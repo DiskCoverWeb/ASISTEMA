@@ -123,7 +123,7 @@ Begin VB.Form FacturaReembolso
          Width           =   1590
       End
       Begin VB.CommandButton Command3 
-         Caption         =   "&Aceptar"
+         Caption         =   "&AceptarX"
          BeginProperty Font 
             Name            =   "Lucida Console"
             Size            =   6.75
@@ -440,13 +440,13 @@ Begin VB.Form FacturaReembolso
    End
    Begin MSDataGridLib.DataGrid DGAsientoF 
       Bindings        =   "FacturaR.frx":681C
-      Height          =   3585
+      Height          =   4530
       Left            =   105
       TabIndex        =   28
       Top             =   3255
       Width           =   16080
       _ExtentX        =   28363
-      _ExtentY        =   6324
+      _ExtentY        =   7990
       _Version        =   393216
       AllowUpdate     =   0   'False
       BackColor       =   12648447
