@@ -1,0 +1,56 @@
+Línea 33: la clase MSDataGridLib.DataGrid del control DGQuery no era una clase de control cargada.
+Línea 100: la clase MSAdodcLib.Adodc del control AdoQuery no era una clase de control cargada.
+Línea 203: la clase MSMask.MaskEdBox del control MBoxCtaF no era una clase de control cargada.
+Línea 225: la clase MSMask.MaskEdBox del control MBoxCtaI no era una clase de control cargada.
+Línea 34: el nombre de la propiedad Bindings de DGQuery no es válido.
+Línea 41: el nombre de la propiedad _ExtentX de DGQuery no es válido.
+Línea 42: el nombre de la propiedad _ExtentY de DGQuery no es válido.
+Línea 43: el nombre de la propiedad _Version de DGQuery no es válido.
+Línea 44: el nombre de la propiedad AllowUpdate de DGQuery no es válido.
+Línea 45: el nombre de la propiedad HeadLines de DGQuery no es válido.
+Línea 46: el nombre de la propiedad RowHeight de DGQuery no es válido.
+Línea 55: el nombre de la propiedad HeadFont de DGQuery no es válido.
+Línea 65: el nombre de la propiedad ColumnCount de DGQuery no es válido.
+Línea 78: el nombre de la propiedad Column00 de DGQuery no es válido.
+Línea 91: el nombre de la propiedad Column01 de DGQuery no es válido.
+Línea 92: el nombre de la propiedad SplitCount de DGQuery no es válido.
+Línea 98: el nombre de la propiedad Split0 de DGQuery no es válido.
+Línea 105: el nombre de la propiedad _ExtentX de AdoQuery no es válido.
+Línea 106: el nombre de la propiedad _ExtentY de AdoQuery no es válido.
+Línea 107: el nombre de la propiedad ConnectMode de AdoQuery no es válido.
+Línea 108: el nombre de la propiedad CursorLocation de AdoQuery no es válido.
+Línea 109: el nombre de la propiedad IsolationLevel de AdoQuery no es válido.
+Línea 110: el nombre de la propiedad ConnectionTimeout de AdoQuery no es válido.
+Línea 111: el nombre de la propiedad CommandTimeout de AdoQuery no es válido.
+Línea 112: el nombre de la propiedad CursorType de AdoQuery no es válido.
+Línea 113: el nombre de la propiedad LockType de AdoQuery no es válido.
+Línea 114: el nombre de la propiedad CommandType de AdoQuery no es válido.
+Línea 115: el nombre de la propiedad CursorOptions de AdoQuery no es válido.
+Línea 116: el nombre de la propiedad CacheSize de AdoQuery no es válido.
+Línea 117: el nombre de la propiedad MaxRecords de AdoQuery no es válido.
+Línea 118: el nombre de la propiedad BOFAction de AdoQuery no es válido.
+Línea 119: el nombre de la propiedad EOFAction de AdoQuery no es válido.
+Línea 120: el nombre de la propiedad ConnectStringType de AdoQuery no es válido.
+Línea 124: el nombre de la propiedad Orientation de AdoQuery no es válido.
+Línea 126: el nombre de la propiedad Connect de AdoQuery no es válido.
+Línea 127: el nombre de la propiedad OLEDBString de AdoQuery no es válido.
+Línea 128: el nombre de la propiedad OLEDBFile de AdoQuery no es válido.
+Línea 129: el nombre de la propiedad DataSourceName de AdoQuery no es válido.
+Línea 130: el nombre de la propiedad OtherAttributes de AdoQuery no es válido.
+Línea 131: el nombre de la propiedad UserName de AdoQuery no es válido.
+Línea 132: el nombre de la propiedad Password de AdoQuery no es válido.
+Línea 133: el nombre de la propiedad RecordSource de AdoQuery no es válido.
+Línea 134: el nombre de la propiedad Caption de AdoQuery no es válido.
+Línea 144: el nombre de la propiedad _Version de AdoQuery no es válido.
+Línea 209: el nombre de la propiedad _ExtentX de MBoxCtaF no es válido.
+Línea 210: el nombre de la propiedad _ExtentY de MBoxCtaF no es válido.
+Línea 211: el nombre de la propiedad _Version de MBoxCtaF no es válido.
+Línea 212: el nombre de la propiedad AllowPrompt de MBoxCtaF no es válido.
+Línea 213: el nombre de la propiedad AutoTab de MBoxCtaF no es válido.
+Línea 223: el nombre de la propiedad PromptChar de MBoxCtaF no es válido.
+Línea 231: el nombre de la propiedad _ExtentX de MBoxCtaI no es válido.
+Línea 232: el nombre de la propiedad _ExtentY de MBoxCtaI no es válido.
+Línea 233: el nombre de la propiedad _Version de MBoxCtaI no es válido.
+Línea 234: el nombre de la propiedad AllowPrompt de MBoxCtaI no es válido.
+Línea 235: el nombre de la propiedad AutoTab de MBoxCtaI no es válido.
+Línea 245: el nombre de la propiedad PromptChar de MBoxCtaI no es válido.

@@ -1,0 +1,12 @@
+Línea 309: la clase MSDataListLib.DataCombo del control DCTarjeta no era una clase de control cargada.
+Línea 350: la clase MSDataListLib.DataCombo del control DCBanco no era una clase de control cargada.
+Línea 447: la clase MSDataListLib.DataCombo del control DCFactura no era una clase de control cargada.
+Línea 668: la clase MSMask.MaskEdBox del control MBFecha no era una clase de control cargada.
+Línea 787: la clase MSDataListLib.DataCombo del control DCTipo no era una clase de control cargada.
+Línea 857: la clase MSDataListLib.DataCombo del control DCRetIBienes no era una clase de control cargada.
+Línea 879: la clase MSDataListLib.DataCombo del control DCRetISer no era una clase de control cargada.
+Línea 901: la clase MSDataListLib.DataCombo del control DCRetFuente no era una clase de control cargada.
+Línea 923: la clase MSDataListLib.DataCombo del control DCCodRet no era una clase de control cargada.
+Línea 1134: la clase MSDataListLib.DataCombo del control DCSerie no era una clase de control cargada.
+Línea 1157: la clase MSDataListLib.DataCombo del control DCAutorizacion no era una clase de control cargada.
+Línea 1274: la clase MSDataListLib.DataCombo del control DCVendedor no era una clase de control cargada.

@@ -1,0 +1,8 @@
+Línea 138: la clase MSDataListLib.DataList del control DLCxCxP no era una clase de control cargada.
+Línea 159: la clase MSAdodcLib.Adodc del control AdoCxCxP no era una clase de control cargada.
+Línea 244: la clase MSDataListLib.DataList del control DLGasto no era una clase de control cargada.
+Línea 266: la clase MSAdodcLib.Adodc del control AdoGasto no era una clase de control cargada.
+Línea 313: la clase MSAdodcLib.Adodc del control AdoSubModulo no era una clase de control cargada.
+Línea 360: la clase MSDataListLib.DataList del control DLSubModulo no era una clase de control cargada.
+Línea 382: la clase MSAdodcLib.Adodc del control AdoAux no era una clase de control cargada.
+Línea 429: la clase MSMask.MaskEdBox del control MBoxCta no era una clase de control cargada.

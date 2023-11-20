@@ -1,0 +1,2 @@
+Línea 19: la clase MSDataListLib.DataCombo del control DCClientes no era una clase de control cargada.
+Línea 45: la clase MSAdodcLib.Adodc del control AdoClientes no era una clase de control cargada.

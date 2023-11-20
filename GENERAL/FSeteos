@@ -1,0 +1,2886 @@
+VERSION 5.00
+Object = "{FAEEE763-117E-101B-8933-08002B2F4F5A}#1.1#0"; "DBLIST32.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
+Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "MSMASK32.OCX"
+Begin VB.Form FSeteos 
+   BorderStyle     =   3  'Fixed Dialog
+   Caption         =   "SETEOS PRINCIPALES Y MANTENIMIENTO"
+   ClientHeight    =   6855
+   ClientLeft      =   45
+   ClientTop       =   330
+   ClientWidth     =   11055
+   LinkTopic       =   "Form1"
+   MaxButton       =   0   'False
+   MDIChild        =   -1  'True
+   MinButton       =   0   'False
+   ScaleHeight     =   6855
+   ScaleWidth      =   11055
+   ShowInTaskbar   =   0   'False
+   Begin VB.CommandButton Command12 
+      Caption         =   "&Salir"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   960
+      Left            =   9030
+      Picture         =   "FSeteos.frx":0000
+      Style           =   1  'Graphical
+      TabIndex        =   1
+      Top             =   1155
+      Width           =   1380
+   End
+   Begin TabDlg.SSTab q 
+      Height          =   6630
+      Left            =   105
+      TabIndex        =   2
+      Top             =   105
+      Width           =   10830
+      _ExtentX        =   19103
+      _ExtentY        =   11695
+      _Version        =   393216
+      Tabs            =   7
+      TabHeight       =   520
+      BackColor       =   12632256
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      TabCaption(0)   =   "Generales"
+      TabPicture(0)   =   "FSeteos.frx":0282
+      Tab(0).ControlEnabled=   -1  'True
+      Tab(0).ControlCount=   0
+      TabCaption(1)   =   "Procesos en las Bases de Datos"
+      TabPicture(1)   =   "FSeteos.frx":029E
+      Tab(1).ControlEnabled=   0   'False
+      Tab(1).Control(0)=   "List1"
+      Tab(1).Control(1)=   "Command2"
+      Tab(1).Control(2)=   "Command20"
+      Tab(1).Control(3)=   "Command13"
+      Tab(1).Control(4)=   "Command5"
+      Tab(1).Control(5)=   "Command6"
+      Tab(1).Control(6)=   "Command3"
+      Tab(1).Control(7)=   "Command10"
+      Tab(1).Control(8)=   "Command14"
+      Tab(1).Control(9)=   "Command4"
+      Tab(1).Control(10)=   "Command8"
+      Tab(1).Control(11)=   "File2"
+      Tab(1).Control(12)=   "Frame1"
+      Tab(1).Control(13)=   "TextTP"
+      Tab(1).Control(14)=   "MBoxFechaF"
+      Tab(1).Control(15)=   "MBoxFechaI"
+      Tab(1).Control(16)=   "Label8"
+      Tab(1).Control(17)=   "Label3"
+      Tab(1).Control(18)=   "Label6"
+      Tab(1).ControlCount=   19
+      TabCaption(2)   =   "Niveles de Seguridad para Modulos"
+      TabPicture(2)   =   "FSeteos.frx":02BA
+      Tab(2).ControlEnabled=   0   'False
+      Tab(2).Control(0)=   "TextNiveles(5)"
+      Tab(2).Control(1)=   "DBCUsuario"
+      Tab(2).Control(2)=   "TextClave"
+      Tab(2).Control(3)=   "DBCListEmp"
+      Tab(2).Control(4)=   "TextNiveles(4)"
+      Tab(2).Control(5)=   "TextNiveles(3)"
+      Tab(2).Control(6)=   "TextNiveles(2)"
+      Tab(2).Control(7)=   "TextNiveles(1)"
+      Tab(2).Control(8)=   "TextNiveles(0)"
+      Tab(2).Control(9)=   "Command11"
+      Tab(2).Control(10)=   "CheckSupervisor"
+      Tab(2).Control(11)=   "CheckNivel(5)"
+      Tab(2).Control(12)=   "CheckNivel(4)"
+      Tab(2).Control(13)=   "CheckNivel(3)"
+      Tab(2).Control(14)=   "CheckNivel(2)"
+      Tab(2).Control(15)=   "CheckNivel(1)"
+      Tab(2).Control(16)=   "CheckNivel(0)"
+      Tab(2).Control(17)=   "Label10"
+      Tab(2).Control(18)=   "Label12"
+      Tab(2).Control(19)=   "Label4"
+      Tab(2).ControlCount=   20
+      TabCaption(3)   =   "Menu de Modulos"
+      TabPicture(3)   =   "FSeteos.frx":02D6
+      Tab(3).ControlEnabled=   0   'False
+      Tab(3).ControlCount=   0
+      TabCaption(4)   =   "Mantenimiento de Bases de Datos"
+      TabPicture(4)   =   "FSeteos.frx":02F2
+      Tab(4).ControlEnabled=   0   'False
+      Tab(4).Control(0)=   "File3"
+      Tab(4).Control(1)=   "Dir3"
+      Tab(4).Control(2)=   "Command18"
+      Tab(4).Control(3)=   "List3"
+      Tab(4).Control(4)=   "List2"
+      Tab(4).Control(5)=   "Frame3"
+      Tab(4).Control(6)=   "Picture2"
+      Tab(4).Control(7)=   "Picture1"
+      Tab(4).Control(8)=   "Command7"
+      Tab(4).Control(9)=   "Label5"
+      Tab(4).Control(10)=   "Label7"
+      Tab(4).ControlCount=   11
+      TabCaption(5)   =   "Cierre de Periodos para Modulos"
+      TabPicture(5)   =   "FSeteos.frx":030E
+      Tab(5).ControlEnabled=   0   'False
+      Tab(5).Control(0)=   "Command19"
+      Tab(5).Control(1)=   "Command17"
+      Tab(5).Control(2)=   "Command16"
+      Tab(5).Control(3)=   "MBoxFechaC"
+      Tab(5).Control(4)=   "Label9"
+      Tab(5).ControlCount=   5
+      TabCaption(6)   =   "_"
+      TabPicture(6)   =   "FSeteos.frx":032A
+      Tab(6).ControlEnabled=   0   'False
+      Tab(6).Control(0)=   "Command15"
+      Tab(6).ControlCount=   1
+      Begin VB.FileListBox File3 
+         Height          =   1455
+         Left            =   -71430
+         TabIndex        =   46
+         Top             =   1365
+         Width           =   2325
+      End
+      Begin VB.DirListBox Dir3 
+         Height          =   1440
+         Left            =   -74895
+         TabIndex        =   47
+         Top             =   1365
+         Width           =   3480
+      End
+      Begin VB.ListBox List1 
+         Height          =   1620
+         Left            =   -69015
+         TabIndex        =   6
+         Top             =   3150
+         Width           =   4425
+      End
+      Begin VB.CommandButton Command2 
+         Caption         =   "Cambiar a Dolares"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   960
+         Left            =   -69015
+         Picture         =   "FSeteos.frx":0346
+         Style           =   1  'Graphical
+         TabIndex        =   30
+         Top             =   2100
+         Width           =   1380
+      End
+      Begin VB.CommandButton Command20 
+         Caption         =   "Reactivar Diarios de Giros"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   960
+         Left            =   -70485
+         Picture         =   "FSeteos.frx":0A88
+         Style           =   1  'Graphical
+         TabIndex        =   35
+         Top             =   2100
+         Width           =   1380
+      End
+      Begin VB.TextBox TextNiveles 
+         BeginProperty Font 
+            Name            =   "Terminal"
+            Size            =   6
+            Charset         =   255
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   855
+         Index           =   5
+         Left            =   -73950
+         MultiLine       =   -1  'True
+         ScrollBars      =   2  'Vertical
+         TabIndex        =   16
+         Top             =   5670
+         Width           =   4215
+      End
+      Begin VB.CommandButton Command19 
+         Caption         =   "Cerrar &CAJA CREDITO"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   960
+         Left            =   -69015
+         Picture         =   "FSeteos.frx":0ECA
+         Style           =   1  'Graphical
+         TabIndex        =   36
+         Top             =   1050
+         Width           =   1380
+      End
+      Begin VB.CommandButton Command18 
+         Caption         =   "&Eliminar Tablas Temporales"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   960
+         Left            =   -67545
+         Picture         =   "FSeteos.frx":130C
+         Style           =   1  'Graphical
+         TabIndex        =   37
+         Top             =   1050
+         Width           =   1380
+      End
+      Begin VB.ListBox List3 
+         Height          =   1620
+         Left            =   -74895
+         TabIndex        =   38
+         Top             =   4830
+         Width           =   3900
+      End
+      Begin VB.CommandButton Command17 
+         Caption         =   "Presentar Faltantes de Giros"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   960
+         Left            =   -67545
+         Picture         =   "FSeteos.frx":174E
+         Style           =   1  'Graphical
+         TabIndex        =   44
+         Top             =   1050
+         Width           =   1380
+      End
+      Begin MSDBCtls.DBCombo DBCUsuario 
+         Bindings        =   "FSeteos.frx":1B90
+         DataSource      =   "DataEmpresa"
+         Height          =   315
+         Left            =   -72690
+         TabIndex        =   20
+         Top             =   1050
+         Width           =   5055
+         _ExtentX        =   8916
+         _ExtentY        =   556
+         _Version        =   393216
+         Text            =   "DBCombo1"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin VB.TextBox TextClave 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -68805
+         MaxLength       =   8
+         TabIndex        =   61
+         Text            =   "XXXXXXXX"
+         Top             =   1470
+         Width           =   1170
+      End
+      Begin MSDBCtls.DBCombo DBCListEmp 
+         Bindings        =   "FSeteos.frx":1BAA
+         DataSource      =   "DataListEmp"
+         Height          =   315
+         Left            =   -69645
+         TabIndex        =   29
+         Top             =   4305
+         Width           =   5055
+         _ExtentX        =   8916
+         _ExtentY        =   556
+         _Version        =   393216
+         Text            =   ""
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin VB.TextBox TextNiveles 
+         BeginProperty Font 
+            Name            =   "Terminal"
+            Size            =   6
+            Charset         =   255
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   855
+         Index           =   4
+         Left            =   -73950
+         MultiLine       =   -1  'True
+         ScrollBars      =   2  'Vertical
+         TabIndex        =   17
+         Top             =   4830
+         Width           =   4215
+      End
+      Begin VB.TextBox TextNiveles 
+         BeginProperty Font 
+            Name            =   "Terminal"
+            Size            =   6
+            Charset         =   255
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   855
+         Index           =   3
+         Left            =   -73950
+         MultiLine       =   -1  'True
+         ScrollBars      =   2  'Vertical
+         TabIndex        =   18
+         Top             =   3990
+         Width           =   4215
+      End
+      Begin VB.CommandButton Command16 
+         Caption         =   "Cerrar &FAMIENVIOS"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   960
+         Left            =   -70485
+         Picture         =   "FSeteos.frx":1BC4
+         Style           =   1  'Graphical
+         TabIndex        =   60
+         Top             =   1050
+         Width           =   1380
+      End
+      Begin VB.CommandButton Command15 
+         Height          =   960
+         Left            =   -67545
+         TabIndex        =   59
+         Top             =   1050
+         Width           =   1380
+      End
+      Begin VB.CommandButton Command13 
+         Caption         =   "Procesos Varios"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   960
+         Left            =   -67545
+         Picture         =   "FSeteos.frx":2006
+         Style           =   1  'Graphical
+         TabIndex        =   58
+         Top             =   2100
+         Width           =   1380
+      End
+      Begin VB.CommandButton Command5 
+         Caption         =   "Eliminar Periodo"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   960
+         Left            =   -70485
+         Picture         =   "FSeteos.frx":2448
+         Style           =   1  'Graphical
+         TabIndex        =   14
+         Top             =   1050
+         Width           =   1380
+      End
+      Begin VB.CommandButton Command6 
+         Caption         =   "Eliminar Comprobantes Incompletos"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   960
+         Left            =   -73425
+         Picture         =   "FSeteos.frx":288A
+         Style           =   1  'Graphical
+         TabIndex        =   5
+         Top             =   2100
+         Width           =   1380
+      End
+      Begin VB.CommandButton Command3 
+         Caption         =   "Reprocesar Comprobantes"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   960
+         Left            =   -67545
+         Picture         =   "FSeteos.frx":2CCC
+         Style           =   1  'Graphical
+         TabIndex        =   12
+         Top             =   1050
+         Width           =   1380
+      End
+      Begin VB.CommandButton Command10 
+         Caption         =   "Descuadre del Cat. en Ctas de Grupo"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   960
+         Left            =   -71955
+         Picture         =   "FSeteos.frx":310E
+         Style           =   1  'Graphical
+         TabIndex        =   57
+         Top             =   2100
+         Width           =   1380
+      End
+      Begin VB.CommandButton Command14 
+         Caption         =   "Actualizar Número de Empresa"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   960
+         Left            =   -74895
+         Picture         =   "FSeteos.frx":3550
+         Style           =   1  'Graphical
+         TabIndex        =   13
+         Top             =   2100
+         Width           =   1380
+      End
+      Begin VB.CommandButton Command4 
+         Caption         =   "Compactar Bases de Datos"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   960
+         Left            =   -69015
+         Picture         =   "FSeteos.frx":3992
+         Style           =   1  'Graphical
+         TabIndex        =   42
+         Top             =   1050
+         Width           =   1380
+      End
+      Begin VB.CommandButton Command8 
+         Caption         =   "Procesar Totales de Contabilidad"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   960
+         Left            =   -71955
+         Picture         =   "FSeteos.frx":3C9C
+         Style           =   1  'Graphical
+         TabIndex        =   4
+         Top             =   1050
+         Width           =   1380
+      End
+      Begin VB.ListBox List2 
+         Height          =   1815
+         Left            =   -74895
+         TabIndex        =   48
+         Top             =   2940
+         Width           =   3900
+      End
+      Begin VB.Frame Frame3 
+         Height          =   750
+         Left            =   -69015
+         TabIndex        =   54
+         Top             =   2100
+         Width           =   1380
+         Begin VB.CommandButton Command1 
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   435
+            Left            =   105
+            Picture         =   "FSeteos.frx":3DE6
+            Style           =   1  'Graphical
+            TabIndex        =   55
+            Top             =   210
+            Width           =   330
+         End
+         Begin VB.CommandButton Command9 
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   435
+            Left            =   420
+            Picture         =   "FSeteos.frx":3EE8
+            Style           =   1  'Graphical
+            TabIndex        =   56
+            Top             =   210
+            Width           =   330
+         End
+      End
+      Begin VB.PictureBox Picture2 
+         AutoSize        =   -1  'True
+         BorderStyle     =   0  'None
+         Height          =   480
+         Left            =   -71640
+         Picture         =   "FSeteos.frx":3FEA
+         ScaleHeight     =   480
+         ScaleWidth      =   480
+         TabIndex        =   53
+         Top             =   945
+         Width           =   480
+      End
+      Begin VB.PictureBox Picture1 
+         AutoSize        =   -1  'True
+         BorderStyle     =   0  'None
+         Height          =   480
+         Left            =   -74895
+         Picture         =   "FSeteos.frx":442C
+         ScaleHeight     =   480
+         ScaleWidth      =   480
+         TabIndex        =   52
+         Top             =   945
+         Width           =   480
+      End
+      Begin VB.CommandButton Command7 
+         Caption         =   "&Abrir Base de Datos"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   960
+         Left            =   -69015
+         Picture         =   "FSeteos.frx":486E
+         Style           =   1  'Graphical
+         TabIndex        =   51
+         Top             =   1050
+         Width           =   1380
+      End
+      Begin VB.TextBox TextNiveles 
+         BeginProperty Font 
+            Name            =   "Terminal"
+            Size            =   6
+            Charset         =   255
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   855
+         Index           =   2
+         Left            =   -73950
+         MultiLine       =   -1  'True
+         ScrollBars      =   2  'Vertical
+         TabIndex        =   34
+         Top             =   3150
+         Width           =   4215
+      End
+      Begin VB.TextBox TextNiveles 
+         BeginProperty Font 
+            Name            =   "Terminal"
+            Size            =   6
+            Charset         =   255
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   855
+         Index           =   1
+         Left            =   -73950
+         MultiLine       =   -1  'True
+         ScrollBars      =   2  'Vertical
+         TabIndex        =   33
+         Top             =   2310
+         Width           =   4215
+      End
+      Begin VB.TextBox TextNiveles 
+         BeginProperty Font 
+            Name            =   "Terminal"
+            Size            =   6
+            Charset         =   255
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   855
+         Index           =   0
+         Left            =   -73950
+         MultiLine       =   -1  'True
+         ScrollBars      =   2  'Vertical
+         TabIndex        =   32
+         Text            =   "FSeteos.frx":4CB0
+         Top             =   1470
+         Width           =   4215
+      End
+      Begin VB.CommandButton Command11 
+         Caption         =   "&Grabar"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   960
+         Left            =   -67545
+         Picture         =   "FSeteos.frx":4CC4
+         Style           =   1  'Graphical
+         TabIndex        =   31
+         Top             =   1050
+         Width           =   1380
+      End
+      Begin VB.CheckBox CheckSupervisor 
+         Caption         =   "NIVEL DE SUPERVISOR : PUEDE REALIZAR &TODAS LAS OPCIONES."
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   435
+         Left            =   -69645
+         TabIndex        =   27
+         Top             =   2100
+         Width           =   4950
+      End
+      Begin VB.CheckBox CheckNivel 
+         Caption         =   "NIVEL No. &6"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   435
+         Index           =   5
+         Left            =   -74895
+         TabIndex        =   26
+         Top             =   5670
+         Width           =   960
+      End
+      Begin VB.CheckBox CheckNivel 
+         Caption         =   "NIVEL No. &5"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   435
+         Index           =   4
+         Left            =   -74895
+         TabIndex        =   25
+         Top             =   4830
+         Width           =   960
+      End
+      Begin VB.CheckBox CheckNivel 
+         Caption         =   "NIVEL No. &4"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   435
+         Index           =   3
+         Left            =   -74895
+         TabIndex        =   24
+         Top             =   3990
+         Width           =   960
+      End
+      Begin VB.CheckBox CheckNivel 
+         Caption         =   "NIVEL No. &3"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   435
+         Index           =   2
+         Left            =   -74895
+         TabIndex        =   23
+         Top             =   3150
+         Width           =   960
+      End
+      Begin VB.CheckBox CheckNivel 
+         Caption         =   "NIVEL No. &2"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   435
+         Index           =   1
+         Left            =   -74895
+         TabIndex        =   22
+         Top             =   2310
+         Width           =   960
+      End
+      Begin VB.CheckBox CheckNivel 
+         Caption         =   "NIVEL No. &1"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   435
+         Index           =   0
+         Left            =   -74895
+         TabIndex        =   21
+         Top             =   1470
+         Width           =   960
+      End
+      Begin VB.FileListBox File2 
+         Height          =   870
+         Left            =   -69015
+         TabIndex        =   15
+         Top             =   3150
+         Visible         =   0   'False
+         Width           =   1905
+      End
+      Begin VB.Frame Frame1 
+         Height          =   1695
+         Left            =   -74895
+         TabIndex        =   7
+         Top             =   3045
+         Width           =   5790
+         Begin VB.FileListBox File1 
+            Height          =   1065
+            Left            =   3045
+            TabIndex        =   8
+            Top             =   525
+            Width           =   2640
+         End
+         Begin VB.DirListBox Dir1 
+            Height          =   990
+            Left            =   105
+            TabIndex        =   9
+            Top             =   525
+            Width           =   2955
+         End
+         Begin VB.Label Label2 
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   " Bases de Datos"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   3045
+            TabIndex        =   11
+            Top             =   210
+            Width           =   2640
+         End
+         Begin VB.Label Label1 
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   " Directorio de la Empresa"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   105
+            TabIndex        =   10
+            Top             =   210
+            Width           =   2955
+         End
+      End
+      Begin VB.TextBox TextTP 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -73845
+         TabIndex        =   3
+         Top             =   1680
+         Width           =   1275
+      End
+      Begin MSMask.MaskEdBox MBoxFechaF 
+         Height          =   330
+         Left            =   -73845
+         TabIndex        =   45
+         Top             =   1365
+         Width           =   1275
+         _ExtentX        =   2249
+         _ExtentY        =   582
+         _Version        =   393216
+         AllowPrompt     =   -1  'True
+         AutoTab         =   -1  'True
+         MaxLength       =   10
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Format          =   "dd/mm/yyyy"
+         Mask            =   "##/##/####"
+         PromptChar      =   "0"
+      End
+      Begin MSMask.MaskEdBox MBoxFechaI 
+         Height          =   330
+         Left            =   -73845
+         TabIndex        =   43
+         Top             =   1050
+         Width           =   1275
+         _ExtentX        =   2249
+         _ExtentY        =   582
+         _Version        =   393216
+         AllowPrompt     =   -1  'True
+         AutoTab         =   -1  'True
+         MaxLength       =   10
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Format          =   "dd/mm/yyyy"
+         Mask            =   "##/##/####"
+         PromptChar      =   "0"
+      End
+      Begin MSMask.MaskEdBox MBoxFechaC 
+         Height          =   330
+         Left            =   -74895
+         TabIndex        =   62
+         Top             =   1365
+         Width           =   1380
+         _ExtentX        =   2434
+         _ExtentY        =   582
+         _Version        =   393216
+         AllowPrompt     =   -1  'True
+         AutoTab         =   -1  'True
+         MaxLength       =   10
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Format          =   "dd/mm/yyyy"
+         Mask            =   "##/##/####"
+         PromptChar      =   "0"
+      End
+      Begin VB.Label Label10 
+         Alignment       =   2  'Center
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   "CLAVE"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -69645
+         TabIndex        =   64
+         Top             =   1470
+         Width           =   855
+      End
+      Begin VB.Label Label12 
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " &NOMBRE DE LA EMPRESA A INGRESAR"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -69645
+         TabIndex        =   28
+         Top             =   3990
+         Width           =   5055
+      End
+      Begin VB.Label Label9 
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " Fecha &Cierre"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -74895
+         TabIndex        =   63
+         Top             =   1050
+         Width           =   1380
+      End
+      Begin VB.Label Label5 
+         Caption         =   " Bases de Datos"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -71115
+         TabIndex        =   49
+         Top             =   1050
+         Width           =   1695
+      End
+      Begin VB.Label Label7 
+         Caption         =   " Directorio de la Empresa"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -74370
+         TabIndex        =   50
+         Top             =   1050
+         Width           =   2745
+      End
+      Begin VB.Label Label4 
+         Alignment       =   2  'Center
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   "NOMBRE DE &USUARIO"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -74895
+         TabIndex        =   19
+         Top             =   1050
+         Width           =   2220
+      End
+      Begin VB.Label Label8 
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " &Desde:"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -74895
+         TabIndex        =   41
+         Top             =   1050
+         Width           =   1065
+      End
+      Begin VB.Label Label3 
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " Hasta:"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -74895
+         TabIndex        =   40
+         Top             =   1365
+         Width           =   1065
+      End
+      Begin VB.Label Label6 
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " Tipo Proc:"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -74895
+         TabIndex        =   39
+         Top             =   1680
+         Width           =   1065
+      End
+   End
+   Begin VB.Data DataAuxCaja 
+      Caption         =   "AuxCaja"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   315
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   1995
+      Visible         =   0   'False
+      Width           =   2010
+   End
+   Begin VB.Data DataEmpresa1 
+      Caption         =   "Empresa1"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   315
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   3570
+      Visible         =   0   'False
+      Width           =   2010
+   End
+   Begin VB.Data DataEmpresa 
+      Caption         =   "Empresa"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   2415
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   1365
+      Visible         =   0   'False
+      Width           =   2325
+   End
+   Begin VB.Data DataConta 
+      Caption         =   "Conta"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   315
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   2310
+      Visible         =   0   'False
+      Width           =   2010
+   End
+   Begin VB.Data DataResult 
+      Caption         =   "Result"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   315
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   5460
+      Visible         =   0   'False
+      Width           =   2010
+   End
+   Begin VB.Data DataProducc 
+      Caption         =   "Producc"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   315
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   4515
+      Visible         =   0   'False
+      Width           =   2010
+   End
+   Begin VB.Data DataCorreos 
+      Caption         =   "Correos"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   315
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   2940
+      Visible         =   0   'False
+      Width           =   2010
+   End
+   Begin VB.Data DataFacturas 
+      Caption         =   "Facturas"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   315
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   5145
+      Visible         =   0   'False
+      Width           =   2010
+   End
+   Begin VB.Data DataSubCtas1 
+      Caption         =   "SubCtas1"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   315
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   4830
+      Visible         =   0   'False
+      Width           =   2010
+   End
+   Begin VB.Data DataCtasProc 
+      Caption         =   "CtasProc"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   315
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   4200
+      Visible         =   0   'False
+      Width           =   2010
+   End
+   Begin VB.Data DataCodigos 
+      Caption         =   "Codigos"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   2415
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   5145
+      Visible         =   0   'False
+      Width           =   2325
+   End
+   Begin VB.Data DataContabil 
+      Caption         =   "Contabil"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   315
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   2625
+      Visible         =   0   'False
+      Width           =   2010
+   End
+   Begin VB.DirListBox Dir2 
+      Height          =   990
+      Left            =   315
+      TabIndex        =   0
+      Top             =   210
+      Visible         =   0   'False
+      Width           =   2430
+   End
+   Begin VB.Data DataSaldoSC 
+      Caption         =   "SaldoSC"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   315
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   3255
+      Visible         =   0   'False
+      Width           =   2010
+   End
+   Begin VB.Data DataContabil1 
+      Caption         =   "Contabil1"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   315
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   3885
+      Visible         =   0   'False
+      Width           =   2010
+   End
+   Begin VB.Data DataCaja 
+      Caption         =   "Caja"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   315
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   1365
+      Visible         =   0   'False
+      Width           =   2010
+   End
+   Begin VB.Data DataCajaCred 
+      Caption         =   "CajaCred"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   315
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   1680
+      Visible         =   0   'False
+      Width           =   2010
+   End
+   Begin VB.Data DataEnvios 
+      Caption         =   "Envios"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   2415
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   5460
+      Visible         =   0   'False
+      Width           =   2325
+   End
+   Begin VB.Data DataDetRet 
+      Caption         =   "DetRet"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   2415
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   1680
+      Visible         =   0   'False
+      Width           =   2325
+   End
+   Begin VB.Data DataAsientBanco 
+      Caption         =   "AsientBanco"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   2415
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   2310
+      Visible         =   0   'False
+      Width           =   2325
+   End
+   Begin VB.Data DataAsientos 
+      Caption         =   "Asientos"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   2415
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   2625
+      Visible         =   0   'False
+      Width           =   2325
+   End
+   Begin VB.Data DataSubCtaDet 
+      Caption         =   "SubCtaDet"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   2415
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   1995
+      Visible         =   0   'False
+      Width           =   2325
+   End
+   Begin VB.Data DataBanco 
+      Caption         =   "Banco"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   2415
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   3255
+      Visible         =   0   'False
+      Width           =   2325
+   End
+   Begin VB.Data DataIngArt 
+      Caption         =   "IngArt"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   2415
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   3570
+      Visible         =   0   'False
+      Width           =   2325
+   End
+   Begin VB.Data DataRet 
+      Caption         =   "Ret"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   2415
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   2940
+      Visible         =   0   'False
+      Width           =   2325
+   End
+   Begin VB.Data DataSubCtas 
+      Caption         =   "SubCtas"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   2415
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   3885
+      Visible         =   0   'False
+      Width           =   2325
+   End
+   Begin VB.Data DataListEmp 
+      Caption         =   "ListEmp"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   2415
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   4200
+      Visible         =   0   'False
+      Width           =   2325
+   End
+   Begin VB.Data DataBuscEmp 
+      Caption         =   "BuscEmp"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   2415
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   4515
+      Visible         =   0   'False
+      Width           =   2325
+   End
+   Begin VB.Data DataSupervisor 
+      Caption         =   "Supervisor"
+      Connect         =   "Access 2000;"
+      DatabaseName    =   ""
+      DefaultCursorType=   0  'DefaultCursor
+      DefaultType     =   2  'UseODBC
+      Exclusive       =   0   'False
+      Height          =   345
+      Left            =   2415
+      Options         =   0
+      ReadOnly        =   0   'False
+      RecordsetType   =   1  'Dynaset
+      RecordSource    =   ""
+      Top             =   4830
+      Visible         =   0   'False
+      Width           =   2325
+   End
+End
+Attribute VB_Name = "FSeteos"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+'Despues lo arreglare
+Private Sub CheckSupervisor_Click()
+If CheckSupervisor.Value Then
+   For I = 0 To 5
+       CheckNivel(I).Value = False
+   Next I
+End If
+End Sub
+
+Private Sub Command1_Click()
+  Cadena = DBGrid2.Columns(I).DataField
+  sSQL = "SELECT * FROM " & List2.Text & " " _
+       & "ORDER BY " & Cadena & " ASC "
+  SelectAdodcdc DataContabil1, sSQL
+End Sub
+
+Private Sub Command10_Click()
+  sSQL = "SELECT T.Fecha,T.TP,T.Numero,C.Codigo,C.Cuenta,T.Debe,T.Haber,T.Debe_ME,T.Haber_ME " _
+       & "FROM Transacciones As T,Catalogo As C " _
+       & "WHERE C.DG = 'G' " _
+       & "AND C.Codigo = T.Cta "
+  SelectDBGrid DBGrid1, DataContabil, sSQL
+End Sub
+
+Private Sub Command11_Click()
+   RatonReloj
+   TextoValido TextClave
+   Codigo = SinEspaciosIzq(DBCUsuario.Text)
+   sSQL = "SELECT * FROM " & UCase(App.EXEName) & " " _
+        & "WHERE Codigo = '" & Codigo & "' "
+   SelectAdodcdc DataEmpresa1, sSQL, False
+   With DataEmpresa1.Recordset
+        If .RecordCount > 0 Then
+           .Edit
+        Else
+           .AddNew
+           .Fields("Codigo") = Codigo
+        End If
+       .Fields("Nivel_1") = CheckNivel(0).Value
+       .Fields("Nivel_2") = CheckNivel(1).Value
+       .Fields("Nivel_3") = CheckNivel(2).Value
+       .Fields("Nivel_4") = CheckNivel(3).Value
+       .Fields("Nivel_5") = CheckNivel(4).Value
+       .Fields("Nivel_6") = CheckNivel(5).Value
+       .Fields("Supervisor") = CheckSupervisor.Value
+       .Update
+   End With
+   sSQL = "SELECT * FROM Accesos " _
+        & "WHERE Codigo = '" & Codigo & "' "
+   SelectAdodcdc DataEmpresa1, sSQL, False
+   With DataEmpresa1.Recordset
+    If .RecordCount > 0 Then
+       .Edit
+       .Fields("TODOS") = CheckSupervisor.Value
+       .Fields("Clave") = TextClave.Text
+       .Update
+    End If
+   End With
+   RatonNormal
+   MsgBox "Niveles de seguridad grabado"
+End Sub
+
+Private Sub Command12_Click()
+ Unload FSeteos
+End Sub
+
+Private Sub Command13_Click()
+  sSQL = "SELECT * FROM TC "
+  SelectAdodc DataAuxCaja, sSQL
+  sSQL = "SELECT Cuenta_No,Fecha,TP,ABS(Debitos-Creditos) AS Valor,Cheque,Hora,Usuario " _
+       & "FROM Trans_Cajas " _
+       & "WHERE TP<>'BOVE' " _
+       & "ORDER BY Cuenta_No,Fecha "
+  SelectAdodc DataCajaCred, sSQL
+  With DataCajaCred.Recordset
+       RatonReloj
+       Contador = 0
+       Do While Not .EOF
+          FSeteos.Caption = "Contador = " & Contador & "/" & .RecordCount
+          Cuenta_No = .Fields("Cuenta_No")
+          TipoDoc = .Fields("TP")
+          MiFecha = .Fields("Fecha")
+          ValorTotal = Round(.Fields("Valor"))
+          Cadena = .Fields("Usuario")
+          Cadena1 = .Fields("Hora")
+          Contador = Contador + 1
+          sSQL = "SELECT Cuenta_No,Fecha,TP,ABS(Debitos-Creditos) AS Valor,Cheque,Hora,Usuario " _
+               & "FROM Trans_Libretas " _
+               & "WHERE Cuenta_No='" & Cuenta_No & "' " _
+               & "AND Fecha=#" & BuscarFecha(MiFecha) & "# " _
+               & "AND TP='" & TipoDoc & "' " _
+               & "AND ABS(Debitos-Creditos)=" & ValorTotal & " "
+          SelectAdodc DataCaja, sSQL
+          If DataCaja.Recordset.RecordCount <= 0 Then
+             DataAuxCaja.Recordset.AddNew
+             DataAuxCaja.Recordset.Fields("Fecha") = MiFecha
+             DataAuxCaja.Recordset.Fields("Cuenta_No") = Cuenta_No
+             DataAuxCaja.Recordset.Fields("TP") = TipoDoc
+             DataAuxCaja.Recordset.Fields("Valor") = ValorTotal
+             DataAuxCaja.Recordset.Fields("Usuario") = Cadena
+             DataAuxCaja.Recordset.Fields("Hora") = Cadena1
+             DataAuxCaja.Recordset.Update
+          End If
+         .MoveNext
+       Loop
+  End With
+  RatonNormal
+End Sub
+
+Private Sub Command14_Click()
+   Titulo = "Pregunta de Actualizacion"
+   Mensajes = "Seguro de actualizar la base" & vbCrLf _
+            & NumEmpresa & " - " & Empresa
+   If BoxMensaje = 6 Then
+      RatonReloj
+      sSQL = "SELECT * FROM Transacciones " _
+           & "WHERE ID = 0 " _
+           & "ORDER BY Fecha,TP,Numero "
+      SelectAdodc DataContabil, sSQL
+      With DataContabil.Recordset
+           ID_Trans = 0
+           Do While Not .EOF
+             .Edit
+             .Fields("ID") = ID_Trans
+             .Update
+             .MoveNext
+              ID_Trans = ID_Trans + 1
+           Loop
+      End With
+      sSQL = "SELECT * FROM TransaccionesSC " _
+           & "WHERE ID = 0 " _
+           & "ORDER BY Fecha,TP,Numero "
+      SelectAdodc DataContabil, sSQL
+      With DataContabil.Recordset
+           ID_Trans = 0
+           Do While Not .EOF
+             .Edit
+             .Fields("ID") = ID_Trans
+             .Update
+             .MoveNext
+              FSeteos.Caption = "Actualizando Numero de Transaccion No. " & ID_Trans
+              ID_Trans = ID_Trans + 1
+           Loop
+      End With
+      sSQL = "UPDATE Transacciones " _
+           & "SET Item = " & NumEmpresa & " "
+      UpdateData DataContabil, sSQL
+      sSQL = "UPDATE TransaccionesSC " _
+           & "SET Item = " & NumEmpresa & " "
+      UpdateData DataContabil, sSQL
+      sSQL = "UPDATE TransaccionesGC " _
+           & "SET Item = " & NumEmpresa & " "
+      UpdateData DataContabil, sSQL
+      sSQL = "UPDATE Comprobantes " _
+           & "SET Item = " & NumEmpresa & " "
+      UpdateData DataContabil, sSQL
+      sSQL = "UPDATE Bancos " _
+           & "SET Item = " & NumEmpresa & " "
+      UpdateData DataContabil, sSQL
+      sSQL = "UPDATE Retenciones " _
+           & "SET Item = " & NumEmpresa & " "
+      UpdateData DataContabil, sSQL
+      sSQL = "UPDATE Kardex " _
+           & "SET Item = " & NumEmpresa & " "
+      UpdateData DataContabil, sSQL
+      RatonNormal
+   End If
+   FSeteos.Caption = "SETEOS PRINCIPALES Y MANTENIMIENTO"
+   MsgBox "Proceso Terminado"
+End Sub
+
+Private Sub Command15_Click()
+   Codigo = InputBox("Ingresar Texto", "Datos")
+   Codigo1 = InputBox("Ingresar Linea de Produccion:", "Datos")
+   If Codigo <> "" And Codigo1 <> "" Then
+      sSQL = "UPDATE Contratos_Meses " _
+           & "SET Codigo = '" & UCase(Codigo1) & "' " _
+           & "WHERE Mid(Contrato_No,1," & Len(Codigo) & ") = '" & UCase(Codigo) & "' "
+      UpdateData DataFacturas, sSQL
+   End If
+End Sub
+
+Private Sub Command16_Click()
+  FechaValida MBoxFechaC
+  FechaFin = BuscarFecha(MBoxFechaC.Text)
+  FSeteos.Caption = "Eliminando Flujo de Caja"
+  sSQL = "DELETE * FROM Flujo_Caja " _
+       & "WHERE Fecha <= #" & FechaFin & "# "
+  DeleteData DataEnvios, sSQL
+  FSeteos.Caption = "Eliminando Correos Cancelados"
+  sSQL = "DELETE * FROM Correos " _
+       & "WHERE Fecha_P <= #" & FechaFin & "# " _
+       & "AND T = 'C' "
+  DeleteData DataEnvios, sSQL
+  FSeteos.Caption = "Eliminando Correos Anulados"
+  sSQL = "DELETE * FROM Correos " _
+       & "WHERE Fecha_P <= #" & FechaFin & "# " _
+       & "AND T = 'A' "
+  DeleteData DataEnvios, sSQL
+  sSQL = "SELECT * FROM Correos " _
+       & "ORDER BY Cod_B "
+  SelectDBGrid DBGEnvios, DataEnvios, sSQL
+  With DataEnvios.Recordset
+   If .RecordCount > 0 Then
+      .MoveLast
+       Contador = .Fields("Cod_B")
+       DBGEnvios.Visible = False
+       I = 0
+      .MoveFirst
+       Do While Not .EOF
+          J = .Fields("Cod_B")
+          FSeteos.Caption = "(" & Contador & ") Eliminando Beneficiarios: " & I & " - " & J
+          sSQL = "DELETE * FROM Beneficiarios " _
+               & "WHERE Codigo_B > " & I & " " _
+               & "AND Codigo_B < " & J & " "
+          DeleteData DataResult, sSQL
+          I = J
+         .MoveNext
+       Loop
+   End If
+  End With
+  DBGEnvios.Visible = True
+  sSQL = "SELECT * FROM Correos " _
+       & "ORDER BY Cod_R "
+  SelectDBGrid DBGEnvios, DataEnvios, sSQL
+  With DataEnvios.Recordset
+   If .RecordCount > 0 Then
+      .MoveLast
+       Contador = .Fields("Cod_R")
+       DBGEnvios.Visible = False
+       I = 0
+      .MoveFirst
+       Do While Not .EOF
+          J = .Fields("Cod_R")
+          FSeteos.Caption = "(" & Contador & ") Eliminando Remitentes:  " & I & " - " & J
+          sSQL = "DELETE * FROM Remitentes " _
+               & "WHERE Codigo_R > " & I & " " _
+               & "AND Codigo_R < " & J & " "
+          DeleteData DataResult, sSQL
+          I = J
+         .MoveNext
+       Loop
+   End If
+  End With
+  sSQL = "UPDATE Beneficiarios " _
+       & "SET Beneficiario = Trim(Beneficiario) "
+  UpdateData DataResult, sSQL
+  sSQL = "UPDATE Remitentes " _
+       & "SET Remitente = Trim(Remitente) "
+  UpdateData DataResult, sSQL
+  DBGEnvios.Visible = True
+End Sub
+
+Private Sub Command17_Click()
+Dim No_Exit As Boolean
+   FechaValida MBoxFechaC
+   NombreArchivo = RutaSistema & "\GIROS_INCOMPLETOS.TXT"
+   Open NombreArchivo For Output As #1 ' Abre el archivo.
+   Print #1, "Giros Incompletos: "
+   sSQL = "SELECT Correos.* " _
+        & "FROM Correos,Beneficiarios,Remitentes " _
+        & "WHERE Correos.Cod_B = Beneficiarios.Codigo_B " _
+        & "AND Correos.Cod_R = Remitentes.Codigo_R " _
+        & "ORDER BY Correos.Envio_No,Correos.Fecha "
+   SelectAdodc DataResult, sSQL
+           
+   sSQL = "SELECT * " _
+        & "FROM Correos " _
+        & "WHERE Fecha>=#" & BuscarFecha(MBoxFechaC.Text) & "# " _
+        & "ORDER BY Envio_No,Fecha "
+   SelectAdodc DataEnvios, sSQL
+   With DataEnvios.Recordset
+    If .RecordCount > 0 Then
+        Do While Not .EOF
+           No_Exit = False
+           Codigo = .Fields("Envio_No")
+           I = .Fields("Cod_B")
+           J = .Fields("Cod_R")
+           FSeteos.Caption = Codigo & " - " & .Fields("Fecha")
+           If DataResult.Recordset.RecordCount > 0 Then
+              DataResult.Recordset.MoveFirst
+              Do While Not DataResult.Recordset.EOF And No_Exit = False
+                 If Codigo = DataResult.Recordset.Fields("Envio_No") Then No_Exit = True
+                 DataResult.Recordset.MoveNext
+              Loop
+           End If
+           If No_Exit Then
+              Cadena = "Giro No. " & Codigo & " Benef.: " & I & ", Remit.: " & J
+              Print #1, Cadena
+           End If
+          .MoveNext
+        Loop
+     End If
+   End With
+   Close #1
+   Unload FSeteos
+End Sub
+
+Private Sub Command18_Click()
+  For I = 0 To List3.ListCount - 1
+     List3.ListIndex = I
+     sSQL = "DROP TABLE " & List3.Text & ";"
+     DataContabil1.Database.Execute sSQL
+  Next I
+  DataContabil1.Refresh
+  Unload FSeteos
+End Sub
+
+Private Sub Command19_Click()
+' Cierre de CAJACREDITO
+  RatonReloj
+  FechaValida MBoxFechaC
+  FechaFin = BuscarFecha(MBoxFechaC.Text)
+  sSQL = "SELECT * FROM Cuentas " _
+       & "ORDER BY Cuenta_No "
+  SelectAdodc DataCaja, sSQL
+  If DataCaja.Recordset.RecordCount > 0 Then
+     FSeteos.Caption = "Eliminando Transacciones de Libretas "
+     DataCaja.Recordset.MoveLast
+     Cuenta_No = Mid(DataCaja.Recordset.Fields("Cuenta_No"), 1, 3)
+   ' Eliminando flujo de libretas
+     sSQL = "DELETE * FROM Trans_Libretas " _
+          & "WHERE Fecha <= #" & FechaFin & "# " _
+          & "AND Mid(Cuenta_No,1,3) <> '" & Cuenta_No & "' "
+     DeleteData DataAuxCaja, sSQL
+     FSeteos.Caption = "Eliminando Transacciones de Cajas "
+   ' Eliminando flujo de caja
+     sSQL = "DELETE * FROM Trans_Cajas " _
+          & "WHERE Fecha <= #" & FechaFin & "# " _
+          & "AND Mid(Cuenta_No,1,3) <> '" & Cuenta_No & "' " _
+          & "AND TP <> 'BOVE' "
+     DeleteData DataAuxCaja, sSQL
+   ' Eliminando flujo de cajas diarias
+     sSQL = "DELETE * FROM Trans_Cajas " _
+          & "WHERE Fecha <= #" & FechaFin & "# " _
+          & "AND Cuenta_No = '" & Ninguno & "' "
+     DeleteData DataAuxCaja, sSQL
+  End If
+  FSeteos.Caption = "Eliminando Transacciones de Bancos"
+' Eliminando depositos de bancos
+  sSQL = "DELETE * FROM Bancos " _
+       & "WHERE Fecha <= #" & FechaFin & "# " _
+       & "AND T = 'N' " _
+       & "AND Dias = 0 "
+  DeleteData DataAuxCaja, sSQL
+' Eliminando los depositos anulados
+  sSQL = "DELETE * FROM Bancos " _
+       & "WHERE T = 'A' "
+  DeleteData DataAuxCaja, sSQL
+  FSeteos.Caption = "Eliminando Transacciones de Encajes"
+' Eliminando los Encajes anulados
+  sSQL = "DELETE * FROM Bloqueos " _
+       & "WHERE T = 'A' "
+  DeleteData DataAuxCaja, sSQL
+  FSeteos.Caption = "Eliminando Transacciones de Flujos de Cajas"
+' Eliminando Saldo de Flujo de caja
+  MiFecha = FechaFin
+  sSQL = "SELECT * FROM Saldo_Caja_Libreta " _
+       & "WHERE Fecha <= #" & FechaFin & "# " _
+       & "ORDER BY Fecha DESC "
+  SelectAdodc DataAuxCaja, sSQL
+  If DataAuxCaja.Recordset.RecordCount > 0 Then
+     FechaFin = BuscarFecha(DataAuxCaja.Recordset.Fields("Fecha"))
+  End If
+  sSQL = "DELETE * FROM Saldo_Caja_Libreta " _
+       & "WHERE Fecha < #" & FechaFin & "# " _
+       & "AND CL = True "
+  DeleteData DataAuxCaja, sSQL
+  FSeteos.Caption = "Eliminando Transacciones de Flujos de Libretas"
+' Eliminando Saldo de Flujo de caja
+  sSQL = "DELETE * FROM Saldo_Caja_Libreta " _
+       & "WHERE Fecha < #" & FechaFin & "# " _
+       & "AND CL = False "
+  DeleteData DataAuxCaja, sSQL
+  FSeteos.Caption = "Eliminando Saldo de Libretas"
+' Eliminando Saldo de Libretas
+  sSQL = "DELETE * FROM Saldo_Libretas " _
+       & "WHERE Fecha < #" & FechaFin & "# "
+  DeleteData DataAuxCaja, sSQL
+  FSeteos.Caption = "Eliminando Transacciones de Prestamos"
+' Eliminando los Prestamos
+  FechaFin = MiFecha
+  Contador = 0
+  sSQL = "SELECT * FROM Prestamos " _
+       & "WHERE Fecha <= #" & FechaFin & "# " _
+       & "AND T = 'C' " _
+       & "ORDER BY TP,Cuenta_No,Credito_No "
+  SelectAdodc DataCaja, sSQL
+  With DataCaja.Recordset
+   If .RecordCount > 0 Then
+       Do While Not .EOF
+          Contador = Contador + 1
+          TipoDoc = .Fields("TP")
+          Numero = .Fields("Credito_No")
+          Cuenta_No = .Fields("Cuenta_No")
+          FSeteos.Caption = Contador & "/" & .RecordCount & ", Eliminando Transacciones de Prestamos " & TipoDoc & ", Credito No. " & Numero
+          sSQL = "DELETE * FROM Trans_Prestamos " _
+               & "WHERE Credito_No = " & Numero & " " _
+               & "AND Cuenta_No = '" & Cuenta_No & "' " _
+               & "AND TP = '" & TipoDoc & "' "
+          DeleteData DataAuxCaja, sSQL
+         .MoveNext
+       Loop
+   End If
+  End With
+  sSQL = "DELETE * FROM Prestamos " _
+       & "WHERE Fecha <= #" & FechaFin & "# " _
+       & "AND T = 'C' "
+  DeleteData DataAuxCaja, sSQL
+' Eliminar Movimientos antes del cierre
+  Contador = 0
+  sSQL = "SELECT * FROM Cuentas " _
+       & "ORDER BY Cuenta_No "
+  SelectAdodc DataCaja, sSQL
+  With DataCaja.Recordset
+   If .RecordCount > 0 Then
+       Do While Not .EOF
+          Contador = Contador + 1
+          Cuenta_No = .Fields("Cuenta_No")
+          FSeteos.Caption = Contador & "/" & .RecordCount & ", Eliminando Movimiento de Libreta No. " & Cuenta_No
+        ' Eliminando Transacciones de libretas
+        '  "ORDER BY Fecha,IDT,Hora,ID "
+          sSQL = "SELECT * FROM Trans_Libretas " _
+               & "WHERE Cuenta_No = '" & Cuenta_No & "' " _
+               & "AND Fecha <= #" & FechaFin & "# " _
+               & "ORDER BY Fecha DESC,IDT DESC,Hora DESC,ID DESC "
+          SelectAdodc DataCajaCred, sSQL
+          If DataCajaCred.Recordset.RecordCount > 0 Then
+            'DataCajaCred.Recordset.MoveLast
+             MiFecha = BuscarFecha(DataCajaCred.Recordset.Fields("Fecha"))
+             sSQL = "DELETE * FROM Trans_Libretas " _
+                  & "WHERE Cuenta_No = '" & Cuenta_No & "' " _
+                  & "AND Fecha < #" & MiFecha & "# "
+             DeleteData DataAuxCaja, sSQL
+          End If
+        ' Eliminando Transacciones de Cajas
+          FSeteos.Caption = Contador & "/" & .RecordCount & ", Eliminando Movimiento de Cuenta No. " & Cuenta_No
+          sSQL = "SELECT * FROM Trans_Cajas " _
+               & "WHERE Cuenta_No = '" & Cuenta_No & "' " _
+               & "AND Fecha <= #" & FechaFin & "# " _
+               & "ORDER BY Fecha DESC,Hora DESC"
+          SelectAdodc DataCajaCred, sSQL
+          If DataCajaCred.Recordset.RecordCount > 0 Then
+            'DataCajaCred.Recordset.MoveLast
+             MiFecha = BuscarFecha(DataCajaCred.Recordset.Fields("Fecha"))
+             sSQL = "DELETE * FROM Trans_Cajas " _
+                  & "WHERE Cuenta_No = '" & Cuenta_No & "' " _
+                  & "AND Fecha < #" & MiFecha & "# "
+             DeleteData DataAuxCaja, sSQL
+          End If
+         .MoveNext
+       Loop
+   End If
+  End With
+  RatonNormal
+  Unload FSeteos
+End Sub
+
+Private Sub Command2_Click()
+   FechaValida MBoxFechaI, False
+   FechaValida MBoxFechaF, False
+   Titulo = "Pregunta de Actualizacion"
+   Mensajes = "Seguro de Cambiar a Dorales el Periodo"
+   If BoxMensaje = 6 Then
+      RatonReloj
+      FechaIni = BuscarFecha(MBoxFechaI.Text)
+      FechaFin = BuscarFecha(MBoxFechaF.Text)
+      sSQL = "SELECT * FROM Transacciones " _
+           & "WHERE Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# "
+      If TextTP.Text <> "" Then sSQL = sSQL & "AND TP = '" & TextTP.Text & "' "
+      SelectAdodc DataContabil, sSQL
+      With DataContabil.Recordset
+       If .RecordCount > 0 Then
+           RatonReloj
+           Do While Not .EOF
+             .Edit
+             .Fields("Debe") = Round(.Fields("Debe") / Dolar)
+             .Fields("Haber") = Round(.Fields("Haber") / Dolar)
+             .Fields("Debe_ME") = 0
+             .Fields("Haber_ME") = 0
+             .Update
+             .MoveNext
+           Loop
+       End If
+      End With
+      sSQL = "SELECT * FROM TransaccionesSC " _
+           & "WHERE Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# "
+      If TextTP.Text <> "" Then sSQL = sSQL & "AND TP = '" & TextTP.Text & "' "
+      SelectAdodc DataContabil, sSQL
+      With DataContabil.Recordset
+       If .RecordCount > 0 Then
+           RatonReloj
+           Do While Not .EOF
+             .Edit
+             .Fields("Debitos") = Round(.Fields("Debitos") / Dolar)
+             .Fields("Creditos") = Round(.Fields("Creditos") / Dolar)
+             .Fields("Debitos_ME") = 0
+             .Fields("Creditos_ME") = 0
+             .Update
+             .MoveNext
+           Loop
+       End If
+      End With
+      RatonNormal
+   End If
+   MsgBox "Proceso Terminado"
+End Sub
+
+Private Sub Command20_Click()
+   FechaValida MBoxFechaI
+   FechaValida MBoxFechaF
+   Titulo = "Pregunta de Actualizacion"
+   Mensajes = "Seguro de Actualizar Girtos Pagados"
+   Contador = 1
+   If BoxMensaje = 6 Then
+      FechaIni = BuscarFecha(MBoxFechaI.Text)
+      FechaFin = BuscarFecha(MBoxFechaF.Text)
+      sSQL = "SELECT * " _
+           & "FROM Correos " _
+           & "WHERE Fecha_P BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
+           & "AND T = 'C' " _
+           & "ORDER BY Fecha_P,Envio_No "
+      SelectAdodc DataEnvios, sSQL
+      sSQL = "SELECT * FROM Flujo_Caja "
+      SelectAdodc DataResult, sSQL
+      sSQL = "DELETE * FROM Flujo_Caja " _
+           & "WHERE Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# "
+      DeleteData DataResult, sSQL
+      With DataEnvios.Recordset
+       If .RecordCount > 0 Then
+           RatonReloj
+           Do While Not .EOF
+              MiFecha = .Fields("Fecha_P")
+              Codigo = .Fields("Envio_No")
+              Codigo1 = .Fields("Sucursal")
+              Codigo2 = .Fields("Usuario")
+              Total = .Fields("TOTAL")
+              DataResult.Recordset.AddNew
+              DataResult.Recordset.Fields("Envio_No") = Codigo
+              DataResult.Recordset.Fields("Fecha") = MiFecha
+              DataResult.Recordset.Fields("Sucursal") = Codigo1
+              DataResult.Recordset.Fields("Egreso_MN") = Total
+              DataResult.Recordset.Fields("Usuario") = Codigo2
+              DataResult.Recordset.Update
+              FSeteos.Caption = Codigo & ": " & Contador & "/" & .RecordCount
+              Contador = Contador + 1
+             .MoveNext
+           Loop
+        End If
+      End With
+   End If
+   RatonNormal
+End Sub
+
+Private Sub Command3_Click()
+  If ClaveSupervisor Then
+     Titulo = "Pregunta de Procesos"
+     Mensajes = "Seguro de Reprocesar" & vbCrLf _
+              & "todos los Comprobantes"
+     If BoxMensaje = 6 Then
+        sSQL = "SELECT * FROM Comprobantes " _
+             & "ORDER BY Item,Tp,Numero "
+        SelectDBGrid DBGrid1, DataContabil, sSQL
+        RatonReloj
+        Contador = 1
+        DBGrid1.Visible = False
+        With DataContabil.Recordset
+         If .RecordCount > 0 Then
+             Do While Not .EOF
+               'Listar Comprobante
+                NumItemTemp = .Fields("Item")
+                FechaTexto = .Fields("Fecha")
+                Numero = .Fields("Numero")
+                TipoComp = .Fields("TP")
+                TipoDoc = .Fields("T")
+                FSeteos.Caption = TipoComp & "-" & Numero & ", " & Contador & "/" & .RecordCount
+                IniciarAsientosDataDe DataAsientos, DataSubCtaDet, DataAsientBanco, DataDetRet, DataIngArt
+                ListarComprobante TipoComp, NumItemTemp, Numero, DataAsientos, DataAsientBanco, DataSubCtaDet, DataDetRet
+                If DataAsientos.Recordset.RecordCount > 0 Then
+                   DataAsientos.Recordset.MoveFirst
+                   Do While Not DataAsientos.Recordset.EOF
+                      Codigo = DataAsientos.Recordset.Fields("CODIGO")
+                      If DataAsientos.Recordset.Fields("DEBE") > 0 Then OpcDH = "1"
+                      If DataAsientos.Recordset.Fields("HABER") > 0 Then OpcDH = "2"
+                      If DataSubCtaDet.Recordset.RecordCount > 0 Then
+                         DataSubCtaDet.Recordset.MoveFirst
+                         Do While Not DataSubCtaDet.Recordset.EOF
+                            DataSubCtaDet.Recordset.Edit
+                            If Codigo = DataSubCtaDet.Recordset.Fields("Cta") Then
+                               DataSubCtaDet.Recordset.Fields("DH") = OpcDH
+                               DataSubCtaDet.Recordset.Update
+                            End If
+                            DataSubCtaDet.Recordset.MoveNext
+                         Loop
+                      End If
+                      DataAsientos.Recordset.MoveNext
+                   Loop
+                End If
+               'Grabacion del Comp
+                Co.T = TipoDoc
+                Co.Item = NumItemTemp
+                Co.TP = TipoComp
+                Co.Fecha = FechaTexto
+                Co.Numero = Numero
+                GrabarComprobante Co, DataAsientos, DataSubCtaDet, DataAsientBanco, DataDetRet
+                Contador = Contador + 1
+               .MoveNext
+             Loop
+         End If
+        End With
+        DBGrid1.Visible = True
+        RatonNormal
+     End If
+  End If
+End Sub
+
+Private Sub Command4_Click()
+   RatonReloj
+   DataContabil.Database.Close
+   DataProducc.Database.Close
+   DataFacturas.Database.Close
+   DataFactTurs.Database.Close
+   DataCodigos.Database.Close
+   DataCtasProc.Database.Close
+   DataSubCtas.Database.Close
+   DataCorreos.Database.Close
+   DataGanadero.Database.Close
+   For Ind = 0 To File1.ListCount - 1
+       Cadena = Dir1.Path & "\" & File1.List(Ind)
+       CompactarDatabase Cadena, False
+   Next Ind
+   RatonNormal
+   Unload FSeteos
+End Sub
+
+Private Sub Command5_Click()
+   FechaValida MBoxFechaI, False
+   FechaValida MBoxFechaF, False
+   If ClaveSupervisor Then
+      Titulo = "Pregunta de Eliminar"
+      Mensajes = "Seguro de Borrar el Periodo"
+      If BoxMensaje = 6 Then
+         RatonReloj
+         FechaIni = BuscarFecha(MBoxFechaI.Text)
+         FechaFin = BuscarFecha(MBoxFechaF.Text)
+         sSQL = "DELETE * FROM Balance_General "
+         DeleteData DataContabil, sSQL
+         sSQL = "DELETE * FROM Balance_Consolidado "
+         DeleteData DataContabil, sSQL
+         sSQL = "DELETE * FROM Estado_Resultado "
+         DeleteData DataContabil, sSQL
+         sSQL = "DELETE * FROM Estado_Resultado_Mes "
+         DeleteData DataContabil, sSQL
+         sSQL = "DELETE * FROM Estado_Resultado_12Meses "
+         DeleteData DataContabil, sSQL
+         sSQL = "DELETE * FROM Transacciones " _
+              & "WHERE Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# "
+         DeleteData DataContabil, sSQL
+         sSQL = "DELETE * FROM TransaccionesSC " _
+              & "WHERE Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# "
+         DeleteData DataContabil, sSQL
+         sSQL = "DELETE * FROM Comprobantes " _
+              & "WHERE Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# "
+         DeleteData DataContabil, sSQL
+         sSQL = "DELETE * FROM Bancos " _
+              & "WHERE Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# "
+         DeleteData DataContabil, sSQL
+         sSQL = "DELETE * FROM Retenciones " _
+              & "WHERE Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# "
+         DeleteData DataContabil, sSQL
+         RatonNormal
+      End If
+      MsgBox "Proceso Terminado"
+   End If
+End Sub
+
+Private Sub Command6_Click()
+sSQL = "SELECT * FROM Comprobantes " _
+     & "ORDER BY Item,TP,Numero,Fecha "
+SelectAdodc DataContabil, sSQL
+List1.Clear
+List1.AddItem "Comprobantes Incompletos Borrados:"
+Contador = 0
+With DataContabil.Recordset
+ If .RecordCount > 0 Then
+     Do While Not .EOF
+     FSeteos.Caption = Contador & " de " & .RecordCount
+     Item = .Fields("Item")
+     Numero = .Fields("Numero")
+     TipoProc = .Fields("TP")
+     MiFecha = .Fields("Fecha")
+     sSQL = "SELECT * FROM Transacciones " _
+          & "WHERE Item = " & Item & " " _
+          & "AND TP = '" & TipoProc & "' " _
+          & "AND Numero = " & Numero & " "
+     SelectAdodc DataConta, sSQL
+     If DataConta.Recordset.RecordCount <= 0 Then
+        List1.AddItem MiFecha & " - " & Item & "-" & TipoProc & "-" & Numero
+        sSQL = "DELETE * FROM Comprobantes " _
+             & "WHERE Item = " & Item & " " _
+             & "AND TP = '" & TipoProc & "' " _
+             & "AND Numero = " & Numero & " " _
+             & "AND Fecha = #" & BuscarFecha(MiFecha) & "# "
+        DeleteData DataSaldoSC, sSQL
+     End If
+     Contador = Contador + 1
+    .MoveNext
+     Loop
+ End If
+End With
+sSQL = "SELECT Item,Fecha,TP,Numero,SUM(Debe) As TDebe,SUM(Haber) As THaber " _
+     & "FROM Transacciones " _
+     & "GROUP BY Item,TP,Numero,Fecha "
+SelectAdodc DataContabil, sSQL
+Contador = 0
+With DataContabil.Recordset
+ If .RecordCount > 0 Then
+     Do While Not .EOF
+     FSeteos.Caption = Contador & " de " & .RecordCount
+     Item = .Fields("Item")
+     Numero = .Fields("Numero")
+     TipoProc = .Fields("TP")
+     MiFecha = .Fields("Fecha")
+     sSQL = "SELECT * FROM Comprobantes " _
+          & "WHERE Item = " & Item & " " _
+          & "AND TP = '" & TipoProc & "' " _
+          & "AND Numero = " & Numero & " "
+     SelectAdodc DataConta, sSQL
+     If DataConta.Recordset.RecordCount <= 0 Then
+        List1.AddItem MiFecha & " - " & Item & "-" & TipoProc & "-" & Numero
+        sSQL = "DELETE * FROM Transacciones " _
+             & "WHERE Item = " & Item & " " _
+             & "AND TP = '" & TipoProc & "' " _
+             & "AND Numero = " & Numero & " " _
+             & "AND Fecha = #" & BuscarFecha(MiFecha) & "# "
+        DeleteData DataSaldoSC, sSQL
+     End If
+     Contador = Contador + 1
+    .MoveNext
+     Loop
+ End If
+End With
+End Sub
+
+Private Sub Command7_Click()
+Dim Td As TableDef
+Dim Encontro As Boolean
+  'DataContabil1.Database.Close
+  List2.Clear
+  List3.Clear
+  Cadena = "Bases: " & vbCrLf
+  For Each Td In DataContabil1.Database.TableDefs
+   If DataEmpresa.Recordset.RecordCount > 0 Then
+      DataEmpresa.Recordset.MoveFirst
+      Encontro = True
+      Do While Not DataEmpresa.Recordset.EOF
+         Cadena1 = SinEspaciosIzq(DataEmpresa.Recordset.Fields("NombUsuar"))
+         Cadena2 = Right(Td.Name, Len(Cadena1))
+         If Cadena1 = Cadena2 Then
+            List3.AddItem Td.Name
+            Encontro = False
+         End If
+         DataEmpresa.Recordset.MoveNext
+      Loop
+      If Encontro And UCase(Mid(Td.Name, 1, 4)) <> "MSYS" Then List2.AddItem Td.Name
+   End If
+  Next
+End Sub
+
+Private Sub Command8_Click()
+  sSQL = "SELECT * FROM Costos_R_" & CodigoUsuario
+  SelectAdodc DataConta, sSQL
+  sSQL = "DELETE * FROM Costos_R_" & CodigoUsuario
+  DeleteData DataConta, sSQL
+  sSQL = "UPDATE Transacciones As T,Bancos As B " _
+       & "SET T.Cheq_Dep = B.Cheq_Dep " _
+       & "WHERE T.Cta = B.Cta_Banco " _
+       & "AND  T.TP = B.TP " _
+       & "AND  T.Numero = B.Numero " _
+       & "AND  T.Cheq_Dep = '" & Ninguno & "' "
+  UpdateData DataContabil, sSQL
+  sSQL = "UPDATE Comprobantes SET Concepto = 'C O M P R O B A N T E    A N U L A D O' " _
+       & "WHERE T = 'A' "
+  UpdateData DataContabil, sSQL
+  sSQL = "UPDATE Transacciones SET " _
+       & "Debe = 0,Haber = 0,Debe_ME = 0,Haber_ME = 0," _
+       & "Saldo = 0,Saldo_ME = 0 " _
+       & "WHERE T = 'A' "
+  UpdateData DataContabil, sSQL
+  sSQL = "UPDATE TransaccionesSC SET " _
+       & "Debitos = 0,Creditos = 0,Debitos_ME = 0,Creditos_ME = 0," _
+       & "Saldo = 0,Saldo_ME = 0 " _
+       & "WHERE T = 'A' "
+  UpdateData DataContabil, sSQL
+  
+  sSQL = "SELECT * FROM Transacciones " _
+       & "ORDER BY TP,Numero,Fecha,Item "
+  SelectAdodc DataContabil, sSQL, False
+  RatonReloj
+  With DataContabil.Recordset
+   If .RecordCount > 0 Then
+      .MoveFirst
+       Cadena = "Comprobantes:" & vbCrLf
+       Debe = 0: Haber = 0
+       NumItem = .Fields("Item")
+       Cta = .Fields("Cta")
+       MiFecha = .Fields("Fecha")
+       TipoComp = .Fields("TP")
+       Numero = .Fields("Numero")
+       Do While Not .EOF
+          If TipoComp <> .Fields("TP") Or Numero <> .Fields("Numero") Or NumItem <> .Fields("Item") Then
+             FSeteos.Caption = MiFecha & " TP: " & TipoComp & " No. " & Numero
+             If Round(Debe - Haber) <> 0 Then
+                Cadena = Cadena & " TP: " & TipoComp & " No. " & Numero & " -> " & Round(Debe - Haber) & vbCrLf
+                DataConta.Recordset.AddNew
+                DataConta.Recordset.Fields("Fecha") = MiFecha
+                DataConta.Recordset.Fields("Beneficiario") = Ninguno
+                DataConta.Recordset.Fields("Cuenta") = Cta
+                DataConta.Recordset.Fields("TP") = TipoComp
+                DataConta.Recordset.Fields("Numero") = Numero
+                DataConta.Recordset.Fields("Debitos") = Debe
+                DataConta.Recordset.Fields("Creditos") = Haber
+                DataConta.Recordset.Fields("Valor_ME") = NumItem
+                DataConta.Recordset.Update
+             End If
+             Debe = 0: Haber = 0
+             NumItem = .Fields("Item")
+             TipoComp = .Fields("TP")
+             Numero = .Fields("Numero")
+             Cta = .Fields("Cta")
+             MiFecha = .Fields("Fecha")
+          End If
+          Debe = Debe + .Fields("Debe")
+          Haber = Haber + .Fields("Haber")
+         .MoveNext
+       Loop
+   End If
+  End With
+  If Round(Debe - Haber) <> 0 Then
+     DataConta.Recordset.AddNew
+     DataConta.Recordset.Fields("Fecha") = MiFecha
+     DataConta.Recordset.Fields("Beneficiario") = Ninguno
+     DataConta.Recordset.Fields("Cuenta") = Cta
+     DataConta.Recordset.Fields("TP") = TipoComp
+     DataConta.Recordset.Fields("Numero") = Numero
+     DataConta.Recordset.Fields("Debitos") = Debe
+     DataConta.Recordset.Fields("Creditos") = Haber
+     DataConta.Recordset.Fields("Valor_ME") = NumItem
+     DataConta.Recordset.Update
+  End If
+  sSQL = "SELECT TP,Numero,Fecha,Item " _
+       & "FROM Transacciones " _
+       & "GROUP BY TP,Numero,Fecha,Item "
+  SelectAdodc DataContabil, sSQL, False
+  RatonReloj
+  With DataContabil.Recordset
+   If .RecordCount > 0 Then
+      .MoveFirst
+       Do While Not .EOF
+          NumItem = .Fields("Item")
+          MiFecha = .Fields("Fecha")
+          TipoComp = .Fields("TP")
+          Numero = .Fields("Numero")
+          FSeteos.Caption = "G: " & MiFecha & " TP: " & TipoComp & " No. " & Numero
+          sSQL = "SELECT * FROM Comprobantes " _
+               & "WHERE TP='" & TipoComp & "' " _
+               & "AND Numero=" & Numero & " " _
+               & "AND Fecha=# " & BuscarFecha(MiFecha) & "# " _
+               & "AND Item=" & NumItem & " "
+          SelectAdodc DataSaldoSC, sSQL
+          If DataSaldoSC.Recordset.RecordCount <= 0 Then
+             DataConta.Recordset.AddNew
+             DataConta.Recordset.Fields("Fecha") = MiFecha
+             DataConta.Recordset.Fields("Beneficiario") = Ninguno
+             DataConta.Recordset.Fields("Cuenta") = Ninguno
+             DataConta.Recordset.Fields("TP") = TipoComp
+             DataConta.Recordset.Fields("Numero") = Numero
+             DataConta.Recordset.Fields("Debitos") = 0
+             DataConta.Recordset.Fields("Creditos") = 0
+             DataConta.Recordset.Fields("Valor_ME") = NumItem
+             DataConta.Recordset.Update
+          End If
+         .MoveNext
+       Loop
+   End If
+  End With
+  sSQL = "SELECT * FROM Costos_R_" & CodigoUsuario
+  SelectAdodc DataContabil, sSQL
+  RatonNormal
+  FSeteos.Caption = "SETEOS GENERALES DE MANTENIMIENTO"
+  MsgBox Cadena
+End Sub
+
+Private Sub Command9_Click()
+  Cadena = DBGrid2.Columns(I).DataField
+  sSQL = "SELECT * FROM " & List2.Text & " " _
+       & "ORDER BY " & Cadena & " DESC "
+  SelectAdodc DataContabil1, sSQL
+End Sub
+
+Private Sub DBCListEmp_KeyDown(KeyCode As Integer, Shift As Integer)
+  Keys_Especiales Shift
+  If KeyCode = vbKeyInsert Then
+     Codigo = SinEspaciosIzq(DBCUsuario.Text)
+     sSQL = "SELECT * FROM Acceso_Empresa " _
+          & "WHERE Codigo = '" & Codigo & "' "
+     SelectDBGrid DBGEmp, DataBuscEmp, sSQL
+     sSQL = "SELECT * FROM Empresas " _
+          & "WHERE Empresa = '" & DBCListEmp.Text & "' "
+     SelectAdodc DataEmpresa1, sSQL
+     With DataBuscEmp.Recordset
+       If DataEmpresa1.Recordset.RecordCount > 0 Then
+         .AddNew
+         .Fields("Codigo") = Codigo
+         .Fields("Empresa") = DataEmpresa1.Recordset.Fields("Empresa")
+         .Fields("SubDir") = DataEmpresa1.Recordset.Fields("SubDir")
+         .Update
+       End If
+     End With
+     sSQL = "SELECT * FROM Acceso_Empresa " _
+          & "WHERE Codigo = '" & Codigo & "' " _
+          & "ORDER BY Empresa "
+     SelectDBGrid DBGEmp, DataBuscEmp, sSQL
+  End If
+  If CtrlDown And KeyCode = vbKeyInsert Then
+     Codigo = SinEspaciosIzq(DBCUsuario.Text)
+     sSQL = "SELECT * FROM Acceso_Empresa "
+     SelectDBGrid DBGEmp, DataBuscEmp, sSQL
+     sSQL = "SELECT * FROM Empresas " _
+          & "ORDER BY Empresa "
+     SelectAdodc DataEmpresa1, sSQL
+     With DataBuscEmp.Recordset
+       If DataEmpresa1.Recordset.RecordCount > 0 Then
+          DataEmpresa1.Recordset.MoveFirst
+          Do While Not DataEmpresa1.Recordset.EOF
+            .AddNew
+            .Fields("Codigo") = Codigo
+            .Fields("Empresa") = DataEmpresa1.Recordset.Fields("Empresa")
+            .Fields("SubDir") = DataEmpresa1.Recordset.Fields("SubDir")
+            .Update
+             DataEmpresa1.Recordset.MoveNext
+          Loop
+       End If
+     End With
+     sSQL = "SELECT * FROM Acceso_Empresa " _
+          & "WHERE Codigo = '" & Codigo & "' " _
+          & "ORDER BY Empresa "
+     SelectDBGrid DBGEmp, DataBuscEmp, sSQL
+  End If
+End Sub
+
+Private Sub DBCUsuario_KeyDown(KeyCode As Integer, Shift As Integer)
+  PresionoEnter KeyCode
+End Sub
+
+Private Sub DBCUsuario_LostFocus()
+   For I = 0 To 5
+      Nivel_N(I) = Val(True)
+   Next I
+   CSupervisor = Val(False)
+   Codigo = SinEspaciosIzq(DBCUsuario.Text)
+   sSQL = "SELECT * FROM Accesos " _
+        & "WHERE Codigo = '" & Codigo & "' "
+   SelectAdodc DataEmpresa1, sSQL, False
+   With DataEmpresa1.Recordset
+    If .RecordCount > 0 Then TextClave.Text = .Fields("Clave") Else TextClave.Text = ""
+   End With
+   sSQL = "SELECT * FROM " & UCase(App.EXEName) & " " _
+        & "WHERE Codigo = '" & Codigo & "' "
+   SelectAdodc DataEmpresa1, sSQL, False
+   With DataEmpresa1.Recordset
+    If .RecordCount > 0 Then
+        Nivel_N(0) = .Fields("Nivel_1")
+        Nivel_N(1) = .Fields("Nivel_2")
+        Nivel_N(2) = .Fields("Nivel_3")
+        Nivel_N(3) = .Fields("Nivel_4")
+        Nivel_N(4) = .Fields("Nivel_5")
+        Nivel_N(5) = .Fields("Nivel_6")
+        CSupervisor = .Fields("Supervisor")
+        For I = 0 To 5
+           If Nivel_N(I) <> 0 Then Nivel_N(I) = 1
+        Next I
+        If CSupervisor <> 0 Then CSupervisor = 1
+    Else
+        MsgBox "Este usuario aun no esta seteado"
+    End If
+   End With
+   sSQL = "SELECT * FROM Acceso_Empresa " _
+        & "WHERE Codigo = '" & Codigo & "' " _
+        & "ORDER BY Empresa "
+   SelectDBGrid DBGEmp, DataBuscEmp, sSQL
+   For I = 0 To 5
+       CheckNivel(I).Value = Nivel_N(I)
+   Next I
+   CheckSupervisor.Value = CSupervisor
+   CheckNivel(0).SetFocus
+End Sub
+
+Private Sub DBGrid1_KeyDown(KeyCode As Integer, Shift As Integer)
+   If KeyCode = vbKeyF1 Then GenerarDataTexto FSeteos, DataContabil
+End Sub
+
+Private Sub DBGrid2_HeadClick(ByVal ColIndex As Integer)
+  I = ColIndex
+End Sub
+
+Private Sub DBGrid3_BeforeDelete(Cancel As Integer)
+  Cancel = DeleteSiNo(DataCodigos)
+End Sub
+
+Private Sub DBGrid4_BeforeDelete(Cancel As Integer)
+  Cancel = DeleteSiNo(DataCtasProc)
+End Sub
+
+Private Sub Dir1_Change()
+  File1.FileName = Dir1.Path & "\*.MDB"
+End Sub
+
+Private Sub File3_LostFocus()
+  DataContabil1.DatabaseName = Dir3.Path & "\" & File3.FileName
+  DataContabil1.Refresh
+End Sub
+
+Private Sub Form_Activate()
+  IniciarAsientosDataDe DataAsientos, DataSubCtas, DataBanco, DataRet, DataIngArt
+  For I = 0 To 5
+      CheckNivel(I).Value = Nivel_N(I)
+  Next I
+  CheckSupervisor.Value = CSupervisor
+  sSQL = "SELECT Nombre_Completo,Clave " _
+       & "FROM Accesos " _
+       & "WHERE Mid(Codigo,1,6) = 'ACCESO' " _
+       & "ORDER BY Codigo "
+  'SelectDBGrid DBGrid6, DataSupervisor, sSQL
+  sSQL = "SELECT * FROM Codigos ORDER BY Concepto "
+  'SelectDBGrid DBGrid3, DataCodigos, sSQL
+  sSQL = "SELECT * FROM CtasProceso ORDER BY Codigo,Cuenta "
+  'SelectDBGrid DBGrid4, DataCtasProc, sSQL
+  sSQL = "SELECT * FROM Niveles ORDER BY Nivel "
+  'SelectDBGrid DBGrid5, DataSubCtas1, sSQL
+' Lista de Usuarios en la red
+  sSQL = "SELECT (Codigo & Space(4) & Nombre_Completo) As NombUsuar " _
+       & "FROM Accesos " _
+       & "WHERE Mid(Codigo,1,6) <> 'ACCESO' " _
+       & "ORDER BY Codigo,Nombre_Completo "
+  SelectDBCombo DBCUsuario, DataEmpresa, sSQL, "NombUsuar", False
+  Select Case UCase(App.EXEName)
+    Case "FAMENVIO"
+         Cadena = "CONFIRMACION DE PAGOS" & vbCrLf & Chr(10) _
+                & "ANULAR"
+         TextNiveles(0).Text = Cadena
+         Cadena = "OBLIGACIONES POR PAGAR"
+         TextNiveles(1).Text = Cadena
+         Cadena = "FLUJO DE CAJA" & vbCrLf & Chr(10) _
+                & "TRANSFERENCIAS" & vbCrLf & Chr(10) _
+                & "RECEPCION ENVIOS"
+         TextNiveles(2).Text = Cadena
+         Cadena = "ACTUALIZACION DE REMITENTES"
+         TextNiveles(3).Text = Cadena
+         Cadena = "CORRESPONSALES" & vbCrLf & Chr(10) _
+                & "TRANSFERENCIAS"
+         TextNiveles(4).Text = Cadena
+         TextNiveles(5).Text = "RECIBOS DE PAGO"
+    Case "CONTABIL"
+         Cadena = "MANTENIMIENTO" & vbCrLf & Chr(10) _
+                & "INGRESO DEL CATALOGO DE CUENTAS" & vbCrLf & Chr(10) _
+                & "PROCESAR INGRESOS - EGRESOS - DIARIOS" & vbCrLf & Chr(10) _
+                & "MAYORIZAR - PROCESAR BALANCES DE COMPROBACION" & vbCrLf & Chr(10) _
+                & "LISTAR BALANCES PRINCIPALES" & vbCrLf & Chr(10) _
+                & "LISTAR COMPROBANTES" & vbCrLf & Chr(10) _
+                & "ANULAR COMPROBANTES"
+         TextNiveles(0).Text = Cadena
+         Cadena = "INGRESO DEL CATALOGO DE CUENTAS" & vbCrLf & Chr(10) _
+                & "PROCESAR INGRESOS EGRESOS DIARIOS" & vbCrLf & Chr(10) _
+                & "MAYORIZAR - PROCESAR BALANCE DE COMPROBACION" & vbCrLf & Chr(10) _
+                & "LISTAR BALANCES PRINCIPALES" & vbCrLf & Chr(10) _
+                & "LISTAR COMPROBANTES"
+         TextNiveles(1).Text = Cadena
+         Cadena = "INGRESO DEL CATALOGO DE CUENTAS" & vbCrLf & Chr(10) _
+                & "PROCESAR INGRESOS - EGRESOS - DIARIOS" & vbCrLf & Chr(10) _
+                & "LISTAR COMPROBANTES"
+         TextNiveles(2).Text = Cadena
+         Cadena = "PROCESAR INGRESOS - EGRESOS - DIARIOS" & vbCrLf & Chr(10) _
+                & "LISTAR COMPROBANTES"
+         TextNiveles(3).Text = Cadena
+         Cadena = ""
+         TextNiveles(4).Text = Cadena
+         TextNiveles(5).Text = Cadena
+    Case "CAJACRED"
+         Cadena = "ADREDITAR INTERESES" & vbCrLf & Chr(10) _
+                & "LISTAR CUENTAS" & vbCrLf & Chr(10) _
+                & "VER MOVIMIENTO DE CUENTAS" & vbCrLf & Chr(10) _
+                & "HISTORIAL DE CUENTAS" & vbCrLf & Chr(10) _
+                & "GRABAR CIERRE DEL DIA" & vbCrLf & Chr(10) _
+                & "VER SALDO DE INTERES ACUMULADOS POR PAGAR DIAS ANTERIORES" & vbCrLf & Chr(10) _
+                & "CAMBIAR DIAS DE EFECTIVIZACION" & vbCrLf & Chr(10) _
+                & "PROTESTAR CHEQUES" & vbCrLf & Chr(10) _
+                & "EFECTIVIZAR CHEQUES"
+         TextNiveles(0).Text = Cadena
+         Cadena = "DEPOSITOS Y RETIROS" & vbCrLf & Chr(10) _
+                & "REALIZAR INGRESOS Y EGRESOS DE CAJA" & vbCrLf & Chr(10) _
+                & "DEPOSITOS AL BANCO" & vbCrLf & Chr(10) _
+                & "IMPRIMIR FLUJO DE CAJA Y LIBRETAS" & vbCrLf & Chr(10) _
+                & "HISTORIAL DE CUENTAS"
+         TextNiveles(1).Text = Cadena
+         Cadena = "APERTURAS" & vbCrLf & Chr(10) _
+                & "TRANSACCIONES DE CREDITO" & vbCrLf & Chr(10) _
+                & "ENCAJES" & vbCrLf & Chr(10) _
+                & "LISTAR CUENTAS" & vbCrLf & Chr(10) _
+                & "VER MOVIMIENTO DE CUENTAS" & vbCrLf & Chr(10) _
+                & "IMPRIMIR MOVIMIENTO DE CUENTAS" & vbCrLf & Chr(10) _
+                & "IMPRIMIR CREDITO" & vbCrLf & Chr(10) _
+                & "HISTORIAL DE CUENTAS"
+         TextNiveles(2).Text = Cadena
+         Cadena = "TRANSACCIONES DE CREDITO" & vbCrLf & Chr(10) _
+                & "IMPRIMIR REPORTE DE NOTAS DE DEBITO Y CREDTITO"
+         TextNiveles(3).Text = Cadena
+         Cadena = ""
+         TextNiveles(4).Text = "MANTENIMIENTO"
+         TextNiveles(5).Text = Cadena
+  End Select
+  sSQL = "SELECT * FROM Empresas ORDER BY Empresa "
+  SelectDBCombo DBCListEmp, DataListEmp, sSQL, "Empresa", False
+  RatonNormal
+End Sub
+
+Private Sub Form_Load()
+  CentrarForm FSeteos
+' Direccion de Bases de la empresa
+  Dir1.Path = RutaEmpresa
+  File1.FileName = Dir1.Path & "\*.MDB"
+  Dir2.Path = RutaEmpresa
+  File2.FileName = Dir2.Path & "\*.MDB"
+  Dir3.Path = RutaEmpresa
+  File3.FileName = Dir2.Path & "\*.MDB"
+' Direccion del encabezado de las empresas
+  DataListEmp.DatabaseName = RutaSistema & "\EMPRESAS.MDB"
+  DataBuscEmp.DatabaseName = RutaSistema & "\EMPRESAS.MDB"
+  DataEmpresa.DatabaseName = RutaSistema & "\EMPRESAS.MDB"
+  DataEmpresa1.DatabaseName = RutaSistema & "\EMPRESAS.MDB"
+  DataSupervisor.DatabaseName = RutaSistema & "\EMPRESAS.MDB"
+' Direccion de Contabilidad e Inventario
+  DataRet.DatabaseName = RutaEmpresa & "\CONTABIL.MDB"
+  DataBanco.DatabaseName = RutaEmpresa & "\CONTABIL.MDB"
+  DataConta.DatabaseName = RutaEmpresa & "\CONTABIL.MDB"
+  DataIngArt.DatabaseName = RutaEmpresa & "\CONTABIL.MDB"
+  DataDetRet.DatabaseName = RutaEmpresa & "\CONTABIL.MDB"
+  DataSubCtas.DatabaseName = RutaEmpresa & "\CONTABIL.MDB"
+  DataSaldoSC.DatabaseName = RutaEmpresa & "\CONTABIL.MDB"
+  DataAsientos.DatabaseName = RutaEmpresa & "\CONTABIL.MDB"
+  DataContabil.DatabaseName = RutaEmpresa & "\CONTABIL.MDB"
+  DataSubCtaDet.DatabaseName = RutaEmpresa & "\CONTABIL.MDB"
+  DataAsientBanco.DatabaseName = RutaEmpresa & "\CONTABIL.MDB"
+' Direccion de direccion de Facturacion
+  DataProducc.DatabaseName = RutaEmpresa & "\PRODUCC.MDB"
+  'DataFactTurs.DatabaseName = RutaEmpresa & "\PRODUCC.MDB"
+  DataSubCtas1.DatabaseName = RutaEmpresa & "\PRODUCC.MDB"
+  DataFacturas.DatabaseName = RutaEmpresa & "\PRODUCC.MDB"
+' Direccion de Seteos Principales
+  DataCodigos.DatabaseName = RutaEmpresa & "\SETEOS.MDB"
+  DataCtasProc.DatabaseName = RutaEmpresa & "\SETEOS.MDB"
+' Direccion de Base de Famiremesas
+  DataEnvios.DatabaseName = RutaEmpresa & "\ENVIOS.MDB"
+  DataResult.DatabaseName = RutaEmpresa & "\ENVIOS.MDB"
+  DataCorreos.DatabaseName = RutaEmpresa & "\ENVIOS.MDB"
+' Direccion de Bases de Cooperativas
+  DataCaja.DatabaseName = RutaEmpresa & "\CAJACRED.MDB"
+  DataAuxCaja.DatabaseName = RutaEmpresa & "\CAJACRED.MDB"
+  DataCajaCred.DatabaseName = RutaEmpresa & "\CAJACRED.MDB"
+End Sub
+
+Private Sub List2_DblClick()
+  SiguienteControl
+End Sub
+
+Private Sub List2_KeyDown(KeyCode As Integer, Shift As Integer)
+  If KeyCode = vbKeyDelete Then
+     Mensajes = "Esta seguro de Eliminar la Tabla " & List2.Text & "]"
+     Titulo = "Pregunta de Eliminacion"
+     If BoxMensaje = 6 Then
+        sSQL = "DROP TABLE " & List2.Text & " "
+        DataContabil1.Database.Execute sSQL
+        DataContabil1.Refresh
+        List2.Clear
+        For Each Td In DataContabil1.Database.TableDefs
+         If UCase(Mid(Td.Name, 1, 4)) <> "MSYS" Then List2.AddItem Td.Name
+        Next
+     End If
+  End If
+End Sub
+
+Private Sub List2_LostFocus()
+  sSQL = "SELECT * FROM " & List2.Text & " "
+  SelectAdodc DataContabil1, sSQL
+End Sub
+
+Private Sub MBoxFechaC_GotFocus()
+  MarcarTexto MBoxFechaC
+End Sub
+
+Private Sub MBoxFechaC_LostFocus()
+  FechaValida MBoxFechaC
+End Sub
+
+Private Sub MBoxFechaF_LostFocus()
+  FechaValida MBoxFechaF, False
+End Sub
+
+Private Sub MBoxFechaI_LostFocus()
+   FechaValida MBoxFechaI, False
+End Sub
+
+Private Sub TextTP_GotFocus()
+  TextTP.Text = ""
+End Sub
+
+Private Sub TextTP_LostFocus()
+  TextTP.Text = UCase(TextTP.Text)
+End Sub
+

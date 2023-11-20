@@ -1,0 +1,11 @@
+Línea 17: la clase MSComctlLib.ImageList del control ImageList1 no era una clase de control cargada.
+Línea 51: la clase MSDataGridLib.DataGrid del control DGCostos no era una clase de control cargada.
+Línea 135: la clase MSAdodcLib.Adodc del control AdoCostos no era una clase de control cargada.
+Línea 181: la clase MSAdodcLib.Adodc del control AdoSubModulo no era una clase de control cargada.
+Línea 228: la clase MSAdodcLib.Adodc del control AdoCtas no era una clase de control cargada.
+Línea 275: la clase MSDataListLib.DataCombo del control DCProyecto no era una clase de control cargada.
+Línea 297: la clase MSAdodcLib.Adodc del control AdoCtas1 no era una clase de control cargada.
+Línea 344: la clase MSDataListLib.DataCombo del control DCCtasProyecto no era una clase de control cargada.
+Línea 366: la clase MSDataListLib.DataCombo del control DCSubModulos no era una clase de control cargada.
+Línea 388: la clase MSAdodcLib.Adodc del control AdoAux no era una clase de control cargada.
+Línea 435: la clase MSComctlLib.Toolbar del control Toolbar1 no era una clase de control cargada.

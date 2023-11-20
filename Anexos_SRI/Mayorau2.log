@@ -1,0 +1,4 @@
+Línea 27: la clase MSDataListLib.DataCombo del control DCCliente no era una clase de control cargada.
+Línea 49: la clase MSAdodcLib.Adodc del control AdoSubCta no era una clase de control cargada.
+Línea 95: la clase MSDataGridLib.DataGrid del control DGMayor no era una clase de control cargada.
+Línea 218: la clase MSAdodcLib.Adodc del control AdoCliente no era una clase de control cargada.

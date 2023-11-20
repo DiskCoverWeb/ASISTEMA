@@ -1,0 +1,7 @@
+Línea 17: la clase ComctlLib.Toolbar del control Toolbar1 no era una clase de control cargada.
+Línea 172: la clase MSDataGridLib.DataGrid del control DGLibroRet no era una clase de control cargada.
+Línea 239: la clase MSAdodcLib.Adodc del control AdoClientes no era una clase de control cargada.
+Línea 286: la clase MSAdodcLib.Adodc del control AdoAux no era una clase de control cargada.
+Línea 333: la clase MSAdodcLib.Adodc del control AdoAir no era una clase de control cargada.
+Línea 380: la clase MSAdodcLib.Adodc del control AdoLibroRet no era una clase de control cargada.
+Línea 426: la clase ComctlLib.ImageList del control ImageList1 no era una clase de control cargada.

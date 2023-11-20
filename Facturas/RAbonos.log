@@ -1,0 +1,3 @@
+Línea 81: la clase MSDataGridLib.DataGrid del control DGIngCaja no era una clase de control cargada.
+Línea 260: la clase MSDataListLib.DataCombo del control DCRecibo no era una clase de control cargada.
+Línea 368: la clase MSMask.MaskEdBox del control MBFecha no era una clase de control cargada.

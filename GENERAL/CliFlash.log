@@ -1,0 +1,4 @@
+Línea 19: la clase ComctlLib.Toolbar del control TBarCliente no era una clase de control cargada.
+Línea 273: la clase MSAdodcLib.Adodc del control AdoAux no era una clase de control cargada.
+Línea 320: la clase MSAdodcLib.Adodc del control AdoListCtas no era una clase de control cargada.
+Línea 445: la clase ComctlLib.ImageList del control ImageList1 no era una clase de control cargada.

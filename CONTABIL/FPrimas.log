@@ -1,0 +1,6 @@
+Línea 17: la clase MSDataListLib.DataCombo del control DCCtas no era una clase de control cargada.
+Línea 39: la clase MSDataGridLib.DataGrid del control DGPrimas no era una clase de control cargada.
+Línea 162: la clase MSAdodcLib.Adodc del control AdoTrans no era una clase de control cargada.
+Línea 209: la clase MSMask.MaskEdBox del control MBHasta no era una clase de control cargada.
+Línea 234: la clase MSMask.MaskEdBox del control MBDesde no era una clase de control cargada.
+Línea 259: la clase MSAdodcLib.Adodc del control AdoCtas no era una clase de control cargada.

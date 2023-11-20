@@ -1,0 +1,4 @@
+Línea 103: la clase MSDataListLib.DataList del control DLEmpresa no era una clase de control cargada.
+Línea 162: la clase MSAdodcLib.Adodc del control AdoCta no era una clase de control cargada.
+Línea 208: la clase MSAdodcLib.Adodc del control AdoEmp no era una clase de control cargada.
+Línea 254: la clase MSAdodcLib.Adodc del control AdoAux no era una clase de control cargada.

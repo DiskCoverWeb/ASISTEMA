@@ -1,0 +1,6 @@
+Línea 81: la clase MSDataGridLib.DataGrid del control DGPara no era una clase de control cargada.
+Línea 148: la clase MSAdodcLib.Adodc del control AdoPara no era una clase de control cargada.
+Línea 211: la clase MSAdodcLib.Adodc del control AdoMemoNo no era una clase de control cargada.
+Línea 258: la clase MSAdodcLib.Adodc del control AdoMemo no era una clase de control cargada.
+Línea 305: la clase MSComDlg.CommonDialog del control CDialogDir no era una clase de control cargada.
+Línea 373: la clase ComctlLib.ImageList del control ImageList1 no era una clase de control cargada.

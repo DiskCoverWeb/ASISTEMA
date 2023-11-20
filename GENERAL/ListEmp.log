@@ -1,0 +1,10 @@
+Línea 120: la clase MSDataListLib.DataList del control DLEntidad no era una clase de control cargada.
+Línea 152: la clase MSAdodcLib.Adodc del control AdoEmp no era una clase de control cargada.
+Línea 339: la clase MSDataListLib.DataCombo del control DCEmpresa no era una clase de control cargada.
+Línea 379: la clase MSAdodcLib.Adodc del control AdoEmpresa no era una clase de control cargada.
+Línea 426: la clase MSAdodcLib.Adodc del control AdoAcceso no era una clase de control cargada.
+Línea 473: la clase MSAdodcLib.Adodc del control AdoAux no era una clase de control cargada.
+Línea 520: la clase MSAdodcLib.Adodc del control AdoEmp000 no era una clase de control cargada.
+Línea 567: la clase MSAdodcLib.Adodc del control AdoEntidad no era una clase de control cargada.
+Línea 614: la clase ComctlLib.ListView del control LstVwFTP no era una clase de control cargada.
+Línea 664: la clase ComctlLib.ImageList del control ImgLstFTP no era una clase de control cargada.

@@ -1,0 +1,114 @@
+CREATE DEFINER=`diskcover`@`%` PROCEDURE `sp_datos_iniciales`(
+	IN `ItemEmpresa` VARCHAR(3),
+	IN `RUCEmpresa` VARCHAR(13),
+	IN `CodigoUsuario` VARCHAR(10),
+	IN `NombreUsuario` VARCHAR(60),
+	IN `IDEUsuario` VARCHAR(15),
+	IN `PWRUsuario` VARCHAR(10),
+	IN `NombreEmpresa` VARCHAR(100),
+	IN `RazonSocialEmpresa` VARCHAR(120),
+	IN `NombreCiudad` VARCHAR(35),
+	IN `NLogoTipo` VARCHAR(10),
+	IN `NMarcaAgua` VARCHAR(10),
+	INOUT `FechaCO` VARCHAR(10),
+	INOUT `FechaCE` VARCHAR(10),
+	INOUT `AgenteRetencion` VARCHAR(25),
+	INOUT `MicroEmpresa` VARCHAR(1),
+	INOUT `EstadoEmpresa` VARCHAR(4),
+	INOUT `DescripcionEstado` VARCHAR(50)
+)
+LANGUAGE SQL
+NOT DETERMINISTIC
+CONTAINS SQL
+SQL SECURITY DEFINER
+COMMENT ''
+BEGIN
+   DECLARE CONT INT DEFAULT 0;
+	DECLARE IDEntidad INT DEFAULT 0;
+   DECLARE IDTrans INT DEFAULT 1;
+   DECLARE TextoAux VARCHAR(255) DEFAULT '.';
+   
+-- Recojemos si es Agentede Retencion
+	SELECT  COUNT(*), RESOLUCION
+	INTO CONT, AgenteRetencion
+	FROM agente_retencion 
+	WHERE RUC = RUCEmpresa; 
+   IF CONT = 0 THEN 
+	   SET AgenteRetencion = '.';
+	END IF;   
+   
+-- Recojemos si es MicroEmpresa
+	SELECT  COUNT(*), A2021
+	INTO CONT, MicroEmpresa
+	FROM micro_empresa
+	WHERE RUC = RUCEmpresa; 
+   IF CONT = 0 THEN 
+	   SET MicroEmpresa = '.';
+   END IF;
+--    AND Empresa = NombreEmpresa	
+
+   SELECT COUNT(*), ID_Empresa, Estado, Fecha, Fecha_CE 
+   INTO CONT, IDEntidad, EstadoEmpresa, FechaCO, FechaCE
+   FROM lista_empresas 
+   WHERE RUC_CI_NIC = RUCEmpresa
+   AND Item = ItemEmpresa
+	ORDER BY ID_Empresa;
+   IF CONT = 0 THEN 
+	   SET IDEntidad = 0;
+		SET EstadoEmpresa = '.';
+		SET FechaCO = CURDATE();
+		SET FechaCE = CURDATE();
+   END IF;
+      
+   SELECT COUNT(*), Descripcion 
+   INTO CONT, DescripcionEstado
+   FROM lista_estados 
+   WHERE Estado = EstadoEmpresa;
+   IF CONT = 0 THEN 
+	   SET DescripcionEstado = 'ESTADO INDEFINIDO';
+   END IF;
+   
+	SELECT COUNT(*), MAX(ID_Empresa)
+   INTO CONT, IDTrans
+	FROM lista_empresas 
+	WHERE ID_Empresa >= 9999; 
+   IF CONT = 0 THEN 
+	   SET IDTrans = 0;
+   END IF;
+   SET IDTrans = IDTrans + 1;
+   
+	SELECT COUNT(*), RUC_CI_NIC
+   INTO CONT, TextoAux
+	FROM lista_empresas
+	WHERE RUC_CI_NIC = RUCEmpresa
+	AND Item = ItemEmpresa
+	LIMIT 2;
+	
+	IF CONT <= 0 THEN
+      SET IDEntidad = IDTrans;
+      INSERT INTO lista_empresas (ID_Empresa,Item,Empresa,Razon_Social,RUC_CI_NIC,Estado,Ciudad,Fecha_CE)
+      VALUES (IDTrans, ItemEmpresa, NombreEmpresa, RazonSocialEmpresa, RUCEmpresa, 'ONLY',NombreCiudad, CURDATE());
+   ELSE
+      UPDATE lista_empresas 
+      SET Ciudad = NombreCiudad, Logo_Tipo = NLogoTipo, Marca_Agua = NMarcaAgua, Empresa = NombreEmpresa
+      WHERE RUC_CI_NIC = RUCEmpresa
+      AND ID_Empresa = IDEntidad
+      AND Item = ItemEmpresa;
+   END IF;
+
+   SELECT COUNT(*), CI_NIC 
+   INTO CONT, TextoAux   
+   FROM acceso_usuarios 
+   WHERE CI_NIC = CodigoUsuario
+   LIMIT 2;
+   IF CONT = 0 THEN 
+	   SET IDTrans = 0;
+	ELSE   
+	   SET IDTrans = CONT; 
+   END IF;
+
+   IF IDTrans <= 0 THEN
+      INSERT INTO acceso_usuarios (ID_Empresa, CI_NIC, Nombre_Usuario, Usuario, Clave) 
+      VALUES(IDEntidad, CodigoUsuario, NombreUsuario, IDEUsuario, PWRUsuario);
+   END IF;
+END

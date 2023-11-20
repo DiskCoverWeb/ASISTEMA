@@ -1,0 +1,3 @@
+Línea 19: la clase MSAdodcLib.Adodc del control AdoTipoComprobante no era una clase de control cargada.
+Línea 183: la clase MSMask.MaskEdBox del control MBFechaRegis no era una clase de control cargada.
+Línea 209: la clase MSDataListLib.DataCombo del control DCTipoComprobante no era una clase de control cargada.

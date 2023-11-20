@@ -1,0 +1,7 @@
+Línea 55: la clase MSDataListLib.DataCombo del control DCCliente no era una clase de control cargada.
+Línea 142: la clase MSDataGridLib.DataGrid del control DGQuery no era una clase de control cargada.
+Línea 344: la clase MSComctlLib.ImageList del control ImageListFacturas no era una clase de control cargada.
+Línea 759: la clase MSMask.MaskEdBox del control MBFechaF no era una clase de control cargada.
+Línea 784: la clase MSMask.MaskEdBox del control MBFechaI no era una clase de control cargada.
+Línea 809: la clase MSComctlLib.Toolbar del control ToolbarMenu no era una clase de control cargada.
+Línea 1054: la clase MSDataListLib.DataCombo del control DCCxC no era una clase de control cargada.

@@ -1,0 +1,9 @@
+Línea 23: la clase ComctlLib.Toolbar del control Toolbar1 no era una clase de control cargada.
+Línea 121: la clase ComctlLib.ProgressBar del control ProgressBarEstado no era una clase de control cargada.
+Línea 194: la clase InetCtlsObjects.Inet del control URLinet no era una clase de control cargada.
+Línea 227: la clase MSAdodcLib.Adodc del control AdoEmpresa no era una clase de control cargada.
+Línea 274: la clase MSAdodcLib.Adodc del control AdoBusqEmp no era una clase de control cargada.
+Línea 321: la clase MSComDlg.CommonDialog del control CDialogDir no era una clase de control cargada.
+Línea 329: la clase MSAdodcLib.Adodc del control AdoAux no era una clase de control cargada.
+Línea 376: la clase ComctlLib.ListView del control LstVwFTP no era una clase de control cargada.
+Línea 465: la clase ComctlLib.ImageList del control ImgLstFTP no era una clase de control cargada.
