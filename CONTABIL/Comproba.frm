@@ -12,8 +12,8 @@ Begin VB.Form FComprobantes
    ClientWidth     =   11595
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   9030
-   ScaleWidth      =   11595
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    WindowState     =   1  'Minimized
    Begin MSDataListLib.DataCombo DCCliente 
       Bindings        =   "Comproba.frx":0000
@@ -2607,7 +2607,7 @@ Private Sub Tipo_De_Comprobante_No(C1 As Comprobantes)
   Frame2.Visible = False
   'FrmBenef.Visible = False
   CheckEfect.Visible = False
-  CheckBco.Value = False
+  CheckBco.value = False
   Label6.Caption = Moneda
  'Determinamos que tipo de comprobante realizamos
   Select Case C1.TP
@@ -2617,7 +2617,7 @@ Private Sub Tipo_De_Comprobante_No(C1 As Comprobantes)
          Label3.Caption = " &BENEFICIARIO:"
          FComprobantes.Caption = "COMPROBANTE DE DIARIO"
          Label2.Caption = "Diario No. " & Format(Year(MBoxFecha), "0000") & "- "
-         OpcTP(0).Value = True
+         OpcTP(0).value = True
     Case CompIngreso
          Frame2.Visible = True
          NumComp = ReadSetDataNum("Ingresos", True, False)
@@ -2627,7 +2627,7 @@ Private Sub Tipo_De_Comprobante_No(C1 As Comprobantes)
 '         CheckBco.value = 1
          FComprobantes.Caption = "COMPROBANTE DE INGRESO"
          Label2.Caption = "Ingreso No. " & Format(Year(MBoxFecha), "0000") & "- "
-         OpcTP(1).Value = True
+         OpcTP(1).value = True
     Case CompEgreso
          Frame2.Visible = True
          NumComp = ReadSetDataNum("Egresos", True, False)
@@ -2637,21 +2637,21 @@ Private Sub Tipo_De_Comprobante_No(C1 As Comprobantes)
  '        CheckBco.value = 1
          FComprobantes.Caption = "COMPROBANTE DE EGRESO"
          Label2.Caption = "Egreso No. " & Format(Year(MBoxFecha), "0000") & "- "
-         OpcTP(2).Value = True
+         OpcTP(2).value = True
     Case CompNotaDebito
          NumComp = ReadSetDataNum("NotaDebito", True, False)
          Label2.Caption = "Nota de Débito No. "
          Label3.Caption = " &BENEFICIARIO:"
          FComprobantes.Caption = "COMPROBANTE DE NOTA DE DEBITO"
          Label2.Caption = "Nota de Debito No. " & Format(Year(MBoxFecha), "0000") & "- "
-         OpcTP(3).Value = True
+         OpcTP(3).value = True
     Case CompNotaCredito
          NumComp = ReadSetDataNum("NotaCredito", True, False)
          Label2.Caption = "Nota de Débito No. "
          Label3.Caption = " &BENEFICIARIO:"
          FComprobantes.Caption = "COMPROBANTE DE NOTA DE CREDITO"
          Label2.Caption = "Nota de Credito No. " & Format(Year(MBoxFecha), "0000") & "- "
-         OpcTP(4).Value = True
+         OpcTP(4).value = True
   End Select
   If ModificarComp Then NumComp = C1.Numero
     
@@ -2859,9 +2859,9 @@ End Sub
 Private Sub DCBanco_KeyDown(KeyCode As Integer, Shift As Integer)
   Select Case KeyCode
     Case vbKeyEscape
-         If OpcTP(1).Value Or OpcTP(4).Value Then
+         If OpcTP(1).value Or OpcTP(4).value Then
             CalculosTotalAsientos AdoAsientos, LabelDebe, LabelHaber, LabelDiferencia
-            If CheckBco.Value Then
+            If CheckBco.value Then
                With AdoAsientosB.Recordset
                 If .RecordCount > 0 Then
                    .MoveFirst
@@ -2885,7 +2885,7 @@ Private Sub DCBanco_KeyDown(KeyCode As Integer, Shift As Integer)
             LabelTotal.Caption = Format(Monto_Total, "#,##0.00")
             TextConcepto.SetFocus
          End If
-         If OpcTP(4).Value Then TextConcepto.SetFocus
+         If OpcTP(4).value Then TextConcepto.SetFocus
     Case vbKeyReturn
          SiguienteControl
   End Select
@@ -2895,7 +2895,7 @@ Private Sub DCBanco_LostFocus()
 Dim AdoCheq As ADODB.Recordset
   LeerBanco AdoCtas, DCBanco.Text
   DCBanco.Text = Codigo & Space(5) & NombreBanco
-  If OpcTP(2).Value Then
+  If OpcTP(2).value Then
      Label24.Caption = "Cheq. No."
      Set AdoCheq = New ADODB.Recordset
      AdoCheq.CursorType = adOpenStatic
@@ -2965,7 +2965,7 @@ End Sub
 
 Private Sub MBFechaEfec_LostFocus()
   FechaValida MBFechaEfec
-  If OpcTP(2).Value Then
+  If OpcTP(2).value Then
      NoCheque = TextCheque.Text
      Fecha_Vence = MBFechaEfec.Text
      SQL1 = "DELETE * " _
@@ -2981,8 +2981,8 @@ Private Sub MBFechaEfec_LostFocus()
   End If
 End Sub
 
-Private Sub OpcTP_Click(Index As Integer)
-  Select Case Index
+Private Sub OpcTP_Click(index As Integer)
+  Select Case index
     Case 0: Co.TP = CompDiario
     Case 1: Co.TP = CompIngreso
     Case 2: Co.TP = CompEgreso
@@ -2992,7 +2992,7 @@ Private Sub OpcTP_Click(Index As Integer)
   Tipo_De_Comprobante_No Co
 End Sub
 
-Private Sub OpcTP_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
+Private Sub OpcTP_KeyDown(index As Integer, KeyCode As Integer, Shift As Integer)
    If KeyCode = vbKeyReturn Then MBoxFecha.SetFocus
 End Sub
 
@@ -3148,7 +3148,7 @@ Dim AdoCheq As ADODB.Recordset
   Set AdoCheq = New ADODB.Recordset
   AdoCheq.CursorType = adOpenStatic
   AdoCheq.CursorLocation = adUseClient
-  If OpcTP(1).Value Then
+  If OpcTP(1).value Then
      TextoValido TextCheque, True
   Else
      TextoValido TextCheque, False
@@ -3170,7 +3170,7 @@ Dim AdoCheq As ADODB.Recordset
      MsgBox "Warning: El Cheque No. " & TextCheque & ", ya esta ingresado."
   End If
   AdoCheq.Close
-  If OpcTP(2).Value And IsNumeric(TextCheque) Then TextCheque = Format(Val(TextCheque), "00000000")
+  If OpcTP(2).value And IsNumeric(TextCheque) Then TextCheque = Format(Val(TextCheque), "00000000")
 End Sub
 
 Private Sub TextDeposito_GotFocus()
@@ -3337,11 +3337,11 @@ Private Sub CmdGrabar_Click()
         If AdoAsientos.Recordset.RecordCount > 0 Then
           RatonReloj
           If NuevoComp Then
-             If OpcTP(0).Value Then NumComp = ReadSetDataNum("Diario", True, True)
-             If OpcTP(1).Value Then NumComp = ReadSetDataNum("Ingresos", True, True)
-             If OpcTP(2).Value Then NumComp = ReadSetDataNum("Egresos", True, True)
-             If OpcTP(3).Value Then NumComp = ReadSetDataNum("NotaDebito", True, True)
-             If OpcTP(4).Value Then NumComp = ReadSetDataNum("NotaCredito", True, True)
+             If OpcTP(0).value Then NumComp = ReadSetDataNum("Diario", True, True)
+             If OpcTP(1).value Then NumComp = ReadSetDataNum("Ingresos", True, True)
+             If OpcTP(2).value Then NumComp = ReadSetDataNum("Egresos", True, True)
+             If OpcTP(3).value Then NumComp = ReadSetDataNum("NotaDebito", True, True)
+             If OpcTP(4).value Then NumComp = ReadSetDataNum("NotaCredito", True, True)
           End If
           FechaTexto = MBoxFecha
           Co.T = Normal
@@ -3361,7 +3361,7 @@ Private Sub CmdGrabar_Click()
           DGAsientosB.Visible = False
           RatonNormal
           ImprimirComprobantesDe False, Co
-          If CheqCopia.Value Then ImprimirComprobantesDe False, Co
+          If CheqCopia.value Then ImprimirComprobantesDe False, Co
           BorrarAsientos True
           NumComp = NumComp + 1
           Co.Numero = NumComp
@@ -3404,7 +3404,7 @@ Private Sub TextCodigo_GotFocus()
   MBEfectivizar.Visible = False
   TextCodigo.Text = ""
   TextValor.Visible = False
-  Opcion_Mulp = OpcMult.Value
+  Opcion_Mulp = OpcMult.value
   CalculosTotalAsientos AdoAsientos, LabelDebe, LabelHaber, LabelDiferencia
 End Sub
 
@@ -3425,9 +3425,9 @@ Dim DetCtaBusqueda As String
                InsertarAsientosC AdoAsientos
             End If
          Else
-            If OpcTP(2).Value Or OpcTP(3).Value Then
+            If OpcTP(2).value Or OpcTP(3).value Then
                TextValor.Visible = True
-               If CheckEfect.Value Then
+               If CheckEfect.value Then
                   OpcDH = 2: ValorDH = Abono
                   Cadena = SinEspaciosIzq(DCCaja.Text)
                   Codigo = Leer_Cta_Catalogo(Cadena)
@@ -3438,7 +3438,7 @@ Dim DetCtaBusqueda As String
                End If
                SumaBancos = 0
                CalculosTotalAsientos AdoAsientos, LabelDebe, LabelHaber, LabelDiferencia
-               If CheckBco.Value Then
+               If CheckBco.value Then
                   SumaBancos = SumaDebe - SumaHaber
                   OpcDH = 2: ValorDH = SumaDebe - SumaHaber
                   Cadena = SinEspaciosIzq(DCBanco.Text)
@@ -3652,7 +3652,7 @@ Private Sub TextCantidad_LostFocus()
   TextCantidad.Text = Format(Abono, "#,##0.00")
   Monto_Total = Abono
   LabelTotal.Caption = Format(Monto_Total, "#,##0.00")
-  If CheckEfect.Value And OpcTP(1).Value Then
+  If CheckEfect.value And OpcTP(1).value Then
      OpcDH = 1: ValorDH = Abono
      Cadena = SinEspaciosIzq(DCCaja.Text)
      Codigo = Leer_Cta_Catalogo(Cadena)
@@ -3667,7 +3667,7 @@ Private Sub TextConcepto_LostFocus()
 End Sub
 
 Private Sub CheckBco_Click()
-  If CheckBco.Value Then
+  If CheckBco.value Then
      sSQL = "SELECT Codigo & Space(5) & Cuenta As NomCuenta " _
           & "FROM Catalogo_Cuentas " _
           & "WHERE TC = 'BA' " _
@@ -3676,7 +3676,7 @@ Private Sub CheckBco_Click()
           & "AND Periodo = '" & Periodo_Contable & "' " _
           & "ORDER BY Codigo "
      SelectDB_Combo DCBanco, AdoBanco, sSQL, "NomCuenta"
-     If OpcTP(2).Value Then
+     If OpcTP(2).value Then
         Label24.Caption = "Cheq. No."
         Label5.Visible = False
         TextDeposito.Visible = False
@@ -3707,7 +3707,7 @@ End Sub
 
 Private Sub CheckEfect_Click()
   Label6.Caption = Moneda
-  If CheckEfect.Value Then
+  If CheckEfect.value Then
      sSQL = "SELECT Codigo & Space(5) & Cuenta As NomCaja " _
           & "FROM Catalogo_Cuentas " _
           & "WHERE TC = 'CJ' " _

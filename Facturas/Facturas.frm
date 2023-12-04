@@ -3668,7 +3668,7 @@ Dim GuiaRemision As Long
      FA.Nota = TextNota
      FA.Pedido = TxtPedido
     'MsgBox Val(TxtCompra)
-     If IsNumeric(TxtCompra) Then FA.Orden_Compra = Val(TxtCompra)
+     If IsNumeric(TxtCompra) Then FA.Orden_Compra = TxtCompra
      
      If AdoMod.Recordset.RecordCount > 0 Then
         AdoMod.Recordset.MoveFirst

@@ -62,10 +62,10 @@ Option Explicit
 '''                 & "EN QUITO - ECUADOR O LOS EMAILS:" & vbCrLf _
 '''                 & "asistencia@diskcoversystem.com / prisma_net@hotmail.es" & vbCrLf _
 '''                 & "PARA SU LEGALIZACION"
-'-----------------------------------------------------------------
+'--------------------------------------------------------------------------------------------------------------------------------------------
 'https://srienlinea.sri.gob.ec/sri-catastro-sujeto-servicio-internet/rest/ConsolidadoContribuyente/existePorNumeroRuc?numeroRuc=0702164179001
 'https://srienlinea.sri.gob.ec/facturacion-internet/consultas/publico/ruc-datos2.jspa?accion=siguiente&ruc=0702164179001
-'-----------------------------------------------------------------
+'-----------------------------------------------------------------------------------------------------------------------
 Global Const TextoLeyendaFA = "Para consultas, requerimientos o reclamos puede contactarse a nuestro Centro de Atención al Cliente Teléfono: 02-6052430, " _
                             & "o escriba al correo prisma_net@hotmail.es; para Transferencia o Depósitos hacer en El Banco Pichincha: Cta. Ahr. 4245946100 a " _
                             & "Nombre de Walter Vaca Prieto/Cta. Cte 3422225804, a Nombre de PRISMANET PROFESIONAL S.A."
@@ -109,14 +109,14 @@ Global Const MensajeDeAdvertencia = "DISKCOVER SYSTEM representado por PrismaNet
 Global Const ServidorEnLineaSRI = "En estos momentos el servidor de Aprobacion de Documentos Electronicos en Ambiente de XXXX no esta en linea, " _
                                 & "no se podra aprobar sus documentos, podra generar los comprobantes y despues enviar autorizar al SRI."
 
-'---------------------------------------------------------------------------------
+'-------------------------------------------------------------------------------
 'Datos de Conexion a la Base de Datos en las nubes db.diskcoversystem.com:13306
-'---------------------------------------------------------------------------------
+'-------------------------------------------------------------------------------
 'Global Const AdoStrCnnMySQL = "DRIVER={MySQL ODBC 3.51 Driver};"
 'Global Const AdoStrCnnMySQL = "DRIVER={MySQL ODBC 5.1 Driver};"
 'Global Const AdoStrCnnMySQL = "DRIVER={MySQL ODBC 8.2 ANSI Driver};"
 'Global Const AdoStrCnnMySQL = "DRIVER={MySQL ODBC 8.2 Unicode Driver};"
-                            
+'-------------------------------------------------------------------------------
 Global Const AdoStrCnnMySQL = "DRIVER={MySQL ODBC 5.1 Driver};" _
                             & "SERVER=db.diskcoversystem.com;" _
                             & "PORT=13306;" _
@@ -128,7 +128,6 @@ Global Const AdoStrCnnMySQL = "DRIVER={MySQL ODBC 5.1 Driver};" _
 'Global Const AdoStrCnnMySQL = "Driver={MySQL ODBC 8.2 Unicode Driver};SERVER=db.diskcoversystem.com;DATABASE=diskcover_empresas;USER=diskcover;PASSWORD=disk2017@Cover;PORT=13306; OPTION=3"
 Global Const strServidor = "db.diskcoversystem.com"
 
-'Global Const urlIdukay = "http://localhost/diskcoversystem/php/vista/consultarEstudiante.php?id="
 Global Const urlIdukay = "https://erp.diskcoversystem.com/php/vista/consultarEstudiante.php?id="
 Global Const urlEsUnRUC = "https://srienlinea.sri.gob.ec/sri-catastro-sujeto-servicio-internet/rest/ConsolidadoContribuyente/existePorNumeroRuc?numeroRuc="
 Global Const urlDatosDelRUC = "https://srienlinea.sri.gob.ec/facturacion-internet/consultas/publico/ruc-datos2.jspa?accion=siguiente&ruc="

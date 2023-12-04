@@ -243,7 +243,7 @@ Dim CadAncho As String
             TMail.Usuario = "admin"
             TMail.Password = "Admin@2023"
             TMail.Puerto = 26
-            TMail.de = Replace(TMail.de, "diskcoversystem.com", "smtp.diskcoversystem.com")
+           'TMail.de = Replace(TMail.de, "diskcoversystem.com", "smtp.diskcoversystem.com")
             
 '''         TMail.servidor = "relay.dnsexit.com"
 '''         TMail.Usuario = "diskcoversystem"

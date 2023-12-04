@@ -1089,7 +1089,7 @@ Dim TPosLinea As Single
     Select Case Tipo_Documento
       Case "FA": DiasPago = CStr(CFechaLong(TFA.Fecha_V) - CFechaLong(TFA.Fecha))
                  cPrint.printTexto 13, PosLinea, "Fecha Emisión: " & TFA.Fecha
-                 cPrint.printTexto 17, PosLinea, "Fecha de pago: " & TFA.Fecha_V
+                 If CFechaLong(TFA.Fecha) < CFechaLong(TFA.Fecha_V) Then cPrint.printTexto 17, PosLinea, "Fecha de pago: " & TFA.Fecha_V
                  PosLinea = PosLinea + 0.35
                  
                  If Len(TFA.Tipo_Pago) > 1 Then
@@ -1097,7 +1097,7 @@ Dim TPosLinea As Single
                     cPrint.printTexto 13, PosLinea, "Monto " & Moneda
                     cPrint.printVariable 14, PosLinea, TFA.Total_MN
                  End If
-                 cPrint.printTexto 17, PosLinea, "Condición de Venta: " & DiasPago & " días"
+                 If DiasPago > 0 Then cPrint.printTexto 17, PosLinea, "Condición de Venta: " & DiasPago & " días"
                  If TFA.Cod_Ejec <> Ninguno Then
                     PosLinea = PosLinea + 0.35
                     cPrint.printTexto 1.6, PosLinea, "Vendedor: " & TFA.Cod_Ejec & " - " & ULCase(TFA.Ejecutivo_Venta)
@@ -1362,9 +1362,13 @@ Dim TempPosLineaAbono As Single
             End If
             If TFA.EsPorReembolso Then
                PosLinea = PosLinea + 0.32
+               Cod_Aux = "Autorizacion(" & .fields("Lote_No") & ") " & .fields("Procedencia")
+               cPrint.printTexto 7.6, PosLinea, Cod_Aux, PorteDeLetra
+               PosLinea = PosLinea + 0.32
                Cod_Aux = "Reembolso de Gastos"
                If Len(.fields("Tipo_Hab")) > 1 Then Cod_Aux = Cod_Aux & " por " & .fields("Tipo_Hab")
                cPrint.printTexto 7.6, PosLinea, Cod_Aux, PorteDeLetra
+               
             End If
             If .fields("Orden_No") <> 0 Then cPrint.printTexto 14.3, PosLinea, Format$(.fields("Orden_No"), "00000000"), PorteDeLetra
             
@@ -3703,12 +3707,12 @@ Dim SecuencialReembolo As String
                     Insertar_Campo_XML CampoXML("identificacionProveedorReembolso", .fields("Ruta"))
                     Insertar_Campo_XML CampoXML("codPaisPagoProveedorReembolso", "593")
                     Insertar_Campo_XML CampoXML("tipoProveedorReembolso", TipoProvReemb)
-                    Insertar_Campo_XML CampoXML("codDocReembolso", "11")
+                    Insertar_Campo_XML CampoXML("codDocReembolso", .fields("Lote_No"))
                     Insertar_Campo_XML CampoXML("estabDocReembolso", Serie1Reembolo)
                     Insertar_Campo_XML CampoXML("ptoEmiDocReembolso", Serie2Reembolo)
                     Insertar_Campo_XML CampoXML("secuencialDocReembolso", SecuencialReembolo)
                     Insertar_Campo_XML CampoXML("fechaEmisionDocReembolso", TFA.Fecha)
-                    Insertar_Campo_XML CampoXML("numeroautorizacionDocReemb", String(10, "9"))
+                    Insertar_Campo_XML CampoXML("numeroautorizacionDocReemb", .fields("Procedencia")) 'String(10, "9"))
                     Insertar_Campo_XML AbrirXML("detalleImpuestos")
                        Insertar_Campo_XML AbrirXML("detalleImpuesto")
                           Insertar_Campo_XML CampoXML("codigo", "2")

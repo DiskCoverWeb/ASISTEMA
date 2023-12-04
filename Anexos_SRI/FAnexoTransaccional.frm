@@ -1,8 +1,8 @@
 VERSION 5.00
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.Form FAnexoTransaccional 
    Caption         =   "Talón Resumen"
    ClientHeight    =   10470
@@ -886,7 +886,7 @@ Begin VB.Form FAnexoTransaccional
          TabIndex        =   2
          Top             =   0
          Width           =   2955
-         Begin VB.CheckBox CheqSoloFisico 
+         Begin VB.CheckBox CheqATSConElect 
             Caption         =   "Generar ATS con Comprobante Electronicos"
             BeginProperty Font 
                Name            =   "MS Sans Serif"
@@ -3396,7 +3396,7 @@ Dim Id_Mes As Byte
      
      If InStr(1, CStr(FechaFin), "-") > 0 Then Numero = CLng(Replace(FechaFin, "-", "")) Else Numero = CLng(FechaFin)
      
-     Actualizar_Datos_ATS_SP NumEmpresa, FechaInicial, FechaFinal, Numero, CheqSoloFisico.value
+     Actualizar_Datos_ATS_SP NumEmpresa, FechaInicial, FechaFinal, Numero, CheqATSConElect.value
                
     'LISTA DE CODIGO DE ANEXOS
      Progreso_Esperar
@@ -3431,7 +3431,7 @@ Dim Id_Mes As Byte
          RutaSubDirTemp = Archivo_XML
          Progreso_Barra.Mensaje_Box = "ATS-Generando en: " & Archivo_XML
          Progreso_Esperar
-         Crear_Anexos_Tipo_01_Marzo_2015 Archivo_XML, CheqSoloFisico.value
+         Crear_Anexos_Tipo_01_Marzo_2015 Archivo_XML, CheqATSConElect.value
 '''         Select Case Val(Anio)
 '''           Case 2008 To 2012: Crear_Anexos_Tipo_01 Archivo_XML
 '''           Case 2013 To 2050:

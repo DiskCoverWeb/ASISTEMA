@@ -329,6 +329,7 @@ Type CtasAsiento
       LogoFactura      As String
       LogoNotaCredito  As String
       PDF_ClaveAcceso  As String
+      Orden_Compra     As String
       
       C                As Boolean
       p                As Boolean
@@ -356,7 +357,6 @@ Type CtasAsiento
       Retencion        As Long
       Nota_Credito     As Long
       Numero           As Long
-      Orden_Compra     As Long
       
       Porc_C           As Single
       Cotizacion       As Single
