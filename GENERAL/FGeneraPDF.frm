@@ -31,7 +31,7 @@ Begin VB.Form FGeneraPDF
       ImageList       =   "ImageList1"
       _Version        =   327682
       BeginProperty Buttons {0713E452-850A-101B-AFC0-4210102A8DA7} 
-         NumButtons      =   18
+         NumButtons      =   19
          BeginProperty Button1 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "Salir"
             Object.ToolTipText     =   "Salir"
@@ -140,6 +140,12 @@ Begin VB.Form FGeneraPDF
             Object.Tag             =   ""
             ImageIndex      =   18
          EndProperty
+         BeginProperty Button19 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   "Descarga_CE_SRI"
+            Object.ToolTipText     =   "Descarga Comprobante Electronico SRI"
+            Object.Tag             =   ""
+            ImageIndex      =   20
+         EndProperty
       EndProperty
       MousePointer    =   1
       Begin VB.Frame Frame1 
@@ -154,7 +160,7 @@ Begin VB.Form FGeneraPDF
             Strikethrough   =   0   'False
          EndProperty
          Height          =   645
-         Left            =   10710
+         Left            =   11340
          TabIndex        =   4
          Top             =   0
          Width           =   7575
@@ -503,7 +509,7 @@ Begin VB.Form FGeneraPDF
       MaskColor       =   12632256
       _Version        =   327682
       BeginProperty Images {0713E8C2-850A-101B-AFC0-4210102A8DA7} 
-         NumListImages   =   19
+         NumListImages   =   20
          BeginProperty ListImage1 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
             Picture         =   "FGeneraPDF.frx":1BC6
             Key             =   ""
@@ -578,6 +584,10 @@ Begin VB.Form FGeneraPDF
          EndProperty
          BeginProperty ListImage19 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
             Picture         =   "FGeneraPDF.frx":45C36
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage20 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "FGeneraPDF.frx":45E74
             Key             =   ""
          EndProperty
       EndProperty
@@ -679,6 +689,9 @@ Dim TipoSRI As Tipo_Contribuyente
 Dim SQL_Server1 As Boolean
 Dim AdoStrCnn1 As String
 Dim RutaPDF As String
+Dim ClaveAccesoSRI As String
+Dim RutaXMLAutorizado As String
+Dim RutaXMLRechazado As String
 
 Dim v1 As Byte
 Dim v2 As Byte
@@ -871,20 +884,30 @@ Dim v10 As Date
         TMail.ListaMail = 255
         TMail.TipoDeEnvio = "CO"
        'MsgBox RutaBackup
-        Cadena = Leer_Archivo_Texto(RutaSistema & "\FORMATOS\credenciales.html")
         TMail.Asunto = "Prueba de Mails por smtp.diskcoversystem.com"
-        TMail.MensajeHTML = "" 'Cadena
+        TMail.MensajeHTML = Leer_Archivo_Texto(RutaSistema & "\FORMATOS\credenciales.html")
+        With TMail
+             Cadena = Replace(MensajeAutomatizado, vbCrLf, "<br>")
+            .MensajeHTML = Replace(TMail.MensajeHTML, "vMensajeFinal", Cadena)
+            .MensajeHTML = Replace(.MensajeHTML, "Mensaje_Comunicado", "")
+            .MensajeHTML = Replace(.MensajeHTML, "Nombre_Usuario", NombreUsuario)
+            .MensajeHTML = Replace(.MensajeHTML, "Mensaje_Comunicado", ComunicadoEntidad)
+            .MensajeHTML = Replace(.MensajeHTML, "Representante_Legal", NombreGerente)
+            .MensajeHTML = Replace(.MensajeHTML, "Numero_Telefono", Telefono1)
+            .MensajeHTML = Replace(.MensajeHTML, "Emails", EmailProcesos)
+            .MensajeHTML = Replace(.MensajeHTML, "Razon_Social", RazonSocial)
+        End With
+        'TMail.MensajeHTML = ""
         TMail.Mensaje = "Esta es una prueba de Correo Electronico enviado por DNS-EXIT, " _
                       & "mensaje enviado desde el PC: " & IP_PC.Nombre_PC & ", a las: " & Time & ", " _
                       & "de la empresa: " & Empresa & "."
-        TMail.MensajeHTML = Leer_Archivo_Texto(RutaSistema & "\FONDOS\index1.html")
                       
         TMail.Adjunto = ""
-        
         TMail.para = ""
         Insertar_Mail TMail.para, "diskcover.system@yahoo.com"
         Insertar_Mail TMail.para, "diskcover.system@gmail.com"
         Insertar_Mail TMail.para, "informacion@diskcoversystem.com"
+        Insertar_Mail TMail.para, "electronicos@diskcoversystem.com"
         FEnviarCorreos.Show 1
         TMail.para = ""
         TMail.ListaMail = 255
@@ -938,6 +961,26 @@ Dim v10 As Date
         Recepcion_SRI_XML Codigo
    Case "Enviar_Json"
         MsgBox "1752765675 = " & post_URL_JSon("1752765675", 0, 0)
+   Case "Descarga_CE_SRI"
+        ClaveAccesoSRI = InputBox("Ingrese la Clave de Acceso del Documento Electronico:", "OBTENER DOCUMENTO ELECTRONICO", "3110202307179219679500120010010000105740005173518")
+        If Len(ClaveAccesoSRI) >= 39 Then
+            RutaXMLAutorizado = RutaSysBases & "\TEMP\Comprobantes Recibidos\" & ClaveAccesoSRI & ".xml"
+            RutaXMLRechazado = RutaSysBases & "\TEMP\Comprobantes no Autorizados\" & ClaveAccesoSRI & ".xml"
+            MsgBox RutaXMLAutorizado
+            SRI_Autorizacion = SRI_Leer_XML_Autorizado(RutaXMLAutorizado, RutaXMLRechazado)
+            If Existe_File(RutaXMLAutorizado) Then
+                TextoFileEmp = SRI_Autorizacion.Documento_XML
+                I = InStr(TextoFileEmp, "<![CDATA[")
+                F = InStr(TextoFileEmp, "]]></comprobante>")
+                If I > 0 And F > 0 Then I = I + 9
+                TextoFileEmp = TrimStrg(MidStrg(TextoFileEmp, I, F - I))
+            Else
+                TextoFileEmp = SRI_Autorizacion.Documento_XML
+            End If
+            If Len(TextoFileEmp) > 1 Then MsgBox TextoFileEmp Else MsgBox "SRI Fuera de Linea"
+         Else
+            MsgBox "DATOS INGRESADOS NO CUMPLEN CON EL FORMATO"
+         End If
   End Select
   RatonNormal
 End Sub

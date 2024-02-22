@@ -935,11 +935,11 @@ Public Sub GenerarTablaPrestamoCxCP(BoxMiFecha As String, _
        Contador = 1: Total = Saldo
        Valor = Redondear(((12 * Total) + (Total * Interes * Numero)) / (12 * Numero), 2)
        Valor_ME = 0: Total_ME = 0: Comision = 0
-       For i = 0 To Numero
+       For I = 0 To Numero
            SetAddNew DtaTabla
-          .fields("Cuotas") = i
+          .fields("Cuotas") = I
           '.Fields("Dia") = Weekday(MiFecha)
-           If i = 0 Then
+           If I = 0 Then
              .fields("Fecha") = Mifecha
              .fields("Capital") = 0
              .fields("Interes") = 0
@@ -947,7 +947,7 @@ Public Sub GenerarTablaPrestamoCxCP(BoxMiFecha As String, _
              .fields("Pagos") = 0
               Mifecha = SiguienteMes(Mifecha)
            Else
-              If i = Numero Then
+              If I = Numero Then
                  'MsgBox Saldo
                  Total_ME = Saldo
                  Valor_ME = Valor - Saldo
@@ -980,7 +980,7 @@ Public Sub GenerarTablaPrestamoCxCP(BoxMiFecha As String, _
           'Interes Final
            Valor_ME = Redondear(Valor - Total_ME - Comision, 2)
            Contador = Contador + 1
-       Next i
+       Next I
   End With
   DBG_Tabla.Visible = True
 End Sub
@@ -1010,9 +1010,9 @@ LimiteAlto = LimiteAlto - 0.5
 LimiteAncho = LimiteAncho - 0.5
 Ancho(CantCampos) = LimiteAncho
 ReDim VectCurr(LimiteAncho + 1) As Double
-For i = 0 To LimiteAncho
-   VectCurr(i) = 0
-Next i
+For I = 0 To LimiteAncho
+   VectCurr(I) = 0
+Next I
 Pagina = 1
 Contador = 1
 'Iniciamos la impresion
@@ -1034,9 +1034,9 @@ Salir_Busq:
      
      Printer.FontBold = False
      Do While Not .EOF
-        For i = 3 To CantCampos - 3
-            If IsNumeric(.fields(i)) Then VectCurr(i) = VectCurr(i) + .fields(i)
-        Next i
+        For I = 3 To CantCampos - 3
+            If IsNumeric(.fields(I)) Then VectCurr(I) = VectCurr(I) + .fields(I)
+        Next I
         PrinterTexto 0.01, PosLinea + 0.2, Val(Contador) & ".-"
         PrinterAllFields CantCampos, PosLinea + 0.2, Datas, False, False
         Contador = Contador + 1
@@ -1044,9 +1044,9 @@ Salir_Busq:
         Imprimir_Linea_H PosLinea + 0.3, Ancho(0), Ancho(CantCampos)
         PosLinea = PosLinea + 0.4
         If PosLinea > LimiteAlto Then
-           For i = 0 To CantCampos
-               Imprimir_Linea_V Ancho(i), AuxPosLinea, PosLinea
-           Next i
+           For I = 0 To CantCampos
+               Imprimir_Linea_V Ancho(I), AuxPosLinea, PosLinea
+           Next I
            Imprimir_Linea_H PosLinea + 0.3, Ancho(0), Ancho(CantCampos)
            Printer.NewPage
            'MsgBox "Fin Rol"
@@ -1058,15 +1058,15 @@ Salir_Busq:
         End If
        .MoveNext
      Loop
-     For i = 0 To CantCampos
-         Imprimir_Linea_V Ancho(i), AuxPosLinea, PosLinea
-     Next i
+     For I = 0 To CantCampos
+         Imprimir_Linea_V Ancho(I), AuxPosLinea, PosLinea
+     Next I
      Imprimir_Linea_H PosLinea, Ancho(0), Ancho(CantCampos), Negro, True
 End With
 PosLinea = PosLinea + 0.05
-For i = 0 To CantCampos - 1
-    PrinterVariables Ancho(i) + 0.2, PosLinea, VectCurr(i)
-Next i
+For I = 0 To CantCampos - 1
+    PrinterVariables Ancho(I) + 0.2, PosLinea, VectCurr(I)
+Next I
 RatonNormal
 MensajeEncabData = ""
 If FinDoc Then Printer.EndDoc
@@ -1866,28 +1866,28 @@ Dim TotalCtas As Long
       TotalCtas = .RecordCount
       Cuenta = .fields("Cta")
       Caracter = MidStrg(.fields("Cta"), 1, 1)
-      For i = 0 To 4: Semana(i) = 0: Next i
-      For i = 0 To 4: Domingos(i) = 0: Next i
-      For i = 0 To 4: TotalSemana(i) = 0: Next i
-      j = 4
+      For I = 0 To 4: Semana(I) = 0: Next I
+      For I = 0 To 4: Domingos(I) = 0: Next I
+      For I = 0 To 4: TotalSemana(I) = 0: Next I
+      J = 4
       Mifecha = FechaFinal
-      For i = Day(FechaFinal) To Day(FechaInicial) Step -1
+      For I = Day(FechaFinal) To Day(FechaInicial) Step -1
          If Weekday(Mifecha) = 1 Then
-            Domingos(j) = i
-            j = j - 1
+            Domingos(J) = I
+            J = J - 1
          End If
          Mifecha = CLongFecha(CFechaLong(Mifecha) - 1)
-      Next i
+      Next I
       Do While Not .EOF
          Progreso_Barra.Mensaje_Box = "Cuenta: " & Cuenta
          Progreso_Esperar
          If Caracter <> MidStrg(.fields("Cta"), 1, 1) Then
             Cantidad = 0
-            For i = 0 To 4
-                Cantidad = Cantidad + TotalSemana(i)
-            Next i
+            For I = 0 To 4
+                Cantidad = Cantidad + TotalSemana(I)
+            Next I
             Caracter = MidStrg(.fields("Cta"), 1, 1)
-            For i = 0 To 4: TotalSemana(i) = 0: Next i
+            For I = 0 To 4: TotalSemana(I) = 0: Next I
          End If
          If Cuenta <> .fields("Cta") Then
             MiTiempo = Time - MiTiempo1
@@ -1896,17 +1896,17 @@ Dim TotalCtas As Long
              
             CalculosTotalesCtasMes DataCtas, Cuenta, Debe, Haber, Saldo, Debe_ME, Haber_ME, Saldo_ME
              
-            For i = 0 To 4
-                TotalSemana(i) = TotalSemana(i) + Semana(i)
-            Next i
+            For I = 0 To 4
+                TotalSemana(I) = TotalSemana(I) + Semana(I)
+            Next I
             Cantidad = 0
-            For i = 0 To 4
-                Cantidad = Cantidad + Semana(i)
-            Next i
+            For I = 0 To 4
+                Cantidad = Cantidad + Semana(I)
+            Next I
             Cuenta = .fields("Cta")
             Debe = 0: Haber = 0: Saldo = 0
             Debe_ME = 0: Haber_ME = 0: Saldo_ME = 0
-            For i = 0 To 4: Semana(i) = 0: Next i
+            For I = 0 To 4: Semana(I) = 0: Next I
          End If
          NoDias = Day(.fields("Fecha"))
          Select Case NoDias
@@ -1959,17 +1959,17 @@ Dim TotalCtas As Long
   End If
   End With
   CalculosTotalesCtasMes DataCtas, Cuenta, Debe, Haber, Saldo, Debe_ME, Haber_ME, Saldo_ME
-  For i = 0 To 4
-      TotalSemana(i) = TotalSemana(i) + Semana(i)
-  Next i
+  For I = 0 To 4
+      TotalSemana(I) = TotalSemana(I) + Semana(I)
+  Next I
   Cantidad = 0
-  For i = 0 To 4
-      Cantidad = Cantidad + Semana(i)
-  Next i
+  For I = 0 To 4
+      Cantidad = Cantidad + Semana(I)
+  Next I
   Cantidad = 0
-  For i = 0 To 4
-      Cantidad = Cantidad + TotalSemana(i)
-  Next i
+  For I = 0 To 4
+      Cantidad = Cantidad + TotalSemana(I)
+  Next I
   Cadena = "BALANCE DE COMPROBACION MENSUAL"
   FormPadre.Caption = Cadena
   RatonNormal
@@ -2582,14 +2582,14 @@ With Datas.Recordset
      If OpcCoop Then
         Printer.Line (Ancho(0), PosLinea)-(Ancho(5), PosLinea + 1), Negro, B
         Printer.Line (Ancho(0), PosLinea + 0.5)-(Ancho(5), PosLinea + 0.5), Negro
-        For j = 1 To c - 1
-            If j <> 2 Then Printer.Line (Ancho(j), PosLinea + 0.5)-(Ancho(j), PosLinea + 1), Negro
-        Next j
+        For J = 1 To C - 1
+            If J <> 2 Then Printer.Line (Ancho(J), PosLinea + 0.5)-(Ancho(J), PosLinea + 1), Negro
+        Next J
      Else
         Printer.Line (Ancho(0), PosLinea)-(Ancho(5), PosLinea + 1.4), Negro, B
-        For j = 1 To c - 1
-            Printer.Line (Ancho(j), PosLinea + 0.9)-(Ancho(j), PosLinea + 1.4), Negro
-        Next j
+        For J = 1 To C - 1
+            Printer.Line (Ancho(J), PosLinea + 0.9)-(Ancho(J), PosLinea + 1.4), Negro
+        Next J
      End If
      Printer.FontBold = True
      PrinterTexto Ancho(0), PosLinea + 0.1, "FECHA:"
@@ -2893,15 +2893,15 @@ Dim NumeroDeMeses As Integer
   
   With Datas.Recordset
   KE = 2
-  For j = IRR To JRR
-      PrinterTexto Ancho(KE), PosLinea, UCaseStrg(.fields(j).Name)
+  For J = IRR To JRR
+      PrinterTexto Ancho(KE), PosLinea, UCaseStrg(.fields(J).Name)
       PrinterTexto Ancho(KE), PosLinea + 0.5, "Parcial"
       PrinterTexto Ancho(KE) + 1.8, PosLinea + 0.5, "Total"
       KE = KE + 1
-  Next j
-  For j = 0 To 8
-   If j <> 1 Then Printer.Line (Ancho(j), PosLinea - 0.1)-(Ancho(j), PosLinea + 0.9), Negro
-  Next j
+  Next J
+  For J = 0 To 8
+   If J <> 1 Then Printer.Line (Ancho(J), PosLinea - 0.1)-(Ancho(J), PosLinea + 0.9), Negro
+  Next J
   Printer.Line (Ancho(0), PosLinea - 0.1)-(Ancho(8), PosLinea - 0.1), Negro
   Printer.Line (Ancho(2), PosLinea + 0.4)-(Ancho(8), PosLinea + 0.4), Negro
   Printer.Line (Ancho(0), PosLinea + 0.9)-(Ancho(8), PosLinea + 0.9), Negro
@@ -2935,14 +2935,14 @@ Dim NumeroDeMeses As Integer
   PrinterTexto Ancho(0), PosLinea, "D E T A L L E"
   Printer.FontSize = 6: NoMeses = 1
   With Datas.Recordset
-  For j = 3 To CantCampos - 1
-      PrinterTexto Ancho(j), PosLinea, UCaseStrg(MidStrg(.fields(j).Name, 1, 10))
+  For J = 3 To CantCampos - 1
+      PrinterTexto Ancho(J), PosLinea, UCaseStrg(MidStrg(.fields(J).Name, 1, 10))
       NoMeses = NoMeses + 1
-  Next j
+  Next J
   Printer.Line (Ancho(0), PosLinea - 0.1)-(Ancho(0), PosLinea + 0.35), Negro
-  For j = 0 To CantCampos
-   If j > 2 Then Printer.Line (Ancho(j), PosLinea - 0.1)-(Ancho(j), PosLinea + 0.35), Negro
-  Next j
+  For J = 0 To CantCampos
+   If J > 2 Then Printer.Line (Ancho(J), PosLinea - 0.1)-(Ancho(J), PosLinea + 0.35), Negro
+  Next J
   Printer.Line (Ancho(0), PosLinea - 0.1)-(Ancho(CantCampos), PosLinea - 0.1), Negro
   Printer.Line (Ancho(0), PosLinea + 0.35)-(Ancho(CantCampos), PosLinea + 0.35), Negro
   End With
@@ -3584,9 +3584,9 @@ Dim AdoRetAut As ADODB.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
           SetAdoAddNew "Trans_Rol_Pagos"
-          For j = 0 To .fields.Count - 1
-              SetAdoFields .fields(j).Name, .fields(j)
-          Next j
+          For J = 0 To .fields.Count - 1
+              SetAdoFields .fields(J).Name, .fields(J)
+          Next J
           SetAdoFields "CodigoU", CodigoUsuario
           SetAdoFields "Item", C1.Item
           SetAdoFields "Fecha", C1.Fecha
@@ -3774,7 +3774,7 @@ Dim AdoRetAut As ADODB.Recordset
          SetAdoFields "Codigo_C", CodigoP
          SetAdoFields "C_Costo", CodigoCC
          SetAdoFields "Item", C1.Item
-         If TipoCta = "BA" Then SetAdoFields "C", True
+         If TipoCta = "BA" Then SetAdoFields "C", ConciliacionAut
          SetAdoFields "Procesado", False
          SetAdoUpdate
          NumTrans = NumTrans + 1
@@ -3895,9 +3895,9 @@ Dim NDolares As String
 Dim EsPropio As Single
 Dim DetSubCta As String
 Dim ImpDetSubCta As Boolean
-For i = 0 To 4
-    PosAsiento(i) = SetD(AsientosX + i).PosX
-Next i
+For I = 0 To 4
+    PosAsiento(I) = SetD(AsientosX + I).PosX
+Next I
 PosAsiento(5) = PosAsiento(4) + 3
 TamanoLetra = SetD(AsientosX).Tamaño
 Printer.FontSize = TamanoLetra
@@ -3916,7 +3916,7 @@ If .RecordCount > 0 Then
        PosLineaTotal = SetD(SumaTotales).PosY - 0.1
     End If
     If PosLineaTotal >= 23 Then PosLineaTotal = 23
-    i = 0
+    I = 0
    .MoveFirst
     Printer.FontBold = False
     Do While Not .EOF
@@ -3945,9 +3945,9 @@ If .RecordCount > 0 Then
          Printer.FontItalic = False
          PrinterFields PosAsiento(3) + 0.1, PosLinea, .fields("Debe")
          PrinterFields PosAsiento(4) + 0.1, PosLinea, .fields("Haber")
-         For j = 0 To 5
-             Printer.Line (PosAsiento(j), PosLinea - 0.05)-(PosAsiento(j), PosLinea + 0.4), NoColor
-         Next j
+         For J = 0 To 5
+             Printer.Line (PosAsiento(J), PosLinea - 0.05)-(PosAsiento(J), PosLinea + 0.4), NoColor
+         Next J
          SumaDebe = SumaDebe + .fields("Debe")
          SumaHaber = SumaHaber + .fields("Haber")
       End If
@@ -4048,9 +4048,9 @@ If .RecordCount > 0 Then
                   End If
                   
                   If PosLinea >= 23 Then
-                     For j = 0 To 5
-                         Printer.Line (PosAsiento(j), PosLineaInicio - 0.05)-(PosAsiento(j), PosLinea), NoColor
-                     Next j
+                     For J = 0 To 5
+                         Printer.Line (PosAsiento(J), PosLineaInicio - 0.05)-(PosAsiento(J), PosLinea), NoColor
+                     Next J
                      Printer.Line (0.5, PosLinea)-(PosAsiento(5), PosLinea), NoColor
                      Printer.FontItalic = False
                      Printer.FontBold = False
@@ -4073,7 +4073,7 @@ If .RecordCount > 0 Then
                      Printer.FontName = LetraAnterior
                      PosLinea = 3.6
                      PosLineaInicio = PosLinea
-                     i = 0
+                     I = 0
                      Pagina = Pagina + 1
                      Printer.FontSize = 7
                   End If
@@ -4151,9 +4151,9 @@ If .RecordCount > 0 Then
                   End If
                   
                   If PosLinea >= 23 Then
-                     For j = 0 To 5
-                         Printer.Line (PosAsiento(j), PosLineaInicio - 0.05)-(PosAsiento(j), PosLinea), NoColor
-                     Next j
+                     For J = 0 To 5
+                         Printer.Line (PosAsiento(J), PosLineaInicio - 0.05)-(PosAsiento(J), PosLinea), NoColor
+                     Next J
                      Printer.Line (0.5, PosLinea)-(PosAsiento(5), PosLinea), NoColor
                      Printer.FontItalic = False
                      Printer.FontBold = False
@@ -4176,7 +4176,7 @@ If .RecordCount > 0 Then
                      Printer.FontName = LetraAnterior
                      PosLinea = 3.6
                      PosLineaInicio = PosLinea
-                     i = 0
+                     I = 0
                      Pagina = Pagina + 1
                      Printer.FontSize = 7
                   End If
@@ -4190,9 +4190,9 @@ If .RecordCount > 0 Then
       
       If PosLinea >= 23 Then
          PosLinea = PosLinea + 0.35
-         For j = 0 To 5
-             Printer.Line (PosAsiento(j), PosLineaInicio - 0.05)-(PosAsiento(j), PosLinea), NoColor
-         Next j
+         For J = 0 To 5
+             Printer.Line (PosAsiento(J), PosLineaInicio - 0.05)-(PosAsiento(J), PosLinea), NoColor
+         Next J
          Printer.Line (0.5, PosLinea)-(PosAsiento(5), PosLinea), NoColor
          Printer.FontItalic = False
          Printer.FontBold = False
@@ -4215,10 +4215,10 @@ If .RecordCount > 0 Then
          Printer.FontName = LetraAnterior
          PosLinea = 3.6
          PosLineaInicio = PosLinea
-         i = 0
+         I = 0
          Pagina = Pagina + 1
       End If
-      i = i + 1
+      I = I + 1
      .MoveNext
     Loop
     Printer.FontItalic = False
@@ -4227,9 +4227,9 @@ If .RecordCount > 0 Then
     PrinterTexto SetD(1).PosX, SetD(1).PosY, msg
     Printer.FontSize = TamanoLetra
     If PosLinea > PosLineaTotal Then PosLineaTotal = PosLinea
-    For j = 0 To 5
-        Printer.Line (PosAsiento(j), PosLineaInicio - 0.05)-(PosAsiento(j), PosLineaTotal), NoColor
-    Next j
+    For J = 0 To 5
+        Printer.Line (PosAsiento(J), PosLineaInicio - 0.05)-(PosAsiento(J), PosLineaTotal), NoColor
+    Next J
     If PonerLineas Then
        Dibujo = RutaSistema & "\FORMATOS\TOTALES.GIF"
        PrinterPaint Dibujo, 0.5, PosLineaTotal, 19, 2
@@ -4319,8 +4319,8 @@ If PonImpresoraDefecto(SetNombrePRN) Then
    Set cPrint = New cImpresion
    cPrint.iniciaImpresion
    InicioX = 0.5: InicioY = 0
-    c = 7
-    ReDim Ancho(c) As Single
+    C = 7
+    ReDim Ancho(C) As Single
     Ancho(0) = 1
     Ancho(1) = 3.5
     Ancho(2) = 10.5
@@ -4364,9 +4364,9 @@ If PonImpresoraDefecto(SetNombrePRN) Then
             End If
             PosLinea = PosLinea + 0.5
             If PosLinea > LimiteAlto Then
-               For i = 0 To 6
-                   cPrint.printLinea Ancho(i) - 0.3, PosLinInic - 0.3, Ancho(i) - 0.3, PosLinea + 0.4, Negro
-               Next i
+               For I = 0 To 6
+                   cPrint.printLinea Ancho(I) - 0.3, PosLinInic - 0.3, Ancho(I) - 0.3, PosLinea + 0.4, Negro
+               Next I
                cPrint.printLinea Ancho(0), PosLinea, Ancho(6), PosLinea, Negro
                Printer.NewPage
                cPrint.printEncabezado Ancho(0), 1
@@ -4379,9 +4379,9 @@ If PonImpresoraDefecto(SetNombrePRN) Then
          Loop
      End If
     End With
-    For i = 0 To 6
-        cPrint.printLinea Ancho(i) - 0.3, PosLinInic - 0.3, Ancho(i) - 0.3, PosLinea + 0.4, Negro
-    Next i
+    For I = 0 To 6
+        cPrint.printLinea Ancho(I) - 0.3, PosLinInic - 0.3, Ancho(I) - 0.3, PosLinea + 0.4, Negro
+    Next I
     cPrint.printLinea Ancho(0) - 0.3, PosLinea, Ancho(6) - 0.3, PosLinea, Negro
     PosLinea = PosLinea + 0.05
     cPrint.printLinea Ancho(0) - 0.3, PosLinea, Ancho(6) - 0.3, PosLinea, Negro
@@ -5159,7 +5159,7 @@ With Datas.Recordset
          Printer.FontItalic = False
          Printer.FontSize = SizeLetra
          If .fields("DG") = "G" Then Printer.FontBold = True
-         If .fields("Clave") <> 0 Then PrinterTexto Ancho(0), PosLinea, String$(3, " ") & str(.fields("Clave")), True
+         If .fields("Clave") <> 0 Then PrinterTexto Ancho(0), PosLinea, String$(3, " ") & Str(.fields("Clave")), True
          PrinterFields Ancho(1), PosLinea, .fields("TC"), True
          PrinterFields Ancho(2), PosLinea, .fields("ME"), True
          PrinterFields Ancho(3), PosLinea, .fields("DG"), True
@@ -6240,9 +6240,9 @@ Dim NumNivel As Byte
    If Len(CodigoCta) > 12 Then
       Niveles = 6
    Else
-      For i = 1 To Len(CodigoCta)
-          If MidStrg(CodigoCta, i, 1) = "." Then NumNivel = NumNivel + 1
-      Next i
+      For I = 1 To Len(CodigoCta)
+          If MidStrg(CodigoCta, I, 1) = "." Then NumNivel = NumNivel + 1
+      Next I
       Niveles = NumNivel + 1
    End If
    If CodigoCta = " " Then Niveles = 1
@@ -6305,9 +6305,9 @@ With Datas.Recordset
          PrinterFields Ancho(4), PosLinea, .fields("Numero"), False
          PrinterFields Ancho(5), PosLinea, .fields("Cheq_Dep"), False
          PrinterFields Ancho(6), PosLinea, .fields("Valor"), False
-         For i = 0 To CantCampos
-            Printer.Line (Ancho(i), PosLinea - 0.1)-(Ancho(i), PosLinea + 0.4), Negro
-         Next i
+         For I = 0 To CantCampos
+            Printer.Line (Ancho(I), PosLinea - 0.1)-(Ancho(I), PosLinea + 0.4), Negro
+         Next I
          Total = Total + .fields("Valor")
          PosLinea = PosLinea + 0.4
          If PosLinea > LimiteAlto Then
@@ -6353,9 +6353,9 @@ If PonImpresoraDefecto(SetNombrePRN) Then
 RatonReloj
 InicioX = 0.5: InicioY = 0
 Escala_Centimetro FormaImp, TipoVerdana, SizeLetra
-c = 9
-CantCampos = c - 1
-ReDim Ancho(c) As Single
+C = 9
+CantCampos = C - 1
+ReDim Ancho(C) As Single
 Ancho(0) = 0.5  ' Fecha
 Ancho(1) = 2.2  ' Beneficiario
 If MN_ME Then
@@ -6670,8 +6670,8 @@ With Datas.Recordset
          PrinterFields Ancho(4), PosLinea, .fields("Debitos"), False
          PrinterFields Ancho(5), PosLinea, .fields("Creditos"), False
          PrinterFields Ancho(6), PosLinea, .fields("Saldo_Actual"), False
-         For i = 0 To CantCampos
-            Printer.Line (Ancho(i), PosLinea - 0.1)-(Ancho(i), PosLinea + 0.4), Negro
+         For I = 0 To CantCampos
+            Printer.Line (Ancho(I), PosLinea - 0.1)-(Ancho(I), PosLinea + 0.4), Negro
          Next
          PosLinea = PosLinea + 0.35
          If PosLinea >= LimiteAlto Then
@@ -6734,9 +6734,9 @@ With Datas.Recordset
       TipoProc = .fields("TC")
       EncabezadoData Datas
       Printer.FontSize = 8
-      For i = 1 To 7
-          TotalDia(i) = 0
-      Next i
+      For I = 1 To 7
+          TotalDia(I) = 0
+      Next I
       Do While Not .EOF
          If TipoProc <> .fields("TC") Then
             'PosLinea = PosLinea + 0.1
@@ -6752,9 +6752,9 @@ With Datas.Recordset
             PosLinea = PosLinea + 0.1
             'Moneda_US = .Fields("ME")
             TipoProc = .fields("TC")
-            For i = 1 To 7
-                TotalDia(i) = 0
-            Next i
+            For I = 1 To 7
+                TotalDia(I) = 0
+            Next I
             Saldo = 0
          End If
          PrinterFields Ancho(1), PosLinea, .fields("Detalle")
@@ -6764,8 +6764,8 @@ With Datas.Recordset
              TotalDia(NoDias) = TotalDia(NoDias) + .fields(DiasLetras(NoDias))
          Next NoDias
          PrinterFields Ancho(9), PosLinea, .fields("Total")
-         For i = 0 To 10
-            Printer.Line (Ancho(i), PosLinea - 0.1)-(Ancho(i), PosLinea + 0.4), Negro
+         For I = 0 To 10
+            Printer.Line (Ancho(I), PosLinea - 0.1)-(Ancho(I), PosLinea + 0.4), Negro
          Next
          PosLinea = PosLinea + 0.4
          If PosLinea > LimiteAlto Then
@@ -7131,9 +7131,9 @@ With Datas.Recordset
             PrinterFields Ancho(10), PosLinea, .fields(10), True
             PrinterFields Ancho(11), PosLinea, .fields(11), True
          End If
-         For i = 1 To CantCampos
-             Printer.Line (Ancho(i), PosLinea - 0.1)-(Ancho(i), PosLinea + 0.3), Negro
-         Next i
+         For I = 1 To CantCampos
+             Printer.Line (Ancho(I), PosLinea - 0.1)-(Ancho(I), PosLinea + 0.3), Negro
+         Next I
          PosLinea = PosLinea + 0.3
          If PosLinea > LimiteAlto Then
             Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
@@ -7331,9 +7331,9 @@ With Datas.Recordset
             PrinterFields Ancho(2), PosLinea, .fields(2), True
             'PrinterFields Ancho(3), PosLinea, .Fields(3), True
          End If
-         For i = 1 To CantCampos
-             Printer.Line (Ancho(i), PosLinea - 0.1)-(Ancho(i), PosLinea + 0.3), Negro
-         Next i
+         For I = 1 To CantCampos
+             Printer.Line (Ancho(I), PosLinea - 0.1)-(Ancho(I), PosLinea + 0.3), Negro
+         Next I
          PosLinea = PosLinea + 0.3
          If PosLinea >= LimiteAlto Then
             Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
@@ -7427,7 +7427,7 @@ DataAnchoCampos InicioX, DataT, 8, TipoLetra, 1
 LimiteAlto = LimiteAlto - 2
 Pagina = 1
 HoraSistema = Time
-c = 5
+C = 5
 Ancho(0) = 1      'Codigo
 Ancho(1) = 3.4    'Cuenta
 Ancho(2) = 13.1   'Parcial
@@ -7457,7 +7457,7 @@ With DataT.Recordset
            Printer.FontBold = True
            Printer.FontItalic = False
            PosLinea = PosLinea + 0.05
-           Printer.Line (Ancho(0), PosLinea)-(Ancho(c), PosLinea), Negro
+           Printer.Line (Ancho(0), PosLinea)-(Ancho(C), PosLinea), Negro
            PosLinea = PosLinea + 0.05
            PrinterVariables Ancho(0), PosLinea, Format$(NoItem, "000")
            PrinterVariables Ancho(2), PosLinea, "T O T A L E S"
@@ -7470,7 +7470,7 @@ With DataT.Recordset
            Encab_Libro_Diario DataT
            If PosLinea >= LimiteAlto Then
               PosLinea = PosLinea + 0.05
-              Printer.Line (Ancho(0), PosLinea)-(Ancho(c), PosLinea), Negro
+              Printer.Line (Ancho(0), PosLinea)-(Ancho(C), PosLinea), Negro
               Printer.NewPage
               Encabezado Ancho(0), Ancho(5)
               Printer.FontSize = PorteLetra
@@ -7497,9 +7497,9 @@ With DataT.Recordset
         PrinterFields Ancho(4), PosLinea, .fields("Haber"), False
         Printer.FontSize = 7
         If Len(.fields("Detalle")) > 1 Then
-           For i = 0 To c
-               Printer.Line (Ancho(i), PosLinea - 0.1)-(Ancho(i), PosLinea + 0.3), Negro
-           Next i
+           For I = 0 To C
+               Printer.Line (Ancho(I), PosLinea - 0.1)-(Ancho(I), PosLinea + 0.3), Negro
+           Next I
            PosLinea = PosLinea + 0.32
            PrinterFields Ancho(1), PosLinea, .fields("Detalle"), False
         End If
@@ -7520,9 +7520,9 @@ With DataT.Recordset
                           Numero = AdoSubCtas.Recordset.fields("Numero") And _
                           TipoCta = AdoSubCtas.Recordset.fields("TP") Then
                           'MsgBox "..."
-                          For i = 0 To c
-                              Printer.Line (Ancho(i), PosLinea - 0.1)-(Ancho(i), PosLinea + 0.3), Negro
-                          Next i
+                          For I = 0 To C
+                              Printer.Line (Ancho(I), PosLinea - 0.1)-(Ancho(I), PosLinea + 0.3), Negro
+                          Next I
                           PosLinea = PosLinea + 0.32
                           Printer.FontItalic = True
                           PrinterFields Ancho(1) + 0.4, PosLinea, AdoSubCtas.Recordset.fields("Cliente"), False
@@ -7545,15 +7545,15 @@ With DataT.Recordset
               End If
            End If
         End If
-        For i = 0 To c
-            Printer.Line (Ancho(i), PosLinea - 0.1)-(Ancho(i), PosLinea + 0.38), Negro
-        Next i
+        For I = 0 To C
+            Printer.Line (Ancho(I), PosLinea - 0.1)-(Ancho(I), PosLinea + 0.38), Negro
+        Next I
         Debe = Debe + .fields("Debe")
         Haber = Haber + .fields("Haber")
         If Evaluar Then PosLinea = PosLinea + 0.32 Else PosLinea = PosLinea + 0.37
         If PosLinea >= LimiteAlto Then
            PosLinea = PosLinea + 0.05
-           Printer.Line (Ancho(0), PosLinea)-(Ancho(c), PosLinea), Negro
+           Printer.Line (Ancho(0), PosLinea)-(Ancho(C), PosLinea), Negro
            Printer.NewPage
            Encabezado Ancho(0), Ancho(5)
            Printer.FontSize = PorteLetra
@@ -7565,7 +7565,7 @@ With DataT.Recordset
      Loop
 End With
 PosLinea = PosLinea + 0.05
-Printer.Line (InicioX, PosLinea)-(Ancho(c), PosLinea), Negro
+Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
 Printer.FontSize = PorteLetra
 Printer.FontBold = True
 Printer.FontItalic = False
@@ -7701,7 +7701,7 @@ InicioX = 0.5: InicioY = 0
 Escala_Centimetro 1, TipoTimes, 9
 Pagina = 1
 HoraSistema = Time
-c = 5
+C = 5
 Ancho(0) = 0.5
 Ancho(1) = 2.9
 Ancho(2) = 12.5
@@ -7725,7 +7725,7 @@ With DataT.Recordset
      Do While Not .EOF
         Printer.FontSize = 9
         If PosLinea + 0.5 > LimiteAlto Then
-           Printer.Line (Ancho(0), PosLinea)-(Ancho(c), PosLinea), Negro
+           Printer.Line (Ancho(0), PosLinea)-(Ancho(C), PosLinea), Negro
            PosLinea = PosLinea + 0.1
            PrinterVariables Ancho(2), PosLinea, "T O T A L E S"
            PrinterVariables Ancho(3), PosLinea, Debe
@@ -7736,7 +7736,7 @@ With DataT.Recordset
            PrinterVariables Ancho(3), PosLinea, Debe
            PrinterVariables Ancho(4), PosLinea, Haber
            PosLinea = PosLinea + 0.5
-           Printer.Line (Ancho(0), PosLinea)-(Ancho(c), PosLinea), Negro
+           Printer.Line (Ancho(0), PosLinea)-(Ancho(C), PosLinea), Negro
            PosLinea = PosLinea + 0.1
            Encab_Diario_General DataT
         End If
@@ -7747,11 +7747,11 @@ With DataT.Recordset
               PrinterVariables Ancho(0), PosLinea, "F E C H A:"
               PrinterFields Ancho(1), PosLinea, .fields("Fecha"), False
               PosLinea = PosLinea + 0.4
-              Printer.Line (Ancho(0), PosLinea)-(Ancho(c), PosLinea), Negro
+              Printer.Line (Ancho(0), PosLinea)-(Ancho(C), PosLinea), Negro
               PosLinea = PosLinea + 0.1
            End If
            If PosLinea + 0.5 > LimiteAlto Then
-              Printer.Line (Ancho(0), PosLinea)-(Ancho(c), PosLinea), Negro
+              Printer.Line (Ancho(0), PosLinea)-(Ancho(C), PosLinea), Negro
               PosLinea = PosLinea + 0.1
               PrinterVariables Ancho(2), PosLinea, "T O T A L E S"
               PrinterVariables Ancho(3), PosLinea, Debe
@@ -7762,7 +7762,7 @@ With DataT.Recordset
               PrinterVariables Ancho(3), PosLinea, Debe
               PrinterVariables Ancho(4), PosLinea, Haber
               PosLinea = PosLinea + 0.5
-              Printer.Line (Ancho(0), PosLinea)-(Ancho(c), PosLinea), Negro
+              Printer.Line (Ancho(0), PosLinea)-(Ancho(C), PosLinea), Negro
               PosLinea = PosLinea + 0.1
               Encab_Diario_General DataT
            End If
@@ -7784,7 +7784,7 @@ With DataT.Recordset
 End With
 PrinterVariables Ancho(0), PosLinea, "CONCEPTO: " & ConceptoDe
 PosLinea = PosLinea + 0.4
-Printer.Line (InicioX, PosLinea)-(Ancho(c), PosLinea), Negro
+Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
 PosLinea = PosLinea + 0.1
 PrinterVariables Ancho(2), PosLinea, "T O T A L E S"
 PrinterVariables Ancho(3), PosLinea, Debe
@@ -7816,7 +7816,7 @@ SetPrinters.Show 1
 If PonImpresoraDefecto(SetNombrePRN) Then
 RatonReloj
 Escala_Centimetro 1, TipoArialNarrow, 8
-CantCampos = 6: c = 6
+CantCampos = 6: C = 6
 ReDim Ancho(CantCampos) As Single
 IXX = 0
 If Opcion = 1 Then
@@ -7939,7 +7939,7 @@ Dim NumeroDeMeses As Integer
 Dim Id_Campos As Integer
 On Error GoTo Errorhandler
 Escala_Centimetro 2, TipoTimes, 7.5, True
-CantCampos = 9: c = 9
+CantCampos = 9: C = 9
 ReDim Ancho(CantCampos) As Single
 Ancho(0) = 0.2  ' Cta
 Ancho(1) = 0.4  ' SubCta
@@ -7972,20 +7972,20 @@ Volver_Imprimir:
                Printer.FontBold = True
         End Select
         PrinterFields Ancho(0), PosLinea, .fields(1), False
-        j = 2
-        For i = IE To JE
+        J = 2
+        For I = IE To JE
             If MidStrg(TrimStrg(.fields(1)), 1, 1) = "*" Then
                Select Case MidStrg(.fields(0), 1, 1)
                  Case "-", "+", "("
-                      PrinterFields Ancho(j) + 1.8, PosLinea, .fields(i), False
+                      PrinterFields Ancho(J) + 1.8, PosLinea, .fields(I), False
                  Case Else
-                      PrinterFields Ancho(j), PosLinea, .fields(i), False
+                      PrinterFields Ancho(J), PosLinea, .fields(I), False
                End Select
             Else
-               PrinterFields Ancho(j) + 1.8, PosLinea, .fields(i), False
+               PrinterFields Ancho(J) + 1.8, PosLinea, .fields(I), False
             End If
-            j = j + 1
-        Next i
+            J = J + 1
+        Next I
         Select Case MidStrg(.fields(0), 1, 1)
           Case "-", "+", "("
                Printer.Line (Ancho(0), PosLinea - 0.05)-(Ancho(8), PosLinea - 0.05), Negro
@@ -7996,10 +7996,10 @@ Volver_Imprimir:
                Printer.Line (Ancho(0), PosLinea + 0.36)-(Ancho(8), PosLinea + 0.36), Negro
         End Select
         Printer.Line (Ancho(0), PosLinea - 0.05)-(Ancho(0), PosLinea + 0.4), Negro
-        For j = 2 To 8
-            Printer.Line (Ancho(j), PosLinea - 0.05)-(Ancho(j), PosLinea + 0.4), Negro
-            Printer.Line (Ancho(j) + 1.8, PosLinea - 0.05)-(Ancho(j) + 1.8, PosLinea + 0.4), Negro
-        Next j
+        For J = 2 To 8
+            Printer.Line (Ancho(J), PosLinea - 0.05)-(Ancho(J), PosLinea + 0.4), Negro
+            Printer.Line (Ancho(J) + 1.8, PosLinea - 0.05)-(Ancho(J) + 1.8, PosLinea + 0.4), Negro
+        Next J
         PosLinea = PosLinea + 0.4
         If PosLinea > LimiteAlto Then
            Printer.Line (Ancho(0), PosLinea)-(Ancho(8), PosLinea), Negro
@@ -8055,10 +8055,10 @@ With Datas.Recordset
      Ancho(1) = 0.1   ' SubCta
      Ancho(2) = 0.1   ' SubCta
      Distancia = 4
-     For i = 3 To CantCampos  ' Ene,Feb,..., etc.
-         Ancho(i) = Distancia
+     For I = 3 To CantCampos  ' Ene,Feb,..., etc.
+         Ancho(I) = Distancia
          Distancia = Distancia + 1.6
-     Next i
+     Next I
      'Ancho(I + 1) = Distancia 'fin de la impresion
      If Distancia <= 19.5 Then
         Escala_Centimetro 1, TipoTimes, 8, True
@@ -8090,13 +8090,13 @@ With Datas.Recordset
         End If
         PrinterTexto Ancho(0), PosLinea, Cadena
         Printer.Line (Ancho(3), PosLinea)-(Ancho(CantCampos), PosLinea + 0.35), Blanco, BF
-        For i = 3 To CantCampos - 1
-            PrinterFields Ancho(i), PosLinea, .fields(i), False
-        Next i
+        For I = 3 To CantCampos - 1
+            PrinterFields Ancho(I), PosLinea, .fields(I), False
+        Next I
         Printer.Line (Ancho(0), PosLinea - 0.1)-(Ancho(0), PosLinea + 0.35), Negro
-        For j = 3 To CantCampos
-            Printer.Line (Ancho(j), PosLinea - 0.1)-(Ancho(j), PosLinea + 0.35), Negro
-        Next j
+        For J = 3 To CantCampos
+            Printer.Line (Ancho(J), PosLinea - 0.1)-(Ancho(J), PosLinea + 0.35), Negro
+        Next J
         PosLinea = PosLinea + 0.31
         If PosLinea > LimiteAlto Then
            Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
@@ -8142,7 +8142,7 @@ If PonImpresoraDefecto(SetNombrePRN) Then
 RatonReloj
 Escala_Centimetro 1, TipoTimes, 9
 IXX = 0
-   CantCampos = 6: c = 6
+   CantCampos = 6: C = 6
    ReDim Ancho(CantCampos) As Single
    Ancho(0) = 0.5
    Ancho(1) = 3
@@ -8284,7 +8284,7 @@ ReDim Ancho(9) As Single
 Escala_Centimetro 1, TipoLetra, PorteLetra
 InicioX = 1: InicioY = 0
 Pagina = 1: Documento = 1
-c = 8
+C = 8
 Ancho(0) = 1      ' Fecha
 Ancho(1) = 2.5    ' TP
 Ancho(2) = 3.1    ' Numero
@@ -8335,14 +8335,14 @@ Do While Not .EOF
    Printer.FontSize = PorteLetra
    'MsgBox "Hola"
    If Cta <> .fields("Cta") Then
-      For j = 0 To c
-          Printer.Line (Ancho(j), PosLineaIni - 0.1)-(Ancho(j), PosLinea + 0.1), Negro
-      Next j
+      For J = 0 To C
+          Printer.Line (Ancho(J), PosLineaIni - 0.1)-(Ancho(J), PosLinea + 0.1), Negro
+      Next J
       Printer.FontBold = True
       PosLinea = PosLinea + 0.05
-      Printer.Line (InicioX, PosLinea)-(Ancho(c), PosLinea), Negro
+      Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
       PosLinea = PosLinea - 0.05
-      Printer.Line (InicioX, PosLinea)-(Ancho(c), PosLinea), Negro
+      Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
       PosLinea = PosLinea + 0.05
       PrinterVariableTexto Ancho(0), PosLinea, "Fin de: ", MesesLetras(MesActual)
       MesActual = FechaMes(.fields("Fecha"))
@@ -8361,7 +8361,7 @@ Do While Not .EOF
       CadCtaSup = CtaSup & Space(5) & NomCtaSup
       CadCta = Cta & Space(5) & NomCta
       If PosLinea >= LimiteAlto Then
-         Printer.Line (InicioX, PosLinea + 0.1)-(Ancho(c), PosLinea + 0.1), Negro
+         Printer.Line (InicioX, PosLinea + 0.1)-(Ancho(C), PosLinea + 0.1), Negro
          Printer.NewPage
          Encabezado Ancho(0), Ancho(8)
          EncabMayor "L I B R O    M A Y O R", FechaCorte, Ancho(8)
@@ -8377,14 +8377,14 @@ Do While Not .EOF
       Printer.FontSize = PorteLetra
    End If
    If MesActual <> FechaMes(.fields("Fecha")) Then
-      For j = 0 To c
-          Printer.Line (Ancho(j), PosLineaIni - 0.1)-(Ancho(j), PosLinea + 0.1), Negro
-      Next j
+      For J = 0 To C
+          Printer.Line (Ancho(J), PosLineaIni - 0.1)-(Ancho(J), PosLinea + 0.1), Negro
+      Next J
       Printer.FontBold = True
       PosLinea = PosLinea + 0.1
-      Printer.Line (InicioX, PosLinea)-(Ancho(c), PosLinea), Negro
+      Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
       PosLinea = PosLinea - 0.05
-      Printer.Line (InicioX, PosLinea)-(Ancho(c), PosLinea), Negro
+      Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
       PosLinea = PosLinea + 0.1
       PrinterVariableTexto Ancho(0), PosLinea, "Fin de: ", MesesLetras(MesActual)
       MesActual = FechaMes(DataT.Recordset.fields("Fecha"))
@@ -8397,7 +8397,7 @@ Do While Not .EOF
       PosLinea = PosLinea + 0.35
       PrinterVariableTexto Ancho(0), PosLinea, "Inicio de: ", MesesLetras(MesActual)
       PosLinea = PosLinea + 0.4
-      Printer.Line (InicioX, PosLinea)-(Ancho(c), PosLinea), Negro
+      Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
       PosLinea = PosLinea + 0.1
       Printer.FontBold = False
       Printer.FontItalic = False
@@ -8493,10 +8493,10 @@ Do While Not .EOF
          Printer.FontSize = PorteLetra - 3
          Do While Not RegSubCtas.EOF
             If PosLinea >= LimiteAlto Then
-               For j = 0 To c
-                   Printer.Line (Ancho(j), PosLineaIni - 0.1)-(Ancho(j), PosLinea + 0.1), Negro
-               Next j
-               Printer.Line (InicioX, PosLinea + 0.1)-(Ancho(c), PosLinea + 0.1), Negro
+               For J = 0 To C
+                   Printer.Line (Ancho(J), PosLineaIni - 0.1)-(Ancho(J), PosLinea + 0.1), Negro
+               Next J
+               Printer.Line (InicioX, PosLinea + 0.1)-(Ancho(C), PosLinea + 0.1), Negro
                Printer.NewPage
                CadCtaSup = CtaSup & Space(5) & NomCtaSup
                CadCta = Cta & Space(5) & NomCta
@@ -8533,10 +8533,10 @@ Do While Not .EOF
    End If
    
    If PosLinea >= LimiteAlto Then
-      For j = 0 To c
-          Printer.Line (Ancho(j), PosLineaIni - 0.1)-(Ancho(j), PosLinea + 0.1), Negro
-      Next j
-      Printer.Line (InicioX, PosLinea + 0.1)-(Ancho(c), PosLinea + 0.1), Negro
+      For J = 0 To C
+          Printer.Line (Ancho(J), PosLineaIni - 0.1)-(Ancho(J), PosLinea + 0.1), Negro
+      Next J
+      Printer.Line (InicioX, PosLinea + 0.1)-(Ancho(C), PosLinea + 0.1), Negro
       Printer.NewPage
       CadCtaSup = CtaSup & Space(5) & NomCtaSup
       CadCta = Cta & Space(5) & NomCta
@@ -8554,13 +8554,13 @@ Do While Not .EOF
   .MoveNext
 Loop
 End With
-For j = 0 To c
-    Printer.Line (Ancho(j), PosLineaIni - 0.1)-(Ancho(j), PosLinea + 0.1), Negro
-Next j
+For J = 0 To C
+    Printer.Line (Ancho(J), PosLineaIni - 0.1)-(Ancho(J), PosLinea + 0.1), Negro
+Next J
 PosLinea = PosLinea + 0.1
-Printer.Line (InicioX, PosLinea)-(Ancho(c), PosLinea), Negro
+Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
 PosLinea = PosLinea - 0.05
-Printer.Line (InicioX, PosLinea)-(Ancho(c), PosLinea), Negro
+Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
 Printer.FontBold = True
 PosLinea = PosLinea + 0.1
 PrinterVariableTexto Ancho(0), PosLinea, "Fin de: ", MesesLetras(MesActual)
@@ -8607,7 +8607,7 @@ ReDim Ancho(11) As Single
 Escala_Centimetro 1, TipoLetra, PorteLetra
 InicioX = 1: InicioY = 0
 Pagina = 1: Documento = 1
-c = 9
+C = 9
 Ancho(0) = 1     'Fecha
 Ancho(1) = 2.3   'Factura/Prima
 Ancho(2) = 3.6   'TP
@@ -8654,7 +8654,7 @@ Printer.FontSize = PorteLetra
 PrinterFields Ancho(0), PosLinea, .fields("Fecha"), True
 Do While Not .EOF
    If PosLinea > LimiteAlto Then
-      Printer.Line (InicioX, PosLinea + 0.05)-(Ancho(c), PosLinea + 0.05), Negro
+      Printer.Line (InicioX, PosLinea + 0.05)-(Ancho(C), PosLinea + 0.05), Negro
       Printer.NewPage
       CadCta = Cta & " - " & NomCta
       CadCtaSup = Codigo & " - " & NombreCliente
@@ -8668,8 +8668,8 @@ Do While Not .EOF
       Printer.FontSize = PorteLetra
    End If
    If Cta <> .fields("Cta") Then
-      Printer.Line (InicioX, PosLinea)-(Ancho(c), PosLinea), Negro
-      Printer.Line (InicioX, PosLinea + 0.05)-(Ancho(c), PosLinea + 0.05), Negro
+      Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
+      Printer.Line (InicioX, PosLinea + 0.05)-(Ancho(C), PosLinea + 0.05), Negro
       PosLinea = PosLinea + 0.15
       'PrinterVariableTexto Ancho(0), PosLinea, "Fin de: ", MesesLetras(MesActual), False
       MesActual = FechaMes(.fields("Fecha"))
@@ -8694,7 +8694,7 @@ Do While Not .EOF
       Total_Prima = 0: SumaDebe = 0: SumaHaber = 0: Suma_ME = 0: Suma_MN = 0: SumaParcial_ME = 0
       PosLinea = PosLinea + 0.6
       If PosLinea + 2 > LimiteAlto Then
-         Printer.Line (InicioX, PosLinea + 0.1)-(Ancho(c), PosLinea + 0.1), Negro
+         Printer.Line (InicioX, PosLinea + 0.1)-(Ancho(C), PosLinea + 0.1), Negro
          Printer.NewPage
          Encabezado Ancho(0), Ancho(9)
          PosLinea = PosLinea - 0.5
@@ -8709,8 +8709,8 @@ Do While Not .EOF
       PrinterFields Ancho(0), PosLinea, .fields("Fecha"), True
    End If
    If Codigo <> .fields("Codigo") Then
-      Printer.Line (InicioX, PosLinea)-(Ancho(c), PosLinea), Negro
-      Printer.Line (InicioX, PosLinea + 0.05)-(Ancho(c), PosLinea + 0.05), Negro
+      Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
+      Printer.Line (InicioX, PosLinea + 0.05)-(Ancho(C), PosLinea + 0.05), Negro
       PosLinea = PosLinea + 0.15
       'PrinterVariableTexto Ancho(0), PosLinea, "Fin de: ", MesesLetras(MesActual), False
       MesActual = FechaMes(.fields("Fecha"))
@@ -8728,7 +8728,7 @@ Do While Not .EOF
       SumaDebe = 0: SumaHaber = 0: Suma_ME = 0: Suma_MN = 0: SumaParcial_ME = 0
       PosLinea = PosLinea + 0.6
       If PosLinea + 2 > LimiteAlto Then
-         Printer.Line (InicioX, PosLinea + 0.05)-(Ancho(c), PosLinea + 0.05), Negro
+         Printer.Line (InicioX, PosLinea + 0.05)-(Ancho(C), PosLinea + 0.05), Negro
          Printer.NewPage
          Encabezado Ancho(0), Ancho(9)
          PosLinea = PosLinea - 0.5
@@ -8763,10 +8763,10 @@ Do While Not .EOF
    Detalle_Concepto = TrimStrg(Detalle_Concepto)
    NumeroLineas = PrinterLineasMayor(Ancho(4), PosLinea, Detalle_Concepto, Ancho(5) - Ancho(4) - 0.2)
    If NumeroLineas > 1 Then
-      For i = 1 To NumeroLineas
-         For j = 0 To c
-           Printer.Line (Ancho(j), PosLinea - 0.1)-(Ancho(j), PosLinea + 0.5), Negro
-         Next j
+      For I = 1 To NumeroLineas
+         For J = 0 To C
+           Printer.Line (Ancho(J), PosLinea - 0.1)-(Ancho(J), PosLinea + 0.5), Negro
+         Next J
          PosLinea = PosLinea + 0.4
       Next
       PosLinea = PosLinea - 0.4
@@ -8779,14 +8779,14 @@ Do While Not .EOF
    SumaDebe = SumaDebe + .fields("Debitos")
    SumaHaber = SumaHaber + .fields("Creditos")
    Saldo = .fields("Saldo_MN")
-   For j = 0 To c
-      Printer.Line (Ancho(j), PosLinea - 0.1)-(Ancho(j), PosLinea + 0.4), Negro
-   Next j
+   For J = 0 To C
+      Printer.Line (Ancho(J), PosLinea - 0.1)-(Ancho(J), PosLinea + 0.4), Negro
+   Next J
    PosLinea = PosLinea + AltoLetra
   .MoveNext
 Loop
-Printer.Line (InicioX, PosLinea)-(Ancho(c), PosLinea), Negro
-Printer.Line (InicioX, PosLinea + 0.05)-(Ancho(c), PosLinea + 0.05), Negro
+Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
+Printer.Line (InicioX, PosLinea + 0.05)-(Ancho(C), PosLinea + 0.05), Negro
 PosLinea = PosLinea + 0.15
 'PrinterVariableTexto Ancho(0), PosLinea, "Fin de: ", MesesLetras(MesActual), False
 Printer.FontBold = True
@@ -8827,7 +8827,7 @@ Set DataReg = New ADODB.Recordset
 DataReg.CursorType = adOpenStatic
 DataReg.CursorLocation = adUseClient
 Pagina = 1: Documento = 1
-c = 9
+C = 9
 Ancho(0) = 0.5  'Fecha
 Ancho(1) = 2.2  'Factura
 Ancho(2) = 3.7  'TP
@@ -8865,7 +8865,7 @@ MesActual = FechaMes(.fields("Fecha"))
 Suma_ME = 0: SumaDebe = 0: SumaHaber = 0: SumaSaldo = 0: SumaParcial_ME = 0
 Do While Not .EOF
    If PosLinea > LimiteAlto Then
-      Printer.Line (InicioX, PosLinea + 0.1)-(Ancho(c), PosLinea + 0.1), Negro
+      Printer.Line (InicioX, PosLinea + 0.1)-(Ancho(C), PosLinea + 0.1), Negro
       Printer.NewPage
       CadCtaSup = NomCtaSup
       CadCta = Cta & Space(10) & NomCta
@@ -8875,8 +8875,8 @@ Do While Not .EOF
    End If
    If Cta <> .fields("Codigo") Then
       Printer.FontBold = True
-      Printer.Line (InicioX, PosLinea)-(Ancho(c), PosLinea), Negro
-      Printer.Line (InicioX, PosLinea + 0.1)-(Ancho(c), PosLinea + 0.1), Negro
+      Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
+      Printer.Line (InicioX, PosLinea + 0.1)-(Ancho(C), PosLinea + 0.1), Negro
       PosLinea = PosLinea + 0.2
       PrinterVariableTexto Ancho(0), PosLinea, "Fin de: ", MesesLetras(MesActual)
       MesActual = FechaMes(.fields("Fecha"))
@@ -8904,7 +8904,7 @@ Do While Not .EOF
       CadCtaSup = NomCtaSup
       CadCta = Cta & Space(10) & NomCta
       If PosLinea + 3 > LimiteAlto Then
-         Printer.Line (InicioX, PosLinea + 0.1)-(Ancho(c), PosLinea + 0.1), Negro
+         Printer.Line (InicioX, PosLinea + 0.1)-(Ancho(C), PosLinea + 0.1), Negro
          Printer.NewPage
          Encabezado Ancho(0), Ancho(9)
          EncabMayor "Modulos de Subcuentas de Bloque", FechaCorte, Ancho(9)
@@ -8913,7 +8913,7 @@ Do While Not .EOF
    End If
    If MesActual <> FechaMes(.fields("Fecha")) Then
       Printer.FontBold = True
-      Printer.Line (InicioX, PosLinea)-(Ancho(c), PosLinea), Negro
+      Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
       PosLinea = PosLinea + 0.1
       PrinterVariableTexto Ancho(0), PosLinea, "Fin de: ", MesesLetras(MesActual)
       MesActual = FechaMes(DataT.Recordset.fields("Fecha"))
@@ -8927,7 +8927,7 @@ Do While Not .EOF
       PosLinea = PosLinea + 0.4
       PrinterVariableTexto Ancho(0), PosLinea, "Inicio de: ", MesesLetras(MesActual)
       PosLinea = PosLinea + 0.4
-      Printer.Line (InicioX, PosLinea)-(Ancho(c), PosLinea), Negro
+      Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
       PosLinea = PosLinea + 0.1
       Printer.FontBold = False
    End If
@@ -8938,10 +8938,10 @@ Do While Not .EOF
    PrinterFields Ancho(3), PosLinea, .fields("Numero"), True
    NumeroLineas = PrinterLineasMayor(Ancho(4), PosLinea, .fields("Concepto"), 10.4)
    If NumeroLineas > 1 Then
-      For i = 1 To NumeroLineas
-         For j = 0 To c
-           Printer.Line (Ancho(j), PosLinea - 0.1)-(Ancho(j), PosLinea + 0.5), Negro
-         Next j
+      For I = 1 To NumeroLineas
+         For J = 0 To C
+           Printer.Line (Ancho(J), PosLinea - 0.1)-(Ancho(J), PosLinea + 0.5), Negro
+         Next J
          PosLinea = PosLinea + 0.4
       Next
       PosLinea = PosLinea - 0.4
@@ -8950,9 +8950,9 @@ Do While Not .EOF
    PrinterFields Ancho(6), PosLinea, .fields("Parcial_ME"), True
    PrinterFields Ancho(7), PosLinea, .fields("Saldo"), True
    PrinterFields Ancho(8), PosLinea, .fields("Saldo_ME"), True
-   For j = 0 To c
-      Printer.Line (Ancho(j), PosLinea - 0.1)-(Ancho(j), PosLinea + 0.4), Negro
-   Next j
+   For J = 0 To C
+      Printer.Line (Ancho(J), PosLinea - 0.1)-(Ancho(J), PosLinea + 0.4), Negro
+   Next J
    SumaSaldo = .fields("Saldo")
    If .fields("Parcial_ME") = 0 Then Suma_ME = 0 Else Suma_ME = .fields("Saldo_ME")
    SumaParcial_ME = SumaParcial_ME + .fields("Parcial_ME")
@@ -8962,8 +8962,8 @@ Do While Not .EOF
   .MoveNext
 Loop
 End With
-Printer.Line (InicioX, PosLinea)-(Ancho(c), PosLinea), Negro
-Printer.Line (InicioX, PosLinea + 0.1)-(Ancho(c), PosLinea + 0.1), Negro
+Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
+Printer.Line (InicioX, PosLinea + 0.1)-(Ancho(C), PosLinea + 0.1), Negro
 Printer.FontBold = True
 PosLinea = PosLinea + 0.2
 PrinterVariableTexto Ancho(0), PosLinea, "Fin de: ", MesesLetras(MesActual)
@@ -8994,7 +8994,7 @@ Dim NuevoDoc As Boolean
 Dim MesActual As Integer
 Dim NumeroLineas As Single
  
-Dim i As Integer
+Dim I As Integer
 
 PorteLetra = 9
 TipoLetra = TipoArialNarrow
@@ -9015,7 +9015,7 @@ Escala_Centimetro 2, TipoLetra, PorteLetra
 InicioX = 0.5: InicioY = 0
 Pagina = 1: Documento = 1
 HoraSistema = Time
-c = 10
+C = 10
 Ancho(0) = 0.5   ' Fecha
 Ancho(1) = 2     ' TP
 Ancho(2) = 2.6   ' Numero
@@ -9023,9 +9023,9 @@ Ancho(3) = 4.1   ' Cheque/Deposito
 Ancho(4) = 6     ' Beneficiario
 Ancho(5) = 10    ' Concepto
 Ancho(10) = LimiteAncho - 1
-For i = 9 To 6 Step -1
-    Ancho(i) = Ancho(i + 1) - 2.2
-Next i
+For I = 9 To 6 Step -1
+    Ancho(I) = Ancho(I + 1) - 2.2
+Next I
 '''Ancho(6) = 17.5  ' Parcial ME
 '''Ancho(7) = 19.5  ' Debe
 '''Ancho(8) = 21.5  ' Haber
@@ -9058,7 +9058,7 @@ Do While Not .EOF
    If PosLinea > LimiteAlto Then
       'MsgBox LimiteAlto
       PosLinea = PosLinea + 0.1
-      Printer.Line (InicioX, PosLinea)-(Ancho(c), PosLinea), Negro
+      Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
       Printer.NewPage
       CadCtaSup = CtaSup & Space(10) & NomCtaSup
       CadCta = Cta & Space(10) & NomCta
@@ -9075,7 +9075,7 @@ Do While Not .EOF
    Printer.FontSize = PorteLetra
    If MesActual <> FechaMes(.fields("Fecha")) Then
       PosLinea = PosLinea + 0.1
-      Printer.Line (InicioX, PosLinea)-(Ancho(c), PosLinea), Negro
+      Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
       PosLinea = PosLinea + 0.05
       Printer.FontBold = True
       PrinterVariableTexto Ancho(0), PosLinea, "Fin de: ", MesesLetras(MesActual)
@@ -9089,7 +9089,7 @@ Do While Not .EOF
       PosLinea = PosLinea + 0.4
       PrinterVariableTexto Ancho(0), PosLinea, "Inicio de: ", MesesLetras(MesActual)
       PosLinea = PosLinea + 0.4
-      Printer.Line (InicioX, PosLinea)-(Ancho(c), PosLinea), Negro
+      Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
       PosLinea = PosLinea + 0.1
       Printer.FontBold = False
       Printer.FontItalic = False
@@ -9107,10 +9107,10 @@ Do While Not .EOF
    If OpcCoop Then
       NumeroLineas = PrinterLineasMayor(Ancho(5), PosLinea, .fields("Concepto"), Redondear(Ancho(6) - Ancho(5)))
       If NumeroLineas > 1 Then
-         For i = 1 To NumeroLineas
-            For j = 0 To c
-              If j <> 6 Then Printer.Line (Ancho(j), PosLinea - 0.1)-(Ancho(j), PosLinea + 0.5), Negro
-            Next j
+         For I = 1 To NumeroLineas
+            For J = 0 To C
+              If J <> 6 Then Printer.Line (Ancho(J), PosLinea - 0.1)-(Ancho(J), PosLinea + 0.5), Negro
+            Next J
             PosLinea = PosLinea + 0.35
          Next
          PosLinea = PosLinea - 0.35
@@ -9128,9 +9128,9 @@ Do While Not .EOF
          SumaDebe = SumaDebe + .fields("Debe")
          SumaHaber = SumaHaber + .fields("Haber")
       End If
-      For j = 0 To c
-         If j <> 6 Then Printer.Line (Ancho(j), PosLinea - 0.1)-(Ancho(j), PosLinea + 0.4), Negro
-      Next j
+      For J = 0 To C
+         If J <> 6 Then Printer.Line (Ancho(J), PosLinea - 0.1)-(Ancho(J), PosLinea + 0.4), Negro
+      Next J
       If .fields("T") <> Anulado Then
           SumaSaldo = .fields("Saldo")
           Suma_ME = .fields("Saldo_ME")
@@ -9139,10 +9139,10 @@ Do While Not .EOF
    Else
       NumeroLineas = PrinterLineasMayor(Ancho(5), PosLinea, .fields("Concepto"), Redondear(Ancho(6) - Ancho(5)))
       If NumeroLineas > 1 Then
-      For i = 1 To NumeroLineas
-         For j = 0 To c
-           Printer.Line (Ancho(j), PosLinea - 0.1)-(Ancho(j), PosLinea + 0.5), Negro
-         Next j
+      For I = 1 To NumeroLineas
+         For J = 0 To C
+           Printer.Line (Ancho(J), PosLinea - 0.1)-(Ancho(J), PosLinea + 0.5), Negro
+         Next J
          PosLinea = PosLinea + 0.35
       Next
       PosLinea = PosLinea - 0.35
@@ -9151,9 +9151,9 @@ Do While Not .EOF
       PrinterFields Ancho(7), PosLinea, .fields("Debe"), True
       PrinterFields Ancho(8), PosLinea, .fields("Haber"), True
       PrinterFields Ancho(9), PosLinea, .fields("Saldo"), True
-      For j = 0 To c
-         Printer.Line (Ancho(j), PosLinea - 0.1)-(Ancho(j), PosLinea + 0.4), Negro
-      Next j
+      For J = 0 To C
+         Printer.Line (Ancho(J), PosLinea - 0.1)-(Ancho(J), PosLinea + 0.4), Negro
+      Next J
       SumaDebe = SumaDebe + .fields("Debe")
       SumaHaber = SumaHaber + .fields("Haber")
       If .fields("T") <> Anulado Then
@@ -9166,7 +9166,7 @@ Do While Not .EOF
 Loop
 End With
 PosLinea = PosLinea + 0.1
-Printer.Line (InicioX, PosLinea)-(Ancho(c), PosLinea), Negro
+Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
 Printer.FontBold = True
 PosLinea = PosLinea + 0.05
 PrinterVariableTexto Ancho(0), PosLinea, "Fin de: ", MesesLetras(MesActual)
@@ -9940,10 +9940,10 @@ If FormaImp <= 1 Then
    Ancho(1) = 5
    Ancho(2) = 5.5
    Tasa = 5.8
-   For i = 3 To CantCampos
+   For I = 3 To CantCampos
        Tasa = Tasa + 0.7
-       Ancho(i) = Tasa
-   Next i
+       Ancho(I) = Tasa
+   Next I
    Ancho(CantCampos) = Tasa + 0.1
 End If
 Pagina = 1
@@ -9961,26 +9961,26 @@ With Datas.Recordset
            NombreCliente = .fields("Cliente")
            PrinterTexto Ancho(0), PosLinea, NombreCliente
         End If
-        For i = 1 To CantCampos - 1
+        For I = 1 To CantCampos - 1
             If Opcion_Imp <= 2 Then
-               PrinterTexto Ancho(i), PosLinea, UCaseStrg(MidStrg(.fields(i), 1, 3))
+               PrinterTexto Ancho(I), PosLinea, UCaseStrg(MidStrg(.fields(I), 1, 3))
             Else
-               If i <= 2 Then
-                  PrinterFields Ancho(i), PosLinea, .fields(i)
+               If I <= 2 Then
+                  PrinterFields Ancho(I), PosLinea, .fields(I)
                Else
                   Cod_Benef = " "
                  'MsgBox "..."
                   If Opcion_Imp = 0 Then
-                     If .fields(i) <> Ninguno Then Cod_Benef = "Ok"
-                     PrinterTexto Ancho(i), PosLinea, Cod_Benef
+                     If .fields(I) <> Ninguno Then Cod_Benef = "Ok"
+                     PrinterTexto Ancho(I), PosLinea, Cod_Benef
                   ElseIf Opcion_Imp = 1 Then
-                     PrinterFields Ancho(i), PosLinea, .fields(i)
+                     PrinterFields Ancho(I), PosLinea, .fields(I)
                   Else
-                     PrinterFields Ancho(i), PosLinea, .fields(i)
+                     PrinterFields Ancho(I), PosLinea, .fields(I)
                   End If
                End If
             End If
-        Next i
+        Next I
         PosLinea = PosLinea + 0.36
         If PosLinea >= LimiteAlto Then
            Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
@@ -10045,10 +10045,10 @@ Dim VTotales(6) As Double
 LimiteAlto = LimiteAlto - 0.4
 With Datas.Recordset
     .MoveFirst
-     For i = 0 To 5
-         VTotales(i) = 0
-         VSubTotales(i) = 0
-     Next i
+     For I = 0 To 5
+         VTotales(I) = 0
+         VSubTotales(I) = 0
+     Next I
      Total = 0: Monto_Total = 0
      Encabezados
      NombreCliente = .fields("Cliente")
@@ -10070,9 +10070,9 @@ With Datas.Recordset
            NombreCliente = .fields("Cliente")
            EncabezadoSaldosTemp
            Printer.FontSize = SizeLetra
-           For i = 0 To 6
-               VSubTotales(i) = 0
-           Next i
+           For I = 0 To 6
+               VSubTotales(I) = 0
+           Next I
            Total = 0
         End If
         If PosLinea >= LimiteAlto Then
@@ -10107,9 +10107,9 @@ With Datas.Recordset
         VSubTotales(3) = VSubTotales(3) + .fields("Ven_31_a_60")
         VSubTotales(4) = VSubTotales(4) + .fields("Ven_61_a_90")
         VSubTotales(5) = VSubTotales(5) + .fields("Mas_91")
-        For j = 1 To 11
-            Printer.Line (Ancho(j), PosLinea - 0.05)-(Ancho(j), PosLinea + 0.36), Negro
-        Next j
+        For J = 1 To 11
+            Printer.Line (Ancho(J), PosLinea - 0.05)-(Ancho(J), PosLinea + 0.36), Negro
+        Next J
         PosLinea = PosLinea + 0.35
         If PosLinea >= LimiteAlto Then
            Imprimir_Linea_H PosLinea, Ancho(0), Ancho(CantCampos)
@@ -10329,7 +10329,7 @@ RatonReloj
 InicioX = 1: InicioY = 0
 SubTotal = 0: Total = 0
 DataAnchoCampos InicioX, Datas, 6, TipoVerdana, Orientacion_Pagina
-If PorCta.Value = 1 Then
+If PorCta.value = 1 Then
    Ancho(0) = 1     'Codigo Cta
    Ancho(1) = 3     'Cuenta
 Else
@@ -10346,7 +10346,7 @@ With Datas.Recordset
  If .RecordCount > 0 Then
      .MoveFirst
       Encabezado_SubCta_Costos PorCta
-      If PorCta.Value = 1 Then
+      If PorCta.value = 1 Then
          Cuenta = .fields("Cta") & " - " & .fields("Cuenta")
       Else
          Cuenta = .fields("Sub_Modulos")
@@ -10358,7 +10358,7 @@ With Datas.Recordset
       Printer.FontSize = SizeLetra
       PrinterTexto Ancho(0), PosLinea, UCaseStrg(Cuenta)
       Do While Not .EOF
-         If PorCta.Value = 1 Then
+         If PorCta.value = 1 Then
             If Cuenta <> .fields("Cta") & " - " & .fields("Cuenta") Then
                PosLinea = PosLinea + 0.05
                Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
@@ -10394,13 +10394,13 @@ With Datas.Recordset
             PrinterFields Ancho(2), PosLinea, .fields(2)
             PrinterFields Ancho(3), PosLinea, .fields(3)
          End If
-         For i = 0 To CantCampos
-             If PorCta.Value = 1 Then
-                If i <> 1 Then Printer.Line (Ancho(i), PosLinea - 0.1)-(Ancho(i), PosLinea + 0.3), Negro
+         For I = 0 To CantCampos
+             If PorCta.value = 1 Then
+                If I <> 1 Then Printer.Line (Ancho(I), PosLinea - 0.1)-(Ancho(I), PosLinea + 0.3), Negro
              Else
-                Printer.Line (Ancho(i), PosLinea - 0.1)-(Ancho(i), PosLinea + 0.3), Negro
+                Printer.Line (Ancho(I), PosLinea - 0.1)-(Ancho(I), PosLinea + 0.3), Negro
              End If
-         Next i
+         Next I
          PosLinea = PosLinea + 0.3
          If PosLinea >= LimiteAlto Then
             Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
@@ -10475,7 +10475,7 @@ End If
 Printer.FontSize = 7
 Printer.FontUnderline = True
 '========================================================================
-If PorCta.Value = 1 Then
+If PorCta.value = 1 Then
    PrinterTexto Ancho(0), PosLinea, "C U E N T A"
    PrinterTexto Ancho(2), PosLinea, "S U B C U E N T A"
    PrinterTexto Ancho(3), PosLinea, "SUBTOTAL"

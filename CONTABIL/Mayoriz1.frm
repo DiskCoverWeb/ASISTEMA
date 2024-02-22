@@ -1,9 +1,9 @@
 VERSION 5.00
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDATGRD.OCX"
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "COMCTL32.OCX"
+Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Begin VB.Form ListMayorizacion1 
    Caption         =   "Mayor Analitico"
    ClientHeight    =   7365
@@ -12,8 +12,8 @@ Begin VB.Form ListMayorizacion1
    ClientWidth     =   11340
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   7365
-   ScaleWidth      =   11340
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    WindowState     =   2  'Maximized
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
@@ -21,8 +21,8 @@ Begin VB.Form ListMayorizacion1
       Left            =   0
       TabIndex        =   25
       Top             =   0
-      Width           =   11340
-      _ExtentX        =   20003
+      Width           =   28560
+      _ExtentX        =   50377
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005

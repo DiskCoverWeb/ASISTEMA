@@ -88,7 +88,7 @@ Begin VB.Form Facturas
          Left            =   4305
          TabIndex        =   1
          Top             =   -105
-         Width           =   10620
+         Width           =   12825
          Begin VB.TextBox TxtCompra 
             Alignment       =   1  'Right Justify
             BeginProperty Font 
@@ -152,8 +152,8 @@ Begin VB.Form Facturas
             TabIndex        =   6
             Top             =   210
             Visible         =   0   'False
-            Width           =   3585
-            _ExtentX        =   6324
+            Width           =   5685
+            _ExtentX        =   10028
             _ExtentY        =   635
             _Version        =   393216
             Text            =   ""
@@ -202,10 +202,10 @@ Begin VB.Form Facturas
             EndProperty
             ForeColor       =   &H000000C0&
             Height          =   330
-            Left            =   9135
+            Left            =   11235
             TabIndex        =   7
             Top             =   210
-            Width           =   1380
+            Width           =   1485
          End
       End
    End
@@ -224,7 +224,7 @@ Begin VB.Form Facturas
       Height          =   6840
       Left            =   15015
       TabIndex        =   76
-      Top             =   3570
+      Top             =   2415
       Visible         =   0   'False
       Width           =   4740
       Begin VB.TextBox TxtLugarEntrega 
@@ -816,7 +816,7 @@ Begin VB.Form Facturas
       Height          =   2325
       Left            =   15015
       TabIndex        =   106
-      Top             =   735
+      Top             =   1575
       Visible         =   0   'False
       Width           =   3900
       Begin VB.CommandButton Command5 
@@ -1062,9 +1062,9 @@ Begin VB.Form Facturas
    End
    Begin MSMask.MaskEdBox MBoxFechaV 
       Height          =   330
-      Left            =   5145
-      TabIndex        =   17
-      Top             =   1155
+      Left            =   3885
+      TabIndex        =   11
+      Top             =   735
       Width           =   1275
       _ExtentX        =   2249
       _ExtentY        =   582
@@ -1100,7 +1100,7 @@ Begin VB.Form Facturas
       Height          =   2115
       Left            =   15015
       TabIndex        =   111
-      Top             =   3150
+      Top             =   3570
       Visible         =   0   'False
       Width           =   3795
       Begin VB.CommandButton Command11 
@@ -1711,17 +1711,17 @@ Begin VB.Form Facturas
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   10710
-      TabIndex        =   11
+      Left            =   15855
+      TabIndex        =   15
       Text            =   "000000000"
       Top             =   735
       Width           =   1275
    End
    Begin MSMask.MaskEdBox MBoxFecha 
       Height          =   330
-      Left            =   1680
-      TabIndex        =   15
-      Top             =   1155
+      Left            =   1260
+      TabIndex        =   9
+      Top             =   735
       Width           =   1275
       _ExtentX        =   2249
       _ExtentY        =   582
@@ -2611,11 +2611,11 @@ Begin VB.Form Facturas
       Bindings        =   "Facturas.frx":017C
       DataSource      =   "AdoTipoPago"
       Height          =   360
-      Left            =   8085
-      TabIndex        =   19
+      Left            =   1680
+      TabIndex        =   17
       Top             =   1155
-      Width           =   6840
-      _ExtentX        =   12065
+      Width           =   9885
+      _ExtentX        =   17436
       _ExtentY        =   635
       _Version        =   393216
       BackColor       =   12648447
@@ -2728,8 +2728,8 @@ Begin VB.Form Facturas
       Bindings        =   "Facturas.frx":0196
       DataSource      =   "AdoLinea"
       Height          =   360
-      Left            =   1680
-      TabIndex        =   9
+      Left            =   6825
+      TabIndex        =   13
       Top             =   735
       Width           =   4740
       _ExtentX        =   8361
@@ -2780,8 +2780,8 @@ Begin VB.Form Facturas
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   105
-      TabIndex        =   8
+      Left            =   5250
+      TabIndex        =   12
       Top             =   735
       Width           =   1590
    End
@@ -2861,8 +2861,8 @@ Begin VB.Form Facturas
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   6510
-      TabIndex        =   18
+      Left            =   105
+      TabIndex        =   16
       Top             =   1155
       Width           =   1590
    End
@@ -3026,14 +3026,14 @@ Begin VB.Form Facturas
       EndProperty
       ForeColor       =   &H8000000D&
       Height          =   330
-      Left            =   13440
-      TabIndex        =   13
-      Top             =   735
+      Left            =   15645
+      TabIndex        =   19
+      Top             =   1155
       Width           =   1485
    End
    Begin VB.Label Label17 
       BorderStyle     =   1  'Fixed Single
-      Caption         =   " Saldo Pendien"
+      Caption         =   " Saldo Pendiente del Cliente"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   8.25
@@ -3044,10 +3044,10 @@ Begin VB.Form Facturas
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   12075
-      TabIndex        =   12
-      Top             =   735
-      Width           =   1380
+      Left            =   11655
+      TabIndex        =   18
+      Top             =   1155
+      Width           =   4005
    End
    Begin VB.Label Label48 
       BorderStyle     =   1  'Fixed Single
@@ -3257,7 +3257,7 @@ Begin VB.Form Facturas
    End
    Begin VB.Label Label35 
       BorderStyle     =   1  'Fixed Single
-      Caption         =   " Fecha de Vencimiento"
+      Caption         =   " Vencimiento"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   8.25
@@ -3268,10 +3268,10 @@ Begin VB.Form Facturas
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   3045
-      TabIndex        =   16
-      Top             =   1155
-      Width           =   2115
+      Left            =   2625
+      TabIndex        =   10
+      Top             =   735
+      Width           =   1275
    End
    Begin VB.Label LabelTotal 
       Alignment       =   1  'Right Justify
@@ -3505,14 +3505,14 @@ Begin VB.Form Facturas
       EndProperty
       ForeColor       =   &H000000FF&
       Height          =   330
-      Left            =   6510
-      TabIndex        =   10
+      Left            =   11655
+      TabIndex        =   14
       Top             =   735
       Width           =   4215
    End
    Begin VB.Label Label4 
       BorderStyle     =   1  'Fixed Single
-      Caption         =   " &Fecha Emision"
+      Caption         =   " &Emision"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   8.25
@@ -3524,9 +3524,9 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   105
-      TabIndex        =   14
-      Top             =   1155
-      Width           =   1590
+      TabIndex        =   8
+      Top             =   735
+      Width           =   1170
    End
    Begin VB.Label LabelSubTotal 
       Alignment       =   1  'Right Justify
@@ -4088,6 +4088,13 @@ Private Sub DCLinea_LostFocus()
   Encerar_Factura FA
   FA.Cod_CxC = DCLinea
   Lineas_De_CxC FA
+   Tipo_De_Facturacion
+   FechaTexto1 = MBoxFecha
+   FA.Fecha = MBoxFecha
+   FA.Fecha_V = FA.Fecha
+   FA.Fecha_C = FA.Fecha
+   FechaComp = FA.Fecha
+   
   'FA.Factura = Numero_Factura(FA)
   FA.Nuevo_Doc = True
   FA.Factura = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, False)
@@ -5021,17 +5028,12 @@ End Sub
 Private Sub MBoxFecha_LostFocus()
    FechaValida MBoxFecha, True
    Validar_Porc_IVA MBoxFecha
-   Tipo_De_Facturacion
+   FA.Fecha = MBoxFecha
    If FA.TC = "OP" Then
       MBoxFechaV = CLongFecha(CFechaLong(MBoxFecha) + 3)
    Else
       MBoxFechaV = CLongFecha(CFechaLong(MBoxFecha) + 15)
    End If
-   FechaTexto1 = MBoxFecha
-   FA.Fecha = MBoxFecha
-   FA.Fecha_V = FA.Fecha
-   FA.Fecha_C = FA.Fecha
-   FechaComp = FA.Fecha
 End Sub
 
 Private Sub MBoxFechaGRE_GotFocus()

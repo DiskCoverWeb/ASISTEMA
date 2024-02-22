@@ -4,7 +4,7 @@ Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Begin VB.Form FListComprobantes 
    Caption         =   "SubCtas"
    ClientHeight    =   8895
@@ -13,8 +13,8 @@ Begin VB.Form FListComprobantes
    ClientWidth     =   11280
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   15615
-   ScaleWidth      =   28560
+   ScaleHeight     =   8895
+   ScaleWidth      =   11280
    WindowState     =   2  'Maximized
    Begin VB.CommandButton Command2 
       BackColor       =   &H00FFFFC0&
@@ -299,8 +299,8 @@ Begin VB.Form FListComprobantes
       Left            =   0
       TabIndex        =   34
       Top             =   0
-      Width           =   28560
-      _ExtentX        =   50377
+      Width           =   11280
+      _ExtentX        =   19897
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -382,24 +382,24 @@ Begin VB.Form FListComprobantes
       TabCaption(1)   =   "&5.- RETENCIONES"
       TabPicture(1)   =   "FLstComp.frx":5396
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "DGFAV"
+      Tab(1).Control(0)=   "DGRet"
       Tab(1).Control(1)=   "DGFAC"
-      Tab(1).Control(2)=   "DGRet"
+      Tab(1).Control(2)=   "DGFAV"
       Tab(1).ControlCount=   3
       TabCaption(2)   =   "&6.- SUBCUENTAS"
       TabPicture(2)   =   "FLstComp.frx":53B2
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "DGIxExCC"
-      Tab(2).Control(1)=   "DGCxCxP"
+      Tab(2).Control(0)=   "DGCxCxP"
+      Tab(2).Control(1)=   "DGIxExCC"
       Tab(2).ControlCount=   2
       TabCaption(3)   =   "&7.- KARDEX"
       TabPicture(3)   =   "FLstComp.frx":53CE
       Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "LblTotalC"
-      Tab(3).Control(1)=   "LblTotalComp"
+      Tab(3).Control(0)=   "DGKardex"
+      Tab(3).Control(1)=   "Label11"
       Tab(3).Control(2)=   "Label10"
-      Tab(3).Control(3)=   "Label11"
-      Tab(3).Control(4)=   "DGKardex"
+      Tab(3).Control(3)=   "LblTotalComp"
+      Tab(3).Control(4)=   "LblTotalC"
       Tab(3).ControlCount=   5
       Begin MSDataGridLib.DataGrid DGAsientos 
          Bindings        =   "FLstComp.frx":53EA
@@ -1802,7 +1802,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-Option Explicit
+    Option Explicit
 
 Dim IDTipoComp As Integer
 Dim FechaTemp As String
@@ -2223,7 +2223,7 @@ Private Sub MBFecha_LostFocus()
         Actualiza_Procesado_Tabla "Transacciones", True
         Actualiza_Procesado_Tabla "Trans_SubCtas", True
         Actualiza_Procesado_Tabla "Trans_Kardex", True
-     
+
         MBFecha.Enabled = False
         MsgBox "Proceso terminado con exito," & vbCrLf & vbCrLf & "vuelva a listar el comprobante"
     End If
@@ -2634,8 +2634,8 @@ If ClaveSupervisor Then
 End If
 End Sub
 
-Private Sub OpcTP_LostFocus(Index As Integer)
-   IDTipoComp = Index
+Private Sub OpcTP_LostFocus(index As Integer)
+   IDTipoComp = index
    ListarTipoComp IDTipoComp
 End Sub
 

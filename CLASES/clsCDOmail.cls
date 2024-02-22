@@ -40,7 +40,7 @@ Function Enviar_Backup() As Boolean
     Dim archivoAdjunto As String
     Dim posPuntoComa As String
     Dim vAdjunto As String
-
+        
    'chequea si hay conexión
     If InternetGetConnectedState(0&, 0&) = False Then
        RaiseEvent Error("No se puede enviar el correo. " & "Verificar la conexión a internet si está disponible", 0)

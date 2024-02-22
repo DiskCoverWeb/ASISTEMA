@@ -1,9 +1,9 @@
 VERSION 5.00
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDATGRD.OCX"
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.Form MayorAux 
    Caption         =   "Movimientos de Sub Cuentas"
    ClientHeight    =   7395
@@ -12,8 +12,8 @@ Begin VB.Form MayorAux
    ClientWidth     =   11280
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   7395
-   ScaleWidth      =   11280
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    WindowState     =   2  'Maximized
    Begin MSComctlLib.ImageList ImageList1 
       Left            =   11865
@@ -806,8 +806,8 @@ Begin VB.Form MayorAux
       Left            =   0
       TabIndex        =   32
       Top             =   0
-      Width           =   11280
-      _ExtentX        =   19897
+      Width           =   28560
+      _ExtentX        =   50377
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005

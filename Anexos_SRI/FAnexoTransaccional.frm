@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Begin VB.Form FAnexoTransaccional 
    Caption         =   "Talón Resumen"
    ClientHeight    =   10470
@@ -1173,7 +1173,7 @@ Dim ExisteAnioActual As Boolean
   sSQL = sSQL _
        & "GROUP BY YEAR(Fecha) " _
        & "ORDER BY YEAR(Fecha) DESC "
-  Select_Adodc AdoAux, sSQL
+  Select_Adodc AdoAux, sSQL, , , "Periodos_ATS"
   With AdoAux.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
@@ -3219,10 +3219,12 @@ Dim Nombre2 As String
   NumFile = FreeFile
   Open NombreArchivo For Output As #NumFile   ' Abre el archivo
  'ENCABEZADO
-  Print #NumFile, "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>"
+  Print #NumFile, "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>"
   Print #NumFile, AbrirXML("rdep")
   Print #NumFile, vbTab & CampoXML("numRuc", RUC)
   Print #NumFile, vbTab & CampoXML("anio", Format(Anio, "0000"))
+  Print #NumFile, vbTab & CampoXML("tipoEmpleador", "PRIVADO_MIXTO")
+  Print #NumFile, vbTab & CampoXML("enteSegSocial", "IESS")
    With AdoRolPagos.Recordset
     If .RecordCount > 0 Then
         Print #NumFile, AbrirXML("retRelDep")
@@ -3265,7 +3267,8 @@ Dim Nombre2 As String
            
            Print #NumFile, vbTab & vbTab & AbrirXML("empleado")
            Print #NumFile, vbTab & vbTab & vbTab & CampoXML("benGalpg", "NO")
-          'Print #NumFile, vbTab & vbTab & vbTab & CampoXML("enfcatastro", "NO")
+           Print #NumFile, vbTab & vbTab & vbTab & CampoXML("enfcatastro", "NO")
+           Print #NumFile, vbTab & vbTab & vbTab & CampoXML("numCargRebGastPers", "0")
            If .fields("TD") = "R" Then
                Print #NumFile, vbTab & vbTab & vbTab & CampoXML("tipIdRet", "C")
                Print #NumFile, vbTab & vbTab & vbTab & CampoXML("idRet", MidStrg(Ruc_Empleado, 1, 10))
@@ -3289,6 +3292,7 @@ Dim Nombre2 As String
            Print #NumFile, vbTab & vbTab & vbTab & CampoXML("idDiscap", .fields("Identificacion"))
            Print #NumFile, vbTab & vbTab & CerrarXML("empleado")
            
+           
 '''           Print #NumFile, vbTab & vbTab & CampoXML("anioRet", Format(Anio, "0000"))
 '''           If Anio < 2012 Then
 '''              Print #NumFile, vbTab & vbTab & CampoXML("dirCal", TrimStrg(MidStrg(.Fields("Direccion"), 1, 20)))
@@ -3311,8 +3315,8 @@ Dim Nombre2 As String
            Print #NumFile, vbTab & vbTab & CampoXML("decimCuar", .fields("Valor_Dec_4to"))
            Totales_SRI(5) = Totales_SRI(5) + .fields("Valor_Dec_4to")
            Print #NumFile, vbTab & vbTab & CampoXML("fondoReserva", .fields("FondoReserva"))
-           Print #NumFile, vbTab & vbTab & CampoXML("salarioDigno", 0)
-           Print #NumFile, vbTab & vbTab & CampoXML("otrosIngRenGrav", 0)
+           Print #NumFile, vbTab & vbTab & CampoXML("salarioDigno", "0.00")
+           Print #NumFile, vbTab & vbTab & CampoXML("otrosIngRenGrav", "0.00")
            Print #NumFile, vbTab & vbTab & CampoXML("ingGravConEsteEmpl", .fields("SuelSal"))
            Print #NumFile, vbTab & vbTab & CampoXML("sisSalNet", .fields("SN"))
            Print #NumFile, vbTab & vbTab & CampoXML("apoPerIess", .fields("ApoPerIess"))
@@ -3334,8 +3338,8 @@ Dim Nombre2 As String
            Valor_Retenido = .fields("ImpRentCaus") + .fields("Deduccion") + .fields("ImpAnterior")
            Print #NumFile, vbTab & vbTab & CampoXML("impRentCaus", .fields("ImpRentCaus"))
            
-           Print #NumFile, vbTab & vbTab & CampoXML("rebajaGastosPersonales", 0)
-           Print #NumFile, vbTab & vbTab & CampoXML("impuestoRentaRebajaGastosPersonales", 0)
+           Print #NumFile, vbTab & vbTab & CampoXML("rebajaGastosPersonales", "0.00")
+           Print #NumFile, vbTab & vbTab & CampoXML("impuestoRentaRebajaGastosPersonales", "0.00")
            
            Print #NumFile, vbTab & vbTab & CampoXML("valRetAsuOtrosEmpls", .fields("Deduccion"))
            Print #NumFile, vbTab & vbTab & CampoXML("valImpAsuEsteEmpl", .fields("ImpAnterior"))

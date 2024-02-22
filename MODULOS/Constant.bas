@@ -134,6 +134,7 @@ Global Const urlDatosDelRUC = "https://srienlinea.sri.gob.ec/facturacion-interne
 '-----------------------------------------------------------------
 Global Const CorreoDiskCover = "informacion@diskcoversystem.com"
 Global Const ContrasenaDiskCover = "infoDlcjvl1210DiskCover"
+Global Const CorreoUpdate = "actualizar@diskcoversystem.com"
 'LINODE
 Global Const ftpSvrLinode = "ftp.diskcoversystem.com"
 Global Const ftpUseLinode = "ftpuser"

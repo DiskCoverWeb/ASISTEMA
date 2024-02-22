@@ -36,7 +36,7 @@ On Error GoTo Errorhandler
     Next IdP
     'MsgBox Len(ListP) & vbCrLf & vbCrLf & ListP
    
-   'Generar_File_SQL "Store_Procedure", ListP
+    'Generar_File_SQL "Store_Procedure", ListP
    
 '''    Progreso_Esperar True
     cMiCmd.CommandTimeout = 0
@@ -1391,6 +1391,7 @@ Dim NumFile As Long
        Open PathCSV For Input As #NumFile
          If Not EOF(NumFile) Then Line Input #NumFile, LineFile
          If InStr(LineFile, ";emision") > 0 Then TipoFile = "05"
+         If InStr(LineFile, ";CI_RUC_Codigo") > 0 Then TipoFile = "15"
          If InStr(LineFile, ";COD_MES") > 0 Then TipoFile = "27"
          If InStr(LineFile, ";CI_RUC_P_SUBMOD") > 0 Then TipoFile = "99"
        Close #NumFile
@@ -1471,6 +1472,22 @@ Dim MiReg As ADODB.Recordset
     RatonReloj
     Iniciar_Stored_Procedure "sp Importar Contabilidad con SubModulo", MiSQL, MiCmd, MiReg
     MiCmd.CommandText = "sp_Importar_Contabilidad_SubModulos"
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Usuario", adVarChar, adParamInput, 10, CodigoUsuario)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@NumModulo", adVarChar, adParamInput, 2, NumModulo)
+    Procesar_Stored_Procedure MiCmd, MiReg
+    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+    RatonNormal
+End Sub
+
+Public Sub Importar_Abonos_Facturas_SP()
+Dim MiSQL As ADODB.Connection
+Dim MiCmd As ADODB.Command
+Dim MiReg As ADODB.Recordset
+    RatonReloj
+    Iniciar_Stored_Procedure "sp Importar Abonos Facturas", MiSQL, MiCmd, MiReg
+    MiCmd.CommandText = "sp_Importar_Abonos_Facturas"
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Usuario", adVarChar, adParamInput, 10, CodigoUsuario)

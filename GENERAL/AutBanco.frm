@@ -2,9 +2,9 @@ VERSION 5.00
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Begin VB.Form FRecaudacionBancosCxC 
-   BackColor       =   &H0080FF80&
+   BackColor       =   &H00FFFFC0&
    Caption         =   "BANCO BOLIVARIANO"
    ClientHeight    =   8865
    ClientLeft      =   60
@@ -13,49 +13,9 @@ Begin VB.Form FRecaudacionBancosCxC
    Icon            =   "AutBanco.frx":0000
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   Picture         =   "AutBanco.frx":0442
    ScaleHeight     =   8865
    ScaleWidth      =   12300
    WindowState     =   2  'Maximized
-   Begin VB.TextBox TxtFile 
-      BackColor       =   &H00000000&
-      BeginProperty Font 
-         Name            =   "Courier New"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H00FFFFFF&
-      Height          =   5580
-      Left            =   105
-      MultiLine       =   -1  'True
-      ScrollBars      =   3  'Both
-      TabIndex        =   16
-      Top             =   2205
-      Width           =   10725
-   End
-   Begin VB.CommandButton Command2 
-      BackColor       =   &H00FFC0C0&
-      Caption         =   "&S"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   225
-      Left            =   14385
-      Style           =   1  'Graphical
-      TabIndex        =   18
-      Top             =   945
-      Width           =   330
-   End
    Begin MSComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
       Height          =   900
@@ -65,7 +25,7 @@ Begin VB.Form FRecaudacionBancosCxC
       Width           =   12300
       _ExtentX        =   21696
       _ExtentY        =   1588
-      ButtonWidth     =   2566
+      ButtonWidth     =   1482
       ButtonHeight    =   1429
       AllowCustomize  =   0   'False
       Appearance      =   1
@@ -74,7 +34,7 @@ Begin VB.Form FRecaudacionBancosCxC
       BeginProperty Buttons {66833FE8-8583-11D1-B16A-00C0F0283628} 
          NumButtons      =   4
          BeginProperty Button1 {66833FEA-8583-11D1-B16A-00C0F0283628} 
-            Caption         =   "&Salir"
+            Caption         =   "Salir"
             Key             =   "Salir"
             Object.ToolTipText     =   "Salir del Módulo"
             ImageIndex      =   1
@@ -87,19 +47,19 @@ Begin VB.Form FRecaudacionBancosCxC
             EndProperty
          EndProperty
          BeginProperty Button2 {66833FEA-8583-11D1-B16A-00C0F0283628} 
-            Caption         =   "&Visualizar"
+            Caption         =   "Visualizar"
             Key             =   "Visualizar"
             Object.ToolTipText     =   "Visualizar Archivo"
             ImageIndex      =   2
          EndProperty
          BeginProperty Button3 {66833FEA-8583-11D1-B16A-00C0F0283628} 
-            Caption         =   "&Enviar Rubros"
+            Caption         =   "Enviar"
             Key             =   "Enviar"
             Object.ToolTipText     =   "Envia rubros de cobros al Banco"
             ImageIndex      =   3
          EndProperty
          BeginProperty Button4 {66833FEA-8583-11D1-B16A-00C0F0283628} 
-            Caption         =   "&Recibir Abonos"
+            Caption         =   "Recibir"
             Key             =   "Recibir"
             Object.ToolTipText     =   "Recibir Abonos del Banco"
             ImageIndex      =   4
@@ -107,12 +67,12 @@ Begin VB.Form FRecaudacionBancosCxC
       EndProperty
       BorderStyle     =   1
       Begin MSDataListLib.DataCombo DCGrupoF 
-         Bindings        =   "AutBanco.frx":4F7A
+         Bindings        =   "AutBanco.frx":0442
          DataSource      =   "AdoGrupo"
          Height          =   360
-         Left            =   8085
-         TabIndex        =   3
-         Top             =   420
+         Left            =   13545
+         TabIndex        =   5
+         Top             =   315
          Visible         =   0   'False
          Width           =   1800
          _ExtentX        =   3175
@@ -130,12 +90,12 @@ Begin VB.Form FRecaudacionBancosCxC
          EndProperty
       End
       Begin MSDataListLib.DataCombo DCGrupoI 
-         Bindings        =   "AutBanco.frx":4F91
+         Bindings        =   "AutBanco.frx":0459
          DataSource      =   "AdoGrupo"
          Height          =   360
-         Left            =   6195
-         TabIndex        =   2
-         Top             =   420
+         Left            =   11655
+         TabIndex        =   4
+         Top             =   315
          Visible         =   0   'False
          Width           =   1800
          _ExtentX        =   3175
@@ -152,8 +112,8 @@ Begin VB.Form FRecaudacionBancosCxC
             Strikethrough   =   0   'False
          EndProperty
       End
-      Begin VB.CheckBox CheqRangos 
-         Caption         =   "Procesar &Por Rangos Grupos:"
+      Begin VB.Frame Frame1 
+         Caption         =   " CUENTA A LA QUE SE VA ACREDITAR LOS ABONOS"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
             Size            =   8.25
@@ -163,11 +123,35 @@ Begin VB.Form FRecaudacionBancosCxC
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Height          =   330
-         Left            =   5985
-         TabIndex        =   1
-         Top             =   0
-         Width           =   3690
+         Height          =   645
+         Left            =   16905
+         TabIndex        =   8
+         Top             =   105
+         Width           =   6105
+         Begin MSDataListLib.DataCombo DCBanco 
+            Bindings        =   "AutBanco.frx":0470
+            DataSource      =   "AdoBanco"
+            Height          =   360
+            Left            =   105
+            TabIndex        =   9
+            Top             =   210
+            Width           =   5895
+            _ExtentX        =   10398
+            _ExtentY        =   635
+            _Version        =   393216
+            BackColor       =   16777215
+            ForeColor       =   192
+            Text            =   "Banco"
+            BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+               Name            =   "MS Sans Serif"
+               Size            =   9.75
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+         End
       End
       Begin VB.Frame Frame2 
          Caption         =   "ORDEN No."
@@ -181,8 +165,8 @@ Begin VB.Form FRecaudacionBancosCxC
             Strikethrough   =   0   'False
          EndProperty
          Height          =   645
-         Left            =   9975
-         TabIndex        =   4
+         Left            =   15435
+         TabIndex        =   6
          Top             =   105
          Width           =   1380
          Begin VB.TextBox TxtOrden 
@@ -198,14 +182,31 @@ Begin VB.Form FRecaudacionBancosCxC
             Height          =   330
             Left            =   105
             MaxLength       =   10
-            TabIndex        =   5
+            TabIndex        =   7
             Text            =   "0"
             Top             =   210
             Width           =   1170
          End
       End
-      Begin VB.Frame Frame1 
-         Caption         =   " CUENTA A LA QUE SE VA ACREDITAR LOS ABONOS"
+      Begin VB.CheckBox CheqRangos 
+         Caption         =   "Procesar &Por Rangos Grupos:"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   11340
+         TabIndex        =   3
+         Top             =   0
+         Width           =   3690
+      End
+      Begin VB.Frame Frame3 
+         Caption         =   "ENTIDAD FINANCIERA"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
             Size            =   8.25
@@ -216,27 +217,27 @@ Begin VB.Form FRecaudacionBancosCxC
             Strikethrough   =   0   'False
          EndProperty
          Height          =   645
-         Left            =   11445
-         TabIndex        =   6
+         Left            =   3465
+         TabIndex        =   1
          Top             =   105
-         Width           =   6105
-         Begin MSDataListLib.DataCombo DCBanco 
-            Bindings        =   "AutBanco.frx":4FA8
-            DataSource      =   "AdoBanco"
-            Height          =   360
+         Width           =   7785
+         Begin MSDataListLib.DataCombo DCTablaSRI 
+            Bindings        =   "AutBanco.frx":0487
+            DataSource      =   "AdoTablaSRI"
+            Height          =   315
             Left            =   105
-            TabIndex        =   7
+            TabIndex        =   2
             Top             =   210
-            Width           =   5895
-            _ExtentX        =   10398
-            _ExtentY        =   635
+            Width           =   7575
+            _ExtentX        =   13361
+            _ExtentY        =   556
             _Version        =   393216
-            BackColor       =   16744576
-            ForeColor       =   192
+            BackColor       =   16777215
+            ForeColor       =   4194304
             Text            =   "Banco"
             BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
                Name            =   "MS Sans Serif"
-               Size            =   9.75
+               Size            =   8.25
                Charset         =   0
                Weight          =   700
                Underline       =   0   'False
@@ -246,9 +247,48 @@ Begin VB.Form FRecaudacionBancosCxC
          End
       End
    End
+   Begin VB.TextBox TxtFile 
+      BackColor       =   &H00000000&
+      BeginProperty Font 
+         Name            =   "Courier New"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   5580
+      Left            =   105
+      MultiLine       =   -1  'True
+      ScrollBars      =   3  'Both
+      TabIndex        =   18
+      Top             =   2415
+      Width           =   10725
+   End
+   Begin VB.CommandButton Command2 
+      BackColor       =   &H00FFC0C0&
+      Caption         =   "&S"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   225
+      Left            =   14700
+      Style           =   1  'Graphical
+      TabIndex        =   20
+      Top             =   1050
+      Width           =   330
+   End
    Begin MSComctlLib.ImageList ImageList1 
-      Left            =   0
-      Top             =   630
+      Left            =   2730
+      Top             =   2940
       _ExtentX        =   1005
       _ExtentY        =   1005
       BackColor       =   -2147483643
@@ -259,41 +299,40 @@ Begin VB.Form FRecaudacionBancosCxC
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   5
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "AutBanco.frx":4FBF
+            Picture         =   "AutBanco.frx":04A1
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "AutBanco.frx":5899
+            Picture         =   "AutBanco.frx":0D7B
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "AutBanco.frx":6173
+            Picture         =   "AutBanco.frx":1655
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "AutBanco.frx":648D
+            Picture         =   "AutBanco.frx":196F
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "AutBanco.frx":6D43
+            Picture         =   "AutBanco.frx":2225
             Key             =   ""
          EndProperty
       EndProperty
    End
-   Begin VB.PictureBox Picture1 
+   Begin VB.PictureBox PctBanco 
       Appearance      =   0  'Flat
       AutoRedraw      =   -1  'True
-      AutoSize        =   -1  'True
       BackColor       =   &H80000005&
       BorderStyle     =   0  'None
       ForeColor       =   &H80000008&
       Height          =   1065
       Left            =   105
       ScaleHeight     =   1065
-      ScaleWidth      =   4950
-      TabIndex        =   17
+      ScaleWidth      =   9045
+      TabIndex        =   19
       Top             =   840
-      Width           =   4950
+      Width           =   9045
    End
    Begin VB.CheckBox CheqSAT 
       BackColor       =   &H00FF8080&
@@ -308,9 +347,9 @@ Begin VB.Form FRecaudacionBancosCxC
          Strikethrough   =   0   'False
       EndProperty
       Height          =   225
-      Left            =   11655
-      TabIndex        =   14
-      Top             =   1575
+      Left            =   11970
+      TabIndex        =   16
+      Top             =   1680
       Visible         =   0   'False
       Width           =   2640
    End
@@ -327,9 +366,9 @@ Begin VB.Form FRecaudacionBancosCxC
          Strikethrough   =   0   'False
       EndProperty
       Height          =   225
-      Left            =   11655
-      TabIndex        =   12
-      Top             =   945
+      Left            =   11970
+      TabIndex        =   14
+      Top             =   1050
       Width           =   2640
    End
    Begin VB.CheckBox CheqPend 
@@ -345,9 +384,9 @@ Begin VB.Form FRecaudacionBancosCxC
          Strikethrough   =   0   'False
       EndProperty
       Height          =   225
-      Left            =   11655
-      TabIndex        =   13
-      Top             =   1260
+      Left            =   11970
+      TabIndex        =   15
+      Top             =   1365
       Width           =   2640
    End
    Begin MSAdodcLib.Adodc AdoAux 
@@ -493,9 +532,9 @@ Begin VB.Form FRecaudacionBancosCxC
    End
    Begin MSMask.MaskEdBox MBFechaI 
       Height          =   330
-      Left            =   10290
-      TabIndex        =   9
-      Top             =   945
+      Left            =   10605
+      TabIndex        =   11
+      Top             =   1050
       Width           =   1275
       _ExtentX        =   2249
       _ExtentY        =   582
@@ -566,9 +605,9 @@ Begin VB.Form FRecaudacionBancosCxC
    End
    Begin MSMask.MaskEdBox MBFechaF 
       Height          =   330
-      Left            =   10290
-      TabIndex        =   11
-      Top             =   1470
+      Left            =   10605
+      TabIndex        =   13
+      Top             =   1575
       Width           =   1275
       _ExtentX        =   2249
       _ExtentY        =   582
@@ -593,7 +632,7 @@ Begin VB.Form FRecaudacionBancosCxC
    Begin MSAdodcLib.Adodc AdoPendiente 
       Height          =   330
       Left            =   105
-      Top             =   2310
+      Top             =   5775
       Visible         =   0   'False
       Width           =   2115
       _ExtentX        =   3731
@@ -828,7 +867,7 @@ Begin VB.Form FRecaudacionBancosCxC
    Begin MSAdodcLib.Adodc AdoGrupo 
       Height          =   330
       Left            =   105
-      Top             =   5250
+      Top             =   5145
       Visible         =   0   'False
       Width           =   2115
       _ExtentX        =   3731
@@ -872,6 +911,53 @@ Begin VB.Form FRecaudacionBancosCxC
       EndProperty
       _Version        =   393216
    End
+   Begin MSAdodcLib.Adodc AdoTablaSRI 
+      Height          =   330
+      Left            =   105
+      Top             =   5460
+      Visible         =   0   'False
+      Width           =   2115
+      _ExtentX        =   3731
+      _ExtentY        =   582
+      ConnectMode     =   0
+      CursorLocation  =   3
+      IsolationLevel  =   -1
+      ConnectionTimeout=   15
+      CommandTimeout  =   30
+      CursorType      =   3
+      LockType        =   3
+      CommandType     =   8
+      CursorOptions   =   0
+      CacheSize       =   50
+      MaxRecords      =   0
+      BOFAction       =   0
+      EOFAction       =   0
+      ConnectStringType=   1
+      Appearance      =   1
+      BackColor       =   -2147483643
+      ForeColor       =   -2147483640
+      Orientation     =   0
+      Enabled         =   -1
+      Connect         =   ""
+      OLEDBString     =   ""
+      OLEDBFile       =   ""
+      DataSourceName  =   ""
+      OtherAttributes =   ""
+      UserName        =   ""
+      Password        =   ""
+      RecordSource    =   ""
+      Caption         =   "TablaSRI"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      _Version        =   393216
+   End
    Begin VB.Label Label4 
       BackColor       =   &H00FF8080&
       BorderStyle     =   1  'Fixed Single
@@ -888,8 +974,8 @@ Begin VB.Form FRecaudacionBancosCxC
       ForeColor       =   &H000000C0&
       Height          =   330
       Left            =   105
-      TabIndex        =   15
-      Top             =   1890
+      TabIndex        =   17
+      Top             =   1995
       Width           =   10725
    End
    Begin VB.Label Label1 
@@ -906,9 +992,9 @@ Begin VB.Form FRecaudacionBancosCxC
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   8925
-      TabIndex        =   10
-      Top             =   1470
+      Left            =   9240
+      TabIndex        =   12
+      Top             =   1575
       Width           =   1380
    End
    Begin VB.Label Label8 
@@ -925,9 +1011,9 @@ Begin VB.Form FRecaudacionBancosCxC
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   8925
-      TabIndex        =   8
-      Top             =   945
+      Left            =   9240
+      TabIndex        =   10
+      Top             =   1050
       Width           =   1380
    End
 End
@@ -1205,7 +1291,7 @@ Dim CaptionTemp As String
   FechaValida MBFechaI
   FechaValida MBFechaF
   TipoDoc = ""
-  If CheqMatricula.Value = 1 Then TipoDoc = "0" Else TipoDoc = "1"
+  If CheqMatricula.value = 1 Then TipoDoc = "0" Else TipoDoc = "1"
   AuxNumEmp = NumEmpresa
   Cta_Cobrar = Ninguno
   FechaFinal = MBFechaF
@@ -1280,15 +1366,15 @@ Dir_Dialog.Filename = Abrir_Archivo(Me.hwnd, Dir_Dialog, OpenFile)
           TxtFile = TxtFile & Cod_Field & vbCrLf
        Loop
      Close #NumFile
-     j = 1: K = 0
+     J = 1: K = 0
      Cadena = ""
      Cadena1 = ""
-     For i = 1 To MaxCar
-         Cadena = Cadena & CStr(j)
-         j = j + 1
-         If j > 9 Then
+     For I = 1 To MaxCar
+         Cadena = Cadena & CStr(J)
+         J = J + 1
+         If J > 9 Then
             Cadena = Cadena & "0"
-            j = 1
+            J = 1
             K = K + 1
             If K <= 10 Then
                Cadena1 = Cadena1 & String(9, " ") & CStr(K)
@@ -1296,7 +1382,7 @@ Dir_Dialog.Filename = Abrir_Archivo(Me.hwnd, Dir_Dialog, OpenFile)
                Cadena1 = Cadena1 & String(8, " ") & CStr(K)
             End If
          End If
-     Next i
+     Next I
      Cadena = Cadena & vbCrLf
      Cadena1 = Cadena1 & vbCrLf
      
@@ -1308,7 +1394,7 @@ Dir_Dialog.Filename = Abrir_Archivo(Me.hwnd, Dir_Dialog, OpenFile)
 End Sub
 
 Private Sub CheqRangos_Click()
-  If CheqRangos.Value = 0 Then
+  If CheqRangos.value = 0 Then
      DCGrupoI.Visible = False
      DCGrupoF.Visible = False
   Else
@@ -1332,7 +1418,7 @@ Dim Tabulador As String
   FechaValida MBFechaI
   FechaValida MBFechaF
   TipoDoc = ""
-  If CheqMatricula.Value = 1 Then TipoDoc = "0" Else TipoDoc = "1"
+  If CheqMatricula.value = 1 Then TipoDoc = "0" Else TipoDoc = "1"
   AuxNumEmp = NumEmpresa
   Cta_Cobrar = Ninguno
   FechaFinal = MBFechaF
@@ -1381,7 +1467,7 @@ Dim Tabulador As String
        & "AND F.T = 'P' " _
        & "AND F.Saldo_MN > 0 " _
        & "AND NOT F.TC IN ('C','P') "
-  If CheqRangos.Value <> 0 Then sSQL = sSQL & "AND C.Grupo BETWEEN '" & DCGrupoI & "' and '" & DCGrupoF & "' "
+  If CheqRangos.value <> 0 Then sSQL = sSQL & "AND C.Grupo BETWEEN '" & DCGrupoI & "' and '" & DCGrupoF & "' "
   sSQL = sSQL _
        & "AND F.CodigoC = C.Codigo " _
        & "ORDER BY C.Grupo, C.Cliente, F.Anio_Mes, F.Serie, F.Factura, CI_RUC,F.CodigoC,C.Actividad,C.Direccion, F.Fecha, F.Saldo_MN "
@@ -1740,7 +1826,7 @@ Dim AuxNumEmp As String
                     End If
                  End If
             Case "BOLIVARIANO"
-                  If CheqSAT.Value = 1 Then
+                  If CheqSAT.value = 1 Then
                      CodigoP = MidStrg(Cod_Field, 14, 8)
                   Else
                      CodigoP = MidStrg(Cod_Field, 1, 8)
@@ -1769,7 +1855,7 @@ Dim AuxNumEmp As String
                              & MidStrg(Cod_Field, 207, 2) & "/" _
                              & MidStrg(Cod_Field, 209, 4)
             Case "PACIFICO"
-                  If CheqSAT.Value Then
+                  If CheqSAT.value Then
                      CodigoP = CamposFile(17).Valor
                      FechaTexto = Format$(CamposFile(11).Valor, FormatoFechas)
                   Else
@@ -2038,6 +2124,86 @@ Dim AuxNumEmp As String
 Salida_Rutina: 'En caso de haber problemas con el archivo
 End Sub
 
+Private Sub DCTablaSRI_Change()
+Dim ColorFondo As Long
+  TextoBanco = Ninguno
+  With AdoTablaSRI.Recordset
+   If .RecordCount > 0 Then
+      .MoveFirst
+      .Find ("Descripcion = '" & DCTablaSRI.Text & "' ")
+       If Not .EOF Then TextoBanco = .fields("Abreviado")
+   End If
+  End With
+  Select Case TextoBanco
+    Case "PICHINCHA":
+         ColorFondo = &H80FFFF
+         RutaOrigen = RutaSistema & "\LOGOS\PICHINCHA.GIF"
+         FRecaudacionBancosCxC.Caption = "BANCO DEL PICHINCHA (" & CodigoDelBanco & ")" & String(40, " ") & "EL ULTIMO CODIGO: " & Codigo
+         CheqSAT.Visible = False
+    Case "BOLIVARIANO":
+         ColorFondo = &H808000
+         RutaOrigen = RutaSistema & "\LOGOS\BOLIVARIANO.GIF"
+         FRecaudacionBancosCxC.Caption = "BANCO BOLIVARIANO (" & CodigoDelBanco & ")" & String(40, " ") & "EL ULTIMO CODIGO: " & Codigo
+         CheqSAT.Visible = True
+    Case "BGR_EC":
+         ColorFondo = &H80000004
+         RutaOrigen = RutaSistema & "\LOGOS\BGR_EC.GIF"
+         FRecaudacionBancosCxC.Caption = "BANCO GENERAL RUMIÑAHUI (" & CodigoDelBanco & ")" & String(40, " ") & "EL ULTIMO CODIGO: " & Codigo
+         CheqSAT.Visible = False
+    Case "INTERNACIONAL":
+         ColorFondo = &HFF8080
+         RutaOrigen = RutaSistema & "\LOGOS\INTERNACIONAL.GIF"
+         FRecaudacionBancosCxC.Caption = "BANCO INTERNACIONAL (" & CodigoDelBanco & ")" & String(40, " ") & "EL ULTIMO CODIGO: " & Codigo
+         CheqSAT.Visible = False
+    Case "PACIFICO":
+         ColorFondo = &HC0C000
+         RutaOrigen = RutaSistema & "\LOGOS\PACIFICO.GIF"
+         FRecaudacionBancosCxC.Caption = "BANCO DEL PACIFICO (" & CodigoDelBanco & ")" & String(40, " ") & "EL ULTIMO CODIGO: " & Codigo
+         CheqSAT.Caption = "Archivos OCP"
+         CheqSAT.Visible = True
+    Case "INTERMATICO"
+         ColorFondo = &HC0C000
+         RutaOrigen = RutaSistema & "\LOGOS\INTERMATICO.GIF"
+         FRecaudacionBancosCxC.Caption = "BANCO DEL PACIFICO: INTERMATICO (" & CodigoDelBanco & ")" & String(40, " ") & "EL ULTIMO CODIGO: " & Codigo
+         CheqSAT.Caption = "Archivos OCP"
+         CheqSAT.Visible = True
+    Case "BIZBANCKPACIFICO":
+         ColorFondo = &HC0C000
+         RutaOrigen = RutaSistema & "\LOGOS\BIZBANCK.GIF"
+         FRecaudacionBancosCxC.Caption = "BANCO DEL PACIFICO (" & CodigoDelBanco & ")" & String(40, " ") & "EL ULTIMO CODIGO: " & Codigo
+         CheqSAT.Caption = "Archivos OCP"
+         CheqSAT.Visible = True
+    Case "PRODUBANCO"
+         ColorFondo = &HFFFFFF
+         RutaOrigen = RutaSistema & "\LOGOS\PRODUBAN.JPG"
+         FRecaudacionBancosCxC.Caption = "PRODUBANCO (" & CodigoDelBanco & ")" & String(40, " ") & "EL ULTIMO CODIGO: " & Codigo
+    Case "GUAYAQUIL":
+         ColorFondo = &HFF8080
+         RutaOrigen = RutaSistema & "\LOGOS\GUAYAQUIL.GIF"
+         FRecaudacionBancosCxC.Caption = "BANCO DE GUAYQUIL (" & CodigoDelBanco & ")" & String(40, " ") & "EL ULTIMO CODIGO: " & Codigo
+         CheqSAT.Visible = False
+    Case "COOPJEP"
+         ColorFondo = &H80FF80
+         RutaOrigen = RutaSistema & "\LOGOS\COOP_JEP.GIF"
+         FRecaudacionBancosCxC.Caption = "COOPERATIVA JEP (" & CodigoDelBanco & ")" & String(40, " ") & "EL ULTIMO CODIGO: " & Codigo
+         CheqSAT.Visible = False
+    Case "CACPE"
+         ColorFondo = &H80FF80
+         RutaOrigen = RutaSistema & "\LOGOS\CACPE.GIF"
+         FRecaudacionBancosCxC.Caption = "COOPERATIVA CACPE (" & CodigoDelBanco & ")" & String(40, " ") & "EL ULTIMO CODIGO: " & Codigo
+         CheqSAT.Visible = False
+    Case Else
+         ColorFondo = &HFFFFFF
+         RutaOrigen = RutaSistema & "\LOGOS\ABONOS1.GIF"
+         FRecaudacionBancosCxC.Caption = "OTROS BANCOS (" & CodigoDelBanco & ")" & String(40, " ") & "EL ULTIMO CODIGO: " & Codigo
+         CheqSAT.Visible = False
+  End Select
+  PctBanco.BackColor = ColorFondo
+  Command2.BackColor = ColorFondo
+  FRecaudacionBancosCxC.BackColor = ColorFondo
+  PctBanco.Picture = LoadPicture(RutaOrigen)   ', 0, 0, 5000, 1100
+End Sub
+
 '''Private Sub File1_KeyDown(KeyCode As Integer, Shift As Integer)
 '''  NombreArchivo = File1.Filename
 '''  If KeyCode = vbKeyDelete Then
@@ -2061,15 +2227,26 @@ Private Sub Form_Activate()
   Label4.Caption = Ninguno
   FRecaudacionBancosCxC.Caption = "FACTURACION DE BANCOS (" & CodigoDelBanco & ")"
   
+  sSQL = "SELECT Descripcion, Abreviado, ID " _
+       & "From Tabla_Referenciales_SRI " _
+       & "WHERE Tipo_Referencia = 'BANCOS Y COOP' " _
+       & "AND Abreviado <> '.' " _
+       & "AND TFA <> " & Val(adFalse) & " " _
+       & "ORDER BY Descripcion "
+  SelectDB_Combo DCTablaSRI, AdoTablaSRI, sSQL, "Descripcion"
+
   sSQL = "SELECT Grupo,Count(Grupo) As Cantidad " _
        & "FROM Clientes " _
-       & "WHERE FA <> " & Val(adFalse) & " "
+       & "WHERE FA <> " & Val(adFalse) & " " _
+       & "AND LEN(Grupo) > 1 "
   If Mas_Grupos Then sSQL = sSQL & "AND DirNumero = '" & NumEmpresa & "' "
-  sSQL = sSQL & "GROUP BY Grupo " _
+  sSQL = sSQL _
+       & "GROUP BY Grupo " _
        & "ORDER BY Grupo "
   SelectDB_Combo DCGrupoI, AdoGrupo, sSQL, "Grupo"
   SelectDB_Combo DCGrupoF, AdoGrupo, sSQL, "Grupo"
   If AdoGrupo.Recordset.RecordCount > 0 Then
+     DCGrupoI.Text = AdoGrupo.Recordset.fields("Grupo")
      AdoGrupo.Recordset.MoveLast
      DCGrupoF.Text = AdoGrupo.Recordset.fields("Grupo")
   End If
@@ -2110,74 +2287,6 @@ Private Sub Form_Activate()
        & "AND Periodo = '" & Periodo_Contable & "' " _
        & "ORDER BY Codigo "
   SelectDB_Combo DCBanco, AdoBanco, sSQL, "NomCuenta"
-  Select Case TextoBanco
-    Case "PICHINCHA":
-         RutaOrigen = RutaSistema & "\LOGOS\PICHINCHA.GIF"
-         FRecaudacionBancosCxC.BackColor = &H80FFFF
-         FRecaudacionBancosCxC.Caption = "BANCO DEL PICHINCHA (" & CodigoDelBanco & ")" & String(40, " ") & "EL ULTIMO CODIGO: " & Codigo
-         CheqSAT.Visible = False
-    Case "BOLIVARIANO":
-         RutaOrigen = RutaSistema & "\LOGOS\BOLIVARIANO.GIF"
-         FRecaudacionBancosCxC.BackColor = &H808000
-         FRecaudacionBancosCxC.Caption = "BANCO BOLIVARIANO (" & CodigoDelBanco & ")" & String(40, " ") & "EL ULTIMO CODIGO: " & Codigo
-         CheqSAT.Visible = True
-    Case "BGR_EC":
-         RutaOrigen = RutaSistema & "\LOGOS\BGR_EC.GIF"
-         FRecaudacionBancosCxC.BackColor = &H80000004
-         FRecaudacionBancosCxC.Caption = "BANCO GENERAL RUMIÑAHUI (" & CodigoDelBanco & ")" & String(40, " ") & "EL ULTIMO CODIGO: " & Codigo
-         CheqSAT.Visible = False
-    Case "INTERNACIONAL":
-         RutaOrigen = RutaSistema & "\LOGOS\INTERNACIONAL.GIF"
-         FRecaudacionBancosCxC.BackColor = &HFF8080    '&HFF0000
-         FRecaudacionBancosCxC.Caption = "BANCO INTERNACIONAL (" & CodigoDelBanco & ")" & String(40, " ") & "EL ULTIMO CODIGO: " & Codigo
-         CheqSAT.Visible = False
-    Case "PACIFICO":
-         RutaOrigen = RutaSistema & "\LOGOS\PACIFICO.GIF"
-         FRecaudacionBancosCxC.BackColor = &HC0C000
-         FRecaudacionBancosCxC.Caption = "BANCO DEL PACIFICO (" & CodigoDelBanco & ")" & String(40, " ") & "EL ULTIMO CODIGO: " & Codigo
-         CheqSAT.Caption = "Archivos OCP"
-         CheqSAT.Visible = True
-         
-    Case "INTERMATICO"
-         RutaOrigen = RutaSistema & "\LOGOS\INTERMATICO.GIF"
-         FRecaudacionBancosCxC.BackColor = &HC0C000
-         FRecaudacionBancosCxC.Caption = "BANCO DEL PACIFICO: INTERMATICO (" & CodigoDelBanco & ")" & String(40, " ") & "EL ULTIMO CODIGO: " & Codigo
-         CheqSAT.Caption = "Archivos OCP"
-         CheqSAT.Visible = True
-    Case "BIZBANCKPACIFICO":
-         RutaOrigen = RutaSistema & "\LOGOS\BIZBANCK.GIF"
-         FRecaudacionBancosCxC.BackColor = &HC0C000
-         FRecaudacionBancosCxC.Caption = "BANCO DEL PACIFICO (" & CodigoDelBanco & ")" & String(40, " ") & "EL ULTIMO CODIGO: " & Codigo
-         CheqSAT.Caption = "Archivos OCP"
-         CheqSAT.Visible = True
-    Case "PRODUBANCO"
-         RutaOrigen = RutaSistema & "\LOGOS\PRODUBAN.JPG"
-         FRecaudacionBancosCxC.BackColor = &HFFFFFF
-         FRecaudacionBancosCxC.Caption = "PRODUBANCO (" & CodigoDelBanco & ")" & String(40, " ") & "EL ULTIMO CODIGO: " & Codigo
-    Case "GUAYAQUIL":
-         RutaOrigen = RutaSistema & "\LOGOS\GUAYAQUIL.GIF"
-         FRecaudacionBancosCxC.BackColor = &HFF8080    '&HFF0000
-         FRecaudacionBancosCxC.Caption = "BANCO DE GUAYQUIL (" & CodigoDelBanco & ")" & String(40, " ") & "EL ULTIMO CODIGO: " & Codigo
-         CheqSAT.Visible = False
-    Case "COOPJEP"
-         RutaOrigen = RutaSistema & "\LOGOS\COOP_JEP.GIF"
-         FRecaudacionBancosCxC.BackColor = &H80FF80       '&HFF0000
-         FRecaudacionBancosCxC.Caption = "COOPERATIVA JEP (" & CodigoDelBanco & ")" & String(40, " ") & "EL ULTIMO CODIGO: " & Codigo
-         CheqSAT.Visible = False
-    Case "CACPE"
-         RutaOrigen = RutaSistema & "\LOGOS\CACPE.GIF"
-         FRecaudacionBancosCxC.BackColor = &H80FF80       '&HFF0000
-         FRecaudacionBancosCxC.Caption = "COOPERATIVA CACPE (" & CodigoDelBanco & ")" & String(40, " ") & "EL ULTIMO CODIGO: " & Codigo
-         CheqSAT.Visible = False
-    Case Else
-         RutaOrigen = RutaSistema & "\LOGOS\ABONOS1.GIF"
-         FRecaudacionBancosCxC.BackColor = &HFFFFFF
-         FRecaudacionBancosCxC.Caption = "OTROS BANCOS (" & CodigoDelBanco & ")" & String(40, " ") & "EL ULTIMO CODIGO: " & Codigo
-         CheqSAT.Visible = False
-  End Select
-  Picture1.AutoRedraw = True
-  FRecaudacionBancosCxC.Picture = LoadPicture()
-  Picture1.Picture = LoadPicture(RutaOrigen)   ', 0, 0, 5000, 1100
 
   Label1.BackColor = FRecaudacionBancosCxC.BackColor
   'Frame1.BackColor = FRecaudacionBancosCxC.BackColor
@@ -2213,21 +2322,17 @@ Private Sub Form_Activate()
   With AdoBanco.Recordset
    If .RecordCount > 0 Then
       .MoveFirst
-       Do While Not .EOF
-          If Cta_Del_Banco = .fields("Codigo") Then
-             DCBanco = .fields("NomCuenta")
-             Cta_Banco = Cta_Del_Banco
-            .MoveLast
-          End If
-         .MoveNext
-       Loop
-       If Cta_Banco = Ninguno Then
-          MsgBox "No existen cuentas asignadas o no" & vbCrLf & vbCrLf & "estan bien establecidad las cuentas contables"
+      .Find ("Codigo = '" & Cta_Del_Banco & "' ")
+       If Not .EOF Then
+          DCBanco = .fields("NomCuenta")
+          Cta_Banco = Cta_Del_Banco
+       Else
          .MoveFirst
+          MsgBox "No existen cuentas asignadas o no" & vbCrLf & vbCrLf & "estan bien establecidad las cuentas contables"
           DCBanco = .fields("NomCuenta")
           Cta_Banco = SinEspaciosIzq(DCBanco)
        End If
-       TxtOrden.SetFocus
+       DCTablaSRI.SetFocus
    Else
        MsgBox "No existen cuentas asignadas o no" & vbCrLf & vbCrLf & "estan bien establecidad las cuentas contables"
        Unload FRecaudacionBancosCxC
@@ -2242,6 +2347,7 @@ End Sub
 Private Sub Form_Load()
  'CentrarForm FRecaudacionBancosCxC
   If CodigoUsuario = "ACCESO02" Then
+     Toolbar1.buttons("AlumnosContabilidad").Enabled = True
      'Command6.Visible = True
   End If
   RutaBackupXX = ""
@@ -2253,6 +2359,7 @@ Private Sub Form_Load()
   ConectarAdodc AdoFactura
   ConectarAdodc AdoClientes
   ConectarAdodc AdoProducto
+  ConectarAdodc AdoTablaSRI
   ConectarAdodc AdoPendiente
   ConectarAdodc AdoIngCaja
   RutaBackup = RutaSysBases & "\BANCO"
@@ -2302,7 +2409,7 @@ NumFileDetalle = FreeFile
 NumFileFacturas = FreeFile
 NumFileAlumnos = FreeFile
 TipoDoc = "0"
-If CheqMatricula.Value = 1 Then TipoDoc = "1"
+If CheqMatricula.value = 1 Then TipoDoc = "1"
 
 Contador = 0
  
@@ -2331,10 +2438,10 @@ With AdoAux.Recordset
         ''ProgBarra.value = Contador
         CodigoCli = .fields("CI_RUC")
         Codigo = "0"
-        For i = 1 To Len(.fields("CI_RUC"))
-            If IsNumeric(MidStrg(.fields("CI_RUC"), i, 1)) Then Codigo = Codigo & MidStrg(.fields("CI_RUC"), i, 1)
-        Next i
-        Codigo = TrimStrg(str(Val(Codigo)))
+        For I = 1 To Len(.fields("CI_RUC"))
+            If IsNumeric(MidStrg(.fields("CI_RUC"), I, 1)) Then Codigo = Codigo & MidStrg(.fields("CI_RUC"), I, 1)
+        Next I
+        Codigo = TrimStrg(Str(Val(Codigo)))
         Codigo = Codigo & String(15 - Len(Codigo), " ")
       ' MsgBox "|" & Codigo & "|"
         NombreCliente = SetearBlancos(MidStrg(.fields("Cliente"), 1, 30), 30, 0, False)
@@ -2348,7 +2455,7 @@ With AdoAux.Recordset
            AdoPendiente.Recordset.Find ("CI_RUC Like '" & CodigoCli & "' ")
            If Not AdoPendiente.Recordset.EOF Then SaldoPendiente = AdoPendiente.Recordset.fields("Saldo_Pend")
         End If
-        If CheqPend.Value = 1 Then SaldoPendiente = .fields("Total_MN")
+        If CheqPend.value = 1 Then SaldoPendiente = .fields("Total_MN")
         Total_Factura = .fields("Total_MN")
         Monto_Total = Total_Factura
         Total = SaldoPendiente
@@ -2397,7 +2504,7 @@ Public Sub Generar_Coop_Jep()
   RatonReloj
  'Facturas Emitidas del mes
   sSQL = "SELECT CI_RUC As 'CODIGO ALUMNO', C.Cliente As 'NOMBRE ALUMNO', C.Direccion As 'CURSO', "
-  If CheqMatricula.Value = 1 Then
+  If CheqMatricula.value = 1 Then
      sSQL = sSQL & "SUM(Saldo_MN) As 'MATRICULA', '0' As 'PENSION', "
   Else
      sSQL = sSQL & "'0' As 'MATRICULA',SUM(Saldo_MN) As 'PENSION', "
@@ -2497,7 +2604,7 @@ Public Sub Actualizar_Bolivariano()
 RutaGeneraFile = UCaseStrg(RutaSysBases & "\BANCO\FACTURAS\ACTALUMNOS" & CodigoDelBanco & ".TXT")
 NumFileFacturas = FreeFile
 TipoDoc = "0"
-If CheqMatricula.Value = 1 Then TipoDoc = "1"
+If CheqMatricula.value = 1 Then TipoDoc = "1"
 Contador = 0
 ''ProgBarra.value = 0
 'ProgBarra.Min = 0
@@ -2524,10 +2631,10 @@ With AdoFactura.Recordset
         'ProgBarra.value = Contador
         CodigoCli = .fields("CI_RUC")
         Codigo = "0"
-        For i = 1 To Len(.fields("CI_RUC"))
-            If IsNumeric(MidStrg(.fields("CI_RUC"), i, 1)) Then Codigo = Codigo & MidStrg(.fields("CI_RUC"), i, 1)
-        Next i
-        Codigo = TrimStrg(str(Val(Codigo)))
+        For I = 1 To Len(.fields("CI_RUC"))
+            If IsNumeric(MidStrg(.fields("CI_RUC"), I, 1)) Then Codigo = Codigo & MidStrg(.fields("CI_RUC"), I, 1)
+        Next I
+        Codigo = TrimStrg(Str(Val(Codigo)))
         Codigo = Codigo & String(15 - Len(Codigo), " ")
       ' MsgBox "|" & Codigo & "|"
         NombreCliente = SetearBlancos(MidStrg(.fields("Cliente"), 1, 30), 30, 0, False)
@@ -2871,7 +2978,7 @@ Dim CamposFile() As Campos_Tabla
                 Print #NumFileFacturas, "REC" & vbTab;
                 Print #NumFileFacturas, vbTab;
                 Print #NumFileFacturas, vbTab;
-                If CheqMatricula.Value = 1 Then
+                If CheqMatricula.value = 1 Then
                    Codigo4 = "MATRICULAS DE " & MidStrg(MesesLetras(Month(MBFechaI)), 1, 3) & "-" & Year(MBFechaI)
                 Else
                    Codigo4 = "PENSION ACUMULADA DE " & MidStrg(MesesLetras(Month(MBFechaI)), 1, 3) & "-" & Year(MBFechaI)
@@ -2902,7 +3009,7 @@ Dim CamposFile() As Campos_Tabla
                 Print #NumFileFacturas, vbTab;
                 Print #NumFileFacturas, MidStrg(Codigo1, 6, 2) & vbTab;
                 'Print #NumFileFacturas, "Pensión Acumulada" & vbTab;
-                If CheqMatricula.Value = 1 Then
+                If CheqMatricula.value = 1 Then
                    Codigo4 = .fields("Grupo") & " Matricula "
                 Else
                    Codigo4 = .fields("Grupo") & " Pension "
@@ -3022,7 +3129,7 @@ Dim CamposFile() As Campos_Tabla
              AdoPendiente.Recordset.Find ("CodigoC Like '" & CodigoCli & "' ")
              If Not AdoPendiente.Recordset.EOF Then SaldoPendiente = AdoPendiente.Recordset.fields("Saldo_Pend")
           End If
-          If CheqPend.Value = 1 Then
+          If CheqPend.value = 1 Then
              Total = .fields("Saldo_MN")
           Else
              Total = SaldoPendiente
@@ -3046,7 +3153,7 @@ Dim CamposFile() As Campos_Tabla
              Print #NumFileFacturas, "REC" & vbTab;
              Print #NumFileFacturas, vbTab;
              Print #NumFileFacturas, vbTab;
-             If CheqMatricula.Value = 1 Then
+             If CheqMatricula.value = 1 Then
                 Codigo4 = "MATRICULAS DE " & MidStrg(MesesLetras(Month(MBFechaI)), 1, 3) & "-" & Year(MBFechaI)
              Else
                 Codigo4 = "PENSION DE " & MidStrg(MesesLetras(Month(MBFechaI)), 1, 3) & "-" & Year(MBFechaI)
@@ -3114,8 +3221,8 @@ With AdoPendiente.Recordset
         If Costo_Banco > 0 Then Total_Factura = Total_Factura + Costo_Banco
         Total = Total + Total_Factura
         TotalIngreso = TotalIngreso + Total_Factura
-        i = Int(Total_Factura)
-        j = (Total_Factura - Int(Total_Factura)) * 100
+        I = Int(Total_Factura)
+        J = (Total_Factura - Int(Total_Factura)) * 100
         'MsgBox Grupo_No & "(" & JE & ")" & vbCrLf & Total_Factura & vbCrLf & Total & vbCrLf & TotalIngreso
         If Len(.fields("Actividad")) = 1 Then
           'Empieza la trama por Alumno
@@ -3124,7 +3231,7 @@ With AdoPendiente.Recordset
            Print #NumFileFacturas, "SC";                                                 ' Codigo de Servicio
            Print #NumFileFacturas, "  ";                                                 ' Tipo de Cuenta
            Print #NumFileFacturas, String(8, " ");                                       ' Numero de Cuenta
-           Print #NumFileFacturas, Format$(i, "0000000000000") & Format$(j, "00");         ' Valor
+           Print #NumFileFacturas, Format$(I, "0000000000000") & Format$(J, "00");         ' Valor
            Print #NumFileFacturas, CodigoCli & String(15 - Len(CodigoCli), " ");         ' Codigo del Alumno
            Print #NumFileFacturas, Codigo2 & String(20 - Len(Codigo2), " ");             ' Referencia
            Print #NumFileFacturas, "RE";                                                 ' Forma de Pago
@@ -3192,15 +3299,15 @@ With AdoPendiente.Recordset
         If Costo_Banco > 0 Then Total_Factura = Total_Factura + Costo_Banco
         Total = Total + Total_Factura
         TotalIngreso = TotalIngreso + Total_Factura
-        i = Int(Total_Factura)
-        j = (Total_Factura - Int(Total_Factura)) * 100
+        I = Int(Total_Factura)
+        J = (Total_Factura - Int(Total_Factura)) * 100
         If Len(.fields("Actividad")) > 1 And UCaseStrg(MidStrg(.fields("Actividad"), 1, 5)) <> "TRANS" Then
           'Empieza la trama por Alumno
            Print #NumFileFacturas, "1";                                                  ' Localidad
            Print #NumFileFacturas, "OCP";                                                ' Transsaccion
            Print #NumFileFacturas, "SC";                                                 ' Codigo de Servicio
            Print #NumFileFacturas, MidStrg(.fields("Actividad"), 1, 10);                     ' Tipo de Cuenta y Numero de Cuenta
-           Print #NumFileFacturas, Format$(i, "0000000000000") & Format$(j, "00");         ' Valor
+           Print #NumFileFacturas, Format$(I, "0000000000000") & Format$(J, "00");         ' Valor
            Print #NumFileFacturas, CodigoCli & String(15 - Len(CodigoCli), " ");         ' Codigo del Alumno
            Print #NumFileFacturas, Codigo2 & String(20 - Len(Codigo2), " ");             ' Referencia
            Print #NumFileFacturas, "CU";                                                 ' Forma de Pago
@@ -3290,8 +3397,8 @@ With AdoPendiente.Recordset
         If Costo_Banco > 0 Then Total_Factura = Total_Factura + Costo_Banco
         Total = Total + Total_Factura
         TotalIngreso = TotalIngreso + Total_Factura
-        i = Int(Total_Factura)
-        j = (Total_Factura - Int(Total_Factura)) * 100
+        I = Int(Total_Factura)
+        J = (Total_Factura - Int(Total_Factura)) * 100
        'MsgBox Grupo_No & "(" & JE & ")" & vbCrLf & Total_Factura & vbCrLf & Total & vbCrLf & TotalIngreso
        'Empieza la trama por Alumno
        'Registro de Cobros
@@ -3299,7 +3406,7 @@ With AdoPendiente.Recordset
         Print #NumFileFacturas, Format$(Contador, "0000000");                          ' Secuencial
         Print #NumFileFacturas, CodigoCli & String(15 - Len(CodigoCli), " ");         ' Codigo del Alumno
         Print #NumFileFacturas, "USD";                                                ' Transsaccion
-        Print #NumFileFacturas, Format$(i, "00000000") & Format$(j, "00");              ' Valor a Cobrar
+        Print #NumFileFacturas, Format$(I, "00000000") & Format$(J, "00");              ' Valor a Cobrar
         Print #NumFileFacturas, "REC";                                                ' Codigo de Servicio
         Print #NumFileFacturas, NombreCliente & String(40 - Len(NombreCliente), " "); ' Nombre del Alumno
         Print #NumFileFacturas, Format$(MBFechaI, "YYYYMM");                           ' Mes de Generacion

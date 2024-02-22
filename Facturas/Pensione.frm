@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Begin VB.Form FacturasPension 
    BackColor       =   &H00C0C0C0&
    Caption         =   "FACTURACION DE PENSIONES"
@@ -2489,7 +2489,7 @@ Public Sub Actualiza_Datos_Cliente()
                SetAdoFields "Cta_Numero", TxtCtaNo
                SetAdoFields "Tipo_Cta", CTipoCta
                SetAdoFields "Caducidad", UltimoDiaMes("01/" & MBFecha)
-               SetAdoFields "Por_Deposito", CBool(CheqPorDeposito.Value)
+               SetAdoFields "Por_Deposito", CBool(CheqPorDeposito.value)
                SetAdoFields "Cod_Banco", Documento
                SetAdoFields "Periodo", Periodo_Contable
                SetAdoFields "Item", NumEmpresa
@@ -2506,7 +2506,7 @@ Public Sub Actualiza_Datos_Cliente()
               .fields("Cta_Numero") = TxtCtaNo
               .fields("Tipo_Cta") = CTipoCta
               .fields("Caducidad") = UltimoDiaMes("01/" & MBFecha)
-              .fields("Por_Deposito") = CBool(CheqPorDeposito.Value)
+              .fields("Por_Deposito") = CBool(CheqPorDeposito.value)
               .fields("Cod_Banco") = Documento
               .Update
            End If
@@ -2787,7 +2787,7 @@ Private Sub CGrupo_LostFocus()
 End Sub
 
 Private Sub CheqDebito_Click()
-    If CheqDebito.Value Then
+    If CheqDebito.value Then
        FrmDebito.Visible = True
     Else
        FrmDebito.Visible = False
@@ -3032,37 +3032,37 @@ Dim S_SubTotal As String
      S_Porc_Desc = InputBox("Porcentaje del Descuento: ", "PORCENTAJE DE DESCUENTO", "0.00")
      If IsNumeric(S_Porc_Desc) Then
         Porc_Desc2 = Val(S_Porc_Desc)
-        For i = 0 To LstMeses.ListCount - 1
-            If LstMeses.Selected(i) Then ContDesc = ContDesc + 1
-        Next i
+        For I = 0 To LstMeses.ListCount - 1
+            If LstMeses.Selected(I) Then ContDesc = ContDesc + 1
+        Next I
         If ContDesc <> 0 Then Valor_Desc2 = Redondear(((Porc_Desc2 / 100) * SubTotal_Desc2) / ContDesc, 2)
-        For i = 0 To LstMeses.ListCount - 1
-         If LstMeses.Selected(i) Then
-            S_Valor = TrimStrg(MidStrg(Rubros_Facturar(i), 76, 13))
-            S_Descuento1 = TrimStrg(MidStrg(Rubros_Facturar(i), 89, 13))
+        For I = 0 To LstMeses.ListCount - 1
+         If LstMeses.Selected(I) Then
+            S_Valor = TrimStrg(MidStrg(Rubros_Facturar(I), 76, 13))
+            S_Descuento1 = TrimStrg(MidStrg(Rubros_Facturar(I), 89, 13))
             S_Descuento2 = Format$(Valor_Desc2, "0.00")
             S_SubTotal = Format$(Val(S_Valor) - Val(S_Descuento1) - Val(S_Descuento2), "0.00")
-            Rubros_Facturar(i) = "X" & MidStrg(Rubros_Facturar(i), 1, 75) _
+            Rubros_Facturar(I) = "X" & MidStrg(Rubros_Facturar(I), 1, 75) _
                                & Space(13 - Len(S_Valor)) & S_Valor _
                                & Space(13 - Len(S_Descuento1)) & S_Descuento1 _
                                & Space(13 - Len(S_Descuento2)) & S_Descuento2 _
                                & Space(13 - Len(S_SubTotal)) & S_SubTotal _
-                               & "       " & SinEspaciosDer(Rubros_Facturar(i))
+                               & "       " & SinEspaciosDer(Rubros_Facturar(I))
          End If
-        Next i
+        Next I
         ContDesc = LstMeses.ListCount
         SubTotal_Desc2 = 0
         LstMeses.Clear
-        For i = 0 To ContDesc - 1
-            If MidStrg(Rubros_Facturar(i), 1, 1) = "X" Then
+        For I = 0 To ContDesc - 1
+            If MidStrg(Rubros_Facturar(I), 1, 1) = "X" Then
                SubTotal_Desc2 = SubTotal_Desc2 + Valor_Desc2
-               Rubros_Facturar(i) = MidStrg(Rubros_Facturar(i), 2, Len(Rubros_Facturar(i)))
-               LstMeses.AddItem Rubros_Facturar(i)
-               LstMeses.Selected(i) = True
+               Rubros_Facturar(I) = MidStrg(Rubros_Facturar(I), 2, Len(Rubros_Facturar(I)))
+               LstMeses.AddItem Rubros_Facturar(I)
+               LstMeses.Selected(I) = True
             Else
-               LstMeses.AddItem Rubros_Facturar(i)
+               LstMeses.AddItem Rubros_Facturar(I)
             End If
-        Next i
+        Next I
         FA.Descuento2 = SubTotal_Desc2
         LabelDescuento2.Caption = Format$(FA.Descuento2, "#,##0.00")
      End If
@@ -3183,7 +3183,7 @@ Dim S_SubTotal As String
   
   AdoAsientoF.Refresh
   DCCliente.Text = UCaseStrg(DCCliente.Text)
-  CheqDebito.Value = 0
+  CheqDebito.value = 0
   FrmDebito.Visible = False
   ExisteCliente = False
   Nuevo = False
@@ -3210,7 +3210,7 @@ Dim S_SubTotal As String
   DCDebito.Text = Ninguno
   CTipoCta.Text = Ninguno
   TxtCtaNo.Text = Ninguno
-  CheqPorDeposito.Value = 0
+  CheqPorDeposito.value = 0
   MBFecha.Text = Format$(FechaSistema, "MM/yyyy")
   TBeneficiario.Saldo_Pendiente = 0
   
@@ -3291,7 +3291,7 @@ Dim S_SubTotal As String
              CTipoCta = AdoAux.Recordset.fields("Tipo_Cta")
              Documento = AdoAux.Recordset.fields("Cod_Banco")
              MBFecha = Format(AdoAux.Recordset.fields("Caducidad"), "MM/yyyy")
-             If AdoAux.Recordset.fields("Por_Deposito") Then CheqPorDeposito.Value = 1 Else CheqPorDeposito.Value = 0
+             If AdoAux.Recordset.fields("Por_Deposito") Then CheqPorDeposito.value = 1 Else CheqPorDeposito.value = 0
              If AdoDebito.Recordset.RecordCount > 0 Then
                 AdoDebito.Recordset.MoveFirst
                 AdoDebito.Recordset.Find ("Codigo = " & Documento & " ")
@@ -3374,9 +3374,9 @@ Dim S_SubTotal As String
             .MoveNext
           Loop
           ReDim Rubros_Facturar(LstMeses.ListCount) As String
-          For i = 0 To LstMeses.ListCount - 1
-              Rubros_Facturar(i) = LstMeses.List(i)
-          Next i
+          For I = 0 To LstMeses.ListCount - 1
+              Rubros_Facturar(I) = LstMeses.List(I)
+          Next I
       Else
           MsgBox "No existe datos para Facturar"
           DCLinea.SetFocus
@@ -3404,7 +3404,7 @@ Dim S_SubTotal As String
   tempCaducidad = MBFecha
   
   If Len(TxtCtaNo) > 1 And Len(CTipoCta) > 1 And Documento > 0 Then
-     CheqDebito.Value = 1
+     CheqDebito.value = 1
      FrmDebito.Visible = True
   End If
   
@@ -3607,9 +3607,9 @@ Dim S_SubTotal As String
                                 & "       " & SinEspaciosDer(Rubros_Facturar(Idx))
            LstMeses.List(Idx) = Rubros_Facturar(Idx)
            SubTotal_Desc2 = 0
-           For i = 0 To LstMeses.ListCount - 1
-               SubTotal_Desc2 = SubTotal_Desc2 + Val(TrimStrg(MidStrg(Rubros_Facturar(i), 102, 13)))
-           Next i
+           For I = 0 To LstMeses.ListCount - 1
+               SubTotal_Desc2 = SubTotal_Desc2 + Val(TrimStrg(MidStrg(Rubros_Facturar(I), 102, 13)))
+           Next I
            FA.Descuento2 = SubTotal_Desc2
            LabelDescuento2.Caption = Format$(FA.Descuento2, "#,##0.00")
         Else
@@ -3629,14 +3629,14 @@ Private Sub LstMeses_LostFocus()
         & "AND Codigo_Cliente = '" & CodigoCliente & "' " _
         & "AND CodigoU = '" & CodigoUsuario & "' "
    Ejecutar_SQL_SP sSQL
-   For i = 0 To LstMeses.ListCount - 1
-     If LstMeses.Selected(i) Then
-        MiMes = TrimStrg(SinEspaciosIzq(LstMeses.List(i)))
-        Cadena = TrimStrg(MidStrg(LstMeses.List(i), Len(MiMes) + 1, Len(LstMeses.List(i))))
+   For I = 0 To LstMeses.ListCount - 1
+     If LstMeses.Selected(I) Then
+        MiMes = TrimStrg(SinEspaciosIzq(LstMeses.List(I)))
+        Cadena = TrimStrg(MidStrg(LstMeses.List(I), Len(MiMes) + 1, Len(LstMeses.List(I))))
         Codigo = SinEspaciosIzq(Cadena)     ' Codigo_Inv
         Cadena = TrimStrg(MidStrg(Cadena, Len(Codigo) + 1, Len(Cadena)))
         Codigo1 = SinEspaciosIzq(Cadena)    ' Periodo
-        Codigo2 = SinEspaciosDer(LstMeses.List(i))
+        Codigo2 = SinEspaciosDer(LstMeses.List(I))
         NoMeses = LetrasMeses(MiMes)
         With AdoArticulo.Recordset
          If .RecordCount > 0 Then
@@ -3651,10 +3651,10 @@ Private Sub LstMeses_LostFocus()
                     Si_No = .fields("IVA")
                     If TipoFactura <> "FA" Then Si_No = False
                     Cta_Ventas = .fields("Cta_Ventas")
-                    Real1 = CCur(TrimStrg(MidStrg(Rubros_Facturar(i), 76, 13)))   ' Valor
+                    Real1 = CCur(TrimStrg(MidStrg(Rubros_Facturar(I), 76, 13)))   ' Valor
                    'MsgBox TrimStrg(MidStrg(Rubros_Facturar(I), 89, 13))
-                    Real2 = CCur(TrimStrg(MidStrg(Rubros_Facturar(i), 89, 13)))   ' Descuento
-                    Real5 = CCur(TrimStrg(MidStrg(Rubros_Facturar(i), 102, 13)))  ' Descuento PP
+                    Real2 = CCur(TrimStrg(MidStrg(Rubros_Facturar(I), 89, 13)))   ' Descuento
+                    Real5 = CCur(TrimStrg(MidStrg(Rubros_Facturar(I), 102, 13)))  ' Descuento PP
                     Real3 = Real1 - Real2 - Real5
                     Real4 = 0
                     If Si_No Then Real4 = CCur(Real3 * Porc_IVA)      'El valor del IVA
@@ -3687,7 +3687,7 @@ Private Sub LstMeses_LostFocus()
          End If
         End With
      End If
-   Next i
+   Next I
    AdoAsientoF.Refresh
    Calculos_Totales_Factura FA
    Total_Desc = Redondear(FA.Descuento, 2)
@@ -3922,6 +3922,7 @@ End Sub
 
 Private Sub Toolbar1_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMenu)
 Dim Resultado As Boolean
+ 'MsgBox ButtonMenu.key
   Select Case ButtonMenu.key
     Case "CarteraPDF"
          FechaInicial = MBHistorico.Text
@@ -4233,13 +4234,13 @@ Dim tipoDeLetra As String
     cPrint.printTexto 1.5, PosLinea, TrimStrg(Label11.Caption)
     PosLinea = PosLinea + 0.4
     Valor = 0
-    For i = 0 To LstMeses.ListCount - 1
-     If LstMeses.Selected(i) Then
-        cPrint.printTexto 1.5, PosLinea, LstMeses.List(i)
-        Valor = Valor + Val(TrimStrg(MidStrg(LstMeses.List(i), 115, 13)))
+    For I = 0 To LstMeses.ListCount - 1
+     If LstMeses.Selected(I) Then
+        cPrint.printTexto 1.5, PosLinea, LstMeses.List(I)
+        Valor = Valor + Val(TrimStrg(MidStrg(LstMeses.List(I), 115, 13)))
         PosLinea = PosLinea + 0.35
      End If
-    Next i
+    Next I
     PosLinea = PosLinea + 0.1
     cPrint.printCuadro 1.4, Ini_Y - 0.05, 19.9, PosLinea - 0.7, Negro, "B", 0.1
     cPrint.printLinea 1.4, Ini_Y + 0.3, 19.8, Ini_Y + 0.3, Negro, 0.1

@@ -6,14 +6,14 @@ Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form FacturaReembolso 
    BackColor       =   &H00C0C0C0&
    Caption         =   "2023-09-30 00:00:00.000"
-   ClientHeight    =   10305
+   ClientHeight    =   10335
    ClientLeft      =   45
    ClientTop       =   345
-   ClientWidth     =   16305
+   ClientWidth     =   16365
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   10305
-   ScaleWidth      =   16305
+   ScaleHeight     =   10335
+   ScaleWidth      =   16365
    WindowState     =   1  'Minimized
    Begin VB.TextBox TxtAutProvee 
       BeginProperty Font 

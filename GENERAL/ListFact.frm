@@ -4,7 +4,7 @@ Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.Ocx"
 Begin VB.Form ListFact 
    BackColor       =   &H80000002&
@@ -24,8 +24,8 @@ Begin VB.Form ListFact
    EndProperty
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   15615
-   ScaleWidth      =   28560
+   ScaleHeight     =   9405
+   ScaleWidth      =   11280
    WindowState     =   2  'Maximized
    Begin VB.CheckBox CheqClaveAcceso 
       Alignment       =   1  'Right Justify
@@ -1492,13 +1492,13 @@ Begin VB.Form ListFact
    End
    Begin MSComctlLib.Toolbar TBarFactura 
       Align           =   1  'Align Top
-      Height          =   660
+      Height          =   1800
       Left            =   0
       TabIndex        =   68
       Top             =   0
-      Width           =   28560
-      _ExtentX        =   50377
-      _ExtentY        =   1164
+      Width           =   11280
+      _ExtentX        =   19897
+      _ExtentY        =   3175
       ButtonWidth     =   1032
       ButtonHeight    =   1005
       Appearance      =   1

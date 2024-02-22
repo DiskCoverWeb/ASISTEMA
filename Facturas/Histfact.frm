@@ -4,7 +4,7 @@ Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{65E121D4-0C60-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSChrt20.ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Begin VB.Form HistorialFacturas 
    Caption         =   "RESUMEN HISTORICO DE FACTURAS/NOTAS DE VENTA"
    ClientHeight    =   10050
@@ -1565,7 +1565,7 @@ If CheqCxC.value = 1 Then PorCxC = True
       sSQL = "SELECT F.TP,F.Fecha,C.Cliente,F.Serie,F.Factura,F.Banco,F.Cheque,F.Abono,F.Mes,F.Comprobante," _
            & "F.Autorizacion,F.Serie_NC,Secuencial_NC,F.Autorizacion_NC,F.Base_Imponible,F.Porc,C.Representante As Razon_Social," _
            & "F.Cta,F.Cta_CxP " _
-           & "FROM Trans_Abonos As F,Clientes C " _
+           & "FROM Trans_Abonos As F, Clientes C " _
            & "WHERE F.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
            & "AND F.Item = '" & NumEmpresa & "' " _
            & "AND F.Periodo = '" & Periodo_Contable & "' " _
@@ -3336,7 +3336,7 @@ Private Sub ToolbarMenu_ButtonClick(ByVal Button As MSComctlLib.Button)
     Case "Estado_Cuenta_Cliente"
          If ListCliente.Text = "Todos" Then FA.CodigoC = "Todos"
          Reporte_Cartera_Clientes_SP PrimerDiaMes(MBFechaI), UltimoDiaMes(FechaSistema), FA.CodigoC
-         sSQL = "SELECT C.Cliente, RCC.T, RCC.TC, RCC.Serie, RCC.Factura, RCC.Fecha, RCC.Detalle, RCC.Anio, RCC.Mes, RCC.Cargos, RCC.Abonos, RCC.CodigoC, " _
+         sSQL = "SELECT C.Cliente, RCC.T, RCC.TC, RCC.Serie, RCC.Factura, RCC.Fecha, RCC.Detalle, RCC.Anio, RCC.Mes, RCC.Cargos, RCC.Abonos, RCC.Saldo, RCC.CodigoC, " _
               & "C.Email, C.EmailR, C.Direccion " _
               & "FROM Reporte_Cartera_Clientes As RCC, Clientes As C " _
               & "WHERE RCC.Item = '" & NumEmpresa & "' " _
@@ -3344,7 +3344,7 @@ Private Sub ToolbarMenu_ButtonClick(ByVal Button As MSComctlLib.Button)
               & "AND RCC.T <> 'A' " _
               & "AND RCC.CodigoC = C.Codigo " _
               & "ORDER BY C.Cliente, RCC.TC, RCC.Serie, RCC.Factura, RCC.Anio, RCC.Mes, RCC.ID "
-         Select_Adodc_Grid DGQuery, AdoQuery, sSQL, "Reporte_Cartera_Clientes"
+         Select_Adodc_Grid DGQuery, AdoQuery, sSQL
          DGQuery.Visible = False
          With AdoQuery.Recordset
           If .RecordCount > 0 Then

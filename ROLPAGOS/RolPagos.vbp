@@ -1,6 +1,6 @@
 Type=Exe
 Reference=*\G{F5078F18-C551-11D3-89B9-0000F81FE221}#3.0#0#..\..\Windows\SysWOW64\msxml3.dll#Microsoft XML, v3.0
-Reference=*\G{2B29DA88-F9FE-4876-97A3-5A9D505378FC}#1.0#0#..\..\WINDOWS\LIBRERIA\FacturacionElect.tlb#FacturacionElect
+Reference=*\G{2B29DA88-F9FE-4876-97A3-5A9D505378FC}#1.0#0#..\..\Windows\SysWow64\FacturacionElect.tlb#FacturacionElect
 Reference=*\G{00025E01-0000-0000-C000-000000000046}#4.0#0#..\..\Program Files (x86)\Common Files\Microsoft Shared\DAO\DAO350.DLL#Microsoft DAO 3.5 Object Library
 Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\Windows\SysWOW64\stdole2.tlb#OLE Automation
 Reference=*\G{2A75196C-D9EB-4129-B803-931327F72D5C}#2.8#0#..\..\Program Files (x86)\Common Files\System\ado\msado28.tlb#Microsoft ActiveX Data Objects 2.8 Library
@@ -15,7 +15,7 @@ Object={F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0; ComDlg32.OCX
 Object={BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0; TabCtl32.Ocx
 Object={248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0; MSWINSCK.ocx
 Object={F6125AB1-8AB1-11CE-A77F-08002B2F4E98}#2.0#0; msrdc20.Ocx
-Object={831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0; mscomctl.OCX
+Object={831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0; MSCOMCTL.OCX
 Object={27395F88-0C0C-101B-A3C9-08002B2F49FB}#1.1#0; PicClp32.Ocx
 Object={648A5603-2C6E-101B-82B6-000000000014}#1.1#0; MSComm32.Ocx
 Object={3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0; richtx32.Ocx

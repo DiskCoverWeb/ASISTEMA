@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.4#0"; "comctl32.Ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Begin VB.Form ISubCtas 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Ingreso/Modificacion de SubCuentas"
@@ -408,7 +408,7 @@ Begin VB.Form ISubCtas
       EndProperty
       Height          =   330
       Left            =   1470
-      MaxLength       =   80
+      MaxLength       =   60
       TabIndex        =   13
       Text            =   "0"
       Top             =   3780
@@ -1020,21 +1020,21 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
    Case "Primero"
         Nuevo = False
        .MoveFirst
-        DLCtas.Text = .Fields("Nombre_Cta")
+        DLCtas.Text = .fields("Nombre_Cta")
    Case "Anterior"
         Nuevo = False
        .MovePrevious
         If .BOF Then .MoveFirst
-        DLCtas.Text = .Fields("Nombre_Cta")
+        DLCtas.Text = .fields("Nombre_Cta")
    Case "Siguiente"
         Nuevo = False
        .MoveNext
         If .EOF Then .MoveLast
-        DLCtas.Text = .Fields("Nombre_Cta")
+        DLCtas.Text = .fields("Nombre_Cta")
    Case "Ultimo"
         Nuevo = False
        .MoveLast
-        DLCtas.Text = .Fields("Nombre_Cta")
+        DLCtas.Text = .fields("Nombre_Cta")
  End Select
  If Nuevo = False Then
     Cadena = SinEspaciosIzq(DLCtas.Text)
@@ -1053,25 +1053,25 @@ Public Sub LlenarCta(CodigoCta As String)
    Select_Adodc AdoSubCta1, sSQL
    With AdoSubCta1.Recordset
     If .RecordCount > 0 Then
-        TextSubCta.Text = .Fields("Detalle")
-        TxtCodigo = .Fields("Codigo")
-        Select Case .Fields("TC")
+        TextSubCta.Text = .fields("Detalle")
+        TxtCodigo = .fields("Codigo")
+        Select Case .fields("TC")
           Case "G": OpcG.value = True
           Case "I": OpcI.value = True
           Case "PM": OpcPM.value = True
           Case "CC": OpcCC.value = True
         End Select
-        MBoxCta.Text = FormatoCodigoCta(.Fields("Cta_Reembolso"))
-        Label5.Caption = " " & Listar_Detalle_Cta(.Fields("Cta_Reembolso"))
+        MBoxCta.Text = FormatoCodigoCta(.fields("Cta_Reembolso"))
+        Label5.Caption = " " & Listar_Detalle_Cta(.fields("Cta_Reembolso"))
         'MsgBox Listar_Detalle_Cta(.Fields("Cta"))
-        TxtReembolso = .Fields("Reembolso")
-        TxtNivel = .Fields("Nivel")
-        MBFechaI = .Fields("Fecha_D")
-        MBFechaF = .Fields("Fecha_H")
-        TextPresupuesto = Format(.Fields("Presupuesto"), "#,##0.00")
-        If .Fields("Caja") Then CheqCaja.value = 1 Else CheqCaja.value = 0
-        If .Fields("Agrupacion") Then CheqNivel.value = 1 Else CheqNivel.value = 0
-        If .Fields("Bloquear") Then CheqBloquear.value = 1 Else CheqBloquear.value = 0
+        TxtReembolso = .fields("Reembolso")
+        TxtNivel = .fields("Nivel")
+        MBFechaI = .fields("Fecha_D")
+        MBFechaF = .fields("Fecha_H")
+        TextPresupuesto = Format(.fields("Presupuesto"), "#,##0.00")
+        If .fields("Caja") Then CheqCaja.value = 1 Else CheqCaja.value = 0
+        If .fields("Agrupacion") Then CheqNivel.value = 1 Else CheqNivel.value = 0
+        If .fields("Bloquear") Then CheqBloquear.value = 1 Else CheqBloquear.value = 0
     Else
         DLCtas.Enabled = False
         TextSubCta.Text = ""
@@ -1104,7 +1104,7 @@ Public Sub GrabarCta(CodigoCta As String)
        & "AND TC = '" & TipoCta & "' "
   Select_Adodc AdoSubCta1, sSQL
   If AdoSubCta1.Recordset.RecordCount > 0 Then
-     Codigo = AdoSubCta1.Recordset.Fields("Codigo")
+     Codigo = AdoSubCta1.Recordset.fields("Codigo")
   Else
      If TipoCta = "CC" Then
         Codigo = CodigoCta
@@ -1155,7 +1155,7 @@ Public Sub ListarSubCtas(TipoCta As String)
        & "ORDER BY Codigo "
   Select_Adodc AdoCatalogo, sSQL
   
-  sSQL = "SELECT (Codigo & Space(5) & Detalle & Space(54-LEN(Detalle)) & Nivel) As Nombre_Cta " _
+  sSQL = "SELECT (Codigo & Space(5) & Detalle & Space(60-LEN(Detalle)) & Nivel) As Nombre_Cta " _
        & "FROM Catalogo_SubCtas " _
        & "WHERE TC = '" & TipoCta & "' " _
        & "AND Item = '" & NumEmpresa & "' " _
@@ -1179,7 +1179,7 @@ Public Function Listar_Detalle_Cta(FCta As String) As String
       .MoveFirst
       .Find ("Codigo = '" & FCta & "' ")
        If Not .EOF Then
-          Listar_Detalle_Cta = .Fields("Cuenta")
+          Listar_Detalle_Cta = .fields("Cuenta")
        Else
           Listar_Detalle_Cta = ""
        End If

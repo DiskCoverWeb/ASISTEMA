@@ -1093,10 +1093,10 @@ Dim IdName As String
                     If IdName = "VALOR DIARIO" Then Tipo_Carga = 26
                     If IdName = "CATEGORIA" Then Tipo_Carga = 11
                Case 6
-                    If IdName = "CI/RUC/Codigo" Then Tipo_Carga = 15
                     If IdName = "FECHA_DOC" Then Tipo_Carga = 32
                     If IdName = "Desc_Item" Then Tipo_Carga = 101             ' Catalogo_Productos
                Case 7
+                    If IdName = "CI_RUC_Codigo" Then Tipo_Carga = 15
                     If IdName = "PROFESION" Then Tipo_Carga = 18
                     If IdName = "Sustento" Then Tipo_Carga = 23
                     If IdName = "ruc_proveedor" Then Tipo_Carga = 38
@@ -1235,10 +1235,10 @@ Private Sub Command2_Click()
       'Case 11: Importar_Facturas_Contabilidad
       'Case 12: Importar_SubModulo
       'Case 14: Importar_Sobrantes_Faltantes
-      'Case 15: Importar_Abonos_Transferencias
+      Case 15: Importar_Abonos_Transferencias
       'Case 16: Cambio_Numero_Secuencial
       'Case 17: Importar_Consumos
-      'Case 18: Importar_Empleados
+      Case 18: Importar_Empleados
       Case 19: Importar_Descuento_Empleados
       Case 20: Importar_Facturas_Farmacias
       'Case 21: Importar_Notas_Materias
@@ -6880,7 +6880,7 @@ End Sub
 '''              SetAdoFields "Ciudad_B_C_M", CodigoP
 '''              SetAdoFields "Fecha_B_C_M", Fecha_Vence
 '''              SetAdoUpdate
-'''           End If
+''           End If
 '''           Me.Caption = "Importar de FlexGrid a Sistema de Parroquias: " & i & " de " & Rango.NumFila2
 '''      Next i
 '''  End With
@@ -6888,347 +6888,266 @@ End Sub
 '''  MsgBox "Proceso Terminado con exito," & vbCrLf & "Revise los datos procesados"
 '''End Sub
 '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-'''Public Sub Importar_Abonos_Transferencias()
-'''Dim I As Long
-'''Dim N As Long
-'''Dim CodRet As String
-'''Dim CompRet As String
-'''Dim Tot_Propinas As Currency
-'''Dim NumMes As Long
-'''  FechaTexto = FechaSistema
-'''  Bandera = False
-'''  Evaluar = True
-'''  DiarioCaja = ReadSetDataNum("Recibo_No", True, True)
-''' 'Empezamos la importacion de las facturas
-'''  TA.Cta_CxP = FA.Cta_CxP
-'''  TA.Autorizacion = FA.Autorizacion
-'''  TA.Serie = FA.Serie
-'''  TA.TP = FA.TC
-'''  TA.T = Normal
-'''  DGExcelAdodc.Visible = False
-'''  With AdoExcelAdodc.Recordset
-'''      'MsgBox .Rows & vbCrLf & .Cols
-'''       For i = 1 To .rows - 1
-'''          .Row = i
-'''           NumMes = 0
-'''           For N = 1 To .cols - 1
-'''              .Col = N
-'''               Codigo = TrimStrg(.Text)
-'''               Select Case N
-'''                 Case 1: If IsDate(Codigo) Then TA.Fecha = Codigo Else TA.Fecha = FechaSistema
-'''                 Case 2: If IsNumeric(Codigo) Then NumMes = Val(Codigo)
-'''                 Case 3: TA.Abono = Redondear(Val(Codigo), 2)
-'''                 Case 4: TA.Cheque = Codigo
-'''                 Case 5: TA.Cta = Codigo
-'''                 Case 6: TA.Banco = "DEP. POR " & Codigo
-'''                 Case 7: CodigoP = Codigo
-'''               End Select
-'''           Next N
-'''          'MsgBox TA.TP & vbCrLf & TA.Serie & vbCrLf & TA.Factura
-'''           Si_No = True
-'''           CodigoCli = Ninguno
-'''           If AdoClientes.Recordset.RecordCount > 0 Then
-'''              AdoClientes.Recordset.MoveFirst
-'''              AdoClientes.Recordset.Find ("Codigo = '" & CodigoP & "' ")
-'''              If Not AdoClientes.Recordset.EOF Then
-'''                 CodigoCli = AdoClientes.Recordset.Fields("Codigo")
-'''                 TextoCheque = AdoClientes.Recordset.Fields("Grupo")
-'''                 NombreCliente = AdoClientes.Recordset.Fields("Cliente")
-'''              Else
-'''                 Do While Len(CodigoP) <= 13 And Si_No
-'''                    AdoClientes.Recordset.MoveFirst
-'''                    AdoClientes.Recordset.Find ("CI_RUC = '" & CodigoP & "' ")
-'''                    If Not AdoClientes.Recordset.EOF Then
-'''                       CodigoCli = AdoClientes.Recordset.Fields("Codigo")
-'''                       TextoCheque = AdoClientes.Recordset.Fields("Grupo")
-'''                       NombreCliente = AdoClientes.Recordset.Fields("Cliente")
-'''                       Si_No = False
-'''                    Else
-'''                       CodigoP = "0" & CodigoP
-'''                    End If
-'''                 Loop
-'''              End If
-'''           End If
-'''           If Len(CodigoP) > 13 Then CodigoCli = Ninguno
-'''           TA.CodigoC = CodigoCli
-'''           FechaInicial = BuscarFecha("01/" & Format$(NumMes, "00") & "/" & Year(TA.Fecha))
-'''           FechaFinal = BuscarFecha(TA.Fecha)
-'''           TA.Factura = 0
-'''           sSQL = "SELECT * " _
-'''                & "FROM Facturas " _
-'''                & "WHERE Periodo = '" & Periodo_Contable & "' " _
-'''                & "AND Item = '" & NumEmpresa & "' " _
-'''                & "AND CodigoC = '" & TA.CodigoC & "' " _
-'''                & "AND T <> '" & Anulado & "' " _
-'''                & "AND Saldo_MN > 0 "
-'''           If NumMes <= 0 Then
-'''              sSQL = sSQL & "AND Fecha <= #" & FechaFinal & "# "
-'''           ElseIf 1 <= NumMes And NumMes <= 12 Then
-'''              sSQL = sSQL & "AND Fecha BETWEEN #" & FechaInicial & "# and #" & FechaFinal & "# "
-'''           ElseIf NumMes > 12 Then
-'''              sSQL = sSQL & "AND Factura = " & NumMes & " "
-'''           End If
-'''           sSQL = sSQL & "ORDER BY Fecha,Factura "
-'''           Select_Adodc AdoAux, sSQL
-'''          'MsgBox sSQL
-'''           If AdoAux.Recordset.RecordCount > 0 Then
-'''              Saldo = TA.Abono
-'''              Do While Not AdoAux.Recordset.EOF And Saldo >= 0
-'''                 TA.Abono = AdoAux.Recordset.Fields("Saldo_MN")
-'''                 TA.Factura = AdoAux.Recordset.Fields("Factura")
-'''                 TA.Autorizacion = AdoAux.Recordset.Fields("Autorizacion")
-'''                 TA.Serie = AdoAux.Recordset.Fields("Serie")
-'''                 TA.TP = AdoAux.Recordset.Fields("TC")
-'''                 If 0 < Saldo And TA.Abono <= Saldo And TA.Factura > 0 Then
-'''                    'MsgBox TA.Factura & vbCrLf & TA.Abono
-'''                    Grabar_Abonos TA
-'''                    Saldo = Saldo - TA.Abono
-'''                 End If
-'''                 AdoAux.Recordset.MoveNext
-'''              Loop
-'''           End If
-'''           Me.Caption = "Importar de FlexGrid a Sistema de Facturacion El Numero: " & TA.Factura & ": " & i & " de " & Rango.NumFila2
-'''      Next i
-'''  End With
-'''  DGExcelAdodc.Visible = True
-'''  FA.Factura = 0
-'''  FA.Fecha_Corte = FechaSistema
-'''  Actualizar_Abonos_Facturas_SP FA
-'''  Me.Caption = "IMPORTACION DE ABONOS AUTOMATICOS"
-'''End Sub
+Public Sub Importar_Abonos_Transferencias()
+Dim AdoCatalogoDB As ADODB.Recordset
+Dim AdoSubCtaDB As ADODB.Recordset
+    
+    Progreso_Barra.Mensaje_Box = "Subiendo Contabilidad Externa con SubModulos"
+    Progreso_Iniciar
+    RatonReloj
+    DGExcelAdodc.Visible = False
+    sSQL = "DELETE * " _
+         & "FROM Tabla_Temporal " _
+         & "WHERE Item = '" & NumEmpresa & "' " _
+         & "AND Modulo = '" & NumModulo & "' " _
+         & "AND CodigoU = '" & CodigoUsuario & "' "
+    Ejecutar_SQL_SP sSQL
+    
+    TextoImprimio = ""
+    Importar_Abonos_Facturas_SP
+    
+    ConectarAdodc AdoExcelAdodc
+    Select_Adodc AdoExcelAdodc, "SELECT * FROM Asiento_CSV_" & CodigoUsuario
+    
+    DGExcelAdodc.Visible = True
+    RatonNormal
+    Progreso_Final
+    If Len(TextoImprimio) > 2 Then FInfoError.Show
+  
+    FA.Factura = 0
+    FA.Fecha_Corte = FechaSistema
+    Actualizar_Abonos_Facturas_SP FA
+    Me.Caption = "IMPORTACION DE ABONOS AUTOMATICOS"
+End Sub
 '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-'''Public Sub Importar_Empleados()
-'''Dim I As Long
-'''Dim N As Long
-'''Dim Lista_Clientes_Nuevos As String
-'''Dim Cta_Transf As String
-'''Dim Crear_Nuevo As Boolean
-'''Dim Aplica_FP As Boolean
-'''  Lista_Clientes_Nuevos = ""
-'''  sSQL = "SELECT * " _
-'''       & "FROM Clientes " _
-'''       & "WHERE Codigo <> '.' " _
-'''       & "ORDER BY CI_RUC "
-'''  Select_Adodc AdoClientes, sSQL
-'''
-'''  sSQL = "SELECT * " _
-'''       & "FROM Catalogo_Rol_Pagos " _
-'''       & "WHERE Item = '" & NumEmpresa & "' " _
-'''       & "AND Periodo = '" & Periodo_Contable & "' " _
-'''       & "ORDER BY Codigo "
-'''  Select_Adodc AdoAux, sSQL
-'''
-'''  With AdoExcelAdodc.Recordset
-'''      'MsgBox .Rows & vbCrLf & .Cols
-'''       For i = 1 To .rows - 1
-'''           TBeneficiario.T = Normal
-'''           TBeneficiario.FA = False
-'''           TBeneficiario.TP = "E"
-'''           TBeneficiario.Codigo = Ninguno
-'''           TBeneficiario.CI_RUC = "9999999999999"
-'''           TBeneficiario.Fecha = FechaSistema
-'''           TBeneficiario.Fecha_A = FechaSistema
-'''           TBeneficiario.Fecha_N = FechaSistema
-'''           TBeneficiario.Cliente = Ninguno
-'''           TBeneficiario.Sexo = Ninguno
-'''           TBeneficiario.Email1 = Ninguno
-'''           TBeneficiario.Email2 = Ninguno
-'''           TBeneficiario.Direccion = "SD"
-'''           TBeneficiario.DirNumero = "SN"
-'''           TBeneficiario.Telefono1 = "022000000"
-'''           TBeneficiario.Celular = "0990000000"
-'''           TBeneficiario.Ciudad = NombreCiudad
-'''           TBeneficiario.Prov = CodigoProv
-'''           TBeneficiario.Pais = CodigoPais
-'''           TBeneficiario.Grupo_No = "NUEVOS"
-'''           TBeneficiario.Profesion = Ninguno
-'''           Crear_Nuevo = False
-'''          .Row = i
-'''          .Col = 9
-'''           Codigo = Replace(.Text, "'", "")
-'''           Codigo = Replace(Codigo, "-", "")
-'''           Codigo = TrimStrg(Codigo)
-'''           If Codigo = "" Then Codigo = Ninguno
-'''          'RUC/Cedula/Codigo Alumno/Consumidor Final
-'''           If Len(Codigo) > 1 Then
-'''              If IsNumeric(Codigo) Then
-'''                 If Len(Codigo) < 9 Then
-'''                    Codigo = Format$(Val(Codigo), "00000000")
-'''                    TBeneficiario.FA = True
-'''                 ElseIf Len(Codigo) = 9 Then
-'''                    Codigo = "0" & Codigo
-'''                 ElseIf Len(Codigo) = 11 Then
-'''                    Codigo = "00" & Codigo
-'''                 ElseIf Len(Codigo) = 12 Then
-'''                    Codigo = "0" & Codigo
-'''                 End If
-'''              End If
-'''              TBeneficiario.CI_RUC = Codigo
-'''              DigVerif = Digito_Verificador( Codigo)
-'''              Caracter = MidStrg(Codigo, 10, 1)
-'''              TBeneficiario.TP = Tipo_RUC_CI.Tipo_Beneficiario
-'''              TBeneficiario.Codigo = Tipo_RUC_CI.Codigo_RUC_CI
-'''           End If
-'''          .Col = 7
-'''           Codigo = Replace(.Text, "'", "")
-'''           Codigo = Replace(Codigo, "-", "")
-'''           Codigo = TrimStrg(Codigo)
-'''           If Codigo = "" Then Codigo = Ninguno
-'''           TBeneficiario.Fecha_A = Codigo
-'''           If TBeneficiario.Codigo <> Ninguno And IsDate(TBeneficiario.Fecha_A) Then
-'''              For N = 1 To .cols - 1
-'''                 .Col = N
-'''                  Codigo = Replace(.Text, "'", "")
-'''                  Codigo = Replace(Codigo, "-", "")
-'''                  Codigo = TrimStrg(Codigo)
-'''                  If Codigo = "" Then Codigo = Ninguno
-'''                  Select Case N
-'''                    Case 1: TBeneficiario.Cliente = UCaseStrg(TrimStrg(MidStrg(Codigo, 1, 60))) 'Cliente
-'''                    Case 2: TBeneficiario.Grupo_No = UCaseStrg(TrimStrg(MidStrg(Codigo, 1, 9)))
-'''                    Case 3: If Codigo = "AFR" Then Aplica_FP = False Else Aplica_FP = True
-'''                   'Case 4: No se utiliza
-'''                    Case 5: TBeneficiario.Salario = Val(Codigo)
-'''                    Case 6: If Len(Codigo) > 3 Then TBeneficiario.Ciudad = UCaseStrg(Codigo) 'Ciudad
-'''                   'Case 7: ya esta asignado la Fecha de Ingreso
-'''                    Case 8: TBeneficiario.Profesion = UCaseStrg(Codigo)
-'''                   'case 9: ya esta asignado la CI
-'''                    Case 10: TBeneficiario.Direccion = UCaseStrg(MidStrg(Codigo, 1, 50)) 'Direccion
-'''                    Case 11: TBeneficiario.Telefono1 = MidStrg(Codigo, 1, 10) 'Telefono
-'''                    Case 12: TBeneficiario.Fecha_N = Codigo 'Fecha_N
-'''                    Case 13: TBeneficiario.Sexo = MidStrg(Codigo, 1, 1) 'Sexo"
-'''                    Case 14: TBeneficiario.Cte_Ahr_Otro = Codigo
-'''                    Case 15: TBeneficiario.Cod_Banco = Val(Codigo)
-'''                    Case 16: TBeneficiario.Cta_Transf = Codigo
-'''                    Case 17: Cta_Aux = Codigo
-'''                    Case 18: Cta_Gastos = Codigo
-'''                  End Select
-'''              Next N
-'''              Cta_Transf = Ninguno
-'''              If Len(TrimStrg(TBeneficiario.Cte_Ahr_Otro) & TrimStrg(TBeneficiario.Cta_Transf)) > 2 Then
-'''                 Cta_Transf = TBeneficiario.Cte_Ahr_Otro & " " & TBeneficiario.Cta_Transf
-'''              End If
-'''              If AdoClientes.Recordset.RecordCount > 0 Then
-'''                 AdoClientes.Recordset.MoveFirst
-'''                 AdoClientes.Recordset.Find ("CI_RUC = '" & TBeneficiario.CI_RUC & "' ")
-'''                 If Not AdoClientes.Recordset.EOF Then
-'''                    TBeneficiario.Codigo = AdoClientes.Recordset.Fields("Codigo")
-'''                    AdoClientes.Recordset.Fields("T") = TBeneficiario.T
-'''                    If IsDate(TBeneficiario.Fecha_N) Then AdoClientes.Recordset.Fields("Fecha_N") = TBeneficiario.Fecha_N
-'''                    If IsDate(TBeneficiario.Fecha) Then AdoClientes.Recordset.Fields("Fecha") = TBeneficiario.Fecha
-'''                    If Len(TBeneficiario.Cliente) > 1 Then AdoClientes.Recordset.Fields("Cliente") = TBeneficiario.Cliente
-'''                    If Len(TBeneficiario.Sexo) > 1 Then AdoClientes.Recordset.Fields("Sexo") = TBeneficiario.Sexo
-'''                    If Len(TBeneficiario.Email1) > 1 Then AdoClientes.Recordset.Fields("Email") = TBeneficiario.Email1
-'''                    If Len(TBeneficiario.Email2) > 1 Then AdoClientes.Recordset.Fields("Email2") = TBeneficiario.Email2
-'''                    If Len(TBeneficiario.Direccion) > 1 Then AdoClientes.Recordset.Fields("Direccion") = TBeneficiario.Direccion
-'''                    If Len(TBeneficiario.DirNumero) > 1 Then AdoClientes.Recordset.Fields("DirNumero") = TBeneficiario.DirNumero
-'''                    If Len(TBeneficiario.Telefono1) > 1 Then AdoClientes.Recordset.Fields("Telefono") = TBeneficiario.Telefono1
-'''                    If Len(TBeneficiario.Celular) > 1 Then AdoClientes.Recordset.Fields("Celular") = TBeneficiario.Celular
-'''                    If Len(TBeneficiario.Ciudad) > 1 Then AdoClientes.Recordset.Fields("Ciudad") = TBeneficiario.Ciudad
-'''                    If Len(TBeneficiario.Prov) > 1 Then AdoClientes.Recordset.Fields("Prov") = TBeneficiario.Prov
-'''                    If Len(TBeneficiario.Pais) > 1 Then AdoClientes.Recordset.Fields("Pais") = TBeneficiario.Pais
-'''                    If Len(TBeneficiario.Grupo_No) > 1 Then AdoClientes.Recordset.Fields("Grupo") = TBeneficiario.Grupo_No
-'''                    If Len(TBeneficiario.Profesion) > 1 Then AdoClientes.Recordset.Fields("Profesion") = TBeneficiario.Profesion
-'''                    AdoClientes.Recordset.Update
-'''                 Else
-'''                    Crear_Nuevo = True
-'''                 End If
-'''              Else
-'''                 Crear_Nuevo = True
-'''              End If
-'''              If Crear_Nuevo Then
-'''                 SetAdoAddNew "Clientes"
-'''                 SetAdoFields "T", TBeneficiario.T
-'''                 SetAdoFields "TD", TBeneficiario.TP
-'''                 If Len(TBeneficiario.Codigo) > 1 Then SetAdoFields "Codigo", TBeneficiario.Codigo
-'''                 If Len(TBeneficiario.CI_RUC) > 1 Then SetAdoFields "CI_RUC", TBeneficiario.CI_RUC
-'''                 If IsDate(TBeneficiario.Fecha) Then SetAdoFields "Fecha", TBeneficiario.Fecha
-'''                 If IsDate(TBeneficiario.Fecha_N) Then SetAdoFields "Fecha_N", TBeneficiario.Fecha_N
-'''                 If Len(TBeneficiario.Cliente) > 1 Then SetAdoFields "Cliente", TBeneficiario.Cliente
-'''                 If Len(TBeneficiario.Sexo) > 1 Then SetAdoFields "Sexo", TBeneficiario.Sexo
-'''                 If Len(TBeneficiario.Email1) > 1 Then SetAdoFields "Email", TBeneficiario.Email1
-'''                 If Len(TBeneficiario.Email2) > 1 Then SetAdoFields "Email2", TBeneficiario.Email2
-'''                 If Len(TBeneficiario.Direccion) > 1 Then SetAdoFields "Direccion", TBeneficiario.Direccion
-'''                 If Len(TBeneficiario.DirNumero) > 1 Then SetAdoFields "DirNumero", TBeneficiario.DirNumero
-'''                 If Len(TBeneficiario.Telefono1) > 1 Then SetAdoFields "Telefono", TBeneficiario.Telefono1
-'''                 If Len(TBeneficiario.Celular) > 1 Then SetAdoFields "Celular", TBeneficiario.Celular
-'''                 If Len(TBeneficiario.Ciudad) > 1 Then SetAdoFields "Ciudad", TBeneficiario.Ciudad
-'''                 If Len(TBeneficiario.Prov) > 1 Then SetAdoFields "Prov", TBeneficiario.Prov
-'''                 If Len(TBeneficiario.Grupo_No) > 1 Then SetAdoFields "Grupo", TBeneficiario.Grupo_No
-'''                 If Len(TBeneficiario.Profesion) > 1 Then SetAdoFields "Profesion", TBeneficiario.Profesion
-'''                 SetAdoUpdate
-'''                 Lista_Clientes_Nuevos = Lista_Clientes_Nuevos _
-'''                                       & TBeneficiario.CI_RUC & vbTab _
-'''                                       & TBeneficiario.Cliente & vbTab _
-'''                                       & TBeneficiario.Grupo_No & vbCrLf
-'''              End If
-'''             'Creamos los Clientes Rol de Pagos
-'''              Crear_Nuevo = False
-'''              If AdoAux.Recordset.RecordCount > 0 Then
-'''                 AdoAux.Recordset.MoveFirst
-'''                 AdoAux.Recordset.Find ("Codigo = '" & TBeneficiario.Codigo & "' ")
-'''                 If Not AdoAux.Recordset.EOF Then
-'''                    If Len(TBeneficiario.Fecha_A) Then AdoAux.Recordset.Fields("Fecha") = TBeneficiario.Fecha_A
-'''                    If Len(TBeneficiario.Grupo_No) > 1 Then AdoAux.Recordset.Fields("Grupo_Rol") = TBeneficiario.Grupo_No
-'''                    If Len(TBeneficiario.Salario) > 1 Then AdoAux.Recordset.Fields("Salario") = TBeneficiario.Salario
-'''                    AdoAux.Recordset.Fields("T") = TBeneficiario.T
-'''                    AdoAux.Recordset.Fields("SN") = "1"
-'''                    AdoAux.Recordset.Fields("Valor_Hora") = Redondear(TBeneficiario.Salario / 240, 2)
-'''                    AdoAux.Recordset.Fields("Horas_Sem") = 60
-'''                    AdoAux.Recordset.Fields("IESS_Per") = 0.0945
-'''                    AdoAux.Recordset.Fields("IESS_Pat") = 0.1215
-'''                    AdoAux.Recordset.Fields("Cta_Transferencia") = Cta_Transf
-'''                    AdoAux.Recordset.Fields("Codigo_Banco") = TBeneficiario.Cod_Banco
-'''                    AdoAux.Recordset.Fields("Pagar_Fondo_Reserva") = Aplica_FP
-'''                    AdoAux.Recordset.Fields("Cta_Forma_Pago") = Cta_Aux
-'''                    If Len(TBeneficiario.Cte_Ahr_Otro) >= 3 Then
-'''                       AdoAux.Recordset.Fields("FP") = "T"
-'''                       AdoAux.Recordset.Fields("TC") = "BA"
-'''                    Else
-'''                       AdoAux.Recordset.Fields("FP") = "E"
-'''                       AdoAux.Recordset.Fields("TC") = "CJ"
-'''                    End If
-'''                    AdoAux.Recordset.Update
-'''                 Else
-'''                    Crear_Nuevo = True
-'''                 End If
-'''              Else
-'''                 Crear_Nuevo = True
-'''              End If
-'''              If Crear_Nuevo Then
-'''                 SetAdoAddNew "Catalogo_Rol_Pagos"
-'''                 If Len(TBeneficiario.Codigo) > 1 Then SetAdoFields "Codigo", TBeneficiario.Codigo
-'''                 If Len(TBeneficiario.Fecha_A) Then SetAdoFields "Fecha", TBeneficiario.Fecha_A
-'''                 If Len(TBeneficiario.Grupo_No) > 1 Then SetAdoFields "Grupo_Rol", TBeneficiario.Grupo_No
-'''                 If Len(TBeneficiario.Salario) > 1 Then SetAdoFields "Salario", TBeneficiario.Salario
-'''                 SetAdoFields "T", TBeneficiario.T
-'''                 SetAdoFields "SN", "1"
-'''                 SetAdoFields "Valor_Hora", Redondear(TBeneficiario.Salario / 240, 2)
-'''                 SetAdoFields "Horas_Sem", 60
-'''                 SetAdoFields "IESS_Per", 0.0945
-'''                 SetAdoFields "IESS_Pat", 0.1215
-'''                 SetAdoFields "Cta_Transferencia", Cta_Transf
-'''                 SetAdoFields "Codigo_Banco", TBeneficiario.Cod_Banco
-'''                 SetAdoFields "Pagar_Fondo_Reserva", Aplica_FP
-'''                 SetAdoFields "Cta_Forma_Pago", Cta_Aux
-'''                 If Len(TBeneficiario.Cte_Ahr_Otro) >= 3 Then
-'''                    SetAdoFields "FP", "T"
-'''                    SetAdoFields "TC", "BA"
-'''                 Else
-'''                    SetAdoFields "FP", "E"
-'''                    SetAdoFields "TC", "CJ"
-'''                 End If
-'''                 SetAdoUpdate
-'''              End If
-'''           End If
-'''           Me.Caption = "Importar de FlexGrid a Sistema El Beneficiario: " & TBeneficiario.CI_RUC & ": " & i & " de " & Rango.NumFila2
-'''      Next i
-'''  End With
-'''  If Len(Lista_Clientes_Nuevos) > 2 Then
-'''     TextoImprimio = Lista_Clientes_Nuevos
-'''     Unload FImporta
-'''     FInfoError.Show
-'''  End If
-'''End Sub
+Public Sub Importar_Empleados()
+Dim I As Long
+Dim N As Long
+Dim Lista_Clientes_Nuevos As String
+Dim Cta_Transf As String
+Dim Crear_Nuevo As Boolean
+Dim Aplica_FP As Boolean
+  Lista_Clientes_Nuevos = ""
+  sSQL = "SELECT * " _
+       & "FROM Clientes " _
+       & "WHERE Codigo <> '.' " _
+       & "ORDER BY CI_RUC "
+  Select_Adodc AdoClientes, sSQL
+
+  sSQL = "SELECT * " _
+       & "FROM Catalogo_Rol_Pagos " _
+       & "WHERE Item = '" & NumEmpresa & "' " _
+       & "AND Periodo = '" & Periodo_Contable & "' " _
+       & "ORDER BY Codigo "
+  Select_Adodc AdoAux, sSQL
+
+  With AdoExcelAdodc.Recordset
+   If .RecordCount > 0 Then
+       Progreso_Barra.Valor_Maximo = .RecordCount
+      .MoveFirst
+       Do While Not .EOF
+           TBeneficiario.T = Normal
+           TBeneficiario.FA = False
+           TBeneficiario.TP = "E"
+           TBeneficiario.Codigo = Ninguno
+           TBeneficiario.CI_RUC = "9999999999999"
+           TBeneficiario.Fecha = FechaSistema
+           TBeneficiario.Fecha_A = FechaSistema
+           TBeneficiario.Fecha_N = FechaSistema
+           TBeneficiario.Cliente = Ninguno
+           TBeneficiario.Sexo = Ninguno
+           TBeneficiario.Email1 = Ninguno
+           TBeneficiario.Email2 = Ninguno
+           TBeneficiario.Direccion = "SD"
+           TBeneficiario.DirNumero = "SN"
+           TBeneficiario.Telefono1 = "022000000"
+           TBeneficiario.Celular = "0990000000"
+           TBeneficiario.Ciudad = NombreCiudad
+           TBeneficiario.Prov = CodigoProv
+           TBeneficiario.Pais = CodigoPais
+           TBeneficiario.Grupo_No = "NUEVOS"
+           TBeneficiario.Profesion = Ninguno
+           Crear_Nuevo = False
+           
+           Codigo = Dato_Campo(.fields(9))
+          'RUC/Cedula/Codigo Alumno/Consumidor Final
+           If Len(Codigo) > 1 Then
+              If IsNumeric(Codigo) Then
+                 If Len(Codigo) < 9 Then
+                    Codigo = Format$(Val(Codigo), "00000000")
+                    TBeneficiario.FA = True
+                 ElseIf Len(Codigo) = 9 Then
+                    Codigo = "0" & Codigo
+                 ElseIf Len(Codigo) = 11 Then
+                    Codigo = "00" & Codigo
+                 ElseIf Len(Codigo) = 12 Then
+                    Codigo = "0" & Codigo
+                 End If
+              End If
+              TBeneficiario.CI_RUC = Codigo
+              DigVerif = Digito_Verificador(Codigo)
+              Caracter = MidStrg(Codigo, 10, 1)
+              TBeneficiario.TP = Tipo_RUC_CI.Tipo_Beneficiario
+              TBeneficiario.Codigo = Tipo_RUC_CI.Codigo_RUC_CI
+           End If
+           TBeneficiario.Fecha_A = Dato_Campo(.fields(6))
+           If TBeneficiario.Codigo <> Ninguno And IsDate(TBeneficiario.Fecha_A) Then
+              For IdField = 0 To .fields.Count - 1
+                  If IdField = 100 Then Codigo = Dato_Campo(.fields(IdField), True) Else Codigo = Dato_Campo(.fields(IdField))
+                  Codigo = UCaseStrg(Codigo)
+                  Codigo = Sin_Signos_Especiales(Codigo)
+                  If Codigo = "" Then Codigo = Ninguno
+                 'MsgBox .fields(IdField) & vbCrLf & IdField
+                  Select Case IdField + 1
+                    Case 1: TBeneficiario.Cliente = UCaseStrg(TrimStrg(MidStrg(Codigo, 1, 60))) 'Cliente
+                    Case 2: TBeneficiario.Grupo_No = UCaseStrg(TrimStrg(MidStrg(Codigo, 1, 9)))
+                    Case 3: If Codigo = "AFR" Then Aplica_FP = False Else Aplica_FP = True
+                   'Case 4: No se utiliza
+                    Case 5: TBeneficiario.Salario = Val(Codigo)
+                    Case 6: If Len(Codigo) > 3 Then TBeneficiario.Ciudad = UCaseStrg(Codigo) 'Ciudad
+                   'Case 7: ya esta asignado la Fecha de Ingreso
+                    Case 8: TBeneficiario.Profesion = UCaseStrg(Codigo)
+                   'case 9: ya esta asignado la CI
+                    Case 10: TBeneficiario.Direccion = UCaseStrg(MidStrg(Codigo, 1, 50)) 'Direccion
+                    Case 11: TBeneficiario.Telefono1 = MidStrg(Replace(Codigo, " ", ""), 1, 10) 'Telefono
+                    Case 12: TBeneficiario.Fecha_N = Codigo 'Fecha_N
+                    Case 13: TBeneficiario.Sexo = MidStrg(Codigo, 1, 1) 'Sexo"
+                    Case 14: TBeneficiario.Cte_Ahr_Otro = Codigo
+                    Case 15: TBeneficiario.Cod_Banco = Val(Codigo)
+                    Case 16: TBeneficiario.Cta_Transf = Codigo
+                    Case 17: Cta_Aux = Codigo
+                    Case 18: Cta_Gastos = Codigo
+                  End Select
+              Next IdField
+              Cta_Transf = Ninguno
+              If Len(TrimStrg(TBeneficiario.Cte_Ahr_Otro) & TrimStrg(TBeneficiario.Cta_Transf)) > 2 Then
+                 Cta_Transf = TBeneficiario.Cte_Ahr_Otro & " " & TBeneficiario.Cta_Transf
+              End If
+              If AdoClientes.Recordset.RecordCount > 0 Then
+                 AdoClientes.Recordset.MoveFirst
+                 AdoClientes.Recordset.Find ("CI_RUC = '" & TBeneficiario.CI_RUC & "' ")
+                 If Not AdoClientes.Recordset.EOF Then
+                    TBeneficiario.Codigo = AdoClientes.Recordset.fields("Codigo")
+                    AdoClientes.Recordset.fields("T") = TBeneficiario.T
+                    If IsDate(TBeneficiario.Fecha_N) Then AdoClientes.Recordset.fields("Fecha_N") = TBeneficiario.Fecha_N
+                    If IsDate(TBeneficiario.Fecha) Then AdoClientes.Recordset.fields("Fecha") = TBeneficiario.Fecha
+                    If Len(TBeneficiario.Cliente) > 1 Then AdoClientes.Recordset.fields("Cliente") = TBeneficiario.Cliente
+                    If Len(TBeneficiario.Sexo) > 1 Then AdoClientes.Recordset.fields("Sexo") = TBeneficiario.Sexo
+                    If Len(TBeneficiario.Email1) > 1 Then AdoClientes.Recordset.fields("Email") = TBeneficiario.Email1
+                    If Len(TBeneficiario.Email2) > 1 Then AdoClientes.Recordset.fields("Email2") = TBeneficiario.Email2
+                    If Len(TBeneficiario.Direccion) > 1 Then AdoClientes.Recordset.fields("Direccion") = TBeneficiario.Direccion
+                    If Len(TBeneficiario.DirNumero) > 1 Then AdoClientes.Recordset.fields("DirNumero") = TBeneficiario.DirNumero
+                    If Len(TBeneficiario.Telefono1) > 1 Then AdoClientes.Recordset.fields("Telefono") = TBeneficiario.Telefono1
+                    If Len(TBeneficiario.Celular) > 1 Then AdoClientes.Recordset.fields("Celular") = TBeneficiario.Celular
+                    If Len(TBeneficiario.Ciudad) > 1 Then AdoClientes.Recordset.fields("Ciudad") = TBeneficiario.Ciudad
+                    If Len(TBeneficiario.Prov) > 1 Then AdoClientes.Recordset.fields("Prov") = TBeneficiario.Prov
+                    If Len(TBeneficiario.Pais) > 1 Then AdoClientes.Recordset.fields("Pais") = TBeneficiario.Pais
+                    If Len(TBeneficiario.Grupo_No) > 1 Then AdoClientes.Recordset.fields("Grupo") = TBeneficiario.Grupo_No
+                    'MsgBox Len(TBeneficiario.Profesion)
+                    If Len(TBeneficiario.Profesion) > 1 Then AdoClientes.Recordset.fields("Profesion") = TBeneficiario.Profesion
+                    AdoClientes.Recordset.Update
+                 Else
+                    Crear_Nuevo = True
+                 End If
+              Else
+                 Crear_Nuevo = True
+              End If
+              If Crear_Nuevo Then
+                 SetAdoAddNew "Clientes"
+                 SetAdoFields "T", TBeneficiario.T
+                 SetAdoFields "TD", TBeneficiario.TP
+                 If Len(TBeneficiario.Codigo) > 1 Then SetAdoFields "Codigo", TBeneficiario.Codigo
+                 If Len(TBeneficiario.CI_RUC) > 1 Then SetAdoFields "CI_RUC", TBeneficiario.CI_RUC
+                 If IsDate(TBeneficiario.Fecha) Then SetAdoFields "Fecha", TBeneficiario.Fecha
+                 If IsDate(TBeneficiario.Fecha_N) Then SetAdoFields "Fecha_N", TBeneficiario.Fecha_N
+                 If Len(TBeneficiario.Cliente) > 1 Then SetAdoFields "Cliente", TBeneficiario.Cliente
+                 If Len(TBeneficiario.Sexo) > 1 Then SetAdoFields "Sexo", TBeneficiario.Sexo
+                 If Len(TBeneficiario.Email1) > 1 Then SetAdoFields "Email", TBeneficiario.Email1
+                 If Len(TBeneficiario.Email2) > 1 Then SetAdoFields "Email2", TBeneficiario.Email2
+                 If Len(TBeneficiario.Direccion) > 1 Then SetAdoFields "Direccion", TBeneficiario.Direccion
+                 If Len(TBeneficiario.DirNumero) > 1 Then SetAdoFields "DirNumero", TBeneficiario.DirNumero
+                 If Len(TBeneficiario.Telefono1) > 1 Then SetAdoFields "Telefono", TBeneficiario.Telefono1
+                 If Len(TBeneficiario.Celular) > 1 Then SetAdoFields "Celular", TBeneficiario.Celular
+                 If Len(TBeneficiario.Ciudad) > 1 Then SetAdoFields "Ciudad", TBeneficiario.Ciudad
+                 If Len(TBeneficiario.Prov) > 1 Then SetAdoFields "Prov", TBeneficiario.Prov
+                 If Len(TBeneficiario.Grupo_No) > 1 Then SetAdoFields "Grupo", TBeneficiario.Grupo_No
+                 If Len(TBeneficiario.Profesion) > 1 Then SetAdoFields "Profesion", TBeneficiario.Profesion
+                 SetAdoUpdate
+                 Lista_Clientes_Nuevos = Lista_Clientes_Nuevos _
+                                       & TBeneficiario.CI_RUC & vbTab _
+                                       & TBeneficiario.Cliente & vbTab _
+                                       & TBeneficiario.Grupo_No & vbCrLf
+              End If
+             'Creamos los Clientes Rol de Pagos
+              Crear_Nuevo = False
+              If AdoAux.Recordset.RecordCount > 0 Then
+                 AdoAux.Recordset.MoveFirst
+                 AdoAux.Recordset.Find ("Codigo = '" & TBeneficiario.Codigo & "' ")
+                 If Not AdoAux.Recordset.EOF Then
+                    If Len(TBeneficiario.Fecha_A) Then AdoAux.Recordset.fields("Fecha") = TBeneficiario.Fecha_A
+                    If Len(TBeneficiario.Grupo_No) > 1 Then AdoAux.Recordset.fields("Grupo_Rol") = TBeneficiario.Grupo_No
+                    If Len(TBeneficiario.Salario) > 1 Then AdoAux.Recordset.fields("Salario") = TBeneficiario.Salario
+                    AdoAux.Recordset.fields("T") = TBeneficiario.T
+                    AdoAux.Recordset.fields("SN") = "1"
+                    AdoAux.Recordset.fields("Valor_Hora") = Redondear(TBeneficiario.Salario / 240, 2)
+                    AdoAux.Recordset.fields("Horas_Sem") = 60
+                    AdoAux.Recordset.fields("Porc_IESS_Per") = 0.0945
+                    AdoAux.Recordset.fields("Porc_IESS_Pat") = 0.1215
+                    AdoAux.Recordset.fields("Cta_Transferencia") = Cta_Transf
+                    AdoAux.Recordset.fields("Codigo_Banco") = TBeneficiario.Cod_Banco
+                    AdoAux.Recordset.fields("Pagar_Fondo_Reserva") = Aplica_FP
+                    AdoAux.Recordset.fields("Cta_Forma_Pago") = Cta_Aux
+                    If Len(TBeneficiario.Cte_Ahr_Otro) >= 3 Then
+                       AdoAux.Recordset.fields("FP") = "T"
+                       AdoAux.Recordset.fields("TC") = "BA"
+                    Else
+                       AdoAux.Recordset.fields("FP") = "E"
+                       AdoAux.Recordset.fields("TC") = "CJ"
+                    End If
+                    AdoAux.Recordset.Update
+                 Else
+                    Crear_Nuevo = True
+                 End If
+              Else
+                 Crear_Nuevo = True
+              End If
+              If Crear_Nuevo Then
+                 SetAdoAddNew "Catalogo_Rol_Pagos"
+                 If Len(TBeneficiario.Codigo) > 1 Then SetAdoFields "Codigo", TBeneficiario.Codigo
+                 If Len(TBeneficiario.Fecha_A) Then SetAdoFields "Fecha", TBeneficiario.Fecha_A
+                 If Len(TBeneficiario.Grupo_No) > 1 Then SetAdoFields "Grupo_Rol", TBeneficiario.Grupo_No
+                 If Len(TBeneficiario.Salario) > 1 Then SetAdoFields "Salario", TBeneficiario.Salario
+                 SetAdoFields "T", TBeneficiario.T
+                 SetAdoFields "SN", "1"
+                 SetAdoFields "Valor_Hora", Redondear(TBeneficiario.Salario / 240, 2)
+                 SetAdoFields "Horas_Sem", 60
+                 SetAdoFields "IESS_Per", 0.0945
+                 SetAdoFields "IESS_Pat", 0.1215
+                 SetAdoFields "Cta_Transferencia", Cta_Transf
+                 SetAdoFields "Codigo_Banco", TBeneficiario.Cod_Banco
+                 SetAdoFields "Pagar_Fondo_Reserva", Aplica_FP
+                 SetAdoFields "Cta_Forma_Pago", Cta_Aux
+                 If Len(TBeneficiario.Cte_Ahr_Otro) >= 3 Then
+                    SetAdoFields "FP", "T"
+                    SetAdoFields "TC", "BA"
+                 Else
+                    SetAdoFields "FP", "E"
+                    SetAdoFields "TC", "CJ"
+                 End If
+                 SetAdoUpdate
+              End If
+           End If
+           Me.Caption = "Importar de FlexGrid a Sistema El Beneficiario: " & TBeneficiario.CI_RUC & ": " & I & " de " & Rango.NumFila2
+        .MoveNext
+      Loop
+   End If
+  End With
+  If Len(Lista_Clientes_Nuevos) > 2 Then
+     TextoImprimio = Lista_Clientes_Nuevos
+     Unload FImporta
+     FInfoError.Show
+  End If
+End Sub
 '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 '''Public Sub Importar_Catalogo_RolPagos()
 '''Dim I As Long

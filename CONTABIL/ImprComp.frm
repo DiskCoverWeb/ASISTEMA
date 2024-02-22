@@ -473,8 +473,8 @@ Dim IdxComp As Long
     Do While Not AdoListComp.Recordset.EOF
        Co.TP = TipoComp
        Co.Item = NumEmpresa
-       Co.Numero = AdoListComp.Recordset.Fields("Numero")
-       Co.Fecha = AdoListComp.Recordset.Fields("Fecha")
+       Co.Numero = AdoListComp.Recordset.fields("Numero")
+       Co.Fecha = AdoListComp.Recordset.fields("Fecha")
        ImprimirComprobantes.Caption = "Imprimiendo Comprobante de " & TipoComp & " No. " & Co.Numero
        
    'Listar el Comprobante
@@ -488,7 +488,7 @@ Dim IdxComp As Long
          & "AND C.CodigoU = A.Codigo " _
          & "AND C.Codigo_B = Cl.Codigo "
     Select_AdoDB AdoComp, sSQL
-    If AdoComp.RecordCount > 0 Then Co.Fecha = AdoComp.Fields("Fecha")
+    If AdoComp.RecordCount > 0 Then Co.Fecha = AdoComp.fields("Fecha")
    'Listar las Transacciones
     sSQL = "SELECT T.Cta,Ca.Cuenta,Parcial_ME,Debe,Haber,Detalle,Cheq_Dep,Fecha_Efec,Ca.Item " _
          & "FROM Transacciones As T,Catalogo_Cuentas As Ca " _
@@ -565,7 +565,7 @@ Dim IdxComp As Long
     Select_AdoDB AdoSubC2, sSQL
     
     ConceptoComp = Ninguno
-    If AdoComp.RecordCount > 0 Then ConceptoComp = AdoComp.Fields("Concepto")
+    If AdoComp.RecordCount > 0 Then ConceptoComp = AdoComp.fields("Concepto")
         Select Case Co.TP
           Case CompIngreso: ImprimirCompIngreso AdoComp, AdoBanc, AdoTrans, AdoSubC1, AdoSubC2, True
           Case CompEgreso: ImprimirCompEgreso AdoComp, AdoBanc, AdoTrans, AdoFact, AdoRet, AdoSubC1, AdoSubC2, ImpSoloReten, True, True
@@ -658,6 +658,7 @@ Private Sub MBFechaI_LostFocus()
         & "AND Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
         & "ORDER BY Numero "
    SelectDB_Combo DCDesde, AdoDesde, sSQL, "Numero"
+   MsgBox sSQL
 End Sub
 
 Private Sub MBFechaF_GotFocus()
@@ -680,5 +681,6 @@ Private Sub MBFechaF_LostFocus()
         & "AND Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
         & "ORDER BY Numero "
    SelectDB_Combo DCHasta, AdoHasta, sSQL, "Numero", True
+   MsgBox sSQL
 End Sub
 

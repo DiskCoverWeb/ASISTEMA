@@ -85,6 +85,7 @@ Global Moneda_E As Boolean
 Global IniciarPrograma As Boolean
 Global FacturaNueva As Boolean
 Global FacturaMatricula As Boolean
+Global ConciliacionAut As Boolean
 Global Mod_Fact As Boolean
 Global Mod_Fecha As Boolean
 Global Plazo_Fijo As Boolean

@@ -1231,7 +1231,10 @@ For IJ = 0 To Update_File.ListCount - 1
    'Este procedimiento retorna en la variable "TablaNew" de tipo vector los campos a actualizar
     Si_No = False
     For I = 0 To Update_LstTablas.ListCount - 1
-      If RutaOrigen = Update_LstTablas.List(I) Then Si_No = True
+      If RutaOrigen = Update_LstTablas.List(I) Then
+         Si_No = True
+         I = Update_LstTablas.ListCount
+      End If
     Next I
     
    'Si la Tabla Existe pasamos a actualizar
@@ -1271,9 +1274,9 @@ For IJ = 0 To Update_File.ListCount - 1
                     If TablaNew(K).Campo = "ID" Then Crear_Clave_Primaria = True
                     If .fields(J).Name = "ID" Then Existe_ID = True
                 Next J
-               'Actualizo el campo nuevo
-                'If RutaOrigen = "Facturas" And TablaNew(K).Campo = "Direccion" Then MsgBox TablaNew(K).Campo
+               'If RutaOrigen = "Facturas" And TablaNew(K).Campo = "Direccion" Then MsgBox TablaNew(K).Campo
                 If Evaluar Then
+                  'Actualizo el campo antiguo si hay cambios
                    If CambiarTipo Then
                       SQL1 = "ALTER TABLE [" & RutaOrigen & "] "
                       If SQL_Server Then
@@ -1287,6 +1290,7 @@ For IJ = 0 To Update_File.ListCount - 1
                      Ejecutar_SQL_SP SQL1, True
                    End If
                 Else
+                  'Si es campo nuevo le actualizo
                    SQL1 = ""
                    Contador = Contador + 1
                    If Contador <= 1 Then Cadena = Cadena & Space(3) & " => "
@@ -1385,6 +1389,7 @@ Next IJ
   For I = 0 To Update_LstTablas.ListCount - 1
      Progreso_Barra.Mensaje_Box = "Actualizando Nulos de " & Update_LstTablas.List(I)
      ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+     
      If MidStrg(Update_LstTablas.List(I), 1, 4) <> "Tipo" Then Eliminar_Nulos_SP Update_LstTablas.List(I)
   Next I
   If Cadena <> "" Then TextoBusqueda = TextoBusqueda & "Campos con nulos:" & vbCrLf & Cadena
@@ -1552,39 +1557,39 @@ Next IJ
  ' MsgBox AdoStrCnn
 '  TxtResult.SelStart = Len(TxtResult)
 '  TxtResult.SelLength = Len(TxtResult)
-  NombreUsuario = "DiskCover Sytem"
+''  NombreUsuario = "DiskCover Sytem"
   Update_Campo = ""
   RutaDestino = ""
-  TMail.Adjunto = ""
+''  TMail.Adjunto = ""
   TMail.MensajeHTML = ""
-  EmailEmpresa = ""
-  NombreGerente = ""
-  Telefono1 = ""
-  RazonSocial = ""
+''  EmailEmpresa = ""
+''  NombreGerente = ""
+''  Telefono1 = ""
+''  RazonSocial = ""
   ComunicadoEntidad = ""
   
-  sSQL = "SELECT * " _
-       & "FROM Empresas " _
-       & "ORDER BY Item "
-  Select_AdoDB AdoCompDB, sSQL
-  With AdoCompDB
-   If .RecordCount > 0 Then
-       Do While Not .EOF
-          If Len(.fields("Razon_Social")) > 1 Then Cadena = .fields("Razon_Social") Else Cadena = .fields("Empresa")
-          If Len(.fields("Email")) > 1 And EmailEmpresa = "" Then EmailEmpresa = .fields("Email")
-          If Len(.fields("Gerente")) > 1 And NombreGerente = "" Then NombreGerente = .fields("Gerente")
-          If Len(.fields("Telefono1")) > 1 And Telefono1 = "" Then Telefono1 = .fields("Telefono1")
-          If Len(Cadena) > 1 And RazonSocial = "" Then RazonSocial = Cadena
-          TMail.Mensaje = TMail.Mensaje _
-                        & "CI/RUC: " & .fields("RUC") & vbTab _
-                        & .fields("Ciudad") & vbTab & vbTab _
-                        & .fields("Gerente") & vbTab & vbTab _
-                        & Cadena & vbCrLf
-         .MoveNext
-       Loop
-   End If
-  End With
-  AdoCompDB.Close
+'''  sSQL = "SELECT * " _
+'''       & "FROM Empresas " _
+'''       & "ORDER BY Item "
+'''  Select_AdoDB AdoCompDB, sSQL
+'''  With AdoCompDB
+'''   If .RecordCount > 0 Then
+'''       Do While Not .EOF
+'''          If Len(.fields("Razon_Social")) > 1 Then Cadena = .fields("Razon_Social") Else Cadena = .fields("Empresa")
+'''          If Len(.fields("Email")) > 1 And EmailEmpresa = "" Then EmailEmpresa = .fields("Email")
+'''          If Len(.fields("Gerente")) > 1 And NombreGerente = "" Then NombreGerente = .fields("Gerente")
+'''          If Len(.fields("Telefono1")) > 1 And Telefono1 = "" Then Telefono1 = .fields("Telefono1")
+'''          If Len(Cadena) > 1 And RazonSocial = "" Then RazonSocial = Cadena
+'''          TMail.Mensaje = TMail.Mensaje _
+'''                        & "CI/RUC: " & .fields("RUC") & vbTab _
+'''                        & .fields("Ciudad") & vbTab & vbTab _
+'''                        & .fields("Gerente") & vbTab & vbTab _
+'''                        & Cadena & vbCrLf
+'''         .MoveNext
+'''       Loop
+'''   End If
+'''  End With
+'''  AdoCompDB.Close
   '---------------------------------------------------------------------------------
    If IP_PC.InterNet Then
       RatonReloj
@@ -1629,7 +1634,7 @@ Next IJ
     ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
     Eliminar_Duplicados_SP "Catalogo_Cuentas", "Codigo", "", "", True
   '---------------------------------------------------------------------------------
-    ProgressBarEstado.Value = Progreso_Barra.Valor_Maximo
+    ProgressBarEstado.value = Progreso_Barra.Valor_Maximo
     
     Progreso_Barra.Mensaje_Box = "FIN DEL PROCESO DE ACTUALIZACION"
     ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
@@ -1754,7 +1759,7 @@ Public Sub Enviar_Mail_Actualizacion()
    'Enviamos el mail de confirmacion
     TMail.para = ""
     Insertar_Mail TMail.para, EmailEmpresa
-    Insertar_Mail TMail.para, "informacion@diskcoversystem.com"
+    Insertar_Mail TMail.para, CorreoUpdate
     TMail.Asunto = "Proceso de actualizacion, exitoso"
     TMail.Mensaje = TMail.Mensaje & vbCrLf & "SERVIRLES ES NUESTRO COMPROMISO, DISFRUTARLO ES EL SUYO."
     FEnviarCorreos.Show 1
@@ -1832,6 +1837,7 @@ Dim IdBase As Integer
         FrmBaseDatos.Refresh
        'MsgBox "-> " & NombreBase(IdBase) & vbCrLf & "   En proceso..."
         If Ping_PC(strIPServidor) Then
+           MiTiempo = Time
            Datos_Procesados_BD Format(IdBase, "00") & " -> " & NombreBase(IdBase) & vbCrLf & "      En proceso..."
            If strNombreBaseDatos <> NombreBase(IdBase) Then
               AdoStrCnn = Replace(AdoStrCnn, strNombreBaseDatos, NombreBase(IdBase))
@@ -1853,11 +1859,12 @@ Dim IdBase As Integer
            Datos_Procesados_BD "      [" & Format(Time - MiTiempo, FormatoTimes) & "] Base actualizada con exito."
           
           'Enviamos el mail de confirmacion
-           TMail.Mensaje = "Informacion de actualizacion del sistema [" & FechaSistema & " - " & Format(Time, FormatoTimes) & "]:" & vbCrLf _
-                         & "Del Servidor " & strIPServidor & " se ha actualizado la base de Datos: " & NombreBase(IdBase) & vbCrLf & vbCrLf _
-                         & "SERVIRLES ES NUESTRO COMPROMISO, DISFRUTARLO ES EL SUYO."
-           TMail.para = "recepcion@diskcoversystem.com"
-           TMail.Asunto = "La Base de Datos: (" & Format(IdBase, "00") & ") " & NombreBase(IdBase) & " fue actualizadaa con exito."
+           TMail.Mensaje = "Informacion de actualizacion del sistema " & vbCrLf _
+                         & "Fecha y Hora [" & FechaSistema & " - " & Format(Time, FormatoTimes) & "]: " & vbCrLf _
+                         & "Del Servidor " & strIPServidor & " se ha actualizado la base de Datos: " & NombreBase(IdBase)
+           TMail.para = CorreoUpdate
+           TMail.Asunto = "Actualizacion exitosa de la Base de Datos: " & NombreBase(IdBase) & " (" & Format(IdBase, "00") & ") Duracion: " _
+                        & Format(Time - MiTiempo, FormatoTimes)
            FEnviarCorreos.Show 1
         Else
            MsgBox "LA CONEXION NO ESTA ESTABLECIDA" & vbCrLf _
@@ -1939,6 +1946,7 @@ Dim IdBase As Integer
         FrmBaseDatos.Caption = "BASE DE DATOS, Tiempo transcurrido: " & Format(Time - MiTiempo, FormatoTimes)
         FrmBaseDatos.Refresh
         If Ping_PC(strIPServidor) Then
+           MiTiempo = Time
            Datos_Procesados_BD Format(IdBase, "00") & " -> " & NombreBase(IdBase) & vbCrLf & "      En proceso..."
            
           'MsgBox "-> " & NombreBase(IdBase) & vbCrLf & "   En proceso..."
@@ -1993,11 +2001,12 @@ Dim IdBase As Integer
            Datos_Procesados_BD "      [" & Format(Time - MiTiempo, FormatoTimes) & "] Base actualizada con exito."
           
           'Enviamos el mail de confirmacion
-           TMail.Mensaje = "Informacion de actualizacion del sistema [" & FechaSistema & " - " & Format(Time, FormatoTimes) & "]:" & vbCrLf _
-                         & "Del Servidor " & strIPServidor & " se ha actualizado la base de Datos: " & NombreBase(IdBase) & vbCrLf _
-                         & "SERVIRLES ES NUESTRO COMPROMISO, DISFRUTARLO ES EL SUYO."
-           TMail.para = "recepcion@diskcoversystem.com"
-           TMail.Asunto = "La Base de Datos: (" & Format(IdBase, "00") & ") " & NombreBase(IdBase) & " fue actualizadaa con exito."
+           TMail.Mensaje = "Informacion de actualizacion del sistema " & vbCrLf _
+                         & "Fecha y Hora [" & FechaSistema & " - " & Format(Time, FormatoTimes) & "] SP Y FN:" & vbCrLf _
+                         & "Del Servidor " & strIPServidor & " se ha actualizado la base de Datos: " & NombreBase(IdBase)
+           TMail.para = CorreoUpdate
+           TMail.Asunto = "La Base de Datos: (" & Format(IdBase, "00") & ") " & NombreBase(IdBase) & ", Duracion: " _
+                        & Format(Time - MiTiempo, FormatoTimes) & ", fue actualizadaa con exito."
            FEnviarCorreos.Show 1
         Else
            MsgBox "LA CONEXION NO ESTA ESTABLECIDA" & vbCrLf _
@@ -2015,7 +2024,7 @@ End Sub
 Public Sub Proceso_Terminado_Exitosamente()
     Progreso_Barra.Incremento = Progreso_Barra.Valor_Maximo
     ProgressBarEstado.Max = Progreso_Barra.Valor_Maximo
-    ProgressBarEstado.Value = Progreso_Barra.Valor_Maximo
+    ProgressBarEstado.value = Progreso_Barra.Valor_Maximo
     RatonNormal
     MsgBox "Proceso realizado con exito"
     LblAdvertencia.ForeColor = &HFFFF80

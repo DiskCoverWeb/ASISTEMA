@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Begin VB.MDIForm MDIFact 
    BackColor       =   &H00FFFFFF&
    Caption         =   "Sistema de Facturacion"
@@ -227,84 +227,9 @@ Begin VB.MDIForm MDIFact
       End
       Begin VB.Menu MAbonoNV 
          Caption         =   "Facturación/Cobros Automática por"
-         Begin VB.Menu MRespRest 
-            Caption         =   "&Banco Bolivariano"
-         End
-         Begin VB.Menu MBcoInter 
-            Caption         =   "Banco &Internacional"
-         End
-         Begin VB.Menu MBcoPichinha 
-            Caption         =   "Banco del &Pichincha"
-         End
-         Begin VB.Menu MBcoPacific 
-            Caption         =   "Banco del &Pacífico"
-         End
-         Begin VB.Menu MIntermatico 
-            Caption         =   "Banco del Pacifico (Inter&matico)"
-         End
-         Begin VB.Menu MProdubanco 
-            Caption         =   "Banco Produbanco"
-         End
-         Begin VB.Menu MBGR_EC 
-            Caption         =   "Banco General Rumiñahui"
-         End
-         Begin VB.Menu MBancoGuayaquil 
-            Caption         =   "Banco de Guayaquil"
-         End
-         Begin VB.Menu MBar6 
-            Caption         =   "-"
-         End
-         Begin VB.Menu MAbonoAutomatocs 
-            Caption         =   "Abonos Automaticos"
-         End
-         Begin VB.Menu MCooperativas 
-            Caption         =   "-"
-         End
-         Begin VB.Menu MCoopJep 
-            Caption         =   "Cooperativa JEP"
-         End
-         Begin VB.Menu MCoopCACPE 
-            Caption         =   "Cooperativa CACPE Bliblian Ltda"
-         End
       End
       Begin VB.Menu MRecaudacionAut 
          Caption         =   "Envio/Recepcion Recaudación del Banco"
-         Begin VB.Menu MBcoRecBolivariano 
-            Caption         =   "Recaudacion Banco Bolivariano"
-         End
-         Begin VB.Menu MBcoRecInternacional 
-            Caption         =   "Recaudacion Banco Internacional"
-         End
-         Begin VB.Menu MBcoGuayquil 
-            Caption         =   "Recaudacion Banco de Guayaquil"
-         End
-         Begin VB.Menu BcoRecPichincha 
-            Caption         =   "Recaudacion Banco del Pichincha"
-         End
-         Begin VB.Menu MBcoPacificoBizbanck 
-            Caption         =   "Recaudacion Banco del Pacifico"
-         End
-         Begin VB.Menu MRecProdubanco 
-            Caption         =   "Recaudacion del Produbanco"
-         End
-         Begin VB.Menu MRecOtrosBancos 
-            Caption         =   "Recaudacion de Otros Bancos"
-         End
-         Begin VB.Menu MRecTarjetas 
-            Caption         =   "Recaudacion de Tarjetas"
-         End
-         Begin VB.Menu MBCoopJep1 
-            Caption         =   "-"
-         End
-         Begin VB.Menu MCoopJep1 
-            Caption         =   "Cooperativa JEP"
-         End
-         Begin VB.Menu MSubirFarmacia 
-            Caption         =   "Subir Farmacias"
-         End
-         Begin VB.Menu MRecaudacionxExcel 
-            Caption         =   "Recaudacion por Excel"
-         End
       End
       Begin VB.Menu MBAbono1 
          Caption         =   "-"
@@ -385,6 +310,7 @@ Begin VB.MDIForm MDIFact
       End
       Begin VB.Menu MImpoExecel 
          Caption         =   "Importaciones desde Excel"
+         Shortcut        =   ^E
       End
       Begin VB.Menu MBar5 
          Caption         =   "-"
@@ -484,12 +410,6 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
-Private Sub BcoRecPichincha_Click()
-  RatonReloj
-  TextoBanco = "PICHINCHA"
-  FRecaudacionBancosPreFa.Show
-End Sub
-
 Private Sub Clientes_Click()
   RatonReloj
   CliFact = True
@@ -550,12 +470,6 @@ Private Sub MAbonoAuto_Click()
   AbonoAutomatico.Show
 End Sub
 
-Private Sub MAbonoAutomatocs_Click()
-  RatonReloj
-  TextoBanco = "AUTOMATICOS"
-  FRecaudacionBancosCxC.Show
-End Sub
-
 Private Sub MAbonoCredito_Click()
   RatonReloj
   TipoDoc = ""
@@ -578,6 +492,11 @@ Private Sub MAbonoEfect_Click()
   Nuevo = True
   TipoProc = "EFECTIVO"
   AbonoAnticipo.Show 1
+End Sub
+
+Private Sub MAbonoNV_Click()
+  RatonReloj
+  FRecaudacionBancosCxC.Show
 End Sub
 
 Private Sub MAbonosAntiCli_Click()
@@ -603,65 +522,6 @@ Private Sub MAsientoMatricula_Click()
   CliFact = True
   Control_Procesos Normal, "Asiento de Afiliados"
   FClientesRazonSocial.Show
-End Sub
-
-Private Sub MBancoGuayaquil_Click()
-  RatonReloj
- 'FBancoPacifico.Show
-  TextoBanco = "GUAYAQUIL"
-  FRecaudacionBancosCxC.Show
-End Sub
-
-Private Sub MBcoGuayquil_Click()
-  RatonReloj
-  TextoBanco = "GUAYAQUIL"
-  FRecaudacionBancosPreFa.Show
-End Sub
-
-Private Sub MBcoInter_Click()
-  RatonReloj
- 'FBancoInternacional.Show
-  TextoBanco = "INTERNACIONAL"
-  FRecaudacionBancosCxC.Show
-End Sub
-
-Private Sub MBcoPacific_Click()
-  RatonReloj
- 'FBancoPacifico.Show
-  TextoBanco = "PACIFICO"
-  FRecaudacionBancosCxC.Show
-End Sub
-
-Private Sub MBcoPacificoBizbanck_Click()
-  RatonReloj
- 'FBancoPichincha.Show
-  TextoBanco = "BIZBANCKPACIFICO"
-  FRecaudacionBancosPreFa.Show
-End Sub
-
-Private Sub MBcoPichinha_Click()
-  RatonReloj
-  TextoBanco = "PICHINCHA"
-  FRecaudacionBancosCxC.Show
-End Sub
-
-Private Sub MBcoRecBolivariano_Click()
-  RatonReloj
-  TextoBanco = "BOLIVARIANO"
-  FRecaudacionBancosPreFa.Show
-End Sub
-
-Private Sub MBcoRecInternacional_Click()
-  RatonReloj
-  TextoBanco = "INTERNACIONAL"
-  FRecaudacionBancosPreFa.Show
-End Sub
-
-Private Sub MBGR_EC_Click()
-  RatonReloj
-  'FBancoPichincha.Show
-  TextoBanco = "BGR_EC"
-  FRecaudacionBancosCxC.Show
 End Sub
 
 Private Sub MCambCod_Click()
@@ -739,24 +599,6 @@ Private Sub MCobProg_Click()
   FCobrosProgramados.Show
 End Sub
 
-Private Sub MCoopCACPE_Click()
-  RatonReloj
-  TextoBanco = "CACPE"
-  FRecaudacionBancosCxC.Show
-End Sub
-
-Private Sub MCoopJep_Click()
-  RatonReloj
-  TextoBanco = "COOPJEP"
-  FRecaudacionBancosCxC.Show
-End Sub
-
-Private Sub MCoopJep1_Click()
-  RatonReloj
-  TextoBanco = "COOPJEP"
-  FRecaudacionBancosPreFa.Show
-End Sub
-
 Private Sub MCtasDocxCobrar_Click()
   RatonReloj
   CxCNivel.Show
@@ -774,6 +616,11 @@ Private Sub MFactReembolso_Click()
   TipoFactura = "FR"
   FacturaNueva = True
   FacturaReembolso.Show
+End Sub
+
+Private Sub MRecaudacionAut_Click()
+  RatonReloj
+  FRecaudacionBancosPreFa.Show
 End Sub
 
 Private Sub Timer1_Timer()
@@ -933,13 +780,6 @@ Private Sub MIngLinea_Click()
   IngLinea.Show
 End Sub
 
-Private Sub MIntermatico_Click()
-  RatonReloj
- 'FBancoPacifico.Show
-  TextoBanco = "INTERMATICO"
-  FRecaudacionBancosCxC.Show
-End Sub
-
 Private Sub MLiquidacionCompras_Click()
   RatonReloj
   TipoFactura = "LC"
@@ -1028,12 +868,6 @@ Private Sub MPorTransf_Click()
   AbonoAnticipo.Show 1
 End Sub
 
-Private Sub MProdubanco_Click()
-  RatonReloj
-  TextoBanco = "PRODUBANCO"
-  FRecaudacionBancosCxC.Show
-End Sub
-
 Private Sub MPuntoVenta_Click()
   RatonReloj
   TipoFactura = "NV"
@@ -1055,38 +889,8 @@ Private Sub MPVDonaciones_Click()
   FacturasPV.Show
 End Sub
 
-Private Sub MRecaudacionxExcel_Click()
-  RatonReloj
-  TextoBanco = "POREXCEL"
-  FRecaudacionBancosPreFa.Show
-End Sub
-
 Private Sub MReciboAbonoAnticipado_Click()
   MayorAux.Show
-End Sub
-
-Private Sub MRecOtrosBancos_Click()
-  RatonReloj
-  TextoBanco = "OTROSBANCOS"
-  FRecaudacionBancosPreFa.Show
-End Sub
-
-Private Sub MRecProdubanco_Click()
-  RatonReloj
-  TextoBanco = "PRODUBANCO"
-  FRecaudacionBancosPreFa.Show
-End Sub
-
-Private Sub MRecTarjetas_Click()
-  RatonReloj
-  TextoBanco = "TARJETAS"
-  FRecaudacionBancosPreFa.Show
-End Sub
-
-Private Sub MRespRest_Click()
-  RatonReloj
-  TextoBanco = "BOLIVARIANO"
-  FRecaudacionBancosCxC.Show
 End Sub
 
 Private Sub MResumComis_Click()
@@ -1113,12 +917,6 @@ End Sub
 Private Sub MRetencion_Click()
   RatonReloj
   AbonoRetencion.Show
-End Sub
-
-Private Sub MSubirFarmacia_Click()
-  RatonReloj
-  TextoBanco = "FARMACIAS"
-  FRecaudacionBancosPreFa.Show
 End Sub
 
 Private Sub MTraslVentAnt_Click()

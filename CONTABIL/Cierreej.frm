@@ -3,7 +3,7 @@ Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.Form CierreEjercicio 
    Caption         =   "BALANCE DE COMPROBACION"
    ClientHeight    =   8505
@@ -151,7 +151,7 @@ Begin VB.Form CierreEjercicio
       Height          =   5475
       Left            =   105
       TabIndex        =   5
-      Top             =   1470
+      Top             =   1575
       Width           =   11670
       _ExtentX        =   20585
       _ExtentY        =   9657
@@ -724,7 +724,7 @@ Begin VB.Form CierreEjercicio
       EndProperty
       _Version        =   393216
    End
-   Begin MSAdodcLib.Adodc AdoCta 
+   Begin MSAdodcLib.Adodc AdoAux 
       Height          =   330
       Left            =   315
       Top             =   3150
@@ -759,7 +759,7 @@ Begin VB.Form CierreEjercicio
       UserName        =   ""
       Password        =   ""
       RecordSource    =   ""
-      Caption         =   "Cta"
+      Caption         =   "Aux"
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "MS Sans Serif"
          Size            =   8.25
@@ -1479,7 +1479,7 @@ Dim ListaCodigos(5) As String
                & "AND Concepto = '" & TipoCodigo & "' "
           Select_AdoDB AdoNum, sSQL
           If AdoNum.RecordCount > 0 Then
-             Numero1 = AdoNum.Fields("Numero")
+             Numero1 = AdoNum.fields("Numero")
              sSQL = "SELECT Concepto, Numero, ID " _
                   & "FROM Comprobantes " _
                   & "WHERE Periodo = '" & Periodo_Contable & "' " _
@@ -1502,12 +1502,12 @@ End Sub
 Public Sub InsertarTotales(AdoG As Adodc, cod, Cta, Anal, Parc, Tot)
    With AdoG.Recordset
         .AddNew
-        .Fields("Codigo") = cod
-        .Fields("Cuenta") = Cta
-        .Fields("Analitico") = Anal
-        .Fields("Parcial") = Parc
-        .Fields("Total") = Tot
-        .Fields("Item") = NumEmpresa
+        .fields("Codigo") = cod
+        .fields("Cuenta") = Cta
+        .fields("Analitico") = Anal
+        .fields("Parcial") = Parc
+        .fields("Total") = Tot
+        .fields("Item") = NumEmpresa
         .Update
    End With
 End Sub
@@ -1515,13 +1515,13 @@ End Sub
 Public Sub InsertarTotalesCon(AdoG As Adodc, cod, CtaDG, Cta, Sal_ME, Sal_MN, Tot)
    With AdoG.Recordset
         .AddNew
-        .Fields("Codigo") = cod
-        .Fields("Cuenta") = Cta
-        .Fields("Saldo_ME") = Sal_ME
-        .Fields("Saldo_MN") = Sal_MN
-        .Fields("Total") = Tot
-        .Fields("DG") = CtaDG
-        .Fields("Item") = NumEmpresa
+        .fields("Codigo") = cod
+        .fields("Cuenta") = Cta
+        .fields("Saldo_ME") = Sal_ME
+        .fields("Saldo_MN") = Sal_MN
+        .fields("Total") = Tot
+        .fields("DG") = CtaDG
+        .fields("Item") = NumEmpresa
         .Update
    End With
 End Sub
@@ -1626,13 +1626,13 @@ Dim Factura_No1 As Long
           Contador = Contador + 1
           SiTieneSubModulo = False
           Debe = 0: Haber = 0
-          TipoCta = .Fields("DG")
-          Moneda_US = .Fields("ME")
-          Codigo = .Fields("Codigo")
-          Cuenta = .Fields("Cuenta")
-          TipoDoc = .Fields("TC")
-          Total = Redondear(.Fields("Saldo_Total"), 2)
-          Total_ME = Redondear(.Fields("Saldo_Total_ME"), 2)
+          TipoCta = .fields("DG")
+          Moneda_US = .fields("ME")
+          Codigo = .fields("Codigo")
+          Cuenta = .fields("Cuenta")
+          TipoDoc = .fields("TC")
+          Total = Redondear(.fields("Saldo_Total"), 2)
+          Total_ME = Redondear(.fields("Saldo_Total_ME"), 2)
           If OpcCoop Then
              If Moneda_US Then
                 Select Case MidStrg(Codigo, 1, 1)
@@ -1690,21 +1690,21 @@ Dim Factura_No1 As Long
                    'Insertamos Cheques girados y no cobrados
                     Do While Not AdoCheques.Recordset.EOF
                        ValorDH = 0
-                       SumaCheqDebe = SumaCheqDebe + AdoCheques.Recordset.Fields("Debe")
-                       SumaCheqHaber = SumaCheqHaber + AdoCheques.Recordset.Fields("Haber")
-                       CodigoCli = AdoCheques.Recordset.Fields("Codigo_C")
-                       If AdoCheques.Recordset.Fields("Debe") > 0 Then
-                          ValorDH = AdoCheques.Recordset.Fields("Debe")
+                       SumaCheqDebe = SumaCheqDebe + AdoCheques.Recordset.fields("Debe")
+                       SumaCheqHaber = SumaCheqHaber + AdoCheques.Recordset.fields("Haber")
+                       CodigoCli = AdoCheques.Recordset.fields("Codigo_C")
+                       If AdoCheques.Recordset.fields("Debe") > 0 Then
+                          ValorDH = AdoCheques.Recordset.fields("Debe")
                           OpcDH = 1
-                       ElseIf AdoCheques.Recordset.Fields("Haber") > 0 Then
-                          ValorDH = AdoCheques.Recordset.Fields("Haber")
+                       ElseIf AdoCheques.Recordset.fields("Haber") > 0 Then
+                          ValorDH = AdoCheques.Recordset.fields("Haber")
                           OpcDH = 2
                        End If
-                       Fecha_Vence = AdoCheques.Recordset.Fields("Fecha_Efec")
-                       NoCheque = AdoCheques.Recordset.Fields("Cheq_Dep")
-                       DetalleComp = AdoCheques.Recordset.Fields("TP") & "-" _
-                                   & Format(AdoCheques.Recordset.Fields("Numero"), "00000000") & ". " _
-                                   & TrimStrg(AdoCheques.Recordset.Fields("Cliente"))
+                       Fecha_Vence = AdoCheques.Recordset.fields("Fecha_Efec")
+                       NoCheque = AdoCheques.Recordset.fields("Cheq_Dep")
+                       DetalleComp = AdoCheques.Recordset.fields("TP") & "-" _
+                                   & Format(AdoCheques.Recordset.fields("Numero"), "00000000") & ". " _
+                                   & TrimStrg(AdoCheques.Recordset.fields("Cliente"))
                       'MsgBox "Cheq: " & ValorDH
                        InsertarAsiento AdoCtas
                        AdoCheques.Recordset.MoveNext
@@ -1741,10 +1741,10 @@ Dim Factura_No1 As Long
                  Select_Adodc AdoSubCtaDet, sSQL
                  If AdoSubCtaDet.Recordset.RecordCount > 0 Then
                     Do While Not AdoSubCtaDet.Recordset.EOF
-                       If AdoSubCtaDet.Recordset.Fields("TSaldo") > 0 Then
-                          TDebito = TDebito + AdoSubCtaDet.Recordset.Fields("TSaldo")
-                       ElseIf AdoSubCtaDet.Recordset.Fields("TSaldo") < 0 Then
-                          TCredito = TCredito + (-AdoSubCtaDet.Recordset.Fields("TSaldo"))
+                       If AdoSubCtaDet.Recordset.fields("TSaldo") > 0 Then
+                          TDebito = TDebito + AdoSubCtaDet.Recordset.fields("TSaldo")
+                       ElseIf AdoSubCtaDet.Recordset.fields("TSaldo") < 0 Then
+                          TCredito = TCredito + (-AdoSubCtaDet.Recordset.fields("TSaldo"))
                        End If
                        AdoSubCtaDet.Recordset.MoveNext
                     Loop
@@ -1769,10 +1769,10 @@ Dim Factura_No1 As Long
                  Select_Adodc AdoSubCtaDet, sSQL
                  If AdoSubCtaDet.Recordset.RecordCount > 0 Then
                     Do While Not AdoSubCtaDet.Recordset.EOF
-                       If AdoSubCtaDet.Recordset.Fields("TSaldo") > 0 Then
-                          TCredito = TCredito + AdoSubCtaDet.Recordset.Fields("TSaldo")
-                       ElseIf AdoSubCtaDet.Recordset.Fields("TSaldo") < 0 Then
-                          TDebito = TDebito + (-AdoSubCtaDet.Recordset.Fields("TSaldo"))
+                       If AdoSubCtaDet.Recordset.fields("TSaldo") > 0 Then
+                          TCredito = TCredito + AdoSubCtaDet.Recordset.fields("TSaldo")
+                       ElseIf AdoSubCtaDet.Recordset.fields("TSaldo") < 0 Then
+                          TDebito = TDebito + (-AdoSubCtaDet.Recordset.fields("TSaldo"))
                        End If
                        AdoSubCtaDet.Recordset.MoveNext
                     Loop
@@ -1808,9 +1808,9 @@ Dim Factura_No1 As Long
    If .RecordCount > 0 Then
       .MoveFirst
        Do While Not .EOF
-          SumaDebe = SumaDebe + .Fields("DEBE")
-          SumaHaber = SumaHaber + .Fields("HABER")
-         .Fields("A_No") = Ln_No
+          SumaDebe = SumaDebe + .fields("DEBE")
+          SumaHaber = SumaHaber + .fields("HABER")
+         .fields("A_No") = Ln_No
          .MoveNext
           Ln_No = Ln_No + 1
        Loop
@@ -1828,8 +1828,8 @@ Dim Factura_No1 As Long
        SumaDebe = 0: SumaHaber = 0
       .MoveFirst
        Do While Not .EOF
-          SumaDebe = SumaDebe + .Fields("DEBE")
-          SumaHaber = SumaHaber + .Fields("HABER")
+          SumaDebe = SumaDebe + .fields("DEBE")
+          SumaHaber = SumaHaber + .fields("HABER")
          .MoveNext
        Loop
    End If
@@ -1877,16 +1877,16 @@ Dim Factura_No1 As Long
           Saldo_ME = 0
           Valor = 0
           OpcTM = 1
-          Debitos = .Fields("TDebitos")
-          Creditos = .Fields("TCreditos")
-          Codigo = .Fields("Codigo")
-          Beneficiario = .Fields("Cliente")
-          SubCtaGen = .Fields("Cta")
-          Mifecha = .Fields("Fecha_Venc")
-          Factura_No = .Fields("Factura")
-          TipoSubCta = .Fields("TC")
+          Debitos = .fields("TDebitos")
+          Creditos = .fields("TCreditos")
+          Codigo = .fields("Codigo")
+          Beneficiario = .fields("Cliente")
+          SubCtaGen = .fields("Cta")
+          Mifecha = .fields("Fecha_Venc")
+          Factura_No = .fields("Factura")
+          TipoSubCta = .fields("TC")
           Progreso_Barra.Mensaje_Box = "Submódulos de: " & SubCtaGen & " => " & Beneficiario
-          Select Case .Fields("TC")
+          Select Case .fields("TC")
             Case "C"
                  Saldo = Debitos - Creditos
                  ValorDH = Saldo
@@ -1925,17 +1925,17 @@ Dim Factura_No1 As Long
              If AdoRet.Recordset.RecordCount > 0 Then
                'MsgBox "Tiene prestamos superiores: " & SubCtaGen & vbCrLf & Codigo & vbCrLf & AdoRet.Recordset.RecordCount
                 Do While Not AdoRet.Recordset.EOF
-                   If AdoRet.Recordset.Fields("Debitos") > 0 Then
-                      ValorDH = AdoRet.Recordset.Fields("Debitos")
+                   If AdoRet.Recordset.fields("Debitos") > 0 Then
+                      ValorDH = AdoRet.Recordset.fields("Debitos")
                       If ValorDH = Debitos Then ValorDH = 0
                       OpcDH = 1
                    Else
-                      ValorDH = AdoRet.Recordset.Fields("Creditos")
+                      ValorDH = AdoRet.Recordset.fields("Creditos")
                       If ValorDH = Creditos Then ValorDH = 0
                       OpcDH = 2
                    End If
-                   Fecha_V1 = AdoRet.Recordset.Fields("Fecha_V")
-                   Factura_No = AdoRet.Recordset.Fields("Factura")
+                   Fecha_V1 = AdoRet.Recordset.fields("Fecha_V")
+                   Factura_No = AdoRet.Recordset.fields("Factura")
                   'If SubCtaGen = "2.1.03.01.03" And Factura_No = 79498 Then MsgBox ValorSubModulo & " .."
                   'If SubCtaGen = "1.1.04.03.01" And Codigo = "GRUP2" And Factura_No = 18553 Then MsgBox ValorDH & " .."
                    If ValorDH > 0 Then
@@ -2041,12 +2041,12 @@ Dim Factura_No1 As Long
    If .RecordCount > 0 Then
        Progreso_Barra.Valor_Maximo = .RecordCount + 100
        Do While Not .EOF
-          CodigoInv = .Fields("Codigo_Inv")
-          Cta_Inventario = .Fields("Cta_Inventario")
-          Cantidad = .Fields("TExistencia")
-          Producto = .Fields("Producto")
-          Cod_Bodega = .Fields("CodBodega")
-          Precio = Redondear(.Fields("Costo"), Dec_Costo)
+          CodigoInv = .fields("Codigo_Inv")
+          Cta_Inventario = .fields("Cta_Inventario")
+          Cantidad = .fields("TExistencia")
+          Producto = .fields("Producto")
+          Cod_Bodega = .fields("CodBodega")
+          Precio = Redondear(.fields("Costo"), Dec_Costo)
           If Precio <= 0 Then Precio = 0.01
           If Cantidad > 0 Then
              OpcDH = 1
@@ -2075,8 +2075,8 @@ Dim Factura_No1 As Long
           SetAdoFields "TC", Pendiente
           SetAdoFields "CodBod", Cod_Bodega
           Select Case TipoKardex
-            Case "SERIE": SetAdoFields "Serie_No", .Fields("Serie_No")
-            Case "BARRA": SetAdoFields "COD_BAR", .Fields("Codigo_Barra")
+            Case "SERIE": SetAdoFields "Serie_No", .fields("Serie_No")
+            Case "BARRA": SetAdoFields "COD_BAR", .fields("Codigo_Barra")
           End Select
           SetAdoUpdate
          .MoveNext
@@ -2323,7 +2323,16 @@ If Diferencia = 0 Then
       CopiarAdoTablaPeriodo "Catalogo_Lineas", FechaFinal
       Progreso_Barra.Incremento = Progreso_Barra.Incremento + 1
       Progreso_Esperar
+      CopiarAdoTablaPeriodo "Catalogo_Marcas", FechaFinal
+      Progreso_Barra.Incremento = Progreso_Barra.Incremento + 1
+      Progreso_Esperar
       CopiarAdoTablaPeriodo "Catalogo_Productos", FechaFinal
+      Progreso_Barra.Incremento = Progreso_Barra.Incremento + 1
+      Progreso_Esperar
+      CopiarAdoTablaPeriodo "Catalogo_Recetas", FechaFinal
+      Progreso_Barra.Incremento = Progreso_Barra.Incremento + 1
+      Progreso_Esperar
+      CopiarAdoTablaPeriodo "Catalogo_Rol_Cuentas", FechaFinal
       Progreso_Barra.Incremento = Progreso_Barra.Incremento + 1
       Progreso_Esperar
       CopiarAdoTablaPeriodo "Catalogo_Rol_Pagos", FechaFinal
@@ -2335,24 +2344,47 @@ If Diferencia = 0 Then
       CopiarAdoTablaPeriodo "Clientes_Facturacion", FechaFinal
       Progreso_Barra.Incremento = Progreso_Barra.Incremento + 1
       Progreso_Esperar
+      CopiarAdoTablaPeriodo "Codigos", FechaFinal
+      Progreso_Barra.Incremento = Progreso_Barra.Incremento + 1
+      Progreso_Esperar
       CopiarAdoTablaPeriodo "Ctas_Proceso", FechaFinal
       Progreso_Barra.Incremento = Progreso_Barra.Incremento + 1
       Progreso_Esperar
       If CheqRenumerar.value <> 0 Then
-         sSQL = "DELETE * " _
-              & "FROM Codigos " _
-              & "WHERE Item = '" & NumEmpresa & "' " _
-              & "AND Periodo = '" & Ninguno & "' " _
-              & "AND NOT (Concepto LIKE '%_SERIE_%') "
-         Ejecutar_SQL_SP sSQL
-        
-         sSQL = "INSERT INTO Codigos (Item, Concepto, Numero, Periodo, X) " _
-              & "SELECT '" & NumEmpresa & "', Concepto, Numero, Periodo, X " _
-              & "FROM Codigos " _
-              & "WHERE Item = '000' " _
-              & "AND Periodo = '.' " _
-              & "ORDER BY Concepto, Numero "
-         Ejecutar_SQL_SP sSQL
+         For I = 1 To 12
+             Numero = CLng(Format(I, "00") & "000001")
+             'MsgBox Numero
+             sSQL = "SELECT Concepto, Numero, ID " _
+                  & "FROM Codigos " _
+                  & "WHERE Item = '" & NumEmpresa & "' " _
+                  & "AND Periodo = '.' " _
+                  & "AND (Concepto LIKE '" & Format(I, "00") & "%') " _
+                  & "ORDER BY Concepto "
+             Select_Adodc AdoAux, sSQL
+             With AdoAux.Recordset
+              If .RecordCount > 0 Then
+                  Do While Not .EOF
+                    .fields("Numero") = Numero
+                    .MoveNext
+                  Loop
+                 .UpdateBatch
+              End If
+             End With
+         Next I
+''''         sSQL = "DELETE * " _
+''''              & "FROM Codigos " _
+''''              & "WHERE Item = '" & NumEmpresa & "' " _
+''''              & "AND Periodo = '" & Ninguno & "' " _
+''''              & "AND NOT (Concepto LIKE '%_SERIE_%') "
+''''         Ejecutar_SQL_SP sSQL
+''''
+''''         sSQL = "INSERT INTO Codigos (Item, Concepto, Numero, Periodo, X) " _
+''''              & "SELECT '" & NumEmpresa & "', Concepto, Numero, Periodo, X " _
+''''              & "FROM Codigos " _
+''''              & "WHERE Item = '000' " _
+''''              & "AND Periodo = '.' " _
+''''              & "ORDER BY Concepto, Numero "
+''''         Ejecutar_SQL_SP sSQL
       Else
          CopiarAdoTablaPeriodo "Codigos", FechaFinal
       End If
@@ -2616,8 +2648,8 @@ Private Sub Form_Activate()
        & "AND Periodo = '" & Periodo_Contable & "' "
   Select_Adodc AdoTrans, sSQL
   If AdoTrans.Recordset.RecordCount > 0 Then
-     FechaInicial = AdoTrans.Recordset.Fields("Fecha_Inicial")
-     FechaFinal = AdoTrans.Recordset.Fields("Fecha_Final")
+     FechaInicial = AdoTrans.Recordset.fields("Fecha_Inicial")
+     FechaFinal = AdoTrans.Recordset.fields("Fecha_Final")
      FechaIni = BuscarFecha(FechaInicial)
      FechaFin = BuscarFecha(FechaFinal)
      FechaTexto = FechaFinal
@@ -2644,7 +2676,7 @@ Private Sub Form_Load()
   CentrarForm CierreEjercicio
   ConectarAdodc AdoInv
   ConectarAdodc AdoRet
-  ConectarAdodc AdoCta
+  ConectarAdodc AdoAux
   ConectarAdodc AdoCtas
   ConectarAdodc AdoBanco
   ConectarAdodc AdoTrans

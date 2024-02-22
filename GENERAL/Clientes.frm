@@ -1,10 +1,10 @@
 VERSION 5.00
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
-Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
+Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form FClientes 
    BackColor       =   &H00FFFFC0&
    Caption         =   "Apertura de cuenta"
@@ -17,33 +17,14 @@ Begin VB.Form FClientes
    ScaleHeight     =   9330
    ScaleWidth      =   14715
    WindowState     =   1  'Minimized
-   Begin VB.CommandButton Command6 
-      BackColor       =   &H00FFFFFF&
-      BeginProperty Font 
-         Name            =   "MS Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   330
-      Left            =   7770
-      Picture         =   "Clientes.frx":0000
-      Style           =   1  'Graphical
-      TabIndex        =   96
-      Top             =   735
-      Width           =   330
-   End
    Begin ComctlLib.Toolbar TBarCliente 
       Align           =   1  'Align Top
       Height          =   660
       Left            =   0
       TabIndex        =   93
       Top             =   0
-      Width           =   14715
-      _ExtentX        =   25956
+      Width           =   28560
+      _ExtentX        =   50377
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -101,7 +82,6 @@ Begin VB.Form FClientes
             ImageIndex      =   8
          EndProperty
          BeginProperty Button9 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   ""
             Object.Tag             =   ""
             ImageIndex      =   9
             Style           =   3
@@ -120,7 +100,6 @@ Begin VB.Form FClientes
             ImageIndex      =   10
          EndProperty
          BeginProperty Button12 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   ""
             Object.Tag             =   ""
             ImageIndex      =   11
             Style           =   3
@@ -200,6 +179,25 @@ Begin VB.Form FClientes
          EndProperty
       EndProperty
       BorderStyle     =   1
+   End
+   Begin VB.CommandButton Command6 
+      BackColor       =   &H00FFFFFF&
+      BeginProperty Font 
+         Name            =   "MS Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   7770
+      Picture         =   "Clientes.frx":0000
+      Style           =   1  'Graphical
+      TabIndex        =   96
+      Top             =   735
+      Width           =   330
    End
    Begin VB.TextBox TxtCI_RUC 
       BeginProperty Font 
@@ -2759,18 +2757,16 @@ Public Sub GrabarCliente()
            If Not AdoEjec.Recordset.EOF Then CodigoEjecutivo = AdoEjec.Recordset.fields("Codigo")
         End If
         
-        sSQL = "SELECT * " _
+        sSQL = "SELECT " & Full_Fields("Clientes") & " " _
              & "FROM Clientes " _
              & "WHERE Codigo = '" & TxtCodigo & "' "
         Select_Adodc AdoListCtas, sSQL
         With AdoListCtas.Recordset
          If .RecordCount > 0 Then
-             Control_Procesos Normal, "Grabar/Modificar: " & TxtApellidosS
              Codigo = TxtCodigo
              If AdoListCtas.Recordset.fields("Cliente") <> TxtApellidosS Then Nuevo = True
          Else
              Nuevo = True
-             Control_Procesos Normal, "Nuevo: " & TxtApellidosS
              Codigo = Tipo_RUC_CI.Codigo_RUC_CI
              T = Normal
              SetAddNew AdoListCtas
@@ -2813,22 +2809,22 @@ Public Sub GrabarCliente()
         SetFields AdoListCtas, "Contacto", TxtContacto
         SetFields AdoListCtas, "Cta_CxP", CambioCodigoCta(MBCtaxCob)
         SetFields AdoListCtas, "Cod_Ejec", CodigoEjecutivo
-        If CheqContEsp.Value = 0 Then
+        If CheqContEsp.value = 0 Then
            SetFields AdoListCtas, "Especial", False
         Else
            SetFields AdoListCtas, "Especial", True
         End If
-        If CheqRISE.Value = 0 Then
+        If CheqRISE.value = 0 Then
            SetFields AdoListCtas, "RISE", False
         Else
            SetFields AdoListCtas, "RISE", True
         End If
-        If OpcM.Value Then
+        If OpcM.value Then
            SetFields AdoListCtas, "Sexo", "M"
         Else
            SetFields AdoListCtas, "Sexo", "F"
         End If
-        If CheqDr.Value Then
+        If CheqDr.value Then
            SetFields AdoListCtas, "Asignar_Dr", True
         Else
            SetFields AdoListCtas, "Asignar_Dr", False
@@ -2991,7 +2987,12 @@ Public Sub GrabarCliente()
         End If
        End With
   End If
-  If Nuevo Then ListarClientes
+  If Nuevo Then
+     Control_Procesos Normal, "Nuevo Beneficiario: " & TxtApellidosS
+     ListarClientes
+  Else
+     Control_Procesos Normal, "Grabar/Modificar: " & TxtApellidosS
+  End If
   MsgBox "ACTUALIZACION EXITOSA"
   DCCliente.SetFocus
 End Sub
@@ -3027,8 +3028,8 @@ Public Sub DatosNuevos()
    MBFecha = FechaSistema
    TxtApellidosS.Enabled = True
    TxtRazonSocial.Enabled = True
-   CheqContEsp.Value = 0
-   CheqRISE.Value = 0
+   CheqContEsp.value = 0
+   CheqRISE.value = 0
    CodigoEjecutivo = Ninguno
 End Sub
 
@@ -3184,10 +3185,10 @@ Dim TextoBusqueda1 As String
      MBCtaxCob = FormatoCodigoCta(.fields("Cta_CxP"))
      CodigoEjecutivo = .fields("Cod_Ejec")
      'TxtDescuento = Format(.Fields("Valor_Descuento"), "#,##0.00")
-     If .fields("Especial") Then CheqContEsp.Value = 1 Else CheqContEsp.Value = 0
-     If .fields("RISE") Then CheqRISE.Value = 1 Else CheqRISE.Value = 0
+     If .fields("Especial") Then CheqContEsp.value = 1 Else CheqContEsp.value = 0
+     If .fields("RISE") Then CheqRISE.value = 1 Else CheqRISE.value = 0
      If .fields("FA") Then LstProductos.AddItem "Cliente de Facturación"
-     If .fields("Asignar_Dr") Then CheqDr.Value = 1 Else CheqDr.Value = 0
+     If .fields("Asignar_Dr") Then CheqDr.value = 1 Else CheqDr.value = 0
      TipoBenef = .fields("TD")
      Temp_TD = .fields("TD")
      For I = 0 To CEstado.ListCount - 1
@@ -3195,7 +3196,7 @@ Dim TextoBusqueda1 As String
           CEstado = CEstado.List(I)
       End If
      Next I
-     If .fields("Sexo") = "M" Then OpcM.Value = True Else OpcF.Value = True
+     If .fields("Sexo") = "M" Then OpcM.value = True Else OpcF.value = True
      Label6.Caption = "* C.I./R.U.C.  [" & TipoBenef & "]"
      DN = Datos_Nacion(.fields("Ciudad"), "C", .fields("Pais"), .fields("Prov"))
      CProvincia.Text = DN.Provincia

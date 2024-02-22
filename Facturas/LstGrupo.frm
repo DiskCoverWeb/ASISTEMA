@@ -507,15 +507,16 @@ Begin VB.Form ListarGrupos
       _ExtentY        =   688
       _Version        =   393216
       Tabs            =   7
+      Tab             =   1
       TabsPerRow      =   7
       TabHeight       =   520
       TabCaption(0)   =   "LISTADO POR GRUPOS"
       TabPicture(0)   =   "LstGrupo.frx":005F
-      Tab(0).ControlEnabled=   -1  'True
+      Tab(0).ControlEnabled=   0   'False
       Tab(0).ControlCount=   0
       TabCaption(1)   =   "PENSION MENSUAL DEL AÑO"
       TabPicture(1)   =   "LstGrupo.frx":007B
-      Tab(1).ControlEnabled=   0   'False
+      Tab(1).ControlEnabled=   -1  'True
       Tab(1).ControlCount=   0
       TabCaption(2)   =   "ALUMNOS CON DESCUENTO"
       TabPicture(2)   =   "LstGrupo.frx":0097
@@ -1986,32 +1987,52 @@ Dim Curso As String
 Dim IdMail As Long
 
   DGQuery.Visible = False
-  sSQL = "UPDATE Reporte_CxC_Cuotas " _
-       & "SET E = 0 " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND CodigoU = '" & CodigoUsuario & "' "
+  If CheqConDeuda.value Then
+     sSQL = "UPDATE Reporte_CxC_Cuotas " _
+          & "SET E = 0 " _
+          & "WHERE Item = '" & NumEmpresa & "' " _
+          & "AND CodigoU = '" & CodigoUsuario & "' "
+  Else
+     sSQL = "UPDATE Clientes " _
+          & "SET FactM = 0 " _
+          & "WHERE FA <> " & Val(adFalse) & " "
+  End If
   Ejecutar_SQL_SP sSQL
   
   For IdMail = 0 To LstClientes.ListCount - 1
     If LstClientes.Selected(IdMail) Then
        NombreCliente = TrimStrg(MidStrg(LstClientes.List(IdMail), 1, 79))
-       sSQL = "UPDATE Reporte_CxC_Cuotas " _
-            & "SET E = 1 " _
-            & "WHERE Item = '" & NumEmpresa & "' " _
-            & "AND CodigoU = '" & CodigoUsuario & "' " _
-            & "AND Cliente = '" & NombreCliente & "' "
+       If CheqConDeuda.value Then
+          sSQL = "UPDATE Reporte_CxC_Cuotas " _
+               & "SET E = 1 " _
+               & "WHERE Item = '" & NumEmpresa & "' " _
+               & "AND CodigoU = '" & CodigoUsuario & "' " _
+               & "AND Cliente = '" & NombreCliente & "' "
+       Else
+          sSQL = "UPDATE Clientes " _
+               & "SET FactM = 1 " _
+               & "WHERE FA <> " & Val(adFalse) & " " _
+               & "AND Cliente LIKE '" & NombreCliente & "%' "
+       End If
        Ejecutar_SQL_SP sSQL
     End If
   Next IdMail
-  
-  sSQL = "SELECT " & ListaDeCampos & ", C.Representante, C.CI_RUC, C.Email, C.EmailR " _
-       & "FROM Reporte_CxC_Cuotas As RCC, Clientes As C " _
-       & "WHERE RCC.Item = '" & NumEmpresa & "' " _
-       & "AND RCC.CodigoU = '" & CodigoUsuario & "' " _
-       & "AND RCC.E <> 0 " _
-       & "AND RCC.Codigo = C.Codigo " _
-       & "ORDER BY RCC.GrupoNo, RCC.Cliente "
-  Select_Adodc AdoAux, sSQL, , , "Reporte_CxC_Cuotas_Clientes"
+  If CheqConDeuda.value Then
+     sSQL = "SELECT " & ListaDeCampos & ", C.Representante, C.CI_RUC, C.Email, C.EmailR " _
+          & "FROM Reporte_CxC_Cuotas As RCC, Clientes As C " _
+          & "WHERE RCC.Item = '" & NumEmpresa & "' " _
+          & "AND RCC.CodigoU = '" & CodigoUsuario & "' " _
+          & "AND RCC.E <> 0 " _
+          & "AND RCC.Codigo = C.Codigo " _
+          & "ORDER BY RCC.GrupoNo, RCC.Cliente "
+  Else
+     sSQL = "SELECT Cliente, 0 As CxC_20XX, 0 As SubTotal, 0 As Anticipos, 0 As Total, Direccion As Detalle_Grupo, Grupo As GrupoNo , Representante, CI_RUC, Email, EmailR " _
+          & "FROM Clientes " _
+          & "WHERE FA <> " & Val(adFalse) & " " _
+          & "AND FactM <> " & Val(adFalse) & " " _
+          & "ORDER BY GrupoNo, Cliente "
+  End If
+  Select_Adodc AdoAux, sSQL
   'DGQuery1.Visible = False
   TMail.ListaMail = 255
   TMail.ListaError = ""
@@ -2021,7 +2042,6 @@ Dim IdMail As Long
   
   With AdoAux.Recordset
    If .RecordCount > 0 Then
-   
        Do While Not .EOF
           NombreRepresentante = .fields("Representante")
           NombreCli = .fields("Cliente")

@@ -6,7 +6,7 @@ Begin VB.Form FEnviarCorreos
    ClientHeight    =   1200
    ClientLeft      =   0
    ClientTop       =   15
-   ClientWidth     =   9780
+   ClientWidth     =   9765
    ClipControls    =   0   'False
    ControlBox      =   0   'False
    DrawStyle       =   5  'Transparent
@@ -15,7 +15,7 @@ Begin VB.Form FEnviarCorreos
    MinButton       =   0   'False
    Picture         =   "FEnviarCorreos.frx":0000
    ScaleHeight     =   1200
-   ScaleWidth      =   9780
+   ScaleWidth      =   9765
    ShowInTaskbar   =   0   'False
    StartUpPosition =   3  'Windows Default
    Begin VB.Timer Timer1 
@@ -77,6 +77,8 @@ Dim RutaFile As String
 Dim Temp As Variant
 
 Dim Si_Enviar As Boolean
+Dim MsgAux As String
+Dim Contactos As String
 
 'Dim Parpadear As Boolean
 
@@ -84,10 +86,10 @@ Dim Si_Enviar As Boolean
 Private Sub Form_Activate()
 Dim Tiempo_Espera As Single
 Dim MiTiempo_Espera As Single
-Dim MsgAux As String
+
 Dim EMailPara As String
 Dim Emails As String
-Dim Contactos As String
+
 Dim posPuntoComa As String
 
  If Si_Enviar Then
@@ -117,7 +119,7 @@ Dim posPuntoComa As String
          If Len(RazonSocial) > 1 Then MsgAux = RazonSocial Else MsgAux = Empresa
          
          'MsgBox InStr(.Mensaje, "Este correo electrónico fue generado automáticamente del Sistema Financiero")
-         If InStr(.Mensaje, "Este correo electronico fue generado automaticamente del Sistema Financiero") = 0 Then
+         If InStr(.Mensaje, "Este correo electronico fue generado automaticamente a usted desde El Sistema Financiero") = 0 Then
            .Mensaje = .Mensaje & vbCrLf & MensajeAutomatizado
            .Mensaje = Replace(.Mensaje, "Nombre_Usuario", NombreUsuario)
            .Mensaje = Replace(.Mensaje, "Mensaje_Comunicado", ComunicadoEntidad)
@@ -154,7 +156,11 @@ Dim posPuntoComa As String
                   'MsgBox "Email: " & Email & vbCrLf & RutaXML
                   .para = EMailPara
                   'Metodo manda el mail
-                  .Enviar_Backup
+                  'MsgBox "Iguales: " & .de & " => " & EMailPara & vbCrLf & InStr(.de, EMailPara)
+                   If InStr(.de, EMailPara) = 0 Then
+                     .Enviar_Backup
+                      Control_Procesos "EM", "Email: " & .de & " => " & EMailPara, "Asunto: " & .Asunto
+                   End If
                 End If
                 Emails = MidStrg(Emails, posPuntoComa + 1, Len(Emails))
              Loop
@@ -177,21 +183,15 @@ End Sub
 
 Private Sub Form_Load()
 Dim CadAncho As String
+Dim CantCadAncho As Long
 
     RatonReloj
     CentrarForm FEnviarCorreos
     Redondear_Formulario FEnviarCorreos, 40
-    Si_Enviar = False
-    FEnviarCorreos.width = 2000 + FEnviarCorreos.TextWidth(String(Len(" Remitente: " & TMail.de & " "), "_"))
-    FEnviarCorreos.Refresh
     AnchoMaxForm = FEnviarCorreos.width
-    
-    'CadAncho = "ASUNTO: " & TMail.Asunto & "__"
-    'If AnchoMaxForm < FEnviarCorreos.TextWidth(CadAncho) Then AnchoMaxForm = FEnviarCorreos.TextWidth(CadAncho)
-    'FEnviarCorreos.width = AnchoMaxForm
-    'FEnviarCorreos.Refresh
-    Label1.width = AnchoMaxForm - Label1.Left - 200
-    
+        
+    Si_Enviar = False
+        
     Label1.Caption = "CONECTANDOSE AL SERVIDOR" & vbCrLf & vbCrLf _
                    & "DE CORREOS ELECTRONICOS"
     Label1.Refresh
@@ -213,7 +213,7 @@ Dim CadAncho As String
          & "AND LEN(smtp_Servidor) > 1 " _
          & "AND smtp_Puerto > 0 "
     Select_AdoDB AdoSMTP, sSQL
-   'MsgBox "..."
+
     With AdoSMTP
      If .RecordCount > 0 Then
          TMail.useAuntentificacion = CBool(.fields("smtp_UseAuntentificacion"))
@@ -234,6 +234,7 @@ Dim CadAncho As String
          If Email_CE_Copia Then Insertar_Mail Emails, EmailProcesos
          If TMail.de = "" And 0 <= TMail.ListaMail And TMail.ListaMail <= 6 Then TMail.de = Lista_De_Correos(TMail.ListaMail).Correo_Electronico
          TMail.de = Replace(UCase(Empresa), """", "") & " <" & TMail.de & ">"
+         
         'Si utilizamos el correo de DiskCover System
          If TMail.servidor = "mail.diskcoversystem.com" Then
             TMail.servidor = "smtp.diskcoversystem.com"
@@ -253,11 +254,45 @@ Dim CadAncho As String
      End If
     End With
     AdoSMTP.Close
+    
+   'Si enviamos mail desde el modulo de actualizacion se activa el servidor propio de DiskCover System
+    If Modulo = "UPDATE" Then
+       NombreUsuario = "Update DiskCover"
+       ComunicadoEntidad = ""
+       NombreGerente = "Walter Vaca Prieto"
+       Contactos = "09-9965-4196/09-89105300"
+       EmailProcesos = CorreoUpdate
+       MsgAux = "DISKCOVER SYSTEM"
+    
+       TMail.servidor = "smtp.diskcoversystem.com"
+       TMail.ehlo = "smtp.diskcoversystem.com"
+       TMail.ssl = False
+       TMail.tls = True
+       TMail.Usuario = "admin"
+       TMail.Password = "Admin@2023"
+       TMail.Puerto = 26
+       TMail.de = "Actualizacion de DiskCover System" & " <" & CorreoDiskCover & ">"
+    End If
+    
+    CadAncho = " Remitente: " & TMail.de & " "
+    CantCadAncho = 1300 + FEnviarCorreos.TextWidth(CadAncho)
+    
+   'MsgBox TMail.de & vbCrLf & CantCadAncho & vbCrLf & AnchoMaxForm
+    If CantCadAncho > AnchoMaxForm Then
+       Label1.width = CantCadAncho - Label1.Left - 200
+       Label1.Refresh
+       FEnviarCorreos.width = CantCadAncho
+       FEnviarCorreos.Refresh
+    End If
+    
+   'CadAncho = "ASUNTO: " & TMail.Asunto & "__"
+        
     If TMail.de <> "" And TMail.para <> "" Then
        Si_Enviar = True
     Else
        TMail.ListaError = TMail.ListaError = ". Credenciales no asignadas para el envio de Correos electronicos, solicite ayuda al Administrador del Sistema"
     End If
+    
 End Sub
 
 ' envio completo
@@ -266,8 +301,6 @@ Dim MiTiempo_Espera As Single
 Dim Tiempo_Espera As Single
     RatonNormal
    'MsgBox "Mensaje enviado", vbInformation
-    
-    Control_Procesos "M", TMail.para, TMail.Destinatario & "- Mensaje enviado Correctamente"
    'MsgBox TMail.Destinatario & "..."
     If Len(TMail.Adjunto) <= 1 Then
        MiTiempo_Espera = 0
@@ -288,8 +321,8 @@ End Sub
 Private Sub oMail_Error(Descripcion As String, Numero As Variant)
     RatonNormal
     'MsgBox Descripcion, vbCritical, Numero
-    TMail.ListaError = TMail.ListaError & "Error: Para: " & TMail.para & "(" & TMail.Destinatario & "), " & Descripcion & vbCrLf
-    Control_Procesos "M", TMail.para, TMail.Destinatario & "-" & Descripcion
+    TMail.ListaError = TMail.ListaError & "Error No. " & Numero & ": " & Descripcion & vbCrLf
+    Control_Procesos "ER", "Email: " & TMail.de & " => " & TMail.para, "Error: " & TMail.ListaError
    'Unload FEnviarCorreos
 End Sub
 

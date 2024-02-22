@@ -7,13 +7,13 @@ Begin VB.Form SetPrinters
    ClientHeight    =   3615
    ClientLeft      =   60
    ClientTop       =   450
-   ClientWidth     =   7695
+   ClientWidth     =   7470
    Icon            =   "SetPrinters.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   3615
-   ScaleWidth      =   7695
+   ScaleWidth      =   7470
    StartUpPosition =   3  'Windows Default
    Begin MSAdodcLib.Adodc AdoSetImpresora 
       Height          =   330
@@ -65,23 +65,23 @@ Begin VB.Form SetPrinters
    Begin VB.OptionButton OpcBHoriz 
       BackColor       =   &H00FFC0C0&
       Height          =   645
-      Left            =   6615
+      Left            =   6510
       Picture         =   "SetPrinters.frx":08CA
       Style           =   1  'Graphical
       TabIndex        =   8
-      Top             =   945
-      Width           =   960
+      Top             =   840
+      Width           =   750
    End
    Begin VB.OptionButton OpcBVert 
       BackColor       =   &H00FFC0C0&
-      Height          =   750
-      Left            =   6720
+      Height          =   645
+      Left            =   6615
       Picture         =   "SetPrinters.frx":100C
       Style           =   1  'Graphical
       TabIndex        =   7
       Top             =   105
       Value           =   -1  'True
-      Width           =   750
+      Width           =   540
    End
    Begin VB.TextBox TxtPapel 
       BackColor       =   &H00C0FFFF&
@@ -154,8 +154,8 @@ Begin VB.Form SetPrinters
       Picture         =   "SetPrinters.frx":174E
       Style           =   1  'Graphical
       TabIndex        =   10
-      Top             =   2520
-      Width           =   1275
+      Top             =   2415
+      Width           =   960
    End
    Begin VB.CommandButton Command1 
       BackColor       =   &H00FF8080&
@@ -174,8 +174,8 @@ Begin VB.Form SetPrinters
       Picture         =   "SetPrinters.frx":1DE4
       Style           =   1  'Graphical
       TabIndex        =   9
-      Top             =   1680
-      Width           =   1275
+      Top             =   1575
+      Width           =   960
    End
    Begin VB.ListBox ListPrinter 
       BeginProperty Font 
@@ -268,8 +268,8 @@ Private Sub Command1_Click()
    SetPapelCopia = False
    With AdoSetImpresora.Recordset
     If .RecordCount > 0 Then
-       .Fields("Impresora_Defecto") = TxtImpresora
-       .Fields("Papel_Impresora") = TxtPapel
+       .fields("Impresora_Defecto") = TxtImpresora
+       .fields("Papel_Impresora") = TxtPapel
        .Update
     End If
    End With
@@ -319,9 +319,9 @@ Private Sub Form_Activate()
     'MsgBox ListPRN.ListCount
      If ListPRN.ListCount > 0 Then
         SetPapelPRNCad = ListPRN.List(0)
-        For i = 0 To ListPRN.ListCount - 1
-            If Val(SinEspaciosIzq(ListPRN.List(i))) = 9 Then SetPapelPRNCad = ListPRN.List(i)
-        Next i
+        For I = 0 To ListPRN.ListCount - 1
+            If Val(SinEspaciosIzq(ListPRN.List(I))) = 9 Then SetPapelPRNCad = ListPRN.List(I)
+        Next I
      Else
         SetPapelPRNCad = "No Admite tipo y porte de papel"
      End If
@@ -333,9 +333,9 @@ Private Sub Form_Activate()
      If Mensajes <> "" Then Label2.Caption = Mensajes
     'Determinamos si esta organizado por default el tipo de impresora y tamaño de papel
      If AdoSetImpresora.Recordset.RecordCount > 0 Then
-        If Len(AdoSetImpresora.Recordset.Fields("Impresora_Defecto")) > 1 Then
-           ListPrinter.Text = AdoSetImpresora.Recordset.Fields("Impresora_Defecto")
-           TxtPapel = AdoSetImpresora.Recordset.Fields("Papel_Impresora")
+        If Len(AdoSetImpresora.Recordset.fields("Impresora_Defecto")) > 1 Then
+           ListPrinter.Text = AdoSetImpresora.Recordset.fields("Impresora_Defecto")
+           TxtPapel = AdoSetImpresora.Recordset.fields("Papel_Impresora")
         End If
      End If
      SetPrinters.Visible = True
@@ -368,16 +368,16 @@ Private Sub Form_Load()
  
  'Revizamos cuantas Impresoras estan instaladas y activas
   ReDim ListaDeImpresoras(Printers.Count + 1) As String
-  For i = 0 To Printers.Count - 1
-      ListaDeImpresoras(i) = Printers(i).DeviceName
-  Next i
+  For I = 0 To Printers.Count - 1
+      ListaDeImpresoras(I) = Printers(I).DeviceName
+  Next I
   ListaDeImpresoras(Printers.Count) = Impresota_PDF
   
  'llenamos las impresoras en el combobox
   ListPrinter.Clear
-  For i = 0 To UBound(ListaDeImpresoras) - 1
-      ListPrinter.AddItem ListaDeImpresoras(i)
-  Next i
+  For I = 0 To UBound(ListaDeImpresoras) - 1
+      ListPrinter.AddItem ListaDeImpresoras(I)
+  Next I
   ListPrinter.Text = Printer.DeviceName
 End Sub
 
@@ -396,9 +396,9 @@ Private Sub ListPrinter_LostFocus()
     'MsgBox ListPRN.ListCount
      If ListPRN.ListCount > 0 Then
         SetPapelPRNCad = ListPRN.List(0)
-        For i = 0 To ListPRN.ListCount - 1
-            If Val(SinEspaciosIzq(ListPRN.List(i))) = 9 Then SetPapelPRNCad = ListPRN.List(i)
-        Next i
+        For I = 0 To ListPRN.ListCount - 1
+            If Val(SinEspaciosIzq(ListPRN.List(I))) = 9 Then SetPapelPRNCad = ListPRN.List(I)
+        Next I
      Else
         SetPapelPRNCad = "No Admite tipo y porte de papele"
      End If

@@ -363,7 +363,7 @@ End Sub
 ''     SetAdoUpdate
     'MsgBox strServidor
 
-Public Sub Control_Procesos(TipoTrans As String, Tarea As String, Optional Proceso As String)
+Public Sub Control_Procesos(TipoTrans As String, Proceso As String, Optional Tarea As String, Optional Credito_No As String)
 Dim BD1MySQL As ADODB.Connection
 Dim Modulos As String
 Dim Mifecha1 As String
@@ -373,15 +373,17 @@ Dim NombreUsuario1 As String
   If NumEmpresa = "" Then NumEmpresa = Ninguno
   If TMail.Credito_No = "" Then TMail.Credito_No = Ninguno
   If Modulo <> Ninguno And TipoTrans <> Ninguno And NumEmpresa <> Ninguno Then
-     If Proceso = Ninguno Then Proceso = "Procesando..." Else Proceso = TrimStrg(MidStrg(Proceso, 1, 60))
-     If Len(Tarea) > 60 Then Tarea = TrimStrg(MidStrg(Tarea, 1, 60))
-     If Len(Tarea) > 1 Then
+     If Proceso = Ninguno Then Proceso = "Procesando..." Else Proceso = TrimStrg(MidStrg(Proceso, 1, 120))
+     Tarea = TrimStrg(MidStrg(Tarea, 1, 120))
+     If Tarea = "" Then Tarea = Ninguno
+     If Len(Proceso) > 1 Then
         If Ping_PC(strServidor) Then
            Modulos = Modulo
            NombreUsuario1 = TrimStrg(MidStrg(NombreUsuario, 1, 60))
            TipoTrans = UCaseStrg(TipoTrans)
            Mifecha1 = Format(date, "yyyy-mm-dd")
            MiHora1 = Format(Time, "hh:mm:ss")
+           If Credito_No = "" Then Credito_No = Ninguno
            
            Cadena = IP_PC.Nombre_PC & vbCrLf _
                   & IP_PC.IP_PC & vbCrLf _
@@ -392,10 +394,10 @@ Dim NombreUsuario1 As String
            For I = 0 To UBound(IP_PC.Lista_IPs)
                Cadena = Cadena & IP_PC.Lista_IPs(I) & vbCrLf
            Next I
-          'MsgBox Cadena
            sSQL = "INSERT INTO acceso_pcs (IP_Acceso,CodigoU,Item,Aplicacion,RUC,Fecha,Hora,ES,Tarea,Proceso,Credito_No,Periodo) " _
                 & "VALUES ('" & IP_PC.IP_PC & "','" & CodigoUsuario & "','" & NumEmpresa & "'," & "'" & Modulo & "','" & RUC & "','" & Mifecha1 _
-                & "','" & MiHora1 & "','" & TipoTrans & "','" & Tarea & "','" & Proceso & "','" & TMail.Credito_No & "','" & Periodo_Contable & "');"
+                & "','" & MiHora1 & "','" & TipoTrans & "','" & Tarea & "','" & Proceso & "','" & Credito_No & "','" & Periodo_Contable & "');"
+          'MsgBox Cadena & vbCrLf & vbCrLf & "CONSULTA A REALIZAR:" & vbCrLf & sSQL
            Conectar_Ado_Execute_MySQL sSQL
         End If
      End If
@@ -1570,7 +1572,7 @@ Dim ImagenIco As String
          If Len(Progreso_Barra.Mensaje_Box) > 1 Then .StaBarEmp.Panels.Item(5).Text = Progreso_Barra.Mensaje_Box Else .StaBarEmp.Panels.Item(5).Text = "Procesando..."
         
         'Actualiza estado de barra de colores
-        .ProgressBarEstado.Value = Progreso_Barra.Incremento
+        .ProgressBarEstado.value = Progreso_Barra.Incremento
         .ProgressBarEstado.Max = Progreso_Barra.Valor_Maximo
     End With
 End Sub
@@ -1605,7 +1607,7 @@ Dim Porcentaje As Long
          If .Incremento > .Valor_Maximo Then .Incremento = .Valor_Maximo
          If Procesando > 10 Then Procesando = 0
          MDIFormulario.ProgressBarEstado.Max = .Valor_Maximo
-         MDIFormulario.ProgressBarEstado.Value = .Incremento
+         MDIFormulario.ProgressBarEstado.value = .Incremento
          MDIFormulario.StaBarEmp.Refresh
          If Not NoIncrementar Then .Incremento = .Incremento + 1
          Procesando = Procesando + 1
@@ -1621,7 +1623,7 @@ Public Sub Progreso_Final()
         .StaBarEmp.Panels.Item(5).Bevel = sbrInset
         .StaBarEmp.Panels.Item(5).Picture = LoadPicture()
          Color_Fondo .ProgressBarEstado.hwnd, RGB(153, 153, 255)
-        .ProgressBarEstado.Value = 0 '.ProgressBarEstado.Max
+        .ProgressBarEstado.value = 0 '.ProgressBarEstado.Max
         .StaBarEmp.Panels.Item(5).Picture = LoadPicture(RutaSistema & "\FORMATOS\Visto.ico")
     End With
     RatonNormal
@@ -2551,11 +2553,11 @@ Public Sub SetProgBar(BarraProg As ProgressBar, _
   BarraProg.Min = 0
   If BarraProg.Min >= Maximo Then Maximo = 100
   BarraProg.Max = Maximo
-  BarraProg.Value = BarraProg.Min
+  BarraProg.value = BarraProg.Min
 End Sub
 
 Public Sub IncProgBar(BarraProg As ProgressBar)
-  If BarraProg.Value < BarraProg.Max Then BarraProg.Value = BarraProg.Value + 1
+  If BarraProg.value < BarraProg.Max Then BarraProg.value = BarraProg.value + 1
 End Sub
 
 Public Function Cambio_Letras(Num, Optional NumDecimales As Byte, Optional SinMayusc As Boolean, Optional SinSobre100 As Boolean) As String
@@ -7801,11 +7803,11 @@ Dim oSheet As Object
    
    'Add data to cells of the first worksheet in the new workbook
    Set oSheet = oBook.Worksheets(1)
-   oSheet.Range("A1").Value = "Last Name"
-   oSheet.Range("B1").Value = "First Name"
+   oSheet.Range("A1").value = "Last Name"
+   oSheet.Range("B1").value = "First Name"
    oSheet.Range("A1:B1").Font.bold = True
-   oSheet.Range("A2").Value = "Doe"
-   oSheet.Range("B2").Value = "John"
+   oSheet.Range("A2").value = "Doe"
+   oSheet.Range("B2").value = "John"
    'Save the Workbook and Quit Excel
    oBook.SaveAs PathExcel
    oExcel.Quit

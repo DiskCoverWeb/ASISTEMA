@@ -764,7 +764,6 @@ Dim FechaFinN As Integer
 Dim SiActualizar As Boolean
 
     RatonReloj
-    If strIPServidor = "mysql.diskcoversystem.com" Then strIPServidor = "db.diskcoversystem.com"
     Primera_Vez = False
     PosPicX = 5600
     PosLinea = Pict_Version.Top + 2500
@@ -925,8 +924,8 @@ Dim SiActualizar As Boolean
          ImpCeros = CBool(.fields("Imp_Ceros"))
          Email_CE_Copia = CBool(.fields("Email_CE_Copia"))
          Ret_Aut = CBool(.fields("Ret_Aut"))
+         'ConciliacionAut = CBool(.fields("Conciliacion_Aut"))
 
-         'MsgBox OpcCoop
          Debo_Pagare = MensajeDeboPagare
          If Len(RazonSocial) > 1 Then CodigoA = RazonSocial Else CodigoA = Empresa
          If .fields("Debo_Pagare") = "SI" Then Debo_Pagare = Replace(Debo_Pagare, "Razon_Social", CodigoA) Else Debo_Pagare = Ninguno
@@ -977,6 +976,7 @@ Dim SiActualizar As Boolean
                .Update
             End If
          End If
+
          If Not PCActivo Then
             Cadena = NombreUsuario & vbCrLf & "Su Equipo se encuentra en LISTA NEGRA, ingreso no autorizado, comuniquese con el Administrador del Sistema"
             MsgBox UCaseStrg(Cadena), vbCritical, "ACCESO DEL PC DENEGADO"
@@ -1024,6 +1024,7 @@ Dim SiActualizar As Boolean
    'Actualiza Datos iniciales de la Empresa
    '+++++++++++++++++++++++++++++++++++++++
     Iniciar_Datos_Default_SP
+    
    '+++++++++++++++++++++++++++++++++++++++
    'MsgBox URLToken & vbCrLf & Token
     
@@ -1057,26 +1058,6 @@ Dim SiActualizar As Boolean
     End Select
     
     RatonNormal
-    If Len(ListaFacturas) > 1 Then
-       ListaFacturas = ListaFacturas _
-                     & "COMUNIQUESE CON SERVICIO AL CLIENTE DE DISKCOVER SYSTEM A LOS TELEFONOS: 098-910-5300/098-652-4396/099-965-4196, " _
-                     & "O ENVIE UN MAIL A carteraclientes@diskcoversystem.com; CON EL COMPROBANTE DE DEPOSITO Y ASI PROCEDER A REALIZAR " _
-                     & "LA ACTUALIZACION DE LA JUSTIFICACION EN EL SISTEMA." & vbCrLf
-       MsgBox ListaFacturas
-       TMail.Usuario = CorreoDiskCover
-       TMail.Password = ContrasenaDiskCover
-       TMail.de = CorreoDiskCover
-       TMail.Mensaje = ListaFacturas
-       TMail.Adjunto = ""
-       TMail.Credito_No = ""
-       TMail.para = ""
-       Insertar_Mail TMail.para, EmailEmpresa
-       Insertar_Mail TMail.para, EmailContador
-       If Email_CE_Copia Then Insertar_Mail TMail.para, EmailProcesos
-      'Enviamos lista de mails
-       FEnviarCorreos.Show 1
-    End If
-    Control_Procesos Normal, "Ingreso a " & Empresa
     Cadena1 = ""
     If Len(NombreGerente) <= 1 Then Cadena1 = Cadena1 & "Representante Legal," & vbCrLf
     If Len(RazonSocial) <= 1 Then Cadena1 = Cadena1 & "Razon Social," & vbCrLf
@@ -1225,6 +1206,36 @@ Dim SiActualizar As Boolean
         
    'Fin de actualizacion de el log de ingresos
    'MsgBox AgenteRetencion & vbCrLf & MicroEmpresa
+   'Ver_Grafico_FormPict
+    
+    Select Case Ambiente
+      Case "1": If Not Ping_PC("celcer.sri.gob.ec") Then Cadena = Replace(ServidorEnLineaSRI, "XXXX", "Prueba") Else Cadena = ""
+      Case "2": If Not Ping_PC("cel.sri.gob.ec") Then Cadena = Replace(ServidorEnLineaSRI, "XXXX", "Produccion") Else Cadena = ""
+      Case Else: Cadena = ""
+    End Select
+    Control_Procesos Normal, "Ingreso a " & Empresa, "R.U.C. " & RUC & ", Item: " & NumEmpresa
+    
+   'If Cadena <> "" Then MsgBox UCaseStrg(Cadena)
+    If Len(ListaFacturas) > 1 Then
+       ListaFacturas = ListaFacturas _
+                     & "COMUNIQUESE CON SERVICIO AL CLIENTE DE DISKCOVER SYSTEM A LOS TELEFONOS: 098-910-5300/098-652-4396/099-965-4196, " _
+                     & "O ENVIE UN MAIL A carteraclientes@diskcoversystem.com; CON EL COMPROBANTE DE DEPOSITO Y ASI PROCEDER A REALIZAR " _
+                     & "LA ACTUALIZACION DE LA JUSTIFICACION EN EL SISTEMA." & vbCrLf
+       MsgBox ListaFacturas
+       TMail.Usuario = CorreoDiskCover
+       TMail.Password = ContrasenaDiskCover
+       TMail.de = CorreoDiskCover
+       TMail.Mensaje = ListaFacturas
+       TMail.Adjunto = ""
+       TMail.Credito_No = ""
+       TMail.para = ""
+       Insertar_Mail TMail.para, EmailEmpresa
+       Insertar_Mail TMail.para, EmailContador
+       Insertar_Mail TMail.para, CorreoDiskCover
+       If Email_CE_Copia Then Insertar_Mail TMail.para, EmailProcesos
+      'Enviamos lista de mails
+       FEnviarCorreos.Show 1
+    End If
     With TMail
         .TipoDeEnvio = ""
         .ListaMail = 0
@@ -1237,17 +1248,13 @@ Dim SiActualizar As Boolean
         .MensajeHTML = ""
         .para = ""
     End With
-   'Ver_Grafico_FormPict
     
-    Select Case Ambiente
-      Case "1": If Not Ping_PC("celcer.sri.gob.ec") Then Cadena = Replace(ServidorEnLineaSRI, "XXXX", "Prueba") Else Cadena = ""
-      Case "2": If Not Ping_PC("cel.sri.gob.ec") Then Cadena = Replace(ServidorEnLineaSRI, "XXXX", "Produccion") Else Cadena = ""
-      Case Else: Cadena = ""
-    End Select
     RatonNormal
-    If Cadena <> "" Then MsgBox UCaseStrg(Cadena)
     Unload ListEmp
-    If Evaluar Then End
+    If Evaluar Then
+       Control_Procesos "Q", "ACCESO DENEGADO A: " & Empresa, "Motivo: " & EstadoEmpresa
+       End
+    End If
 End Sub
 
 Public Function BuscarClave(Usuario As String, Clave As String) As Boolean

@@ -4131,12 +4131,12 @@ Dim Porcentaje As Single
        RutaGeneraFile = RutaSysBases & "\Auditoria\" & RutaGeneraFile & ".xls"
        If Dir(RutaGeneraFile) <> "" Then Kill RutaGeneraFile
        For NRegistro = 0 To .fields.Count - 1
-           oSheet.Range(Chr(65 + NRegistro) & "1").Value = .fields(NRegistro).Name
+           oSheet.Range(Chr(65 + NRegistro) & "1").value = .fields(NRegistro).Name
        Next NRegistro
        Do While Not .EOF
           Contador = Contador + 1
           For NRegistro = 0 To .fields.Count - 1
-              oSheet.Range(Chr(65 + NRegistro) & CStr(Contador)).Value = CStr(.fields(NRegistro))
+              oSheet.Range(Chr(65 + NRegistro) & CStr(Contador)).value = CStr(.fields(NRegistro))
           Next NRegistro
           Porcentaje = Contador / .RecordCount
           Progreso_Esperar
@@ -4183,12 +4183,12 @@ Dim Porcentaje As Single
        RutaGeneraFile = RutaSysBases & "\Auditoria\" & RutaGeneraFile & ".xls"
        If Dir(RutaGeneraFile) <> "" Then Kill RutaGeneraFile
        For NRegistro = 0 To .fields.Count - 1
-           oSheet.Range(Chr(65 + NRegistro) & "1").Value = .fields(NRegistro).Name
+           oSheet.Range(Chr(65 + NRegistro) & "1").value = .fields(NRegistro).Name
        Next NRegistro
        Do While Not .EOF
           Contador = Contador + 1
           For NRegistro = 0 To .fields.Count - 1
-              oSheet.Range(Chr(65 + NRegistro) & CStr(Contador)).Value = CStr(.fields(NRegistro))
+              oSheet.Range(Chr(65 + NRegistro) & CStr(Contador)).value = CStr(.fields(NRegistro))
           Next NRegistro
           Porcentaje = Contador / .RecordCount
           Progreso_Esperar
