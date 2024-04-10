@@ -3296,6 +3296,7 @@ Dim AdoRetAut As ADODB.Recordset
           Factura_No = .fields("Factura")
           Fecha_Vence = .fields("FECHA_V")
           Cta_Cobrar = TrimStrg(.fields("Cta"))
+          If Len(SerieFactura) < 6 Then SerieFactura = "001001"
           If Valor <> 0 Or Valor_ME <> 0 Then
              SetAdoAddNew "Trans_SubCtas"
              SetAdoFields "T", C1.T
@@ -3309,6 +3310,7 @@ Dim AdoRetAut As ADODB.Recordset
              SetAdoFields "Fecha_V", Fecha_Vence
              SetAdoFields "Serie", SerieFactura
              SetAdoFields "Factura", Factura_No
+             SetAdoFields "Fecha_E", .fields("FECHA_E")
              SetAdoFields "Detalle_SubCta", .fields("Detalle_SubCta")
              SetAdoFields "Prima", .fields("Prima")
              If OpcDH = 1 Then
@@ -7040,7 +7042,7 @@ Public Sub Imprimir_Saldos_SubCtas_Vence(Datas As Adodc, _
 SizeLetra = 6
 Mensajes = "Seguro de Imprimir en:" & vbCrLf & Printer.DeviceName & "?"
 Titulo = "IMPRESION"
-Bandera = False
+Bandera = True
 If Vertical Then Orientacion_Pagina = 1 Else Orientacion_Pagina = 2
 SetPrinters.Show 1
 If PonImpresoraDefecto(SetNombrePRN) Then
@@ -7048,94 +7050,166 @@ RatonReloj
 InicioX = 1: InicioY = 0
 Saldo = 0: Saldo_ME = 0: Valor = 0
 Total = 0: Total_ME = 0: Valor_ME = 0
+Debe = 0: Haber = 0
+Debitos = 0: Creditos = 0
+Ln_No = 1
 DataAnchoCampos InicioX, Datas, 6, TipoVerdana, FormaImp, True
 Ancho(0) = 0.5    'Cuenta
-Ancho(1) = 4      'Cliente
-Ancho(2) = 8.3    'Telefono
-Ancho(3) = 9.8    'Factura
-Ancho(4) = 11.2   'TP
-Ancho(5) = 11.65   'Numero
-Ancho(6) = 12.9     'Fecha
-Ancho(7) = 14.3   'Fecha_V
+Ancho(1) = 0.7   'Cliente
+Ancho(2) = 6.7    'Telefono
+Ancho(3) = 8.2    'Serie-Factura
+Ancho(4) = 10.6   'TP
+Ancho(5) = 11.1   'Numero
+Ancho(6) = 12.4   'Fecha
+Ancho(7) = 13.9   'Fecha_V
 If Vertical Then
-   Ancho(8) = 15.7   'Total
-   Ancho(9) = 17.2     'Abonos
-   Ancho(10) = 18.7  'Saldo
+   Ancho(8) = 15.4   'Total
+   Ancho(9) = 17     'Abonos
+   Ancho(10) = 18.6  'Saldo
    Ancho(11) = 20.2  '
    CantCampos = 11
 Else
-   Ancho(8) = 15.7  'Beneficiario
-   Ancho(9) = 24  'Total
-   Ancho(10) = 25.5  'Abonos
-   Ancho(11) = 27  'Saldo
-   Ancho(12) = 28.5 '
+   Ancho(8) = 15.7   'Beneficiario
+   Ancho(9) = 23.7   'Total
+   Ancho(10) = 25.3  'Abonos
+   Ancho(11) = 26.9  'Saldo
+   Ancho(12) = 28.5  '
    CantCampos = 12
 End If
 Pagina = 1
 'Iniciamos la impresion
 Printer.FontBold = False
-With Datas.Recordset
- If .RecordCount > 0 Then
+ With Datas.Recordset
+  If .RecordCount > 0 Then
+      Progreso_Barra.Mensaje_Box = "Imprimiendo/Generando Reporte"
+      Progreso_Iniciar
+      Progreso_Barra.Valor_Maximo = .RecordCount
+ 
      .MoveFirst
       Encabezado_SubCta_Venc Vertical
-      Debe = 0: Haber = 0
-      Debe_ME = 0: Haber_ME = 0
-      Total = 0: Saldo = 0
-      Total_ME = 0: Saldo_ME = 0
-      Cuenta = .fields("Cuenta")
+      Cuenta = UCaseStrg(.fields("Cuenta"))
+      SubCta = ULCase(.fields("Cliente"))
       Si_No = True
       Printer.FontName = TipoVerdana
       Printer.FontItalic = False
       Printer.FontBold = False
       Printer.FontSize = SizeLetra
-      PrinterTexto Ancho(0), PosLinea, Cuenta
+      PrinterTexto Ancho(0), PosLinea, Cuenta & ":"
+      PosLinea = PosLinea + 0.3
+      Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
+      PosLinea = PosLinea + 0.1
       Do While Not .EOF
-         If Cuenta <> .fields("Cuenta") And NivelB Then
-            PosLinea = PosLinea + 0.05
+         If Cuenta <> UCaseStrg(.fields("Cuenta")) And NivelB Then
+            PosLinea = PosLinea + 0.1
             Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
             PosLinea = PosLinea + 0.05
             If Vertical Then
-               PrinterVariables Ancho(5), PosLinea, "SUBTOTAL"
-               PrinterVariables Ancho(6), PosLinea, Debe
-               PrinterVariables Ancho(7), PosLinea, Debe - Haber
-               PrinterVariables Ancho(8), PosLinea, Haber
+               PrinterVariables Ancho(2), PosLinea, "Subtotal de " & SubCta
+               PrinterVariables Ancho(8), PosLinea, Debitos
+               PrinterVariables Ancho(9), PosLinea, Debitos - Creditos
+               PrinterVariables Ancho(10), PosLinea, Creditos
             Else
-               PrinterVariables Ancho(6), PosLinea, "SUBTOTAL"
-               PrinterVariables Ancho(7), PosLinea, Debe
-               PrinterVariables Ancho(8), PosLinea, Debe - Haber
-               PrinterVariables Ancho(9), PosLinea, Haber
+               PrinterVariables Ancho(1), PosLinea, "SUBTOTAL"
+               PrinterVariables Ancho(8), PosLinea, Debitos
+               PrinterVariables Ancho(9), PosLinea, Debitos - Creditos
+               PrinterVariables Ancho(10), PosLinea, Creditos
             End If
-            PosLinea = PosLinea + 0.5
+            PosLinea = PosLinea + 0.4
+            
+            'PosLinea = PosLinea + 0.1
+            'Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
+            'PosLinea = PosLinea + 0.1
+            If Vertical Then
+               PrinterVariables Ancho(2), PosLinea, "SUBTOTAL " & Cuenta
+               PrinterVariables Ancho(8), PosLinea, Debe
+               PrinterVariables Ancho(9), PosLinea, Debe - Haber
+               PrinterVariables Ancho(10), PosLinea, Haber
+            Else
+               PrinterVariables Ancho(7), PosLinea, "SUBTOTAL"
+               PrinterVariables Ancho(8), PosLinea, Debe
+               PrinterVariables Ancho(9), PosLinea, Debe - Haber
+               PrinterVariables Ancho(10), PosLinea, Haber
+            End If
+            PosLinea = PosLinea + 0.4
             Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
-            PosLinea = PosLinea + 0.1
+            PosLinea = PosLinea + 0.05
             Debe = 0: Haber = 0
+            Debitos = 0: Creditos = 0
             Debe_ME = 0: Haber_ME = 0
-            Cuenta = .fields("Cuenta")
+            Cuenta = UCaseStrg(.fields("Cuenta"))
+            SubCta = ULCase(.fields("Cliente"))
             Si_No = True
-            PrinterTexto Ancho(0), PosLinea, Cuenta
+            PrinterTexto Ancho(0), PosLinea, Cuenta & ":"
+            PosLinea = PosLinea + 0.3
+            Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
+            PosLinea = PosLinea + 0.05
+            Bandera = True
+            Ln_No = 1
          End If
-         PrinterTexto Ancho(1), PosLinea, ULCase(.fields(1))
+         If SubCta <> ULCase(.fields("Cliente")) Then
+            PosLinea = PosLinea + 0.1
+            Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
+            PosLinea = PosLinea + 0.05
+            If Vertical Then
+               PrinterVariables Ancho(2), PosLinea, "Subtotal de " & SubCta
+               PrinterVariables Ancho(8), PosLinea, Debitos
+               PrinterVariables Ancho(9), PosLinea, Debitos - Creditos
+               PrinterVariables Ancho(10), PosLinea, Creditos
+            Else
+               PrinterVariables Ancho(1), PosLinea, "SUBTOTAL"
+               PrinterVariables Ancho(8), PosLinea, Debitos
+               PrinterVariables Ancho(9), PosLinea, Debitos - Creditos
+               PrinterVariables Ancho(10), PosLinea, Creditos
+            End If
+            Debitos = 0: Creditos = 0
+            Cuenta = UCaseStrg(.fields("Cuenta"))
+            SubCta = ULCase(.fields("Cliente"))
+            PosLinea = PosLinea + 0.4
+            Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
+            PosLinea = PosLinea + 0.05
+            Bandera = True
+            Ln_No = 1
+         End If
+         
+         'PrinterTexto Ancho(1), PosLinea, ULCase(.fields(1))
+         If Bandera Then
+            PrinterTexto Ancho(1), PosLinea, ULCase(SubCta)
+            Bandera = False
+         End If
+         
+         'PrinterTexto Ancho(2) - 0.5, PosLinea, Format(Ln_No, "00")
+
          PrinterFields Ancho(2), PosLinea, .fields(2), True
-         PrinterFields Ancho(3), PosLinea, .fields(3), True
-         PrinterFields Ancho(4), PosLinea, .fields(4), True
-         PrinterFields Ancho(5), PosLinea, .fields(5), True
-         PrinterFields Ancho(6), PosLinea, .fields(6), True
-         PrinterFields Ancho(7), PosLinea, .fields(7), True
+         PrinterTexto Ancho(3), PosLinea, .fields(3) & "-" & Format(.fields(4), "000000000")
+         PrinterFields Ancho(4), PosLinea, .fields(5), True
+         PrinterTexto Ancho(5), PosLinea, Format(.fields(6), "00000000")
+         PrinterFields Ancho(6), PosLinea, .fields(7), True
+         PrinterFields Ancho(7), PosLinea, .fields(8), True
          If Vertical Then
-            PrinterFields Ancho(8), PosLinea, .fields(8), True
-            PrinterFields Ancho(9), PosLinea, .fields(9), True
-            PrinterFields Ancho(10), PosLinea, .fields(10), True
+            PrinterFields Ancho(8), PosLinea, .fields(9), True
+            PrinterFields Ancho(9), PosLinea, .fields(10), True
+            PrinterFields Ancho(10), PosLinea, .fields(11), True
          Else
-            PrinterFields Ancho(8), PosLinea, .fields(8), True
-            PrinterFields Ancho(9), PosLinea, .fields(9), True
-            PrinterFields Ancho(10), PosLinea, .fields(10), True
-            PrinterFields Ancho(11), PosLinea, .fields(11), True
+            PrinterFields Ancho(8), PosLinea, .fields(9), True
+            PrinterFields Ancho(9), PosLinea, .fields(10), True
+            PrinterFields Ancho(10), PosLinea, .fields(11), True
+            PrinterFields Ancho(11), PosLinea, .fields(12), True
          End If
-         For I = 1 To CantCampos
-             Printer.Line (Ancho(I), PosLinea - 0.1)-(Ancho(I), PosLinea + 0.3), Negro
-         Next I
          PosLinea = PosLinea + 0.3
-         If PosLinea > LimiteAlto Then
+         For I = 0 To CantCampos
+             If I <> 1 Then Printer.Line (Ancho(I), PosLinea - 0.3)-(Ancho(I), PosLinea), Negro
+         Next I
+        'Total
+         Total = Total + .fields("Total")
+         Saldo = Saldo + .fields("Saldo")
+        'SubTotal
+         Debe = Debe + .fields("Total")
+         Haber = Haber + .fields("Saldo")
+        'SubTotal SubModulo
+         Debitos = Debitos + .fields("Total")
+         Creditos = Creditos + .fields("Saldo")
+         Ln_No = Ln_No + 1
+         If PosLinea >= (LimiteAlto - 0.3) Then
             Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
             Printer.NewPage
             Encabezado_SubCta_Venc Vertical
@@ -7143,56 +7217,64 @@ With Datas.Recordset
             Printer.FontItalic = False
             Printer.FontBold = False
             Printer.FontSize = SizeLetra
-            PrinterTexto Ancho(0), PosLinea, Cuenta
+            PrinterTexto Ancho(0), PosLinea, Cuenta & ":"
+            PosLinea = PosLinea + 0.3
+            Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
+            PosLinea = PosLinea + 0.05
+            Bandera = True
          End If
-        'Total
-         Total = Total + .fields("Total")
-         Saldo = Saldo + .fields("Saldo")
-        'SubTotal
-         Debe = Debe + .fields("Total")
-         Haber = Haber + .fields("Saldo")
+         Progreso_Barra.Mensaje_Box = "Progreso => " & Cuenta & ": " & SubCta
+         Progreso_Esperar
         .MoveNext
       Loop
      .MoveFirst
  End If
 End With
 If NivelB Then
+   PosLinea = PosLinea + 0.1
+   Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
    PosLinea = PosLinea + 0.05
+   PrinterVariables Ancho(2), PosLinea, "Subtotal de " & SubCta
+   PrinterVariables Ancho(8), PosLinea, Debitos
+   PrinterVariables Ancho(9), PosLinea, Debitos - Creditos
+   PrinterVariables Ancho(10), PosLinea, Creditos
+   PosLinea = PosLinea + 0.4
    Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
    PosLinea = PosLinea + 0.05
    If Vertical Then
-      PrinterVariables Ancho(5), PosLinea, "SUBTOTAL"
-      PrinterVariables Ancho(6), PosLinea, Debe
-      PrinterVariables Ancho(7), PosLinea, Debe - Haber
-      PrinterVariables Ancho(8), PosLinea, Haber
+      PrinterVariables Ancho(2), PosLinea, "SUBTOTAL " & Cuenta
+      PrinterVariables Ancho(8), PosLinea, Debe
+      PrinterVariables Ancho(9), PosLinea, Debe - Haber
+      PrinterVariables Ancho(10), PosLinea, Haber
    Else
-      PrinterVariables Ancho(6), PosLinea, "SUBTOTAL"
-      PrinterVariables Ancho(7), PosLinea, Debe
-      PrinterVariables Ancho(8), PosLinea, Debe - Haber
-      PrinterVariables Ancho(9), PosLinea, Haber
+      PrinterVariables Ancho(7), PosLinea, "SUBTOTAL"
+      PrinterVariables Ancho(8), PosLinea, Debe
+      PrinterVariables Ancho(9), PosLinea, Debe - Haber
+      PrinterVariables Ancho(10), PosLinea, Haber
    End If
-   PosLinea = PosLinea + 0.5
+   PosLinea = PosLinea + 0.4
    Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
    PosLinea = PosLinea + 0.05
 End If
 Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
-PosLinea = PosLinea + 0.05
+PosLinea = PosLinea + 0.1
 If Vertical Then
-   PrinterVariables Ancho(5), PosLinea, "T O T A L"
-   PrinterVariables Ancho(6), PosLinea, Total
-   PrinterVariables Ancho(7), PosLinea, Total - Saldo
-   PrinterVariables Ancho(8), PosLinea, Saldo
+   PrinterVariables Ancho(7), PosLinea, "T O T A L"
+   PrinterVariables Ancho(8), PosLinea, Total
+   PrinterVariables Ancho(9), PosLinea, Total - Saldo
+   PrinterVariables Ancho(10), PosLinea, Saldo
 Else
    PrinterVariables Ancho(6), PosLinea, "T O T A L"
    PrinterVariables Ancho(7), PosLinea, Total
    PrinterVariables Ancho(8), PosLinea, Total - Saldo
    PrinterVariables Ancho(9), PosLinea, Saldo
 End If
-PosLinea = PosLinea + 0.4
-Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
-PosLinea = PosLinea + 0.05
-Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
+'PosLinea = PosLinea + 0.4
+'Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
+'PosLinea = PosLinea + 0.05
+'Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
 RatonNormal
+Progreso_Final
 MensajeEncabData = ""
 Printer.EndDoc
 Exit Sub

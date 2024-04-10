@@ -8,7 +8,7 @@ Begin VB.Form FComprasAT
    BackColor       =   &H00FFC0C0&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "COMPRAS"
-   ClientHeight    =   7650
+   ClientHeight    =   8580
    ClientLeft      =   30
    ClientTop       =   420
    ClientWidth     =   12060
@@ -18,7 +18,7 @@ Begin VB.Form FComprasAT
    MaxButton       =   0   'False
    MinButton       =   0   'False
    Moveable        =   0   'False
-   ScaleHeight     =   7650
+   ScaleHeight     =   8580
    ScaleWidth      =   12060
    Begin VB.CommandButton CmdCerrar 
       BackColor       =   &H00FF8080&
@@ -127,13 +127,13 @@ Begin VB.Form FComprasAT
       Width           =   1065
    End
    Begin TabDlg.SSTab SSTCompras 
-      Height          =   5715
+      Height          =   6555
       Left            =   105
       TabIndex        =   8
       Top             =   1890
       Width           =   11850
       _ExtentX        =   20902
-      _ExtentY        =   10081
+      _ExtentY        =   11562
       _Version        =   393216
       TabHeight       =   420
       BackColor       =   16761024
@@ -173,12 +173,12 @@ Begin VB.Form FComprasAT
       TabCaption(1)   =   "Conceptos AIR"
       TabPicture(1)   =   "FComprasAT.frx":0E3B
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "FrmPagoExterior"
-      Tab(1).Control(1)=   "CFormaPago"
-      Tab(1).Control(2)=   "Frame2"
-      Tab(1).Control(3)=   "DCTipoPago"
-      Tab(1).Control(4)=   "Label41"
-      Tab(1).Control(5)=   "Label44"
+      Tab(1).Control(0)=   "Label44"
+      Tab(1).Control(1)=   "Label41"
+      Tab(1).Control(2)=   "DCTipoPago"
+      Tab(1).Control(3)=   "Frame2"
+      Tab(1).Control(4)=   "CFormaPago"
+      Tab(1).Control(5)=   "FrmPagoExterior"
       Tab(1).ControlCount=   6
       TabCaption(2)   =   "Partidos Políticos"
       TabPicture(2)   =   "FComprasAT.frx":0E57
@@ -191,7 +191,7 @@ Begin VB.Form FComprasAT
          TabIndex        =   75
          Top             =   735
          Visible         =   0   'False
-         Width           =   10095
+         Width           =   11565
          Begin VB.Frame Frame3 
             BorderStyle     =   0  'None
             BeginProperty Font 
@@ -203,10 +203,10 @@ Begin VB.Form FComprasAT
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Height          =   435
-            Left            =   8610
+            Height          =   330
+            Left            =   10080
             TabIndex        =   79
-            Top             =   105
+            Top             =   210
             Width           =   1380
             Begin VB.OptionButton OpcSiAplicaDoble 
                Caption         =   "SI"
@@ -214,7 +214,7 @@ Begin VB.Form FComprasAT
                Left            =   105
                Style           =   1  'Graphical
                TabIndex        =   80
-               Top             =   210
+               Top             =   105
                Value           =   -1  'True
                Width           =   540
             End
@@ -224,7 +224,7 @@ Begin VB.Form FComprasAT
                Left            =   735
                Style           =   1  'Graphical
                TabIndex        =   81
-               Top             =   210
+               Top             =   105
                Width           =   540
             End
          End
@@ -240,7 +240,7 @@ Begin VB.Form FComprasAT
                Strikethrough   =   0   'False
             EndProperty
             Height          =   330
-            Left            =   8610
+            Left            =   10080
             TabIndex        =   83
             Top             =   525
             Width           =   1380
@@ -271,8 +271,8 @@ Begin VB.Form FComprasAT
             Left            =   105
             TabIndex        =   77
             Top             =   525
-            Width           =   4110
-            _ExtentX        =   7250
+            Width           =   5370
+            _ExtentX        =   9472
             _ExtentY        =   556
             _Version        =   393216
             Text            =   "DataCombo1"
@@ -302,12 +302,12 @@ Begin VB.Form FComprasAT
             Left            =   105
             TabIndex        =   76
             Top             =   210
-            Width           =   4110
+            Width           =   5370
          End
          Begin VB.Label Label42 
             Caption         =   "Aplica convenio de doble tributación?"
             Height          =   225
-            Left            =   4410
+            Left            =   5880
             TabIndex        =   78
             Top             =   315
             Width           =   4005
@@ -315,7 +315,7 @@ Begin VB.Form FComprasAT
          Begin VB.Label Label43 
             Caption         =   "Pago Sujeto a retención en aplicación de la forma legal?"
             Height          =   225
-            Left            =   4410
+            Left            =   5880
             TabIndex        =   82
             Top             =   630
             Width           =   4005
@@ -327,18 +327,18 @@ Begin VB.Form FComprasAT
          TabIndex        =   72
          Text            =   "Combo1"
          Top             =   420
-         Width           =   1485
+         Width           =   1800
       End
       Begin VB.CommandButton CmdAir 
          Caption         =   "&AIR"
-         Height          =   975
-         Left            =   10710
+         Height          =   765
+         Left            =   10920
          Picture         =   "FComprasAT.frx":0E89
          Style           =   1  'Graphical
          TabIndex        =   70
          ToolTipText     =   "Se ubica en la pestaña de Retenciones"
          Top             =   420
-         Width           =   975
+         Width           =   765
       End
       Begin VB.Frame Frame8 
          Caption         =   "SOLO PARTIDOS POLITICOS"
@@ -1400,11 +1400,11 @@ Begin VB.Form FComprasAT
             Strikethrough   =   0   'False
          EndProperty
          ForeColor       =   &H00800000&
-         Height          =   3795
+         Height          =   4320
          Left            =   -74892
          TabIndex        =   86
          Top             =   1785
-         Width           =   10095
+         Width           =   11565
          Begin MSDataListLib.DataCombo DCRetFuente 
             Bindings        =   "FComprasAT.frx":1F19
             DataSource      =   "AdoRetFuente"
@@ -1413,8 +1413,8 @@ Begin VB.Form FComprasAT
             TabIndex        =   88
             Top             =   315
             Visible         =   0   'False
-            Width           =   7575
-            _ExtentX        =   13361
+            Width           =   9045
+            _ExtentX        =   15954
             _ExtentY        =   556
             _Version        =   393216
             Text            =   ""
@@ -1449,18 +1449,18 @@ Begin VB.Form FComprasAT
          Begin VB.TextBox TxtValConA 
             Enabled         =   0   'False
             Height          =   336
-            Left            =   8715
+            Left            =   10185
             TabIndex        =   105
-            Top             =   1470
+            Top             =   1995
             Width           =   1275
          End
          Begin VB.TextBox TxtPorRetConA 
             Alignment       =   1  'Right Justify
             Enabled         =   0   'False
             Height          =   336
-            Left            =   8085
+            Left            =   9555
             TabIndex        =   103
-            Top             =   1470
+            Top             =   1995
             Width           =   645
          End
          Begin VB.TextBox TxtTotalReten 
@@ -1476,11 +1476,11 @@ Begin VB.Form FComprasAT
                Strikethrough   =   0   'False
             EndProperty
             Height          =   336
-            Left            =   8400
+            Left            =   9870
             TabIndex        =   108
             Text            =   "0.00"
             ToolTipText     =   "Sumatoria total de las retenciones"
-            Top             =   3360
+            Top             =   3885
             Width           =   1590
          End
          Begin VB.TextBox TxtSumatoria 
@@ -1496,7 +1496,7 @@ Begin VB.Form FComprasAT
                Strikethrough   =   0   'False
             EndProperty
             Height          =   336
-            Left            =   8085
+            Left            =   9555
             MultiLine       =   -1  'True
             TabIndex        =   97
             Text            =   "FComprasAT.frx":1F34
@@ -1506,9 +1506,9 @@ Begin VB.Form FComprasAT
          Begin VB.TextBox TxtBimpConA 
             Alignment       =   1  'Right Justify
             Height          =   336
-            Left            =   6720
+            Left            =   8190
             TabIndex        =   101
-            Top             =   1470
+            Top             =   1995
             Width           =   1380
          End
          Begin VB.TextBox TxtNumUnoAutComRet 
@@ -1519,7 +1519,7 @@ Begin VB.Form FComprasAT
             TabIndex        =   95
             ToolTipText     =   $"FComprasAT.frx":1F3B
             Top             =   840
-            Width           =   4215
+            Width           =   5580
          End
          Begin VB.TextBox TxtNumTresComRet 
             Height          =   336
@@ -1555,11 +1555,11 @@ Begin VB.Form FComprasAT
             Bindings        =   "FComprasAT.frx":2069
             DataSource      =   "AdoConceptoRet"
             Height          =   345
-            Left            =   105
+            Left            =   1470
             TabIndex        =   99
-            Top             =   1470
-            Width           =   6630
-            _ExtentX        =   11695
+            Top             =   1260
+            Width           =   9990
+            _ExtentX        =   17621
             _ExtentY        =   609
             _Version        =   393216
             Text            =   ""
@@ -1578,9 +1578,9 @@ Begin VB.Form FComprasAT
             Height          =   1380
             Left            =   105
             TabIndex        =   106
-            Top             =   1890
-            Width           =   9885
-            _ExtentX        =   17436
+            Top             =   2415
+            Width           =   11355
+            _ExtentX        =   20029
             _ExtentY        =   2434
             _Version        =   393216
             AllowUpdate     =   0   'False
@@ -1640,6 +1640,17 @@ Begin VB.Form FComprasAT
                EndProperty
             EndProperty
          End
+         Begin VB.Label LblCodRet 
+            BackColor       =   &H00FF0000&
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   "Codigo Retencion"
+            ForeColor       =   &H00FFFFFF&
+            Height          =   645
+            Left            =   105
+            TabIndex        =   120
+            Top             =   1680
+            Width           =   7995
+         End
          Begin VB.Label Label36 
             BorderStyle     =   1  'Fixed Single
             Caption         =   " Total Retenciones"
@@ -1653,9 +1664,9 @@ Begin VB.Form FComprasAT
                Strikethrough   =   0   'False
             EndProperty
             Height          =   330
-            Left            =   6615
+            Left            =   8085
             TabIndex        =   107
-            Top             =   3360
+            Top             =   3885
             Width           =   1800
          End
          Begin VB.Label Label35 
@@ -1670,10 +1681,10 @@ Begin VB.Form FComprasAT
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Height          =   225
-            Left            =   8715
+            Height          =   330
+            Left            =   10185
             TabIndex        =   104
-            Top             =   1260
+            Top             =   1680
             Width           =   1275
          End
          Begin VB.Label Label34 
@@ -1688,10 +1699,10 @@ Begin VB.Form FComprasAT
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Height          =   225
-            Left            =   8085
+            Height          =   330
+            Left            =   9555
             TabIndex        =   102
-            Top             =   1260
+            Top             =   1680
             Width           =   645
          End
          Begin VB.Label Label33 
@@ -1706,15 +1717,15 @@ Begin VB.Form FComprasAT
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Height          =   225
-            Left            =   6720
+            Height          =   330
+            Left            =   8190
             TabIndex        =   100
-            Top             =   1260
+            Top             =   1680
             Width           =   1380
          End
          Begin VB.Label Label32 
             BorderStyle     =   1  'Fixed Single
-            Caption         =   " CODIGO DE RETENCION"
+            Caption         =   " CODIGO RET."
             BeginProperty Font 
                Name            =   "MS Sans Serif"
                Size            =   8.25
@@ -1724,11 +1735,11 @@ Begin VB.Form FComprasAT
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Height          =   225
+            Height          =   330
             Left            =   105
             TabIndex        =   98
             Top             =   1260
-            Width           =   6630
+            Width           =   1380
          End
          Begin VB.Label Label31 
             BorderStyle     =   1  'Fixed Single
@@ -1743,7 +1754,7 @@ Begin VB.Form FComprasAT
                Strikethrough   =   0   'False
             EndProperty
             Height          =   330
-            Left            =   6720
+            Left            =   8190
             TabIndex        =   96
             Top             =   735
             Width           =   1380
@@ -1764,7 +1775,7 @@ Begin VB.Form FComprasAT
             Left            =   2415
             TabIndex        =   94
             Top             =   630
-            Width           =   4215
+            Width           =   5580
          End
          Begin VB.Label Label29 
             BorderStyle     =   1  'Fixed Single
@@ -1811,8 +1822,8 @@ Begin VB.Form FComprasAT
          TabIndex        =   13
          ToolTipText     =   "En este campo de selección se despliega un lista de tipos de sustentos tributarios correspondientes a la transacción escogida"
          Top             =   1050
-         Width           =   10515
-         _ExtentX        =   18547
+         Width           =   10725
+         _ExtentX        =   18918
          _ExtentY        =   635
          _Version        =   393216
          Text            =   ""
@@ -1830,11 +1841,11 @@ Begin VB.Form FComprasAT
          Bindings        =   "FComprasAT.frx":20BC
          DataSource      =   "AdoTipoPago"
          Height          =   315
-         Left            =   -70275
+         Left            =   -69960
          TabIndex        =   74
          Top             =   420
-         Width           =   5475
-         _ExtentX        =   9657
+         Width           =   6630
+         _ExtentX        =   11695
          _ExtentY        =   556
          _Version        =   393216
          Text            =   ""
@@ -1861,7 +1872,7 @@ Begin VB.Form FComprasAT
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   -71850
+         Left            =   -71535
          TabIndex        =   73
          Top             =   420
          Width           =   1590
@@ -1917,7 +1928,7 @@ Begin VB.Form FComprasAT
          Left            =   105
          TabIndex        =   12
          Top             =   840
-         Width           =   10410
+         Width           =   10725
       End
    End
    Begin MSAdodcLib.Adodc AdoSustento 
@@ -2903,6 +2914,7 @@ End Sub
 
 Private Sub CmdAir_Click()
   'Carga los conceptos de Retencion segun la fecha de Registro
+   If Len(MBFechaEmi) < 10 Then MBFechaEmi = FechaSistema
    sSQL = "SELECT (Codigo & ' - ' & Concepto) As Detalle_Conceptos,* " _
        & "FROM Tipo_Concepto_Retencion " _
        & "WHERE Codigo <> '.' " _
@@ -3066,6 +3078,7 @@ Private Sub DCConceptoRet_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub DCConceptoRet_LostFocus()
+    LblCodRet.Caption = ""
     OP = False
     If IsNumeric(DCConceptoRet.Text) Then
        MsgBox "No ingrese números. Vuelva a seleccionar.", vbInformation, "Aviso"
@@ -3076,6 +3089,7 @@ Private Sub DCConceptoRet_LostFocus()
            .MoveFirst
            .Find ("Codigo = '" & SinEspaciosIzq(DCConceptoRet) & "' ")
             If Not .EOF Then
+               LblCodRet.Caption = .fields("Codigo") & ": " & .fields("Concepto")
                TxtPorRetConA = .fields("Porcentaje")
                If .fields("Ingresar_Porcentaje") = "S" Then OP = True
               'MsgBox .Fields("Porcentaje")
@@ -3104,6 +3118,33 @@ End Sub
 
 Private Sub DCPorcenIva_KeyDown(KeyCode As Integer, Shift As Integer)
     PresionoEnter KeyCode
+End Sub
+
+Private Sub DCPorcenIva_LostFocus()
+    If Not IsNumeric(DCPorcenIva) Then
+       MsgBox "No ingrese caracteres. Vuelva a seleccionar.", vbInformation, "Aviso"
+       DCPorcenIva = ""
+       'Carga_PorcentajeIva (MBFechaRegis)
+       DCPorcenIva.SetFocus
+    Else
+       'Busca y captura el codigo de Porcentaje IVA
+       PorIva = DCPorcenIva.Text
+       Label13.Caption = " TARIFA " & DCPorcenIva.Text & "%"
+       CodPorIva = "0"
+       With AdoPorIva.Recordset
+        If .RecordCount > 0 Then
+           .MoveFirst
+           .Find ("Porc = '" & PorIva & "' ")
+            If Not .EOF Then CodPorIva = .fields("Codigo")
+        End If
+       End With
+
+       Total_IVA = 0
+       Total_IVA = CTNumero(TxtBaseImpoGrav, 2)
+      'Calcula el Porcentaje de Iva
+       CalmIva = (Total_IVA * DCPorcenIva) / 100
+       TxtMontoIva = CalmIva
+    End If
 End Sub
 
 Private Sub DCRetFuente_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -3422,32 +3463,6 @@ Private Sub DCPorcenIce_LostFocus()
           TxtIvaSerMonIva = TxtMontoIva
           TxtIvaBienMonIva = 0
        End If
-    End If
-End Sub
-
-Private Sub DCPorcenIva_LostFocus()
-    If Not IsNumeric(DCPorcenIva) Then
-       MsgBox "No ingrese caracteres. Vuelva a seleccionar.", vbInformation, "Aviso"
-       DCPorcenIva = ""
-       'Carga_PorcentajeIva (MBFechaRegis)
-       DCPorcenIva.SetFocus
-    Else
-       'Busca y captura el codigo de Porcentaje IVA
-       PorIva = SinEspaciosDer(DCPorcenIva.Text)
-       Label13.Caption = " TARIFA " & DCPorcenIva.Text & "%"
-       CodPorIva = "0"
-       With AdoPorIva.Recordset
-        If .RecordCount > 0 Then
-           .MoveFirst
-           .Find ("Porc = '" & PorIva & "' ")
-            If Not .EOF Then CodPorIva = .fields("Codigo")
-        End If
-       End With
-       Total_IVA = 0
-       Total_IVA = CTNumero(TxtBaseImpoGrav, 2)
-      'Calcula el Porcentaje de Iva
-       CalmIva = (Total_IVA * DCPorcenIva) / 100
-       TxtMontoIva = CalmIva
     End If
 End Sub
 

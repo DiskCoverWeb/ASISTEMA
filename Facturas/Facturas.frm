@@ -8,14 +8,14 @@ Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.Ocx"
 Begin VB.Form Facturas 
    BackColor       =   &H00C0C0C0&
    Caption         =   "FACTURACION:  Ingreso de Facturas"
-   ClientHeight    =   11715
+   ClientHeight    =   10215
    ClientLeft      =   45
    ClientTop       =   345
-   ClientWidth     =   19860
+   ClientWidth     =   18960
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   11715
-   ScaleWidth      =   19860
+   ScaleHeight     =   10215
+   ScaleWidth      =   18960
    WindowState     =   2  'Maximized
    Begin ComctlLib.Toolbar TBarFactura 
       Align           =   1  'Align Top
@@ -23,8 +23,8 @@ Begin VB.Form Facturas
       Left            =   0
       TabIndex        =   0
       Top             =   0
-      Width           =   19860
-      _ExtentX        =   35031
+      Width           =   18960
+      _ExtentX        =   33443
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -89,6 +89,40 @@ Begin VB.Form Facturas
          TabIndex        =   1
          Top             =   -105
          Width           =   12825
+         Begin VB.CheckBox Check1 
+            Caption         =   "Facturar en ME"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   435
+            Left            =   105
+            TabIndex        =   2
+            Top             =   210
+            Width           =   1065
+         End
+         Begin VB.CheckBox CheqSP 
+            Caption         =   "Sector Público"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   435
+            Left            =   1365
+            TabIndex        =   3
+            Top             =   210
+            Width           =   1065
+         End
          Begin VB.TextBox TxtCompra 
             Alignment       =   1  'Right Justify
             BeginProperty Font 
@@ -109,40 +143,6 @@ Begin VB.Form Facturas
             Text            =   "Facturas.frx":0000
             Top             =   210
             Width           =   1170
-         End
-         Begin VB.CheckBox CheqSP 
-            Caption         =   "Sector Público"
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   435
-            Left            =   1365
-            TabIndex        =   3
-            Top             =   210
-            Width           =   1065
-         End
-         Begin VB.CheckBox Check1 
-            Caption         =   "Facturar en ME"
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   435
-            Left            =   105
-            TabIndex        =   2
-            Top             =   210
-            Width           =   1065
          End
          Begin MSDataListLib.DataCombo DCMod 
             Bindings        =   "Facturas.frx":0004
@@ -167,25 +167,6 @@ Begin VB.Form Facturas
                Strikethrough   =   0   'False
             EndProperty
          End
-         Begin VB.Label LblCompra 
-            Alignment       =   2  'Center
-            BorderStyle     =   1  'Fixed Single
-            Caption         =   " Orden Compra No."
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   330
-            Left            =   2520
-            TabIndex        =   4
-            Top             =   210
-            Width           =   1695
-         End
          Begin VB.Label LabelCodigo 
             Alignment       =   2  'Center
             BackColor       =   &H00C0FFFF&
@@ -207,6 +188,25 @@ Begin VB.Form Facturas
             Top             =   210
             Width           =   1485
          End
+         Begin VB.Label LblCompra 
+            Alignment       =   2  'Center
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   " Orden Compra No."
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   2520
+            TabIndex        =   4
+            Top             =   210
+            Width           =   1695
+         End
       End
    End
    Begin VB.Frame FrmGuiaRemision 
@@ -222,9 +222,9 @@ Begin VB.Form Facturas
          Strikethrough   =   0   'False
       EndProperty
       Height          =   6840
-      Left            =   15015
-      TabIndex        =   76
-      Top             =   2415
+      Left            =   11655
+      TabIndex        =   78
+      Top             =   6090
       Visible         =   0   'False
       Width           =   4740
       Begin VB.TextBox TxtLugarEntrega 
@@ -241,7 +241,7 @@ Begin VB.Form Facturas
          Height          =   330
          Left            =   105
          MaxLength       =   50
-         TabIndex        =   103
+         TabIndex        =   105
          Top             =   5985
          Width           =   4530
       End
@@ -259,7 +259,7 @@ Begin VB.Form Facturas
          Height          =   330
          Left            =   2730
          MaxLength       =   30
-         TabIndex        =   101
+         TabIndex        =   103
          Top             =   5250
          Width           =   1905
       End
@@ -277,7 +277,7 @@ Begin VB.Form Facturas
          Height          =   330
          Left            =   1155
          MaxLength       =   15
-         TabIndex        =   99
+         TabIndex        =   101
          Top             =   5250
          Width           =   1590
       End
@@ -295,7 +295,7 @@ Begin VB.Form Facturas
          Height          =   330
          Left            =   105
          MaxLength       =   10
-         TabIndex        =   97
+         TabIndex        =   99
          Text            =   "XXX-9999"
          Top             =   5250
          Width           =   1065
@@ -305,7 +305,7 @@ Begin VB.Form Facturas
          Caption         =   "Aceptar"
          Height          =   330
          Left            =   2625
-         TabIndex        =   104
+         TabIndex        =   106
          Top             =   6405
          Width           =   960
       End
@@ -314,14 +314,14 @@ Begin VB.Form Facturas
          Caption         =   "Cancelar"
          Height          =   330
          Left            =   3675
-         TabIndex        =   105
+         TabIndex        =   107
          Top             =   6405
          Width           =   960
       End
       Begin MSMask.MaskEdBox MBoxFechaGRE 
          Height          =   330
          Left            =   3255
-         TabIndex        =   78
+         TabIndex        =   80
          Top             =   210
          Width           =   1380
          _ExtentX        =   2434
@@ -346,7 +346,7 @@ Begin VB.Form Facturas
       Begin MSMask.MaskEdBox MBoxFechaGRI 
          Height          =   330
          Left            =   3360
-         TabIndex        =   85
+         TabIndex        =   87
          Top             =   1785
          Width           =   1275
          _ExtentX        =   2249
@@ -371,7 +371,7 @@ Begin VB.Form Facturas
       Begin MSMask.MaskEdBox MBoxFechaGRF 
          Height          =   330
          Left            =   3360
-         TabIndex        =   89
+         TabIndex        =   91
          Top             =   2625
          Width           =   1275
          _ExtentX        =   2249
@@ -398,7 +398,7 @@ Begin VB.Form Facturas
          DataSource      =   "AdoCiudades"
          Height          =   315
          Left            =   945
-         TabIndex        =   87
+         TabIndex        =   89
          Top             =   2205
          Width           =   3690
          _ExtentX        =   6509
@@ -420,7 +420,7 @@ Begin VB.Form Facturas
          DataSource      =   "AdoCiudades"
          Height          =   315
          Left            =   945
-         TabIndex        =   91
+         TabIndex        =   93
          Top             =   3045
          Width           =   3690
          _ExtentX        =   6509
@@ -442,7 +442,7 @@ Begin VB.Form Facturas
          DataSource      =   "AdoPersonas"
          Height          =   315
          Left            =   105
-         TabIndex        =   93
+         TabIndex        =   95
          Top             =   3780
          Width           =   4530
          _ExtentX        =   7990
@@ -464,7 +464,7 @@ Begin VB.Form Facturas
          DataSource      =   "AdoPersonas"
          Height          =   315
          Left            =   105
-         TabIndex        =   95
+         TabIndex        =   97
          Top             =   4515
          Width           =   4530
          _ExtentX        =   7990
@@ -486,7 +486,7 @@ Begin VB.Form Facturas
          DataSource      =   "AdoSerieGR"
          Height          =   315
          Left            =   2100
-         TabIndex        =   80
+         TabIndex        =   82
          Top             =   630
          Width           =   1170
          _ExtentX        =   2064
@@ -518,7 +518,7 @@ Begin VB.Form Facturas
          EndProperty
          Height          =   330
          Left            =   105
-         TabIndex        =   102
+         TabIndex        =   104
          Top             =   5670
          Width           =   4530
       End
@@ -538,7 +538,7 @@ Begin VB.Form Facturas
          ForeColor       =   &H000000FF&
          Height          =   330
          Left            =   105
-         TabIndex        =   83
+         TabIndex        =   85
          Top             =   1365
          Width           =   4530
       End
@@ -558,7 +558,7 @@ Begin VB.Form Facturas
          ForeColor       =   &H000000FF&
          Height          =   330
          Left            =   105
-         TabIndex        =   82
+         TabIndex        =   84
          Top             =   1050
          Width           =   4530
       End
@@ -579,7 +579,7 @@ Begin VB.Form Facturas
          ForeColor       =   &H000000FF&
          Height          =   330
          Left            =   3255
-         TabIndex        =   81
+         TabIndex        =   83
          Top             =   630
          Width           =   1380
       End
@@ -598,7 +598,7 @@ Begin VB.Form Facturas
          EndProperty
          Height          =   330
          Left            =   2730
-         TabIndex        =   100
+         TabIndex        =   102
          Top             =   4935
          Width           =   1905
       End
@@ -617,7 +617,7 @@ Begin VB.Form Facturas
          EndProperty
          Height          =   330
          Left            =   1155
-         TabIndex        =   98
+         TabIndex        =   100
          Top             =   4935
          Width           =   1590
       End
@@ -636,7 +636,7 @@ Begin VB.Form Facturas
          EndProperty
          Height          =   330
          Left            =   105
-         TabIndex        =   96
+         TabIndex        =   98
          Top             =   4935
          Width           =   1065
       End
@@ -656,7 +656,7 @@ Begin VB.Form Facturas
          ForeColor       =   &H000000FF&
          Height          =   330
          Left            =   105
-         TabIndex        =   79
+         TabIndex        =   81
          Top             =   630
          Width           =   2010
       End
@@ -675,7 +675,7 @@ Begin VB.Form Facturas
          EndProperty
          Height          =   330
          Left            =   105
-         TabIndex        =   94
+         TabIndex        =   96
          Top             =   4200
          Width           =   4530
       End
@@ -694,7 +694,7 @@ Begin VB.Form Facturas
          EndProperty
          Height          =   330
          Left            =   105
-         TabIndex        =   92
+         TabIndex        =   94
          Top             =   3465
          Width           =   4530
       End
@@ -713,7 +713,7 @@ Begin VB.Form Facturas
          EndProperty
          Height          =   330
          Left            =   105
-         TabIndex        =   90
+         TabIndex        =   92
          Top             =   3045
          Width           =   855
       End
@@ -732,7 +732,7 @@ Begin VB.Form Facturas
          EndProperty
          Height          =   330
          Left            =   105
-         TabIndex        =   86
+         TabIndex        =   88
          Top             =   2205
          Width           =   855
       End
@@ -751,7 +751,7 @@ Begin VB.Form Facturas
          EndProperty
          Height          =   330
          Left            =   105
-         TabIndex        =   88
+         TabIndex        =   90
          Top             =   2625
          Width           =   3270
       End
@@ -770,7 +770,7 @@ Begin VB.Form Facturas
          EndProperty
          Height          =   330
          Left            =   105
-         TabIndex        =   84
+         TabIndex        =   86
          Top             =   1785
          Width           =   3270
       End
@@ -789,7 +789,7 @@ Begin VB.Form Facturas
          EndProperty
          Height          =   330
          Left            =   105
-         TabIndex        =   77
+         TabIndex        =   79
          Top             =   210
          Width           =   3165
       End
@@ -814,8 +814,8 @@ Begin VB.Form Facturas
          Strikethrough   =   0   'False
       EndProperty
       Height          =   2325
-      Left            =   15015
-      TabIndex        =   106
+      Left            =   13230
+      TabIndex        =   108
       Top             =   1575
       Visible         =   0   'False
       Width           =   3900
@@ -825,7 +825,7 @@ Begin VB.Form Facturas
          Height          =   540
          Left            =   2625
          Style           =   1  'Graphical
-         TabIndex        =   110
+         TabIndex        =   112
          Top             =   1680
          Width           =   1170
       End
@@ -835,7 +835,7 @@ Begin VB.Form Facturas
          Height          =   540
          Left            =   1365
          Style           =   1  'Graphical
-         TabIndex        =   109
+         TabIndex        =   111
          Top             =   1680
          Width           =   1170
       End
@@ -855,7 +855,7 @@ Begin VB.Form Facturas
          Left            =   105
          List            =   "Facturas.frx":009C
          Style           =   1  'Checkbox
-         TabIndex        =   108
+         TabIndex        =   110
          Top             =   210
          Width           =   3690
       End
@@ -865,7 +865,7 @@ Begin VB.Form Facturas
          Height          =   540
          Left            =   105
          Style           =   1  'Graphical
-         TabIndex        =   107
+         TabIndex        =   109
          Top             =   1680
          Width           =   1170
       End
@@ -884,7 +884,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   3735
       Left            =   8085
-      TabIndex        =   125
+      TabIndex        =   127
       Top             =   4935
       Visible         =   0   'False
       Width           =   4815
@@ -900,7 +900,7 @@ Begin VB.Form Facturas
          EndProperty
          Height          =   2985
          Left            =   120
-         TabIndex        =   126
+         TabIndex        =   128
          Top             =   600
          Width           =   4575
       End
@@ -918,7 +918,7 @@ Begin VB.Form Facturas
          EndProperty
          Height          =   330
          Left            =   120
-         TabIndex        =   127
+         TabIndex        =   129
          Top             =   240
          Width           =   4620
       End
@@ -928,7 +928,7 @@ Begin VB.Form Facturas
       DataSource      =   "AdoMedico"
       Height          =   360
       Left            =   9450
-      TabIndex        =   32
+      TabIndex        =   34
       ToolTipText     =   "<Ctrl+R>: Buscar por CI/RUC, <F12>: LLamar a la Historia Clinica, <Ctrl+F>: Listar Ordenes de Trabajo  del Cliente"
       Top             =   2415
       Width           =   5475
@@ -960,14 +960,14 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   750
       Left            =   9240
-      TabIndex        =   52
+      TabIndex        =   54
       Top             =   5460
       Visible         =   0   'False
       Width           =   1590
       Begin MSMask.MaskEdBox MBFechaVGR 
          Height          =   330
          Left            =   105
-         TabIndex        =   53
+         TabIndex        =   55
          Top             =   315
          Width           =   1380
          _ExtentX        =   2434
@@ -995,7 +995,7 @@ Begin VB.Form Facturas
       DataSource      =   "AdoArticulo"
       Height          =   360
       Left            =   1785
-      TabIndex        =   46
+      TabIndex        =   48
       ToolTipText     =   "<F10> Insertar Orden de Pedidos"
       Top             =   4515
       Width           =   6315
@@ -1019,7 +1019,7 @@ Begin VB.Form Facturas
       DataSource      =   "AdoCliente"
       Height          =   360
       Left            =   5145
-      TabIndex        =   23
+      TabIndex        =   25
       ToolTipText     =   "<Ctrl+R>: Buscar por CI/RUC, <F12>: LLamar a la Historia Clinica, <Ctrl+F>: Listar Ordenes de Trabajo  del Cliente"
       Top             =   1575
       Width           =   9780
@@ -1042,7 +1042,7 @@ Begin VB.Form Facturas
       DataSource      =   "AdoGrupo"
       Height          =   360
       Left            =   1680
-      TabIndex        =   21
+      TabIndex        =   23
       ToolTipText     =   "<Ctrl-F12> Forzar al 12% IVA"
       Top             =   1575
       Width           =   1590
@@ -1062,9 +1062,9 @@ Begin VB.Form Facturas
    End
    Begin MSMask.MaskEdBox MBoxFechaV 
       Height          =   330
-      Left            =   3885
-      TabIndex        =   11
-      Top             =   735
+      Left            =   1365
+      TabIndex        =   17
+      Top             =   1155
       Width           =   1275
       _ExtentX        =   2249
       _ExtentY        =   582
@@ -1098,9 +1098,9 @@ Begin VB.Form Facturas
          Strikethrough   =   0   'False
       EndProperty
       Height          =   2115
-      Left            =   15015
-      TabIndex        =   111
-      Top             =   3570
+      Left            =   13440
+      TabIndex        =   113
+      Top             =   2100
       Visible         =   0   'False
       Width           =   3795
       Begin VB.CommandButton Command11 
@@ -1116,7 +1116,7 @@ Begin VB.Form Facturas
          EndProperty
          Height          =   330
          Left            =   2625
-         TabIndex        =   123
+         TabIndex        =   125
          Top             =   1680
          Width           =   1065
       End
@@ -1133,7 +1133,7 @@ Begin VB.Form Facturas
          EndProperty
          Height          =   330
          Left            =   1470
-         TabIndex        =   122
+         TabIndex        =   124
          Top             =   1680
          Width           =   1065
       End
@@ -1151,7 +1151,7 @@ Begin VB.Form Facturas
          Height          =   330
          Left            =   1470
          MaxLength       =   10
-         TabIndex        =   121
+         TabIndex        =   123
          Top             =   1260
          Width           =   2220
       End
@@ -1171,7 +1171,7 @@ Begin VB.Form Facturas
          Left            =   105
          MaxLength       =   10
          MultiLine       =   -1  'True
-         TabIndex        =   119
+         TabIndex        =   121
          Text            =   "Facturas.frx":0100
          Top             =   1260
          Width           =   1275
@@ -1192,7 +1192,7 @@ Begin VB.Form Facturas
          Left            =   2835
          MaxLength       =   10
          MultiLine       =   -1  'True
-         TabIndex        =   117
+         TabIndex        =   119
          Text            =   "Facturas.frx":0102
          Top             =   525
          Width           =   855
@@ -1200,7 +1200,7 @@ Begin VB.Form Facturas
       Begin MSMask.MaskEdBox MBFechaIn 
          Height          =   330
          Left            =   105
-         TabIndex        =   113
+         TabIndex        =   115
          Top             =   525
          Width           =   1275
          _ExtentX        =   2249
@@ -1226,7 +1226,7 @@ Begin VB.Form Facturas
       Begin MSMask.MaskEdBox MBFechaOut 
          Height          =   330
          Left            =   1470
-         TabIndex        =   115
+         TabIndex        =   117
          Top             =   525
          Width           =   1275
          _ExtentX        =   2249
@@ -1265,7 +1265,7 @@ Begin VB.Form Facturas
          ForeColor       =   &H00FFFFFF&
          Height          =   330
          Left            =   1470
-         TabIndex        =   120
+         TabIndex        =   122
          Top             =   945
          Width           =   2220
       End
@@ -1285,7 +1285,7 @@ Begin VB.Form Facturas
          ForeColor       =   &H00FFFFFF&
          Height          =   330
          Left            =   2835
-         TabIndex        =   118
+         TabIndex        =   120
          Top             =   210
          Width           =   855
       End
@@ -1305,7 +1305,7 @@ Begin VB.Form Facturas
          ForeColor       =   &H00FFFFFF&
          Height          =   330
          Left            =   105
-         TabIndex        =   116
+         TabIndex        =   118
          Top             =   945
          Width           =   1275
       End
@@ -1325,7 +1325,7 @@ Begin VB.Form Facturas
          ForeColor       =   &H00FFFFFF&
          Height          =   330
          Left            =   1470
-         TabIndex        =   114
+         TabIndex        =   116
          Top             =   210
          Width           =   1275
       End
@@ -1345,7 +1345,7 @@ Begin VB.Form Facturas
          ForeColor       =   &H00FFFFFF&
          Height          =   330
          Left            =   105
-         TabIndex        =   112
+         TabIndex        =   114
          Top             =   210
          Width           =   1275
       End
@@ -1409,7 +1409,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   2415
-      TabIndex        =   29
+      TabIndex        =   31
       Top             =   1995
       Width           =   6945
    End
@@ -1426,7 +1426,7 @@ Begin VB.Form Facturas
       ForeColor       =   &H00808080&
       Height          =   315
       Left            =   9975
-      TabIndex        =   55
+      TabIndex        =   57
       Text            =   "Combo1"
       Top             =   4515
       Width           =   855
@@ -1447,7 +1447,7 @@ Begin VB.Form Facturas
       Left            =   210
       MultiLine       =   -1  'True
       ScrollBars      =   3  'Both
-      TabIndex        =   47
+      TabIndex        =   49
       Text            =   "Facturas.frx":0104
       Top             =   5145
       Visible         =   0   'False
@@ -1457,7 +1457,7 @@ Begin VB.Form Facturas
       Bindings        =   "Facturas.frx":010A
       Height          =   2850
       Left            =   105
-      TabIndex        =   75
+      TabIndex        =   77
       Top             =   5040
       Width           =   14835
       _ExtentX        =   26167
@@ -1536,7 +1536,7 @@ Begin VB.Form Facturas
       Left            =   11760
       MaxLength       =   14
       MultiLine       =   -1  'True
-      TabIndex        =   59
+      TabIndex        =   61
       Text            =   "Facturas.frx":0124
       Top             =   4515
       Width           =   1590
@@ -1557,7 +1557,7 @@ Begin VB.Form Facturas
       Left            =   10815
       MaxLength       =   10
       MultiLine       =   -1  'True
-      TabIndex        =   57
+      TabIndex        =   59
       Text            =   "Facturas.frx":0129
       Top             =   4515
       Width           =   960
@@ -1577,7 +1577,7 @@ Begin VB.Form Facturas
       Height          =   330
       Left            =   8925
       MaxLength       =   10
-      TabIndex        =   51
+      TabIndex        =   53
       Text            =   "0"
       ToolTipText     =   "<Ctrl+F12>: LLenas detalles de la Orden"
       Top             =   4515
@@ -1597,7 +1597,7 @@ Begin VB.Form Facturas
       Height          =   225
       Left            =   9660
       Style           =   1  'Graphical
-      TabIndex        =   74
+      TabIndex        =   76
       Top             =   9030
       Width           =   225
    End
@@ -1606,7 +1606,7 @@ Begin VB.Form Facturas
       DataSource      =   "AdoEjecutivo"
       Height          =   360
       Left            =   2100
-      TabIndex        =   34
+      TabIndex        =   36
       Top             =   2835
       Visible         =   0   'False
       Width           =   7260
@@ -1639,7 +1639,7 @@ Begin VB.Form Facturas
       Height          =   330
       Left            =   3255
       MultiLine       =   -1  'True
-      TabIndex        =   67
+      TabIndex        =   69
       Text            =   "Facturas.frx":0146
       Top             =   8925
       Width           =   1485
@@ -1658,7 +1658,7 @@ Begin VB.Form Facturas
       Height          =   330
       Left            =   10710
       MaxLength       =   5
-      TabIndex        =   36
+      TabIndex        =   38
       Text            =   "0"
       Top             =   2835
       Visible         =   0   'False
@@ -1678,7 +1678,7 @@ Begin VB.Form Facturas
       Height          =   330
       Left            =   2100
       MaxLength       =   200
-      TabIndex        =   40
+      TabIndex        =   42
       Top             =   3255
       Width           =   12825
    End
@@ -1696,7 +1696,7 @@ Begin VB.Form Facturas
       Height          =   330
       Left            =   2100
       MaxLength       =   200
-      TabIndex        =   42
+      TabIndex        =   44
       Top             =   3675
       Width           =   12825
    End
@@ -1719,7 +1719,7 @@ Begin VB.Form Facturas
    End
    Begin MSMask.MaskEdBox MBoxFecha 
       Height          =   330
-      Left            =   1260
+      Left            =   1365
       TabIndex        =   9
       Top             =   735
       Width           =   1275
@@ -1756,7 +1756,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   105
-      TabIndex        =   33
+      TabIndex        =   35
       Top             =   2835
       Width           =   2010
    End
@@ -2376,7 +2376,7 @@ Begin VB.Form Facturas
       DataSource      =   "AdoBodega"
       Height          =   360
       Left            =   12285
-      TabIndex        =   38
+      TabIndex        =   40
       ToolTipText     =   "<F10> Insertar Orden de Pedidos"
       Top             =   2835
       Width           =   2640
@@ -2400,7 +2400,7 @@ Begin VB.Form Facturas
       DataSource      =   "AdoMarca"
       Height          =   360
       Left            =   105
-      TabIndex        =   44
+      TabIndex        =   46
       ToolTipText     =   "<F10> Insertar Orden de Pedidos"
       Top             =   4515
       Width           =   1695
@@ -2611,11 +2611,11 @@ Begin VB.Form Facturas
       Bindings        =   "Facturas.frx":017C
       DataSource      =   "AdoTipoPago"
       Height          =   360
-      Left            =   1680
-      TabIndex        =   17
+      Left            =   4305
+      TabIndex        =   19
       Top             =   1155
-      Width           =   9885
-      _ExtentX        =   17436
+      Width           =   8625
+      _ExtentX        =   15214
       _ExtentY        =   635
       _Version        =   393216
       BackColor       =   12648447
@@ -2728,11 +2728,11 @@ Begin VB.Form Facturas
       Bindings        =   "Facturas.frx":0196
       DataSource      =   "AdoLinea"
       Height          =   360
-      Left            =   6825
-      TabIndex        =   13
+      Left            =   4305
+      TabIndex        =   11
       Top             =   735
-      Width           =   4740
-      _ExtentX        =   8361
+      Width           =   5370
+      _ExtentX        =   9472
       _ExtentY        =   635
       _Version        =   393216
       Text            =   "CxC Clientes"
@@ -2745,6 +2745,94 @@ Begin VB.Form Facturas
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
+   End
+   Begin MSAdodcLib.Adodc AdoPorcIVA 
+      Height          =   330
+      Left            =   6405
+      Top             =   7980
+      Visible         =   0   'False
+      Width           =   1905
+      _ExtentX        =   3360
+      _ExtentY        =   582
+      ConnectMode     =   0
+      CursorLocation  =   3
+      IsolationLevel  =   -1
+      ConnectionTimeout=   15
+      CommandTimeout  =   30
+      CursorType      =   3
+      LockType        =   3
+      CommandType     =   8
+      CursorOptions   =   0
+      CacheSize       =   50
+      MaxRecords      =   0
+      BOFAction       =   0
+      EOFAction       =   0
+      ConnectStringType=   1
+      Appearance      =   1
+      BackColor       =   -2147483643
+      ForeColor       =   -2147483640
+      Orientation     =   0
+      Enabled         =   -1
+      Connect         =   ""
+      OLEDBString     =   ""
+      OLEDBFile       =   ""
+      DataSourceName  =   ""
+      OtherAttributes =   ""
+      UserName        =   ""
+      Password        =   ""
+      RecordSource    =   ""
+      Caption         =   "PorcIVA"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      _Version        =   393216
+   End
+   Begin MSDataListLib.DataCombo DCPorcIVA 
+      Bindings        =   "Facturas.frx":01AD
+      DataSource      =   "AdoPorcIVA"
+      Height          =   360
+      Left            =   10710
+      TabIndex        =   13
+      ToolTipText     =   "Seleccione el Porc del IVA"
+      Top             =   735
+      Width           =   855
+      _ExtentX        =   1508
+      _ExtentY        =   635
+      _Version        =   393216
+      Text            =   "12%"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
+   Begin VB.Label Label9 
+      BorderStyle     =   1  'Fixed Single
+      Caption         =   " Porc IVA"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   9765
+      TabIndex        =   12
+      Top             =   735
+      Width           =   960
    End
    Begin VB.Label LblGuia 
       Alignment       =   2  'Center
@@ -2763,7 +2851,7 @@ Begin VB.Form Facturas
       ForeColor       =   &H00C00000&
       Height          =   645
       Left            =   9660
-      TabIndex        =   124
+      TabIndex        =   126
       Top             =   8610
       Width           =   5265
    End
@@ -2780,8 +2868,8 @@ Begin VB.Form Facturas
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   5250
-      TabIndex        =   12
+      Left            =   2730
+      TabIndex        =   10
       Top             =   735
       Width           =   1590
    End
@@ -2798,31 +2886,31 @@ Begin VB.Form Facturas
       BeginProperty Images {0713E8C2-850A-101B-AFC0-4210102A8DA7} 
          NumListImages   =   7
          BeginProperty ListImage1 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "Facturas.frx":01AD
+            Picture         =   "Facturas.frx":01C6
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "Facturas.frx":04C7
+            Picture         =   "Facturas.frx":04E0
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "Facturas.frx":07E1
+            Picture         =   "Facturas.frx":07FA
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "Facturas.frx":0AFB
+            Picture         =   "Facturas.frx":0B14
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "Facturas.frx":0E15
+            Picture         =   "Facturas.frx":0E2E
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "Facturas.frx":112F
+            Picture         =   "Facturas.frx":1148
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "Facturas.frx":1449
+            Picture         =   "Facturas.frx":1462
             Key             =   ""
          EndProperty
       EndProperty
@@ -2844,7 +2932,7 @@ Begin VB.Form Facturas
       ForeColor       =   &H80000002&
       Height          =   330
       Left            =   13335
-      TabIndex        =   61
+      TabIndex        =   63
       Top             =   4515
       Width           =   1590
    End
@@ -2861,8 +2949,8 @@ Begin VB.Form Facturas
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   105
-      TabIndex        =   16
+      Left            =   2730
+      TabIndex        =   18
       Top             =   1155
       Width           =   1590
    End
@@ -2880,7 +2968,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   1785
-      TabIndex        =   45
+      TabIndex        =   47
       Top             =   4200
       Width           =   6315
    End
@@ -2898,7 +2986,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   13545
-      TabIndex        =   27
+      TabIndex        =   29
       Top             =   1995
       Width           =   1380
    End
@@ -2916,7 +3004,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   10920
-      TabIndex        =   25
+      TabIndex        =   27
       Top             =   1995
       Width           =   1590
    End
@@ -2934,7 +3022,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   12600
-      TabIndex        =   26
+      TabIndex        =   28
       Top             =   1995
       Width           =   960
    End
@@ -2952,7 +3040,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   9450
-      TabIndex        =   24
+      TabIndex        =   26
       Top             =   1995
       Width           =   1485
    End
@@ -2970,7 +3058,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   3360
-      TabIndex        =   22
+      TabIndex        =   24
       Top             =   1575
       Width           =   1800
    End
@@ -2988,7 +3076,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   7980
-      TabIndex        =   31
+      TabIndex        =   33
       Top             =   2415
       Width           =   1380
    End
@@ -3006,7 +3094,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   105
-      TabIndex        =   30
+      TabIndex        =   32
       Top             =   2415
       Width           =   7890
    End
@@ -3027,7 +3115,7 @@ Begin VB.Form Facturas
       ForeColor       =   &H8000000D&
       Height          =   330
       Left            =   15645
-      TabIndex        =   19
+      TabIndex        =   21
       Top             =   1155
       Width           =   1485
    End
@@ -3044,10 +3132,10 @@ Begin VB.Form Facturas
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   11655
-      TabIndex        =   18
+      Left            =   13020
+      TabIndex        =   20
       Top             =   1155
-      Width           =   4005
+      Width           =   2640
    End
    Begin VB.Label Label48 
       BorderStyle     =   1  'Fixed Single
@@ -3063,7 +3151,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   105
-      TabIndex        =   28
+      TabIndex        =   30
       Top             =   1995
       Width           =   2325
    End
@@ -3081,7 +3169,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   105
-      TabIndex        =   20
+      TabIndex        =   22
       Top             =   1575
       Width           =   1590
    End
@@ -3099,7 +3187,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   105
-      TabIndex        =   43
+      TabIndex        =   45
       Top             =   4200
       Width           =   1695
    End
@@ -3117,7 +3205,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   11340
-      TabIndex        =   37
+      TabIndex        =   39
       Top             =   2835
       Width           =   960
    End
@@ -3136,7 +3224,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   13335
-      TabIndex        =   60
+      TabIndex        =   62
       Top             =   4200
       Width           =   1590
    End
@@ -3155,7 +3243,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   11760
-      TabIndex        =   58
+      TabIndex        =   60
       Top             =   4200
       Width           =   1590
    End
@@ -3174,7 +3262,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   10815
-      TabIndex        =   56
+      TabIndex        =   58
       Top             =   4200
       Width           =   960
    End
@@ -3192,7 +3280,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   9975
-      TabIndex        =   54
+      TabIndex        =   56
       Top             =   4200
       Width           =   855
    End
@@ -3211,7 +3299,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   8925
-      TabIndex        =   50
+      TabIndex        =   52
       Top             =   4200
       Width           =   1065
    End
@@ -3232,7 +3320,7 @@ Begin VB.Form Facturas
       ForeColor       =   &H8000000D&
       Height          =   330
       Left            =   8085
-      TabIndex        =   49
+      TabIndex        =   51
       Top             =   4515
       Width           =   855
    End
@@ -3251,7 +3339,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   8085
-      TabIndex        =   48
+      TabIndex        =   50
       Top             =   4200
       Width           =   855
    End
@@ -3268,9 +3356,9 @@ Begin VB.Form Facturas
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   2625
-      TabIndex        =   10
-      Top             =   735
+      Left            =   105
+      TabIndex        =   16
+      Top             =   1155
       Width           =   1275
    End
    Begin VB.Label LabelTotal 
@@ -3290,7 +3378,7 @@ Begin VB.Form Facturas
       ForeColor       =   &H000000FF&
       Height          =   330
       Left            =   7980
-      TabIndex        =   73
+      TabIndex        =   75
       Top             =   8925
       Width           =   1590
    End
@@ -3309,7 +3397,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   7980
-      TabIndex        =   72
+      TabIndex        =   74
       Top             =   8610
       Width           =   1590
    End
@@ -3330,7 +3418,7 @@ Begin VB.Form Facturas
       ForeColor       =   &H000000FF&
       Height          =   330
       Left            =   6405
-      TabIndex        =   71
+      TabIndex        =   73
       Top             =   8925
       Width           =   1485
    End
@@ -3351,7 +3439,7 @@ Begin VB.Form Facturas
       ForeColor       =   &H000000FF&
       Height          =   330
       Left            =   4830
-      TabIndex        =   69
+      TabIndex        =   71
       Top             =   8925
       Width           =   1485
    End
@@ -3371,7 +3459,7 @@ Begin VB.Form Facturas
       ForeColor       =   &H00000000&
       Height          =   330
       Left            =   6405
-      TabIndex        =   70
+      TabIndex        =   72
       Top             =   8610
       Width           =   1485
    End
@@ -3391,7 +3479,7 @@ Begin VB.Form Facturas
       ForeColor       =   &H00000000&
       Height          =   330
       Left            =   4830
-      TabIndex        =   68
+      TabIndex        =   70
       Top             =   8610
       Width           =   1485
    End
@@ -3410,7 +3498,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   3255
-      TabIndex        =   66
+      TabIndex        =   68
       Top             =   8610
       Width           =   1485
    End
@@ -3431,7 +3519,7 @@ Begin VB.Form Facturas
       ForeColor       =   &H000000FF&
       Height          =   330
       Left            =   1680
-      TabIndex        =   65
+      TabIndex        =   67
       Top             =   8925
       Width           =   1485
    End
@@ -3449,7 +3537,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   9450
-      TabIndex        =   35
+      TabIndex        =   37
       Top             =   2835
       Visible         =   0   'False
       Width           =   1275
@@ -3468,7 +3556,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   105
-      TabIndex        =   39
+      TabIndex        =   41
       Top             =   3255
       Width           =   2010
    End
@@ -3486,7 +3574,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   105
-      TabIndex        =   41
+      TabIndex        =   43
       Top             =   3675
       Width           =   2010
    End
@@ -3526,7 +3614,7 @@ Begin VB.Form Facturas
       Left            =   105
       TabIndex        =   8
       Top             =   735
-      Width           =   1170
+      Width           =   1275
    End
    Begin VB.Label LabelSubTotal 
       Alignment       =   1  'Right Justify
@@ -3545,7 +3633,7 @@ Begin VB.Form Facturas
       ForeColor       =   &H000000FF&
       Height          =   330
       Left            =   105
-      TabIndex        =   63
+      TabIndex        =   65
       Top             =   8925
       Width           =   1485
    End
@@ -3564,7 +3652,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   1680
-      TabIndex        =   64
+      TabIndex        =   66
       Top             =   8610
       Width           =   1485
    End
@@ -3583,7 +3671,7 @@ Begin VB.Form Facturas
       EndProperty
       Height          =   330
       Left            =   105
-      TabIndex        =   62
+      TabIndex        =   64
       Top             =   8610
       Width           =   1485
    End
@@ -4062,7 +4150,7 @@ Dim PorcIVA As Byte
  If CtrlDown And KeyCode = vbKeyF12 Then
     PorcIVA = InputBox("Ingrese el porcentaje a Proccesar:", "PORCENTAJE DE IVA", Porc_IVA * 100)
     Select Case PorcIVA
-      Case 8, 10, 12, 14
+      Case 8, 10, 12, 14, 15
            Porc_IVA = PorcIVA / 100
       Case Else
            Porc_IVA = 0.12
@@ -4100,7 +4188,6 @@ Private Sub DCLinea_LostFocus()
   FA.Factura = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, False)
   TextFacturaNo = FA.Factura
   DatInv.TC = FA.TC
-  Tipo_De_Facturacion
 End Sub
 
 Private Sub DCArticulo_GotFocus()
@@ -4554,6 +4641,19 @@ Private Sub DCMod_LostFocus()
   DCLinea.SetFocus
 End Sub
 
+Private Sub DCPorcIVA_KeyDown(KeyCode As Integer, Shift As Integer)
+  PresionoEnter KeyCode
+End Sub
+
+Private Sub DCPorcIVA_LostFocus()
+  If IsNumeric(DCPorcIVA.Text) Then
+     If AdoPorcIVA.Recordset.RecordCount > 0 Then Porc_IVA = Redondear(DCPorcIVA / 100, 2)
+  Else
+     Porc_IVA = 0
+  End If
+  Tipo_De_Facturacion
+End Sub
+
 Private Sub DCSerieGR_KeyDown(KeyCode As Integer, Shift As Integer)
   PresionoEnter KeyCode
 End Sub
@@ -4713,7 +4813,7 @@ Private Sub Form_Activate()
        & "AND Codigo IN ('01','16','17','18','19','20','21') " _
        & "ORDER BY Codigo "
   SelectDB_Combo DCTipoPago, AdoTipoPago, sSQL, "CTipoPago"
-  
+
   sSQL = "SELECT CC.Codigo " _
        & "FROM Catalogo_Cuentas As CC INNER JOIN Catalogo_Productos As CP " _
        & "ON CC.Item = CP.Item " _
@@ -4830,6 +4930,14 @@ Private Sub Form_Activate()
         & "ORDER BY Marca "
    SelectDB_Combo DCMarca, AdoMarca, sSQL, "Marca"
    
+   sSQL = "SELECT Codigo, Porc " _
+        & "FROM Tabla_Por_ICE_IVA " _
+        & "WHERE IVA <> " & Val(adFalse) & " " _
+        & "AND Fecha_Inicio <= #" & BuscarFecha(FechaSistema) & "# " _
+        & "AND Fecha_Final >= #" & BuscarFecha(FechaSistema) & "# " _
+        & "ORDER BY Porc DESC "
+   SelectDB_Combo DCPorcIVA, AdoPorcIVA, sSQL, "Porc"
+    
    sSQL = "DELETE * " _
         & "FROM Asiento_F " _
         & "WHERE Item = '" & NumEmpresa & "' " _
@@ -4903,6 +5011,7 @@ Private Sub Form_Load()
    ConectarAdodc AdoLinea
    ConectarAdodc AdoMarca
    ConectarAdodc AdoBodega
+   ConectarAdodc AdoPorcIVA
    ConectarAdodc AdoFactura
    ConectarAdodc AdoAsientoF
    ConectarAdodc AdoCliente
@@ -5026,14 +5135,32 @@ Private Sub MBoxFecha_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub MBoxFecha_LostFocus()
-   FechaValida MBoxFecha, True
-   Validar_Porc_IVA MBoxFecha
-   FA.Fecha = MBoxFecha
-   If FA.TC = "OP" Then
-      MBoxFechaV = CLongFecha(CFechaLong(MBoxFecha) + 3)
-   Else
-      MBoxFechaV = CLongFecha(CFechaLong(MBoxFecha) + 15)
-   End If
+    FechaValida MBoxFecha, True
+    FA.Fecha = MBoxFecha
+    If FA.TC = "OP" Then
+       MBoxFechaV = CLongFecha(CFechaLong(MBoxFecha) + 3)
+    Else
+       MBoxFechaV = CLongFecha(CFechaLong(MBoxFecha) + 15)
+    End If
+    
+    sSQL = "SELECT Codigo, Concepto, CxC, Serie, Autorizacion " _
+         & "FROM Catalogo_Lineas " _
+         & "WHERE TL <> " & Val(adFalse) & " " _
+         & "AND Item = '" & NumEmpresa & "' " _
+         & "AND Periodo = '" & Periodo_Contable & "' " _
+         & "AND Fact = '" & FA.TC & "' " _
+         & "AND Fecha <= #" & BuscarFecha(FA.Fecha) & "# " _
+         & "AND Vencimiento >= #" & BuscarFecha(FA.Fecha) & "# " _
+         & "ORDER BY Codigo "
+    SelectDB_Combo DCLinea, AdoLinea, sSQL, "Concepto"
+    
+    sSQL = "SELECT Codigo, Porc " _
+         & "FROM Tabla_Por_ICE_IVA " _
+         & "WHERE IVA <> " & Val(adFalse) & " " _
+         & "AND Fecha_Inicio <= #" & BuscarFecha(FA.Fecha) & "# " _
+         & "AND Fecha_Final >= #" & BuscarFecha(FA.Fecha) & "# " _
+         & "ORDER BY Porc DESC "
+    SelectDB_Combo DCPorcIVA, AdoPorcIVA, sSQL, "Porc"
 End Sub
 
 Private Sub MBoxFechaGRE_GotFocus()
@@ -5358,6 +5485,7 @@ Dim SubTotalDescuento As Currency
        'Descuento
         SubTotalDescuento = Redondear(SubTotal * (Redondear(Val(CDesc1.Text), 3) / 100), 2)
        'IVA = SubTotal - Descuento
+       'MsgBox Porc_IVA
         If BanIVA And FA.TC <> "NV" Then SubTotalIVA = Redondear((SubTotal - SubTotalDescuento) * Porc_IVA, 4)
        'If TipoFactura = "OP" Then SubTotalIVA = 0
         If CDbl(TextVUnit) = 0 Then SubTotalIVA = 0

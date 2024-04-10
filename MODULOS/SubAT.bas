@@ -792,8 +792,7 @@ Dim IDn As Long
 
    'Pagina de Conexion con el SRI
    'ClaveDeAcceso = "0909202101179186152300120010040000056111234567815"
-      
-    
+          
     'MsgBox URLAutorizacion & vbCrLf & ClaveDeAcceso & vbCrLf & MidStrg(ClaveDeAcceso, 24, 1)
           
     RatonReloj
@@ -806,11 +805,11 @@ Dim IDn As Long
          Loop
          IDn = InStr(RutaAutorizado, ".xml")
         .Clave_De_Acceso = MidStrg(RutaAutorizado, IDo + 1, IDn - IDo - 1)
+        '.Clave_De_Acceso = "0103202407179130545000120030370000231671791305419"
          Select Case MidStrg(.Clave_De_Acceso, 24, 1)
            Case "1": URLAutorizacion = "https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl"
            Case "2": URLAutorizacion = "https://cel.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl"
          End Select
-         
         .Estado_SRI = "CG"
         .Documento_XML = ""
         .Error_SRI = ""
@@ -835,6 +834,7 @@ Dim IDn As Long
            .Fecha_Autorizacion = Format$(MidStrg(ArrayAutorizacion(2), 1, 10), "dd/MM/yyyy")
            .Hora_Autorizacion = MidStrg(ArrayAutorizacion(2), 12, 8)
            .Documento_XML = Leer_Archivo_Texto(RutaAutorizado)
+            
             'SRI_Actualizar_Documento_XML .Clave_De_Acceso
             'Progreso_Barra.Mensaje_Box = "Grabando en la base el Documento: " & MidStrg(ClaveDeAcceso, 25, 15)
             Cadena = ""
@@ -849,11 +849,13 @@ Dim IDn As Long
                 If Len(ArrayAutorizacion(ContadorEstados)) > 1 Then .Error_SRI = .Error_SRI & ArrayAutorizacion(ContadorEstados) & ", "
             Next ContadorEstados
            .Error_SRI = TrimStrg(.Error_SRI)
+            'MsgBox .Error_SRI & "....."
          End If
          Progreso_Barra.Mensaje_Box = ArrayAutorizacion(0) & " " & .Estado_SRI & " -> " & ArrayAutorizacion(2)
          Progreso_Esperar True
          Progreso_Final
          RatonNormal
+         
     End With
     Progreso_Final
     SRI_Leer_XML_Autorizado = SRI_Aut
@@ -2236,7 +2238,7 @@ Dim NombreTipoDeLetra As String
          & "AND TC.TP = Co.TP " _
          & "AND TC.Numero = Co.Numero " _
          & "ORDER BY Establecimiento, PuntoEmision,Secuencial "
-    Select_AdoDB AdoDBCompras, sSQL
+    Select_AdoDB AdoDBCompras, sSQL, "Encabezado_LC"
     With AdoDBCompras
      If .RecordCount > 0 Then
          TFA.Fecha = .fields("Fecha")
@@ -2257,6 +2259,7 @@ Dim NombreTipoDeLetra As String
          TFA.Con_IVA = .fields("BaseImpGrav")
          TFA.Total_IVA = .fields("MontoIva")
          TFA.Nota = .fields("Concepto")
+         If TFA.Nota = Ninguno Then TFA.Nota = "Liquidacion de Compras"
          TFA.Total_MN = TFA.Sin_IVA + TFA.Con_IVA + TFA.Total_IVA
          TFA.SubTotal = TFA.Sin_IVA + TFA.Con_IVA
          Validar_Porc_IVA TFA.Fecha
@@ -2293,7 +2296,7 @@ Dim NombreTipoDeLetra As String
          & "AND TIV.Fecha_Final >= #" & BuscarFecha(FechaTexto) & "# " _
          & "AND R.CodRet = TIV.Codigo " _
          & "ORDER BY R.Cta_Retencion "
-    Select_AdoDB AdoDBAir, sSQL
+    Select_AdoDB AdoDBAir, sSQL, "Detalle_LC"
    'Encabezado Factura
     With AdoDBCompras
      If .RecordCount > 0 Then
@@ -2475,6 +2478,7 @@ Dim Documento As Long
          Case "01": TD = "FA"
          Case "03": TD = "LC"
          Case "04": TD = "NC"
+         Case "06": TD = "GR"
          Case "07": TD = "RE"
          Case Else: TD = "XX"
        End Select
@@ -2855,7 +2859,8 @@ Dim Autorizar_XML As Boolean
           TFA.EmailC = .fields("Email")
           CodSustento = Format$(.fields("CodSustento"), "00")
           tipoCodComprobante = Format$(.fields("TipoComprobante"), "00")
-          Validar_Porc_IVA TFA.Fecha
+          Obtener_Porc_IVA TFA.Fecha, .fields("PorcentajeIva")
+         'Validar_Porc_IVA TFA.Fecha
          'Algoritmo Modulo 11 para la clave de la retencion
          '& Format$(TFA.Vencimiento, "ddmmyyyy")
           TFA.ClaveAcceso = Format$(TFA.Fecha, "ddmmyyyy") & "07" & RUC & Ambiente & TFA.Serie_R & Format$(TFA.Retencion, String(9, "0")) _
@@ -2931,7 +2936,7 @@ Dim Autorizar_XML As Boolean
                     Insertar_Campo_XML AbrirXML("impuestosDocSustento")
                         Insertar_Campo_XML AbrirXML("impuestoDocSustento")
                             Insertar_Campo_XML CampoXML("codImpuestoDocSustento", "2")
-                            Insertar_Campo_XML CampoXML("codigoPorcentaje", "2")
+                            Insertar_Campo_XML CampoXML("codigoPorcentaje", .fields("PorcentajeIva"))
                             Insertar_Campo_XML CampoXML("baseImponible", Total_Con_IVA, 2)
                             Insertar_Campo_XML CampoXML("tarifa", Porc_IVA * 100)
                             Insertar_Campo_XML CampoXML("valorImpuesto", Total_IVA, 2)
@@ -3161,8 +3166,10 @@ Dim Autorizar_XML As Boolean
           TFA.Nota = .fields("Concepto")
           TFA.Total_MN = TFA.Sin_IVA + TFA.Con_IVA + TFA.Total_IVA
           TFA.SubTotal = TFA.Sin_IVA + TFA.Con_IVA
+          If TFA.Nota = Ninguno Then TFA.Nota = "Liquidacion de Compras"
           tipoCodComprobante = Format$(.fields("TipoComprobante"), "00")
-          Validar_Porc_IVA TFA.Fecha
+         'Validar_Porc_IVA TFA.Fecha
+          Obtener_Porc_IVA TFA.Fecha, .fields("PorcentajeIva")
           TFA.Porc_IVA = Porc_IVA * 100
           
          'Algoritmo Modulo 11 para la clave de la retencion
@@ -3229,7 +3236,7 @@ Dim Autorizar_XML As Boolean
                    
                    Insertar_Campo_XML AbrirXML("totalImpuesto")
                       Insertar_Campo_XML CampoXML("codigo", "2")
-                      Insertar_Campo_XML CampoXML("codigoPorcentaje", "2")
+                      Insertar_Campo_XML CampoXML("codigoPorcentaje", .fields("PorcentajeIva"))
                       Insertar_Campo_XML CampoXML("baseImponible", TFA.Con_IVA)
                       Insertar_Campo_XML CampoXML("tarifa", TFA.Porc_IVA)
                       Insertar_Campo_XML CampoXML("valor", TFA.Total_IVA)
@@ -3279,7 +3286,7 @@ Dim Autorizar_XML As Boolean
                    Insertar_Campo_XML AbrirXML("impuestos")
                       Insertar_Campo_XML AbrirXML("impuesto")
                          Insertar_Campo_XML CampoXML("codigo", "2")
-                         Insertar_Campo_XML CampoXML("codigoPorcentaje", "2")
+                         Insertar_Campo_XML CampoXML("codigoPorcentaje", .fields("PorcentajeIva"))
                          Insertar_Campo_XML CampoXML("tarifa", TFA.Porc_IVA)
                          Insertar_Campo_XML CampoXML("baseImponible", TFA.Con_IVA)
                          Insertar_Campo_XML CampoXML("valor", TFA.Total_IVA)
@@ -3439,7 +3446,9 @@ Dim SecuencialReembolo As String
          If TFA.TDT = 41 Then TFA.EsPorReembolso = True
          
         'MsgBox "Validar Porc IVA"
-         Validar_Porc_IVA TFA.Fecha
+         
+         Obtener_Cod_Porc_IVA TFA.Fecha, (TFA.Porc_IVA * 100)
+        'MsgBox TFA.Porc_IVA & vbCrLf & Cod_Porc_IVA
          
         'Generamos la Clave de acceso
         '& Format$(TFA.Vencimiento, "ddmmyyyy")
@@ -3552,11 +3561,7 @@ Dim SecuencialReembolo As String
                    Insertar_Campo_XML AbrirXML("totalImpuesto")
                        Insertar_Campo_XML CampoXML("codigo", "2")
                       'MsgBox Porc_IVA
-                       If (Porc_IVA * 100) > 12 Then
-                          Insertar_Campo_XML CampoXML("codigoPorcentaje", "3")
-                       Else
-                          Insertar_Campo_XML CampoXML("codigoPorcentaje", "2")
-                       End If
+                       Insertar_Campo_XML CampoXML("codigoPorcentaje", Cod_Porc_IVA)
                        'Insertar_Campo_XML CampoXML("descuentoAdicional", "0")
                        Insertar_Campo_XML CampoXML("baseImponible", Format$(TFA.Con_IVA - TFA.Descuento_X, "#0.00"))
                        Insertar_Campo_XML CampoXML("tarifa", Porc_IVA * 100)
@@ -3669,11 +3674,7 @@ Dim SecuencialReembolo As String
                                Insertar_Campo_XML CampoXML("codigoPorcentaje", "0")
                                Insertar_Campo_XML CampoXML("tarifa", "0")
                            Else
-                               If (Porc_IVA * 100) > 12 Then
-                                  Insertar_Campo_XML CampoXML("codigoPorcentaje", "3")
-                               Else
-                                  Insertar_Campo_XML CampoXML("codigoPorcentaje", "2")
-                               End If
+                               Insertar_Campo_XML CampoXML("codigoPorcentaje", Cod_Porc_IVA)
                                Insertar_Campo_XML CampoXML("tarifa", Porc_IVA * 100)
                            End If
                            Insertar_Campo_XML CampoXML("baseImponible", Format$(.fields("Total") - (.fields("Total_Desc") + .fields("Total_Desc2")), "#0.00"))
@@ -3717,7 +3718,7 @@ Dim SecuencialReembolo As String
                        Insertar_Campo_XML AbrirXML("detalleImpuesto")
                           Insertar_Campo_XML CampoXML("codigo", "2")
                           If .fields("Total_IVA") > 0 Then
-                             Insertar_Campo_XML CampoXML("codigoPorcentaje", "2")
+                             Insertar_Campo_XML CampoXML("codigoPorcentaje", Cod_Porc_IVA)
                              Insertar_Campo_XML CampoXML("tarifa", "12")
                              Insertar_Campo_XML CampoXML("baseImponibleReembolso", SubTotal)
                              Insertar_Campo_XML CampoXML("impuestoReembolso", .fields("Total_IVA"))

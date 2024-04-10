@@ -1320,12 +1320,12 @@ Private Sub DCCliente_LostFocus()
       .MoveFirst
       .Find ("Cliente = '" & DCCliente.Text & "'")
        If Not .EOF Then
-          CodigoBenef = .Fields("Codigo")
-          TextBenef.Text = .Fields("Cliente")
-          CodigoCliente = .Fields("Codigo")
-          NombreCliente = .Fields("Cliente")
-          Grupo_No = .Fields("Grupo")
-          TipoDoc = .Fields("TD")
+          CodigoBenef = .fields("Codigo")
+          TextBenef.Text = .fields("Cliente")
+          CodigoCliente = .fields("Codigo")
+          NombreCliente = .fields("Cliente")
+          Grupo_No = .fields("Grupo")
+          TipoDoc = .fields("TD")
           FrmBenef.Visible = False
           'TextCotiza.SetFocus
        Else
@@ -1375,12 +1375,12 @@ Private Sub TextBenef_LostFocus()
       .MoveFirst
       .Find ("Cliente = '" & TextBenef.Text & "'")
        If Not .EOF Then
-          CodigoBenef = .Fields("Codigo")
-          TextBenef.Text = .Fields("Cliente")
-          CodigoCliente = .Fields("Codigo")
-          NombreCliente = .Fields("Cliente")
-          Grupo_No = .Fields("Grupo")
-          TipoDoc = .Fields("TD")
+          CodigoBenef = .fields("Codigo")
+          TextBenef.Text = .fields("Cliente")
+          CodigoCliente = .fields("Codigo")
+          NombreCliente = .fields("Cliente")
+          Grupo_No = .fields("Grupo")
+          TipoDoc = .fields("TD")
           FA.CodigoC = CodigoCliente
           FA.Cliente = NombreCliente
        Else
@@ -1511,7 +1511,7 @@ Private Sub DCArticulo_KeyDown(KeyCode As Integer, Shift As Integer)
       If .RecordCount Then
          .MoveFirst
          .Find ("Producto = '" & DCArticulo & "' ")
-          If Not .EOF Then MsgBox .Fields("Producto") & ":" & vbCrLf & .Fields("Ayuda")
+          If Not .EOF Then MsgBox .fields("Producto") & ":" & vbCrLf & .fields("Ayuda")
       End If
      End With
   End If
@@ -1524,9 +1524,9 @@ End Sub
 
 Private Sub DGAsientoF_BeforeDelete(Cancel As Integer)
   Mensajes = "¿Realmente desea eliminar el campo " & vbCrLf & "(" _
-           & AdoAsientoF.Recordset.Fields("CODIGO") & ") " _
-           & AdoAsientoF.Recordset.Fields("PRODUCTO") & "   TOTAL -> " _
-           & AdoAsientoF.Recordset.Fields("TOTAL") & "?"
+           & AdoAsientoF.Recordset.fields("CODIGO") & ") " _
+           & AdoAsientoF.Recordset.fields("PRODUCTO") & "   TOTAL -> " _
+           & AdoAsientoF.Recordset.fields("TOTAL") & "?"
   Titulo = "Confirmación de eliminación"
   If BoxMensaje = 6 Then Cancel = False Else Cancel = True
 End Sub
@@ -1597,6 +1597,8 @@ End Sub
 
 Private Sub MBFecha_LostFocus()
   FechaValida MBFecha
+  Validar_Porc_IVA MBFecha
+  
   FechaTexto1 = MBFecha.Text
   FA.Fecha = MBFecha.Text
   sSQL = "SELECT * " _
@@ -1748,17 +1750,17 @@ Public Sub ProcGrabar()
             SetAdoFields "Factura", FA.Factura
             SetAdoFields "CodigoC", FA.CodigoC
             SetAdoFields "Fecha", MBFecha
-            SetAdoFields "Codigo", .Fields("CODIGO")
-            SetAdoFields "Cantidad", .Fields("CANT")
-            SetAdoFields "CodigoL", .Fields("CODIGO_L")
-            SetAdoFields "Reposicion", .Fields("REP")
-            SetAdoFields "Precio", .Fields("PRECIO")
-            SetAdoFields "Total", .Fields("TOTAL")
-            SetAdoFields "Total_Desc", .Fields("Total_Desc")
-            SetAdoFields "Total_IVA", .Fields("Total_IVA")
-            SetAdoFields "Producto", .Fields("PRODUCTO")
-            SetAdoFields "Cod_Ejec", .Fields("Cod_Ejec")
-            SetAdoFields "Porc_C", .Fields("Porc_C")
+            SetAdoFields "Codigo", .fields("CODIGO")
+            SetAdoFields "Cantidad", .fields("CANT")
+            SetAdoFields "CodigoL", .fields("CODIGO_L")
+            SetAdoFields "Reposicion", .fields("REP")
+            SetAdoFields "Precio", .fields("PRECIO")
+            SetAdoFields "Total", .fields("TOTAL")
+            SetAdoFields "Total_Desc", .fields("Total_Desc")
+            SetAdoFields "Total_IVA", .fields("Total_IVA")
+            SetAdoFields "Producto", .fields("PRODUCTO")
+            SetAdoFields "Cod_Ejec", .fields("Cod_Ejec")
+            SetAdoFields "Porc_C", .fields("Porc_C")
             SetAdoFields "CodigoU", CodigoUsuario
             SetAdoFields "Periodo", Periodo_Contable
             SetAdoFields "Item", NumEmpresa

@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form AbonoAnticipo 
    BorderStyle     =   3  'Fixed Dialog
@@ -752,50 +752,55 @@ Private Sub Command1_Click()
   FechaValida MBFecha
   TextoValido TextCheqNo
   FechaTexto = MBFecha
-  Mensajes = "Esta Seguro que desea grabar Abono."
-  Titulo = "Formulario de Grabación."
-  If BoxMensaje = vbYes Then
-     FechaTexto = MBFecha ' FechaSistema
-     If CheqRecibo.value = 1 Then
-        DiarioCaja = ReadSetDataNum("Recibo_No", True, True)
-     Else
-        DiarioCaja = Val(TxtRecibo)
-     End If
-     SaldoDisp = Saldo - TotalCajaMN
-     LabelPend.Caption = Format$(SaldoDisp, "#,##0.00")
-     Cta = SinEspaciosIzq(DCBanco)
-    'Abono de Factura
-     TA.Recibi_de = NombreCliente
-     TA.T = Normal
-     TA.TP = TipoFactura
-     TA.Fecha = MBFecha
-     TA.Cta = Cta
-     TA.Banco = TrimStrg(TxtBanco)
-     TA.Cheque = TrimStrg(TextCheqNo)
-     TA.Abono = TotalCajaMN
-     TA.CodigoC = CodigoCli
-     TA.Recibo_No = Format$(DiarioCaja, "0000000000")
-     Grabar_Abonos TA
-    'Tipo de Abonos con SubCtas
-    'Costo Bancario por deposito
-     If TipoProc = "TRANSFERENCIA" Then
-        If Costo_Banco > 0 Then
-           TA.TP = "CB"
-           TA.Fecha = MBFecha
-           TA.Cta = Cta
-           TA.Cta_CxP = Cta_Gasto_Banco
-           TA.Banco = "COSTO BANCARIO"
-           TA.Cheque = "TRANSF"
-           TA.Abono = Costo_Banco
-           Grabar_Abonos TA
-        End If
-     End If
-     Actualizar_Saldos_Facturas_SP TA.TP, TA.Serie, TA.Factura
-     RatonNormal
-     Imprimir_Comprobante_Caja TA
-     Listar_Facturas_Pendientes
-     MsgBox "Abono Realizado con éxito"
-     DCFactura.SetFocus
+  If CFechaLong(MBFecha) < CFechaLong(FechaCorte) Then
+     MsgBox "No se puede grabar abonos con fecha inferior a la emision de la factura"
+     MBFecha.SetFocus
+  Else
+    Mensajes = "Esta Seguro que desea grabar Abono."
+    Titulo = "Formulario de Grabación."
+    If BoxMensaje = vbYes Then
+       FechaTexto = MBFecha ' FechaSistema
+       If CheqRecibo.value = 1 Then
+          DiarioCaja = ReadSetDataNum("Recibo_No", True, True)
+       Else
+          DiarioCaja = Val(TxtRecibo)
+       End If
+       SaldoDisp = Saldo - TotalCajaMN
+       LabelPend.Caption = Format$(SaldoDisp, "#,##0.00")
+       Cta = SinEspaciosIzq(DCBanco)
+      'Abono de Factura
+       TA.Recibi_de = NombreCliente
+       TA.T = Normal
+       TA.TP = TipoFactura
+       TA.Fecha = MBFecha
+       TA.Cta = Cta
+       TA.Banco = TrimStrg(TxtBanco)
+       TA.Cheque = TrimStrg(TextCheqNo)
+       TA.Abono = TotalCajaMN
+       TA.CodigoC = CodigoCli
+       TA.Recibo_No = Format$(DiarioCaja, "0000000000")
+       Grabar_Abonos TA
+      'Tipo de Abonos con SubCtas
+      'Costo Bancario por deposito
+       If TipoProc = "TRANSFERENCIA" Then
+          If Costo_Banco > 0 Then
+             TA.TP = "CB"
+             TA.Fecha = MBFecha
+             TA.Cta = Cta
+             TA.Cta_CxP = Cta_Gasto_Banco
+             TA.Banco = "COSTO BANCARIO"
+             TA.Cheque = "TRANSF"
+             TA.Abono = Costo_Banco
+             Grabar_Abonos TA
+          End If
+       End If
+       Actualizar_Saldos_Facturas_SP TA.TP, TA.Serie, TA.Factura
+       RatonNormal
+       Imprimir_Comprobante_Caja TA
+       Listar_Facturas_Pendientes
+       MsgBox "Abono Realizado con éxito"
+       DCFactura.SetFocus
+    End If
   End If
  'Unload AbonoEfectivo
 End Sub
@@ -845,6 +850,7 @@ Private Sub DCAutorizacion_LostFocus()
           TipoFactura = .fields("TC")
           Saldo = .fields("Saldo_MN")
          'Datos del Abonos
+          FechaCorte = .fields("Fecha")
           TA.Serie = .fields("Serie")
           TA.Autorizacion = .fields("Autorizacion")
           TA.TP = TipoFactura
@@ -861,7 +867,13 @@ Private Sub DCAutorizacion_LostFocus()
           LabelPend.Caption = Format$(SaldoDisp, "#,##0.00")
           AbonoAnticipo.Caption = "INGRESO DE CAJA (" & TipoFactura & ")"
           TextCajaMN.Text = LabelPend.Caption
-          DCBanco.SetFocus
+         'MsgBox CFechaLong(MBFecha) & vbCrLf & CFechaLong(FechaCorte)
+          If CFechaLong(MBFecha) < CFechaLong(FechaCorte) Then
+             MsgBox "No se puede grabar abonos con fecha inferior a la emision de la factura"
+             MBFecha.SetFocus
+          Else
+             DCBanco.SetFocus
+          End If
        Else
           MsgBox "Esta Factura no esta pendiente"
           Command1.Enabled = False
@@ -869,7 +881,6 @@ Private Sub DCAutorizacion_LostFocus()
        End If
     End If
   End With
-  
 End Sub
 
 Private Sub DCBanco_KeyDown(KeyCode As Integer, Shift As Integer)

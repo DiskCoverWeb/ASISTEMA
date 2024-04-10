@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Begin VB.Form ListEmp 
    BackColor       =   &H00FF8080&
    BorderStyle     =   3  'Fixed Dialog
@@ -1622,6 +1622,7 @@ Dim Txt_SMTP_Mails As String
    
    RatonReloj
    HayCnn = Get_WAN_IP
+   
   'MsgBox IP_PC.Nombre_PC & vbCrLf & IP_PC.IP_PC & vbCrLf & IP_PC.InterNet & vbCrLf
    Cadena = ".." & String(Len(IP_PC.Status) * 2, "..") & ".." & vbCrLf _
           & """" & UCase(IP_PC.Status) & """" & vbCrLf _
@@ -1682,22 +1683,7 @@ Dim Txt_SMTP_Mails As String
    Pict_Version.AutoRedraw = True
    Pict_Version.ForeColor = Amarillo_Claro
    Pict_Version.FontName = TipoArial
-         
-  'Contador de Fondos y Verificacion de Fondos de Pantalla
-   Mes = Format$(Month(FechaSistema), "00")
-   Cadena = Dir(RutaSistema & "\FONDOS\M" & Mes & "\*.jpg", vbNormal)
-   ContadorFondos = 0
-   Do While Cadena <> ""
-      If Cadena <> "." And Cadena <> ".." Then
-         If (GetAttr(RutaSistema & "\FONDOS\M" & Mes & "\" & Cadena) And vbNormal) = vbNormal Then
-            ReDim Preserve Fondos_Pantalla(ContadorFondos) As String
-            Fondos_Pantalla(ContadorFondos) = RutaSistema & "\FONDOS\M" & Mes & "\" & Cadena
-            ContadorFondos = ContadorFondos + 1
-         End If
-      End If
-      Cadena = Dir
-   Loop
-      
+
    RatonReloj
   'Averiguamos si el MySQL esta en linea
    Cadena = ""

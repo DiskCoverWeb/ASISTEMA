@@ -13,8 +13,8 @@ Begin VB.Form LRolPagos
    ClientWidth     =   14775
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   12375
-   ScaleWidth      =   22800
+   ScaleHeight     =   10035
+   ScaleWidth      =   14775
    WindowState     =   2  'Maximized
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
@@ -22,8 +22,8 @@ Begin VB.Form LRolPagos
       Left            =   0
       TabIndex        =   0
       Top             =   0
-      Width           =   22800
-      _ExtentX        =   40217
+      Width           =   14775
+      _ExtentX        =   26061
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -105,6 +105,7 @@ Begin VB.Form LRolPagos
             ImageIndex      =   17
          EndProperty
          BeginProperty Button13 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
             Object.Tag             =   ""
             Style           =   3
             MixedState      =   -1  'True
@@ -2193,6 +2194,8 @@ Dim Rubros_Otros_Ingresos As String
 Dim Lista_Emails As String
 Dim CtasDelRol As String
 Dim CtaImpRenta As String
+Dim PrimerDia As String
+Dim UltimoDia As String
 
 Dim TRol_Pago As Tipo_Rol_Pago_Individual
 Dim CtasRol() As CtasAsiento
@@ -2854,7 +2857,7 @@ Dim Total_Aporte_Patronal As Currency
            DetalleComp = Format(Contador, "00") & ".- " & ULCase(.fields("Cliente"))
           'Procesar Asiento de Efectivos, Cheques o Transferencias del Empleado
            CodigoCli = Ninguno
-           If CheqCxP.Value = 0 Then
+           If CheqCxP.value = 0 Then
               If UCase(MidStrg(.fields("Cheq_Dep_Transf"), 1, 3)) = "CHQ" Then
                  NoCheque = SinEspaciosDer(.fields("Cheq_Dep_Transf"))
                  Total_Cheque = Total_Cheque + .fields("Egresos")
@@ -2880,7 +2883,7 @@ Dim Total_Aporte_Patronal As Currency
        Loop
     End If
    End With
-   If CheqCxP.Value <> 0 Then
+   If CheqCxP.value <> 0 Then
       NoCheque = Ninguno
       DetalleComp = Ninguno
       InsertarAsientos AdoAsiento, SinEspaciosIzq(DCCxP), 0, 0, Total_Pagar
@@ -2996,11 +2999,13 @@ Dim Total_Aporte_Patronal As Currency
 End Sub
 
 Private Sub CheqCxP_Click()
-  If CheqCxP.Value = 1 Then DCCxP.Visible = True Else DCCxP.Visible = False
+  If CheqCxP.value = 1 Then DCCxP.Visible = True Else DCCxP.Visible = False
 End Sub
 
 Private Sub CmbGrupos_GotFocus()
   LRolPagos.Caption = "ROL DE PAGOS MES DE " & UCase(MesesLetras(Month(FechaFinal)))
+  PrimerDia = BuscarFecha(PrimerDiaMes(FechaFinal))
+  UltimoDia = BuscarFecha(UltimoDiaMes(FechaFinal))
 End Sub
 
 Private Sub CmbGrupos_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -3059,7 +3064,7 @@ Dim OrdenAlfabetico As Boolean
   Inicializar_Cero_Asientos True
   Si_No = Leer_Campo_Empresa("Rol_2_Pagina")
   Medio_Rol = Leer_Campo_Empresa("Medio_Rol")
-  If OpcGrupo.Value Then OrdenAlfabetico = False Else OrdenAlfabetico = True
+  If OpcGrupo.value Then OrdenAlfabetico = False Else OrdenAlfabetico = True
   Fecha_Del_AT CMes, CAnio
 
  'Procedemos a procesar el Rol pedido del mes o quincena
@@ -3100,7 +3105,7 @@ Dim OrdenAlfabetico As Boolean
  'MsgBox AdoAux.Recordset.RecordCount & vbCrLf & vbCrLf & SQL2
   If AdoAux.Recordset.RecordCount <= 0 Then
     'Procesamos el Rol de Pagos del Mes
-     Procesar_Rol_Pagos_Mensual_SP FechaIni, FechaFin, CmbGrupos.Text, CheqCxP.Value, SinEspaciosIzq(DCCxP)
+     Procesar_Rol_Pagos_Mensual_SP FechaIni, FechaFin, CmbGrupos.Text, CheqCxP.value, SinEspaciosIzq(DCCxP)
     '------------------------------------------------------------------------------------------------------
      Llenar_Rol_Pagos_Empleados False
      Listar_CxCxP_SubMod
@@ -3171,7 +3176,7 @@ Dim OrdenAlfabetico As Boolean
   Select_Adodc AdoAux, sSQL
   With AdoAux.Recordset
    If .RecordCount > 0 Then
-       Insertar_Texto_Temporal_SP "Estos Empleados no estan bien asignado el subModulo de Gastos:"
+       Insertar_Texto_Temporal_SP "Estos Empleados no estan bien asignado al subModulo de Gastos:"
        Do While Not .EOF
           Insertar_Texto_Temporal_SP " * " & .fields("Cliente")
          .MoveNext
@@ -3198,6 +3203,7 @@ Dim IESS_ExtSN As Boolean
 Dim Reingreso_FR As Boolean
 
 Dim Dias_x_Mes As Byte
+Dim CargaFamiliar As Byte
 
 Dim Dias_Temp As Integer
 Dim Dias_Laborados As Integer
@@ -3225,6 +3231,7 @@ Dim Total_CRR As Currency
 Dim SueldoV As Currency
 Dim SalarioNominal As Currency
 Dim MaximoGastoPersonal As Currency
+Dim DescuentoCargaFamiliar As Currency
 
 Dim DH_SubCta As String
 Dim Fecha_Empleado As String
@@ -3264,7 +3271,7 @@ Dim CedulaDeUno As String
  'Si queremos saber los calculos individuales de un empleado
  '----------------------------------------------------------
   CedulaDeUno = Ninguno
- 'CedulaDeUno = "1312182700"
+ 'CedulaDeUno = "1755513619"
  '----------------------------------------------------------
   FraccionBasica = 0
   SQL2 = "SELECT TOP 1 Hasta " _
@@ -3274,12 +3281,10 @@ Dim CedulaDeUno As String
   Select_Adodc AdoImpRenta, SQL2
   If AdoImpRenta.Recordset.RecordCount > 0 Then FraccionBasica = Redondear(AdoImpRenta.Recordset.fields("Hasta") * 2.13, 2)
   
-  MaximoGastoPersonal = Redondear(Canasta_Basica * 7, 2)
-  
-  sSQL = "SELECT C.Cliente, C.CI_RUC, C.Direccion, C.Telefono, C.Actividad, C.Email, C.Email2, CR.Codigo, CR.Grupo_Rol, " _
+  sSQL = "SELECT C.Cliente, C.CI_RUC, C.Direccion, C.Telefono, C.Actividad, C.Email, C.Email2, CR.Codigo, CR.Grupo_Rol, CR.Carga_Familiar, " _
        & "CR.SubModulo, CR.ExtC, CR.Fecha, CR.Reingreso_FR, CR.FechaVI, CR.FechaVF, CR.SN, CR.Pagar_Fondo_Reserva, CR.Pagar_Decimos, " _
        & "CR.TiempoParcial, CR.Codigo_Banco, CR.Cta_Transferencia, CR.TC, CR.FP, CR.Cta_Forma_Pago, CRC.*, CSC.Detalle, " _
-       & "(CR.Vivienda+CR.Salud+CR.Educacion+CR.Alimentacion+CR.Vestimenta+CR.Discapacidad+CR.Tercera_Edad) As Gastos_Personales " _
+       & "(CR.Vivienda+CR.Salud+CR.Educacion+CR.Alimentacion+CR.Vestimenta+CR.Discapacidad+CR.Tercera_Edad+CR.Turismo) As Gastos_Personales " _
        & "FROM Clientes As C, Catalogo_Rol_Pagos As CR, Catalogo_Rol_Cuentas As CRC, Catalogo_SubCtas As CSC " _
        & "WHERE CR.Item = '" & NumEmpresa & "' " _
        & "AND CR.Periodo = '" & Periodo_Contable & "' " _
@@ -3295,18 +3300,42 @@ Dim CedulaDeUno As String
        & "AND CR.Periodo = CSC.Periodo " _
        & "AND CR.Codigo = C.Codigo " _
        & "AND CR.SubModulo = CSC.Codigo " _
+       & "AND CR.Grupo_Rol = CRC.Grupo_Rol " _
+       & "UNION " _
+       & "SELECT C.Cliente, C.CI_RUC, C.Direccion, C.Telefono, C.Actividad, C.Email, C.Email2, CR.Codigo, CR.Grupo_Rol, CR.Carga_Familiar, " _
+       & "CR.SubModulo, CR.ExtC, CR.Fecha, CR.Reingreso_FR, CR.FechaVI, CR.FechaVF, CR.SN, CR.Pagar_Fondo_Reserva, CR.Pagar_Decimos, " _
+       & "CR.TiempoParcial, CR.Codigo_Banco, CR.Cta_Transferencia, CR.TC, CR.FP, CR.Cta_Forma_Pago, CRC.*, CSC.Detalle, " _
+       & "(CR.Vivienda+CR.Salud+CR.Educacion+CR.Alimentacion+CR.Vestimenta+CR.Discapacidad+CR.Tercera_Edad+CR.Turismo) As Gastos_Personales " _
+       & "FROM Clientes As C, Catalogo_Rol_Pagos As CR, Catalogo_Rol_Cuentas As CRC, Catalogo_SubCtas As CSC " _
+       & "WHERE CR.Item = '" & NumEmpresa & "' " _
+       & "AND CR.Periodo = '" & Periodo_Contable & "' " _
+       & "AND CR.T = 'R' " _
+       & "AND CR.FechaC BETWEEN #" & PrimerDia & "# and #" & UltimoDia & "# " _
+       & "AND CR.Salario > 0 "
+  If Grupo_No <> "TODOS" Then sSQL = sSQL & "AND CR.Grupo_Rol = '" & Grupo_No & "' "
+  If CedulaDeUno <> Ninguno Then sSQL = sSQL & "AND C.CI_RUC = '" & CedulaDeUno & "' "
+  sSQL = sSQL _
+       & "AND CR.Item = CRC.Item " _
+       & "AND CR.Item = CSC.Item " _
+       & "AND CR.Periodo = CRC.Periodo " _
+       & "AND CR.Periodo = CSC.Periodo " _
+       & "AND CR.Codigo = C.Codigo " _
+       & "AND CR.SubModulo = CSC.Codigo " _
        & "AND CR.Grupo_Rol = CRC.Grupo_Rol "
-  If OpcGrupo.Value Then
+  If OpcGrupo.value Then
      sSQL = sSQL & "ORDER BY CR.Grupo_Rol,C.Cliente,CR.Codigo,CR.Cta_Transferencia "
   Else
      sSQL = sSQL & "ORDER BY C.Cliente,CR.Codigo,CR.Cta_Transferencia "
   End If
-  Select_Adodc AdoClientes, sSQL, , , "Rol_pagos_mensual"
+  Select_Adodc AdoClientes, sSQL
   With AdoClientes.Recordset
    'MsgBox .RecordCount
    If .RecordCount > 0 Then
        Progreso_Barra.Valor_Maximo = Progreso_Barra.Valor_Maximo + .RecordCount
        Do While Not .EOF
+          MaximoGastoPersonal = 0
+          DescuentoCargaFamiliar = 0
+          
          'Datos Generales del Rol de Pago
           TRol_Pago.Codigo = .fields("Codigo")
           TRol_Pago.Empleado = .fields("Cliente")
@@ -3316,7 +3345,23 @@ Dim CedulaDeUno As String
           IESS_ExtSN = .fields("ExtC")
           Fecha_Empleado = .fields("Fecha")
           Reingreso_FR = .fields("Reingreso_FR")
+          CargaFamiliar = .fields("Carga_Familiar")
           
+         'Descuento Canasta Basica:
+         '------------------------
+          SQL2 = "SELECT Cargas, Canastas, Rebaja " _
+               & "FROM Tabla_Canasta_Familiar " _
+               & "WHERE Anio = '" & CStr(Year(FechaInicial)) & "' " _
+               & "AND Cargas = " & CargaFamiliar & " " _
+               & "ORDER BY Cargas "
+          Select_Adodc AdoAux, SQL2
+          If AdoAux.Recordset.RecordCount > 0 Then
+             MaximoGastoPersonal = Redondear(AdoAux.Recordset.fields("Canastas") * Canasta_Basica, 2)
+             If MaximoGastoPersonal <= .fields("Gastos_Personales") Then
+                DescuentoCargaFamiliar = Redondear(MaximoGastoPersonal * (AdoAux.Recordset.fields("Rebaja") / 100), 2)
+             End If
+          End If
+       
           Dias_Temp = (CFechaLong(Fecha_IESS) - CFechaLong(Fecha_Empleado)) + 1
           If Reingreso_FR Then Dias_Temp = 365
           
@@ -3458,7 +3503,7 @@ Dim CedulaDeUno As String
              End If
 
              Limpiar_Rol_Individual
-             If CheqHoras.Value = 1 Then TRol_Pago.Horas = AdoSubCta.Recordset.fields("T_Horas")
+             If CheqHoras.value = 1 Then TRol_Pago.Horas = AdoSubCta.Recordset.fields("T_Horas")
              TRol_Pago.ID = 10
              TRol_Pago.Cod_Rol_Pago = "Salario"
              TRol_Pago.Tipo_Rubro = "PER"
@@ -3471,7 +3516,7 @@ Dim CedulaDeUno As String
                 
              If Rol_I <= Rol_M And Rol_M <= Rol_F And Cta_SueldoV <> Ninguno Then
                 Limpiar_Rol_Individual
-                If CheqHoras.Value = 1 Then TRol_Pago.Horas = AdoSubCta.Recordset.fields("T_Horas")
+                If CheqHoras.value = 1 Then TRol_Pago.Horas = AdoSubCta.Recordset.fields("T_Horas")
                 TRol_Pago.ID = 11
                 TRol_Pago.Cod_Rol_Pago = "Salario"
                 TRol_Pago.Tipo_Rubro = "PER"
@@ -3489,7 +3534,7 @@ Dim CedulaDeUno As String
              TRol_Pago.Cod_Rol_Pago = "Hor_Ext"
              TRol_Pago.Tipo_Rubro = "PER"
              TRol_Pago.Cta = Cta_Horas_Extras
-             If CheqHoras.Value = 1 Then TRol_Pago.Horas = AdoSubCta.Recordset.fields("T_Horas_Exts")
+             If CheqHoras.value = 1 Then TRol_Pago.Horas = AdoSubCta.Recordset.fields("T_Horas_Exts")
              TRol_Pago.Ingresos = Saldo
              Debe = Debe + TRol_Pago.Ingresos
              Insertar_Rol_Individual
@@ -3954,11 +3999,13 @@ Dim CedulaDeUno As String
                     End If
 '                 End If
                 
-                 Total_GP = .fields("Gastos_Personales")
+                 Total_GP = .fields("Gastos_Personales") - DescuentoCargaFamiliar
 
                  If CedulaDeUno <> Ninguno Then MsgBox "Total Gastos Personales (" & MaximoGastoPersonal & ") = " & Total_GP & vbCrLf & "Sueldo - IEES: " & Total_IR
                 'Maximo Gastos personales aceptados por empleado
                 '----------------------------------------------
+                
+                
                  If Total_GP > MaximoGastoPersonal Then Total_GP = MaximoGastoPersonal
                                                                                                     
                  NoMeses = (12 - Month(FechaInicial) + 1)
@@ -3994,6 +4041,8 @@ Dim CedulaDeUno As String
                     Total_Desc = Total_Desc * Redondear(AdoImpRenta.Recordset.fields("Excede") / 100, 2)
                     Total_Desc = Redondear((Total_Desc + AdoImpRenta.Recordset.fields("Basico")) / Meses_IR, 2)
                  End If
+                 
+                 If Total_Desc < 0 Then Total_Desc = 0
                  
                  If CedulaDeUno <> Ninguno Then MsgBox "Total Desc Imp Renta: (" & TRol_Pago.Codigo & ") = " & Total_Desc
                  
@@ -4049,7 +4098,7 @@ Dim CedulaDeUno As String
                Case "T": TRol_Pago.Cheq_Dep_Transf = Cuenta_No
                Case "O": TRol_Pago.Cheq_Dep_Transf = Ninguno
              End Select
-             If CheqCxP.Value <> 0 Then
+             If CheqCxP.value <> 0 Then
                 TRol_Pago.Cta = SinEspaciosIzq(DCCxP.Text)
                'TRol_Pago.Cheq_Dep_Transf = "CP" & CStr(Year(fechafinal) & Format(Month(fechafinal), "00"))
                 Cta = Leer_Cta_Catalogo(TRol_Pago.Cta)
@@ -4511,23 +4560,23 @@ Public Sub Procesar_CxCxP(vTC As String)
   DGNomina.Visible = False
   DGAsiento(0).Visible = False
   
-  sSQL = "UPDATE Trans_SubCtas " _
-       & "SET X = '.' " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND Periodo = '" & Periodo_Contable & "' "
-  Ejecutar_SQL_SP sSQL
-
-  sSQL = "UPDATE Trans_SubCtas " _
-       & "SET X = 'R' " _
-       & "FROM Trans_SubCtas As TS, Catalogo_Rol_Pagos As CRP " _
-       & "WHERE TS.Item = '" & NumEmpresa & "' " _
-       & "AND TS.Periodo = '" & Periodo_Contable & "' " _
-       & "AND TS.TC = '" & vTC & "' " _
-       & "AND CRP.T = '" & Normal & "' " _
-       & "AND TS.Item = CRP.Item " _
-       & "AND TS.Periodo = CRP.Periodo " _
-       & "AND TS.Codigo = CRP.Codigo "
-  Ejecutar_SQL_SP sSQL
+'''  sSQL = "UPDATE Trans_SubCtas " _
+'''       & "SET X = '.' " _
+'''       & "WHERE Item = '" & NumEmpresa & "' " _
+'''       & "AND Periodo = '" & Periodo_Contable & "' "
+'''  Ejecutar_SQL_SP sSQL
+'''
+'''  sSQL = "UPDATE Trans_SubCtas " _
+'''       & "SET X = 'R' " _
+'''       & "FROM Trans_SubCtas As TS, Catalogo_Rol_Pagos As CRP " _
+'''       & "WHERE TS.Item = '" & NumEmpresa & "' " _
+'''       & "AND TS.Periodo = '" & Periodo_Contable & "' " _
+'''       & "AND TS.TC = '" & vTC & "' " _
+'''       & "AND CRP.T = '" & Normal & "' " _
+'''       & "AND TS.Item = CRP.Item " _
+'''       & "AND TS.Periodo = CRP.Periodo " _
+'''       & "AND TS.Codigo = CRP.Codigo "
+'''  Ejecutar_SQL_SP sSQL
 
   SQL2 = "DELETE * " _
        & "FROM Asiento_SC " _
@@ -4554,7 +4603,10 @@ Public Sub Procesar_CxCxP(vTC As String)
        & "AND Fecha_V <= #" & BuscarFecha(FechaFinal) & "# " _
        & "AND T = '" & Normal & "' " _
        & "AND TC = '" & vTC & "' " _
-       & "AND X = 'R' " _
+       & "AND Codigo IN (SELECT Codigo " _
+       & "               FROM Catalogo_Rol_Pagos ) " _
+       & "               WHERE Item = '" & NumEmpresa & "' " _
+       & "               AND Periodo = '" & Periodo_Contable & "') " _
        & "GROUP BY Codigo, TC, Cta, Serie, Factura "
   If vTC = "C" Then sSQL = sSQL & "HAVING SUM(Debitos)-SUM(Creditos) > 0 " Else sSQL = sSQL & "HAVING SUM(Creditos)-SUM(Debitos) > 0 "
   sSQL = sSQL & "ORDER BY Codigo, TC, Cta, Serie, Factura "
@@ -4717,10 +4769,10 @@ Dim oSheet As Object
       oSheet.Columns("C").columnWidth = 40
       oSheet.Columns("D").columnWidth = 15
      'Detalle de las columnas
-      oSheet.Range("A1").Value = "F_P"
-      oSheet.Range("B1").Value = "Detalle_Rol"
-      oSheet.Range("C1").Value = "Forma_de_Pago"
-      oSheet.Range("D1").Value = "Neto_Recibir"
+      oSheet.Range("A1").value = "F_P"
+      oSheet.Range("B1").value = "Detalle_Rol"
+      oSheet.Range("C1").value = "Forma_de_Pago"
+      oSheet.Range("D1").value = "Neto_Recibir"
       oSheet.Range("A1:D1").Font.Bold = True
      'Datos de la hoja de calculo
       NFila = 1
@@ -4750,10 +4802,10 @@ Dim oSheet As Object
 
          
         'Religioso
-         oSheet.Range("A" & CStr(NFila)).Value = .fields("F_P")
-         oSheet.Range("B" & CStr(NFila)).Value = .fields("Detalle_Rol")
-         oSheet.Range("C" & CStr(NFila)).Value = .fields("Forma_de_Pago")
-         oSheet.Range("D" & CStr(NFila)).Value = .fields("Neto_Recibir")
+         oSheet.Range("A" & CStr(NFila)).value = .fields("F_P")
+         oSheet.Range("B" & CStr(NFila)).value = .fields("Detalle_Rol")
+         oSheet.Range("C" & CStr(NFila)).value = .fields("Forma_de_Pago")
+         oSheet.Range("D" & CStr(NFila)).value = .fields("Neto_Recibir")
         .MoveNext
       Loop
      'Bloqueamos las celdas que no se puden cambiar
@@ -4828,7 +4880,7 @@ Public Sub Procesar_Grabar()
      Co.Monto_Total = TotalCajaMN + Total_Cheque + Total_Bancos
      Co.Item = NumEmpresa
      Co.Usuario = CodigoUsuario
-     If CheqCD.Value <> 1 Then
+     If CheqCD.value <> 1 Then
         Co.TP = CompDiario
         Co.Numero = ReadSetDataNum("Diario", True, True)
      Else
@@ -5166,7 +5218,7 @@ Public Sub Listar_Empleados()
        & "AND CR.Grupo_Rol = CRC.Grupo_Rol " _
        & "AND CR.Item = CRC.Item " _
        & "AND CR.Periodo = CRC.Periodo "
-  If OpcGrupo.Value Then
+  If OpcGrupo.value Then
      sSQL = sSQL & "ORDER BY CR.Grupo_Rol,C.Cliente,CR.Codigo,CR.Cta_Transferencia "
   Else
      sSQL = sSQL & "ORDER BY C.Cliente,CR.Codigo,CR.Cta_Transferencia "
@@ -6117,7 +6169,7 @@ Public Sub Llenar_Rol_Pagos_Colectivo(Es_quincena As Boolean)
        & "WHERE Item = '" & NumEmpresa & "' " _
        & "AND CodigoU = '" & CodigoUsuario & "' "
   If CmbGrupos <> "TODOS" Then SQL1 = SQL1 & "AND Grupo_Rol = '" & CmbGrupos & "' "
-  If OpcGrupo.Value Then
+  If OpcGrupo.value Then
      SQL1 = SQL1 & "ORDER BY Grupo_Rol,No_,Nombre_Empleado "
   Else
      SQL1 = SQL1 & "ORDER BY Nombre_Empleado "
@@ -6135,7 +6187,7 @@ Public Sub Llenar_Rol_Pagos_Colectivo(Es_quincena As Boolean)
        & "WHERE Item = '" & NumEmpresa & "' " _
        & "AND CodigoU = '" & CodigoUsuario & "' "
   If CmbGrupos <> "TODOS" Then SQL3 = SQL3 & "AND Grupo_Rol = '" & CmbGrupos & "' "
-  If OpcGrupo.Value Then
+  If OpcGrupo.value Then
      SQL3 = SQL3 & "ORDER BY Grupo_Rol,No_,Nombre_Empleado "
   Else
      SQL3 = SQL3 & "ORDER BY Nombre_Empleado "

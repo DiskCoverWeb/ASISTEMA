@@ -1,9 +1,9 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
 Begin VB.Form FListarEmpleados 
    Caption         =   "LISTA DE EMPLEADOS"
    ClientHeight    =   7485
@@ -974,7 +974,7 @@ Dim Tabla_ya_Existe As Boolean
          & "AND DG = 'D' " _
          & "AND LEN(Cod_Rol_Pago) > 1 " _
          & "ORDER BY Codigo "
-    Select_Adodc AdoSRI, sSQL, , , "RP_Catalogo_Cuentas"
+    Select_Adodc AdoSRI, sSQL
    
     RatonReloj
     Tabla_ya_Existe = False
@@ -992,6 +992,7 @@ Dim Tabla_ya_Existe As Boolean
        sSQL = "DROP TABLE Asiento_RP_IE "
        Ejecutar_SQL_SP sSQL
     End If
+
     sSQL = "CREATE TABLE Asiento_RP_IE (" _
          & "Codigo NVARCHAR(10) NULL," _
          & "Empleado NVARCHAR(60) NULL," _
@@ -1010,7 +1011,7 @@ Dim Tabla_ya_Existe As Boolean
          & "I_E_Emp NVARCHAR(1) NULL," _
          & "Item NVARCHAR(3) NULL); "
     Ejecutar_SQL_SP sSQL
-         
+
     sSQL = "INSERT INTO Asiento_RP_IE(Codigo,Empleado,SUELDO,I_E_Emp,Item) " _
          & "SELECT C.Codigo,C.Cliente,CRP.Salario,'" & I_E_Emp & "' As IE,'" & NumEmpresa & "' As Item " _
          & "FROM Clientes As C,Catalogo_Rol_Pagos AS CRP " _
@@ -1019,7 +1020,6 @@ Dim Tabla_ya_Existe As Boolean
          & "AND CRP.T = '" & Normal & "' " _
          & "AND C.Codigo = CRP.Codigo "
     Ejecutar_SQL_SP sSQL
-    
     With AdoSRI.Recordset
      If .RecordCount > 0 Then
         .MoveFirst

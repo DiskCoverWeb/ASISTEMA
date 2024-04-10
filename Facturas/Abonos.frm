@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form Abonos 
    BorderStyle     =   3  'Fixed Dialog
@@ -1928,147 +1928,152 @@ Attribute VB_Exposed = False
 Dim EsNotaDeVenta As Boolean
 
 Private Sub Command1_Click()
-  TextoValido TextBanco
-  TextoValido TextCheqNo
-  TA.Recibi_de = NombreCliente
-  Mensajes = "Esta Seguro que desea grabar estos pagos."
-  Titulo = "Formulario de Grabación."
-  If BoxMensaje = vbYes Then
-     CodigoVen = CodigoUsuario
-     If ComisionEjec Then
-        With AdoRecibo.Recordset
-         If .RecordCount > 0 Then
-            .MoveFirst
-            .Find ("Nombre_Completo = '" & DCVendedor & "' ")
-             If Not .EOF Then CodigoVen = .fields("Codigo")
+  If CFechaLong(MBFecha) < CFechaLong(FechaCorte) Then
+     MsgBox "No se puede grabar abonos con fecha inferior a la emision de la factura"
+     MBFecha.SetFocus
+  Else
+      TextoValido TextBanco
+      TextoValido TextCheqNo
+      TA.Recibi_de = NombreCliente
+      Mensajes = "Esta Seguro que desea grabar estos pagos."
+      Titulo = "Formulario de Grabación."
+      If BoxMensaje = vbYes Then
+         CodigoVen = CodigoUsuario
+         If ComisionEjec Then
+            With AdoRecibo.Recordset
+             If .RecordCount > 0 Then
+                .MoveFirst
+                .Find ("Nombre_Completo = '" & DCVendedor & "' ")
+                 If Not .EOF Then CodigoVen = .fields("Codigo")
+             End If
+            End With
          End If
-        End With
-     End If
-     Calculo_Saldo
-     FechaTexto = FechaSistema
-     If CheqRecibo.value = 1 Then
-        DiarioCaja = ReadSetDataNum("Recibo_No", True, True)
-     Else
-        DiarioCaja = Val(TxtRecibo)
-     End If
-     Cta = SinEspaciosIzq(DCBanco.Text)
-     Cta1 = SinEspaciosIzq(DCTarjeta.Text)
-     NombreBanco1 = TrimStrg(MidStrg(DCTarjeta.Text, Len(Cta1) + 1, 60))
-     NombreBanco1 = MidStrg(NombreBanco1, 1, 25)
-     TA.Cta_CxP = Cta_Cobrar
-     TA.CodigoC = CodigoCliente
-     TA.T = Normal
-     TA.TP = FA.TC
-     TA.Serie = FA.Serie
-     TA.Factura = FA.Factura
-     TA.Fecha = MBFecha
-     
-    'Abono de Factura Caja MN
-     TA.Cta = Cta_CajaG
-     TA.Banco = "EFECTIVO MN"
-     TA.Cheque = Grupo_No
-     TA.Abono = TotalCajaMN
-     Grabar_Abonos TA
-     
-    'Abono de Factura Caja ME
-     TA.Cta = Cta_CajaGE
-     TA.Banco = "EFECTIVO MN"
-     TA.Cheque = Grupo_No
-     TA.Abono = TotalCajaME
-     Grabar_Abonos TA
-     
-    'Abono de Factura Banco
-     TA.Cta = TrimStrg(SinEspaciosIzq(DCBanco))
-     TA.Banco = TextBanco
-     TA.Cheque = TextCheqNo
-     TA.Abono = Total_Bancos
-     Grabar_Abonos TA
-     
-    'Abono de Factura Tarjeta
-     TA.Cta = TrimStrg(SinEspaciosIzq(DCTarjeta))
-     TA.Banco = NombreBanco1
-     TA.Cheque = TextBaucher
-     TA.Abono = Total_Tarjeta
-     Grabar_Abonos TA
-     
-    'Abono de Factura Rete. IVA Bienes
-     Codigo1 = Format$(Val(TrimStrg(MidStrg(TxtSerieRet, 1, 3))), "000")
-     Codigo2 = Format$(Val(TrimStrg(MidStrg(TxtSerieRet, 4, 3))), "000")
-     
-     TA.Cta = TrimStrg(SinEspaciosIzq(DCRetIBienes))
-     TA.Banco = "RETENCION IVA BIENES"
-     TA.Cheque = TextCompRet
-     TA.Abono = Total_RetIVAB
-     TA.AutorizacionR = TxtAutoRet
-     TA.Establecimiento = Codigo1
-     TA.Emision = Codigo2
-     TA.Porcentaje = Val(CBienes)
-     Grabar_Abonos_Retenciones TA
-     
-    'Abono de Factura Ret IVA Servicio
-     TA.Cta = TrimStrg(SinEspaciosIzq(DCRetISer))
-     TA.Banco = "RETENCION IVA SERVICIO"
-     TA.Cheque = TextCompRet
-     TA.Abono = Total_RetIVAS
-     TA.AutorizacionR = TxtAutoRet
-     TA.Establecimiento = Codigo1
-     TA.Emision = Codigo2
-     TA.Porcentaje = Val(CServicio)
-     Grabar_Abonos_Retenciones TA
-     
-    'Abono de Factura Ret. Fuente
-     TA.Cta = TrimStrg(SinEspaciosIzq(DCRetFuente))
-     TA.Banco = "RETENCION FUENTE - " & DCCodRet
-     TA.Cheque = TextCompRet
-     TA.Abono = Total_Ret
-     TA.AutorizacionR = TxtAutoRet
-     TA.Establecimiento = Codigo1
-     TA.Emision = Codigo2
-     TA.Porcentaje = Val(TextPorc)
-     Grabar_Abonos_Retenciones TA
-     
-    'Abono de Factura Interes Tarjeta
-     TA.TP = "TJ"
-     TA.Cta = Cta1
-     TA.Cta_CxP = Cta_Tarjetas
-     TA.Banco = "INTERES POR TARJETA"
-     TA.Cheque = TextBaucher
-     TA.Abono = Val(TextInteres)
-     Grabar_Abonos TA
-     
-     Actualizar_Saldos_Facturas_SP FA.TC, FA.Serie, FA.Factura
-     
-'''     T = "P"
-'''     If SaldoDisp <= 0 Then
-'''        T = "C"
-'''        SaldoDisp = 0
-'''     End If
-'''     sSQL = "UPDATE Facturas " _
-'''          & "SET Saldo_MN = " & SaldoDisp & ",T = '" & T & "' " _
-'''          & "WHERE Item = '" & NumEmpresa & "' " _
-'''          & "AND Periodo = '" & Periodo_Contable & "' " _
-'''          & "AND TC = '" & TA.TP & "' " _
-'''          & "AND Serie = '" & TA.Serie & "' " _
-'''          & "AND Autorizacion = '" & TA.Autorizacion & "' " _
-'''          & "AND Factura = " & TA.Factura & " " _
-'''          & "AND CodigoC = '" & TA.CodigoC & "' "
-'''     Ejecutar_SQL_SP sSQL
-     
-     LabelCambio.Caption = "0.00"
-     TextCajaMN = "0.00"
-     TextCajaME = "0.00"
-     TextRet = "0.00"
-     TextRetIVA = "0.00"
-     TextCheqNo = ""
-     TextCheque = "0.00"
-     TextBaucher = ""
-     TextTotalBaucher = "0.00"
-     TextRecibido = "0.00"
-     TextInteres = "0.00"
-     RatonNormal
-     Imprimir_Comprobante_Caja TA
+         Calculo_Saldo
+         FechaTexto = FechaSistema
+         If CheqRecibo.value = 1 Then
+            DiarioCaja = ReadSetDataNum("Recibo_No", True, True)
+         Else
+            DiarioCaja = Val(TxtRecibo)
+         End If
+         Cta = SinEspaciosIzq(DCBanco.Text)
+         Cta1 = SinEspaciosIzq(DCTarjeta.Text)
+         NombreBanco1 = TrimStrg(MidStrg(DCTarjeta.Text, Len(Cta1) + 1, 60))
+         NombreBanco1 = MidStrg(NombreBanco1, 1, 25)
+         TA.Cta_CxP = Cta_Cobrar
+         TA.CodigoC = CodigoCliente
+         TA.T = Normal
+         TA.TP = FA.TC
+         TA.Serie = FA.Serie
+         TA.Factura = FA.Factura
+         TA.Fecha = MBFecha
+         
+        'Abono de Factura Caja MN
+         TA.Cta = Cta_CajaG
+         TA.Banco = "EFECTIVO MN"
+         TA.Cheque = Grupo_No
+         TA.Abono = TotalCajaMN
+         Grabar_Abonos TA
+         
+        'Abono de Factura Caja ME
+         TA.Cta = Cta_CajaGE
+         TA.Banco = "EFECTIVO MN"
+         TA.Cheque = Grupo_No
+         TA.Abono = TotalCajaME
+         Grabar_Abonos TA
+         
+        'Abono de Factura Banco
+         TA.Cta = TrimStrg(SinEspaciosIzq(DCBanco))
+         TA.Banco = TextBanco
+         TA.Cheque = TextCheqNo
+         TA.Abono = Total_Bancos
+         Grabar_Abonos TA
+         
+        'Abono de Factura Tarjeta
+         TA.Cta = TrimStrg(SinEspaciosIzq(DCTarjeta))
+         TA.Banco = NombreBanco1
+         TA.Cheque = TextBaucher
+         TA.Abono = Total_Tarjeta
+         Grabar_Abonos TA
+         
+        'Abono de Factura Rete. IVA Bienes
+         Codigo1 = Format$(Val(TrimStrg(MidStrg(TxtSerieRet, 1, 3))), "000")
+         Codigo2 = Format$(Val(TrimStrg(MidStrg(TxtSerieRet, 4, 3))), "000")
+         
+         TA.Cta = TrimStrg(SinEspaciosIzq(DCRetIBienes))
+         TA.Banco = "RETENCION IVA BIENES"
+         TA.Cheque = TextCompRet
+         TA.Abono = Total_RetIVAB
+         TA.AutorizacionR = TxtAutoRet
+         TA.Establecimiento = Codigo1
+         TA.Emision = Codigo2
+         TA.Porcentaje = Val(CBienes)
+         Grabar_Abonos_Retenciones TA
+         
+        'Abono de Factura Ret IVA Servicio
+         TA.Cta = TrimStrg(SinEspaciosIzq(DCRetISer))
+         TA.Banco = "RETENCION IVA SERVICIO"
+         TA.Cheque = TextCompRet
+         TA.Abono = Total_RetIVAS
+         TA.AutorizacionR = TxtAutoRet
+         TA.Establecimiento = Codigo1
+         TA.Emision = Codigo2
+         TA.Porcentaje = Val(CServicio)
+         Grabar_Abonos_Retenciones TA
+         
+        'Abono de Factura Ret. Fuente
+         TA.Cta = TrimStrg(SinEspaciosIzq(DCRetFuente))
+         TA.Banco = "RETENCION FUENTE - " & DCCodRet
+         TA.Cheque = TextCompRet
+         TA.Abono = Total_Ret
+         TA.AutorizacionR = TxtAutoRet
+         TA.Establecimiento = Codigo1
+         TA.Emision = Codigo2
+         TA.Porcentaje = Val(TextPorc)
+         Grabar_Abonos_Retenciones TA
+         
+        'Abono de Factura Interes Tarjeta
+         TA.TP = "TJ"
+         TA.Cta = Cta1
+         TA.Cta_CxP = Cta_Tarjetas
+         TA.Banco = "INTERES POR TARJETA"
+         TA.Cheque = TextBaucher
+         TA.Abono = Val(TextInteres)
+         Grabar_Abonos TA
+         
+         Actualizar_Saldos_Facturas_SP FA.TC, FA.Serie, FA.Factura
+         
+    '''     T = "P"
+    '''     If SaldoDisp <= 0 Then
+    '''        T = "C"
+    '''        SaldoDisp = 0
+    '''     End If
+    '''     sSQL = "UPDATE Facturas " _
+    '''          & "SET Saldo_MN = " & SaldoDisp & ",T = '" & T & "' " _
+    '''          & "WHERE Item = '" & NumEmpresa & "' " _
+    '''          & "AND Periodo = '" & Periodo_Contable & "' " _
+    '''          & "AND TC = '" & TA.TP & "' " _
+    '''          & "AND Serie = '" & TA.Serie & "' " _
+    '''          & "AND Autorizacion = '" & TA.Autorizacion & "' " _
+    '''          & "AND Factura = " & TA.Factura & " " _
+    '''          & "AND CodigoC = '" & TA.CodigoC & "' "
+    '''     Ejecutar_SQL_SP sSQL
+         
+         LabelCambio.Caption = "0.00"
+         TextCajaMN = "0.00"
+         TextCajaME = "0.00"
+         TextRet = "0.00"
+         TextRetIVA = "0.00"
+         TextCheqNo = ""
+         TextCheque = "0.00"
+         TextBaucher = ""
+         TextTotalBaucher = "0.00"
+         TextRecibido = "0.00"
+         TextInteres = "0.00"
+         RatonNormal
+         Imprimir_Comprobante_Caja TA
+      End If
+      If Evaluar Then Unload Abonos
   End If
-  If Evaluar Then Unload Abonos
 End Sub
 
 Private Sub Command3_Click()
@@ -2655,6 +2660,10 @@ Private Sub DCAutorizacion_LostFocus()
           Grupo_No = .fields("Grupo")
           LblCliente.Caption = " " & NombreCliente
           LblGrupo.Caption = " " & Grupo_No
+          
+          FechaCorte = .fields("Fecha")
+          TA.Fecha = MBFecha
+          
           If TotalDolar <> 0 Then
              TextRet.Enabled = True
           Else
@@ -2670,6 +2679,10 @@ Private Sub DCAutorizacion_LostFocus()
              TextCajaMN.SetFocus
           End If
           Abonos.Caption = "INGRESO DE CAJA (" & TipoFactura & ")"
+          If CFechaLong(MBFecha) < CFechaLong(FechaCorte) Then
+             MsgBox "No se puede grabar abonos con fecha inferior a la emision de la factura"
+             MBFecha.SetFocus
+          End If
        End If
     End If
   End With

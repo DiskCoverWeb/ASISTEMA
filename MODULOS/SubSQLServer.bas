@@ -34,9 +34,9 @@ On Error GoTo Errorhandler
     For IdP = 0 To cMiCmd.Parameters.Count - 1
         ListP = ListP & cMiCmd.Parameters.Item(IdP).Name & " = '" & cMiCmd.Parameters.Item(IdP) & "'" & vbCrLf
     Next IdP
-    'MsgBox Len(ListP) & vbCrLf & vbCrLf & ListP
+   'MsgBox Len(ListP) & vbCrLf & vbCrLf & ListP
    
-    'Generar_File_SQL "Store_Procedure", ListP
+   'Generar_File_SQL "Store_Procedure", ListP
    
 '''    Progreso_Esperar True
     cMiCmd.CommandTimeout = 0
@@ -59,6 +59,52 @@ Public Sub Finalizar_Stored_Procedure(cMiSQL As ADODB.Connection, _
     Set cMiSQL = Nothing
     Set cMiCmd = Nothing
 '''    Progreso_Final
+    RatonNormal
+End Sub
+
+Public Sub Lista_Mensaje_SP_MySQL(MensajeAyuda As String)
+Dim cnMySQL As ADODB.Connection
+Dim rsMySQL As ADODB.Recordset
+Dim cmdMySQL As ADODB.Command
+
+    RatonReloj
+    If Ping_PC("db.diskcoversystem.com") Then
+       'Conexion a MySQL del servidor en las nubes
+        Set cmdMySQL = New ADODB.Command
+        Set cnMySQL = New ADODB.Connection
+        cnMySQL.ConnectionString = AdoStrCnnMySQL
+        cnMySQL.open
+        Set cmdMySQL.ActiveConnection = cnMySQL
+        cmdMySQL.CommandType = adCmdText
+    
+       'Parametros de entrada y de salida
+        cmdMySQL.CommandText = "Call sp_lista_mensaje(@MensajeAyuda);"
+    
+       'Enviamos los parametro de solo entrada al SP
+        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("MensajeAyuda", adVarChar, adParamInput, 1024, MensajeAyuda)
+    
+       'Ejecucion del SP en MySQL
+        Set rsMySQL = cmdMySQL.Execute
+    
+       'Recolectamos los resultados de los parametros de salida
+        Set rsMySQL = cnMySQL.Execute("SELECT @MensajeAyuda;")
+    
+       'Pasamos a variables globales lso resultados del SP
+        If Not rsMySQL.EOF Then MensajeAyuda = rsMySQL.fields(0)
+    
+       'Cerramos la conexion con MySQL
+        rsMySQL.Close
+        cnMySQL.Close
+        
+       'Liberando de la memoria es control de conexion
+        Set cmdMySQL.ActiveConnection = Nothing
+        Set rsMySQL = Nothing
+        Set cnMySQL = Nothing
+        Set cmdMySQL = Nothing
+    Else
+        MensajeAyuda = "AHORA YA ESTAMOS EN LAS NUBES, VISITANOS:" & vbCrLf _
+                     & "https://erp.diskcoversystem.com"
+    End If
     RatonNormal
 End Sub
 
@@ -1215,51 +1261,6 @@ Dim BuscarCodigo1 As String
     BuscarCodigo = MiCmd.Parameters("@Codigo_Encontrado").value
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
-
-'''Public Sub Lista_Mensaje_SP_MySQL(MensajeAyuda As String)
-'''Dim cnMySQL As ADODB.Connection
-'''Dim rsMySQL As ADODB.Recordset
-'''Dim cmdMySQL As ADODB.Command
-'''
-'''    RatonReloj
-'''    MensajeAyuda = Ninguno
-'''    If IP_PC.InterNet Then
-'''       If Ping_PC("db.diskcoversystem.com") Then
-'''         'Conexion a MySQL del servidor en las nubes
-'''          Set cmdMySQL = New ADODB.Command
-'''          Set cnMySQL = New ADODB.Connection
-'''          cnMySQL.ConnectionString = AdoStrCnnMySQL
-'''          cnMySQL.open
-'''          Set cmdMySQL.ActiveConnection = cnMySQL
-'''          cmdMySQL.CommandType = adCmdText
-'''
-'''         'Parametros de entrada y de salida
-'''          cmdMySQL.CommandText = "Call sp_lista_mensaje(@MensajeAyuda);"
-'''
-'''         'Enviamos los parametro de solo entrada al SP
-'''          cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("MensajeAyuda", adVarChar, adParamInput, 1024, MensajeAyuda)
-'''
-'''         'Ejecucion del SP en MySQL
-'''          Set rsMySQL = cmdMySQL.Execute
-'''
-'''         'Recolectamos los resultados de los parametros de salida
-'''          Set rsMySQL = cnMySQL.Execute("SELECT @MensajeAyuda;")
-'''
-'''         'Pasamos a variables globales lso resultados del SP
-'''          If Not rsMySQL.EOF Then MensajeAyuda = rsMySQL.fields(0)
-'''
-'''         'Cerramos la conexion con MySQL
-'''          rsMySQL.Close
-'''          cnMySQL.Close
-'''       End If
-'''      'Liberando de la memoria es control de conexion
-'''       Set cmdMySQL.ActiveConnection = Nothing
-'''       Set rsMySQL = Nothing
-'''       Set cnMySQL = Nothing
-'''       Set cmdMySQL = Nothing
-'''    End If
-'''    RatonNormal
-'''End Sub
 
 Public Sub Reporte_CxCxP_x_Meses_SP(CtaSubMod As String, MBFechaF As String)
 Dim MiSQL As ADODB.Connection

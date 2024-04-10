@@ -31,7 +31,7 @@ Begin VB.Form FRecaudacionBancosPreFa
          Strikethrough   =   0   'False
       EndProperty
       Height          =   225
-      Left            =   24885
+      Left            =   21840
       Style           =   1  'Graphical
       TabIndex        =   28
       Top             =   1050
@@ -43,13 +43,13 @@ Begin VB.Form FRecaudacionBancosPreFa
       BackColor       =   &H80000005&
       BorderStyle     =   0  'None
       ForeColor       =   &H80000008&
-      Height          =   1065
+      Height          =   1275
       Left            =   105
-      ScaleHeight     =   1065
-      ScaleWidth      =   11460
+      ScaleHeight     =   1275
+      ScaleWidth      =   8730
       TabIndex        =   27
       Top             =   945
-      Width           =   11460
+      Width           =   8730
    End
    Begin VB.CheckBox CheqAlDia 
       Caption         =   "Generar quienes esten al dia "
@@ -63,10 +63,10 @@ Begin VB.Form FRecaudacionBancosPreFa
          Strikethrough   =   0   'False
       EndProperty
       Height          =   225
-      Left            =   20790
+      Left            =   17010
       TabIndex        =   22
-      Top             =   1680
-      Width           =   4005
+      Top             =   1890
+      Width           =   3480
    End
    Begin VB.TextBox TextFacturaNo 
       BeginProperty Font 
@@ -79,10 +79,10 @@ Begin VB.Form FRecaudacionBancosPreFa
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   19530
+      Left            =   15750
       TabIndex        =   19
       Text            =   "99999999"
-      Top             =   1680
+      Top             =   1890
       Width           =   1170
    End
    Begin VB.CheckBox CheqMatricula 
@@ -98,10 +98,10 @@ Begin VB.Form FRecaudacionBancosPreFa
          Strikethrough   =   0   'False
       EndProperty
       Height          =   225
-      Left            =   20790
+      Left            =   17010
       TabIndex        =   20
       Top             =   1050
-      Width           =   4005
+      Width           =   3480
    End
    Begin VB.CheckBox Cheq_NumCodigos 
       Caption         =   "Procesar Con Codigo de la Empresa"
@@ -115,18 +115,18 @@ Begin VB.Form FRecaudacionBancosPreFa
          Strikethrough   =   0   'False
       EndProperty
       Height          =   225
-      Left            =   20790
+      Left            =   17010
       TabIndex        =   21
-      Top             =   1365
+      Top             =   1470
       Value           =   1  'Checked
-      Width           =   4005
+      Width           =   3480
    End
    Begin MSDataGridLib.DataGrid DGFactura 
       Bindings        =   "AutRecau.frx":0442
       Height          =   2430
       Left            =   105
       TabIndex        =   26
-      Top             =   5565
+      Top             =   6195
       Width           =   10515
       _ExtentX        =   18547
       _ExtentY        =   4286
@@ -203,7 +203,7 @@ Begin VB.Form FRecaudacionBancosPreFa
       MultiLine       =   -1  'True
       ScrollBars      =   3  'Both
       TabIndex        =   25
-      Top             =   2100
+      Top             =   2310
       Width           =   10515
    End
    Begin MSAdodcLib.Adodc AdoAux 
@@ -349,7 +349,7 @@ Begin VB.Form FRecaudacionBancosPreFa
    End
    Begin MSMask.MaskEdBox MBFechaI 
       Height          =   330
-      Left            =   13125
+      Left            =   10395
       TabIndex        =   11
       Top             =   1050
       Width           =   1275
@@ -422,9 +422,9 @@ Begin VB.Form FRecaudacionBancosPreFa
    End
    Begin MSMask.MaskEdBox MBFechaF 
       Height          =   330
-      Left            =   13125
+      Left            =   10395
       TabIndex        =   13
-      Top             =   1365
+      Top             =   1470
       Width           =   1275
       _ExtentX        =   2249
       _ExtentY        =   582
@@ -635,7 +635,7 @@ Begin VB.Form FRecaudacionBancosPreFa
    End
    Begin MSComDlg.CommonDialog CDialogDir 
       Left            =   12285
-      Top             =   2100
+      Top             =   2940
       _ExtentX        =   847
       _ExtentY        =   847
       _Version        =   393216
@@ -692,11 +692,11 @@ Begin VB.Form FRecaudacionBancosPreFa
       Bindings        =   "AutRecau.frx":045B
       DataSource      =   "AdoLinea"
       Height          =   315
-      Left            =   14490
+      Left            =   11760
       TabIndex        =   17
       Top             =   1365
-      Width           =   6210
-      _ExtentX        =   10954
+      Width           =   5160
+      _ExtentX        =   9102
       _ExtentY        =   556
       _Version        =   393216
       ForeColor       =   255
@@ -760,9 +760,9 @@ Begin VB.Form FRecaudacionBancosPreFa
    End
    Begin MSMask.MaskEdBox MBFechaV 
       Height          =   330
-      Left            =   13125
+      Left            =   10395
       TabIndex        =   15
-      Top             =   1680
+      Top             =   1890
       Width           =   1275
       _ExtentX        =   2249
       _ExtentY        =   582
@@ -833,7 +833,7 @@ Begin VB.Form FRecaudacionBancosPreFa
    End
    Begin MSComctlLib.ImageList ImageList1 
       Left            =   11655
-      Top             =   2100
+      Top             =   2940
       _ExtentX        =   1005
       _ExtentY        =   1005
       BackColor       =   -2147483643
@@ -1002,7 +1002,7 @@ Begin VB.Form FRecaudacionBancosPreFa
          Bindings        =   "AutRecau.frx":42B8
          DataSource      =   "AdoGrupo"
          Height          =   360
-         Left            =   13650
+         Left            =   12810
          TabIndex        =   5
          Top             =   420
          Visible         =   0   'False
@@ -1025,7 +1025,7 @@ Begin VB.Form FRecaudacionBancosPreFa
          Bindings        =   "AutRecau.frx":42CF
          DataSource      =   "AdoGrupo"
          Height          =   360
-         Left            =   11865
+         Left            =   11025
          TabIndex        =   4
          Top             =   420
          Visible         =   0   'False
@@ -1056,7 +1056,7 @@ Begin VB.Form FRecaudacionBancosPreFa
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   11655
+         Left            =   11025
          TabIndex        =   3
          Top             =   105
          Width           =   3690
@@ -1076,7 +1076,7 @@ Begin VB.Form FRecaudacionBancosPreFa
          Left            =   6930
          TabIndex        =   1
          Top             =   105
-         Width           =   4635
+         Width           =   4005
          Begin MSDataListLib.DataCombo DCTablaSRI 
             Bindings        =   "AutRecau.frx":42E6
             DataSource      =   "AdoTablaSRI"
@@ -1084,8 +1084,8 @@ Begin VB.Form FRecaudacionBancosPreFa
             Left            =   105
             TabIndex        =   2
             Top             =   210
-            Width           =   4425
-            _ExtentX        =   7805
+            Width           =   3795
+            _ExtentX        =   6694
             _ExtentY        =   556
             _Version        =   393216
             BackColor       =   16777215
@@ -1095,7 +1095,7 @@ Begin VB.Form FRecaudacionBancosPreFa
                Name            =   "MS Sans Serif"
                Size            =   8.25
                Charset         =   0
-               Weight          =   700
+               Weight          =   400
                Underline       =   0   'False
                Italic          =   0   'False
                Strikethrough   =   0   'False
@@ -1114,10 +1114,10 @@ Begin VB.Form FRecaudacionBancosPreFa
             Strikethrough   =   0   'False
          EndProperty
          Height          =   645
-         Left            =   15540
+         Left            =   14700
          TabIndex        =   6
          Top             =   105
-         Width           =   1380
+         Width           =   1275
          Begin VB.TextBox TxtCodBanco 
             BeginProperty Font 
                Name            =   "MS Sans Serif"
@@ -1133,11 +1133,11 @@ Begin VB.Form FRecaudacionBancosPreFa
             TabIndex        =   7
             Text            =   "0"
             Top             =   210
-            Width           =   1170
+            Width           =   1065
          End
       End
       Begin VB.Frame Frame1 
-         Caption         =   " CUENTA A LA QUE SE VA ACREDITAR LOS ABONOS"
+         Caption         =   "Cuenta de Acreditacion de los Abonos"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
             Size            =   8.25
@@ -1148,10 +1148,10 @@ Begin VB.Form FRecaudacionBancosPreFa
             Strikethrough   =   0   'False
          EndProperty
          Height          =   645
-         Left            =   17010
+         Left            =   16065
          TabIndex        =   8
          Top             =   105
-         Width           =   6105
+         Width           =   5055
          Begin MSDataListLib.DataCombo DCBanco 
             Bindings        =   "AutRecau.frx":4300
             DataSource      =   "AdoBanco"
@@ -1159,8 +1159,8 @@ Begin VB.Form FRecaudacionBancosPreFa
             Left            =   105
             TabIndex        =   9
             Top             =   210
-            Width           =   5895
-            _ExtentX        =   10398
+            Width           =   4845
+            _ExtentX        =   8546
             _ExtentY        =   556
             _Version        =   393216
             BackColor       =   16777215
@@ -1202,7 +1202,7 @@ Begin VB.Form FRecaudacionBancosPreFa
    Begin VB.Label Label6 
       Alignment       =   1  'Right Justify
       BorderStyle     =   1  'Fixed Single
-      Caption         =   " Nota de Venta No."
+      Caption         =   " Nota de Venta No. 1234567890123-001001"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   8.25
@@ -1214,10 +1214,10 @@ Begin VB.Form FRecaudacionBancosPreFa
       EndProperty
       ForeColor       =   &H000000FF&
       Height          =   330
-      Left            =   14490
+      Left            =   11760
       TabIndex        =   18
-      Top             =   1680
-      Width           =   5055
+      Top             =   1890
+      Width           =   4005
    End
    Begin VB.Label Label5 
       BackColor       =   &H00FF8080&
@@ -1233,9 +1233,9 @@ Begin VB.Form FRecaudacionBancosPreFa
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   11655
+      Left            =   8925
       TabIndex        =   14
-      Top             =   1680
+      Top             =   1890
       Width           =   1485
    End
    Begin VB.Label Label4 
@@ -1269,10 +1269,10 @@ Begin VB.Form FRecaudacionBancosPreFa
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   14490
+      Left            =   11760
       TabIndex        =   16
       Top             =   1050
-      Width           =   6210
+      Width           =   5160
    End
    Begin VB.Label Label1 
       BackColor       =   &H00FF8080&
@@ -1288,9 +1288,9 @@ Begin VB.Form FRecaudacionBancosPreFa
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   11655
+      Left            =   8925
       TabIndex        =   12
-      Top             =   1365
+      Top             =   1470
       Width           =   1485
    End
    Begin VB.Label Label8 
@@ -1307,7 +1307,7 @@ Begin VB.Form FRecaudacionBancosPreFa
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   11655
+      Left            =   8925
       TabIndex        =   10
       Top             =   1050
       Width           =   1485
@@ -2379,6 +2379,7 @@ Dim CaptionTemp As String
   Select Case TextoBanco
     Case "BIZBANCKPACIFICO"
     Case "PICHINCHA"
+    Case "PACIFICO"
     Case "BOLIVARIANO"
     Case "GUAYAQUIL"
     Case "PRODUBANCO"
@@ -4283,11 +4284,7 @@ End Sub
 Public Sub Generar_Guayaquil()
 Dim FechaVenc As String
 Dim MesesDif As Byte
-RutaGeneraFile = UCaseStrg(RutaSysBases _
-               & "\BANCO\FACTURAS\RCE_" _
-               & Format$(FechaSistema, "YYYYMMDD") & "_" _
-               & Format$(Val(CodigoDelBanco), "0000000") _
-               & "_01.TXT")
+RutaGeneraFile = UCaseStrg(RutaSysBases & "\BANCO\FACTURAS\REM_" & Format$(FechaSistema, "YYYYMMDD") & "_" & Format$(Val(CodigoDelBanco), "00000") & ".TXT")
 NumFileFacturas = FreeFile
 TipoDoc = "0"
 Contador = 0
@@ -4346,29 +4343,32 @@ With AdoFactura.Recordset
         J = (Total_Factura - Int(Total_Factura)) * 100
        'MsgBox Grupo_No & "(" & JE & ")" & vbCrLf & Total_Factura & vbCrLf & Total & vbCrLf & TotalIngreso
        'Empieza la trama por Alumno
-       'Registro de Cobros
-        Print #NumFileFacturas, "CO";                                                 ' Localidad
-        Print #NumFileFacturas, Format$(Contador, "0000000");                          ' Secuencial
-        Print #NumFileFacturas, CodigoCli & String(15 - Len(CodigoCli), " ");         ' Codigo del Alumno
-        Print #NumFileFacturas, "USD";                                                ' Transsaccion
-        Print #NumFileFacturas, Format$(I, "00000000") & Format$(J, "00");              ' Valor a Cobrar
-        Print #NumFileFacturas, "REC";                                                ' Codigo de Servicio
-        Print #NumFileFacturas, NombreCliente & String(40 - Len(NombreCliente), " "); ' Nombre del Alumno
-        Print #NumFileFacturas, Format$(.fields("Fecha"), "YYYYMM");                           ' Mes de Generacion
-        Print #NumFileFacturas, "CU";                                                 ' Forma de Pago
-        Print #NumFileFacturas, "PA";                                                 ' Moneda
-        Print #NumFileFacturas, "ES";                                                 ' NUC Ordenante
-        Print #NumFileFacturas, Codigo2 & String(15 - Len(Codigo2), " ")              ' Codigo del Alumno
+       'Registro de Cabecera
+        Print #NumFileFacturas, "01";                                                   ' Localidad
+        Print #NumFileFacturas, "REC";                                                  ' Codigo de Servicio
+        Print #NumFileFacturas, "00017";                                                ' Codigo del Banco
+        Print #NumFileFacturas, CodigoDelBanco & String(5 - Len(CodigoDelBanco), " ");  ' Codigo de la Empresa
+        Print #NumFileFacturas, "01";                                                   ' Contenido del archivo
+        Print #NumFileFacturas, Format$(MBFechaI, "YYYYMMDD");                          ' Fecha Inicio de Cobro
+        Print #NumFileFacturas, Format$(MBFechaV, "YYYYMMDD");                          ' Fecha Tope de Cobro
+        Print #NumFileFacturas, "00000001";                                             ' Numero de Registros
+        Print #NumFileFacturas, Format$(I, "0000000000000") & Format$(J, "00");         ' Valor a Cobrar
+        Print #NumFileFacturas, String(68, " ")                                         ' Fin de la Trama
         
-       'Registro de Fecha Vencimiento
-        Print #NumFileFacturas, "RC";                                                 ' Regla de Cobro
-        Print #NumFileFacturas, Format$(Contador, "0000000");                          ' Secuencial
-        Print #NumFileFacturas, "VM";                                                 ' Regla Cobro Fecha Vencimiento
-        Print #NumFileFacturas, Format$(MBFechaI, "YYYYMMDD");                         ' Fecha Inicio de Cobro
-        Print #NumFileFacturas, Format$(MBFechaV, "YYYYMMDD");                         ' Fecha Tope de Cobro
-        Print #NumFileFacturas, "FI";                                                 ' Monto fijo
-        Print #NumFileFacturas, String(30, "0")                                       ' Fin de la Trama
-        FechaVenc = CLongFecha(CFechaLong(FechaVenc) + 1)
+       'Registro del Detalle del Cobro
+        Print #NumFileFacturas, "02";                                                   ' Tipo Registro
+        Print #NumFileFacturas, "01";                                                   ' Novedad
+        Print #NumFileFacturas, CodigoCli & String(15 - Len(CodigoCli), " ");           ' Codigo del Alumno
+        Print #NumFileFacturas, NombreCliente & String(40 - Len(NombreCliente), " ");   ' Nombre del Alumno
+        Print #NumFileFacturas, Format$(I, "00000000") & Format$(J, "00");              ' Valor a Cobrar
+        Print #NumFileFacturas, Format$(MBFechaV, "YYYYMMDD");                          ' Fecha Tope de Cobro
+        Print #NumFileFacturas, Format$(I, "00000000") & Format$(J, "00");              ' Valor a Cobrar
+        Print #NumFileFacturas, String(10, "0");                                        ' Valor Retenido
+        Print #NumFileFacturas, Codigo2 & String(15 - Len(Codigo2), " ");               ' Referencia
+        Print #NumFileFacturas, Format$(.fields("Fecha"), "YYYYMM");                    ' Mes de Generacion
+        Print #NumFileFacturas, Format$(Contador, "00");                                ' Secuencial
+        Print #NumFileFacturas, "    "                                                  ' Fin del a Trama
+        
        .MoveNext
      Loop
      Codigo4 = Format$(Total, "#,##0.00")

@@ -1143,7 +1143,7 @@ Dim RutaXMLRechazado As String
      
      sSQL = "SELECT IDENTIFICACION_RECEPTOR " _
           & "FROM " & TextoFile & " " _
-          & "WHERE COMPROBANTE <> '.' " _
+          & "WHERE TIPO_COMPROBANTE <> '.' " _
           & "GROUP BY IDENTIFICACION_RECEPTOR "
      Select_Adodc AdoTxt, sSQL
      If AdoTxt.Recordset.RecordCount > 0 Then
@@ -1157,8 +1157,8 @@ Dim RutaXMLRechazado As String
         ArchivoValido = True
         sSQL = "SELECT " & Full_Fields(TextoFile) & " " _
              & "FROM " & TextoFile & " " _
-             & "WHERE COMPROBANTE <> '.' " _
-             & "ORDER BY COMPROBANTE, IDENTIFICACION_RECEPTOR, FECHA_EMISION "
+             & "WHERE TIPO_COMPROBANTE <> '.' " _
+             & "ORDER BY TIPO_COMPROBANTE, IDENTIFICACION_RECEPTOR, FECHA_EMISION "
         Select_Adodc AdoTxt, sSQL
         With AdoTxt.Recordset
          If .RecordCount > 0 Then
@@ -1292,11 +1292,11 @@ Dim RutaXMLRechazado As String
                      
                      'Actualizamos los datos del cliente/proveedor
                       If AXML.Documento = "Factura" Then .fields("CodSustento") = SinEspaciosIzq(DCSustento)
-                      .fields("PROCESAR") = 1
+                      '.fields("PROCESAR") = 1
                       .fields("IMPORTE_TOTAL") = AXML.Total
                       .fields("Cod_Ret") = AXML.Cod_Ret
                       .fields("Serie_Receptor") = AXML.Serie_Receptor
-                      .fields("Documento") = AXML.Comprobante
+                      '.fields("Documento") = AXML.Comprobante
                       .fields("Subtotal") = AXML.SubTotal
                       .fields("Total_IVA") = AXML.Total_IVA
                       .fields("Ret_IVA_B") = AXML.Ret_IVA_B
@@ -1907,10 +1907,10 @@ End Sub
 Private Sub DGDocSRI_BeforeColUpdate(ByVal ColIndex As Integer, OldValue As Variant, Cancel As Integer)
   Select Case DGDocSRI.Columns(ColIndex).Caption
     Case "Procesar"
-         If DGDocSRI.Columns("Procesar").Value = 0 Or DGDocSRI.Columns("Procesar").Value = 1 Then Cancel = False Else Cancel = True
+         If DGDocSRI.Columns("Procesar").value = 0 Or DGDocSRI.Columns("Procesar").value = 1 Then Cancel = False Else Cancel = True
     Case "Cod_Ret"
-         Mifecha = BuscarFecha(DGDocSRI.Columns("Fecha_Emision").Value)
-         CodRet = DGDocSRI.Columns("Cod_Ret").Value
+         Mifecha = BuscarFecha(DGDocSRI.Columns("Fecha_Emision").value)
+         CodRet = DGDocSRI.Columns("Cod_Ret").value
          If Len(CodRet) > 1 Then
             AXML.Cta_Ret_Fuente = Ninguno
             sSQL = "SELECT TOP 1 Codigo, Porcentaje " _
@@ -1922,8 +1922,8 @@ Private Sub DGDocSRI_BeforeColUpdate(ByVal ColIndex As Integer, OldValue As Vari
             If AdoAux.Recordset.RecordCount > 0 Then
                AXML.Porc_Ret = AdoAux.Recordset.fields("Porcentaje")
                Porcentaje = AXML.Porc_Ret / 100
-               DGDocSRI.Columns("Porc_Ret").Value = AdoAux.Recordset.fields("Porcentaje")
-               DGDocSRI.Columns("Ret_Fuente").Value = Redondear(DGDocSRI.Columns("Subtotal").Value * Porcentaje, 2)
+               DGDocSRI.Columns("Porc_Ret").value = AdoAux.Recordset.fields("Porcentaje")
+               DGDocSRI.Columns("Ret_Fuente").value = Redondear(DGDocSRI.Columns("Subtotal").value * Porcentaje, 2)
                If AXML.Porc_Ret > 0 Then
                   sSQL = "SELECT Codigo " _
                        & "FROM Catalogo_Cuentas " _
@@ -1933,7 +1933,7 @@ Private Sub DGDocSRI_BeforeColUpdate(ByVal ColIndex As Integer, OldValue As Vari
                        & "AND DG = 'D' " _
                        & "AND Cuenta LIKE '%" & CStr(AXML.Porc_Ret) & "%%' "
                   Select_Adodc AdoAux, sSQL
-                  If AdoAux.Recordset.RecordCount > 0 Then DGDocSRI.Columns("Cta_Ret_Fuente").Value = AdoAux.Recordset.fields("Codigo")
+                  If AdoAux.Recordset.RecordCount > 0 Then DGDocSRI.Columns("Cta_Ret_Fuente").value = AdoAux.Recordset.fields("Codigo")
                End If
                Cancel = False
             Else
@@ -1942,9 +1942,9 @@ Private Sub DGDocSRI_BeforeColUpdate(ByVal ColIndex As Integer, OldValue As Vari
             End If
          Else
             If CodRet = Ninguno Then
-               DGDocSRI.Columns("Cod_Ret").Value = CodRet
-               DGDocSRI.Columns("Porc_Ret").Value = 0
-               DGDocSRI.Columns("Ret_Fuente").Value = 0
+               DGDocSRI.Columns("Cod_Ret").value = CodRet
+               DGDocSRI.Columns("Porc_Ret").value = 0
+               DGDocSRI.Columns("Ret_Fuente").value = 0
                Cancel = False
             Else
                Cancel = True
@@ -1952,7 +1952,7 @@ Private Sub DGDocSRI_BeforeColUpdate(ByVal ColIndex As Integer, OldValue As Vari
          End If
          'Cancel = False
     Case "Porc_Ret_IVA_B"
-         Porcentaje = DGDocSRI.Columns("Porc_Ret_IVA_B").Value
+         Porcentaje = DGDocSRI.Columns("Porc_Ret_IVA_B").value
          If 0 <= Porcentaje And Porcentaje <= 100 Then
             sSQL = "SELECT Codigo " _
                  & "FROM Tabla_Por_IVA " _
@@ -1961,7 +1961,7 @@ Private Sub DGDocSRI_BeforeColUpdate(ByVal ColIndex As Integer, OldValue As Vari
             Select_Adodc AdoAux, sSQL
             If AdoAux.Recordset.RecordCount > 0 Then
                Porcentaje = Porcentaje / 100
-               DGDocSRI.Columns("Ret_IVA_B").Value = Redondear(DGDocSRI.Columns("Total_IVA").Value * Porcentaje, 2)
+               DGDocSRI.Columns("Ret_IVA_B").value = Redondear(DGDocSRI.Columns("Total_IVA").value * Porcentaje, 2)
                Cancel = False
             Else
                Cancel = True
@@ -1970,7 +1970,7 @@ Private Sub DGDocSRI_BeforeColUpdate(ByVal ColIndex As Integer, OldValue As Vari
             Cancel = True
          End If
     Case "Porc_Ret_IVA_S"
-         Porcentaje = DGDocSRI.Columns("Porc_Ret_IVA_S").Value
+         Porcentaje = DGDocSRI.Columns("Porc_Ret_IVA_S").value
          If 0 <= Porcentaje And Porcentaje <= 100 Then
             sSQL = "SELECT Codigo " _
                  & "FROM Tabla_Por_IVA " _
@@ -1979,7 +1979,7 @@ Private Sub DGDocSRI_BeforeColUpdate(ByVal ColIndex As Integer, OldValue As Vari
             Select_Adodc AdoAux, sSQL
             If AdoAux.Recordset.RecordCount > 0 Then
                Porcentaje = Porcentaje / 100
-               DGDocSRI.Columns("Ret_IVA_S").Value = Redondear(DGDocSRI.Columns("Total_IVA").Value * Porcentaje, 2)
+               DGDocSRI.Columns("Ret_IVA_S").value = Redondear(DGDocSRI.Columns("Total_IVA").value * Porcentaje, 2)
                Cancel = False
             Else
                Cancel = True
@@ -1990,7 +1990,7 @@ Private Sub DGDocSRI_BeforeColUpdate(ByVal ColIndex As Integer, OldValue As Vari
     Case Else
          Cancel = True
   End Select
-  If DGDocSRI.Columns("Documento").Value = "Retencion" Then Cancel = True
+  If DGDocSRI.Columns("Documento").value = "Retencion" Then Cancel = True
 End Sub
 
 Private Sub DGDocSRI_KeyDown(KeyCode As Integer, Shift As Integer)

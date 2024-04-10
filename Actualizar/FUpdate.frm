@@ -1803,7 +1803,7 @@ Dim IdBase As Integer
          & "ON sys.databases.database_id = sys.master_files.database_id " _
          & "WHERE sys.databases.name LIKE 'DiskCover%' " _
          & "GROUP BY sys.databases.name " _
-         & "ORDER BY size_MB, sys.databases.name; "
+         & "ORDER BY sys.databases.name, size_MB; "
     Select_Adodc AdoAux, sSQL
     With AdoAux.Recordset
      If .RecordCount > 0 Then
@@ -1914,7 +1914,7 @@ Dim IdBase As Integer
          & "ON sys.databases.database_id = sys.master_files.database_id " _
          & "WHERE sys.databases.name LIKE 'DiskCover%' " _
          & "GROUP BY sys.databases.name " _
-         & "ORDER BY size_MB, sys.databases.name; "
+         & "ORDER BY sys.databases.name, size_MB; "
     Select_Adodc AdoAux, sSQL
     With AdoAux.Recordset
      If .RecordCount > 0 Then

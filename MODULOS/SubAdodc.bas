@@ -1697,8 +1697,7 @@ If ((Xo > 0) And (Yo > 0)) Then
       If Not ImpLineaCero Then StrgFormatoCampo = " "
    End If
    'PonerLineas
-   If Yo < LimiteAlto Then
-      
+   If Yo <= LimiteAlto Then
       LimpiarLinea Xo, Yo, PonerLineas
       Printer.CurrentX = Xo + Distancia
       Printer.CurrentY = Yo
@@ -6876,6 +6875,91 @@ Dim columnas As Long
               Progreso_Barra.Mensaje_Box = ""
               Progreso_Final
            'End If
+   End Select
+End Sub
+
+Public Sub Exportar_AdoDB_Solo_Excel(consulta As ADODB.Recordset, Optional nombreHoja As String)
+Dim APIExcel As Object
+Dim AddLibro As Object
+Dim AddHoja  As Object
+Dim I As Long
+Dim filas As Long
+Dim columnas As Long
+
+   If DescripcionEstado = "" Then DescripcionEstado = "NO ESTA PERMITIDO"
+   Select Case EstadoEmpresa
+     Case "BLOQ", "ONLY", "VEN90", "VEN180", "VEN360", "MAS360", "PRUEBA"
+          MsgBox DescripcionEstado, vbOKOnly, "ESTADO DE LA EMPRESA"
+     Case Else
+          If consulta.RecordCount > 0 Then
+            'Mensajes = "Desea Transportar la Consulta a Microsoft Excel "
+            'Titulo = "GENERACION DE ARCHIVOS A EXCEL"
+            'If BoxMensaje = vbYes Then
+        
+             RatonReloj
+           
+            'Creamos objeto excel y nuevo libro y no mostramos el archivo
+             Set APIExcel = CreateObject("Excel.Application")
+             Set AddLibro = APIExcel.Workbooks.Add
+             APIExcel.Visible = False
+              
+            'Añadimos hoja al libro nuevo y nombramos pestaña
+             Set AddHoja = AddLibro.Worksheets(1)
+           
+            'Damos nombre a la hoja con la que vamos a exportar los datos
+             
+            'If Len(nombreHoja) > 0 Then AddHoja.Name = MidStrg(nombreHoja, 1, 31) Else
+              
+             AddHoja.Name = "DiskCover System"
+              
+            'Traemos los datos de cabecera de la tabla Access y los pegamos en la hoja excel
+             columnas = consulta.fields.Count
+             filas = consulta.RecordCount
+           
+            'Generamos encabezado con colores
+             With APIExcel.Range(APIExcel.cells(1, 1), APIExcel.cells(1, columnas))
+                 .Font.bold = True
+                 .Interior.color = RGB(128, 128, 128)
+                 .HorizontalAlignment = 3
+                '.VerticalAlignment = 2
+                 .EntireRow.RowHeight = 20
+             End With
+           
+             With APIExcel.Range(APIExcel.cells(2, 1), APIExcel.cells(2, columnas))
+                 .Font.bold = True
+                 .Interior.color = RGB(168, 168, 0)
+                 .HorizontalAlignment = 3
+                 .VerticalAlignment = 2
+                 .EntireRow.RowHeight = 20
+             End With
+           
+             With APIExcel.Range(APIExcel.cells(2, 1), APIExcel.cells(filas + 2, columnas)).Borders
+                 .LineStyle = 1
+                 .Weight = 1
+                 .ColorIndex = 5
+             End With
+            
+            'Escribimos el encabezado de la consulta
+             APIExcel.cells(1, 1) = Empresa & " [" & nombreHoja & "]"
+             For I = 0 To columnas - 1
+                 APIExcel.cells(2, I + 1) = consulta.fields(I).Name
+             Next I
+           
+            'Pegamos los datos de la tabla en la nueva hoja
+             consulta.MoveFirst
+             AddHoja.Range("A3").CopyFromRecordset consulta
+              
+            'Damos formato a las columnas, ajustando contenidos
+             With APIExcel.ActiveSheet.cells
+                 .Select
+                 .EntireColumn.AutoFit
+                 .Range("A1").Select
+             End With
+              
+            'Mostramos la hoja
+             APIExcel.Visible = True
+             RatonNormal
+          End If
    End Select
 End Sub
 

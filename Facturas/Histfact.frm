@@ -3474,7 +3474,9 @@ Private Sub ToolbarMenu_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMe
      Case "Deuda_x_Mail"
           Actualizar_Abonos_Facturas_SP FA
           Historico_Facturas
-          Deuda_x_Mail "FA"
+          Titulo = "Pregunta de Envio de Mails"
+          Mensajes = "Esta seguro de querer enviar por mail Cartera de Clientes?"
+          If BoxMensaje = vbYes Then Deuda_x_Mail "FA"
    End Select
 End Sub
 
@@ -4462,6 +4464,7 @@ Dim posPuntoComa As Integer
              Insertar_Mail TMail.para, TBeneficiario.EmailR
              Insertar_Mail TMail.para, TBeneficiario.Email1
              Insertar_Mail TMail.para, TBeneficiario.Email2
+             
              FEnviarCorreos.Show vbModal
              CadDeuda = "TC " & vbTab & "FECHA EMIS " & vbTab & "SERIE " & vbTab & vbTab & "DOCUMENTO " & vbTab & "SALDO ACTUTAL" & vbCrLf
              Codigo = .fields("CodigoC")

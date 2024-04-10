@@ -39,3 +39,5 @@ Global Cont_DBF As Byte
 Global Tipo_Carga As Byte
 
 Global Procesando As Byte
+
+Global Cod_Porc_IVA As Byte

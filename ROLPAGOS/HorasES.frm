@@ -1,9 +1,9 @@
 VERSION 5.00
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
 Begin VB.Form HorasEntSal 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "REGISTRO DE HORAS TRABAJADAS"
@@ -1021,6 +1021,7 @@ Private Sub Command1_Click()
 Dim DiasTrabajados As Integer
 Dim UltimodDiaMes As Integer
 Dim Fecha_Empleado As String
+Dim Fecha_Salida As String
 Dim Fecha_IESS As String
 
   RatonReloj
@@ -1051,8 +1052,14 @@ Dim Fecha_IESS As String
           Grupo_No = .fields("Grupo")
           TxtValorHora = .fields("Valor_Hora")
           Fecha_Empleado = .fields("Fecha")
+          Fecha_Salida = .fields("FechaC")
           
-          DiasTrabajados = CFechaLong(FechaFinal) - CFechaLong(Fecha_Empleado) + 1
+          If .fields("T") = "R" Then
+              If (CFechaLong(.fields("FechaC")) - CFechaLong(.fields("Fecha"))) > 30 Then Fecha_Empleado = PrimerDiaMes(MBFechaI) Else Fecha_Empleado = .fields("Fecha")
+              DiasTrabajados = CFechaLong(Fecha_Salida) - CFechaLong(Fecha_Empleado) + 1
+          Else
+              DiasTrabajados = CFechaLong(FechaFinal) - CFechaLong(Fecha_Empleado) + 1
+          End If
           
           'If DiasTrabajados <= UltimodDiaMes Then DiasTrabajados = DiasTrabajados + 1
           
@@ -1091,7 +1098,7 @@ Dim Fecha_IESS As String
              SetAdoFields "Porc_Hr_Ext", 0
              SetAdoFields "Ing_Horas_Ext", 0
              SetAdoFields "Valor_Hora", .fields("Valor_Hora")
-             SetAdoFields "Ing_Liquido", ValorTotal
+             SetAdoFields "Ing_Liquido", Redondear(ValorTotal, 2)
              SetAdoFields "Orden", TxtOrden
              SetAdoFields "CodigoU", CodigoUsuario
              SetAdoFields "Item", NumEmpresa
@@ -1286,14 +1293,28 @@ Private Sub MBFechaI_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub MBFechaI_LostFocus()
+Dim PrimerDia As String
+Dim UltimoDia As String
+  
   FechaValida MBFechaI
+  PrimerDia = BuscarFecha(PrimerDiaMes(MBFechaI))
+  UltimoDia = BuscarFecha(UltimoDiaMes(MBFechaI))
 
-  sSQL = "SELECT C.Cliente,C.CI_RUC,C.Grupo,RP.* " _
+  sSQL = "SELECT RP.T, C.Cliente, C.CI_RUC, C.Grupo, RP.Codigo, RP.Horas_Ext, RP.Valor_Hora, RP.Fecha, RP.FechaC, RP.Horas_Sem, RP.Salario, RP.Valor_Hora " _
        & "FROM Clientes As C,Catalogo_Rol_Pagos As RP " _
        & "WHERE RP.Item = '" & NumEmpresa & "' " _
        & "AND RP.Periodo = '" & Periodo_Contable & "' " _
        & "AND RP.T = '" & Normal & "' " _
-       & "AND RP.Fecha <= #" & BuscarFecha(MBFechaI) & "# " _
+       & "AND RP.Fecha <= #" & UltimoDia & "# " _
+       & "AND RP.Salario > 0 " _
+       & "AND C.Codigo = RP.Codigo " _
+       & "UNION " _
+       & "SELECT RP.T, C.Cliente, C.CI_RUC, C.Grupo, RP.Codigo, RP.Horas_Ext, RP.Valor_Hora, RP.Fecha, RP.FechaC, RP.Horas_Sem, RP.Salario, RP.Valor_Hora " _
+       & "FROM Clientes As C,Catalogo_Rol_Pagos As RP " _
+       & "WHERE RP.Item = '" & NumEmpresa & "' " _
+       & "AND RP.Periodo = '" & Periodo_Contable & "' " _
+       & "AND RP.T = 'R' " _
+       & "AND RP.FechaC BETWEEN #" & PrimerDia & "# and #" & UltimoDia & "# " _
        & "AND RP.Salario > 0 " _
        & "AND C.Codigo = RP.Codigo " _
        & "ORDER BY C.Cliente "

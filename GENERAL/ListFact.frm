@@ -27,6 +27,31 @@ Begin VB.Form ListFact
    ScaleHeight     =   9405
    ScaleWidth      =   11280
    WindowState     =   2  'Maximized
+   Begin MSDataListLib.DataCombo DCArticulo 
+      Bindings        =   "ListFact.frx":0000
+      DataSource      =   "AdoArticulo"
+      Height          =   3540
+      Left            =   4095
+      TabIndex        =   66
+      Top             =   4620
+      Visible         =   0   'False
+      Width           =   11670
+      _ExtentX        =   20585
+      _ExtentY        =   6138
+      _Version        =   393216
+      Style           =   1
+      BackColor       =   12648384
+      Text            =   ""
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   12
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
    Begin VB.CheckBox CheqClaveAcceso 
       Alignment       =   1  'Right Justify
       Caption         =   "Clave de Accceso:"
@@ -55,7 +80,7 @@ Begin VB.Form ListFact
       MultiLine       =   -1  'True
       ScrollBars      =   3  'Both
       TabIndex        =   67
-      Text            =   "ListFact.frx":0000
+      Text            =   "ListFact.frx":001A
       Top             =   4935
       Visible         =   0   'False
       Width           =   13770
@@ -75,7 +100,7 @@ Begin VB.Form ListFact
          Caption         =   "&Aceptar"
          Height          =   855
          Left            =   6510
-         Picture         =   "ListFact.frx":0006
+         Picture         =   "ListFact.frx":0020
          Style           =   1  'Graphical
          TabIndex        =   62
          Top             =   1575
@@ -86,7 +111,7 @@ Begin VB.Form ListFact
          Caption         =   "&Salir"
          Height          =   855
          Left            =   6510
-         Picture         =   "ListFact.frx":0448
+         Picture         =   "ListFact.frx":0462
          Style           =   1  'Graphical
          TabIndex        =   63
          Top             =   2520
@@ -124,7 +149,7 @@ Begin VB.Form ListFact
          Width           =   1905
       End
       Begin MSDataListLib.DataCombo DCEjecutivo 
-         Bindings        =   "ListFact.frx":0D12
+         Bindings        =   "ListFact.frx":0D2C
          DataSource      =   "AdoEjecutivo"
          Height          =   3105
          Left            =   210
@@ -147,7 +172,7 @@ Begin VB.Form ListFact
       Width           =   2220
    End
    Begin MSDataGridLib.DataGrid DGDetalle 
-      Bindings        =   "ListFact.frx":0D2D
+      Bindings        =   "ListFact.frx":0D47
       Height          =   2010
       Left            =   105
       TabIndex        =   65
@@ -602,7 +627,7 @@ Begin VB.Form ListFact
       Begin VB.OptionButton OpcDes 
          Height          =   345
          Left            =   4620
-         Picture         =   "ListFact.frx":0D46
+         Picture         =   "ListFact.frx":0D60
          Style           =   1  'Graphical
          TabIndex        =   26
          Top             =   210
@@ -611,7 +636,7 @@ Begin VB.Form ListFact
       Begin VB.OptionButton OpcAsc 
          Height          =   345
          Left            =   4305
-         Picture         =   "ListFact.frx":126C
+         Picture         =   "ListFact.frx":1286
          Style           =   1  'Graphical
          TabIndex        =   25
          Top             =   210
@@ -685,7 +710,7 @@ Begin VB.Form ListFact
       Top             =   630
       Width           =   14610
       Begin MSDataListLib.DataCombo DCFact 
-         Bindings        =   "ListFact.frx":1792
+         Bindings        =   "ListFact.frx":17AC
          DataSource      =   "AdoFactList"
          Height          =   360
          Left            =   6510
@@ -707,7 +732,7 @@ Begin VB.Form ListFact
          EndProperty
       End
       Begin MSDataListLib.DataCombo DCTipo 
-         Bindings        =   "ListFact.frx":17AC
+         Bindings        =   "ListFact.frx":17C6
          DataSource      =   "AdoTipo"
          Height          =   360
          Left            =   1995
@@ -729,7 +754,7 @@ Begin VB.Form ListFact
          EndProperty
       End
       Begin MSDataListLib.DataCombo DCSerie 
-         Bindings        =   "ListFact.frx":17C2
+         Bindings        =   "ListFact.frx":17DC
          DataSource      =   "AdoSerie"
          Height          =   360
          Left            =   3570
@@ -1025,23 +1050,23 @@ Begin VB.Form ListFact
       TabsPerRow      =   5
       TabHeight       =   520
       TabCaption(0)   =   "DETALLE DE FACTURA"
-      TabPicture(0)   =   "ListFact.frx":17D9
+      TabPicture(0)   =   "ListFact.frx":17F3
       Tab(0).ControlEnabled=   -1  'True
       Tab(0).ControlCount=   0
       TabCaption(1)   =   "ABONOS DE LA FACTURA"
-      TabPicture(1)   =   "ListFact.frx":17F5
+      TabPicture(1)   =   "ListFact.frx":180F
       Tab(1).ControlEnabled=   0   'False
       Tab(1).ControlCount=   0
       TabCaption(2)   =   "GUIA DE REMISION"
-      TabPicture(2)   =   "ListFact.frx":1811
+      TabPicture(2)   =   "ListFact.frx":182B
       Tab(2).ControlEnabled=   0   'False
       Tab(2).ControlCount=   0
       TabCaption(3)   =   "CONTABILIZACION"
-      TabPicture(3)   =   "ListFact.frx":182D
+      TabPicture(3)   =   "ListFact.frx":1847
       Tab(3).ControlEnabled=   0   'False
       Tab(3).ControlCount=   0
       TabCaption(4)   =   "RESULTADO SRI"
-      TabPicture(4)   =   "ListFact.frx":1849
+      TabPicture(4)   =   "ListFact.frx":1863
       Tab(4).ControlEnabled=   0   'False
       Tab(4).ControlCount=   0
    End
@@ -1301,119 +1326,119 @@ Begin VB.Form ListFact
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   29
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":1865
+            Picture         =   "ListFact.frx":187F
             Key             =   "IMG1"
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":213F
+            Picture         =   "ListFact.frx":2159
             Key             =   "IMG2"
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":2A19
+            Picture         =   "ListFact.frx":2A33
             Key             =   "IMG3"
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":51CB
+            Picture         =   "ListFact.frx":51E5
             Key             =   "IMG4"
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":5A5D
+            Picture         =   "ListFact.frx":5A77
             Key             =   "IMG5"
          EndProperty
          BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":5D77
+            Picture         =   "ListFact.frx":5D91
             Key             =   "IMG6"
          EndProperty
          BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":6651
+            Picture         =   "ListFact.frx":666B
             Key             =   "IMG7"
          EndProperty
          BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":696B
+            Picture         =   "ListFact.frx":6985
             Key             =   "IMG8"
          EndProperty
          BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":A1BED
+            Picture         =   "ListFact.frx":A1C07
             Key             =   "IMG9"
          EndProperty
          BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":A1F07
+            Picture         =   "ListFact.frx":A1F21
             Key             =   "IMG10"
          EndProperty
          BeginProperty ListImage11 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":A28B5
+            Picture         =   "ListFact.frx":A28CF
             Key             =   "IMG11"
          EndProperty
          BeginProperty ListImage12 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":A318F
+            Picture         =   "ListFact.frx":A31A9
             Key             =   "IMG12"
          EndProperty
          BeginProperty ListImage13 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":A34A9
+            Picture         =   "ListFact.frx":A34C3
             Key             =   "IMG13"
          EndProperty
          BeginProperty ListImage14 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":A3D83
+            Picture         =   "ListFact.frx":A3D9D
             Key             =   "IMG14"
          EndProperty
          BeginProperty ListImage15 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":A465D
+            Picture         =   "ListFact.frx":A4677
             Key             =   "IMG15"
          EndProperty
          BeginProperty ListImage16 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":A4D03
+            Picture         =   "ListFact.frx":A4D1D
             Key             =   "IMG16"
          EndProperty
          BeginProperty ListImage17 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":A531E
+            Picture         =   "ListFact.frx":A5338
             Key             =   "IMG17"
          EndProperty
          BeginProperty ListImage18 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":A5BF8
+            Picture         =   "ListFact.frx":A5C12
             Key             =   "IMG18"
          EndProperty
          BeginProperty ListImage19 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":A70BC
+            Picture         =   "ListFact.frx":A70D6
             Key             =   ""
          EndProperty
          BeginProperty ListImage20 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":A7D17
+            Picture         =   "ListFact.frx":A7D31
             Key             =   ""
          EndProperty
          BeginProperty ListImage21 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":142F99
+            Picture         =   "ListFact.frx":142FB3
             Key             =   ""
          EndProperty
          BeginProperty ListImage22 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":1439BD
+            Picture         =   "ListFact.frx":1439D7
             Key             =   ""
          EndProperty
          BeginProperty ListImage23 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":143E0F
+            Picture         =   "ListFact.frx":143E29
             Key             =   ""
          EndProperty
          BeginProperty ListImage24 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":149149
+            Picture         =   "ListFact.frx":149163
             Key             =   ""
          EndProperty
          BeginProperty ListImage25 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":14FC56
+            Picture         =   "ListFact.frx":14FC70
             Key             =   ""
          EndProperty
          BeginProperty ListImage26 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":1566F8
+            Picture         =   "ListFact.frx":156712
             Key             =   ""
          EndProperty
          BeginProperty ListImage27 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":15D663
+            Picture         =   "ListFact.frx":15D67D
             Key             =   ""
          EndProperty
          BeginProperty ListImage28 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":15D97D
+            Picture         =   "ListFact.frx":15D997
             Key             =   ""
          EndProperty
          BeginProperty ListImage29 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":15DC97
+            Picture         =   "ListFact.frx":15DCB1
             Key             =   ""
          EndProperty
       EndProperty
@@ -1464,31 +1489,6 @@ Begin VB.Form ListFact
          Strikethrough   =   0   'False
       EndProperty
       _Version        =   393216
-   End
-   Begin MSDataListLib.DataCombo DCArticulo 
-      Bindings        =   "ListFact.frx":15E8E9
-      DataSource      =   "AdoArticulo"
-      Height          =   3540
-      Left            =   4095
-      TabIndex        =   66
-      Top             =   4620
-      Visible         =   0   'False
-      Width           =   11670
-      _ExtentX        =   20585
-      _ExtentY        =   6138
-      _Version        =   393216
-      Style           =   1
-      BackColor       =   12648384
-      Text            =   ""
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "MS Sans Serif"
-         Size            =   12
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
    End
    Begin MSComctlLib.Toolbar TBarFactura 
       Align           =   1  'Align Top
@@ -2654,7 +2654,7 @@ Private Sub CommandButton2_Click()
 End Sub
 
 Public Sub Cambia_Fechas_Facturas()
-  If ClaveAdministrador Then
+  If ClaveAuxiliar Then
      FechaValida MBFecha
      Mifecha = BuscarFecha(MBFecha)
      MiMes = MesesLetras(Month(MBFecha))
@@ -2666,31 +2666,31 @@ Public Sub Cambia_Fechas_Facturas()
      Factura_Desde = Val(TextFDesde)
      Factura_Hasta = Val(TextFHasta)
      Control_Procesos "F", "Cambio de Fecha desde " & Factura_Desde & " a la " & Factura_Hasta
-  If (Factura_Hasta - Factura_Desde) >= 0 Then
-     RatonReloj
-     SQL2 = "UPDATE Facturas " _
-          & "SET Fecha = #" & Mifecha & "# " _
-          & "WHERE Factura BETWEEN " & Factura_Desde & " and " & Factura_Hasta & " " _
-          & "AND TC = '" & FA.TC & "' " _
-          & "AND Serie = '" & FA.Serie & "' " _
-          & "AND Autorizacion = '" & FA.Autorizacion & "' " _
-          & "AND Item = '" & NumEmpresa & "' " _
-          & "AND Periodo = '" & Periodo_Contable & "' "
-     Ejecutar_SQL_SP SQL2
-     SQL2 = "UPDATE Detalle_Factura " _
-          & "SET Fecha = #" & Mifecha & "# " _
-          & "WHERE Factura BETWEEN " & Factura_Desde & " and " & Factura_Hasta & " " _
-          & "AND TC = '" & FA.TC & "' " _
-          & "AND Serie = '" & FA.Serie & "' " _
-          & "AND Autorizacion = '" & FA.Autorizacion & "' " _
-          & "AND Item = '" & NumEmpresa & "' " _
-          & "AND Periodo = '" & Periodo_Contable & "' "
-     Ejecutar_SQL_SP SQL2
-     RatonNormal
-     MsgBox "Proceso Terminado"
-  Else
-    MsgBox "No se puede procesar el rando de Facturas"
-  End If
+     If (Factura_Hasta - Factura_Desde) >= 0 Then
+        RatonReloj
+        SQL2 = "UPDATE Facturas " _
+             & "SET Fecha = #" & Mifecha & "# " _
+             & "WHERE Factura BETWEEN " & Factura_Desde & " and " & Factura_Hasta & " " _
+             & "AND TC = '" & FA.TC & "' " _
+             & "AND Serie = '" & FA.Serie & "' " _
+             & "AND Autorizacion = '" & FA.Autorizacion & "' " _
+             & "AND Item = '" & NumEmpresa & "' " _
+             & "AND Periodo = '" & Periodo_Contable & "' "
+        Ejecutar_SQL_SP SQL2
+        SQL2 = "UPDATE Detalle_Factura " _
+             & "SET Fecha = #" & Mifecha & "# " _
+             & "WHERE Factura BETWEEN " & Factura_Desde & " and " & Factura_Hasta & " " _
+             & "AND TC = '" & FA.TC & "' " _
+             & "AND Serie = '" & FA.Serie & "' " _
+             & "AND Autorizacion = '" & FA.Autorizacion & "' " _
+             & "AND Item = '" & NumEmpresa & "' " _
+             & "AND Periodo = '" & Periodo_Contable & "' "
+        Ejecutar_SQL_SP SQL2
+        RatonNormal
+        MsgBox "Proceso Terminado"
+    Else
+      MsgBox "No se puede procesar el rando de Facturas"
+    End If
   End If
 End Sub
 
@@ -2843,6 +2843,7 @@ Private Sub DGDetalle_KeyDown(KeyCode As Integer, Shift As Integer)
                            & "AND INV <> " & Val(adFalse) & " " _
                            & "ORDER BY Producto, Codigo_Inv "
                       SelectDB_Combo DCArticulo, AdoArticulo, sSQL, "NombProducto"
+                     'MsgBox AdoArticulo.Recordset.RecordCount
                       DCArticulo.Visible = True
                       DCArticulo.SetFocus
                    End If
@@ -3192,7 +3193,7 @@ Private Sub Form_Activate()
       TBarFactura.buttons("Ejecutivo").Enabled = True
       'TBarFactura.buttons("Kardex").Enabled = True
    Else
-      TBarFactura.buttons("Cambio_Emision_Facturas").Enabled = False
+      'TBarFactura.buttons("Cambio_Emision_Facturas").Enabled = False
       TBarFactura.buttons("Cambio_Vencimiento_Facturas").Enabled = False
       TBarFactura.buttons("Cambia_Autorizacion_Facturas").Enabled = False
       TBarFactura.buttons("Cambia_Numero_de_Facturas").Enabled = False
@@ -3646,7 +3647,7 @@ Dim TempStrg As String
    Case "Reprocesar_Saldos_Facturas"
         If ClaveAuxiliar Then
            DGDetalle.Visible = False
-           Procesar_Saldo_De_Facturas ListFact, True
+           Procesar_Saldo_De_Facturas ListFact, True, MBFecha
            DGDetalle.Visible = True
         End If
    Case "Eliminar_Facturas"

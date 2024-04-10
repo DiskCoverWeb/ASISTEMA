@@ -7,16 +7,16 @@ Begin VB.Form FRolPago
    BackColor       =   &H00C0FFFF&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "ROL DE PAGOS"
-   ClientHeight    =   6750
+   ClientHeight    =   7065
    ClientLeft      =   45
    ClientTop       =   435
-   ClientWidth     =   11265
+   ClientWidth     =   11355
    Icon            =   "FRolPag.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   6750
-   ScaleWidth      =   11265
+   ScaleHeight     =   7065
+   ScaleWidth      =   11355
    ShowInTaskbar   =   0   'False
    StartUpPosition =   3  'Windows Default
    Begin MSDataListLib.DataCombo DCGrupos 
@@ -26,8 +26,8 @@ Begin VB.Form FRolPago
       Left            =   7455
       TabIndex        =   14
       Top             =   945
-      Width           =   2640
-      _ExtentX        =   4657
+      Width           =   2745
+      _ExtentX        =   4842
       _ExtentY        =   556
       _Version        =   393216
       Text            =   "Grupo"
@@ -53,7 +53,7 @@ Begin VB.Form FRolPago
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   9345
+      Left            =   9450
       MaxLength       =   12
       MultiLine       =   -1  'True
       TabIndex        =   39
@@ -291,13 +291,13 @@ Begin VB.Form FRolPago
       Width           =   1065
    End
    Begin TabDlg.SSTab SSTab1 
-      Height          =   3585
+      Height          =   3900
       Left            =   105
       TabIndex        =   40
       Top             =   3045
-      Width           =   11040
-      _ExtentX        =   19473
-      _ExtentY        =   6324
+      Width           =   11145
+      _ExtentX        =   19659
+      _ExtentY        =   6879
       _Version        =   393216
       Tabs            =   4
       TabsPerRow      =   4
@@ -392,65 +392,163 @@ Begin VB.Form FRolPago
       TabCaption(1)   =   "Seguro Social y Decimos"
       TabPicture(1)   =   "FRolPag.frx":0186
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "TxtDiasDec4to"
-      Tab(1).Control(1)=   "TxtCISustituye"
-      Tab(1).Control(2)=   "TxtPorcDiscap"
-      Tab(1).Control(3)=   "TxtDiasDec3ro"
-      Tab(1).Control(4)=   "TxtValorDec3ro"
-      Tab(1).Control(5)=   "TxtValorDec4to"
-      Tab(1).Control(6)=   "TxtCodProfesion"
-      Tab(1).Control(7)=   "TxtFPDec"
-      Tab(1).Control(8)=   "MBFechaVF"
-      Tab(1).Control(9)=   "MBFechaVI"
-      Tab(1).Control(10)=   "DCAplicaConvenio"
-      Tab(1).Control(11)=   "DCCondiciones"
-      Tab(1).Control(12)=   "Label46"
-      Tab(1).Control(13)=   "Label48"
-      Tab(1).Control(14)=   "Label49"
-      Tab(1).Control(15)=   "LblTDsustituye"
-      Tab(1).Control(16)=   "Label57"
-      Tab(1).Control(17)=   "Label56"
-      Tab(1).Control(18)=   "Label55"
-      Tab(1).Control(19)=   "Label54"
-      Tab(1).Control(20)=   "Label47"
-      Tab(1).Control(21)=   "Label44"
-      Tab(1).Control(22)=   "Label45"
-      Tab(1).Control(23)=   "Label24"
+      Tab(1).Control(0)=   "Label24"
+      Tab(1).Control(0).Enabled=   0   'False
+      Tab(1).Control(1)=   "Label45"
+      Tab(1).Control(1).Enabled=   0   'False
+      Tab(1).Control(2)=   "Label44"
+      Tab(1).Control(2).Enabled=   0   'False
+      Tab(1).Control(3)=   "Label47"
+      Tab(1).Control(3).Enabled=   0   'False
+      Tab(1).Control(4)=   "Label54"
+      Tab(1).Control(4).Enabled=   0   'False
+      Tab(1).Control(5)=   "Label55"
+      Tab(1).Control(5).Enabled=   0   'False
+      Tab(1).Control(6)=   "Label56"
+      Tab(1).Control(6).Enabled=   0   'False
+      Tab(1).Control(7)=   "Label57"
+      Tab(1).Control(7).Enabled=   0   'False
+      Tab(1).Control(8)=   "LblTDsustituye"
+      Tab(1).Control(8).Enabled=   0   'False
+      Tab(1).Control(9)=   "Label49"
+      Tab(1).Control(9).Enabled=   0   'False
+      Tab(1).Control(10)=   "Label48"
+      Tab(1).Control(10).Enabled=   0   'False
+      Tab(1).Control(11)=   "Label46"
+      Tab(1).Control(11).Enabled=   0   'False
+      Tab(1).Control(12)=   "DCCondiciones"
+      Tab(1).Control(12).Enabled=   0   'False
+      Tab(1).Control(13)=   "DCAplicaConvenio"
+      Tab(1).Control(13).Enabled=   0   'False
+      Tab(1).Control(14)=   "MBFechaVI"
+      Tab(1).Control(14).Enabled=   0   'False
+      Tab(1).Control(15)=   "MBFechaVF"
+      Tab(1).Control(15).Enabled=   0   'False
+      Tab(1).Control(16)=   "TxtFPDec"
+      Tab(1).Control(16).Enabled=   0   'False
+      Tab(1).Control(17)=   "TxtCodProfesion"
+      Tab(1).Control(17).Enabled=   0   'False
+      Tab(1).Control(18)=   "TxtValorDec4to"
+      Tab(1).Control(18).Enabled=   0   'False
+      Tab(1).Control(19)=   "TxtValorDec3ro"
+      Tab(1).Control(19).Enabled=   0   'False
+      Tab(1).Control(20)=   "TxtDiasDec3ro"
+      Tab(1).Control(20).Enabled=   0   'False
+      Tab(1).Control(21)=   "TxtPorcDiscap"
+      Tab(1).Control(21).Enabled=   0   'False
+      Tab(1).Control(22)=   "TxtCISustituye"
+      Tab(1).Control(22).Enabled=   0   'False
+      Tab(1).Control(23)=   "TxtDiasDec4to"
+      Tab(1).Control(23).Enabled=   0   'False
       Tab(1).ControlCount=   24
       TabCaption(2)   =   "Forma de Pago"
       TabPicture(2)   =   "FRolPag.frx":01A2
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "OpcEfectivo"
-      Tab(2).Control(1)=   "OpcCheque"
-      Tab(2).Control(2)=   "OpcTransferencia"
-      Tab(2).Control(3)=   "OpcOtro"
-      Tab(2).Control(4)=   "TxtCI"
+      Tab(2).Control(0)=   "Label51"
+      Tab(2).Control(0).Enabled=   0   'False
+      Tab(2).Control(1)=   "Label18"
+      Tab(2).Control(1).Enabled=   0   'False
+      Tab(2).Control(2)=   "Label50"
+      Tab(2).Control(2).Enabled=   0   'False
+      Tab(2).Control(3)=   "DCTipoBanco"
+      Tab(2).Control(3).Enabled=   0   'False
+      Tab(2).Control(4)=   "DCFormaPago"
+      Tab(2).Control(4).Enabled=   0   'False
       Tab(2).Control(5)=   "TxtCtaAbono"
-      Tab(2).Control(6)=   "DCFormaPago"
-      Tab(2).Control(7)=   "DCTipoBanco"
-      Tab(2).Control(8)=   "Label50"
-      Tab(2).Control(9)=   "Label18"
-      Tab(2).Control(10)=   "Label51"
+      Tab(2).Control(5).Enabled=   0   'False
+      Tab(2).Control(6)=   "TxtCI"
+      Tab(2).Control(6).Enabled=   0   'False
+      Tab(2).Control(7)=   "OpcOtro"
+      Tab(2).Control(7).Enabled=   0   'False
+      Tab(2).Control(8)=   "OpcTransferencia"
+      Tab(2).Control(8).Enabled=   0   'False
+      Tab(2).Control(9)=   "OpcCheque"
+      Tab(2).Control(9).Enabled=   0   'False
+      Tab(2).Control(10)=   "OpcEfectivo"
+      Tab(2).Control(10).Enabled=   0   'False
       Tab(2).ControlCount=   11
       TabCaption(3)   =   "Gastos Personales"
       TabPicture(3)   =   "FRolPag.frx":01BE
       Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "Frame2"
-      Tab(3).Control(1)=   "Txt3Edad"
-      Tab(3).Control(2)=   "TxtDiscap"
-      Tab(3).Control(3)=   "TxtVestimenta"
-      Tab(3).Control(4)=   "TxtAlimentacion"
-      Tab(3).Control(5)=   "TxtEducacion"
-      Tab(3).Control(6)=   "TxtSalud"
-      Tab(3).Control(7)=   "TxtVivienda"
-      Tab(3).Control(8)=   "Label58"
-      Tab(3).Control(9)=   "Label60"
-      Tab(3).Control(10)=   "Label61"
-      Tab(3).Control(11)=   "Label62"
-      Tab(3).Control(12)=   "Label63"
-      Tab(3).Control(13)=   "Label64"
-      Tab(3).Control(14)=   "Label59"
-      Tab(3).ControlCount=   15
+      Tab(3).Control(0)=   "Label59"
+      Tab(3).Control(0).Enabled=   0   'False
+      Tab(3).Control(1)=   "Label64"
+      Tab(3).Control(1).Enabled=   0   'False
+      Tab(3).Control(2)=   "Label63"
+      Tab(3).Control(2).Enabled=   0   'False
+      Tab(3).Control(3)=   "Label62"
+      Tab(3).Control(3).Enabled=   0   'False
+      Tab(3).Control(4)=   "Label61"
+      Tab(3).Control(4).Enabled=   0   'False
+      Tab(3).Control(5)=   "Label60"
+      Tab(3).Control(5).Enabled=   0   'False
+      Tab(3).Control(6)=   "Label58"
+      Tab(3).Control(6).Enabled=   0   'False
+      Tab(3).Control(7)=   "Label11"
+      Tab(3).Control(7).Enabled=   0   'False
+      Tab(3).Control(8)=   "Label13"
+      Tab(3).Control(8).Enabled=   0   'False
+      Tab(3).Control(9)=   "TxtVivienda"
+      Tab(3).Control(9).Enabled=   0   'False
+      Tab(3).Control(10)=   "TxtSalud"
+      Tab(3).Control(10).Enabled=   0   'False
+      Tab(3).Control(11)=   "TxtEducacion"
+      Tab(3).Control(11).Enabled=   0   'False
+      Tab(3).Control(12)=   "TxtAlimentacion"
+      Tab(3).Control(12).Enabled=   0   'False
+      Tab(3).Control(13)=   "TxtVestimenta"
+      Tab(3).Control(13).Enabled=   0   'False
+      Tab(3).Control(14)=   "TxtDiscap"
+      Tab(3).Control(14).Enabled=   0   'False
+      Tab(3).Control(15)=   "Txt3Edad"
+      Tab(3).Control(15).Enabled=   0   'False
+      Tab(3).Control(16)=   "Frame2"
+      Tab(3).Control(16).Enabled=   0   'False
+      Tab(3).Control(17)=   "TxtTurismo"
+      Tab(3).Control(17).Enabled=   0   'False
+      Tab(3).Control(18)=   "TxtCargas"
+      Tab(3).Control(18).Enabled=   0   'False
+      Tab(3).ControlCount=   19
+      Begin VB.TextBox TxtCargas 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -65760
+         MaxLength       =   10
+         TabIndex        =   130
+         Text            =   "0"
+         Top             =   420
+         Width           =   1800
+      End
+      Begin VB.TextBox TxtTurismo 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -72270
+         MaxLength       =   10
+         TabIndex        =   124
+         Text            =   "0.00"
+         Top             =   2520
+         Width           =   1800
+      End
       Begin VB.CheckBox CheqDecimos 
          Caption         =   "PAGAR DECIMOS EN ROL DE PAGOS"
          BeginProperty Font 
@@ -464,13 +562,13 @@ Begin VB.Form FRolPago
          EndProperty
          Height          =   435
          Left            =   7245
-         TabIndex        =   138
-         Top             =   2940
+         TabIndex        =   142
+         Top             =   3255
          Width           =   2955
       End
       Begin MSMask.MaskEdBox MBCta_Diferencia 
          Height          =   330
-         Left            =   9240
+         Left            =   9450
          TabIndex        =   70
          Top             =   1785
          Width           =   1590
@@ -491,7 +589,7 @@ Begin VB.Form FRolPago
       End
       Begin MSMask.MaskEdBox MBCta_Fondo_Reserva_G 
          Height          =   330
-         Left            =   9240
+         Left            =   9450
          TabIndex        =   64
          Top             =   1470
          Width           =   1590
@@ -512,7 +610,7 @@ Begin VB.Form FRolPago
       End
       Begin MSMask.MaskEdBox MBCta_Fondo_Reserva_P 
          Height          =   330
-         Left            =   9240
+         Left            =   9450
          TabIndex        =   58
          Top             =   1155
          Width           =   1590
@@ -545,7 +643,7 @@ Begin VB.Form FRolPago
          Height          =   435
          Left            =   3675
          TabIndex        =   77
-         Top             =   2940
+         Top             =   3255
          Width           =   2955
       End
       Begin VB.CheckBox CheqRFR 
@@ -562,7 +660,7 @@ Begin VB.Form FRolPago
          Height          =   435
          Left            =   105
          TabIndex        =   75
-         Top             =   2940
+         Top             =   3255
          Width           =   2640
       End
       Begin VB.Frame Frame2 
@@ -576,10 +674,10 @@ Begin VB.Form FRolPago
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Height          =   2430
-         Left            =   -68175
-         TabIndex        =   127
-         Top             =   420
+         Height          =   2010
+         Left            =   -67755
+         TabIndex        =   131
+         Top             =   1785
          Width           =   3795
          Begin VB.TextBox TxtCSSP 
             BeginProperty Font 
@@ -594,7 +692,7 @@ Begin VB.Form FRolPago
             Height          =   330
             Left            =   1680
             MaxLength       =   15
-            TabIndex        =   133
+            TabIndex        =   137
             Top             =   1155
             Width           =   2010
          End
@@ -611,7 +709,7 @@ Begin VB.Form FRolPago
             Height          =   330
             Left            =   1680
             MaxLength       =   10
-            TabIndex        =   135
+            TabIndex        =   139
             Top             =   1575
             Width           =   2010
          End
@@ -628,7 +726,7 @@ Begin VB.Form FRolPago
             Height          =   330
             Left            =   1680
             MaxLength       =   15
-            TabIndex        =   129
+            TabIndex        =   133
             Top             =   315
             Width           =   2010
          End
@@ -645,7 +743,7 @@ Begin VB.Form FRolPago
             Height          =   330
             Left            =   1680
             MaxLength       =   12
-            TabIndex        =   131
+            TabIndex        =   135
             Top             =   735
             Width           =   2010
          End
@@ -663,7 +761,7 @@ Begin VB.Form FRolPago
             EndProperty
             Height          =   330
             Left            =   105
-            TabIndex        =   132
+            TabIndex        =   136
             Top             =   1155
             Width           =   1590
          End
@@ -681,7 +779,7 @@ Begin VB.Form FRolPago
             EndProperty
             Height          =   330
             Left            =   105
-            TabIndex        =   134
+            TabIndex        =   138
             Top             =   1575
             Width           =   1590
          End
@@ -699,7 +797,7 @@ Begin VB.Form FRolPago
             EndProperty
             Height          =   330
             Left            =   105
-            TabIndex        =   128
+            TabIndex        =   132
             Top             =   315
             Width           =   1590
          End
@@ -717,7 +815,7 @@ Begin VB.Form FRolPago
             EndProperty
             Height          =   330
             Left            =   105
-            TabIndex        =   130
+            TabIndex        =   134
             Top             =   735
             Width           =   1590
          End
@@ -821,13 +919,13 @@ Begin VB.Form FRolPago
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   -72795
+         Left            =   -67440
          MaxLength       =   20
          TabIndex        =   110
          ToolTipText     =   "C01: Cta Cte, C02: Ahorro, C03: Virtual y CI: Acreditar Sueldo a otro Empleado; espacio y la cuenta"
-         Top             =   1575
+         Top             =   1155
          Visible         =   0   'False
-         Width           =   2535
+         Width           =   3480
       End
       Begin VB.TextBox Txt3Edad 
          Alignment       =   1  'Right Justify
@@ -842,11 +940,11 @@ Begin VB.Form FRolPago
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   -73110
+         Left            =   -72270
          MaxLength       =   10
-         TabIndex        =   126
+         TabIndex        =   128
          Text            =   "0.00"
-         Top             =   2940
+         Top             =   3360
          Width           =   1800
       End
       Begin VB.TextBox TxtDiscap 
@@ -862,11 +960,11 @@ Begin VB.Form FRolPago
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   -73110
+         Left            =   -72270
          MaxLength       =   10
-         TabIndex        =   124
+         TabIndex        =   126
          Text            =   "0.00"
-         Top             =   2520
+         Top             =   2940
          Width           =   1800
       End
       Begin VB.TextBox TxtVestimenta 
@@ -882,7 +980,7 @@ Begin VB.Form FRolPago
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   -73110
+         Left            =   -72270
          MaxLength       =   10
          TabIndex        =   122
          Text            =   "0.00"
@@ -902,7 +1000,7 @@ Begin VB.Form FRolPago
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   -73110
+         Left            =   -72270
          MaxLength       =   10
          TabIndex        =   120
          Text            =   "0.00"
@@ -922,7 +1020,7 @@ Begin VB.Form FRolPago
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   -73110
+         Left            =   -72270
          MaxLength       =   10
          TabIndex        =   118
          Text            =   "0.00"
@@ -942,7 +1040,7 @@ Begin VB.Form FRolPago
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   -73110
+         Left            =   -72270
          MaxLength       =   10
          ScrollBars      =   2  'Vertical
          TabIndex        =   116
@@ -963,7 +1061,7 @@ Begin VB.Form FRolPago
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   -73110
+         Left            =   -72270
          MaxLength       =   10
          TabIndex        =   114
          Text            =   "0.00"
@@ -982,7 +1080,7 @@ Begin VB.Form FRolPago
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   -64710
+         Left            =   -64500
          MaxLength       =   3
          MultiLine       =   -1  'True
          TabIndex        =   92
@@ -1011,7 +1109,7 @@ Begin VB.Form FRolPago
       End
       Begin MSMask.MaskEdBox MBCta_Vacaciones_P 
          Height          =   330
-         Left            =   5670
+         Left            =   5775
          TabIndex        =   56
          Top             =   1155
          Width           =   1590
@@ -1032,7 +1130,7 @@ Begin VB.Form FRolPago
       End
       Begin MSMask.MaskEdBox MBCta_Vacaciones_G 
          Height          =   330
-         Left            =   5670
+         Left            =   5775
          TabIndex        =   62
          Top             =   1470
          Width           =   1590
@@ -1069,7 +1167,7 @@ Begin VB.Form FRolPago
          TabIndex        =   98
          Text            =   "FRolPag.frx":01E0
          Top             =   2100
-         Width           =   540
+         Width           =   750
       End
       Begin VB.TextBox TxtDiasDec3ro 
          Alignment       =   1  'Right Justify
@@ -1114,7 +1212,7 @@ Begin VB.Form FRolPago
       End
       Begin MSMask.MaskEdBox MBCta_Quincena 
          Height          =   330
-         Left            =   5670
+         Left            =   5775
          TabIndex        =   50
          Top             =   735
          Width           =   1590
@@ -1135,7 +1233,7 @@ Begin VB.Form FRolPago
       End
       Begin MSMask.MaskEdBox MBCta_Decimo_Cuarto_P 
          Height          =   330
-         Left            =   5670
+         Left            =   5775
          TabIndex        =   74
          Top             =   2100
          Width           =   1590
@@ -1156,7 +1254,7 @@ Begin VB.Form FRolPago
       End
       Begin MSMask.MaskEdBox MBCta_Decimo_Cuarto_G 
          Height          =   330
-         Left            =   5670
+         Left            =   5775
          TabIndex        =   68
          Top             =   1785
          Width           =   1590
@@ -1177,7 +1275,7 @@ Begin VB.Form FRolPago
       End
       Begin MSMask.MaskEdBox MBCta_Antig 
          Height          =   330
-         Left            =   9240
+         Left            =   9450
          TabIndex        =   52
          Top             =   735
          Width           =   1590
@@ -1219,7 +1317,7 @@ Begin VB.Form FRolPago
       End
       Begin MSMask.MaskEdBox MBCta_Vacacion 
          Height          =   330
-         Left            =   5670
+         Left            =   5775
          TabIndex        =   44
          Top             =   420
          Width           =   1590
@@ -1282,7 +1380,7 @@ Begin VB.Form FRolPago
       End
       Begin MSMask.MaskEdBox MBCta_Horas_Ext 
          Height          =   330
-         Left            =   9240
+         Left            =   9450
          TabIndex        =   46
          Top             =   420
          Width           =   1590
@@ -1354,7 +1452,7 @@ Begin VB.Form FRolPago
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   -67860
+         Left            =   -67755
          MaxLength       =   12
          MultiLine       =   -1  'True
          TabIndex        =   90
@@ -1502,8 +1600,8 @@ Begin VB.Form FRolPago
          Left            =   -69645
          TabIndex        =   94
          Top             =   1680
-         Width           =   5475
-         _ExtentX        =   9657
+         Width           =   5685
+         _ExtentX        =   10028
          _ExtentY        =   609
          _Version        =   393216
          Text            =   ""
@@ -1524,8 +1622,8 @@ Begin VB.Form FRolPago
          Left            =   -74790
          TabIndex        =   106
          Top             =   735
-         Width           =   6105
-         _ExtentX        =   10769
+         Width           =   10830
+         _ExtentX        =   19103
          _ExtentY        =   609
          _Version        =   393216
          Text            =   "DataCombo1"
@@ -1545,10 +1643,10 @@ Begin VB.Form FRolPago
          Height          =   345
          Left            =   -74790
          TabIndex        =   112
-         Top             =   2310
+         Top             =   1890
          Visible         =   0   'False
-         Width           =   9150
-         _ExtentX        =   16140
+         Width           =   10830
+         _ExtentX        =   19103
          _ExtentY        =   609
          _Version        =   393216
          Text            =   ""
@@ -1564,8 +1662,8 @@ Begin VB.Form FRolPago
       End
       Begin MSMask.MaskEdBox MBCta_ExtConyugue 
          Height          =   330
-         Left            =   9240
-         TabIndex        =   139
+         Left            =   9450
+         TabIndex        =   143
          Top             =   2100
          Width           =   1590
          _ExtentX        =   2805
@@ -1587,11 +1685,11 @@ Begin VB.Form FRolPago
          Bindings        =   "FRolPag.frx":0265
          DataSource      =   "AdoSubCtas"
          Height          =   315
-         Left            =   3675
-         TabIndex        =   141
-         Top             =   2520
-         Width           =   7155
-         _ExtentX        =   12621
+         Left            =   3780
+         TabIndex        =   145
+         Top             =   2625
+         Width           =   7260
+         _ExtentX        =   12806
          _ExtentY        =   556
          _Version        =   393216
          Text            =   "NOMINA SIN SUBMODULO"
@@ -1604,6 +1702,46 @@ Begin VB.Form FRolPago
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
+      End
+      Begin VB.Label Label13 
+         BackColor       =   &H00C0FFFF&
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " (-) Numero de Cargas Familiares"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   330
+         Left            =   -68700
+         TabIndex        =   129
+         Top             =   420
+         Width           =   2955
+      End
+      Begin VB.Label Label11 
+         BackColor       =   &H00C0FFFF&
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " (-) Turismo"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   330
+         Left            =   -74895
+         TabIndex        =   123
+         Top             =   2520
+         Width           =   2640
       End
       Begin VB.Label Label12 
          BorderStyle     =   1  'Fixed Single
@@ -1618,8 +1756,8 @@ Begin VB.Form FRolPago
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   7245
-         TabIndex        =   140
+         Left            =   7455
+         TabIndex        =   144
          Top             =   2100
          Width           =   2010
       End
@@ -1636,7 +1774,7 @@ Begin VB.Form FRolPago
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   7245
+         Left            =   7455
          TabIndex        =   69
          Top             =   1785
          Width           =   2010
@@ -1654,7 +1792,7 @@ Begin VB.Form FRolPago
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   7245
+         Left            =   7455
          TabIndex        =   63
          Top             =   1470
          Width           =   2010
@@ -1672,7 +1810,7 @@ Begin VB.Form FRolPago
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   7245
+         Left            =   7455
          TabIndex        =   57
          Top             =   1155
          Width           =   2010
@@ -1698,7 +1836,7 @@ Begin VB.Form FRolPago
       End
       Begin VB.Label Label18 
          BorderStyle     =   1  'Fixed Single
-         Caption         =   " Cta. de Transferencia"
+         Caption         =   " Cuenta de Transferencia No."
          BeginProperty Font 
             Name            =   "MS Sans Serif"
             Size            =   8.25
@@ -1709,11 +1847,11 @@ Begin VB.Form FRolPago
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   -74790
+         Left            =   -70170
          TabIndex        =   109
-         Top             =   1575
+         Top             =   1155
          Visible         =   0   'False
-         Width           =   2010
+         Width           =   2745
       End
       Begin VB.Label Label51 
          BorderStyle     =   1  'Fixed Single
@@ -1730,9 +1868,9 @@ Begin VB.Form FRolPago
          Height          =   330
          Left            =   -74790
          TabIndex        =   111
-         Top             =   1995
+         Top             =   1575
          Visible         =   0   'False
-         Width           =   9150
+         Width           =   10830
       End
       Begin VB.Label Label58 
          BackColor       =   &H00C0FFFF&
@@ -1750,9 +1888,9 @@ Begin VB.Form FRolPago
          ForeColor       =   &H00800000&
          Height          =   330
          Left            =   -74895
-         TabIndex        =   125
-         Top             =   2940
-         Width           =   1800
+         TabIndex        =   127
+         Top             =   3360
+         Width           =   2640
       End
       Begin VB.Label Label60 
          BackColor       =   &H00C0FFFF&
@@ -1772,7 +1910,7 @@ Begin VB.Form FRolPago
          Left            =   -74895
          TabIndex        =   121
          Top             =   2100
-         Width           =   1800
+         Width           =   2640
       End
       Begin VB.Label Label61 
          BackColor       =   &H00C0FFFF&
@@ -1792,12 +1930,12 @@ Begin VB.Form FRolPago
          Left            =   -74895
          TabIndex        =   119
          Top             =   1680
-         Width           =   1800
+         Width           =   2640
       End
       Begin VB.Label Label62 
          BackColor       =   &H00C0FFFF&
          BorderStyle     =   1  'Fixed Single
-         Caption         =   " (-) Educación"
+         Caption         =   " (-) Educación, Arte y Cultura"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
             Size            =   8.25
@@ -1812,7 +1950,7 @@ Begin VB.Form FRolPago
          Left            =   -74895
          TabIndex        =   117
          Top             =   1260
-         Width           =   1800
+         Width           =   2640
       End
       Begin VB.Label Label63 
          BackColor       =   &H00C0FFFF&
@@ -1832,7 +1970,7 @@ Begin VB.Form FRolPago
          Left            =   -74895
          TabIndex        =   115
          Top             =   840
-         Width           =   1800
+         Width           =   2640
       End
       Begin VB.Label Label64 
          BackColor       =   &H00C0FFFF&
@@ -1852,7 +1990,7 @@ Begin VB.Form FRolPago
          Left            =   -74895
          TabIndex        =   113
          Top             =   420
-         Width           =   1800
+         Width           =   2640
       End
       Begin VB.Label Label59 
          BackColor       =   &H00C0FFFF&
@@ -1870,9 +2008,9 @@ Begin VB.Form FRolPago
          ForeColor       =   &H00800000&
          Height          =   330
          Left            =   -74895
-         TabIndex        =   123
-         Top             =   2520
-         Width           =   1800
+         TabIndex        =   125
+         Top             =   2940
+         Width           =   2640
       End
       Begin VB.Label Label46 
          BorderStyle     =   1  'Fixed Single
@@ -1887,7 +2025,7 @@ Begin VB.Form FRolPago
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   -69540
+         Left            =   -69435
          TabIndex        =   89
          Top             =   1260
          Width           =   1695
@@ -1905,10 +2043,10 @@ Begin VB.Form FRolPago
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   -71745
+         Left            =   -71640
          TabIndex        =   87
          Top             =   1260
-         Width           =   1695
+         Width           =   1590
       End
       Begin VB.Label Label49 
          BorderStyle     =   1  'Fixed Single
@@ -1923,7 +2061,7 @@ Begin VB.Form FRolPago
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   -66390
+         Left            =   -66180
          TabIndex        =   91
          Top             =   1260
          Width           =   1695
@@ -1961,7 +2099,7 @@ Begin VB.Form FRolPago
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   3675
+         Left            =   3780
          TabIndex        =   55
          Top             =   1155
          Width           =   2010
@@ -2052,7 +2190,7 @@ Begin VB.Form FRolPago
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   3675
+         Left            =   3780
          TabIndex        =   61
          Top             =   1470
          Width           =   2010
@@ -2072,8 +2210,8 @@ Begin VB.Form FRolPago
          Height          =   330
          Left            =   105
          TabIndex        =   76
-         Top             =   2520
-         Width           =   3585
+         Top             =   2625
+         Width           =   3690
       End
       Begin VB.Label Label34 
          BorderStyle     =   1  'Fixed Single
@@ -2106,7 +2244,7 @@ Begin VB.Form FRolPago
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   3675
+         Left            =   3780
          TabIndex        =   49
          Top             =   735
          Width           =   2010
@@ -2124,7 +2262,7 @@ Begin VB.Form FRolPago
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   3675
+         Left            =   3780
          TabIndex        =   73
          Top             =   2100
          Width           =   2010
@@ -2142,7 +2280,7 @@ Begin VB.Form FRolPago
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   3675
+         Left            =   3780
          TabIndex        =   67
          Top             =   1785
          Width           =   2010
@@ -2160,7 +2298,7 @@ Begin VB.Form FRolPago
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   7245
+         Left            =   7455
          TabIndex        =   51
          Top             =   735
          Width           =   2010
@@ -2196,7 +2334,7 @@ Begin VB.Form FRolPago
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   3675
+         Left            =   3780
          TabIndex        =   43
          Top             =   420
          Width           =   2010
@@ -2250,7 +2388,7 @@ Begin VB.Form FRolPago
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   7245
+         Left            =   7455
          TabIndex        =   45
          Top             =   420
          Width           =   2010
@@ -2376,7 +2514,7 @@ Begin VB.Form FRolPago
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   9345
+      Left            =   9450
       MaxLength       =   12
       MultiLine       =   -1  'True
       TabIndex        =   37
@@ -2397,7 +2535,7 @@ Begin VB.Form FRolPago
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   9345
+      Left            =   9450
       MaxLength       =   12
       MultiLine       =   -1  'True
       TabIndex        =   35
@@ -2499,7 +2637,7 @@ Begin VB.Form FRolPago
       TabIndex        =   8
       Text            =   "FRolPag.frx":028E
       Top             =   525
-      Width           =   2640
+      Width           =   2745
    End
    Begin VB.OptionButton OpcSi 
       BackColor       =   &H00C0FFFF&
@@ -2551,10 +2689,10 @@ Begin VB.Form FRolPago
          Strikethrough   =   0   'False
       EndProperty
       Height          =   855
-      Left            =   10185
+      Left            =   10290
       Picture         =   "FRolPag.frx":0292
       Style           =   1  'Graphical
-      TabIndex        =   136
+      TabIndex        =   140
       Top             =   105
       Width           =   960
    End
@@ -2571,10 +2709,10 @@ Begin VB.Form FRolPago
          Strikethrough   =   0   'False
       EndProperty
       Height          =   855
-      Left            =   10185
+      Left            =   10290
       Picture         =   "FRolPag.frx":0B5C
       Style           =   1  'Graphical
-      TabIndex        =   137
+      TabIndex        =   141
       Top             =   1050
       Width           =   960
    End
@@ -3211,10 +3349,10 @@ Begin VB.Form FRolPago
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   8610
+      Left            =   8400
       TabIndex        =   20
       Top             =   1260
-      Width           =   1485
+      Width           =   1800
    End
    Begin VB.Label Label1 
       BackColor       =   &H00C0FFFF&
@@ -3233,7 +3371,7 @@ Begin VB.Form FRolPago
       Left            =   7455
       TabIndex        =   19
       Top             =   1260
-      Width           =   1170
+      Width           =   960
    End
    Begin VB.Label Label2 
       BackColor       =   &H00C0FFFF&
@@ -3252,7 +3390,7 @@ Begin VB.Form FRolPago
       Left            =   7455
       TabIndex        =   36
       Top             =   2100
-      Width           =   1905
+      Width           =   2010
    End
    Begin VB.Label Label5 
       BackColor       =   &H00C0FFFF&
@@ -3271,7 +3409,7 @@ Begin VB.Form FRolPago
       Left            =   7455
       TabIndex        =   34
       Top             =   1680
-      Width           =   1905
+      Width           =   2010
    End
    Begin VB.Label Label19 
       BackColor       =   &H00C0FFFF&
@@ -3349,7 +3487,7 @@ Begin VB.Form FRolPago
       Left            =   7455
       TabIndex        =   1
       Top             =   105
-      Width           =   2640
+      Width           =   2745
    End
    Begin VB.Label Label6 
       BackColor       =   &H00C0FFFF&
@@ -3403,7 +3541,7 @@ Begin VB.Form FRolPago
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   5880
+      Left            =   5985
       TabIndex        =   7
       Top             =   525
       Width           =   1485
@@ -3461,15 +3599,15 @@ Dim OpcCondicion As String
 Dim OpcCopiarTodo As Boolean
 
 Private Sub CheqExtC_Click()
-   If CheqExtC.Value = 1 Then TxtExtC = Format(IESS_Ext * 100, "#,##0.00") Else TxtExtC = "0.00"
+   If CheqExtC.value = 1 Then TxtExtC = Format(IESS_Ext * 100, "#,##0.00") Else TxtExtC = "0.00"
 End Sub
 
 Private Sub CheqMaternidad_Click()
- If CheqMaternidad.Value <> 0 Then MBFechaM.Visible = True Else MBFechaM.Visible = False
+ If CheqMaternidad.value <> 0 Then MBFechaM.Visible = True Else MBFechaM.Visible = False
 End Sub
 
 Private Sub CheqSalida_Click()
- If CheqSalida.Value <> 0 Then MBFechaC.Visible = True Else MBFechaC.Visible = False
+ If CheqSalida.value <> 0 Then MBFechaC.Visible = True Else MBFechaC.Visible = False
 End Sub
 
 Private Sub Command1_Click()
@@ -3510,7 +3648,7 @@ Private Sub Command1_Click()
   
  'Buscamos el codigo del submodulo de gastos
   CodigoInv = ""
-  If DCSubModulo.Text = "" Then DCSubModulo.Text = "NOMINA SIN SUBMODULO"
+  If DCSubModulo.Text = "" Then DCSubModulo.Text = Ninguno
   If AdoSubCtas.Recordset.RecordCount > 0 Then
      AdoSubCtas.Recordset.MoveFirst
      AdoSubCtas.Recordset.Find ("Detalle = '" & DCSubModulo.Text & "' ")
@@ -3537,7 +3675,7 @@ Private Sub Command1_Click()
   SetFields AdoCxCxP, "Clave", TxtClave
   SetFields AdoCxCxP, "Grupo_Rol", DCGrupos
   SetFields AdoCxCxP, "Tarjeta", Sin_Signos_Especiales(TxtTarjeta)
-  If OpcSi.Value Then SetFields AdoCxCxP, "SN", "2" Else SetFields AdoCxCxP, "SN", "1"
+  If OpcSi.value Then SetFields AdoCxCxP, "SN", "2" Else SetFields AdoCxCxP, "SN", "1"
   Cta = CambioCodigoCta(MBCta_Horas_Ext)
   If Val(MidStrg(Cta, 1, 1)) > 0 Then SetFields AdoCxCxP, "Horas_Ext", adTrue
   SetFields AdoCxCxP, "No_CSSP", UCaseStrg(TxtCSSP)
@@ -3545,24 +3683,6 @@ Private Sub Command1_Click()
   SetFields AdoCxCxP, "AFP_ONP", UCaseStrg(TxtAFPONP)
   SetFields AdoCxCxP, "No_Personal", TxtNoSeguro
   
-'''  SetFields AdoCxCxP, "Cta_Sueldo", CambioCodigoCta(MBCta_Sueldo)
-'''  SetFields AdoCxCxP, "Cta_Horas_Ext", CambioCodigoCta(MBCta_Horas_Ext)
-'''  SetFields AdoCxCxP, "Cta_Antiguedad", CambioCodigoCta(MBCta_Antig)
-'''  SetFields AdoCxCxP, "Cta_Diferencia", CambioCodigoCta(MBCta_Diferencia)
-'''  SetFields AdoCxCxP, "Cta_Vacacion", CambioCodigoCta(MBCta_Vacacion)
-'''  SetFields AdoCxCxP, "Cta_Aporte_Patronal_G", CambioCodigoCta(MBCta_Aporte_Patronal_G)
-'''  SetFields AdoCxCxP, "Cta_Decimo_Cuarto_G", CambioCodigoCta(MBCta_Decimo_Cuarto_G)
-'''  SetFields AdoCxCxP, "Cta_Decimo_Cuarto_P", CambioCodigoCta(MBCta_Decimo_Cuarto_P)
-'''  SetFields AdoCxCxP, "Cta_Decimo_Tercer_G", CambioCodigoCta(MBCta_Decimo_Tercer_G)
-'''  SetFields AdoCxCxP, "Cta_Decimo_Tercer_P", CambioCodigoCta(MBCta_Decimo_Tercer_P)
-'''  SetFields AdoCxCxP, "Cta_Fondo_Reserva_G", CambioCodigoCta(MBCta_Fondo_Reserva_G)
-'''  SetFields AdoCxCxP, "Cta_Fondo_Reserva_P", CambioCodigoCta(MBCta_Fondo_Reserva_P)
-'''  SetFields AdoCxCxP, "Cta_Ext_Conyugue_P", CambioCodigoCta(MBCta_ExtConyugue)
-'''  SetFields AdoCxCxP, "Cta_Vacaciones_G", CambioCodigoCta(MBCta_Vacaciones_G)
-'''  SetFields AdoCxCxP, "Cta_Vacaciones_P", CambioCodigoCta(MBCta_Vacaciones_P)
-'''  SetFields AdoCxCxP, "Cta_IESS_Patronal", CambioCodigoCta(MBCta_IESS_Patronal)
-'''  SetFields AdoCxCxP, "Cta_IESS_Personal", CambioCodigoCta(MBCta_IESS_Personal)
-'''  SetFields AdoCxCxP, "Cta_Quincena", CambioCodigoCta(MBCta_Quincena)
   SetFields AdoCxCxP, "CodProfesion", Format$(Val(TxtCodProfesion), "0000000000")
   SetFields AdoCxCxP, "FormaPago10to", UCaseStrg(TxtFPDec)
   SetFields AdoCxCxP, "Ejecutivo", NombreCliente
@@ -3574,28 +3694,35 @@ Private Sub Command1_Click()
   SetFields AdoCxCxP, "Acreditar_Cta", Ninguno
   SetFields AdoCxCxP, "TC", TipoCta
   SetFields AdoCxCxP, "Cta_Forma_Pago", TrimStrg(SinEspaciosIzq(DCFormaPago))
-  SetFields AdoCxCxP, "Pagar_Fondo_Reserva", CBool(CheqFondoReserva.Value)
-  SetFields AdoCxCxP, "Pagar_Decimos", CBool(CheqDecimos.Value)
-  SetFields AdoCxCxP, "TiempoParcial", CBool(CheqTiempoParcial.Value)
-  SetFields AdoCxCxP, "Reingreso_FR", CBool(CheqRFR.Value)
-  SetFields AdoCxCxP, "ExtC", CBool(CheqExtC.Value)
+  SetFields AdoCxCxP, "Pagar_Fondo_Reserva", CBool(CheqFondoReserva.value)
+  SetFields AdoCxCxP, "Pagar_Decimos", CBool(CheqDecimos.value)
+  SetFields AdoCxCxP, "TiempoParcial", CBool(CheqTiempoParcial.value)
+  SetFields AdoCxCxP, "Reingreso_FR", CBool(CheqRFR.value)
+  SetFields AdoCxCxP, "ExtC", CBool(CheqExtC.value)
   SetFields AdoCxCxP, "Identificacion", TxtCISustituye
   SetFields AdoCxCxP, "TIdentificacion", LblTDsustituye.Caption
   SetFields AdoCxCxP, "Aplica", OpcAplica
   SetFields AdoCxCxP, "Condicion", OpcCondicion
   SetFields AdoCxCxP, "Porcentaje", Val(CCur(TxtPorcDiscap))
+  
+  SetFields AdoCxCxP, "Porc_IESS_Per", Val(CCur(TxtPorcAp) / 100)
+  SetFields AdoCxCxP, "Porc_IESS_Pat", Val(CCur(TxtApPer) / 100)
+  SetFields AdoCxCxP, "Porc_IESS_ExtC", Val(CCur(TxtExtC) / 100)
+  
   SetFields AdoCxCxP, "Vivienda", Val(CCur(TxtVivienda))
   SetFields AdoCxCxP, "Salud", Val(CCur(TxtSalud))
   SetFields AdoCxCxP, "Educacion", Val(CCur(TxtEducacion))
   SetFields AdoCxCxP, "Alimentacion", Val(CCur(TxtAlimentacion))
   SetFields AdoCxCxP, "Vestimenta", Val(CCur(TxtVestimenta))
+  SetFields AdoCxCxP, "Turismo", Val(CCur(TxtTurismo))
   SetFields AdoCxCxP, "Discapacidad", Val(CCur(TxtDiscap))
   SetFields AdoCxCxP, "Tercera_Edad", Val(CCur(Txt3Edad))
   SetFields AdoCxCxP, "Cod_Ejec", Abreviatura_Texto(LblCliente.Caption)
+  SetFields AdoCxCxP, "Carga_Familiar", Val(CInt(TxtCargas))
   SetFields AdoCxCxP, "Item", NumEmpresa
   SetFields AdoCxCxP, "Periodo", Periodo_Contable
   
-  If CheqSalida.Value <> 0 Then
+  If CheqSalida.value <> 0 Then
      SetFields AdoCxCxP, "T", "R"
      SetFields AdoCxCxP, "FechaC", MBFechaC
   Else
@@ -3603,18 +3730,18 @@ Private Sub Command1_Click()
      SetFields AdoCxCxP, "FechaC", FechaSistema
   End If
   
-  If CheqMaternidad.Value <> 0 Then
+  If CheqMaternidad.value <> 0 Then
      SetFields AdoCxCxP, "FechaMat", MBFechaM
   Else
      SetFields AdoCxCxP, "FechaMat", FechaSistema
   End If
-  SetFields AdoCxCxP, "Maternidad", CBool(CheqMaternidad.Value)
+  SetFields AdoCxCxP, "Maternidad", CBool(CheqMaternidad.value)
   
-  If OpcEfectivo.Value Then
+  If OpcEfectivo.value Then
      SetFields AdoCxCxP, "FP", "E"
-  ElseIf OpcCheque.Value Then
+  ElseIf OpcCheque.value Then
      SetFields AdoCxCxP, "FP", "C"
-  ElseIf OpcTransferencia.Value Then
+  ElseIf OpcTransferencia.value Then
      SetFields AdoCxCxP, "FP", "T"
      SetFields AdoCxCxP, "Cta_Transferencia", TxtCtaAbono
      SetFields AdoCxCxP, "Acreditar_Cta", TxtCI
@@ -3649,9 +3776,9 @@ Private Sub Command1_Click()
       SetAdoFields "Usuario", TxtUsuario
       SetAdoFields "Nombre_Completo", ULCase(NombreCliente)
       SetAdoFields "Cod_Ejec", Abreviatura_Texto(NombreCliente)
-      If CheqP.Value Then SetAdoFields "Primaria", adTrue
-      If CheqS.Value Then SetAdoFields "Secundaria", adTrue
-      If CheqB.Value Then SetAdoFields "Bachillerato", adTrue
+      If CheqP.value Then SetAdoFields "Primaria", adTrue
+      If CheqS.value Then SetAdoFields "Secundaria", adTrue
+      If CheqB.value Then SetAdoFields "Bachillerato", adTrue
       SetAdoUpdate
    End If
   End With
@@ -3821,16 +3948,16 @@ Dim IdRol As Integer
   MBFecha.Text = FechaSistema
   MBFechaM.Visible = False
   MBFechaC.Visible = False
-  CheqP.Value = 0
-  CheqS.Value = 0
-  CheqB.Value = 0
-  CheqExtC.Value = 0
-  CheqTiempoParcial.Value = 0
-  CheqMaternidad.Value = 0
-  CheqSalida.Value = 0
-  CheqRFR.Value = 0
-  CheqFondoReserva.Value = 0
-  CheqDecimos.Value = 0
+  CheqP.value = 0
+  CheqS.value = 0
+  CheqB.value = 0
+  CheqExtC.value = 0
+  CheqTiempoParcial.value = 0
+  CheqMaternidad.value = 0
+  CheqSalida.value = 0
+  CheqRFR.value = 0
+  CheqFondoReserva.value = 0
+  CheqDecimos.value = 0
 
 '  TxtApPer.Text = "0.00"
 '  TxtPorcAp.Text = "0.00"
@@ -3846,9 +3973,9 @@ Dim IdRol As Integer
   Select_Adodc AdoSubCtas, sSQL
   With AdoSubCtas.Recordset
    If .RecordCount > 0 Then
-       If .fields("Primaria") Then CheqP.Value = 1
-       If .fields("Secundaria") Then CheqS.Value = 1
-       If .fields("Bachillerato") Then CheqB.Value = 1
+       If .fields("Primaria") Then CheqP.value = 1
+       If .fields("Secundaria") Then CheqS.value = 1
+       If .fields("Bachillerato") Then CheqB.value = 1
        TxtUsuario = .fields("Usuario")
        TxtClave = .fields("Clave")
    End If
@@ -3913,6 +4040,8 @@ Dim IdRol As Integer
         TxtVestimenta = .fields("Vestimenta")
         TxtDiscap = .fields("Discapacidad")
         Txt3Edad = .fields("Tercera_Edad")
+        TxtTurismo = .fields("Turismo")
+        TxtCargas = .fields("Carga_Familiar")
         
         TxtCISustituye = .fields("Identificacion")
         LblTDsustituye.Caption = .fields("TIdentificacion")
@@ -3938,33 +4067,35 @@ Dim IdRol As Integer
          End If
         End With
         
-        If .fields("Pagar_Fondo_Reserva") Then CheqFondoReserva.Value = 1
-        If .fields("Pagar_Decimos") Then CheqDecimos.Value = 1
-        If .fields("Reingreso_FR") Then CheqRFR.Value = 1
-        If .fields("TiempoParcial") Then CheqTiempoParcial.Value = 1
+        If .fields("Pagar_Fondo_Reserva") Then CheqFondoReserva.value = 1
+        If .fields("Pagar_Decimos") Then CheqDecimos.value = 1
+        If .fields("Reingreso_FR") Then CheqRFR.value = 1
+        If .fields("TiempoParcial") Then CheqTiempoParcial.value = 1
         If .fields("ExtC") Then
             TxtExtC = Format(IESS_Ext * 100, "#,##0.00")
-            CheqExtC.Value = 1
+            CheqExtC.value = 1
         End If
         If .fields("Maternidad") Then
             MBFechaM.Visible = True
-            CheqMaternidad.Value = 1
+            CheqMaternidad.value = 1
         End If
         If .fields("T") = "R" Then
             MBFechaC.Visible = True
-            CheqSalida.Value = 1
+            CheqSalida.value = 1
         End If
                 
         TipoCta = .fields("TC")
         Cta_Aux = .fields("Cta_Forma_Pago")
         TxtTarjeta = .fields("Tarjeta")
+        
+        TxtPorcAp = Format(.fields("Porc_IESS_Per") * 100, "#,##0.00")
+        TxtApPer = Format(.fields("Porc_IESS_Pat") * 100, "#,##0.00")
+        TxtExtC = Format(.fields("Porc_IESS_ExtC") * 100, "#,##0.00")
+  
         If .fields("SN") = "2" Then
-            OpcSi.Value = True
-            'TxtApPer = Format((IESS_Pat + IESS_Per) * 100, "#,##0.00")
+            OpcSi.value = True
         Else
-            OpcNo.Value = True
-            'TxtApPer = Format(IESS_Pat * 100, "#,##0.00")
-            'TxtPorcAp = Format(IESS_Per * 100, "#,##0.00")
+            OpcNo.value = True
         End If
         If AdoSubCtas.Recordset.RecordCount > 0 Then
            AdoSubCtas.Recordset.MoveFirst
@@ -3972,10 +4103,10 @@ Dim IdRol As Integer
            If Not AdoSubCtas.Recordset.EOF Then DCSubModulo.Text = AdoSubCtas.Recordset.fields("Detalle")
         End If
         Select Case .fields("FP")
-          Case "E": OpcEfectivo.Value = True
-          Case "C": OpcCheque.Value = True
-          Case "T": OpcTransferencia.Value = True
-          Case "O": OpcOtro.Value = True
+          Case "E": OpcEfectivo.value = True
+          Case "C": OpcCheque.value = True
+          Case "T": OpcTransferencia.value = True
+          Case "O": OpcOtro.value = True
         End Select
         If .fields("Codigo_Banco") > 0 Then
             If AdoTipoBanco.Recordset.RecordCount > 0 Then
@@ -4000,7 +4131,7 @@ Dim IdRol As Integer
        If Not .EOF Then DCFormaPago = .fields("Codigo") & " - " & .fields("Cuenta")
    End If
   End With
-  If OpcSi.Value Then OpcSi.SetFocus Else OpcNo.SetFocus
+  If OpcSi.value Then OpcSi.SetFocus Else OpcNo.SetFocus
   If Val(CodigoPaisEmpleado) <> 593 Then
      Label55.Visible = True
      DCAplicaConvenio.Visible = True
@@ -4114,13 +4245,13 @@ Private Sub OpcOtro_Click()
 End Sub
 
 Private Sub OpcSi_Click()
-'    TxtPorcAp = "0.00"
-'    TxtApPer = Format((IESS_Pat + IESS_Per) * 100, "#,##0.00")
+  TxtPorcAp = "0.00"
+  TxtApPer = Format((IESS_Pat + IESS_Per) * 100, "#,##0.00")
 End Sub
 
 Private Sub OpcNo_Click()
-''    TxtApPer = Format(IESS_Pat * 100, "#,##0.00")
-''    TxtPorcAp = Format(IESS_Per * 100, "#,##0.00")
+  TxtApPer = Format(IESS_Pat * 100, "#,##0.00")
+  TxtPorcAp = Format(IESS_Per * 100, "#,##0.00")
 End Sub
 
 Private Sub OpcTransferencia_Click()
@@ -4161,6 +4292,18 @@ End Sub
 
 Private Sub TxtApPer_LostFocus()
   TextoValido TxtApPer, True
+End Sub
+
+Private Sub TxtCargas_GotFocus()
+  MarcarTexto TxtCargas
+End Sub
+
+Private Sub TxtCargas_KeyDown(KeyCode As Integer, Shift As Integer)
+  PresionoEnter KeyCode
+End Sub
+
+Private Sub TxtCargas_LostFocus()
+  TextoValido TxtCargas, True, , 0
 End Sub
 
 Private Sub TxtCI_GotFocus()
@@ -4457,19 +4600,19 @@ Public Sub Tipo_de_Pago()
        & "AND Periodo = '" & Periodo_Contable & "' " _
        & "AND Codigo < '3' " _
        & "AND DG = 'D' "
-  If OpcEfectivo.Value Then
+  If OpcEfectivo.value Then
      sSQL = sSQL & "AND TC = 'CJ' "
      Label18.Visible = False
      Label50.Visible = False
      TxtCI.Visible = False
      TxtCtaAbono.Visible = False
-  ElseIf OpcCheque.Value Then
+  ElseIf OpcCheque.value Then
      sSQL = sSQL & "AND TC = 'BA' "
      Label18.Visible = False
      Label50.Visible = False
      TxtCI.Visible = False
      TxtCtaAbono.Visible = False
-  ElseIf OpcTransferencia.Value Then
+  ElseIf OpcTransferencia.value Then
      sSQL = sSQL & "AND TC = 'BA' "
      Label18.Visible = True
      TxtCI.Visible = True

@@ -12,8 +12,8 @@ Begin VB.Form EstadoResult12Meses
    ClientWidth     =   11610
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   7410
-   ScaleWidth      =   11610
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    WindowState     =   2  'Maximized
    Begin MSDataGridLib.DataGrid DGBalanceG 
       Bindings        =   "EstRes12.frx":0000
@@ -391,8 +391,8 @@ Begin VB.Form EstadoResult12Meses
       Left            =   0
       TabIndex        =   9
       Top             =   0
-      Width           =   11610
-      _ExtentX        =   20479
+      Width           =   28560
+      _ExtentX        =   50377
       _ExtentY        =   1588
       ButtonWidth     =   1376
       ButtonHeight    =   1429
@@ -737,7 +737,7 @@ Dim LineaTexto As String
   With AdoBalanceG.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
-          Total_Presupuesto = Total_Presupuesto + .Fields("Presupuesto")
+          Total_Presupuesto = Total_Presupuesto + .fields("Presupuesto")
          .MoveNext
        Loop
       .MoveFirst

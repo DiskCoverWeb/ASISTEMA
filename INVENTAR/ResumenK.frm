@@ -1,9 +1,9 @@
 VERSION 5.00
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "COMCTL32.OCX"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
-Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDATGRD.OCX"
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Begin VB.Form ResumenKardex 
    Caption         =   "RESUMEN DE EXISTENCIAS"
    ClientHeight    =   10620
@@ -12,8 +12,8 @@ Begin VB.Form ResumenKardex
    ClientWidth     =   15735
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   12375
-   ScaleWidth      =   22800
+   ScaleHeight     =   10620
+   ScaleWidth      =   15735
    WindowState     =   1  'Minimized
    Begin ComctlLib.Toolbar TBKardex 
       Align           =   1  'Align Top
@@ -1342,10 +1342,6 @@ End Sub
 
 Private Sub DCTInv_LostFocus()
    Listar_Por_Producto
-End Sub
-
-Private Sub DGQuery_Click()
-
 End Sub
 
 Private Sub Form_Activate()

@@ -2246,7 +2246,7 @@ End Sub
 Private Sub Form_Activate()
   Grupo_Inv = Ninguno
   Ln_No = 1
-  OpcMult.Value = True
+  OpcMult.value = True
   Cant_Item_PV = 50
   sSQL = "DELETE * " _
        & "FROM Asiento_F " _
@@ -2320,7 +2320,7 @@ Private Sub Form_Activate()
         FacturasPV.Caption = "INGRESAR LIQUIDACION DE COMPRAS"
         Label1.Caption = " LIQUIDACION DE COMPRAS No."
         Label3.Caption = " I.V.A. 0.00%"
-        OpcDiv.Value = True
+        OpcDiv.value = True
         'If Len(Opc_Grupo_Div) > 1 Then Grupo_Inv = Opc_Grupo_Div
     Case Else
         FacturasPV.Caption = "INGRESAR FACTURA"
@@ -2493,7 +2493,7 @@ End Sub
 
 Private Sub MBFecha_LostFocus()
   FechaValida MBFecha
- 'Validar_Porc_IVA MBFecha
+  Validar_Porc_IVA MBFecha
   FechaTexto1 = MBFecha
 End Sub
 
@@ -2536,7 +2536,7 @@ End Sub
 Private Sub TextVUnit_Change()
    If IsNumeric(TextVUnit) And IsNumeric(TextCant) Then
       If Val(TextVUnit) = 0 Then TextVUnit = "0.01"
-      If OpcMult.Value Then Real1 = CCur(TextCant) * CCur(TextVUnit) Else Real1 = CCur(TextCant) / CCur(TextVUnit)
+      If OpcMult.value Then Real1 = CCur(TextCant) * CCur(TextVUnit) Else Real1 = CCur(TextCant) / CCur(TextVUnit)
       LabelVTotal.Caption = Format$(Real1, "#,##0.0000")
    Else
       LabelVTotal.Caption = "0.0000"
@@ -2749,7 +2749,7 @@ Dim ProductoAux As String
       If IsNumeric(TextVUnit) And IsNumeric(TextCant) Then
          'If Val(TextVUnit) = 0 Then TextVUnit = "0.01"
          'If Val(TextCant) = 0 Then TextCant = "1"
-         If OpcMult.Value Then
+         If OpcMult.value Then
             Real1 = CCur(TextCant) * CCur(TextVUnit)
          Else
             If CCur(TextVUnit) <> 0 Then Real1 = CCur(TextCant) / CCur(TextVUnit)
@@ -2764,8 +2764,8 @@ Dim ProductoAux As String
          LabelVTotal.Caption = Format$(Real1, "#,##0.00")
          If Len(TxtDocumentos) > 1 Then Producto = Producto & " - " & TxtDocumentos
          If IsNumeric(TxtRifaD) And IsNumeric(TxtRifaH) And Val(TxtRifaD) < Val(TxtRifaH) Then
-               For i = Val(TxtRifaD) To Val(TxtRifaH)
-                   ProductoAux = Producto & " " & Format(i, "000000")
+               For I = Val(TxtRifaD) To Val(TxtRifaH)
+                   ProductoAux = Producto & " " & Format(I, "000000")
                    SetAddNew AdoAsientoF
                    SetFields AdoAsientoF, "CODIGO", DatInv.Codigo_Inv
                    SetFields AdoAsientoF, "CODIGO_L", CodigoL
@@ -2781,7 +2781,7 @@ Dim ProductoAux As String
                    SetFields AdoAsientoF, "A_No", Ln_No
                    SetUpdate AdoAsientoF
                    Ln_No = Ln_No + 1
-               Next i
+               Next I
          Else
             If CCur(TextCant) > 0 And DatInv.Stock > 0 Then
                SetAddNew AdoAsientoF

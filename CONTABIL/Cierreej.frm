@@ -3,7 +3,7 @@ Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Begin VB.Form CierreEjercicio 
    Caption         =   "BALANCE DE COMPROBACION"
    ClientHeight    =   8505
@@ -1537,6 +1537,7 @@ Dim SumaCheqHaber As Currency
 Dim TempBaValorDH As Currency
 Dim TempBaOpcDH As String
 Dim Fecha_V1 As String
+Dim FechaEmision As String
 Dim Factura_No1 As Long
 
     RatonReloj
@@ -1546,7 +1547,8 @@ Dim Factura_No1 As Long
     Ln_No = 1
     TipoCta = Ninguno
     Fecha_Vence = FechaFinal
-    
+    Fecha_V1 = FechaFinal
+    FechaEmision = FechaFinal
     Mayorizar_Inventario_SP FechaFinal
   
    'Variables Generales de Entrada
@@ -1730,14 +1732,14 @@ Dim Factura_No1 As Long
             Case "C"    'CxC Asignamos los submodulos
                  TDebito = 0
                  TCredito = 0
-                 sSQL = "SELECT Codigo, Factura, (SUM(Debitos)-SUM(Creditos)) AS TSaldo " _
+                 sSQL = "SELECT Codigo, Serie, Factura, (SUM(Debitos)-SUM(Creditos)) AS TSaldo " _
                       & "FROM Trans_SubCtas " _
                       & "WHERE Fecha <= #" & FechaFin & "# " _
                       & "AND Periodo = '" & Periodo_Contable & "' " _
                       & "AND Item = '" & NumEmpresa & "' " _
                       & "AND Cta = '" & Codigo & "' " _
                       & "AND T <> 'A' " _
-                      & "GROUP BY Codigo, Factura "
+                      & "GROUP BY Codigo, Serie, Factura "
                  Select_Adodc AdoSubCtaDet, sSQL
                  If AdoSubCtaDet.Recordset.RecordCount > 0 Then
                     Do While Not AdoSubCtaDet.Recordset.EOF
@@ -1758,14 +1760,14 @@ Dim Factura_No1 As Long
             Case "P"   'CxP Asignamos los submodulos
                  TDebito = 0
                  TCredito = 0
-                 sSQL = "SELECT Codigo, Factura, (SUM(Creditos)-SUM(Debitos)) AS TSaldo " _
+                 sSQL = "SELECT Codigo, Serie, Factura, (SUM(Creditos)-SUM(Debitos)) AS TSaldo " _
                       & "FROM Trans_SubCtas " _
                       & "WHERE Fecha <= #" & FechaFin & "# " _
                       & "AND Periodo = '" & Periodo_Contable & "' " _
                       & "AND Item = '" & NumEmpresa & "' " _
                       & "AND Cta = '" & Codigo & "' " _
                       & "AND T <> 'A' " _
-                      & "GROUP BY Codigo, Factura "
+                      & "GROUP BY Codigo, Serie, Factura "
                  Select_Adodc AdoSubCtaDet, sSQL
                  If AdoSubCtaDet.Recordset.RecordCount > 0 Then
                     Do While Not AdoSubCtaDet.Recordset.EOF
@@ -1847,7 +1849,7 @@ Dim Factura_No1 As Long
        & "AND T_No = " & Trans_No & " "
   Select_Adodc AdoBanco, sSQL
   
-  sSQL = "SELECT TS.Codigo, C.Cliente, TS.Factura, TS.TC, TS.Cta, MIN(TS.Fecha_V) As Fecha_Venc, " _
+  sSQL = "SELECT TS.Codigo, C.Cliente, TS.Serie, TS.Factura, TS.TC, TS.Cta, MIN(TS.Fecha_V) As Fecha_Venc, MIN(TS.Fecha_E) As Fecha_Emis, " _
        & "SUM(TS.Debitos) As TDebitos, SUM(TS.Creditos) As TCreditos " _
        & "FROM Clientes As C, Catalogo_Cuentas As CC, Trans_SubCtas As TS " _
        & "WHERE TS.Item = '" & NumEmpresa & "' " _
@@ -1858,9 +1860,9 @@ Dim Factura_No1 As Long
        & "AND TS.Cta = CC.Codigo " _
        & "AND TS.Item = CC.Item " _
        & "AND TS.Periodo = CC.Periodo " _
-       & "GROUP BY TS.Codigo,C.Cliente,TS.Factura,TS.TC,TS.Cta " _
+       & "GROUP BY TS.Codigo, C.Cliente, TS.Serie, TS.Factura, TS.TC, TS.Cta " _
        & "HAVING (SUM(TS.Debitos)-SUM(TS.Creditos)) <> 0 " _
-       & "ORDER BY TS.TC,TS.Cta,C.Cliente,TS.Factura,SUM(TS.Debitos) DESC, SUM(TS.Creditos) DESC "
+       & "ORDER BY TS.TC, TS.Cta, C.Cliente, TS.Serie, TS.Factura, SUM(TS.Debitos) DESC, SUM(TS.Creditos) DESC "
   Select_Adodc AdoTrans, sSQL
  'MsgBox sSQL
   Contador = 0
@@ -1877,6 +1879,8 @@ Dim Factura_No1 As Long
           Saldo_ME = 0
           Valor = 0
           OpcTM = 1
+          FechaEmision = .fields("Fecha_Emis")
+          SerieFactura = .fields("Serie")
           Debitos = .fields("TDebitos")
           Creditos = .fields("TCreditos")
           Codigo = .fields("Codigo")
@@ -1918,6 +1922,7 @@ Dim Factura_No1 As Long
                   & "AND TS.Codigo = '" & Codigo & "' " _
                   & "AND TS.Cta = '" & SubCtaGen & "' " _
                   & "AND TS.TC = '" & TipoSubCta & "' " _
+                  & "AND TS.Serie = '" & SerieFactura & "' " _
                   & "AND TS.Factura = " & Factura_No & " " _
                   & "AND TS.T <> 'A' " _
                   & "AND TS.Codigo = C.Codigo "
@@ -1940,8 +1945,10 @@ Dim Factura_No1 As Long
                   'If SubCtaGen = "1.1.04.03.01" And Codigo = "GRUP2" And Factura_No = 18553 Then MsgBox ValorDH & " .."
                    If ValorDH > 0 Then
                       SetAddNew AdoBanco
-                      SetFields AdoBanco, "Fecha_V", Fecha_V1
+                      SetFields AdoBanco, "FECHA_E", FechaEmision
+                      SetFields AdoBanco, "FECHA_V", Fecha_V1
                       SetFields AdoBanco, "TC", TipoSubCta
+                      SetFields AdoBanco, "Serie", SerieFactura
                       SetFields AdoBanco, "Factura", Factura_No
                       SetFields AdoBanco, "Codigo", Codigo
                       SetFields AdoBanco, "Beneficiario", Beneficiario
@@ -1978,8 +1985,10 @@ Dim Factura_No1 As Long
                        End If
                 End Select
                 SetAddNew AdoBanco
-                SetFields AdoBanco, "Fecha_V", Mifecha
+                SetFields AdoBanco, "FECHA_E", FechaEmision
+                SetFields AdoBanco, "FECHA_V", Fecha_V1
                 SetFields AdoBanco, "TC", TipoSubCta
+                SetFields AdoBanco, "Serie", SerieFactura
                 SetFields AdoBanco, "Factura", Factura_No
                 SetFields AdoBanco, "Codigo", Codigo
                 SetFields AdoBanco, "Beneficiario", Beneficiario
@@ -2089,7 +2098,7 @@ Dim Factura_No1 As Long
        & "WHERE Item = '" & NumEmpresa & "' " _
        & "AND CodigoU = '" & CodigoUsuario & "' " _
        & "AND T_No = " & Trans_No & " " _
-       & "ORDER BY TC,Cta,Beneficiario,Fecha_V,Factura "
+       & "ORDER BY TC,Cta,Beneficiario,FECHA_E,FECHA_V,Factura "
   Select_Adodc_Grid DGBanco, AdoBanco, sSQL
   
   sSQL = "SELECT * " _

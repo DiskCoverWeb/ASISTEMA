@@ -811,13 +811,16 @@ Dim RUC_Rec As String
 End Sub
 
 'Reprocesa los Saldo de las Facturas Pendiente por medio de bancos
-Public Sub Procesar_Saldo_De_Facturas(MiFormulario As Form, Optional PorX As Boolean)
+Public Sub Procesar_Saldo_De_Facturas(MiFormulario As Form, Optional PorX As Boolean, Optional FechaReproceso As String)
 Dim VFA As Tipo_Abono
 Dim IDMes As Integer
 Dim MiForm_Caption  As String
+Dim FechaRep As String
 Dim FacturaDB As ADODB.Recordset
   MiForm_Caption = MiFormulario.Caption
   'If ClaveAuxiliar Then
+   If IsDate(FechaReproceso) Then FechaRep = FechaReproceso Else FechaRep = "01/01/" & Year(FechaReproceso)
+   FechaRep = BuscarFecha(FechaRep)
    Contador = 0
    MiFormulario.Caption = "Actualizando Clientes de Facturas en Detalles y Abonos "
   
@@ -827,7 +830,8 @@ Dim FacturaDB As ADODB.Recordset
         sSQL = "UPDATE Detalle_Factura " _
              & "SET Total = ROUND(Cantidad * Precio," & Dec_PVP & ",0) " _
              & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND Periodo = '" & Periodo_Contable & "' "
+             & "AND Periodo = '" & Periodo_Contable & "' " _
+             & "AND Fecha >= #" & FechaRep & "# "
         Ejecutar_SQL_SP sSQL
            
         sSQL = "UPDATE Detalle_Factura " _
@@ -835,6 +839,7 @@ Dim FacturaDB As ADODB.Recordset
              & "WHERE Item = '" & NumEmpresa & "' " _
              & "AND Periodo = '" & Periodo_Contable & "' " _
              & "AND T <> '" & Anulado & "' " _
+             & "AND Fecha >= #" & FechaRep & "# " _
              & "AND Total_IVA <> 0 "
         Ejecutar_SQL_SP sSQL
                            
@@ -849,6 +854,7 @@ Dim FacturaDB As ADODB.Recordset
         sSQL = sSQL _
              & "WHERE F.Item = '" & NumEmpresa & "' " _
              & "AND F.Periodo = '" & Periodo_Contable & "' " _
+             & "AND F.Fecha >= #" & FechaRep & "# " _
              & "AND F.Autorizacion = DF.Autorizacion " _
              & "AND F.Fecha = DF.Fecha " _
              & "AND F.Serie = DF.Serie " _
@@ -870,6 +876,7 @@ Dim FacturaDB As ADODB.Recordset
         sSQL = sSQL _
              & "WHERE F.Item = '" & NumEmpresa & "' " _
              & "AND F.Periodo = '" & Periodo_Contable & "' " _
+             & "AND F.Fecha >= #" & FechaRep & "# " _
              & "AND F.Autorizacion = DF.Autorizacion " _
              & "AND F.Serie = DF.Serie " _
              & "AND F.Factura = DF.Factura " _
@@ -890,6 +897,7 @@ Dim FacturaDB As ADODB.Recordset
         sSQL = sSQL _
              & "WHERE F.Item = '" & NumEmpresa & "' " _
              & "AND F.Periodo = '" & Periodo_Contable & "' " _
+             & "AND F.Fecha >= #" & FechaRep & "# " _
              & "AND F.Autorizacion = DF.Autorizacion " _
              & "AND F.Serie = DF.Serie " _
              & "AND F.Factura = DF.Factura " _
@@ -904,7 +912,8 @@ Dim FacturaDB As ADODB.Recordset
         sSQL = "UPDATE Facturas " _
              & "SET Total_MN = 0,SubTotal = 0 " _
              & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND Periodo = '" & Periodo_Contable & "' "
+             & "AND Periodo = '" & Periodo_Contable & "' " _
+             & "AND Fecha >= #" & FechaRep & "# "
         Ejecutar_SQL_SP sSQL
   
         If Periodo_Contable = Ninguno Then
@@ -923,6 +932,7 @@ Dim FacturaDB As ADODB.Recordset
                      & "           AND Detalle_Factura.Autorizacion = Facturas.Autorizacion) " _
                      & "WHERE Item = '" & NumEmpresa & "' " _
                      & "AND Periodo = '" & Periodo_Contable & "' " _
+                     & "AND Fecha >= #" & FechaRep & "# " _
                      & "AND MONTH(Fecha) = " & IDMes & " "
                 Ejecutar_SQL_SP sSQL
                               
@@ -940,6 +950,7 @@ Dim FacturaDB As ADODB.Recordset
                      & "               AND Detalle_Factura.Autorizacion = Facturas.Autorizacion) " _
                      & "WHERE Item = '" & NumEmpresa & "' " _
                      & "AND Periodo = '" & Periodo_Contable & "' " _
+                     & "AND Fecha >= #" & FechaRep & "# " _
                      & "AND MONTH(Fecha) = " & IDMes & " "
                 Ejecutar_SQL_SP sSQL
                 
@@ -957,6 +968,7 @@ Dim FacturaDB As ADODB.Recordset
                      & "               AND Detalle_Factura.Autorizacion = Facturas.Autorizacion) " _
                      & "WHERE Item = '" & NumEmpresa & "' " _
                      & "AND Periodo = '" & Periodo_Contable & "' " _
+                     & "AND Fecha >= #" & FechaRep & "# " _
                      & "AND MONTH(Fecha) = " & IDMes & " "
                 Ejecutar_SQL_SP sSQL
             
@@ -974,6 +986,7 @@ Dim FacturaDB As ADODB.Recordset
                      & "                 AND Detalle_Factura.Autorizacion = Facturas.Autorizacion) " _
                      & "WHERE Item = '" & NumEmpresa & "' " _
                      & "AND Periodo = '" & Periodo_Contable & "' " _
+                     & "AND Fecha >= #" & FechaRep & "# " _
                      & "AND MONTH(Fecha) = " & IDMes & " "
                 Ejecutar_SQL_SP sSQL
             
@@ -991,6 +1004,7 @@ Dim FacturaDB As ADODB.Recordset
                      & "                  AND Detalle_Factura.Autorizacion = Facturas.Autorizacion) " _
                      & "WHERE Item = '" & NumEmpresa & "' " _
                      & "AND Periodo = '" & Periodo_Contable & "' " _
+                     & "AND Fecha >= #" & FechaRep & "# " _
                      & "AND MONTH(Fecha) = " & IDMes & " "
                 Ejecutar_SQL_SP sSQL
                                 
@@ -1011,6 +1025,7 @@ Dim FacturaDB As ADODB.Recordset
                       & "AND Periodo = '" & Periodo_Contable & "' " _
                       & "AND TC IN ('FA','NV','LC') " _
                       & "AND Desc_0 = 0 " _
+                      & "AND Fecha >= #" & FechaRep & "# " _
                       & "AND MONTH(Fecha) = " & IDMes & " "
                  Ejecutar_SQL_SP sSQL
                        
@@ -1031,6 +1046,7 @@ Dim FacturaDB As ADODB.Recordset
                       & "AND Periodo = '" & Periodo_Contable & "' " _
                       & "AND TC IN ('FA','NV','LC') " _
                       & "AND Desc_X = 0 " _
+                      & "AND Fecha >= #" & FechaRep & "# " _
                       & "AND MONTH(Fecha) = " & IDMes & " "
                  Ejecutar_SQL_SP sSQL
             
@@ -1114,21 +1130,24 @@ Dim FacturaDB As ADODB.Recordset
              & "SET Total_MN = ROUND(Con_IVA + Sin_IVA + IVA + Servicio - Descuento - Descuento2,2,0)," _
              & "SubTotal = ROUND(Con_IVA + Sin_IVA + Servicio,2,0) " _
              & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND Periodo = '" & Periodo_Contable & "' "
+             & "AND Periodo = '" & Periodo_Contable & "' " _
+             & "AND Fecha >= #" & FechaRep & "# "
         Ejecutar_SQL_SP sSQL
         
         sSQL = "UPDATE Facturas " _
              & "SET Saldo_MN = Total_MN " _
              & "WHERE Item = '" & NumEmpresa & "' " _
              & "AND Periodo = '" & Periodo_Contable & "' " _
-             & "AND T <> 'A' "
+             & "AND T <> 'A' " _
+             & "AND Fecha >= #" & FechaRep & "# "
         Ejecutar_SQL_SP sSQL
    Else
         sSQL = "UPDATE Facturas " _
              & "SET Saldo_Actual = Total_MN " _
              & "WHERE Item = '" & NumEmpresa & "' " _
              & "AND Periodo = '" & Periodo_Contable & "' " _
-             & "AND T <> 'A' "
+             & "AND T <> 'A' " _
+             & "AND Fecha >= #" & FechaRep & "# "
         Ejecutar_SQL_SP sSQL
    End If
    
@@ -1196,13 +1215,14 @@ Dim FacturaDB As ADODB.Recordset
          End If
          sSQL = sSQL & "WHERE F.Item = '" & NumEmpresa & "' " _
               & "AND F.Periodo = '" & Periodo_Contable & "' " _
+              & "AND F.Cta_CxP = '.' " _
+              & "AND MONTH(F.Fecha) = " & IDMes & " " _
+              & "AND CL.TL <> " & Val(adFalse) & " " _
+              & "AND F.Fecha >= #" & FechaRep & "# " _
               & "AND F.Cod_CxC = CL.Codigo " _
               & "AND F.Item = CL.Item " _
               & "AND F.Periodo = CL.Periodo " _
-              & "AND F.TC = CL.Fact " _
-              & "AND F.Cta_CxP = '.' " _
-              & "AND MONTH(F.Fecha) = " & IDMes & " " _
-              & "AND CL.TL <> " & Val(adFalse) & " "
+              & "AND F.TC = CL.Fact "
          Ejecutar_SQL_SP sSQL
         'Actualizamos Detalle de Fctura
          If SQL_Server Then
@@ -1216,13 +1236,15 @@ Dim FacturaDB As ADODB.Recordset
          sSQL = sSQL & "WHERE F.Item = '" & NumEmpresa & "' " _
               & "AND F.Periodo = '" & Periodo_Contable & "' " _
               & "AND F.CodigoL = '.' " _
+              & "AND MONTH(F.Fecha) = " & IDMes & " " _
+              & "AND F.Fecha >= #" & FechaRep & "# " _
               & "AND F.Factura = CL.Factura " _
               & "AND F.Autorizacion = CL.Autorizacion " _
               & "AND F.Serie = CL.Serie " _
               & "AND F.TC = CL.TC " _
               & "AND F.Item = CL.Item " _
-              & "AND F.Periodo = CL.Periodo " _
-              & "AND MONTH(F.Fecha) = " & IDMes & " "
+              & "AND F.Periodo = CL.Periodo "
+
          Ejecutar_SQL_SP sSQL
         'Actualizacmos los Abonos
          If SQL_Server Then
@@ -1236,13 +1258,14 @@ Dim FacturaDB As ADODB.Recordset
          sSQL = sSQL & "WHERE F.Item = '" & NumEmpresa & "' " _
               & "AND F.Periodo = '" & Periodo_Contable & "' " _
               & "AND F.Cta_CxP = '.' " _
+              & "AND MONTH(F.Fecha) = " & IDMes & " " _
+              & "AND F.Fecha >= #" & FechaRep & "# " _
               & "AND F.Factura = CL.Factura " _
               & "AND F.Autorizacion = CL.Autorizacion " _
               & "AND F.Serie = CL.Serie " _
               & "AND F.TP = CL.TC " _
               & "AND F.Item = CL.Item " _
-              & "AND F.Periodo = CL.Periodo " _
-              & "AND MONTH(F.Fecha) = " & IDMes & " "
+              & "AND F.Periodo = CL.Periodo "
          Ejecutar_SQL_SP sSQL
     Next IDMes
    
@@ -1273,6 +1296,7 @@ Dim FacturaDB As ADODB.Recordset
      End If
      sSQL = sSQL & "WHERE F.Item = '" & NumEmpresa & "' " _
           & "AND F.Periodo = '" & Periodo_Contable & "' " _
+          & "AND F.Fecha >= #" & FechaRep & "# " _
           & "AND F.CodigoC = DF.CodigoC " _
           & "AND F.Autorizacion = DF.Autorizacion " _
           & "AND F.Serie = DF.Serie " _
@@ -1295,6 +1319,7 @@ Dim FacturaDB As ADODB.Recordset
      sSQL = sSQL _
           & "WHERE F.Item = '" & NumEmpresa & "' " _
           & "AND F.Periodo = '" & Periodo_Contable & "' " _
+          & "AND F.Fecha >= #" & FechaRep & "# " _
           & "AND F.CodigoC = TA.CodigoC " _
           & "AND F.Factura = TA.Factura " _
           & "AND F.Autorizacion = TA.Autorizacion " _
@@ -1321,6 +1346,7 @@ Dim FacturaDB As ADODB.Recordset
                 & "WHERE Item = '" & NumEmpresa & "' " _
                 & "AND Periodo = '" & Periodo_Contable & "' " _
                 & "AND X = 'A' " _
+                & "AND Fecha >= #" & FechaRep & "# " _
                 & "AND MONTH(Fecha) = " & IDMes & " "
            Ejecutar_SQL_SP sSQL
         Else
@@ -1329,6 +1355,7 @@ Dim FacturaDB As ADODB.Recordset
                 & "WHERE Item = '" & NumEmpresa & "' " _
                 & "AND Periodo = '" & Periodo_Contable & "' " _
                 & "AND X = 'A' " _
+                & "AND Fecha >= #" & FechaRep & "# " _
                 & "AND MONTH(Fecha) = " & IDMes & " "
            Ejecutar_SQL_SP sSQL
         End If
@@ -1375,6 +1402,7 @@ Dim FacturaDB As ADODB.Recordset
      End If
      sSQL = sSQL & "WHERE F.Item = '" & NumEmpresa & "' " _
           & "AND F.Periodo = '" & Periodo_Contable & "' " _
+          & "AND F.Fecha >= #" & FechaRep & "# " _
           & "AND F.Item = DF.Item " _
           & "AND F.Periodo = DF.Periodo " _
           & "AND F.Factura = DF.Factura " _
@@ -1394,6 +1422,7 @@ Dim FacturaDB As ADODB.Recordset
      End If
      sSQL = sSQL & "WHERE F.Item = '" & NumEmpresa & "' " _
           & "AND F.Periodo = '" & Periodo_Contable & "' " _
+          & "AND F.Fecha >= #" & FechaRep & "# " _
           & "AND F.Item = DF.Item " _
           & "AND F.Periodo = DF.Periodo " _
           & "AND F.Factura = DF.Factura " _
@@ -1411,6 +1440,7 @@ Dim FacturaDB As ADODB.Recordset
           & "FROM Facturas " _
           & "WHERE Item = '" & NumEmpresa & "' " _
           & "AND Periodo = '" & Periodo_Contable & "' " _
+          & "AND Fecha >= #" & FechaRep & "# " _
           & "AND Saldo_MN < 0 " _
           & "ORDER BY TC,Fecha,Factura "
      Select_AdoDB FacturaDB, sSQL

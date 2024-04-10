@@ -1436,17 +1436,17 @@ Dim FechaFin1 As String
     'Averiguamos si esta cerrado el mes de procesamiento
      FechaCierre = "01/" & Month(FechaSistema) & "/" & Year(FechaSistema)
      FechaFin1 = BuscarFecha(NomBox.Text)
-     Porc_IVA = 0
-    'Carga la Tabla de Porcentaje Iva
-     sSQL1 = "SELECT * " _
-           & "FROM Tabla_Por_ICE_IVA " _
-           & "WHERE IVA <> " & Val(adFalse) & " " _
-           & "AND Fecha_Inicio <= #" & FechaFin1 & "# " _
-           & "AND Fecha_Final >= #" & FechaFin1 & "# " _
-           & "ORDER BY Porc DESC "
-     Select_AdoDB AdoCierre, sSQL1
-     If AdoCierre.RecordCount > 0 Then Porc_IVA = Redondear(AdoCierre.fields("Porc") / 100, 2)
-     AdoCierre.Close
+'''     Porc_IVA = 0
+'''    'Carga la Tabla de Porcentaje Iva
+'''     sSQL1 = "SELECT * " _
+'''           & "FROM Tabla_Por_ICE_IVA " _
+'''           & "WHERE IVA <> " & Val(adFalse) & " " _
+'''           & "AND Fecha_Inicio <= #" & FechaFin1 & "# " _
+'''           & "AND Fecha_Final >= #" & FechaFin1 & "# " _
+'''           & "ORDER BY Porc DESC "
+'''     Select_AdoDB AdoCierre, sSQL1
+'''     If AdoCierre.RecordCount > 0 Then Porc_IVA = Redondear(AdoCierre.fields("Porc") / 100, 2)
+'''     AdoCierre.Close
      
      sSQL1 = "SELECT Fecha_Inicial " _
            & "FROM Fechas_Balance " _
@@ -1484,18 +1484,56 @@ Dim sSQL1 As String
     RatonReloj
    'Carga la Tabla de Porcentaje IVA
     If FechaIVA = "00/00/0000" Then FechaIVA = FechaSistema
-    Set AdoCierre = New ADODB.Recordset
-    AdoCierre.CursorType = adOpenDynamic
-    AdoCierre.CursorLocation = adUseClient
     sSQL1 = "SELECT * " _
           & "FROM Tabla_Por_ICE_IVA " _
           & "WHERE IVA <> " & Val(adFalse) & " " _
           & "AND Fecha_Inicio <= #" & BuscarFecha(FechaIVA) & "# " _
           & "AND Fecha_Final >= #" & BuscarFecha(FechaIVA) & "# " _
           & "ORDER BY Porc DESC "
-    sSQL1 = CompilarSQL(sSQL1)
-    AdoCierre.open sSQL1, AdoStrCnn, , , adCmdText
+    Select_AdoDB AdoCierre, sSQL1
     If AdoCierre.RecordCount > 0 Then Porc_IVA = Redondear(AdoCierre.fields("Porc") / 100, 2)
+    AdoCierre.Close
+   'MsgBox "===--->> " & Porc_IVA
+    RatonNormal
+End Sub
+
+Public Sub Obtener_Porc_IVA(FechaIVA As String, CodPorcIVA As Byte)
+Dim AdoCierre As ADODB.Recordset
+Dim sSQL1 As String
+    RatonReloj
+   'Carga la Tabla de Porcentaje IVA
+    If FechaIVA = "00/00/0000" Then FechaIVA = FechaSistema
+    sSQL1 = "SELECT * " _
+          & "FROM Tabla_Por_ICE_IVA " _
+          & "WHERE IVA <> " & Val(adFalse) & " " _
+          & "AND Fecha_Inicio <= #" & BuscarFecha(FechaIVA) & "# " _
+          & "AND Fecha_Final >= #" & BuscarFecha(FechaIVA) & "# " _
+          & "AND Codigo = " & CodPorcIVA & " " _
+          & "ORDER BY Porc DESC "
+    Select_AdoDB AdoCierre, sSQL1
+    If AdoCierre.RecordCount > 0 Then Porc_IVA = Redondear(AdoCierre.fields("Porc") / 100, 2)
+    AdoCierre.Close
+    RatonNormal
+End Sub
+
+Public Sub Obtener_Cod_Porc_IVA(FechaIVA As String, PorcIVA As Byte)
+Dim AdoCierre As ADODB.Recordset
+Dim sSQL1 As String
+    RatonReloj
+   'Carga la Tabla de Porcentaje IVA
+    If FechaIVA = "00/00/0000" Then FechaIVA = FechaSistema
+    sSQL1 = "SELECT * " _
+          & "FROM Tabla_Por_ICE_IVA " _
+          & "WHERE IVA <> " & Val(adFalse) & " " _
+          & "AND Fecha_Inicio <= #" & BuscarFecha(FechaIVA) & "# " _
+          & "AND Fecha_Final >= #" & BuscarFecha(FechaIVA) & "# " _
+          & "AND Porc = " & PorcIVA & " " _
+          & "ORDER BY Porc DESC "
+    Select_AdoDB AdoCierre, sSQL1
+    If AdoCierre.RecordCount > 0 Then
+       Cod_Porc_IVA = AdoCierre.fields("Codigo")
+       Porc_IVA = Redondear(AdoCierre.fields("Porc") / 100, 2)
+    End If
     AdoCierre.Close
     RatonNormal
 End Sub
@@ -2186,13 +2224,28 @@ Dim HalfHeight As Single
    'MsgBox Format$(Time, "HH:MM:SS") & vbCrLf & Format$(TiempoSistema, "HH:MM:SS") & vbCrLf & Minutos & vbCrLf & Segundos & vbCrLf & MiTiempo
    'If CrearYa Then MiTiempo = 6
     If MiTiempo >= 6 Then
-       HayCnn = Get_WAN_IP
-       If Not IP_PC.InterNet Then MsgBox IP_PC.Status & vbCrLf & vbCrLf & "Comuniquese con su Administrador de Redes"
       'MsgBox Minutos & vbCrLf & Segundos
       '-------------------------------------------------------------------------------
        TiempoSistema = Time
       '-------------------------------------------------------------------------------
        If Len(NumEmpresa) >= 3 And Len(NumModulo) > 1 And Len(CodigoUsuario) > 1 Then
+         'Contador de Fondos y Verificacion de Fondos de Pantalla
+          Mes = Format$(Month(FechaSistema), "00")
+          Cadena = Dir(RutaSistema & "\FONDOS\M" & Mes & "\*.jpg", vbNormal)
+          ContadorFondos = 0
+          Do While Cadena <> ""
+             If Cadena <> "." And Cadena <> ".." Then
+                If (GetAttr(RutaSistema & "\FONDOS\M" & Mes & "\" & Cadena) And vbNormal) = vbNormal Then
+                   ReDim Preserve Fondos_Pantalla(ContadorFondos) As String
+                   Fondos_Pantalla(ContadorFondos) = RutaSistema & "\FONDOS\M" & Mes & "\" & Cadena
+                   ContadorFondos = ContadorFondos + 1
+                End If
+             End If
+             Cadena = Dir
+          Loop
+          ContadorFondos = UBound(Fondos_Pantalla)
+          Cadena = ""
+          
           NombFilePict = CodigoUsuario & NumEmpresa & NumModulo
          'MsgBox NombFilePict
          'MsgBox MDI_X_Max & vbCrLf & MDI_Y_Max
@@ -2222,7 +2275,7 @@ Dim HalfHeight As Single
                          & "En caso de requerir atención personalizada por parte de un asesor de servicio " _
                          & "al cliente de DiskCover System, usted podrá solicitar ayuda mediante los canales de " _
                          & "atención al cliente oficiales que detallamos a continuación: " _
-                         & "Telefonos: 098-652-4396/099-965-4196/098-910-5300." & vbCrLf & vbCrLf _
+                         & "Telefonos: 099-965-4196/098-910-5300." & vbCrLf & vbCrLf _
                          & "Por la atención que se de al presente quedamos de usted." & vbCrLf & vbCrLf _
                          & "DESEA SEGUIR RECIBIENDO ESTE COMUNICADO"
                 If BoxMensaje = vbNo Then
@@ -2273,23 +2326,15 @@ Dim HalfHeight As Single
                    & "WHERE Item = '" & NumEmpresa & "' " _
                    & "AND Fecha_CE <> '" & BuscarFecha(Fecha_CE) & "' "
               Ejecutar_SQL_SP sSQL
+          Else
+              MsgBox IP_PC.Status & vbCrLf & vbCrLf & "Comuniquese con su Administrador de Redes"
           End If
            
          'MsgBox DescripcionEstado
           TextoFile = "DiskCover System ahora en las Nubes "
-'''          Lista_Mensaje_SP_MySQL TextoFile
-'''          If Len(TextoFile) <= 3 Then TextoFile = "DiskCover System ahora en las Nubes "
-'''          If ContadorAyuda > 0 Then
-'''             RND_Files = Int(((ContadorAyuda - 1) * Rnd) + 1)
-'''             sSQL = "SELECT Mensaje " _
-'''                  & "FROM Tabla_Mensajes " _
-'''                  & "WHERE No = " & RND_Files & " "
-'''             Select_AdoDB AdoEstado, sSQL
-'''             If AdoEstado.RecordCount > 0 Then TextoFile = AdoEstado.Fields("Mensaje") & vbCrLf & RND_Files
-'''             AdoEstado.Close
-'''          End If
-         ContadorFondos = UBound(Fondos_Pantalla)
-
+          Lista_Mensaje_SP_MySQL TextoFile
+          If Len(TextoFile) <= 3 Then TextoFile = "DiskCover System ahora en las Nubes "
+          
         'Colocamos el grafico si existe ya hecho en otras secciones sino colocamos el por default
          RutaDestino1 = RutaSistema & "\FONDOS\USUARIOS\" & NombFilePict & ".jpg"
          If Dir(RutaDestino1) = "" Then RutaDestino1 = RutaSistema & "\INICIO.jpg"
@@ -7420,8 +7465,12 @@ End Sub
 
 Public Function Existe_File(RutaArchivo As String) As Boolean
 'MsgBox "Ruta: " & RutaBuscar & FileBuscar
-    If Len(TrimStrg(Dir$(RutaArchivo))) Then
-       Existe_File = True
+    If Len(RutaArchivo) > 1 Then
+       If Len(TrimStrg(Dir$(RutaArchivo))) Then
+          Existe_File = True
+       Else
+          Existe_File = False
+       End If
     Else
        Existe_File = False
     End If

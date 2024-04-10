@@ -234,9 +234,9 @@ Dim CantCadAncho As Long
          If Email_CE_Copia Then Insertar_Mail Emails, EmailProcesos
          If TMail.de = "" And 0 <= TMail.ListaMail And TMail.ListaMail <= 6 Then TMail.de = Lista_De_Correos(TMail.ListaMail).Correo_Electronico
          TMail.de = Replace(UCase(Empresa), """", "") & " <" & TMail.de & ">"
-         
         'Si utilizamos el correo de DiskCover System
          If TMail.servidor = "mail.diskcoversystem.com" Then
+            TMail.de = Replace(TMail.de, "@diskcoversystem.com", "@smtp.diskcoversystem.com")
             TMail.servidor = "smtp.diskcoversystem.com"
             TMail.ehlo = "smtp.diskcoversystem.com"
             TMail.ssl = False
@@ -260,7 +260,7 @@ Dim CantCadAncho As Long
        NombreUsuario = "Update DiskCover"
        ComunicadoEntidad = ""
        NombreGerente = "Walter Vaca Prieto"
-       Contactos = "09-9965-4196/09-89105300"
+       Contactos = "09-9965-4196/09-8910-5300"
        EmailProcesos = CorreoUpdate
        MsgAux = "DISKCOVER SYSTEM"
     

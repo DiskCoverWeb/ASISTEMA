@@ -1,5 +1,9 @@
 Attribute VB_Name = "Constantes"
 Option Explicit
+'-------------------------------------------------------
+'CORREOS PERSONALES DE DISKCOVER SYSTEM:
+
+'electronicos@diskcoversystem.com      Electronicos2022@
 
 '-------------------------------------------------------
 'SERVIRLES ES NUESTRO COMPROMISO, DISFRUTARLO ES EL SUYO.

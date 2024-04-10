@@ -1567,7 +1567,7 @@ End Sub
 
 Private Sub MBFecha_LostFocus()
   FechaValida MBFecha
- 'Validar_Porc_IVA MBFecha
+  Validar_Porc_IVA MBFecha
   FechaTexto1 = MBFecha
   LblSerie.Caption = SerieFactura & "-"
   NumComp = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, False)

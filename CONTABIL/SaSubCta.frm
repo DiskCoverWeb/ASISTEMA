@@ -68,14 +68,14 @@ Begin VB.Form SaldoCtasEspeciales
       TabCaption(1)   =   "&REPORTE DE &FLUJO DE CAJA"
       TabPicture(1)   =   "SaSubCta.frx":001C
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "LabelEgr"
-      Tab(1).Control(1)=   "Label10"
-      Tab(1).Control(2)=   "LabelIng"
-      Tab(1).Control(3)=   "Label11"
-      Tab(1).Control(4)=   "AdoFlujoCaja"
-      Tab(1).Control(5)=   "Command10"
-      Tab(1).Control(6)=   "Command5"
-      Tab(1).Control(7)=   "DGFlujoCaja"
+      Tab(1).Control(0)=   "DGFlujoCaja"
+      Tab(1).Control(1)=   "Command5"
+      Tab(1).Control(2)=   "Command10"
+      Tab(1).Control(3)=   "AdoFlujoCaja"
+      Tab(1).Control(4)=   "Label11"
+      Tab(1).Control(5)=   "LabelIng"
+      Tab(1).Control(6)=   "Label10"
+      Tab(1).Control(7)=   "LabelEgr"
       Tab(1).ControlCount=   8
       Begin VB.ListBox LstCtaCajaBancos 
          Height          =   735
@@ -1218,7 +1218,7 @@ Attribute VB_Exposed = False
 Dim Lista_Ctas As String
 
 Private Sub CheqIndiv_Click()
-  If CheqIndiv.Value = 1 Then DCCtas.Visible = True Else DCCtas.Visible = False
+  If CheqIndiv.value = 1 Then DCCtas.Visible = True Else DCCtas.Visible = False
 End Sub
 
 Private Sub Command1_Click()
@@ -1226,10 +1226,10 @@ Private Sub Command1_Click()
 End Sub
 
 Private Sub Command10_Click()
-  If OpcI.Value Then
+  If OpcI.value Then
      SQLMsg1 = "INGRESOS DE CAJA CHICA"
      Documento = 1
-  ElseIf OpcE.Value Then
+  ElseIf OpcE.value Then
      SQLMsg1 = "EGRESOS DE CAJA CHICA"
      Documento = 2
   Else
@@ -1262,7 +1262,7 @@ Private Sub Command5_Click()
           & "WHERE Item = '" & NumEmpresa & "' " _
           & "AND Periodo = '" & Periodo_Contable & "' " _
           & Lista_Ctas
-     If CheqIndiv.Value = 1 Then sSQL = sSQL & "AND Codigo = '" & SubCtaGen & "' "
+     If CheqIndiv.value = 1 Then sSQL = sSQL & "AND Codigo = '" & SubCtaGen & "' "
      sSQL = sSQL & "ORDER BY Fecha,Cta,Codigo,Numero "
      Select_Adodc AdoCtas, sSQL
      RatonReloj
@@ -1294,7 +1294,7 @@ Private Sub Command5_Click()
        & "AND TGC.Item = '" & NumEmpresa & "' " _
        & "AND TGC.Periodo = '" & Periodo_Contable & "' " _
        & Lista_Ctas
-  If CheqIndiv.Value = 1 Then sSQL = sSQL & "AND TGC.Codigo = '" & SubCtaGen & "' "
+  If CheqIndiv.value = 1 Then sSQL = sSQL & "AND TGC.Codigo = '" & SubCtaGen & "' "
   sSQL = sSQL & "AND TGC.Item = GC.Item " _
        & "AND TGC.Periodo = GC.Periodo " _
        & "AND TGC.Codigo = GC.Codigo " _
@@ -1320,9 +1320,9 @@ End Sub
 Private Sub Command6_Click()
   DGGastos.Visible = False
   SQLMsg3 = ""
-  If OpcI.Value Then
+  If OpcI.value Then
      SQLMsg1 = "INGRESO DE CAJA"
-  ElseIf OpcE.Value Then
+  ElseIf OpcE.value Then
      SQLMsg1 = "GASTOS DE CAJA"
   End If
   SQLMsg2 = "Desde:  " & MBoxFechaI & "   al   " & MBoxFechaF
@@ -1360,8 +1360,8 @@ Dim TotalCaja() As Currency
   FechaFin = BuscarFecha(MBoxFechaF)
   NumPagos = ReadSetDataNum("Caja Chica", False, False)
   IniciarAsientosDe DGAsiento, AdoAsiento
-  If OpcI.Value Then LabelConcepto.Caption = " Reposicion de Caja Chica desde el " & MBoxFechaI & " al " & MBoxFechaF
-  If OpcE.Value Then LabelConcepto.Caption = " Egresos de Caja Chica desde el " & MBoxFechaI & " al " & MBoxFechaF
+  If OpcI.value Then LabelConcepto.Caption = " Reposicion de Caja Chica desde el " & MBoxFechaI & " al " & MBoxFechaF
+  If OpcE.value Then LabelConcepto.Caption = " Egresos de Caja Chica desde el " & MBoxFechaI & " al " & MBoxFechaF
   LabelDiaD.Caption = DiasLetras(Weekday(MBoxFechaI))
   LabelDiaH.Caption = DiasLetras(Weekday(MBoxFechaF))
   DGGastos.Visible = False
@@ -1397,7 +1397,7 @@ Dim TotalCaja() As Currency
        & "AND Periodo = '" & Periodo_Contable & "' " _
        & Lista_Ctas _
        & "AND Egreso > 0 "
-  If CheqIndiv.Value = 1 Then sSQL = sSQL & "AND Codigo = '" & SubCtaGen & "' "
+  If CheqIndiv.value = 1 Then sSQL = sSQL & "AND Codigo = '" & SubCtaGen & "' "
   sSQL = sSQL _
        & "GROUP BY Contra_Cta " _
        & "ORDER BY Contra_Cta "
@@ -1422,12 +1422,12 @@ Dim TotalCaja() As Currency
        & "AND Item = '" & NumEmpresa & "' " _
        & "AND Periodo = '" & Periodo_Contable & "' " _
        & Lista_Ctas
-  If OpcI.Value Then
+  If OpcI.value Then
      sSQL = sSQL & "AND Ingreso > 0 "
-  ElseIf OpcE.Value Then
+  ElseIf OpcE.value Then
      sSQL = sSQL & "AND Egreso > 0 "
   End If
-  If CheqIndiv.Value = 1 Then sSQL = sSQL & "AND Codigo = '" & SubCtaGen & "' "
+  If CheqIndiv.value = 1 Then sSQL = sSQL & "AND Codigo = '" & SubCtaGen & "' "
   sSQL = sSQL & "ORDER BY Cta,Codigo,Fecha "
   Select_Adodc AdoCtas, sSQL
   With AdoCtas.Recordset
@@ -1452,9 +1452,9 @@ Dim TotalCaja() As Currency
              Next I
           End If
           I = Weekday(.fields("Fecha"))
-          If OpcI.Value Then
+          If OpcI.value Then
              TotalDia(I) = TotalDia(I) + .fields("Ingreso")
-          ElseIf OpcE.Value Then
+          ElseIf OpcE.value Then
              TotalDia(I) = TotalDia(I) + .fields("Egreso")
           End If
           Total_IVA = Total_IVA + .fields("IVA")
@@ -1480,9 +1480,9 @@ Dim TotalCaja() As Currency
        Total = 0: Saldo = 0
        Do While Not .EOF
           If Cta <> .fields("Cta") Then
-             If OpcI.Value Then
+             If OpcI.value Then
                 InsertarAsientos AdoAsiento, Cta, 0, 0, Total
-             ElseIf OpcE.Value Then
+             ElseIf OpcE.value Then
                 InsertarAsientos AdoAsiento, Cta, 0, Total, 0
              End If
              Cta = .fields("Cta")
@@ -1492,18 +1492,18 @@ Dim TotalCaja() As Currency
           Saldo = Saldo + .fields("Total")
          .MoveNext
        Loop
-       If OpcI.Value Then
+       If OpcI.value Then
           InsertarAsientos AdoAsiento, Cta, 0, 0, Total
-       ElseIf OpcE.Value Then
+       ElseIf OpcE.value Then
           InsertarAsientos AdoAsiento, Cta, 0, Total, 0
        End If
    End If
   End With
   If Total_IVA > 0 Then InsertarAsientos AdoAsiento, Cta_IVA_Inventario, 0, Total_IVA, 0
-  If OpcI.Value Then
+  If OpcI.value Then
 '     Contra_Cta = SinEspaciosIzq(DLCtas.Text)
  '    InsertarAsientos AdoAsiento, Contra_Cta, 0, Saldo, 0
-  ElseIf OpcE.Value Then
+  ElseIf OpcE.value Then
      If TxtCheqDep.Visible Then NoCheque = UCaseStrg(TxtCheqDep)
         For IE = 0 To UBound(Contra_Ctas)
             InsertarAsientos AdoAsiento, Contra_Ctas(IE), 0, 0, TotalCaja(IE)
@@ -1555,9 +1555,9 @@ End Sub
 
 Private Sub Command8_Click()
   SQLMsg3 = LabelConcepto.Caption
-  If OpcI.Value Then
+  If OpcI.value Then
      SQLMsg1 = "INGRESO DE CAJA"
-  ElseIf OpcE.Value Then
+  ElseIf OpcE.value Then
      SQLMsg1 = "GASTOS DE CAJA"
   End If
   SQLMsg2 = "Desde:  " & MBoxFechaI & "   al   " & MBoxFechaF
@@ -1596,9 +1596,9 @@ If ClaveSupervisor Then
   'MsgBox Saldo
    If Saldo = 0 Then
       FechaTexto = FechaSistema
-      If OpcI.Value Then
+      If OpcI.value Then
          FechaTexto = MBoxFechaI
-      ElseIf OpcE.Value Then
+      ElseIf OpcE.value Then
          FechaTexto = MBoxFechaF
       End If
       FechaComp = FechaTexto
@@ -1624,7 +1624,7 @@ If ClaveSupervisor Then
       Co.Usuario = CodigoUsuario
       Co.Item = NumEmpresa
       GrabarComprobante Co
-      If OpcE.Value Then
+      If OpcE.value Then
          sSQL = "SELECT Cta,Contra_Cta,CodRet,Serie,Autorizacion,Secuencial,Codigo,CodigoC,Fecha,Egreso,IVA " _
               & "FROM Trans_Gastos_Caja " _
               & "WHERE Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
@@ -1880,10 +1880,10 @@ Public Sub Insertar_Totales_Gastos()
      For I = 2 To 7
          SetAdoFields DiasLetras(Weekday(I)), Redondear(TotalDia(I), 2)
      Next I
-     If OpcI.Value Then
+     If OpcI.value Then
         SetAdoFields "TC", "C"
         SetAdoFields "Cta", Cta_CajaG
-     ElseIf OpcE.Value Then
+     ElseIf OpcE.value Then
         SetAdoFields "TC", "G"
         SetAdoFields "Cta", Cta
         SetAdoFields "Cta_Aux", Cta1
@@ -1892,7 +1892,7 @@ Public Sub Insertar_Totales_Gastos()
      SetAdoFields "CodigoU", CodigoUsuario
      SetAdoFields "Item", NumEmpresa
      SetAdoUpdate
-     If OpcE.Value Then
+     If OpcE.value Then
         SetAdoAddNew "Asiento_SC"
         SetAdoFields "DH", "1"
         SetAdoFields "Factura", NumPagos

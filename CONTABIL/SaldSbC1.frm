@@ -14,8 +14,8 @@ Begin VB.Form SaldoSubCtasVence
    DrawStyle       =   1  'Dash
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   8985
-   ScaleWidth      =   11280
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    WindowState     =   2  'Maximized
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
@@ -23,8 +23,8 @@ Begin VB.Form SaldoSubCtasVence
       Left            =   0
       TabIndex        =   0
       Top             =   0
-      Width           =   11280
-      _ExtentX        =   19897
+      Width           =   28560
+      _ExtentX        =   50377
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -878,13 +878,14 @@ Private Sub CheqIndiv_Click()
     If CheqIndiv.value = 1 Then DCCtas.Visible = True Else DCCtas.Visible = False
 End Sub
 
-Public Sub Imprimir()
+Public Sub ImprimirCxC_P_G_I_CC()
   DGBanco.Visible = False
 ''  If Opcion <> 10 Then
 ''     If SSTab1.Tab = 0 Then Opcion = 1 Else Opcion = 2
 ''  End If
   SQLMsg2 = "Desde:  " & MBoxFechaI.Text & "   al   " & MBoxFechaF.Text
   If OpcP.value Then SQLMsg3 = "FACTURAS PENDIENTES" Else SQLMsg3 = "FACTURAS CANCELADAS"
+ 'MsgBox Opcion
   Select Case Opcion
     Case 1
          Select Case TipoCta
@@ -921,7 +922,7 @@ Public Sub Costos()
    If .RecordCount > 0 Then
       .MoveFirst
       .Find ("Cliente = '" & DCCtas.Text & "' ")
-       If Not .EOF Then CodigoCli = .Fields("Codigo")
+       If Not .EOF Then CodigoCli = .fields("Codigo")
    End If
   End With
   Cta = SinEspaciosIzq(DCCta)
@@ -982,7 +983,7 @@ Public Sub Costos()
          With AdoBanco.Recordset
           If .RecordCount > 0 Then
               Do While Not .EOF
-                 Total = Total + .Fields("Total")
+                 Total = Total + .fields("Total")
                 .MoveNext
               Loop
           End If
@@ -1009,7 +1010,7 @@ Public Sub Consultar()
    If .RecordCount > 0 Then
       .MoveFirst
       .Find ("Cliente = '" & DCCtas.Text & "' ")
-       If Not .EOF Then CodigoCli = .Fields("Codigo")
+       If Not .EOF Then CodigoCli = .fields("Codigo")
    End If
   End With
   Cta = SinEspaciosIzq(DCCta)
@@ -1020,7 +1021,7 @@ Public Sub Consultar()
  'MsgBox CTC & vbCrLf & TipoCta
   Select Case CTC
     Case "CxC", "CxP"
-         sSQL = "SELECT CC.Cuenta,C.Cliente,C.Telefono,TS.Factura, MIN(TS.TP) As TP_, MIN(TS.Numero) As Numero_, MIN(TS.Fecha) As Fecha_Emi,MIN(TS.Fecha_V) As Fecha_Ven,"
+         sSQL = "SELECT CC.Cuenta, C.Cliente, C.Telefono, TS.Serie, TS.Factura, MIN(TS.TP) As TP_, MIN(TS.Numero) As Numero_, MIN(TS.Fecha_E) As Fecha_Emi,MIN(TS.Fecha_V) As Fecha_Ven,"
          If CheqDSubCta.value = 1 Then sSQL = sSQL & "TS.Detalle_SubCta As Beneficiario,"
          Select Case TipoCta
            Case "C"
@@ -1045,11 +1046,11 @@ Public Sub Consultar()
               & "AND TS.Item = CC.Item " _
               & "AND TS.Periodo = CC.Periodo "
          If CheqDSubCta.value = 1 Then
-            sSQL = sSQL & "GROUP BY C.Cliente,TS.Codigo,CC.Cuenta,TS.Factura,C.Telefono,TS.Detalle_SubCta,TS.TC,TS.Cta "
+            sSQL = sSQL & "GROUP BY C.Cliente,TS.Codigo,CC.Cuenta,TS.Serie, TS.Factura,C.Telefono,TS.Detalle_SubCta,TS.TC,TS.Cta "
             If OpcT.value = 0 Then sSQL = sSQL & SQL1
             sSQL = sSQL & "ORDER BY CC.Cuenta,C.Cliente,TS.Detalle_SubCta,TS.Factura "
          Else
-            sSQL = sSQL & "GROUP BY C.Cliente,TS.Codigo,CC.Cuenta,TS.Factura,C.Telefono,TS.TC,TS.Cta "
+            sSQL = sSQL & "GROUP BY C.Cliente,TS.Codigo,CC.Cuenta,TS.Serie,TS.Factura,C.Telefono,TS.TC,TS.Cta "
             If OpcT.value = 0 Then sSQL = sSQL & SQL1
             sSQL = sSQL & "ORDER BY CC.Cuenta,C.Cliente,TS.Factura "
          End If
@@ -1090,10 +1091,10 @@ Public Sub Consultar()
        Do While Not .EOF
           Select Case CTC
             Case "CxC", "CxP"
-                 Total = Total + .Fields("Total")
-                 Saldo = Saldo + .Fields("Saldo")
+                 Total = Total + .fields("Total")
+                 Saldo = Saldo + .fields("Saldo")
             Case Else
-                 Total = Total + .Fields("Total")
+                 Total = Total + .fields("Total")
           End Select
          .MoveNext
        Loop
@@ -1127,7 +1128,7 @@ Public Sub Temporizada()
    If .RecordCount > 0 Then
       .MoveFirst
       .Find ("Cliente = '" & DCCtas.Text & "' ")
-       If Not .EOF Then CodigoCli = .Fields("Codigo")
+       If Not .EOF Then CodigoCli = .fields("Codigo")
    End If
   End With
   Cta = SinEspaciosIzq(DCCta)
@@ -1209,20 +1210,20 @@ Public Sub Temporizada()
           SetAdoAddNew "Saldo_Diarios"
           Select Case CTC
             Case "CxC", "CxP"
-                 Saldo = Saldo + .Fields("Saldo")
-                 FechaN = CFechaLong(.Fields("Fecha_Emi"))
-                 FechaFinN = CFechaLong(.Fields("Fecha_Ven"))
-                 SetAdoFields "Fecha_Venc", .Fields("Fecha_Ven")
-                 SetAdoFields "Numero", .Fields("Factura")
-                 SetAdoFields "Comprobante", .Fields("Cliente")
-                 Valor = .Fields("Saldo")
+                 Saldo = Saldo + .fields("Saldo")
+                 FechaN = CFechaLong(.fields("Fecha_Emi"))
+                 FechaFinN = CFechaLong(.fields("Fecha_Ven"))
+                 SetAdoFields "Fecha_Venc", .fields("Fecha_Ven")
+                 SetAdoFields "Numero", .fields("Factura")
+                 SetAdoFields "Comprobante", .fields("Cliente")
+                 Valor = .fields("Saldo")
             Case Else
                  FechaN = CFechaLong("01/01/" & Year(FechaSistema))
-                 FechaFinN = CFechaLong(.Fields("Fecha_Emi"))
-                 SetAdoFields "Fecha_Venc", .Fields("Fecha_Emi")
-                 SetAdoFields "Comprobante", .Fields("Sub_Modulos")
-                 Valor = .Fields("Total")
-                 Saldo = Saldo + .Fields("Total")
+                 FechaFinN = CFechaLong(.fields("Fecha_Emi"))
+                 SetAdoFields "Fecha_Venc", .fields("Fecha_Emi")
+                 SetAdoFields "Comprobante", .fields("Sub_Modulos")
+                 Valor = .fields("Total")
+                 Saldo = Saldo + .fields("Total")
           End Select
           NumDias = FechaFinN - FechaN
           Select Case NumDias
@@ -1235,8 +1236,8 @@ Public Sub Temporizada()
             Case Is > 360: SetAdoFields "Ven_mas_de_360", Valor
           End Select
           SetAdoFields "T", Normal
-          SetAdoFields "Fecha", .Fields("Fecha_Emi")
-          SetAdoFields "Dato_Aux1", .Fields("Cuenta")
+          SetAdoFields "Fecha", .fields("Fecha_Emi")
+          SetAdoFields "Dato_Aux1", .fields("Cuenta")
           SetAdoFields "Total", Valor
           SetAdoFields "Saldo_Actual", Valor
           SetAdoFields "Item", NumEmpresa
@@ -1275,6 +1276,43 @@ End Sub
 
 Private Sub CTC_LostFocus()
   Listar_Beneficiarios
+End Sub
+
+Private Sub DGBanco_DblClick()
+    With AdoBanco.Recordset
+     If .RecordCount > 0 Then
+         If ClaveContador Then
+            RatonReloj
+            SerieFactura = DGBanco.Columns(3)
+            FacturaNo = DGBanco.Columns(4)
+            TipoDoc = DGBanco.Columns(5)
+            Asiento = DGBanco.Columns(6)
+            Codigo1 = DGBanco.Columns(13)
+            Cta = DGBanco.Columns(14)
+            Mifecha = InputBox("INGRSE FECHA DE EMISION: ", "CAMBIO DE FECHA DE EMISION", FechaSistema)
+            If IsDate(Mifecha) Then
+               sSQL = "UPDATE Trans_SubCtas " _
+                    & "SET Fecha_E = '" & BuscarFecha(Mifecha) & "' " _
+                    & "WHERE Item = '" & NumEmpresa & "' " _
+                    & "AND Periodo = '" & Periodo_Contable & "' " _
+                    & "AND TP = '" & TipoDoc & "' " _
+                    & "AND Numero = " & Asiento & " " _
+                    & "AND Codigo = '" & Codigo1 & "' " _
+                    & "AND Cta = '" & Cta & "' " _
+                    & "AND Factura = " & FacturaNo & " "
+               Ejecutar_SQL_SP sSQL
+               RatonNormal
+               MsgBox "Proceso realizado con exito, vuelva a consultar"
+            Else
+               RatonNormal
+               MsgBox "Fecha ingresada incorrecta"
+            End If
+         End If
+     Else
+         RatonNormal
+         MsgBox "No Existe Datos que Modificar"
+     End If
+    End With
 End Sub
 
 Private Sub Form_Activate()
@@ -1448,7 +1486,7 @@ Dim TotalSubModulo As Currency
       With AdoBanco.Recordset
        If .RecordCount > 0 Then
            Do While Not .EOF
-              If InStr(.Fields("Anio"), "TOTAL") Then TotalSubModulo = TotalSubModulo + .Fields("Valor_x_Mes")
+              If InStr(.fields("Anio"), "TOTAL") Then TotalSubModulo = TotalSubModulo + .fields("Valor_x_Mes")
              .MoveNext
            Loop
           .MoveFirst
@@ -1466,7 +1504,7 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
       Case "Consultar": Consultar
       Case "Costos": Costos
       Case "Temporizada": Temporizada
-      Case "Imprimir": Imprimir
+      Case "Imprimir": ImprimirCxC_P_G_I_CC
       Case "CxCxP_Mes"
            DGBanco.Visible = False
            Reporte_CxCxP_x_Meses

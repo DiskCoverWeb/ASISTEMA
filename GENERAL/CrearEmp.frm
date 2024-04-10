@@ -1,8 +1,8 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "COMCTL32.OCX"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.Ocx"
 Begin VB.Form CrearEmp 
    BackColor       =   &H80000000&
@@ -201,21 +201,21 @@ Begin VB.Form CrearEmp
       TabCaption(1)   =   "PROCESOS GENERALES"
       TabPicture(1)   =   "CrearEmp.frx":08E6
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "TextClave"
-      Tab(1).Control(1)=   "TextUsuario"
-      Tab(1).Control(2)=   "CheqCopiiarEmpresa"
-      Tab(1).Control(3)=   "CheqUsuario"
-      Tab(1).Control(4)=   "Frame5"
-      Tab(1).Control(5)=   "Frame3"
-      Tab(1).Control(6)=   "Frame1"
+      Tab(1).Control(0)=   "Label11"
+      Tab(1).Control(1)=   "LabelUsuario"
+      Tab(1).Control(2)=   "LabelClave"
+      Tab(1).Control(3)=   "DCListEmpCopy"
+      Tab(1).Control(4)=   "TextLogoTipo"
+      Tab(1).Control(5)=   "Picture1"
+      Tab(1).Control(6)=   "File2"
       Tab(1).Control(7)=   "Frame2"
-      Tab(1).Control(8)=   "File2"
-      Tab(1).Control(9)=   "Picture1"
-      Tab(1).Control(10)=   "TextLogoTipo"
-      Tab(1).Control(11)=   "DCListEmpCopy"
-      Tab(1).Control(12)=   "LabelClave"
-      Tab(1).Control(13)=   "LabelUsuario"
-      Tab(1).Control(14)=   "Label11"
+      Tab(1).Control(8)=   "Frame1"
+      Tab(1).Control(9)=   "Frame3"
+      Tab(1).Control(10)=   "Frame5"
+      Tab(1).Control(11)=   "CheqUsuario"
+      Tab(1).Control(12)=   "CheqCopiiarEmpresa"
+      Tab(1).Control(13)=   "TextUsuario"
+      Tab(1).Control(14)=   "TextClave"
       Tab(1).ControlCount=   15
       TabCaption(2)   =   "COMPROBANTES ELECTRONICOS"
       TabPicture(2)   =   "CrearEmp.frx":0902
@@ -3468,7 +3468,7 @@ Private Sub Command1_Click()
     TMail.Usuario = TxtEmailConexionCE.Text
     TMail.Password = TxtPaswordCE.Text
     TMail.Puerto = TxtPuerto.Text                                ' 465
-    TMail.UseAuntentificacion = CBool(CheqAutentificacion.value) ' True
+    TMail.useAuntentificacion = CBool(CheqAutentificacion.value) ' True
     TMail.ssl = CBool(CheqSSL.value)                             ' True
    '---------------------------------------------------------------
     NombreGerente = "Walter Vaca Prieto"
@@ -3594,8 +3594,6 @@ Private Sub File2_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub Form_Activate()
-  HayCnn = Get_WAN_IP
-
   sSQL = "SELECT " & Full_Fields("Empresas") & " " _
        & "FROM Empresas " _
        & "WHERE Item <> '000' " _
@@ -3652,6 +3650,7 @@ Private Sub Form_Activate()
 End Sub
 
 Private Sub Form_Load()
+  HayCnn = Get_WAN_IP
   CentrarForm CrearEmp
   ConectarAdodc AdoClave
   ConectarAdodc AdoPaises

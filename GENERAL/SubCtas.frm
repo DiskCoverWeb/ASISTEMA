@@ -6,24 +6,160 @@ Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Begin VB.Form FSubCtas 
    BackColor       =   &H00FFC0C0&
    BorderStyle     =   3  'Fixed Dialog
-   Caption         =   "Ingresar Subcuentas de Proceso"
-   ClientHeight    =   7260
+   Caption         =   "z"
+   ClientHeight    =   7275
    ClientLeft      =   45
    ClientTop       =   330
-   ClientWidth     =   11670
+   ClientWidth     =   13890
    ControlBox      =   0   'False
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   7260
-   ScaleWidth      =   11670
+   Picture         =   "SubCtas.frx":0000
+   ScaleHeight     =   7275
+   ScaleWidth      =   13890
    ShowInTaskbar   =   0   'False
+   Begin VB.TextBox TextValor 
+      Alignment       =   1  'Right Justify
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   12075
+      MaxLength       =   12
+      MultiLine       =   -1  'True
+      TabIndex        =   16
+      Text            =   "SubCtas.frx":0342
+      Top             =   1050
+      Width           =   1695
+   End
+   Begin VB.TextBox TxtMeses 
+      Alignment       =   1  'Right Justify
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   11235
+      MaxLength       =   12
+      MultiLine       =   -1  'True
+      TabIndex        =   14
+      Text            =   "SubCtas.frx":0346
+      Top             =   1050
+      Width           =   855
+   End
+   Begin MSMask.MaskEdBox MBoxFechaV 
+      Height          =   330
+      Left            =   9870
+      TabIndex        =   12
+      ToolTipText     =   "Formato de Fecha: DD/MM/AA"
+      Top             =   1050
+      Width           =   1380
+      _ExtentX        =   2434
+      _ExtentY        =   582
+      _Version        =   393216
+      AllowPrompt     =   -1  'True
+      AutoTab         =   -1  'True
+      MaxLength       =   10
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Format          =   "dd/mm/yyyy"
+      Mask            =   "##/##/####"
+      PromptChar      =   "0"
+   End
+   Begin MSMask.MaskEdBox MBoxFechaE 
+      Height          =   330
+      Left            =   8505
+      TabIndex        =   10
+      ToolTipText     =   "Formato de Fecha: DD/MM/AA"
+      Top             =   1050
+      Visible         =   0   'False
+      Width           =   1380
+      _ExtentX        =   2434
+      _ExtentY        =   582
+      _Version        =   393216
+      AllowPrompt     =   -1  'True
+      AutoTab         =   -1  'True
+      MaxLength       =   10
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Format          =   "dd/mm/yyyy"
+      Mask            =   "##/##/####"
+      PromptChar      =   "0"
+   End
+   Begin MSDataListLib.DataCombo DCFactura 
+      Bindings        =   "SubCtas.frx":034A
+      DataSource      =   "AdoFacturas"
+      Height          =   345
+      Left            =   6825
+      TabIndex        =   8
+      Top             =   1050
+      Width           =   1695
+      _ExtentX        =   2990
+      _ExtentY        =   609
+      _Version        =   393216
+      Text            =   "Factura"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Arial"
+         Size            =   9
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
+   Begin VB.TextBox TxtSerie 
+      Alignment       =   1  'Right Justify
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   5985
+      MaxLength       =   6
+      MultiLine       =   -1  'True
+      TabIndex        =   5
+      Text            =   "SubCtas.frx":0364
+      Top             =   1050
+      Width           =   855
+   End
    Begin MSDataListLib.DataCombo DCCliente 
-      Bindings        =   "SubCtas.frx":0000
+      Bindings        =   "SubCtas.frx":036B
       DataSource      =   "AdoCliente"
       Height          =   2655
       Left            =   210
-      TabIndex        =   37
+      TabIndex        =   41
       Top             =   2205
       Visible         =   0   'False
       Width           =   11250
@@ -43,77 +179,15 @@ Begin VB.Form FSubCtas
          Strikethrough   =   0   'False
       EndProperty
    End
-   Begin VB.TextBox TextValor 
-      Alignment       =   1  'Right Justify
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   330
-      Left            =   9870
-      MaxLength       =   12
-      MultiLine       =   -1  'True
-      TabIndex        =   12
-      Text            =   "SubCtas.frx":0019
-      Top             =   1050
-      Width           =   1695
-   End
-   Begin VB.TextBox TxtMeses 
-      Alignment       =   1  'Right Justify
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   330
-      Left            =   9030
-      MaxLength       =   12
-      MultiLine       =   -1  'True
-      TabIndex        =   10
-      Text            =   "SubCtas.frx":001D
-      Top             =   1050
-      Width           =   855
-   End
-   Begin MSDataListLib.DataCombo DCFactura 
-      Bindings        =   "SubCtas.frx":0021
-      DataSource      =   "AdoFacturas"
-      Height          =   345
-      Left            =   7350
-      TabIndex        =   8
-      Top             =   1050
-      Width           =   1695
-      _ExtentX        =   2990
-      _ExtentY        =   609
-      _Version        =   393216
-      Text            =   "Factura"
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Arial"
-         Size            =   9
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-   End
    Begin MSDataListLib.DataCombo DCDetalle 
-      Bindings        =   "SubCtas.frx":003B
+      Bindings        =   "SubCtas.frx":0384
       DataSource      =   "AdoDetalle"
       Height          =   345
       Left            =   5985
-      TabIndex        =   14
+      TabIndex        =   18
       Top             =   1785
-      Width           =   5580
-      _ExtentX        =   9843
+      Width           =   7785
+      _ExtentX        =   13732
       _ExtentY        =   609
       _Version        =   393216
       Text            =   ""
@@ -130,14 +204,14 @@ Begin VB.Form FSubCtas
    Begin VB.CheckBox ToggleButton1 
       Height          =   540
       Left            =   5985
-      Picture         =   "SubCtas.frx":0054
+      Picture         =   "SubCtas.frx":039D
       Style           =   1  'Graphical
-      TabIndex        =   35
+      TabIndex        =   39
       Top             =   105
       Width           =   750
    End
    Begin MSDataListLib.DataList DLSubCta 
-      Bindings        =   "SubCtas.frx":0496
+      Bindings        =   "SubCtas.frx":07DF
       DataSource      =   "AdoBenef"
       Height          =   1410
       Left            =   105
@@ -174,10 +248,10 @@ Begin VB.Form FSubCtas
       ForeColor       =   &H0000FFFF&
       Height          =   2010
       Left            =   105
-      TabIndex        =   21
+      TabIndex        =   25
       Top             =   5145
       Visible         =   0   'False
-      Width           =   11460
+      Width           =   13665
       Begin VB.CommandButton Command2 
          Caption         =   "&No Grabar"
          BeginProperty Font 
@@ -190,10 +264,10 @@ Begin VB.Form FSubCtas
             Strikethrough   =   0   'False
          EndProperty
          Height          =   750
-         Left            =   10185
-         Picture         =   "SubCtas.frx":04AD
+         Left            =   12390
+         Picture         =   "SubCtas.frx":07F6
          Style           =   1  'Graphical
-         TabIndex        =   38
+         TabIndex        =   42
          Top             =   1050
          Width           =   1170
       End
@@ -209,11 +283,11 @@ Begin VB.Form FSubCtas
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   5145
+         Left            =   6300
          MaxLength       =   60
-         TabIndex        =   28
+         TabIndex        =   32
          Top             =   945
-         Width           =   4950
+         Width           =   6000
       End
       Begin VB.TextBox TxtEmail1 
          BackColor       =   &H00FFFFC0&
@@ -229,9 +303,9 @@ Begin VB.Form FSubCtas
          Height          =   330
          Left            =   105
          MaxLength       =   60
-         TabIndex        =   27
+         TabIndex        =   31
          Top             =   945
-         Width           =   5055
+         Width           =   6210
       End
       Begin VB.CommandButton CommandButton1 
          Caption         =   "&Grabar"
@@ -245,10 +319,10 @@ Begin VB.Form FSubCtas
             Strikethrough   =   0   'False
          EndProperty
          Height          =   750
-         Left            =   10185
-         Picture         =   "SubCtas.frx":0D77
+         Left            =   12390
+         Picture         =   "SubCtas.frx":10C0
          Style           =   1  'Graphical
-         TabIndex        =   36
+         TabIndex        =   40
          Top             =   210
          Width           =   1170
       End
@@ -264,10 +338,10 @@ Begin VB.Form FSubCtas
             Strikethrough   =   0   'False
          EndProperty
          Height          =   315
-         Left            =   6090
-         TabIndex        =   34
+         Left            =   6300
+         TabIndex        =   38
          Top             =   1470
-         Width           =   4005
+         Width           =   6000
       End
       Begin VB.ComboBox CProvincia 
          BackColor       =   &H00FFFFC0&
@@ -282,10 +356,10 @@ Begin VB.Form FSubCtas
          EndProperty
          Height          =   315
          Left            =   2520
-         TabIndex        =   32
+         TabIndex        =   36
          Text            =   "PICHINCHA"
          Top             =   1470
-         Width           =   3585
+         Width           =   3795
       End
       Begin VB.ComboBox CNacion 
          BackColor       =   &H00FFFFC0&
@@ -300,7 +374,7 @@ Begin VB.Form FSubCtas
          EndProperty
          Height          =   315
          Left            =   105
-         TabIndex        =   30
+         TabIndex        =   34
          Text            =   "ECUADOR"
          Top             =   1470
          Width           =   2430
@@ -319,9 +393,9 @@ Begin VB.Form FSubCtas
          Height          =   330
          Left            =   1890
          MaxLength       =   60
-         TabIndex        =   25
+         TabIndex        =   29
          Top             =   420
-         Width           =   8205
+         Width           =   10410
       End
       Begin VB.TextBox TxtCI_RUC 
          BackColor       =   &H00FFFFC0&
@@ -337,7 +411,7 @@ Begin VB.Form FSubCtas
          Height          =   330
          Left            =   105
          MaxLength       =   13
-         TabIndex        =   23
+         TabIndex        =   27
          ToolTipText     =   "<Alt+F2> Codigo Automático"
          Top             =   420
          Width           =   1800
@@ -358,9 +432,9 @@ Begin VB.Form FSubCtas
          ForeColor       =   &H00000080&
          Height          =   225
          Left            =   105
-         TabIndex        =   26
+         TabIndex        =   30
          Top             =   735
-         Width           =   9990
+         Width           =   12195
       End
       Begin VB.Label Label7 
          BackColor       =   &H00FFFF00&
@@ -377,10 +451,10 @@ Begin VB.Form FSubCtas
          EndProperty
          ForeColor       =   &H00000080&
          Height          =   225
-         Left            =   6090
-         TabIndex        =   33
+         Left            =   6300
+         TabIndex        =   37
          Top             =   1260
-         Width           =   4005
+         Width           =   6000
       End
       Begin VB.Label Label35 
          BackColor       =   &H00FFFF00&
@@ -398,9 +472,9 @@ Begin VB.Form FSubCtas
          ForeColor       =   &H00000080&
          Height          =   225
          Left            =   2520
-         TabIndex        =   31
+         TabIndex        =   35
          Top             =   1260
-         Width           =   3585
+         Width           =   3795
       End
       Begin VB.Label Label34 
          BackColor       =   &H00FFFF00&
@@ -418,7 +492,7 @@ Begin VB.Form FSubCtas
          ForeColor       =   &H00000080&
          Height          =   225
          Left            =   105
-         TabIndex        =   29
+         TabIndex        =   33
          Top             =   1260
          Width           =   2430
       End
@@ -438,9 +512,9 @@ Begin VB.Form FSubCtas
          ForeColor       =   &H00000080&
          Height          =   225
          Left            =   1890
-         TabIndex        =   24
+         TabIndex        =   28
          Top             =   210
-         Width           =   8205
+         Width           =   10410
       End
       Begin VB.Label Label10 
          BackColor       =   &H00FFFF00&
@@ -458,7 +532,7 @@ Begin VB.Form FSubCtas
          ForeColor       =   &H00000080&
          Height          =   225
          Left            =   105
-         TabIndex        =   22
+         TabIndex        =   26
          Top             =   210
          Width           =   1800
       End
@@ -475,23 +549,23 @@ Begin VB.Form FSubCtas
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   5985
+      Left            =   6825
       MaxLength       =   10
       MultiLine       =   -1  'True
-      TabIndex        =   6
-      Text            =   "SubCtas.frx":1641
+      TabIndex        =   7
+      Text            =   "SubCtas.frx":198A
       Top             =   1050
       Visible         =   0   'False
-      Width           =   1380
+      Width           =   1695
    End
    Begin MSDataGridLib.DataGrid DGSubCta 
-      Bindings        =   "SubCtas.frx":1646
+      Bindings        =   "SubCtas.frx":198F
       Height          =   2850
       Left            =   105
-      TabIndex        =   15
+      TabIndex        =   19
       Top             =   2205
-      Width           =   11460
-      _ExtentX        =   20214
+      Width           =   13665
+      _ExtentX        =   24104
       _ExtentY        =   5027
       _Version        =   393216
       AllowUpdate     =   -1  'True
@@ -601,32 +675,6 @@ Begin VB.Form FSubCtas
       EndProperty
       _Version        =   393216
    End
-   Begin MSMask.MaskEdBox MBoxFechaV 
-      Height          =   330
-      Left            =   5985
-      TabIndex        =   5
-      ToolTipText     =   "Formato de Fecha: DD/MM/AA"
-      Top             =   1050
-      Width           =   1380
-      _ExtentX        =   2434
-      _ExtentY        =   582
-      _Version        =   393216
-      AllowPrompt     =   -1  'True
-      AutoTab         =   -1  'True
-      MaxLength       =   10
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Format          =   "dd/mm/yyyy"
-      Mask            =   "##/##/####"
-      PromptChar      =   "0"
-   End
    Begin VB.CommandButton Command1 
       BackColor       =   &H00FFC0C0&
       Caption         =   "&Continuar"
@@ -640,10 +688,10 @@ Begin VB.Form FSubCtas
          Strikethrough   =   0   'False
       EndProperty
       Height          =   960
-      Left            =   10395
-      Picture         =   "SubCtas.frx":1662
+      Left            =   12600
+      Picture         =   "SubCtas.frx":19AB
       Style           =   1  'Graphical
-      TabIndex        =   16
+      TabIndex        =   20
       Top             =   5145
       Width           =   1170
    End
@@ -930,7 +978,7 @@ Begin VB.Form FSubCtas
       _Version        =   393216
    End
    Begin MSDataListLib.DataCombo DCSubCta 
-      Bindings        =   "SubCtas.frx":1AA4
+      Bindings        =   "SubCtas.frx":1DED
       DataSource      =   "AdoNivel"
       Height          =   345
       Left            =   105
@@ -999,26 +1047,6 @@ Begin VB.Form FSubCtas
       EndProperty
       _Version        =   393216
    End
-   Begin VB.Label Label5 
-      Alignment       =   2  'Center
-      BackStyle       =   0  'Transparent
-      BorderStyle     =   1  'Fixed Single
-      Caption         =   " DETALLE AUXILIAR DEL SUBMODULO"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   330
-      Left            =   5985
-      TabIndex        =   13
-      Top             =   1470
-      Width           =   5580
-   End
    Begin VB.Label Label17 
       Alignment       =   2  'Center
       BackStyle       =   0  'Transparent
@@ -1034,8 +1062,8 @@ Begin VB.Form FSubCtas
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   9870
-      TabIndex        =   11
+      Left            =   12075
+      TabIndex        =   15
       Top             =   735
       Width           =   1695
    End
@@ -1054,30 +1082,10 @@ Begin VB.Form FSubCtas
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   9030
-      TabIndex        =   9
+      Left            =   11235
+      TabIndex        =   13
       Top             =   735
       Width           =   855
-   End
-   Begin VB.Label Label6 
-      Alignment       =   2  'Center
-      BackStyle       =   0  'Transparent
-      BorderStyle     =   1  'Fixed Single
-      Caption         =   "FACTURA No."
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   330
-      Left            =   7350
-      TabIndex        =   7
-      Top             =   735
-      Width           =   1695
    End
    Begin VB.Label Label4 
       Alignment       =   2  'Center
@@ -1094,10 +1102,91 @@ Begin VB.Form FSubCtas
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
+      Left            =   9870
+      TabIndex        =   11
+      Top             =   735
+      Width           =   1380
+   End
+   Begin VB.Label Label13 
+      Alignment       =   2  'Center
+      BackStyle       =   0  'Transparent
+      BorderStyle     =   1  'Fixed Single
+      Caption         =   "FECHA EMI."
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   8505
+      TabIndex        =   9
+      Top             =   735
+      Visible         =   0   'False
+      Width           =   1380
+   End
+   Begin VB.Label Label6 
+      Alignment       =   2  'Center
+      BackStyle       =   0  'Transparent
+      BorderStyle     =   1  'Fixed Single
+      Caption         =   "FACTURA No."
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   6825
+      TabIndex        =   6
+      Top             =   735
+      Width           =   1695
+   End
+   Begin VB.Label Label12 
+      Alignment       =   2  'Center
+      BackStyle       =   0  'Transparent
+      BorderStyle     =   1  'Fixed Single
+      Caption         =   "SERIE"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
       Left            =   5985
       TabIndex        =   4
       Top             =   735
-      Width           =   1380
+      Width           =   855
+   End
+   Begin VB.Label Label5 
+      Alignment       =   2  'Center
+      BackStyle       =   0  'Transparent
+      BorderStyle     =   1  'Fixed Single
+      Caption         =   " DETALLE AUXILIAR DEL SUBMODULO"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   5985
+      TabIndex        =   17
+      Top             =   1470
+      Width           =   7785
    End
    Begin VB.Label LabelCta 
       Alignment       =   2  'Center
@@ -1118,7 +1207,7 @@ Begin VB.Form FSubCtas
       Left            =   6825
       TabIndex        =   3
       Top             =   105
-      Width           =   4740
+      Width           =   6945
    End
    Begin VB.Label LabelTotalSCME 
       Alignment       =   1  'Right Justify
@@ -1136,8 +1225,8 @@ Begin VB.Form FSubCtas
       EndProperty
       ForeColor       =   &H8000000D&
       Height          =   435
-      Left            =   7875
-      TabIndex        =   20
+      Left            =   10080
+      TabIndex        =   24
       Top             =   5670
       Width           =   2430
    End
@@ -1155,8 +1244,8 @@ Begin VB.Form FSubCtas
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   6300
-      TabIndex        =   17
+      Left            =   8505
+      TabIndex        =   21
       Top             =   5670
       Width           =   1590
    End
@@ -1196,8 +1285,8 @@ Begin VB.Form FSubCtas
       EndProperty
       ForeColor       =   &H8000000D&
       Height          =   435
-      Left            =   7875
-      TabIndex        =   19
+      Left            =   10080
+      TabIndex        =   23
       Top             =   5145
       Width           =   2430
    End
@@ -1215,8 +1304,8 @@ Begin VB.Form FSubCtas
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   6300
-      TabIndex        =   18
+      Left            =   8505
+      TabIndex        =   22
       Top             =   5145
       Width           =   1590
    End
@@ -1231,6 +1320,7 @@ Dim SumaSubCta As Currency
 Dim SumaSubCta_ME As Currency
 Dim AgruparSubMod As Boolean
 Dim InsSubMod As Boolean
+Dim FechaEmi As String
 
 Public Function SumarSubCtas() As Currency
   SumaSubCta = 0: SumaSubCta_ME = 0
@@ -1304,7 +1394,7 @@ End Sub
 
 Private Sub Command2_Click()
   FSubCtas.Height = Command1.Top + Command1.Height + 600
-  ToggleButton1.Value = False
+  ToggleButton1.value = False
   Frame1.Visible = False
   DLSubCta.SetFocus
 End Sub
@@ -1373,7 +1463,7 @@ Private Sub CommandButton1_Click()
        & "ORDER BY Cl.Cliente "
   SelectDB_List DLSubCta, AdoBenef, sSQL, "NomCuenta"
   FSubCtas.Height = Command1.Top + Command1.Height + 600
-  ToggleButton1.Value = False
+  ToggleButton1.value = False
   Frame1.Visible = False
   DLSubCta.SetFocus
 End Sub
@@ -1425,6 +1515,7 @@ Dim SCCantidad As Currency
  'MsgBox TextValor.Text
   ValorDH = CCur(TextValor)
   ValorDHAux = Redondear(ValorDH, 2)
+  If Len(TxtSerie) < 6 Then TxtSerie = "001001"
  'If TextFactura.Text = "" Then TextFactura.Text = "0"
  'MsgBox ValorDH
   If DCDetalle.Text = "" Then DCDetalle.Text = Ninguno
@@ -1432,6 +1523,8 @@ Dim SCCantidad As Currency
   Fecha_V_Prest = MBoxFechaV
   If CFechaLong(Fecha_V_Prest) = CFechaLong(UltimoDiaMes(Fecha_V_Prest)) Then Es_Fecha_Fin_Mes = True
  'MsgBox Fecha_V_Prest & vbCrLf & Es_Fecha_Fin_Mes & vbCrLf & UltimoDiaMes(Fecha_V_Prest)
+  If MBoxFechaE.Visible = True Then FechaEmi = MBoxFechaE.Text Else FechaEmi = Co.Fecha
+
   If ValorDH > 0 Then
      If OpcTM = 2 Then
         If Opcion_Mulp Then
@@ -1463,7 +1556,8 @@ Dim SCCantidad As Currency
             .fields("Fecha_V") = Fecha_V_Prest
           End If
          .fields("TC") = SubCta
-         .fields("Serie") = "001001"
+         .fields("Serie") = TxtSerie.Text
+         .fields("FECHA_E") = FechaEmi
           If SubCta = "PM" Then
             .fields("Prima") = CLng(Val(DCFactura.Text))
             .fields("Factura") = CLng(Val(TxtPrima))
@@ -1505,7 +1599,7 @@ Private Sub DCFactura_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub DCFactura_LostFocus()
-  Factura_No = CCur(Val(DCFactura.Text))
+  If IsNumeric(DCFactura.Text) Then Factura_No = CCur(Val(DCFactura.Text)) Else Factura_No = 0
   TextValor = "0.00"
   Select Case SubCta
     Case "C", "P"
@@ -1524,6 +1618,25 @@ Private Sub DCFactura_LostFocus()
          End If
         End With
   End Select
+    
+    sSQL = "SELECT Serie, Factura, COUNT(Factura) As CantFact " _
+         & "FROM Trans_SubCtas " _
+         & "WHERE TC = '" & SubCta & "' " _
+         & "AND Item = '" & NumEmpresa & "' " _
+         & "AND Periodo = '" & Periodo_Contable & "' " _
+         & "AND Serie = '" & TxtSerie.Text & "' " _
+         & "AND Factura = " & DCFactura.Text & " " _
+         & "GROUP BY Serie, Factura " _
+         & "ORDER BY Serie, Factura "
+    Select_Adodc AdoAux, sSQL
+    If AdoAux.Recordset.RecordCount > 0 Then
+       Label13.Visible = False
+       MBoxFechaE.Visible = False
+    Else
+       Label13.Visible = True
+       MBoxFechaE.Visible = True
+       MBoxFechaE.SetFocus
+    End If
 End Sub
 
 Private Sub DCSubCta_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -1649,6 +1762,7 @@ Private Sub Form_Activate()
       End Select
    End If
    MBoxFechaV = FechaTexto
+   MBoxFechaE = FechaTexto
    TxtPrima.Visible = False
    If OpcTM = 2 Then Label17.Caption = "VALOR M/E" Else Label17.Caption = "VALOR M/N"
    TotalSubCta = Redondear(TotalSubCta, 2)
@@ -1815,7 +1929,18 @@ End Sub
 
 Private Sub MBoxFechaV_LostFocus()
   FechaValida MBoxFechaV, False
-  Facturas_Pendientes_SC
+End Sub
+
+Private Sub MBoxFechaE_GotFocus()
+  MarcarTexto MBoxFechaE
+End Sub
+
+Private Sub MBoxFechaE_KeyDown(KeyCode As Integer, Shift As Integer)
+  PresionoEnter KeyCode
+End Sub
+
+Private Sub MBoxFechaE_LostFocus()
+  FechaValida MBoxFechaE, False
 End Sub
 
 Private Sub TextValor_GotFocus()
@@ -1831,7 +1956,7 @@ Private Sub TextValor_LostFocus()
 End Sub
 
 Private Sub ToggleButton1_Click()
-  If ToggleButton1.Value Then
+  If ToggleButton1.value Then
      FSubCtas.Height = Frame1.Top + Frame1.Height + 600
      Frame1.Caption = "| CUENTA: " & SubCtaGen & " - " & Cuenta & " |"
      Frame1.Visible = True
@@ -1932,7 +2057,7 @@ Private Sub TxtCI_RUC_LostFocus()
            If .fields("Cliente") <> TxtApellidosS Then
                MsgBox "Este R.U.C./C.I., está asignado a " & vbCrLf & vbCrLf & .fields("Cliente")
                FSubCtas.Height = Command1.Top + Command1.Height + 600
-               ToggleButton1.Value = False
+               ToggleButton1.value = False
                Frame1.Visible = False
                DLSubCta.SetFocus
                'TxtCI_RUC.SetFocus
@@ -2030,6 +2155,7 @@ Public Sub Facturas_Pendientes_SC()
          & "AND Cta = '" & SubCtaGen & "' " _
          & "AND Item = '" & NumEmpresa & "' " _
          & "AND Periodo = '" & Periodo_Contable & "' " _
+         & "AND Serie = '" & TxtSerie & "' " _
          & "AND Fecha <= #" & BuscarFecha(FechaTexto) & "# " _
          & "AND T <> 'A' "
     If AgruparSubMod Then
@@ -2090,4 +2216,17 @@ Public Sub Listar_SubCta_Modulo()
                & "ORDER BY Cl.Cliente "
    End Select
    SelectDB_List DLSubCta, AdoBenef, sSQL, "NomCuenta", , "Detalle SubCtas"
+End Sub
+
+Private Sub TxtSerie_GotFocus()
+  MarcarTexto TxtSerie
+End Sub
+
+Private Sub TxtSerie_KeyDown(KeyCode As Integer, Shift As Integer)
+    PresionoEnter KeyCode
+End Sub
+
+Private Sub TxtSerie_LostFocus()
+    If Len(TxtSerie) < 6 Then TxtSerie = "001001"
+    Facturas_Pendientes_SC
 End Sub
