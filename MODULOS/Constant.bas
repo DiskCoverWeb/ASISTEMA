@@ -2,9 +2,13 @@ Attribute VB_Name = "Constantes"
 Option Explicit
 '-------------------------------------------------------
 'CORREOS PERSONALES DE DISKCOVER SYSTEM:
-
-'electronicos@diskcoversystem.com      Electronicos2022@
-
+'======================================
+'electronicos@diskcoversystem.com       Electronicos2022@
+'comprobantes@diskcoversystem.com       Dlcjvl1210@CompElec
+'informacion@diskcoversystem.com        infoDlcjvl1210DiskCover
+'actualizar@diskcoversystem.com         Dlcjvl1210@
+'desarrollo@diskcoversystem.com         Dlcjvl031210@
+'soporte@diskcoversystem.com            Dlcjvl031210@
 '-------------------------------------------------------
 'SERVIRLES ES NUESTRO COMPROMISO, DISFRUTARLO ES EL SUYO.
 '-------------------------------------------------------
@@ -144,10 +148,11 @@ Global Const ftpSvrLinode = "ftp.diskcoversystem.com"
 Global Const ftpUseLinode = "ftpuser"
 Global Const ftpPwrLinode = "ftp2023User"
 Global Const ftpPuerto = 21
-'NUC
+'NAS publico
 Global Const ftpSvr = "vpn.diskcoversystem.com"
 Global Const ftpUse = "ftpuser"
 Global Const ftpPwr = "ftp2023User"
+Global Const ftpDir = "/ftp"
 '-----------------------------------------------------------------
 Global Const Car_Visto = 251
 '-----------------------------------------------------------------

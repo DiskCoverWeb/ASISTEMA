@@ -1148,6 +1148,7 @@ End Sub
 
 Public Sub Carga_ConceptosRetencion(MBFecha As String)
 Dim FechaCodAir As String
+  If Not IsDate(MBFecha) Then MBFecha = "01/01/2000"
   FechaCodAir = BuscarFecha(MBFecha)
  'Carga los conceptos de Retencion segun la fecha de Registro
   sSQL = "SELECT * " _
@@ -1173,59 +1174,64 @@ Private Sub ChRetS_Click()
 End Sub
 
 Private Sub Command1_Click()
-  TextoValido TextBanco
-  TextoValido TextCheqNo
-  Mensajes = "Esta Seguro que desea grabar estos pagos."
-  Titulo = "Formulario de Grabación."
-  If BoxMensaje = vbYes Then
-     Calculo_Saldo
-     TotalAbonos = Total_RetIVAB + Total_RetIVAS + Total_Ret
-     SaldoDisp = Saldo - TotalAbonos
-     Control_Procesos "P", "Abono de " & TipoFactura & ". No. " & Factura_No & "Por Ret " & Format$(TotalAbonos, "#,##0.00")
-     FechaTexto = FechaSistema
-     If CheqRecibo.value = 1 Then
-        DiarioCaja = ReadSetDataNum("Recibo_No", True, True)
-     Else
-        DiarioCaja = Val(TxtRecibo)
-     End If
-     Codigo1 = Format$(Val(TrimStrg(MidStrg(TextCheqNo, 1, 3))), "000")
-     Codigo2 = Format$(Val(TrimStrg(MidStrg(TextCheqNo, 4, 3))), "000")
-     If ChRetB.value <> 0 Then
-        Cta_Ret_IVA = SinEspaciosIzq(DCRetIBienes)
-        GrabarAbonosRetenciones Cta_Ret_IVA, "RETENCION IVA BIENES", TextCompRet, TipoFactura, Factura_No, Total_RetIVAB, MBFecha, Codigo1, Codigo2, TextBanco, Val(CBienes)
-     End If
-     If ChRetS.value <> 0 Then
-        Cta_Ret_IVA = SinEspaciosIzq(DCRetISer)
-        GrabarAbonosRetenciones Cta_Ret_IVA, "RETENCION IVA SERVICIO", TextCompRet, TipoFactura, Factura_No, Total_RetIVAS, MBFecha, Codigo1, Codigo2, TextBanco, Val(CServicio)
-     End If
-     If ChRetF.value <> 0 Then
-        Cta_Ret = SinEspaciosIzq(DCRetFuente)
-        GrabarAbonosRetenciones Cta_Ret, "RETENCION FUENTE - " & DCCodRet, TextCompRet, TipoFactura, Factura_No, Total_Ret, MBFecha, Codigo1, Codigo2, TextBanco, Val(TextPorc)
-     End If
-     T = "P"
-     If SaldoDisp <= 0 Then
-        T = "C"
-        SaldoDisp = 0
-     End If
-     sSQL = "UPDATE Facturas " _
-          & "SET Saldo_MN = " & SaldoDisp & ",T = '" & T & "' " _
-          & "WHERE Item = '" & NumEmpresa & "' " _
-          & "AND Factura = " & Factura_No & " " _
-          & "AND TC = '" & TipoFactura & "' " _
-          & "AND Periodo = '" & Periodo_Contable & "' " _
-          & "AND CodigoC = '" & CodigoCliente & "' "
-     Ejecutar_SQL_SP sSQL
-     TextCajaMN = "0.00"
-     TextCajaME = "0.00"
-     TextRet = "0.00"
-     TextRetIVA = "0.00"
-     TextCheqNo = ""
-     TextCheque = "0.00"
-     TextBaucher = ""
-     TextTotalBaucher = "0.00"
-     TextRecibido = "0.00"
-     TextInteres = "0.00"
-     RatonNormal
+  If CFechaLong(MBFecha) < CFechaLong(FechaCorte) Then
+     MsgBox "No se puede grabar abonos con fecha inferior a la emision de la factura"
+     MBFecha.SetFocus
+  Else
+    TextoValido TextBanco
+    TextoValido TextCheqNo
+    Mensajes = "Esta Seguro que desea grabar estos pagos."
+    Titulo = "Formulario de Grabación."
+    If BoxMensaje = vbYes Then
+       Calculo_Saldo
+       TotalAbonos = Total_RetIVAB + Total_RetIVAS + Total_Ret
+       SaldoDisp = Saldo - TotalAbonos
+       Control_Procesos "P", "Abono de " & TipoFactura & ". No. " & Factura_No & "Por Ret " & Format$(TotalAbonos, "#,##0.00")
+       FechaTexto = FechaSistema
+       If CheqRecibo.value = 1 Then
+          DiarioCaja = ReadSetDataNum("Recibo_No", True, True)
+       Else
+          DiarioCaja = Val(TxtRecibo)
+       End If
+       Codigo1 = Format$(Val(TrimStrg(MidStrg(TextCheqNo, 1, 3))), "000")
+       Codigo2 = Format$(Val(TrimStrg(MidStrg(TextCheqNo, 4, 3))), "000")
+       If ChRetB.value <> 0 Then
+          Cta_Ret_IVA = SinEspaciosIzq(DCRetIBienes)
+          GrabarAbonosRetenciones Cta_Ret_IVA, "RETENCION IVA BIENES", TextCompRet, TipoFactura, Factura_No, Total_RetIVAB, MBFecha, Codigo1, Codigo2, TextBanco, Val(CBienes)
+       End If
+       If ChRetS.value <> 0 Then
+          Cta_Ret_IVA = SinEspaciosIzq(DCRetISer)
+          GrabarAbonosRetenciones Cta_Ret_IVA, "RETENCION IVA SERVICIO", TextCompRet, TipoFactura, Factura_No, Total_RetIVAS, MBFecha, Codigo1, Codigo2, TextBanco, Val(CServicio)
+       End If
+       If ChRetF.value <> 0 Then
+          Cta_Ret = SinEspaciosIzq(DCRetFuente)
+          GrabarAbonosRetenciones Cta_Ret, "RETENCION FUENTE - " & DCCodRet, TextCompRet, TipoFactura, Factura_No, Total_Ret, MBFecha, Codigo1, Codigo2, TextBanco, Val(TextPorc)
+       End If
+       T = "P"
+       If SaldoDisp <= 0 Then
+          T = "C"
+          SaldoDisp = 0
+       End If
+       sSQL = "UPDATE Facturas " _
+            & "SET Saldo_MN = " & SaldoDisp & ",T = '" & T & "' " _
+            & "WHERE Item = '" & NumEmpresa & "' " _
+            & "AND Factura = " & Factura_No & " " _
+            & "AND TC = '" & TipoFactura & "' " _
+            & "AND Periodo = '" & Periodo_Contable & "' " _
+            & "AND CodigoC = '" & CodigoCliente & "' "
+       Ejecutar_SQL_SP sSQL
+       TextCajaMN = "0.00"
+       TextCajaME = "0.00"
+       TextRet = "0.00"
+       TextRetIVA = "0.00"
+       TextCheqNo = ""
+       TextCheque = "0.00"
+       TextBaucher = ""
+       TextTotalBaucher = "0.00"
+       TextRecibido = "0.00"
+       TextInteres = "0.00"
+       RatonNormal
+    End If
   End If
 End Sub
 
@@ -1244,9 +1250,9 @@ Private Sub DCCliente_LostFocus()
       .MoveFirst
       .Find ("Cliente Like '" & DCCliente.Text & "' ")
        If Not .EOF Then
-          CodigoCliente = .Fields("Codigo")
+          CodigoCliente = .fields("Codigo")
           NombreCliente = DCCliente.Text
-          DireccionCli = .Fields("Direccion")
+          DireccionCli = .fields("Direccion")
           'Grupo_No = .Fields("Grupo")
           Listar_Facturas_P
           If Evaluar Then DCFactura.Text = Factura_No
@@ -1277,15 +1283,16 @@ Private Sub DCFactura_LostFocus()
       .MoveFirst
       .Find ("Factura Like " & Val(DCFactura) & " ")
        If Not .EOF Then
-          Factura_No = .Fields("Factura")
-          Cta_Cobrar = .Fields("Cta_CxP")
-          Saldo = Redondear(.Fields("Saldo_MN"), 2)
-          Saldo_ME = Redondear(.Fields("Saldo_ME"), 2)
-          TipoFactura = .Fields("TC")
-          TotalDolar = .Fields("Total_ME")
-          Cotizacion = .Fields("Cotizacion")
-          AutorizacionFA = .Fields("Autorizacion")
-          SerieFA = .Fields("Serie")
+          FechaCorte = .fields("Fecha")
+          Factura_No = .fields("Factura")
+          Cta_Cobrar = .fields("Cta_CxP")
+          Saldo = Redondear(.fields("Saldo_MN"), 2)
+          Saldo_ME = Redondear(.fields("Saldo_ME"), 2)
+          TipoFactura = .fields("TC")
+          TotalDolar = .fields("Total_ME")
+          Cotizacion = .fields("Cotizacion")
+          AutorizacionFA = .fields("Autorizacion")
+          SerieFA = .fields("Serie")
           Total_Ret = 0
           Total_RetIVAB = 0
           Total_RetIVAS = 0

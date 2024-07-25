@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "Mscomctl.ocx"
 Begin VB.MDIForm MDIConta 
    BackColor       =   &H00FFFFFF&
    Caption         =   " "
@@ -264,7 +264,7 @@ Begin VB.MDIForm MDIConta
          Caption         =   "Conciliacion Bancaria"
       End
       Begin VB.Menu MImpComp 
-         Caption         =   "Imprimir Lista de Comprobantes"
+         Caption         =   "Imprimir Comprobantes en Bloque"
       End
       Begin VB.Menu MBarAT 
          Caption         =   "-"

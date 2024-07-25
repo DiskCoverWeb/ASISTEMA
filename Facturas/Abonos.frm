@@ -1955,6 +1955,7 @@ Private Sub Command1_Click()
          Else
             DiarioCaja = Val(TxtRecibo)
          End If
+         TotalAbonos = 0
          Cta = SinEspaciosIzq(DCBanco.Text)
          Cta1 = SinEspaciosIzq(DCTarjeta.Text)
          NombreBanco1 = TrimStrg(MidStrg(DCTarjeta.Text, Len(Cta1) + 1, 60))
@@ -1972,6 +1973,7 @@ Private Sub Command1_Click()
          TA.Banco = "EFECTIVO MN"
          TA.Cheque = Grupo_No
          TA.Abono = TotalCajaMN
+         If TA.Abono > 0 Then TotalAbonos = TotalAbonos + TA.Abono
          Grabar_Abonos TA
          
         'Abono de Factura Caja ME
@@ -1979,6 +1981,7 @@ Private Sub Command1_Click()
          TA.Banco = "EFECTIVO MN"
          TA.Cheque = Grupo_No
          TA.Abono = TotalCajaME
+         If TA.Abono > 0 Then TotalAbonos = TotalAbonos + TA.Abono
          Grabar_Abonos TA
          
         'Abono de Factura Banco
@@ -1986,6 +1989,7 @@ Private Sub Command1_Click()
          TA.Banco = TextBanco
          TA.Cheque = TextCheqNo
          TA.Abono = Total_Bancos
+         If TA.Abono > 0 Then TotalAbonos = TotalAbonos + TA.Abono
          Grabar_Abonos TA
          
         'Abono de Factura Tarjeta
@@ -1993,6 +1997,7 @@ Private Sub Command1_Click()
          TA.Banco = NombreBanco1
          TA.Cheque = TextBaucher
          TA.Abono = Total_Tarjeta
+         If TA.Abono > 0 Then TotalAbonos = TotalAbonos + TA.Abono
          Grabar_Abonos TA
          
         'Abono de Factura Rete. IVA Bienes
@@ -2007,6 +2012,7 @@ Private Sub Command1_Click()
          TA.Establecimiento = Codigo1
          TA.Emision = Codigo2
          TA.Porcentaje = Val(CBienes)
+         If TA.Abono > 0 Then TotalAbonos = TotalAbonos + TA.Abono
          Grabar_Abonos_Retenciones TA
          
         'Abono de Factura Ret IVA Servicio
@@ -2018,6 +2024,7 @@ Private Sub Command1_Click()
          TA.Establecimiento = Codigo1
          TA.Emision = Codigo2
          TA.Porcentaje = Val(CServicio)
+         If TA.Abono > 0 Then TotalAbonos = TotalAbonos + TA.Abono
          Grabar_Abonos_Retenciones TA
          
         'Abono de Factura Ret. Fuente
@@ -2029,6 +2036,7 @@ Private Sub Command1_Click()
          TA.Establecimiento = Codigo1
          TA.Emision = Codigo2
          TA.Porcentaje = Val(TextPorc)
+         If TA.Abono > 0 Then TotalAbonos = TotalAbonos + TA.Abono
          Grabar_Abonos_Retenciones TA
          
         'Abono de Factura Interes Tarjeta
@@ -2038,6 +2046,7 @@ Private Sub Command1_Click()
          TA.Banco = "INTERES POR TARJETA"
          TA.Cheque = TextBaucher
          TA.Abono = Val(TextInteres)
+         If TA.Abono > 0 Then TotalAbonos = TotalAbonos + TA.Abono
          Grabar_Abonos TA
          
          Actualizar_Saldos_Facturas_SP FA.TC, FA.Serie, FA.Factura

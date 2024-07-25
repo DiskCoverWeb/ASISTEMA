@@ -2290,7 +2290,7 @@ Public Sub IniciarAsientos(DBGAsiento As DataGrid, _
                            DtaSubCta As Adodc, _
                            DtaRet As Adodc)
   If Trans_No <= 0 Then Trans_No = 1
-  If NuevoComp Then BorrarAsientos True
+  If NuevoComp Then Eliminar_Asientos_SP True
   SQL2 = "SELECT * " _
        & "FROM Asiento " _
        & "WHERE Item = '" & NumEmpresa & "' " _
@@ -2322,7 +2322,7 @@ Public Sub IniciarAsientosDe(DBGAsiento As DataGrid, _
                              DtaAsiento As Adodc)
   If Trans_No <= 0 Then Trans_No = 1
   Ln_No = 1
-  BorrarAsientos True
+  Eliminar_Asientos_SP True
 '''  SQL2 = "SELECT * " _
 '''       & "FROM Asiento_SC " _
 '''       & "WHERE Item = '" & NumEmpresa & "' " _
@@ -2357,7 +2357,7 @@ End Sub
 
 Public Sub IniciarAsientosAdo(DtaAsiento As Adodc)
   If Trans_No <= 0 Then Trans_No = 1
-  BorrarAsientos True
+  Eliminar_Asientos_SP True
   SQL2 = "SELECT * " _
        & "FROM Asiento_SC " _
        & "WHERE Item = '" & NumEmpresa & "' " _
@@ -2414,83 +2414,83 @@ Public Sub IniciarAsientosAdo(DtaAsiento As Adodc)
   Select_Adodc DtaAsiento, SQL2
 End Sub
 
-Public Sub BorrarAsientos(B_Asiento As Boolean)
-  If Trans_No <= 0 Then Trans_No = 1
-  If B_Asiento Then
-     SQL1 = "DELETE " _
-          & "FROM Asiento " _
-          & "WHERE Item = '" & NumEmpresa & "' " _
-          & "AND CodigoU = '" & CodigoUsuario & "' " _
-          & "AND T_No = " & Trans_No & " "
-     Ejecutar_SQL_SP SQL1
-  End If
-  SQL1 = "DELETE " _
-       & "FROM Asiento_SC " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND CodigoU = '" & CodigoUsuario & "' " _
-       & "AND T_No = " & Trans_No & " "
-  Ejecutar_SQL_SP SQL1
-  SQL1 = "DELETE " _
-       & "FROM Asiento_B " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND CodigoU = '" & CodigoUsuario & "' " _
-       & "AND T_No = " & Trans_No & " "
-  Ejecutar_SQL_SP SQL1
-  SQL1 = "DELETE " _
-       & "FROM Asiento_R " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND CodigoU = '" & CodigoUsuario & "' " _
-       & "AND T_No = " & Trans_No & " "
-  Ejecutar_SQL_SP SQL1
-  SQL1 = "DELETE " _
-       & "FROM Asiento_RP " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND CodigoU = '" & CodigoUsuario & "' " _
-       & "AND T_No = " & Trans_No & " "
-  Ejecutar_SQL_SP SQL1
-  SQL1 = "DELETE " _
-       & "FROM Asiento_K " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND CodigoU = '" & CodigoUsuario & "' " _
-       & "AND T_No = " & Trans_No & " "
-  Ejecutar_SQL_SP SQL1
-  SQL1 = "DELETE " _
-       & "FROM Asiento_P " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND CodigoU = '" & CodigoUsuario & "' " _
-       & "AND T_No = " & Trans_No & " "
-  Ejecutar_SQL_SP SQL1
-  SQL1 = "DELETE " _
-       & "FROM Asiento_Air " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND CodigoU = '" & CodigoUsuario & "' " _
-       & "AND T_No = " & Trans_No & " "
-  Ejecutar_SQL_SP SQL1
-  SQL1 = "DELETE " _
-       & "FROM Asiento_Compras " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND CodigoU = '" & CodigoUsuario & "' " _
-       & "AND T_No = " & Trans_No & " "
-  Ejecutar_SQL_SP SQL1
-  SQL1 = "DELETE " _
-       & "FROM Asiento_Exportaciones " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND CodigoU = '" & CodigoUsuario & "' " _
-       & "AND T_No = " & Trans_No & " "
-  Ejecutar_SQL_SP SQL1
-  SQL1 = "DELETE " _
-       & "FROM Asiento_Importaciones " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND CodigoU = '" & CodigoUsuario & "' " _
-       & "AND T_No = " & Trans_No & " "
-  Ejecutar_SQL_SP SQL1
-  SQL1 = "DELETE " _
-       & "FROM Asiento_Ventas " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND CodigoU = '" & CodigoUsuario & "' " _
-       & "AND T_No = " & Trans_No & " "
-  Ejecutar_SQL_SP SQL1
-End Sub
+'''Public Sub Eliminar_Asientos_SP(B_Asiento As Boolean)
+'''  If Trans_No <= 0 Then Trans_No = 1
+'''  If B_Asiento Then
+'''     SQL1 = "DELETE " _
+'''          & "FROM Asiento " _
+'''          & "WHERE Item = '" & NumEmpresa & "' " _
+'''          & "AND CodigoU = '" & CodigoUsuario & "' " _
+'''          & "AND T_No = " & Trans_No & " "
+'''     Ejecutar_SQL_SP SQL1
+'''  End If
+'''  SQL1 = "DELETE " _
+'''       & "FROM Asiento_SC " _
+'''       & "WHERE Item = '" & NumEmpresa & "' " _
+'''       & "AND CodigoU = '" & CodigoUsuario & "' " _
+'''       & "AND T_No = " & Trans_No & " "
+'''  Ejecutar_SQL_SP SQL1
+'''  SQL1 = "DELETE " _
+'''       & "FROM Asiento_B " _
+'''       & "WHERE Item = '" & NumEmpresa & "' " _
+'''       & "AND CodigoU = '" & CodigoUsuario & "' " _
+'''       & "AND T_No = " & Trans_No & " "
+'''  Ejecutar_SQL_SP SQL1
+'''  SQL1 = "DELETE " _
+'''       & "FROM Asiento_R " _
+'''       & "WHERE Item = '" & NumEmpresa & "' " _
+'''       & "AND CodigoU = '" & CodigoUsuario & "' " _
+'''       & "AND T_No = " & Trans_No & " "
+'''  Ejecutar_SQL_SP SQL1
+'''  SQL1 = "DELETE " _
+'''       & "FROM Asiento_RP " _
+'''       & "WHERE Item = '" & NumEmpresa & "' " _
+'''       & "AND CodigoU = '" & CodigoUsuario & "' " _
+'''       & "AND T_No = " & Trans_No & " "
+'''  Ejecutar_SQL_SP SQL1
+'''  SQL1 = "DELETE " _
+'''       & "FROM Asiento_K " _
+'''       & "WHERE Item = '" & NumEmpresa & "' " _
+'''       & "AND CodigoU = '" & CodigoUsuario & "' " _
+'''       & "AND T_No = " & Trans_No & " "
+'''  Ejecutar_SQL_SP SQL1
+'''  SQL1 = "DELETE " _
+'''       & "FROM Asiento_P " _
+'''       & "WHERE Item = '" & NumEmpresa & "' " _
+'''       & "AND CodigoU = '" & CodigoUsuario & "' " _
+'''       & "AND T_No = " & Trans_No & " "
+'''  Ejecutar_SQL_SP SQL1
+'''  SQL1 = "DELETE " _
+'''       & "FROM Asiento_Air " _
+'''       & "WHERE Item = '" & NumEmpresa & "' " _
+'''       & "AND CodigoU = '" & CodigoUsuario & "' " _
+'''       & "AND T_No = " & Trans_No & " "
+'''  Ejecutar_SQL_SP SQL1
+'''  SQL1 = "DELETE " _
+'''       & "FROM Asiento_Compras " _
+'''       & "WHERE Item = '" & NumEmpresa & "' " _
+'''       & "AND CodigoU = '" & CodigoUsuario & "' " _
+'''       & "AND T_No = " & Trans_No & " "
+'''  Ejecutar_SQL_SP SQL1
+'''  SQL1 = "DELETE " _
+'''       & "FROM Asiento_Exportaciones " _
+'''       & "WHERE Item = '" & NumEmpresa & "' " _
+'''       & "AND CodigoU = '" & CodigoUsuario & "' " _
+'''       & "AND T_No = " & Trans_No & " "
+'''  Ejecutar_SQL_SP SQL1
+'''  SQL1 = "DELETE " _
+'''       & "FROM Asiento_Importaciones " _
+'''       & "WHERE Item = '" & NumEmpresa & "' " _
+'''       & "AND CodigoU = '" & CodigoUsuario & "' " _
+'''       & "AND T_No = " & Trans_No & " "
+'''  Ejecutar_SQL_SP SQL1
+'''  SQL1 = "DELETE " _
+'''       & "FROM Asiento_Ventas " _
+'''       & "WHERE Item = '" & NumEmpresa & "' " _
+'''       & "AND CodigoU = '" & CodigoUsuario & "' " _
+'''       & "AND T_No = " & Trans_No & " "
+'''  Ejecutar_SQL_SP SQL1
+'''End Sub
 
 Public Function ExistenMovimientos() As Boolean
 Dim AdoCtas As ADODB.Recordset
@@ -2618,7 +2618,7 @@ With Datas.Recordset
         NumeroLineas = PrinterLineasMayor(Ancho(0) + 1.8, PosLinea + 0.5, .fields("Concepto"), 15)
         'MsgBox PosLinea & vbCrLf & NumeroLineas & vbCrLf & PosLinea_Aux
         'PrinterFields Ancho(0) + 1.8, PosLinea + 0.5, .Fields("Concepto")
-        PosLinea = PosLinea + 0.8
+        'PosLinea = PosLinea + 0.8
         PrinterFields Ancho(0) + 6.2, PosLinea + 0.1, .fields("CodigoU")
         PrinterFields Ancho(2) + 0.6, PosLinea + 0.1, .fields("TP")
         PrinterTexto Ancho(3) + 1.8, PosLinea + 0.1, Format$(.fields("Numero"), "00000000")
@@ -3240,7 +3240,7 @@ Dim AdoRetAut As ADODB.Recordset
      C1.Autorizacion_LC = ReadSetDataNum("LC_SERIE_" & C1.Serie_LC, True, True)
      TMail.TipoDeEnvio = "CE"
   End If
-  If Len(C1.Autorizacion_R) >= 13 Then
+  If Len(C1.Autorizacion_R) > 1 Then
      sSQL = "SELECT Tipo_Trans, A_No " _
           & "FROM Asiento_Air " _
           & "WHERE Item = '" & NumEmpresa & "' " _
@@ -3825,7 +3825,7 @@ Dim AdoRetAut As ADODB.Recordset
   
  'Eliminamos Asientos contables
   Trans_No = C1.T_No
-  BorrarAsientos True
+  Eliminar_Asientos_SP True
   Control_Procesos Normal, "Grabar Comprobante de: " & C1.TP & " No. " & C1.Numero
   RatonNormal
 End Sub
@@ -5253,7 +5253,8 @@ Public Sub ImprimirCompNota_D_C(DataComp As ADODB.Recordset, _
                                 DataTrans As ADODB.Recordset, _
                                 DataSubC1 As ADODB.Recordset, _
                                 DataSubC2 As ADODB.Recordset, _
-                                Tipo_D_C As String)
+                                Tipo_D_C As String, _
+                                Optional NuevaPagina As Boolean)
 'Establecemos Espacios y seteos de impresion
 On Error GoTo Errorhandler
 RatonReloj
@@ -5279,7 +5280,7 @@ With DataComp
      PrinterLineas SetD(3).PosX, SetD(3).PosY, .fields("Concepto"), 16
      ImprimirAsientos DataTrans, DataComp, DataSubC1, DataSubC2, 4, 9, CDConLineas, "DC", .fields("T"), .fields("Cotizacion")
      Printer.FontName = LetraAnterior
-     Printer.EndDoc
+     If NuevaPagina Then Printer.NewPage Else Printer.EndDoc
  End If
 End With
 RatonNormal
@@ -7679,13 +7680,13 @@ InicioX = 0.5: InicioY = 0.01
 'DataAnchoCampos InicioX, Datas, 9, TipoTimes, 1
 DataAnchoCampos InicioX, Datas, 9, TipoArial, 1
 Ancho(0) = 0.5   'Fecha
-Ancho(1) = 1.9   'Numero
-Ancho(2) = 2.5   'Concepto
-Ancho(3) = 8     'Codigo
-Ancho(4) = 9.9   'Cuenta
-Ancho(5) = 14.8  'Debe
-Ancho(6) = 17    'Haber
-Ancho(7) = 19.5
+Ancho(1) = 1.7   'Numero
+Ancho(2) = 2.3   'Concepto
+Ancho(3) = 7.9   'Codigo
+Ancho(4) = 10.2  'Cuenta
+Ancho(5) = 15.3  'Debe
+Ancho(6) = 17.5  'Haber
+Ancho(7) = 20
 CantCampos = 7
 Pagina = 1
 LimiteAlto = LimiteAlto - 1
@@ -7701,7 +7702,7 @@ With Datas.Recordset
       Numero = .fields("Numero")
       TP = .fields("TP")
       PrinterFields Ancho(0), PosLinea, .fields("Fecha")
-      PrinterVariables Ancho(0) + 0.3, PosLinea + 0.35, TP & "-" & Format$(Numero, "000000")
+      PrinterVariables Ancho(0), PosLinea + 0.35, TP & "-" & Format$(Numero, "000000")
       NumeroLineas = PrinterLineasMayor(Ancho(2), PosLinea, .fields("Concepto"), 5.5)
       PFil = 0
       If NumeroLineas > 1 Then PFil = PosLinea + (NumeroLineas * 0.4)
@@ -7713,7 +7714,7 @@ With Datas.Recordset
             TP = .fields("TP")
             If PosLinea < PFil Then PosLinea = PFil
             PrinterFields Ancho(0), PosLinea, .fields("Fecha")
-            PrinterVariables Ancho(0) + 0.3, PosLinea + 0.35, TP & "-" & Format$(Numero, "000000")
+            PrinterVariables Ancho(0), PosLinea + 0.35, TP & "-" & Format$(Numero, "000000")
             NumeroLineas = PrinterLineasMayor(Ancho(2), PosLinea, .fields("Concepto"), 5.5)
             PFil = 0
             If NumeroLineas > 1 Then PFil = PosLinea + (NumeroLineas * 0.4)
@@ -8376,7 +8377,9 @@ Ancho(5) = 13.1   ' Debe
 Ancho(6) = 15.4   ' Haber
 Ancho(7) = 17.7   ' Saldo
 Ancho(8) = 20     ' Fin
+LimiteAlto = LimiteAlto - 1
 'MsgBox LimiteAlto
+
 Cta = Ninguno: NomCta = "": CtaSup = "": NomCtaSup = ""
 If DataT.Recordset.RecordCount > 0 Then
    DataT.Recordset.MoveFirst

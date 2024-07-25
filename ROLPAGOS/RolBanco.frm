@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Begin VB.Form FRolPagoBanco 
    BackColor       =   &H00FF8080&
@@ -878,6 +878,7 @@ Dim CaptionTemp As String
           & "AND R.Fecha_H <= #" & FechaFin & "# " _
           & "AND R.Item = '" & NumEmpresa & "' " _
           & "AND R.Periodo = '" & Periodo_Contable & "' " _
+          & "AND CR.T = '" & Normal & "' " _
           & "AND R.Tipo_Rubro = 'PER' " _
           & "AND R.Cod_Rol_Pago = 'Neto_Recibir' " _
           & "AND R.Codigo = C.Codigo " _

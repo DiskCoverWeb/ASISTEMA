@@ -12,8 +12,8 @@ Begin VB.Form BalanceComp
    Icon            =   "Balacomp.frx":0000
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   12375
-   ScaleWidth      =   22800
+   ScaleHeight     =   7575
+   ScaleWidth      =   11280
    WindowState     =   2  'Maximized
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
@@ -21,8 +21,8 @@ Begin VB.Form BalanceComp
       Left            =   0
       TabIndex        =   0
       Top             =   0
-      Width           =   22800
-      _ExtentX        =   40217
+      Width           =   11280
+      _ExtentX        =   19897
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -958,8 +958,8 @@ Public Sub ListarTipoDeBalance(EsBalanceMes As Boolean)
               & "AND ISNUMERIC(MidStrg(Codigo,1,1)) <> " & Val(adFalse) & " "
   End Select
   
-  If OpcG.Value Then sSQL = sSQL & "AND DG = 'G' "
-  If OpcD.Value Then sSQL = sSQL & "AND DG = 'D' "
+  If OpcG.value Then sSQL = sSQL & "AND DG = 'G' "
+  If OpcD.value Then sSQL = sSQL & "AND DG = 'D' "
   sSQL = sSQL & "AND Codigo <> '" & Ninguno & "' " _
        & "AND Item = '" & NumEmpresa & "' " _
        & "AND Periodo = '" & Periodo_Contable & "' " _

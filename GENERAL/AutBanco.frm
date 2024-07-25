@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "Mscomctl.ocx"
 Begin VB.Form FRecaudacionBancosCxC 
    BackColor       =   &H00FFFFC0&
    Caption         =   "BANCO BOLIVARIANO"
@@ -18,13 +18,13 @@ Begin VB.Form FRecaudacionBancosCxC
    WindowState     =   2  'Maximized
    Begin MSComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
-      Height          =   900
+      Height          =   660
       Left            =   0
       TabIndex        =   0
       Top             =   0
       Width           =   12300
       _ExtentX        =   21696
-      _ExtentY        =   1588
+      _ExtentY        =   1164
       ButtonWidth     =   1482
       ButtonHeight    =   1429
       AllowCustomize  =   0   'False
@@ -70,7 +70,7 @@ Begin VB.Form FRecaudacionBancosCxC
          Bindings        =   "AutBanco.frx":0442
          DataSource      =   "AdoGrupo"
          Height          =   360
-         Left            =   13545
+         Left            =   11340
          TabIndex        =   5
          Top             =   315
          Visible         =   0   'False
@@ -93,7 +93,7 @@ Begin VB.Form FRecaudacionBancosCxC
          Bindings        =   "AutBanco.frx":0459
          DataSource      =   "AdoGrupo"
          Height          =   360
-         Left            =   11655
+         Left            =   9450
          TabIndex        =   4
          Top             =   315
          Visible         =   0   'False
@@ -124,7 +124,7 @@ Begin VB.Form FRecaudacionBancosCxC
             Strikethrough   =   0   'False
          EndProperty
          Height          =   645
-         Left            =   16905
+         Left            =   14700
          TabIndex        =   8
          Top             =   105
          Width           =   6105
@@ -165,7 +165,7 @@ Begin VB.Form FRecaudacionBancosCxC
             Strikethrough   =   0   'False
          EndProperty
          Height          =   645
-         Left            =   15435
+         Left            =   13230
          TabIndex        =   6
          Top             =   105
          Width           =   1380
@@ -200,7 +200,7 @@ Begin VB.Form FRecaudacionBancosCxC
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   11340
+         Left            =   9450
          TabIndex        =   3
          Top             =   0
          Width           =   3690
@@ -220,7 +220,7 @@ Begin VB.Form FRecaudacionBancosCxC
          Left            =   3465
          TabIndex        =   1
          Top             =   105
-         Width           =   7785
+         Width           =   5895
          Begin MSDataListLib.DataCombo DCTablaSRI 
             Bindings        =   "AutBanco.frx":0487
             DataSource      =   "AdoTablaSRI"
@@ -228,8 +228,8 @@ Begin VB.Form FRecaudacionBancosCxC
             Left            =   105
             TabIndex        =   2
             Top             =   210
-            Width           =   7575
-            _ExtentX        =   13361
+            Width           =   5685
+            _ExtentX        =   10028
             _ExtentY        =   556
             _Version        =   393216
             BackColor       =   16777215
@@ -1650,6 +1650,7 @@ Dim AuxNumEmp As String
   Separador = Ninguno
   Orden_Pago = Ninguno
   OrdenValida = False
+  ReDim Preserve CamposFile(100) As Campos_Tabla
   NumFile = FreeFile
   Open RutaGeneraFile For Input As #NumFile
     Do While Not EOF(NumFile)
@@ -1660,19 +1661,24 @@ Dim AuxNumEmp As String
        If Contador = 0 Then
           Do While Len(Cod_Field) > 2
              No_Hasta = InStr(Cod_Field, Separador)
-             ReDim Preserve CamposFile(CantCampos) As Campos_Tabla
+             
              CamposFile(CantCampos).Campo = "C" & Format$(CantCampos, "00")
-             CampoTemp = TrimStrg(MidStrg(Cod_Field, 1, No_Hasta - 1))
-             Select Case TextoBanco
-               Case "PICHINCHA"
-                    If CantCampos = 14 And TxtOrden = CampoTemp Then
-                       Orden_Pago = CampoTemp  ' Orden No
+             If No_Hasta > 1 Then
+                CampoTemp = TrimStrg(MidStrg(Cod_Field, 1, No_Hasta - 1))
+                Select Case TextoBanco
+                  Case "PICHINCHA"
+                       If CantCampos = 14 And TxtOrden = CampoTemp Then
+                          Orden_Pago = CampoTemp  ' Orden No
+                          OrdenValida = True
+                       End If
+                       'MsgBox CantCampos & " _ " & CampoTemp
+                  Case Else
                        OrdenValida = True
-                    End If
-               Case Else
-                    OrdenValida = True
-             End Select
-             Cod_Field = TrimStrg(MidStrg(Cod_Field, No_Hasta + 1, Len(Cod_Field)))
+                End Select
+                Cod_Field = TrimStrg(MidStrg(Cod_Field, No_Hasta + 1, Len(Cod_Field)))
+             Else
+                Cod_Field = ""
+             End If
              CantCampos = CantCampos + 1
           Loop
        End If
@@ -1696,9 +1702,14 @@ Dim AuxNumEmp As String
       'Colocamos los datos del archivo en un array de texto
        CantCampos = 0
        Do While Len(Cod_Field) > 2
+         'MsgBox UBound(CamposFile) & " - " & CantCampos & ".- " & CamposFile(35).Valor & " - " & MidStrg(Cod_Field, 1, No_Hasta - 1)
           No_Hasta = InStr(Cod_Field, Separador)
-          CamposFile(CantCampos).Valor = TrimStrg(MidStrg(Cod_Field, 1, No_Hasta - 1))
-          Cod_Field = TrimStrg(MidStrg(Cod_Field, No_Hasta + 1, Len(Cod_Field)))
+          If No_Hasta > 1 Then
+             CamposFile(CantCampos).Valor = TrimStrg(MidStrg(Cod_Field, 1, No_Hasta - 1))
+             Cod_Field = TrimStrg(MidStrg(Cod_Field, No_Hasta + 1, Len(Cod_Field)))
+          Else
+             Cod_Field = ""
+          End If
           CantCampos = CantCampos + 1
        Loop
       'Procedemos a eliminar los abonos que se encuentran en el archivo, por si volvemos a subir
@@ -1727,12 +1738,15 @@ Dim AuxNumEmp As String
   FA.Serie = Ninguno
   FA.TC = Ninguno
   FA.Factura = 0
+  FA.Fecha_Desde = "01/01/2000"
+  FA.Fecha_Hasta = FechaSistema
+  
   Actualizar_Abonos_Facturas_SP FA
   
   AbonosAnticipados = 0
   Total_Dep_Confirmar = 0
   Trans_No = 200
-  BorrarAsientos True
+  Eliminar_Asientos_SP True
   SubCtaGen = Leer_Seteos_Ctas("Cta_Anticipos_Clientes")
   Cta_Del_Banco = TrimStrg(SinEspaciosIzq(DCBanco))
   Contrato_No = Ninguno
@@ -2072,7 +2086,7 @@ Dim AuxNumEmp As String
 '''  If Total_Dep_Confirmar > 0 Then
 '''     SubCtaGen = Leer_Seteos_Ctas("Cta_Deposito_Confirmar")
 '''     Trans_No = 200
-'''     BorrarAsientos True
+'''     Eliminar_Asientos_SP True
 '''     sSQL = "SELECT * " _
 '''          & "FROM Asiento " _
 '''          & "WHERE Item = '" & NumEmpresa & "' " _
@@ -2287,7 +2301,7 @@ Private Sub Form_Activate()
        & "AND Periodo = '" & Periodo_Contable & "' " _
        & "ORDER BY Codigo "
   SelectDB_Combo DCBanco, AdoBanco, sSQL, "NomCuenta"
-
+  Cta_Del_Banco = TrimStrg(SinEspaciosIzq(DCBanco))
   Label1.BackColor = FRecaudacionBancosCxC.BackColor
   'Frame1.BackColor = FRecaudacionBancosCxC.BackColor
   'CheqBanco.BackColor = FRecaudacionBancosCxC.BackColor

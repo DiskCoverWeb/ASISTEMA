@@ -141,7 +141,8 @@ Dim esMail As Boolean
 End Function
 
 Public Sub Insertar_Mail(ListaMails As String, InsertarMail As String)
-   If (InStr(ListaMails, InsertarMail) = 0) And (InStr(InsertarMail, "@") > 0) And (Len(InsertarMail) > 3) Then
+
+   If (InStr(ListaMails, InsertarMail) = 0) And (InStr(InsertarMail, "@") > 0) And (Len(Trim(InsertarMail)) > 3) Then
       ListaMails = ListaMails & InsertarMail & ";"
    Else
       TMail.ListaError = TMail.ListaError & TMail.Destinatario & ": " & InsertarMail & vbCrLf
@@ -1497,7 +1498,7 @@ Dim sSQL1 As String
     RatonNormal
 End Sub
 
-Public Sub Obtener_Porc_IVA(FechaIVA As String, CodPorcIVA As Byte)
+Public Sub Obtener_Porc_IVA(FechaIVA As String, CodPorcIva As Byte)
 Dim AdoCierre As ADODB.Recordset
 Dim sSQL1 As String
     RatonReloj
@@ -1508,7 +1509,7 @@ Dim sSQL1 As String
           & "WHERE IVA <> " & Val(adFalse) & " " _
           & "AND Fecha_Inicio <= #" & BuscarFecha(FechaIVA) & "# " _
           & "AND Fecha_Final >= #" & BuscarFecha(FechaIVA) & "# " _
-          & "AND Codigo = " & CodPorcIVA & " " _
+          & "AND Codigo = " & CodPorcIva & " " _
           & "ORDER BY Porc DESC "
     Select_AdoDB AdoCierre, sSQL1
     If AdoCierre.RecordCount > 0 Then Porc_IVA = Redondear(AdoCierre.fields("Porc") / 100, 2)
@@ -3795,7 +3796,7 @@ Dim CantStrg As Single
 If ((Xo > 0) And (Yo > 0)) Then
    CantStrg = Printer.TextWidth(Texto) + 0.1
    Distancia = VariableWidth(Variable)
-   If Yo <= LimiteAlto Then
+   'If Yo <= LimiteAlto Then
       Printer.CurrentX = Xo
       Printer.CurrentY = Yo
       If Texto = Ninguno Then Texto = " "
@@ -3807,7 +3808,7 @@ If ((Xo > 0) And (Yo > 0)) Then
       If StrgFormatoVariable = "0" Then StrgFormatoVariable = " "
       If StrgFormatoVariable = "0.00" Then StrgFormatoVariable = " "
       Printer.Print StrgFormatoVariable
-   End If
+   'End If
 End If
 'End If
 End Sub
@@ -3820,7 +3821,7 @@ Public Sub PrinterTexto(Xo As Single, _
 'If Yo <= LimiteAlto Then
 If ((Xo > 0) And (Yo > 0) And (Texto <> "")) Then
    RatonReloj
-   If Yo <= LimiteAlto Then
+   'If Yo < (LimiteAlto - 0.35) Then
       LimpiarLineaTexto Xo, Yo, Texto
       If JustDer Then
          Printer.CurrentX = Xo + anchoTexto - Printer.TextWidth(Texto) + 0.1
@@ -3831,7 +3832,7 @@ If ((Xo > 0) And (Yo > 0) And (Texto <> "")) Then
       'If Texto = "0" Then Texto = " "
       Printer.CurrentY = Yo
       Printer.Print Texto
-   End If
+   'End If
    RatonNormal
 End If
 'End If
@@ -3908,12 +3909,12 @@ End Function
 
 Public Sub PrinterNum(Xo As Single, Yo As Single, Numero As Currency)
 Dim Numero_Letras As String
-If Yo < LimiteAlto Then
+'If Yo < LimiteAlto Then
 If ((Xo > 0) And (Yo > 0)) Then
    Numero_Letras = Cambio_Letras(Numero, 2)
    PrinterLineas Xo, Yo, Numero_Letras, 15.5
 End If
-End If
+'End If
 End Sub
 
 Public Sub PrinterNumCheque(Xo As Single, Yo As Single, AnchoCheque As Single, ValorChq As Currency)
@@ -3937,16 +3938,16 @@ If ((Xo > 0) And (Yo > 0)) Then
      JR = Redondear(Printer.TextWidth(Cadena), 4)
    Wend
    Cadena = MidStrg(Numero_Letras, 1, I)
-   If Yo < LimiteAlto Then
+   'If Yo < LimiteAlto Then
       Printer.CurrentX = Xo
       Printer.CurrentY = Yo
       Printer.Print Cadena
-   End If
+   'End If
    Numero_Letras = MidStrg(Numero_Letras, I + 1, Len(Numero_Letras))
-   If (Yo + 0.6) < LimiteAlto Then
+   'If (Yo + 0.6) < LimiteAlto Then
       Printer.CurrentX = Xo - 1.5: Printer.CurrentY = Yo + 0.6
       Printer.Print Numero_Letras
-   End If
+   'End If
 End If
 End Sub
 
@@ -4559,6 +4560,75 @@ If Strg <> Ninguno And Yo > 0 And Xo > 0 Then
 End If
 RatonNormal
 PrinterLineasTexto = Yf
+End Function
+
+Public Function PrinterLineasTextoPV(Xo As Single, _
+                                    Yo As Single, _
+                                    Strg As String, _
+                                    Optional CantCaracter As Byte) As Single
+Dim CStrg As String
+Dim cTemp As String
+Dim Carac As String
+Dim IdCar As Long
+Dim IdBlanco As Long
+Dim CantBlanco As Long
+Dim Yf As Single
+Dim Inicio As Long
+Dim Final As Long
+Yf = Yo
+If Strg <> Ninguno And Yo > 0 And Xo > 0 Then
+   RatonReloj
+   CStrg = Replace(Strg, vbCrLf, "^")
+   IdCar = 1
+   Inicio = 1: Final = Len(Strg)
+   cTemp = ""
+   Carac = ""
+   Do While Len(CStrg) > 1
+      Carac = MidStrg(CStrg, IdCar, 1)
+      cTemp = cTemp & Carac
+      
+      'MsgBox "|" & Carac & "|" & vbCrLf & cTemp
+            
+      If Len(cTemp) > CantCaracter Or Carac = "^" Then
+         Printer.CurrentX = Xo
+         Printer.CurrentY = Yf
+         
+        'MsgBox Asc(Carac) & "Imprimiendo:" & vbCrLf & "|" & cTemp & "|"
+         If Carac = "^" Then
+            Printer.Print MidStrg(cTemp, 1, Len(cTemp) - 1)
+            CStrg = MidStrg(CStrg, Len(cTemp) + 1, Len(CStrg))
+         Else
+            'MsgBox Asc(Carac) & "Imprimiendo:" & vbCrLf & "|" & cTemp & "|"
+            If Len(cTemp) <> CantCaracter Then
+               CantBlanco = 0
+               IdBlanco = Len(cTemp)
+               Do While IdBlanco > 0 And MidStrg(cTemp, IdBlanco, 1) <> " "
+                  CantBlanco = CantBlanco + 1
+                  IdBlanco = IdBlanco - 1
+               Loop
+               If CantBlanco > 0 Then cTemp = MidStrg(cTemp, 1, IdBlanco)
+            End If
+            'MsgBox Asc(Carac) & "Imprimiendo:" & vbCrLf & "|" & cTemp & "|" & vbCrLf & "[" & MidStrg(cTemp, 1, IdBlanco) & "]" & vbCrLf & CantBlanco
+            
+            Printer.Print TrimStrg(MidStrg(cTemp, 1, Len(cTemp) - 1))
+            CStrg = MidStrg(CStrg, Len(cTemp), Len(CStrg))
+         End If
+         cTemp = ""
+         IdCar = 0
+         Yf = Yf + Printer.TextHeight("H") + 0.01
+      End If
+      IdCar = IdCar + 1
+   Loop
+   If cTemp <> "" Then
+      Printer.CurrentX = Xo
+      Printer.CurrentY = Yf
+      Printer.Print cTemp
+      Yf = Yf + Printer.TextHeight("H") + 0.01
+   End If
+   
+End If
+RatonNormal
+PrinterLineasTextoPV = Yf
 End Function
 
 Public Sub CentrarForm(Forms As Form)

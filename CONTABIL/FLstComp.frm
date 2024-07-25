@@ -1,10 +1,10 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "Mscomctl.ocx"
 Begin VB.Form FListComprobantes 
    Caption         =   "SubCtas"
    ClientHeight    =   8895
@@ -246,7 +246,7 @@ Begin VB.Form FListComprobantes
       MaskColor       =   12632256
       _Version        =   393216
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
-         NumListImages   =   11
+         NumListImages   =   12
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
             Picture         =   "FLstComp.frx":0018
             Key             =   ""
@@ -291,6 +291,10 @@ Begin VB.Form FListComprobantes
             Picture         =   "FLstComp.frx":4AA0
             Key             =   ""
          EndProperty
+         BeginProperty ListImage12 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "FLstComp.frx":537A
+            Key             =   ""
+         EndProperty
       EndProperty
    End
    Begin MSComctlLib.Toolbar Toolbar1 
@@ -308,7 +312,7 @@ Begin VB.Form FListComprobantes
       ImageList       =   "ImageList1"
       _Version        =   393216
       BeginProperty Buttons {66833FE8-8583-11D1-B16A-00C0F0283628} 
-         NumButtons      =   10
+         NumButtons      =   11
          BeginProperty Button1 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Salir"
             Object.ToolTipText     =   "Salir del modulo"
@@ -359,6 +363,11 @@ Begin VB.Form FListComprobantes
             Object.ToolTipText     =   "Anular varios comprobantes"
             ImageIndex      =   11
          EndProperty
+         BeginProperty Button11 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "Bajar_Excel"
+            Object.ToolTipText     =   "Bajar a excel las Transacciones"
+            ImageIndex      =   12
+         EndProperty
       EndProperty
    End
    Begin TabDlg.SSTab SSTab1 
@@ -374,35 +383,35 @@ Begin VB.Form FListComprobantes
       TabsPerRow      =   4
       TabHeight       =   520
       TabCaption(0)   =   "&4.- CONTABILIZACION"
-      TabPicture(0)   =   "FLstComp.frx":537A
+      TabPicture(0)   =   "FLstComp.frx":5FCC
       Tab(0).ControlEnabled=   -1  'True
       Tab(0).Control(0)=   "DGAsientos"
       Tab(0).Control(0).Enabled=   0   'False
       Tab(0).ControlCount=   1
       TabCaption(1)   =   "&5.- RETENCIONES"
-      TabPicture(1)   =   "FLstComp.frx":5396
+      TabPicture(1)   =   "FLstComp.frx":5FE8
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "DGRet"
+      Tab(1).Control(0)=   "DGFAV"
       Tab(1).Control(1)=   "DGFAC"
-      Tab(1).Control(2)=   "DGFAV"
+      Tab(1).Control(2)=   "DGRet"
       Tab(1).ControlCount=   3
       TabCaption(2)   =   "&6.- SUBCUENTAS"
-      TabPicture(2)   =   "FLstComp.frx":53B2
+      TabPicture(2)   =   "FLstComp.frx":6004
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "DGCxCxP"
-      Tab(2).Control(1)=   "DGIxExCC"
+      Tab(2).Control(0)=   "DGIxExCC"
+      Tab(2).Control(1)=   "DGCxCxP"
       Tab(2).ControlCount=   2
       TabCaption(3)   =   "&7.- KARDEX"
-      TabPicture(3)   =   "FLstComp.frx":53CE
+      TabPicture(3)   =   "FLstComp.frx":6020
       Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "DGKardex"
-      Tab(3).Control(1)=   "Label11"
+      Tab(3).Control(0)=   "LblTotalC"
+      Tab(3).Control(1)=   "LblTotalComp"
       Tab(3).Control(2)=   "Label10"
-      Tab(3).Control(3)=   "LblTotalComp"
-      Tab(3).Control(4)=   "LblTotalC"
+      Tab(3).Control(3)=   "Label11"
+      Tab(3).Control(4)=   "DGKardex"
       Tab(3).ControlCount=   5
       Begin MSDataGridLib.DataGrid DGAsientos 
-         Bindings        =   "FLstComp.frx":53EA
+         Bindings        =   "FLstComp.frx":603C
          Height          =   2535
          Left            =   105
          TabIndex        =   36
@@ -469,7 +478,7 @@ Begin VB.Form FListComprobantes
          EndProperty
       End
       Begin MSDataGridLib.DataGrid DGRet 
-         Bindings        =   "FLstComp.frx":5404
+         Bindings        =   "FLstComp.frx":6056
          Height          =   1695
          Left            =   -74895
          TabIndex        =   22
@@ -535,7 +544,7 @@ Begin VB.Form FListComprobantes
          EndProperty
       End
       Begin MSDataGridLib.DataGrid DGCxCxP 
-         Bindings        =   "FLstComp.frx":5419
+         Bindings        =   "FLstComp.frx":606B
          Height          =   1800
          Left            =   -74895
          TabIndex        =   23
@@ -601,7 +610,7 @@ Begin VB.Form FListComprobantes
          EndProperty
       End
       Begin MSDataGridLib.DataGrid DGKardex 
-         Bindings        =   "FLstComp.frx":5430
+         Bindings        =   "FLstComp.frx":6082
          Height          =   3060
          Left            =   -74895
          TabIndex        =   24
@@ -668,7 +677,7 @@ Begin VB.Form FListComprobantes
          EndProperty
       End
       Begin MSDataGridLib.DataGrid DGFAC 
-         Bindings        =   "FLstComp.frx":5448
+         Bindings        =   "FLstComp.frx":609A
          Height          =   855
          Left            =   -74895
          TabIndex        =   20
@@ -734,7 +743,7 @@ Begin VB.Form FListComprobantes
          EndProperty
       End
       Begin MSDataGridLib.DataGrid DGFAV 
-         Bindings        =   "FLstComp.frx":545D
+         Bindings        =   "FLstComp.frx":60AF
          Height          =   960
          Left            =   -74895
          TabIndex        =   21
@@ -800,7 +809,7 @@ Begin VB.Form FListComprobantes
          EndProperty
       End
       Begin MSDataGridLib.DataGrid DGIxExCC 
-         Bindings        =   "FLstComp.frx":5472
+         Bindings        =   "FLstComp.frx":60C4
          Height          =   1800
          Left            =   -74895
          TabIndex        =   37
@@ -1802,7 +1811,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-    Option Explicit
+Option Explicit
 
 Dim IDTipoComp As Integer
 Dim FechaTemp As String
@@ -1979,11 +1988,6 @@ End Sub
 Private Sub DGAsientos_KeyDown(KeyCode As Integer, Shift As Integer)
 Dim ID_Temp As Long
   Keys_Especiales Shift
-  If CtrlDown And KeyCode = vbKeyF1 Then
-     DGAsientos.Visible = False
-     GenerarDataTexto FListComprobantes, AdoAsientos
-     DGAsientos.Visible = True
-  End If
   If CtrlDown And KeyCode = vbKeyZ Then
      If ClaveContador Then
         RatonReloj
@@ -2045,11 +2049,6 @@ End Sub
 
 Private Sub DGCxCxP_KeyDown(KeyCode As Integer, Shift As Integer)
   Keys_Especiales Shift
-  If CtrlDown And KeyCode = vbKeyF1 Then
-     DGCxCxP.Visible = False
-     GenerarDataTexto FListComprobantes, AdoCxCxP
-     DGCxCxP.Visible = True
-  End If
   If CtrlDown And KeyCode = vbKeyP Then
      MsgBox "cambiar"
   End If
@@ -2071,11 +2070,6 @@ Dim Lote As String
         Ejecutar_SQL_SP sSQL
         MsgBox "Proceso Exitoso"
      End If
-  End If
-  If CtrlDown And KeyCode = vbKeyF1 Then
-     DGKardex.Visible = False
-     GenerarDataTexto FListComprobantes, AdoIngKar
-     DGKardex.Visible = True
   End If
 End Sub
 
@@ -2270,7 +2264,8 @@ Public Sub ListarComprobantes()
   Co.CodigoB = Ninguno
   Co.CodigoDr = Ninguno
  'Llenar Encabezado del Comprobante
-  sSQL = "SELECT C.*,A.Nombre_Completo,Cl.CI_RUC,Cl.Direccion,Cl.Email,Cl.Telefono,Cl.Celular,Cl.Cliente,Cl.Ciudad " _
+  sSQL = "SELECT C.T, C.Fecha, C.Codigo_B, Cl.Cliente, C.Concepto, C.Efectivo, A.Nombre_Completo, " _
+       & "A.Nombre_Completo,Cl.CI_RUC,Cl.Direccion,Cl.Email,Cl.Telefono,Cl.Celular,Cl.Cliente,Cl.Ciudad " _
        & "FROM Comprobantes As C, Accesos As A, Clientes As Cl " _
        & "WHERE C.Numero = " & Co.Numero & " " _
        & "AND C.TP = '" & Co.TP & "' " _
@@ -2474,162 +2469,182 @@ Dim MesNo As Integer
 End Sub
 
 Public Sub AnularComprobante()
+Dim AdoDBAux As ADODB.Recordset
 Dim AnularComprobanteDe As String
 Dim MotivoAnulacion As String
-Dim EsCxC As Boolean
+Dim CtasComp As String
+Dim CodigosKardex As String
 Dim UnaFecha As Boolean
-Dim CompCierre As Boolean
-Dim IdF As Long
 
 If ClaveSupervisor Then
-   CompCierre = False
-  'Co = ObtenerNumeroDeComp
-   FechaInicial = Co.Fecha
-   FechaFinal = Co.Fecha
-   If InStr(Co.Concepto, "Cierre de Caja de") > 0 Then CompCierre = True
-   If CompCierre Then
-      If InStr(Co.Concepto, "Cierre de Caja de Cuentas por Cobrar") > 0 Then EsCxC = True Else EsCxC = False
-      UnaFecha = True
-      For IdF = 1 To Len(Co.Concepto)
-          Mifecha = MidStrg(Co.Concepto, IdF, 10)
-          If IsDate(Mifecha) Then
-             If Year(Mifecha) >= 1900 Then
-                If UnaFecha Then
-                   FechaInicial = Mifecha
-                   FechaFinal = Mifecha
-                   UnaFecha = False
-                   IdF = IdF + 10
-                Else
-                   FechaFinal = Mifecha
-                   IdF = IdF + 10
-                End If
-             End If
-          End If
-      Next IdF
-   End If
-   FechaIni = BuscarFecha(FechaInicial)
-   FechaFin = BuscarFecha(FechaFinal)
-   AnularComprobanteDe = "WHERE Periodo = '" & Periodo_Contable & "' " _
-                       & "AND Item = '" & Co.Item & "' " _
-                       & "AND TP = '" & Co.TP & "' " _
-                       & "AND Numero = " & Co.Numero & " "
    Mensajes = "Seguro de Anular" & vbCrLf & "El Comprobante No. " & Co.TP & "-" & Co.Numero
    Titulo = "Pregunta de Anulacion"
    If BoxMensaje = vbYes Then
-      Control_Procesos "A", "Anulo Comprobante de: " & Co.TP & " No. " & Co.Numero
-      If InStr(LabelConcepto.Caption, "(ANULADO)") > 0 Then
+      If InStr(Co.Concepto, "Cierre de Caja de") > 0 Then
+         FechaInicial = Co.Fecha
+         FechaFinal = Co.Fecha
+         
          Contra_Cta = LabelConcepto.Caption
-      Else
-         MotivoAnulacion = UCase(InputBox("MOTIVO DE LA ANULACION:", "FORMULARIO DE ANULACION", ""))
-         Contra_Cta = "(ANULADO) "
-         If MotivoAnulacion <> "" Then Contra_Cta = Contra_Cta & "[MOTIVO: " & MotivoAnulacion & "], "
-         Contra_Cta = Contra_Cta & LabelConcepto.Caption
+         UnaFecha = True
+         Do While Len(Contra_Cta) > 0
+            Mifecha = TrimStrg(MidStrg(Contra_Cta, 1, 10))
+            If IsDate(Mifecha) And Len(Mifecha) = 10 Then
+               If Year(Mifecha) >= 1900 Then
+                  If UnaFecha Then
+                     FechaInicial = Mifecha
+                     FechaFinal = Mifecha
+                     UnaFecha = False
+                  Else
+                     FechaFinal = Mifecha
+                  End If
+               End If
+            End If
+            Contra_Cta = MidStrg(Contra_Cta, 2, Len(Contra_Cta))
+         Loop
+         
+         FechaIni = BuscarFecha(FechaInicial)
+         FechaFin = BuscarFecha(FechaFinal)
+         
+         sSQL = "UPDATE Facturas " _
+              & "SET C = 0 " _
+              & "WHERE Periodo = '" & Periodo_Contable & "' " _
+              & "AND Item = '" & Co.Item & "' " _
+              & "AND Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# "
+         Ejecutar_SQL_SP sSQL
+         
+         sSQL = "UPDATE Trans_Abonos " _
+              & "SET C = 0 " _
+              & "WHERE Periodo = '" & Periodo_Contable & "' " _
+              & "AND Item = '" & Co.Item & "' " _
+              & "AND Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# "
+         Ejecutar_SQL_SP sSQL
       End If
-      Contra_Cta = MidStrg(Contra_Cta, 1, 120)
+   
+     'Determinamos las cuentas a re-mayorizar despues de anular
+      CtasComp = ""
+      CodigosKardex = ""
+      AnularComprobanteDe = "WHERE Periodo = '" & Periodo_Contable & "' " _
+                          & "AND Item = '" & Co.Item & "' " _
+                          & "AND TP = '" & Co.TP & "' " _
+                          & "AND Numero = " & Co.Numero & " "
+
+      sSQL = "SELECT Cta " _
+           & "FROM Transacciones " _
+           & AnularComprobanteDe _
+           & "ORDER BY Cta "
+      Select_AdoDB AdoDBAux, sSQL
+      With AdoDBAux
+       If .RecordCount > 0 Then
+           Do While Not .EOF
+              If InStr(CtasComp, .fields("Cta")) = 0 Then CtasComp = CtasComp & "'" & .fields("Cta") & "', "
+             .MoveNext
+           Loop
+       End If
+      End With
+      AdoDBAux.Close
+      CtasComp = CtasComp & "'.'"
+  
+     'Determinamos los Kardex a re-mayorizar despues de anular
+      sSQL = "SELECT Codigo_Inv " _
+           & "FROM Trans_Kardex " _
+           & AnularComprobanteDe _
+           & "ORDER BY Codigo_Inv "
+      Select_AdoDB AdoDBAux, sSQL
+      With AdoDBAux
+       If .RecordCount > 0 Then
+           Do While Not .EOF
+              If InStr(CodigosKardex, .fields("Codigo_Inv")) = 0 Then CodigosKardex = CodigosKardex & "'" & .fields("Codigo_Inv") & "', "
+             .MoveNext
+           Loop
+       End If
+      End With
+      AdoDBAux.Close
+      CodigosKardex = CodigosKardex & "'.'"
+  
+      sSQL = "UPDATE Transacciones " _
+           & "SET Procesado = " & Val(adFalse) & " " _
+           & "WHERE Item = '" & NumEmpresa & "' " _
+           & "AND Periodo = '" & Periodo_Contable & "' " _
+           & "AND Cta IN (" & CtasComp & ") "
+      Ejecutar_SQL_SP sSQL
+     
+      sSQL = "UPDATE Trans_SubCtas " _
+           & "SET Procesado = " & Val(adFalse) & " " _
+           & "WHERE Item = '" & NumEmpresa & "' " _
+           & "AND Periodo = '" & Periodo_Contable & "' " _
+           & "AND Cta IN (" & CtasComp & ") "
+      Ejecutar_SQL_SP sSQL
+        
+      sSQL = "UPDATE Trans_Kardex " _
+           & "SET Procesado = " & Val(adFalse) & " " _
+           & "WHERE Item = '" & NumEmpresa & "' " _
+           & "AND Periodo = '" & Periodo_Contable & "' " _
+           & "AND Codigo_Inv IN (" & CodigosKardex & ") "
+      Ejecutar_SQL_SP sSQL
+
+      If InStr(LabelConcepto.Caption, "(ANULADO)") = 0 Then
+         Contra_Cta = "(ANULADO) " & LabelConcepto.Caption
+      Else
+         Contra_Cta = LabelConcepto.Caption
+      End If
+      MotivoAnulacion = UCase(InputBox("MOTIVO DE LA ANULACION:", "FORMULARIO DE ANULACION", ""))
+      If MotivoAnulacion <> "" Then Contra_Cta = Contra_Cta & ", [MOTIVO: " & MotivoAnulacion & "], "
+      Contra_Cta = TrimStrg(MidStrg(Contra_Cta, 1, 160))
+     
      'Actualizamos Comprobante
       sSQL = "UPDATE Comprobantes " _
            & "SET T = '" & Anulado & "', Concepto = '" & Contra_Cta & "' " _
            & AnularComprobanteDe
       Ejecutar_SQL_SP sSQL
+      
      'Actualizar Transacciones
       sSQL = "UPDATE Transacciones " _
            & "SET T = '" & Anulado & "',Debe = 0,Haber = 0,Saldo = 0 " _
            & AnularComprobanteDe
       Ejecutar_SQL_SP sSQL
+      
      'Actualizar Trans_SubCtas
       sSQL = "UPDATE Trans_SubCtas " _
            & "SET T = '" & Anulado & "',Debitos = 0,Creditos = 0,Saldo_MN = 0,Saldo_ME = 0,Prima = 0 " _
            & AnularComprobanteDe
       Ejecutar_SQL_SP sSQL
+
      'Actualizar Retencion
       sSQL = "DELETE * " _
            & "FROM Trans_Air " _
            & AnularComprobanteDe
       Ejecutar_SQL_SP sSQL
+      
       sSQL = "DELETE * " _
            & "FROM Trans_Compras " _
            & AnularComprobanteDe
       Ejecutar_SQL_SP sSQL
+      
+      sSQL = "DELETE * " _
+           & "FROM Trans_Kardex " _
+           & AnularComprobanteDe
+      Ejecutar_SQL_SP sSQL
+      
       sSQL = "DELETE * " _
            & "FROM Trans_Ventas " _
            & AnularComprobanteDe
       Ejecutar_SQL_SP sSQL
+      
       sSQL = "DELETE * " _
            & "FROM Trans_Exportaciones " _
            & AnularComprobanteDe
       Ejecutar_SQL_SP sSQL
+      
       sSQL = "DELETE * " _
            & "FROM Trans_Importaciones " _
            & AnularComprobanteDe
       Ejecutar_SQL_SP sSQL
      
-     'Eliminamos el Rol de Pagos
       sSQL = "DELETE * " _
            & "FROM Trans_Rol_de_Pagos " _
            & AnularComprobanteDe
       Ejecutar_SQL_SP sSQL
-     'Actualizar Kardex
-      If CompCierre Then
-         sSQL = "UPDATE Trans_Kardex " _
-              & "SET Procesado = 0, TP = '.', Numero = 0 " _
-              & AnularComprobanteDe _
-              & "AND Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-              & "AND LEN(Serie) > 1 " _
-              & "AND Factura <> 0 "
-         Ejecutar_SQL_SP sSQL
-        'MsgBox "CompCierre" & vbCrLf & sSQL
-      Else
-         sSQL = "SELECT Codigo_Inv " _
-              & "FROM Trans_Kardex " _
-              & AnularComprobanteDe
-         Select_Adodc AdoCxCxP, sSQL
-         With AdoCxCxP.Recordset
-          If .RecordCount > 0 Then
-              Do While Not .EOF
-                 Codigo = .fields("Codigo_Inv")
-                 sSQL = "UPDATE Trans_Kardex " _
-                      & "SET Procesado = 0 " _
-                      & "WHERE Item = '" & Co.Item & "' " _
-                      & "AND Periodo = '" & Periodo_Contable & "' " _
-                      & "AND Codigo_Inv = '" & Codigo & "' "
-                 Ejecutar_SQL_SP sSQL
-                'MsgBox "Sin CompCierre" & vbCrLf & sSQL
-                .MoveNext
-              Loop
-          End If
-         End With
-         
-         sSQL = "DELETE * " _
-              & "FROM Trans_Kardex " _
-              & AnularComprobanteDe _
-              & "AND TC = '" & Ninguno & "' " _
-              & "AND Serie = '" & Ninguno & "' " _
-              & "AND Factura = 0 "
-         Ejecutar_SQL_SP sSQL
-      End If
-     
-     'Actualizar las Ctas a mayoriazar
-      sSQL = "SELECT Cta " _
-           & "FROM Transacciones " _
-           & AnularComprobanteDe _
-           & "GROUP BY Cta " _
-           & "ORDER BY Cta "
-      Select_Adodc AdoCxCxP, sSQL
-      With AdoCxCxP.Recordset
-       If .RecordCount > 0 Then
-           Do While Not .EOF
-             'Determinamos que la cuenta ya fue mayorizada
-              SubCta = .fields("Cta")
-              sSQL = "UPDATE Transacciones " _
-                   & "SET Procesado = " & Val(adFalse) & " " _
-                   & "WHERE Item = '" & NumEmpresa & "' " _
-                   & "AND Periodo = '" & Periodo_Contable & "' " _
-                   & "AND Cta = '" & SubCta & "' "
-              Ejecutar_SQL_SP sSQL
-             .MoveNext
-           Loop
-       End If
-      End With
+      Control_Procesos "A", "Anulo Comprobante de: " & Co.TP & " No. " & Co.Numero, "MOTIVO DE LA ANULACION: " & MotivoAnulacion
    End If
 End If
 End Sub
@@ -2675,7 +2690,7 @@ Dim ItemAux As String
                FechaComp = MBFecha.Text
                Co.Fecha = MBFecha.Text
                Unload FListComprobantes
-               BorrarAsientos True
+               Eliminar_Asientos_SP True
                FComprobantes.Show
             End If
          End If
@@ -2696,7 +2711,8 @@ Dim ItemAux As String
             Trans_No = 1
             IniciarAsientosDe DGAsientos, AdoAsientos
             Unload FListComprobantes
-            BorrarAsientos True
+            Eliminar_Asientos_SP True
+            
             FComprobantes.Show
          Else
             ListarComprobantes
@@ -2718,6 +2734,17 @@ Dim ItemAux As String
             RatonReloj
             FAnularMasa.Show 1
          End If
+    Case "Bajar_Excel"
+         Mensajes = "Bajar a excel las transacciones y subcuentas y/o Kardex del " & Co.TP & " No. " & Co.Numero
+         Titulo = "Pregunta de descargas"
+         If BoxMensaje = vbYes Then
+            DGAsientos.Visible = False
+            GenerarDataTexto FListComprobantes, AdoAsientos
+            GenerarDataTexto FListComprobantes, AdoCxCxP
+            GenerarDataTexto FListComprobantes, AdoIngKar
+            DGAsientos.Visible = True
+        End If
+    
   End Select
 End Sub
 

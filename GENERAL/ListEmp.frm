@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Begin VB.Form ListEmp 
    BackColor       =   &H00FF8080&
    BorderStyle     =   3  'Fixed Dialog
@@ -2426,10 +2426,11 @@ On Error GoTo error_Handler
       'Colocamos el puerto de conexion
       .Puerto = 21
       'Establecesmo el nombre del Servidor FTP
-       If InStr(IP_PC.IP_PC, "192.168.21.") > 0 Or InStr(IP_PC.IP_PC, "192.168.27.") > 0 Then .servidor = "192.168.27.4" Else .servidor = ftpSvr
+      'If InStr(IP_PC.IP_PC, "192.168.") > 0 Then .servidor = "192.168.27.4" Else
+      .servidor = ftpSvr
       'conectamos al servidor FTP. EL label es el control donde mostrar los errores y el estado de la conexión
        If .ConectarFtp(LstStatud) = False Then
-           MsgBox "No se pudo conectar"
+           MsgBox "No se pudo conectar al servidor de Certificados"
            Exit Sub
        End If
        
@@ -2442,7 +2443,7 @@ On Error GoTo error_Handler
          
        If IdC > 0 Then
          'Conectamos la nueva Base de Datos para sacar los Certificados del servidor que no los obtenga el cliente
-         .CambiarDirectorio rutaFTP & "/SISTEMA/CERTIFIC/"
+         .CambiarDirectorio "/SISTEMA/CERTIFIC/"
          .ListarArchivos
           For I = 1 To LstVwFTP.ListItems.Count
               For J = 0 To UBound(Certificados)
@@ -2455,7 +2456,7 @@ On Error GoTo error_Handler
        End If
        If iDL > 0 Then
          'Conectamos la nueva Base de Datos para sacar los Certificados del servidor que no los obtenga el cliente
-         .CambiarDirectorio rutaFTP & "/SISTEMA/LOGOS/"
+         .CambiarDirectorio "/SISTEMA/LOGOS/"
          .ListarArchivos
           For I = 1 To LstVwFTP.ListItems.Count
               For J = 0 To UBound(LogoTipos)

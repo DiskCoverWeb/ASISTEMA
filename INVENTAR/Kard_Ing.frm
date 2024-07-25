@@ -1,9 +1,9 @@
 VERSION 5.00
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.Ocx"
 Begin VB.Form Kard_Ing 
    Caption         =   "CONTROL DE INVENTARIO PARA INGRESOS/EGRESOS"
@@ -14,9 +14,31 @@ Begin VB.Form Kard_Ing
    Icon            =   "Kard_Ing.frx":0000
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   15615
-   ScaleWidth      =   28560
+   Picture         =   "Kard_Ing.frx":0442
+   ScaleHeight     =   8340
+   ScaleWidth      =   13635
    WindowState     =   2  'Maximized
+   Begin VB.TextBox TxtSerie 
+      Alignment       =   1  'Right Justify
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      IMEMode         =   3  'DISABLE
+      Left            =   11340
+      MaxLength       =   10
+      MultiLine       =   -1  'True
+      TabIndex        =   23
+      Text            =   "Kard_Ing.frx":0784
+      Top             =   1155
+      Width           =   750
+   End
    Begin VB.TextBox TxtSerieNo 
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -31,7 +53,7 @@ Begin VB.Form Kard_Ing
       IMEMode         =   3  'DISABLE
       Left            =   7665
       MaxLength       =   25
-      TabIndex        =   55
+      TabIndex        =   59
       Text            =   "."
       Top             =   4305
       Width           =   3270
@@ -50,7 +72,7 @@ Begin VB.Form Kard_Ing
       IMEMode         =   3  'DISABLE
       Left            =   5040
       MaxLength       =   25
-      TabIndex        =   53
+      TabIndex        =   57
       Text            =   "."
       Top             =   4305
       Width           =   2640
@@ -69,7 +91,7 @@ Begin VB.Form Kard_Ing
       IMEMode         =   3  'DISABLE
       Left            =   10920
       MaxLength       =   25
-      TabIndex        =   51
+      TabIndex        =   55
       Text            =   "."
       Top             =   3675
       Width           =   4215
@@ -89,7 +111,7 @@ Begin VB.Form Kard_Ing
       IMEMode         =   3  'DISABLE
       Left            =   8925
       MaxLength       =   25
-      TabIndex        =   49
+      TabIndex        =   53
       Text            =   "."
       Top             =   3675
       Width           =   2010
@@ -110,15 +132,15 @@ Begin VB.Form Kard_Ing
       Left            =   5040
       MaxLength       =   10
       MultiLine       =   -1  'True
-      TabIndex        =   43
-      Text            =   "Kard_Ing.frx":0442
+      TabIndex        =   47
+      Text            =   "Kard_Ing.frx":078D
       Top             =   3675
       Width           =   1380
    End
    Begin MSMask.MaskEdBox MBFechaExp 
       Height          =   330
       Left            =   7665
-      TabIndex        =   47
+      TabIndex        =   51
       Top             =   3675
       Width           =   1275
       _ExtentX        =   2249
@@ -141,11 +163,11 @@ Begin VB.Form Kard_Ing
       PromptChar      =   "0"
    End
    Begin MSDataListLib.DataCombo DCMarca 
-      Bindings        =   "Kard_Ing.frx":0444
+      Bindings        =   "Kard_Ing.frx":078F
       DataSource      =   "AdoMarca"
       Height          =   315
       Left            =   8190
-      TabIndex        =   29
+      TabIndex        =   33
       Top             =   2205
       Width           =   3900
       _ExtentX        =   6879
@@ -262,8 +284,8 @@ Begin VB.Form Kard_Ing
       Height          =   330
       Left            =   13440
       MultiLine       =   -1  'True
-      TabIndex        =   61
-      Text            =   "Kard_Ing.frx":045B
+      TabIndex        =   65
+      Text            =   "Kard_Ing.frx":07A6
       Top             =   4305
       Width           =   1695
    End
@@ -281,8 +303,8 @@ Begin VB.Form Kard_Ing
       Height          =   330
       Left            =   12180
       MultiLine       =   -1  'True
-      TabIndex        =   59
-      Text            =   "Kard_Ing.frx":045D
+      TabIndex        =   63
+      Text            =   "Kard_Ing.frx":07A8
       Top             =   4305
       Width           =   1275
    End
@@ -300,17 +322,17 @@ Begin VB.Form Kard_Ing
       Height          =   330
       Left            =   10920
       MultiLine       =   -1  'True
-      TabIndex        =   57
-      Text            =   "Kard_Ing.frx":045F
+      TabIndex        =   61
+      Text            =   "Kard_Ing.frx":07AA
       Top             =   4305
       Width           =   1275
    End
    Begin MSDataListLib.DataCombo DCInv 
-      Bindings        =   "Kard_Ing.frx":0461
+      Bindings        =   "Kard_Ing.frx":07AC
       DataSource      =   "AdoInv"
       Height          =   2715
       Left            =   105
-      TabIndex        =   23
+      TabIndex        =   27
       Top             =   1890
       Width           =   4845
       _ExtentX        =   8546
@@ -344,7 +366,7 @@ Begin VB.Form Kard_Ing
       IMEMode         =   3  'DISABLE
       Left            =   10815
       MaxLength       =   25
-      TabIndex        =   41
+      TabIndex        =   45
       Text            =   "."
       Top             =   2940
       Width           =   4320
@@ -352,9 +374,9 @@ Begin VB.Form Kard_Ing
    Begin VB.CommandButton Command4 
       Height          =   645
       Left            =   15225
-      Picture         =   "Kard_Ing.frx":0476
+      Picture         =   "Kard_Ing.frx":07C1
       Style           =   1  'Graphical
-      TabIndex        =   75
+      TabIndex        =   79
       Top             =   105
       Width           =   645
    End
@@ -362,12 +384,12 @@ Begin VB.Form Kard_Ing
       Caption         =   "Seleccionar Comprobante"
       Height          =   645
       Left            =   2730
-      TabIndex        =   74
+      TabIndex        =   78
       Top             =   7875
       Width           =   1170
    End
    Begin MSDataListLib.DataCombo DCCtaObra 
-      Bindings        =   "Kard_Ing.frx":0CC6
+      Bindings        =   "Kard_Ing.frx":1011
       DataSource      =   "AdoCtaObra"
       Height          =   330
       Left            =   5880
@@ -389,7 +411,7 @@ Begin VB.Form Kard_Ing
       EndProperty
    End
    Begin MSDataListLib.DataCombo DCDiario 
-      Bindings        =   "Kard_Ing.frx":0CDF
+      Bindings        =   "Kard_Ing.frx":102A
       DataSource      =   "AdoDiario"
       Height          =   315
       Left            =   13335
@@ -412,7 +434,7 @@ Begin VB.Form Kard_Ing
       EndProperty
    End
    Begin MSDataListLib.DataCombo DCBenef 
-      Bindings        =   "Kard_Ing.frx":0CF7
+      Bindings        =   "Kard_Ing.frx":1042
       DataSource      =   "AdoBenef"
       Height          =   330
       Left            =   5880
@@ -523,11 +545,11 @@ Begin VB.Form Kard_Ing
       EndProperty
       Height          =   330
       IMEMode         =   3  'DISABLE
-      Left            =   13125
+      Left            =   13335
       MaxLength       =   10
       MultiLine       =   -1  'True
-      TabIndex        =   21
-      Text            =   "Kard_Ing.frx":0D0E
+      TabIndex        =   25
+      Text            =   "Kard_Ing.frx":1059
       Top             =   1155
       Width           =   2010
    End
@@ -545,8 +567,8 @@ Begin VB.Form Kard_Ing
       Height          =   330
       Left            =   3990
       MultiLine       =   -1  'True
-      TabIndex        =   64
-      Text            =   "Kard_Ing.frx":0D10
+      TabIndex        =   68
+      Text            =   "Kard_Ing.frx":105B
       Top             =   8190
       Width           =   1590
    End
@@ -564,17 +586,17 @@ Begin VB.Form Kard_Ing
       Height          =   330
       Left            =   5670
       MultiLine       =   -1  'True
-      TabIndex        =   71
-      Text            =   "Kard_Ing.frx":0D12
+      TabIndex        =   75
+      Text            =   "Kard_Ing.frx":105D
       Top             =   8190
       Width           =   1590
    End
    Begin MSDataListLib.DataCombo DCTInv 
-      Bindings        =   "Kard_Ing.frx":0D14
+      Bindings        =   "Kard_Ing.frx":105F
       DataSource      =   "AdoTInv"
       Height          =   315
       Left            =   105
-      TabIndex        =   22
+      TabIndex        =   26
       Top             =   1575
       Width           =   4845
       _ExtentX        =   8546
@@ -607,7 +629,7 @@ Begin VB.Form Kard_Ing
       ForeColor       =   &H00FFFFFF&
       Height          =   330
       Left            =   5040
-      TabIndex        =   25
+      TabIndex        =   29
       Top             =   1890
       Width           =   1485
    End
@@ -626,16 +648,16 @@ Begin VB.Form Kard_Ing
       ForeColor       =   &H00FFFFFF&
       Height          =   330
       Left            =   6510
-      TabIndex        =   26
+      TabIndex        =   30
       Top             =   1890
       Width           =   1695
    End
    Begin MSDataListLib.DataCombo DCBodega 
-      Bindings        =   "Kard_Ing.frx":0D2A
+      Bindings        =   "Kard_Ing.frx":1075
       DataSource      =   "AdoBodega"
       Height          =   315
       Left            =   5040
-      TabIndex        =   27
+      TabIndex        =   31
       Top             =   2205
       Width           =   3165
       _ExtentX        =   5583
@@ -654,11 +676,11 @@ Begin VB.Form Kard_Ing
       EndProperty
    End
    Begin MSDataGridLib.DataGrid DGKardex 
-      Bindings        =   "Kard_Ing.frx":0D42
+      Bindings        =   "Kard_Ing.frx":108D
       Height          =   3165
       Left            =   105
-      TabIndex        =   62
-      Top             =   4620
+      TabIndex        =   66
+      Top             =   4725
       Width           =   15030
       _ExtentX        =   26511
       _ExtentY        =   5583
@@ -736,8 +758,8 @@ Begin VB.Form Kard_Ing
       Height          =   330
       Left            =   9240
       MultiLine       =   -1  'True
-      TabIndex        =   39
-      Text            =   "Kard_Ing.frx":0D5A
+      TabIndex        =   43
+      Text            =   "Kard_Ing.frx":10A5
       Top             =   2940
       Width           =   1590
    End
@@ -756,8 +778,8 @@ Begin VB.Form Kard_Ing
       IMEMode         =   3  'DISABLE
       Left            =   8085
       MultiLine       =   -1  'True
-      TabIndex        =   37
-      Text            =   "Kard_Ing.frx":0D5E
+      TabIndex        =   41
+      Text            =   "Kard_Ing.frx":10A9
       Top             =   2940
       Width           =   1170
    End
@@ -1059,8 +1081,8 @@ Begin VB.Form Kard_Ing
       Left            =   6615
       MaxLength       =   10
       MultiLine       =   -1  'True
-      TabIndex        =   35
-      Text            =   "Kard_Ing.frx":0D60
+      TabIndex        =   39
+      Text            =   "Kard_Ing.frx":10AB
       Top             =   2940
       Width           =   1485
    End
@@ -1078,8 +1100,8 @@ Begin VB.Form Kard_Ing
       Height          =   330
       Left            =   7350
       MultiLine       =   -1  'True
-      TabIndex        =   66
-      Text            =   "Kard_Ing.frx":0D62
+      TabIndex        =   70
+      Text            =   "Kard_Ing.frx":10AD
       Top             =   8190
       Width           =   1590
    End
@@ -1096,9 +1118,9 @@ Begin VB.Form Kard_Ing
       EndProperty
       Height          =   750
       Left            =   14070
-      Picture         =   "Kard_Ing.frx":0D64
+      Picture         =   "Kard_Ing.frx":10AF
       Style           =   1  'Graphical
-      TabIndex        =   70
+      TabIndex        =   74
       Top             =   7875
       Width           =   960
    End
@@ -1115,9 +1137,9 @@ Begin VB.Form Kard_Ing
       EndProperty
       Height          =   750
       Left            =   13020
-      Picture         =   "Kard_Ing.frx":162E
+      Picture         =   "Kard_Ing.frx":1979
       Style           =   1  'Graphical
-      TabIndex        =   69
+      TabIndex        =   73
       Top             =   7875
       Width           =   960
    End
@@ -1461,7 +1483,7 @@ Begin VB.Form Kard_Ing
    Begin MSMask.MaskEdBox MBFechaFab 
       Height          =   330
       Left            =   6405
-      TabIndex        =   45
+      TabIndex        =   49
       Top             =   3675
       Width           =   1275
       _ExtentX        =   2249
@@ -1493,6 +1515,112 @@ Begin VB.Form Kard_Ing
       RemotePort      =   443
       URL             =   "https://"
    End
+   Begin MSDataListLib.DataCombo DCPorcIVA 
+      Bindings        =   "Kard_Ing.frx":1DBB
+      DataSource      =   "AdoPorcIVA"
+      Height          =   360
+      Left            =   9450
+      TabIndex        =   21
+      ToolTipText     =   "Seleccione el Porc del IVA"
+      Top             =   1155
+      Width           =   855
+      _ExtentX        =   1508
+      _ExtentY        =   635
+      _Version        =   393216
+      Text            =   "12%"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
+   Begin MSAdodcLib.Adodc AdoPorcIVA 
+      Height          =   330
+      Left            =   315
+      Top             =   6195
+      Visible         =   0   'False
+      Width           =   2010
+      _ExtentX        =   3545
+      _ExtentY        =   582
+      ConnectMode     =   0
+      CursorLocation  =   3
+      IsolationLevel  =   -1
+      ConnectionTimeout=   15
+      CommandTimeout  =   30
+      CursorType      =   3
+      LockType        =   3
+      CommandType     =   8
+      CursorOptions   =   0
+      CacheSize       =   50
+      MaxRecords      =   0
+      BOFAction       =   0
+      EOFAction       =   0
+      ConnectStringType=   1
+      Appearance      =   1
+      BackColor       =   -2147483643
+      ForeColor       =   -2147483640
+      Orientation     =   0
+      Enabled         =   -1
+      Connect         =   ""
+      OLEDBString     =   ""
+      OLEDBFile       =   ""
+      DataSourceName  =   ""
+      OtherAttributes =   ""
+      UserName        =   ""
+      Password        =   ""
+      RecordSource    =   ""
+      Caption         =   "PorcIVA"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      _Version        =   393216
+   End
+   Begin VB.Label Label32 
+      BorderStyle     =   1  'Fixed Single
+      Caption         =   " Porc IVA"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   8505
+      TabIndex        =   20
+      Top             =   1155
+      Width           =   960
+   End
+   Begin VB.Label Label31 
+      BorderStyle     =   1  'Fixed Single
+      Caption         =   "Serie No."
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   10395
+      TabIndex        =   22
+      Top             =   1155
+      Width           =   960
+   End
    Begin VB.Label Label30 
       BackColor       =   &H00FF8080&
       BorderStyle     =   1  'Fixed Single
@@ -1509,7 +1637,7 @@ Begin VB.Form Kard_Ing
       ForeColor       =   &H00FFFFFF&
       Height          =   330
       Left            =   7665
-      TabIndex        =   54
+      TabIndex        =   58
       Top             =   3990
       Width           =   3270
    End
@@ -1529,7 +1657,7 @@ Begin VB.Form Kard_Ing
       ForeColor       =   &H00FFFFFF&
       Height          =   330
       Left            =   5040
-      TabIndex        =   52
+      TabIndex        =   56
       Top             =   3990
       Width           =   2640
    End
@@ -1549,7 +1677,7 @@ Begin VB.Form Kard_Ing
       ForeColor       =   &H00FFFFFF&
       Height          =   330
       Left            =   10920
-      TabIndex        =   50
+      TabIndex        =   54
       Top             =   3360
       Width           =   4215
    End
@@ -1569,7 +1697,7 @@ Begin VB.Form Kard_Ing
       ForeColor       =   &H00FFFFFF&
       Height          =   330
       Left            =   8925
-      TabIndex        =   48
+      TabIndex        =   52
       Top             =   3360
       Width           =   2010
    End
@@ -1589,7 +1717,7 @@ Begin VB.Form Kard_Ing
       ForeColor       =   &H00FFFFFF&
       Height          =   330
       Left            =   7665
-      TabIndex        =   46
+      TabIndex        =   50
       Top             =   3360
       Width           =   1275
    End
@@ -1609,7 +1737,7 @@ Begin VB.Form Kard_Ing
       ForeColor       =   &H00FFFFFF&
       Height          =   330
       Left            =   6405
-      TabIndex        =   44
+      TabIndex        =   48
       Top             =   3360
       Width           =   1275
    End
@@ -1629,7 +1757,7 @@ Begin VB.Form Kard_Ing
       ForeColor       =   &H00FFFFFF&
       Height          =   330
       Left            =   5040
-      TabIndex        =   42
+      TabIndex        =   46
       Top             =   3360
       Width           =   1380
    End
@@ -1721,7 +1849,7 @@ Begin VB.Form Kard_Ing
       ForeColor       =   &H00FFFFFF&
       Height          =   330
       Left            =   13440
-      TabIndex        =   60
+      TabIndex        =   64
       Top             =   3990
       Width           =   1695
    End
@@ -1741,7 +1869,7 @@ Begin VB.Form Kard_Ing
       ForeColor       =   &H00FFFFFF&
       Height          =   330
       Left            =   12180
-      TabIndex        =   58
+      TabIndex        =   62
       Top             =   3990
       Width           =   1275
    End
@@ -1761,7 +1889,7 @@ Begin VB.Form Kard_Ing
       ForeColor       =   &H00FFFFFF&
       Height          =   330
       Left            =   10920
-      TabIndex        =   56
+      TabIndex        =   60
       Top             =   3990
       Width           =   1275
    End
@@ -1781,7 +1909,7 @@ Begin VB.Form Kard_Ing
       ForeColor       =   &H00FFFFFF&
       Height          =   330
       Left            =   8190
-      TabIndex        =   28
+      TabIndex        =   32
       Top             =   1890
       Width           =   3900
    End
@@ -1816,7 +1944,7 @@ Begin VB.Form Kard_Ing
       EndProperty
       Height          =   645
       Left            =   105
-      TabIndex        =   73
+      TabIndex        =   77
       Top             =   7875
       Width           =   2535
    End
@@ -1836,7 +1964,7 @@ Begin VB.Form Kard_Ing
       ForeColor       =   &H00FFFFFF&
       Height          =   330
       Left            =   5040
-      TabIndex        =   32
+      TabIndex        =   36
       Top             =   2625
       Width           =   1590
    End
@@ -1856,7 +1984,7 @@ Begin VB.Form Kard_Ing
       ForeColor       =   &H00FFFFFF&
       Height          =   330
       Left            =   12075
-      TabIndex        =   30
+      TabIndex        =   34
       Top             =   1890
       Width           =   3060
    End
@@ -1877,7 +2005,7 @@ Begin VB.Form Kard_Ing
       ForeColor       =   &H00FFFFFF&
       Height          =   330
       Left            =   5040
-      TabIndex        =   24
+      TabIndex        =   28
       Top             =   1575
       Width           =   10095
    End
@@ -1951,8 +2079,8 @@ Begin VB.Form Kard_Ing
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   11970
-      TabIndex        =   20
+      Left            =   12180
+      TabIndex        =   24
       Top             =   1155
       Width           =   1170
    End
@@ -1971,7 +2099,7 @@ Begin VB.Form Kard_Ing
       EndProperty
       Height          =   330
       Left            =   3990
-      TabIndex        =   63
+      TabIndex        =   67
       Top             =   7875
       Width           =   1590
    End
@@ -1990,7 +2118,7 @@ Begin VB.Form Kard_Ing
       EndProperty
       Height          =   330
       Left            =   5670
-      TabIndex        =   72
+      TabIndex        =   76
       Top             =   7875
       Width           =   1590
    End
@@ -2010,7 +2138,7 @@ Begin VB.Form Kard_Ing
       ForeColor       =   &H00FFFFFF&
       Height          =   330
       Left            =   10815
-      TabIndex        =   40
+      TabIndex        =   44
       Top             =   2625
       Width           =   4320
    End
@@ -2030,7 +2158,7 @@ Begin VB.Form Kard_Ing
       ForeColor       =   &H00FFFFFF&
       Height          =   330
       Left            =   6615
-      TabIndex        =   34
+      TabIndex        =   38
       Top             =   2625
       Width           =   1485
    End
@@ -2050,7 +2178,7 @@ Begin VB.Form Kard_Ing
       EndProperty
       Height          =   330
       Left            =   9030
-      TabIndex        =   68
+      TabIndex        =   72
       Top             =   8190
       Width           =   1590
    End
@@ -2070,7 +2198,7 @@ Begin VB.Form Kard_Ing
       ForeColor       =   &H00FFFFFF&
       Height          =   330
       Left            =   9240
-      TabIndex        =   38
+      TabIndex        =   42
       Top             =   2625
       Width           =   1590
    End
@@ -2090,7 +2218,7 @@ Begin VB.Form Kard_Ing
       ForeColor       =   &H00FFFFFF&
       Height          =   330
       Left            =   8085
-      TabIndex        =   36
+      TabIndex        =   40
       Top             =   2625
       Width           =   1170
    End
@@ -2108,7 +2236,7 @@ Begin VB.Form Kard_Ing
       EndProperty
       Height          =   330
       Left            =   5040
-      TabIndex        =   33
+      TabIndex        =   37
       Top             =   2940
       Width           =   1590
    End
@@ -2126,7 +2254,7 @@ Begin VB.Form Kard_Ing
       EndProperty
       Height          =   330
       Left            =   12075
-      TabIndex        =   31
+      TabIndex        =   35
       Top             =   2205
       Width           =   3060
    End
@@ -2145,7 +2273,7 @@ Begin VB.Form Kard_Ing
       EndProperty
       Height          =   330
       Left            =   9030
-      TabIndex        =   67
+      TabIndex        =   71
       Top             =   7875
       Width           =   1590
    End
@@ -2164,7 +2292,7 @@ Begin VB.Form Kard_Ing
       EndProperty
       Height          =   330
       Left            =   7350
-      TabIndex        =   65
+      TabIndex        =   69
       Top             =   7875
       Width           =   1590
    End
@@ -2433,6 +2561,7 @@ Private Sub Command1_Click()
   FechaValida MBVence
   FechaTexto = MBFechaI
   TextoValido TextOrden, , True
+  If Len(TxtSerie) <> 6 Then TxtSerie = "001001"
  'TotalInventario
  'MsgBox CodigoUsuario & vbCrLf & CodigoCliente
   Factura_No = Val(TxtFactNo)
@@ -2632,6 +2761,7 @@ Private Sub Command1_Click()
                Total_Factura = ValorDH
                SetAdoAddNew "Asiento_SC"
                SetAdoFields "TM", "1"
+               SetAdoFields "Serie", TxtSerie
                SetAdoFields "Factura", Val(TxtFactNo)
                SetAdoFields "Codigo", CodigoCliente
                SetAdoFields "FECHA_V", MBVence
@@ -2775,7 +2905,7 @@ Private Sub Command3_Click()
              NumTrans = NumTrans + 1
             .MoveNext
           Loop
-          BorrarAsientos True
+          Eliminar_Asientos_SP True
       End If
      End With
      RatonNormal
@@ -2913,16 +3043,16 @@ Private Sub DCInv_LostFocus()
        End If
     End If
   End With
+
+'''  sSQL = "SELECT Porc " _
+'''       & "FROM Tabla_Por_ICE_IVA " _
+'''       & "WHERE IVA <> " & Val(adFalse) & " " _
+'''       & "AND Fecha_Inicio <= #" & BuscarFecha(MBFechaI) & "# " _
+'''       & "AND Fecha_Final >= #" & BuscarFecha(MBFechaI) & "# " _
+'''       & "ORDER BY Porc "
+'''  Select_Adodc AdoAux, sSQL
+'''  If AdoAux.Recordset.RecordCount > 0 Then Porc_IVA = Redondear(AdoAux.Recordset.fields("Porc") / 100, 2)
   
-  sSQL = "SELECT * " _
-       & "FROM Tabla_Por_ICE_IVA " _
-       & "WHERE IVA <> " & Val(adFalse) & " " _
-       & "AND Fecha_Inicio <= #" & BuscarFecha(MBFechaI) & "# " _
-       & "AND Fecha_Final >= #" & BuscarFecha(MBFechaI) & "# " _
-       & "ORDER BY Porc "
-  Select_Adodc AdoAux, sSQL
-  If AdoAux.Recordset.RecordCount > 0 Then Porc_IVA = Redondear(AdoAux.Recordset.fields("Porc") / 100, 2)
-   
   LabelCodigo.Caption = CodigoInv
   LabelUnidad.Caption = Unidad
   LabelProducto.Caption = Producto
@@ -2939,6 +3069,18 @@ End Sub
 
 Private Sub DCMarca_KeyDown(KeyCode As Integer, Shift As Integer)
   PresionoEnter KeyCode
+End Sub
+
+Private Sub DCPorcIVA_KeyDown(KeyCode As Integer, Shift As Integer)
+  PresionoEnter KeyCode
+End Sub
+
+Private Sub DCPorcIVA_LostFocus()
+  If IsNumeric(DCPorcIVA.Text) Then
+     If AdoPorcIVA.Recordset.RecordCount > 0 Then Porc_IVA = Redondear(DCPorcIVA / 100, 2)
+  Else
+     Porc_IVA = 0
+  End If
 End Sub
 
 Private Sub DCTInv_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -2994,6 +3136,13 @@ Private Sub MBFechaI_LostFocus()
   FechaValida MBFechaI
   FechaComp = MBFechaI
   Fecha_Vence = MBFechaI
+    sSQL = "SELECT Codigo, Porc " _
+         & "FROM Tabla_Por_ICE_IVA " _
+         & "WHERE IVA <> " & Val(adFalse) & " " _
+         & "AND Fecha_Inicio <= #" & BuscarFecha(FechaComp) & "# " _
+         & "AND Fecha_Final >= #" & BuscarFecha(FechaComp) & "# " _
+         & "ORDER BY Porc DESC "
+    SelectDB_Combo DCPorcIVA, AdoPorcIVA, sSQL, "Porc"
 End Sub
 
 Private Sub MBVence_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -3174,6 +3323,7 @@ Private Sub Form_Load()
   ConectarAdodc AdoDiario
   ConectarAdodc AdoKardex
   ConectarAdodc AdoBodega
+  ConectarAdodc AdoPorcIVA
   ConectarAdodc AdoCtaObra
   ConectarAdodc AdoAsientos
 End Sub
@@ -3505,6 +3655,18 @@ End Sub
 
 Private Sub TxtRegSanitario_LostFocus()
    TextoValido TxtRegSanitario, , True
+End Sub
+
+Private Sub TxtSerie_GotFocus()
+  MarcarTexto TxtSerie
+End Sub
+
+Private Sub TxtSerie_KeyDown(KeyCode As Integer, Shift As Integer)
+  PresionoEnter KeyCode
+End Sub
+
+Private Sub TxtSerie_LostFocus()
+   TextoValido TxtSerie
 End Sub
 
 Private Sub TxtSerieNo_GotFocus()

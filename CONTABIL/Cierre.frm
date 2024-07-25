@@ -143,7 +143,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Sub Command1_Click()
-Dim NoMes As Byte
+Dim NoMes As Integer
 Dim Anio As String
 Dim Mes As String
 Dim Mes_C As Integer
@@ -191,8 +191,8 @@ Dim IMes As Integer
   With AdoCierre.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
-          LstMeses.AddItem .Fields("Detalle"), IMes
-          LstMeses.Selected(IMes) = CBool(.Fields("Cerrado"))
+          LstMeses.AddItem .fields("Detalle"), IMes
+          LstMeses.Selected(IMes) = CBool(.fields("Cerrado"))
           IMes = IMes + 1
          .MoveNext
        Loop

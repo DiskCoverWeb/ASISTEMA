@@ -238,8 +238,7 @@ Public Function GetDirectorioActual() As String
     'Crea un buffer
     m_DirectorioActual = String(MAX_PATH, 0)
     'Obtenemos el directorio actual
-     ret = FtpGetCurrentDirectory(HandleConect, m_DirectorioActual, _
-           Len(m_DirectorioActual))
+     ret = FtpGetCurrentDirectory(HandleConect, m_DirectorioActual, Len(m_DirectorioActual))
      GetDirectorioActual = m_DirectorioActual
 End Function
 
@@ -270,9 +269,9 @@ Public Sub CambiarDirectorio(PathDirectorio As String)
        Exit Sub
     End If
     
-    'Cambia al Directorio especificado
-    ret = FtpSetCurrentDirectory(HandleConect, strDir & "/" & PathDirectorio)
-    
+   'Cambia al Directorio especificado
+    ret = FtpSetCurrentDirectory(HandleConect, ftpDir & PathDirectorio)   ' & "/"
+    'MsgBox ret
     If ret = 0 Then
        Status "Error al cambiar de directorio"
     End If

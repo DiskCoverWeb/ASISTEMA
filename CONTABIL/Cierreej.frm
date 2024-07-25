@@ -151,7 +151,7 @@ Begin VB.Form CierreEjercicio
       Height          =   5475
       Left            =   105
       TabIndex        =   5
-      Top             =   1575
+      Top             =   1470
       Width           =   11670
       _ExtentX        =   20585
       _ExtentY        =   9657
@@ -2671,13 +2671,19 @@ Private Sub Form_Activate()
   Else
      Label5.Caption = "NO SE PUEDE CERRAR EL EJERCICIO NO HAY FECHA DE CIERRE"
   End If
+  If Periodo_Contable = Ninguno Then
+     Toolbar1.buttons("Grabar").Enabled = True
+     Toolbar1.buttons("Actualizar").Enabled = False
+  Else
+     Toolbar1.buttons("Grabar").Enabled = False
+     Toolbar1.buttons("Actualizar").Enabled = True
+  End If
   If Bloquear_Control Then
      Toolbar1.buttons("Procesar").Enabled = False
      Toolbar1.buttons("Grabar").Enabled = False
      Toolbar1.buttons("Actualizar").Enabled = False
      Toolbar1.buttons("Imprimir").Enabled = False
   End If
-  
   MBoxCtaI.SetFocus
 End Sub
 

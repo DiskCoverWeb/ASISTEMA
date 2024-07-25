@@ -887,7 +887,7 @@ Public Sub ImprimirCxC_P_G_I_CC()
   If OpcP.value Then SQLMsg3 = "FACTURAS PENDIENTES" Else SQLMsg3 = "FACTURAS CANCELADAS"
  'MsgBox Opcion
   Select Case Opcion
-    Case 1
+    Case 1 ' CxC y CxP
          Select Case TipoCta
            Case "C", "P"
                 If CheqDSubCta.value = 0 Then

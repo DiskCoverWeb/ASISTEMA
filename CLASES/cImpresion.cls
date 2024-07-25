@@ -11,21 +11,16 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-
-
-'----------------------------------------------------------------------------------------------------------
+'-------------------------------------------------------------------------------------------------------------------------------------------------------
 ' CLASE         : cImpresion
-'----------------------------------------------------------------------------------------------------------
+'-------------------------------------------------------------------------------------------------------------------------------------------------------
 ' FECHA         : 23 de Agosto del 2016
-'
 ' DESARROLLADO  : Walter Jalil Vaca Prieto
+' DESCRIPCION   : Esta clase sirve para imprimir la misma informacion en tres tipos de objeto de impresion, estos objeto son: Printer, Picture y PDF.
 '
-' DESCRIPCION   : Esta clase sirve para imprimir la misma informacion en tres tipos de objeto de impresion,
-'                 estos objeto son: Printer, Picture y PDF.
-'
-'                 El objetivo de la creacion de esta clase es para poder migrar a punto NET son problemas y
-'                 para futuro poder imprimir en cualquier tipo de objeto lo que deseamos.
-'----------------------------------------------------------------------------------------------------------
+'                 El objetivo de la creacion de esta clase es para poder migrar a punto NET son problemas y para futuro poder imprimir en cualquier tipo
+'                 de objeto lo que deseamos.
+'-------------------------------------------------------------------------------------------------------------------------------------------------------
 Option Explicit
 
 Public Enum eTipoImpresion
@@ -495,14 +490,14 @@ End Sub
 
 Private Sub SetearTipoDeLetra()
     Select Case vTipoLetra
-      Case TipoArial:     ObjPrint.PDFSetFontName FONT_ARIAL
+     'Case TipoArial:     ObjPrint.PDFSetFontName FONT_ARIAL
       Case TipoCourier:   ObjPrint.PDFSetFontName FONT_COURIER
       Case TipoTimes:     ObjPrint.PDFSetFontName FONT_TIMES
       Case TipoSymbol:    ObjPrint.PDFSetFontName FONT_SYMBOL
       Case TipoHelvetica: ObjPrint.PDFSetFontName FONT_HELVETICA
-      Case TipoVerdana:   ObjPrint.PDFSetFontName FONT_VERDANA
+     'Case TipoVerdana:   ObjPrint.PDFSetFontName FONT_VERDANA
       Case TipoTerminal:  ObjPrint.PDFSetFontName FONT_ZAPFDINGBATS
-      Case Else:          ObjPrint.PDFSetFontName FONT_ARIAL
+      Case Else:          ObjPrint.PDFSetFontName FONT_HELVETICA 'ObjPrint.PDFSetFontName FONT_ARIAL
     End Select
 End Sub
 
@@ -639,6 +634,7 @@ Public Sub finalizaImpresion()
     Select Case vTipoImp
       Case eTipoImpresion.c_PDF
            ObjPrint.PDFEndDoc
+           Set ObjPrint = Nothing
       Case eTipoImpresion.c_Picture
            ObjPrint.Cls
       Case eTipoImpresion.c_Printer
@@ -835,7 +831,7 @@ Dim tColorLetra As Long
            ObjPrint.PDFSetTextColor = vColorLetra
            If ConFondo Then ObjPrint.PDFSetFill = vColorFondo
            vPosXo = vPosXo - 1.2
-           vPosYo = vPosYo - 0.1
+           vPosYo = vPosYo - 0.1 ' 0.5
       Case eTipoImpresion.c_Picture
            ObjPrint.FontSize = vPorteLetra
            ObjPrint.ForeColor = vColorLetra
@@ -1050,9 +1046,9 @@ Dim CFinal As Integer
       For ItemCampo = CInicio To CFinal - CamposMenos
           If (Ancho(ItemCampo) <= LimiteAncho) And (Ancho(ItemCampo) > 0) And (dPosY > 0) Then
              If dNombresCampos Then
-                printTexto Ancho(ItemCampo), dPosY, .Fields(ItemCampo).Name, dPorteLetra, , , Blanco
+                printTexto Ancho(ItemCampo), dPosY, .fields(ItemCampo).Name, dPorteLetra, , , Blanco
              Else
-                printFields Ancho(ItemCampo), dPosY, .Fields(ItemCampo), dPorteLetra, Negro, Blanco, 2
+                printFields Ancho(ItemCampo), dPosY, .fields(ItemCampo), dPorteLetra, Negro, Blanco, 2
              End If
           End If
       Next ItemCampo
@@ -1377,7 +1373,7 @@ Dim StrCampos As String
     If vSumaTotalAncho < 1 Then vSumaTotalAncho = 1
     With dAdodc.Recordset
          If .RecordCount > 0 Then .MoveFirst
-         vCantidadCampos = .Fields.Count
+         vCantidadCampos = .fields.Count
          CantCampos = vCantidadCampos
          ReDim Ancho(vCantidadCampos + 1) As Single
          ReDim AnchoDeCampo(vCantidadCampos + 1) As String
@@ -1388,7 +1384,7 @@ Dim StrCampos As String
          Ancho(0) = vSumaTotalAncho
          vAncho(0) = vSumaTotalAncho
          For Idx = 0 To vCantidadCampos - 1
-             vDistancia = anchoFields(.Fields(Idx))
+             vDistancia = anchoFields(.fields(Idx))
              vSumatoria = anchoTexto(vStrgAnchoVariable)
             'StrCampos = StrCampos & .Fields(Idx).Name & " - " & vSumatoria & " - " & vStrgAnchoVariable & " - " & dStrgFormatoCampo & vbCrLf
             'MsgBox .Fields(Idx).Name & " = " & .Fields(Idx) & vbCrLf & vSumatoria & vbCrLf & vDistancia

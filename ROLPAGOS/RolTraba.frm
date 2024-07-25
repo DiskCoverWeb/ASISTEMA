@@ -1020,7 +1020,7 @@ Private Sub Command1_Click()
   FechaValida MBFechaI
   FechaValida MBFechaF
   Trans_No = 100
-  BorrarAsientos True
+  Eliminar_Asientos_SP True
   IniciarAsientosDe DGAsiento, AdoAsiento
   Ctas_Asientos_Decimos
   TipoDoc = ""
@@ -1046,7 +1046,7 @@ Private Sub Command3_Click()
   FechaValida MBFechaI
   FechaValida MBFechaF
   Trans_No = 100
-  BorrarAsientos True
+  Eliminar_Asientos_SP True
   IniciarAsientosDe DGAsiento, AdoAsiento
   Ctas_Asientos_Decimos
   TipoDoc = ""
@@ -1104,8 +1104,8 @@ Private Sub Command5_Click()
    If .RecordCount > 0 Then
       .MoveFirst
        Do While Not .EOF
-          SumaDebe = SumaDebe + .Fields("DEBE")
-          SumaHaber = SumaHaber + .Fields("HABER")
+          SumaDebe = SumaDebe + .fields("DEBE")
+          SumaHaber = SumaHaber + .fields("HABER")
          .MoveNext
        Loop
       .MoveFirst
@@ -1150,7 +1150,7 @@ Private Sub Form_Activate()
   SelectDB_Combo DCBanco, AdoBanco, sSQL, "NomCuenta"
 
   Trans_No = 100
-  BorrarAsientos True
+  Eliminar_Asientos_SP True
   IniciarAsientosDe DGAsiento, AdoAsiento
   DGClientes.Caption = "ORIGEN" & Space(18) & "COD: " & CodigoDelBanco
   RutaOrigen = RutaSistema & "\LOGOS\MINISTER.GIF"
@@ -1258,16 +1258,16 @@ Dim Separador As String
    If .RecordCount > 0 Then
       .MoveFirst
        Do While Not .EOF
-          If Len(.Fields("CI_RUC")) = 10 Then
+          If Len(.fields("CI_RUC")) = 10 Then
              Contador = Contador + 1
-             NombreCliente = ULCase(.Fields("Cliente"))
+             NombreCliente = ULCase(.fields("Cliente"))
              Codigo1 = SinEspaciosIzq(NombreCliente)
              NombreCliente = TrimStrg(MidStrg(NombreCliente, Len(Codigo1) + 1, Len(NombreCliente)))
              Codigo2 = SinEspaciosIzq(NombreCliente)
              NombreCliente = TrimStrg(MidStrg(NombreCliente, Len(Codigo2) + 1, Len(NombreCliente)))
              Codigo3 = NombreCliente
              If Len(Codigo3) <= 1 Then Codigo3 = ""
-             CodigoP = .Fields("CI_RUC")
+             CodigoP = .fields("CI_RUC")
            ' Empieza la trama por Alumno
              Print #NumFileAlumnos, CodigoP & ";";
              Print #NumFileAlumnos, TrimStrg(Codigo3) & ";";
@@ -1322,46 +1322,46 @@ Dim Separador As String
          Case 4: Print #NumFileAlumnos, "Cédula (Ejm.:0502366503);Nombres;Apellidos;Genero (Masculino=M ó Femenino=F);Ocupación(codigo iess);Días laborados (360 días equivalen a un año);Tipo de Pago(Pago Directo=P,Acreditación en Cuenta=A,Retencion Pago Directo=RP,Retencion Acreditación en Cuenta=RA);Solo si el trabajador posee JORNADA PARCIAL PERMANENTE ponga una X;DETERMINE EN HORAS LA JORNADA PARCIAL PERMANENTE SEMANAL ESTIPULADO EN EL CONTRATO;Solo si su trabajador posee algun tipo de discapacidad ponga una X;Fecha de Jubilación;valor Retencion;SOLO SI SU TRABAJADOR MENSUALIZA EL PAGO DE LA DECIMOCUARTA REMUNERACIÓN PONGA UNA X"
        End Select
        Do While Not .EOF
-          If Len(.Fields("CI_RUC")) = 10 Then
+          If Len(.fields("CI_RUC")) = 10 Then
              Contador = Contador + 1
-             NombreCliente = UCase(.Fields("Cliente"))
+             NombreCliente = UCase(.fields("Cliente"))
              Codigo1 = SinEspaciosIzq(NombreCliente)
              NombreCliente = TrimStrg(MidStrg(NombreCliente, Len(Codigo1) + 1, Len(NombreCliente)))
              Codigo2 = SinEspaciosIzq(NombreCliente)
              NombreCliente = TrimStrg(MidStrg(NombreCliente, Len(Codigo2) + 1, Len(NombreCliente)))
              Codigo3 = NombreCliente
              If Len(Codigo3) <= 1 Then Codigo3 = ""
-             CodigoP = .Fields("CI_RUC")
+             CodigoP = .fields("CI_RUC")
            ' Empieza la trama por Empleado
              Select Case Decimo
                Case 3
                      Print #NumFileAlumnos, CodigoP & ";";
                      Print #NumFileAlumnos, TrimStrg(Codigo3) & ";";
                      Print #NumFileAlumnos, TrimStrg(Codigo1 & " " & Codigo2) & ";";
-                     Print #NumFileAlumnos, TrimStrg(.Fields("Sexo")) & ";";
-                     Print #NumFileAlumnos, .Fields("Profesion") & ";";
-                     Print #NumFileAlumnos, Format(.Fields("Valor_Dec_3ro"), "##0.00") & ";";
-                     Print #NumFileAlumnos, .Fields("Dias_Dec_3ro") & ";";
-                     Print #NumFileAlumnos, .Fields("FormaPago10to") & ";"
+                     Print #NumFileAlumnos, TrimStrg(.fields("Sexo")) & ";";
+                     Print #NumFileAlumnos, .fields("Profesion") & ";";
+                     Print #NumFileAlumnos, Format(.fields("Valor_Dec_3ro"), "##0.00") & ";";
+                     Print #NumFileAlumnos, .fields("Dias_Dec_3ro") & ";";
+                     Print #NumFileAlumnos, .fields("FormaPago10to") & ";"
 '''                     Print #NumFileAlumnos, ";";
 '''                     Print #NumFileAlumnos, ";"
                Case 4
                      Print #NumFileAlumnos, CodigoP & ";";
                      Print #NumFileAlumnos, TrimStrg(Codigo3) & ";";
                      Print #NumFileAlumnos, TrimStrg(Codigo1 & " " & Codigo2) & ";";
-                     Print #NumFileAlumnos, TrimStrg(.Fields("Sexo")) & ";";
-                     Print #NumFileAlumnos, .Fields("Profesion") & ";";
-                     Print #NumFileAlumnos, .Fields("Dias_Dec_4to") & ";";
-                     Print #NumFileAlumnos, .Fields("FormaPago10to") & ";";
+                     Print #NumFileAlumnos, TrimStrg(.fields("Sexo")) & ";";
+                     Print #NumFileAlumnos, .fields("Profesion") & ";";
+                     Print #NumFileAlumnos, .fields("Dias_Dec_4to") & ";";
+                     Print #NumFileAlumnos, .fields("FormaPago10to") & ";";
                      Print #NumFileAlumnos, ";";
                      Print #NumFileAlumnos, ";";
-                     If .Fields("Porcentaje") > 0 Then
+                     If .fields("Porcentaje") > 0 Then
                          Print #NumFileAlumnos, "X;";
                      Else
                          Print #NumFileAlumnos, ";";
                      End If
                      Print #NumFileAlumnos, ";";
-                     If .Fields("Pagar_Decimos") Then
+                     If .fields("Pagar_Decimos") Then
                          Print #NumFileAlumnos, ";X"
                      Else
                          Print #NumFileAlumnos, ";"
@@ -1378,13 +1378,13 @@ Dim Separador As String
    If .RecordCount > 0 Then
       .MoveFirst
        Do While Not .EOF
-          CodigoP = .Fields("CI_RUC")
+          CodigoP = .fields("CI_RUC")
              Select Case Decimo
                Case 3
-                    InsValorCtaPro .Fields("Cta_Decimo_Tercer_P"), .Fields("Valor_Dec_3ro")
+                    InsValorCtaPro .fields("Cta_Decimo_Tercer_P"), .fields("Valor_Dec_3ro")
                    '.Fields ("Dias_Dec_3ro")
                Case 4
-                    InsValorCtaPro .Fields("Cta_Decimo_Cuarto_P"), .Fields("Valor_Dec_4to")
+                    InsValorCtaPro .fields("Cta_Decimo_Cuarto_P"), .fields("Valor_Dec_4to")
                    '.Fields ("Dias_Dec_4to")
              End Select
          .MoveNext
@@ -1439,8 +1439,8 @@ Public Sub Ctas_Asientos_Decimos()
       'Seteamos las Cuentas del Rol Pagos
        Do While Not .EOF
          'Provisiones de Decimos
-          SetearCtasCierrePro .Fields("Cta_Decimo_Tercer_P")
-          SetearCtasCierrePro .Fields("Cta_Decimo_Cuarto_P")
+          SetearCtasCierrePro .fields("Cta_Decimo_Tercer_P")
+          SetearCtasCierrePro .fields("Cta_Decimo_Cuarto_P")
          .MoveNext
        Loop
    End If
@@ -1523,17 +1523,17 @@ Dim Total_Aporte_Patronal As Currency
     If .RecordCount > 0 Then
        .MoveFirst
         Do While Not .EOF
-           DetalleComp = .Fields("Cliente")
-           CodigoCli = .Fields("Codigo")
+           DetalleComp = .fields("Cliente")
+           CodigoCli = .fields("Codigo")
            Select Case Decimo
-             Case 3: Total = .Fields("Valor_Dec_3ro")
-                     If .Fields("FormaPago10to") = "A" Then
+             Case 3: Total = .fields("Valor_Dec_3ro")
+                     If .fields("FormaPago10to") = "A" Then
                          InsertarAsientos AdoAsiento, Cta, 0, 0, Total
                      Else
                          InsertarAsientos AdoAsiento, Cta_CajaG, 0, 0, Total
                      End If
-             Case 4: Total = .Fields("Valor_Dec_4to")
-                     If .Fields("FormaPago10to") = "A" Then
+             Case 4: Total = .fields("Valor_Dec_4to")
+                     If .fields("FormaPago10to") = "A" Then
                          InsertarAsientos AdoAsiento, Cta, 0, 0, Total
                      Else
                          InsertarAsientos AdoAsiento, Cta_CajaG, 0, 0, Total
@@ -1561,8 +1561,8 @@ Dim Total_Aporte_Patronal As Currency
     If .RecordCount > 0 Then
        .MoveFirst
         Do While Not .EOF
-           SumaDebe = SumaDebe + .Fields("DEBE")
-           SumaHaber = SumaHaber + .Fields("HABER")
+           SumaDebe = SumaDebe + .fields("DEBE")
+           SumaHaber = SumaHaber + .fields("HABER")
           .MoveNext
         Loop
     End If

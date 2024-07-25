@@ -2,8 +2,8 @@ VERSION 5.00
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Begin VB.Form Conciliacion 
    Caption         =   "CONCILIACION DE BANCOS DE DEPOSITOS Y RETIROS"
    ClientHeight    =   9360
@@ -30,7 +30,7 @@ Begin VB.Form Conciliacion
       ImageList       =   "ImageList1"
       _Version        =   327682
       BeginProperty Buttons {0713E452-850A-101B-AFC0-4210102A8DA7} 
-         NumButtons      =   7
+         NumButtons      =   9
          BeginProperty Button1 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "Salir"
             Object.ToolTipText     =   "Salir del Modulo"
@@ -73,6 +73,18 @@ Begin VB.Form Conciliacion
             Object.Tag             =   ""
             ImageIndex      =   5
          EndProperty
+         BeginProperty Button8 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   "Bajar_Excel"
+            Object.ToolTipText     =   "Baja a Excel el reporte de la pantalla"
+            Object.Tag             =   ""
+            ImageIndex      =   8
+         EndProperty
+         BeginProperty Button9 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   "Buscar"
+            Object.ToolTipText     =   "Buscar un Documento"
+            Object.Tag             =   ""
+            ImageIndex      =   9
+         EndProperty
       EndProperty
       Begin VB.Frame Frame3 
          Caption         =   "&Fechas Desde - Hasta"
@@ -86,7 +98,7 @@ Begin VB.Form Conciliacion
             Strikethrough   =   0   'False
          EndProperty
          Height          =   645
-         Left            =   4200
+         Left            =   5355
          TabIndex        =   1
          Top             =   0
          Width           =   12405
@@ -164,7 +176,7 @@ Begin VB.Form Conciliacion
                Name            =   "MS Sans Serif"
                Size            =   8.25
                Charset         =   0
-               Weight          =   400
+               Weight          =   700
                Underline       =   0   'False
                Italic          =   0   'False
                Strikethrough   =   0   'False
@@ -474,6 +486,7 @@ Begin VB.Form Conciliacion
       Height          =   5790
       Left            =   105
       TabIndex        =   6
+      ToolTipText     =   "<CTRL+ B> Buscar un Documentos, <CTRL + F1> Bajar a Excel el  reporte"
       Top             =   735
       Width           =   11250
       _ExtentX        =   19844
@@ -687,7 +700,7 @@ Begin VB.Form Conciliacion
       MaskColor       =   12632256
       _Version        =   327682
       BeginProperty Images {0713E8C2-850A-101B-AFC0-4210102A8DA7} 
-         NumListImages   =   7
+         NumListImages   =   9
          BeginProperty ListImage1 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
             Picture         =   "Concilia.frx":0645
             Key             =   ""
@@ -716,6 +729,14 @@ Begin VB.Form Conciliacion
             Picture         =   "Concilia.frx":18E1
             Key             =   ""
          EndProperty
+         BeginProperty ListImage8 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "Concilia.frx":1BFB
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage9 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "Concilia.frx":A0CD
+            Key             =   ""
+         EndProperty
       EndProperty
    End
 End
@@ -727,11 +748,15 @@ Attribute VB_Exposed = False
 
 Private Sub Imprimir()
   DGBalance.Visible = False
+  Codigo1 = SinEspaciosIzq(DCCtas.Text)
+  
   sSQL = "SELECT C,FECHA,BENEFICIARIO,TP,NUMERO,CHEQ_DEP,DEBE,HABER " _
        & "FROM Asiento_C " _
-       & "WHERE CodigoU = '" & CodigoUsuario & "' " _
-       & "AND Item = '" & NumEmpresa & "' " _
+       & "WHERE CodigoU = '" & CodigoUsuario & "' "
+  If ConSucursal = False Then sSQL = sSQL & "AND Item = '" & NumEmpresa & "' "
+  sSQL = sSQL _
        & "AND T_No = " & Trans_No & " " _
+       & "AND Cta = '" & Codigo1 & "' " _
        & "ORDER BY FECHA,TP,NUMERO,DEBE DESC,HABER "
   Select_Adodc AdoAsientos, sSQL
   
@@ -740,9 +765,11 @@ Private Sub Imprimir()
   
   sSQL = "SELECT * " _
        & "FROM Asiento_C " _
-       & "WHERE CodigoU = '" & CodigoUsuario & "' " _
-       & "AND Item = '" & NumEmpresa & "' " _
+       & "WHERE CodigoU = '" & CodigoUsuario & "' "
+  If ConSucursal = False Then sSQL = sSQL & "AND Item = '" & NumEmpresa & "' "
+  sSQL = sSQL _
        & "AND T_No = " & Trans_No & " " _
+       & "AND Cta = '" & Codigo1 & "' " _
        & "ORDER BY FECHA,TP,NUMERO,DEBE DESC,HABER "
   Select_Adodc_Grid DGBalance, AdoAsientos, sSQL
   DGBalance.Visible = True
@@ -760,16 +787,15 @@ Private Sub Procesar()
        & "FROM Asiento_C " _
        & "WHERE CodigoU = '" & CodigoUsuario & "' "
   If ConSucursal = False Then sSQL = sSQL & "AND Item = '" & NumEmpresa & "' "
-  sSQL = sSQL & "AND T_No = " & Trans_No & " "
+  sSQL = sSQL _
+       & "AND T_No = " & Trans_No & " " _
+       & "AND Cta = '" & Codigo1 & "' "
   Ejecutar_SQL_SP sSQL
-  sSQL = "SELECT * " _
-       & "FROM Asiento_C " _
-       & "WHERE CodigoU = '" & CodigoUsuario & "' "
-  If ConSucursal = False Then sSQL = sSQL & "AND Item = '" & NumEmpresa & "' "
-  sSQL = sSQL & "AND T_No = " & Trans_No & " "
-  Select_Adodc AdoAsientos, sSQL
-  sSQL = "SELECT C,Cliente As Beneficiario,T.Fecha,T.TP,T.Numero,Cheq_Dep,Debe,Haber,Parcial_ME,T.Item,T.ID " _
-       & "FROM Transacciones As T,Comprobantes As C,Clientes AS Cl " _
+  
+  sSQL = "INSERT INTO Asiento_C (C, FECHA, BENEFICIARIO, TP, NUMERO, CHEQ_DEP, DEBE, HABER, Item, IDB, ME, T_No, CodigoU, Pagar, Cta) " _
+       & "SELECT T.C, T.Fecha, Cliente, T.TP, T.Numero, T. Cheq_Dep, T.Debe, T.Haber, T.Item, T.ID, CASE WHEN T.Parcial_ME <> 0 THEN 1 ELSE 0 END, " _
+       & Trans_No & ", '" & CodigoUsuario & "', 0, T.Cta " _
+       & "FROM Transacciones As T, Comprobantes As C, Clientes AS Cl " _
        & "WHERE T.Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
        & "AND T.Cta = '" & Codigo1 & "' "
   If ConSucursal = False Then sSQL = sSQL & "AND T.Item = '" & NumEmpresa & "' "
@@ -780,8 +806,9 @@ Private Sub Procesar()
        & "AND T.Periodo = C.Periodo " _
        & "AND C.Codigo_B = Cl.Codigo " _
        & "UNION " _
-       & "SELECT C,Cliente As Beneficiario,T.Fecha,T.TP,T.Numero,Cheq_Dep,Debe,Haber,Parcial_ME,T.Item,T.ID " _
-       & "FROM Transacciones As T,Comprobantes As C,Clientes AS Cl " _
+       & "SELECT T.C, T.Fecha, Cliente, T.TP, T.Numero, T. Cheq_Dep, T.Debe, T.Haber, T.Item, T.ID, CASE WHEN T.Parcial_ME <> 0 THEN 1 ELSE 0 END, " _
+       & Trans_No & ", '" & CodigoUsuario & "', 0, T.Cta " _
+       & "FROM Transacciones As T, Comprobantes As C, Clientes AS Cl " _
        & "WHERE T.Fecha < #" & FechaIni & "# " _
        & "AND T.Cta = '" & Codigo1 & "' " _
        & "AND C = " & Val(adFalse) & " "
@@ -792,46 +819,74 @@ Private Sub Procesar()
        & "AND C.Item = T.Item " _
        & "AND T.Periodo = C.Periodo " _
        & "AND C.Codigo_B = Cl.Codigo " _
-       & "ORDER BY T.Fecha,T.TP,T.Numero,Debe DESC,Haber,T.ID "
-  Select_Adodc AdoCtas, sSQL
-  RatonReloj
-  DGBalance.Visible = False
-  With AdoCtas.Recordset
-   If .RecordCount > 0 Then
-       Do While Not .EOF
-         Contador = Contador + 1
-         Conciliacion.Caption = "Conciliando la fecha: " & .fields("Fecha")
-         SetAddNew AdoAsientos
-         SetFields AdoAsientos, "C", .fields("C")
-         SetFields AdoAsientos, "FECHA", .fields("Fecha")
-         SetFields AdoAsientos, "BENEFICIARIO", .fields("Beneficiario")
-         SetFields AdoAsientos, "TP", .fields("TP")
-         SetFields AdoAsientos, "NUMERO", .fields("Numero")
-         SetFields AdoAsientos, "CHEQ_DEP", .fields("Cheq_Dep")
-         SetFields AdoAsientos, "DEBE", .fields("Debe")
-         SetFields AdoAsientos, "HABER", .fields("Haber")
-         SetFields AdoAsientos, "ME", Moneda_US
-         SetFields AdoAsientos, "CodigoU", CodigoUsuario
-         SetFields AdoAsientos, "Item", .fields("Item")
-         SetFields AdoAsientos, "T_No", Trans_No
-         SetFields AdoAsientos, "IdTrans", Format(Contador, "0000")
-         SetUpdate AdoAsientos
-        .MoveNext
-       Loop
-   End If
-  End With
+       & "ORDER BY T.Fecha, T.TP, T.Numero, Debe DESC, Haber, T.ID "
+  Ejecutar_SQL_SP sSQL
+  
+'''  sSQL = "SELECT C,Cliente As Beneficiario,T.Fecha,T.TP,T.Numero,Cheq_Dep,Debe,Haber,Parcial_ME,T.Item,T.ID " _
+'''       & "FROM Transacciones As T,Comprobantes As C,Clientes AS Cl " _
+'''       & "WHERE T.Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
+'''       & "AND T.Cta = '" & Codigo1 & "' "
+'''  If ConSucursal = False Then sSQL = sSQL & "AND T.Item = '" & NumEmpresa & "' "
+'''  sSQL = sSQL & "AND T.Periodo = '" & Periodo_Contable & "' " _
+'''       & "AND C.TP = T.TP " _
+'''       & "AND C.Numero = T.Numero " _
+'''       & "AND C.Item = T.Item " _
+'''       & "AND T.Periodo = C.Periodo " _
+'''       & "AND C.Codigo_B = Cl.Codigo " _
+'''       & "UNION " _
+'''       & "SELECT C,Cliente As Beneficiario,T.Fecha,T.TP,T.Numero,Cheq_Dep,Debe,Haber,Parcial_ME,T.Item,T.ID " _
+'''       & "FROM Transacciones As T,Comprobantes As C,Clientes AS Cl " _
+'''       & "WHERE T.Fecha < #" & FechaIni & "# " _
+'''       & "AND T.Cta = '" & Codigo1 & "' " _
+'''       & "AND C = " & Val(adFalse) & " "
+'''  If ConSucursal = False Then sSQL = sSQL & "AND T.Item = '" & NumEmpresa & "' "
+'''  sSQL = sSQL & "AND T.Periodo = '" & Periodo_Contable & "' " _
+'''       & "AND C.TP = T.TP " _
+'''       & "AND C.Numero = T.Numero " _
+'''       & "AND C.Item = T.Item " _
+'''       & "AND T.Periodo = C.Periodo " _
+'''       & "AND C.Codigo_B = Cl.Codigo " _
+'''       & "ORDER BY T.Fecha,T.TP,T.Numero,Debe DESC,Haber,T.ID "
+'''  Select_Adodc AdoCtas, sSQL
+'''  RatonReloj
+'''  DGBalance.Visible = False
+'''  With AdoCtas.Recordset
+'''   If .RecordCount > 0 Then
+'''       Do While Not .EOF
+'''         Contador = Contador + 1
+'''         Conciliacion.Caption = "Conciliando la fecha: " & .fields("Fecha")
+'''         SetAddNew AdoAsientos
+'''         SetFields AdoAsientos, "C", .fields("C")
+'''         SetFields AdoAsientos, "FECHA", .fields("Fecha")
+'''         SetFields AdoAsientos, "BENEFICIARIO", .fields("Beneficiario")
+'''         SetFields AdoAsientos, "TP", .fields("TP")
+'''         SetFields AdoAsientos, "NUMERO", .fields("Numero")
+'''         SetFields AdoAsientos, "CHEQ_DEP", .fields("Cheq_Dep")
+'''         SetFields AdoAsientos, "DEBE", .fields("Debe")
+'''         SetFields AdoAsientos, "HABER", .fields("Haber")
+'''         SetFields AdoAsientos, "ME", Moneda_US
+'''         SetFields AdoAsientos, "CodigoU", CodigoUsuario
+'''         SetFields AdoAsientos, "Item", .fields("Item")
+'''         SetFields AdoAsientos, "T_No", Trans_No
+'''         SetFields AdoAsientos, "IdTrans", Format(Contador, "0000")
+'''         SetUpdate AdoAsientos
+'''        .MoveNext
+'''       Loop
+'''   End If
+'''  End With
   RatonNormal
   sSQL = "SELECT * " _
        & "FROM Asiento_C " _
-       & "WHERE CodigoU='" & CodigoUsuario & "' "
+       & "WHERE CodigoU = '" & CodigoUsuario & "' "
   If ConSucursal = False Then sSQL = sSQL & "AND Item = '" & NumEmpresa & "' "
-  sSQL = sSQL & "AND T_No = " & Trans_No & " " _
-       & "ORDER BY FECHA DESC,TP,NUMERO,DEBE DESC,HABER "
+  sSQL = sSQL _
+       & "AND T_No = " & Trans_No & " " _
+       & "AND Cta = '" & Codigo1 & "' "
   Select_Adodc_Grid DGBalance, AdoAsientos, sSQL
   SumaDebe = 0: SumaHaber = 0
   DGBalance.Visible = True
-  Cadena = "Registros: " & Format(AdoCtas.Recordset.RecordCount, "#,##0") & ".   Páginas: " _
-         & Format((AdoCtas.Recordset.RecordCount / 45) + 1, "#,##0") & "."
+  Cadena = "Registros: " & Format(AdoAsientos.Recordset.RecordCount, "#,##0") & ".   Páginas: " _
+         & Format((AdoAsientos.Recordset.RecordCount / 45) + 1, "#,##0") & "."
   Conciliacion.Caption = "CONCILIACION DE BANCOS"
   AdoCtas.Caption = Cadena
   Opcion = 1
@@ -895,22 +950,21 @@ Private Sub Grabar()
        If SQL_Server Then
           sSQL = "UPDATE Transacciones " _
                & "SET C = AC.C " _
-               & "FROM Transacciones As T,Asiento_C As AC "
+               & "FROM Transacciones As T, Asiento_C As AC " _
+               & "WHERE AC.CodigoU = '" & CodigoUsuario & "' "
        Else
           sSQL = "UPDATE Transacciones As T,Asiento_C As AC " _
-               & "SET T.C = AC.C "
+               & "SET T.C = AC.C " _
+               & "WHERE AC.CodigoU = '" & CodigoUsuario & "' "
        End If
-       sSQL = sSQL & "WHERE AC.TP = T.TP " _
-            & "AND AC.Numero = T.Numero " _
-            & "AND AC.DEBE = T.Debe " _
-            & "AND AC.HABER = T.Haber " _
-            & "AND AC.FECHA = T.Fecha " _
-            & "AND AC.CHEQ_DEP = T.Cheq_Dep " _
-            & "AND AC.Item = T.Item " _
-            & "AND AC.CodigoU = '" & CodigoUsuario & "' " _
+       If ConSucursal = False Then sSQL = sSQL & "AND AC.Item = '" & NumEmpresa & "' "
+       sSQL = sSQL _
             & "AND AC.T_No = " & Trans_No & " " _
+            & "AND AC.Cta = '" & Codigo1 & "' " _
             & "AND T.Periodo = '" & Periodo_Contable & "' " _
-            & "AND T.Cta = '" & Codigo1 & "' "
+            & "AND AC.Cta = T.Cta " _
+            & "AND AC.Item = T.Item " _
+            & "AND AC.IDB = T.ID "
        Ejecutar_SQL_SP sSQL
        MsgBox "Proceso Grabado"
    End If
@@ -951,46 +1005,47 @@ Private Sub DCCtas_LostFocus()
 End Sub
 
 Private Sub DGBalance_Click()
-   If Opcion = 2 Then ID_Trans = DGBalance.Columns(9)
+   If Opcion = 2 Then ID_Trans = DGBalance.Columns(16)
 End Sub
 
 Private Sub DGBalance_KeyDown(KeyCode As Integer, Shift As Integer)
   Keys_Especiales Shift
-  If CtrlDown And KeyCode = vbKeyF1 Then GenerarDataTexto Conciliacion, AdoAsientos
 End Sub
 
 Private Sub DGBalance_KeyPress(KeyAscii As Integer)
-   If Opcion = 1 Then
-      Codigo1 = DGBalance.Columns(13)
-      Select Case Chr(KeyAscii)
-        Case "s", "S", "y", "Y": ' Si
-             NivelCta = 1
-        Case "n", "N"  ' No
-             NivelCta = 0
-      End Select
-      Select Case Chr(KeyAscii)
-        Case "s", "S", "y", "Y", "n", "N":
-             If AdoAsientos.Recordset.RecordCount > 0 Then
-                sSQL = "UPDATE Asiento_C " _
-                     & "SET C = " & NivelCta & " " _
-                     & "WHERE IdTrans = '" & Codigo1 & "' "
-                If ConSucursal = False Then sSQL = sSQL & "AND Item = '" & NumEmpresa & "' "
-                sSQL = sSQL & "AND CodigoU = '" & CodigoUsuario & "' " _
-                     & "AND T_No = " & Trans_No & " "
-                Ejecutar_SQL_SP sSQL
-                sSQL = "SELECT * " _
-                     & "FROM Asiento_C " _
-                     & "WHERE CodigoU = '" & CodigoUsuario & "' "
-                If ConSucursal = False Then sSQL = sSQL & "AND Item = '" & NumEmpresa & "' "
-                sSQL = sSQL & "AND T_No = " & Trans_No & " " _
-                     & "ORDER BY IdTrans "
-                Select_Adodc_Grid DGBalance, AdoAsientos, sSQL
-                AdoAsientos.Recordset.MoveFirst
-                AdoAsientos.Recordset.Find ("IdTrans = '" & Codigo1 & "' ")
-                DGBalance.SetFocus
-             End If
-      End Select
-   End If
+    If AdoAsientos.Recordset.RecordCount > 0 Then
+       If Opcion = 1 Then
+          ID_Reg = Val(DGBalance.Columns(14))
+          Select Case Chr(KeyAscii)
+            Case "s", "S", "y", "Y": ' Si
+                 NivelCta = 1
+            Case "n", "N"  ' No
+                 NivelCta = 0
+          End Select
+          Select Case Chr(KeyAscii)
+            Case "s", "S", "y", "Y", "n", "N":
+                 sSQL = "UPDATE Asiento_C " _
+                      & "SET C = " & NivelCta & " " _
+                      & "WHERE IDB = " & ID_Reg & " "
+                 If ConSucursal = False Then sSQL = sSQL & "AND Item = '" & NumEmpresa & "' "
+                 sSQL = sSQL & "AND CodigoU = '" & CodigoUsuario & "' " _
+                      & "AND T_No = " & Trans_No & " "
+                 Ejecutar_SQL_SP sSQL
+                 
+                 sSQL = "SELECT * " _
+                      & "FROM Asiento_C " _
+                      & "WHERE CodigoU = '" & CodigoUsuario & "' "
+                 If ConSucursal = False Then sSQL = sSQL & "AND Item = '" & NumEmpresa & "' "
+                 sSQL = sSQL & "AND T_No = " & Trans_No & " " _
+                      & "AND Cta = '" & Codigo1 & "' " _
+                      & "ORDER BY ID "
+                 Select_Adodc_Grid DGBalance, AdoAsientos, sSQL
+                 AdoAsientos.Recordset.MoveFirst
+                 AdoAsientos.Recordset.Find ("IDB = " & ID_Reg & " ")
+                 DGBalance.SetFocus
+          End Select
+       End If
+    End If
 End Sub
 
 Private Sub Form_Activate()
@@ -1026,8 +1081,16 @@ Private Sub MBFecha_LostFocus()
   FechaValida MBFecha
 End Sub
 
+Private Sub MBoxFechaF_GotFocus()
+  MarcarTexto MBoxFechaF
+End Sub
+
 Private Sub MBoxFechaF_LostFocus()
   FechaValida MBoxFechaF
+End Sub
+
+Private Sub MBoxFechaI_GotFocus()
+  MarcarTexto MBoxFechaI
 End Sub
 
 Private Sub MBoxFechaI_LostFocus()
@@ -1045,6 +1108,23 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
       Case "Borrar": Borrar_Transito
       Case "Grabar": Grabar
       Case "Imprimir": Imprimir
+      Case "Bajar_Excel": DGBalance.Visible = False
+           GenerarDataTexto Conciliacion, AdoAsientos
+           DGBalance.Visible = True
+      Case "Buscar"
+            If AdoAsientos.Recordset.RecordCount > 0 Then
+               NoCheque = InputBox("INGRESE CHEQUE/DEPOSITO/TRANSFERENCIA", "BUSCAR POR TIPO DE DOCUMENTO", "")
+               DGBalance.Visible = False
+               AdoAsientos.Recordset.MoveFirst
+               AdoAsientos.Recordset.Find ("CHEQ_DEP = '" & NoCheque & "' ")
+               If AdoAsientos.Recordset.EOF Then
+                  AdoAsientos.Recordset.MoveFirst
+                  MsgBox "No exite el documento ingresado"
+               End If
+               DGBalance.Visible = True
+            Else
+               MsgBox "No existe registros que buscar"
+            End If
     End Select
 End Sub
 

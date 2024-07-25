@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
@@ -20,7 +20,7 @@ Begin VB.Form ListarGrupos
       Align           =   1  'Align Top
       Height          =   660
       Left            =   0
-      TabIndex        =   39
+      TabIndex        =   50
       Top             =   0
       Width           =   28560
       _ExtentX        =   50377
@@ -90,9 +90,9 @@ Begin VB.Form ListarGrupos
       Begin VB.Frame Frame1 
          Height          =   645
          Left            =   5355
-         TabIndex        =   40
+         TabIndex        =   0
          Top             =   0
-         Width           =   16395
+         Width           =   16500
          Begin VB.CheckBox CheqRangos 
             Caption         =   "&Por Rangos Grupos:"
             BeginProperty Font 
@@ -106,7 +106,7 @@ Begin VB.Form ListarGrupos
             EndProperty
             Height          =   330
             Left            =   105
-            TabIndex        =   41
+            TabIndex        =   1
             Top             =   210
             Width           =   2115
          End
@@ -123,7 +123,7 @@ Begin VB.Form ListarGrupos
             EndProperty
             Height          =   330
             Left            =   6090
-            TabIndex        =   44
+            TabIndex        =   4
             Top             =   210
             Value           =   1  'Checked
             Width           =   2325
@@ -131,8 +131,8 @@ Begin VB.Form ListarGrupos
          Begin VB.CommandButton Command2 
             Caption         =   "&S"
             Height          =   330
-            Left            =   15540
-            TabIndex        =   48
+            Left            =   15645
+            TabIndex        =   52
             Top             =   210
             Width           =   330
          End
@@ -148,9 +148,9 @@ Begin VB.Form ListarGrupos
                Strikethrough   =   0   'False
             EndProperty
             Height          =   330
-            Left            =   15960
+            Left            =   16065
             Style           =   1  'Graphical
-            TabIndex        =   47
+            TabIndex        =   51
             Top             =   210
             Width           =   330
          End
@@ -159,7 +159,7 @@ Begin VB.Form ListarGrupos
             DataSource      =   "AdoGrupo"
             Height          =   360
             Left            =   2310
-            TabIndex        =   42
+            TabIndex        =   2
             Top             =   210
             Width           =   1800
             _ExtentX        =   3175
@@ -182,10 +182,10 @@ Begin VB.Form ListarGrupos
             DataSource      =   "AdoTipoPago"
             Height          =   315
             Left            =   9975
-            TabIndex        =   46
+            TabIndex        =   6
             Top             =   210
-            Width           =   5475
-            _ExtentX        =   9657
+            Width           =   5580
+            _ExtentX        =   9843
             _ExtentY        =   556
             _Version        =   393216
             Text            =   ""
@@ -204,7 +204,7 @@ Begin VB.Form ListarGrupos
             DataSource      =   "AdoGrupo"
             Height          =   360
             Left            =   4200
-            TabIndex        =   43
+            TabIndex        =   3
             Top             =   210
             Width           =   1800
             _ExtentX        =   3175
@@ -236,38 +236,18 @@ Begin VB.Form ListarGrupos
             EndProperty
             Height          =   330
             Left            =   8505
-            TabIndex        =   45
+            TabIndex        =   5
             Top             =   210
             Width           =   1485
          End
       End
    End
-   Begin VB.TextBox TxtAyuda 
-      BeginProperty Font 
-         Name            =   "Courier"
-         Size            =   9.75
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H000000FF&
-      Height          =   2535
-      Left            =   105
-      MultiLine       =   -1  'True
-      ScrollBars      =   2  'Vertical
-      TabIndex        =   18
-      Top             =   6405
-      Visible         =   0   'False
-      Width           =   7575
-   End
    Begin VB.Frame FrmEmail 
       BackColor       =   &H00800000&
       Height          =   2955
-      Left            =   105
-      TabIndex        =   21
-      Top             =   2310
+      Left            =   420
+      TabIndex        =   32
+      Top             =   2835
       Visible         =   0   'False
       Width           =   20070
       Begin VB.ListBox LstClientes 
@@ -283,7 +263,7 @@ Begin VB.Form ListarGrupos
          Height          =   1140
          Left            =   105
          Style           =   1  'Checkbox
-         TabIndex        =   22
+         TabIndex        =   40
          Top             =   1575
          Width           =   10935
       End
@@ -291,7 +271,7 @@ Begin VB.Form ListarGrupos
          Caption         =   "Enviar mail >>"
          Height          =   540
          Left            =   15855
-         TabIndex        =   32
+         TabIndex        =   42
          Top             =   840
          Width           =   1800
       End
@@ -300,7 +280,7 @@ Begin VB.Form ListarGrupos
          Left            =   8505
          MaxLength       =   255
          MultiLine       =   -1  'True
-         TabIndex        =   30
+         TabIndex        =   43
          Top             =   525
          Width           =   7260
       End
@@ -319,7 +299,7 @@ Begin VB.Form ListarGrupos
          ForeColor       =   &H00FFFFFF&
          Height          =   435
          Left            =   15855
-         TabIndex        =   31
+         TabIndex        =   41
          Top             =   210
          Value           =   1  'Checked
          Width           =   1800
@@ -328,7 +308,7 @@ Begin VB.Form ListarGrupos
          Height          =   330
          Left            =   1155
          MaxLength       =   60
-         TabIndex        =   26
+         TabIndex        =   36
          Top             =   630
          Width           =   7260
       End
@@ -336,7 +316,7 @@ Begin VB.Form ListarGrupos
          Caption         =   "Adjuntar >>"
          Height          =   330
          Left            =   105
-         TabIndex        =   27
+         TabIndex        =   37
          Top             =   1050
          Width           =   1065
       End
@@ -354,7 +334,7 @@ Begin VB.Form ListarGrupos
          EndProperty
          Height          =   330
          Left            =   8505
-         TabIndex        =   29
+         TabIndex        =   39
          Top             =   210
          Width           =   7260
       End
@@ -372,7 +352,7 @@ Begin VB.Form ListarGrupos
          EndProperty
          Height          =   330
          Left            =   105
-         TabIndex        =   25
+         TabIndex        =   35
          Top             =   630
          Width           =   1065
       End
@@ -389,7 +369,7 @@ Begin VB.Form ListarGrupos
          EndProperty
          Height          =   330
          Left            =   1155
-         TabIndex        =   28
+         TabIndex        =   38
          Top             =   1050
          Width           =   7260
       End
@@ -407,7 +387,7 @@ Begin VB.Form ListarGrupos
          EndProperty
          Height          =   330
          Left            =   105
-         TabIndex        =   23
+         TabIndex        =   33
          Top             =   210
          Width           =   1065
       End
@@ -425,17 +405,444 @@ Begin VB.Form ListarGrupos
          EndProperty
          Height          =   330
          Left            =   1155
-         TabIndex        =   24
+         TabIndex        =   34
          Top             =   210
          Width           =   7260
       End
    End
+   Begin VB.Frame Frame3 
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   1380
+      Left            =   105
+      TabIndex        =   7
+      Top             =   735
+      Width           =   21750
+      Begin VB.TextBox TxtNota 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00C00000&
+         Height          =   330
+         Left            =   11760
+         MaxLength       =   100
+         TabIndex        =   27
+         Top             =   945
+         Width           =   9885
+      End
+      Begin VB.TextBox TxtObs 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00C00000&
+         Height          =   330
+         Left            =   1575
+         MaxLength       =   100
+         TabIndex        =   25
+         Top             =   945
+         Width           =   9360
+      End
+      Begin VB.CheckBox CheqFA 
+         Caption         =   "Fecha FA"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Left            =   9660
+         TabIndex        =   16
+         Top             =   210
+         Width           =   1380
+      End
+      Begin MSDataListLib.DataCombo DCCliente 
+         Bindings        =   "LstGrupo.frx":0048
+         DataSource      =   "AdoCliente"
+         Height          =   360
+         Left            =   2835
+         TabIndex        =   15
+         Top             =   525
+         Width           =   6735
+         _ExtentX        =   11880
+         _ExtentY        =   635
+         _Version        =   393216
+         Text            =   "Clientes"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin VB.CheckBox CheqResumen 
+         Caption         =   "Resumen Periodos"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Left            =   5985
+         TabIndex        =   13
+         Top             =   210
+         Value           =   1  'Checked
+         Width           =   1905
+      End
+      Begin VB.ComboBox CTipoConsulta 
+         BackColor       =   &H00C0E0FF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00000040&
+         Height          =   360
+         Left            =   2835
+         TabIndex        =   12
+         Top             =   210
+         Width           =   3060
+      End
+      Begin MSDataListLib.DataCombo DCProductos 
+         Bindings        =   "LstGrupo.frx":0061
+         DataSource      =   "AdoProductos"
+         Height          =   360
+         Left            =   15750
+         TabIndex        =   23
+         Top             =   525
+         Visible         =   0   'False
+         Width           =   5895
+         _ExtentX        =   10398
+         _ExtentY        =   635
+         _Version        =   393216
+         Text            =   "Clientes"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin VB.OptionButton OpcActivos 
+         Caption         =   "Activos"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Left            =   18480
+         TabIndex        =   21
+         Top             =   210
+         Value           =   -1  'True
+         Width           =   960
+      End
+      Begin VB.OptionButton OpcInactivos 
+         Caption         =   "Inactivos"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Left            =   19530
+         TabIndex        =   22
+         Top             =   210
+         Width           =   1170
+      End
+      Begin VB.CheckBox CheqPorRubro 
+         Caption         =   "Por Rubros de Facturacion"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Left            =   15750
+         TabIndex        =   20
+         Top             =   210
+         Width           =   2640
+      End
+      Begin VB.CheckBox CheqDesc 
+         Caption         =   "D&escuentos"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Left            =   8085
+         TabIndex        =   14
+         Top             =   210
+         Width           =   1380
+      End
+      Begin MSDataListLib.DataCombo DCLinea 
+         Bindings        =   "LstGrupo.frx":007C
+         DataSource      =   "AdoLinea"
+         Height          =   360
+         Left            =   11025
+         TabIndex        =   19
+         Top             =   525
+         Width           =   4635
+         _ExtentX        =   8176
+         _ExtentY        =   635
+         _Version        =   393216
+         Text            =   "CxC Clientes"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin MSMask.MaskEdBox MBFechaF 
+         Height          =   330
+         Left            =   1365
+         TabIndex        =   11
+         Top             =   525
+         Width           =   1275
+         _ExtentX        =   2249
+         _ExtentY        =   582
+         _Version        =   393216
+         AllowPrompt     =   -1  'True
+         AutoTab         =   -1  'True
+         MaxLength       =   10
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Format          =   "dd/mm/yyyy"
+         Mask            =   "##/##/####"
+         PromptChar      =   "0"
+      End
+      Begin VB.CheckBox CheqVenc 
+         Caption         =   "Vencimiento"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Left            =   1365
+         TabIndex        =   9
+         Top             =   210
+         Value           =   1  'Checked
+         Width           =   1380
+      End
+      Begin MSMask.MaskEdBox MBFechaI 
+         Height          =   330
+         Left            =   105
+         TabIndex        =   10
+         Top             =   525
+         Width           =   1275
+         _ExtentX        =   2249
+         _ExtentY        =   582
+         _Version        =   393216
+         AllowPrompt     =   -1  'True
+         AutoTab         =   -1  'True
+         MaxLength       =   10
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Format          =   "dd/mm/yyyy"
+         Mask            =   "##/##/####"
+         PromptChar      =   "0"
+      End
+      Begin MSMask.MaskEdBox MBFecha 
+         Height          =   330
+         Left            =   9660
+         TabIndex        =   17
+         Top             =   525
+         Visible         =   0   'False
+         Width           =   1275
+         _ExtentX        =   2249
+         _ExtentY        =   582
+         _Version        =   393216
+         AllowPrompt     =   -1  'True
+         AutoTab         =   -1  'True
+         MaxLength       =   10
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Format          =   "dd/mm/yyyy"
+         Mask            =   "##/##/####"
+         PromptChar      =   "0"
+      End
+      Begin VB.Label Label15 
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " NOTA:"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   11025
+         TabIndex        =   26
+         Top             =   945
+         Width           =   750
+      End
+      Begin VB.Label Label14 
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " OBSERVACION"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   105
+         TabIndex        =   24
+         Top             =   945
+         Width           =   1485
+      End
+      Begin VB.Label Label2 
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " &Linea de Facturacion:"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   11025
+         TabIndex        =   18
+         Top             =   210
+         Width           =   4635
+      End
+      Begin VB.Label Label5 
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " &Emision:"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   105
+         TabIndex        =   8
+         Top             =   210
+         Width           =   1275
+      End
+   End
+   Begin VB.TextBox TxtAyuda 
+      BeginProperty Font 
+         Name            =   "Courier"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H000000FF&
+      Height          =   2535
+      Left            =   105
+      MultiLine       =   -1  'True
+      ScrollBars      =   2  'Vertical
+      TabIndex        =   29
+      Top             =   7980
+      Visible         =   0   'False
+      Width           =   7575
+   End
    Begin MSDataGridLib.DataGrid DGQuery 
-      Bindings        =   "LstGrupo.frx":0048
+      Bindings        =   "LstGrupo.frx":0093
       Height          =   3480
       Left            =   105
-      TabIndex        =   20
-      Top             =   2310
+      TabIndex        =   31
+      Top             =   2520
       Width           =   20385
       _ExtentX        =   35957
       _ExtentY        =   6138
@@ -500,384 +907,48 @@ Begin VB.Form ListarGrupos
    Begin TabDlg.SSTab SSTab2 
       Height          =   390
       Left            =   105
-      TabIndex        =   19
-      Top             =   1890
+      TabIndex        =   30
+      Top             =   2205
       Width           =   21750
       _ExtentX        =   38365
       _ExtentY        =   688
       _Version        =   393216
       Tabs            =   7
-      Tab             =   1
       TabsPerRow      =   7
       TabHeight       =   520
       TabCaption(0)   =   "LISTADO POR GRUPOS"
-      TabPicture(0)   =   "LstGrupo.frx":005F
-      Tab(0).ControlEnabled=   0   'False
+      TabPicture(0)   =   "LstGrupo.frx":00AA
+      Tab(0).ControlEnabled=   -1  'True
       Tab(0).ControlCount=   0
       TabCaption(1)   =   "PENSION MENSUAL DEL AÑO"
-      TabPicture(1)   =   "LstGrupo.frx":007B
-      Tab(1).ControlEnabled=   -1  'True
+      TabPicture(1)   =   "LstGrupo.frx":00C6
+      Tab(1).ControlEnabled=   0   'False
       Tab(1).ControlCount=   0
       TabCaption(2)   =   "ALUMNOS CON DESCUENTO"
-      TabPicture(2)   =   "LstGrupo.frx":0097
+      TabPicture(2)   =   "LstGrupo.frx":00E2
       Tab(2).ControlEnabled=   0   'False
       Tab(2).ControlCount=   0
       TabCaption(3)   =   "NOMINA DE ALUMNOS"
-      TabPicture(3)   =   "LstGrupo.frx":00B3
+      TabPicture(3)   =   "LstGrupo.frx":00FE
       Tab(3).ControlEnabled=   0   'False
       Tab(3).ControlCount=   0
       TabCaption(4)   =   "ENVIOS POR MAIL"
-      TabPicture(4)   =   "LstGrupo.frx":00CF
+      TabPicture(4)   =   "LstGrupo.frx":011A
       Tab(4).ControlEnabled=   0   'False
       Tab(4).ControlCount=   0
       TabCaption(5)   =   "RESUMEN PENSIONES POR MES"
-      TabPicture(5)   =   "LstGrupo.frx":00EB
+      TabPicture(5)   =   "LstGrupo.frx":0136
       Tab(5).ControlEnabled=   0   'False
       Tab(5).ControlCount=   0
       TabCaption(6)   =   "ENVIAR DEUDA POR API Y EMAIL"
-      TabPicture(6)   =   "LstGrupo.frx":0107
+      TabPicture(6)   =   "LstGrupo.frx":0152
       Tab(6).ControlEnabled=   0   'False
       Tab(6).ControlCount=   0
-   End
-   Begin VB.Frame Frame3 
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   1065
-      Left            =   105
-      TabIndex        =   0
-      Top             =   735
-      Width           =   21645
-      Begin VB.CheckBox CheqFA 
-         Caption         =   "Fecha FA"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   225
-         Left            =   9660
-         TabIndex        =   9
-         Top             =   210
-         Width           =   1380
-      End
-      Begin MSDataListLib.DataCombo DCCliente 
-         Bindings        =   "LstGrupo.frx":0123
-         DataSource      =   "AdoCliente"
-         Height          =   360
-         Left            =   2835
-         TabIndex        =   8
-         Top             =   525
-         Width           =   6735
-         _ExtentX        =   11880
-         _ExtentY        =   635
-         _Version        =   393216
-         Text            =   "Clientes"
-         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "MS Sans Serif"
-            Size            =   9.75
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-      End
-      Begin VB.CheckBox CheqResumen 
-         Caption         =   "Resumen Periodos"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   225
-         Left            =   5985
-         TabIndex        =   6
-         Top             =   210
-         Value           =   1  'Checked
-         Width           =   1905
-      End
-      Begin VB.ComboBox CTipoConsulta 
-         BackColor       =   &H00C0E0FF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   9.75
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00000040&
-         Height          =   360
-         Left            =   2835
-         TabIndex        =   5
-         Top             =   210
-         Width           =   3060
-      End
-      Begin MSDataListLib.DataCombo DCProductos 
-         Bindings        =   "LstGrupo.frx":013C
-         DataSource      =   "AdoProductos"
-         Height          =   360
-         Left            =   15645
-         TabIndex        =   16
-         Top             =   525
-         Visible         =   0   'False
-         Width           =   5895
-         _ExtentX        =   10398
-         _ExtentY        =   635
-         _Version        =   393216
-         Text            =   "Clientes"
-         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "MS Sans Serif"
-            Size            =   9.75
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-      End
-      Begin VB.OptionButton OpcActivos 
-         Caption         =   "Activos"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   225
-         Left            =   18375
-         TabIndex        =   14
-         Top             =   210
-         Value           =   -1  'True
-         Width           =   960
-      End
-      Begin VB.OptionButton OpcInactivos 
-         Caption         =   "Inactivos"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   225
-         Left            =   19425
-         TabIndex        =   15
-         Top             =   210
-         Width           =   1170
-      End
-      Begin VB.CheckBox CheqPorRubro 
-         Caption         =   "Por Rubros de Facturacion"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   225
-         Left            =   15645
-         TabIndex        =   13
-         Top             =   210
-         Width           =   2640
-      End
-      Begin VB.CheckBox CheqDesc 
-         Caption         =   "D&escuentos"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   225
-         Left            =   8085
-         TabIndex        =   7
-         Top             =   210
-         Width           =   1380
-      End
-      Begin MSDataListLib.DataCombo DCLinea 
-         Bindings        =   "LstGrupo.frx":0157
-         DataSource      =   "AdoLinea"
-         Height          =   360
-         Left            =   11025
-         TabIndex        =   12
-         Top             =   525
-         Width           =   4530
-         _ExtentX        =   7990
-         _ExtentY        =   635
-         _Version        =   393216
-         Text            =   "CxC Clientes"
-         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "MS Sans Serif"
-            Size            =   9.75
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-      End
-      Begin MSMask.MaskEdBox MBFechaF 
-         Height          =   330
-         Left            =   1365
-         TabIndex        =   4
-         Top             =   525
-         Width           =   1275
-         _ExtentX        =   2249
-         _ExtentY        =   582
-         _Version        =   393216
-         AllowPrompt     =   -1  'True
-         AutoTab         =   -1  'True
-         MaxLength       =   10
-         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Format          =   "dd/mm/yyyy"
-         Mask            =   "##/##/####"
-         PromptChar      =   "0"
-      End
-      Begin VB.CheckBox CheqVenc 
-         Caption         =   "Vencimiento"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   225
-         Left            =   1365
-         TabIndex        =   2
-         Top             =   210
-         Value           =   1  'Checked
-         Width           =   1380
-      End
-      Begin MSMask.MaskEdBox MBFechaI 
-         Height          =   330
-         Left            =   105
-         TabIndex        =   3
-         Top             =   525
-         Width           =   1275
-         _ExtentX        =   2249
-         _ExtentY        =   582
-         _Version        =   393216
-         AllowPrompt     =   -1  'True
-         AutoTab         =   -1  'True
-         MaxLength       =   10
-         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Format          =   "dd/mm/yyyy"
-         Mask            =   "##/##/####"
-         PromptChar      =   "0"
-      End
-      Begin MSMask.MaskEdBox MBFecha 
-         Height          =   330
-         Left            =   9660
-         TabIndex        =   10
-         Top             =   525
-         Visible         =   0   'False
-         Width           =   1275
-         _ExtentX        =   2249
-         _ExtentY        =   582
-         _Version        =   393216
-         AllowPrompt     =   -1  'True
-         AutoTab         =   -1  'True
-         MaxLength       =   10
-         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Format          =   "dd/mm/yyyy"
-         Mask            =   "##/##/####"
-         PromptChar      =   "0"
-      End
-      Begin VB.Label Label2 
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   " &Linea de Facturacion:"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   11025
-         TabIndex        =   11
-         Top             =   210
-         Width           =   4530
-      End
-      Begin VB.Label Label5 
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   " &Emision:"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   105
-         TabIndex        =   1
-         Top             =   210
-         Width           =   1275
-      End
    End
    Begin MSAdodcLib.Adodc AdoCiudad 
       Height          =   330
       Left            =   2835
-      Top             =   3045
+      Top             =   3570
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -924,7 +995,7 @@ Begin VB.Form ListarGrupos
    Begin MSAdodcLib.Adodc AdoCliente 
       Height          =   330
       Left            =   2835
-      Top             =   2730
+      Top             =   3255
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -971,7 +1042,7 @@ Begin VB.Form ListarGrupos
    Begin MSAdodcLib.Adodc AdoNiveles 
       Height          =   330
       Left            =   2835
-      Top             =   5250
+      Top             =   5775
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -1018,7 +1089,7 @@ Begin VB.Form ListarGrupos
    Begin MSAdodcLib.Adodc AdoLinea 
       Height          =   330
       Left            =   2835
-      Top             =   4935
+      Top             =   5460
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -1065,7 +1136,7 @@ Begin VB.Form ListarGrupos
    Begin MSAdodcLib.Adodc AdoAux 
       Height          =   330
       Left            =   2835
-      Top             =   3360
+      Top             =   3885
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -1112,7 +1183,7 @@ Begin VB.Form ListarGrupos
    Begin MSAdodcLib.Adodc AdoGrupo 
       Height          =   330
       Left            =   2835
-      Top             =   3990
+      Top             =   4515
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -1159,7 +1230,7 @@ Begin VB.Form ListarGrupos
    Begin MSAdodcLib.Adodc AdoAux2 
       Height          =   330
       Left            =   2835
-      Top             =   3675
+      Top             =   4200
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -1206,7 +1277,7 @@ Begin VB.Form ListarGrupos
    Begin MSAdodcLib.Adodc AdoProductos 
       Height          =   330
       Left            =   2835
-      Top             =   4305
+      Top             =   4830
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -1253,7 +1324,7 @@ Begin VB.Form ListarGrupos
    Begin MSAdodcLib.Adodc AdoTipoPago 
       Height          =   330
       Left            =   2835
-      Top             =   4620
+      Top             =   5145
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -1300,7 +1371,7 @@ Begin VB.Form ListarGrupos
    Begin MSAdodcLib.Adodc AdoQuery 
       Height          =   330
       Left            =   9870
-      Top             =   5985
+      Top             =   6510
       Width           =   10305
       _ExtentX        =   18177
       _ExtentY        =   582
@@ -1346,7 +1417,7 @@ Begin VB.Form ListarGrupos
    Begin MSAdodcLib.Adodc AdoParte 
       Height          =   330
       Left            =   4935
-      Top             =   2730
+      Top             =   3255
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -1404,8 +1475,8 @@ Begin VB.Form ListarGrupos
       EndProperty
       Height          =   330
       Left            =   6510
-      TabIndex        =   38
-      Top             =   5985
+      TabIndex        =   49
+      Top             =   6510
       Width           =   1590
    End
    Begin VB.Label Label8 
@@ -1422,8 +1493,8 @@ Begin VB.Form ListarGrupos
       EndProperty
       Height          =   330
       Left            =   105
-      TabIndex        =   37
-      Top             =   5985
+      TabIndex        =   48
+      Top             =   6510
       Width           =   1380
    End
    Begin VB.Label Label9 
@@ -1442,8 +1513,8 @@ Begin VB.Form ListarGrupos
       EndProperty
       Height          =   330
       Left            =   1470
-      TabIndex        =   36
-      Top             =   5985
+      TabIndex        =   47
+      Top             =   6510
       Width           =   1695
    End
    Begin VB.Label Label11 
@@ -1460,8 +1531,8 @@ Begin VB.Form ListarGrupos
       EndProperty
       Height          =   330
       Left            =   3255
-      TabIndex        =   35
-      Top             =   5985
+      TabIndex        =   46
+      Top             =   6510
       Width           =   1485
    End
    Begin VB.Label Label10 
@@ -1480,8 +1551,8 @@ Begin VB.Form ListarGrupos
       EndProperty
       Height          =   330
       Left            =   4725
-      TabIndex        =   34
-      Top             =   5985
+      TabIndex        =   45
+      Top             =   6510
       Width           =   1695
    End
    Begin VB.Label Label4 
@@ -1500,13 +1571,13 @@ Begin VB.Form ListarGrupos
       EndProperty
       Height          =   330
       Left            =   8085
-      TabIndex        =   33
-      Top             =   5985
+      TabIndex        =   44
+      Top             =   6510
       Width           =   1695
    End
    Begin ComctlLib.ImageList ImageList1 
       Left            =   20790
-      Top             =   2625
+      Top             =   3150
       _ExtentX        =   1005
       _ExtentY        =   1005
       BackColor       =   -2147483643
@@ -1570,7 +1641,7 @@ Begin VB.Form ListarGrupos
       ForeColor       =   &H00000080&
       Height          =   330
       Left            =   105
-      TabIndex        =   17
+      TabIndex        =   28
       Top             =   11655
       Width           =   16290
    End
@@ -1630,18 +1701,197 @@ Public Sub Listar_Grupo()
    'MsgBox sSQL
 End Sub
 
-Public Sub ProcGrabarMult()
+'''Public Sub ProcGrabarMult()
+'''Dim Periodo_Facturacion As String
+'''Dim Total_IVAFM As Currency
+''' 'Seteamos los encabezados para las facturas
+'''  Validar_Porc_IVA MBFechaI
+'''  FA.Porc_IVA = Porc_IVA
+'''  NoMes = Month(MBFechaI)
+'''  Periodo_Facturacion = CStr(Year(MBFechaI))
+'''  DGQuery.Visible = False
+'''  'DGQuery1.Visible = False
+'''  sSQL = "SELECT C.Grupo,C.Cliente,C.Codigo,CF.Periodo,CF.Num_Mes,SUM(CF.Valor) As TValor " _
+'''       & "FROM Clientes As C, Clientes_Facturacion As CF " _
+'''       & "WHERE CF.Item = '" & NumEmpresa & "' " _
+'''       & "AND C.T = 'N' "
+'''  If PorGrupo <> 0 Then
+'''     sSQL = sSQL & "AND C.Grupo = '" & DCCliente.Text & "' "
+'''  Else
+'''     If CheqRangos.value <> 0 Then sSQL = sSQL & "AND C.Grupo BETWEEN '" & Codigo1 & "' and '" & Codigo2 & "' "
+'''  End If
+'''  If CheqFA.value = 0 Then
+'''     sSQL = sSQL _
+'''          & "AND CF.Num_Mes = " & NoMes & " " _
+'''          & "AND CF.Periodo = '" & Periodo_Facturacion & "' "
+'''  Else
+'''     sSQL = sSQL & "AND CF.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# "
+'''  End If
+'''  sSQL = sSQL & "AND C.Codigo = CF.Codigo " _
+'''       & "GROUP BY C.Grupo,C.Cliente,C.Codigo,CF.Periodo,CF.Num_Mes " _
+'''       & "ORDER BY C.Grupo,C.Cliente,CF.Periodo,CF.Num_Mes "   'CF.Periodo
+'''  Select_Adodc AdoQuery, sSQL
+'''  Contador = 0
+''' 'MsgBox AdoQuery.Recordset.RecordCount
+'''  If AdoQuery.Recordset.RecordCount > 0 Then
+'''     RatonReloj
+'''     Moneda_US = False
+'''     TextoProc = Ninguno
+'''     TextoFormaPago = PagoCred
+'''     If CheqFA.value = 0 Then FechaTexto = MBFechaI Else FechaTexto = MBFecha
+'''     FA.T = Pendiente
+'''     FA.Nuevo_Doc = True
+'''     FA.Factura = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, False)
+'''     FA.Fecha = FechaTexto
+'''     Factura_No = FA.Factura
+'''    'Grabamos Facturacion Multiple
+'''     If AdoQuery.Recordset.RecordCount > 0 Then
+'''        Factura_Desde = Factura_No
+'''        Factura_Hasta = Factura_No + AdoQuery.Recordset.RecordCount
+'''     End If
+'''     'MsgBox Factura_Desde & " - " & Factura_Hasta
+'''     sSQL = "DELETE * " _
+'''          & "FROM Detalle_Factura " _
+'''          & "WHERE Factura BETWEEN " & Factura_Desde & " and " & Factura_Hasta & " " _
+'''          & "AND Periodo = '" & Periodo_Contable & "' " _
+'''          & "AND Item = '" & NumEmpresa & "' " _
+'''          & "AND TC = '" & FA.TC & "' " _
+'''          & "AND Serie = '" & FA.Serie & "' " _
+'''          & "AND Autorizacion = '" & FA.Autorizacion & "' "
+'''     Ejecutar_SQL_SP sSQL
+'''
+'''     sSQL = "DELETE * " _
+'''          & "FROM Facturas " _
+'''          & "WHERE Factura BETWEEN " & Factura_Desde & " and " & Factura_Hasta & " " _
+'''          & "AND Periodo = '" & Periodo_Contable & "' " _
+'''          & "AND Item = '" & NumEmpresa & "' " _
+'''          & "AND TC = '" & FA.TC & "' " _
+'''          & "AND Serie = '" & FA.Serie & "' " _
+'''          & "AND Autorizacion = '" & FA.Autorizacion & "' "
+'''     Ejecutar_SQL_SP sSQL
+'''
+'''    'Grabamos el numero de factura
+'''     Do While Not AdoQuery.Recordset.EOF
+'''        FA.Factura = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, True)
+'''        FA.CodigoC = AdoQuery.Recordset.fields("Codigo")
+'''        FA.Cliente = AdoQuery.Recordset.fields("Cliente")
+'''        FA.Grupo = AdoQuery.Recordset.fields("Grupo")
+'''        NoMes = AdoQuery.Recordset.fields("Num_Mes")
+'''        MiMes = MesesLetras(NoMes)
+'''        Periodo_Facturacion = AdoQuery.Recordset.fields("Periodo")
+'''        FA.EmailC = Ninguno
+'''        FA.Fecha = FechaTexto
+'''        FA.Nota = "Facturas del mes de " & MesesLetras(FechaMes(FechaTexto))
+'''       'NoMes = Month(FechaTexto)
+'''        ListarGrupos.Caption = "(" & Format$(Contador / AdoQuery.Recordset.RecordCount, "00%") & ") - " & FA.Cliente
+'''        sSQL = "DELETE * " _
+'''             & "FROM Asiento_F " _
+'''             & "WHERE Item = '" & NumEmpresa & "' " _
+'''             & "AND CodigoU = '" & CodigoUsuario & "' "
+'''        Ejecutar_SQL_SP sSQL
+'''
+'''        sSQL = "SELECT C.Cliente,CF.Codigo_Inv,CP.Producto,CF.Valor,CF.Descuento,CF.Descuento2,CP.IVA,C.Codigo,C.Grupo " _
+'''             & "FROM Clientes_Facturacion As CF,Clientes As C,Catalogo_Productos CP " _
+'''             & "WHERE CF.Item = '" & NumEmpresa & "' " _
+'''             & "AND CP.Periodo = '" & Periodo_Contable & "' " _
+'''             & "AND C.Codigo = '" & FA.CodigoC & "' " _
+'''             & "AND CF.Num_Mes = " & NoMes & " " _
+'''             & "AND CF.Periodo = '" & Periodo_Facturacion & "' " _
+'''             & "AND CF.Codigo_Inv = CP.Codigo_Inv " _
+'''             & "AND CF.Codigo = C.Codigo " _
+'''             & "AND CF.Item = CP.Item " _
+'''             & "ORDER BY CF.Codigo_Inv "
+'''        Select_Adodc AdoParte, sSQL
+'''
+'''       'MsgBox AdoParte.Recordset.RecordCount
+'''
+'''        With AdoParte.Recordset
+'''         If .RecordCount > 0 Then
+'''             Do While Not .EOF
+'''                If .fields("Valor") > 0 Then
+'''                   'MsgBox MiMes & vbCrLf & NoMes & vbCrLf & Periodo_Facturacion
+'''                    SetAdoAddNew "Asiento_F"
+'''                    SetAdoFields "CODIGO", .fields("Codigo_Inv")
+'''                    SetAdoFields "CODIGO_L", CodigoL
+'''                    SetAdoFields "PRODUCTO", .fields("Producto")
+'''                    SetAdoFields "CANT", 1
+'''                    SetAdoFields "PRECIO", .fields("Valor")
+'''                    SetAdoFields "Total_Desc", .fields("Descuento")
+'''                    SetAdoFields "Total_Desc2", .fields("Descuento2")
+'''                    SetAdoFields "TOTAL", .fields("Valor")
+'''                    If .fields("IVA") Then
+'''                        Total_IVAFM = Redondear(.fields("Valor") * Porc_IVA, 2)
+'''                    Else
+'''                        Total_IVAFM = 0
+'''                    End If
+'''                    SetAdoFields "Total_IVA", Total_IVAFM
+'''                    SetAdoFields "Cta", Cta_Ventas
+'''                    SetAdoFields "Item", NumEmpresa
+'''                    SetAdoFields "Codigo_Cliente", FA.CodigoC
+'''                   'SetAdoFields "RUTA", MidStrg("(" & FA.Grupo & ") " & FA.Cliente, 1, 50)
+'''                    SetAdoFields "Mes", MiMes
+'''                    SetAdoFields "TICKET", Periodo_Facturacion
+'''                    SetAdoFields "CodigoU", CodigoUsuario
+'''                    SetAdoFields "A_No", Contador
+'''                    SetAdoUpdate
+'''                End If
+'''               .MoveNext
+'''             Loop
+'''             Factura_Hasta = FA.Factura
+'''             FA.Tipo_PRN = "FM"
+'''             Calculos_Totales_Factura FA
+'''             FA.Nota = "FACTURA PENDIENTE DE PAGO"
+'''             Grabar_Factura FA, False
+'''            'SRI_Crear_Clave_Acceso_Facturas FA, Code39Clt1, False, False
+'''
+'''             TextCheqNo = TxtGrupo
+'''             ListarGrupos.Caption = ListarGrupos.Caption & ", No. " & FA.Factura
+'''             sSQL = "DELETE * " _
+'''                  & "FROM Clientes_Facturacion " _
+'''                  & "WHERE Item = '" & NumEmpresa & "' " _
+'''                  & "AND Codigo = '" & FA.CodigoC & "' " _
+'''                  & "AND Num_Mes = " & NoMes & " " _
+'''                  & "AND Periodo = '" & Periodo_Facturacion & "' "
+'''             Ejecutar_SQL_SP sSQL
+'''             Control_Procesos Normal, "Grabar Factura No. " & FA.Serie & "-" & Format$(FA.Factura, "000000000")
+'''         End If
+'''        End With
+'''        Contador = Contador + 1
+'''        AdoQuery.Recordset.MoveNext
+'''     Loop
+'''
+'''     SSTab2.Tab = 0
+'''     RatonNormal
+'''     Bandera = False
+'''     Evaluar = True
+'''     If TipoFactura = "NV" Then
+'''        Cadena = "IMPRIMIR NOTAS DE VENTA" & vbCrLf & vbCrLf
+'''     Else
+'''        Cadena = "IMPRIMIR FACTURAS (FM)" & vbCrLf & vbCrLf
+'''     End If
+'''     Cadena = Cadena _
+'''            & "DESDE: " & Factura_Desde & vbCrLf & vbCrLf _
+'''            & "HASTA: " & Factura_Hasta & vbCrLf & vbCrLf _
+'''            & "SON UN TOTAL DE: " & Format$(Factura_Hasta - Factura_Desde + 1, "#,##0") & vbCrLf & vbCrLf _
+'''            & "EN EL MENU:" & vbCrLf & vbCrLf _
+'''            & "ARCHIVOS" & vbCrLf _
+'''            & Space(18) & "LISTAR ANULAR FACTURAS" & vbCrLf & vbCrLf _
+'''            & "Opción: En Bloque"
+'''     MsgBox Cadena
+'''  Else
+'''     MsgBox "No se puede grabar la Factura," & vbCrLf & "falta datos."
+'''  End If
+'''  DGQuery.Visible = True
+'''  RatonNormal
+'''End Sub
+
+Public Sub Grabar_Facturas_en_Lote()
 Dim Periodo_Facturacion As String
 Dim Total_IVAFM As Currency
- 'Seteamos los encabezados para las facturas
-  Validar_Porc_IVA MBFechaI
-  FA.Porc_IVA = Porc_IVA
-  NoMes = Month(MBFechaI)
-  Periodo_Facturacion = CStr(Year(MBFechaI))
+
   DGQuery.Visible = False
-  'DGQuery1.Visible = False
   sSQL = "SELECT C.Grupo,C.Cliente,C.Codigo,CF.Periodo,CF.Num_Mes,SUM(CF.Valor) As TValor " _
-       & "FROM Clientes As C,Clientes_Facturacion As CF " _
+       & "FROM Clientes As C, Clientes_Facturacion As CF " _
        & "WHERE CF.Item = '" & NumEmpresa & "' " _
        & "AND C.T = 'N' "
   If PorGrupo <> 0 Then
@@ -1664,135 +1914,21 @@ Dim Total_IVAFM As Currency
  'MsgBox AdoQuery.Recordset.RecordCount
   If AdoQuery.Recordset.RecordCount > 0 Then
      RatonReloj
-     Moneda_US = False
-     TextoProc = Ninguno
-     TextoFormaPago = PagoCred
-     If CheqFA.value = 0 Then FechaTexto = MBFechaI Else FechaTexto = MBFecha
-     FA.T = Pendiente
-     FA.Nuevo_Doc = True
-     FA.Factura = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, False)
-     FA.Fecha = FechaTexto
-     Factura_No = FA.Factura
+     
+    'Seteamos los encabezados para las facturas
+     Validar_Porc_IVA MBFechaI
+     NoMes = Month(MBFechaI)
+     Periodo_Facturacion = CStr(Year(MBFechaI))
+     Factura_Desde = FA.Factura
+     
     'Grabamos Facturacion Multiple
-     If AdoQuery.Recordset.RecordCount > 0 Then
-        Factura_Desde = Factura_No
-        Factura_Hasta = Factura_No + AdoQuery.Recordset.RecordCount
-     End If
-     'MsgBox Factura_Desde & " - " & Factura_Hasta
-     sSQL = "DELETE * " _
-          & "FROM Detalle_Factura " _
-          & "WHERE Factura BETWEEN " & Factura_Desde & " and " & Factura_Hasta & " " _
-          & "AND Periodo = '" & Periodo_Contable & "' " _
-          & "AND Item = '" & NumEmpresa & "' " _
-          & "AND TC = '" & FA.TC & "' " _
-          & "AND Serie = '" & FA.Serie & "' " _
-          & "AND Autorizacion = '" & FA.Autorizacion & "' "
-     Ejecutar_SQL_SP sSQL
+     Grabar_Facturas_x_Lotes_SP FA.Cod_CxC, DCGrupoI, DCGrupoF, MBFechaI, MBFechaF, MBFecha, NoMes, Periodo_Facturacion, FA.Tipo_Pago, TxtNota, TxtObs, PorGrupo, CheqRangos, CheqFA
      
-     sSQL = "DELETE * " _
-          & "FROM Facturas " _
-          & "WHERE Factura BETWEEN " & Factura_Desde & " and " & Factura_Hasta & " " _
-          & "AND Periodo = '" & Periodo_Contable & "' " _
-          & "AND Item = '" & NumEmpresa & "' " _
-          & "AND TC = '" & FA.TC & "' " _
-          & "AND Serie = '" & FA.Serie & "' " _
-          & "AND Autorizacion = '" & FA.Autorizacion & "' "
-     Ejecutar_SQL_SP sSQL
-     
-    'Grabamos el numero de factura
-     Do While Not AdoQuery.Recordset.EOF
-        FA.Factura = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, True)
-        FA.CodigoC = AdoQuery.Recordset.fields("Codigo")
-        FA.Cliente = AdoQuery.Recordset.fields("Cliente")
-        FA.Grupo = AdoQuery.Recordset.fields("Grupo")
-        NoMes = AdoQuery.Recordset.fields("Num_Mes")
-        MiMes = MesesLetras(NoMes)
-        Periodo_Facturacion = AdoQuery.Recordset.fields("Periodo")
-        FA.EmailC = Ninguno
-        FA.Fecha = FechaTexto
-        FA.Nota = "Facturas del mes de " & MesesLetras(FechaMes(FechaTexto))
-       'NoMes = Month(FechaTexto)
-        ListarGrupos.Caption = "(" & Format$(Contador / AdoQuery.Recordset.RecordCount, "00%") & ") - " & FA.Cliente
-        sSQL = "DELETE * " _
-             & "FROM Asiento_F " _
-             & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND CodigoU = '" & CodigoUsuario & "' "
-        Ejecutar_SQL_SP sSQL
-        
-        sSQL = "SELECT C.Cliente,CF.Codigo_Inv,CP.Producto,CF.Valor,CF.Descuento,CF.Descuento2,CP.IVA,C.Codigo,C.Grupo " _
-             & "FROM Clientes_Facturacion As CF,Clientes As C,Catalogo_Productos CP " _
-             & "WHERE CF.Item = '" & NumEmpresa & "' " _
-             & "AND CP.Periodo = '" & Periodo_Contable & "' " _
-             & "AND C.Codigo = '" & FA.CodigoC & "' " _
-             & "AND CF.Num_Mes = " & NoMes & " " _
-             & "AND CF.Periodo = '" & Periodo_Facturacion & "' " _
-             & "AND CF.Codigo_Inv = CP.Codigo_Inv " _
-             & "AND CF.Codigo = C.Codigo " _
-             & "AND CF.Item = CP.Item " _
-             & "ORDER BY CF.Codigo_Inv "
-        Select_Adodc AdoParte, sSQL
-        
-       'MsgBox AdoParte.Recordset.RecordCount
-        
-        With AdoParte.Recordset
-         If .RecordCount > 0 Then
-             Do While Not .EOF
-                If .fields("Valor") > 0 Then
-                   'MsgBox MiMes & vbCrLf & NoMes & vbCrLf & Periodo_Facturacion
-                    SetAdoAddNew "Asiento_F"
-                    SetAdoFields "CODIGO", .fields("Codigo_Inv")
-                    SetAdoFields "CODIGO_L", CodigoL
-                    SetAdoFields "PRODUCTO", .fields("Producto")
-                    SetAdoFields "CANT", 1
-                    SetAdoFields "PRECIO", .fields("Valor")
-                    SetAdoFields "Total_Desc", .fields("Descuento")
-                    SetAdoFields "Total_Desc2", .fields("Descuento2")
-                    SetAdoFields "TOTAL", .fields("Valor")
-                    If .fields("IVA") Then
-                        Total_IVAFM = Redondear(.fields("Valor") * Porc_IVA, 2)
-                    Else
-                        Total_IVAFM = 0
-                    End If
-                    SetAdoFields "Total_IVA", Total_IVAFM
-                    SetAdoFields "Cta", Cta_Ventas
-                    SetAdoFields "Item", NumEmpresa
-                    SetAdoFields "Codigo_Cliente", FA.CodigoC
-                   'SetAdoFields "RUTA", MidStrg("(" & FA.Grupo & ") " & FA.Cliente, 1, 50)
-                    SetAdoFields "Mes", MiMes
-                    SetAdoFields "TICKET", Periodo_Facturacion
-                    SetAdoFields "CodigoU", CodigoUsuario
-                    SetAdoFields "A_No", Contador
-                    SetAdoUpdate
-                End If
-               .MoveNext
-             Loop
-             Factura_Hasta = FA.Factura
-             FA.Tipo_PRN = "FM"
-             Calculos_Totales_Factura FA
-             FA.Nota = "FACTURA PENDIENTE DE PAGO"
-             Grabar_Factura FA, False
-            'SRI_Crear_Clave_Acceso_Facturas FA, Code39Clt1, False, False
-             
-             TextCheqNo = TxtGrupo
-             ListarGrupos.Caption = ListarGrupos.Caption & ", No. " & FA.Factura
-             sSQL = "DELETE * " _
-                  & "FROM Clientes_Facturacion " _
-                  & "WHERE Item = '" & NumEmpresa & "' " _
-                  & "AND Codigo = '" & FA.CodigoC & "' " _
-                  & "AND Num_Mes = " & NoMes & " " _
-                  & "AND Periodo = '" & Periodo_Facturacion & "' "
-             Ejecutar_SQL_SP sSQL
-             Control_Procesos Normal, "Grabar Factura No. " & FA.Serie & "-" & Format$(FA.Factura, "000000000")
-         End If
-        End With
-        Contador = Contador + 1
-        AdoQuery.Recordset.MoveNext
-     Loop
+     Factura_Hasta = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, False)
      
      SSTab2.Tab = 0
      RatonNormal
-     Bandera = False
-     Evaluar = True
+     
      If TipoFactura = "NV" Then
         Cadena = "IMPRIMIR NOTAS DE VENTA" & vbCrLf & vbCrLf
      Else
@@ -1813,6 +1949,7 @@ Dim Total_IVAFM As Currency
   DGQuery.Visible = True
   RatonNormal
 End Sub
+
 
 Private Sub CheqFA_Click()
   If CheqFA.value = 0 Then
@@ -1864,13 +2001,14 @@ Public Sub Generar_Facturas_Grupos()
            End If
            Mensajes = Mensajes & " en bloque "
            Titulo = "Formulario de Grabacion"
-           If BoxMensaje = vbYes Then ProcGrabarMult
+           If BoxMensaje = vbYes Then Grabar_Facturas_en_Lote  'ProcGrabarMult
         Else
            MsgBox "Debe seleccionar la opcion: 'Listar Todos' " & vbCrLf _
                 & "Caso Contrario no podra facturar"
         End If
     End If
  End If
+ CheqRangos.SetFocus
 End Sub
 
 Public Sub Listado_x_Grupos()
@@ -3082,4 +3220,28 @@ Dim ExisteUno As Boolean
        MsgBox "Proceso Terminado con exito"
        If Len(TextoImprimio) > 2 Then FInfoError.Show
     End If
+End Sub
+
+Private Sub TxtNota_GotFocus()
+    MarcarTexto TxtNota
+End Sub
+
+Private Sub TxtNota_KeyDown(KeyCode As Integer, Shift As Integer)
+    PresionoEnter KeyCode
+End Sub
+
+Private Sub TxtNota_LostFocus()
+    TextoValido TxtNota, , True
+End Sub
+
+Private Sub TxtObs_GotFocus()
+    MarcarTexto TxtObs
+End Sub
+
+Private Sub TxtObs_KeyDown(KeyCode As Integer, Shift As Integer)
+    PresionoEnter KeyCode
+End Sub
+
+Private Sub TxtObs_LostFocus()
+    TextoValido TxtObs, , True
 End Sub

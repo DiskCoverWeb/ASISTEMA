@@ -5,10 +5,10 @@ Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form AbonoAutomatico 
    Caption         =   "INGRESO DE CAJA"
-   ClientHeight    =   8400
+   ClientHeight    =   7590
    ClientLeft      =   5040
    ClientTop       =   4395
-   ClientWidth     =   13365
+   ClientWidth     =   14625
    BeginProperty Font 
       Name            =   "MS Sans Serif"
       Size            =   8.25
@@ -20,16 +20,32 @@ Begin VB.Form AbonoAutomatico
    EndProperty
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   8400
-   ScaleWidth      =   13365
+   ScaleHeight     =   7590
+   ScaleWidth      =   14625
    WindowState     =   2  'Maximized
+   Begin VB.TextBox TextFDesde 
+      Height          =   330
+      Left            =   6825
+      TabIndex        =   11
+      Text            =   "0"
+      Top             =   420
+      Width           =   1485
+   End
+   Begin VB.TextBox TextFHasta 
+      Height          =   330
+      Left            =   8295
+      TabIndex        =   12
+      Text            =   "0"
+      Top             =   420
+      Width           =   1485
+   End
    Begin VB.CommandButton Command4 
       Caption         =   "&Todas las Pendientes"
       Height          =   750
-      Left            =   8085
+      Left            =   11235
       Picture         =   "AbonoAut.frx":0000
       Style           =   1  'Graphical
-      TabIndex        =   20
+      TabIndex        =   23
       Top             =   105
       Width           =   1170
    End
@@ -37,17 +53,17 @@ Begin VB.Form AbonoAutomatico
       Caption         =   "Notas de Crédito"
       Height          =   330
       Left            =   2835
-      TabIndex        =   12
+      TabIndex        =   15
       Top             =   945
       Width           =   1800
    End
    Begin VB.CommandButton Command3 
       Caption         =   "&Por Autorización"
       Height          =   750
-      Left            =   6825
+      Left            =   9870
       Picture         =   "AbonoAut.frx":0442
       Style           =   1  'Graphical
-      TabIndex        =   14
+      TabIndex        =   17
       Top             =   105
       Width           =   1275
    End
@@ -55,7 +71,7 @@ Begin VB.Form AbonoAutomatico
       Caption         =   "Cierre Periodo"
       Height          =   330
       Left            =   1155
-      TabIndex        =   11
+      TabIndex        =   14
       Top             =   945
       Width           =   1590
    End
@@ -63,7 +79,7 @@ Begin VB.Form AbonoAutomatico
       Caption         =   "Abonos"
       Height          =   330
       Left            =   105
-      TabIndex        =   10
+      TabIndex        =   13
       Top             =   945
       Value           =   -1  'True
       Width           =   960
@@ -72,10 +88,10 @@ Begin VB.Form AbonoAutomatico
       Bindings        =   "AbonoAut.frx":0884
       Height          =   5790
       Left            =   105
-      TabIndex        =   19
+      TabIndex        =   22
       Top             =   1365
-      Width           =   13140
-      _ExtentX        =   23178
+      Width           =   14400
+      _ExtentX        =   25400
       _ExtentY        =   10213
       _Version        =   393216
       AllowUpdate     =   0   'False
@@ -230,20 +246,20 @@ Begin VB.Form AbonoAutomatico
    Begin VB.CommandButton Command2 
       Caption         =   "&Salir"
       Height          =   750
-      Left            =   10395
+      Left            =   13545
       Picture         =   "AbonoAut.frx":089D
       Style           =   1  'Graphical
-      TabIndex        =   16
+      TabIndex        =   19
       Top             =   105
       Width           =   960
    End
    Begin VB.CommandButton Command1 
       Caption         =   "&Aceptar"
       Height          =   750
-      Left            =   9345
+      Left            =   12495
       Picture         =   "AbonoAut.frx":1167
       Style           =   1  'Graphical
-      TabIndex        =   15
+      TabIndex        =   18
       Top             =   105
       Width           =   960
    End
@@ -324,10 +340,10 @@ Begin VB.Form AbonoAutomatico
       DataSource      =   "AdoBanco"
       Height          =   315
       Left            =   4725
-      TabIndex        =   13
+      TabIndex        =   16
       Top             =   945
-      Width           =   6630
-      _ExtentX        =   11695
+      Width           =   9780
+      _ExtentX        =   17251
       _ExtentY        =   556
       _Version        =   393216
       Text            =   "Banco"
@@ -564,6 +580,16 @@ Begin VB.Form AbonoAutomatico
       EndProperty
       _Version        =   393216
    End
+   Begin VB.Label Label4 
+      Alignment       =   2  'Center
+      BorderStyle     =   1  'Fixed Single
+      Caption         =   " Rago de Factura desde - Hasta"
+      Height          =   330
+      Left            =   6825
+      TabIndex        =   10
+      Top             =   105
+      Width           =   2955
+   End
    Begin VB.Label Label11 
       BorderStyle     =   1  'Fixed Single
       Caption         =   " Autorización"
@@ -610,7 +636,7 @@ Begin VB.Form AbonoAutomatico
       BorderStyle     =   1  'Fixed Single
       Height          =   330
       Left            =   8295
-      TabIndex        =   17
+      TabIndex        =   20
       Top             =   7140
       Width           =   1800
    End
@@ -619,7 +645,7 @@ Begin VB.Form AbonoAutomatico
       Caption         =   " Saldo Pendiente"
       Height          =   330
       Left            =   6720
-      TabIndex        =   18
+      TabIndex        =   21
       Top             =   7140
       Width           =   1590
    End
@@ -657,21 +683,21 @@ Private Sub Command1_Click()
      With AdoFactura.Recordset
       If .RecordCount > 0 Then
          .MoveFirst
-          FA.TC = .Fields("TC")
-          FA.Serie = .Fields("Serie")
+          FA.TC = .fields("TC")
+          FA.Serie = .fields("Serie")
           CodigoP = Ninguno
           TipoDoc = Ninguno
           Do While Not .EOF
             'Abono de Factura
              TA.T = Cancelado
-             TA.TP = .Fields("TC")
-             TA.Serie = .Fields("Serie")
-             TA.Factura = .Fields("Factura")
-             TA.Autorizacion = .Fields("Autorizacion")
-             TA.Cta_CxP = .Fields("Cta_CxP")
-             TA.CodigoC = .Fields("CodigoC")
-             TA.Abono = .Fields("Saldo_MN")
-             TA.Cheque = .Fields("Grupo")
+             TA.TP = .fields("TC")
+             TA.Serie = .fields("Serie")
+             TA.Factura = .fields("Factura")
+             TA.Autorizacion = .fields("Autorizacion")
+             TA.Cta_CxP = .fields("Cta_CxP")
+             TA.CodigoC = .fields("CodigoC")
+             TA.Abono = .fields("Saldo_MN")
+             TA.Cheque = .fields("Grupo")
              If OpcAbonos.value Then
                 TA.Banco = "Abonos de Cierre"
              ElseIf OpcNC.value Then
@@ -850,66 +876,72 @@ End Sub
 Public Sub Saldos_Pendiente_Facturas(PorAutorizacion As Boolean)
   DGFactura.Visible = False
   RatonReloj
+  TextoValido TextFDesde, True, , 0
+  TextoValido TextFHasta, True, , 0
   FechaValida MBFecha
   FechaFin = BuscarFecha(MBFecha)
+  Factura_Desde = Val(TextFDesde)
+  Factura_Hasta = Val(TextFHasta)
   Cadena = ""
-  sSQL = "SELECT TC,Autorizacion,Serie,MAX(Vencimiento) As Fecha_Venc " _
-       & "FROM Facturas " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND Periodo = '" & Periodo_Contable & "' " _
-       & "AND LEN(Autorizacion) <= 13 " _
-       & "GROUP BY TC,Autorizacion,Serie " _
-       & "ORDER BY TC,Autorizacion,Serie "
-  Select_Adodc AdoFactura, sSQL
-  Total = 0: Contador = 0
-  With AdoFactura.Recordset
-   If .RecordCount > 0 Then
-       Do While Not .EOF
-          Mifecha = BuscarFecha(.Fields("Fecha_Venc"))
-          sSQL = "UPDATE Facturas " _
-               & "SET Vencimiento = #" & Mifecha & "# " _
-               & "WHERE Item = '" & NumEmpresa & "' " _
-               & "AND Periodo = '" & Periodo_Contable & "' " _
-               & "AND TC = '" & .Fields("TC") & "' " _
-               & "AND Serie = '" & .Fields("Serie") & "' " _
-               & "AND Autorizacion = '" & .Fields("Autorizacion") & "' " _
-               & "AND Serie = '" & .Fields("Serie") & "' " _
-               & "AND Vencimiento <> #" & Mifecha & "# "
-          Ejecutar_SQL_SP sSQL
-         .MoveNext
-       Loop
-   End If
-  End With
-  sSQL = "SELECT F.T,F.TC,F.Serie,F.Autorizacion,F.Factura,F.CodigoC,C.Grupo,F.Cta_CxP,F.Saldo_MN " _
-       & "FROM Facturas As F,Clientes As C " _
-       & "WHERE F.Fecha <= #" & FechaFin & "# " _
-       & "AND F.Item = '" & NumEmpresa & "' " _
-       & "AND F.Periodo = '" & Periodo_Contable & "' "
-  If PorAutorizacion Then
-     sSQL = sSQL _
+  If Factura_Desde <= Factura_Hasta And Factura_Desde > 0 And Factura_Hasta > 0 Then
+     sSQL = "SELECT TC,Autorizacion,Serie,MAX(Vencimiento) As Fecha_Venc " _
+          & "FROM Facturas " _
+          & "WHERE Item = '" & NumEmpresa & "' " _
+          & "AND Periodo = '" & Periodo_Contable & "' " _
+          & "AND LEN(Autorizacion) <= 13 " _
+          & "GROUP BY TC,Autorizacion,Serie " _
+          & "ORDER BY TC,Autorizacion,Serie "
+     Select_Adodc AdoFactura, sSQL
+     Total = 0: Contador = 0
+     With AdoFactura.Recordset
+      If .RecordCount > 0 Then
+          Do While Not .EOF
+             Mifecha = BuscarFecha(.fields("Fecha_Venc"))
+             sSQL = "UPDATE Facturas " _
+                  & "SET Vencimiento = #" & Mifecha & "# " _
+                  & "WHERE Item = '" & NumEmpresa & "' " _
+                  & "AND Periodo = '" & Periodo_Contable & "' " _
+                  & "AND TC = '" & .fields("TC") & "' " _
+                  & "AND Serie = '" & .fields("Serie") & "' " _
+                  & "AND Autorizacion = '" & .fields("Autorizacion") & "' " _
+                  & "AND Factura BETWEEN " & Factura_Desde & " and " & Factura_Hasta & " " _
+                  & "AND Vencimiento <> #" & Mifecha & "# "
+             Ejecutar_SQL_SP sSQL
+            .MoveNext
+          Loop
+      End If
+     End With
+     sSQL = "SELECT F.T,F.TC,F.Serie,F.Autorizacion,F.Factura,F.CodigoC,C.Grupo,F.Cta_CxP,F.Saldo_MN " _
+          & "FROM Facturas As F, Clientes As C " _
+          & "WHERE F.Fecha <= #" & FechaFin & "# " _
+          & "AND F.Item = '" & NumEmpresa & "' " _
+          & "AND F.Periodo = '" & Periodo_Contable & "' " _
           & "AND F.TC = '" & FA.TC & "' " _
-          & "AND F.Serie = '" & FA.Serie & "' " _
-          & "AND F.Autorizacion = '" & FA.Autorizacion & "' "
+          & "AND F.Serie = '" & FA.Serie & "' "
+     If PorAutorizacion Then sSQL = sSQL & "AND F.Autorizacion = '" & FA.Autorizacion & "' "
+     sSQL = sSQL _
+          & "AND F.Factura BETWEEN " & Factura_Desde & " and " & Factura_Hasta & " " _
+          & "AND F.Saldo_MN > 0 " _
+          & "AND F.T <> '" & Anulado & "' " _
+          & "AND F.CodigoC = C.Codigo " _
+          & "ORDER BY F.Autorizacion,F.Serie,F.TC,F.Factura,F.CodigoC,C.Grupo,F.Cta_CxP "
+     Select_Adodc AdoFactura, sSQL
+     Total = 0: Contador = 0
+     With AdoFactura.Recordset
+      If .RecordCount > 0 Then
+          Factura_Desde = .fields("Factura")
+          Do While Not .EOF
+             Contador = Contador + 1
+             AbonoAutomatico.Caption = Format$(Contador / .RecordCount, "00%")
+             Total = Total + .fields("Saldo_MN")
+             Factura_Hasta = .fields("Factura")
+            .MoveNext
+          Loop
+      End If
+     End With
+  Else
+     MsgBox "Rango de Facturas erroneas"
   End If
-  sSQL = sSQL _
-       & "AND F.Saldo_MN > 0 " _
-       & "AND F.T <> '" & Anulado & "' " _
-       & "AND F.CodigoC = C.Codigo " _
-       & "ORDER BY F.Autorizacion,F.Serie,F.TC,F.Factura,F.CodigoC,C.Grupo,F.Cta_CxP "
-  Select_Adodc AdoFactura, sSQL
-  Total = 0: Contador = 0
-  With AdoFactura.Recordset
-   If .RecordCount > 0 Then
-       Factura_Desde = .Fields("Factura")
-       Do While Not .EOF
-          Contador = Contador + 1
-          AbonoAutomatico.Caption = Format$(Contador / .RecordCount, "00%")
-          Total = Total + .Fields("Saldo_MN")
-          Factura_Hasta = .Fields("Factura")
-         .MoveNext
-       Loop
-   End If
-  End With
   LabelSaldo.Caption = Format$(Total, "#,##0.00")
   DGFactura.Visible = True
   RatonNormal
@@ -924,4 +956,28 @@ Private Sub OpcNC_Click()
        & "AND DG = 'D' " _
        & "ORDER BY Codigo "
   SelectDB_Combo DCBanco, AdoBanco, sSQL, "NomCuenta"
+End Sub
+
+Private Sub TextFDesde_GotFocus()
+   MarcarTexto TextFDesde
+End Sub
+
+Private Sub TextFDesde_KeyDown(KeyCode As Integer, Shift As Integer)
+   PresionoEnter KeyCode
+End Sub
+
+Private Sub TextFDesde_LostFocus()
+   TextoValido TextFDesde, True, , 0
+End Sub
+
+Private Sub TextFHasta_GotFocus()
+   MarcarTexto TextFHasta
+End Sub
+
+Private Sub TextFHasta_KeyDown(KeyCode As Integer, Shift As Integer)
+   PresionoEnter KeyCode
+End Sub
+
+Private Sub TextFHasta_LostFocus()
+   TextoValido TextFHasta, True, , 0
 End Sub

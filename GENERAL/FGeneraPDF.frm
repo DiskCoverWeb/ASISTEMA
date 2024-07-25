@@ -1,9 +1,9 @@
 VERSION 5.00
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{65E121D4-0C60-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSChrt20.ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
+Object = "{65E121D4-0C60-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSChrt20.ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.Ocx"
 Begin VB.Form FGeneraPDF 
    Caption         =   "PDF"
@@ -603,7 +603,7 @@ Option Explicit
 Dim obj_Excel As Object
 Dim Obj_Libro As Object
 Dim Obj_Hoja As Object
-Dim cImp As cImpresion
+'Dim cImp As cImpresion
 
 Private Sub CTipoCtrl_Click()
    SiguienteControl
@@ -754,11 +754,11 @@ Dim v10 As Date
             tPrint.TipoImpresion = Es_PDF
             tPrint.NombreArchivo = "Archivo de prueba"
             tPrint.TituloArchivo = "PRUEBA DE PDF"
-            tPrint.TipoLetra = TipoArial
             tPrint.OrientacionPagina = 1
             tPrint.PaginaA4 = True
             tPrint.EsCampoCorto = False
             tPrint.VerDocumento = True
+            tPrint.TipoLetra = TipoArial
 
             Set cPrint = New cImpresion
             cPrint.iniciaImpresion
@@ -784,6 +784,22 @@ Dim v10 As Date
             cPrint.printTexto 5, 11, "10 1231.34", , 2, Verde_Claro
             cPrint.printTexto 5, 12, "10 182,121,231.34", , 2
             cPrint.PorteDeLetra = 10
+            
+            cPrint.tipoDeLetra = TipoArial
+            cPrint.printTexto 1.5, 15, "20 Hola mundo... " & TipoArial, 12, , , Azul
+            cPrint.tipoDeLetra = TipoCourier
+            cPrint.printTexto 1.5, 15.5, "20 Hola mundo... " & TipoCourier, 12, , , Azul
+            cPrint.tipoDeLetra = TipoTimes
+            cPrint.printTexto 1.5, 16, "20 Hola mundo... " & TipoTimes, 12, , , Azul
+            cPrint.tipoDeLetra = TipoSymbol
+            cPrint.printTexto 1.5, 16.5, "20 Hola mundo... " & TipoSymbol, 12, , , Azul
+            cPrint.tipoDeLetra = TipoHelvetica
+            cPrint.printTexto 1.5, 17, "20 Hola mundo... " & TipoHelvetica, 12, , , Azul
+            cPrint.tipoDeLetra = TipoVerdana
+            cPrint.printTexto 1.5, 17.5, "20 Hola mundo... " & TipoVerdana, 12, , , Azul
+            cPrint.tipoDeLetra = TipoTerminal
+            cPrint.printTexto 1.5, 18, "20 Hola mundo... " & TipoTerminal, 12, , , Azul
+
             v1 = 200
             v2 = 250
             v3 = 23432
@@ -857,6 +873,41 @@ Dim v10 As Date
 '''        End If
    Case "SP_Almacenado"
         'SP_Almacenado
+        Dim strFull As String
+        Dim arrSplitStrings1() As String
+        Dim arrSplitStrings2() As String
+        Dim strSingleString1 As String
+        Dim strSingleString2 As String
+        Dim strSingleString3 As String
+        Dim i As Long
+        
+        strFull = "Dow - Fonseca - Graham - Kopke - Noval - Offley - Sandeman - Taylor - Warre"    ' String that will be used.
+        
+        arrSplitStrings1 = Split(strFull, "-")      ' arrSplitStrings1 will be an array from 0 To 8.
+                                                    ' arrSplitStrings1(0) = "Dow " and arrSplitStrings1(1) = " Fonesca ".
+                                                    ' The delimiter did not include spaces, so the spaces in strFull will be included in the returned array values.
+        
+        arrSplitStrings2 = Split(strFull, " - ")    ' arrSplitStrings2 will be an array from 0 To 8.
+                                                    ' arrSplitStrings2(0) = "Dow" and arrSplitStrings2(1) = "Fonesca".
+                                                    ' The delimiter includes the spaces, so the spaces will not be included in the returned array values.
+        
+        'Multiple examples of how to return the value "Kopke" (array position 3).
+        
+        strSingleString1 = arrSplitStrings2(6)      ' strSingleString1 = "Kopke".
+        
+        strSingleString2 = Split(strFull, " - ")(7) ' strSingleString2 = "Kopke".
+                                                    ' This syntax can be used if the entire array is not needed, and the position in the returned array for the desired value is known.
+        
+        For i = LBound(arrSplitStrings2, 1) To UBound(arrSplitStrings2, 1)
+            If InStr(1, arrSplitStrings2(i), "Kopke", vbTextCompare) > 0 Then
+                strSingleString3 = arrSplitStrings2(i)
+                Exit For
+            End If
+        Next i
+        MsgBox strSingleString1 & vbNewLine _
+             & strSingleString2 & vbNewLine _
+             & strSingleString3 & vbNewLine
+        
    Case "Exportar_Excel"
         'Exportar_Excel
         sSQL = "SELECT F.CodigoC,C.Actividad,C.Cliente,CI_RUC,C.Direccion,C.Grupo,SUM(Saldo_MN) As Saldo_Pend " _
@@ -970,10 +1021,10 @@ Dim v10 As Date
             SRI_Autorizacion = SRI_Leer_XML_Autorizado(RutaXMLAutorizado, RutaXMLRechazado)
             If Existe_File(RutaXMLAutorizado) Then
                 TextoFileEmp = SRI_Autorizacion.Documento_XML
-                I = InStr(TextoFileEmp, "<![CDATA[")
+                i = InStr(TextoFileEmp, "<![CDATA[")
                 F = InStr(TextoFileEmp, "]]></comprobante>")
-                If I > 0 And F > 0 Then I = I + 9
-                TextoFileEmp = TrimStrg(MidStrg(TextoFileEmp, I, F - I))
+                If i > 0 And F > 0 Then i = i + 9
+                TextoFileEmp = TrimStrg(MidStrg(TextoFileEmp, i, F - i))
             Else
                 TextoFileEmp = SRI_Autorizacion.Documento_XML
             End If
@@ -986,7 +1037,7 @@ Dim v10 As Date
 End Sub
 
 Public Sub Cuadro_Impresora()
-Dim NPRinter, BeginPage, EndPage, NumCopies, Orientation, I
+Dim NPRinter, BeginPage, EndPage, NumCopies, Orientation, i
 ' Establece Cancel a True.
 CommonDialog1.CancelError = True
 On Error GoTo errHandler
@@ -999,7 +1050,7 @@ NumCopies = CommonDialog1.Copies
 Orientation = CommonDialog1.Orientation
 
 MsgBox NPRinter & vbCrLf & BeginPage & vbCrLf & EndPage & vbCrLf & NumCopies & vbCrLf & Orientation
-For I = 1 To NumCopies
+For i = 1 To NumCopies
 ' Escriba aquí código para enviar los datos a la ' impresora.
 Next
 Exit Sub
@@ -1162,14 +1213,14 @@ Dim Dato() As Currency
     MSChart.Plot.axis(MSChart20Lib.VtChAxisId.VtChAxisIdY).AxisTitle.Text = "Miles en USD"
     MSChart.chartType = VtChChartType2dBar
     MSChart.RowLabel = "Origenes"
-     For I = 0 To 9
-        MSChart.Column = I + 1
+     For i = 0 To 9
+        MSChart.Column = i + 1
         MSChart.Row = 1
-        MSChart.RowLabel = CStr(I + 1)
-        Dato(I, 1) = I * 100
-        Dato(I, 2) = I * 200
+        MSChart.RowLabel = CStr(i + 1)
+        Dato(i, 1) = i * 100
+        Dato(i, 2) = i * 200
         MSChart.ChartData = Dato
-     Next I
+     Next i
     MSChart.ShowLegend = True
      
          
@@ -1965,9 +2016,9 @@ Dim rsExcel As ADODB.Recordset
        AdoDataGrid.Recordset.MoveLast
        DataGrid.Caption = AdoDataGrid.Recordset.RecordCount
        Cadena = "Registros: " & AdoDataGrid.Recordset.RecordCount & vbCrLf
-       For I = 0 To AdoDataGrid.Recordset.fields.Count - 1
-           Cadena = Cadena & AdoDataGrid.Recordset.fields(I).Name & " = " & AdoDataGrid.Recordset.fields(I) & vbCrLf
-       Next I
+       For i = 0 To AdoDataGrid.Recordset.fields.Count - 1
+           Cadena = Cadena & AdoDataGrid.Recordset.fields(i).Name & " = " & AdoDataGrid.Recordset.fields(i) & vbCrLf
+       Next i
        'MsgBox Cadena
        End If
 End Sub
@@ -2059,11 +2110,11 @@ Dim Documento As String
        SRI_Autorizacion = SRI_Leer_XML_Autorizado(RutaXMLAutorizado, RutaXMLRechazado)
        TextoFileEmp = SRI_Autorizacion.Documento_XML
        MsgBox SRI_Autorizacion.Documento_XML
-       I = InStr(TextoFileEmp, "<![CDATA[")
+       i = InStr(TextoFileEmp, "<![CDATA[")
        F = InStr(TextoFileEmp, "]]></comprobante>")
-       If I > 0 And F > 0 Then
-          I = I + 9
-          Documento = TrimStrg(MidStrg(TextoFileEmp, I, F - I))
+       If i > 0 And F > 0 Then
+          i = i + 9
+          Documento = TrimStrg(MidStrg(TextoFileEmp, i, F - i))
           Escribir_Archivo RutaXMLAutorizado, Documento
           
        End If

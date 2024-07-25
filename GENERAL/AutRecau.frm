@@ -2,9 +2,9 @@ VERSION 5.00
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "Mscomctl.ocx"
 Begin VB.Form FRecaudacionBancosPreFa 
    BackColor       =   &H00C0FFC0&
    Caption         =   "RECAUDACIONES POR BANCO"
@@ -15,8 +15,8 @@ Begin VB.Form FRecaudacionBancosPreFa
    Icon            =   "AutRecau.frx":0000
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   9450
-   ScaleWidth      =   12915
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    WindowState     =   2  'Maximized
    Begin VB.CommandButton Command2 
       BackColor       =   &H00FFC0C0&
@@ -934,8 +934,8 @@ Begin VB.Form FRecaudacionBancosPreFa
       Left            =   0
       TabIndex        =   0
       Top             =   0
-      Width           =   12915
-      _ExtentX        =   22781
+      Width           =   28560
+      _ExtentX        =   50377
       _ExtentY        =   1588
       ButtonWidth     =   1720
       ButtonHeight    =   1429
@@ -2417,7 +2417,7 @@ Dim CaptionTemp As String
               & "HAVING SUM(F.Valor-(F.Descuento+F.Descuento2)) > 0 " _
               & "ORDER BY C.Grupo,C.Cliente,F.Fecha "
   End Select
-  Select_Adodc AdoFactura, sSQL, , , "Envio_Banco"
+  Select_Adodc AdoFactura, sSQL  ', , , "Envio_Banco_GYE"
   
 '''  sSQL = "SELECT F.CodigoC,C.Actividad,C.Cliente,CI_RUC,C.Direccion,C.Grupo,SUM(Saldo_MN) As Saldo_Pend " _
 '''       & "FROM Facturas As F, Clientes As C " _
@@ -4284,7 +4284,7 @@ End Sub
 Public Sub Generar_Guayaquil()
 Dim FechaVenc As String
 Dim MesesDif As Byte
-RutaGeneraFile = UCaseStrg(RutaSysBases & "\BANCO\FACTURAS\REM_" & Format$(FechaSistema, "YYYYMMDD") & "_" & Format$(Val(CodigoDelBanco), "00000") & ".TXT")
+RutaGeneraFile = UCaseStrg(RutaSysBases & "\BANCO\FACTURAS\REM_" & Format$(FechaSistema, "YYYYMMDD") & "_" & UCase(CodigoDelBanco) & ".TXT")
 NumFileFacturas = FreeFile
 TipoDoc = "0"
 Contador = 0
@@ -4295,26 +4295,50 @@ Open RutaGeneraFile For Output As #NumFileFacturas ' Abre el archivo.
 With AdoFactura.Recordset
  If .RecordCount > 0 Then
     .MoveFirst
+     Contador = 0
+     TotalIngreso = 0
+     Do While Not .EOF
+        Contador = Contador + 1
+        TotalIngreso = TotalIngreso + .fields("Valor_Cobro")
+       .MoveNext
+     Loop
+    .MoveFirst
      TxtFile = "TOTAL NOMINA DE RECAUDACION:" & vbCrLf
      Codigo3 = TrimStrg(MidStrg(NombreEmpresa, 1, 30))
      Total = 0
-     TotalIngreso = 0
+     
      Total_Factura = 0
      IE = 1
      JE = 1
      KE = 1
+     
+     I = Int(TotalIngreso)
+     J = (TotalIngreso - I) * 100
      Grupo_No = .fields("Grupo")
      Codigo = .fields("CodigoC")
+     
 '''     MesesDif = Month(MBFechaV) - Month(MBFechaI)
 '''     If MesesDif < 0 Then MesesDif = 0
 '''     FechaVenc = CLongFecha(CFechaLong(MBFechaV) - MesesDif)
+       'Registro de Cabecera
+        Print #NumFileFacturas, "01";                                                   ' Localidad
+        Print #NumFileFacturas, "REC";                                                  ' Codigo de Servicio
+        Print #NumFileFacturas, "00017";                                                ' Codigo del Banco
+        Print #NumFileFacturas, CodigoDelBanco & String(5 - Len(CodigoDelBanco), " ");  ' Codigo de la Empresa
+        Print #NumFileFacturas, "01";                                                   ' Contenido del archivo
+        Print #NumFileFacturas, Format$(MBFechaI, "YYYYMMDD");                          ' Fecha Inicio de Cobro
+        Print #NumFileFacturas, Format$(MBFechaV, "YYYYMMDD");                          ' Fecha Tope de Cobro
+        Print #NumFileFacturas, Format(Contador, "00000000");                           ' Numero de Registros
+        Print #NumFileFacturas, Format$(I, "0000000000000") & Format$(J, "00");         ' Valor Total a Cobrar
+        Print #NumFileFacturas, String(68, " ")                                         ' Fin de la Trama
+        
+     TotalIngreso = 0
      Do While Not .EOF
         'MsgBox .Fields("Grupo")
         If Grupo_No <> .fields("Grupo") Then
            Codigo4 = Format$(Total, "#,##0.00")
            Codigo4 = String(13 - Len(Codigo4), " ") & Format$(Total, "#,##0.00")
-           TxtFile = TxtFile _
-                   & "Grupo: " & Grupo_No & vbTab & "Resumen de Registros por Grupo: " & JE & vbTab & "Total a Recaudar USD" & vbTab & Codigo4 & vbCrLf
+           TxtFile = TxtFile & "Grupo: " & Grupo_No & vbTab & "Resumen de Registros por Grupo: " & JE & vbTab & "Total a Recaudar USD" & vbTab & Codigo4 & vbCrLf
            JE = 0
            Total = 0
            IE = IE + 1
@@ -4334,26 +4358,16 @@ With AdoFactura.Recordset
         NombreCliente = Sin_Signos_Especiales(TrimStrg(MidStrg(.fields("Cliente"), 1, 40)))
         Codigo1 = TrimStrg(MidStrg(.fields("Direccion"), 1, 30))
         FechaTexto = " " & MidStrg(MesesLetras(Month(MBFechaI)), 1, 3) & " " & Year(MBFechaI)
-        Codigo2 = MidStrg(UCaseStrg(MidStrg(MesesLetras(Month(.fields("Fecha"))), 1, 3)) & " " & .fields("Grupo"), 1, 15)
+       'Codigo2 = MidStrg(UCaseStrg(MidStrg(MesesLetras(Month(.fields("Fecha"))), 1, 3)) & " " & .fields("Grupo"), 1, 15)
+        Codigo2 = TrimStrg(MidStrg(UCaseStrg(.fields("Codigo_Inv") & " " & .fields("Grupo")), 1, 15))
         Total_Factura = .fields("Valor_Cobro")
         If Costo_Banco > 0 Then Total_Factura = Total_Factura + Costo_Banco
         Total = Total + Total_Factura
         TotalIngreso = TotalIngreso + Total_Factura
         I = Int(Total_Factura)
-        J = (Total_Factura - Int(Total_Factura)) * 100
+        J = (Total_Factura - I) * 100
        'MsgBox Grupo_No & "(" & JE & ")" & vbCrLf & Total_Factura & vbCrLf & Total & vbCrLf & TotalIngreso
        'Empieza la trama por Alumno
-       'Registro de Cabecera
-        Print #NumFileFacturas, "01";                                                   ' Localidad
-        Print #NumFileFacturas, "REC";                                                  ' Codigo de Servicio
-        Print #NumFileFacturas, "00017";                                                ' Codigo del Banco
-        Print #NumFileFacturas, CodigoDelBanco & String(5 - Len(CodigoDelBanco), " ");  ' Codigo de la Empresa
-        Print #NumFileFacturas, "01";                                                   ' Contenido del archivo
-        Print #NumFileFacturas, Format$(MBFechaI, "YYYYMMDD");                          ' Fecha Inicio de Cobro
-        Print #NumFileFacturas, Format$(MBFechaV, "YYYYMMDD");                          ' Fecha Tope de Cobro
-        Print #NumFileFacturas, "00000001";                                             ' Numero de Registros
-        Print #NumFileFacturas, Format$(I, "0000000000000") & Format$(J, "00");         ' Valor a Cobrar
-        Print #NumFileFacturas, String(68, " ")                                         ' Fin de la Trama
         
        'Registro del Detalle del Cobro
         Print #NumFileFacturas, "02";                                                   ' Tipo Registro

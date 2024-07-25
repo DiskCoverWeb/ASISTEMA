@@ -158,8 +158,7 @@ Private FSubject            As String
 Private FProducer           As String
 Private FFileCompress       As Boolean
 
-Private ParentNum, ContentNum, ResourceNum, FontNum, CatalogNum, _
-        FontNumber, CurrentPDFSetPageObject, NumberofImages, iOutlineRoot As Integer
+Private ParentNum, ContentNum, ResourceNum, FontNum, CatalogNum, FontNumber, CurrentPDFSetPageObject, NumberofImages, iOutlineRoot As Integer
 
 Private PDFCanvasWidth()
 Private PDFCanvasHeight()
@@ -702,8 +701,7 @@ Dim str_TmpFontNm   As String
 
     If str_Fontname <> FONT_ARIAL And str_Fontname <> FONT_COURIER And str_Fontname <> FONT_SYMBOL And str_Fontname <> FONT_TIMES And _
        str_Fontname <> FONT_HELVETICA And str_Fontname <> FONT_ZAPFDINGBATS And str_Fontname <> FONT_VERDANA And str_Fontname <> FONT_CALIBRI Then
-        MsgBox "Font name set incorrectly : " & str_Style & "." & vbNewLine & _
-               "Font set to Times New Roman.", vbCritical, "Font name - " & mjwPDFVersion
+        MsgBox "Font name set incorrectly : " & str_Style & "." & vbNewLine & "Font set to Times New Roman.", vbCritical, "Font name - " & mjwPDFVersion
         str_TmpFontName = "TimesRoman"
         boPDFItalic = False
         boPDFBold = False
@@ -716,8 +714,8 @@ Dim str_TmpFontNm   As String
     End If
     
     Select Case str_Fontname
-        Case FONT_ARIAL
-           str_TmpFontNm = "Arial"
+''        Case FONT_ARIAL
+''           str_TmpFontNm = "Arial"
         Case FONT_COURIER
             str_TmpFontNm = "Courier"
         Case FONT_TIMES
@@ -733,15 +731,17 @@ Dim str_TmpFontNm   As String
         Case FONT_ZAPFDINGBATS
             str_TmpFontNm = "ZapfDingbats"
         Case Else
-            str_TmpFontNm = "Arial"
+            str_TmpFontNm = "Helvetica"
     End Select
     
-    If str_TmpFontNm = "Arial" Then
-        str_TmpFontName = "Helvetica"
-    Else
-        str_TmpFontName = str_TmpFontNm
-    End If
+''''    If str_TmpFontNm = "Arial" Then
+''''        str_TmpFontName = "Helvetica"
+''''    Else
+''''        str_TmpFontName = str_TmpFontNm
+''''    End If
 
+    str_TmpFontName = str_TmpFontNm
+    
     boPDFItalic = False
     boPDFBold = False
 
@@ -796,13 +796,13 @@ Dim str_TmpFontNm   As String
        str_Fontname <> FONT_ZAPFDINGBATS And str_Fontname <> FONT_HELVETICA And str_Fontname <> FONT_VERDANA Then
        MsgBox "Font name set incorrectly." & vbNewLine & "Font set to Times New Roman.", vbCritical, "Font name - " & mjwPDFVersion
        str_TmpFontName = "Times New Roman"  'XXXXX
-        
+
         PDFFontName = str_TmpFontName
         PDFFontNum = FontNum
         FontNum = FontNum + 1
         Exit Sub
     End If
-    
+
     Select Case str_Fontname
         Case FONT_ARIAL
            str_TmpFontNm = "Arial"
@@ -819,17 +819,20 @@ Dim str_TmpFontNm   As String
         Case FONT_VERDANA
             str_TmpFontNm = "Verdana"
         Case Else
-            str_TmpFontNm = "Arial"
+            str_TmpFontNm = "Helvetica"
+           'str_TmpFontNm = "Arial"
     End Select
-    
-    If str_TmpFontNm = "Arial" Then
-        str_TmpFontName = "Helvetica"
-    Else
-        str_TmpFontName = str_TmpFontNm
-    End If
+
+''''    If str_TmpFontNm = "Arial" Then
+''''        str_TmpFontName = "Helvetica"
+''''    Else
+''''        str_TmpFontName = str_TmpFontNm
+''''    End If
+
+    str_TmpFontName = str_TmpFontNm
 
     str_TmpFont = str_TmpFontName
-        
+
     If boPDFItalic = True And boPDFBold = False Then
         Select Case str_TmpFontName
             Case "Times"
@@ -851,7 +854,7 @@ Dim str_TmpFontNm   As String
     If boPDFItalic = False And boPDFBold = True Then
         str_TmpFontName = str_TmpFontName & "-Bold"
     End If
-    
+
     If boPDFItalic = False And boPDFBold = False Then
         Select Case str_TmpFontName
             Case "Times"
@@ -860,7 +863,7 @@ Dim str_TmpFontNm   As String
                 str_TmpFontName = str_TmpFontName
         End Select
     End If
-    
+
     PDFFontName = str_TmpFontName
     PDFFontNum = FontNum
     FontNum = FontNum + 1

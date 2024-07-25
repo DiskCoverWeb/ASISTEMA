@@ -3419,9 +3419,11 @@ Dim SecuencialReembolo As String
          & "AND LEN(Autorizacion) = 13 " _
          & "AND T <> 'A' "
     Select_AdoDB AdoDBFA, sSQL
+    
     RatonReloj
     With AdoDBFA
      If .RecordCount > 0 Then
+         
          Autorizar_XML = True
          TFA.T = .fields("T")
          TFA.SP = .fields("SP")
@@ -3754,6 +3756,8 @@ Dim SecuencialReembolo As String
        End If
        If Len(TFA.Contacto) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Referencia"">" & TFA.Contacto & "</campoAdicional>"
        If Val(TFA.Orden_Compra) > 0 Then Insertar_Campo_XML "<campoAdicional nombre=""ordenCompra"">" & TFA.Orden_Compra & "</campoAdicional>"
+       If Len(TFA.Observacion) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Observacion"">" & TFA.Observacion & "</campoAdicional>"
+       If Len(TFA.Nota) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Nota"">" & TFA.Nota & "</campoAdicional>"
      Insertar_Campo_XML CerrarXML("infoAdicional")
     ' MsgBox MicroEmpresa
     'Fin del Archivo Xml
@@ -3766,7 +3770,7 @@ Dim SecuencialReembolo As String
       'Grabamos el comprobante XML
        RatonReloj
        If Len(TFA.Autorizacion) = 13 Then
-          'MsgBox RutaDocumentos
+          
           If CFechaLong(TFA.Fecha) <= CFechaLong(Fecha_CE) Then
              RutaGeneraFile = RutaDocumentos & "\Comprobantes Generados\" & TFA.ClaveAcceso & ".xml"
              
@@ -4165,6 +4169,9 @@ Dim Con_Inv As Boolean
 '''         TFA.EmailR = .Email2
 '''    End With
     
+    'TFA.Porc_NC = 0.15
+    Obtener_Cod_Porc_IVA TFA.Fecha, (TFA.Porc_NC * 100)
+    MsgBox Cod_Porc_IVA
    'NOTA DE CREDITO
     SubT_Con_Inv = False
     Total_Sin_IVA = 0
@@ -4301,11 +4308,7 @@ Dim Con_Inv As Boolean
             Insertar_Campo_XML AbrirXML("totalConImpuestos")
                 Insertar_Campo_XML AbrirXML("totalImpuesto")
                    Insertar_Campo_XML CampoXML("codigo", "2")
-                   If (Porc_IVA * 100) > 12 Then
-                      Insertar_Campo_XML CampoXML("codigoPorcentaje", "3")
-                   Else
-                      Insertar_Campo_XML CampoXML("codigoPorcentaje", "2")
-                   End If
+                   Insertar_Campo_XML CampoXML("codigoPorcentaje", Cod_Porc_IVA)
                    Insertar_Campo_XML CampoXML("baseImponible", Total_Con_IVA - Total_Desc)
                    Insertar_Campo_XML CampoXML("valor", Format$(.Total_IVA_NC, "#0.00"))
                 Insertar_Campo_XML CerrarXML("totalImpuesto")
@@ -4317,6 +4320,7 @@ Dim Con_Inv As Boolean
          RatonReloj
          With AdoDBNC
           If .RecordCount > 0 Then
+             'MsgBox .RecordCount
              .MoveFirst
               Insertar_Campo_XML AbrirXML("detalles")
                 Do While Not .EOF
@@ -4334,15 +4338,17 @@ Dim Con_Inv As Boolean
                        Insertar_Campo_XML AbrirXML("impuestos")
                            Insertar_Campo_XML AbrirXML("impuesto")
                               Insertar_Campo_XML CampoXML("codigo", "2")
+                             ' MsgBox "....."
                               If .fields("Total_IVA") = 0 Then
                                   Insertar_Campo_XML CampoXML("codigoPorcentaje", "0")
                                   Insertar_Campo_XML CampoXML("tarifa", "0")
                               Else
-                                  If (Porc_IVA * 100) > 12 Then
-                                     Insertar_Campo_XML CampoXML("codigoPorcentaje", "3")
-                                  Else
-                                     Insertar_Campo_XML CampoXML("codigoPorcentaje", "2")
-                                  End If
+'''                                  If (Porc_IVA * 100) > 12 Then
+'''                                     Insertar_Campo_XML CampoXML("codigoPorcentaje", "3")
+'''                                  Else
+'''                                     Insertar_Campo_XML CampoXML("codigoPorcentaje", "2")
+'''                                  End If
+                                  Insertar_Campo_XML CampoXML("codigoPorcentaje", Cod_Porc_IVA)
                                   Insertar_Campo_XML CampoXML("tarifa", Porc_IVA * 100)
                               End If
                               Insertar_Campo_XML CampoXML("baseImponible", Format$(.fields("Total") - .fields("Descuento"), "#0.00"))
@@ -4400,7 +4406,6 @@ Dim Con_Inv As Boolean
                        TFA.Estado_SRI_NC = SRI_Autorizacion.Estado_SRI
                        If VerNotaCredito Then MsgBox "(" & SRI_Autorizacion.Estado_SRI & ")"
                     End If
-                
             Else
                 RatonNormal
                 MsgBox MensajeNoAutorizarCE

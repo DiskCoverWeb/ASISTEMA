@@ -1467,7 +1467,7 @@ Printer.Orientation = Orientacion_Pagina      'Orientacion_Pagina normal de la h
 Printer.ScaleMode = vbCentimeters   'Escala de centimetros
 If SetPapelPRN > 0 Then Printer.PaperSize = SetPapelPRN Else Printer.PaperSize = vbPRPSLetter
 Printer.DrawWidth = 1               'Ancho de la línea
-LimiteAlto = Printer.ScaleHeight - 1.5 'Limite de impresión a lo largo
+LimiteAlto = Printer.ScaleHeight - 1.8 'Limite de impresión a lo largo
 LimiteAncho = Printer.ScaleWidth       'Limite de impresión a lo ancho
 AnchoPapel = Redondear(Printer.ScaleWidth - 0.3, 2) 'Ancho de impresion del papel
 Printer.FontName = TipoLetra        'Tipo de letra en todo el sistema
@@ -1531,12 +1531,12 @@ Dim AnchoCampo As Single
 'Orientacion_Pagina normal de la hoja y Limite de impresión a lo largo
  Select Case Orientacion_Pagina
    Case 1: Printer.Orientation = vbPRORPortrait 'Vertical
-           LimiteAlto = Redondear(Printer.ScaleHeight - 1.6, 4)
+           LimiteAlto = Redondear(Printer.ScaleHeight - 1.8, 4)
    Case 2: Printer.Orientation = vbPRORLandscape 'Horizontal
-           LimiteAlto = Redondear(Printer.ScaleHeight - 1, 4)
+           LimiteAlto = Redondear(Printer.ScaleHeight - 1.4, 4)
    Case Else: Printer.Orientation = vbPRORPortrait
               Orientacion_Pagina = 1
-              LimiteAlto = Redondear(Printer.ScaleHeight - 1.6, 4)
+              LimiteAlto = Redondear(Printer.ScaleHeight - 1.8, 4)
  End Select
  Printer.DrawWidth = 1                  'Ancho de la línea
  Printer.FontName = TipoLetra           'Tipo de letra en todo el sistema
@@ -1547,7 +1547,7 @@ Dim AnchoCampo As Single
  LimiteAncho = Redondear(Printer.ScaleWidth - 0.5, 4)   'Limite de impresión a lo ancho
  SetPapelAncho = Redondear(Printer.ScaleWidth, 4)
  SetPapelLargo = Redondear(Printer.ScaleHeight, 4)
- AnchoPapel = Redondear(Printer.ScaleWidth - 0.3, 4) 'Ancho de impresion del papel
+ AnchoPapel = Redondear(Printer.ScaleWidth - 0.5, 4) 'Ancho de impresion del papel
 'Determinamos en ancho maximo de cada campo de la tabla para imprimir
  SetAnchoCampos Printer, EsCampoCorto
  IniXX = IniciarX
@@ -1697,12 +1697,14 @@ If ((Xo > 0) And (Yo > 0)) Then
       If Not ImpLineaCero Then StrgFormatoCampo = " "
    End If
    'PonerLineas
-   If Yo <= LimiteAlto Then
+   'If Yo < LimiteAlto Then
       LimpiarLinea Xo, Yo, PonerLineas
       Printer.CurrentX = Xo + Distancia
       Printer.CurrentY = Yo
       Printer.Print StrgFormatoCampo
-   End If
+   'Else
+   '   MsgBox Yo & vbCrLf & LimiteAlto
+   'End If
   'MsgBox AdoTipo.Name & vbCrLf & StrgFormatoCampo
 End If
 'End If

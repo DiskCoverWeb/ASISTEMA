@@ -630,7 +630,7 @@ With AdoDiarioCaja.Recordset
      Printer.FontBold = True
      Printer.FontName = TipoTimes
      Printer.FontSize = SetD(2).Tamaño
-     PrinterTexto SetD(2).PosX, SetD(2).PosY, FechaStrgCiudad(.Fields("Fecha"))
+     PrinterTexto SetD(2).PosX, SetD(2).PosY, FechaStrgCiudad(.fields("Fecha"))
      Printer.FontSize = SetD(3).Tamaño
      PrinterTexto SetD(3).PosX, SetD(3).PosY, NombreCliente
      Printer.FontSize = SetD(5).Tamaño
@@ -648,23 +648,23 @@ With AdoDiarioCaja.Recordset
      Real1 = 0:     Real2 = 0:     Real3 = 0:     Real4 = 0
      Do While Not .EOF
         Printer.FontSize = SetD(13).Tamaño
-        PrinterTexto SetD(13).PosX, PosLinea, Format$(.Fields("Factura"), "0000000")
+        PrinterTexto SetD(13).PosX, PosLinea, Format$(.fields("Factura"), "0000000")
         Printer.FontSize = SetD(19).Tamaño
-        PrinterFields SetD(19).PosX, PosLinea, .Fields("Comprobante")
+        PrinterFields SetD(19).PosX, PosLinea, .fields("Comprobante")
         Printer.FontSize = SetD(14).Tamaño
-        PrinterFields SetD(14).PosX, PosLinea, .Fields("Saldo_Anterior")
+        PrinterFields SetD(14).PosX, PosLinea, .fields("Saldo_Anterior")
         Printer.FontSize = SetD(15).Tamaño
-        PrinterFields SetD(15).PosX, PosLinea, .Fields("RET_FTE")
+        PrinterFields SetD(15).PosX, PosLinea, .fields("RET_FTE")
         Printer.FontSize = SetD(16).Tamaño
-        PrinterFields SetD(16).PosX, PosLinea, .Fields("RET_IVA")
+        PrinterFields SetD(16).PosX, PosLinea, .fields("RET_IVA")
         Printer.FontSize = SetD(17).Tamaño
-        PrinterFields SetD(17).PosX, PosLinea, .Fields("ABONO")
+        PrinterFields SetD(17).PosX, PosLinea, .fields("ABONO")
         Printer.FontSize = SetD(18).Tamaño
-        PrinterFields SetD(18).PosX, PosLinea, .Fields("Saldo_Actual")
-        Real1 = Real1 + .Fields("RET_FTE")
-        Real2 = Real2 + .Fields("RET_IVA")
-        Real3 = Real3 + .Fields("ABONO")
-        Real4 = Real4 + .Fields("Saldo_Actual")
+        PrinterFields SetD(18).PosX, PosLinea, .fields("Saldo_Actual")
+        Real1 = Real1 + .fields("RET_FTE")
+        Real2 = Real2 + .fields("RET_IVA")
+        Real3 = Real3 + .fields("ABONO")
+        Real4 = Real4 + .fields("Saldo_Actual")
         PosLinea = PosLinea + 0.4
        .MoveNext
      Loop
@@ -742,41 +742,41 @@ Private Sub DCRecibo_LostFocus()
   'MsgBox sSQL
   With AdoDiarioCaja.Recordset
    If .RecordCount > 0 Then
-       Label2.Caption = " " & .Fields("Cliente")
-       TA.TP = .Fields("TP")
-       TA.Fecha = .Fields("Fecha")
-       TA.Factura = .Fields("Factura")
-       TA.CodigoC = .Fields("CodigoC")
-       TA.Recibi_de = .Fields("Cliente")
-       TA.Recibo_No = .Fields("Recibo_No")
-       TRecibo.CI_RUC = .Fields("CI_RUC")
+       Label2.Caption = " " & .fields("Cliente")
+       TA.TP = .fields("TP")
+       TA.Fecha = .fields("Fecha")
+       TA.Factura = .fields("Factura")
+       TA.CodigoC = .fields("CodigoC")
+       TA.Recibi_de = .fields("Cliente")
+       TA.Recibo_No = .fields("Recibo_No")
+       TRecibo.CI_RUC = .fields("CI_RUC")
        Mifecha = TA.Fecha
        Contrato_No = "Abono de Factura(s): "
-       Factura_No = .Fields("Factura")
-       CodigoCliente = .Fields("CodigoC")
-       NumCheque = .Fields("Recibo_No")
+       Factura_No = .fields("Factura")
+       CodigoCliente = .fields("CodigoC")
+       NumCheque = .fields("Recibo_No")
        Real1 = 0: Real2 = 0: Real3 = 0: Real4 = 0
-       NoCheque = MidStrg(.Fields("Banco"), 1, 5)
+       NoCheque = MidStrg(.fields("Banco"), 1, 5)
        Saldo = 0
        If DBFactura.RecordCount > 0 Then
           DBFactura.MoveFirst
           DBFactura.Find ("Factura = " & Factura_No & " ")
-          If Not DBFactura.EOF Then Saldo = DBFactura.Fields("Saldo_MN")
+          If Not DBFactura.EOF Then Saldo = DBFactura.fields("Saldo_MN")
        End If
-       If Len(.Fields("Cheque")) > 1 Then NoCheque = NoCheque & "... No. " & .Fields("Cheque")
+       If Len(.fields("Cheque")) > 1 Then NoCheque = NoCheque & "... No. " & .fields("Cheque")
        Do While Not .EOF
-          If Factura_No <> .Fields("Factura") Then
+          If Factura_No <> .fields("Factura") Then
              'If OpcCliente.Value Then
                 Procesar_Abonos
                 Contrato_No = Contrato_No & Factura_No & " - "
-                Factura_No = .Fields("Factura")
-                NumCheque = .Fields("Recibo_No")
+                Factura_No = .fields("Factura")
+                NumCheque = .fields("Recibo_No")
                 Real1 = 0: Real2 = 0: Real3 = 0: Real4 = 0
                 Saldo = 0
                 If DBFactura.RecordCount > 0 Then
                    DBFactura.MoveFirst
                    DBFactura.Find ("Factura = " & Factura_No & " ")
-                   If Not DBFactura.EOF Then Saldo = DBFactura.Fields("Saldo_MN")
+                   If Not DBFactura.EOF Then Saldo = DBFactura.fields("Saldo_MN")
                 End If
 
 '''              Else
@@ -788,24 +788,24 @@ Private Sub DCRecibo_LostFocus()
 '''                Real1 = 0: Real2 = 0: Real3 = 0: Real4 = 0
 '''             End If
           End If
-          Total = Total + .Fields("Abono")
-          Select Case .Fields("Banco")
-            Case "RETENCION EN LA FUENTE": Real1 = Real1 + .Fields("Abono")
-            Case "RETENCION DEL IVA": Real2 = Real2 + .Fields("Abono")
+          Total = Total + .fields("Abono")
+          Select Case .fields("Banco")
+            Case "RETENCION EN LA FUENTE": Real1 = Real1 + .fields("Abono")
+            Case "RETENCION DEL IVA": Real2 = Real2 + .fields("Abono")
             Case "EFECTIVO MN"
-                 Real4 = Real4 + .Fields("Abono")
-                 SaldoCont = SaldoCont + .Fields("Abono")
+                 Real4 = Real4 + .fields("Abono")
+                 SaldoCont = SaldoCont + .fields("Abono")
             Case Else
-                 Real3 = Real3 + .Fields("Abono")
-                 SaldoDisp = SaldoDisp + .Fields("Abono")
-                 If IsNumeric(.Fields("Cheque")) Then
-                    NombreBanco = .Fields("Banco")
-                    NoCheque = .Fields("Cheque")
+                 Real3 = Real3 + .fields("Abono")
+                 SaldoDisp = SaldoDisp + .fields("Abono")
+                 If IsNumeric(.fields("Cheque")) Then
+                    NombreBanco = .fields("Banco")
+                    NoCheque = .fields("Cheque")
                  End If
           End Select
           
-          NoCheque = MidStrg(.Fields("Banco"), 1, 5)
-          If Len(.Fields("Cheque")) > 1 Then NoCheque = NoCheque & "... No. " & .Fields("Cheque")
+          NoCheque = MidStrg(.fields("Banco"), 1, 5)
+          If Len(.fields("Cheque")) > 1 Then NoCheque = NoCheque & "... No. " & .fields("Cheque")
          ' MsgBox Total
          .MoveNext
        Loop
@@ -816,7 +816,7 @@ Private Sub DCRecibo_LostFocus()
        If DBFactura.RecordCount > 0 Then
           DBFactura.MoveFirst
           DBFactura.Find ("Factura = " & Factura_No & " ")
-          If Not DBFactura.EOF Then Saldo = DBFactura.Fields("Saldo_MN")
+          If Not DBFactura.EOF Then Saldo = DBFactura.fields("Saldo_MN")
        End If
        Contrato_No = Contrato_No & Factura_No & " - "
    End If
@@ -835,10 +835,10 @@ Private Sub DCRecibo_LostFocus()
   With AdoDiarioCaja.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
-          Real1 = Real1 + .Fields("RET_FTE") + .Fields("RET_IVA")
-          Real2 = Real2 + .Fields("ABONO")
-          Real4 = Real4 + .Fields("ABONO_E")
-          Total = Total + .Fields("Saldo_Actual")
+          Real1 = Real1 + .fields("RET_FTE") + .fields("RET_IVA")
+          Real2 = Real2 + .fields("ABONO")
+          Real4 = Real4 + .fields("ABONO_E")
+          Total = Total + .fields("Saldo_Actual")
          .MoveNext
        Loop
    End If

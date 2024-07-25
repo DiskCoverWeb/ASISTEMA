@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
@@ -3455,7 +3455,7 @@ Dim Detalle_Ret As String
          & "AND Numero = -1 " _
          & "AND TP = 'NN' "
     Ejecutar_SQL_SP sSQL
-    BorrarAsientos True
+    Eliminar_Asientos_SP True
     IniciarAsientosDe DGAsiento, AdoAsiento
     Bandera = False
     Evaluar = True
@@ -6361,7 +6361,7 @@ End Sub
 ''''''  Fecha_Vence = FA.Vencimiento
 ''''''  Autorizacion = FA.Autorizacion
 ''''''  Cta_Cobrar = FA.Cta_CxP
-'''  BorrarAsientos True
+'''  Eliminar_Asientos_SP True
 '''  Bandera = False
 '''  Evaluar = True
 ''''  NumTrans = Maximo_De("Trans_Compras", "ID")
@@ -6690,7 +6690,7 @@ End Sub
 '''  Cta_Faltantes = Leer_Seteos_Ctas("Cta_Faltantes")
 '''  Trans_No = 100
 '''
-'''  BorrarAsientos True
+'''  Eliminar_Asientos_SP True
 '''
 '''  SQL2 = "SELECT * " _
 '''       & "FROM Asiento " _
@@ -7554,7 +7554,7 @@ End Sub
 ''' 'Encerar_Facturas
 '''  Trans_No = 181
 ''' 'Insertamos asiento Gastos+IVA contra CxP Proveedores
-'''  BorrarAsientos True
+'''  Eliminar_Asientos_SP True
 '''  IniciarAsientosDe DGAsiento, AdoAsiento
 '''  Bandera = False
 '''  Evaluar = True
@@ -7814,7 +7814,7 @@ End Sub
 '''                 End If
 '''              End If
 '''             'Insertamos asiento Gastos+IVA contra CxP Proveedores
-'''              BorrarAsientos True
+'''              Eliminar_Asientos_SP True
 '''              IniciarAsientosDe DGAsiento, AdoAsiento
 '''              Codigo2 = Leer_SubCta_Modulo(SubModuloGasto)
 '''              Codigo = Leer_Cta_Catalogo(Cta_Gasto)
@@ -8004,7 +8004,7 @@ End Sub
 '''           End If
 '''           Me.Caption = "Revisando Datos en el excel: " & i & " de " & .rows - 1 & ", Fecha: " & Mifecha & ", Proveedor: " & NombreCliente
 '''      Next i
-'''      BorrarAsientos True
+'''      Eliminar_Asientos_SP True
 '''  End With
 '''  If TextoImprimio <> "" Then FInfoError.Show
 '''End Sub
@@ -8152,7 +8152,7 @@ End Sub
 '''Dim NumCompBata As String
 '''
 '''  Trans_No = 185
-'''  BorrarAsientos True
+'''  Eliminar_Asientos_SP True
 '''  DiarioInicial = 0
 '''  NoCheque = Ninguno
 '''  SumaDebe = 0
@@ -8283,7 +8283,7 @@ End Sub
 '''              GrabarComprobante Co
 '''
 '''              Ln_No = 1
-'''              BorrarAsientos True
+'''              Eliminar_Asientos_SP True
 '''              IniciarAsientosDe DGAsiento, AdoAsiento
 '''              DetalleComp = Ninguno
 '''              Datos_Default_Beneficiario
@@ -8506,7 +8506,7 @@ End Sub
 '''     Co.Item = NumEmpresa
 '''     GrabarComprobante Co
 '''
-'''     BorrarAsientos True
+'''     Eliminar_Asientos_SP True
 '''     IniciarAsientosDe DGAsiento, AdoAsiento
 '''     DetalleComp = Ninguno
 '''     DGAsiento.Visible = True

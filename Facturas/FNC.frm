@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form FNotasDeCredito 
    BackColor       =   &H00FFC0C0&
@@ -1484,12 +1484,15 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
-Dim Idx  As Long
-Dim NCNo As Long
 
 Dim ReIngNC   As Boolean
 Dim DocConInv As Boolean
 Dim Ok_Inv    As Boolean
+
+Dim Idx  As Long
+Dim NCNo As Long
+
+
 
 Dim AdoAuxDB As ADODB.Recordset
 
@@ -1764,7 +1767,6 @@ Private Sub DCClientes_LostFocus()
       .Find ("Cliente = '" & DCClientes & "' ")
        If Not .EOF Then
           FA.CodigoC = .fields("Codigo")
-          FA.Cta_CxP = .fields("Cta_CxP")
           FA.Cliente = .fields("Cliente")
        End If
    End If
@@ -1793,7 +1795,6 @@ Private Sub DCClientes_LostFocus()
        & "ORDER BY TC "
   SelectDB_Combo DCTC, AdoTC, sSQL, "TC"
   If AdoTC.Recordset.RecordCount <= 0 Then MsgBox "Este Cliente no ha empezado a generar facturas"
-  
   TxtConcepto = "Nota de Crédito de: " & DCClientes.Text
 End Sub
 
@@ -1986,7 +1987,7 @@ Private Sub Form_Load()
   ConectarAdodc AdoAsiento_NC
   
   DGAsiento_NC.Top = FrmProductos.Top + FrmProductos.Height + 80
-  DGAsiento_NC.Height = AdoClientes.Top - (FrmProductos.Top + FrmProductos.Height) - 200
+  DGAsiento_NC.Height = AdoClientes.Top - (FrmProductos.Top + FrmProductos.Height) - 100
      
   FA.TC = Ninguno
   FA.Serie = Ninguno
@@ -2041,7 +2042,7 @@ Dim InsertarItem As Boolean
     If Val(TextCant) > 0 And Val(TextVUnit) > 0 Then
        SubTotalDesc = Val(TextDesc)
        SubTotal = Redondear(Val(TextCant) * Val(TextVUnit), 2)
-       If BanIVA And FA.TC <> "NV" Then SubTotalIVA = Redondear((SubTotal - SubTotalDesc) * Porc_IVA, 4)
+       If BanIVA And FA.TC <> "NV" Then SubTotalIVA = Redondear((SubTotal - SubTotalDesc) * FA.Porc_NC, 4)
        Total = SubTotal_NC + SubTotal + IVA_NC + SubTotalIVA - SubTotalDesc - Total_Desc
        'If Total <= CCur(LblTotal) Then
           With AdoAsiento_NC.Recordset
@@ -2071,7 +2072,7 @@ Dim InsertarItem As Boolean
              SetAdoFields "Mes_No", Month(FA.Fecha)
              SetAdoFields "Mes", MesesLetras(Month(FA.Fecha))
              SetAdoFields "Anio", Year(FA.Fecha)
-             SetAdoFields "Porc_IVA", FA.Porc_IVA
+             SetAdoFields "Porc_IVA", FA.Porc_NC
              If DatInv.Con_Kardex Then
                SetAdoFields "Ok", DatInv.Con_Kardex
                SetAdoFields "Cta_Inventario", DatInv.Cta_Inventario
@@ -2175,6 +2176,8 @@ Private Sub TxtAutorizacion_LostFocus()
           Loop
       End If
      End With
+     Label15.Caption = " Autorización del Documento - Fecha de Emision: " & FA.Fecha
+     If FA.Porc_NC > 0 Then Label5.Caption = " Total del I.V.A " & (FA.Porc_NC * 100) & "%"
      Listar_Articulos_Malla
      If DocConInv Then DCBodega.SetFocus Else DGAsiento_NC.SetFocus
 End Sub
@@ -2266,7 +2269,7 @@ Public Sub Listar_Articulos_Malla()
 End Sub
 
 Public Sub Listar_Facturas_Pendientes_NC()
-  sSQL = "SELECT C.Grupo, C.Codigo, C.Cliente, F.Cta_CxP, SUM(F.Total_MN) As TotFact " _
+  sSQL = "SELECT C.Grupo, C.Codigo, C.Cliente, SUM(F.Total_MN) As TotFact " _
        & "FROM Clientes As C, Facturas As F " _
        & "WHERE F.Item = '" & NumEmpresa & "' " _
        & "AND F.Periodo = '" & Periodo_Contable & "' " _
@@ -2274,7 +2277,7 @@ Public Sub Listar_Facturas_Pendientes_NC()
        & "AND F.T <> 'A' " _
        & "AND F.Saldo_MN <> 0 " _
        & "AND C.Codigo = F.CodigoC " _
-       & "GROUP BY C.Grupo, C.Codigo, C.Cliente, F.Cta_CxP " _
+       & "GROUP BY C.Grupo, C.Codigo, C.Cliente " _
        & "ORDER BY C.Cliente "
   SelectDB_Combo DCClientes, AdoClientes, sSQL, "Cliente"
 End Sub

@@ -222,9 +222,9 @@ Begin VB.Form Facturas
          Strikethrough   =   0   'False
       EndProperty
       Height          =   6840
-      Left            =   11655
+      Left            =   12390
       TabIndex        =   78
-      Top             =   6090
+      Top             =   2310
       Visible         =   0   'False
       Width           =   4740
       Begin VB.TextBox TxtLugarEntrega 
@@ -461,7 +461,7 @@ Begin VB.Form Facturas
       End
       Begin MSDataListLib.DataCombo DCEmpresaEntrega 
          Bindings        =   "Facturas.frx":0067
-         DataSource      =   "AdoPersonas"
+         DataSource      =   "AdoTransporte"
          Height          =   315
          Left            =   105
          TabIndex        =   97
@@ -482,7 +482,7 @@ Begin VB.Form Facturas
          EndProperty
       End
       Begin MSDataListLib.DataCombo DCSerieGR 
-         Bindings        =   "Facturas.frx":0081
+         Bindings        =   "Facturas.frx":0083
          DataSource      =   "AdoSerieGR"
          Height          =   315
          Left            =   2100
@@ -851,9 +851,9 @@ Begin VB.Form Facturas
             Strikethrough   =   0   'False
          EndProperty
          Height          =   1335
-         ItemData        =   "Facturas.frx":009A
+         ItemData        =   "Facturas.frx":009C
          Left            =   105
-         List            =   "Facturas.frx":009C
+         List            =   "Facturas.frx":009E
          Style           =   1  'Checkbox
          TabIndex        =   110
          Top             =   210
@@ -883,9 +883,9 @@ Begin VB.Form Facturas
          Strikethrough   =   0   'False
       EndProperty
       Height          =   3735
-      Left            =   8085
+      Left            =   8715
       TabIndex        =   127
-      Top             =   4935
+      Top             =   3150
       Visible         =   0   'False
       Width           =   4815
       Begin VB.ListBox LstSeries 
@@ -924,7 +924,7 @@ Begin VB.Form Facturas
       End
    End
    Begin MSDataListLib.DataCombo DCMedico 
-      Bindings        =   "Facturas.frx":009E
+      Bindings        =   "Facturas.frx":00A0
       DataSource      =   "AdoMedico"
       Height          =   360
       Left            =   9450
@@ -991,7 +991,7 @@ Begin VB.Form Facturas
       End
    End
    Begin MSDataListLib.DataCombo DCArticulo 
-      Bindings        =   "Facturas.frx":00B6
+      Bindings        =   "Facturas.frx":00B8
       DataSource      =   "AdoArticulo"
       Height          =   360
       Left            =   1785
@@ -1015,7 +1015,7 @@ Begin VB.Form Facturas
       EndProperty
    End
    Begin MSDataListLib.DataCombo DCCliente 
-      Bindings        =   "Facturas.frx":00D0
+      Bindings        =   "Facturas.frx":00D2
       DataSource      =   "AdoCliente"
       Height          =   360
       Left            =   5145
@@ -1038,7 +1038,7 @@ Begin VB.Form Facturas
       EndProperty
    End
    Begin MSDataListLib.DataCombo DCGrupo_No 
-      Bindings        =   "Facturas.frx":00E9
+      Bindings        =   "Facturas.frx":00EB
       DataSource      =   "AdoGrupo"
       Height          =   360
       Left            =   1680
@@ -1172,7 +1172,7 @@ Begin VB.Form Facturas
          MaxLength       =   10
          MultiLine       =   -1  'True
          TabIndex        =   121
-         Text            =   "Facturas.frx":0100
+         Text            =   "Facturas.frx":0102
          Top             =   1260
          Width           =   1275
       End
@@ -1193,7 +1193,7 @@ Begin VB.Form Facturas
          MaxLength       =   10
          MultiLine       =   -1  'True
          TabIndex        =   119
-         Text            =   "Facturas.frx":0102
+         Text            =   "Facturas.frx":0104
          Top             =   525
          Width           =   855
       End
@@ -1353,7 +1353,7 @@ Begin VB.Form Facturas
    Begin MSAdodcLib.Adodc AdoMedico 
       Height          =   330
       Left            =   4515
-      Top             =   7980
+      Top             =   6720
       Visible         =   0   'False
       Width           =   1905
       _ExtentX        =   3360
@@ -1448,17 +1448,17 @@ Begin VB.Form Facturas
       MultiLine       =   -1  'True
       ScrollBars      =   3  'Both
       TabIndex        =   49
-      Text            =   "Facturas.frx":0104
-      Top             =   5145
+      Text            =   "Facturas.frx":0106
+      Top             =   5040
       Visible         =   0   'False
       Width           =   13245
    End
    Begin MSDataGridLib.DataGrid DGAsientoF 
-      Bindings        =   "Facturas.frx":010A
+      Bindings        =   "Facturas.frx":010C
       Height          =   2850
       Left            =   105
       TabIndex        =   77
-      Top             =   5040
+      Top             =   4935
       Width           =   14835
       _ExtentX        =   26167
       _ExtentY        =   5027
@@ -1537,7 +1537,7 @@ Begin VB.Form Facturas
       MaxLength       =   14
       MultiLine       =   -1  'True
       TabIndex        =   61
-      Text            =   "Facturas.frx":0124
+      Text            =   "Facturas.frx":0126
       Top             =   4515
       Width           =   1590
    End
@@ -1558,7 +1558,7 @@ Begin VB.Form Facturas
       MaxLength       =   10
       MultiLine       =   -1  'True
       TabIndex        =   59
-      Text            =   "Facturas.frx":0129
+      Text            =   "Facturas.frx":012B
       Top             =   4515
       Width           =   960
    End
@@ -1602,7 +1602,7 @@ Begin VB.Form Facturas
       Width           =   225
    End
    Begin MSDataListLib.DataCombo DCEjecutivo 
-      Bindings        =   "Facturas.frx":012B
+      Bindings        =   "Facturas.frx":012D
       DataSource      =   "AdoEjecutivo"
       Height          =   360
       Left            =   2100
@@ -1640,7 +1640,7 @@ Begin VB.Form Facturas
       Left            =   3255
       MultiLine       =   -1  'True
       TabIndex        =   69
-      Text            =   "Facturas.frx":0146
+      Text            =   "Facturas.frx":0148
       Top             =   8925
       Width           =   1485
    End
@@ -2372,7 +2372,7 @@ Begin VB.Form Facturas
       _Version        =   393216
    End
    Begin MSDataListLib.DataCombo DCBodega 
-      Bindings        =   "Facturas.frx":014D
+      Bindings        =   "Facturas.frx":014F
       DataSource      =   "AdoBodega"
       Height          =   360
       Left            =   12285
@@ -2396,7 +2396,7 @@ Begin VB.Form Facturas
       EndProperty
    End
    Begin MSDataListLib.DataCombo DCMarca 
-      Bindings        =   "Facturas.frx":0165
+      Bindings        =   "Facturas.frx":0167
       DataSource      =   "AdoMarca"
       Height          =   360
       Left            =   105
@@ -2608,7 +2608,7 @@ Begin VB.Form Facturas
       _Version        =   393216
    End
    Begin MSDataListLib.DataCombo DCTipoPago 
-      Bindings        =   "Facturas.frx":017C
+      Bindings        =   "Facturas.frx":017E
       DataSource      =   "AdoTipoPago"
       Height          =   360
       Left            =   4305
@@ -2725,7 +2725,7 @@ Begin VB.Form Facturas
       _Version        =   393216
    End
    Begin MSDataListLib.DataCombo DCLinea 
-      Bindings        =   "Facturas.frx":0196
+      Bindings        =   "Facturas.frx":0198
       DataSource      =   "AdoLinea"
       Height          =   360
       Left            =   4305
@@ -2748,8 +2748,8 @@ Begin VB.Form Facturas
    End
    Begin MSAdodcLib.Adodc AdoPorcIVA 
       Height          =   330
-      Left            =   6405
-      Top             =   7980
+      Left            =   4515
+      Top             =   7035
       Visible         =   0   'False
       Width           =   1905
       _ExtentX        =   3360
@@ -2794,7 +2794,7 @@ Begin VB.Form Facturas
       _Version        =   393216
    End
    Begin MSDataListLib.DataCombo DCPorcIVA 
-      Bindings        =   "Facturas.frx":01AD
+      Bindings        =   "Facturas.frx":01AF
       DataSource      =   "AdoPorcIVA"
       Height          =   360
       Left            =   10710
@@ -2815,6 +2815,53 @@ Begin VB.Form Facturas
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
+   End
+   Begin MSAdodcLib.Adodc AdoTransporte 
+      Height          =   330
+      Left            =   4515
+      Top             =   7350
+      Visible         =   0   'False
+      Width           =   2115
+      _ExtentX        =   3731
+      _ExtentY        =   582
+      ConnectMode     =   0
+      CursorLocation  =   3
+      IsolationLevel  =   -1
+      ConnectionTimeout=   15
+      CommandTimeout  =   30
+      CursorType      =   3
+      LockType        =   3
+      CommandType     =   8
+      CursorOptions   =   0
+      CacheSize       =   50
+      MaxRecords      =   0
+      BOFAction       =   0
+      EOFAction       =   0
+      ConnectStringType=   1
+      Appearance      =   1
+      BackColor       =   -2147483643
+      ForeColor       =   -2147483640
+      Orientation     =   0
+      Enabled         =   -1
+      Connect         =   ""
+      OLEDBString     =   ""
+      OLEDBFile       =   ""
+      DataSourceName  =   ""
+      OtherAttributes =   ""
+      UserName        =   ""
+      Password        =   ""
+      RecordSource    =   ""
+      Caption         =   "Transporte"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      _Version        =   393216
    End
    Begin VB.Label Label9 
       BorderStyle     =   1  'Fixed Single
@@ -2886,31 +2933,31 @@ Begin VB.Form Facturas
       BeginProperty Images {0713E8C2-850A-101B-AFC0-4210102A8DA7} 
          NumListImages   =   7
          BeginProperty ListImage1 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "Facturas.frx":01C6
+            Picture         =   "Facturas.frx":01C8
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "Facturas.frx":04E0
+            Picture         =   "Facturas.frx":04E2
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "Facturas.frx":07FA
+            Picture         =   "Facturas.frx":07FC
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "Facturas.frx":0B14
+            Picture         =   "Facturas.frx":0B16
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "Facturas.frx":0E2E
+            Picture         =   "Facturas.frx":0E30
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "Facturas.frx":1148
+            Picture         =   "Facturas.frx":114A
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "Facturas.frx":1462
+            Picture         =   "Facturas.frx":1464
             Key             =   ""
          EndProperty
       EndProperty
@@ -3715,6 +3762,7 @@ End Sub
 Public Sub Grabar_Factura_Actual()
 Dim GuiaRemision As Long
  'Procedemos a grabar la factura actual
+  FA.Fecha_V = MBoxFechaV
   sSQL = "SELECT * " _
        & "FROM Asiento_F " _
        & "WHERE Item = '" & NumEmpresa & "' " _
@@ -3865,7 +3913,7 @@ Dim GuiaRemision As Long
         If FA.TC <> "OP" Then
           'MsgBox FA.Autorizacion & vbCrLf & FA.Autorizacion_GR
            If Len(FA.Autorizacion) >= 13 Then
-              If Grafico_PV Then Imprimir_Punto_Venta_Grafico FA Else Imprimir_Punto_Venta FA
+              Imprimir_Punto_Venta FA
            Else
               Titulo = "IMPRESION"
               Mensajes = "Facturacion Multiple"
@@ -4078,6 +4126,11 @@ Private Sub Command8_Click()
                FA.Comercial = .fields("Cliente")
                FA.CIRUCComercial = .fields("CI_RUC")
             End If
+        End If
+       End With
+       
+       With AdoTransporte.Recordset
+        If .RecordCount > 0 Then
            .MoveFirst
            .Find ("Cliente = '" & DCEmpresaEntrega & "' ")
             If Not .EOF Then
@@ -4141,6 +4194,18 @@ Private Sub DCEjecutivo_LostFocus()
         FA.Cod_Ejec = Ninguno
     End If
    End With
+End Sub
+
+Private Sub DCEmpresaEntrega_KeyPress(KeyAscii As Integer)
+Dim Busqueda As String
+    Busqueda = DCRazonSocial
+    If Len(Busqueda) > 0 Then
+       sSQL = "SELECT TOP 50 Cliente, CI_RUC, Codigo, Cta_CxP, Grupo, Cod_Ejec " _
+            & "FROM Clientes "
+       If IsNumeric(Busqueda) Then sSQL = sSQL & "WHERE CI_RUC LIKE '" & Busqueda & "%' " Else sSQL = sSQL & "WHERE Cliente LIKE '" & Busqueda & "%' "
+       sSQL = sSQL & "ORDER BY Cliente "
+       Select_Adodc AdoTransporte, sSQL
+    End If
 End Sub
 
 Private Sub DCGrupo_No_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -4497,10 +4562,10 @@ End Sub
 Private Sub DCCliente_KeyPress(KeyAscii As Integer)
 Dim Busqueda As String
     Busqueda = DCCliente.Text
-    If Len(Busqueda) > 1 Then
+    If Len(Busqueda) > 0 Then
        sSQL = "SELECT TOP 50 Cliente, CI_RUC, Codigo, Cta_CxP, Grupo, Cod_Ejec " _
             & "FROM Clientes "
-       If IsNumeric(Busqueda) Then sSQL = sSQL & "WHERE CI_RUC LIKE '" & Busqueda & "%' " Else sSQL = sSQL & "WHERE Cliente LIKE '%" & Busqueda & "%' "
+       If IsNumeric(Busqueda) Then sSQL = sSQL & "WHERE CI_RUC LIKE '" & Busqueda & "%' " Else sSQL = sSQL & "WHERE Cliente LIKE '" & Busqueda & "%' "
        sSQL = sSQL & "ORDER BY Cliente "
        Select_Adodc AdoCliente, sSQL
     End If
@@ -4554,10 +4619,12 @@ Private Sub DCCliente_LostFocus()
              DCEjecutivo.Text = Ninguno
              FA.Cta_CxP = .fields("Cta_CxP")
              FA.Cod_Ejec = .fields("Cod_Ejec")
-             If AdoEjecutivo.Recordset.RecordCount > 0 Then
-                AdoEjecutivo.Recordset.MoveFirst
-                AdoEjecutivo.Recordset.Find ("Codigo = '" & FA.Cod_Ejec & "' ")
-                If Not AdoEjecutivo.Recordset.EOF Then DCEjecutivo.Text = AdoEjecutivo.Recordset.fields("Cliente")
+             If ComisionEjec Then
+                If AdoEjecutivo.Recordset.RecordCount > 0 Then
+                   AdoEjecutivo.Recordset.MoveFirst
+                   AdoEjecutivo.Recordset.Find ("Codigo = '" & FA.Cod_Ejec & "' ")
+                   If Not AdoEjecutivo.Recordset.EOF Then DCEjecutivo.Text = AdoEjecutivo.Recordset.fields("Cliente")
+                End If
              End If
              If AdoLinea.Recordset.RecordCount > 0 Then
                 AdoLinea.Recordset.MoveFirst
@@ -4652,6 +4719,18 @@ Private Sub DCPorcIVA_LostFocus()
      Porc_IVA = 0
   End If
   Tipo_De_Facturacion
+End Sub
+
+Private Sub DCRazonSocial_KeyPress(KeyAscii As Integer)
+Dim Busqueda As String
+    Busqueda = DCRazonSocial
+    If Len(Busqueda) > 0 Then
+       sSQL = "SELECT TOP 50 Cliente, CI_RUC, Codigo, Cta_CxP, Grupo, Cod_Ejec " _
+            & "FROM Clientes "
+       If IsNumeric(Busqueda) Then sSQL = sSQL & "WHERE CI_RUC LIKE '" & Busqueda & "%' " Else sSQL = sSQL & "WHERE Cliente LIKE '" & Busqueda & "%' "
+       sSQL = sSQL & "ORDER BY Cliente "
+       Select_Adodc AdoCliente, sSQL
+    End If
 End Sub
 
 Private Sub DCSerieGR_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -4837,7 +4916,7 @@ Private Sub Form_Activate()
   SelectDB_Combo DCMod, AdoMod, sSQL, "Detalle"
   If AdoMod.Recordset.RecordCount > 0 Then DCMod.Visible = True
   
-  sSQL = "SELECT TOP 100 Cliente, CI_RUC, TD, Codigo, Cta_CxP " _
+  sSQL = "SELECT TOP 50 Cliente, CI_RUC, TD, Codigo, Cta_CxP " _
        & "FROM Clientes " _
        & "WHERE Asignar_Dr <> " & Val(adFalse) & " " _
        & "ORDER BY Cliente "
@@ -5021,6 +5100,7 @@ Private Sub Form_Load()
    ConectarAdodc AdoEjecutivo
    ConectarAdodc AdoCiudades
    ConectarAdodc AdoPersonas
+   ConectarAdodc AdoTransporte
    ConectarAdodc AdoMedico
    ConectarAdodc AdoSerieGR
 End Sub
@@ -5261,12 +5341,12 @@ Private Sub TBarFactura_ButtonClick(ByVal Button As ComctlLib.Button)
           SelectDB_Combo DCCiudadI, AdoCiudades, sSQL, "Descripcion_Rubro"
           SelectDB_Combo DCCiudadF, AdoCiudades, sSQL, "Descripcion_Rubro"
             
-          sSQL = "SELECT Cliente,CI_RUC,TD,Direccion,Codigo " _
+          sSQL = "SELECT TOP 50 Cliente,CI_RUC,TD,Direccion,Codigo " _
                & "FROM Clientes " _
                & "WHERE TD IN ('C','R') " _
                & "ORDER BY Cliente "
           SelectDB_Combo DCRazonSocial, AdoPersonas, sSQL, "Cliente"
-          SelectDB_Combo DCEmpresaEntrega, AdoPersonas, sSQL, "Cliente"
+          SelectDB_Combo DCEmpresaEntrega, AdoTransporte, sSQL, "Cliente"
           LblGuiaR = Format$(Val(TxtGuiaRem), "00000000")
           FrmGuiaRemision.Top = 740
           FrmGuiaRemision.Visible = True

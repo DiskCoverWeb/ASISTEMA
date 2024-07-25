@@ -1,13 +1,13 @@
-FDiskCover = 32, 12, 619, 381, , 44, 44, 631, 413, C
+FDiskCover = 32, 12, 619, 381, Z, 44, 44, 631, 413, C
 SubWinZip = 22, 22, 857, 414, C
 clsCDOmail = 100, 100, 806, 551, C
-FEnviarCorreos = 150, 150, 856, 601, Z, 0, 0, 771, 451, C
+FEnviarCorreos = 150, 150, 856, 601, , 0, 0, 771, 451, C
 SubWindows = 156, 156, 1377, 798, C
 TTipos = 26, 26, 1247, 668, C
 cImpresion = 52, 52, 1273, 694, C
 Constantes = 26, 26, 1247, 668, C
 mjwPDF = 0, 0, 0, 0, C
-SubAdodc = 0, 0, 1221, 642, 
+SubAdodc = 0, 0, 1221, 642, C
 SubContabil = 182, 182, 1403, 824, 
 SubRutinas = 286, 286, 1507, 928, 
 TLong = 0, 0, 0, 0, C

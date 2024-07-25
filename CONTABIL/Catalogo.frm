@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.4#0"; "comctl32.Ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Begin VB.Form CatalogoCtas 
    Caption         =   "PRESENTACION DEL CATALOGO DE CUENTA"
    ClientHeight    =   11235
@@ -369,10 +369,10 @@ Public Sub ListarCatalogoCuentas()
   SQLMsg1 = "PLAN DE CUENTAS"
   sSQL = "SELECT Clave,TC,ME,DG,Codigo,Cuenta,Presupuesto,Codigo_Ext,Cod_Rol_Pago,I_E_Emp, Con_IESS " _
        & "FROM Catalogo_Cuentas " _
-       & "WHERE Cuenta <> '" & Ninguno & "' " _
-       & "AND Codigo BETWEEN '" & Codigo & "' and '" & Codigo1 & "' " _
-       & "AND Item = '" & NumEmpresa & "' " _
-       & "AND Periodo = '" & Periodo_Contable & "' "
+       & "WHERE Item = '" & NumEmpresa & "' " _
+       & "AND Periodo = '" & Periodo_Contable & "' " _
+       & "AND Cuenta <> '" & Ninguno & "' " _
+       & "AND Codigo BETWEEN '" & Codigo & "' and '" & Codigo1 & "' "
   If OpcG.value Then
      sSQL = sSQL & "AND DG = 'G' "
   ElseIf OpcD.value Then

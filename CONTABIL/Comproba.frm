@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
@@ -12,8 +12,8 @@ Begin VB.Form FComprobantes
    ClientWidth     =   11595
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   15615
-   ScaleWidth      =   28560
+   ScaleHeight     =   9030
+   ScaleWidth      =   11595
    WindowState     =   1  'Minimized
    Begin MSDataListLib.DataCombo DCCliente 
       Bindings        =   "Comproba.frx":0000
@@ -525,15 +525,15 @@ Begin VB.Form FComprobantes
       TabCaption(2)   =   "&6.- RETENCIONES"
       TabPicture(2)   =   "Comproba.frx":016E
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "DGAsientosR"
-      Tab(2).Control(1)=   "DGAC"
+      Tab(2).Control(0)=   "DGAC"
+      Tab(2).Control(1)=   "DGAsientosR"
       Tab(2).ControlCount=   2
       TabCaption(3)   =   "&7.- AC - AV - AI - AE"
       TabPicture(3)   =   "Comproba.frx":018A
       Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "DGAE"
+      Tab(3).Control(0)=   "DGAV"
       Tab(3).Control(1)=   "DGAI"
-      Tab(3).Control(2)=   "DGAV"
+      Tab(3).Control(2)=   "DGAE"
       Tab(3).ControlCount=   3
       Begin MSDataGridLib.DataGrid DGAC 
          Bindings        =   "Comproba.frx":01A6
@@ -3362,7 +3362,7 @@ Private Sub CmdGrabar_Click()
           RatonNormal
           ImprimirComprobantesDe False, Co
           If CheqCopia.value Then ImprimirComprobantesDe False, Co
-          BorrarAsientos True
+          Eliminar_Asientos_SP True
           NumComp = NumComp + 1
           Co.Numero = NumComp
           LabelComp.Caption = Format(NumComp, "00000000")
@@ -3414,7 +3414,7 @@ Dim DetCtaBusqueda As String
   Select Case KeyCode
     Case vbKeyEscape
          If UCaseStrg(Modulo) = "GASTOS" Then
-            CalculosTotalAsientos AdoAsientos, LabelDebe, LabelHaber, LabelDiferencia
+            
             Diferencia = SumaDebe - SumaHaber
             If Diferencia > 0 Then
                OpcDH = 2: ValorDH = Diferencia
@@ -3565,11 +3565,11 @@ Private Sub Form_Activate()
                  & "en transito con su codigo de usuario." & vbCrLf & vbCrLf _
                  & "Desea recuperarlos?"
         Titulo = "PREGUNTA DE CONFIRMACION"
-        If BoxMensaje <> vbYes Then BorrarAsientos True
+        If BoxMensaje <> vbYes Then Eliminar_Asientos_SP True
      End If
   End If
   
-  sSQL = "SELECT TOP 50 Cliente,CI_RUC,Codigo " _
+  sSQL = "SELECT TOP 50 Cliente, CI_RUC, Codigo " _
        & "FROM Clientes " _
        & "WHERE Cliente LIKE '%" & Co.Beneficiario & "%' " _
        & "ORDER BY Cliente "

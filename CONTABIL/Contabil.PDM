@@ -1,0 +1,260 @@
+[Root]
+Most Recent Package=DiskCover System 32 o 64 Bits
+
+
+[Package|DiskCover System 32 o 64 Bits|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\SISTEMA\SETUP\Setup_32_64Bits
+
+[Package|DiskCover System 32 o 64 Bits|Configure DAO ISAMs]
+Applicable=Yes
+Xbase=Yes
+Excel=Yes
+Text=Yes
+Jet 2.x=Yes
+Lotus=Yes
+Paradox=Yes
+
+[Package|DiskCover System 32 o 64 Bits|Configure DAO ODBC]
+JetWorkspace=Yes
+ODBCDirect=Yes
+
+[Package|DiskCover System 32 o 64 Bits|Files Found]
+
+[Package|DiskCover System 32 o 64 Bits|Files Released]
+port1.dll=
+Rdc20ES.dll=
+rdocurs.dll=
+FacturacionElect.tlb=
+unzip32.dll=
+zip32.dll=
+
+[Package|DiskCover System 32 o 64 Bits|Missing Dependency Information]
+C:\Windows\System32\MSEXCH35.DLL=
+C:\Program Files\Common Files\Adobe\Acrobat\ActiveX\AcroPDF.dll=
+C:\Program Files\Microsoft Office\root\Office16\EXCEL.EXE=
+C:\Program Files (x86)\Common Files\System\ado\msado28.tlb=
+C:\Windows\SysWOW64\FacturacionElect.tlb=
+C:\Windows\SysWOW64\msxml3.dll=
+C:\Windows\System32\unzip32.dll=
+C:\Windows\System32\zip32.dll=
+C:\Windows\System32\IPHLPAPI.DLL=
+C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_5.82.22621.3527_none_fbe8b6227808ef55\comctl32.dll=
+C:\Windows\System32\wininet.dll=
+C:\Windows\System32\urlmon.dll=
+
+[Package|DiskCover System 32 o 64 Bits|Out-of-Date Dependency Information]
+C:\Windows\SysWOW64\scrrun.dll=
+C:\Windows\SysWOW64\msstdfmt.dll=
+
+[Package|DiskCover System 32 o 64 Bits|Files Added]
+
+[Package|DiskCover System 32 o 64 Bits|Files Removed]
+c:\program files\common files\adobe\acrobat\activex\acropdf.dll=
+c:\program files\microsoft office\root\office16\excel.exe=
+
+[Package|DiskCover System 32 o 64 Bits|Files In Project]
+C:\SISTEMA\Contabilidad.exe=Yes
+C:\Windows\System32\msvbvm60.dll=Yes
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=Yes
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=Yes
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\ASYCFILT.DLL=Yes
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\STDOLE2.TLB=Yes
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\Windows\System32\VB6ES.DLL=Yes
+C:\Windows\System32\urlmon.dll=Yes
+C:\Windows\System32\wininet.dll=Yes
+C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_5.82.22621.3527_none_fbe8b6227808ef55\comctl32.dll=Yes
+C:\Windows\System32\IPHLPAPI.DLL=Yes
+C:\Windows\SysWOW64\msxml3.dll=Yes
+C:\Program Files (x86)\Common Files\Microsoft Shared\DAO\DAO350.DLL=Yes
+C:\Windows\System32\MSJET35.DLL=Yes
+C:\Windows\System32\msjter35.dll=Yes
+C:\Windows\System32\msjint35.dll=Yes
+C:\Windows\System32\vbajet32.dll=Yes
+C:\Windows\System32\expsrv.dll=Yes
+C:\Windows\System32\msrd2x35.dll=Yes
+C:\Windows\System32\MSREPL35.DLL=Yes
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MSVCRT40.DLL=Yes
+C:\Windows\System32\VB5DB.DLL=Yes
+C:\Program Files (x86)\Common Files\System\ado\msado28.tlb=Yes
+C:\Windows\SysWOW64\MSBind.dll=Yes
+C:\Windows\SysWOW64\msstdfmt.dll=Yes
+C:\Windows\SysWOW64\STDFTES.DLL=Yes
+C:\Program Files\Microsoft Office\root\Office16\EXCEL.EXE=No
+C:\Program Files\Common Files\Adobe\Acrobat\ActiveX\AcroPDF.dll=No
+C:\Windows\SysWOW64\scrrun.dll=Yes
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MSVCRT.DLL=Yes
+C:\Windows\SysWOW64\SCRRNES.DLL=Yes
+C:\Windows\SysWOW64\TabCtl32.Ocx=Yes
+C:\Windows\SysWOW64\TabCtES.dll=Yes
+C:\Windows\SysWOW64\msmask32.ocx=Yes
+C:\Windows\SysWOW64\MSMskES.dll=Yes
+C:\Windows\SysWOW64\ComDlg32.OCX=Yes
+C:\Windows\SysWOW64\CMDLGES.DLL=Yes
+C:\Windows\SysWOW64\MSDatGrd.ocx=Yes
+C:\Windows\SysWOW64\DATGDES.DLL=Yes
+C:\Windows\SysWOW64\MSDatLst.Ocx=Yes
+C:\Windows\SysWOW64\DATLSES.DLL=Yes
+C:\Windows\SysWOW64\MSAdoDc.ocx=Yes
+C:\Windows\SysWOW64\ADODCES.DLL=Yes
+C:\Windows\SysWOW64\msrdc20.Ocx=Yes
+C:\Windows\SysWOW64\msrdo20.dll=Yes
+C:\Windows\SysWOW64\RDO20ES.DLL=Yes
+C:\Windows\SysWOW64\comctl32.Ocx=Yes
+C:\Windows\SysWOW64\CmCtlES.dll=Yes
+C:\Windows\SysWOW64\MSChrt20.ocx=Yes
+C:\Windows\SysWOW64\MSCH2ES.DLL=Yes
+C:\Windows\SysWOW64\PicClp32.Ocx=Yes
+C:\Windows\SysWOW64\PCCLPES.DLL=Yes
+C:\Windows\SysWOW64\mscomctl.OCX=Yes
+C:\Windows\SysWOW64\MSCMCES.DLL=Yes
+C:\Windows\SysWOW64\richtx32.Ocx=Yes
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\RICHED32.DLL=Yes
+C:\Windows\SysWOW64\RCHTXES.DLL=Yes
+C:\Windows\SysWOW64\MSComm32.Ocx=Yes
+C:\Windows\SysWOW64\MSComES.dll=Yes
+C:\Windows\SysWOW64\sysinfo.Ocx=Yes
+C:\Windows\SysWOW64\SYSINES.DLL=Yes
+C:\Windows\SysWOW64\MSINET.Ocx=Yes
+C:\Windows\SysWOW64\INETES.DLL=Yes
+C:\Windows\SysWOW64\MSWINSCK.ocx=Yes
+C:\Windows\SysWOW64\WinSkES.dll=Yes
+C:\Windows\System32\MSEXCL35.DLL=Yes
+C:\Windows\System32\MSLTUS35.DLL=Yes
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=Yes
+C:\Windows\System32\MSPDOX35.DLL=Yes
+C:\Windows\System32\MSTEXT35.DLL=Yes
+C:\Windows\System32\MSXBSE35.DLL=Yes
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\Windows\System32\VB6STKIT.DLL=Yes
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+C:\Windows\LIBRERIA\FacturacionElect.tlb=Yes
+C:\Windows\SysWOW64\MSFlxGrd.ocx=Yes
+C:\Windows\SysWOW64\FlxGdES.dll=Yes
+
+[Package|DiskCover System 32 o 64 Bits|Configure Registry Files]
+Applicable=No
+
+[Package|DiskCover System 32 o 64 Bits|Configure Remote Servers]
+Applicable=No
+
+[Package|DiskCover System 32 o 64 Bits|Install Locations]
+C:\SISTEMA\Contabilidad.exe=$(AppPath)
+C:\Windows\System32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=$(WinSysPathSysFile)
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=$(WinSysPathSysFile)
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\ASYCFILT.DLL=$(WinSysPathSysFile)
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\STDOLE2.TLB=$(WinSysPathSysFile)
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\Windows\System32\VB6ES.DLL=$(WinSysPath)
+C:\Windows\System32\urlmon.dll=$(WinSysPath)
+C:\Windows\System32\wininet.dll=$(WinSysPath)
+C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_5.82.22621.3527_none_fbe8b6227808ef55\comctl32.dll=$(WinSysPath)
+C:\Windows\System32\IPHLPAPI.DLL=$(WinSysPath)
+C:\Windows\System32\zip32.dll=$(WinSysPath)
+C:\Windows\System32\unzip32.dll=$(WinSysPath)
+C:\Windows\SysWOW64\msxml3.dll=$(WinSysPath)
+C:\Windows\SysWOW64\FacturacionElect.tlb=$(WinSysPath)
+C:\Program Files (x86)\Common Files\Microsoft Shared\DAO\DAO350.DLL=$(MSDAOPath)
+C:\Windows\System32\MSJET35.DLL=$(WinSysPathSysFile)
+C:\Windows\System32\msjter35.dll=$(WinSysPathSysFile)
+C:\Windows\System32\msjint35.dll=$(WinSysPathSysFile)
+C:\Windows\System32\vbajet32.dll=$(WinSysPathSysFile)
+C:\Windows\System32\expsrv.dll=$(WinSysPathSysFile)
+C:\Windows\System32\msrd2x35.dll=$(WinSysPathSysFile)
+C:\Windows\System32\MSREPL35.DLL=$(WinSysPathSysFile)
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MSVCRT40.DLL=$(WinSysPathSysFile)
+C:\Windows\System32\VB5DB.DLL=$(WinSysPath)
+C:\Program Files (x86)\Common Files\System\ado\msado28.tlb=$(WinSysPath)
+C:\Windows\SysWOW64\MSBind.dll=$(WinSysPath)
+C:\Windows\SysWOW64\msstdfmt.dll=$(WinSysPath)
+C:\Windows\SysWOW64\STDFTES.DLL=$(WinSysPath)
+C:\Program Files\Microsoft Office\root\Office16\EXCEL.EXE=$(AppPath)
+C:\Program Files\Common Files\Adobe\Acrobat\ActiveX\AcroPDF.dll=$(WinSysPath)
+C:\Windows\SysWOW64\scrrun.dll=$(WinSysPath)
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MSVCRT.DLL=$(WinSysPathSysFile)
+C:\Windows\SysWOW64\SCRRNES.DLL=$(WinSysPath)
+C:\Windows\SysWOW64\TabCtl32.Ocx=$(WinSysPath)
+C:\Windows\SysWOW64\TabCtES.dll=$(WinSysPath)
+C:\Windows\SysWOW64\msmask32.ocx=$(WinSysPath)
+C:\Windows\SysWOW64\MSMskES.dll=$(WinSysPath)
+C:\Windows\SysWOW64\ComDlg32.OCX=$(WinSysPath)
+C:\Windows\SysWOW64\CMDLGES.DLL=$(WinSysPath)
+C:\Windows\SysWOW64\MSDatGrd.ocx=$(WinSysPath)
+C:\Windows\SysWOW64\DATGDES.DLL=$(WinSysPath)
+C:\Windows\SysWOW64\MSDatLst.Ocx=$(WinSysPath)
+C:\Windows\SysWOW64\DATLSES.DLL=$(WinSysPath)
+C:\Windows\SysWOW64\MSAdoDc.ocx=$(WinSysPath)
+C:\Windows\SysWOW64\ADODCES.DLL=$(WinSysPath)
+C:\Windows\SysWOW64\msrdc20.Ocx=$(WinSysPath)
+C:\Windows\SysWOW64\msrdo20.dll=$(WinSysPath)
+C:\Windows\SysWOW64\RDOCURS.DLL=$(WinSysPath)
+C:\Windows\SysWOW64\RDO20ES.DLL=$(WinSysPath)
+C:\Windows\SysWOW64\RDC20ES.DLL=$(WinSysPath)
+C:\Windows\SysWOW64\comctl32.Ocx=$(WinSysPath)
+C:\Windows\SysWOW64\CmCtlES.dll=$(WinSysPath)
+C:\Windows\SysWOW64\MSChrt20.ocx=$(WinSysPath)
+C:\Windows\SysWOW64\MSCH2ES.DLL=$(WinSysPath)
+C:\Windows\SysWOW64\PicClp32.Ocx=$(WinSysPath)
+C:\Windows\SysWOW64\PCCLPES.DLL=$(WinSysPath)
+C:\Windows\SysWOW64\mscomctl.OCX=$(WinSysPath)
+C:\Windows\SysWOW64\MSCMCES.DLL=$(WinSysPath)
+C:\Windows\SysWOW64\richtx32.Ocx=$(WinSysPath)
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\RICHED32.DLL=$(WinSysPathSysFile)
+C:\Windows\SysWOW64\RCHTXES.DLL=$(WinSysPath)
+C:\Windows\SysWOW64\MSComm32.Ocx=$(WinSysPath)
+C:\Windows\SysWOW64\MSComES.dll=$(WinSysPath)
+C:\Windows\SysWOW64\sysinfo.Ocx=$(WinSysPath)
+C:\Windows\SysWOW64\SYSINES.DLL=$(WinSysPath)
+C:\Windows\SysWOW64\MSINET.Ocx=$(WinSysPath)
+C:\Windows\SysWOW64\INETES.DLL=$(WinSysPath)
+C:\Windows\SysWOW64\MSWINSCK.ocx=$(WinSysPath)
+C:\Windows\SysWOW64\WinSkES.dll=$(WinSysPath)
+C:\Windows\System32\MSEXCL35.DLL=$(WinSysPathSysFile)
+C:\Windows\System32\MSEXCH35.DLL=$(WinSysPath)
+C:\Windows\System32\MSLTUS35.DLL=$(WinSysPathSysFile)
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=$(AppPath)
+C:\Windows\System32\MSPDOX35.DLL=$(WinSysPathSysFile)
+C:\Windows\System32\MSTEXT35.DLL=$(WinSysPathSysFile)
+C:\Windows\System32\MSXBSE35.DLL=$(WinSysPathSysFile)
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\Windows\System32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+C:\Windows\LIBRERIA\FacturacionElect.tlb=$(WinSysPath)
+C:\Windows\SysWOW64\MSFlxGrd.ocx=$(WinSysPath)
+C:\Windows\SysWOW64\FlxGdES.dll=$(WinSysPath)
+
+[Package|DiskCover System 32 o 64 Bits|Configure Shared Files]
+Applicable=Yes
+C:\SISTEMA\Contabilidad.exe=No
+C:\Program Files\Microsoft Office\root\Office16\EXCEL.EXE=Yes
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=Yes
+
+[Package|DiskCover System 32 o 64 Bits|Distribution]
+Type=single
+Size=
+Title=DiskCover System 32 o 64 Bits
+
+[Package|DiskCover System 32 o 64 Bits|Package]
+PackageFolder=C:\SISTEMA\SETUP\Setup_32_64Bits
+ProjectFolder=C:\ASISTEMA\CONTABIL
+ServerSideCab=
+File1=C:\SISTEMA\SETUP\Setup_32_64Bits\setup.exe
+File2=C:\SISTEMA\SETUP\Setup_32_64Bits\Setup.Lst
+File3=C:\SISTEMA\SETUP\Setup_32_64Bits\Contabilidad.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz
+
+[Package|DiskCover System 32 o 64 Bits|IconGroups]
+Group0=DiskCover System 32 o 64 Bits
+PrivateGroup0=-1
+Parent0=$(Programs)
+
+[Package|DiskCover System 32 o 64 Bits|DiskCover System 32 o 64 Bits]
+Icon1=Contabilidad.exe
+Title1=DiskCover System 32 o 64 Bits
+StartIn1=$(AppPath)
+Key1=Icon1

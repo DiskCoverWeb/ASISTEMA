@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
@@ -1296,7 +1296,7 @@ Dim RutaXMLRechazado As String
                       .fields("IMPORTE_TOTAL") = AXML.Total
                       .fields("Cod_Ret") = AXML.Cod_Ret
                       .fields("Serie_Receptor") = AXML.Serie_Receptor
-                      '.fields("Documento") = AXML.Comprobante
+                      .fields("Comprobante") = AXML.Comprobante
                       .fields("Subtotal") = AXML.SubTotal
                       .fields("Total_IVA") = AXML.Total_IVA
                       .fields("Ret_IVA_B") = AXML.Ret_IVA_B
@@ -1315,6 +1315,7 @@ Dim RutaXMLRechazado As String
                       .fields("Cta_Ret_IVA_S") = AXML.Cta_Ret_IVA_S
                       .fields("CodPorIva") = AXML.CodPorIva
                       .fields("CodSustento") = AXML.Cod_Sustento
+                      .fields("Procesar") = adTrue
                       .Update
                        Contador = Contador + 1
                    Else
@@ -1330,7 +1331,7 @@ Dim RutaXMLRechazado As String
          TextoFile = "Asiento_TXT_" & CodigoUsuario
          sSQL = "DELETE " _
               & "FROM " & TextoFile & " " _
-              & "WHERE COMPROBANTE <> '.' "
+              & "WHERE Item = '" & NumEmpresa & "' "
          Ejecutar_SQL_SP sSQL
          MsgBox "La informacion de este archivo no es para la Empresa. No se procede a procesar"
      End If
@@ -1343,7 +1344,7 @@ Dim RutaXMLRechazado As String
      sSQL = "SELECT " & Full_Fields(TextoFile) & " " _
           & "FROM " & TextoFile & " " _
           & "WHERE Item = '" & NumEmpresa & "' " _
-          & "ORDER BY COMPROBANTE, FECHA_EMISION, ID "
+          & "ORDER BY Serie_Receptor, Comprobante, RAZON_SOCIAL_EMISOR, FECHA_EMISION, ID "
      Select_Adodc_Grid DGDocSRI, AdoDocSRI, sSQL
      DGDocSRI.Visible = True
      Progreso_Final
@@ -1381,7 +1382,7 @@ Public Sub Grabar_Comprobantes_XML()
          & "FROM " & TextoFile & " " _
          & "WHERE Item = '" & NumEmpresa & "' " _
          & "AND Procesar <> 0 " _
-         & "ORDER BY COMPROBANTE, FECHA_EMISION, ID "
+         & "ORDER BY Serie_Receptor, Comprobante, RAZON_SOCIAL_EMISOR, FECHA_EMISION, ID "
     Select_Adodc AdoAux, sSQL
     
     With AdoAux.Recordset
@@ -1492,7 +1493,7 @@ Public Sub Grabar_Comprobantes_XML()
                    NombreCliente = AdoAbono.Recordset.fields("Razon_Social_Emisor")
 
                   'Insertamos las transacciones
-                   BorrarAsientos True
+                   Eliminar_Asientos_SP True
                     
                    sSQL = "SELECT " & Full_Fields("Asiento") & " " _
                         & "FROM Asiento " _

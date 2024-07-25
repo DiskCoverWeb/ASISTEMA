@@ -694,6 +694,55 @@ Dim FechaFinSP As String
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
 
+Public Sub Grabar_Facturas_x_Lotes_SP(CodigoCxC As String, _
+                                      GrupoINo As String, _
+                                      GrupoFNo As String, _
+                                      FechaDesde As MaskEdBox, _
+                                      FechaHasta As MaskEdBox, _
+                                      FechaFacturar As MaskEdBox, _
+                                      NoMes As Integer, _
+                                      AnioFA As String, _
+                                      Tipo_Pago As String, _
+                                      Nota As String, _
+                                      Observacion As String, _
+                                      PorGrupo As Boolean, _
+                                      CheqRangos As Boolean, _
+                                      CheqFA As Boolean)
+Dim MiSQL As ADODB.Connection
+Dim MiCmd As ADODB.Command
+Dim MiReg As ADODB.Recordset
+
+Dim FechaIniSP As String
+Dim FechaFinSP As String
+Dim FechaFacSP As String
+    
+    FechaIniSP = BuscarFecha(FechaDesde.Text)
+    FechaFinSP = BuscarFecha(FechaHasta.Text)
+    FechaFacSP = BuscarFecha(FechaFacturar.Text)
+    Iniciar_Stored_Procedure "Generacion de Facturas en Bloque", MiSQL, MiCmd, MiReg
+    MiCmd.CommandText = "sp_Grabar_Facturas_x_Lotes"
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@NumModulo", adVarChar, adParamInput, 2, NumModulo)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Usuario", adVarChar, adParamInput, 10, CodigoUsuario)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@GrupoIni", adVarChar, adParamInput, 10, GrupoINo)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@GrupoFin", adVarChar, adParamInput, 10, GrupoFNo)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaDesde", adVarChar, adParamInput, 10, FechaIniSP)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaHasta", adVarChar, adParamInput, 10, FechaFinSP)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaFacturar", adVarChar, adParamInput, 10, FechaFacSP)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@CodigoCxC", adVarChar, adParamInput, 10, CodigoCxC)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@NoMes", adInteger, adParamInput, 10, NoMes)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@AnioFA", adVarChar, adParamInput, 10, AnioFA)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Tipo_Pago", adVarChar, adParamInput, 2, Tipo_Pago)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Nota", adVarChar, adParamInput, 100, Nota)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Observacion", adVarChar, adParamInput, 100, Observacion)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@PorGrupo", adBoolean, adParamInput, 1, PorGrupo)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@CheqRangos", adBoolean, adParamInput, 1, CheqRangos)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@CheqFA", adBoolean, adParamInput, 1, CheqFA)
+    Procesar_Stored_Procedure MiCmd, MiReg
+    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+End Sub
+
 Public Sub Digito_Verificador_SP(NumeroRUC As String)
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
@@ -751,9 +800,9 @@ Dim MiReg As ADODB.Recordset
     FechaIni = TFA.Fecha_Desde
     FechaFin = TFA.Fecha_Hasta
     
-    If IsDate(FechaCorte) Then FechaCorte = BuscarFecha(FechaCorte) Else FechaCorte = BuscarFecha(FechaSistema)
-    If IsDate(FechaIni) Then FechaIni = BuscarFecha(FechaIni) Else FechaIni = BuscarFecha(FechaSistema)
-    If IsDate(FechaFin) Then FechaFin = BuscarFecha(FechaFin) Else FechaFin = BuscarFecha(FechaSistema)
+    If IsDate(FechaCorte) And Len(FechaCorte) = 10 Then FechaCorte = BuscarFecha(FechaCorte) Else FechaCorte = BuscarFecha(FechaSistema)
+    If IsDate(FechaIni) And Len(FechaIni) = 10 Then FechaIni = BuscarFecha(FechaIni) Else FechaIni = BuscarFecha(FechaSistema)
+    If IsDate(FechaFin) And Len(FechaFin) = 10 Then FechaFin = BuscarFecha(FechaFin) Else FechaFin = BuscarFecha(FechaSistema)
     If FechaCorte = BuscarFecha(FechaSistema) Then SaldoReal = True
     
    'MsgBox "==> " & TFA.Fecha_Corte & vbCrLf & TFA.Fecha_Desde & vbCrLf & TFA.Fecha_Hasta & vbCrLf & SaldoReal & vbCrLf & PorFecha
@@ -868,6 +917,25 @@ Dim FechaFinSP As String
     FechaFinSP = BuscarFecha(FechaHasta.Text)
     Iniciar_Stored_Procedure "Cierre Diario de Caja", MiSQL, MiCmd, MiReg
     MiCmd.CommandText = "sp_Productos_Cierre_Caja"
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaDesde", adVarChar, adParamInput, 10, FechaIniSP)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaHasta", adVarChar, adParamInput, 10, FechaFinSP)
+    Procesar_Stored_Procedure MiCmd, MiReg
+    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+End Sub
+
+Public Sub Insertar_Productos_Cierre_Caja_SP(FechaDesde As MaskEdBox, FechaHasta As MaskEdBox)
+Dim MiSQL As ADODB.Connection
+Dim MiCmd As ADODB.Command
+Dim MiReg As ADODB.Recordset
+Dim FechaIniSP As String
+Dim FechaFinSP As String
+
+    FechaIniSP = BuscarFecha(FechaDesde.Text)
+    FechaFinSP = BuscarFecha(FechaHasta.Text)
+    Iniciar_Stored_Procedure "Insertar Productos Cierre Caja", MiSQL, MiCmd, MiReg
+    MiCmd.CommandText = "sp_Insertar_Productos_Cierre_Caja"
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaDesde", adVarChar, adParamInput, 10, FechaIniSP)
@@ -994,18 +1062,41 @@ Dim MiReg As ADODB.Recordset
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
 
-Public Sub Procesar_Rol_Pagos_Mensual_SP(FechaIniRol As String, _
+'''Public Sub Procesar_Rol_Pagos_Mensual_SP(FechaIniRol As String, _
+'''                                         FechaFinRol As String, _
+'''                                         GrupoRol As String, _
+'''                                         CheqCxP As Boolean, _
+'''                                         DCCxP As String)
+'''Dim MiSQL As ADODB.Connection
+'''Dim MiCmd As ADODB.Command
+'''Dim MiReg As ADODB.Recordset
+'''
+'''    Iniciar_Stored_Procedure "Generacion Rol Pagos Colectivo Mensual", MiSQL, MiCmd, MiReg
+'''    MiCmd.CommandText = "sp_Procesar_Rol_Pagos_Mensual"
+'''    MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
+'''    MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
+'''    MiCmd.Parameters.Append MiCmd.CreateParameter("@NumModulo", adVarChar, adParamInput, 2, NumModulo)
+'''    MiCmd.Parameters.Append MiCmd.CreateParameter("@CodigoUsuario", adVarChar, adParamInput, 10, CodigoUsuario)
+'''    MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaIniRol", adVarChar, adParamInput, 10, FechaIniRol)
+'''    MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaFinRol", adVarChar, adParamInput, 10, FechaFinRol)
+'''    MiCmd.Parameters.Append MiCmd.CreateParameter("@GrupoRol", adVarChar, adParamInput, 15, GrupoRol)
+'''    MiCmd.Parameters.Append MiCmd.CreateParameter("@DCCxP", adVarChar, adParamInput, 18, DCCxP)
+'''    MiCmd.Parameters.Append MiCmd.CreateParameter("@CheqCxP", adBoolean, adParamInput, 1, CheqCxP)
+'''    Procesar_Stored_Procedure MiCmd, MiReg
+'''    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+'''End Sub
+
+Public Sub Procesar_Rol_Pagos_del_Mes_SP(FechaIniRol As String, _
                                          FechaFinRol As String, _
                                          GrupoRol As String, _
-                                         CheqCxP As Boolean, _
-                                         DCCxP As String)
+                                         DCCxP As String, _
+                                         No_Cheque As Long)
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
 Dim MiReg As ADODB.Recordset
 
-    Iniciar_Stored_Procedure "Generacion Rol Pagos Colectivo Mensual", MiSQL, MiCmd, MiReg
-    MiCmd.CommandText = "sp_Procesar_Rol_Pagos_Mensual"
-    'MiCmd.CommandText = "sp_Procesar_Rol_Pagos_del_Mes" 'Nuevo
+    Iniciar_Stored_Procedure "Generacion Rol Pagos del Mes", MiSQL, MiCmd, MiReg
+    MiCmd.CommandText = "sp_Procesar_Rol_Pagos_del_Mes"
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@NumModulo", adVarChar, adParamInput, 2, NumModulo)
@@ -1014,7 +1105,26 @@ Dim MiReg As ADODB.Recordset
     MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaFinRol", adVarChar, adParamInput, 10, FechaFinRol)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@GrupoRol", adVarChar, adParamInput, 15, GrupoRol)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@DCCxP", adVarChar, adParamInput, 18, DCCxP)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@CheqCxP", adBoolean, adParamInput, 1, CheqCxP)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@No_Cheque", adInteger, adParamInput, 14, No_Cheque)
+    
+    Procesar_Stored_Procedure MiCmd, MiReg
+    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+End Sub
+
+Public Sub Procesar_Rol_Pagos_Asientos_SP(FechaIniRol As String, _
+                                          FechaFinRol As String)
+Dim MiSQL As ADODB.Connection
+Dim MiCmd As ADODB.Command
+Dim MiReg As ADODB.Recordset
+
+    Iniciar_Stored_Procedure "Generacion Rol Pagos del Mes", MiSQL, MiCmd, MiReg
+    MiCmd.CommandText = "sp_Procesar_Rol_Pagos_Asientos"
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@NumModulo", adVarChar, adParamInput, 2, NumModulo)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@CodigoUsuario", adVarChar, adParamInput, 10, CodigoUsuario)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaIniRol", adVarChar, adParamInput, 10, FechaIniRol)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaFinRol", adVarChar, adParamInput, 10, FechaFinRol)
     Procesar_Stored_Procedure MiCmd, MiReg
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
@@ -1220,6 +1330,21 @@ Dim MiReg As ADODB.Recordset
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
 
+Public Sub Eliminar_Asientos_SP(B_Asiento As Boolean)
+Dim MiSQL As ADODB.Connection
+Dim MiCmd As ADODB.Command
+Dim MiReg As ADODB.Recordset
+
+    Iniciar_Stored_Procedure NumEmpresa & " - Eliminar Asientos " & Periodo, MiSQL, MiCmd, MiReg
+    MiCmd.CommandText = "sp_Eliminar_Asientos"
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Usuario", adVarChar, adParamInput, 10, CodigoUsuario)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@TransNo", adInteger, adParamInput, 14, Trans_No)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@B_Asiento", adBoolean, adParamInput, 1, B_Asiento)
+    Procesar_Stored_Procedure MiCmd, MiReg
+    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+End Sub
+
 Public Sub Leer_Codigo_Inv_SP(BuscarCodigo As String, FechaInventario As String, CodBodega As String, CodMarca As String, CodigoDeInv As String)
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
@@ -1373,6 +1498,14 @@ Dim sSQLAux As String
      Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
   End If
   RatonNormal
+'''  MsgBox C1.RetNueva & vbCrLf _
+'''       & C1.Serie_R & vbCrLf _
+'''       & C1.Retencion & vbCrLf _
+'''       & C1.Autorizacion_R & vbCrLf _
+'''       & C1.Ctas_Modificar & vbCrLf _
+'''       & C1.CodigoInvModificar & vbCrLf _
+'''       & Ln_No & vbCrLf _
+'''       & LnSC_No
 End Sub
 
 Public Sub Subir_Archivo_CSV_SP(PathCSV As String)

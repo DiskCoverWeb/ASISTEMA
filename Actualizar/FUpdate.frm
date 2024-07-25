@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.Ocx"
 Begin VB.Form FActualizar 
    BackColor       =   &H00808080&
@@ -642,12 +642,13 @@ End Sub
 
 Private Sub Bajar_Archivos_FTP(TypeUpdate As String)
 Dim ListaDeArchivos As String
-Dim rutaFTP As String
 Dim Certificados() As String
 Dim IdC As Byte
-
+'If InStr(IP_PC.IP_PC, "192.168.") > 0 Then .servidor = "192.168.27.4" Else
 On Error GoTo error_Handler
 
+   FActualizar.Caption = "ESTABLECIENDO CONEXION AL SERVIDOR..."
+   FActualizar.Refresh
   'If Existe_File(RutaSysBases & "\TEMP\*.zip") Then Kill RutaSysBases & "\TEMP\*.zip"
    With ftp
        Progreso_Barra.Mensaje_Box = "Conectando al servidor"
@@ -658,27 +659,27 @@ On Error GoTo error_Handler
       'Le establecemos el nombre de usuario de la cuenta
       .Usuario = ftpUse
       'Establecesmo el nombre del Servidor FTP
-       If InStr(IP_PC.IP_PC, "192.168.21.") > 0 Or InStr(IP_PC.IP_PC, "192.168.27.") > 0 Then .servidor = "192.168.27.4" Else .servidor = ftpSvr
-      '...conectamos al servidor FTP. EL label es el control donde mostrar los errores y el estado de la conexión
-       FActualizar.Caption = "DATOS Y PROGRAMAS: " & .servidor
-       FActualizar.Refresh
+      .servidor = ftpSvr
       'MsgBox .servidor
+      'Conectamos al servidor FTP. EL label es el control donde mostrar los errores y el estado de la conexión
        If .ConectarFtp(LstStatud) = False Then
            MsgBox "No se pudo conectar"
            Exit Sub
        End If
+       FActualizar.Caption = "DATOS Y PROGRAMAS: " & .servidor
+       FActualizar.Refresh
       'Mostramos en el label el path del directorio actual donde estamos ubicados en el servidor
        Progreso_Barra.Mensaje_Box = .GetDirectorioActual
+      'MsgBox Progreso_Barra.Mensaje_Box
       .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-       rutaFTP = ""
       'Le indicamos el ListView donde se listarán los archivos
        Set .ListView = LstVwFTP
        Progreso_Barra.Mensaje_Box = "Buscando directorio en el servidor"
       .Mostar_Estado_FTP ProgressBarEstado, LstStatud
 
-      '----------------------------------------------------------------------------------
-      'Esta opcion solo actualiza la base de datos y los Store Procedure con las Function
-      '==================================================================================
+      '------------------------------------------------------------------------------------
+      'Esta opcion solo actualiza la base de datos y los Store Procedure con las Functiones
+      '====================================================================================
        If InStr(TypeUpdate, "[1]") Then
           Progreso_Barra.Mensaje_Box = "Eliminando Version anterior"
          .Mostar_Estado_FTP ProgressBarEstado, LstStatud
@@ -690,10 +691,9 @@ On Error GoTo error_Handler
           Eliminar_Si_Existe_File RutaSistema & "\FONDOS\USUARIOS\*.*"
           Eliminar_Si_Existe_File RutaSistema & "\BASES\UPDATE_DB\*.*"
           
-         .CambiarDirectorio rutaFTP & "/SISTEMA/BASES/UPDATE_DB/"
+         .CambiarDirectorio "/SISTEMA/BASES/UPDATE_DB/"
          .ListarArchivos
           For I = 1 To LstVwFTP.ListItems.Count
-              Cadena = Cadena & LstVwFTP.ListItems(I) & vbCrLf
              'MsgBox LstVwFTP.ListItems(I) & vbCrLf & UCaseStrg(RightStrg(LstVwFTP.ListItems(I), 3))
               Select Case UCaseStrg(RightStrg(LstVwFTP.ListItems(I), 3))
                 Case "DBS", "UPD", "TXT", "DOC", "SQL"
@@ -706,9 +706,8 @@ On Error GoTo error_Handler
                     .ObtenerArchivo LstVwFTP.ListItems(I), RutaSysBases & "\TEMP\" & LstVwFTP.ListItems(I), True
               End Select
           Next I
-          
          'Insertamos fondos nuevos de raiz
-         .CambiarDirectorio rutaFTP & "/SISTEMA/FONDOS/"
+         .CambiarDirectorio "/SISTEMA/FONDOS/"
          .ListarArchivos
           For I = 1 To LstVwFTP.ListItems.Count
               Select Case UCaseStrg(RightStrg(LstVwFTP.ListItems(I), 3))
@@ -725,19 +724,17 @@ On Error GoTo error_Handler
       '==========================================
        If InStr(TypeUpdate, "[2]") Then
          'Borramos archivos antiguos
-         .CambiarDirectorio rutaFTP & "/SISTEMA/"
-          Cadena = ""
+         .CambiarDirectorio "/SISTEMA"
          .ListarArchivos
           For I = 1 To LstVwFTP.ListItems.Count
               Select Case UCaseStrg(RightStrg(LstVwFTP.ListItems(I), 3))
                 Case "EXE", "JPG", "PNG"
-                     Cadena = Cadena & LstVwFTP.ListItems(I) & vbCrLf
                      Progreso_Barra.Mensaje_Box = "Eliminando: " & LstVwFTP.ListItems(I)
                     .Mostar_Estado_FTP ProgressBarEstado, LstStatud
                      Eliminar_Si_Existe_File RutaSistema & "\" & LstVwFTP.ListItems(I)
               End Select
+              Cadena = Cadena & LstVwFTP.ListItems(I) & vbCrLf
           Next I
-         'MsgBox .GetDirectorioActual & vbCrLf & Cadena
          'Copiamos nuevos archivos del servidor
           Cadena = ""
           For I = 1 To LstVwFTP.ListItems.Count
@@ -751,10 +748,9 @@ On Error GoTo error_Handler
           Next I
           Sleep 5000
           
-          Cadena = ""
           For I = 1 To LstVwFTP.ListItems.Count
               If UCaseStrg(RightStrg(LstVwFTP.ListItems(I), 3)) = "EXE" Then
-                 Cadena = Cadena & "Copying: " & LstVwFTP.ListItems(I) & vbCrLf
+                'Cadena = Cadena & "Copying: " & LstVwFTP.ListItems(I) & vbCrLf
                  Progreso_Barra.Mensaje_Box = "Actualizando: " & LstVwFTP.ListItems(I)
                 .Mostar_Estado_FTP ProgressBarEstado, LstStatud
                 .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\" & LstVwFTP.ListItems(I), True
@@ -781,7 +777,7 @@ On Error GoTo error_Handler
 
           If IdC > 0 Then
              RatonReloj
-            .CambiarDirectorio rutaFTP & "/SISTEMA/CERTIFIC/"
+            .CambiarDirectorio "/SISTEMA/CERTIFIC/"
             .ListarArchivos
              For I = 1 To LstVwFTP.ListItems.Count
                  For J = 0 To UBound(Certificados)
@@ -802,7 +798,7 @@ On Error GoTo error_Handler
        If InStr(TypeUpdate, "[3]") Then
          'Borrammos fondos antiguos de cada mes
           For J = 1 To 12
-             .CambiarDirectorio rutaFTP & "/SISTEMA/FONDOS/M" & Format(J, "00") & "/"
+             .CambiarDirectorio "/SISTEMA/FONDOS/M" & Format(J, "00") & "/"
              .ListarArchivos
               For I = 1 To LstVwFTP.ListItems.Count
                   If Len(LstVwFTP.ListItems(I)) > 3 Then
@@ -813,7 +809,7 @@ On Error GoTo error_Handler
               Next I
           Next J
          
-         .CambiarDirectorio rutaFTP & "/SISTEMA/LOGOS/"
+         .CambiarDirectorio "/SISTEMA/LOGOS/"
          .ListarArchivos
           For I = 1 To LstVwFTP.ListItems.Count
               If Len(LstVwFTP.ListItems(I)) > 3 Then
@@ -823,7 +819,7 @@ On Error GoTo error_Handler
               End If
           Next I
           
-         .CambiarDirectorio rutaFTP & "/SISTEMA/FOTOS/"
+         .CambiarDirectorio "/SISTEMA/FOTOS/"
          .ListarArchivos
           For I = 1 To LstVwFTP.ListItems.Count
               If Len(LstVwFTP.ListItems(I)) > 3 Then
@@ -833,7 +829,7 @@ On Error GoTo error_Handler
               End If
           Next I
           
-         .CambiarDirectorio rutaFTP & "/SISTEMA/FORMATOS/"
+         .CambiarDirectorio "/SISTEMA/FORMATOS/"
          .ListarArchivos
           For I = 1 To LstVwFTP.ListItems.Count
               If Len(LstVwFTP.ListItems(I)) > 3 Then
@@ -845,18 +841,21 @@ On Error GoTo error_Handler
                     
         'Insertamos los fondos por Mes
           For J = 1 To 12
-             .CambiarDirectorio rutaFTP & "/SISTEMA/FONDOS/M" & Format(J, "00") & "/"
+             .CambiarDirectorio "/SISTEMA/FONDOS/M" & Format(J, "00") & "/"
              .ListarArchivos
+             'Cadena = "/SISTEMA/FONDOS/M" & Format(J, "00") & "/" & vbCrLf
               For I = 1 To LstVwFTP.ListItems.Count
+                 'Cadena = Cadena & LstVwFTP.ListItems(I) & vbCrLf
                   If Len(LstVwFTP.ListItems(I)) > 3 Then
                      Progreso_Barra.Mensaje_Box = "Actualizando: FONDOS\M" & Format(J, "00") & "\" & LstVwFTP.ListItems(I)
                     .Mostar_Estado_FTP ProgressBarEstado, LstStatud
                     .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\FONDOS\M" & Format(J, "00") & "\" & LstVwFTP.ListItems(I), True
                   End If
               Next I
+             'MsgBox Cadena
           Next J
           
-         .CambiarDirectorio rutaFTP & "/SISTEMA/LOGOS/"
+         .CambiarDirectorio "/SISTEMA/LOGOS/"
          .ListarArchivos
           For I = 1 To LstVwFTP.ListItems.Count
               If Len(LstVwFTP.ListItems(I)) > 3 Then
@@ -866,7 +865,7 @@ On Error GoTo error_Handler
               End If
           Next I
           
-         .CambiarDirectorio rutaFTP & "/SISTEMA/FOTOS/"
+         .CambiarDirectorio "/SISTEMA/FOTOS/"
          .ListarArchivos
           For I = 1 To LstVwFTP.ListItems.Count
               If Len(LstVwFTP.ListItems(I)) > 3 Then
@@ -876,7 +875,7 @@ On Error GoTo error_Handler
               End If
           Next I
           
-         .CambiarDirectorio rutaFTP & "/SISTEMA/FORMATOS/"
+         .CambiarDirectorio "/SISTEMA/FORMATOS/"
          .ListarArchivos
           For I = 1 To LstVwFTP.ListItems.Count
               If Len(LstVwFTP.ListItems(I)) > 3 Then
@@ -2055,7 +2054,6 @@ End Sub
 Private Sub Descargar_FTP_Certificados_Logos()
 Dim AdoDBTemp As ADODB.Recordset
 Dim ListaDeArchivos As String
-Dim rutaFTP As String
 Dim Certificados() As String
 Dim LogoTipos() As String
 Dim IdC As Byte
@@ -2123,28 +2121,31 @@ On Error GoTo error_Handler
       'Le establecemos el nombre de usuario de la cuenta
       .Usuario = ftpUse
       'Establecesmo el nombre del Servidor FTP
-       If InStr(IP_PC.IP_PC, "192.168.21.") > 0 Or InStr(IP_PC.IP_PC, "192.168.27.") > 0 Then .servidor = "192.168.27.3" Else .servidor = ftpSvr
+       'Or InStr(IP_PC.IP_PC, "192.168.27.") > 0
+      'MsgBox IP_PC.IP_PC & vbCrLf &
+      'If InStr(IP_PC.IP_PC, "192.168.") > 0 Then .servidor = "192.168.27.4" Else
+      .servidor = ftpSvr
       '...conectamos al servidor FTP. EL label es el control donde mostrar los errores y el estado de la conexión
        If .ConectarFtp(LstStatud) = False Then
            MsgBox "No se pudo conectar"
            Exit Sub
        End If
-       
        LstStatud.Text = LstStatud.Text & .GetDirectorioActual & vbCrLf
-       rutaFTP = ""
+       
       'Mostramos en el label el path del directorio actual donde estamos ubicados en el servidor
-       rutaFTP = ""
       'Le indicamos el ListView donde se listarán los archivos
        Set .ListView = LstVwFTP
-         
+
        If IdC > 0 Then
           RatonReloj
          'Conectamos la nueva Base de Datos para sacar los Certificados del servidor que no los obtenga el cliente
-         .CambiarDirectorio rutaFTP & "/SISTEMA/CERTIFIC/"
+         .CambiarDirectorio "/SISTEMA/CERTIFIC/"
          .ListarArchivos
           For I = 1 To LstVwFTP.ListItems.Count
               For J = 0 To UBound(Certificados)
                   If Certificados(J) = LstVwFTP.ListItems(I) Then
+                     Progreso_Barra.Mensaje_Box = "Descargando: " & LstVwFTP.ListItems(I)
+                    .Mostar_Estado_FTP ProgressBarEstado, LstStatud
                     .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\CERTIFIC\" & LstVwFTP.ListItems(I), True
                      'Exit For
                   End If
@@ -2155,11 +2156,13 @@ On Error GoTo error_Handler
        If IdL > 0 Then
           RatonReloj
          'Conectamos la nueva Base de Datos para sacar los Certificados del servidor que no los obtenga el cliente
-         .CambiarDirectorio rutaFTP & "/SISTEMA/LOGOS/"
+         .CambiarDirectorio "/SISTEMA/LOGOS/"
          .ListarArchivos
           For I = 1 To LstVwFTP.ListItems.Count
               For J = 0 To UBound(LogoTipos)
                   If UCaseStrg(LogoTipos(J)) = UCaseStrg(LstVwFTP.ListItems(I)) Then
+                     Progreso_Barra.Mensaje_Box = "Descargando: " & LstVwFTP.ListItems(I)
+                    .Mostar_Estado_FTP ProgressBarEstado, LstStatud
                     .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\LOGOS\" & LstVwFTP.ListItems(I), True
                      'Exit For
                   End If
@@ -2167,6 +2170,18 @@ On Error GoTo error_Handler
           Next I
           RatonNormal
        End If
+       
+       RatonReloj
+      'Conectamos la nueva Base de Datos para sacar los Certificados del servidor que no los obtenga el cliente
+      .CambiarDirectorio "/SISTEMA/FONTSPDF/"
+      .ListarArchivos
+       For I = 1 To LstVwFTP.ListItems.Count
+           Progreso_Barra.Mensaje_Box = "Descargando: " & LstVwFTP.ListItems(I)
+          .Mostar_Estado_FTP ProgressBarEstado, LstStatud
+          .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\FONTSPDF\" & LstVwFTP.ListItems(I), True
+       Next I
+       RatonNormal
+       
       .Desconectar
    End With
    RatonNormal

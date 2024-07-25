@@ -1808,7 +1808,7 @@ Public Sub ProcGrabar()
              & "AND Serie = '" & FA.Serie & "' "
         Ejecutar_SQL_SP sSQL
      End If
-     If Grafico_PV Then Imprimir_Punto_Venta_Grafico FA Else Imprimir_Punto_Venta FA
+     Imprimir_Punto_Venta FA
      NombreCliente = "CONSUMIDOR FINAL"
      TextBenef = "CONSUMIDOR FINAL"
   Else

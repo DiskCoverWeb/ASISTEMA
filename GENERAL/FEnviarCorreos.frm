@@ -136,6 +136,7 @@ Dim posPuntoComa As String
          'Datos para enviar
          .Mensaje = TMail.Mensaje
          .MensajeHTML = TMail.MensajeHTML
+          
           Emails = TMail.para
           
          'MsgBox "DE: " & oMail.de & vbCrLf & "PARA: " & Emails
@@ -156,11 +157,14 @@ Dim posPuntoComa As String
                   'MsgBox "Email: " & Email & vbCrLf & RutaXML
                   .para = EMailPara
                   'Metodo manda el mail
-                  'MsgBox "Iguales: " & .de & " => " & EMailPara & vbCrLf & InStr(.de, EMailPara)
-                   If InStr(.de, EMailPara) = 0 Then
+                  
+                   'MsgBox InStr(.de, EMailPara)
+                   
+                   'If InStr(.de, EMailPara) = 0 Then
+                     'MsgBox "Iguales: " & .de & " => " & EMailPara & vbCrLf & InStr(.de, EMailPara)
                      .Enviar_Backup
                       Control_Procesos "EM", "Email: " & .de & " => " & EMailPara, "Asunto: " & .Asunto
-                   End If
+                   'End If
                 End If
                 Emails = MidStrg(Emails, posPuntoComa + 1, Len(Emails))
              Loop
@@ -207,7 +211,7 @@ Dim CantCadAncho As Long
    'Timer1_Timer
    
     sSQL = "SELECT smtp_Servidor, smtp_Puerto, smtp_UseAuntentificacion, smtp_SSL, smtp_Secure, " _
-         & "Email_Conexion, Email_Contraseña, Email_Conexion_CE, Email_Contraseña_CE, Email_CE_Copia " _
+         & "Email_Conexion, Email_Contraseña, Email_Conexion_CE, Email_Contraseña_CE, Email_Procesos, Email_CE_Copia " _
          & "FROM Empresas " _
          & "WHERE Item = '" & NumEmpresa & "' " _
          & "AND LEN(smtp_Servidor) > 1 " _
@@ -216,6 +220,7 @@ Dim CantCadAncho As Long
 
     With AdoSMTP
      If .RecordCount > 0 Then
+         EmailProcesos = .fields("Email_Procesos")
          TMail.useAuntentificacion = CBool(.fields("smtp_UseAuntentificacion"))
          TMail.ssl = CBool(.fields("smtp_SSL"))
          TMail.tls = CBool(.fields("smtp_Secure"))
@@ -231,7 +236,8 @@ Dim CantCadAncho As Long
             TMail.Password = .fields("Email_Contraseña")
             TMail.de = .fields("Email_Conexion")
          End If
-         If Email_CE_Copia Then Insertar_Mail Emails, EmailProcesos
+         
+         If Email_CE_Copia Then Insertar_Mail TMail.para, EmailProcesos
          If TMail.de = "" And 0 <= TMail.ListaMail And TMail.ListaMail <= 6 Then TMail.de = Lista_De_Correos(TMail.ListaMail).Correo_Electronico
          TMail.de = Replace(UCase(Empresa), """", "") & " <" & TMail.de & ">"
         'Si utilizamos el correo de DiskCover System

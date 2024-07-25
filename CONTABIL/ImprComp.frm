@@ -461,6 +461,8 @@ Dim IdxComp As Long
    Case CompIngreso: Mensajes = "Imprimir Comprobante de Ingreso" & vbCrLf
    Case CompEgreso: Mensajes = "Imprimir Comprobante de Egreso" & vbCrLf
    Case CompDiario: Mensajes = "Imprimir Comprobante de Diario" & vbCrLf
+   Case CompNotaDebito: Mensajes = "Imprimir Comprobante de Nota de Debito" & vbCrLf
+   Case CompNotaDebito: Mensajes = "Imprimir Comprobante de Nota de Credito" & vbCrLf
  End Select
  Mensajes = Mensajes & "Desde el " & DCDesde & " Hasta " & DCHasta & " en:" & vbCrLf _
           & Printer.DeviceName & "?"
@@ -471,114 +473,121 @@ Dim IdxComp As Long
     Escala_Centimetro 1, TipoTimes, 10
    'Listar el Comprobante
     Do While Not AdoListComp.Recordset.EOF
-       Co.TP = TipoComp
+       ConceptoComp = Ninguno
        Co.Item = NumEmpresa
+       Co.TP = AdoListComp.Recordset.fields("TP")
        Co.Numero = AdoListComp.Recordset.fields("Numero")
        Co.Fecha = AdoListComp.Recordset.fields("Fecha")
        ImprimirComprobantes.Caption = "Imprimiendo Comprobante de " & TipoComp & " No. " & Co.Numero
        
-   'Listar el Comprobante
-    sSQL = "SELECT C.*,A.Nombre_Completo,Cl.CI_RUC,Cl.Direccion,Cl.Email," _
-         & "Cl.Telefono,Cl.Celular,Cl.FAX,Cl.Cliente,Cl.Codigo,Cl.Ciudad " _
-         & "FROM Comprobantes As C,Accesos As A,Clientes As Cl " _
-         & "WHERE C.Numero = " & Co.Numero & " " _
-         & "AND C.TP = '" & Co.TP & "' " _
-         & "AND C.Item = '" & Co.Item & "' " _
-         & "AND C.Periodo = '" & Periodo_Contable & "' " _
-         & "AND C.CodigoU = A.Codigo " _
-         & "AND C.Codigo_B = Cl.Codigo "
-    Select_AdoDB AdoComp, sSQL
-    If AdoComp.RecordCount > 0 Then Co.Fecha = AdoComp.fields("Fecha")
-   'Listar las Transacciones
-    sSQL = "SELECT T.Cta,Ca.Cuenta,Parcial_ME,Debe,Haber,Detalle,Cheq_Dep,Fecha_Efec,Ca.Item " _
-         & "FROM Transacciones As T,Catalogo_Cuentas As Ca " _
-         & "WHERE T.TP = '" & Co.TP & "' " _
-         & "AND T.Numero = " & Co.Numero & " " _
-         & "AND T.Item = '" & Co.Item & "' " _
-         & "AND T.Periodo = '" & Periodo_Contable & "' " _
-         & "AND T.Item = Ca.Item " _
-         & "AND T.Cta = Ca.Codigo " _
-         & "AND T.Periodo = Ca.Periodo " _
-         & "ORDER BY T.ID,Debe DESC,T.Cta "
-    Select_AdoDB AdoTrans, sSQL
-   'Llenar Bancos
-    sSQL = "SELECT T.Cta,C.TC,C.Cuenta,Co.Fecha,Cl.Cliente,T.Cheq_Dep,T.Debe,T.Haber " _
-         & "FROM Transacciones As T,Comprobantes As Co,Catalogo_Cuentas As C,Clientes As Cl " _
-         & "WHERE T.TP = '" & Co.TP & "' " _
-         & "AND T.Numero = -1 " _
-         & "AND T.Item = '" & Co.Item & "' " _
-         & "AND T.Periodo = '" & Periodo_Contable & "' " _
-         & "AND T.Numero = Co.Numero " _
-         & "AND T.TP = Co.TP " _
-         & "AND T.Cta = C.Codigo " _
-         & "AND T.Item = C.Item " _
-         & "AND T.Item = Co.Item " _
-         & "AND T.Periodo = C.Periodo " _
-         & "AND T.Periodo = Co.Periodo " _
-         & "AND C.TC = 'BA' " _
-         & "AND Co.Codigo_B = Cl.Codigo "
-    Select_AdoDB AdoBanc, sSQL
-   'Listar las Retenciones del IVA
-    sSQL = "SELECT * " _
-         & "FROM Trans_Compras " _
-         & "WHERE Numero = " & Co.Numero & " " _
-         & "AND TP = '" & Co.TP & "' " _
-         & "AND Item = '" & Co.Item & "' " _
-         & "AND Periodo = '" & Periodo_Contable & "' " _
-         & "ORDER BY Cta_Servicio,Cta_Bienes "
-   Select_AdoDB AdoFact, sSQL
-  'Listar las Retenciones de la Fuente
-   sSQL = "SELECT R.*,TIV.Concepto " _
-         & "FROM Trans_Air As R,Tipo_Concepto_Retencion As TIV " _
-         & "WHERE R.Numero = " & Co.Numero & " " _
-         & "AND R.TP = '" & Co.TP & "' " _
-         & "AND R.Item = '" & Co.Item & "' " _
-         & "AND TIV.Fecha_Inicio <= #" & BuscarFecha(Co.Fecha) & "# " _
-         & "AND TIV.Fecha_Final >= #" & BuscarFecha(Co.Fecha) & "# " _
-         & "AND R.Periodo = '" & Periodo_Contable & "' " _
-         & "AND R.Tipo_Trans IN ('C','I') " _
-         & "AND R.CodRet = TIV.Codigo " _
-         & "ORDER BY R.Cta_Retencion "
-    Select_AdoDB AdoRet, sSQL
-   'Llenar SubCtas
-    sSQL = "SELECT T.Cta,T.TC,T.Factura,C.Cliente,T.Detalle_SubCta,T.Debitos,T.Creditos,T.Fecha_V,T.Codigo,T.Prima " _
-         & "FROM Trans_SubCtas As T,Clientes As C " _
-         & "WHERE T.TP = '" & Co.TP & "' " _
-         & "AND T.Numero = " & Co.Numero & " " _
-         & "AND T.Item = '" & Co.Item & "' " _
-         & "AND T.Periodo = '" & Periodo_Contable & "' " _
-         & "AND T.TC IN ('C','P') " _
-         & "AND T.Codigo = C.Codigo " _
-         & "ORDER BY T.Cta,C.Cliente,T.Fecha_V,T.Factura "
-    Select_AdoDB AdoSubC1, sSQL
-    sSQL = "SELECT T.Cta,T.TC,T.Factura,C.Detalle As Cliente,T.Detalle_SubCta,T.Debitos,T.Creditos,T.Fecha_V,T.Codigo,T.Prima " _
-         & "FROM Trans_SubCtas As T,Catalogo_SubCtas As C " _
-         & "WHERE T.TP = '" & Co.TP & "' " _
-         & "AND T.Numero = " & Co.Numero & " " _
-         & "AND T.Item = '" & Co.Item & "' " _
-         & "AND T.Periodo = '" & Periodo_Contable & "' " _
-         & "AND T.TC = C.TC " _
-         & "AND T.Item = C.Item " _
-         & "AND T.Periodo = C.Periodo " _
-         & "AND T.Codigo = C.Codigo " _
-         & "ORDER BY T.Cta,C.Detalle,T.Fecha_V,T.Factura "
-    Select_AdoDB AdoSubC2, sSQL
-    
-    ConceptoComp = Ninguno
-    If AdoComp.RecordCount > 0 Then ConceptoComp = AdoComp.fields("Concepto")
-        Select Case Co.TP
-          Case CompIngreso: ImprimirCompIngreso AdoComp, AdoBanc, AdoTrans, AdoSubC1, AdoSubC2, True
-          Case CompEgreso: ImprimirCompEgreso AdoComp, AdoBanc, AdoTrans, AdoFact, AdoRet, AdoSubC1, AdoSubC2, ImpSoloReten, True, True
-          Case CompDiario: ImprimirCompDiario AdoComp, AdoTrans, AdoFact, AdoRet, AdoSubC1, AdoSubC2, ImpSoloReten, True, True
-        End Select
-        'Printer.NewPage
-        AdoListComp.Recordset.MoveNext
+    'Listar el Comprobante
+     sSQL = "SELECT C.*,A.Nombre_Completo,Cl.CI_RUC,Cl.Direccion,Cl.Email," _
+          & "Cl.Telefono,Cl.Celular,Cl.FAX,Cl.Cliente,Cl.Codigo,Cl.Ciudad " _
+          & "FROM Comprobantes As C,Accesos As A,Clientes As Cl " _
+          & "WHERE C.Numero = " & Co.Numero & " " _
+          & "AND C.TP = '" & Co.TP & "' " _
+          & "AND C.Item = '" & Co.Item & "' " _
+          & "AND C.Periodo = '" & Periodo_Contable & "' " _
+          & "AND C.CodigoU = A.Codigo " _
+          & "AND C.Codigo_B = Cl.Codigo "
+     Select_AdoDB AdoComp, sSQL
+     If AdoComp.RecordCount > 0 Then
+        Co.Fecha = AdoComp.fields("Fecha")
+        Co.Concepto = AdoComp.fields("Concepto")
+        ConceptoComp = Co.Concepto
+     End If
+   
+     'Listar las Transacciones
+      sSQL = "SELECT T.Cta,Ca.Cuenta,Parcial_ME,Debe,Haber,Detalle,Cheq_Dep,Fecha_Efec,Ca.Item " _
+           & "FROM Transacciones As T,Catalogo_Cuentas As Ca " _
+           & "WHERE T.TP = '" & Co.TP & "' " _
+           & "AND T.Numero = " & Co.Numero & " " _
+           & "AND T.Item = '" & Co.Item & "' " _
+           & "AND T.Periodo = '" & Periodo_Contable & "' " _
+           & "AND T.Item = Ca.Item " _
+           & "AND T.Cta = Ca.Codigo " _
+           & "AND T.Periodo = Ca.Periodo " _
+           & "ORDER BY T.ID,Debe DESC,T.Cta "
+      Select_AdoDB AdoTrans, sSQL
+     'Llenar Bancos
+      sSQL = "SELECT T.Cta,C.TC,C.Cuenta,Co.Fecha,Cl.Cliente,T.Cheq_Dep,T.Debe,T.Haber " _
+           & "FROM Transacciones As T,Comprobantes As Co,Catalogo_Cuentas As C,Clientes As Cl " _
+           & "WHERE T.TP = '" & Co.TP & "' " _
+           & "AND T.Numero = -1 " _
+           & "AND T.Item = '" & Co.Item & "' " _
+           & "AND T.Periodo = '" & Periodo_Contable & "' " _
+           & "AND T.Numero = Co.Numero " _
+           & "AND T.TP = Co.TP " _
+           & "AND T.Cta = C.Codigo " _
+           & "AND T.Item = C.Item " _
+           & "AND T.Item = Co.Item " _
+           & "AND T.Periodo = C.Periodo " _
+           & "AND T.Periodo = Co.Periodo " _
+           & "AND C.TC = 'BA' " _
+           & "AND Co.Codigo_B = Cl.Codigo "
+      Select_AdoDB AdoBanc, sSQL
+     'Listar las Retenciones del IVA
+      sSQL = "SELECT * " _
+           & "FROM Trans_Compras " _
+           & "WHERE Numero = " & Co.Numero & " " _
+           & "AND TP = '" & Co.TP & "' " _
+           & "AND Item = '" & Co.Item & "' " _
+           & "AND Periodo = '" & Periodo_Contable & "' " _
+           & "ORDER BY Cta_Servicio,Cta_Bienes "
+     Select_AdoDB AdoFact, sSQL
+    'Listar las Retenciones de la Fuente
+     sSQL = "SELECT R.*,TIV.Concepto " _
+           & "FROM Trans_Air As R,Tipo_Concepto_Retencion As TIV " _
+           & "WHERE R.Numero = " & Co.Numero & " " _
+           & "AND R.TP = '" & Co.TP & "' " _
+           & "AND R.Item = '" & Co.Item & "' " _
+           & "AND TIV.Fecha_Inicio <= #" & BuscarFecha(Co.Fecha) & "# " _
+           & "AND TIV.Fecha_Final >= #" & BuscarFecha(Co.Fecha) & "# " _
+           & "AND R.Periodo = '" & Periodo_Contable & "' " _
+           & "AND R.Tipo_Trans IN ('C','I') " _
+           & "AND R.CodRet = TIV.Codigo " _
+           & "ORDER BY R.Cta_Retencion "
+      Select_AdoDB AdoRet, sSQL
+     'Llenar SubCtas
+      sSQL = "SELECT T.Cta,T.TC,T.Factura,C.Cliente,T.Detalle_SubCta,T.Debitos,T.Creditos,T.Fecha_V,T.Codigo,T.Prima " _
+           & "FROM Trans_SubCtas As T,Clientes As C " _
+           & "WHERE T.TP = '" & Co.TP & "' " _
+           & "AND T.Numero = " & Co.Numero & " " _
+           & "AND T.Item = '" & Co.Item & "' " _
+           & "AND T.Periodo = '" & Periodo_Contable & "' " _
+           & "AND T.TC IN ('C','P') " _
+           & "AND T.Codigo = C.Codigo " _
+           & "ORDER BY T.Cta,C.Cliente,T.Fecha_V,T.Factura "
+      Select_AdoDB AdoSubC1, sSQL
+      sSQL = "SELECT T.Cta,T.TC,T.Factura,C.Detalle As Cliente,T.Detalle_SubCta,T.Debitos,T.Creditos,T.Fecha_V,T.Codigo,T.Prima " _
+           & "FROM Trans_SubCtas As T,Catalogo_SubCtas As C " _
+           & "WHERE T.TP = '" & Co.TP & "' " _
+           & "AND T.Numero = " & Co.Numero & " " _
+           & "AND T.Item = '" & Co.Item & "' " _
+           & "AND T.Periodo = '" & Periodo_Contable & "' " _
+           & "AND T.TC = C.TC " _
+           & "AND T.Item = C.Item " _
+           & "AND T.Periodo = C.Periodo " _
+           & "AND T.Codigo = C.Codigo " _
+           & "ORDER BY T.Cta,C.Detalle,T.Fecha_V,T.Factura "
+      Select_AdoDB AdoSubC2, sSQL
+        
+       Select Case Co.TP
+         Case CompIngreso: ImprimirCompIngreso AdoComp, AdoBanc, AdoTrans, AdoSubC1, AdoSubC2, True
+         Case CompEgreso: ImprimirCompEgreso AdoComp, AdoBanc, AdoTrans, AdoFact, AdoRet, AdoSubC1, AdoSubC2, ImpSoloReten, True, True
+         Case CompDiario: ImprimirCompDiario AdoComp, AdoTrans, AdoFact, AdoRet, AdoSubC1, AdoSubC2, ImpSoloReten, True, True
+         Case CompNotaDebito: ImprimirCompNota_D_C AdoComp, AdoTrans, AdoSubC1, AdoSubC2, "ND", True
+         Case CompNotaCredito: ImprimirCompNota_D_C AdoComp, AdoTrans, AdoSubC1, AdoSubC2, "NC", True
+       End Select
+      'Printer.NewPage
+       AdoListComp.Recordset.MoveNext
     Loop
     Printer.EndDoc
     AdoComp.Close
     AdoTrans.Close
     AdoBanc.Close
     AdoRet.Close
+    MsgBox "Proceso Terminado"
  End If
 End Sub
 
@@ -617,6 +626,14 @@ Private Sub Command3_Click()
   Unload Me
 End Sub
 
+Private Sub DCDesde_KeyDown(KeyCode As Integer, Shift As Integer)
+  PresionoEnter KeyCode
+End Sub
+
+Private Sub DCHasta_KeyDown(KeyCode As Integer, Shift As Integer)
+  PresionoEnter KeyCode
+End Sub
+
 Private Sub Form_Activate()
   LstComp.Clear
   LstComp.AddItem "CD"
@@ -647,18 +664,6 @@ End Sub
 
 Private Sub MBFechaI_LostFocus()
    FechaValida MBFechaI
-   MBFechaF = UltimoDiaMes(MBFechaI)
-   FechaIni = BuscarFecha(MBFechaI)
-   FechaFin = BuscarFecha(MBFechaF)
-   sSQL = "SELECT Numero " _
-        & "FROM Comprobantes " _
-        & "WHERE Item = '" & NumEmpresa & "' " _
-        & "AND Periodo = '" & Periodo_Contable & "' " _
-        & "AND TP = '" & LstComp.Text & "' " _
-        & "AND Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-        & "ORDER BY Numero "
-   SelectDB_Combo DCDesde, AdoDesde, sSQL, "Numero"
-   MsgBox sSQL
 End Sub
 
 Private Sub MBFechaF_GotFocus()
@@ -680,7 +685,11 @@ Private Sub MBFechaF_LostFocus()
         & "AND TP = '" & LstComp.Text & "' " _
         & "AND Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
         & "ORDER BY Numero "
-   SelectDB_Combo DCHasta, AdoHasta, sSQL, "Numero", True
-   MsgBox sSQL
+   SelectDB_Combo DCDesde, AdoDesde, sSQL, "Numero"
+   SelectDB_Combo DCHasta, AdoHasta, sSQL, "Numero"
+   If AdoHasta.Recordset.RecordCount > 0 Then
+      AdoHasta.Recordset.MoveLast
+      DCHasta.Text = AdoHasta.Recordset.fields("Numero")
+   End If
 End Sub
 

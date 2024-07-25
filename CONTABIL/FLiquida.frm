@@ -12,8 +12,8 @@ Begin VB.Form FLiquidacionCompras
    ClientWidth     =   14430
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   7680
-   ScaleWidth      =   14430
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    WindowState     =   2  'Maximized
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
@@ -21,8 +21,8 @@ Begin VB.Form FLiquidacionCompras
       Left            =   0
       TabIndex        =   15
       Top             =   0
-      Width           =   14430
-      _ExtentX        =   25453
+      Width           =   28560
+      _ExtentX        =   50377
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -1072,7 +1072,7 @@ Dim MesNo As Integer
        & "AND Establecimiento+PuntoEmision = '" & Serie_LC & "' " _
        & "AND TipoComprobante IN(3,41) " _
        & "AND Secuencial > 0 "
-  If OpcNoAut.Value Then
+  If OpcNoAut.value Then
       sSQL = sSQL _
           & "AND LEN(Autorizacion) = 13 " _
           & "AND LEN(Clave_Acceso_LC) >= 1 " _
@@ -1096,12 +1096,12 @@ Dim MesNo As Integer
        & "AND Periodo = '" & Periodo_Contable & "' " _
        & "AND TipoComprobante IN (3,41) " _
        & "AND LEN(Establecimiento+PuntoEmision) = 6 "
-  If OpcNoAut.Value Then
+  If OpcNoAut.value Then
       sSQL = sSQL _
           & "AND LEN(Autorizacion) BETWEEN 13 and 49 " _
           & "AND LEN(Clave_Acceso_LC) >= 1 " _
           & "AND Estado_SRI_LC <> 'OK' "
-  ElseIf OpcManuales.Value Then
+  ElseIf OpcManuales.value Then
     sSQL = sSQL _
           & "AND LEN(Autorizacion) < 13 " _
           & "AND LEN(Clave_Acceso_LC) = 1 "
@@ -1192,7 +1192,7 @@ Dim RutaXMLFirmado As String
             'MsgBox "ClaveAcceso_LC: " & FA.ClaveAcceso_LC
              FA.Numero = Co.Numero
              FA.TP = Co.TP
-             SRI_Crear_Clave_Acceso_Liquidacion FA, False, CBool(CheqClaveAcceso.Value)
+             SRI_Crear_Clave_Acceso_Liquidacion FA, False, CBool(CheqClaveAcceso.value)
              RatonNormal
           Else
              RatonNormal

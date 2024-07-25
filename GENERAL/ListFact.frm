@@ -1,10 +1,10 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "Mscomctl.ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.Ocx"
 Begin VB.Form ListFact 
    BackColor       =   &H80000002&
@@ -27,8 +27,87 @@ Begin VB.Form ListFact
    ScaleHeight     =   9405
    ScaleWidth      =   11280
    WindowState     =   2  'Maximized
+   Begin VB.Frame FrmEjecutivo 
+      BackColor       =   &H00404080&
+      Caption         =   "| SELECCIONE EL EJECUTIVO DE VENTA |"
+      ForeColor       =   &H0000FFFF&
+      Height          =   3690
+      Left            =   9765
+      TabIndex        =   57
+      Top             =   2520
+      Visible         =   0   'False
+      Width           =   8520
+      Begin VB.CommandButton Command1 
+         BackColor       =   &H000080FF&
+         Caption         =   "&Aceptar"
+         Height          =   855
+         Left            =   6510
+         Picture         =   "ListFact.frx":0000
+         Style           =   1  'Graphical
+         TabIndex        =   62
+         Top             =   1575
+         Width           =   1800
+      End
+      Begin VB.CommandButton Command2 
+         BackColor       =   &H000080FF&
+         Caption         =   "&Salir"
+         Height          =   855
+         Left            =   6510
+         Picture         =   "ListFact.frx":0442
+         Style           =   1  'Graphical
+         TabIndex        =   63
+         Top             =   2520
+         Width           =   1800
+      End
+      Begin VB.OptionButton OpcAbonos 
+         BackColor       =   &H00004080&
+         Caption         =   "Abonos"
+         ForeColor       =   &H00FFFFFF&
+         Height          =   330
+         Left            =   6510
+         TabIndex        =   61
+         Top             =   1155
+         Width           =   1170
+      End
+      Begin VB.OptionButton OpcFactura 
+         BackColor       =   &H00004080&
+         Caption         =   "Factura"
+         ForeColor       =   &H00FFFFFF&
+         Height          =   330
+         Left            =   6510
+         TabIndex        =   60
+         Top             =   735
+         Width           =   1170
+      End
+      Begin VB.OptionButton OpcAmbos 
+         BackColor       =   &H00004080&
+         Caption         =   "Factura y Abonos"
+         ForeColor       =   &H00FFFFFF&
+         Height          =   330
+         Left            =   6510
+         TabIndex        =   59
+         Top             =   315
+         Value           =   -1  'True
+         Width           =   1905
+      End
+      Begin MSDataListLib.DataCombo DCEjecutivo 
+         Bindings        =   "ListFact.frx":0D0C
+         DataSource      =   "AdoEjecutivo"
+         Height          =   3105
+         Left            =   210
+         TabIndex        =   58
+         Top             =   315
+         Width           =   6210
+         _ExtentX        =   10954
+         _ExtentY        =   5477
+         _Version        =   393216
+         Style           =   1
+         BackColor       =   12640511
+         Text            =   ""
+      End
+   End
    Begin MSDataListLib.DataCombo DCArticulo 
-      Bindings        =   "ListFact.frx":0000
+      Bindings        =   "ListFact.frx":0D27
       DataSource      =   "AdoArticulo"
       Height          =   3540
       Left            =   4095
@@ -80,89 +159,10 @@ Begin VB.Form ListFact
       MultiLine       =   -1  'True
       ScrollBars      =   3  'Both
       TabIndex        =   67
-      Text            =   "ListFact.frx":001A
+      Text            =   "ListFact.frx":0D41
       Top             =   4935
       Visible         =   0   'False
       Width           =   13770
-   End
-   Begin VB.Frame FrmEjecutivo 
-      BackColor       =   &H00404080&
-      Caption         =   "| SELECCIONE EL EJECUTIVO DE VENTA |"
-      ForeColor       =   &H0000FFFF&
-      Height          =   3690
-      Left            =   9765
-      TabIndex        =   57
-      Top             =   2520
-      Visible         =   0   'False
-      Width           =   8520
-      Begin VB.CommandButton Command1 
-         BackColor       =   &H000080FF&
-         Caption         =   "&Aceptar"
-         Height          =   855
-         Left            =   6510
-         Picture         =   "ListFact.frx":0020
-         Style           =   1  'Graphical
-         TabIndex        =   62
-         Top             =   1575
-         Width           =   1800
-      End
-      Begin VB.CommandButton Command2 
-         BackColor       =   &H000080FF&
-         Caption         =   "&Salir"
-         Height          =   855
-         Left            =   6510
-         Picture         =   "ListFact.frx":0462
-         Style           =   1  'Graphical
-         TabIndex        =   63
-         Top             =   2520
-         Width           =   1800
-      End
-      Begin VB.OptionButton OpcAbonos 
-         BackColor       =   &H00004080&
-         Caption         =   "Abonos"
-         ForeColor       =   &H00FFFFFF&
-         Height          =   330
-         Left            =   6510
-         TabIndex        =   61
-         Top             =   1155
-         Width           =   1170
-      End
-      Begin VB.OptionButton OpcFactura 
-         BackColor       =   &H00004080&
-         Caption         =   "Factura"
-         ForeColor       =   &H00FFFFFF&
-         Height          =   330
-         Left            =   6510
-         TabIndex        =   60
-         Top             =   735
-         Width           =   1170
-      End
-      Begin VB.OptionButton OpcAmbos 
-         BackColor       =   &H00004080&
-         Caption         =   "Factura y Abonos"
-         ForeColor       =   &H00FFFFFF&
-         Height          =   330
-         Left            =   6510
-         TabIndex        =   59
-         Top             =   315
-         Value           =   -1  'True
-         Width           =   1905
-      End
-      Begin MSDataListLib.DataCombo DCEjecutivo 
-         Bindings        =   "ListFact.frx":0D2C
-         DataSource      =   "AdoEjecutivo"
-         Height          =   3105
-         Left            =   210
-         TabIndex        =   58
-         Top             =   315
-         Width           =   6210
-         _ExtentX        =   10954
-         _ExtentY        =   5477
-         _Version        =   393216
-         Style           =   1
-         BackColor       =   12640511
-         Text            =   ""
-      End
    End
    Begin VB.ListBox LstBox 
       Height          =   1620
@@ -1713,6 +1713,35 @@ Begin VB.Form ListFact
          EndProperty
       EndProperty
       OLEDropMode     =   1
+      Begin VB.Frame Frame3 
+         BorderStyle     =   0  'None
+         Height          =   645
+         Left            =   12390
+         TabIndex        =   78
+         Top             =   0
+         Width           =   2430
+         Begin VB.CheckBox CheqAutxRangos 
+            Caption         =   "Autorizar por Rangos"
+            Height          =   225
+            Left            =   105
+            TabIndex        =   79
+            Top             =   210
+            Width           =   2220
+         End
+      End
+      Begin MSComctlLib.Toolbar Toolbar1 
+         Height          =   630
+         Left            =   10185
+         TabIndex        =   77
+         Top             =   525
+         Width           =   30
+         _ExtentX        =   53
+         _ExtentY        =   1111
+         ButtonWidth     =   609
+         ButtonHeight    =   1005
+         Appearance      =   1
+         _Version        =   393216
+      End
    End
    Begin VB.Label Label8 
       Alignment       =   2  'Center
@@ -2568,13 +2597,14 @@ Dim FAPend() As Tipo_Facturas
          & "AND Desc_X IS NULL "
     Ejecutar_SQL_SP sSQL
 
-     sSQL = "SELECT CodigoC,Clave_Acceso,Estado_SRI,TC,Fecha,Serie,Factura,Autorizacion " _
+     sSQL = "SELECT CodigoC, Clave_Acceso, Estado_SRI, TC, Fecha, Serie, Factura, Autorizacion " _
           & "FROM Facturas " _
           & "WHERE Item = '" & NumEmpresa & "' " _
           & "AND Periodo = '" & Periodo_Contable & "' " _
           & "AND Serie = '" & DCSerie & "' " _
-          & "AND LEN(Autorizacion) = 13 " _
-          & "ORDER BY TC,Serie,Factura "
+          & "AND LEN(Autorizacion) = 13 "
+     If CheqAutxRangos.value <> 0 And Val(TextFDesde) <= Val(TextFHasta) Then sSQL = sSQL & "AND Factura BETWEEN " & Val(TextFDesde) & " AND " & Val(TextFHasta) & " "
+     sSQL = sSQL & "ORDER BY TC,Serie,Factura "
      Select_Adodc AdoFactList, sSQL
      RatonReloj
      '& "AND Estado_SRI <> 'OK' "
@@ -3553,11 +3583,12 @@ Private Sub TBarFactura_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMe
           Facturas_Impresas FA
      Case "PRN_PV"
           Control_Procesos "I", "Reimpresion de Facturas"
-          If Grafico_PV Then
-             Imprimir_Punto_Venta_Grafico FA
-          Else
-             Imprimir_Punto_Venta FA
-          End If
+          Imprimir_Punto_Venta FA
+''          If Grafico_PV Then
+''             Imprimir_Punto_Venta_Grafico FA
+''          Else
+''             Imprimir_Punto_Venta FA
+''          End If
           Facturas_Impresas FA
      Case "PRN_NC"
           Imprimir_NC
@@ -3592,6 +3623,8 @@ Private Sub TBarFactura_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMe
      Case "PDF_GR"
           SRI_Generar_PDF_GR FA, True
      Case "PDF_DO"
+''          SetPrinters.Show 1
+''          If PonImpresoraDefecto(SetNombrePRN) Then
           Generar_PDF_Donacion FA, True
     '=================================================================================
     ' AUTORIZACION DE COMPROBANTES ELECTRONICOS PENDIENTE CON EL SRI

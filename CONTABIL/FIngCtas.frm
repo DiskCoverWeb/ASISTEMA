@@ -3,7 +3,7 @@ Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "Mscomctl.ocx"
 Begin VB.Form FCatalogo_Cuentas 
    Caption         =   "Ingreso de Cuentas Contables"
    ClientHeight    =   10215
@@ -12,8 +12,8 @@ Begin VB.Form FCatalogo_Cuentas
    ClientWidth     =   14145
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   10215
-   ScaleWidth      =   14145
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    WindowState     =   2  'Maximized
    Begin VB.Frame FrmPresupuesto 
       BackColor       =   &H00C0FFFF&
@@ -528,8 +528,8 @@ Begin VB.Form FCatalogo_Cuentas
       Left            =   0
       TabIndex        =   62
       Top             =   0
-      Width           =   14145
-      _ExtentX        =   24950
+      Width           =   28560
+      _ExtentX        =   50377
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -1927,7 +1927,7 @@ Dim CodigoCtas() As String
     Ejecutar_SQL_SP sSQL
 
   Si_No = False
-  sSQL = "SELECT Item,Codigo " _
+  sSQL = "SELECT Item, Codigo " _
        & "FROM Catalogo_Cuentas " _
        & "WHERE DG = 'D' " _
        & "AND Item = '" & NumEmpresa & "' " _

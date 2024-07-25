@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
@@ -14,8 +14,8 @@ Begin VB.Form FClientes
    ClientWidth     =   14715
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   9330
-   ScaleWidth      =   14715
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    WindowState     =   1  'Minimized
    Begin ComctlLib.Toolbar TBarCliente 
       Align           =   1  'Align Top
@@ -82,6 +82,7 @@ Begin VB.Form FClientes
             ImageIndex      =   8
          EndProperty
          BeginProperty Button9 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
             Object.Tag             =   ""
             ImageIndex      =   9
             Style           =   3
@@ -100,6 +101,7 @@ Begin VB.Form FClientes
             ImageIndex      =   10
          EndProperty
          BeginProperty Button12 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
             Object.Tag             =   ""
             ImageIndex      =   11
             Style           =   3
@@ -3583,7 +3585,7 @@ Dim Busqueda As String
     If Len(Busqueda) > 1 Then
        sSQL = "SELECT TOP 50 CI_RUC, Cliente " _
             & "FROM Clientes "
-       If IsNumeric(Busqueda) Then sSQL = sSQL & "WHERE CI_RUC LIKE '" & Busqueda & "%' " Else sSQL = sSQL & "WHERE Cliente LIKE '%" & Busqueda & "%' "
+       If IsNumeric(Busqueda) Then sSQL = sSQL & "WHERE CI_RUC LIKE '" & Busqueda & "%' " Else sSQL = sSQL & "WHERE Cliente LIKE '" & Busqueda & "%' "
        If Modulo = "FACTURACION" Then
           If Mas_Grupos Then sSQL = sSQL & "AND DirNumero = '" & NumEmpresa & "' "
        ElseIf Modulo = "ROL PAGOS" Then

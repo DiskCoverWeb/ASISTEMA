@@ -1211,6 +1211,7 @@ On Error GoTo END1
    'MsgBox "Get_WAN_IP: " & IP_PC.Conexion_WAN
     IP_PC.MAC_PC = Mi_MAC_Local
     IP_PC.WAN_PC = Mi_IP_Publica
+   'MsgBox IP_PC.IP_PC
     Get_WAN_IP = RSeg
     Exit Function
 END1:
@@ -1219,6 +1220,7 @@ END1:
     IP_PC.Lista_IPs(IP_PC.Max_IP) = "Sin Conexion"
     IP_PC.InterNet = False
    'AdoStrCnnMySQL = ""
+   'MsgBox IP_PC.IP_PC
     Get_WAN_IP = RSeg
 End Function
 

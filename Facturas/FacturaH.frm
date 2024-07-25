@@ -2672,12 +2672,7 @@ Public Sub ProcGrabar()
                   SRI_Crear_Clave_Acceso_Facturas FA, True
                End If
             Else
-               If Grafico_PV Then
-                  Imprimir_Punto_Venta_Grafico FA
-                  Imprimir_Punto_Venta_Grafico FA
-               Else
-                  Imprimir_Punto_Venta FA
-               End If
+               Imprimir_Punto_Venta FA
 ''               FA.Desde = FA.Factura
 ''               FA.Hasta = FA.Factura
 ''               Imprimir_Facturas_CxC FacturasPV, FA, True, False, True, True

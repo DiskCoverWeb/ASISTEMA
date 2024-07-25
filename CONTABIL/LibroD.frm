@@ -11,8 +11,8 @@ Begin VB.Form LibroDiario
    ClientWidth     =   11940
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   8595
-   ScaleWidth      =   11940
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    WindowState     =   2  'Maximized
    Begin VB.CommandButton Command7 
       Caption         =   "&Excel"
@@ -215,7 +215,6 @@ Begin VB.Form LibroDiario
       TabPicture(1)   =   "LibroD.frx":333A
       Tab(1).ControlEnabled=   0   'False
       Tab(1).Control(0)=   "DGSubCtas"
-      Tab(1).Control(0).Enabled=   0   'False
       Tab(1).ControlCount=   1
       Begin MSDataGridLib.DataGrid DGDiario 
          Bindings        =   "LibroD.frx":3356
@@ -1332,7 +1331,7 @@ Private Sub Command1_Click()
        & "AND Co.CodigoU = Ac.Codigo " _
        & "ORDER BY T.Fecha,T.TP,T.Numero,T.ID "
  'MsgBox sSQL
-  Select_Adodc_Grid DGDiario, AdoDiario, sSQL
+  Select_Adodc_Grid DGDiario, AdoDiario, sSQL, , , , "Diario_General"
   
   sSQLTotales = "SELECT T.Fecha,SUM(T.Parcial_ME) As TParcial_ME, SUM(T.Debe) As TDebe, SUM(T.Haber) As THaber " _
               & "FROM Transacciones As T,Catalogo_Cuentas As C,Comprobantes As Co,Clientes As CL,Accesos As Ac " _
@@ -1385,14 +1384,14 @@ Private Sub Command1_Click()
        RatonReloj
        Progreso_Barra.Valor_Maximo = Progreso_Barra.Valor_Maximo + .RecordCount
        Do While Not .EOF
-          Debe = Debe + .Fields("TDebe")
-          Haber = Haber + .Fields("THaber")
-          If .Fields("TParcial_ME") > 0 Then
-              Debe_ME = Debe_ME + .Fields("TParcial_ME")
+          Debe = Debe + .fields("TDebe")
+          Haber = Haber + .fields("THaber")
+          If .fields("TParcial_ME") > 0 Then
+              Debe_ME = Debe_ME + .fields("TParcial_ME")
           Else
-              Haber_ME = Haber_ME + (-.Fields("TParcial_ME"))
+              Haber_ME = Haber_ME + (-.fields("TParcial_ME"))
           End If
-          Progreso_Barra.Mensaje_Box = "Consultando Diario General " & .Fields("Fecha")
+          Progreso_Barra.Mensaje_Box = "Consultando Diario General " & .fields("Fecha")
           Progreso_Esperar
           'MsgBox "..."
          .MoveNext

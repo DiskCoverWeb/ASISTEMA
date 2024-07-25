@@ -696,7 +696,7 @@ Private Sub Command1_Click()
      
      Trans_No = 200
      SubCtaGen = SinEspaciosIzq(DCCtaAnt)
-     BorrarAsientos True
+     Eliminar_Asientos_SP True
      sSQL = "SELECT * " _
           & "FROM Asiento_SC " _
           & "WHERE TC = 'P' " _
@@ -958,7 +958,7 @@ Private Sub Form_Activate()
      SelectDB_Combo DCClientes, AdoClientes, sSQL, "Cliente"
   End If
   DiarioCaja = ReadSetDataNum("Recibo_No", True, False)
-  If CheqRecibo.Value = 1 Then TxtRecibo = Format$(DiarioCaja, "0000000") Else TxtRecibo = ""
+  If CheqRecibo.value = 1 Then TxtRecibo = Format$(DiarioCaja, "0000000") Else TxtRecibo = ""
   Mifecha = BuscarFecha(FechaTexto)
   MBFecha.Text = FechaSistema
   If Bloquear_Control Then Command1.Enabled = False
