@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
@@ -87,69 +87,39 @@ Begin VB.Form FSeteos
       TabPicture(1)   =   "FSeteos.frx":0326
       Tab(1).ControlEnabled=   0   'False
       Tab(1).Control(0)=   "LstTablas"
-      Tab(1).Control(0).Enabled=   0   'False
       Tab(1).Control(1)=   "CheqSCAlum"
-      Tab(1).Control(1).Enabled=   0   'False
       Tab(1).Control(2)=   "LstDuplicados"
-      Tab(1).Control(2).Enabled=   0   'False
       Tab(1).Control(3)=   "Command15"
-      Tab(1).Control(3).Enabled=   0   'False
       Tab(1).ControlCount=   4
       TabCaption(2)   =   "&Niveles de Seguridad"
       TabPicture(2)   =   "FSeteos.frx":0342
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "Command4"
-      Tab(2).Control(0).Enabled=   0   'False
-      Tab(2).Control(1)=   "Command1"
-      Tab(2).Control(1).Enabled=   0   'False
-      Tab(2).Control(2)=   "LstEmpresas"
-      Tab(2).Control(2).Enabled=   0   'False
-      Tab(2).Control(3)=   "Command6"
-      Tab(2).Control(3).Enabled=   0   'False
-      Tab(2).Control(4)=   "LstModulos"
-      Tab(2).Control(4).Enabled=   0   'False
-      Tab(2).Control(5)=   "Command10"
-      Tab(2).Control(5).Enabled=   0   'False
-      Tab(2).Control(6)=   "DGEmp1"
-      Tab(2).Control(6).Enabled=   0   'False
-      Tab(2).Control(7)=   "Command11"
-      Tab(2).Control(7).Enabled=   0   'False
-      Tab(2).Control(8)=   "Command5"
-      Tab(2).Control(8).Enabled=   0   'False
-      Tab(2).Control(9)=   "Command13"
-      Tab(2).Control(9).Enabled=   0   'False
-      Tab(2).Control(10)=   "DCUsuario"
-      Tab(2).Control(10).Enabled=   0   'False
-      Tab(2).Control(11)=   "Command7"
-      Tab(2).Control(11).Enabled=   0   'False
-      Tab(2).Control(12)=   "TxtUsuario"
-      Tab(2).Control(12).Enabled=   0   'False
-      Tab(2).Control(13)=   "Command3"
-      Tab(2).Control(13).Enabled=   0   'False
-      Tab(2).Control(14)=   "Command2"
-      Tab(2).Control(14).Enabled=   0   'False
-      Tab(2).Control(15)=   "TxtItem"
-      Tab(2).Control(15).Enabled=   0   'False
-      Tab(2).Control(16)=   "Frame2"
-      Tab(2).Control(16).Enabled=   0   'False
-      Tab(2).Control(17)=   "TextClave"
-      Tab(2).Control(17).Enabled=   0   'False
-      Tab(2).Control(18)=   "MBPeriodo"
-      Tab(2).Control(18).Enabled=   0   'False
-      Tab(2).Control(19)=   "DCBodega"
-      Tab(2).Control(19).Enabled=   0   'False
-      Tab(2).Control(20)=   "Label3"
-      Tab(2).Control(20).Enabled=   0   'False
-      Tab(2).Control(21)=   "Label5"
-      Tab(2).Control(21).Enabled=   0   'False
-      Tab(2).Control(22)=   "Label2"
-      Tab(2).Control(22).Enabled=   0   'False
-      Tab(2).Control(23)=   "Label1"
-      Tab(2).Control(23).Enabled=   0   'False
-      Tab(2).Control(24)=   "Label10"
-      Tab(2).Control(24).Enabled=   0   'False
-      Tab(2).Control(25)=   "Label4"
-      Tab(2).Control(25).Enabled=   0   'False
+      Tab(2).Control(0)=   "Label4"
+      Tab(2).Control(1)=   "Label10"
+      Tab(2).Control(2)=   "Label1"
+      Tab(2).Control(3)=   "Label2"
+      Tab(2).Control(4)=   "Label5"
+      Tab(2).Control(5)=   "Label3"
+      Tab(2).Control(6)=   "DCBodega"
+      Tab(2).Control(7)=   "MBPeriodo"
+      Tab(2).Control(8)=   "TextClave"
+      Tab(2).Control(9)=   "Frame2"
+      Tab(2).Control(10)=   "TxtItem"
+      Tab(2).Control(11)=   "Command2"
+      Tab(2).Control(12)=   "Command3"
+      Tab(2).Control(13)=   "TxtUsuario"
+      Tab(2).Control(14)=   "Command7"
+      Tab(2).Control(15)=   "DCUsuario"
+      Tab(2).Control(16)=   "Command13"
+      Tab(2).Control(17)=   "Command5"
+      Tab(2).Control(18)=   "Command11"
+      Tab(2).Control(19)=   "DGEmp1"
+      Tab(2).Control(20)=   "Command10"
+      Tab(2).Control(21)=   "LstModulos"
+      Tab(2).Control(22)=   "Command6"
+      Tab(2).Control(23)=   "LstEmpresas"
+      Tab(2).Control(24)=   "Command1"
+      Tab(2).Control(25)=   "Command4"
       Tab(2).ControlCount=   26
       TabCaption(3)   =   "&Impresiones"
       TabPicture(3)   =   "FSeteos.frx":035E
@@ -3256,6 +3226,8 @@ Dim IdProc As Byte
                 Generar_Documentos_Electronicos
            Case "Realizar Copia de Actualizacion"
                 Procesar_Update_DB
+           Case "Prueba de Envio de Correos"
+                Prueba_Envio_de_Correos
            Case "Actualizar Avreviaturas Accesos Usuarios"
                 Poner_Avreviatura_Accesos
          End Select
@@ -3649,6 +3621,7 @@ Dim NumFile As Integer
 Dim RutaGeneraFile As String
 Dim CaptionOld As String
 Dim NombreFile As String
+Dim CadFileCampos As String
 Dim CadFileReg As String
 Dim ContadorReg As Long
 Dim TotalCampo As Integer
@@ -3663,7 +3636,8 @@ With DtaAux.Recordset
      TotalReg = .RecordCount
      TotalCampo = .fields.Count - 1
     .MoveFirst
-     NombreFile = "Z" & NombreTabla & ".DBS"
+     'NombreFile = "Z" & NombreTabla & ".dbs"
+     NombreFile = NombreTabla & ".dbs"
      'TextoFileEmp = TextoFileEmp & vbCrLf & NombreFile & " => " & NombreTabla
      RutaGeneraFile = RutaSistema & "\BASES\UPDATE_DB\" & NombreFile
      Progreso_Barra.Incremento = 0
@@ -3681,15 +3655,16 @@ With DtaAux.Recordset
          TipoC(ILng).Campo = CompilarString(.fields(ILng).Name)
          TipoC(ILng).Ancho = AnchoTipoCampoTexto(.fields(ILng))
      Next ILng
-     CadFileReg = ""
+     CadFileCampos = ""
      For ILng = 0 To TotalCampo
-         CadFileReg = CadFileReg & TipoC(ILng).Campo & ";"
+         CadFileCampos = CadFileCampos & TrimStrg(TipoC(ILng).Campo) & ","
      Next ILng
      
-     CadFileReg = MidStrg(CadFileReg, 1, Len(CadFileReg) - 1)
+     CadFileCampos = MidStrg(CadFileCampos, 1, Len(CadFileCampos) - 1)
      
     'Grabamos el encabezado de la tabla en el archivo plano
-     Print #NumFile, CadFileReg
+     CadFileCampos = "INSERT INTO " & NombreTabla & " (" & CadFileCampos & ") "
+     'Print #NumFile, CadFileCampos
     
      'FAConLineas = True
     .MoveFirst
@@ -3722,14 +3697,13 @@ With DtaAux.Recordset
                    If UCaseStrg(.fields(ILng).Name) = "CEDULA" Then Codigo4 = CompilarRUC_CI(.fields(ILng))
                    'If Codigo4 = "0" Then Codigo4 = Ninguno
                    If Codigo4 = " " Then Codigo4 = Ninguno
-                 
-                   Codigo4 = "^" & Codigo4 & "^"
+                   Codigo4 = "'" & Codigo4 & "'"
               Case TadDate, TadDate1
-                   Codigo4 = "^" & BuscarFecha(.fields(ILng)) & "^"
+                   Codigo4 = "'" & BuscarFecha(.fields(ILng)) & "'"
               Case Else
                    If Codigo4 = "0" Then Codigo4 = Ninguno
                    If Codigo4 = " " Then Codigo4 = Ninguno
-                   Codigo4 = "^" & Codigo4 & "^"
+                   Codigo4 = "'" & Codigo4 & "'"
             End Select
             Codigo4 = Replace(Codigo4, vbCrLf, Chr(170))
             Codigo4 = Replace(Codigo4, Chr(34), Chr(239))
@@ -3752,13 +3726,13 @@ With DtaAux.Recordset
 '''            Codigo4 = Replace(Codigo4, "Ü", "U")
             Codigo4 = Replace(Codigo4, "&", "Y")
             Codigo4 = Replace(Codigo4, "#", "No ")
-            Codigo4 = TrimStrg(Codigo4) & ";"
+            Codigo4 = TrimStrg(Codigo4) & ","
             CadFileReg = CadFileReg & Codigo4
         Next ILng
         
         CadFileReg = MidStrg(CadFileReg, 1, Len(CadFileReg) - 1)
         
-        Print #NumFile, CadFileReg
+        Print #NumFile, CadFileCampos & "VALUES (" & CadFileReg & "); "
         Progreso_Esperar
        .MoveNext
      Loop
@@ -3769,6 +3743,134 @@ End With
 Close #NumFile
 RatonNormal
 End Sub
+
+'''Public Sub GenerarTablaEnArchivoPlano(FechaResp As String, _
+'''                                      NombreTabla As String, _
+'''                                      DtaAux As Adodc)
+'''Dim NumFile As Integer
+'''Dim RutaGeneraFile As String
+'''Dim CaptionOld As String
+'''Dim NombreFile As String
+'''Dim CadFileReg As String
+'''Dim ContadorReg As Long
+'''Dim TotalCampo As Integer
+'''Dim ValorBool As String
+'''Dim ILng As Long
+'''RatonReloj
+'''ContadorReg = 0
+'''If FileResp <= 0 Then FileResp = 1
+'''With DtaAux.Recordset
+''' If .RecordCount > 0 Then
+'''    .MoveLast
+'''     TotalReg = .RecordCount
+'''     TotalCampo = .fields.Count - 1
+'''    .MoveFirst
+'''     'NombreFile = "Z" & NombreTabla & ".dbs"
+'''     NombreFile = NombreTabla & ".dbs"
+'''     'TextoFileEmp = TextoFileEmp & vbCrLf & NombreFile & " => " & NombreTabla
+'''     RutaGeneraFile = RutaSistema & "\BASES\UPDATE_DB\" & NombreFile
+'''     Progreso_Barra.Incremento = 0
+'''     Progreso_Barra.Valor_Maximo = TotalCampo
+'''     Progreso_Barra.Mensaje_Box = NombreFile
+'''     Progreso_Esperar
+'''    'MsgBox NombreFile
+'''     NumFile = FreeFile
+'''     'Contador = 0
+'''     Open RutaGeneraFile For Output As #NumFile ' Abre el archivo.
+'''     FAConLineas = False
+'''     'Print #NumFile, Format(TotalReg, "##0") & " - " & NombreTabla
+'''     ReDim TipoC(TotalCampo) As Campos_Tabla
+'''     For ILng = 0 To TotalCampo
+'''         TipoC(ILng).Campo = CompilarString(.fields(ILng).Name)
+'''         TipoC(ILng).Ancho = AnchoTipoCampoTexto(.fields(ILng))
+'''     Next ILng
+'''     CadFileReg = ""
+'''     For ILng = 0 To TotalCampo
+'''         CadFileReg = CadFileReg & TrimStrg(TipoC(ILng).Campo) & ";"
+'''     Next ILng
+'''
+'''     CadFileReg = MidStrg(CadFileReg, 1, Len(CadFileReg) - 1)
+'''
+'''    'Grabamos el encabezado de la tabla en el archivo plano
+'''     Print #NumFile, CadFileReg
+'''
+'''     'FAConLineas = True
+'''    .MoveFirst
+'''     Do While Not .EOF
+'''        ContadorReg = ContadorReg + 1
+'''        'FSeteos.Caption = NombreTabla _
+'''        '               & ": Procesando(" & Format(ContadorReg / TotalReg, "00%") _
+'''        '               & ") " & String$(ContadorReg Mod 40, "|")
+'''        CadFileReg = ""
+'''        For ILng = 0 To TotalCampo
+'''            If IsNull(.fields(ILng)) Or IsEmpty(.fields(ILng)) Then Codigo4 = "0" Else Codigo4 = CStr(.fields(ILng))
+'''            Select Case .fields(ILng).Type
+'''              Case TadBoolean
+'''                   If Codigo4 = Ninguno Then Codigo4 = "0"
+'''                   Codigo4 = CStr(CInt(CBool(Codigo4)))
+'''                   Codigo4 = SetearBlancos(Codigo4, 2, 0, True, FAConLineas)
+'''                   Codigo4 = Replace(Codigo4, "-1", "1")
+'''              Case TadByte, TadInteger, TadLong
+'''                   If .fields(ILng).Name = "Item" Then
+'''                       Codigo4 = SetearBlancos(Format(.fields(ILng), "000"), 3, 0, False, FAConLineas)
+'''                   Else
+'''                       Codigo4 = SetearBlancos(Codigo4, 0, 0, True, FAConLineas)
+'''                   End If
+'''              Case TadSingle, TadDouble, TadCurrency
+'''                   Codigo4 = SetearBlancos(Codigo4, 0, 0, True, FAConLineas, True)
+'''              Case TadText
+'''                   If UCaseStrg(.fields(ILng).Name) = "RUC_CI" Then Codigo4 = CompilarRUC_CI(.fields(ILng))
+'''                   If UCaseStrg(.fields(ILng).Name) = "RUC" Then Codigo4 = CompilarRUC_CI(.fields(ILng))
+'''                   If UCaseStrg(.fields(ILng).Name) = "CI" Then Codigo4 = CompilarRUC_CI(.fields(ILng))
+'''                   If UCaseStrg(.fields(ILng).Name) = "CEDULA" Then Codigo4 = CompilarRUC_CI(.fields(ILng))
+'''                   'If Codigo4 = "0" Then Codigo4 = Ninguno
+'''                   If Codigo4 = " " Then Codigo4 = Ninguno
+'''                   Codigo4 = "^" & Codigo4 & "^"
+'''              Case TadDate, TadDate1
+'''                   Codigo4 = "^" & BuscarFecha(.fields(ILng)) & "^"
+'''              Case Else
+'''                   If Codigo4 = "0" Then Codigo4 = Ninguno
+'''                   If Codigo4 = " " Then Codigo4 = Ninguno
+'''                   Codigo4 = "^" & Codigo4 & "^"
+'''            End Select
+'''            Codigo4 = Replace(Codigo4, vbCrLf, Chr(170))
+'''            Codigo4 = Replace(Codigo4, Chr(34), Chr(239))
+'''            Codigo4 = Replace(Codigo4, ";", ",")
+'''            Codigo4 = Replace(Codigo4, Chr(255), " ")
+'''            Codigo4 = Replace(Codigo4, Chr(254), " ")
+''''''            Codigo4 = Replace(Codigo4, "á", "a")
+''''''            Codigo4 = Replace(Codigo4, "é", "e")
+''''''            Codigo4 = Replace(Codigo4, "í", "i")
+''''''            Codigo4 = Replace(Codigo4, "ó", "o")
+''''''            Codigo4 = Replace(Codigo4, "ú", "u")
+''''''            Codigo4 = Replace(Codigo4, "ñ", "n")
+''''''            Codigo4 = Replace(Codigo4, "Á", "A")
+''''''            Codigo4 = Replace(Codigo4, "É", "E")
+''''''            Codigo4 = Replace(Codigo4, "Í", "I")
+''''''            Codigo4 = Replace(Codigo4, "Ó", "O")
+''''''            Codigo4 = Replace(Codigo4, "Ú", "U")
+''''''            Codigo4 = Replace(Codigo4, "Ñ", "N")
+''''''            Codigo4 = Replace(Codigo4, "ü", "u")
+''''''            Codigo4 = Replace(Codigo4, "Ü", "U")
+'''            Codigo4 = Replace(Codigo4, "&", "Y")
+'''            Codigo4 = Replace(Codigo4, "#", "No ")
+'''            Codigo4 = TrimStrg(Codigo4) & ";"
+'''            CadFileReg = CadFileReg & Codigo4
+'''        Next ILng
+'''
+'''        CadFileReg = MidStrg(CadFileReg, 1, Len(CadFileReg) - 1)
+'''
+'''        Print #NumFile, CadFileReg
+'''        Progreso_Esperar
+'''       .MoveNext
+'''     Loop
+'''    .MoveFirst
+'''     FileResp = FileResp + 1
+''' End If
+'''End With
+'''Close #NumFile
+'''RatonNormal
+'''End Sub
 
 Public Sub AbrirCamposSQL(NumFile As Integer)
     Cod_Emp = "": Cod_Base = "": Cod_Field = ""
@@ -5526,6 +5628,7 @@ Dim strCnn As String
   LstDuplicados.AddItem "Eliminar Seteos por Default (000)"
   LstDuplicados.AddItem "Eliminar Basura en Base de Datos"
   LstDuplicados.AddItem "Eliminar Indice en Base de Datos"
+  LstDuplicados.AddItem "Prueba de Envio de Correos"
 
   LstDuplicados.AddItem "Realizar Copia de Actualizacion"
   If CodigoUsuario = "ACCESO01" Then Command1.Enabled = True
@@ -7264,14 +7367,16 @@ Dim CamposTabla As String
 Dim Si_Fecha As Boolean
 Dim Si_Fecha_I As Boolean
 Dim Si_TP As Boolean
+Dim Si_ID As Boolean
 Dim Si_Campo As Boolean
 Dim Si_Codigo As Boolean
 Dim Si_Update As Boolean
 '
 FileResp = 0
-If Existe_File(RutaSistema & "\BASES\UPDATE_DB\*.UPD") Then Kill RutaSistema & "\BASES\UPDATE_DB\*.UPD"
-If Existe_File(RutaSistema & "\BASES\UPDATE_DB\*.DBS") Then Kill RutaSistema & "\BASES\UPDATE_DB\*.DBS"
-If Existe_File(RutaSistema & "\BASES\UPDATE_DB\*.TXT") Then Kill RutaSistema & "\BASES\UPDATE_DB\*.TXT"
+If Existe_File(RutaSistema & "\BASES\UPDATE_DB\*.csv") Then Kill RutaSistema & "\BASES\UPDATE_DB\*.csv"
+If Existe_File(RutaSistema & "\BASES\UPDATE_DB\*.dbs") Then Kill RutaSistema & "\BASES\UPDATE_DB\*.dbs"
+If Existe_File(RutaSistema & "\BASES\UPDATE_DB\*.txt") Then Kill RutaSistema & "\BASES\UPDATE_DB\*.txt"
+If Existe_File(RutaSistema & "\BASES\UPDATE_DB\*.upd") Then Kill RutaSistema & "\BASES\UPDATE_DB\*.upd"
 'MsgBox "..."
  sSQL = "DELETE * " _
       & "FROM Trans_Entrada_Salida " _
@@ -7318,7 +7423,7 @@ If Existe_File(RutaSistema & "\BASES\UPDATE_DB\*.TXT") Then Kill RutaSistema & "
          & "WHERE 1 = 0 "
     Select_Adodc AdoComp, sSQL
     RatonReloj
-    RutaGeneraFile = RutaSistema & "\BASES\UPDATE_DB\" & LstTablas.List(ITab) & ".Upd"
+    RutaGeneraFile = RutaSistema & "\BASES\UPDATE_DB\" & LstTablas.List(ITab) & ".upd"
    'FSeteos.Caption = RutaGeneraFile
     NumFile = FreeFile
     Open RutaGeneraFile For Output As #NumFile
@@ -7354,6 +7459,7 @@ If Existe_File(RutaSistema & "\BASES\UPDATE_DB\*.TXT") Then Kill RutaSistema & "
     Progreso_Barra.Mensaje_Box = LstTablas.List(ITab)
     Progreso_Esperar
 Next ITab
+
 'Generamos Los Datos en Item = 000
  Progreso_Barra.Incremento = 0
  Progreso_Barra.Valor_Maximo = LstTablas.ListCount - 1
@@ -7373,6 +7479,7 @@ Next ITab
         Si_TP = False
         Si_Campo = False
         Si_Codigo = False
+        Si_ID = False
         CamposTabla = ""
         sSQL = "SELECT * " _
              & "FROM " & LstTablas.List(ITab) & " " _
@@ -7387,6 +7494,8 @@ Next ITab
              If .fields(JCamp).Name = "TP" Then Si_TP = True
              If .fields(JCamp).Name = "Campo" Then Si_Campo = True
              If .fields(JCamp).Name = "Codigo" Then Si_Codigo = True
+             If .fields(JCamp).Name = "ID" Then Si_ID = True
+             
              If .fields(JCamp).Name <> "ID" Then CamposTabla = CamposTabla & .fields(JCamp).Name & ","
          Next JCamp
         End With
@@ -7397,7 +7506,7 @@ Next ITab
            sSQL = sSQL & "WHERE Item = '000' "
         Else
            If LstTablas.List(ITab) = "Clientes" Then sSQL = sSQL & "WHERE Grupo = '999999' "
-           If LstTablas.List(ITab) = "Accesos" Then sSQL = sSQL & "WHERE Codigo IN ('ACCESO01','ACCESO02','ACCESO03','ACCESO04','ACCESO05','ACCESO06','ACCESO07','ACCESO08','ACCESO09','0702164179') "
+           If LstTablas.List(ITab) = "Accesos" Then sSQL = sSQL & "WHERE Codigo IN ('ACCESO01','ACCESO02','ACCESO03','ACCESO04','ACCESO05','ACCESO06','ACCESO07','ACCESO08','ACCESO09','ACCESO10','0702164179') "
         End If
         Cadena = ""
         If Si_Fecha Then Cadena = Cadena & "Fecha,"
@@ -7405,6 +7514,7 @@ Next ITab
         If Si_TP Then Cadena = Cadena & "TP,"
         If Si_Campo Then Cadena = Cadena & "Campo,"
         If Si_Codigo Then Cadena = Cadena & "Codigo,"
+        If Si_ID Then Cadena = Cadena & "ID,"
         If Cadena <> "" Then
            Cadena = MidStrg(Cadena, 1, Len(Cadena) - 1)
            sSQL = sSQL & "ORDER BY " & Cadena & " "
@@ -7426,7 +7536,7 @@ Progreso_Barra.Valor_Maximo = 0
 Progreso_Barra.Mensaje_Box = "ABASES"
 Progreso_Esperar
 
-RutaGeneraFile = RutaSistema & "\BASES\UPDATE_DB\ABASES.TXT"
+RutaGeneraFile = RutaSistema & "\BASES\UPDATE_DB\ABASES.txt"
 NumFile = FreeFile
 Open RutaGeneraFile For Output As #NumFile
 Print #NumFile, "+";
@@ -8783,5 +8893,4 @@ Public Sub Poner_Avreviatura_Accesos()
           Loop
       End If
      End With
-
 End Sub

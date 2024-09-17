@@ -132,6 +132,7 @@ Class=cJSONScript; ..\CLASES\cJSONScript.cls
 Class=cStringBuilder; ..\CLASES\cStringBuilder.cls
 Module=JSON; ..\MODULOS\JSON.bas
 Form=FacturaH.frm
+Class=cPing; ..\CLASES\cPing.cls
 IconForm="MDIFact"
 Startup="MDIFact"
 HelpFile=""

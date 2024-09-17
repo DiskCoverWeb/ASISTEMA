@@ -508,8 +508,8 @@ Begin VB.Form FComprobantes
       _ExtentX        =   20214
       _ExtentY        =   4842
       _Version        =   393216
-      Tabs            =   4
-      TabsPerRow      =   4
+      Tabs            =   5
+      TabsPerRow      =   5
       TabHeight       =   520
       TabCaption(0)   =   "&4.- CONTABILIZACION"
       TabPicture(0)   =   "Comproba.frx":0136
@@ -528,15 +528,20 @@ Begin VB.Form FComprobantes
       Tab(2).Control(0)=   "DGAC"
       Tab(2).Control(1)=   "DGAsientosR"
       Tab(2).ControlCount=   2
-      TabCaption(3)   =   "&7.- AC - AV - AI - AE"
+      TabCaption(3)   =   "&7.- AV - AI - AE"
       TabPicture(3)   =   "Comproba.frx":018A
       Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "DGAV"
+      Tab(3).Control(0)=   "DGAE"
       Tab(3).Control(1)=   "DGAI"
-      Tab(3).Control(2)=   "DGAE"
+      Tab(3).Control(2)=   "DGAV"
       Tab(3).ControlCount=   3
+      TabCaption(4)   =   "&8.- INVENTARIO"
+      TabPicture(4)   =   "Comproba.frx":01A6
+      Tab(4).ControlEnabled=   0   'False
+      Tab(4).Control(0)=   "DGInventario"
+      Tab(4).ControlCount=   1
       Begin MSDataGridLib.DataGrid DGAC 
-         Bindings        =   "Comproba.frx":01A6
+         Bindings        =   "Comproba.frx":01C2
          Height          =   750
          Left            =   -74895
          TabIndex        =   69
@@ -603,7 +608,7 @@ Begin VB.Form FComprobantes
          EndProperty
       End
       Begin MSDataGridLib.DataGrid DGAE 
-         Bindings        =   "Comproba.frx":01BA
+         Bindings        =   "Comproba.frx":01D6
          Height          =   750
          Left            =   -74895
          TabIndex        =   68
@@ -670,7 +675,7 @@ Begin VB.Form FComprobantes
          EndProperty
       End
       Begin MSDataGridLib.DataGrid DGAI 
-         Bindings        =   "Comproba.frx":01CE
+         Bindings        =   "Comproba.frx":01EA
          Height          =   750
          Left            =   -74895
          TabIndex        =   67
@@ -737,7 +742,7 @@ Begin VB.Form FComprobantes
          EndProperty
       End
       Begin MSDataGridLib.DataGrid DGAV 
-         Bindings        =   "Comproba.frx":01E2
+         Bindings        =   "Comproba.frx":01FE
          Height          =   750
          Left            =   -74895
          TabIndex        =   70
@@ -804,7 +809,7 @@ Begin VB.Form FComprobantes
          EndProperty
       End
       Begin MSDataGridLib.DataGrid DGAsientosR 
-         Bindings        =   "Comproba.frx":01F6
+         Bindings        =   "Comproba.frx":0212
          Height          =   1380
          Left            =   -74895
          TabIndex        =   66
@@ -871,7 +876,7 @@ Begin VB.Form FComprobantes
          EndProperty
       End
       Begin MSDataGridLib.DataGrid DGAsientosSC 
-         Bindings        =   "Comproba.frx":0211
+         Bindings        =   "Comproba.frx":022D
          Height          =   2220
          Left            =   -74895
          TabIndex        =   65
@@ -939,7 +944,7 @@ Begin VB.Form FComprobantes
          EndProperty
       End
       Begin MSDataGridLib.DataGrid DGAsientos 
-         Bindings        =   "Comproba.frx":022D
+         Bindings        =   "Comproba.frx":0249
          Height          =   2220
          Left            =   105
          TabIndex        =   64
@@ -947,6 +952,73 @@ Begin VB.Form FComprobantes
          Width           =   11145
          _ExtentX        =   19659
          _ExtentY        =   3916
+         _Version        =   393216
+         BorderStyle     =   0
+         HeadLines       =   1
+         RowHeight       =   15
+         AllowDelete     =   -1  'True
+         BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ColumnCount     =   2
+         BeginProperty Column00 
+            DataField       =   ""
+            Caption         =   ""
+            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
+               Type            =   0
+               Format          =   ""
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   2058
+               SubFormatType   =   0
+            EndProperty
+         EndProperty
+         BeginProperty Column01 
+            DataField       =   ""
+            Caption         =   ""
+            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
+               Type            =   0
+               Format          =   ""
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   2058
+               SubFormatType   =   0
+            EndProperty
+         EndProperty
+         SplitCount      =   1
+         BeginProperty Split0 
+            BeginProperty Column00 
+            EndProperty
+            BeginProperty Column01 
+            EndProperty
+         EndProperty
+      End
+      Begin MSDataGridLib.DataGrid DGInventario 
+         Bindings        =   "Comproba.frx":0263
+         Height          =   750
+         Left            =   -74895
+         TabIndex        =   73
+         Top             =   420
+         Width           =   11145
+         _ExtentX        =   19659
+         _ExtentY        =   1323
          _Version        =   393216
          BorderStyle     =   0
          HeadLines       =   1
@@ -1084,7 +1156,7 @@ Begin VB.Form FComprobantes
       EndProperty
       Height          =   330
       Left            =   1575
-      Picture         =   "Comproba.frx":0247
+      Picture         =   "Comproba.frx":027F
       TabIndex        =   57
       Top             =   8400
       Width           =   1275
@@ -1178,7 +1250,7 @@ Begin VB.Form FComprobantes
          Width           =   1485
       End
       Begin MSDataGridLib.DataGrid DGAsientosB 
-         Bindings        =   "Comproba.frx":0689
+         Bindings        =   "Comproba.frx":06C1
          Height          =   960
          Left            =   105
          TabIndex        =   35
@@ -1247,7 +1319,7 @@ Begin VB.Form FComprobantes
          EndProperty
       End
       Begin MSDataListLib.DataCombo DCBanco 
-         Bindings        =   "Comproba.frx":06A4
+         Bindings        =   "Comproba.frx":06DC
          DataSource      =   "AdoBanco"
          Height          =   345
          Left            =   1260
@@ -1270,7 +1342,7 @@ Begin VB.Form FComprobantes
          EndProperty
       End
       Begin MSDataListLib.DataCombo DCCaja 
-         Bindings        =   "Comproba.frx":06BB
+         Bindings        =   "Comproba.frx":06F3
          DataSource      =   "AdoCaja"
          Height          =   345
          Left            =   1260
@@ -1308,7 +1380,7 @@ Begin VB.Form FComprobantes
          MaxLength       =   14
          MultiLine       =   -1  'True
          TabIndex        =   30
-         Text            =   "Comproba.frx":06D1
+         Text            =   "Comproba.frx":0709
          Top             =   525
          Visible         =   0   'False
          Width           =   1695
@@ -1329,7 +1401,7 @@ Begin VB.Form FComprobantes
          MaxLength       =   14
          MultiLine       =   -1  'True
          TabIndex        =   26
-         Text            =   "Comproba.frx":06D3
+         Text            =   "Comproba.frx":070B
          Top             =   210
          Visible         =   0   'False
          Width           =   1695
@@ -2180,6 +2252,53 @@ Begin VB.Form FComprobantes
       EndProperty
       _Version        =   393216
    End
+   Begin MSAdodcLib.Adodc AdoInventario 
+      Height          =   330
+      Left            =   2205
+      Top             =   7245
+      Visible         =   0   'False
+      Width           =   2220
+      _ExtentX        =   3916
+      _ExtentY        =   582
+      ConnectMode     =   0
+      CursorLocation  =   3
+      IsolationLevel  =   -1
+      ConnectionTimeout=   15
+      CommandTimeout  =   30
+      CursorType      =   3
+      LockType        =   3
+      CommandType     =   8
+      CursorOptions   =   0
+      CacheSize       =   50
+      MaxRecords      =   0
+      BOFAction       =   0
+      EOFAction       =   0
+      ConnectStringType=   1
+      Appearance      =   1
+      BackColor       =   -2147483643
+      ForeColor       =   -2147483640
+      Orientation     =   0
+      Enabled         =   -1
+      Connect         =   ""
+      OLEDBString     =   ""
+      OLEDBFile       =   ""
+      DataSourceName  =   ""
+      OtherAttributes =   ""
+      UserName        =   ""
+      Password        =   ""
+      RecordSource    =   ""
+      Caption         =   "Inventario"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      _Version        =   393216
+   End
    Begin VB.Label Label23 
       Alignment       =   1  'Right Justify
       BackColor       =   &H00808080&
@@ -2602,7 +2721,6 @@ Public Sub Asientos_Grabados()
 End Sub
 
 Private Sub Tipo_De_Comprobante_No(C1 As Comprobantes)
-
   TextCotiza = Dolar
   Frame2.Visible = False
   'FrmBenef.Visible = False
@@ -2654,7 +2772,7 @@ Private Sub Tipo_De_Comprobante_No(C1 As Comprobantes)
          OpcTP(4).value = True
   End Select
   If ModificarComp Then NumComp = C1.Numero
-    
+  
  'Presentamos la informacion del Asiento y Anexo en este comprobante
   SQL2 = "SELECT " & Full_Fields("Asiento") & " " _
        & "FROM Asiento " _
@@ -2713,6 +2831,13 @@ Private Sub Tipo_De_Comprobante_No(C1 As Comprobantes)
        & "AND CodigoU = '" & CodigoUsuario & "' " _
        & "AND T_No = " & Trans_No & " "
   Select_Adodc_Grid DGAI, AdoAI, SQL2
+  
+  SQL2 = "SELECT " & Full_Fields("Asiento_K") & " " _
+       & "FROM Asiento_K " _
+       & "WHERE Item = '" & NumEmpresa & "' " _
+       & "AND CodigoU = '" & CodigoUsuario & "' " _
+       & "AND T_No = " & Trans_No & " "
+  Select_Adodc_Grid DGInventario, AdoInventario, SQL2
   LabelComp.Caption = Format(NumComp, "00000000")
   MBoxFecha.SetFocus
 End Sub
@@ -3355,8 +3480,10 @@ Private Sub CmdGrabar_Click()
           Co.Item = NumEmpresa
           Co.Usuario = CodigoUsuario
           Co.T_No = Trans_No
+          
          'Grabamos el Comprobante
           GrabarComprobante Co
+          
         ' Seteamos para el siguiente comprobante
           DGAsientosB.Visible = False
           RatonNormal
@@ -3574,14 +3701,12 @@ Private Sub Form_Activate()
        & "WHERE Cliente LIKE '%" & Co.Beneficiario & "%' " _
        & "ORDER BY Cliente "
   SelectDB_Combo DCCliente, AdoBenef, sSQL, "Cliente"
-  
   TipoBusqueda = "%"
-  
   Tipo_De_Comprobante_No Co
-
 '  Datos_del_Cliente Co    'Solo con el CodigoB = Codigo del Cliente se busca
   'Select_Cuentas DLCuentas, AdoCuentas
   Llenar_Encabezado_Comprobante
+
   CalculosTotalAsientos AdoAsientos, LabelDebe, LabelHaber, LabelDiferencia
   Una_Vez = True
  'Listamos lista de clientes para procesar comprobantes
@@ -3617,13 +3742,18 @@ Private Sub Form_Load()
   ConectarAdodc AdoAsientosB
   ConectarAdodc AdoAsientosR
   ConectarAdodc AdoAsientosSC
+  ConectarAdodc AdoInventario
   ConectarAdodc AdoCentroCostos
   
-  SSTab1.Height = MDI_Y_Max - SSTab1.Top - 300
+  SSTab1.Height = MDI_Y_Max - SSTab1.Top - 450
   SSTab1.width = MDI_X_Max - SSTab1.Left
   DGAsientosSC.width = SSTab1.width - 200
   DGAsientosSC.Height = SSTab1.Height - DGAsientosSC.Top - 100
   DLCuentas.Height = SSTab1.Height - DGAsientosSC.Top
+  
+  DGInventario.width = SSTab1.width - 200
+  DGInventario.Height = SSTab1.Height - DGInventario.Top - 100
+  
   DGAC.width = SSTab1.width - 200
   DGAV.width = SSTab1.width - 200
   DGAI.width = SSTab1.width - 200

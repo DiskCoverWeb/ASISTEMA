@@ -1478,6 +1478,7 @@ Private Sub TBKardex_ButtonClick(ByVal Button As ComctlLib.Button)
        AdoAux.Recordset.fields("Detalle") = "Inventario"
        AdoAux.Recordset.fields("Item") = NumEmpresa
        AdoAux.Recordset.fields("Periodo") = Periodo_Contable
+       AdoAux.Recordset.fields("Cerrado") = adFalse
     End If
     AdoAux.Recordset.fields("Fecha_Inicial") = MBoxFechaI
     AdoAux.Recordset.fields("Fecha_Final") = MBoxFechaF

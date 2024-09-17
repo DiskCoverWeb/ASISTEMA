@@ -90,6 +90,7 @@ Module=TDouble; ..\MODULOS\TDouble.bas
 Module=TBaseDatos; ..\MODULOS\TBaseDatos.bas
 Class=cFTP; ..\CLASES\cFTP.cls
 Form=..\GENERAL\Cambclav.frm
+Class=cPing; ..\CLASES\cPing.cls
 IconForm="MDICosto"
 Startup="MDICosto"
 HelpFile=""

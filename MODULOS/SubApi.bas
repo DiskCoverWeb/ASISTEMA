@@ -704,11 +704,11 @@ Public Declare Function IcmpSendEcho Lib "icmp.dll" _
 '-----------------------------------------------------------------------------------------------------------------------------------------------------------
 'Funciones API: WSOCK32
 '-----------------------------------------------------------------------------------------------------------------------------------------------------------
-Public Declare Function WSAGetLastError Lib "wsock32.dll" () As Long
-Public Declare Function WSAStartup Lib "wsock32.dll" (ByVal wVersionRequired As Long, lpWSADATA As WSADATA) As Long
-Public Declare Function WSACleanup Lib "wsock32.dll" () As Long
-Public Declare Function gethostname Lib "wsock32.dll" (ByVal szHost As String, ByVal dwHostLen As Long) As Long
-Private Declare Function inet_addr Lib "wsock32.dll" (ByVal cp As String) As Long
+Public Declare Function WSAGetLastError Lib "WSOCK32.DLL" () As Long
+Public Declare Function WSAStartup Lib "WSOCK32.DLL" (ByVal wVersionRequired As Long, lpWSADATA As WSADATA) As Long
+Public Declare Function WSACleanup Lib "WSOCK32.DLL" () As Long
+Public Declare Function gethostname Lib "WSOCK32.DLL" (ByVal szHost As String, ByVal dwHostLen As Long) As Long
+Private Declare Function inet_addr Lib "WSOCK32.DLL" (ByVal cp As String) As Long
 Private Declare Function gethostbyname Lib "WSOCK32" (ByVal Hostname As String) As Long
 'Public Declare Function gethostbyname Lib "WSOCK32.DLL" (ByVal szHost As String) As Long
 '-----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1137,92 +1137,92 @@ Dim cnt As Long
     ConvertAddressToString = LeftStrg(ConvertAddressToString, Len(ConvertAddressToString) - 1)
 End Function
 
-Public Function Get_WAN_IP() As Boolean
-Dim strString As String
-Dim ret As Long, Tel As Long
-Dim bBytes() As Byte
-Dim TempList() As String
-Dim TempIP As String
-Dim Tempi As Long
-Dim Listing As MIB_IPADDRTABLE
-Dim L3 As String
-Dim dwLen As Long
-Dim RSeg As Boolean
-
-On Error GoTo END1
-
-    RSeg = True
-    IP_PC.InterNet = GetNetConnectString()
-    RSeg = IP_PC.InterNet
-    'RSeg = Ping_PC("8.8.8.8")
-    'If IP_PC.InterNet Then RSeg = Ping_PC("dns.google.com")
-   'MsgBox "InterNet: " & IP_PC.InterNet & vbCrLf & RSeg
-    IP_PC.Max_IP = -1
-    IP_PC.IP_PC = "0.0.0.0"
-   'Averiguamos el nombre del PC
-    dwLen = MAX_COMPUTERNAME_LENGTH + 1
-    strString = String(dwLen, "X")
-    GetComputerName strString, dwLen
-    strString = LeftStrg(strString, dwLen)
-    IP_PC.Nombre_PC = strString
-    
-   'Determinamos la IP del Ordenador
-    GetIpAddrTable ByVal 0&, ret, True
-    If ret <= 0 Then Exit Function
-    ReDim bBytes(0 To ret - 1) As Byte
-    ReDim TempList(0 To ret - 1) As String
-    GetIpAddrTable bBytes(0), ret, False
-    CopyMemory Listing.dEntrys, bBytes(0), 4
-    For Tel = 0 To Listing.dEntrys - 1
-        CopyMemory Listing.mIPInfo(Tel), bBytes(4 + (Tel * Len(Listing.mIPInfo(0)))), Len(Listing.mIPInfo(Tel))
-        TempList(Tel) = ConvertAddressToString(Listing.mIPInfo(Tel).dwAddr)
-    Next Tel
-    
-    For Tempi = 0 To Listing.dEntrys - 1
-       'MsgBox "TempList(" & Tempi & "): " & TempList(Tempi)
-        L3 = LeftStrg(TempList(Tempi), 3)
-        If L3 <> "169" And L3 <> "127" Then IP_PC.Max_IP = IP_PC.Max_IP + 1
-    Next Tempi
-   'MsgBox "Max_IP: " & IP_PC.Max_IP
-    If IP_PC.Max_IP >= 0 Then
-       ReDim IP_PC.Lista_IPs(0 To IP_PC.Max_IP) As String
-       IP_PC.Max_IP = -1
-       TempIP = "" ' TempList(0)
-       For Tempi = 0 To Listing.dEntrys - 1
-           L3 = LeftStrg(TempList(Tempi), 3)
-           If L3 <> "169" And L3 <> "127" Then
-              IP_PC.Max_IP = IP_PC.Max_IP + 1
-              IP_PC.Lista_IPs(IP_PC.Max_IP) = TempList(Tempi)
-              IP_PC.IP_PC = TempList(Tempi)
-           End If
-          '123456789012345
-          '000.000.000.000
-          ' If InStr(TempList(Tempi), ".27.") Then RSeg = False
-          ' If InStr(TempList(Tempi), ".56.") Then RSeg = False
-           'MsgBox "Seg: " & TempList(Tempi)
-       Next Tempi
-    Else
-       ReDim IP_PC.Lista_IPs(0 To 0) As String
-       IP_PC.Max_IP = 0
-       IP_PC.Lista_IPs(IP_PC.Max_IP) = "Sin Conexion"
-       IP_PC.InterNet = False
-       RSeg = False
-    End If
-   'MsgBox "Get_WAN_IP: " & IP_PC.Conexion_WAN
-    IP_PC.MAC_PC = Mi_MAC_Local
-    IP_PC.WAN_PC = Mi_IP_Publica
-   'MsgBox IP_PC.IP_PC
-    Get_WAN_IP = RSeg
-    Exit Function
-END1:
-    ReDim IP_PC.Lista_IPs(0 To 0) As String
-    IP_PC.Max_IP = 0
-    IP_PC.Lista_IPs(IP_PC.Max_IP) = "Sin Conexion"
-    IP_PC.InterNet = False
-   'AdoStrCnnMySQL = ""
-   'MsgBox IP_PC.IP_PC
-    Get_WAN_IP = RSeg
-End Function
+'''Public Function Get_WAN_IP() As Boolean
+'''Dim strString As String
+'''Dim ret As Long, Tel As Long
+'''Dim bBytes() As Byte
+'''Dim TempList() As String
+'''Dim TempIP As String
+'''Dim Tempi As Long
+'''Dim Listing As MIB_IPADDRTABLE
+'''Dim L3 As String
+'''Dim dwLen As Long
+'''Dim RSeg As Boolean
+'''
+'''On Error GoTo END1
+'''
+'''    RSeg = True
+'''    IP_PC.InterNet = GetNetConnectString()
+'''    RSeg = IP_PC.InterNet
+'''    'RSeg = Ping_IP("8.8.8.8")
+'''    'If IP_PC.InterNet Then RSeg = Ping_IP("dns.google.com")
+'''   'MsgBox "InterNet: " & IP_PC.InterNet & vbCrLf & RSeg
+'''    IP_PC.Max_IP = -1
+'''    IP_PC.IP_PC = "0.0.0.0"
+'''   'Averiguamos el nombre del PC
+'''    dwLen = MAX_COMPUTERNAME_LENGTH + 1
+'''    strString = String(dwLen, "X")
+'''    GetComputerName strString, dwLen
+'''    strString = LeftStrg(strString, dwLen)
+'''    IP_PC.Nombre_PC = strString
+'''
+'''   'Determinamos la IP del Ordenador
+'''    GetIpAddrTable ByVal 0&, ret, True
+'''    If ret <= 0 Then Exit Function
+'''    ReDim bBytes(0 To ret - 1) As Byte
+'''    ReDim TempList(0 To ret - 1) As String
+'''    GetIpAddrTable bBytes(0), ret, False
+'''    CopyMemory Listing.dEntrys, bBytes(0), 4
+'''    For Tel = 0 To Listing.dEntrys - 1
+'''        CopyMemory Listing.mIPInfo(Tel), bBytes(4 + (Tel * Len(Listing.mIPInfo(0)))), Len(Listing.mIPInfo(Tel))
+'''        TempList(Tel) = ConvertAddressToString(Listing.mIPInfo(Tel).dwAddr)
+'''    Next Tel
+'''
+'''    For Tempi = 0 To Listing.dEntrys - 1
+'''       'MsgBox "TempList(" & Tempi & "): " & TempList(Tempi)
+'''        L3 = LeftStrg(TempList(Tempi), 3)
+'''        If L3 <> "169" And L3 <> "127" Then IP_PC.Max_IP = IP_PC.Max_IP + 1
+'''    Next Tempi
+'''   'MsgBox "Max_IP: " & IP_PC.Max_IP
+'''    If IP_PC.Max_IP >= 0 Then
+'''       ReDim IP_PC.Lista_IPs(0 To IP_PC.Max_IP) As String
+'''       IP_PC.Max_IP = -1
+'''       TempIP = "" ' TempList(0)
+'''       For Tempi = 0 To Listing.dEntrys - 1
+'''           L3 = LeftStrg(TempList(Tempi), 3)
+'''           If L3 <> "169" And L3 <> "127" Then
+'''              IP_PC.Max_IP = IP_PC.Max_IP + 1
+'''              IP_PC.Lista_IPs(IP_PC.Max_IP) = TempList(Tempi)
+'''              IP_PC.IP_PC = TempList(Tempi)
+'''           End If
+'''          '123456789012345
+'''          '000.000.000.000
+'''          ' If InStr(TempList(Tempi), ".27.") Then RSeg = False
+'''          ' If InStr(TempList(Tempi), ".56.") Then RSeg = False
+'''           'MsgBox "Seg: " & TempList(Tempi)
+'''       Next Tempi
+'''    Else
+'''       ReDim IP_PC.Lista_IPs(0 To 0) As String
+'''       IP_PC.Max_IP = 0
+'''       IP_PC.Lista_IPs(IP_PC.Max_IP) = "Sin Conexion"
+'''       IP_PC.InterNet = False
+'''       RSeg = False
+'''    End If
+'''   'MsgBox "Get_WAN_IP: " & IP_PC.Conexion_WAN
+'''    IP_PC.MAC_PC = Mi_MAC_Local
+'''    IP_PC.WAN_PC = Mi_IP_Publica
+'''   'MsgBox IP_PC.IP_PC
+'''    Get_WAN_IP = RSeg
+'''    Exit Function
+'''END1:
+'''    ReDim IP_PC.Lista_IPs(0 To 0) As String
+'''    IP_PC.Max_IP = 0
+'''    IP_PC.Lista_IPs(IP_PC.Max_IP) = "Sin Conexion"
+'''    IP_PC.InterNet = False
+'''   'AdoStrCnnMySQL = ""
+'''   'MsgBox IP_PC.IP_PC
+'''    Get_WAN_IP = RSeg
+'''End Function
 
 Public Function GetStatusCode(Status As Long) As String
    Select Case Status
@@ -1266,7 +1266,7 @@ Public Function LoByte(ByVal wParam As Integer)
     LoByte = wParam And &HFF&
 End Function
 
-Public Function Ping(szAddress As String, ECHO As ICMP_ECHO_REPLY) As Long
+Public Function ping(szAddress As String, ECHO As ICMP_ECHO_REPLY) As Long
    Dim hPort As Long
    Dim dwAddress As Long
    Dim sDataToSend As String
@@ -1279,9 +1279,9 @@ Public Function Ping(szAddress As String, ECHO As ICMP_ECHO_REPLY) As Long
    hPort = IcmpCreateFile()
    
    If IcmpSendEcho(hPort, dwAddress, sDataToSend, Len(sDataToSend), 0, ECHO, Len(ECHO), PING_TIMEOUT) Then
-      Ping = ECHO.RoundTripTime
+      ping = ECHO.RoundTripTime
    Else
-      Ping = ECHO.Status * -1
+      ping = ECHO.Status * -1
    End If
   'MsgBox szAddress & vbCrLf & dwAddress & vbCrLf & ECHO.RoundTripTime & vbCrLf & ECHO.status
    Call IcmpCloseHandle(hPort)
@@ -1382,122 +1382,122 @@ Public Function SocketsInitialize() As Boolean
     SocketsInitialize = True
 End Function
 
-Public Function Ping_PC(My_IP_PC As String) As Boolean
-Dim DosPuntos As Integer
-Dim Coma As Integer
-Dim Resultado As Boolean
-'Estructura con la información para hacer el Ping
-Dim ECHO As ICMP_ECHO_REPLY
-Dim TargetIP As String ' dirección ip
-Dim ret As String
-Dim PingIP As String
+'''Public Function Ping_IP(My_IP_PC As String) As Boolean
+'''Dim DosPuntos As Integer
+'''Dim Coma As Integer
+'''Dim Resultado As Boolean
+''''Estructura con la información para hacer el Ping
+'''Dim ECHO As ICMP_ECHO_REPLY
+'''Dim TargetIP As String ' dirección ip
+'''Dim ret As String
+'''Dim PingIP As String
+'''
+'''    RatonReloj
+'''   'MsgBox IP_PC & vbCrLf & IsNumeric(Replace(IP_PC, ".", "")) & vbCrLf & recuperar_IP(IP_PC)
+'''    Resultado = False
+'''    If IP_PC.InterNet Then
+'''        PingIP = My_IP_PC
+'''        DosPuntos = InStr(PingIP, ":")
+'''        Coma = InStr(PingIP, ",")
+'''        If (DosPuntos + Coma) > 2 Then PingIP = TrimStrg(MidStrg(PingIP, DosPuntos + 1, Coma - DosPuntos - 1)) Else PingIP = TrimStrg(My_IP_PC)
+'''
+'''        If IsNumeric(Replace(PingIP, ".", "")) Then TargetIP = PingIP Else TargetIP = recuperar_IP(PingIP)
+'''
+'''       'MsgBox My_IP_PC & vbCrLf & PingIP & vbCrLf & TargetIP
+'''
+'''        If Len(TargetIP) > 0 Then
+'''            ret = "Respuesta desde " & TargetIP & ": "
+'''            Call ping(TargetIP, ECHO)
+'''           'Estado del Ping
+'''            If ECHO.Status = 0 Then
+'''                ret = ret & "Tiempo: " & ECHO.RoundTripTime & " ms(1) "
+'''                Resultado = True
+'''            Else
+'''                Call ping(TargetIP, ECHO)
+'''                If ECHO.Status = 0 Then
+'''                   ret = ret & "Tiempo: " & ECHO.RoundTripTime & " ms(2) "
+'''                   Resultado = True
+'''                Else
+'''                   Call ping(TargetIP, ECHO)
+'''                   If ECHO.Status = 0 Then
+'''                      ret = ret & "Tiempo: " & ECHO.RoundTripTime & " ms(3) "
+'''                      Resultado = True
+'''                   Else
+'''                     'Error al hacer ping
+'''                      ret = ret & "Not successful "
+'''    ''                  Call Ping(TargetIP, ECHO)
+'''    ''                  If ECHO.Status = 0 Then
+'''    ''                     ret = ret & "Tiempo: " & ECHO.RoundTripTime & " ms(4) "
+'''    ''                     Resultado = True
+'''    ''                  Else
+'''    ''                  End If
+'''                   End If
+'''                End If
+'''            End If
+'''            ret = ret & "bytes=" & ECHO.DataSize & " "
+'''            If ECHO.DataSize = 0 And ECHO.RoundTripTime = 0 Then Resultado = False
+'''        Else
+'''           'Error
+'''            ret = ret & "Not successful, not exist the hosting"
+'''        End If
+'''
+'''    '    Progreso_Barra.Mensaje_Box = ret
+'''    '    Progreso_Esperar False
+'''       'MsgBox Progreso_Barra.Mensaje_Box
+'''        With ECHO
+'''             ret = ret & vbCrLf _
+'''                 & "Address            : " & .Address & vbCrLf _
+'''                 & "Status             : " & .Status & vbCrLf _
+'''                 & "RoundTripTime      : " & .RoundTripTime & vbCrLf _
+'''                 & "DataSize           : " & .DataSize & vbCrLf _
+'''                 & "Reserved           : " & .Reserved & vbCrLf _
+'''                 & "DataPointer        : " & .DataPointer & vbCrLf _
+'''                 & "Data               : " & .Data & vbCrLf _
+'''                 & "Options Flags      : " & .Options.Flags & vbCrLf _
+'''                 & "Options OptionsData: " & .Options.OptionsData & vbCrLf _
+'''                 & "Options OptionsSize: " & .Options.OptionsSize & vbCrLf _
+'''                 & "Options Tos        : " & .Options.Tos & vbCrLf _
+'''                 & "Options Ttl        : " & .Options.Ttl
+'''        End With
+'''       'MsgBox ret, vbInformation
+'''        IP_PC.Status = IP_PC.Status & ret
+'''    End If
+'''    Ping_PC = Resultado
+'''End Function
 
-    RatonReloj
-   'MsgBox IP_PC & vbCrLf & IsNumeric(Replace(IP_PC, ".", "")) & vbCrLf & recuperar_IP(IP_PC)
-    Resultado = False
-    If IP_PC.InterNet Then
-        PingIP = My_IP_PC
-        DosPuntos = InStr(PingIP, ":")
-        Coma = InStr(PingIP, ",")
-        If (DosPuntos + Coma) > 2 Then PingIP = TrimStrg(MidStrg(PingIP, DosPuntos + 1, Coma - DosPuntos - 1)) Else PingIP = TrimStrg(My_IP_PC)
-          
-        If IsNumeric(Replace(PingIP, ".", "")) Then TargetIP = PingIP Else TargetIP = recuperar_IP(PingIP)
-        
-       'MsgBox My_IP_PC & vbCrLf & PingIP & vbCrLf & TargetIP
-        
-        If Len(TargetIP) > 0 Then
-            ret = "Respuesta desde " & TargetIP & ": "
-            Call Ping(TargetIP, ECHO)
-           'Estado del Ping
-            If ECHO.Status = 0 Then
-                ret = ret & "Tiempo: " & ECHO.RoundTripTime & " ms(1) "
-                Resultado = True
-            Else
-                Call Ping(TargetIP, ECHO)
-                If ECHO.Status = 0 Then
-                   ret = ret & "Tiempo: " & ECHO.RoundTripTime & " ms(2) "
-                   Resultado = True
-                Else
-                   Call Ping(TargetIP, ECHO)
-                   If ECHO.Status = 0 Then
-                      ret = ret & "Tiempo: " & ECHO.RoundTripTime & " ms(3) "
-                      Resultado = True
-                   Else
-                     'Error al hacer ping
-                      ret = ret & "Not successful "
-    ''                  Call Ping(TargetIP, ECHO)
-    ''                  If ECHO.Status = 0 Then
-    ''                     ret = ret & "Tiempo: " & ECHO.RoundTripTime & " ms(4) "
-    ''                     Resultado = True
-    ''                  Else
-    ''                  End If
-                   End If
-                End If
-            End If
-            ret = ret & "bytes=" & ECHO.DataSize & " "
-            If ECHO.DataSize = 0 And ECHO.RoundTripTime = 0 Then Resultado = False
-        Else
-           'Error
-            ret = ret & "Not successful, not exist the hosting"
-        End If
-        
-    '    Progreso_Barra.Mensaje_Box = ret
-    '    Progreso_Esperar False
-       'MsgBox Progreso_Barra.Mensaje_Box
-        With ECHO
-             ret = ret & vbCrLf _
-                 & "Address            : " & .Address & vbCrLf _
-                 & "Status             : " & .Status & vbCrLf _
-                 & "RoundTripTime      : " & .RoundTripTime & vbCrLf _
-                 & "DataSize           : " & .DataSize & vbCrLf _
-                 & "Reserved           : " & .Reserved & vbCrLf _
-                 & "DataPointer        : " & .DataPointer & vbCrLf _
-                 & "Data               : " & .Data & vbCrLf _
-                 & "Options Flags      : " & .Options.Flags & vbCrLf _
-                 & "Options OptionsData: " & .Options.OptionsData & vbCrLf _
-                 & "Options OptionsSize: " & .Options.OptionsSize & vbCrLf _
-                 & "Options Tos        : " & .Options.Tos & vbCrLf _
-                 & "Options Ttl        : " & .Options.Ttl
-        End With
-       'MsgBox ret, vbInformation
-        IP_PC.Status = IP_PC.Status & ret
-    End If
-    Ping_PC = Resultado
-End Function
-
-Public Function recuperar_IP(ByVal Nombre_Host As String) As String
-Dim ErrorNo As String
-Dim lHost As Long, T_Host As HOSTENT, ipDir As Long
-Dim tIP() As Byte, I As Integer, sIP As String
-      
-    If Not Inicializar_Socket() Then
-        recuperar_IP = ""
-        Exit Function
-    End If
-    Nombre_Host = TrimStrg(Nombre_Host)
-    lHost = gethostbyname(Nombre_Host)
-    If lHost = 0 Then
-        recuperar_IP = ""
-        ErrorNo = "Error: " & Nombre_Host & ", fuera de linea o sin internet"
-       'Progreso_Barra.Mensaje_Box = ErrorNo
-       'Progreso_Esperar False
-       'MsgBox ErrorNo
-        Remover_Socket
-        Control_Procesos Normal, ErrorNo, "Conexion"
-        Exit Function
-    End If
-    CopyMemoryIP T_Host, lHost, Len(T_Host)
-    CopyMemoryIP ipDir, T_Host.hAddrList, 4
-    ReDim tIP(1 To T_Host.hLen)
-    CopyMemoryIP tIP(1), ipDir, T_Host.hLen
-     
-    For I = 1 To T_Host.hLen
-        sIP = sIP & tIP(I) & "."
-    Next
-    recuperar_IP = MidStrg(sIP, 1, Len(sIP) - 1)
-      
-    Remover_Socket
-End Function
+'''Public Function recuperar_IP(ByVal Nombre_Host As String) As String
+'''Dim ErrorNo As String
+'''Dim lHost As Long, T_Host As HOSTENT, ipDir As Long
+'''Dim tIP() As Byte, I As Integer, sIP As String
+'''
+'''    If Not Inicializar_Socket() Then
+'''        recuperar_IP = ""
+'''        Exit Function
+'''    End If
+'''    Nombre_Host = TrimStrg(Nombre_Host)
+'''    lHost = gethostbyname(Nombre_Host)
+'''    If lHost = 0 Then
+'''        recuperar_IP = ""
+'''        ErrorNo = "Error: " & Nombre_Host & ", fuera de linea o sin internet"
+'''       'Progreso_Barra.Mensaje_Box = ErrorNo
+'''       'Progreso_Esperar False
+'''       'MsgBox ErrorNo
+'''        Remover_Socket
+'''        Control_Procesos Normal, ErrorNo, "Conexion"
+'''        Exit Function
+'''    End If
+'''    CopyMemoryIP T_Host, lHost, Len(T_Host)
+'''    CopyMemoryIP ipDir, T_Host.hAddrList, 4
+'''    ReDim tIP(1 To T_Host.hLen)
+'''    CopyMemoryIP tIP(1), ipDir, T_Host.hLen
+'''
+'''    For I = 1 To T_Host.hLen
+'''        sIP = sIP & tIP(I) & "."
+'''    Next
+'''    recuperar_IP = MidStrg(sIP, 1, Len(sIP) - 1)
+'''
+'''    Remover_Socket
+'''End Function
   
 Public Function Inicializar_Socket() As Boolean
     Dim W As WSADATA, slb As String, shb As String
@@ -1698,46 +1698,46 @@ MakeMacAddress = "(error building MAC address)"
 Resume MakeMac_exit
 End Function
 
-Public Function Mi_MAC_Local() As String
-Dim colNetAdapters, objWMIService, objitem As Object
-Dim strComputer As String
-    strComputer = "."
-    Set objWMIService = GetObject("winmgmts:" & "{impersonationLevel=impersonate}!\\" & strComputer & "\root\cimv2")
-    Set colNetAdapters = objWMIService.ExecQuery("Select * from Win32_NetworkAdapterConfiguration where IPEnabled=TRUE")
-    For Each objitem In colNetAdapters
-        Mi_MAC_Local = objitem.MACAddress
-    Next
-End Function
+'''Public Function Mi_MAC_Local() As String
+'''Dim colNetAdapters, objWMIService, objitem As Object
+'''Dim strComputer As String
+'''    strComputer = "."
+'''    Set objWMIService = GetObject("winmgmts:" & "{impersonationLevel=impersonate}!\\" & strComputer & "\root\cimv2")
+'''    Set colNetAdapters = objWMIService.ExecQuery("Select * from Win32_NetworkAdapterConfiguration where IPEnabled=TRUE")
+'''    For Each objitem In colNetAdapters
+'''        Mi_MAC_Local = objitem.MACAddress
+'''    Next
+'''End Function
 
-Public Function Mi_IP_Publica() As String
-Dim cTemp As String
-Dim arTemp() As String
-Dim URL As String
-Dim IP As String
-Dim PosIpI As Long
-Dim PosIpF As Long
-IP = RutaSysBases & "\TEMP\IP_" & CodigoUsuario & ".txt"
-cTemp = "NO IP WAN"
-'URL = "http://miip.es"
-URL = "https://whatismyipaddress.com/"
-'URL = "http://myip.es" 'AUN NO FUNCIONA
-If Dir(IP) <> "" Then Kill IP
-Call URLDownloadToFile(0, URL, IP, 0, 0)
-If Dir(IP) <> "" Then
-   cTemp = CreateObject("Scripting.FileSystemObject").OpenTextFile(IP).ReadAll
-   cTemp = Replace(cTemp, """", "'")
-   PosIpI = InStr(cTemp, "https://whatismyipaddress.com/ip/")
-    If PosIpI > 0 Then
-       cTemp = MidStrg(cTemp, PosIpI, Len(cTemp))
-       PosIpF = InStr(cTemp, "'")
-       cTemp = MidStrg(cTemp, 1, PosIpF - 1)
-       cTemp = Replace(cTemp, "https://whatismyipaddress.com/ip/", "")
-       cTemp = TrimStrg(MidStrg(cTemp, 1, 15))
-    End If
-    Kill IP
-End If
-Mi_IP_Publica = cTemp
-End Function
+'''Public Function Mi_IP_Publica() As String
+'''Dim cTemp As String
+'''Dim arTemp() As String
+'''Dim URL As String
+'''Dim IP As String
+'''Dim PosIpI As Long
+'''Dim PosIpF As Long
+'''IP = RutaSysBases & "\TEMP\IP_" & CodigoUsuario & ".txt"
+'''cTemp = "NO IP WAN"
+''''URL = "http://miip.es"
+'''URL = "https://whatismyipaddress.com/"
+''''URL = "http://myip.es" 'AUN NO FUNCIONA
+'''If Dir(IP) <> "" Then Kill IP
+'''Call URLDownloadToFile(0, URL, IP, 0, 0)
+'''If Dir(IP) <> "" Then
+'''   cTemp = CreateObject("Scripting.FileSystemObject").OpenTextFile(IP).ReadAll
+'''   cTemp = Replace(cTemp, """", "'")
+'''   PosIpI = InStr(cTemp, "https://whatismyipaddress.com/ip/")
+'''    If PosIpI > 0 Then
+'''       cTemp = MidStrg(cTemp, PosIpI, Len(cTemp))
+'''       PosIpF = InStr(cTemp, "'")
+'''       cTemp = MidStrg(cTemp, 1, PosIpF - 1)
+'''       cTemp = Replace(cTemp, "https://whatismyipaddress.com/ip/", "")
+'''       cTemp = TrimStrg(MidStrg(cTemp, 1, 15))
+'''    End If
+'''    Kill IP
+'''End If
+'''Mi_IP_Publica = cTemp
+'''End Function
 
 Public Function GetUrlSource(sURL As String) As String
 Dim sBuffer As String * BUFFER_LEN, iResult As Integer, sData As String
@@ -1763,5 +1763,37 @@ Dim hInternet As Long, hSession As Long, lReturn As Long
     iResult = InternetCloseHandle(hInternet)
     sData = Trim(Replace(sData, Chr(0), ""))
     GetUrlSource = sData
+End Function
+
+Public Function Ping_IP(My_IP_PC As String) As Boolean
+Dim ping As cPing
+Dim Cont As Integer
+Dim IPTemp As String
+
+    Set ping = New cPing
+    
+    If ping.ConexionInternet Then
+        IPTemp = Replace(My_IP_PC, ".", "")
+        IPTemp = Replace(IPTemp, ",", "")
+        If IsNumeric(IPTemp) Then ping.IPDestino = My_IP_PC Else ping.IPDestino = ping.RecuperarIP(My_IP_PC)
+        For Cont = 0 To 3
+            ping.ping
+        Next Cont
+        If ping.Estado = 0 Then Ping_IP = True
+    Else
+        Ping_IP = False
+    End If
+End Function
+
+Public Function Get_Internet() As Boolean
+Dim ping As cPing
+    Set ping = New cPing
+    
+    IP_PC.Status = ping.Descripcion
+    IP_PC.WAN_PC = ping.IP_Publica
+    IP_PC.Nombre_PC = ping.Nombre_PC
+    IP_PC.IP_PC = ping.IP_Del_PC
+    IP_PC.MAC_PC = ping.MAC_Del_PC
+    Get_Internet = ping.ConexionInternet
 End Function
 

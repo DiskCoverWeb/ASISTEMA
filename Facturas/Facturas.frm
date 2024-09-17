@@ -3884,7 +3884,7 @@ Dim GuiaRemision As Long
         If Len(FA.Autorizacion) = 13 Then SRI_Crear_Clave_Acceso_Facturas FA, False, , True
          
         If Len(FA.Autorizacion_GR) = 13 Then
-           SRI_Crear_Clave_Acceso_Guia_Remision URLinet, FA, False, True
+           SRI_Crear_Clave_Acceso_Guia_Remision URLInet, FA, False, True
            If Len(FA.Autorizacion_GR) > 13 Then
               sSQL = "UPDATE Facturas_Auxiliares " _
                    & "SET Fecha_Aut_GR = #" & BuscarFecha(FA.Fecha_Aut_GR) & "#," _
@@ -4198,25 +4198,27 @@ End Sub
 
 Private Sub DCEmpresaEntrega_KeyPress(KeyAscii As Integer)
 Dim Busqueda As String
-    Busqueda = DCRazonSocial
+    Busqueda = DCEmpresaEntrega
     If Len(Busqueda) > 0 Then
-       sSQL = "SELECT TOP 50 Cliente, CI_RUC, Codigo, Cta_CxP, Grupo, Cod_Ejec " _
+       sSQL = "SELECT TOP 50 Cliente, CI_RUC, Codigo, Cta_CxP, Grupo, Cod_Ejec, Direccion " _
             & "FROM Clientes "
-       If IsNumeric(Busqueda) Then sSQL = sSQL & "WHERE CI_RUC LIKE '" & Busqueda & "%' " Else sSQL = sSQL & "WHERE Cliente LIKE '" & Busqueda & "%' "
-       sSQL = sSQL & "ORDER BY Cliente "
+       If IsNumeric(Busqueda) Then sSQL = sSQL & "WHERE CI_RUC LIKE '" & Busqueda & "%' " Else sSQL = sSQL & "WHERE Cliente LIKE '%" & Busqueda & "%' "
+       sSQL = sSQL _
+            & "AND TD IN ('C','R') " _
+            & "ORDER BY Cliente "
        Select_Adodc AdoTransporte, sSQL
     End If
 End Sub
 
 Private Sub DCGrupo_No_KeyDown(KeyCode As Integer, Shift As Integer)
-Dim PorcIVA As Byte
+Dim PorcIva As Byte
  Keys_Especiales Shift
  PresionoEnter KeyCode
  If CtrlDown And KeyCode = vbKeyF12 Then
-    PorcIVA = InputBox("Ingrese el porcentaje a Proccesar:", "PORCENTAJE DE IVA", Porc_IVA * 100)
-    Select Case PorcIVA
+    PorcIva = InputBox("Ingrese el porcentaje a Proccesar:", "PORCENTAJE DE IVA", Porc_IVA * 100)
+    Select Case PorcIva
       Case 8, 10, 12, 14, 15
-           Porc_IVA = PorcIVA / 100
+           Porc_IVA = PorcIva / 100
       Case Else
            Porc_IVA = 0.12
     End Select
@@ -4725,11 +4727,13 @@ Private Sub DCRazonSocial_KeyPress(KeyAscii As Integer)
 Dim Busqueda As String
     Busqueda = DCRazonSocial
     If Len(Busqueda) > 0 Then
-       sSQL = "SELECT TOP 50 Cliente, CI_RUC, Codigo, Cta_CxP, Grupo, Cod_Ejec " _
+       sSQL = "SELECT TOP 50 Cliente, CI_RUC, Codigo, Cta_CxP, Grupo, Cod_Ejec, Direccion " _
             & "FROM Clientes "
-       If IsNumeric(Busqueda) Then sSQL = sSQL & "WHERE CI_RUC LIKE '" & Busqueda & "%' " Else sSQL = sSQL & "WHERE Cliente LIKE '" & Busqueda & "%' "
-       sSQL = sSQL & "ORDER BY Cliente "
-       Select_Adodc AdoCliente, sSQL
+       If IsNumeric(Busqueda) Then sSQL = sSQL & "WHERE CI_RUC LIKE '" & Busqueda & "%' " Else sSQL = sSQL & "WHERE Cliente LIKE '%" & Busqueda & "%' "
+       sSQL = sSQL _
+            & "AND TD IN ('C','R') " _
+            & "ORDER BY Cliente "
+       Select_Adodc AdoPersonas, sSQL
     End If
 End Sub
 

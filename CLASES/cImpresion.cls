@@ -601,7 +601,7 @@ Dim sRutaDelPDF As String
           'Determinamos el control Generico de Visual Basic para impresoras PRINTER
            Set ObjPrint = Printer
            ObjPrint.ScaleMode = vbCentimeters             'Escala de centimetros
-           ObjPrint.PaperSize = SetPapelPRN
+           'ObjPrint.PaperSize = SetPapelPRN
            'Printer.PaperSize = SetPapelPRN
           'Seteo la Impresion en Centimetros
            If SetPapelPRN > 0 Then ObjPrint.PaperSize = SetPapelPRN Else ObjPrint.PaperSize = vbPRPSLetter

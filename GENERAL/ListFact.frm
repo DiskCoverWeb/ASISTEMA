@@ -3623,8 +3623,8 @@ Private Sub TBarFactura_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMe
      Case "PDF_GR"
           SRI_Generar_PDF_GR FA, True
      Case "PDF_DO"
-''          SetPrinters.Show 1
-''          If PonImpresoraDefecto(SetNombrePRN) Then
+'''          SetPrinters.Show 1
+'''          If PonImpresoraDefecto(SetNombrePRN) Then
           Generar_PDF_Donacion FA, True
     '=================================================================================
     ' AUTORIZACION DE COMPROBANTES ELECTRONICOS PENDIENTE CON EL SRI

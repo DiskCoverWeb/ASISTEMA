@@ -378,7 +378,7 @@ Dim NombreUsuario1 As String
      Tarea = TrimStrg(MidStrg(Tarea, 1, 120))
      If Tarea = "" Then Tarea = Ninguno
      If Len(Proceso) > 1 Then
-        If Ping_PC(strServidor) Then
+        If Ping_IP(strServidor) Then
            Modulos = Modulo
            NombreUsuario1 = TrimStrg(MidStrg(NombreUsuario, 1, 60))
            TipoTrans = UCaseStrg(TipoTrans)
@@ -392,9 +392,9 @@ Dim NombreUsuario1 As String
                   & IP_PC.InterNet & vbCrLf _
                   & IP_PC.MAC_PC & vbCrLf _
                   & String(20, "=") & vbCrLf
-           For I = 0 To UBound(IP_PC.Lista_IPs)
-               Cadena = Cadena & IP_PC.Lista_IPs(I) & vbCrLf
-           Next I
+'''           For I = 0 To UBound(IP_PC.Lista_IPs)
+'''               Cadena = Cadena & IP_PC.Lista_IPs(I) & vbCrLf
+'''           Next I
            sSQL = "INSERT INTO acceso_pcs (IP_Acceso,CodigoU,Item,Aplicacion,RUC,Fecha,Hora,ES,Tarea,Proceso,Credito_No,Periodo) " _
                 & "VALUES ('" & IP_PC.IP_PC & "','" & CodigoUsuario & "','" & NumEmpresa & "'," & "'" & Modulo & "','" & RUC & "','" & Mifecha1 _
                 & "','" & MiHora1 & "','" & TipoTrans & "','" & Tarea & "','" & Proceso & "','" & Credito_No & "','" & Periodo_Contable & "');"
@@ -1511,13 +1511,13 @@ Dim sSQL1 As String
           & "AND Fecha_Final >= #" & BuscarFecha(FechaIVA) & "# " _
           & "AND Codigo = " & CodPorcIva & " " _
           & "ORDER BY Porc DESC "
-    Select_AdoDB AdoCierre, sSQL1
+    Select_AdoDB AdoCierre, sSQL1, "Tabla_Por_ICE_IVA"
     If AdoCierre.RecordCount > 0 Then Porc_IVA = Redondear(AdoCierre.fields("Porc") / 100, 2)
     AdoCierre.Close
     RatonNormal
 End Sub
 
-Public Sub Obtener_Cod_Porc_IVA(FechaIVA As String, PorcIVA As Byte)
+Public Sub Obtener_Cod_Porc_IVA(FechaIVA As String, PorcIva As Byte)
 Dim AdoCierre As ADODB.Recordset
 Dim sSQL1 As String
     RatonReloj
@@ -1528,7 +1528,7 @@ Dim sSQL1 As String
           & "WHERE IVA <> " & Val(adFalse) & " " _
           & "AND Fecha_Inicio <= #" & BuscarFecha(FechaIVA) & "# " _
           & "AND Fecha_Final >= #" & BuscarFecha(FechaIVA) & "# " _
-          & "AND Porc = " & PorcIVA & " " _
+          & "AND Porc = " & PorcIva & " " _
           & "ORDER BY Porc DESC "
     Select_AdoDB AdoCierre, sSQL1
     If AdoCierre.RecordCount > 0 Then
@@ -1918,6 +1918,7 @@ Dim msg As String
 Dim Web As String
 Dim DatosEmpresa As String
 Dim AnchoWeb As Single
+Dim AltoWeb As Single
 Dim Color1 As Long
 Dim Color2 As Long
 Dim Color3 As Long
@@ -1937,8 +1938,14 @@ Dim FinEjecucion As Boolean
                   & Empresa & " " & vbCrLf _
                   & NombreComercial & " " & vbCrLf
   End If
-  DatosEmpresa = DatosEmpresa & "R.U.C. " & RUC & " " & vbCrLf _
-               & "Representante: " & NombreGerente & " " & vbCrLf
+  DatosEmpresa = DatosEmpresa & "R.U.C. " & RUC & " " & vbCrLf
+  If Len(Obligado_Conta) > 1 Then
+     DatosEmpresa = DatosEmpresa & Obligado_Conta & " esta Obligado a LLevar Contabilidad " & vbCrLf
+  Else
+     DatosEmpresa = DatosEmpresa & "NO esta Obligado a LLevar Contabilidad " & vbCrLf
+  End If
+  If Len(ContEspec) > 1 Then DatosEmpresa = DatosEmpresa & ContEspec & "Contribuyente Especial " & vbCrLf
+  
   Color1 = QBColor(Int((15 * Rnd) + 1)) 'Blanco
   Color2 = QBColor(Int((15 * Rnd) + 1))
   Color3 = QBColor(Int((15 * Rnd) + 1))
@@ -1956,23 +1963,25 @@ Dim FinEjecucion As Boolean
     
   PFil = 60
   PCol = 2650
-  NPicture.Line (0.1, 0.1)-(MDI_X_Max, 1160), Color2, BF
-  NPicture.Line (50, 50)-(MDI_X_Max - 70, 1060), Blanco, BF
+  '1160
+  NPicture.Line (0.1, 0.1)-(MDI_X_Max, 1400), Color2, BF
+  NPicture.Line (50, 50)-(MDI_X_Max - 70, 1340), Blanco, BF
   If Len(LogoTipo) > 1 Then NPicture.PaintPicture LoadPicture(LogoTipo), 70, 70, 2650, 1000
   
-  Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Color1, Color1, DatosEmpresa
+  Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Azul, Azul, DatosEmpresa
     
   AnchoWeb = Escribir_Texto_Picture_Ancho(NPicture, DatosEmpresa)
   PFil = 60
   PCol = AnchoWeb + 3000
-  DatosEmpresa = "Direccion: " & Direccion & " " & vbCrLf _
-               & "Teléfono: " & Telefono1 & " / FAX: " & FAX & " " & vbCrLf _
-               & "Email: " & EmailEmpresa & " " & vbCrLf
+  DatosEmpresa = "Representante: " & NombreGerente & " " & vbCrLf _
+               & "Direccion    : " & Direccion & " " & vbCrLf _
+               & "Teléfono     : " & Telefono1 & " / FAX: " & FAX & " " & vbCrLf _
+               & "Email Empresa: " & EmailEmpresa & " " & vbCrLf
   If Len(Lista_De_Correos(4).Correo_Electronico) > 1 Then
-     DatosEmpresa = DatosEmpresa & "Email C.E.: " & Lista_De_Correos(4).Correo_Electronico & " " & vbCrLf
+     DatosEmpresa = DatosEmpresa & "Email C.E.   : " & Lista_De_Correos(4).Correo_Electronico & " " & vbCrLf
   End If
   
-  Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Color1, Color1, DatosEmpresa
+  Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Azul, Azul, DatosEmpresa
   
   Color1 = QBColor(Int((15 * Rnd) + 1)) 'Blanco
   Color2 = QBColor(Int((15 * Rnd) + 1))
@@ -1987,12 +1996,13 @@ Dim FinEjecucion As Boolean
   Web = "www.diskcoversystem.com"
   NPicture.FontBold = True
   NPicture.Font = TipoCourierNew
-  'NPicture.Font = TipoArialNarrow
   RutaDestino = RutaSistema & "\LOGOS\diskcover_web.gif"
   NPicture.PaintPicture LoadPicture(RutaDestino), MDI_X_Max - 1500, 70, 1350, 500
   
   NPicture.FontSize = 12
+  
  'Fecha de Renovacion del sistema
+ '-------------------------------
   Dias_Restantes = CFechaLong(Fecha_CO) - CFechaLong(FechaSistema) + 1
   
      Select Case Dias_Restantes
@@ -2002,7 +2012,8 @@ Dim FinEjecucion As Boolean
        Case Is >= 241: ColorC = Verde_Claro
      End Select
      If Dias_Restantes > 0 Then
-        msg = "Fecha Renovación: " & Fecha_CO & " " & vbCrLf _
+        msg = "Fecha Renovación del " & vbCrLf _
+            & "Contrato: " & Fecha_CO & " " & vbCrLf _
             & Dias_Restantes & " Dia(s) Restante(s) "
      Else
         msg = "Contrato Vencido "
@@ -2010,11 +2021,13 @@ Dim FinEjecucion As Boolean
      
   msg = UCaseStrg(msg)
   AnchoWeb = Escribir_Texto_Picture_Ancho(NPicture, msg)
-  PCol = MDI_X_Max - AnchoWeb - 120
-  PFil = 1250
+  PCol = MDI_X_Max - AnchoWeb - 1650
+  PFil = 260
   Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Color2, ColorC, msg
   
+  'Ambiente = 0
  'Fecha de renovacion de Comprobantes Electronicos
+ '------------------------------------------------
   Dias_Restantes = CFechaLong(Fecha_CE) - CFechaLong(FechaSistema) + 1
   
     Select Case Dias_Restantes
@@ -2034,31 +2047,51 @@ Dim FinEjecucion As Boolean
          Case Else
                    msg = "Empresa sin Comprobantes Electrónicos " & vbCrLf
        End Select
-       If Len(Obligado_Conta) > 1 Then msg = msg & Obligado_Conta & " esta Obligado a LLevar Contabilidad " & vbCrLf
-       If Len(ContEspec) > 1 Then msg = msg & ContEspec & "Contribuyente Especial " & vbCrLf
     Else
        msg = "Empresa sin Comprobantes Electrónicos" & vbCrLf
     End If
   msg = UCaseStrg(msg)
   AnchoWeb = Escribir_Texto_Picture_Ancho(NPicture, msg)
   PCol = MDI_X_Max - AnchoWeb - 120
-  PFil = 2000
+  PFil = 1500
   Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Color2, ColorC, msg
         
-  msg = "Email de Gerencia: gerencia@diskcoversystem.com " & vbCrLf _
-      & "Teléfono Gerencia: 099-965-4196 " & vbCrLf _
-      & " " & vbCrLf _
+ 'Fecha de renovacion del Certificado Electronico
+ '-----------------------------------------------
+  Dias_Restantes = CFechaLong(Fecha_P12) - CFechaLong(FechaSistema) + 1
+  
+    Select Case Dias_Restantes
+      Case Is <= 1: ColorC = Rojo
+      Case 2 To 120: ColorC = Rojo_Claro
+      Case 121 To 240: ColorC = Amarillo
+      Case Is >= 241: ColorC = Verde_Claro
+    End Select
+    
+    Select Case Ambiente
+      Case "1", "2": msg = "Certificado Firma Electronica " & vbCrLf _
+                         & "Fecha de Renovación: " & Fecha_P12 & " " & vbCrLf _
+                         & Dias_Restantes & " Dia(s) Restante(s) para su renovacion " & vbCrLf
+                     msg = UCaseStrg(msg)
+                     AnchoWeb = Escribir_Texto_Picture_Ancho(NPicture, msg)
+                     PCol = MDI_X_Max - AnchoWeb - 110
+                     PFil = 2800
+                     Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Color2, ColorC, msg
+    End Select
+        
+  msg = "Gerencia: gerencia@diskcoversystem.com " & vbCrLf _
+      & "Teléfono: 099-965-4196 " & vbCrLf _
+      & " " & vbCrLf & " " & vbCrLf _
       & Version_Sistema & " (" & MidStrg(RutaSistema, 1, 2) & ") " & vbCrLf
   PCol = 120
   PFil = Screen.Height - 3500
   NPicture.FontBold = False
   Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Color2, Blanco, msg
 
-  msg = "Email Presidencia   : prisma_net@hotmail.es " & vbCrLf _
-      & "Teléfono Presidencia: 098-910-5300 " & vbCrLf _
+  msg = "Presidencia: prisma_net@hotmail.es " & vbCrLf _
+      & "Teléfono   : 098-910-5300 " & vbCrLf _
       & " " & vbCrLf _
-      & "Email de PrismaNet: informacion@diskcoversystem.com " & vbCrLf _
-      & "Teléfonos Oficina: 098-652-4396 " & vbCrLf
+      & "Prisma Net : informacion@diskcoversystem.com " & vbCrLf _
+      & "Teléfonos  : 098-652-4396 " & vbCrLf
   AnchoWeb = Escribir_Texto_Picture_Ancho(NPicture, msg)
   PCol = MDI_X_Max - AnchoWeb - 120
   'PFil = 4000
@@ -2068,56 +2101,56 @@ Dim FinEjecucion As Boolean
 
   AltoLetra = NPicture.TextHeight(MidStrg(msg, 1, 1))
   PCol = 100
-  PFil = 1250
+  PFil = 1500
   Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Color1, Color2, PictTexto
    
   NPicture.FontSize = 14
-  'NPicture.Font = TipoArial
   NPicture.FontItalic = False
   NPicture.FontBold = True
   NPicture.FontSize = 30
   NPicture.ForeColor = Blanco
-  NPicture.FontName = TipoConsola 'TipoTimes
+  NPicture.FontName = TipoConsola
   AnchoWeb = NPicture.TextWidth(Web)
-  PFil = 1300
+  PFil = MDI_Y_Max - 1600
   PCol = (Screen.width - AnchoWeb) / 2
   NPicture.CurrentY = PFil
   NPicture.CurrentX = PCol  '150
-  
   Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Color1, Color2, Web
-''
+
 ''  NPicture.Print Web
 ''  NPicture.ForeColor = Color2 'Rojo
 ''  NPicture.CurrentY = PFil + 20
 ''  NPicture.CurrentX = PCol + 30
 ''  NPicture.Print Web
   
+  msg = "Quito - Ecuador"
   NPicture.FontItalic = False
   NPicture.FontBold = True
   NPicture.FontSize = 16
   NPicture.ForeColor = Blanco
   NPicture.FontName = TipoConsola 'TipoTimes
-  AnchoWeb = NPicture.TextWidth("Quito - Ecuador")
-  PFil = Screen.Height - 2400
-  PCol = (Screen.width - AnchoWeb) / 2
+  AnchoWeb = NPicture.TextWidth(msg)
+  PFil = MDI_Y_Max - 700
+  PCol = (MDI_X_Max - AnchoWeb) / 2
   NPicture.CurrentY = PFil
   NPicture.CurrentX = PCol  '150
-  NPicture.Print "Quito - Ecuador"
+  NPicture.Print msg
   NPicture.ForeColor = Color2 'Rojo
   NPicture.CurrentY = PFil + 20
   NPicture.CurrentX = PCol + 30
-  NPicture.Print "Quito - Ecuador"
+  NPicture.Print msg
   
   If EstadoEmpresa <> "OK" Then
+     If Len(DescripcionEstado) = 1 Then DescripcionEstado = "EMPRESA SIN DEFINIR SU ESTADO"
      NPicture.FontName = TipoVerdana
      NPicture.FontItalic = False
      NPicture.FontSize = 32
      AnchoWeb = NPicture.TextWidth(DescripcionEstado)
      PCol = (MDI_X_Max - AnchoWeb) / 2
      AnchoWeb = NPicture.TextHeight("H")
-     PFil = (MDI_Y_Max - AnchoWeb) / 2
+     PFil = (MDI_Y_Max - AnchoWeb) / 3
      NPicture.ForeColor = Blanco
-     
+     AltoWeb = PFil
      NPicture.CurrentY = PFil
      NPicture.CurrentX = PCol
      NPicture.Print DescripcionEstado
@@ -2142,19 +2175,34 @@ Dim FinEjecucion As Boolean
      End Select
      NPicture.PaintPicture LoadPicture(RutaDestino), PCol, PFil, 2500, 2000
      ContadorEstados = ContadorEstados + 1
-     Cadena = "" _
-            & DescripcionEstado & vbCrLf _
-            & String(65, "_") & vbCrLf & vbCrLf _
-            & "COMUNIQUECE A SU DISTRIBUIDOR DEL SISTEMA, " _
-            & "O A NUESTRO CENTRO DE ATENCION AL CLIENTE: " _
-            & "TELEFONOS: 098-652-4396/098-910-5300/099-965-4196" & vbCrLf _
-            & "EMAIL: prisma_net@hotmail.es/asistencia@diskcoversystem.com" & vbCrLf & vbCrLf _
-            & "QUITO - ECUADOR"
-     If ContadorEstados > 5 Then
-        MsgBox Cadena, vbExclamation, ">>>>>  M E N S A J E   D E   A D V E R T E N C I A  <<<<<"
+     If ContadorEstados > 6 Then
+        Cadena = String(43, "_") & " " & vbCrLf _
+               & " " & vbCrLf _
+               & "M E N S A J E   D E   A D V E R T E N C I A" & vbCrLf _
+               & "COMUNIQUECE AL DISTRIBUIDOR DEL SISTEMA, " & vbCrLf _
+               & "O A NUESTRO CENTRO DE ATENCION AL CLIENTE: " & vbCrLf _
+               & "TELEFONOS: 098-910-5300/099-965-4196 " & vbCrLf _
+               & "EMAILS: prisma_net@hotmail.es " & vbCrLf _
+               & "        soporte@diskcoversystem.com " & vbCrLf _
+               & String(43, "_") & " "
+        NPicture.Font = TipoCourierNew
+        NPicture.FontSize = 18
+        NPicture.FontBold = True
+        AnchoWeb = Escribir_Texto_Picture_Ancho(NPicture, Cadena)
+        PCol = (MDI_X_Max - AnchoWeb) / 2
+        PFil = AltoWeb + 1000
+        Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Blanco, Rojo, Cadena
         ContadorEstados = 0
      End If
      If FinEjecucion Then
+        Cadena = String(64, "_") & " " & vbCrLf _
+               & "M E N S A J E   D E   B L O Q U E O   D E F I N I T I V O" & vbCrLf _
+               & " " & vbCrLf _
+               & "COMUNIQUECE AL DISTRIBUIDOR DEL SISTEMA, O A NUESTRO " _
+               & "CENTRO DE ATENCION AL CLIENTE: " & vbCrLf _
+               & "TELEFONOS: 098-910-5300/099-965-4196 " & vbCrLf _
+               & "EMAILS: prisma_net@hotmail.es/soporte@diskcoversystem.com " & vbCrLf _
+               & String(64, "_") & " "
         MsgBox Cadena, vbCritical, ">>>>>  M E N S A J E   D E   A D V E R T E N C I A  <<<<<"
         End
      End If
@@ -2230,26 +2278,10 @@ Dim HalfHeight As Single
        TiempoSistema = Time
       '-------------------------------------------------------------------------------
        If Len(NumEmpresa) >= 3 And Len(NumModulo) > 1 And Len(CodigoUsuario) > 1 Then
-         'Contador de Fondos y Verificacion de Fondos de Pantalla
-          Mes = Format$(Month(FechaSistema), "00")
-          Cadena = Dir(RutaSistema & "\FONDOS\M" & Mes & "\*.jpg", vbNormal)
-          ContadorFondos = 0
-          Do While Cadena <> ""
-             If Cadena <> "." And Cadena <> ".." Then
-                If (GetAttr(RutaSistema & "\FONDOS\M" & Mes & "\" & Cadena) And vbNormal) = vbNormal Then
-                   ReDim Preserve Fondos_Pantalla(ContadorFondos) As String
-                   Fondos_Pantalla(ContadorFondos) = RutaSistema & "\FONDOS\M" & Mes & "\" & Cadena
-                   ContadorFondos = ContadorFondos + 1
-                End If
-             End If
-             Cadena = Dir
-          Loop
-          ContadorFondos = UBound(Fondos_Pantalla)
           Cadena = ""
           
           NombFilePict = CodigoUsuario & NumEmpresa & NumModulo
-         'MsgBox NombFilePict
-         'MsgBox MDI_X_Max & vbCrLf & MDI_Y_Max
+         'MsgBox NombFilePict & vbCrLf & MDI_X_Max & " x " & MDI_Y_Max
           EstadoEmpresa = ""
           ComunicadoEntidad = ""
           MensajeEmpresa = ""
@@ -2327,19 +2359,29 @@ Dim HalfHeight As Single
                    & "WHERE Item = '" & NumEmpresa & "' " _
                    & "AND Fecha_CE <> '" & BuscarFecha(Fecha_CE) & "' "
               Ejecutar_SQL_SP sSQL
+              
+              Lista_Mensaje_SP_MySQL TextoFile
+              If Len(TextoFile) <= 3 Then
+''                 TextoFile = ""
+''                 For I = 1 To 10
+''                     TextoFile = TextoFile & " " & vbCrLf
+''                 Next I
+                 TextoFile = "DISKCOVER SYSTEM AHORA EN LAS NUBLES (CLOUD) "
+              End If
           Else
-              MsgBox IP_PC.Status & vbCrLf & vbCrLf & "Comuniquese con su Administrador de Redes"
+''              TextoFile = ""
+''              For I = 1 To 10
+''                  TextoFile = TextoFile & " " & vbCrLf
+''              Next I
+              TextoFile = "DISKCOVER SYSTEM AHORA EN LAS NUBLES (CLOUD) " & vbCrLf & " " & vbCrLf & "COMUNIQUESE CON SU ADMINISTRADOR DE LA RED "
           End If
            
          'MsgBox DescripcionEstado
-          TextoFile = "DiskCover System ahora en las Nubes "
-          Lista_Mensaje_SP_MySQL TextoFile
-          If Len(TextoFile) <= 3 Then TextoFile = "DiskCover System ahora en las Nubes "
           
         'Colocamos el grafico si existe ya hecho en otras secciones sino colocamos el por default
          RutaDestino1 = RutaSistema & "\FONDOS\USUARIOS\" & NombFilePict & ".jpg"
          If Dir(RutaDestino1) = "" Then RutaDestino1 = RutaSistema & "\INICIO.jpg"
-         MDIFormulario.PictMDI.PaintPicture LoadPicture(RutaDestino1), 5, 1150, MDI_X_Max, MDI_Y_Max - 1000
+         'MDIFormulario.PictMDI.PaintPicture LoadPicture(RutaDestino1), 5, 1150, MDI_X_Max, MDI_Y_Max - 1000
          
         'Recuperamos el archivo de Fondo
          Cont_Arch = 1
@@ -2348,10 +2390,13 @@ Dim HalfHeight As Single
          If RND_Files < 1 Then RND_Files = 1
          If RND_Files > ContadorFondos Then RND_Files = ContadorFondos - 1
          RutaOrigen1 = Fondos_Pantalla(RND_Files)
+         
+        'De donde empieza a generarel grafico informativo de la Empresa
+        '==============================================================
+         MDIFormulario.PictMDI.Height = MDI_Y_Max
          MDIFormulario.PictMDI.Visible = True
          MDIFormulario.PictMDI.AutoRedraw = True
-         MDIFormulario.PictMDI.Height = MDI_Y_Max
-         MDIFormulario.PictMDI.PaintPicture LoadPicture(RutaOrigen1), 5, 1150, MDI_X_Max, MDI_Y_Max - 1000
+         MDIFormulario.PictMDI.PaintPicture LoadPicture(RutaOrigen1), 5, 1400, MDI_X_Max, MDI_Y_Max - 1000
          
         'Escribe el texto de los logos y los datos de la empresa
          Escribir_Texto_Picture MDIFormulario.PictMDI, TextoFile  'Msg
@@ -5937,7 +5982,7 @@ Public Function Digito_Verificador(NumeroRUC As String) As String
   'SP que determinar que tipo de contribuyente es y el codigo si es pasaporte
    Digito_Verificador_SP NumeroRUC
    If Tipo_RUC_CI.Tipo_Beneficiario <> "R" And Len(Tipo_RUC_CI.RUC_CI) = 13 Then
-      If Ping_PC("srienlinea.sri.gob.ec") And UCase(GetUrlSource(urlEsUnRUC & Tipo_RUC_CI.RUC_CI)) = "TRUE" Then
+      If Ping_IP("srienlinea.sri.gob.ec") And UCase(GetUrlSource(urlEsUnRUC & Tipo_RUC_CI.RUC_CI)) = "TRUE" Then
          Tipo_RUC_CI.Tipo_Beneficiario = "R"
          Tipo_RUC_CI.Codigo_RUC_CI = MidStrg(Tipo_RUC_CI.RUC_CI, 1, 10)
          Tipo_RUC_CI.Digito_Verificador = MidStrg(Tipo_RUC_CI.RUC_CI, 10, 1)
@@ -7460,7 +7505,30 @@ Dim Results As String
      End If
   End If
   RatonNormal
-  Leer_Archivo_Texto = TrimStrg(TextFile)
+  Leer_Archivo_Texto = Trim(TextFile)
+End Function
+
+Public Function Leer_Archivo_Plano(RutaFile As String) As String
+Dim NumFile As Long
+Dim TextFile As String
+Dim LineFile As String
+Dim Results As String
+  RatonReloj
+  TextFile = ""
+  If Len(RutaFile) > 1 Then
+     Results = Dir$(RutaFile)
+     If Results <> "" Then
+        NumFile = FreeFile
+        Open RutaFile For Input As #NumFile
+        Do While Not EOF(NumFile)
+           Line Input #NumFile, LineFile
+           TextFile = TextFile & LineFile & vbCrLf
+        Loop
+        Close #NumFile
+     End If
+  End If
+  RatonNormal
+  Leer_Archivo_Plano = TextFile
 End Function
 
 Public Sub Escribir_Archivo(RutaFile As String, TextFile As String)
@@ -8299,8 +8367,8 @@ End Sub
 
 Public Sub TVAddNode(ByRef XML_Node As IXMLDOMNode, _
                      ByRef TVTreeView As TreeView, _
-                     Optional ByRef TreeNode As node)
-Dim xNode As node
+                     Optional ByRef TreeNode As Node)
+Dim xNode As Node
 Dim xNodeList As IXMLDOMNodeList
 Dim I As Long
     
@@ -8476,7 +8544,7 @@ Dim Result As Tipo_Contribuyente
         .MicroEmpresa = Ninguno
     End With
     
-    If Len(NumRUC) = 13 And Ping_PC("srienlinea.sri.gob.ec") And UCase(GetUrlSource(urlEsUnRUC & NumRUC)) = "TRUE" Then
+    If Len(NumRUC) = 13 And Ping_IP("srienlinea.sri.gob.ec") And UCase(GetUrlSource(urlEsUnRUC & NumRUC)) = "TRUE" Then
       'Verificamos que tipo de contribuyente es
        Tipo_Contribuyente_SP_MySQL NumRUC, Result.MicroEmpresa, Result.AgenteRetencion
        Result.Existe = True
@@ -8553,7 +8621,7 @@ End Function
 '''Dim Resultado As Boolean
 '''    Resultado = True
 '''    If IP_PC.InterNet Then
-'''       If Not Ping_PC(IPServidor) Then
+'''       If Not Ping_IP(IPServidor) Then
 '''          MsgBox "LA CONEXION NO ESTA ESTABLECIDA, POR FAVOR LLAME AL ADMINISTRADOR DEL SISTEMA PARA QUE ACTIVE EL SERVIDOR " & vbCrLf & IP_PC.Status
 '''          Resultado = False
 '''       End If

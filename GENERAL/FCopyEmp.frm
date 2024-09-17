@@ -455,7 +455,7 @@ Dim NombreTabla   As String
    If .RecordCount > 0 Then
       .MoveFirst
       .Find ("Empresa LIKE '" & Cadena & "' ")
-       If Not .EOF Then NumItem = .Fields("Item")
+       If Not .EOF Then NumItem = .fields("Item")
    End If
   End With
   
@@ -471,19 +471,19 @@ Dim NombreTabla   As String
               & "Este proceso reemplazará la informacion en la empresa actual."
      Titulo = "Pregunta de Copia"
      If BoxMensaje = vbYes Then
-        For i = 0 To LstTablas.ListCount - 1
-            If LstTablas.Selected(i) Then
+        For I = 0 To LstTablas.ListCount - 1
+            If LstTablas.Selected(I) Then
                Existe_Fecha = False
                Existe_Codigo = False
-               NombreTabla = LstTablas.Selected(i)
+               NombreTabla = LstTablas.Selected(I)
               'Leemos datos origen
                sSQL = "SELECT TOP 1 * " _
                     & "FROM " & NombreTabla & " " _
                     & "WHERE Item = '" & NumItem & "' "
                Select_Adodc AdoCopyOrigen, sSQL
-               For J = 0 To AdoCopyOrigen.Recordset.Fields.Count - 1
-                   If AdoCopyOrigen.Recordset.Fields(J).Name = "Fecha" Then Existe_Fecha = True
-                   If AdoCopyOrigen.Recordset.Fields(J).Name = "Codigo" Then Existe_Codigo = True
+               For J = 0 To AdoCopyOrigen.Recordset.fields.Count - 1
+                   If AdoCopyOrigen.Recordset.fields(J).Name = "Fecha" Then Existe_Fecha = True
+                   If AdoCopyOrigen.Recordset.fields(J).Name = "Codigo" Then Existe_Codigo = True
                Next J
                
                sSQL = "SELECT * " _
@@ -499,17 +499,17 @@ Dim NombreTabla   As String
                        sSQL = "SELECT * " _
                             & "FROM " & NombreTabla & " " _
                             & "WHERE Item = '" & NumEmpresa & "' "
-                       For J = 0 To .Fields.Count - 1
-                           If .Fields(J).Name <> "ID" Or .Fields(J).Name <> "Item" Then
-                               Select Case .Fields(J).Type
+                       For J = 0 To .fields.Count - 1
+                           If .fields(J).Name <> "ID" Or .fields(J).Name <> "Item" Then
+                               Select Case .fields(J).Type
                                  Case TadBoolean
-                                      sSQL = sSQL & "AND " & .Fields(J).Name & " = " & CBool(.Fields(J)) & " "
+                                      sSQL = sSQL & "AND " & .fields(J).Name & " = " & CBool(.fields(J)) & " "
                                  Case TadText, TadMemo
-                                      sSQL = sSQL & "AND " & .Fields(J).Name & " = '" & .Fields(J) & "' "
+                                      sSQL = sSQL & "AND " & .fields(J).Name & " = '" & .fields(J) & "' "
                                  Case TadDate, TadDate1
-                                      sSQL = sSQL & "AND " & .Fields(J).Name & " = #" & BuscarFecha(.Fields(J)) & "# "
+                                      sSQL = sSQL & "AND " & .fields(J).Name & " = #" & BuscarFecha(.fields(J)) & "# "
                                  Case TadByte, TadInteger, TadLong, TadCurrency, TadSingle, TadDouble
-                                      sSQL = sSQL & "AND " & .Fields(J).Name & " = " & .Fields(J) & " "
+                                      sSQL = sSQL & "AND " & .fields(J).Name & " = " & .fields(J) & " "
                                End Select
                            End If
                        Next J
@@ -519,14 +519,14 @@ Dim NombreTabla   As String
                       'Insertamos el registro en la tabla destino
                        If RegInsertarDB.RecordCount <= 0 Then
                           SetAdoAddNew NombreTabla
-                          For J = 0 To .Fields.Count - 1
-                              Select Case .Fields(J).Name
+                          For J = 0 To .fields.Count - 1
+                              Select Case .fields(J).Name
                                 Case "Item"
-                                     SetAdoFields .Fields(J).Name, NumEmpresa
+                                     SetAdoFields .fields(J).Name, NumEmpresa
                                 Case "ID"
                                     'No hace nada
                                 Case Else
-                                     SetAdoFields .Fields(J).Name, .Fields(J)
+                                     SetAdoFields .fields(J).Name, .fields(J)
                               End Select
                           Next J
                           SetAdoUpdate
@@ -537,7 +537,7 @@ Dim NombreTabla   As String
                 End If
                End With
             End If
-        Next i
+        Next I
         RatonNormal
         MsgBox "Proceso terminado con éxito"
         Unload FCopyEmpresa
@@ -561,29 +561,29 @@ Private Sub Command4_Click()
       .Find ("Entidad_Comercial = '" & DLEntidad & "' ")
        If Not .EOF Then
          'Determinar que tipo de bases que utilizamos
-          Select Case .Fields("Tipo_Base")
+          Select Case .fields("Tipo_Base")
             Case "SQL SERVER"
-                 AdoStrCnnBackup = "Data Source=" & .Fields("IP_VPN_RUTA") & ";" & vbCrLf _
-                                 & "Initial Catalog=" & .Fields("Base_Datos") & ";" & vbCrLf _
+                 AdoStrCnnBackup = "Data Source=" & .fields("IP_VPN_RUTA") & ";" & vbCrLf _
+                                 & "Initial Catalog=" & .fields("Base_Datos") & ";" & vbCrLf _
                                  & "Provider=SQLOLEDB.1;" & vbCrLf _
-                                 & "UID=" & .Fields("Usuario_DB") & ";" & vbCrLf _
-                                 & "PWD=" & .Fields("Contraseña_DB") & ";"
+                                 & "UID=" & .fields("Usuario_DB") & ";" & vbCrLf _
+                                 & "PWD=" & .fields("Contraseña_DB") & ";"
                  SQL_Server = True
             Case "MY SQL"
                  AdoStrCnnBackup = "DRIVER={MySQL ODBC 3.51 Driver};" & vbCrLf _
-                                 & "SERVER=" & .Fields("IP_VPN_RUTA") & ";" & vbCrLf _
-                                 & "DATABASE=" & .Fields("Base_Datos") & ";" & vbCrLf _
-                                 & "USER=" & .Fields("Usuario_DB") & ";" & vbCrLf _
-                                 & "PASSWORD=" & .Fields("Contraseña_DB") & ";" & vbCrLf _
-                                 & "PORT=" & .Fields("Puerto") & ";" & vbCrLf _
+                                 & "SERVER=" & .fields("IP_VPN_RUTA") & ";" & vbCrLf _
+                                 & "DATABASE=" & .fields("Base_Datos") & ";" & vbCrLf _
+                                 & "USER=" & .fields("Usuario_DB") & ";" & vbCrLf _
+                                 & "PASSWORD=" & .fields("Contraseña_DB") & ";" & vbCrLf _
+                                 & "PORT=" & .fields("Puerto") & ";" & vbCrLf _
                                  & "OPTION=3;"
             Case "ACCESS"
-                 AdoStrCnnBackup = "Data Source=" & .Fields("IP_VPN_DB") & "\" & .Fields("Base_Datos") & ".MDB;" & vbCrLf _
+                 AdoStrCnnBackup = "Data Source=" & .fields("IP_VPN_DB") & "\" & .fields("Base_Datos") & ".MDB;" & vbCrLf _
                                  & "Provider=Microsoft.Jet.OLEDB.4.0;" & vbCrLf _
                                  & "Persist Security Info=False;"
           End Select
          'MsgBox recuperar_IP(.Fields("IP_VPN_RUTA"))
-          If Not Ping_PC(.Fields("IP_VPN_RUTA")) Then
+          If Not Ping_IP(.fields("IP_VPN_RUTA")) Then
              MsgBox "LA CONEXION NO ESTA ESTABLECIDA" & vbCrLf _
                   & "POR FAVOR LLAME AL ADMINISTRADOR" & vbCrLf _
                   & "PARA QUE CONECTE LA VPN"
@@ -685,9 +685,9 @@ Dim Conexiones() As Tipo_Conexion
      End If
      RstSchema.MoveNext
   Loop
-  For i = 0 To LstTablas.ListCount - 1
-      LstTablas.Selected(i) = True
-  Next i
+  For I = 0 To LstTablas.ListCount - 1
+      LstTablas.Selected(I) = True
+  Next I
   RstSchema.Close
   AdoCon1.Close
 '=======================================================================
@@ -742,14 +742,14 @@ Private Sub DLEntidad_KeyUp(KeyCode As Integer, Shift As Integer)
       .MoveFirst
       .Find ("Entidad_Comercial = '" & DLEntidad & "' ")
        If Not .EOF Then
-          TxtReferencia = "IP VPN    : " & .Fields("IP_VPN_RUTA") & vbCrLf _
-                        & "USUARIO   : " & .Fields("Usuario_PC") & vbCrLf _
-                        & "CLAVE     : " & .Fields("Contraseña_PC") & vbCrLf _
-                        & "BASE DATOS: " & .Fields("Base_Datos") & vbCrLf _
-                        & "CLAVE DB  : " & .Fields("Contraseña_DB") & vbCrLf _
-                        & "PUERTO    : " & .Fields("Puerto") & vbCrLf _
-                        & "TEAMVIEWER: " & .Fields("ID_Conexion") & vbCrLf _
-                        & "CLAVE TVW : " & .Fields("ID_Clave")
+          TxtReferencia = "IP VPN    : " & .fields("IP_VPN_RUTA") & vbCrLf _
+                        & "USUARIO   : " & .fields("Usuario_PC") & vbCrLf _
+                        & "CLAVE     : " & .fields("Contraseña_PC") & vbCrLf _
+                        & "BASE DATOS: " & .fields("Base_Datos") & vbCrLf _
+                        & "CLAVE DB  : " & .fields("Contraseña_DB") & vbCrLf _
+                        & "PUERTO    : " & .fields("Puerto") & vbCrLf _
+                        & "TEAMVIEWER: " & .fields("ID_Conexion") & vbCrLf _
+                        & "CLAVE TVW : " & .fields("ID_Clave")
        End If
    End If
   End With

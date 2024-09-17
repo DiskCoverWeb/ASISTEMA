@@ -18,13 +18,13 @@ Begin VB.Form FRecaudacionBancosCxC
    WindowState     =   2  'Maximized
    Begin MSComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
-      Height          =   660
+      Height          =   900
       Left            =   0
       TabIndex        =   0
       Top             =   0
       Width           =   12300
       _ExtentX        =   21696
-      _ExtentY        =   1164
+      _ExtentY        =   1588
       ButtonWidth     =   1482
       ButtonHeight    =   1429
       AllowCustomize  =   0   'False
@@ -1653,40 +1653,41 @@ Dim AuxNumEmp As String
   ReDim Preserve CamposFile(100) As Campos_Tabla
   NumFile = FreeFile
   Open RutaGeneraFile For Input As #NumFile
-    Do While Not EOF(NumFile)
        Line Input #NumFile, Cod_Field
        If Separador = Ninguno Then
           If InStr(Cod_Field, vbTab) > 0 Then Separador = vbTab
        End If
-       If Contador = 0 Then
-          Do While Len(Cod_Field) > 2
-             No_Hasta = InStr(Cod_Field, Separador)
-             
-             CamposFile(CantCampos).Campo = "C" & Format$(CantCampos, "00")
-             If No_Hasta > 1 Then
-                CampoTemp = TrimStrg(MidStrg(Cod_Field, 1, No_Hasta - 1))
-                Select Case TextoBanco
-                  Case "PICHINCHA"
-                       If CantCampos = 14 And TxtOrden = CampoTemp Then
-                          Orden_Pago = CampoTemp  ' Orden No
-                          OrdenValida = True
-                       End If
-                       'MsgBox CantCampos & " _ " & CampoTemp
-                  Case Else
-                       OrdenValida = True
-                End Select
-                Cod_Field = TrimStrg(MidStrg(Cod_Field, No_Hasta + 1, Len(Cod_Field)))
-             Else
-                Cod_Field = ""
-             End If
-             CantCampos = CantCampos + 1
-          Loop
-       End If
-       Contador = Contador + 1
-    Loop
+       Do While Len(Cod_Field) > 2
+          No_Hasta = InStr(Cod_Field, Separador)
+          CamposFile(CantCampos).Campo = "C" & Format$(CantCampos, "00")
+          If No_Hasta > 1 Then
+             CampoTemp = TrimStrg(MidStrg(Cod_Field, 1, No_Hasta - 1))
+             Select Case TextoBanco
+               Case "PICHINCHA"
+                  If CantCampos = 14 And TxtOrden = CampoTemp Then
+                     Orden_Pago = CampoTemp  ' Orden No
+                     OrdenValida = True
+                  End If
+                  'MsgBox CantCampos & " _ " & CampoTemp
+               Case Else
+                  OrdenValida = True
+             End Select
+             Cod_Field = TrimStrg(MidStrg(Cod_Field, No_Hasta + 1, Len(Cod_Field)))
+          Else
+             Cod_Field = ""
+          End If
+          CantCampos = CantCampos + 1
+       Loop
   Close #NumFile
+  
   Total_Alumnos = Contador
- 'MsgBox Total_Alumnos & vbCrLf & CantCampos & vbCrLf & OrdenValida
+  
+  Cadena = ""
+  For I = 0 To CantCampos - 1
+      Cadena = Cadena & CamposFile(I).Campo & vbCrLf
+  Next I
+  'MsgBox Total_Alumnos & " - " & CantCampos & " - " & OrdenValida & vbCrLf & String(100, "_") & vbCrLf & Cadena
+  
   Progreso_Barra.Valor_Maximo = (Total_Alumnos * 3) + 100
   
   If Not OrdenValida Then
@@ -1818,7 +1819,7 @@ Dim AuxNumEmp As String
                     TipoDoc = CamposFile(7).Valor
                     TipoProc = SinEspaciosDer(TipoDoc)
                     TipoDoc = TrimStrg(MidStrg(TipoDoc, 1, Len(TipoDoc) - Len(TipoProc)))
-                    
+
                     TA.Serie = SinEspaciosDer(TipoDoc)                              ' Serie
                     TA.Factura = Val(CamposFile(35).Valor)                          ' Factura
                     TA.CodigoC = CamposFile(4).Valor                                ' Codigo Cliente
@@ -1968,8 +1969,11 @@ Dim AuxNumEmp As String
                   & "AND Factura = " & TA.Factura & " " _
                   & "AND Saldo_MN > 0 "
              Select_Adodc AdoAbono, sSQL
+             
              AbonosPar = NombreCliente & " (" & TA.CodigoC & "): Valor Abono: " & Format$(TA.Abono, "#,##0.00")
-            'MsgBox CodigoP & " - " & Total & ", Cliente: " & NombreCliente
+             
+             ''If InStr(NombreCliente, "GOMEZCOELLO") > 0 Then MsgBox CodigoP & " - " & Total & ", Cliente: " & NombreCliente
+             
              If AdoAbono.Recordset.RecordCount > 0 Then
                 FA.Fecha = AdoAbono.Recordset.fields("Fecha")
                 TA.Cta_CxP = AdoAbono.Recordset.fields("Cta_CxP")
@@ -2008,6 +2012,7 @@ Dim AuxNumEmp As String
                         & "Documento" & vbTab & ": " & TA.Recibo_No & vbCrLf _
                         & "Valor Recibdo USD " & Format(TA.Abono, "#,##0.00") & vbCrLf
                 SRI_Enviar_Mails FA, SRI_Autorizacion, "AB"
+                
              End If
           End If
          'MsgBox NombreCliente & vbCrLf & CodigoCli & vbCrLf & CodigoP

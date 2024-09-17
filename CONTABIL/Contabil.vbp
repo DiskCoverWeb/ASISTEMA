@@ -139,6 +139,7 @@ Form=ChangeCa.frm
 Module=JSON; ..\MODULOS\JSON.bas
 Class=cJSONScript; ..\CLASES\cJSONScript.cls
 Class=cStringBuilder; ..\CLASES\cStringBuilder.cls
+Class=cPing; ..\CLASES\cPing.cls
 IconForm="MDIConta"
 Startup="MDIConta"
 HelpFile=""

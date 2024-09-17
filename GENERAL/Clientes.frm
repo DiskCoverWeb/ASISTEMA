@@ -14,8 +14,8 @@ Begin VB.Form FClientes
    ClientWidth     =   14715
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   15615
-   ScaleWidth      =   28560
+   ScaleHeight     =   9330
+   ScaleWidth      =   14715
    WindowState     =   1  'Minimized
    Begin ComctlLib.Toolbar TBarCliente 
       Align           =   1  'Align Top
@@ -82,7 +82,6 @@ Begin VB.Form FClientes
             ImageIndex      =   8
          EndProperty
          BeginProperty Button9 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   ""
             Object.Tag             =   ""
             ImageIndex      =   9
             Style           =   3
@@ -101,7 +100,6 @@ Begin VB.Form FClientes
             ImageIndex      =   10
          EndProperty
          BeginProperty Button12 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   ""
             Object.Tag             =   ""
             ImageIndex      =   11
             Style           =   3
@@ -3695,6 +3693,9 @@ End Sub
 ''End Sub
 
 Private Sub Form_Activate()
+  If Modulo = "FACTURACION" Then Actualizar_Datos_Representantes_SP
+  
+  Actualiza_Buses = Leer_Campo_Empresa("Actualizar_Buses")
 
   sSQL = "SELECT Codigo, Ejecutivo, Porc_Com " _
        & "FROM Catalogo_Rol_Pagos " _
@@ -3840,7 +3841,8 @@ Private Sub Form_Activate()
   End With
   CProvincia.AddItem "OTRO"
   CProvincia.Text = "PICHINCHA"
-  sSQL = "SELECT TOP 50 CI_RUC, Cliente " _
+  
+  sSQL = "SELECT TOP 50 Codigo, CI_RUC, Cliente " _
        & "FROM Clientes "
   If Modulo = "FACTURACION" Then
      If Mas_Grupos Then sSQL = sSQL & "WHERE DirNumero = '" & NumEmpresa & "' "
@@ -3852,6 +3854,7 @@ Private Sub Form_Activate()
   sSQL = sSQL _
        & "ORDER BY Cliente "
   SelectDB_Combo DCCliente, AdoCliente, sSQL, "Cliente"
+  
   DCCliente.Text = "CONSUMIDOR FINAL"
   'ProgBar.width = MDI_X_Max - 100
   LblSRI.width = MDI_X_Max - LblSRI.Left - 100
@@ -3917,9 +3920,6 @@ Private Sub Form_Load()
    ConectarAdodc AdoListCtas
    ConectarAdodc AdoTarjetas
    ConectarAdodc AdoCreditos
-   
-   If Modulo = "FACTURACION" Then Actualizar_Datos_Representantes_SP
-   Actualiza_Buses = Leer_Campo_Empresa("Actualizar_Buses")
 End Sub
 
 Private Sub LstCampos_KeyDown(KeyCode As Integer, Shift As Integer)

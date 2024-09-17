@@ -976,17 +976,7 @@ Dim SiActualizar As Boolean
                .Update
             End If
          End If
-
-         If Not PCActivo Then
-            Cadena = NombreUsuario & vbCrLf & "Su Equipo se encuentra en LISTA NEGRA, ingreso no autorizado, comuniquese con el Administrador del Sistema"
-            MsgBox UCaseStrg(Cadena), vbCritical, "ACCESO DEL PC DENEGADO"
-            End
-         End If
-         If Not EstadoUsuario Then
-            Cadena = NombreUsuario & vbCrLf & "Su ingreso no esta autorizado, comuniquese con el Administrador del Sistema"
-            MsgBox UCaseStrg(Cadena), vbCritical, "ACCESO AL SISTEMA DENEGADO"
-            End
-         End If
+         
          Contador = 0
          ContadorRUCCI = 0
          NumItemTemp = NumEmpresa
@@ -1006,6 +996,17 @@ Dim SiActualizar As Boolean
         'MsgBox LogoTipo
          Carpeta = .fields("SubDir")
          EmpresaActual = "[" & RutaEmpresa & "]."
+                  
+         If Not PCActivo Then
+            Cadena = NombreUsuario & vbCrLf & "Su Equipo se encuentra en LISTA NEGRA, ingreso no autorizado, comuniquese con el Administrador del Sistema"
+            MsgBox UCaseStrg(Cadena), vbCritical, "ACCESO DEL PC DENEGADO"
+            End
+         End If
+         If Not EstadoUsuario Then
+            Cadena = NombreUsuario & vbCrLf & "Su ingreso no esta autorizado, comuniquese con el Administrador del Sistema"
+            MsgBox UCaseStrg(Cadena), vbCritical, "ACCESO AL SISTEMA DENEGADO"
+            End
+         End If
      Else
          NumEmpresa = Ninguno
      End If
@@ -1209,8 +1210,8 @@ Dim SiActualizar As Boolean
    'Ver_Grafico_FormPict
     
     Select Case Ambiente
-      Case "1": If Not Ping_PC("celcer.sri.gob.ec") Then Cadena = Replace(ServidorEnLineaSRI, "XXXX", "Prueba") Else Cadena = ""
-      Case "2": If Not Ping_PC("cel.sri.gob.ec") Then Cadena = Replace(ServidorEnLineaSRI, "XXXX", "Produccion") Else Cadena = ""
+      Case "1": If Not Ping_IP("celcer.sri.gob.ec") Then Cadena = Replace(ServidorEnLineaSRI, "XXXX", "Prueba") Else Cadena = ""
+      Case "2": If Not Ping_IP("cel.sri.gob.ec") Then Cadena = Replace(ServidorEnLineaSRI, "XXXX", "Produccion") Else Cadena = ""
       Case Else: Cadena = ""
     End Select
     Control_Procesos Normal, "Ingreso a " & Empresa, "R.U.C. " & RUC & ", Item: " & NumEmpresa
@@ -1248,6 +1249,8 @@ Dim SiActualizar As Boolean
         .MensajeHTML = ""
         .para = ""
     End With
+    
+    TiempoSistema = Time - 0.01
     
     RatonNormal
     Unload ListEmp
@@ -1390,7 +1393,7 @@ Private Sub Command1_Click()
                            & "Provider=Microsoft.Jet.OLEDB.4.0;" _
                            & "Persist Security Info=False;"
           End Select
-'          If Ping_PC(strIPServidor) Then
+'          If Ping_IP(strIPServidor) Then
             'Buscamos la cadena de conección a la base en SQL SERVER
              ConectarAdodc AdoAux
              ConectarAdodc AdoEmp
@@ -1620,16 +1623,39 @@ Dim LineaTexto As String
 Dim MiArchivo, MiRuta, MiNombre
 Dim Txt_SMTP_Mails As String
    
-   RatonReloj
-   HayCnn = Get_WAN_IP
+    RatonReloj
+   'Obtenemos la fecha del Sistema
+    FechaSistema = Format$(date, FormatoFechas)
+    
+   'Contador de Fondos y Verificacion de Fondos de Pantalla
+    Mes = Format$(Month(FechaSistema), "00")
+    Cadena = Dir(RutaSistema & "\FONDOS\M" & Mes & "\*.jpg", vbNormal)
+    ContadorFondos = 0
+    Do While Cadena <> ""
+       If Cadena <> "." And Cadena <> ".." Then
+          If (GetAttr(RutaSistema & "\FONDOS\M" & Mes & "\" & Cadena) And vbNormal) = vbNormal Then
+             ReDim Preserve Fondos_Pantalla(ContadorFondos) As String
+             Fondos_Pantalla(ContadorFondos) = RutaSistema & "\FONDOS\M" & Mes & "\" & Cadena
+             ContadorFondos = ContadorFondos + 1
+          End If
+       End If
+       Cadena = Dir
+    Loop
+    Cadena = ""
+    ContadorFondos = UBound(Fondos_Pantalla)
+    
+'    MsgBox MDI_X_Max & "x" & MDI_Y_Max
    
-  'MsgBox IP_PC.Nombre_PC & vbCrLf & IP_PC.IP_PC & vbCrLf & IP_PC.InterNet & vbCrLf
-   Cadena = ".." & String(Len(IP_PC.Status) * 2, "..") & ".." & vbCrLf _
-          & """" & UCase(IP_PC.Status) & """" & vbCrLf _
-          & ".." & String(Len(IP_PC.Status) * 2, "..") & ".." & vbCrLf & vbCrLf _
-          & "Su acceso al Internet es inestable, no podra autorizar los comprobantes " _
-          & "electronicos hasta que su conexion al Internet se estabilice."
-   If Not IP_PC.InterNet Then MsgBox Cadena, vbCritical, "ESTADO DE CONEXION AL INTERNET"
+   IP_PC.InterNet = Get_Internet
+'   If Not Get_Internet Then MsgBox "Este Equipo no esta conectado a Internet"
+'   HayCnn = Get_WAN_IP
+   
+  'MsgBox IP_PC.InterNet & vbCrLf & IP_PC.Nombre_PC & vbCrLf & IP_PC.IP_PC & vbCrLf & IP_PC.MAC_PC & vbCrLf & IP_PC.WAN_PC
+   If Not IP_PC.InterNet Then
+      Cadena = "Su acceso al Internet es inestable, no podra autorizar los comprobantes " _
+             & "electronicos hasta que su conexion al Internet se estabilice."
+      MsgBox Cadena, vbCritical, "ESTADO DE CONEXION AL INTERNET"
+   End If
   'Determinar que tipo de bases utilizamos
    Si_No = False
    Evaluar = False
@@ -1663,8 +1689,6 @@ Dim Txt_SMTP_Mails As String
    CodigoUsuario = Ninguno
    NombreImagenEsperar = ""
    Procesando = 0
-  'Obtenemos la fecha del Sistema
-   FechaSistema = Format$(date, FormatoFechas)
    Dia = Format$(Day(date), "00")
    Mes = Format$(Month(date), "00")
    Anio = Format$(Year(date), "0000")
@@ -1736,7 +1760,11 @@ End Sub
 
 Private Sub Lblwww_DblClick()
 Dim iRet As Long
-  iRet = Shell("rundll32.exe url.dll,FileProtocolHandler " & "https://www.diskcoversystem.com", vbMaximizedFocus)
+  If IP_PC.InterNet Then
+     iRet = Shell("rundll32.exe url.dll,FileProtocolHandler " & "https://www.diskcoversystem.com", vbMaximizedFocus)
+  Else
+     MsgBox "No puede acceder a la pagina web de www.diskcoversystem.com por que no tiene internet"
+  End If
 End Sub
 
 Private Sub TextClave_GotFocus()
@@ -2426,9 +2454,10 @@ On Error GoTo error_Handler
       'Colocamos el puerto de conexion
       .Puerto = 21
       'Establecesmo el nombre del Servidor FTP
-      'If InStr(IP_PC.IP_PC, "192.168.") > 0 Then .servidor = "192.168.27.4" Else
+      'If InStr(IP_PC.IP_PC, "192.168.27") > 0 Or InStr(IP_PC.IP_PC, "192.168.21") > 0 Then .servidor = "192.168.27.2" Else
       .servidor = ftpSvr
       'conectamos al servidor FTP. EL label es el control donde mostrar los errores y el estado de la conexión
+      'MsgBox .servidor
        If .ConectarFtp(LstStatud) = False Then
            MsgBox "No se pudo conectar al servidor de Certificados"
            Exit Sub

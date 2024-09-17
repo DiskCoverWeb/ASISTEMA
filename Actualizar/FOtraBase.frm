@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Begin VB.Form FOtraBase 
    BackColor       =   &H00C00000&
    BorderStyle     =   1  'Fixed Single
@@ -165,16 +165,16 @@ Dim AdoStrCnnTemp As String
           Modo_Educativo = False
           SQL_Server = False
           
-          strIPServidor = .Fields("IP_VPN_RUTA")
-          strNombreBaseDatos = .Fields("Base_Datos")
-          strWebServices = .Fields("WebServices")
-          strPassword = .Fields("Clave_DB")
-          strUsuario = .Fields("Usuario_DB")
-          strPuerto = .Fields("Puerto")
+          strIPServidor = .fields("IP_VPN_RUTA")
+          strNombreBaseDatos = .fields("Base_Datos")
+          strWebServices = .fields("WebServices")
+          strPassword = .fields("Clave_DB")
+          strUsuario = .fields("Usuario_DB")
+          strPuerto = .fields("Puerto")
           
-          Select Case .Fields("Tipo_Base")
+          Select Case .fields("Tipo_Base")
             Case "SQL SERVER"
-                 If .Fields("Puerto") <> 1433 Then
+                 If .fields("Puerto") <> 1433 Then
                      AdoStrCnn = "Data Source=tcp:" & strIPServidor & "," & CStr(strPuerto) & ";" & vbCrLf
                  Else
                      AdoStrCnn = "Data Source=" & strIPServidor & ";" & vbCrLf
@@ -199,7 +199,7 @@ Dim AdoStrCnnTemp As String
                            & "Persist Security Info=False;"
           End Select
 
-          If Not Ping_PC(strIPServidor) Then
+          If Not Ping_IP(strIPServidor) Then
              MsgBox "LA CONEXION NO ESTA ESTABLECIDA" & vbCrLf _
                   & "POR FAVOR LLAME AL BENEFICIARIO" & vbCrLf _
                   & "PARA QUE CONECTE LA VPN"
@@ -284,9 +284,9 @@ Private Sub DLEntidad_KeyUp(KeyCode As Integer, Shift As Integer)
       .MoveFirst
       .Find ("Entidad_Comercial = '" & DLEntidad & "' ")
        If Not .EOF Then
-          TxtReferencia = "IP VPN    : " & .Fields("IP_VPN_RUTA") & vbCrLf _
-                        & "BASE DATOS: " & .Fields("Base_Datos") & vbCrLf _
-                        & "USUARIO   : " & .Fields("Usuario_DB") & vbTab & "CLAVE DB: " & .Fields("Clave_DB")
+          TxtReferencia = "IP VPN    : " & .fields("IP_VPN_RUTA") & vbCrLf _
+                        & "BASE DATOS: " & .fields("Base_Datos") & vbCrLf _
+                        & "USUARIO   : " & .fields("Usuario_DB") & vbTab & "CLAVE DB: " & .fields("Clave_DB")
        End If
    End If
   End With

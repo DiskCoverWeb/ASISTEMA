@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "Mscomctl.ocx"
 Begin VB.MDIForm MDIRolPago 
    BackColor       =   &H00FFFFFF&
    Caption         =   "MDI"
@@ -253,25 +253,26 @@ End Sub
 
 Private Sub MDIForm_Activate()
     MDI_X_Max = Screen.width - 150
-    MDI_Y_Max = Screen.Height - 1900
+    MDI_Y_Max = Screen.Height - 1850
 End Sub
 
 Private Sub MDIForm_Load()
-  Set MDIFormulario = Me
-  Primera_Vez = True
-  Bandera = True
-  UnidadSistema
-  IngresarClave = True
+    Set MDIFormulario = Me
+    
+    Primera_Vez = True
+    Bandera = True
+    UnidadSistema
+    IngresarClave = True
 
- 'MODULOS
-  NumModulo = "0"
-  Modulo = "ROL PAGOS"
-  MenuDeModulos = True
-  TiempoSistema = Time
-  Timer1.Enabled = True
-  Timer1.Interval = 1000
-  ListEmp.Show 1
-  PonerDirEmpresa
+   'MODULOS
+    NumModulo = "0"
+    Modulo = "ROL PAGOS"
+    MenuDeModulos = True
+    TiempoSistema = Time
+    Timer1.Enabled = True
+    Timer1.Interval = 1000
+    ListEmp.Show 1
+    PonerDirEmpresa
 End Sub
 
 Private Sub MDIForm_Unload(Cancel As Integer)

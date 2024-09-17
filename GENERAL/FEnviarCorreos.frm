@@ -111,26 +111,72 @@ Dim posPuntoComa As String
     oMail.Adjunto = TMail.Adjunto
     oMail.de = TMail.de
    'Verificamos que el mail no este vacio
+    If Len(RazonSocial) > 1 Then MsgAux = RazonSocial Else MsgAux = Empresa
+    Contactos = ""
+    Insertar_Cadena Contactos, Telefono1
+    Insertar_Cadena Contactos, Telefono2
     With TMail
-        'Mensaje automatizado de
-         Contactos = ""
-         Insertar_Cadena Contactos, Telefono1
-         Insertar_Cadena Contactos, Telefono2
-         If Len(RazonSocial) > 1 Then MsgAux = RazonSocial Else MsgAux = Empresa
-         
-         'MsgBox InStr(.Mensaje, "Este correo electrónico fue generado automáticamente del Sistema Financiero")
-         If InStr(.Mensaje, "Este correo electronico fue generado automaticamente a usted desde El Sistema Financiero") = 0 Then
-           .Mensaje = .Mensaje & vbCrLf & MensajeAutomatizado
-           .Mensaje = Replace(.Mensaje, "Nombre_Usuario", NombreUsuario)
-           .Mensaje = Replace(.Mensaje, "Mensaje_Comunicado", ComunicadoEntidad)
-           .Mensaje = Replace(.Mensaje, "Representante_Legal", NombreGerente)
-           .Mensaje = Replace(.Mensaje, "Numero_Telefono", Contactos)
-           .Mensaje = Replace(.Mensaje, "Emails", EmailProcesos)
-           .Mensaje = Replace(.Mensaje, "Razon_Social", MsgAux)
-        End If
+      If Len(.MensajeHTML) > 1 Then
+         If Len(MensajeAutomatizado) > 1 Then .MensajeHTML = Replace(.MensajeHTML, "vMensajeFinal", MensajeAutomatizado) Else .MensajeHTML = Replace(.MensajeHTML, "vMensajeFinal", "")
+         If Len(MensajeEmpresa) > 1 Then .MensajeHTML = Replace(.MensajeHTML, "vMensajeEmpresa", MensajeEmpresa) Else .MensajeHTML = Replace(.MensajeHTML, "vMensajeEmpresa", "")
+         If Len(ComunicadoEntidad) > 1 Then .MensajeHTML = Replace(.MensajeHTML, "vMensaje_Comunicado", ComunicadoEntidad) Else .MensajeHTML = Replace(.MensajeHTML, "vMensaje_Comunicado", "")
+         If Len(EmailProcesos) > 1 Then .MensajeHTML = Replace(.MensajeHTML, "vEmails", EmailProcesos) Else .MensajeHTML = Replace(.MensajeHTML, "vEmails", "")
+        .MensajeHTML = Replace(.MensajeHTML, "vNombre_Usuario", NombreUsuario)
+        .MensajeHTML = Replace(.MensajeHTML, "vRepresentante_Legal", NombreGerente)
+        .MensajeHTML = Replace(.MensajeHTML, "vNumero_Telefono", Contactos)
+        .MensajeHTML = Replace(.MensajeHTML, "vRUC_Empresa", RUC)
+        .MensajeHTML = Replace(.MensajeHTML, "vRazon_Social", MsgAux)
+        .MensajeHTML = Replace(.MensajeHTML, "vNombre_Comercial", NombreComercial)
+        .MensajeHTML = Replace(.MensajeHTML, "vDireccion_Empresa", Direccion)
+        .MensajeHTML = Replace(.MensajeHTML, "vObligado_Contabilidad", Obligado_Conta)
+        
+        .MensajeHTML = Replace(.MensajeHTML, "vInformacion_adicional", html_Informacion_adicional)
+        .MensajeHTML = Replace(.MensajeHTML, "vDetalle_adicional", html_Detalle_adicional)
+        
+        .MensajeHTML = Replace(.MensajeHTML, "vNombre_Cliente", FA.Cliente)
+        .MensajeHTML = Replace(.MensajeHTML, "vRUC_Cliente", FA.RUC_CI)
+        .MensajeHTML = Replace(.MensajeHTML, "vDireccion_Cliente", FA.DireccionC)
+        .MensajeHTML = Replace(.MensajeHTML, "vSerie_Cliente", FA.Serie)
+        .MensajeHTML = Replace(.MensajeHTML, "vFactura_Cliente", Format(FA.Factura, "000000000"))
+        .MensajeHTML = Replace(.MensajeHTML, "vAutorizacion_Factura", FA.Autorizacion)
+        .MensajeHTML = Replace(.MensajeHTML, "vRecibo_No", FA.Recibo_No)
+        
+        .MensajeHTML = Replace(.MensajeHTML, vbCrLf, "<br>")
+        .MensajeHTML = Replace(.MensajeHTML, "<N>", "<strong>")
+        .MensajeHTML = Replace(.MensajeHTML, "</N>", "</strong>")
+        .Mensaje = ""
+      Else
+        'MsgBox InStr(.Mensaje, "Este correo electrónico fue generado automáticamente del Sistema Financiero")
+         'If InStr(.Mensaje, "Este correo electronico fue generado automaticamente a usted desde El Sistema Financiero") = 0 Then
+            If Len(MensajeAutomatizado) > 1 Then .Mensaje = .Mensaje & vbCrLf & MensajeAutomatizado
+            If Len(MensajeEmpresa) > 1 Then .Mensaje = Replace(.Mensaje, "vMensajeEmpresa", MensajeEmpresa) Else .Mensaje = Replace(.Mensaje, "vMensajeEmpresa", "")
+            If Len(ComunicadoEntidad) > 1 Then .Mensaje = Replace(.Mensaje, "vMensaje_Comunicado", ComunicadoEntidad) Else .Mensaje = Replace(.Mensaje, "vMensaje_Comunicado", "")
+            If Len(EmailProcesos) > 1 Then .Mensaje = Replace(.Mensaje, "vEmails", EmailProcesos) Else .Mensaje = Replace(.Mensaje, "vEmails", "")
+           .Mensaje = Replace(.Mensaje, "vNombre_Usuario", NombreUsuario)
+           .Mensaje = Replace(.Mensaje, "vRepresentante_Legal", NombreGerente)
+           .Mensaje = Replace(.Mensaje, "vNumero_Telefono", Contactos)
+           .Mensaje = Replace(.Mensaje, "vRUC_Empresa", RUC)
+           .Mensaje = Replace(.Mensaje, "vRazon_Social", MsgAux)
+           .Mensaje = Replace(.Mensaje, "vNombre_Comercial", NombreComercial)
+           .Mensaje = Replace(.Mensaje, "vDireccion_Empresa", Direccion)
+           .Mensaje = Replace(.Mensaje, "vObligado_Contabilidad", Obligado_Conta)
+           
+           .Mensaje = Replace(.Mensaje, "vInformacion_adicional", html_Informacion_adicional)
+           .Mensaje = Replace(.Mensaje, "vDetalle_adicional", html_Detalle_adicional)
+           
+           .Mensaje = Replace(.Mensaje, "vNombre_Cliente", FA.Cliente)
+           .Mensaje = Replace(.Mensaje, "vRUC_Cliente", FA.RUC_CI)
+           .Mensaje = Replace(.Mensaje, "vDireccion_Cliente", FA.DireccionC)
+           .Mensaje = Replace(.Mensaje, "vSerie_Cliente", FA.Serie)
+           .Mensaje = Replace(.Mensaje, "vFactura_Cliente", Format(FA.Factura, "000000000"))
+           .Mensaje = Replace(.Mensaje, "vAutorizacion_Factura", FA.Autorizacion)
+           .Mensaje = Replace(.Mensaje, "vRecibo_No", Format(FA.Fecha, "yyyymmdd"))
+         'End If
+        .MensajeHTML = ""
+      End If
      End With
-
-     'Timer1_Timer
+     
+    'Timer1_Timer
     'Empezamos a enviar el mails
      With oMail
          'Datos para enviar

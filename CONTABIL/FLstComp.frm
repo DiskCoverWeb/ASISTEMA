@@ -412,16 +412,17 @@ Begin VB.Form FListComprobantes
       Tab(3).ControlCount=   5
       Begin MSDataGridLib.DataGrid DGAsientos 
          Bindings        =   "FLstComp.frx":603C
-         Height          =   2535
+         Height          =   3585
          Left            =   105
          TabIndex        =   36
          ToolTipText     =   "<Ctrl+D> Elimina Cuenta, <Ctrl+Z> Cambiar Cuenta, <Ctrl+X> Cambiar Valor del Debe. Haber, etc."
          Top             =   420
-         Width           =   9990
-         _ExtentX        =   17621
-         _ExtentY        =   4471
+         Width           =   11040
+         _ExtentX        =   19473
+         _ExtentY        =   6324
          _Version        =   393216
          AllowUpdate     =   0   'False
+         BackColor       =   12648447
          HeadLines       =   1
          RowHeight       =   15
          BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -437,7 +438,7 @@ Begin VB.Form FListComprobantes
             Name            =   "MS Sans Serif"
             Size            =   8.25
             Charset         =   0
-            Weight          =   400
+            Weight          =   700
             Underline       =   0   'False
             Italic          =   0   'False
             Strikethrough   =   0   'False
@@ -488,6 +489,7 @@ Begin VB.Form FListComprobantes
          _ExtentY        =   2990
          _Version        =   393216
          AllowUpdate     =   0   'False
+         BackColor       =   12640511
          HeadLines       =   1
          RowHeight       =   15
          BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -554,6 +556,7 @@ Begin VB.Form FListComprobantes
          _ExtentY        =   3175
          _Version        =   393216
          AllowUpdate     =   0   'False
+         BackColor       =   12648384
          HeadLines       =   1
          RowHeight       =   15
          BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -621,6 +624,7 @@ Begin VB.Form FListComprobantes
          _ExtentY        =   5398
          _Version        =   393216
          AllowUpdate     =   0   'False
+         BackColor       =   16777152
          HeadLines       =   1
          RowHeight       =   15
          BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -687,6 +691,7 @@ Begin VB.Form FListComprobantes
          _ExtentY        =   1508
          _Version        =   393216
          AllowUpdate     =   0   'False
+         BackColor       =   12640511
          HeadLines       =   1
          RowHeight       =   15
          BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -753,6 +758,7 @@ Begin VB.Form FListComprobantes
          _ExtentY        =   1693
          _Version        =   393216
          AllowUpdate     =   0   'False
+         BackColor       =   12640511
          HeadLines       =   1
          RowHeight       =   15
          BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -819,6 +825,7 @@ Begin VB.Form FListComprobantes
          _ExtentY        =   3175
          _Version        =   393216
          AllowUpdate     =   0   'False
+         BackColor       =   12648384
          HeadLines       =   1
          RowHeight       =   15
          BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -2083,7 +2090,7 @@ End Sub
 ''''End Sub
 
 Private Sub Form_Activate()
-   SSTab1.Height = MDI_Y_Max - SSTab1.Top - 300
+   SSTab1.Height = MDI_Y_Max - SSTab1.Top - 450
    SSTab1.width = MDI_X_Max - SSTab1.Left
    
    DGCxCxP.width = SSTab1.width - 200
@@ -2590,61 +2597,65 @@ If ClaveSupervisor Then
       MotivoAnulacion = UCase(InputBox("MOTIVO DE LA ANULACION:", "FORMULARIO DE ANULACION", ""))
       If MotivoAnulacion <> "" Then Contra_Cta = Contra_Cta & ", [MOTIVO: " & MotivoAnulacion & "], "
       Contra_Cta = TrimStrg(MidStrg(Contra_Cta, 1, 160))
-     
-     'Actualizamos Comprobante
-      sSQL = "UPDATE Comprobantes " _
-           & "SET T = '" & Anulado & "', Concepto = '" & Contra_Cta & "' " _
-           & AnularComprobanteDe
-      Ejecutar_SQL_SP sSQL
+      If Len(MotivoAnulacion) > 1 Then
+        'Actualizamos Comprobante
+         sSQL = "UPDATE Comprobantes " _
+              & "SET T = '" & Anulado & "', Concepto = '" & Contra_Cta & "' " _
+              & AnularComprobanteDe
+         Ejecutar_SQL_SP sSQL
       
-     'Actualizar Transacciones
-      sSQL = "UPDATE Transacciones " _
-           & "SET T = '" & Anulado & "',Debe = 0,Haber = 0,Saldo = 0 " _
-           & AnularComprobanteDe
-      Ejecutar_SQL_SP sSQL
-      
-     'Actualizar Trans_SubCtas
-      sSQL = "UPDATE Trans_SubCtas " _
-           & "SET T = '" & Anulado & "',Debitos = 0,Creditos = 0,Saldo_MN = 0,Saldo_ME = 0,Prima = 0 " _
-           & AnularComprobanteDe
-      Ejecutar_SQL_SP sSQL
-
-     'Actualizar Retencion
-      sSQL = "DELETE * " _
-           & "FROM Trans_Air " _
-           & AnularComprobanteDe
-      Ejecutar_SQL_SP sSQL
-      
-      sSQL = "DELETE * " _
-           & "FROM Trans_Compras " _
-           & AnularComprobanteDe
-      Ejecutar_SQL_SP sSQL
-      
-      sSQL = "DELETE * " _
-           & "FROM Trans_Kardex " _
-           & AnularComprobanteDe
-      Ejecutar_SQL_SP sSQL
-      
-      sSQL = "DELETE * " _
-           & "FROM Trans_Ventas " _
-           & AnularComprobanteDe
-      Ejecutar_SQL_SP sSQL
-      
-      sSQL = "DELETE * " _
-           & "FROM Trans_Exportaciones " _
-           & AnularComprobanteDe
-      Ejecutar_SQL_SP sSQL
-      
-      sSQL = "DELETE * " _
-           & "FROM Trans_Importaciones " _
-           & AnularComprobanteDe
-      Ejecutar_SQL_SP sSQL
-     
-      sSQL = "DELETE * " _
-           & "FROM Trans_Rol_de_Pagos " _
-           & AnularComprobanteDe
-      Ejecutar_SQL_SP sSQL
-      Control_Procesos "A", "Anulo Comprobante de: " & Co.TP & " No. " & Co.Numero, "MOTIVO DE LA ANULACION: " & MotivoAnulacion
+        'Actualizar Transacciones
+         sSQL = "UPDATE Transacciones " _
+              & "SET T = '" & Anulado & "',Debe = 0,Haber = 0,Saldo = 0 " _
+              & AnularComprobanteDe
+         Ejecutar_SQL_SP sSQL
+          
+        'Actualizar Trans_SubCtas
+         sSQL = "UPDATE Trans_SubCtas " _
+              & "SET T = '" & Anulado & "',Debitos = 0,Creditos = 0,Saldo_MN = 0,Saldo_ME = 0,Prima = 0 " _
+              & AnularComprobanteDe
+         Ejecutar_SQL_SP sSQL
+    
+        'Actualizar Retencion
+         sSQL = "DELETE * " _
+              & "FROM Trans_Air " _
+              & AnularComprobanteDe
+         Ejecutar_SQL_SP sSQL
+          
+         sSQL = "DELETE * " _
+              & "FROM Trans_Compras " _
+              & AnularComprobanteDe
+         Ejecutar_SQL_SP sSQL
+          
+         sSQL = "DELETE * " _
+              & "FROM Trans_Kardex " _
+              & AnularComprobanteDe
+         Ejecutar_SQL_SP sSQL
+          
+         sSQL = "DELETE * " _
+              & "FROM Trans_Ventas " _
+              & AnularComprobanteDe
+         Ejecutar_SQL_SP sSQL
+          
+         sSQL = "DELETE * " _
+              & "FROM Trans_Exportaciones " _
+              & AnularComprobanteDe
+         Ejecutar_SQL_SP sSQL
+          
+         sSQL = "DELETE * " _
+              & "FROM Trans_Importaciones " _
+              & AnularComprobanteDe
+         Ejecutar_SQL_SP sSQL
+         
+         sSQL = "DELETE * " _
+              & "FROM Trans_Rol_de_Pagos " _
+              & AnularComprobanteDe
+         Ejecutar_SQL_SP sSQL
+         Control_Procesos "A", "Anulo Comprobante de: " & Co.TP & " No. " & Co.Numero, "MOTIVO DE LA ANULACION: " & MotivoAnulacion
+         MsgBox "Comprobante de: " & Co.TP & " No. " & Co.Numero & ", ANULADO CORRECTAMENTE"
+      Else
+         MsgBox "No se Anulo el Comprobante de: " & Co.TP & " No. " & Co.Numero & ", porque no se ingreso el MOTIVO DE LA ANULACION"
+      End If
    End If
 End If
 End Sub

@@ -6852,521 +6852,170 @@ Errorhandler:
     Exit Sub
 End Sub
 
-'''Public Sub Imprimir_Punto_Venta_Grafico(TFA As Tipo_Facturas)
-'''Dim AdoDBFactura As ADODB.Recordset
-'''Dim AdoDBDetalle As ADODB.Recordset
-'''Dim CadenaMoneda As String
-'''Dim Numero_Letras As String
-'''Dim Tipo_Letras As String
-'''Dim Cant_Ln As Single
-'''Dim Una_Copia As Boolean
-'''Dim PathCodigoBarra As String
-'''Dim AnchoMaxDir As Single
-'''Dim Establecimiento As Integer
-'''Dim Imp_Mes As Boolean
-'''
-'''On Error GoTo Errorhandler
-'''
-'''ContEspec = Leer_Campo_Empresa("Codigo_Contribuyente_Especial")
-'''Obligado_Conta = Leer_Campo_Empresa("Obligado_Conta")
-'''SetNombrePRN = Leer_Campo_Empresa("Impresora_Defecto")
-'''If SetNombrePRN = Ninguno Then
-'''   Mensajes = "Imprmir Factura No. " & TFA.Factura
-'''   Titulo = "IMPRESION"
-'''   Bandera = False
-'''   SetPrinters.Show 1
-'''Else
-'''   SetPapelPRNCad = Leer_Campo_Empresa("Papel_Impresora")
-'''   SetPapelPRN = CInt(SinEspaciosIzq(SetPapelPRNCad))
-'''End If
-'''
-'''If IsNumeric(TFA.Autorizacion) Then
-'''    Ambiente = MidStrg(TFA.ClaveAcceso, 24, 1)
-'''   'Generacion Codigo de Barras
-'''    PathCodigoBarra = RutaSysBases & "\TEMP\" & TFA.ClaveAcceso & ".jpg"
-'''
-''''''    Clipboard.Clear
-''''''    Code39Clt1.AlturaBarra = 15
-''''''    Code39Clt1.TamBarra = 1
-''''''    Code39Clt1.ColorCodigo = "N"
-''''''    Code39Clt1.ValorCodigo = TFA.ClaveAcceso
-''''''    Code39Clt1.RealizarCodigo
-''''''    SavePicture Clipboard.GetData(2), PathCodigoBarra
-'''End If
-'''
-'''Mensajes = "Imprmir Factura No. " & TFA.Factura
-'''Titulo = "IMPRESION"
-'''Bandera = False
-''''SetPrinters.Show 1
-'''
-'''Tipo_Letras = TipoVerdana 'TipoArialNarrow
-'''If PonImpresoraDefecto(SetNombrePRN) Then
-'''   PorteLetra = 7
-'''   Escala_Centimetro 1, Tipo_Letras, PorteLetra
-'''   RatonReloj
-'''   PosLinea = 0.01: InicioX = 0.01
-'''   Printer.FontName = Tipo_Letras
-'''   Printer.FontSize = PorteLetra
-'''   Una_Copia = True
-'''Imprimir_Copia:
-'''   SubTotal = 0: Total = 0: Total_IVA = 0: Total_Desc = 0: Cant_Ln = 0
-'''  'Dibujo = RutaSistema & "\LOGOS\PRISMANE.JPG"
-'''   Printer.FontName = Tipo_Letras
-'''  'Iniciamos la consulta de impresion
-'''   If TFA.TC = "PV" Then
-'''      sSQL = "SELECT F.*,C.Cliente,C.CI_RUC,C.Telefono,C.Direccion,C.Ciudad,C.Grupo,C.Email " _
-'''           & "FROM Trans_Ticket As F,Clientes As C " _
-'''           & "WHERE F.Ticket = " & TFA.Factura & " " _
-'''           & "AND F.TC = '" & TFA.TC & "' " _
-'''           & "AND F.Periodo = '" & Periodo_Contable & "' " _
-'''           & "AND F.Item = '" & NumEmpresa & "' " _
-'''           & "AND C.Codigo = F.CodigoC "
-'''   Else
-'''      sSQL = "SELECT F.*,C.Cliente,C.CI_RUC,C.Telefono,C.Direccion,C.Ciudad,C.Grupo,C.Email " _
-'''           & "FROM Facturas As F,Clientes As C " _
-'''           & "WHERE F.Factura = " & TFA.Factura & " " _
-'''           & "AND F.TC = '" & TFA.TC & "' " _
-'''           & "AND F.Serie = '" & TFA.Serie & "' " _
-'''           & "AND F.Periodo = '" & Periodo_Contable & "' " _
-'''           & "AND F.Item = '" & NumEmpresa & "' " _
-'''           & "AND C.Codigo = F.CodigoC "
-'''   End If
-'''  Select_AdoDB AdoDBFactura, sSQL
-''' 'Datos Iniciales
-'''  With AdoDBFactura
-'''   If .RecordCount > 0 Then
-'''      'Encabezado de la Factura
-'''       AnchoMaxDir = 0
-'''       Establecimiento = Val(MidStrg(.fields("Serie"), 1, 3))
-'''       If Establecimiento > 1 Then DireccionEstab = TFA.DireccionEstab
-'''       If Printer.TextWidth(Direccion) > AnchoMaxDir Then AnchoMaxDir = Printer.TextWidth(Direccion)
-'''       If Printer.TextWidth(DireccionEstab) > AnchoMaxDir Then AnchoMaxDir = Printer.TextWidth(DireccionEstab)
-'''       If Establecimiento > 1 Then
-'''          PrinterPaint TFA.LogoTipoEstab, 0.01, PosLinea, 3, 1.5        'Ancho = 4.7
-'''       Else
-'''          PrinterPaint LogoTipo, 0.01, PosLinea, 3, 1.5      'Ancho = 4.7
-'''       End If
-'''       Printer.FontBold = True
-'''       Printer.FontSize = PorteLetra + 2
-'''       PrinterTexto 4.1, PosLinea, "R.U.C."
-'''       PosLinea = PosLinea + 0.5
-'''       PrinterTexto 3.6, PosLinea, RUC
-'''       PosLinea = PosLinea + 0.5
-'''       Printer.FontSize = PorteLetra
-'''       PrinterTexto 3.6, PosLinea, "Teléfono: " & Telefono1
-'''       Printer.FontSize = PorteLetra + 1
-'''       PosLinea = PosLinea + 0.5
-'''       If Encabezado_PV Then
-'''          If TFA.TC <> "PV" Then
-'''             If Printer.TextWidth(UCaseStrg(RazonSocial)) > 7 Then Printer.FontSize = PorteLetra - 1
-'''             PrinterCentrarTexto 7, PosLinea, UCaseStrg(RazonSocial)
-'''             PosLinea = PosLinea + 0.4
-'''             If Establecimiento > 1 Then
-'''                If UCaseStrg(RazonSocial) <> UCaseStrg(TFA.NombreEstab) Then
-'''                   Printer.FontSize = PorteLetra + 2
-'''                   If Printer.TextWidth(UCaseStrg(TFA.NombreEstab)) > 7 Then Printer.FontSize = PorteLetra - 1
-'''                   PrinterCentrarTexto 7, PosLinea, UCaseStrg(TFA.NombreEstab)
-'''                   PosLinea = PosLinea + 0.4
-'''                End If
-'''             Else
-'''                If UCaseStrg(RazonSocial) <> UCaseStrg(NombreComercial) Then
-'''                   Printer.FontSize = PorteLetra + 2
-'''                   If Printer.TextWidth(UCaseStrg(RazonSocial)) > 7 Then Printer.FontSize = PorteLetra - 1
-'''                   PrinterCentrarTexto 7, PosLinea, UCaseStrg(NombreComercial)
-'''                   PosLinea = PosLinea + 0.4
-'''                End If
-'''             End If
-'''             PosLinea = PosLinea + 0.1
-'''             Printer.FontSize = PorteLetra
-'''             If AnchoMaxDir > 5 Then Printer.FontSize = PorteLetra - 1
-'''             Printer.FontBold = True
-'''             PrinterTexto InicioX, PosLinea, "Dirección Mat.:"
-'''             Printer.FontBold = False
-'''             If AnchoMaxDir > 5 Then
-'''                PrinterTexto InicioX + 2, PosLinea, Direccion
-'''             Else
-'''                PrinterTexto InicioX + 2.2, PosLinea, Direccion
-'''             End If
-'''
-'''             PosLinea = PosLinea + 0.35
-'''             If Establecimiento > 1 Then
-'''                Printer.FontBold = True
-'''                PrinterTexto InicioX, PosLinea, "Dirección Suc.:"
-'''                Printer.FontBold = False
-'''                If AnchoMaxDir > 5 Then
-'''                   PrinterTexto InicioX + 2, PosLinea, DireccionEstab
-'''                Else
-'''                   PrinterTexto InicioX + 2.2, PosLinea, DireccionEstab
-'''                End If
-'''                PosLinea = PosLinea + 0.35
-'''                Printer.FontBold = True
-'''                PrinterTexto InicioX, PosLinea, "Teléfono:"
-'''                Printer.FontBold = False
-'''                PrinterTexto 2, PosLinea, TFA.TelefonoEstab
-'''                PosLinea = PosLinea + 0.4
-'''             End If
-'''             Printer.FontBold = True
-'''             If Len(ContEspec) > 1 Then
-'''                PrinterTexto InicioX, PosLinea, "Contribuyente Especial No. " & ContEspec
-'''                PosLinea = PosLinea + 0.35
-'''             End If
-'''             PrinterTexto InicioX, PosLinea, "OBLIGADO A LLEVAR CONTABILIDAD: " & Obligado_Conta
-'''             PosLinea = PosLinea + 0.35
-'''             Imprimir_Linea_H PosLinea, InicioX, 7
-'''             PosLinea = PosLinea + 0.05
-'''             Printer.FontSize = PorteLetra + 1
-'''             If TFA.TC = "NV" Then
-'''                SerieFactura = MidStrg(.fields("Serie"), 1, 3) & "-" & MidStrg(.fields("Serie"), 4, 3)
-'''                PrinterTexto InicioX, PosLinea, "NOTA DE VENTA No. " & SerieFactura & "-" & Format$(.fields("Factura"), "000000000")
-'''             Else
-'''                SerieFactura = MidStrg(.fields("Serie"), 1, 3) & "-" & MidStrg(.fields("Serie"), 4, 3)
-'''                PrinterTexto InicioX, PosLinea, "FACTURA No. " & SerieFactura & "-" & Format$(.fields("Factura"), "000000000")
-'''             End If
-'''             PosLinea = PosLinea + 0.4
-'''             PrinterTexto InicioX, PosLinea, "NUMERO DE AUTORIZACION: "
-'''             PosLinea = PosLinea + 0.35
-'''             Printer.FontBold = False
-'''             PrinterTexto InicioX, PosLinea, TFA.Autorizacion
-'''             Printer.FontSize = PorteLetra
-'''             Printer.FontBold = True
-'''             PosLinea = PosLinea + 0.4
-'''             Printer.FontBold = True
-'''             PrinterTexto InicioX, PosLinea, "FECHA: "
-'''             Printer.FontBold = False
-'''             PrinterTexto InicioX + 1.2, PosLinea, FechaStrgCorta(.fields("Fecha"))
-'''             Printer.FontBold = True
-'''             PrinterTexto InicioX + 3.8, PosLinea, "HORA: "
-'''             Printer.FontBold = False
-'''             PrinterTexto InicioX + 4.9, PosLinea, .fields("Hora")
-'''             PosLinea = PosLinea + 0.35
-'''             Printer.FontBold = True
-'''             If Ambiente = "1" Then
-'''                PrinterTexto InicioX, PosLinea, "AMBIENTE: PRUEBA"
-'''             Else
-'''                PrinterTexto InicioX, PosLinea, "AMBIENTE: PRODUCCION"
-'''             End If
-'''             PrinterTexto 3.8, PosLinea, "EMISIÓN: NORMAL"
-'''             PosLinea = PosLinea + 0.35
-'''             PrinterTexto InicioX, PosLinea, "CLAVE DE ACCESO"
-'''             PosLinea = PosLinea + 0.4
-'''             Printer.FontBold = False
-'''            'Imprimimos el codigo de barra
-'''             PrinterPaint PathCodigoBarra, 0.01, PosLinea, 7, 0.8
-'''             PosLinea = PosLinea + 0.9
-'''             Printer.FontSize = PorteLetra - 0.8
-'''             PrinterTexto InicioX, PosLinea, TFA.ClaveAcceso
-'''             PosLinea = PosLinea + 0.4
-'''          Else
-'''             SerieFactura = MidStrg(MesesLetras(Month(.fields("Fecha"))), 1, 3) & "-" & Year(.fields("Fecha"))
-'''             PrinterTexto InicioX, PosLinea, "T I C K E T   No. " & SerieFactura & "-" & Format$(.fields("Factura"), "000000000")
-'''             Total_Desc = .fields("Descuento")
-'''          End If
-'''       Else
-'''          PosLinea = PosLinea + 0.2
-'''          If Printer.TextWidth(UCaseStrg(RazonSocial)) > 7 Then Printer.FontSize = PorteLetra - 1
-'''          PrinterCentrarTexto 7, PosLinea, UCaseStrg(RazonSocial)
-'''          PosLinea = PosLinea + 0.4
-'''          If UCaseStrg(RazonSocial) <> UCaseStrg(NombreComercial) Then
-'''             Printer.FontSize = PorteLetra + 2
-'''             If Printer.TextWidth(UCaseStrg(RazonSocial)) > 7 Then Printer.FontSize = PorteLetra - 1
-'''             PrinterCentrarTexto 7, PosLinea, UCaseStrg(NombreComercial)
-'''             PosLinea = PosLinea + 0.4
-'''          End If
-'''          PosLinea = PosLinea + 0.1
-'''          Printer.FontSize = PorteLetra
-'''          If AnchoMaxDir > 5 Then Printer.FontSize = PorteLetra - 1
-'''          Printer.FontBold = True
-'''          PrinterTexto InicioX, PosLinea, "Dirección Matriz:"
-'''          PosLinea = PosLinea + 0.4
-'''          Printer.FontBold = False
-'''          PrinterTexto InicioX, PosLinea, Direccion
-'''          PosLinea = PosLinea + 0.35
-'''          If Len(TFA.Autorizacion) > 20 And TFA.TC <> "PV" Then
-'''             Printer.FontBold = True
-'''             PrinterTexto InicioX, PosLinea, "CLAVE DE ACCESO No."
-'''             PosLinea = PosLinea + 0.35
-'''             Printer.FontBold = False
-'''             PrinterTexto InicioX, PosLinea, MidStrg(TFA.ClaveAcceso, 1, 40)
-'''             PosLinea = PosLinea + 0.35
-'''             PrinterTexto InicioX, PosLinea, MidStrg(TFA.ClaveAcceso, 41, 10)
-'''             PosLinea = PosLinea + 0.35
-'''             Printer.FontBold = True
-'''             PrinterTexto InicioX, PosLinea, "AUTORIZACION No."
-'''             PosLinea = PosLinea + 0.35
-'''             Printer.FontBold = False
-'''             PrinterTexto InicioX, PosLinea, TFA.Autorizacion
-'''             PosLinea = PosLinea + 0.35
-'''             Printer.FontBold = True
-'''             PrinterTexto InicioX, PosLinea, "FECHA DE AUTORIZACION: " & TFA.Fecha_Aut
-'''             PosLinea = PosLinea + 0.35
-'''             Printer.FontBold = False
-'''          End If
-'''          Printer.FontBold = True
-'''          PrinterTexto InicioX, PosLinea, "FECHA DE EMISION: " & TFA.Fecha
-'''          PosLinea = PosLinea + 0.35
-'''          PrinterTexto InicioX, PosLinea, "DOCUMENTO DE " & TFA.TC & " No. " & TFA.Serie & "-" & Format$(TFA.Factura, "0000000")
-'''          PosLinea = PosLinea + 0.35
-'''          Printer.FontBold = False
-'''       End If
-'''       Printer.FontSize = PorteLetra
-'''       If Len(ReferenciaEmpresa) > 1 Then
-'''          PrinterCentrarTexto 7, PosLinea, ULCase(ReferenciaEmpresa)
-'''          PosLinea = PosLinea + 0.35
-'''       End If
-'''       Printer.FontSize = PorteLetra
-'''       Imprimir_Linea_H PosLinea, InicioX, 7
-'''       PosLinea = PosLinea + 0.05
-'''      'Encabezado del Contribuyente
-'''       Printer.FontBold = True
-'''       PrinterTexto InicioX, PosLinea, "Razón Social/Nombres y Apellidos: "
-'''       Printer.FontBold = False
-'''       PosLinea = PosLinea + 0.35
-'''       If .fields("Cliente") = .fields("Razon_Social") Then
-'''           PrinterTexto InicioX, PosLinea, PrinterTextoMaximo(.fields("Cliente"), 7)
-'''       Else
-'''           PrinterTexto InicioX, PosLinea, PrinterTextoMaximo(.fields("Razon_Social"), 7)
-'''           PosLinea = PosLinea + 0.35
-'''           Printer.FontBold = True
-'''           PrinterTexto InicioX, PosLinea, "Estudiante: "
-'''           Printer.FontBold = False
-'''           PosLinea = PosLinea + 0.35
-'''           PrinterTexto InicioX, PosLinea, PrinterTextoMaximo(.fields("Cliente"), 7)
-'''           PosLinea = PosLinea + 0.35
-'''           PrinterTexto InicioX, PosLinea, .fields("Direccion")
-'''       End If
-'''       PosLinea = PosLinea + 0.35
-'''       Printer.FontBold = True
-'''       PrinterTexto InicioX, PosLinea, "Identificación: "
-'''       Printer.FontBold = False
-'''       If .fields("Cliente") = .fields("Razon_Social") Then
-'''           PrinterTexto InicioX + 2.1, PosLinea, .fields("CI_RUC")
-'''       Else
-'''           PrinterTexto InicioX + 2.1, PosLinea, .fields("RUC_CI")
-'''       End If
-'''       Printer.FontBold = True
-'''       PrinterTexto InicioX + 4.5, PosLinea, "Teléf.: "
-'''       Printer.FontBold = False
-'''       PrinterTexto InicioX + 5.5, PosLinea, .fields("Telefono")
-'''       PosLinea = PosLinea + 0.35
-'''''       Printer.FontBold = True
-'''''       PrinterTexto InicioX, PosLinea, "Dirección del Contribuyente: "
-'''''       Printer.FontBold = False
-'''''       PosLinea = PosLinea + 0.35
-'''''       PrinterTexto InicioX, PosLinea, .Fields("Direccion_RS")
-'''''       PosLinea = PosLinea + 0.35
-'''       Printer.FontBold = True
-'''       PrinterTexto InicioX, PosLinea, "Correo Electrónico: "
-'''       Printer.FontBold = False
-'''       PosLinea = PosLinea + 0.35
-'''       PrinterTexto InicioX, PosLinea, .fields("Email")
-'''       PosLinea = PosLinea + 0.5
-'''       Imprimir_Linea_H PosLinea, InicioX, 7
-'''       PosLinea = PosLinea + 0.05
-'''       Printer.FontBold = True
-'''       Printer.FontSize = PorteLetra - 1
-'''       PrinterTexto InicioX, PosLinea, "Cant."
-'''       PrinterTexto InicioX + 0.8, PosLinea, "P R O D U C T O"
-'''       PrinterTexto InicioX + 4.6, PosLinea, "P.V.P."
-'''       PrinterTexto InicioX + 5.7, PosLinea, "T O T A L"
-'''       PosLinea = PosLinea + 0.35
-'''       Efectivo = .fields("Efectivo")
-'''       Imprimir_Linea_H PosLinea, InicioX, 7, Negro
-'''       PosLinea = PosLinea + 0.05
-'''       Imp_Mes = .fields("Imp_Mes")
-'''   End If
-'''  End With
-'''  Printer.FontBold = False
-''' 'Comenzamos a recoger los detalles de la factura
-'''  If TFA.TC = "PV" Then
-'''     sSQL = "SELECT DF.*,CP.Detalle,CP.Codigo_Barra " _
-'''          & "FROM Trans_Ticket As DF,Catalogo_Productos As CP " _
-'''          & "WHERE DF.Ticket = " & TFA.Factura & " " _
-'''          & "AND DF.TC = '" & TFA.TC & "' " _
-'''          & "AND DF.Item = '" & NumEmpresa & "' " _
-'''          & "AND DF.Periodo = '" & Periodo_Contable & "' " _
-'''          & "AND DF.Item = CP.Item " _
-'''          & "AND DF.Periodo = CP.Periodo " _
-'''          & "AND DF.Codigo_Inv = CP.Codigo_Inv " _
-'''          & "ORDER BY DF.ID "
-'''  Else
-'''     sSQL = "SELECT DF.*,CP.Detalle,CP.Codigo_Barra " _
-'''          & "FROM Detalle_Factura As DF,Catalogo_Productos As CP " _
-'''          & "WHERE DF.Factura = " & TFA.Factura & " " _
-'''          & "AND DF.TC = '" & TFA.TC & "' " _
-'''          & "AND DF.Serie = '" & TFA.Serie & "' " _
-'''          & "AND DF.Item = '" & NumEmpresa & "' " _
-'''          & "AND DF.Periodo = '" & Periodo_Contable & "' " _
-'''          & "AND DF.Item = CP.Item " _
-'''          & "AND DF.Periodo = CP.Periodo " _
-'''          & "AND DF.Codigo = CP.Codigo_Inv " _
-'''          & "ORDER BY DF.ID "
-'''  End If
-'''
-'''  'MsgBox "LA CONSULTA ES:" & vbCrLf & vbCrLf & sSQL
-'''  Select_AdoDB AdoDBDetalle, sSQL
-'''  With AdoDBDetalle
-'''   If .RecordCount > 0 Then
-'''       Do While Not .EOF
-'''          PrinterTexto InicioX, PosLinea, CStr(.fields("Cantidad"))
-'''          Producto = .fields("Producto") & " "
-'''          If Imp_Mes Then
-'''             If .fields("Mes") <> Ninguno Then Producto = Producto & MidStrg(.fields("Mes"), 1, 3)
-'''             If .fields("Ticket") <> Ninguno Then Producto = Producto & "-" & .fields("Ticket")
-'''             CodigoP = CodigoP & ", "
-'''          End If
-'''          PosLinea = PrinterLineasTexto(InicioX + 0.8, PosLinea, Producto, 3.5)
-'''          'PrinterTexto InicioX + 0.8, PosLinea, PrinterTextoMaximo(.Fields("Producto"), 3.5)
-'''          PrinterFields InicioX + 3.7, PosLinea, .fields("Precio")
-'''          PrinterFields InicioX + 5, PosLinea, .fields("Total")
-'''          SubTotal = SubTotal + .fields("Total")
-'''          If TFA.TC = "PV" Then
-'''             Total_Desc = Total_Desc + .fields("Descuento")
-'''          Else
-'''             Total_IVA = Total_IVA + .fields("Total_IVA")
-'''          End If
-'''          PosLinea = PosLinea + 0.3
-'''          Cant_Ln = Cant_Ln + 0.03
-'''         .MoveNext
-'''       Loop
-'''   End If
-'''  End With
-''' 'Pie de factura
-''' '===========================================================
-'''  'PosLinea = PosLinea + (2.3 - Cant_Ln)
-'''  PosLinea = PosLinea + 0.2
-'''
-'''  Imprimir_Linea_H PosLinea, InicioX, 7, Negro
-'''  PosLinea = PosLinea + 0.05
-'''  With AdoDBFactura
-'''   If .RecordCount > 0 Then
-'''      'SubTotal = Total
-'''       Total = SubTotal + Total_IVA - Total_Desc
-'''       Codigo1 = MidStrg(CodigoUsuario, 1, 4) & "X" & MidStrg(CodigoUsuario, Len(CodigoUsuario) - 1, 2)
-'''       PrinterTexto InicioX, PosLinea, "Cajero: " & Codigo1
-'''       Printer.FontBold = True
-'''       PrinterTexto InicioX + 3.8, PosLinea, "SUBTOTAL"
-'''       Printer.FontBold = False
-'''       PrinterVariables InicioX + 5, PosLinea, SubTotal
-'''       PosLinea = PosLinea + 0.3
-'''       Printer.FontBold = True
-'''       PrinterTexto InicioX + 3.8, PosLinea, "DESCUENTO"
-'''       Printer.FontBold = False
-'''       PrinterVariables InicioX + 5, PosLinea, Total_Desc, True
-'''       PosLinea = PosLinea + 0.3
-'''       If Encabezado_PV Then PrinterTexto InicioX, PosLinea, "Su  Factura  será  enviada  al"
-'''       If TFA.TC <> "PV" Then
-'''          Printer.FontBold = True
-'''          PrinterTexto InicioX + 3.8, PosLinea, "I.V.A. " & Porc_IVA * 100 & "%"
-'''          Printer.FontBold = False
-'''          PrinterVariables InicioX + 5, PosLinea, Total_IVA
-'''          PosLinea = PosLinea + 0.3
-'''       End If
-'''       If Encabezado_PV Then PrinterTexto InicioX, PosLinea, "correo electrónico registrado."
-'''       Printer.FontBold = True
-'''       PrinterTexto InicioX + 3.8, PosLinea, "T O T A L"
-'''       Printer.FontBold = False
-'''       PrinterVariables InicioX + 5, PosLinea, Total
-'''       PosLinea = PosLinea + 0.3
-'''
-'''       If TFA.TC <> "PV" Then
-'''          If .fields("Cotizacion") > 0 Then PrinterTexto InicioX, PosLinea, "Cotizacion:"
-'''       End If
-'''       If Efectivo > 0 Then
-'''          Printer.FontBold = True
-'''          PrinterTexto InicioX + 3.8, PosLinea, "EFECTIVO"
-'''          Printer.FontBold = False
-'''          PrinterVariables InicioX + 5, PosLinea, Efectivo
-'''          PosLinea = PosLinea + 0.3
-'''          If TFA.TC <> "PV" Then
-'''             If .fields("Cotizacion") > 0 Then PrinterTexto InicioX, PosLinea, Format$(.fields("Cotizacion"), "#,##0.00")
-'''          End If
-'''          Printer.FontBold = True
-'''          PrinterTexto InicioX + 3.8, PosLinea, "CAMBIO"
-'''          Printer.FontBold = False
-'''          PrinterVariables InicioX + 5, PosLinea, Efectivo - Total, True
-'''          PosLinea = PosLinea + 0.3
-'''       End If
-'''       Imprimir_Linea_H PosLinea, InicioX, 7, Negro
-'''       PosLinea = PosLinea + 0.05
-'''       If TFA.TC = "PV" Then
-'''          PrinterCentrarTexto 4.7, PosLinea, "RECLAME SU FACTURA/NOTA DE VENTA"
-'''          PosLinea = PosLinea + 0.25
-'''          PrinterCentrarTexto 4.7, PosLinea, "EN CAJA"
-'''''       Else
-'''''          If Not Encabezado_PV Then PrinterCentrarTexto 7, PosLinea, "VERIFIQUE SUS DATOS"
-'''       End If
-'''       Printer.FontSize = PorteLetra + 2
-'''       PrinterCentrarTexto 7, PosLinea, "GRACIAS POR SU COLABORACION"
-'''       PosLinea = PosLinea + 0.4
-'''       Printer.FontSize = PorteLetra
-'''       PrinterCentrarTexto 7, PosLinea, "www.diskcoversystem.com"
-'''       PosLinea = PosLinea + 0.5
-'''   End If
-'''  End With
-'''  If Copia_PV And Una_Copia Then
-'''     Una_Copia = False
-'''     GoTo Imprimir_Copia
-'''  End If
-'''  Printer.EndDoc
-'''
-''' 'Imprimimos el ticket si esta habilitado la rifa
-'''  CodigoCorresp = Leer_Campo_Empresa("Rifa")
-'''  Mifecha = Leer_Campo_Empresa("Fecha_Rifa")
-'''  Cuota = Leer_Campo_Empresa("Monto_Minimo")
-'''  If CodigoCorresp <> Ninguno And Total >= Cuota Then
-'''     Escala_Centimetro 1, Tipo_Letras, PorteLetra
-'''     PosLinea = 0.01: InicioX = 0.01
-'''    'MsgBox Cuota
-'''     PrinterPaint LogoTipo, 0.01, PosLinea, 2, 1      'Ancho = 4.7
-'''     Printer.FontSize = PorteLetra + 2
-'''     PrinterTexto 4.4, PosLinea, "R.U.C."
-'''     PosLinea = PosLinea + 0.4
-'''     PrinterTexto 4, PosLinea, RUC
-'''     PosLinea = PosLinea + 0.4
-'''     Printer.FontSize = PorteLetra
-'''     PrinterTexto 4, PosLinea, "Teléfono: " & Telefono1
-'''     PosLinea = PosLinea + 0.4
-'''     Printer.FontSize = PorteLetra + 2
-'''     PrinterCentrarTexto 7, PosLinea, "TICKET No. " & Format$(TFA.Factura, "000000000")
-'''     PosLinea = PosLinea + 0.4
-'''     Printer.FontSize = PorteLetra + 1
-'''     PrinterCentrarTexto 7, PosLinea, "SORTEO DE CLIENTES FRECUENTES"
-'''     PosLinea = PosLinea + 0.4
-'''     PrinterCentrarTexto 7, PosLinea, "FECHA DE LA RIFA: " & FechaStrgDias(Mifecha)
-'''     PosLinea = PosLinea + 0.4
-'''     Printer.FontSize = PorteLetra + 2
-'''     PrinterCentrarTexto 7, PosLinea, "S E   R I F A R A"
-'''     PosLinea = PosLinea + 0.4
-'''     Printer.FontSize = PorteLetra
-'''     PrinterCentrarTexto 7, PosLinea, UCaseStrg(CodigoCorresp)
-'''     Printer.FontSize = PorteLetra + 1
-'''     PosLinea = PosLinea + 0.5
-'''     Imprimir_Linea_H PosLinea + 0.35, 1.5, 7
-'''     PrinterTexto 0.01, PosLinea, "NOMBRE: "
-'''     PosLinea = PosLinea + 0.6
-'''     Imprimir_Linea_H PosLinea + 0.35, 1.5, 7
-'''     PrinterTexto 0.01, PosLinea, "TELEFONO: "
-'''     PosLinea = PosLinea + 0.6
-'''     Imprimir_Linea_H PosLinea + 0.35, 1.5, 7
-'''     PrinterTexto 0.01, PosLinea, "E MAIL: "
-'''     PosLinea = PosLinea + 0.6
-'''     Imprimir_Linea_H PosLinea + 0.35, 1.5, 7
-'''     PrinterTexto 0.01, PosLinea, "CI/RUC: "
-'''     PosLinea = PosLinea + 0.6
-'''     Printer.FontSize = PorteLetra + 3
-'''     PrinterCentrarTexto 7, PosLinea, "DEPOSITELO EN EL ANFORA"
-'''  End If
-'''  Printer.EndDoc
-'''  AdoDBDetalle.Close
-'''  AdoDBFactura.Close
-'''End If
-'''RatonNormal
-'''Exit Sub
-'''Errorhandler:
-'''    RatonNormal
-'''    ErrorDeImpresion
-'''    Exit Sub
-'''End Sub
+Public Sub Imprimir_Recibo_Punto_Venta(TTA As Tipo_Abono, Optional FechaRecibo As String, Optional PorMail As Boolean)
+Dim AdoDBDAbonos As ADODB.Recordset
+Dim Numero_Letras As String
+Dim CantGuion As Byte
+Dim CantBlancos As String
+Dim PorFecha As Boolean
+
+On Error GoTo Errorhandler
+
+CantGuion = CByte(Leer_Campo_Empresa("Cant_Ancho_PV"))
+Encabezado_PV = CBool(Leer_Campo_Empresa("Encabezado_PV"))
+Grafico_PV = CBool(Leer_Campo_Empresa("Grafico_PV"))
+Copia_PV = CBool(Leer_Campo_Empresa("Copia_PV"))
+If CantGuion < 26 Then CantGuion = 26
+
+Producto = ""
+
+If IsDate(FechaRecibo) Then PorFecha = True Else PorFecha = False
+
+'MsgBox FechaRecibo
+   sSQL = "SELECT TA.Recibo_No, TA.TP, TA.Serie, TA.Factura, TA.Autorizacion, TA.Fecha, TA.Banco, TA.Cheque, TA.Abono, TA.CodigoU, " _
+        & "C.Cliente, C.CI_RUC, C.Telefono, C.Direccion, C.Ciudad, C.Grupo, C.Email, C.Email2, C.EmailR " _
+        & "FROM Trans_Abonos As TA, Clientes As C " _
+        & "WHERE TA.Item = '" & NumEmpresa & "' " _
+        & "AND TA.Periodo = '" & Periodo_Contable & "' " _
+        & "AND TA.TP = '" & TTA.TP & "' " _
+        & "AND TA.Serie = '" & TTA.Serie & "' " _
+        & "AND TA.Factura = " & TTA.Factura & " "
+   If PorFecha Then sSQL = sSQL & "AND TA.Fecha = #" & BuscarFecha(FechaRecibo) & "# "
+   sSQL = sSQL _
+        & "AND TA.CodigoC = C.Codigo " _
+        & "ORDER BY TA.Fecha, TA.ID "
+   Select_AdoDB AdoDBDAbonos, sSQL
+   With AdoDBDAbonos
+    If .RecordCount > 0 Then
+        Total = 0
+        Total_IVA = 0
+        Codigo1 = MidStrg(.fields("CodigoU"), 1, 4) & "X" & MidStrg(.fields("CodigoU"), Len(.fields("CodigoU")) - 1, 2)
+        TMail.para = ""
+        Insertar_Mail TMail.para, .fields("Email")
+        Insertar_Mail TMail.para, .fields("Email2")
+        Insertar_Mail TMail.para, .fields("EmailR")
+        Insertar_Mail TMail.para, "diskcover.system@gmail.com"
+        Insertar_Mail TMail.para, "informacion@diskcoversystem.com"
+       'Encabezado_PV
+        If Encabezado_PV Then
+           If RazonSocial = NombreComercial Then
+              Producto = RazonSocial & vbCrLf _
+                       & "R.U.C. " & RUC & vbCrLf
+           Else
+              Producto = RazonSocial & vbCrLf _
+                       & NombreComercial & vbCrLf _
+                       & "R.U.C. " & RUC & vbCrLf
+           End If
+           Producto = Producto _
+                    & "Direccion: " & Direccion & vbCrLf _
+                    & "Telefono: " & Telefono1 & vbCrLf _
+                    & "RECIBO No. " & Year(.fields("Fecha")) & "-" & .fields("Recibo_No") & vbCrLf _
+                    & String(CantGuion, "-") & vbCrLf _
+                    & "Autorizacion del SRI No." & vbCrLf _
+                    & .fields("Autorizacion") & vbCrLf _
+                    & "DOCUMENTO " & .fields("TP") & " No. " & .fields("Serie") & "-" & Format$(.fields("Factura"), "0000000") & vbCrLf
+        Else
+           Producto = RazonSocial & vbCrLf _
+                    & "Transaccion (" & .fields("TP") & " No. " & .fields("Serie") & "-" & Format$(.fields("Factura"), "0000000") & vbCrLf
+        End If
+        If PorFecha Then Producto = Producto & "Fecha de Abono: " & .fields("Fecha") & vbCrLf
+        Producto = Producto & String(CantGuion, "-") & vbCrLf _
+                 & "Cliente: " & .fields("Cliente") & vbCrLf _
+                 & "R.U.C./C.I.: " & .fields("CI_RUC") & vbCrLf
+        If .fields("Telefono") <> Ninguno Then Producto = Producto & "Telefono: " & .fields("Telefono") & vbCrLf
+        If .fields("Direccion") <> Ninguno Then Producto = Producto & "Direccion: " & .fields("Direccion") & vbCrLf
+        If .fields("Email") <> Ninguno Then Producto = Producto & "Email: " & .fields("Email") & vbCrLf
+        Producto = Producto & String(CantGuion, "=") & vbCrLf
+        If PorFecha Then
+           Producto = Producto & "DETALLE COMPROBANTE " & String(6, " ") & "SUBTOTAL" & vbCrLf
+        Else
+           Producto = Producto & "DETALLE COMPROBANTE/FECHA   SUBTOTAL" & vbCrLf
+        End If
+        Producto = Producto & String(CantGuion, "=") & vbCrLf
+       'Detalle del abono
+        Do While Not .EOF
+           If .fields("Banco") = "." Then CodigoP = "SD" Else CodigoP = .fields("Banco")
+           If .fields("Cheque") <> "." Then CodigoP = CodigoP & "-" & .fields("Cheque")
+           Mifecha = FechaStrg(.fields("Fecha"))
+           If Not PorFecha Then
+              Producto = Producto & CodigoP & vbCrLf _
+                       & Mifecha & String(25 - Len(Mifecha), " ") & " " & SetearBlancos(CStr(.fields("Abono")), 10, 0, True, , True) & vbCrLf
+           Else
+              Producto = Producto & CodigoP & String(25 - Len(CodigoP), " ") & " " & SetearBlancos(CStr(.fields("Abono")), 10, 0, True, , True) & vbCrLf
+           End If
+           Total = Total + .fields("Abono")
+          .MoveNext
+        Loop
+       'Fin del Recibo
+        Producto = Producto & String(CantGuion, "-") & vbCrLf _
+                 & "Cajero: " & Codigo1 & String(10 - Len(Codigo1), " ") & "TOTAL " & SetearBlancos(CStr(Total), 12, 0, True, False, True) & vbCrLf _
+                 & " " & vbCrLf _
+                 & " " & vbCrLf _
+                 & " " & vbCrLf _
+                 & "_____________      _______________" & vbCrLf _
+                 & "Entregado por      Recibi Conforme" & vbCrLf & " " & vbCrLf
+'''                 & "IMPORTANTE:" & vbCrLf _
+'''                 & "Los productos donados, han perdido valor comercial por diferentes motivos, pero mantienen un valor social. " _
+'''                 & "Estos productos han pasado por un proceso de clasificación y se encuentran en buen estado. Se recomienda su " _
+'''                 & "consumo INMEDIATO y se prohíbe su comercialización. " & RazonSocial & " no se responsabiliza por " _
+'''                 & "cualquier efecto negativo que causare el consumo de alimentos en un tiempo mayor al sugerido.  Con su firma " _
+'''                 & "el beneficiario acepta que ha sido informado sobre el estado de los productos, que los recibe con su consentimiento, " _
+'''                 & "que los usará para fines benéficos y bajo su completa responsabilidad." & vbCrLf & " " & vbCrLf & " " & vbCrLf
+        
+    End If
+   End With
+   AdoDBDAbonos.Close
+   If PorMail Then
+      Titulo = "Pregunta de Envio de Mails"
+      Mensajes = "Esta seguro de querer enviar por mail los documentos?"
+      If BoxMensaje = vbYes Then
+         TMail.MensajeHTML = ""
+         TMail.Mensaje = ""
+         TMail.ListaMail = 255
+         TMail.TipoDeEnvio = "."
+         TMail.Asunto = "Prueba de Mails por smtp.diskcoversystem.com"
+         With TMail
+             .MensajeHTML = Leer_Archivo_Texto(RutaSistema & "\FORMATOS\recibo_mail.html")
+             .MensajeHTML = Replace(TMail.MensajeHTML, "vMensaje", Replace(Producto, vbCrLf, "<br>"))
+         End With
+        'TMail.Mensaje = Producto
+         TMail.Adjunto = ""
+         FEnviarCorreos.Show 1
+         TMail.para = ""
+         TMail.ListaMail = 255
+         Generar_File_SQL "Recibo_Mail", TMail.MensajeHTML
+         RatonNormal
+       End If
+   Else
+      Mensajes = "Imprmir Recibo de la Factura No. " & TTA.Factura
+      Titulo = "IMPRESION"
+      Bandera = False
+      SetPrinters.Show 1
+      If PonImpresoraDefecto(SetNombrePRN) Then
+         RatonReloj
+        'Enviamos a la Impresora
+         Escala_Centimetro 1, TipoCourierNew, 8
+         PosLinea = 0.01
+         Printer.FontName = TipoCourierNew
+         Printer.FontSize = 8
+        'Si imprimimos el LogoTipo
+         If Grafico_PV Then
+            PrinterPaint LogoTipo, 0.01, PosLinea, 5, 1.9
+            PosLinea = PosLinea + 2.2
+         End If
+         PosLinea = PrinterLineasTextoPV(0.01, PosLinea, Producto, CantGuion)
+        'Generar_File_SQL "Nota_Donacion", Producto
+         Printer.EndDoc
+      End If
+   End If
+
+RatonNormal
+Exit Sub
+Errorhandler:
+    RatonNormal
+    ErrorDeImpresion
+    Exit Sub
+End Sub
 
 Public Sub Imprimir_Punto_Venta_SRI(DtaFactura As Adodc, _
                                     DtaDetalle As Adodc, _
@@ -11973,12 +11622,12 @@ Dim TempPosLineaAbono As Single
     TFA.PDF_ClaveAcceso = TipoDoc & SerieFactura
     
    'Generamos el documento
-    tPrint.TipoImpresion = Es_Printer
+   'tPrint.TipoImpresion = Es_Printer
    
-   'tPrint.TipoImpresion = Es_PDF
+    tPrint.TipoImpresion = Es_PDF
 
    'MsgBox TFA.PDF_ClaveAcceso
-    tPrint.NombreArchivo = TFA.PDF_ClaveAcceso
+    tPrint.NombreArchivo = TFA.TC & " " & TFA.Serie & "-" & TFA.Factura
     tPrint.TituloArchivo = "Documento RIDE de Donacion"
     tPrint.TipoLetra = tipoDeLetra
     tPrint.OrientacionPagina = 1
@@ -12031,8 +11680,8 @@ Dim TempPosLineaAbono As Single
     cPrint.tipoNegrilla = False
     
    'Cuadros Superiores
-    cPrint.printCuadro 1.5, 3, 9.4, PosLinf, Blanco, "B", 1
-    cPrint.printCuadro 17, 1.1, 20, 3, Negro, "B"
+    cPrint.printCuadro 16.9, 1.1, 20, 3, Negro, "B"
+    'cPrint.printCuadro 1.5, 2, 15, PosLinf, Blanco, "B", 1
    '==================================================================================================
    'Empezamos a escribir los datos del beneficiario/Cliente/Proveedor
     PosLinea = TPosLinea
@@ -12064,12 +11713,14 @@ Dim TempPosLineaAbono As Single
      PosLinea = PosLinea + 0.35
      cPrint.printTexto 1.6, PosLinea, "Atención: " & TFA.Contacto
      cPrint.printTexto 12.5, PosLinea, "Procesado Por: " & TFA.Digitador
+     'MsgBox TFA.Digitador
     'Cuadro de Informacion Contribuyente
-     cPrint.printCuadro 1.5, PosLinf, 20, PosLinea - 0.2, Negro, "B"
+     cPrint.printCuadro 1.5, PosLinf, 20, PosLinea + 0.2, Negro, "B"
      PosLinea = PosLinea + 0.5
     'Fin de Impresion del Encabezado del Documento PDF
     '==================================================================================================
     TempPosLinea = PosLinea
+   'Cuadro de encabezado del detalle
     cPrint.printCuadro 1.5, PosLinea, 20, PosLinea + 0.01, &HE2E2E2, "BF"
     cPrint.printCuadro 1.5, PosLinea, 20, PosLinea + 0.01, Negro, "B"
     PosLinea = PosLinea + 0.2
@@ -12079,8 +11730,8 @@ Dim TempPosLineaAbono As Single
     cPrint.printTexto 3.4, PosLinea, "GRUPO DE PRODUCTO", PorteDeLetra
     cPrint.printTexto 14.3, PosLinea, "DETALLE"
     cPrint.printTexto 18.3, PosLinea, "CANTIDAD (KG)", PorteDeLetra
-    'cPrint.printLinea 1.5, PosLinea + 0.5, 20, PosLinea + 0.5, Negro
-    PosLinea = PosLinea + 0.5 ' 10.4
+    'cPrint.printLinea 1.1, PosLinea + 0.5, 20.3, PosLinea + 0.5, Negro
+    PosLinea = PosLinea + 0.6 ' 10.4
     cPrint.colorDeLetra = Negro
     cPrint.tipoNegrilla = False
     cPrint.letraTipo tipoDeLetra, 8
@@ -12095,19 +11746,19 @@ Dim TempPosLineaAbono As Single
             cPrint.printTexto 1.6, PosLinea, .fields("Codigo")
             cPrint.printTexto 3.5, PosLinea, .fields("Producto")
             cPrint.printTexto 14.4, PosLinea, .fields("Tipo_Hab")
-            cPrint.printFields 18.1, PosLinea, .fields("Cantidad")
+            cPrint.printFields 18, PosLinea, .fields("Cantidad")
             If PosLineaTemp > PosLinea Then PosLinea = PosLineaTemp
-            PosLinea = PosLinea + 0.35
+            PosLinea = PosLinea + 0.4
             Cantidad = Cantidad + .fields("Cantidad")
            'MsgBox "Linea.: " & PosLinea
             If PosLinea >= 26 Then
               'MsgBox "Nueva Pag.: " & PosLinea
               'Lineas al final del detalle de la factura
                PosLinea = PosLinea + 0.2
-               cPrint.printCuadro 1.5, TempPosLinea, 20, PosLinea, Negro, "B"
-               cPrint.printLinea 3.3, TempPosLinea, 3.3, PosLinea, Negro
-               cPrint.printLinea 14.2, TempPosLinea, 14.2, PosLinea, Negro
-               cPrint.printLinea 18.2, TempPosLinea, 18.2, PosLinea, Negro
+               cPrint.printCuadro 1.5, TempPosLinea, 10.3, PosLinea, Negro, "B"
+               cPrint.printLinea 3.2, TempPosLinea, 3.2, PosLinea, Negro
+               cPrint.printLinea 14.1, TempPosLinea, 14.1, PosLinea, Negro
+               cPrint.printLinea 18, TempPosLinea, 18, PosLinea, Negro
                
                cPrint.printTexto 1.6, PosLinea, "C O N T I N U A   E N   L A   S I G U I E N T E   P A G I N A . . .", PorteDeLetra
                cPrint.paginaNueva
@@ -12122,7 +11773,7 @@ Dim TempPosLineaAbono As Single
                cPrint.printTexto 18.3, PosLinea, "CANTIDAD (KG)", PorteDeLetra
               
               'Detalle de la Factura
-               cPrint.printCuadro 1.5, TempPosLinea, 20, TempPosLinea + 0.5, Negro, "B"
+               cPrint.printCuadro 1.5, TempPosLinea - 0.2, 20, TempPosLinea + 0.5, Negro, "B"
                PosLinea = PosLinea + 0.45 ' 10.4
                cPrint.tipoNegrilla = False
                cPrint.letraTipo tipoDeLetra, 6
@@ -12136,26 +11787,33 @@ Dim TempPosLineaAbono As Single
     cPrint.printCuadro 1.5, PosLinea, 20, PosLinea + 0.01, Negro, "B"
     
    'Lineas al final del detalle de la factura
-    cPrint.printCuadro 1.5, TempPosLinea, 20, PosLinea, Negro, "B"
+    cPrint.printCuadro 1.5, TempPosLinea, 20, PosLinea + 2.5, Negro, "B"
+    
     cPrint.printLinea 3.3, TempPosLinea, 3.3, PosLinea, Negro
     cPrint.printLinea 14.2, TempPosLinea, 14.2, PosLinea, Negro
     cPrint.printLinea 18.2, TempPosLinea, 18.2, PosLinea + 0.6, Negro
-    PosLinea = PosLinea + 0.1
+    
+    PosLinea = PosLinea + 0.2
     cPrint.printTexto 16.5, PosLinea, " T O T A L", PorteDeLetra
     cPrint.printVariable 18.3, PosLinea, CDbl(Cantidad), PorteDeLetra, , , 2
-    PosLinea = PosLinea + 0.6
+    PosLinea = PosLinea + 0.5
     cPrint.letraTipo tipoDeLetra, 7
-    If Len(TFA.Nota) > 1 Then cPrint.printTexto 1.5, PosLinea, "Nota: " & TFA.Nota, PorteDeLetra
-    If Len(TFA.Observacion) > 1 Then PosLinea = cPrint.printTextoMultiple(10.5, PosLinea, "Observacion: " & TFA.Observacion, 12.5)
-    PosLinea = PosLinea + 0.4
+    
     cPrint.printCuadro 1.5, PosLinea, 20, PosLinea + 0.01, &HE2E2E2, "BF"
-    cPrint.printCuadro 1.5, PosLinea, 20, PosLinea + 0.01, Negro, "B"
-    cPrint.printCuadro 1.5, PosLinea, 20, PosLinea + 2, Negro, "B"
-    cPrint.printLinea 10.4, PosLinea, 10.4, PosLinea + 2.6, Negro
-    PosLinea = PosLinea + 0.1
-    cPrint.printTexto 2, PosLinea, "Entregado Por", PorteDeLetra
-    cPrint.printTexto 12, PosLinea, "Recibi Conforme", PorteDeLetra
-    PosLinea = PosLinea + 2.6
+    cPrint.printCuadro 1.5, PosLinea - 0.01, 20, PosLinea + 0.01, Negro, "B"
+    cPrint.printLinea 10.4, PosLinea, 10.4, PosLinea + 2.4, Negro
+    PosLinea = PosLinea + 0.15
+    cPrint.printTexto 1.6, PosLinea, "Nota:"
+    cPrint.printTexto 10.5, PosLinea, "Observacion:"
+    If Len(TFA.Nota) > 1 Then cPrint.printTexto 2.25, PosLinea, TFA.Nota, PorteDeLetra
+    If Len(TFA.Observacion) > 1 Then cPrint.printTexto 12, PosLinea, TFA.Observacion
+    PosLinea = PosLinea + 0.4
+    'cPrint.printCuadro 1.5, PosLinea, 20, PosLinea + 2, Negro, "B"
+    
+    PosLinea = PosLinea + 1.5
+    cPrint.printTexto 5, PosLinea, "Entregado Por", PorteDeLetra
+    cPrint.printTexto 14.5, PosLinea, "Recibi Conforme", PorteDeLetra
+    PosLinea = PosLinea + 0.6
     cPrint.colorDeLetra = Negro
     cPrint.tipoNegrilla = True
     cPrint.letraTipo tipoDeLetra, 7
@@ -12165,13 +11823,13 @@ Dim TempPosLineaAbono As Single
     cPrint.letraTipo tipoDeLetra, 7
     Cadena = "Los productos donados, han perdido valor comercial por diferentes motivos, pero mantienen un valor social. " _
            & "Estos productos han pasado por un proceso de clasificación y se encuentran en buen estado. Se recomienda su " _
-           & "consumo INMEDIATO y se prohíbe su comercialización. El Banco de Alimentos de Quito no se responsabiliza por " _
+           & "consumo INMEDIATO y se prohíbe su comercialización. EL BANCO DE ALIMENTOS QUITO no se responsabiliza por " _
            & "cualquier efecto negativo que causare el consumo de alimentos en un tiempo mayor al sugerido.  Con su firma " _
            & "el beneficiario acepta que ha sido informado sobre el estado de los productos, que los recibe con su consentimiento, " _
            & "que los usará para fines benéficos y bajo su completa responsabilidad."
     PosLinea = cPrint.printTextoMultiple(3.6, PosLinea, Cadena, 16.6)
    '==================================================================================================
-    PosLinea = PosLinea + 0.6
+    PosLinea = PosLinea + 1
     TempPosLinea = PosLinea
     PosLinea = PosLinea + 0.2
     cPrint.printImagen LogoTipo, 1.6, PosLinea, 4.4, 2
@@ -14520,6 +14178,7 @@ Dim TotDescuento As Currency
     Select_AdoDB AdoDBFac, sSQL
     If AdoDBFac.RecordCount > 0 Then TFA.Digitador = AdoDBFac.fields("Nombre_Completo")
     AdoDBFac.Close
+    TFA.Digitador = Replace(TFA.Digitador, vbCrLf, "")
     
     sSQL = "SELECT Descripcion " _
          & "FROM Tabla_Referenciales_SRI " _
@@ -15149,4 +14808,46 @@ Dim SiExisteDatos As Boolean
    AdoCarteraDB.Close
    Reporte_Cartera_Clientes_PDF = SiExisteDatos
 End Function
+
+Public Sub Prueba_Envio_de_Correos()
+    TMail.ListaMail = 255
+    TMail.TipoDeEnvio = "CO"
+   'MsgBox RutaBackup
+    TMail.Asunto = "Prueba de Mails por smtp.diskcoversystem.com"
+    TMail.MensajeHTML = Leer_Archivo_Texto(RutaSistema & "\JAVASCRIPT\email_recibo.html")
+    
+    html_Informacion_adicional = "<strong>INFORMACION ADICIONAL:</strong><br><br>" _
+                               & "<strong>Importe total: USD </strong>150,00<br>" _
+                               & "<strong>Importe total: USD </strong>150,00<br>" _
+                               & "<strong>Importe total: USD </strong>150,00<br>"
+                               
+    html_Detalle_adicional = "<tr>" _
+                           & "<td>13/12/2024</td>" _
+                           & "<td>Madera</td>" _
+                           & "<td class='row text-right'>150,00</td>" _
+                           & "</tr>" _
+                           & "<tr>" _
+                           & "<td>13/12/2024</td>" _
+                           & "<td>Madera</td>" _
+                           & "<td class='row text-right'>180,00</td>" _
+                           & "</tr>"
+    FA.Fecha = FechaSistema
+    FA.Recibo_No = Format(FA.Fecha, "yyyymmdd") & Format(FA.Factura, "000000000")
+    'TMail.MensajeHTML = ""
+    'TMail.Mensaje = "Esta es una prueba de Correo Electronico enviado por DNS-EXIT, " _
+                  & "mensaje enviado desde el PC: " & IP_PC.Nombre_PC & ", a las: " & Time & ", " _
+                  & "de la empresa: " & Empresa & "."
+
+    TMail.Adjunto = ""
+    TMail.para = ""
+    Insertar_Mail TMail.para, "diskcoversystem@msn.com"
+    Insertar_Mail TMail.para, "diskcover.system@yahoo.com"
+    Insertar_Mail TMail.para, "diskcover.system@gmail.com"
+    Insertar_Mail TMail.para, "informacion@diskcoversystem.com"
+    Insertar_Mail TMail.para, "electronicos@diskcoversystem.com"
+    FEnviarCorreos.Show 1
+    TMail.para = ""
+    TMail.ListaMail = 255
+End Sub
+
 

@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "Mscomctl.ocx"
 Begin VB.MDIForm MDISeteos 
    BackColor       =   &H00FFFFFF&
    Caption         =   " "
@@ -204,6 +204,13 @@ Private Sub CambClave_Click()
 End Sub
 
 Private Sub ChangeEmp_Click()
+  
+  
+  
+  
+  
+  
+  
   Control_Procesos Normal, "Salir del Sistema"
   RatonReloj
   UnidadSistema

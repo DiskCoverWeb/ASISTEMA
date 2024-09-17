@@ -330,6 +330,7 @@ Type CtasAsiento
       LogoNotaCredito  As String
       PDF_ClaveAcceso  As String
       Orden_Compra     As String
+      Recibo_No        As String
       
       C                As Boolean
       p                As Boolean
@@ -895,6 +896,11 @@ Type Datos_PDF
      TelefonoBeneficiario   As String
      EmailBeneficiario      As String
      ValorTotal             As Currency
+End Type
+
+Type List_Files
+     File                   As String
+     Ext                    As String
 End Type
 
 'Formulario Padre o Principal

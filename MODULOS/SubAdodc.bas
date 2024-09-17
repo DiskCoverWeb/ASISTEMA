@@ -27,6 +27,18 @@ Option Explicit
 '''  Select_AdoDB AdoAuxDB, sSQL
 '''  AdoAuxDB.Close
 
+'''NumFile = FreeFile
+'''Open FileDestino For Input As #NumFile    ' Open file.
+'''Do While Not EOF(NumFile)           ' Loop until end of file.
+'''   MyChar = Input(1, #NumFile)     ' Get one character.
+'''   TextoFile = TextoFile & MyChar
+'''
+'''   Progreso_Barra.Mensaje_Box = "Actualizando: " & FileOrigen & " - " & Len(TextoFile)
+'''  .Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''
+'''Loop
+'''Close #NumFile                      ' Close file.
+
 Public Function Crear_FN_SP(RutaFile As String) As String
 Dim Si_Crear As Boolean
 Dim NumFile As Long
@@ -3123,7 +3135,7 @@ Dim IdTime As Long
      SQLQuery = CompilarSQL(SQLQuery)
     'MsgBox SQLQuery & vbCrLf & String(70, "_") & vbCrLf & AdoStrCnnMySQL
      Set AdoCon1 = New ADODB.Connection
-     If Ping_PC("db.diskcoversystem.com") Then
+     If Ping_IP("db.diskcoversystem.com") Then
         AdoCon1.open AdoStrCnnMySQL
         AdoCon1.Execute SQLQuery, RegAfectados, adCmdText
         AdoCon1.Close
@@ -4437,7 +4449,7 @@ End Sub
 
 Public Sub UPD_Actualizar_Datos_Defecto(ProgressBarEstado As ProgressBar, _
                                         LstStatud As ListBox, _
-                                        URLInet As Inet, _
+                                        URLinet As Inet, _
                                         Update_Dir As DirListBox, _
                                         Update_File As FileListBox, _
                                         Update_LstTablas As ListBox, _
@@ -6999,6 +7011,7 @@ On Error GoTo error_Handler
           '==================================================================================
            FileCSV = Right$(sOrigen, Len(sOrigen) - InStrRev(sOrigen, "\"))
            sDestino = "/files/" & FileCSV
+           MsgBox sDestino
            Progreso_Barra.Mensaje_Box = "Subiendo: " & FileCSV
           .SubirArchivo sOrigen, sDestino, True
           .Desconectar

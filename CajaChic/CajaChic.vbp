@@ -93,6 +93,7 @@ Class=cFTP; ..\CLASES\cFTP.cls
 Object={38911DA0-E448-11D0-84A3-00DD01104159}#1.1#0; ComCt332.ocx
 Form=..\GENERAL\CliFlash.frm
 Form=..\ROLPAGOS\FRolPag.frm
+Class=cPing; ..\CLASES\cPing.cls
 IconForm="MDICajaChica"
 Startup="MDICajaChica"
 HelpFile=""

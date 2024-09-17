@@ -3789,7 +3789,8 @@ Dim AdoRetAut As ADODB.Recordset
   C1.Ctas_Modificar = TrimStrg(C1.Ctas_Modificar)
   C1.CodigoInvModificar = TrimStrg(C1.CodigoInvModificar)
   If Len(C1.Ctas_Modificar) > 1 Then
-     C1.Ctas_Modificar = MidStrg(C1.Ctas_Modificar, 1, Len(C1.Ctas_Modificar) - 1)
+     If MidStrg(C1.Ctas_Modificar, Len(C1.Ctas_Modificar), 1) = "," Then C1.Ctas_Modificar = MidStrg(C1.Ctas_Modificar, 1, Len(C1.Ctas_Modificar) - 1)
+     
      sSQL = "UPDATE Transacciones " _
           & "SET Procesado = 0 " _
           & "WHERE Item = '" & C1.Item & "' " _
@@ -3798,7 +3799,7 @@ Dim AdoRetAut As ADODB.Recordset
      Ejecutar_SQL_SP sSQL
   End If
   If Len(C1.CodigoInvModificar) > 1 Then
-     C1.CodigoInvModificar = MidStrg(C1.CodigoInvModificar, 1, Len(C1.CodigoInvModificar) - 1)
+     'C1.CodigoInvModificar = MidStrg(C1.CodigoInvModificar, 1, Len(C1.CodigoInvModificar) - 1)
      sSQL = "UPDATE Trans_Kardex " _
           & "SET Procesado = 0 " _
           & "WHERE Item = '" & C1.Item & "' " _

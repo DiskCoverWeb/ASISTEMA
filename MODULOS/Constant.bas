@@ -3,12 +3,13 @@ Option Explicit
 '-------------------------------------------------------
 'CORREOS PERSONALES DE DISKCOVER SYSTEM:
 '======================================
-'electronicos@diskcoversystem.com       Electronicos2022@
+'actualizar@diskcoversystem.com         Dlcjvl031210@
 'comprobantes@diskcoversystem.com       Dlcjvl1210@CompElec
-'informacion@diskcoversystem.com        infoDlcjvl1210DiskCover
-'actualizar@diskcoversystem.com         Dlcjvl1210@
 'desarrollo@diskcoversystem.com         Dlcjvl031210@
+'electronicos@diskcoversystem.com       Electronicos2022@
+'informacion@diskcoversystem.com        infoDlcjvl1210DiskCover
 'soporte@diskcoversystem.com            Dlcjvl031210@
+'soporteweb@diskcoversystem.com         Dlcjvl031210@
 '-------------------------------------------------------
 'SERVIRLES ES NUESTRO COMPROMISO, DISFRUTARLO ES EL SUYO.
 '-------------------------------------------------------
@@ -80,23 +81,23 @@ Global Const TextoLeyendaFA = "Para consultas, requerimientos o reclamos puede c
 
 Global Const TextoLeyendaFA1 = "SERVIRLE ES NUESTRO OBJETIVO, DISFRUTARLO EL SUYO"
 
-Global Const MensajeAutomatizado = "Mensaje_Comunicado" & vbCrLf _
+Global Const MensajeAutomatizado = "vMensaje_Comunicado" & vbCrLf _
                                  & "Este correo electronico fue generado automaticamente a usted desde El Sistema Financiero Contable DiskCover System, " _
-                                 & "porque figura como correo electronico alternativo de Razon_Social. " _
+                                 & "porque figura como correo electronico alternativo de vRazon_Social. " _
                                  & "Nosotros respetamos su privacidad y solamente se utiliza este medio para mantenerlo informado sobre nuestras ofertas, " _
                                  & "promociones y comunicados. No compartimos, publicamos o vendemos su informacion personal fuera de nuestra empresa. " _
-                                 & "Este mensaje fue procesado por: Nombre_Usuario, funcionario que forma parte de la Institucion." & vbCrLf & vbCrLf _
+                                 & "Este mensaje fue procesado por: vNombre_Usuario, funcionario que forma parte de la Institucion." & vbCrLf & vbCrLf _
                                  & "Por la atencion que se de al presente quedo de usted." & vbCrLf _
                                  & vbCrLf _
                                  & "Atentamente," & vbCrLf _
                                  & vbCrLf _
-                                 & "Representante_Legal" & vbCrLf _
-                                 & "Razon_Social" & vbCrLf _
+                                 & "vRepresentante_Legal" & vbCrLf _
+                                 & "vRazon_Social" & vbCrLf _
                                  & vbCrLf _
-                                 & "Esta direccion de correo electronico no admite respuestas. En caso de requerir atencion personalizada por parte de un " _
-                                 & "asesor de Servicio al Cliente de Razon_Social, podra solicitar ayuda mediante los canales oficiales que detallamos a " _
-                                 & "continuación: Telefonos: Numero_Telefono Correo: Emails." & vbCrLf & vbCrLf _
-                                 & "www.diskcoversystem.com" & vbCrLf _
+                                 & "<N>NOTA:</N> Esta direccion de correo electronico no admite respuestas. En caso de requerir atencion personalizada por parte de un " _
+                                 & "asesor de Servicio al Cliente de vRazon_Social, podra solicitar ayuda mediante los canales oficiales que detallamos a " _
+                                 & "continuación: Telefonos: vNumero_Telefono, Correo: vEmails." & vbCrLf & vbCrLf _
+                                 & "Visita: diskcoversystem" & vbCrLf _
                                  & "QUITO - ECUADOR" & vbCrLf
 
 Global Const MensajeNoAutorizarCE = "LA EMPRESA NO TIENE ACTIVADO EL PROCESO PARA SOLICITAR AUTORIZACION AL SRI, " _
@@ -144,15 +145,15 @@ Global Const CorreoDiskCover = "informacion@diskcoversystem.com"
 Global Const ContrasenaDiskCover = "infoDlcjvl1210DiskCover"
 Global Const CorreoUpdate = "actualizar@diskcoversystem.com"
 'LINODE
-Global Const ftpSvrLinode = "ftp.diskcoversystem.com"
+Global Const ftpSvrLinode = "ftp.diskcoversystem.com" 'Es el servidor del db.diskcoversystem.com
 Global Const ftpUseLinode = "ftpuser"
 Global Const ftpPwrLinode = "ftp2023User"
 Global Const ftpPuerto = 21
 'NAS publico
-Global Const ftpSvr = "vpn.diskcoversystem.com"
+Global Const ftpSvr = "ftpds.diskcoversystem.com" 'Es el servidor del erp.diskcoversystem.com
 Global Const ftpUse = "ftpuser"
 Global Const ftpPwr = "ftp2023User"
-Global Const ftpDir = "/ftp"
+Global Const ftpDir = "/files"
 '-----------------------------------------------------------------
 Global Const Car_Visto = 251
 '-----------------------------------------------------------------

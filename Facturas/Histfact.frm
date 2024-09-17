@@ -4,7 +4,7 @@ Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{65E121D4-0C60-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSChrt20.ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "Mscomctl.ocx"
 Begin VB.Form HistorialFacturas 
    Caption         =   "RESUMEN HISTORICO DE FACTURAS/NOTAS DE VENTA"
    ClientHeight    =   10050
@@ -4363,35 +4363,52 @@ Dim Cta_Aux_Mail As String
        Ejecutar_SQL_SP sSQL
        CheqAbonos.value = 0
     End If
-    sSQL = "SELECT C.Cliente,F.CodigoC,F.Clave_Acceso,F.Estado_SRI,F.TC,F.Fecha,F.Fecha_V,F.Serie,F.Factura,F.Hora_Aut,F.Fecha_Aut,F.Autorizacion," _
-         & "F.Saldo_MN,C.Email,C.Email2,C.EmailR,C.CI_RUC " _
-         & "FROM Facturas As F,Clientes As C " _
-         & "WHERE F.Item = '" & NumEmpresa & "' " _
-         & "AND F.Periodo = '" & Periodo_Contable & "' " _
-         & "AND F.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# "
-    If DocDesde > 0 And DocHasta > 0 And DocDesde <= DocHasta Then sSQL = sSQL & "AND F.Factura BETWEEN " & DocDesde & " and " & DocHasta & " "
-    If TipoEnvio = "FA" Then sSQL = sSQL & "AND LEN(F.Autorizacion) >= 13 "
-    If Cta_Aux_Mail <> Ninguno Then sSQL = sSQL & "AND F.X = '.' "
+    If TipoEnvio = "FA" Then
+        sSQL = "SELECT C.Cliente, F.CodigoC, F.Estado_SRI, F.TC, F.Fecha, F.Fecha_V, F.Serie, F.Factura, F.Hora_Aut, F.Fecha_Aut, F.Autorizacion, " _
+             & "F.Saldo_MN, C.Email, C.Email2, C.EmailR, C.CI_RUC " _
+             & "FROM Facturas As F, Clientes As C " _
+             & "WHERE F.Item = '" & NumEmpresa & "' " _
+             & "AND F.Periodo = '" & Periodo_Contable & "' " _
+             & "AND F.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
+             & "AND F.TC IN ('FA','NV') " _
+             & Tipo_De_Consulta(, True)
+        If DocDesde > 0 And DocHasta > 0 And DocDesde <= DocHasta Then sSQL = sSQL & "AND F.Factura BETWEEN " & DocDesde & " and " & DocHasta & " "
+        If Cta_Aux_Mail <> Ninguno Then sSQL = sSQL & "AND F.X = '.' "
+    Else
+        sSQL = "SELECT C.Cliente, F.CodigoC, F.TP As TC, F.Fecha, F.Serie, F.Factura, F.Hora_Aut, F.Fecha_Aut, F.Autorizacion, " _
+             & "F.Abono As Saldo_MN, C.Email, C.Email2, C.EmailR, C.CI_RUC " _
+             & "FROM Trans_Abonos As F, Clientes As C " _
+             & "WHERE F.Item = '" & NumEmpresa & "' " _
+             & "AND F.Periodo = '" & Periodo_Contable & "' " _
+             & "AND F.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
+             & "AND F.TP IN ('FA','NV') " _
+             & Tipo_De_Consulta(, True)
+        If DocDesde > 0 And DocHasta > 0 And DocDesde <= DocHasta Then sSQL = sSQL & "AND F.Factura BETWEEN " & DocDesde & " and " & DocHasta & " "
+        If Cta_Aux_Mail <> Ninguno Then sSQL = sSQL & "AND F.Cta = '" & Cta_Aux_Mail & "' "
+    End If
     sSQL = sSQL _
-         & Tipo_De_Consulta(, True) _
-         & "AND F.TC IN ('FA','NV') " _
          & "AND F.CodigoC = C.Codigo " _
-         & "ORDER BY F.Factura "
-    Select_Adodc AdoQuery, sSQL
+         & "ORDER BY F.Serie, F.Factura "
+    Select_Adodc AdoQuery, sSQL, , , "Recibos_Mails"
     RatonReloj
     With AdoQuery.Recordset
-     'MsgBox "Total Registros: " & .RecordCount
+    'MsgBox "Total Registros: " & .RecordCount
      If .RecordCount > 0 Then
          Titulo = "Pregunta de Envio de Mails"
          Mensajes = "Esta seguro de querer enviar por mail los documentos?"
          If BoxMensaje = vbYes Then
             Do While Not .EOF
                FA.CodigoC = .fields("CodigoC")
-               FA.ClaveAcceso = .fields("Clave_Acceso")
-               FA.Estado_SRI = .fields("Estado_SRI")
+               FA.ClaveAcceso = .fields("Autorizacion")
+               If TipoEnvio = "FA" Then
+                  FA.Estado_SRI = .fields("Estado_SRI")
+                  FA.Fecha_V = .fields("Fecha_V")
+               Else
+                  FA.Estado_SRI = "OK"
+               End If
                FA.TC = .fields("TC")
                FA.Fecha = .fields("Fecha")
-               FA.Fecha_V = .fields("Fecha_V")
+               
                FA.Serie = .fields("Serie")
                FA.CI_RUC = .fields("CI_RUC")
                FA.Factura = .fields("Factura")

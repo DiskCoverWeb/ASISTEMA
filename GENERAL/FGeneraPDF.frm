@@ -879,7 +879,7 @@ Dim v10 As Date
         Dim strSingleString1 As String
         Dim strSingleString2 As String
         Dim strSingleString3 As String
-        Dim i As Long
+        Dim I As Long
         
         strFull = "Dow - Fonseca - Graham - Kopke - Noval - Offley - Sandeman - Taylor - Warre"    ' String that will be used.
         
@@ -898,12 +898,12 @@ Dim v10 As Date
         strSingleString2 = Split(strFull, " - ")(7) ' strSingleString2 = "Kopke".
                                                     ' This syntax can be used if the entire array is not needed, and the position in the returned array for the desired value is known.
         
-        For i = LBound(arrSplitStrings2, 1) To UBound(arrSplitStrings2, 1)
-            If InStr(1, arrSplitStrings2(i), "Kopke", vbTextCompare) > 0 Then
-                strSingleString3 = arrSplitStrings2(i)
+        For I = LBound(arrSplitStrings2, 1) To UBound(arrSplitStrings2, 1)
+            If InStr(1, arrSplitStrings2(I), "Kopke", vbTextCompare) > 0 Then
+                strSingleString3 = arrSplitStrings2(I)
                 Exit For
             End If
-        Next i
+        Next I
         MsgBox strSingleString1 & vbNewLine _
              & strSingleString2 & vbNewLine _
              & strSingleString3 & vbNewLine
@@ -955,6 +955,7 @@ Dim v10 As Date
                       
         TMail.Adjunto = ""
         TMail.para = ""
+        Insertar_Mail TMail.para, "diskcoversystem@msn.com"
         Insertar_Mail TMail.para, "diskcover.system@yahoo.com"
         Insertar_Mail TMail.para, "diskcover.system@gmail.com"
         Insertar_Mail TMail.para, "informacion@diskcoversystem.com"
@@ -1021,10 +1022,10 @@ Dim v10 As Date
             SRI_Autorizacion = SRI_Leer_XML_Autorizado(RutaXMLAutorizado, RutaXMLRechazado)
             If Existe_File(RutaXMLAutorizado) Then
                 TextoFileEmp = SRI_Autorizacion.Documento_XML
-                i = InStr(TextoFileEmp, "<![CDATA[")
+                I = InStr(TextoFileEmp, "<![CDATA[")
                 F = InStr(TextoFileEmp, "]]></comprobante>")
-                If i > 0 And F > 0 Then i = i + 9
-                TextoFileEmp = TrimStrg(MidStrg(TextoFileEmp, i, F - i))
+                If I > 0 And F > 0 Then I = I + 9
+                TextoFileEmp = TrimStrg(MidStrg(TextoFileEmp, I, F - I))
             Else
                 TextoFileEmp = SRI_Autorizacion.Documento_XML
             End If
@@ -1037,7 +1038,7 @@ Dim v10 As Date
 End Sub
 
 Public Sub Cuadro_Impresora()
-Dim NPRinter, BeginPage, EndPage, NumCopies, Orientation, i
+Dim NPRinter, BeginPage, EndPage, NumCopies, Orientation, I
 ' Establece Cancel a True.
 CommonDialog1.CancelError = True
 On Error GoTo errHandler
@@ -1050,7 +1051,7 @@ NumCopies = CommonDialog1.Copies
 Orientation = CommonDialog1.Orientation
 
 MsgBox NPRinter & vbCrLf & BeginPage & vbCrLf & EndPage & vbCrLf & NumCopies & vbCrLf & Orientation
-For i = 1 To NumCopies
+For I = 1 To NumCopies
 ' Escriba aquí código para enviar los datos a la ' impresora.
 Next
 Exit Sub
@@ -1213,14 +1214,14 @@ Dim Dato() As Currency
     MSChart.Plot.axis(MSChart20Lib.VtChAxisId.VtChAxisIdY).AxisTitle.Text = "Miles en USD"
     MSChart.chartType = VtChChartType2dBar
     MSChart.RowLabel = "Origenes"
-     For i = 0 To 9
-        MSChart.Column = i + 1
+     For I = 0 To 9
+        MSChart.Column = I + 1
         MSChart.Row = 1
-        MSChart.RowLabel = CStr(i + 1)
-        Dato(i, 1) = i * 100
-        Dato(i, 2) = i * 200
+        MSChart.RowLabel = CStr(I + 1)
+        Dato(I, 1) = I * 100
+        Dato(I, 2) = I * 200
         MSChart.ChartData = Dato
-     Next i
+     Next I
     MSChart.ShowLegend = True
      
          
@@ -2016,9 +2017,9 @@ Dim rsExcel As ADODB.Recordset
        AdoDataGrid.Recordset.MoveLast
        DataGrid.Caption = AdoDataGrid.Recordset.RecordCount
        Cadena = "Registros: " & AdoDataGrid.Recordset.RecordCount & vbCrLf
-       For i = 0 To AdoDataGrid.Recordset.fields.Count - 1
-           Cadena = Cadena & AdoDataGrid.Recordset.fields(i).Name & " = " & AdoDataGrid.Recordset.fields(i) & vbCrLf
-       Next i
+       For I = 0 To AdoDataGrid.Recordset.fields.Count - 1
+           Cadena = Cadena & AdoDataGrid.Recordset.fields(I).Name & " = " & AdoDataGrid.Recordset.fields(I) & vbCrLf
+       Next I
        'MsgBox Cadena
        End If
 End Sub
@@ -2110,11 +2111,11 @@ Dim Documento As String
        SRI_Autorizacion = SRI_Leer_XML_Autorizado(RutaXMLAutorizado, RutaXMLRechazado)
        TextoFileEmp = SRI_Autorizacion.Documento_XML
        MsgBox SRI_Autorizacion.Documento_XML
-       i = InStr(TextoFileEmp, "<![CDATA[")
+       I = InStr(TextoFileEmp, "<![CDATA[")
        F = InStr(TextoFileEmp, "]]></comprobante>")
-       If i > 0 And F > 0 Then
-          i = i + 9
-          Documento = TrimStrg(MidStrg(TextoFileEmp, i, F - i))
+       If I > 0 And F > 0 Then
+          I = I + 9
+          Documento = TrimStrg(MidStrg(TextoFileEmp, I, F - I))
           Escribir_Archivo RutaXMLAutorizado, Documento
           
        End If

@@ -2,14 +2,15 @@ VERSION 5.00
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form RAbonos 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "INGRESO DE CAJA                                                                      Cancelacion Factura"
-   ClientHeight    =   6120
+   ClientHeight    =   7530
    ClientLeft      =   5025
    ClientTop       =   4380
-   ClientWidth     =   10920
+   ClientWidth     =   14040
    BeginProperty Font 
       Name            =   "MS Sans Serif"
       Size            =   8.25
@@ -23,70 +24,160 @@ Begin VB.Form RAbonos
    MaxButton       =   0   'False
    MDIChild        =   -1  'True
    MinButton       =   0   'False
-   ScaleHeight     =   6120
-   ScaleWidth      =   10920
+   ScaleHeight     =   7530
+   ScaleWidth      =   14040
    ShowInTaskbar   =   0   'False
-   Begin VB.CheckBox CheqFecha 
-      Caption         =   "Fecha del dia:"
-      Height          =   330
-      Left            =   6405
-      TabIndex        =   4
-      Top             =   105
-      Value           =   1  'Checked
-      Width           =   2010
+   Begin ComctlLib.Toolbar Toolbar1 
+      Align           =   1  'Align Top
+      Height          =   660
+      Left            =   0
+      TabIndex        =   15
+      Top             =   0
+      Width           =   14040
+      _ExtentX        =   24765
+      _ExtentY        =   1164
+      ButtonWidth     =   1032
+      ButtonHeight    =   1005
+      Appearance      =   1
+      ImageList       =   "ImageList1"
+      _Version        =   327682
+      BeginProperty Buttons {0713E452-850A-101B-AFC0-4210102A8DA7} 
+         NumButtons      =   7
+         BeginProperty Button1 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   "Salir"
+            Object.ToolTipText     =   "Salir del Modulo"
+            Object.Tag             =   ""
+            ImageIndex      =   1
+         EndProperty
+         BeginProperty Button2 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   "Recibo"
+            Object.ToolTipText     =   "Listar Recibo"
+            Object.Tag             =   ""
+            ImageIndex      =   2
+         EndProperty
+         BeginProperty Button3 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   "Excel"
+            Object.ToolTipText     =   "Enviar a Excel el Resultado"
+            Object.Tag             =   ""
+            ImageIndex      =   3
+         EndProperty
+         BeginProperty Button4 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   "PDF"
+            Object.ToolTipText     =   "Generar Recibo en PDF"
+            Object.Tag             =   ""
+            ImageIndex      =   4
+         EndProperty
+         BeginProperty Button5 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   "Impresora"
+            Object.ToolTipText     =   "Imprimir Recibo"
+            Object.Tag             =   ""
+            ImageIndex      =   5
+         EndProperty
+         BeginProperty Button6 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   "Punto_Venta"
+            Object.ToolTipText     =   "Imprimir Recibo PV"
+            Object.Tag             =   ""
+            ImageIndex      =   6
+         EndProperty
+         BeginProperty Button7 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   "Email"
+            Object.ToolTipText     =   "Enviar por mail el Recibo"
+            Object.Tag             =   ""
+            ImageIndex      =   7
+         EndProperty
+      EndProperty
+      Begin VB.Frame Frame1 
+         Height          =   645
+         Left            =   4200
+         TabIndex        =   16
+         Top             =   0
+         Width           =   9675
+         Begin VB.OptionButton OpcFactura 
+            Caption         =   "Por Factura"
+            Height          =   330
+            Left            =   3150
+            TabIndex        =   21
+            Top             =   210
+            Value           =   -1  'True
+            Width           =   1380
+         End
+         Begin VB.OptionButton OpcRecibo 
+            Caption         =   "Por Recibo"
+            Height          =   330
+            Left            =   4725
+            TabIndex        =   20
+            Top             =   210
+            Width           =   1380
+         End
+         Begin VB.OptionButton OpcCliente 
+            Caption         =   "Por Cliente"
+            Height          =   330
+            Left            =   6300
+            TabIndex        =   19
+            Top             =   210
+            Width           =   1275
+         End
+         Begin VB.OptionButton OpCFecha 
+            Caption         =   "Por Fecha"
+            Height          =   330
+            Left            =   7875
+            TabIndex        =   18
+            Top             =   210
+            Width           =   1275
+         End
+         Begin VB.CheckBox CheqFecha 
+            Caption         =   "Fecha del dia:"
+            Height          =   330
+            Left            =   105
+            TabIndex        =   17
+            Top             =   210
+            Value           =   1  'Checked
+            Width           =   1590
+         End
+         Begin MSMask.MaskEdBox MBFecha 
+            Height          =   330
+            Left            =   1785
+            TabIndex        =   22
+            Top             =   210
+            Width           =   1275
+            _ExtentX        =   2249
+            _ExtentY        =   582
+            _Version        =   393216
+            AllowPrompt     =   -1  'True
+            AutoTab         =   -1  'True
+            MaxLength       =   10
+            BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Format          =   "dd/mm/yyyy"
+            Mask            =   "##/##/####"
+            PromptChar      =   "0"
+         End
+      End
    End
-   Begin VB.OptionButton OpCFecha 
-      Caption         =   "Por Fecha"
+   Begin VB.CommandButton Command4 
+      Caption         =   "&S"
       Height          =   330
-      Left            =   5040
-      TabIndex        =   3
-      Top             =   105
-      Width           =   1275
-   End
-   Begin VB.CommandButton Command1 
-      Caption         =   "&Recibo"
-      Height          =   750
-      Left            =   9870
-      Picture         =   "RAbonos.frx":0000
-      Style           =   1  'Graphical
+      Left            =   13545
       TabIndex        =   23
-      Top             =   1365
-      Width           =   960
-   End
-   Begin VB.OptionButton OpcCliente 
-      Caption         =   "Por Cliente"
-      Height          =   330
-      Left            =   3465
-      TabIndex        =   2
-      Top             =   105
-      Width           =   1275
-   End
-   Begin VB.OptionButton OpcRecibo 
-      Caption         =   "Por Recibo"
-      Height          =   330
-      Left            =   1785
-      TabIndex        =   1
-      Top             =   105
-      Width           =   1380
-   End
-   Begin VB.OptionButton OpcFactura 
-      Caption         =   "Por Factura"
-      Height          =   330
-      Left            =   105
-      TabIndex        =   0
-      Top             =   105
-      Value           =   -1  'True
-      Width           =   1380
+      Top             =   735
+      Width           =   330
    End
    Begin MSDataGridLib.DataGrid DGIngCaja 
-      Bindings        =   "RAbonos.frx":08CA
-      Height          =   2430
+      Bindings        =   "RAbonos.frx":0000
+      Height          =   3270
       Left            =   105
-      TabIndex        =   7
-      Top             =   2100
-      Width           =   9675
-      _ExtentX        =   17066
-      _ExtentY        =   4286
+      TabIndex        =   1
+      Top             =   2625
+      Width           =   13770
+      _ExtentX        =   24289
+      _ExtentY        =   5768
       _Version        =   393216
       HeadLines       =   1
       RowHeight       =   15
@@ -146,7 +237,7 @@ Begin VB.Form RAbonos
    Begin MSAdodcLib.Adodc AdoClientes 
       Height          =   330
       Left            =   315
-      Top             =   3045
+      Top             =   4410
       Visible         =   0   'False
       Width           =   2430
       _ExtentX        =   4286
@@ -193,7 +284,7 @@ Begin VB.Form RAbonos
    Begin MSAdodcLib.Adodc AdoDiarioCaja 
       Height          =   330
       Left            =   315
-      Top             =   2625
+      Top             =   3990
       Visible         =   0   'False
       Width           =   2430
       _ExtentX        =   4286
@@ -237,35 +328,15 @@ Begin VB.Form RAbonos
       EndProperty
       _Version        =   393216
    End
-   Begin VB.CommandButton Command3 
-      Caption         =   "&Imprimir"
-      Height          =   750
-      Left            =   9870
-      Picture         =   "RAbonos.frx":08E6
-      Style           =   1  'Graphical
-      TabIndex        =   8
-      Top             =   525
-      Width           =   960
-   End
-   Begin VB.CommandButton Command2 
-      Caption         =   "&Salir"
-      Height          =   750
-      Left            =   9870
-      Picture         =   "RAbonos.frx":11B0
-      Style           =   1  'Graphical
-      TabIndex        =   9
-      Top             =   2205
-      Width           =   960
-   End
    Begin MSDataListLib.DataCombo DCRecibo 
-      Bindings        =   "RAbonos.frx":1A7A
+      Bindings        =   "RAbonos.frx":001C
       DataSource      =   "AdoRecibo"
       Height          =   315
       Left            =   105
-      TabIndex        =   6
-      Top             =   525
-      Width           =   9675
-      _ExtentX        =   17066
+      TabIndex        =   0
+      Top             =   735
+      Width           =   13350
+      _ExtentX        =   23548
       _ExtentY        =   556
       _Version        =   393216
       Text            =   "DataCombo1"
@@ -274,7 +345,7 @@ Begin VB.Form RAbonos
    Begin MSAdodcLib.Adodc AdoRecibo 
       Height          =   330
       Left            =   315
-      Top             =   2310
+      Top             =   3675
       Visible         =   0   'False
       Width           =   2430
       _ExtentX        =   4286
@@ -321,7 +392,7 @@ Begin VB.Form RAbonos
    Begin MSAdodcLib.Adodc AdoFacturas 
       Height          =   330
       Left            =   315
-      Top             =   3360
+      Top             =   4725
       Visible         =   0   'False
       Width           =   2430
       _ExtentX        =   4286
@@ -365,30 +436,47 @@ Begin VB.Form RAbonos
       EndProperty
       _Version        =   393216
    End
-   Begin MSMask.MaskEdBox MBFecha 
-      Height          =   330
-      Left            =   8505
-      TabIndex        =   5
-      Top             =   105
-      Width           =   1275
-      _ExtentX        =   2249
-      _ExtentY        =   582
-      _Version        =   393216
-      AllowPrompt     =   -1  'True
-      AutoTab         =   -1  'True
-      MaxLength       =   10
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
+   Begin ComctlLib.ImageList ImageList1 
+      Left            =   13965
+      Top             =   735
+      _ExtentX        =   1005
+      _ExtentY        =   1005
+      BackColor       =   -2147483643
+      ImageWidth      =   32
+      ImageHeight     =   32
+      MaskColor       =   12632256
+      _Version        =   327682
+      BeginProperty Images {0713E8C2-850A-101B-AFC0-4210102A8DA7} 
+         NumListImages   =   7
+         BeginProperty ListImage1 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "RAbonos.frx":0034
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage2 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "RAbonos.frx":034E
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage3 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "RAbonos.frx":0668
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage4 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "RAbonos.frx":12BA
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage5 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "RAbonos.frx":15D4
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage6 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "RAbonos.frx":18EE
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage7 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "RAbonos.frx":1C08
+            Key             =   ""
+         EndProperty
       EndProperty
-      Format          =   "dd/mm/yyyy"
-      Mask            =   "##/##/####"
-      PromptChar      =   "0"
    End
    Begin VB.Label LblBanco 
       Alignment       =   1  'Right Justify
@@ -396,18 +484,18 @@ Begin VB.Form RAbonos
       Caption         =   " BANCO"
       Height          =   1380
       Left            =   105
-      TabIndex        =   19
-      Top             =   4620
-      Width           =   5265
+      TabIndex        =   11
+      Top             =   5985
+      Width           =   9360
    End
    Begin VB.Label Label2 
       BackColor       =   &H00FFFFFF&
       BorderStyle     =   1  'Fixed Single
       Height          =   330
       Left            =   1260
-      TabIndex        =   22
-      Top             =   945
-      Width           =   8520
+      TabIndex        =   14
+      Top             =   1155
+      Width           =   12615
    End
    Begin VB.Label LblRetencion 
       Alignment       =   1  'Right Justify
@@ -415,18 +503,18 @@ Begin VB.Form RAbonos
       BorderStyle     =   1  'Fixed Single
       Caption         =   "0.00"
       Height          =   330
-      Left            =   8190
-      TabIndex        =   21
-      Top             =   5250
+      Left            =   12285
+      TabIndex        =   13
+      Top             =   6615
       Width           =   1590
    End
    Begin VB.Label Label7 
       BorderStyle     =   1  'Fixed Single
       Caption         =   " RETENCIONES"
       Height          =   330
-      Left            =   5460
-      TabIndex        =   20
-      Top             =   5250
+      Left            =   9555
+      TabIndex        =   12
+      Top             =   6615
       Width           =   2745
    End
    Begin VB.Label LblEfectivo 
@@ -435,9 +523,9 @@ Begin VB.Form RAbonos
       BorderStyle     =   1  'Fixed Single
       Caption         =   "0.00"
       Height          =   330
-      Left            =   8190
-      TabIndex        =   17
-      Top             =   4935
+      Left            =   12285
+      TabIndex        =   9
+      Top             =   6300
       Width           =   1590
    End
    Begin VB.Label LblTotBanco 
@@ -446,47 +534,46 @@ Begin VB.Form RAbonos
       BorderStyle     =   1  'Fixed Single
       Caption         =   "0.00"
       Height          =   330
-      Left            =   8190
-      TabIndex        =   18
-      Top             =   4620
+      Left            =   12285
+      TabIndex        =   10
+      Top             =   5985
       Width           =   1590
    End
    Begin VB.Label Label6 
       BorderStyle     =   1  'Fixed Single
       Caption         =   " EFECTIVO"
       Height          =   330
-      Left            =   5460
-      TabIndex        =   15
-      Top             =   4935
+      Left            =   9555
+      TabIndex        =   7
+      Top             =   6300
       Width           =   2745
    End
    Begin VB.Label LblCheque 
       BorderStyle     =   1  'Fixed Single
       Caption         =   " BANCO"
       Height          =   330
-      Left            =   5460
-      TabIndex        =   16
-      Top             =   4620
+      Left            =   9555
+      TabIndex        =   8
+      Top             =   5985
       Width           =   2745
    End
    Begin VB.Label LblConcepto 
       BackColor       =   &H00FFFFFF&
       BorderStyle     =   1  'Fixed Single
-      Caption         =   "Gavetas"
       Height          =   645
-      Left            =   2100
-      TabIndex        =   13
-      Top             =   1365
-      Width           =   7680
+      Left            =   105
+      TabIndex        =   5
+      Top             =   1890
+      Width           =   13770
    End
    Begin VB.Label Label4 
       BorderStyle     =   1  'Fixed Single
       Caption         =   " POR CONCEPTO DE:"
-      Height          =   645
+      Height          =   330
       Left            =   105
-      TabIndex        =   14
-      Top             =   1365
-      Width           =   2010
+      TabIndex        =   6
+      Top             =   1575
+      Width           =   13770
    End
    Begin VB.Label LabelTotal 
       Alignment       =   1  'Right Justify
@@ -494,18 +581,18 @@ Begin VB.Form RAbonos
       BorderStyle     =   1  'Fixed Single
       Caption         =   "0.00"
       Height          =   330
-      Left            =   8190
-      TabIndex        =   11
-      Top             =   5670
+      Left            =   12285
+      TabIndex        =   3
+      Top             =   7035
       Width           =   1590
    End
    Begin VB.Label Label1 
       BorderStyle     =   1  'Fixed Single
       Caption         =   " T O T A L"
       Height          =   330
-      Left            =   5460
-      TabIndex        =   10
-      Top             =   5670
+      Left            =   9555
+      TabIndex        =   2
+      Top             =   7035
       Width           =   2745
    End
    Begin VB.Label Label3 
@@ -513,8 +600,8 @@ Begin VB.Form RAbonos
       Caption         =   " RECIBI DE:"
       Height          =   330
       Left            =   105
-      TabIndex        =   12
-      Top             =   945
+      TabIndex        =   4
+      Top             =   1155
       Width           =   1170
    End
 End
@@ -529,7 +616,7 @@ Private Sub CheqFecha_Click()
   If CheqFecha.value <> 0 Then MBFecha.Visible = True Else MBFecha.Visible = False
 End Sub
 
-Private Sub Command1_Click()
+Private Sub Imprimir_Recibos()
    If CheqFecha.value <> 0 Then
       Imprimir_Comprobante_Caja_Por_Cliente AdoDiarioCaja, TA, MBFecha
    Else
@@ -537,11 +624,7 @@ Private Sub Command1_Click()
    End If
 End Sub
 
-Private Sub Command2_Click()
-   Unload RAbonos
-End Sub
-
-Private Sub Command3_Click()
+Private Sub Printer_PDF()
 Dim TipoProc As String
 Dim SizeLetra As Integer
 On Error GoTo Errorhandler
@@ -689,11 +772,15 @@ Errorhandler:
     Exit Sub
 End Sub
 
+Private Sub Command4_Click()
+    Unload RAbonos
+End Sub
+
 Private Sub DCRecibo_KeyDown(KeyCode As Integer, Shift As Integer)
   PresionoEnter KeyCode
 End Sub
 
-Private Sub DCRecibo_LostFocus()
+Private Sub Consultar_Recibo()
   RatonReloj
   DGIngCaja.Visible = False
   Contador = 1
@@ -739,7 +826,7 @@ Private Sub DCRecibo_LostFocus()
   sSQL = sSQL & "AND TA.CodigoC = C.Codigo " _
        & "ORDER BY TA.Factura,TA.Comprobante,TA.Banco,TA.Cheque "
   Select_Adodc AdoDiarioCaja, sSQL
-  'MsgBox sSQL
+ 'MsgBox sSQL
   With AdoDiarioCaja.Recordset
    If .RecordCount > 0 Then
        Label2.Caption = " " & .fields("Cliente")
@@ -853,13 +940,10 @@ Private Sub DCRecibo_LostFocus()
   RatonNormal
 End Sub
 
-Private Sub DGIngCaja_KeyDown(KeyCode As Integer, Shift As Integer)
-  Keys_Especiales Shift
-  If CtrlDown And KeyCode = vbKeyF1 Then
-     DGIngCaja.Visible = False
-     GenerarDataTexto RAbonos, AdoDiarioCaja
-     DGIngCaja.Visible = True
-  End If
+Private Sub Enviar_Excel()
+    DGIngCaja.Visible = False
+    GenerarDataTexto RAbonos, AdoDiarioCaja
+    DGIngCaja.Visible = True
 End Sub
 
 Private Sub Form_Activate()
@@ -895,29 +979,35 @@ Public Sub Listar_Recibos()
           & "FROM Trans_Abonos " _
           & "WHERE Item = '" & NumEmpresa & "' " _
           & "AND Periodo = '" & Periodo_Contable & "' " _
+          & "AND TP <> 'TJ' "
+     If CheqFecha.value <> 0 Then sSQL = sSQL & "AND Fecha = #" & BuscarFecha(MBFecha) & "# "
+     sSQL = sSQL _
           & "GROUP BY TP,Serie,Factura " _
           & "ORDER BY TP,Serie,Factura "
   ElseIf OpcRecibo.value Then
      sSQL = "SELECT Recibo_No As Recibo " _
           & "FROM Trans_Abonos " _
           & "WHERE Item = '" & NumEmpresa & "' " _
-          & "AND Periodo = '" & Periodo_Contable & "' " _
-          & "GROUP BY Recibo_No " _
+          & "AND Periodo = '" & Periodo_Contable & "' "
+     If CheqFecha.value <> 0 Then sSQL = sSQL & "AND Fecha = #" & BuscarFecha(MBFecha) & "# "
+     sSQL = sSQL & "GROUP BY Recibo_No " _
           & "ORDER BY Recibo_No "
   ElseIf OpCFecha.value Then
      sSQL = "SELECT Fecha As Recibo " _
           & "FROM Trans_Abonos " _
           & "WHERE Item = '" & NumEmpresa & "' " _
-          & "AND Periodo = '" & Periodo_Contable & "' " _
-          & "GROUP BY Fecha " _
+          & "AND Periodo = '" & Periodo_Contable & "' "
+     If CheqFecha.value <> 0 Then sSQL = sSQL & "AND Fecha = #" & BuscarFecha(MBFecha) & "# "
+     sSQL = sSQL & "GROUP BY Fecha " _
           & "ORDER BY Fecha "
   Else
      sSQL = "SELECT TA.CodigoC,C.Cliente As Recibo " _
-          & "FROM Clientes As C,Trans_Abonos As TA " _
+          & "FROM Clientes As C, Trans_Abonos As TA " _
           & "WHERE C.Cliente <> '.' " _
           & "AND TA.Item = '" & NumEmpresa & "' " _
-          & "AND TA.Periodo = '" & Periodo_Contable & "' " _
-          & "AND TA.CodigoC = C.Codigo " _
+          & "AND TA.Periodo = '" & Periodo_Contable & "' "
+     If CheqFecha.value <> 0 Then sSQL = sSQL & "AND TA.Fecha = #" & BuscarFecha(MBFecha) & "# "
+     sSQL = sSQL & "AND TA.CodigoC = C.Codigo " _
           & "GROUP BY C.Cliente,TA.CodigoC " _
           & "ORDER BY C.Cliente "
   End If
@@ -975,4 +1065,24 @@ End Sub
 
 Private Sub OpcRecibo_Click()
   Listar_Recibos
+End Sub
+
+Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
+'MsgBox Button.key
+ Select Case Button.key
+   Case "Salir"
+        Unload Me
+   Case "Recibo"
+        Consultar_Recibo
+   Case "Excel"
+        Enviar_Excel
+   Case "PDF"
+        Printer_PDF
+   Case "Impresora"
+        Imprimir_Recibos
+   Case "Punto_Venta"
+        If CheqFecha.value <> O Then Imprimir_Recibo_Punto_Venta TA, MBFecha.Text Else Imprimir_Recibo_Punto_Venta TA
+   Case "Email"
+        If CheqFecha.value <> O Then Imprimir_Recibo_Punto_Venta TA, MBFecha.Text, True Else Imprimir_Recibo_Punto_Venta TA, , True
+ End Select
 End Sub

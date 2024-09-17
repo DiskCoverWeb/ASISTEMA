@@ -1,9 +1,9 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "Mscomctl.ocx"
 Begin VB.Form CierreEjercicio 
    Caption         =   "BALANCE DE COMPROBACION"
    ClientHeight    =   8505
@@ -1528,7 +1528,7 @@ End Sub
 
 Private Sub Procesar_Cierre_Ejercicio()
 Dim OpcDH1 As Byte
-'Dim SiTieneSubModulo As Boolean
+
 Dim TDebito As Currency
 Dim TCredito As Currency
 Dim ValorSubModulo As Currency
@@ -1549,6 +1549,7 @@ Dim Factura_No1 As Long
     Fecha_Vence = FechaFinal
     Fecha_V1 = FechaFinal
     FechaEmision = FechaFinal
+    
     Mayorizar_Inventario_SP FechaFinal
   
    'Variables Generales de Entrada
@@ -1626,7 +1627,6 @@ Dim Factura_No1 As Long
        Do While Not .EOF
           DetalleComp = Ninguno
           Contador = Contador + 1
-          SiTieneSubModulo = False
           Debe = 0: Haber = 0
           TipoCta = .fields("DG")
           Moneda_US = .fields("ME")
@@ -1730,61 +1730,65 @@ Dim Factura_No1 As Long
                  End If
                  InsertarAsiento AdoCtas
             Case "C"    'CxC Asignamos los submodulos
-                 TDebito = 0
-                 TCredito = 0
-                 sSQL = "SELECT Codigo, Serie, Factura, (SUM(Debitos)-SUM(Creditos)) AS TSaldo " _
-                      & "FROM Trans_SubCtas " _
-                      & "WHERE Fecha <= #" & FechaFin & "# " _
-                      & "AND Periodo = '" & Periodo_Contable & "' " _
-                      & "AND Item = '" & NumEmpresa & "' " _
-                      & "AND Cta = '" & Codigo & "' " _
-                      & "AND T <> 'A' " _
-                      & "GROUP BY Codigo, Serie, Factura "
-                 Select_Adodc AdoSubCtaDet, sSQL
-                 If AdoSubCtaDet.Recordset.RecordCount > 0 Then
-                    Do While Not AdoSubCtaDet.Recordset.EOF
-                       If AdoSubCtaDet.Recordset.fields("TSaldo") > 0 Then
-                          TDebito = TDebito + AdoSubCtaDet.Recordset.fields("TSaldo")
-                       ElseIf AdoSubCtaDet.Recordset.fields("TSaldo") < 0 Then
-                          TCredito = TCredito + (-AdoSubCtaDet.Recordset.fields("TSaldo"))
-                       End If
-                       AdoSubCtaDet.Recordset.MoveNext
-                    Loop
+                 If SiTieneSubModulo Then
+                    TDebito = 0
+                    TCredito = 0
+                    sSQL = "SELECT Codigo, Serie, Factura, (SUM(Debitos)-SUM(Creditos)) AS TSaldo " _
+                         & "FROM Trans_SubCtas " _
+                         & "WHERE Fecha <= #" & FechaFin & "# " _
+                         & "AND Periodo = '" & Periodo_Contable & "' " _
+                         & "AND Item = '" & NumEmpresa & "' " _
+                         & "AND Cta = '" & Codigo & "' " _
+                         & "AND T <> 'A' " _
+                         & "GROUP BY Codigo, Serie, Factura "
+                    Select_Adodc AdoSubCtaDet, sSQL
+                    If AdoSubCtaDet.Recordset.RecordCount > 0 Then
+                       Do While Not AdoSubCtaDet.Recordset.EOF
+                          If AdoSubCtaDet.Recordset.fields("TSaldo") > 0 Then
+                             TDebito = TDebito + AdoSubCtaDet.Recordset.fields("TSaldo")
+                          ElseIf AdoSubCtaDet.Recordset.fields("TSaldo") < 0 Then
+                             TCredito = TCredito + (-AdoSubCtaDet.Recordset.fields("TSaldo"))
+                          End If
+                          AdoSubCtaDet.Recordset.MoveNext
+                       Loop
+                    End If
+                    OpcDH = 1
+                    ValorDH = TDebito
+                    InsertarAsiento AdoCtas
+                    OpcDH = 2
+                    ValorDH = TCredito
+                    InsertarAsiento AdoCtas
                  End If
-                 OpcDH = 1
-                 ValorDH = TDebito
-                 InsertarAsiento AdoCtas
-                 OpcDH = 2
-                 ValorDH = TCredito
-                 InsertarAsiento AdoCtas
             Case "P"   'CxP Asignamos los submodulos
-                 TDebito = 0
-                 TCredito = 0
-                 sSQL = "SELECT Codigo, Serie, Factura, (SUM(Creditos)-SUM(Debitos)) AS TSaldo " _
-                      & "FROM Trans_SubCtas " _
-                      & "WHERE Fecha <= #" & FechaFin & "# " _
-                      & "AND Periodo = '" & Periodo_Contable & "' " _
-                      & "AND Item = '" & NumEmpresa & "' " _
-                      & "AND Cta = '" & Codigo & "' " _
-                      & "AND T <> 'A' " _
-                      & "GROUP BY Codigo, Serie, Factura "
-                 Select_Adodc AdoSubCtaDet, sSQL
-                 If AdoSubCtaDet.Recordset.RecordCount > 0 Then
-                    Do While Not AdoSubCtaDet.Recordset.EOF
-                       If AdoSubCtaDet.Recordset.fields("TSaldo") > 0 Then
-                          TCredito = TCredito + AdoSubCtaDet.Recordset.fields("TSaldo")
-                       ElseIf AdoSubCtaDet.Recordset.fields("TSaldo") < 0 Then
-                          TDebito = TDebito + (-AdoSubCtaDet.Recordset.fields("TSaldo"))
-                       End If
-                       AdoSubCtaDet.Recordset.MoveNext
-                    Loop
+                 If SiTieneSubModulo Then
+                    TDebito = 0
+                    TCredito = 0
+                    sSQL = "SELECT Codigo, Serie, Factura, (SUM(Creditos)-SUM(Debitos)) AS TSaldo " _
+                         & "FROM Trans_SubCtas " _
+                         & "WHERE Fecha <= #" & FechaFin & "# " _
+                         & "AND Periodo = '" & Periodo_Contable & "' " _
+                         & "AND Item = '" & NumEmpresa & "' " _
+                         & "AND Cta = '" & Codigo & "' " _
+                         & "AND T <> 'A' " _
+                         & "GROUP BY Codigo, Serie, Factura "
+                    Select_Adodc AdoSubCtaDet, sSQL
+                    If AdoSubCtaDet.Recordset.RecordCount > 0 Then
+                       Do While Not AdoSubCtaDet.Recordset.EOF
+                          If AdoSubCtaDet.Recordset.fields("TSaldo") > 0 Then
+                             TCredito = TCredito + AdoSubCtaDet.Recordset.fields("TSaldo")
+                          ElseIf AdoSubCtaDet.Recordset.fields("TSaldo") < 0 Then
+                             TDebito = TDebito + (-AdoSubCtaDet.Recordset.fields("TSaldo"))
+                          End If
+                          AdoSubCtaDet.Recordset.MoveNext
+                       Loop
+                    End If
+                    OpcDH = 2
+                    ValorDH = TCredito
+                    InsertarAsiento AdoCtas
+                    OpcDH = 1
+                    ValorDH = TDebito
+                    InsertarAsiento AdoCtas
                  End If
-                 OpcDH = 2
-                 ValorDH = TCredito
-                 InsertarAsiento AdoCtas
-                 OpcDH = 1
-                 ValorDH = TDebito
-                 InsertarAsiento AdoCtas
             Case Else
                  InsertarAsiento AdoCtas
           End Select
@@ -2606,13 +2610,8 @@ Private Sub DGInv_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub Form_Activate()
-  'PictProgreso_Barra.width = Redondear(MDI_X_Max / 3) - 50
-  'PictProgreso_Barra.width = Redondear(MDI_X_Max / 3) - 50
-  'PictProgreso_Barra.Left = PictProgreso_Barra.Left + PictProgreso_Barra.width
-  'PictProgreso_Barra.Left = PictProgreso_Barra.Left + PictProgreso_Barra.width
   SSTab1.Height = MDI_Y_Max - DGBalance.Top - 1800
   SSTab1.width = MDI_X_Max - DGBalance.Left - 10
-  'PictProgreso_Barra.width = MDI_X_Max - PictProgreso_Barra.Left - 10
   
   SSTab1.Tab = 3
   DGCheques.Height = SSTab1.Height - DGCheques.Top - 140
@@ -2635,6 +2634,7 @@ Private Sub Form_Activate()
   LabelTotDebe.Top = SSTab1.Top + SSTab1.Height + 30
   LabelTotHaber.Top = SSTab1.Top + SSTab1.Height + 30
 
+  DGBalance.Visible = False
   TipoDoc = CompDiario
   Trans_No = 1
   IniciarAsientosDe DGBalance, AdoCtas
@@ -2684,6 +2684,21 @@ Private Sub Form_Activate()
      Toolbar1.buttons("Actualizar").Enabled = False
      Toolbar1.buttons("Imprimir").Enabled = False
   End If
+  RatonReloj
+  SiTieneSubModulo = False
+  sSQL = "SELECT Item, COUNT(Item) As ContSM " _
+       & "FROM Trans_SubCtas " _
+       & "WHERE Item = '" & NumEmpresa & "' " _
+       & "AND Periodo = '" & Periodo_Contable & "' " _
+       & "AND T <> 'A' " _
+       & "AND TC IN ('C','P') " _
+       & "GROUP BY Item "
+  Select_Adodc AdoAux, sSQL
+  If AdoAux.Recordset.RecordCount > 0 Then
+     If AdoAux.Recordset.fields("ContSM") > 0 Then SiTieneSubModulo = True
+  End If
+  DGBalance.Visible = True
+  RatonNormal
   MBoxCtaI.SetFocus
 End Sub
 
@@ -2705,10 +2720,38 @@ Private Sub Form_Load()
   RatonNormal
 End Sub
 
+Private Sub MBoxCtaI_GotFocus()
+  MarcarTexto MBoxCtaI
+End Sub
+
+Private Sub MBoxCtaI_KeyDown(KeyCode As Integer, Shift As Integer)
+  PresionoEnter KeyCode
+End Sub
+
 Private Sub MBoxCtaI_LostFocus()
- Codigo1 = CambioCodigoCta(MBoxCtaI.Text)
- Codigo = Leer_Cta_Catalogo(Codigo1)
- If Cuenta = Ninguno Then MsgBox "Cuenta no asignada en el Catalogo de Cuentas"
+    Codigo1 = CambioCodigoCta(MBoxCtaI.Text)
+    If MidStrg(Codigo1, 1, 1) = "3" Then
+       Codigo = Leer_Cta_Catalogo(Codigo1)
+       If Cuenta = Ninguno Then
+          MsgBox "Cuenta no asignada en el Catalogo de Cuentas"
+          Toolbar1.buttons("Procesar").Enabled = False
+          MBoxCtaI.SetFocus
+       Else
+          If TipoCta <> "D" Then
+             MsgBox "Existe Cuenta de cierre pero no es de detalle, no se puede hacer el proceso"
+             Toolbar1.buttons("Procesar").Enabled = False
+             MBoxCtaI.SetFocus
+          Else
+             Toolbar1.buttons("Procesar").Enabled = True
+          End If
+       End If
+    Else
+       MsgBox "Advertencia: Solo se admiten Cuentas Patrimoniales de tipo '3'"
+       Toolbar1.buttons("Procesar").Enabled = False
+       MBoxCtaI.SetFocus
+    End If
+    
+    Toolbar1.Refresh
 End Sub
 
 Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)

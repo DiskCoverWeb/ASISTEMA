@@ -94,6 +94,7 @@ Form=..\INVENTAR\Catalogo.frm
 Form=..\Facturas\FAnular.frm
 Form=FImpFarm.frm
 Form=..\GENERAL\FSuscripcion.frm
+Class=cPing; ..\CLASES\cPing.cls
 IconForm="MDIFarmacia"
 Startup="MDIFarmacia"
 HelpFile=""

@@ -58,6 +58,7 @@ Module=SubSQLServer; ..\MODULOS\SubSQLServer.bas
 Form=..\GENERAL\FEsperar.frm
 Class=cFTP; ..\CLASES\cFTP.cls
 Module=TBaseDatos; ..\MODULOS\TBaseDatos.bas
+Class=cPing; ..\CLASES\cPing.cls
 IconForm="FActualizar"
 Startup="FActualizar"
 HelpFile=""

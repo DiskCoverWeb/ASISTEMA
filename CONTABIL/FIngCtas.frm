@@ -12,8 +12,8 @@ Begin VB.Form FCatalogo_Cuentas
    ClientWidth     =   14145
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   15615
-   ScaleWidth      =   28560
+   ScaleHeight     =   10215
+   ScaleWidth      =   14145
    WindowState     =   2  'Maximized
    Begin VB.Frame FrmPresupuesto 
       BackColor       =   &H00C0FFFF&
@@ -528,8 +528,8 @@ Begin VB.Form FCatalogo_Cuentas
       Left            =   0
       TabIndex        =   62
       Top             =   0
-      Width           =   28560
-      _ExtentX        =   50377
+      Width           =   14145
+      _ExtentX        =   24950
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -2169,15 +2169,15 @@ Private Sub TBarCuentas_ButtonClick(ByVal Button As MSComctlLib.Button)
            If ClaveSupervisor Then
               RatonReloj
               Producto = "Catalogo"
-              If OpcD.value Then
+              'If OpcD.value Then
                  Codigo1 = CambioCodigoCta(MBoxCta.Text)
                  Codigo3 = Codigo1 & " - " & TextConcepto
                  'MsgBox Codigo1
                  FChangeCta.Show 1
-              Else
+              'Else
                  RatonNormal
                  MsgBox "Solo puede cambiar Cuentas de Detalle"
-              End If
+              'End If
            End If
     End Select
 End Sub

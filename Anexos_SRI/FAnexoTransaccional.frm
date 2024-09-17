@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "Mscomctl.ocx"
 Begin VB.Form FAnexoTransaccional 
    Caption         =   "Talón Resumen"
    ClientHeight    =   10470
@@ -776,13 +776,6 @@ Begin VB.Form FAnexoTransaccional
             Key             =   "Anos"
             ImageIndex      =   2
             Style           =   5
-            BeginProperty ButtonMenus {66833FEC-8583-11D1-B16A-00C0F0283628} 
-               NumButtonMenus  =   1
-               BeginProperty ButtonMenu1 {66833FEE-8583-11D1-B16A-00C0F0283628} 
-                  Key             =   "A2000"
-                  Text            =   "2000"
-               EndProperty
-            EndProperty
          EndProperty
          BeginProperty Button2 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Caption         =   "Meses"
@@ -882,10 +875,10 @@ Begin VB.Form FAnexoTransaccional
       MousePointer    =   1
       Begin VB.Frame Frame1 
          Height          =   855
-         Left            =   8820
+         Left            =   7770
          TabIndex        =   2
          Top             =   0
-         Width           =   2955
+         Width           =   8100
          Begin VB.CheckBox CheqATSConElect 
             Caption         =   "Generar ATS con Comprobante Electronicos"
             BeginProperty Font 
@@ -902,6 +895,25 @@ Begin VB.Form FAnexoTransaccional
             TabIndex        =   3
             Top             =   210
             Width           =   2640
+         End
+         Begin VB.Label LblATS 
+            Alignment       =   2  'Center
+            BackColor       =   &H00FF0000&
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   13.5
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H0080FFFF&
+            Height          =   435
+            Left            =   3045
+            TabIndex        =   10
+            Top             =   210
+            Width           =   4740
          End
       End
    End
@@ -1127,6 +1139,8 @@ Dim ExisteAnioActual As Boolean
   DGRolPagos.width = MDI_X_Max - 100
   DGRolPagos.Height = MDI_Y_Max - 1800
   AdoRolPagos.Top = DGRolPagos.Height - 500
+  Frame1.width = MDI_X_Max - Frame1.Left - 50
+  LblATS.width = Frame1.width - LblATS.Left - 150
   
   LblA4.Top = DGRolPagos.Height - 500
   TxtCodigo.Top = LblA4.Top
@@ -1134,23 +1148,47 @@ Dim ExisteAnioActual As Boolean
   LblA4.Caption = ""
   
  'Empresas si es con sucursales
-  tItem = ""
+ 
+  sItem = ""
   sSQL = "SELECT Sucursal " _
        & "FROM Acceso_Sucursales " _
        & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND No_ATS = 0 " _
+       & "GROUP BY Sucursal " _
        & "ORDER BY Sucursal "
   Select_Adodc AdoAux, sSQL
   With AdoAux.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
-          tItem = tItem & "'" & .fields("Sucursal") & "',"
+          sItem = sItem & "'" & .fields("Sucursal") & "',"
          .MoveNext
        Loop
+       sItem = sItem & "'XXX'"
+   Else
+       sItem = "'" & NumEmpresa & "'"
    End If
   End With
-  If Len(tItem) > 1 Then sItem = MidStrg(tItem, 1, Len(tItem) - 1) Else sItem = "'" & NumEmpresa & "','XXX'"
   
+  No_ATS = ""
+  sSQL = "SELECT Sucursal " _
+       & "FROM Acceso_Sucursales " _
+       & "WHERE Item = '" & NumEmpresa & "' " _
+       & "AND No_ATS <> 0 " _
+       & "ORDER BY Sucursal "
+  Select_Adodc AdoAux, sSQL
+  With AdoAux.Recordset
+   If .RecordCount > 0 Then
+       Do While Not .EOF
+          No_ATS = No_ATS & "'" & .fields("Sucursal") & "',"
+         .MoveNext
+       Loop
+       No_ATS = No_ATS & "'XXX'"
+   Else
+       No_ATS = "'" & NumEmpresa & "'"
+   End If
+  End With
+
+  'Toolbar1.buttons.Clear
+  Toolbar1.buttons.Item(1).ButtonMenus.Add (0), "A2000", 2000
   ExisteAnioActual = False
   sSQL = "SELECT YEAR(Fecha) As Anio " _
        & "FROM Trans_Compras " _
@@ -1177,17 +1215,23 @@ Dim ExisteAnioActual As Boolean
   With AdoAux.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
-          Toolbar1.buttons.Item(1).ButtonMenus.Add , "A" & .fields("Anio"), .fields("Anio")
-          If Year(FechaSistema) = .fields("Anio") Then ExisteAnioActual = True
+          MsgBox .fields("Anio")
+          'If .fields("Anio") <> "2000" Then
+              Toolbar1.buttons.Item(1).ButtonMenus.Add , "A" & .fields("Anio"), .fields("Anio")
+              If Year(FechaSistema) = .fields("Anio") Then ExisteAnioActual = True
+          'End If
          .MoveNext
        Loop
    End If
   End With
+  
+  'MsgBox sItem & vbCrLf & No_ATS
+
  'MsgBox Toolbar1.Buttons.Item(1).ButtonMenus.Count
   If Not ExisteAnioActual And Periodo_Contable = Ninguno Then
      Toolbar1.buttons.Item(1).ButtonMenus.Add , "A" & Year(FechaSistema), Year(FechaSistema)
   End If
-  Toolbar1.buttons.Item(1).ButtonMenus.Remove ("A2000")
+'  Toolbar1.buttons.Item(1).ButtonMenus.Remove ("A2000")
   
  'verificamos si la carpeta AT y la subcarpeta de la empresa existe sino la creamos
  
@@ -1775,7 +1819,7 @@ Dim ValRetServ50 As Currency
   With AdoPuntosVentas.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
-          KE = CInt(.fields("Establecimiento"))
+          If .fields("Establecimiento") = "." Then KE = 1 Else KE = CInt(.fields("Establecimiento"))
           Suma_Ventas = .fields("BaseImponibleV")
           If Not IsNull(.fields("BaseImpGravV")) Then Suma_Ventas = Suma_Ventas + .fields("BaseImpGravV")  ' + .Fields("MontoIvaV")
           If .fields("TipoComprobante") = 4 Then
@@ -3382,11 +3426,11 @@ End Sub
 
 Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
 Dim Id_Mes As Byte
-  
   Anio_Anexo = Toolbar1.buttons(2).Caption
   Mes_Anexo = Toolbar1.buttons(3).Caption
   Progreso_Barra.Mensaje_Box = "Consultando el ATS de " & Anio_Anexo & "-" & Mes_Anexo
   Progreso_Iniciar
+  LblATS.Caption = "GENERACION DEL ATS DEL " & Anio_Anexo & " - " & Mes_Anexo
   Archivo_XML = ""
   If Button.key <> "Salir" Then
     'Determinamos la fecha del Anexo
@@ -3423,6 +3467,7 @@ Dim Id_Mes As Byte
         'Aqui se genera el Archivo XML
         ' Insertar_Ventas_ATS
          'Insertar_Liquidacion_Compras_ATS
+         RatonReloj
          Consultar_Anexos
          Archivo_XML = RutaSysBases & "\AT\AT" & NumEmpresa & "\AT"
          Select Case Mes_Anexo
@@ -3435,6 +3480,7 @@ Dim Id_Mes As Byte
          RutaSubDirTemp = Archivo_XML
          Progreso_Barra.Mensaje_Box = "ATS-Generando en: " & Archivo_XML
          Progreso_Esperar
+         RatonReloj
          Crear_Anexos_Tipo_01_Marzo_2015 Archivo_XML, CheqATSConElect.value
 '''         Select Case Val(Anio)
 '''           Case 2008 To 2012: Crear_Anexos_Tipo_01 Archivo_XML
@@ -3442,6 +3488,7 @@ Dim Id_Mes As Byte
 '''         End Select
         'Presentamos el anexo en la pantalla
          Carga_Paginas_AT
+         RatonNormal
     Case "ATSFinanc"
         'NumMeses = 1
         'Aqui se genera el Archivo XML
@@ -3487,6 +3534,10 @@ Private Sub Toolbar1_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMenu)
      Toolbar1.buttons(3).Caption = Mes_Anexo
   End If
 '  SSTab1.Caption = "ANEXO TRANSACIONAL DE " & Anio_Anexo & "-" & UCaseStrg(Mes_Anexo)
+  Anio_Anexo = Toolbar1.buttons(2).Caption
+  Mes_Anexo = Toolbar1.buttons(3).Caption
+  LblATS.Caption = "GENERACION DEL ATS DEL " & Anio_Anexo & " - " & Mes_Anexo
+  LblATS.Refresh
   Toolbar1.Refresh
 End Sub
 
@@ -3931,14 +3982,16 @@ Dim PosYf As Single
 End Sub
 
 Public Sub Vista_Compras()
+ 'MsgBox No_ATS
  sSQL = "SELECT TC.TipoComprobante,TCC.Descripcion,COUNT(TipoComprobante) As Cant,SUM(BaseImponible) As BI,SUM(BaseImpGrav) As BIG,SUM(MontoIva) As MI " _
       & "FROM Trans_Compras As TC,Clientes As C,Tipo_Comprobante As TCC " _
       & "WHERE TC.Fecha Between #" & FechaIni & "# AND #" & FechaFin & "#  "
  If ConSucursal Then
-    If Len(No_ATS) > 3 Then sSQL = sSQL & "AND TC.Item NOT IN (" & No_ATS & ") "
+    If Len(No_ATS) > 3 Then sSQL = sSQL & "AND TC.Item IN (" & No_ATS & ") "
  Else
     sSQL = sSQL & "AND TC.Item = '" & NumEmpresa & "' "
  End If
+ If CheqATSConElect.value = 0 Then sSQL = sSQL & "AND LEN(TC.AutRetencion) < 13 "
  sSQL = sSQL _
       & "AND TC.Periodo = '" & Periodo_Contable & "' " _
       & "AND TCC.TC = 'TDC' " _
@@ -4001,10 +4054,11 @@ Public Sub Vista_Compras()
       & "FROM Trans_Compras As TC,Clientes As C,Tipo_Tributario As TCC " _
       & "WHERE TC.Fecha Between #" & FechaIni & "# AND #" & FechaFin & "#  "
  If ConSucursal Then
-    If Len(No_ATS) > 3 Then sSQL = sSQL & "AND TC.Item NOT IN (" & No_ATS & ") "
+    If Len(No_ATS) > 3 Then sSQL = sSQL & "AND TC.Item IN (" & No_ATS & ") "
  Else
     sSQL = sSQL & "AND TC.Item = '" & NumEmpresa & "' "
  End If
+ If CheqATSConElect.value = 0 Then sSQL = sSQL & "AND LEN(TC.AutRetencion) < 13 "
  sSQL = sSQL & "AND TC.Periodo = '" & Periodo_Contable & "' " _
       & "AND TC.CodSustento IN ('01','03','06','08','09') " _
       & "AND TC.CodSustento = TCC.Credito_Tributario  " _
@@ -4078,7 +4132,7 @@ Public Sub Vista_Ventas()
       & "FROM Trans_Ventas As TV,Clientes As C,Tipo_Comprobante As TCC " _
       & "WHERE TV.Fecha Between #" & FechaIni & "# AND #" & FechaFin & "#  "
  If ConSucursal Then
-    If Len(No_ATS) > 3 Then sSQL = sSQL & "AND TV.Item NOT IN (" & No_ATS & ") "
+    If Len(No_ATS) > 3 Then sSQL = sSQL & "AND TV.Item IN (" & No_ATS & ") "
  Else
     sSQL = sSQL & "AND TV.Item = '" & NumEmpresa & "' "
  End If
@@ -4821,10 +4875,14 @@ Public Sub Consultar_Anexos()
        & "FROM Trans_Compras As TC, Clientes As C " _
        & "WHERE TC.Fecha Between #" & FechaIni & "# AND #" & FechaFin & "# " _
        & "AND TC.Periodo = '" & Periodo_Contable & "' " _
-       & "AND TC.Item IN (" & sItem & ") " _
+       & "AND TC.Item IN (" & sItem & ") "
+  
+  If CheqATSConElect.value = 0 Then sSQL = sSQL & "AND LEN(AutRetencion) < 13 "
+  
+  sSQL = sSQL _
        & "AND TC.IdProv = C.Codigo " _
        & "ORDER BY TC.Linea_SRI,C.Cliente, C.CI_RUC, C.TD "
-  Select_Adodc AdoCompras, sSQL
+  Select_Adodc AdoCompras, sSQL, , , "ATS_Compras"
   
  'IMPORTACIONES
   sSQL = "SELECT C.Cliente, C.Codigo, C.CI_RUC, C.TD,TI.* " _

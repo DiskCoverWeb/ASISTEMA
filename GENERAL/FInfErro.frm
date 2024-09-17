@@ -1,23 +1,25 @@
 VERSION 5.00
-Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDATGRD.OCX"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
+Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Begin VB.Form FInfoError 
-   BackColor       =   &H00FFFFC0&
+   BackColor       =   &H00C0FFFF&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "FORMULARIO DE INFORME DE ERRORES"
-   ClientHeight    =   7710
+   ClientHeight    =   8745
    ClientLeft      =   45
    ClientTop       =   435
-   ClientWidth     =   13680
+   ClientWidth     =   13650
    Icon            =   "FInfErro.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   7710
-   ScaleWidth      =   13680
+   ScaleHeight     =   8745
+   ScaleWidth      =   13650
    ShowInTaskbar   =   0   'False
+   Visible         =   0   'False
    WindowState     =   1  'Minimized
    Begin VB.CommandButton Command3 
+      BackColor       =   &H0000FFFF&
       Caption         =   "&Excel"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -29,27 +31,27 @@ Begin VB.Form FInfoError
          Strikethrough   =   0   'False
       EndProperty
       Height          =   750
-      Left            =   12705
+      Left            =   945
       Picture         =   "FInfErro.frx":0696
       Style           =   1  'Graphical
       TabIndex        =   3
-      Top             =   945
+      Top             =   105
       Width           =   855
    End
    Begin MSDataGridLib.DataGrid DGInfoError 
       Bindings        =   "FInfErro.frx":12D8
-      Height          =   7155
+      Height          =   7365
       Left            =   105
       TabIndex        =   2
-      Top             =   105
-      Width           =   12510
-      _ExtentX        =   22066
-      _ExtentY        =   12621
+      Top             =   945
+      Width           =   13455
+      _ExtentX        =   23733
+      _ExtentY        =   12991
       _Version        =   393216
       AllowUpdate     =   0   'False
-      BackColor       =   16777088
+      BackColor       =   8454143
       ColumnHeaders   =   0   'False
-      ForeColor       =   128
+      ForeColor       =   12582912
       HeadLines       =   1
       RowHeight       =   18
       BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -106,6 +108,7 @@ Begin VB.Form FInfoError
       EndProperty
    End
    Begin VB.CommandButton Command2 
+      BackColor       =   &H0000FFFF&
       Caption         =   "&Imprimir"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -117,14 +120,15 @@ Begin VB.Form FInfoError
          Strikethrough   =   0   'False
       EndProperty
       Height          =   750
-      Left            =   12705
+      Left            =   1785
       Picture         =   "FInfErro.frx":12F3
       Style           =   1  'Graphical
       TabIndex        =   1
-      Top             =   1785
+      Top             =   105
       Width           =   855
    End
    Begin VB.CommandButton Command1 
+      BackColor       =   &H0000FFFF&
       Caption         =   "&Ok"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -136,7 +140,7 @@ Begin VB.Form FInfoError
          Strikethrough   =   0   'False
       EndProperty
       Height          =   750
-      Left            =   12705
+      Left            =   105
       Picture         =   "FInfErro.frx":1BBD
       Style           =   1  'Graphical
       TabIndex        =   0
@@ -146,9 +150,9 @@ Begin VB.Form FInfoError
    Begin MSAdodcLib.Adodc AdoInfoError 
       Height          =   330
       Left            =   105
-      Top             =   7245
-      Width           =   12510
-      _ExtentX        =   22066
+      Top             =   8295
+      Width           =   13455
+      _ExtentX        =   23733
       _ExtentY        =   582
       ConnectMode     =   0
       CursorLocation  =   3
@@ -271,7 +275,8 @@ Private Sub Form_Activate()
 Dim cSQL As String
 Dim WidthText As Single
 Dim AnchoMax As Byte
-    DGInfoError.Visible = False
+    RatonReloj
+    Imagen_Esperar "Iniciamos el informe de Errores"
     cSQL = "SELECT Texto " _
          & "FROM Tabla_Temporal " _
          & "WHERE Item = '" & NumEmpresa & "' " _
@@ -281,13 +286,13 @@ Dim AnchoMax As Byte
     Select_Adodc_Grid DGInfoError, AdoInfoError, cSQL
     With AdoInfoError.Recordset
      If .RecordCount > 0 Then
-         AnchoMax = AdoInfoError.Recordset.fields(0).DefinedSize
-         WidthText = DGInfoError.Parent.TextWidth(String$(AnchoMax, "H"))
-         DGInfoError.Columns(0).width = WidthText
-         DGInfoError.Refresh
-         DGInfoError.Visible = True
-         Unload FEsperar
+         FInfoError.Visible = True
          FInfoError.WindowState = vbNormal
+         FInfoError.Refresh
+         CentrarForm FInfoError
+         DGInfoError.Columns(0).width = AdoInfoError.width - 100
+         DGInfoError.Refresh
+         Unload FEsperar
          RatonNormal
      Else
          RatonNormal
@@ -298,9 +303,6 @@ Dim AnchoMax As Byte
 End Sub
 
 Private Sub Form_Load()
-    RatonReloj
-    Imagen_Esperar "Iniciamos el informe de Errores"
-    CentrarForm FInfoError
     ConectarAdodc AdoInfoError
 End Sub
 

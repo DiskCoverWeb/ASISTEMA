@@ -831,15 +831,15 @@ Public K As Byte
 Public Desde, Hasta As Date
 
 Private Sub ChkPorBenef_Click()
-  If ChkPorBenef.Value <> 0 Then DCBeneficiario.Visible = True Else DCBeneficiario.Visible = False
+  If ChkPorBenef.value <> 0 Then DCBeneficiario.Visible = True Else DCBeneficiario.Visible = False
 End Sub
 
 Private Sub ChkPorCIRUC_Click()
-If ChkPorCIRUC.Value <> 0 Then DCCIRUC.Visible = True Else DCCIRUC.Visible = False
+If ChkPorCIRUC.value <> 0 Then DCCIRUC.Visible = True Else DCCIRUC.Visible = False
 End Sub
 
 Private Sub ChkPorCodigo_click()
-  If ChkPorCodigo.Value <> 0 Then DCPorCodigo.Visible = True Else DCPorCodigo.Visible = False
+  If ChkPorCodigo.value <> 0 Then DCPorCodigo.Visible = True Else DCPorCodigo.Visible = False
 End Sub
 
 Private Sub CmdSalir_Click()
@@ -945,7 +945,7 @@ Dim AltoTab As Single
 Dim AnchoTab As Single
 Dim InicioTab As Single
 Dim MitadTab As Single
-   Carga_Benef
+
    NivelNo = Ninguno
    Fecha_Del_AT CMes, CAño
    AnchoTab = MDI_X_Max
@@ -1141,7 +1141,6 @@ End Sub
 
 Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
 Dim No_Mes As Byte
-    Carga_Benef
     Fecha_Del_AT CMes, CAño
    'Consultamos el codigo que pertenece al clietne seleccionado
     NombreCliente = TrimStrg(DCBeneficiario.Text)
@@ -1167,8 +1166,8 @@ Dim No_Mes As Byte
                  & "WHERE TC.Fecha Between #" & FechaIni & "# AND #" & FechaFin & "#  "
             If ConSucursal = False Then sSQL = sSQL & "AND TC.Item = '" & NumEmpresa & "' "
             sSQL = sSQL & "AND TC.Periodo = '" & Periodo_Contable & "' "
-            If ChkPorBenef.Value <> 0 Then sSQL = sSQL & "AND C.Codigo = '" & CodigoCli & "' "
-            If ChkPorCIRUC.Value <> 0 Then sSQL = sSQL & "AND C.CI_RUC = '" & CICliente & "' "
+            If ChkPorBenef.value <> 0 Then sSQL = sSQL & "AND C.Codigo = '" & CodigoCli & "' "
+            If ChkPorCIRUC.value <> 0 Then sSQL = sSQL & "AND C.CI_RUC = '" & CICliente & "' "
             sSQL = sSQL & "AND TC.IdProv = C.Codigo " _
                  & "ORDER BY TC.Linea_SRI, C.Cliente, C.CI_RUC, C.TD "
             Select_Adodc_Grid DGATS, AdoATS, sSQL
@@ -1179,9 +1178,9 @@ Dim No_Mes As Byte
             If ConSucursal = False Then sSQL = sSQL & "AND TA.Item = '" & NumEmpresa & "' "
             sSQL = sSQL & "AND TA.Periodo = '" & Periodo_Contable & "' " _
                  & "AND TA.Tipo_Trans = 'C' "
-            If ChkPorCodigo.Value <> 0 Then sSQL = sSQL & "AND TA.CodRet = '" & Clave & "' "
-            If ChkPorBenef.Value <> 0 Then sSQL = sSQL & "AND C.Codigo = '" & CodigoCli & "' "
-            If ChkPorCIRUC.Value <> 0 Then sSQL = sSQL & "AND C.CI_RUC = '" & CICliente & "' "
+            If ChkPorCodigo.value <> 0 Then sSQL = sSQL & "AND TA.CodRet = '" & Clave & "' "
+            If ChkPorBenef.value <> 0 Then sSQL = sSQL & "AND C.Codigo = '" & CodigoCli & "' "
+            If ChkPorCIRUC.value <> 0 Then sSQL = sSQL & "AND C.CI_RUC = '" & CICliente & "' "
             sSQL = sSQL & "AND TA.IdProv = C.Codigo " _
                  & "ORDER BY TA.Linea_SRI, C.Cliente, TA.Fecha "
             Select_Adodc_Grid DGAir, AdoAir, sSQL
@@ -1194,8 +1193,8 @@ Dim No_Mes As Byte
                  & "WHERE TV.Fecha Between #" & FechaIni & "# AND #" & FechaFin & "#  "
             If ConSucursal = False Then sSQL = sSQL & "AND TV.Item = '" & NumEmpresa & "' "
             sSQL = sSQL & "AND TV.Periodo = '" & Periodo_Contable & "' "
-            If ChkPorBenef.Value <> 0 Then sSQL = sSQL & "AND C.Codigo = '" & CodigoCli & "' "
-            If ChkPorCIRUC.Value <> 0 Then sSQL = sSQL & "AND C.CI_RUC = '" & CICliente & "' "
+            If ChkPorBenef.value <> 0 Then sSQL = sSQL & "AND C.Codigo = '" & CodigoCli & "' "
+            If ChkPorCIRUC.value <> 0 Then sSQL = sSQL & "AND C.CI_RUC = '" & CICliente & "' "
             sSQL = sSQL & "AND TV.IdProv = C.Codigo  " _
                  & "ORDER BY TV.Linea_SRI, C.Cliente, C.CI_RUC, C.TD "
             Select_Adodc_Grid DGATS, AdoATS, sSQL, "Datos"
@@ -1206,9 +1205,9 @@ Dim No_Mes As Byte
             If ConSucursal = False Then sSQL = sSQL & "AND TA.Item = '" & NumEmpresa & "' "
             sSQL = sSQL & "AND TA.Periodo = '" & Periodo_Contable & "' " _
                  & "AND TA.Tipo_Trans = 'V' "
-            If ChkPorCodigo.Value <> 0 Then sSQL = sSQL & "AND TA.CodRet = '" & Clave & "' "
-            If ChkPorBenef.Value <> 0 Then sSQL = sSQL & "AND C.Codigo = '" & CodigoCli & "' "
-            If ChkPorCIRUC.Value <> 0 Then sSQL = sSQL & "AND C.CI_RUC = '" & CICliente & "' "
+            If ChkPorCodigo.value <> 0 Then sSQL = sSQL & "AND TA.CodRet = '" & Clave & "' "
+            If ChkPorBenef.value <> 0 Then sSQL = sSQL & "AND C.Codigo = '" & CodigoCli & "' "
+            If ChkPorCIRUC.value <> 0 Then sSQL = sSQL & "AND C.CI_RUC = '" & CICliente & "' "
             sSQL = sSQL & "AND TA.IdProv = C.Codigo " _
                  & "ORDER BY TA.Linea_SRI, C.Cliente,TA.Fecha "
             Select_Adodc_Grid DGAir, AdoAir, sSQL
@@ -1221,8 +1220,8 @@ Dim No_Mes As Byte
                  & "WHERE TI.Fecha Between #" & FechaIni & "# AND #" & FechaFin & "#  "
             If ConSucursal = False Then sSQL = sSQL & "AND TI.Item = '" & NumEmpresa & "' "
             sSQL = sSQL & "AND TI.Periodo = '" & Periodo_Contable & "' "
-            If ChkPorBenef.Value <> 0 Then sSQL = sSQL & "AND C.Codigo = '" & CodigoCli & "' "
-            If ChkPorCIRUC.Value <> 0 Then sSQL = sSQL & "AND C.CI_RUC = '" & CICliente & "' "
+            If ChkPorBenef.value <> 0 Then sSQL = sSQL & "AND C.Codigo = '" & CodigoCli & "' "
+            If ChkPorCIRUC.value <> 0 Then sSQL = sSQL & "AND C.CI_RUC = '" & CICliente & "' "
             sSQL = sSQL & "AND TI.IdFiscalProv = C.Codigo  " _
                  & "ORDER BY TI.Linea_SRI, C.Cliente, C.CI_RUC, C.TD "
             Select_Adodc_Grid DGATS, AdoATS, sSQL
@@ -1233,9 +1232,9 @@ Dim No_Mes As Byte
             If ConSucursal = False Then sSQL = sSQL & "AND TA.Item = '" & NumEmpresa & "' "
             sSQL = sSQL & "AND TA.Periodo = '" & Periodo_Contable & "' " _
                  & "AND TA.Tipo_Trans = 'I' "
-            If ChkPorCodigo.Value <> 0 Then sSQL = sSQL & "AND TA.CodRet = '" & Clave & "' "
-            If ChkPorBenef.Value <> 0 Then sSQL = sSQL & "AND C.Codigo = '" & CodigoCli & "' "
-            If ChkPorCIRUC.Value <> 0 Then sSQL = sSQL & "AND C.CI_RUC = '" & CICliente & "' "
+            If ChkPorCodigo.value <> 0 Then sSQL = sSQL & "AND TA.CodRet = '" & Clave & "' "
+            If ChkPorBenef.value <> 0 Then sSQL = sSQL & "AND C.Codigo = '" & CodigoCli & "' "
+            If ChkPorCIRUC.value <> 0 Then sSQL = sSQL & "AND C.CI_RUC = '" & CICliente & "' "
             sSQL = sSQL & "AND C.Codigo = TA.IdProv    " _
                  & "ORDER BY TA.Linea_SRI,C.Cliente, TA.Fecha "
             Select_Adodc_Grid DGAir, AdoAir, sSQL
@@ -1248,8 +1247,8 @@ Dim No_Mes As Byte
                  & "WHERE TE.Fecha Between #" & FechaIni & "# AND #" & FechaFin & "# "
             If ConSucursal = False Then sSQL = sSQL & "AND TE.Item = '" & NumEmpresa & "' "
             sSQL = sSQL & "AND TE.Periodo = '" & Periodo_Contable & "' "
-            If ChkPorBenef.Value <> 0 Then sSQL = sSQL & "AND C.Codigo = '" & CodigoCli & "' "
-            If ChkPorCIRUC.Value <> 0 Then sSQL = sSQL & "AND C.CI_RUC = '" & CICliente & "' "
+            If ChkPorBenef.value <> 0 Then sSQL = sSQL & "AND C.Codigo = '" & CodigoCli & "' "
+            If ChkPorCIRUC.value <> 0 Then sSQL = sSQL & "AND C.CI_RUC = '" & CICliente & "' "
             sSQL = sSQL & "AND TE.IdFiscalProv = C.Codigo " _
                  & "ORDER BY TE.Linea_SRI, C.Cliente, C.CI_RUC, C.TD "
             Select_Adodc_Grid DGATS, AdoATS, sSQL

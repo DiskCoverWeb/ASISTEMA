@@ -35,9 +35,8 @@ On Error GoTo Errorhandler
         ListP = ListP & cMiCmd.Parameters.Item(IdP).Name & " = '" & cMiCmd.Parameters.Item(IdP) & "'" & vbCrLf
     Next IdP
    'MsgBox Len(ListP) & vbCrLf & vbCrLf & ListP
-   
    'Generar_File_SQL "Store_Procedure", ListP
-   
+    
 '''    Progreso_Esperar True
     cMiCmd.CommandTimeout = 0
     cMiCmd.Prepared = True
@@ -68,7 +67,7 @@ Dim rsMySQL As ADODB.Recordset
 Dim cmdMySQL As ADODB.Command
 
     RatonReloj
-    If Ping_PC("db.diskcoversystem.com") Then
+    If Ping_IP("db.diskcoversystem.com") Then
        'Conexion a MySQL del servidor en las nubes
         Set cmdMySQL = New ADODB.Command
         Set cnMySQL = New ADODB.Connection
@@ -103,7 +102,7 @@ Dim cmdMySQL As ADODB.Command
         Set cmdMySQL = Nothing
     Else
         MensajeAyuda = "AHORA YA ESTAMOS EN LAS NUBES, VISITANOS:" & vbCrLf _
-                     & "https://erp.diskcoversystem.com"
+                     & "https://www.diskcoversystem.com"
     End If
     RatonNormal
 End Sub
@@ -116,7 +115,7 @@ Dim Mifecha1 As String
 Dim MiHora1 As String
 
    'Conexion a MySQL del servidor en las nubes
-    If Ping_PC("db.diskcoversystem.com") Then
+    If Ping_IP("db.diskcoversystem.com") Then
          RatonReloj
          Mifecha1 = CStr(Format(date, "yyyymmdd"))
          MiHora1 = CStr(Format(Time, "hh:mm:ss"))
@@ -150,7 +149,7 @@ Dim MiHora1 As String
         'Pasamos a variables globales lso resultados del SP
          If Not rsMySQL.EOF Then vActivo = rsMySQL.fields(0)
          
-         MsgBox CodigoUsuario & vbCrLf & IP_PC.IP_PC & vbCrLf & IP_PC.WAN_PC & vbCrLf & IP_PC.Nombre_PC & vbCrLf & IP_PC.MAC_PC & vbCrLf & Mifecha1 & vbCrLf & MiHora1 & vbCrLf & vActivo
+        ' MsgBox CodigoUsuario & vbCrLf & IP_PC.IP_PC & vbCrLf & IP_PC.WAN_PC & vbCrLf & IP_PC.Nombre_PC & vbCrLf & IP_PC.MAC_PC & vbCrLf & Mifecha1 & vbCrLf & MiHora1 & vbCrLf & vActivo
          
         'Cerramos la conexion con MySQL
          rsMySQL.Close
@@ -187,7 +186,7 @@ Dim ParametrosDeSalida As String
     Cartera = 0
     Cant_FA = 0
     TipoPlan = 0
-    If Ping_PC("db.diskcoversystem.com") Then
+    If Ping_IP("db.diskcoversystem.com") Then
         RatonReloj
        'Set cnMySQL = CreateObject("ADODB.Connection")
        'Conexion a MySQL del servidor en las nubes
@@ -304,7 +303,7 @@ Dim ParametrosDeSalida As String
     Cartera = 0
     Cant_FA = 0
     TipoPlan = 0
-     If Ping_PC("db.diskcoversystem.com") Then
+     If Ping_IP("db.diskcoversystem.com") Then
        'Conexion a MySQL del servidor en las nubes
         Set cmdMySQL = New ADODB.Command
         Set cnMySQL = New ADODB.Connection
@@ -363,6 +362,7 @@ Dim ParametrosDeSalida As String
         rsMySQL.Close
         cnMySQL.Close
      End If
+     
     'Set cmdMySQL.ActiveConnection = Nothing
      Set rsMySQL = Nothing
      Set cnMySQL = Nothing
@@ -378,7 +378,7 @@ Dim cmdMySQL As ADODB.Command
 
   vMicroEmpresa = Ninguno
   vAgenteRetencion = Ninguno
-  If Ping_PC("db.diskcoversystem.com") Then
+  If Ping_IP("db.diskcoversystem.com") Then
     If Len(RUCContribuyente) = 13 Then
       'Conexion a MySQL del servidor en las nubes
       'Control_Procesos Normal, "Conexion MySQL Tipo Contribuyente"
@@ -429,7 +429,7 @@ Dim cmdMySQL As ADODB.Command
 
   vToken = Ninguno
   vURL = Ninguno
-  If Ping_PC("db.diskcoversystem.com") And Len(RUCEmpresa) = 13 Then
+  If Ping_IP("db.diskcoversystem.com") And Len(RUCEmpresa) = 13 Then
     'Conexion a MySQL del servidor en las nubes
     'Control_Procesos Normal, "Conexion MySQL Tipo Contribuyente"
      RatonReloj
@@ -513,12 +513,15 @@ Public Sub Ejecutar_SQL_SP(SQL As String, Optional NoCompilar As Boolean, Option
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
 Dim MiReg As ADODB.Recordset
+Dim TByte As Long
+    'MsgBox SQL
     If Not NoCompilar Then SQL = CompilarSQL(SQL)
     Generar_File_SQL NombreFile, SQL
     Iniciar_Stored_Procedure "Ejecucion SP con parametros", MiSQL, MiCmd, MiReg
    'MsgBox Len(SQL) & vbCrLf & SQL
+    TByte = Len(SQL) + 10
     MiCmd.CommandText = "sp_Ejecutar_SQL"
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@sSQL", adVarChar, adParamInput, Len(SQL) + 10, SQL)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@sSQL", adVarChar, adParamInput, TByte, SQL)
     Procesar_Stored_Procedure MiCmd, MiReg
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
@@ -529,6 +532,7 @@ Dim AdoCon1 As ADODB.Connection
   If Len(SQLQuery) > 1 Then
      Set AdoCon1 = New ADODB.Connection
      If Not NoCompilar Then SQLQuery = CompilarSQL(SQLQuery)
+     NombreFile = "Archivo_" & Format(Time, "hh-mm-ss") & ".sql"
      Generar_File_SQL NombreFile, SQLQuery
     'MsgBox SQLQuery & vbCrLf & String(70, "_") & vbCrLf & AdoStrCnn
      If SQL_Server Then AdoCon1.open AdoStrCnn Else AdoCon1.open AdoStrCnnMySQL
@@ -594,8 +598,6 @@ Dim MiReg As ADODB.Recordset
 
     Iniciar_Stored_Procedure "Mayorizar Cuentas", MiSQL, MiCmd, MiReg
     MiCmd.CommandText = "sp_Mayorizar_Cuentas"
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@EsCoop", adBoolean, adParamInput, 1, OpcCoop)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@ConSucursal", adBoolean, adParamInput, 1, ConSucursal)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
     Procesar_Stored_Procedure MiCmd, MiReg
@@ -662,11 +664,12 @@ Dim MiReg As ADODB.Recordset
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Usuario", adVarChar, adParamInput, 10, CodigoUsuario)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@NumModulo", adVarChar, adParamInput, 2, NumModulo)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@ExisteErrores", adBoolean, adParamOutput, 1, ExisteErrores)
+    'MiCmd.Parameters.Append MiCmd.CreateParameter("@ExisteErrores", adBoolean, adParamOutput, 1, ExisteErrores)
     Procesar_Stored_Procedure MiCmd, MiReg
-    ExisteErrores = MiCmd.Parameters("@ExisteErrores").value
+    'ExisteErrores = MiCmd.Parameters("@ExisteErrores").value
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
-    If ExisteErrores Then FInfoError.Show
+    'If ExisteErrores Then
+    FInfoError.Show
 End Sub
 
 Public Sub Presenta_Errores_Facturacion_SP(FechaDesde As MaskEdBox, FechaHasta As MaskEdBox)
@@ -685,12 +688,12 @@ Dim FechaFinSP As String
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaDesde", adVarChar, adParamInput, 10, FechaIniSP)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaHasta", adVarChar, adParamInput, 10, FechaFinSP)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@DecCosto", adUnsignedTinyInt, adParamInput, 1, Dec_Costo)
+    'MiCmd.Parameters.Append MiCmd.CreateParameter("@DecCosto", adUnsignedTinyInt, adParamInput, 1, Dec_Costo)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Usuario", adVarChar, adParamInput, 10, CodigoUsuario)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@NumModulo", adVarChar, adParamInput, 2, NumModulo)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@ExisteErrores", adBoolean, adParamOutput, 1, ExisteErrores)
+    'MiCmd.Parameters.Append MiCmd.CreateParameter("@ExisteErrores", adBoolean, adParamOutput, 1, ExisteErrores)
     Procesar_Stored_Procedure MiCmd, MiReg
-    ExisteErrores = MiCmd.Parameters("@ExisteErrores").value
+    'ExisteErrores = MiCmd.Parameters("@ExisteErrores").value
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
 
@@ -783,7 +786,6 @@ Dim RUCNatural As Boolean
     'MsgBox Tipo_RUC_CI.Tipo_Beneficiario
 End Sub
 
-
 Public Sub Actualizar_Abonos_Facturas_SP(TFA As Tipo_Facturas, _
                                          Optional SaldoReal As Boolean, _
                                          Optional PorFecha As Boolean)
@@ -856,8 +858,6 @@ Dim FechaCorteKardex As String
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Usuario", adVarChar, adParamInput, 10, CodigoUsuario)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Modulo", adVarChar, adParamInput, 2, NumModulo)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@Dec_PVP", adInteger, adParamInput, 14, Dec_PVP)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@Dec_Costo", adInteger, adParamInput, 14, Dec_Costo)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaCorte", adVarChar, adParamInput, 10, FechaCorteKardex)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@TipoKardex", adVarChar, adParamOutput, 6, TipoKardex)
     Procesar_Stored_Procedure MiCmd, MiReg
@@ -1159,7 +1159,7 @@ Dim MiReg As ADODB.Recordset
     
     FechaIni = BuscarFecha(MBFechaI)
     FechaFin = BuscarFecha(MBFechaF)
-    'MsgBox "..."
+    'MsgBox EsBalanceMes & " ..."
     Iniciar_Stored_Procedure "Procesar Balance de Comprobacion", MiSQL, MiCmd, MiReg
     MiCmd.CommandText = "sp_Procesar_Balance"
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
@@ -1239,6 +1239,7 @@ Dim FechaFin As String
     MiCmd.Parameters.Append MiCmd.CreateParameter("@ATFisico", adBoolean, adParamInput, 1, ATFisico)
     Procesar_Stored_Procedure MiCmd, MiReg
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+    MsgBox "...."
 End Sub
 
 Public Sub Iniciar_Datos_Default_SP()
@@ -1261,7 +1262,7 @@ Dim MiReg As ADODB.Recordset
     MiCmd.Parameters.Append MiCmd.CreateParameter("@NombreProvincia", adVarChar, adParamOutput, 35, NombreProvincia)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@ConSucursal", adBoolean, adParamOutput, 1, ConSucursal)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@SiUnidadEducativa", adBoolean, adParamOutput, 1, SiUnidadEducativa)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@PorcIVA", adSingle, adParamOutput, 1, Porc_IVA)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@PorcIVA", adSingle, adParamOutput, 2, Porc_IVA)
    'Recibimos datos del resultado del SP
     Procesar_Stored_Procedure MiCmd, MiReg
     No_ATS = MiCmd.Parameters("@No_ATS").value

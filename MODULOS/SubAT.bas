@@ -2859,6 +2859,7 @@ Dim Autorizar_XML As Boolean
           TFA.EmailC = .fields("Email")
           CodSustento = Format$(.fields("CodSustento"), "00")
           tipoCodComprobante = Format$(.fields("TipoComprobante"), "00")
+         'Obtener_Cod_Porc_IVA TFA.Fecha, (TFA.Porc_IVA * 100)
           Obtener_Porc_IVA TFA.Fecha, .fields("PorcentajeIva")
          'Validar_Porc_IVA TFA.Fecha
          'Algoritmo Modulo 11 para la clave de la retencion
@@ -4171,7 +4172,7 @@ Dim Con_Inv As Boolean
     
     'TFA.Porc_NC = 0.15
     Obtener_Cod_Porc_IVA TFA.Fecha, (TFA.Porc_NC * 100)
-    MsgBox Cod_Porc_IVA
+    'MsgBox Cod_Porc_IVA
    'NOTA DE CREDITO
     SubT_Con_Inv = False
     Total_Sin_IVA = 0
@@ -4460,7 +4461,7 @@ Dim Comprobante As String
           Insertar_Mail TMail.para, EmailProcesos
           TMail.Credito_No = "X" & Format(TFA.Factura, "000000000")
        End If
-       FEnviarCorreos.Show 1
+       'FEnviarCorreos.Show 1
     End If
  End Sub
 

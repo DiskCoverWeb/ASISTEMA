@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "Mscomctl.ocx"
 Begin VB.Form FacturasPension 
    BackColor       =   &H00C0C0C0&
    Caption         =   "FACTURACION DE PENSIONES"
@@ -2631,6 +2631,8 @@ Public Sub Grabar_FA_Pensiones()
          .MoveNext
        Loop
        
+       If Not ComisionEjec Then CodigoVen = Ninguno
+       
       'Grabamos el numero de factura
        Calculos_Totales_Factura FA
        Grabar_Factura FA, True
@@ -3418,6 +3420,7 @@ End Sub
 
 Private Sub Form_Activate()
   Encerar_Factura FA
+  ComisionEjec = Leer_Campo_Empresa("Comision_Ejecutivo")
   
   sSQL = "SELECT MIN(Fecha) As MinFecha " _
        & "FROM Facturas " _
@@ -4297,8 +4300,9 @@ Dim AuxCtaAnticipo As String
        & "AND CodigoC = '" & FA.CodigoC & "' " _
        & "AND Cta = '" & AuxCtaAnticipo & "' " _
        & "AND C = " & Val(adFalse) & " "
-  Select_AdoDB AdoDBTemp, sSQL
+  Select_AdoDB AdoDBTemp, sSQL, "Abonos_Anticipados_Clientes"
   If AdoDBTemp.RecordCount > 0 And Not IsNull(AdoDBTemp.fields("Abonado")) Then TotAntipos = TotAntipos - AdoDBTemp.fields("Abonado")
   AdoDBTemp.Close
+ 'MsgBox TotAntipos
   Saldo_De_Anticipos = TotAntipos
 End Function

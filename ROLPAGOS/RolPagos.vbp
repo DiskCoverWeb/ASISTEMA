@@ -86,6 +86,7 @@ Form=FCtaRolP.frm
 Module=TBaseDatos; ..\MODULOS\TBaseDatos.bas
 Class=cFTP; ..\CLASES\cFTP.cls
 Object={05BFD3F1-6319-4F30-B752-C7A22889BCC4}#1.0#0; AcroPDF.dll
+Class=cPing; ..\CLASES\cPing.cls
 IconForm="MDIRolPago"
 Startup="MDIRolPago"
 HelpFile=""

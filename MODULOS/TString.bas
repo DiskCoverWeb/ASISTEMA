@@ -575,4 +575,7 @@ Global Evaluacion As String
 Global Distrito As String
 Global TipoKardex As String
 '-----------------------------------------
+Global html_Informacion_adicional As String
+Global html_Detalle_adicional As String
+'-----------------------------------------
 Global ListaDeImpresoras() As String

@@ -653,10 +653,14 @@ End Sub
 
 Private Sub Mdiskcoversystem_Click()
 Dim X
-  Control_Procesos "Q", "Salir por ingresar a la Pagina WEB"
-  MsgBox "Estas a punto de ingresar al Centro de descargas del sistema"
-  X = ShellExecute(Me.hwnd, "Open", "http://www.diskcoversystem.com", &O0, &O0, SW_NORMAL)
-  End
+  If IP_PC.InterNet Then
+     Control_Procesos "Q", "Salir por ingresar a la Pagina WEB"
+     MsgBox "Estas a punto de ingresar al Centro de descargas del sistema"
+     X = ShellExecute(Me.hwnd, "Open", "http://www.diskcoversystem.com", &O0, &O0, SW_NORMAL)
+     End
+  Else
+     MsgBox "No puede acceder a la pagina web de www.diskcoversystem.com por que no tiene internet"
+  End If
 End Sub
 
 Private Sub MEmails_Click()
