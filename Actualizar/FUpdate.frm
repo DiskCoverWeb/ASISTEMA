@@ -118,14 +118,6 @@ Begin VB.Form FActualizar
          Width           =   540
       End
    End
-   Begin VB.CommandButton Command1 
-      Caption         =   "FTP"
-      Height          =   435
-      Left            =   5880
-      TabIndex        =   12
-      Top             =   630
-      Width           =   645
-   End
    Begin ComctlLib.ProgressBar ProgressBarEstado 
       Height          =   330
       Left            =   105
@@ -544,9 +536,6 @@ Begin VB.Form FActualizar
       Begin VB.Menu MReindexarTablas 
          Caption         =   "Reindexar Tablas"
       End
-      Begin VB.Menu MImportarBasesAntiguas 
-         Caption         =   "Importar Bases Antiguas"
-      End
       Begin VB.Menu MOptimitarBase 
          Caption         =   "Optimizar Base"
       End
@@ -570,236 +559,6 @@ Option Explicit
 Dim IniIDBase As Integer
 Dim FinIDBase As Integer
 
-'Bajar solo Actualizacion
-Private Sub Command1_Click()
-Dim AdoDBTXT As ADODB.Recordset
-
-Dim IdFile As Long
-Dim CadenaTime As String
-Dim Extension As String
-Dim TextoFile As String
-Dim FileOrigen As String
-Dim FileDestino As String
-Dim Directorio As String
-Dim Files() As String
-
-Dim MyChar As String
-
-'If InStr(IP_PC.IP_PC, "192.168.") > 0 Then .servidor = "192.168.27.4" Else
-On Error GoTo error_Handler
-
-  'Actualizando archivo de la nueva version del sistemas en las Bases de Datos y los SP, FN
-   CadenaTime = ""
-   MiTiempo = Time
-   Bajar_Archivos_FTP "[1]"
-   CadenaTime = CadenaTime & Format(Time - MiTiempo, FormatoTimes) & vbCrLf
-   MiTiempo = Time
-        
-   Progreso_Barra.Mensaje_Box = "Estableciendo conexion al servidor ftpds"
-   FActualizar.Caption = Progreso_Barra.Mensaje_Box
-   FActualizar.Refresh
-   With ftp
-       .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-       .Inicializar Me
-       .Password = ftpPwr        'Establecemos contraseña
-       .Usuario = ftpUse         'Establecemos usuario
-       .servidor = ftpSvr        'Establecemos Servidor FTP
-      
-       'Conectamos al servidor FTP. EL label es el control donde mostrar los errores y el estado de la conexión
-        If .ConectarFtp(LstStatud) = False Then
-            MsgBox "No se pudo conectar"
-            Exit Sub
-        End If
-        
-        IdFile = 0
-
-       'Empezamos a actualizar la Base de Datos
-        Conectar_Base_Datos
-        
-'''       'Elimina la actualizacion anterior si hay conexion
-'''        Eliminar_Si_Existe_File RutaSistema & "\BASES\UPDATE_DB\*.*"
-'''
-'''       'Mostramos en el label el path del directorio actual donde estamos ubicados en el servidor
-'''        Progreso_Barra.Mensaje_Box = .GetDirectorioActual
-'''       .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-'''       'Le indicamos el ListView donde se listarán los archivos
-'''        Set .ListView = LstVwFTP
-'''        Progreso_Barra.Mensaje_Box = "Buscando directorio en el servidor"
-'''       .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-'''
-'''       '-------------------------------------------------------
-'''       'Esta opcion solo baja la actualizacion del servidor erp
-'''       '=======================================================
-'''        Progreso_Barra.Mensaje_Box = "Eliminando Version anterior"
-'''       .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-'''       .CambiarDirectorio "/SISTEMA/BASES/UPDATE_DB/"
-'''       .ListarArchivos
-'''        For I = 1 To LstVwFTP.ListItems.Count
-'''            TextoFile = ""
-'''            FileOrigen = LstVwFTP.ListItems(I)
-'''            FileDestino = RutaSistema & "\BASES\UPDATE_DB\" & LstVwFTP.ListItems(I)
-'''            Extension = RightStrg(FileOrigen, 3)
-'''            Select Case Extension
-'''              Case "dbs", "txt", "upd", "sql"
-'''                   Progreso_Barra.Mensaje_Box = "Descargando: " & FileOrigen
-'''                  .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-'''                  .ObtenerArchivo FileOrigen, FileDestino, True
-'''            End Select
-'''        Next I
-'''       .Desconectar
-       
-        
-        
-       'Creamos la tabla de Actualizaciones
-        If Existe_Tabla("Actualizacion") Then Ejecutar_SQL_SP "DROP TABLE Actualizacion;"
-        Ejecutar_SQL_SP "CREATE TABLE Actualizacion(Archivo VARCHAR(100), Extension VARCHAR(3), Documento NVARCHAR(MAX), ID INT IDENTITY NOT NULL PRIMARY KEY);"
-        
-       'Determinar cuales son las tablas fijas que se van a actualizar
-        
-        Contador = 0
-        Directorio = Dir(RutaSistema & "\BASES\UPDATE_DB\*.upd", vbNormal) 'Recupera la primera entrada.
-        Do While Directorio <> ""
-           If Directorio <> "." And Directorio <> ".." Then
-                   ReDim Preserve Files(Contador) As String
-                   Files(Contador) = Directorio
-                   Contador = Contador + 1
-           End If
-           Directorio = Dir
-        Loop
-        
-        Directorio = Dir(RutaSistema & "\BASES\UPDATE_DB\*.dbs", vbNormal) 'Recupera la primera entrada.
-        Do While Directorio <> ""
-           If Directorio <> "." And Directorio <> ".." Then
-                   ReDim Preserve Files(Contador) As String
-                   Files(Contador) = Directorio
-                   Contador = Contador + 1
-           End If
-           Directorio = Dir
-        Loop
-        
-        Directorio = Dir(RutaSistema & "\BASES\UPDATE_DB\*.sql", vbNormal) 'Recupera la primera entrada.
-        Do While Directorio <> ""
-           If Directorio <> "." And Directorio <> ".." Then
-                   ReDim Preserve Files(Contador) As String
-                   Files(Contador) = Directorio
-                   Contador = Contador + 1
-           End If
-           Directorio = Dir
-        Loop
-        
-        For I = 0 To UBound(Files)
-            FileOrigen = Files(I)
-            Progreso_Barra.Mensaje_Box = "Actualizando: " & FileOrigen
-           .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-            Extension = RightStrg(FileOrigen, 3)
-            FileDestino = RutaSistema & "\BASES\UPDATE_DB\" & FileOrigen
-            TextoFile = Leer_Archivo_Plano(FileDestino)
-
-            TextoFile = Replace(TextoFile, vbCr, "[CR]")
-            TextoFile = Replace(TextoFile, vbLf, "[LF]")
-            TextoFile = Replace(TextoFile, "'", "[`]")
-            TextoFile = Replace(TextoFile, "#", "[N]")
-            TextoFile = Replace(TextoFile, """", "[DC]")
-              
-            Select Case Extension
-              Case "sql"
-                   IdFile = InStr(TextoFile, "CREATE")
-                   If IdFile > 0 Then
-                      TextoFile = MidStrg(TextoFile, IdFile, Len(TextoFile))
-                      For K = Len(TextoFile) To Len(TextoFile) - 10 Step -1
-                          If MidStrg(TextoFile, K, 2) = "GO" Then J = K
-                      Next K
-                      TextoFile = MidStrg(TextoFile, 1, J - 1)
-                   End If
-            End Select
-            
-            'MsgBox FileOrigen & vbCrLf & Len(TextoFile)
-            FileOrigen = MidStrg(FileOrigen, 1, Len(FileOrigen) - 4)
-            sSQL = "INSERT INTO Actualizacion (Archivo, Extension, Documento) " _
-                 & "VALUES ('" & FileOrigen & "', '" & Extension & "', '" & TextoFile & "');"
-            Ejecutar_SQL_SP sSQL
-        Next I
-
-        sSQL = "SELECT Archivo, Extension, Documento " _
-             & "FROM Actualizacion " _
-             & "WHERE Extension <> '.' " _
-             & "ORDER BY Archivo "
-        Select_AdoDB AdoDBTXT, sSQL
-        With AdoDBTXT
-         If .RecordCount > 0 Then
-             Do While Not .EOF
-                LstStatud.Text = "Actualizando signos especiales: " & .fields("Archivo")
-                LstStatud.Refresh
-                TextoFile = .fields("Documento")
-                TextoFile = Replace(TextoFile, "[CR]", vbCr)
-                TextoFile = Replace(TextoFile, "[LF]", vbLf)
-                TextoFile = Replace(TextoFile, "[`]", "'")
-                TextoFile = Replace(TextoFile, "[N]", "#")
-                TextoFile = Replace(TextoFile, "[DC]", """")
-               .fields("Documento") = TextoFile
-               .MoveNext
-             Loop
-            .UpdateBatch
-         End If
-        End With
-        AdoDBTXT.Close
-       
-'''        If strIPServidor = "db.diskcoversystem.com" Then
-'''           Set .ListView = LstVwFTP
-'''           CadenaTime = CadenaTime & Format(Time - MiTiempo, FormatoTimes) & vbCrLf
-'''           Progreso_Barra.Mensaje_Box = "Conectando al servidor ftp de subida"
-'''          .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-'''           FActualizar.Caption = "DATOS Y PROGRAMAS: " & .servidor
-'''           FActualizar.Refresh
-'''
-'''           Progreso_Barra.Mensaje_Box = "Conectando al servidor"
-'''          .Inicializar Me
-'''
-'''          .Usuario = ftpUseLinode       'Establecemos usuario
-'''          .Password = ftpPwrLinode      'Establecemos contraseña
-'''          .Puerto = 21                  'Puerto de subida
-'''          .servidor = ftpSvrLinode      'Establecesmo el Servidor FTP
-'''
-'''          'conectamos al servidor FTP. EL label es el control donde mostrar los errores y el estado de la conexión
-'''           If .ConectarFtp(LstStatud) = False Then
-'''               RatonNormal
-'''               MsgBox "Error (" & Err.Number & ") " & Err.Description & vbCrLf & "No se pudo conectar"
-'''               Exit Sub
-'''           End If
-'''          'Mostramos en el label el path del directorio actual donde estamos ubicados en el servidor
-'''           Progreso_Barra.Mensaje_Box = .GetDirectorioActual
-'''          'Le indicamos el ListView donde se listarán los archivos
-'''          .CambiarDirectorio "/UPDATE_DB/"
-'''          .ListarArchivos
-'''           For I = 1 To LstVwFTP.ListItems.Count
-'''               Progreso_Barra.Mensaje_Box = "Eliminando: " & LstVwFTP.ListItems(I)
-'''              .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-'''              .EliminarArchivo "/files/UPDATE_DB/" & LstVwFTP.ListItems(I)
-'''           Next I
-'''          'Determinar cuales son las tablas fijas que se van a actualizar
-'''           Cadena = Dir(RutaSistema & "\BASES\UPDATE_DB\*.*", vbNormal) 'Recupera la primera entrada.
-'''           Do While Cadena <> ""
-'''              If Cadena <> "." And Cadena <> ".." Then
-'''                 Progreso_Barra.Mensaje_Box = "Subiendo: " & Cadena
-'''                .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-'''                .SubirArchivo RutaSistema & "\BASES\UPDATE_DB\" & Cadena, "/files/UPDATE_DB/" & Cadena, True
-'''                 Contador = Contador + 1
-'''              End If
-'''              Cadena = Dir
-'''           Loop
-'''          .Desconectar
-'''        End If
-   End With
-   RatonNormal
-   
-    CadenaTime = CadenaTime & Format(Time - MiTiempo, FormatoTimes) & vbCrLf
-    MsgBox "Proceso terminado." & vbCrLf & CadenaTime
-Exit Sub
-error_Handler:
-     MsgBox Err.Description, vbCritical
-     RatonNormal
-End Sub
-
 Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
 Dim hInst As Long
 Dim Thread As Long
@@ -819,8 +578,7 @@ Dim Thread As Long
     Progreso_Barra.Incremento = 0
     Progreso_Barra.Puntos = 0
     Progreso_Barra.color = 0
-    MsgBox Button.key
-    
+   'MsgBox Button.key
     Select Case Button.key
       Case "Salir"                          'Salir de la actualizacion
             Progreso_Barra.Valor_Maximo = 100
@@ -842,13 +600,13 @@ Dim Thread As Long
             Progreso_Barra.Valor_Maximo = 2500
             Bajar_Archivos_FTP "[1]"
             TMail.Mensaje = TMail.Mensaje & "Se actualizo solo las bases de datos" & vbCrLf
-            UPD_Actualizar LstStatud, URLinet, Dir1, File1, LstTablas
+            UPD_Actualizar_SP
             Enviar_Mail_Actualizacion
             Proceso_Terminado_Exitosamente
       Case "SoloDatos"                      'Actualiza base de datos sin transmision
             Progreso_Barra.Valor_Maximo = 1900
             TMail.Mensaje = TMail.Mensaje & "Se actualizon solo los datos" & vbCrLf
-            UPD_Actualizar LstStatud, URLinet, Dir1, File1, LstTablas
+            UPD_Actualizar_SP
             Enviar_Mail_Actualizacion
             Proceso_Terminado_Exitosamente
       Case "SoloSPFN"                       'Actualiza SP y FN sin transmision
@@ -893,12 +651,9 @@ On Error GoTo error_Handler
        Progreso_Barra.Mensaje_Box = "Conectando al servidor"
       .Mostar_Estado_FTP ProgressBarEstado, LstStatud
       .Inicializar Me
-      'Le establecemos la contraseña de la cuenta Ftp
-      .Password = ftpPwr
-      'Le establecemos el nombre de usuario de la cuenta
-      .Usuario = ftpUse
-      'Establecesmo el nombre del Servidor FTP
-      .servidor = ftpSvr
+      .Password = ftpPwr                    'Le establecemos la contraseña de la cuenta Ftp
+      .Usuario = ftpUse                     'Le establecemos el nombre de usuario de la cuenta
+      .servidor = ftpSvr                    'Establecesmo el nombre del Servidor FTP
       'MsgBox .servidor
       'Conectamos al servidor FTP. EL label es el control donde mostrar los errores y el estado de la conexión
        If .ConectarFtp(LstStatud) = False Then
@@ -974,6 +729,7 @@ On Error GoTo error_Handler
               End Select
               Cadena = Cadena & LstVwFTP.ListItems(I) & vbCrLf
           Next I
+          
          'Copiamos nuevos archivos del servidor
           Cadena = ""
           For I = 1 To LstVwFTP.ListItems.Count
@@ -985,7 +741,15 @@ On Error GoTo error_Handler
                 .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\" & LstVwFTP.ListItems(I), True
               End Select
           Next I
-          Sleep 5000
+          'Sleep 5000
+          
+         .CambiarDirectorio "/SISTEMA/JAVASCRIPT/"
+         .ListarArchivos
+          For I = 1 To LstVwFTP.ListItems.Count
+              Progreso_Barra.Mensaje_Box = "Actualizando: " & LstVwFTP.ListItems(I)
+             .Mostar_Estado_FTP ProgressBarEstado, LstStatud
+             .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\JAVASCRIPT\" & LstVwFTP.ListItems(I), True
+          Next I
           
           For I = 1 To LstVwFTP.ListItems.Count
               If UCaseStrg(RightStrg(LstVwFTP.ListItems(I), 3)) = "EXE" Then
@@ -1144,7 +908,7 @@ Dim Nombre_Key As String
     Bajar_Archivos_FTP "[1][2][3]"
     RatonReloj
     Progreso_Barra.Mensaje_Box = "PROGRESO DEL RESPALDO"
-    UPD_Actualizar LstStatud, URLinet, Dir1, File1, LstTablas
+    UPD_Actualizar_SP
   Else
     Mensajes = "LO SIENTO NO PODER ACTUALIZAR EL SISTEMA, USTED NO ESTA LEGALIZADO " _
              & "O YA SE VENCIO SU CONTRATO, LLAME AL 593-09-8910-5300" & vbCrLf & vbCrLf _
@@ -1223,7 +987,7 @@ Dim HayCnn As Boolean
     Evaluar = False
     SQL_Server = True
     Conectar_Base_Datos
-    
+  
    'Verificamos si la base esta en Microsoft Access o en SQL Server 7.0
     FechaSistema = Format(date, FormatoFechas)
     NombreCiudad = "QUITO"
@@ -1297,10 +1061,6 @@ Private Sub MEliminarIndce_Click()
   MsgBox "Proceso Terminado"
 End Sub
 
-Private Sub MImportarBasesAntiguas_Click()
-  Importar_Bases_Antiguas
-End Sub
-
 Private Sub MOptimitarBase_Click()
    Optimizar_Memoria
 End Sub
@@ -1314,7 +1074,6 @@ End Sub
 Private Sub MSalir_Click()
    End
 End Sub
-
 
 '''Public Function ConverType(CampoType As Integer) As String
 '''Dim TipoCampo As String
@@ -1354,647 +1113,888 @@ End Sub
 '''    Next I
 '''End Sub
 
-Public Sub UPD_Actualizar(LstStatud As ListBox, _
-                          URLinet As Inet, _
-                          Update_Dir As DirListBox, _
-                          Update_File As FileListBox, _
-                          Update_LstTablas As ListBox, _
-                          Optional Update_Limpiar_Bases As Boolean)
-Dim AdoAuxDB As ADODB.Recordset
-Dim AdoCompDB As ADODB.Recordset
-Dim AdoCompDB1 As ADODB.Recordset
-Dim AdoDBKeyID As ADODB.Recordset
-Dim CantCamposUpd As Integer
-Dim Update_Tipo As Integer
-Dim Idx As Integer
-Dim Idy As Integer
-Dim PIni As Long
-Dim PFin As Long
-Dim IJ As Long
-Dim ContEsp As Long
-Dim IdTime As Long
-Dim NumTrans As Long
-Dim Update_Largo As Long
-Dim ContProc As Long
-Dim MaxProc As Long
-Dim strCnn As String
-Dim Update_Campo As String
-Dim Update_Mails As String
-Dim Update_Excel As String
-Dim Update_Emp As String
-Dim TextoBusqueda1 As String
-Dim ZTablas As String
-Dim Borrar_Campo As Boolean
-Dim CambiarTipo As Boolean
-Dim Crear_Clave_Primaria As Boolean
-Dim Existe_ID As Boolean
+Public Sub UPD_Actualizar_SP()
+Dim AdoDBTXT As ADODB.Recordset
 
- 'MsgBox "Presione Aceptar para empezar la actualizacion: " & Periodo_Contable
-  RatonReloj
-  ContProc = 0
- 'Llenamos lista de tablas actuales
-  UPD_Listar_Tablas Update_LstTablas
-  
-  MaxProc = (Update_LstTablas.ListCount * 8)
-  
-  Progreso_Barra.Mensaje_Box = "PROGRESO DEL ACTUALIZACION"
-  ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
-  
-  ConSubDir = False
-  Contador = 0: FileResp = 0
-  FechaInicial = "31/12/" & Year(FechaSistema)
-  sSQL = "DELETE * " _
-       & "FROM Modulos " _
-       & "WHERE Modulo = 'VS' "
-  Ejecutar_SQL_AdoDB sSQL
-  
-  sSQL = "SELECT MIN(Fecha) As Fecha_MIN " _
-       & "FROM Facturas " _
-       & "WHERE Fecha <= #" & BuscarFecha(FechaSistema) & "# "
-  Select_AdoDB AdoCompDB, sSQL
-  If AdoCompDB.RecordCount > 0 Then
-     If Not IsNull(AdoCompDB.fields("Fecha_MIN")) Then FechaInicial = UltimoDiaMes(AdoCompDB.fields("Fecha_MIN"))
-  End If
-  AdoCompDB.Close
-  
-  'Determinar cuales son las tablas fijas que se van a actualizar
-   Cadena = Dir(RutaSistema & "\BASES\UPDATE_DB\*.DBS", vbNormal) 'Recupera la primera entrada.
-   ZTablas = ""
-   Contador = 0
-   Do While Cadena <> ""
-      If Cadena <> "." And Cadena <> ".." Then
-         ZTablas = ZTablas & MidStrg(Cadena, 2, Len(Cadena) - 5) & " | "
-         Contador = Contador + 1
-      End If
-      Cadena = Dir
-   Loop
-   
-  'Eliminamos las Funciones y Procedmientos necesarios
-   Progreso_Barra.Mensaje_Box = "Eliminando FN y SP Principales"
-   ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
-   Eliminar_FN_SP_SQL
-   
- 'Empezamos a actualizar el programa, primero creamos los SP necesarios para empezar a migrar
-  Ejecutar_SQL_AdoDB Crear_FN_SP(RutaSistema & "\BASES\UPDATE_DB\dbo.sp_Ejecutar_SQL.StoredProcedure.sql"), True
-  Ejecutar_SQL_AdoDB Crear_FN_SP(RutaSistema & "\BASES\UPDATE_DB\dbo.sp_Eliminar_Indices.StoredProcedure.sql"), True
-  Ejecutar_SQL_AdoDB Crear_FN_SP(RutaSistema & "\BASES\UPDATE_DB\dbo.sp_Eliminar_Indices_Temporales.StoredProcedure.sql"), True
-  Ejecutar_SQL_AdoDB Crear_FN_SP(RutaSistema & "\BASES\UPDATE_DB\dbo.sp_Eliminar_Tablas_Temporales.StoredProcedure.sql"), True
-  Ejecutar_SQL_AdoDB Crear_FN_SP(RutaSistema & "\BASES\UPDATE_DB\dbo.sp_Update_Default.StoredProcedure.sql"), True
+Dim IdFile As Long
+Dim CadenaTime As String
+Dim Extension As String
+Dim TextoFile As String
+Dim FileOrigen As String
+Dim FileDestino As String
+Dim Directorio As String
+Dim Files() As String
 
- 'Primero eliminamos los indices
-  Progreso_Barra.Mensaje_Box = "Eliminacion de indices"
-  ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
-  Ejecutar_SP "sp_Eliminar_Indices_Temporales", ""
-  
-  Progreso_Barra.Mensaje_Box = "Eliminamos actualizacion anterior"
-  ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
- 
- 'Eliminar Tablas Temporales que sean necesarias
-  Ejecutar_SP "sp_Eliminar_Tablas_Temporales", ""
-  
- Contador = 0
-'TxtResult = ""
-SubCtaGen = ""
-TextoBusqueda = ""
-Cadena = ""
-Cadena1 = ""
+On Error GoTo error_Handler
 
-'Volvemos a actualizar las tablas actuales despues de haber borrado las temporales o vacias
-Update_Dir.Path = RutaSistema & "\BASES\UPDATE_DB"
-Update_File.Filename = Update_Dir.Path & "\*.UPD"
-UPD_Listar_Tablas Update_LstTablas
-For IJ = 0 To Update_File.ListCount - 1
-    RutaGeneraFile = RutaSistema & "\BASES\UPDATE_DB\" & Update_File.List(IJ)
-   'Nombre de la tabla que se va actuaizar
-    RutaOrigen = TrimStrg(MidStrg(Update_File.List(IJ), 1, Len(Update_File.List(IJ)) - 4))
-   'Leemos los campos de la tabla
-    UPD_Leer_Campos_Tabla RutaGeneraFile
-   'Este procedimiento retorna en la variable "TablaNew" de tipo vector los campos a actualizar
-    Si_No = False
-    For I = 0 To Update_LstTablas.ListCount - 1
-      If RutaOrigen = Update_LstTablas.List(I) Then
-         Si_No = True
-         I = Update_LstTablas.ListCount
-      End If
-    Next I
+   'Actualizando archivo de la nueva version del sistemas en las Bases de Datos y los SP, FN
+    ProgressBarEstado.Max = 100
+    CadenaTime = ""
+    MiTiempo = Time
+    LstStatud.AddItem "Estableciendo conexion al servidor de datos"
+    LstStatud.Refresh
     
-   'Si la Tabla Existe pasamos a actualizar
-    If Si_No Then
-       Progreso_Barra.Mensaje_Box = "Actualizando campos de: " & RutaOrigen
-       ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
-        
-       NombreCampo = ""
-       Existe_ID = False
-       Crear_Clave_Primaria = False
-       CantCamposUpd = CantCampos
-       sSQL = "SELECT * " _
-            & "FROM " & RutaOrigen & " " _
-            & "WHERE 1 = 0 "
-       'MsgBox RutaOrigen & vbCrLf & vbCrLf & AdoStrCnn
-       Select_AdoDB AdoCompDB, sSQL
-       CantCampos = CantCamposUpd
-       With AdoCompDB
-            ReDim TablaOld(.fields.Count) As Crear_Tablas
-            Cadena = ""
-            Contador = 0
-           'MsgBox CantCampos
-            For K = 0 To CantCampos - 1
-                Progreso_Barra.Mensaje_Box = "Actualizando campos de: " & RutaOrigen & " -> " & TablaNew(K).Campo
-                Evaluar = False
-                CambiarTipo = False
-                For J = 0 To .fields.Count - 1
-                    If TablaNew(K).Campo = .fields(J).Name Then
-                       Evaluar = True
-                       If SQL_Server Then
-                          If TypeField(TablaNew(K).TipoSQL) <> .fields(J).Type Then CambiarTipo = True
-                       Else
-                          If TypeField(TablaNew(K).TipoAccess) <> .fields(J).Type Then CambiarTipo = True
-                       End If
-                       If (TablaNew(K).LargoCampo <> 0) And (TablaNew(K).LargoCampo <> .fields(J).DefinedSize) Then CambiarTipo = True
-                    End If
-                    If TablaNew(K).Campo = "ID" Then Crear_Clave_Primaria = True
-                    If .fields(J).Name = "ID" Then Existe_ID = True
-                Next J
-               'If RutaOrigen = "Facturas" And TablaNew(K).Campo = "Direccion" Then MsgBox TablaNew(K).Campo
-                If Evaluar Then
-                  'Actualizo el campo antiguo si hay cambios
-                   If CambiarTipo Then
-                      SQL1 = "ALTER TABLE [" & RutaOrigen & "] "
-                      If SQL_Server Then
-                         SQL1 = SQL1 & "ALTER COLUMN [" & TablaNew(K).Campo & "] " & TablaNew(K).TipoSQL
-                      Else
-                         SQL1 = SQL1 & "ALTER COLUMN [" & TablaNew(K).Campo & "] " & TablaNew(K).TipoAccess
-                      End If
-                      SQL1 = SQL1 & "; "
-                     'If RutaOrigen = "Trans_Documentos" Then MsgBox "CAMBIAR CAMPO:" & vbCrLf & SQL1
-                     'Ejecutar_SP "sp_Ejecutar_SQL", SQL1
-                     Ejecutar_SQL_SP SQL1, True
-                   End If
-                Else
-                  'Si es campo nuevo le actualizo
-                   SQL1 = ""
-                   Contador = Contador + 1
-                   If Contador <= 1 Then Cadena = Cadena & Space(3) & " => "
-                   Cadena = Cadena & TablaNew(K).Campo & Space(30 - Len(TablaNew(K).Campo))
-                   If Contador > 3 Then
-                      Cadena = Cadena & vbCrLf
-                      Contador = 0
-                   End If
-                   If TablaNew(K).Campo <> "ID" Then
-                      SQL1 = "ALTER TABLE [" & RutaOrigen & "] "
-                      If SQL_Server Then
-                         SQL1 = SQL1 & "ADD [" & TablaNew(K).Campo & "] " & TablaNew(K).TipoSQL
-                      Else
-                         SQL1 = SQL1 & "ADD [" & TablaNew(K).Campo & "] " & TablaNew(K).TipoAccess
-                      End If
-                      SQL1 = SQL1 & "; "
-                   Else
-                      If Crear_Clave_Primaria And Not Existe_ID Then
-                         SQL1 = "ALTER TABLE [" & RutaOrigen & "] "
-                         If SQL_Server Then
-                            SQL1 = SQL1 & "ADD [" & TablaNew(K).Campo & "] INT IDENTITY NOT NULL PRIMARY KEY"
-                         Else
-                            SQL1 = SQL1 & "ADD [" & TablaNew(K).Campo & "] LONG IDENTITY NOT NULL PRIMARY KEY"
-                         End If
-                         SQL1 = SQL1 & "; "
-                      End If
-                   End If
-                   'If Crear_Clave_Primaria And SQL1 <> "" Then MsgBox SQL1
-                   If TablaNew(K).Campo <> "" And SQL1 <> "" Then Ejecutar_SQL_SP SQL1, True
-                End If
-            Next K
-            If Cadena <> "" Then TextoBusqueda = TextoBusqueda & "Cambio Tabla: " & RutaOrigen & vbCrLf & Cadena & vbCrLf
-       End With
-       AdoCompDB.Close
-    Else
-      'Si la tabla no existe la creamos
-       Progreso_Barra.Mensaje_Box = "Creando Tabla nueva: " & RutaOrigen
-       ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
-      
-       TextoBusqueda = TextoBusqueda & "Tabla Nueva: " & RutaOrigen & vbCrLf
-       Crear_Clave_Primaria = False
-       For J = 0 To CantCampos - 1
-           If TablaNew(J).Campo = "ID" Then Crear_Clave_Primaria = True
-       Next J
-       SQL1 = "CREATE TABLE [" & RutaOrigen & "] ("
-       For K = 0 To CantCampos - 1
-           If TablaNew(K).Campo = "ID" Then
-              If SQL_Server Then
-                 SQL1 = SQL1 & "[" & TablaNew(K).Campo & "] INT IDENTITY NOT NULL PRIMARY KEY"
-              Else
-                 SQL1 = SQL1 & "[" & TablaNew(K).Campo & "] LONG IDENTITY NOT NULL PRIMARY KEY"
-              End If
-           Else
-              If SQL_Server Then
-                 SQL1 = SQL1 & "[" & TablaNew(K).Campo & "] " & TablaNew(K).TipoSQL
-              Else
-                 SQL1 = SQL1 & "[" & TablaNew(K).Campo & "] " & TablaNew(K).TipoAccess
-              End If
-           End If
-           If K <> (CantCampos - 1) Then SQL1 = SQL1 & ","
-       Next K
-       SQL1 = SQL1 & "); "
-      ' WITH (MEMORY_OPTIMIZED=ON, DURABILITY=SCHEMA_ONLY)
-      'MsgBox "Creando Tabla Nueva:" & vbCrLf & SQL1
-       Ejecutar_SQL_SP SQL1, True
-    End If
-    RatonNormal
-Next IJ
+    IdFile = 0
 
- 'Creamos los SP y FN en sql Server
-  Progreso_Barra.Mensaje_Box = "Creacion de SP y FN"
-  ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
-  Crear_Script_SQL ProgressBarEstado, LstStatud
-
- 'Actualiza el contenido de las tablas con Item 000
-  ContEsp = Progreso_Barra.Incremento
-  
- 'Creamos los indices de las tablas
-  Progreso_Barra.Mensaje_Box = "Creacion de Indices"
-  ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
-  Ejecutar_SP "sp_Eliminar_Indices_Temporales", ""
-  Ejecutar_SP "sp_Crear_Indices", ""
-  
- 'Iniciamos datos por defaul
-  Progreso_Barra.Mensaje_Box = "Iniciar Datos por default"
-  ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
-  
-'''  Parametros = "'000','.',0"
-'''  'MsgBox "."
-'''  Ejecutar_SP "sp_Iniciar_Datos_Default", Parametros
-  Iniciar_Datos_Default_SP
-  'MsgBox "..."
- '========================================================================
- 'Actualizamos valores por defecto en los campos con nulos
-  Cadena = ""
-  For I = 0 To Update_LstTablas.ListCount - 1
-     Progreso_Barra.Mensaje_Box = "Actualizando Nulos de " & Update_LstTablas.List(I)
-     ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
-     
-     If MidStrg(Update_LstTablas.List(I), 1, 4) <> "Tipo" Then Eliminar_Nulos_SP Update_LstTablas.List(I)
-  Next I
-  If Cadena <> "" Then TextoBusqueda = TextoBusqueda & "Campos con nulos:" & vbCrLf & Cadena
-  If SubCtaGen <> "" Then TextoBusqueda = TextoBusqueda & SubCtaGen
-  
- 'Actualizando datos, inserciones y eliminaciones de las tablas de esta actualizacion
-  UPD_Listar_Tablas Update_LstTablas
-  
- 'Eliminacion de Tablas que ya no funcionan en la nueva actualizacion
-  Contador = 0
-  For I = 0 To Update_LstTablas.ListCount - 1
-      Si_No = True
-      For IJ = 0 To Update_File.ListCount - 1
-          RutaOrigen = TrimStrg(MidStrg(Update_File.List(IJ), 1, Len(Update_File.List(IJ)) - 4))
-          If Update_LstTablas.List(I) = RutaOrigen Then Si_No = False
-      Next IJ
-      If Si_No Then
-        Progreso_Barra.Mensaje_Box = "Tabla Eliminada: " & Update_LstTablas.List(I)
-        ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
-
-         If Contador = 0 Then
-            SubCtaGen = "Tablas Eliminadas: " & vbCrLf & Space(10) & "Tabla: " & Update_LstTablas.List(I) & vbCrLf
-            Contador = 1
-         Else
-            SubCtaGen = SubCtaGen & Space(10) & "Tabla: " & Update_LstTablas.List(I) & vbCrLf
-         End If
-        'Eliminar Tabla
-         SQL1 = "DROP TABLE [" & Update_LstTablas.List(I) & "] "
-         Ejecutar_SQL_SP SQL1, True
-         TextoBusqueda = TextoBusqueda & "Tabla: " & Update_LstTablas.List(I) & " fue eliminada " & vbCrLf
-      End If
-  Next I
-  
- '==========================================================================
- ' Procedemos a crear tablas Temporales de informacion de esta actualizacion
- '==========================================================================
-  UPD_Listar_Tablas Update_LstTablas
-  For IJ = 0 To Update_File.ListCount - 1
-      RutaGeneraFile = RutaSistema & "\BASES\UPDATE_DB\" & Update_File.List(IJ)
-     'Nombre de la tabla que se va a crear
-      RutaOrigen = TrimStrg(MidStrg(Update_File.List(IJ), 1, Len(Update_File.List(IJ)) - 4))
-     'Leemos los campos de la tabla
-      UPD_Leer_Campos_Tabla RutaGeneraFile
-     'Si existe la tala la creamos
-      If InStr(ZTablas, RutaOrigen) Then
-        'Creamos la tabla Temporal
+   'Eliminamos y luego creamos la tabla y el SP de Actualizaciones
+    ProgressBarEstado.value = 0
         
-        Progreso_Barra.Mensaje_Box = "Creando Tabla Temporal: " & RutaOrigen
-        ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
-        
-         Crear_Clave_Primaria = False
-         For J = 0 To CantCampos - 1
-             If TablaNew(J).Campo = "ID" Then Crear_Clave_Primaria = True
-         Next J
-         SQL1 = "CREATE TABLE [Z" & RutaOrigen & "] ("
-         For K = 0 To CantCampos - 1
-             If TablaNew(K).Campo = "ID" Then
-                If SQL_Server Then
-                   SQL1 = SQL1 & "[" & TablaNew(K).Campo & "] INT IDENTITY NOT NULL PRIMARY KEY"
-                Else
-                   SQL1 = SQL1 & "[" & TablaNew(K).Campo & "] LONG IDENTITY NOT NULL PRIMARY KEY"
-                End If
-             Else
-                If SQL_Server Then
-                   SQL1 = SQL1 & "[" & TablaNew(K).Campo & "] " & TablaNew(K).TipoSQL
-                Else
-                   SQL1 = SQL1 & "[" & TablaNew(K).Campo & "] " & TablaNew(K).TipoAccess
-                End If
-             End If
-             If K <> (CantCampos - 1) Then SQL1 = SQL1 & ","
-         Next K
-         SQL1 = SQL1 & "); "
-         Ejecutar_SQL_SP SQL1, True
-      End If
-      RatonNormal
-  Next IJ
-  
- 'Subiendo el contenido de la nueva actualizacion
+    sSQL = "SELECT ROUTINE_NAME " _
+         & "FROM INFORMATION_SCHEMA.ROUTINES " _
+         & "WHERE ROUTINE_NAME = 'sp_Actualizar_Base_Datos' "
+    Select_AdoDB AdoDBTXT, sSQL
+    If AdoDBTXT.RecordCount > 0 Then Ejecutar_SQL_AdoDB ("DROP PROCEDURE sp_Actualizar_Base_Datos;")
+    AdoDBTXT.Close
+
+    ProgressBarEstado.value = ProgressBarEstado.value + 1
+    sSQL = "SELECT ROUTINE_NAME " _
+         & "FROM INFORMATION_SCHEMA.ROUTINES " _
+         & "WHERE ROUTINE_NAME = 'sp_Ejecutar_SQL' "
+    Select_AdoDB AdoDBTXT, sSQL
+    If AdoDBTXT.RecordCount > 0 Then Ejecutar_SQL_AdoDB ("DROP PROCEDURE sp_Ejecutar_SQL;")
+    AdoDBTXT.Close
+    Ejecutar_SQL_AdoDB Crear_FN_SP(RutaSistema & "\BASES\UPDATE_DB\dbo.sp_Ejecutar_SQL.StoredProcedure.sql"), True
     
-    Progreso_Barra.Mensaje_Box = "Subiendo nueva version"
-    ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
-    UPD_Actualizar_Tablas_Temporales LstStatud
-  
-    Progreso_Barra.Mensaje_Box = "Actualizando nueva version"
-    ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
-    Ejecutar_SP "sp_UpDate_DB", ""
-  
- 'Actualizamos los datos de esta version
-    Progreso_Barra.Mensaje_Box = "Actualizando registro nueva version"
-    ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
- 
-    Ejecutar_SP "sp_Actualizar_Tablas_Generales", ""
-  
-    Progreso_Barra.Mensaje_Box = "Actualizando datos por defecto de las nuevas"
-    ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+    ProgressBarEstado.value = ProgressBarEstado.value + 1
+    sSQL = "SELECT ROUTINE_NAME " _
+         & "FROM INFORMATION_SCHEMA.ROUTINES " _
+         & "WHERE ROUTINE_NAME = 'sp_Eliminar_Indices_Temporales' "
+    Select_AdoDB AdoDBTXT, sSQL
+    If AdoDBTXT.RecordCount > 0 Then Ejecutar_SQL_AdoDB ("DROP PROCEDURE sp_Eliminar_Indices_Temporales;")
+    AdoDBTXT.Close
+    Ejecutar_SQL_AdoDB Crear_FN_SP(RutaSistema & "\BASES\UPDATE_DB\dbo.sp_Eliminar_Indices_Temporales.StoredProcedure.sql"), True
     
-    UPD_Actualizar_Datos_Defecto ProgressBarEstado, LstStatud, URLinet, Update_Dir, Update_File, Update_LstTablas
-   
-   '========================================================================
-   'Verificacion de campos que no se pudieron actualizar en la base de datos
-   '========================================================================
-    Progreso_Barra.Mensaje_Box = "VERIFICANDO CAMPOS BASES DE DATOS"
-    ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
-  
-    UPD_Listar_Tablas Update_LstTablas
-    RatonReloj
+    
+    ProgressBarEstado.value = ProgressBarEstado.value + 1
+    If Existe_Tabla("Actualizacion") Then Ejecutar_SQL_SP "DROP TABLE Actualizacion;"
+    Ejecutar_SQL_SP "CREATE TABLE Actualizacion(Archivo VARCHAR(100) NULL, Extension VARCHAR(3) NULL, Documento NVARCHAR(MAX) NULL, Con_Item BIT NULL, " _
+                    & "ID INT IDENTITY NOT NULL PRIMARY KEY);"
+        
+    ProgressBarEstado.value = ProgressBarEstado.value + 1
+    Ejecutar_SQL_AdoDB Crear_FN_SP(RutaSistema & "\BASES\UPDATE_DB\dbo.sp_Actualizar_Base_Datos.StoredProcedure.sql"), True
+    
+   'Determinar cuales son las tablas fijas que se van a actualizar en un Array
     Contador = 0
-    TextoBusqueda1 = ""
-  For IE = 0 To Update_LstTablas.ListCount - 1
-      RutaOrigen = Update_LstTablas.List(IE)
+    ProgressBarEstado.value = ProgressBarEstado.value + 1
+    LstStatud.AddItem "Determinando la informacion para la actualuzacion"
+    LstStatud.Refresh
     
-    Progreso_Barra.Mensaje_Box = "Verificando Tipos Campos: " & RutaOrigen & ", de la tabla"
-    ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
-      
-      Select Case MidStrg(RutaOrigen, 1, 5)
-        Case "Tabla", "Tipo_"
-            Progreso_Barra.Mensaje_Box = "Verificando Tipos Campos: " & RutaOrigen & ", no actualizables"
-            ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
-        Case Else
-            'Leemos los campos de las tablas de actualizacion con la que esta actualmente
-             RutaGeneraFile = RutaSistema & "\BASES\UPDATE_DB\" & RutaOrigen & ".Upd"
-             UPD_Leer_Campos_Tabla RutaGeneraFile
-             C = CantCampos    ' Cantidad de Campos en la tabla de consulta
-             sSQL = "SELECT * " _
-                  & "FROM " & RutaOrigen & " " _
-                  & "WHERE 1 = 0 "
-             Select_AdoDB AdoCompDB, sSQL
-             With AdoCompDB
-              For JE = 0 To .fields.Count - 1
-                  Borrar_Campo = True
-                  For KE = 0 To C - 1
-                      If .fields(JE).Name = TablaNew(KE).Campo Then
-                          Borrar_Campo = False
-                          Update_Largo = TablaNew(KE).LargoCampo
-                          If SQL_Server Then Update_Campo = TablaNew(KE).TipoSQL Else Update_Campo = TablaNew(KE).TipoAccess
-                          Update_Tipo = .fields(JE).Type
-                          If Update_Tipo = 134 Or Update_Tipo = 135 Then Update_Tipo = 7
-                          If Update_Tipo <> 7 And Update_Largo <> 0 And .fields(JE).DefinedSize <> Update_Largo Then Si_No = True
-                      End If
-                  Next KE
-                 'Borrar el campo que no debe estar en la tabla
-                  If Borrar_Campo Then
+   'Archivos de Actualizacion de Tablas nuevas o campos de actualizar
+    Directorio = Dir(RutaSistema & "\BASES\UPDATE_DB\*.upd", vbNormal)
+    Do While Directorio <> ""
+       If Directorio <> "." And Directorio <> ".." Then
+          LstStatud.AddItem strNombreBaseDatos & ": Archivo '" & Directorio & "' a subir"
+          LstStatud.Text = strNombreBaseDatos & ": Archivo '" & Directorio & "' a subir"
+          LstStatud.Refresh
                     
-                    Progreso_Barra.Mensaje_Box = "Eliminando de " & RutaOrigen & " el Campo: " & .fields(JE).Name
-                    ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                  
-                      SQL1 = "ALTER TABLE " & RutaOrigen & " " _
-                           & "DROP COLUMN [" & .fields(JE).Name & "];"
-                      Ejecutar_SQL_SP SQL1
-                  End If
-              Next JE
-             End With
-             AdoCompDB.Close
-      End Select
-  Next IE
-  
- '========================================================================
-    Progreso_Barra.Mensaje_Box = "Generando Archivos del Modulo de Auditoria"
-    ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
- 
-  Update_Excel = ""
-'  TxtResult = ""
-  RatonNormal
-  If Cadena <> "" Then TextoBusqueda = TextoBusqueda & "Tablas Actualizadas sin Datos:" & vbCrLf & Cadena
- ' MsgBox AdoStrCnn
-'  TxtResult.SelStart = Len(TxtResult)
-'  TxtResult.SelLength = Len(TxtResult)
-''  NombreUsuario = "DiskCover Sytem"
-  Update_Campo = ""
-  RutaDestino = ""
-''  TMail.Adjunto = ""
-  TMail.MensajeHTML = ""
-''  EmailEmpresa = ""
-''  NombreGerente = ""
-''  Telefono1 = ""
-''  RazonSocial = ""
-  ComunicadoEntidad = ""
-  
-'''  sSQL = "SELECT * " _
-'''       & "FROM Empresas " _
-'''       & "ORDER BY Item "
-'''  Select_AdoDB AdoCompDB, sSQL
-'''  With AdoCompDB
-'''   If .RecordCount > 0 Then
-'''       Do While Not .EOF
-'''          If Len(.fields("Razon_Social")) > 1 Then Cadena = .fields("Razon_Social") Else Cadena = .fields("Empresa")
-'''          If Len(.fields("Email")) > 1 And EmailEmpresa = "" Then EmailEmpresa = .fields("Email")
-'''          If Len(.fields("Gerente")) > 1 And NombreGerente = "" Then NombreGerente = .fields("Gerente")
-'''          If Len(.fields("Telefono1")) > 1 And Telefono1 = "" Then Telefono1 = .fields("Telefono1")
-'''          If Len(Cadena) > 1 And RazonSocial = "" Then RazonSocial = Cadena
-'''          TMail.Mensaje = TMail.Mensaje _
-'''                        & "CI/RUC: " & .fields("RUC") & vbTab _
-'''                        & .fields("Ciudad") & vbTab & vbTab _
-'''                        & .fields("Gerente") & vbTab & vbTab _
-'''                        & Cadena & vbCrLf
-'''         .MoveNext
-'''       Loop
-'''   End If
-'''  End With
-'''  AdoCompDB.Close
-  '---------------------------------------------------------------------------------
-   If IP_PC.InterNet Then
-      RatonReloj
-      sSQL = "SELECT * " _
-           & "FROM lista_estados " _
-           & "WHERE Estado <> '.' " _
-           & "ORDER BY ID,Estado "
-      Select_AdoDB_MySQL AdoRegMySQL, sSQL
-      With AdoRegMySQL
-       If .RecordCount > 0 Then
-           Do While Not .EOF
-              sSQL = "SELECT * " _
-                   & "FROM Tabla_Referenciales_SRI " _
-                   & "WHERE Tipo_Referencia = 'ESTADO EMPRESA' " _
-                   & "AND Codigo = '" & .fields("Estado") & "' "
-              Select_AdoDB AdoReg, sSQL
-              If AdoReg.RecordCount <= 0 Then
-                 SQL1 = "INSERT INTO Tabla_Referenciales_SRI (Tipo_Referencia, Codigo, Descripcion) " _
-                      & "VALUES ('ESTADO EMPRESA', '" & .fields("Estado") & "', '" & .fields("Descripcion") & "');"
-                 Ejecutar_SQL_SP SQL1
-              End If
-              AdoReg.Close
-             .MoveNext
-           Loop
+          ReDim Preserve Files(Contador) As String
+          Files(Contador) = Directorio
+          Contador = Contador + 1
        End If
-      End With
-      AdoRegMySQL.Close
-   End If
-      
+       Directorio = Dir
+    Loop
+
+   'Archivos de bases de datos por default en la nueva actualizacion
+    Directorio = Dir(RutaSistema & "\BASES\UPDATE_DB\*.dbs", vbNormal)
+    Do While Directorio <> ""
+       If Directorio <> "." And Directorio <> ".." Then
+          LstStatud.AddItem strNombreBaseDatos & ": Archivo '" & Directorio & "' a subir"
+          LstStatud.Text = strNombreBaseDatos & ": Archivo '" & Directorio & "' a subir"
+          LstStatud.Refresh
+          
+          ReDim Preserve Files(Contador) As String
+          Files(Contador) = Directorio
+          Contador = Contador + 1
+       End If
+       Directorio = Dir
+    Loop
+    
+   'Archivos de Funciones y Procedimientos de la nueva actualizacion
+    Directorio = Dir(RutaSistema & "\BASES\UPDATE_DB\*.sql", vbNormal) 'Recupera la primera entrada.
+    Do While Directorio <> ""
+       If Directorio <> "." And Directorio <> ".." Then
+          LstStatud.AddItem strNombreBaseDatos & ": Archivo '" & Directorio & "' a subir"
+          LstStatud.Text = strNombreBaseDatos & ": Archivo '" & Directorio & "' a subir"
+          LstStatud.Refresh
+          
+          ReDim Preserve Files(Contador) As String
+          Files(Contador) = Directorio
+          Contador = Contador + 1
+       End If
+       Directorio = Dir
+    Loop
+        
+   'Empezamos a subir la informacion de los archivos a la TABLA de Actualizacion, para luego ejecutar el SP que empieza la actualizacion
+    ProgressBarEstado.Max = ProgressBarEstado.Max + (UBound(Files) * 2)
+    LstStatud.AddItem "Subiendo informacion al servidor"
+    LstStatud.Refresh
+    
+    For I = 0 To UBound(Files)
+        FileOrigen = Files(I)
+        ProgressBarEstado.value = ProgressBarEstado.value + 1
+        LstStatud.AddItem strNombreBaseDatos & ": Subiendo datos de " & FileOrigen
+        LstStatud.Text = strNombreBaseDatos & ": Subiendo datos de " & FileOrigen
+        LstStatud.Refresh
+        
+        Extension = RightStrg(FileOrigen, 3)
+        FileDestino = RutaSistema & "\BASES\UPDATE_DB\" & FileOrigen
+        TextoFile = Leer_Archivo_Plano(FileDestino)
+
+        TextoFile = Replace(TextoFile, vbCr, "[CR]")
+        TextoFile = Replace(TextoFile, vbLf, "[LF]")
+        TextoFile = Replace(TextoFile, "'", "[`]")
+        TextoFile = Replace(TextoFile, "#", "[N]")
+        TextoFile = Replace(TextoFile, """", "[DC]")
+          
+        Select Case Extension
+          Case "sql"
+               IdFile = InStr(TextoFile, "CREATE")
+               If IdFile > 0 Then
+                  TextoFile = MidStrg(TextoFile, IdFile, Len(TextoFile))
+                  For K = Len(TextoFile) To Len(TextoFile) - 10 Step -1
+                      If MidStrg(TextoFile, K, 2) = "GO" Then J = K
+                  Next K
+                  TextoFile = MidStrg(TextoFile, 1, J - 1)
+               End If
+        End Select
+        
+       'MsgBox FileOrigen & vbCrLf & Len(TextoFile)
+        FileOrigen = MidStrg(FileOrigen, 1, Len(FileOrigen) - 4)
+        Ejecutar_SQL_SP "INSERT INTO Actualizacion (Archivo, Extension, Documento) VALUES ('" & FileOrigen & "', '" & Extension & "', '" & TextoFile & "')"
+    Next I
+
+    LstStatud.AddItem "Actualizando caracteres especiales"
+    LstStatud.Refresh
+
+    sSQL = "SELECT Archivo, Extension, Documento " _
+         & "FROM Actualizacion " _
+         & "WHERE Extension <> '.' " _
+         & "ORDER BY Archivo "
+    Select_AdoDB AdoDBTXT, sSQL
+    With AdoDBTXT
+     If .RecordCount > 0 Then
+         Do While Not .EOF
+            'ProgressBarEstado.value = ProgressBarEstado.value + 1
+            LstStatud.Text = "Actualizando signos especiales: " & .fields("Archivo")
+            LstStatud.Refresh
+            TextoFile = .fields("Documento")
+            TextoFile = Replace(TextoFile, "[CR]", vbCr)
+            TextoFile = Replace(TextoFile, "[LF]", vbLf)
+            TextoFile = Replace(TextoFile, "[`]", "'")
+            TextoFile = Replace(TextoFile, "[N]", "#")
+            TextoFile = Replace(TextoFile, "[DC]", """")
+           .fields("Documento") = TextoFile
+           .MoveNext
+         Loop
+        .UpdateBatch
+     End If
+    End With
+    AdoDBTXT.Close
+    
+   'Procedemos a ejecutar el SP que actualizara SP, FN y las tablas
+    LstStatud.AddItem "Procesando actualizacion en: " & strNombreBaseDatos
+    LstStatud.Text = "Procesando actualizacion en: " & strNombreBaseDatos
+    LstStatud.Refresh
+    
+    Actualizar_Base_Datos_SP
+
    'Codigos Catalogo Ctas_Proceso
-    Progreso_Barra.Mensaje_Box = "Determinando Duplicados de: Ctas_Proceso"
-    ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+    LstStatud.AddItem "Determinando Duplicados de: Ctas_Proceso"
+    LstStatud.Refresh
     Eliminar_Duplicados_SP "Ctas_Proceso", "Periodo,Item,Detalle", "Detalle", "", True
-    
+
    'Codigos Catalogo Seteos_Documentos
-    Progreso_Barra.Mensaje_Box = "Determinando Duplicados de: Seteos Documentos"
-    ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+    LstStatud.AddItem "Determinando Duplicados de: Seteos Documentos"
+    LstStatud.Refresh
     Eliminar_Duplicados_SP "Seteos_Documentos", "Item, TP, Campo", "TP", "", True
-       
+
    'Eliminar Duplicados en el Catalogo de Cuentas
-    Progreso_Barra.Mensaje_Box = "Determinando Duplicados de: Catalogo de Cuentas"
-    ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+    LstStatud.AddItem "Determinando Duplicados de: Catalogo de Cuentas"
+    LstStatud.Refresh
     Eliminar_Duplicados_SP "Catalogo_Cuentas", "Codigo", "", "", True
-  '---------------------------------------------------------------------------------
-    ProgressBarEstado.value = Progreso_Barra.Valor_Maximo
-    
-    Progreso_Barra.Mensaje_Box = "FIN DEL PROCESO DE ACTUALIZACION"
-    ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
-End Sub
+   '---------------------------------------------------------------------------------
 
-Private Sub Importar_Bases_Antiguas()
-Dim SiID As Boolean
-Dim SiItem As Boolean
-Dim SiCod As Boolean
-
-Dim ContTAB As Integer
-
-Dim NumReg As Long
-Dim TotalReg As Long
-
-Dim CamposFile() As Campos_Tabla
-
-Dim NombreTabla As String
-
-    Progreso_Barra.Mensaje_Box = "SUBIENDO ABONOS DEL BANCO " & TextoBanco
-    Progreso_Iniciar
-    
-    CDialogDir.Filename = RutaSysBases & "\Datos\Total\*.BDD"
-    CDialogDir.InitDir = RutaSysBases & "\Datos\Total\"
-    CDialogDir.Flags = cdlOFNFileMustExist + cdlOFNNoChangeDir + cdlOFNHideReadOnly
-    CDialogDir.Filter = "Archivos BDD|*.BDD"
-    CDialogDir.DialogTitle = "Abrir Archivo"
-    CDialogDir.Action = 1
-    J = InStrRev(CDialogDir.Filename, "\")
-    If CDialogDir.Filename <> "" And J > 0 Then
-       File1.Path = MidStrg(CDialogDir.Filename, 1, J)
-       File1.Pattern = "*.BDD"
-       Progreso_Barra.Incremento = 0
-       For I = 0 To File1.ListCount - 1
-           Progreso_Barra.Valor_Maximo = File1.ListCount
-           NumReg = 1
-           TotalReg = 2
-           NumFile = FreeFile
-           NombreArchivo = File1.Path & "\" & File1.List(I)
-           Open NombreArchivo For Input As #NumFile
-             Do While Not EOF(NumFile)
-                Line Input #NumFile, Cod_Field
-                Cod_Field = Replace(Cod_Field, vbCrLf, "")
-                Select Case NumReg
-                  Case 1
-                       NombreTabla = TrimStrg(MidStrg(Cod_Field, InStrRev(Cod_Field, "-") + 1, Len(Cod_Field)))
-                       Cod_Field = MidStrg(Cod_Field, 1, Len(Cod_Field) - Len(NombreTabla) - 2)
-                       TotalReg = Val(TrimStrg(MidStrg(Cod_Field, InStrRev(Cod_Field, "-") + 1, Len(Cod_Field))))
-                       Progreso_Barra.Mensaje_Box = NombreTabla
-                       
-                       If Not Existe_Tabla(NombreTabla) Then GoTo Fin_Tabla
-                  Case 2
-                       SiID = False
-                       SiItem = False
-                       SiCod = False
-                       ContTAB = 0
-                       K = 1
-                       For J = 1 To Len(Cod_Field)
-                        If MidStrg(Cod_Field, J, 1) = vbTab Then
-                           ReDim Preserve CamposFile(ContTAB) As Campos_Tabla
-                           CamposFile(ContTAB).Campo = MidStrg(Cod_Field, K, J - K)
-                           Select Case CamposFile(ContTAB).Campo
-                             Case "ID": SiID = True
-                             Case "Item": SiItem = True
-                             Case "Codigo": SiCod = True
-                           End Select
-                           K = J + 1
-                           ContTAB = ContTAB + 1
-                        End If
-                       Next J
-                       Progreso_Barra.Mensaje_Box = "Encerando: " & NombreTabla
-                       
-                       sSQL = "DELETE * " _
-                            & "FROM " & NombreTabla & " "
-                       If SiID Then
-                          sSQL = sSQL & "WHERE ID > 0 "
-                       ElseIf SiItem Then
-                          sSQL = sSQL & "WHERE Item <> '.' "
-                       ElseIf SiCod Then
-                          sSQL = sSQL & "WHERE Codigo <> 'D' "
-                       End If
-                       Ejecutar_SQL_SP sSQL
-'''                       Cadena = ""
-'''                       For J = 0 To UBound(CamposFile)
-'''                           Cadena = Cadena & CamposFile(J).Campo & " = " & CamposFile(J).Valor & vbCrLf
-'''                       Next J
-'''                       MsgBox Cadena
-                  Case Else
-                       ContTAB = 0
-                       K = 1
-                       For J = 1 To Len(Cod_Field)
-                        If MidStrg(Cod_Field, J, 1) = vbTab Then
-                           'MsgBox UBound(CamposFile) & vbCrLf & MidStrg(Cod_Field, K, J - K)
-                           If ContTAB <= UBound(CamposFile) Then CamposFile(ContTAB).Valor = MidStrg(Cod_Field, K, J - K)
-                           K = J + 1
-                           ContTAB = ContTAB + 1
-                        End If
-                       Next J
-                      'Insertamos el registro actual
-'''                       Cadena = ""
-                       SetAdoAddNew NombreTabla
-                       For J = 0 To UBound(CamposFile)
-                           If CamposFile(J).Campo <> "ID" Then SetAdoFields CamposFile(J).Campo, CamposFile(J).Valor
-'''                           Cadena = Cadena & CamposFile(J).Campo & " = " & CamposFile(J).Valor & vbCrLf
-                       Next J
-                       SetAdoUpdate
-'''                       MsgBox Cadena
-                End Select
-                Progreso_Barra.Mensaje_Box = NombreTabla & ": " & Format(NumReg, "#,##0") & " -> " & Format(TotalReg, "#,##0")
-                
-                NumReg = NumReg + 1
-                Contador = Contador + 1
-             Loop
-Fin_Tabla:
-           Close #NumFile
-       Next I
+    If IP_PC.InterNet Then
+       RatonReloj
+       sSQL = "SELECT * " _
+            & "FROM lista_estados " _
+            & "WHERE Estado <> '.' " _
+            & "ORDER BY ID,Estado "
+       Select_AdoDB_MySQL AdoRegMySQL, sSQL
+       With AdoRegMySQL
+        If .RecordCount > 0 Then
+            Do While Not .EOF
+               sSQL = "SELECT Tipo_Referencia " _
+                    & "FROM Tabla_Referenciales_SRI " _
+                    & "WHERE Tipo_Referencia = 'ESTADO EMPRESA' " _
+                    & "AND Codigo = '" & .fields("Estado") & "' "
+               Select_AdoDB AdoReg, sSQL
+               If AdoReg.RecordCount <= 0 Then
+                  SQL1 = "INSERT INTO Tabla_Referenciales_SRI (Tipo_Referencia, Codigo, Descripcion) " _
+                       & "VALUES ('ESTADO EMPRESA', '" & .fields("Estado") & "', '" & .fields("Descripcion") & "');"
+                  Ejecutar_SQL_SP SQL1
+               End If
+               AdoReg.Close
+              .MoveNext
+            Loop
+        End If
+       End With
+       AdoRegMySQL.Close
     End If
-    Progreso_Final
+  
+    ProgressBarEstado.value = ProgressBarEstado.Max
+    CadenaTime = CadenaTime & Format(Time - MiTiempo, FormatoTimes) & vbCrLf
+    LstStatud.AddItem "FIN DEL PROCESO DE ACTUALIZACION [" & CadenaTime & "]"
+    LstStatud.Refresh
+    RatonNormal
+Exit Sub
+
+error_Handler:
+    MsgBox Err.Description, vbCritical
+    RatonNormal
 End Sub
+
+'''Public Sub UPD_Actualizar(LstStatud As ListBox, _
+'''                          URLinet As Inet, _
+'''                          Update_Dir As DirListBox, _
+'''                          Update_File As FileListBox, _
+'''                          Update_LstTablas As ListBox, _
+'''                          Optional Update_Limpiar_Bases As Boolean)
+'''Dim AdoAuxDB As ADODB.Recordset
+'''Dim AdoCompDB As ADODB.Recordset
+'''Dim AdoCompDB1 As ADODB.Recordset
+'''Dim AdoDBKeyID As ADODB.Recordset
+'''Dim CantCamposUpd As Integer
+'''Dim Update_Tipo As Integer
+'''Dim Idx As Integer
+'''Dim Idy As Integer
+'''Dim PIni As Long
+'''Dim PFin As Long
+'''Dim IJ As Long
+'''Dim ContEsp As Long
+'''Dim IdTime As Long
+'''Dim NumTrans As Long
+'''Dim Update_Largo As Long
+'''Dim ContProc As Long
+'''Dim MaxProc As Long
+'''Dim strCnn As String
+'''Dim Update_Campo As String
+'''Dim Update_Mails As String
+'''Dim Update_Excel As String
+'''Dim Update_Emp As String
+'''Dim TextoBusqueda1 As String
+'''Dim ZTablas As String
+'''Dim Borrar_Campo As Boolean
+'''Dim CambiarTipo As Boolean
+'''Dim Crear_Clave_Primaria As Boolean
+'''Dim Existe_ID As Boolean
+'''
+''' 'MsgBox "Presione Aceptar para empezar la actualizacion: " & Periodo_Contable
+'''  RatonReloj
+'''  ContProc = 0
+''' 'Llenamos lista de tablas actuales
+'''  UPD_Listar_Tablas Update_LstTablas
+'''
+'''  MaxProc = (Update_LstTablas.ListCount * 8)
+'''
+'''  Progreso_Barra.Mensaje_Box = "PROGRESO DEL ACTUALIZACION"
+'''  ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''
+'''  ConSubDir = False
+'''  Contador = 0: FileResp = 0
+'''  FechaInicial = "31/12/" & Year(FechaSistema)
+'''  sSQL = "DELETE * " _
+'''       & "FROM Modulos " _
+'''       & "WHERE Modulo = 'VS' "
+'''  Ejecutar_SQL_AdoDB sSQL
+'''
+'''  sSQL = "SELECT MIN(Fecha) As Fecha_MIN " _
+'''       & "FROM Facturas " _
+'''       & "WHERE Fecha <= #" & BuscarFecha(FechaSistema) & "# "
+'''  Select_AdoDB AdoCompDB, sSQL
+'''  If AdoCompDB.RecordCount > 0 Then
+'''     If Not IsNull(AdoCompDB.fields("Fecha_MIN")) Then FechaInicial = UltimoDiaMes(AdoCompDB.fields("Fecha_MIN"))
+'''  End If
+'''  AdoCompDB.Close
+'''
+'''  'Determinar cuales son las tablas fijas que se van a actualizar
+'''   Cadena = Dir(RutaSistema & "\BASES\UPDATE_DB\*.DBS", vbNormal) 'Recupera la primera entrada.
+'''   ZTablas = ""
+'''   Contador = 0
+'''   Do While Cadena <> ""
+'''      If Cadena <> "." And Cadena <> ".." Then
+'''         ZTablas = ZTablas & MidStrg(Cadena, 2, Len(Cadena) - 5) & " | "
+'''         Contador = Contador + 1
+'''      End If
+'''      Cadena = Dir
+'''   Loop
+'''
+'''  'Eliminamos las Funciones y Procedmientos necesarios
+'''   Progreso_Barra.Mensaje_Box = "Eliminando FN y SP Principales"
+'''   ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''   Eliminar_FN_SP_SQL
+'''
+''' 'Empezamos a actualizar el programa, primero creamos los SP necesarios para empezar a migrar
+'''  Ejecutar_SQL_AdoDB Crear_FN_SP(RutaSistema & "\BASES\UPDATE_DB\dbo.sp_Ejecutar_SQL.StoredProcedure.sql"), True
+'''  Ejecutar_SQL_AdoDB Crear_FN_SP(RutaSistema & "\BASES\UPDATE_DB\dbo.sp_Eliminar_Indices.StoredProcedure.sql"), True
+'''  Ejecutar_SQL_AdoDB Crear_FN_SP(RutaSistema & "\BASES\UPDATE_DB\dbo.sp_Eliminar_Indices_Temporales.StoredProcedure.sql"), True
+'''  Ejecutar_SQL_AdoDB Crear_FN_SP(RutaSistema & "\BASES\UPDATE_DB\dbo.sp_Eliminar_Tablas_Temporales.StoredProcedure.sql"), True
+'''  Ejecutar_SQL_AdoDB Crear_FN_SP(RutaSistema & "\BASES\UPDATE_DB\dbo.sp_Update_Default.StoredProcedure.sql"), True
+'''
+''' 'Primero eliminamos los indices
+'''  Progreso_Barra.Mensaje_Box = "Eliminacion de indices"
+'''  ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''  Ejecutar_SP "sp_Eliminar_Indices_Temporales", ""
+'''
+'''  Progreso_Barra.Mensaje_Box = "Eliminamos actualizacion anterior"
+'''  ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''
+''' 'Eliminar Tablas Temporales que sean necesarias
+'''  Ejecutar_SP "sp_Eliminar_Tablas_Temporales", ""
+'''
+''' Contador = 0
+''''TxtResult = ""
+'''SubCtaGen = ""
+'''TextoBusqueda = ""
+'''Cadena = ""
+'''Cadena1 = ""
+'''
+''''Volvemos a actualizar las tablas actuales despues de haber borrado las temporales o vacias
+'''Update_Dir.Path = RutaSistema & "\BASES\UPDATE_DB"
+'''Update_File.Filename = Update_Dir.Path & "\*.UPD"
+'''UPD_Listar_Tablas Update_LstTablas
+'''For IJ = 0 To Update_File.ListCount - 1
+'''    RutaGeneraFile = RutaSistema & "\BASES\UPDATE_DB\" & Update_File.List(IJ)
+'''   'Nombre de la tabla que se va actuaizar
+'''    RutaOrigen = TrimStrg(MidStrg(Update_File.List(IJ), 1, Len(Update_File.List(IJ)) - 4))
+'''   'Leemos los campos de la tabla
+'''    UPD_Leer_Campos_Tabla RutaGeneraFile
+'''   'Este procedimiento retorna en la variable "TablaNew" de tipo vector los campos a actualizar
+'''    Si_No = False
+'''    For I = 0 To Update_LstTablas.ListCount - 1
+'''      If RutaOrigen = Update_LstTablas.List(I) Then
+'''         Si_No = True
+'''         I = Update_LstTablas.ListCount
+'''      End If
+'''    Next I
+'''
+'''   'Si la Tabla Existe pasamos a actualizar
+'''    If Si_No Then
+'''       Progreso_Barra.Mensaje_Box = "Actualizando campos de: " & RutaOrigen
+'''       ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''
+'''       NombreCampo = ""
+'''       Existe_ID = False
+'''       Crear_Clave_Primaria = False
+'''       CantCamposUpd = CantCampos
+'''       sSQL = "SELECT * " _
+'''            & "FROM " & RutaOrigen & " " _
+'''            & "WHERE 1 = 0 "
+'''       'MsgBox RutaOrigen & vbCrLf & vbCrLf & AdoStrCnn
+'''       Select_AdoDB AdoCompDB, sSQL
+'''       CantCampos = CantCamposUpd
+'''       With AdoCompDB
+'''            ReDim TablaOld(.fields.Count) As Crear_Tablas
+'''            Cadena = ""
+'''            Contador = 0
+'''           'MsgBox CantCampos
+'''            For K = 0 To CantCampos - 1
+'''                Progreso_Barra.Mensaje_Box = "Actualizando campos de: " & RutaOrigen & " -> " & TablaNew(K).Campo
+'''                Evaluar = False
+'''                CambiarTipo = False
+'''                For J = 0 To .fields.Count - 1
+'''                    If TablaNew(K).Campo = .fields(J).Name Then
+'''                       Evaluar = True
+'''                       If SQL_Server Then
+'''                          If TypeField(TablaNew(K).TipoSQL) <> .fields(J).Type Then CambiarTipo = True
+'''                       Else
+'''                          If TypeField(TablaNew(K).TipoAccess) <> .fields(J).Type Then CambiarTipo = True
+'''                       End If
+'''                       If (TablaNew(K).LargoCampo <> 0) And (TablaNew(K).LargoCampo <> .fields(J).DefinedSize) Then CambiarTipo = True
+'''                    End If
+'''                    If TablaNew(K).Campo = "ID" Then Crear_Clave_Primaria = True
+'''                    If .fields(J).Name = "ID" Then Existe_ID = True
+'''                Next J
+'''               'If RutaOrigen = "Facturas" And TablaNew(K).Campo = "Direccion" Then MsgBox TablaNew(K).Campo
+'''                If Evaluar Then
+'''                  'Actualizo el campo antiguo si hay cambios
+'''                   If CambiarTipo Then
+'''                      SQL1 = "ALTER TABLE [" & RutaOrigen & "] "
+'''                      If SQL_Server Then
+'''                         SQL1 = SQL1 & "ALTER COLUMN [" & TablaNew(K).Campo & "] " & TablaNew(K).TipoSQL
+'''                      Else
+'''                         SQL1 = SQL1 & "ALTER COLUMN [" & TablaNew(K).Campo & "] " & TablaNew(K).TipoAccess
+'''                      End If
+'''                      SQL1 = SQL1 & "; "
+'''                     'If RutaOrigen = "Trans_Documentos" Then MsgBox "CAMBIAR CAMPO:" & vbCrLf & SQL1
+'''                     'Ejecutar_SP "sp_Ejecutar_SQL", SQL1
+'''                     Ejecutar_SQL_SP SQL1, True
+'''                   End If
+'''                Else
+'''                  'Si es campo nuevo le actualizo
+'''                   SQL1 = ""
+'''                   Contador = Contador + 1
+'''                   If Contador <= 1 Then Cadena = Cadena & Space(3) & " => "
+'''                   Cadena = Cadena & TablaNew(K).Campo & Space(30 - Len(TablaNew(K).Campo))
+'''                   If Contador > 3 Then
+'''                      Cadena = Cadena & vbCrLf
+'''                      Contador = 0
+'''                   End If
+'''                   If TablaNew(K).Campo <> "ID" Then
+'''                      SQL1 = "ALTER TABLE [" & RutaOrigen & "] "
+'''                      If SQL_Server Then
+'''                         SQL1 = SQL1 & "ADD [" & TablaNew(K).Campo & "] " & TablaNew(K).TipoSQL
+'''                      Else
+'''                         SQL1 = SQL1 & "ADD [" & TablaNew(K).Campo & "] " & TablaNew(K).TipoAccess
+'''                      End If
+'''                      SQL1 = SQL1 & "; "
+'''                   Else
+'''                      If Crear_Clave_Primaria And Not Existe_ID Then
+'''                         SQL1 = "ALTER TABLE [" & RutaOrigen & "] "
+'''                         If SQL_Server Then
+'''                            SQL1 = SQL1 & "ADD [" & TablaNew(K).Campo & "] INT IDENTITY NOT NULL PRIMARY KEY"
+'''                         Else
+'''                            SQL1 = SQL1 & "ADD [" & TablaNew(K).Campo & "] LONG IDENTITY NOT NULL PRIMARY KEY"
+'''                         End If
+'''                         SQL1 = SQL1 & "; "
+'''                      End If
+'''                   End If
+'''                   'If Crear_Clave_Primaria And SQL1 <> "" Then MsgBox SQL1
+'''                   If TablaNew(K).Campo <> "" And SQL1 <> "" Then Ejecutar_SQL_SP SQL1, True
+'''                End If
+'''            Next K
+'''            If Cadena <> "" Then TextoBusqueda = TextoBusqueda & "Cambio Tabla: " & RutaOrigen & vbCrLf & Cadena & vbCrLf
+'''       End With
+'''       AdoCompDB.Close
+'''    Else
+'''      'Si la tabla no existe la creamos
+'''       Progreso_Barra.Mensaje_Box = "Creando Tabla nueva: " & RutaOrigen
+'''       ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''
+'''       TextoBusqueda = TextoBusqueda & "Tabla Nueva: " & RutaOrigen & vbCrLf
+'''       Crear_Clave_Primaria = False
+'''       For J = 0 To CantCampos - 1
+'''           If TablaNew(J).Campo = "ID" Then Crear_Clave_Primaria = True
+'''       Next J
+'''       SQL1 = "CREATE TABLE [" & RutaOrigen & "] ("
+'''       For K = 0 To CantCampos - 1
+'''           If TablaNew(K).Campo = "ID" Then
+'''              If SQL_Server Then
+'''                 SQL1 = SQL1 & "[" & TablaNew(K).Campo & "] INT IDENTITY NOT NULL PRIMARY KEY"
+'''              Else
+'''                 SQL1 = SQL1 & "[" & TablaNew(K).Campo & "] LONG IDENTITY NOT NULL PRIMARY KEY"
+'''              End If
+'''           Else
+'''              If SQL_Server Then
+'''                 SQL1 = SQL1 & "[" & TablaNew(K).Campo & "] " & TablaNew(K).TipoSQL
+'''              Else
+'''                 SQL1 = SQL1 & "[" & TablaNew(K).Campo & "] " & TablaNew(K).TipoAccess
+'''              End If
+'''           End If
+'''           If K <> (CantCampos - 1) Then SQL1 = SQL1 & ","
+'''       Next K
+'''       SQL1 = SQL1 & "); "
+'''      ' WITH (MEMORY_OPTIMIZED=ON, DURABILITY=SCHEMA_ONLY)
+'''      'MsgBox "Creando Tabla Nueva:" & vbCrLf & SQL1
+'''       Ejecutar_SQL_SP SQL1, True
+'''    End If
+'''    RatonNormal
+'''Next IJ
+'''
+''' 'Creamos los SP y FN en sql Server
+'''  Progreso_Barra.Mensaje_Box = "Creacion de SP y FN"
+'''  ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''  Crear_Script_SQL ProgressBarEstado, LstStatud
+'''
+''' 'Actualiza el contenido de las tablas con Item 000
+'''  ContEsp = Progreso_Barra.Incremento
+'''
+''' 'Creamos los indices de las tablas
+'''  Progreso_Barra.Mensaje_Box = "Creacion de Indices"
+'''  ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''  Ejecutar_SP "sp_Eliminar_Indices_Temporales", ""
+'''  Ejecutar_SP "sp_Crear_Indices", ""
+'''
+''' 'Iniciamos datos por defaul
+'''  Progreso_Barra.Mensaje_Box = "Iniciar Datos por default"
+'''  ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''
+''''''  Parametros = "'000','.',0"
+''''''  'MsgBox "."
+''''''  Ejecutar_SP "sp_Iniciar_Datos_Default", Parametros
+'''  Iniciar_Datos_Default_SP
+'''  'MsgBox "..."
+''' '========================================================================
+''' 'Actualizamos valores por defecto en los campos con nulos
+'''  Cadena = ""
+'''  For I = 0 To Update_LstTablas.ListCount - 1
+'''     Progreso_Barra.Mensaje_Box = "Actualizando Nulos de " & Update_LstTablas.List(I)
+'''     ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''
+'''     If MidStrg(Update_LstTablas.List(I), 1, 4) <> "Tipo" Then Eliminar_Nulos_SP Update_LstTablas.List(I)
+'''  Next I
+'''  If Cadena <> "" Then TextoBusqueda = TextoBusqueda & "Campos con nulos:" & vbCrLf & Cadena
+'''  If SubCtaGen <> "" Then TextoBusqueda = TextoBusqueda & SubCtaGen
+'''
+''' 'Actualizando datos, inserciones y eliminaciones de las tablas de esta actualizacion
+'''  UPD_Listar_Tablas Update_LstTablas
+'''
+''' 'Eliminacion de Tablas que ya no funcionan en la nueva actualizacion
+'''  Contador = 0
+'''  For I = 0 To Update_LstTablas.ListCount - 1
+'''      Si_No = True
+'''      For IJ = 0 To Update_File.ListCount - 1
+'''          RutaOrigen = TrimStrg(MidStrg(Update_File.List(IJ), 1, Len(Update_File.List(IJ)) - 4))
+'''          If Update_LstTablas.List(I) = RutaOrigen Then Si_No = False
+'''      Next IJ
+'''      If Si_No Then
+'''        Progreso_Barra.Mensaje_Box = "Tabla Eliminada: " & Update_LstTablas.List(I)
+'''        ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''
+'''         If Contador = 0 Then
+'''            SubCtaGen = "Tablas Eliminadas: " & vbCrLf & Space(10) & "Tabla: " & Update_LstTablas.List(I) & vbCrLf
+'''            Contador = 1
+'''         Else
+'''            SubCtaGen = SubCtaGen & Space(10) & "Tabla: " & Update_LstTablas.List(I) & vbCrLf
+'''         End If
+'''        'Eliminar Tabla
+'''         SQL1 = "DROP TABLE [" & Update_LstTablas.List(I) & "] "
+'''         Ejecutar_SQL_SP SQL1, True
+'''         TextoBusqueda = TextoBusqueda & "Tabla: " & Update_LstTablas.List(I) & " fue eliminada " & vbCrLf
+'''      End If
+'''  Next I
+'''
+''' '==========================================================================
+''' ' Procedemos a crear tablas Temporales de informacion de esta actualizacion
+''' '==========================================================================
+'''  UPD_Listar_Tablas Update_LstTablas
+'''  For IJ = 0 To Update_File.ListCount - 1
+'''      RutaGeneraFile = RutaSistema & "\BASES\UPDATE_DB\" & Update_File.List(IJ)
+'''     'Nombre de la tabla que se va a crear
+'''      RutaOrigen = TrimStrg(MidStrg(Update_File.List(IJ), 1, Len(Update_File.List(IJ)) - 4))
+'''     'Leemos los campos de la tabla
+'''      UPD_Leer_Campos_Tabla RutaGeneraFile
+'''     'Si existe la tala la creamos
+'''      If InStr(ZTablas, RutaOrigen) Then
+'''        'Creamos la tabla Temporal
+'''
+'''        Progreso_Barra.Mensaje_Box = "Creando Tabla Temporal: " & RutaOrigen
+'''        ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''
+'''         Crear_Clave_Primaria = False
+'''         For J = 0 To CantCampos - 1
+'''             If TablaNew(J).Campo = "ID" Then Crear_Clave_Primaria = True
+'''         Next J
+'''         SQL1 = "CREATE TABLE [Z" & RutaOrigen & "] ("
+'''         For K = 0 To CantCampos - 1
+'''             If TablaNew(K).Campo = "ID" Then
+'''                If SQL_Server Then
+'''                   SQL1 = SQL1 & "[" & TablaNew(K).Campo & "] INT IDENTITY NOT NULL PRIMARY KEY"
+'''                Else
+'''                   SQL1 = SQL1 & "[" & TablaNew(K).Campo & "] LONG IDENTITY NOT NULL PRIMARY KEY"
+'''                End If
+'''             Else
+'''                If SQL_Server Then
+'''                   SQL1 = SQL1 & "[" & TablaNew(K).Campo & "] " & TablaNew(K).TipoSQL
+'''                Else
+'''                   SQL1 = SQL1 & "[" & TablaNew(K).Campo & "] " & TablaNew(K).TipoAccess
+'''                End If
+'''             End If
+'''             If K <> (CantCampos - 1) Then SQL1 = SQL1 & ","
+'''         Next K
+'''         SQL1 = SQL1 & "); "
+'''         Ejecutar_SQL_SP SQL1, True
+'''      End If
+'''      RatonNormal
+'''  Next IJ
+'''
+''' 'Subiendo el contenido de la nueva actualizacion
+'''
+'''    Progreso_Barra.Mensaje_Box = "Subiendo nueva version"
+'''    ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''    UPD_Actualizar_Tablas_Temporales LstStatud
+'''
+'''    Progreso_Barra.Mensaje_Box = "Actualizando nueva version"
+'''    ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''    Ejecutar_SP "sp_UpDate_DB", ""
+'''
+''' 'Actualizamos los datos de esta version
+'''    Progreso_Barra.Mensaje_Box = "Actualizando registro nueva version"
+'''    ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''
+'''    Ejecutar_SP "sp_Actualizar_Tablas_Generales", ""
+'''
+'''    Progreso_Barra.Mensaje_Box = "Actualizando datos por defecto de las nuevas"
+'''    ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''
+'''    UPD_Actualizar_Datos_Defecto ProgressBarEstado, LstStatud, URLinet, Update_Dir, Update_File, Update_LstTablas
+'''
+'''   '========================================================================
+'''   'Verificacion de campos que no se pudieron actualizar en la base de datos
+'''   '========================================================================
+'''    Progreso_Barra.Mensaje_Box = "VERIFICANDO CAMPOS BASES DE DATOS"
+'''    ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''
+'''    UPD_Listar_Tablas Update_LstTablas
+'''    RatonReloj
+'''    Contador = 0
+'''    TextoBusqueda1 = ""
+'''  For IE = 0 To Update_LstTablas.ListCount - 1
+'''      RutaOrigen = Update_LstTablas.List(IE)
+'''
+'''    Progreso_Barra.Mensaje_Box = "Verificando Tipos Campos: " & RutaOrigen & ", de la tabla"
+'''    ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''
+'''      Select Case MidStrg(RutaOrigen, 1, 5)
+'''        Case "Tabla", "Tipo_"
+'''            Progreso_Barra.Mensaje_Box = "Verificando Tipos Campos: " & RutaOrigen & ", no actualizables"
+'''            ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''        Case Else
+'''            'Leemos los campos de las tablas de actualizacion con la que esta actualmente
+'''             RutaGeneraFile = RutaSistema & "\BASES\UPDATE_DB\" & RutaOrigen & ".Upd"
+'''             UPD_Leer_Campos_Tabla RutaGeneraFile
+'''             C = CantCampos    ' Cantidad de Campos en la tabla de consulta
+'''             sSQL = "SELECT * " _
+'''                  & "FROM " & RutaOrigen & " " _
+'''                  & "WHERE 1 = 0 "
+'''             Select_AdoDB AdoCompDB, sSQL
+'''             With AdoCompDB
+'''              For JE = 0 To .fields.Count - 1
+'''                  Borrar_Campo = True
+'''                  For KE = 0 To C - 1
+'''                      If .fields(JE).Name = TablaNew(KE).Campo Then
+'''                          Borrar_Campo = False
+'''                          Update_Largo = TablaNew(KE).LargoCampo
+'''                          If SQL_Server Then Update_Campo = TablaNew(KE).TipoSQL Else Update_Campo = TablaNew(KE).TipoAccess
+'''                          Update_Tipo = .fields(JE).Type
+'''                          If Update_Tipo = 134 Or Update_Tipo = 135 Then Update_Tipo = 7
+'''                          If Update_Tipo <> 7 And Update_Largo <> 0 And .fields(JE).DefinedSize <> Update_Largo Then Si_No = True
+'''                      End If
+'''                  Next KE
+'''                 'Borrar el campo que no debe estar en la tabla
+'''                  If Borrar_Campo Then
+'''
+'''                    Progreso_Barra.Mensaje_Box = "Eliminando de " & RutaOrigen & " el Campo: " & .fields(JE).Name
+'''                    ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''
+'''                      SQL1 = "ALTER TABLE " & RutaOrigen & " " _
+'''                           & "DROP COLUMN [" & .fields(JE).Name & "];"
+'''                      Ejecutar_SQL_SP SQL1
+'''                  End If
+'''              Next JE
+'''             End With
+'''             AdoCompDB.Close
+'''      End Select
+'''  Next IE
+'''
+''' '========================================================================
+'''    Progreso_Barra.Mensaje_Box = "Generando Archivos del Modulo de Auditoria"
+'''    ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''
+'''  Update_Excel = ""
+''''  TxtResult = ""
+'''  RatonNormal
+'''  If Cadena <> "" Then TextoBusqueda = TextoBusqueda & "Tablas Actualizadas sin Datos:" & vbCrLf & Cadena
+''' ' MsgBox AdoStrCnn
+''''  TxtResult.SelStart = Len(TxtResult)
+''''  TxtResult.SelLength = Len(TxtResult)
+'''''  NombreUsuario = "DiskCover Sytem"
+'''  Update_Campo = ""
+'''  RutaDestino = ""
+'''''  TMail.Adjunto = ""
+'''  TMail.MensajeHTML = ""
+'''''  EmailEmpresa = ""
+'''''  NombreGerente = ""
+'''''  Telefono1 = ""
+'''''  RazonSocial = ""
+'''  ComunicadoEntidad = ""
+'''
+''''''  sSQL = "SELECT * " _
+''''''       & "FROM Empresas " _
+''''''       & "ORDER BY Item "
+''''''  Select_AdoDB AdoCompDB, sSQL
+''''''  With AdoCompDB
+''''''   If .RecordCount > 0 Then
+''''''       Do While Not .EOF
+''''''          If Len(.fields("Razon_Social")) > 1 Then Cadena = .fields("Razon_Social") Else Cadena = .fields("Empresa")
+''''''          If Len(.fields("Email")) > 1 And EmailEmpresa = "" Then EmailEmpresa = .fields("Email")
+''''''          If Len(.fields("Gerente")) > 1 And NombreGerente = "" Then NombreGerente = .fields("Gerente")
+''''''          If Len(.fields("Telefono1")) > 1 And Telefono1 = "" Then Telefono1 = .fields("Telefono1")
+''''''          If Len(Cadena) > 1 And RazonSocial = "" Then RazonSocial = Cadena
+''''''          TMail.Mensaje = TMail.Mensaje _
+''''''                        & "CI/RUC: " & .fields("RUC") & vbTab _
+''''''                        & .fields("Ciudad") & vbTab & vbTab _
+''''''                        & .fields("Gerente") & vbTab & vbTab _
+''''''                        & Cadena & vbCrLf
+''''''         .MoveNext
+''''''       Loop
+''''''   End If
+''''''  End With
+''''''  AdoCompDB.Close
+'''  '---------------------------------------------------------------------------------
+'''   If IP_PC.InterNet Then
+'''      RatonReloj
+'''      sSQL = "SELECT * " _
+'''           & "FROM lista_estados " _
+'''           & "WHERE Estado <> '.' " _
+'''           & "ORDER BY ID,Estado "
+'''      Select_AdoDB_MySQL AdoRegMySQL, sSQL
+'''      With AdoRegMySQL
+'''       If .RecordCount > 0 Then
+'''           Do While Not .EOF
+'''              sSQL = "SELECT * " _
+'''                   & "FROM Tabla_Referenciales_SRI " _
+'''                   & "WHERE Tipo_Referencia = 'ESTADO EMPRESA' " _
+'''                   & "AND Codigo = '" & .fields("Estado") & "' "
+'''              Select_AdoDB AdoReg, sSQL
+'''              If AdoReg.RecordCount <= 0 Then
+'''                 SQL1 = "INSERT INTO Tabla_Referenciales_SRI (Tipo_Referencia, Codigo, Descripcion) " _
+'''                      & "VALUES ('ESTADO EMPRESA', '" & .fields("Estado") & "', '" & .fields("Descripcion") & "');"
+'''                 Ejecutar_SQL_SP SQL1
+'''              End If
+'''              AdoReg.Close
+'''             .MoveNext
+'''           Loop
+'''       End If
+'''      End With
+'''      AdoRegMySQL.Close
+'''   End If
+'''
+'''   'Codigos Catalogo Ctas_Proceso
+'''    Progreso_Barra.Mensaje_Box = "Determinando Duplicados de: Ctas_Proceso"
+'''    ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''    Eliminar_Duplicados_SP "Ctas_Proceso", "Periodo,Item,Detalle", "Detalle", "", True
+'''
+'''   'Codigos Catalogo Seteos_Documentos
+'''    Progreso_Barra.Mensaje_Box = "Determinando Duplicados de: Seteos Documentos"
+'''    ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''    Eliminar_Duplicados_SP "Seteos_Documentos", "Item, TP, Campo", "TP", "", True
+'''
+'''   'Eliminar Duplicados en el Catalogo de Cuentas
+'''    Progreso_Barra.Mensaje_Box = "Determinando Duplicados de: Catalogo de Cuentas"
+'''    ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''    Eliminar_Duplicados_SP "Catalogo_Cuentas", "Codigo", "", "", True
+'''  '---------------------------------------------------------------------------------
+'''    ProgressBarEstado.value = Progreso_Barra.Valor_Maximo
+'''
+'''    Progreso_Barra.Mensaje_Box = "FIN DEL PROCESO DE ACTUALIZACION"
+'''    ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''End Sub
+
+'''Private Sub Importar_Bases_Antiguas()
+'''Dim SiID As Boolean
+'''Dim SiItem As Boolean
+'''Dim SiCod As Boolean
+'''
+'''Dim ContTAB As Integer
+'''
+'''Dim NumReg As Long
+'''Dim TotalReg As Long
+'''
+'''Dim CamposFile() As Campos_Tabla
+'''
+'''Dim NombreTabla As String
+'''
+'''    Progreso_Barra.Mensaje_Box = "SUBIENDO ABONOS DEL BANCO " & TextoBanco
+'''    Progreso_Iniciar
+'''
+'''    CDialogDir.Filename = RutaSysBases & "\Datos\Total\*.BDD"
+'''    CDialogDir.InitDir = RutaSysBases & "\Datos\Total\"
+'''    CDialogDir.Flags = cdlOFNFileMustExist + cdlOFNNoChangeDir + cdlOFNHideReadOnly
+'''    CDialogDir.Filter = "Archivos BDD|*.BDD"
+'''    CDialogDir.DialogTitle = "Abrir Archivo"
+'''    CDialogDir.Action = 1
+'''    J = InStrRev(CDialogDir.Filename, "\")
+'''    If CDialogDir.Filename <> "" And J > 0 Then
+'''       File1.Path = MidStrg(CDialogDir.Filename, 1, J)
+'''       File1.Pattern = "*.BDD"
+'''       Progreso_Barra.Incremento = 0
+'''       For I = 0 To File1.ListCount - 1
+'''           Progreso_Barra.Valor_Maximo = File1.ListCount
+'''           NumReg = 1
+'''           TotalReg = 2
+'''           NumFile = FreeFile
+'''           NombreArchivo = File1.Path & "\" & File1.List(I)
+'''           Open NombreArchivo For Input As #NumFile
+'''             Do While Not EOF(NumFile)
+'''                Line Input #NumFile, Cod_Field
+'''                Cod_Field = Replace(Cod_Field, vbCrLf, "")
+'''                Select Case NumReg
+'''                  Case 1
+'''                       NombreTabla = TrimStrg(MidStrg(Cod_Field, InStrRev(Cod_Field, "-") + 1, Len(Cod_Field)))
+'''                       Cod_Field = MidStrg(Cod_Field, 1, Len(Cod_Field) - Len(NombreTabla) - 2)
+'''                       TotalReg = Val(TrimStrg(MidStrg(Cod_Field, InStrRev(Cod_Field, "-") + 1, Len(Cod_Field))))
+'''                       Progreso_Barra.Mensaje_Box = NombreTabla
+'''
+'''                       If Not Existe_Tabla(NombreTabla) Then GoTo Fin_Tabla
+'''                  Case 2
+'''                       SiID = False
+'''                       SiItem = False
+'''                       SiCod = False
+'''                       ContTAB = 0
+'''                       K = 1
+'''                       For J = 1 To Len(Cod_Field)
+'''                        If MidStrg(Cod_Field, J, 1) = vbTab Then
+'''                           ReDim Preserve CamposFile(ContTAB) As Campos_Tabla
+'''                           CamposFile(ContTAB).Campo = MidStrg(Cod_Field, K, J - K)
+'''                           Select Case CamposFile(ContTAB).Campo
+'''                             Case "ID": SiID = True
+'''                             Case "Item": SiItem = True
+'''                             Case "Codigo": SiCod = True
+'''                           End Select
+'''                           K = J + 1
+'''                           ContTAB = ContTAB + 1
+'''                        End If
+'''                       Next J
+'''                       Progreso_Barra.Mensaje_Box = "Encerando: " & NombreTabla
+'''
+'''                       sSQL = "DELETE * " _
+'''                            & "FROM " & NombreTabla & " "
+'''                       If SiID Then
+'''                          sSQL = sSQL & "WHERE ID > 0 "
+'''                       ElseIf SiItem Then
+'''                          sSQL = sSQL & "WHERE Item <> '.' "
+'''                       ElseIf SiCod Then
+'''                          sSQL = sSQL & "WHERE Codigo <> 'D' "
+'''                       End If
+'''                       Ejecutar_SQL_SP sSQL
+''''''                       Cadena = ""
+''''''                       For J = 0 To UBound(CamposFile)
+''''''                           Cadena = Cadena & CamposFile(J).Campo & " = " & CamposFile(J).Valor & vbCrLf
+''''''                       Next J
+''''''                       MsgBox Cadena
+'''                  Case Else
+'''                       ContTAB = 0
+'''                       K = 1
+'''                       For J = 1 To Len(Cod_Field)
+'''                        If MidStrg(Cod_Field, J, 1) = vbTab Then
+'''                           'MsgBox UBound(CamposFile) & vbCrLf & MidStrg(Cod_Field, K, J - K)
+'''                           If ContTAB <= UBound(CamposFile) Then CamposFile(ContTAB).Valor = MidStrg(Cod_Field, K, J - K)
+'''                           K = J + 1
+'''                           ContTAB = ContTAB + 1
+'''                        End If
+'''                       Next J
+'''                      'Insertamos el registro actual
+''''''                       Cadena = ""
+'''                       SetAdoAddNew NombreTabla
+'''                       For J = 0 To UBound(CamposFile)
+'''                           If CamposFile(J).Campo <> "ID" Then SetAdoFields CamposFile(J).Campo, CamposFile(J).Valor
+''''''                           Cadena = Cadena & CamposFile(J).Campo & " = " & CamposFile(J).Valor & vbCrLf
+'''                       Next J
+'''                       SetAdoUpdate
+''''''                       MsgBox Cadena
+'''                End Select
+'''                Progreso_Barra.Mensaje_Box = NombreTabla & ": " & Format(NumReg, "#,##0") & " -> " & Format(TotalReg, "#,##0")
+'''
+'''                NumReg = NumReg + 1
+'''                Contador = Contador + 1
+'''             Loop
+'''Fin_Tabla:
+'''           Close #NumFile
+'''       Next I
+'''    End If
+'''    Progreso_Final
+'''End Sub
 
 Public Sub Enviar_Mail_Actualizacion()
    'Enviamos el mail de confirmacion
@@ -2039,6 +2039,7 @@ Dim IdBase As Integer
     Datos_Procesados_BD "Transmitiendo Datos del Servidor: " & vbCrLf & strIPServidor
     ConectarAdodc AdoAux
     Datos_Procesados_BD "Verificando Datos a Transmitir..."
+    
     sSQL = "SELECT sys.databases.name,(SUM(sys.master_files.size) * 8/1024) AS size_MB " _
          & "FROM sys.databases JOIN sys.master_files " _
          & "ON sys.databases.database_id = sys.master_files.database_id " _
@@ -2088,7 +2089,9 @@ Dim IdBase As Integer
            ConSucursal = False
            FActualizar.Caption = Modulo & ": " & strIPServidor
            
-           'MsgBox AdoStrCnn
+           strNombreBaseDatos = NombreBase(IdBase)
+           
+          'MsgBox AdoStrCnn
              
           'Conectamos la nueva Base de Datos
            ConectarAdodc AdoAux
@@ -2096,7 +2099,7 @@ Dim IdBase As Integer
            ConectarAdodc AdoEmpresa
             
           'Procedemos a Actualizar la base actual
-           UPD_Actualizar LstStatud, URLinet, Dir1, File1, LstTablas
+           UPD_Actualizar_SP
            Datos_Procesados_BD "      [" & Format(Time - MiTiempo, FormatoTimes) & "] Base actualizada con exito."
           
           'Enviamos el mail de confirmacion
@@ -2278,6 +2281,7 @@ Public Sub Datos_Procesados_BD(TextoAInsertar As String)
     TxtBaseDatos.Text = TxtBaseDatos.Text & TextoAInsertar & vbCrLf
     TxtBaseDatos.SelStart = Len(TxtBaseDatos.Text)
     TxtBaseDatos.SelLength = Len(TxtBaseDatos.Text)
+    TxtBaseDatos.Refresh
 End Sub
 
 Private Sub TxtID_GotFocus()
@@ -2433,5 +2437,4 @@ error_Handler:
      RatonNormal
      MsgBox Err.Description, vbCritical
 End Sub
-
 

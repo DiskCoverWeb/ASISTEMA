@@ -591,6 +591,18 @@ Dim MiReg As ADODB.Recordset
     End If
 End Sub
 
+Public Sub Actualizar_Base_Datos_SP()
+
+Dim MiSQL As ADODB.Connection
+Dim MiCmd As ADODB.Command
+Dim MiReg As ADODB.Recordset
+
+    Iniciar_Stored_Procedure "Actualizar Base Datos", MiSQL, MiCmd, MiReg
+    MiCmd.CommandText = "sp_Actualizar_Base_Datos"
+    Procesar_Stored_Procedure MiCmd, MiReg
+    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+End Sub
+
 Public Sub Mayorizar_Cuentas_SP()
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
@@ -1659,3 +1671,4 @@ Dim NumComp As Long
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
     RatonNormal
 End Sub
+

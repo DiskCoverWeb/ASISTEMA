@@ -11,8 +11,8 @@ Begin VB.Form ProcesarConciliacion
    ClientWidth     =   11460
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   7365
-   ScaleWidth      =   11460
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    WindowState     =   2  'Maximized
    Begin MSDataListLib.DataCombo DCCtas 
       Bindings        =   "ProcConc.frx":0000
@@ -1128,8 +1128,8 @@ Private Sub Command3_Click()
   With AdoTrans.Recordset
    If .RecordCount > 0 Then
       .MoveLast
-       Saldo = .Fields("Saldo")
-       Saldo_ME = .Fields("Saldo_ME")
+       Saldo = .fields("Saldo")
+       Saldo_ME = .fields("Saldo_ME")
    End If
   End With
   DGNotaDC.Visible = False
@@ -1137,9 +1137,9 @@ Private Sub Command3_Click()
    If .RecordCount > 0 Then
       .MoveFirst
        Do While Not .EOF
-          ProcesarConciliacion.Caption = "Procesando Conciliacion de N/D y N/C, fecha: " & .Fields("Fecha")
-          SumaDebe = SumaDebe + .Fields("Debitos")
-          SumaHaber = SumaHaber + .Fields("Creditos")
+          ProcesarConciliacion.Caption = "Procesando Conciliacion de N/D y N/C, fecha: " & .fields("Fecha")
+          SumaDebe = SumaDebe + .fields("Debitos")
+          SumaHaber = SumaHaber + .fields("Creditos")
          .MoveNext
        Loop
    End If
@@ -1164,13 +1164,13 @@ Private Sub Command3_Click()
    If .RecordCount > 0 Then
       .MoveFirst
        Do While Not .EOF
-          ProcesarConciliacion.Caption = "Procesando Conciliacion de Debitos y Creditos, fecha: " & .Fields("Fecha")
+          ProcesarConciliacion.Caption = "Procesando Conciliacion de Debitos y Creditos, fecha: " & .fields("Fecha")
           If Moneda_US Then
              'Debe = Debe + .Fields("Debe_ME")
              'Haber = Haber + .Fields("Haber_ME")
           Else
-             Debe = Debe + .Fields("Debe")
-             Haber = Haber + .Fields("Haber")
+             Debe = Debe + .fields("Debe")
+             Haber = Haber + .fields("Haber")
           End If
          .MoveNext
        Loop
@@ -1190,9 +1190,9 @@ Private Sub Command3_Click()
    If .RecordCount > 0 Then
       .MoveFirst
        Do While Not .EOF
-          ProcesarConciliacion.Caption = "Procesando Conciliacion de Debitos y Creditos, fecha: " & .Fields("Fecha")
-          Debitos = Debitos + .Fields("Debe")
-          Creditos = Creditos + .Fields("Haber")
+          ProcesarConciliacion.Caption = "Procesando Conciliacion de Debitos y Creditos, fecha: " & .fields("Fecha")
+          Debitos = Debitos + .fields("Debe")
+          Creditos = Creditos + .fields("Haber")
          .MoveNext
        Loop
    End If

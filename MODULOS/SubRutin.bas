@@ -40,6 +40,38 @@ Option Explicit
  
 '      & "InStr 'MIOS': '" & InStr(Cadena, "MIOS") & "'"
  
+'       'Elimina la actualizacion anterior si hay conexion
+'        Eliminar_Si_Existe_File RutaSistema & "\BASES\UPDATE_DB\*.*"
+'
+'       'Mostramos en el label el path del directorio actual donde estamos ubicados en el servidor
+'        Progreso_Barra.Mensaje_Box = .GetDirectorioActual
+'       .Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'       'Le indicamos el ListView donde se listarán los archivos
+'        Set .ListView = LstVwFTP
+'        Progreso_Barra.Mensaje_Box = "Buscando directorio en el servidor"
+'       .Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'
+'       '-------------------------------------------------------
+'       'Esta opcion solo baja la actualizacion del servidor erp
+'       '=======================================================
+'        Progreso_Barra.Mensaje_Box = "Eliminando Version anterior"
+'       .Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'       .CambiarDirectorio "/SISTEMA/BASES/UPDATE_DB/"
+'       .ListarArchivos
+'        For I = 1 To LstVwFTP.ListItems.Count
+'            TextoFile = ""
+'            FileOrigen = LstVwFTP.ListItems(I)
+'            FileDestino = RutaSistema & "\BASES\UPDATE_DB\" & LstVwFTP.ListItems(I)
+'            Extension = RightStrg(FileOrigen, 3)
+'            Select Case Extension
+'              Case "dbs", "txt", "upd", "sql"
+'                   Progreso_Barra.Mensaje_Box = "Descargando: " & FileOrigen
+'                  .Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'                  .ObtenerArchivo FileOrigen, FileDestino, True
+'            End Select
+'        Next I
+'       .Desconectar
+
 Public Function Solo_Letras_Numeros(ByVal KeyAscii) As Integer
    If InStr(CadenaValida & Chr(8) & Chr(11) & Chr(13), Chr(KeyAscii)) = 0 Then
       Solo_Letras_Numeros = 0

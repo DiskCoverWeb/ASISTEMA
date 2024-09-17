@@ -5297,16 +5297,23 @@ Public Sub Imprimir_Conciliacion(DtaNotaDC As Adodc, _
                                  DtaDebCred As Adodc, _
                                  DtaTransito As Adodc, _
                                  TipoCta As Boolean)
+Dim Supervisor As String
+
 Dim SizeLetra As Integer
+
 Dim SizeLetra1 As Single
 Dim LenT As Single
+
 On Error GoTo Errorhandler
 Mensajes = "Seguro de Imprimir en:" & vbCrLf & Printer.DeviceName & "?"
 Titulo = "IMPRESION"
 Bandera = False
 SetPrinters.Show 1
 If PonImpresoraDefecto(SetNombrePRN) Then
+
 RatonReloj
+Supervisor = Leer_Campo_Empresa("Supervisor")
+NombreContador = Leer_Campo_Empresa("Contador")
 'FormaImp = 1:
 SizeLetra = 8: SizeLetra1 = 10
 InicioX = 0.5: InicioY = 0
@@ -5683,10 +5690,15 @@ Printer.FontBold = False
 Printer.Line (InicioX, PosLinea)-(19.5, PosLinea), Negro
 PosLinea = PosLinea + 0.1
 Printer.Line (InicioX, PosLinea)-(19.5, PosLinea), Negro
-PosLinea = PosLinea + 1.5
-Printer.Line (InicioX, PosLinea)-(InicioX + 3, PosLinea), Negro
-PosLinea = PosLinea + 0.1
-PrinterTexto 0.5, PosLinea, "Revisado por"
+PosLinea = PosLinea + 2
+PrinterTexto 3, PosLinea, String(Len(NombreContador), "_")
+PrinterTexto 11, PosLinea, String(Len(Supervisor), "_")
+PosLinea = PosLinea + 0.5
+PrinterTexto 3, PosLinea, String(Len(NombreContador) / 2, " ") & "Elaborado por"
+PrinterTexto 11, PosLinea, String(Len(Supervisor) / 2, " ") & "Revisado por"
+PosLinea = PosLinea + 0.5
+PrinterTexto 3, PosLinea, NombreContador
+PrinterTexto 11, PosLinea, Supervisor
 RatonNormal
 MensajeEncabData = ""
 'MsgBox "____"

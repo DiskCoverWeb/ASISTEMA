@@ -3409,7 +3409,8 @@ Dim SecuencialReembolo As String
     Select_AdoDB AdoDBDet, sSQL
    
    'Encabezado de la Factura
-    sSQL = "SELECT T, TDT, SP, Porc_IVA, Imp_Mes, Fecha, Vencimiento, SubTotal, Sin_IVA, Con_IVA, IVA, Total_MN, Razon_Social, RUC_CI, TB, Descuento, Descuento2, Servicio " _
+    sSQL = "SELECT T, TDT, SP, Porc_IVA, Imp_Mes, Fecha, Vencimiento, SubTotal, Sin_IVA, Con_IVA, IVA, Total_MN, Razon_Social, RUC_CI, TB, Descuento, " _
+         & "Orden_Compra, Descuento2, Servicio " _
          & "FROM Facturas " _
          & "WHERE Item = '" & NumEmpresa & "' " _
          & "AND Periodo = '" & Periodo_Contable & "' " _
@@ -3444,6 +3445,7 @@ Dim SecuencialReembolo As String
          TFA.TB = .fields("TB")
          TFA.Descuento = .fields("Descuento")
          TFA.Descuento2 = .fields("Descuento2")
+         TFA.Orden_Compra = .fields("Orden_Compra")
          TFA.Total_Descuento = TFA.Descuento + TFA.Descuento2
          
          If TFA.TDT = 41 Then TFA.EsPorReembolso = True
