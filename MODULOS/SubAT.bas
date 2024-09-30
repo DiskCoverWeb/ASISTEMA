@@ -1596,6 +1596,10 @@ Dim TempPosLineaAbono As Single
             cPrint.printTexto PosColumna, PosLinea, "Teléfono: " & .TelefonoC, PorteDeLetra
             PosLinea = PosLinea + 0.3
          End If
+         If Len(.Orden_Compra) > 1 Then
+            cPrint.printTexto PosColumna, PosLinea, "Orden de Compra No. " & .Orden_Compra
+            PosLinea = PosLinea + 0.3
+         End If
          If Len(.Nota) > 1 Then
             cPrint.printTexto PosColumna, PosLinea, "Nota: " & .Nota, PorteDeLetra
             PosLinea = PosLinea + 0.3

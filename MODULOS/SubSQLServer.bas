@@ -599,6 +599,20 @@ Dim MiReg As ADODB.Recordset
 
     Iniciar_Stored_Procedure "Actualizar Base Datos", MiSQL, MiCmd, MiReg
     MiCmd.CommandText = "sp_Actualizar_Base_Datos"
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@strIPServidor", adVarChar, adParamInput, 50, strIPServidor)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@ruta_file", adVarChar, adParamInput, 256, RutaSistema & "\BASES\UPDATE_DB\")
+    Procesar_Stored_Procedure MiCmd, MiReg
+    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+End Sub
+
+Public Sub Actualizar_SP_FN_SP()
+
+Dim MiSQL As ADODB.Connection
+Dim MiCmd As ADODB.Command
+Dim MiReg As ADODB.Recordset
+
+    Iniciar_Stored_Procedure "Actualizar SP FN", MiSQL, MiCmd, MiReg
+    MiCmd.CommandText = "sp_Actualizar_SP_FN"
     Procesar_Stored_Procedure MiCmd, MiReg
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
@@ -1577,6 +1591,7 @@ Dim NumFile As Long
          If Not EOF(NumFile) Then Line Input #NumFile, LineFile
          If InStr(LineFile, "CLAVE_ACCESO") > 0 Then TipoFile = "SRI"
        Close #NumFile
+       
        If TipoFile <> "" Then
           FileTXT = Right$(PathTXT, Len(PathTXT) - InStrRev(PathTXT, "\"))
           PathTXTT = MidStrg(PathTXT, 1, Len(PathTXT) - Len(FileTXT))

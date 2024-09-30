@@ -89,6 +89,7 @@ Dim MiTiempo_Espera As Single
 
 Dim EMailPara As String
 Dim Emails As String
+Dim TextoHTML As String
 
 Dim posPuntoComa As String
 
@@ -97,7 +98,8 @@ Dim posPuntoComa As String
    'Activamos la clase para envios de los mails
     Set oMail = New clsCDOmail
     If TMail.Asunto = "" Then TMail.Asunto = "Sin asunto"
-    
+   'TMail.Adjunto = TMail.Adjunto & ";" & LogoTipo
+   
    'Datos para enviar
     oMail.servidor = TMail.servidor                       ' smtp.gmail.com
     oMail.Usuario = TMail.Usuario
@@ -115,63 +117,51 @@ Dim posPuntoComa As String
     Contactos = ""
     Insertar_Cadena Contactos, Telefono1
     Insertar_Cadena Contactos, Telefono2
+    
     With TMail
+      If Len(.MensajeHTML) > 1 Then TextoHTML = .MensajeHTML Else TextoHTML = .Mensaje
+      
+      If Len(MensajeAutomatizado) > 1 Then TextoHTML = Replace(TextoHTML, "vMensajeFinal", MensajeAutomatizado) Else TextoHTML = Replace(TextoHTML, "vMensajeFinal", "")
+      If Len(MensajeEmpresa) > 1 Then TextoHTML = Replace(TextoHTML, "vMensajeEmpresa", MensajeEmpresa) Else TextoHTML = Replace(TextoHTML, "vMensajeEmpresa", "")
+      If Len(ComunicadoEntidad) > 1 Then TextoHTML = Replace(TextoHTML, "vMensaje_Comunicado", ComunicadoEntidad) Else TextoHTML = Replace(TextoHTML, "vMensaje_Comunicado", "")
+      If Len(EmailProcesos) > 1 Then TextoHTML = Replace(TextoHTML, "vEmails", EmailProcesos) Else TextoHTML = Replace(TextoHTML, "vEmails", "")
+
+      TextoHTML = Replace(TextoHTML, "vNombre_Usuario", NombreUsuario)
+      TextoHTML = Replace(TextoHTML, "vRepresentante_Legal", NombreGerente)
+      TextoHTML = Replace(TextoHTML, "vNumero_Telefono", Contactos)
+      TextoHTML = Replace(TextoHTML, "vRUC_Empresa", RUC)
+      TextoHTML = Replace(TextoHTML, "vRazon_Social", MsgAux)
+      TextoHTML = Replace(TextoHTML, "vNombre_Comercial", NombreComercial)
+      TextoHTML = Replace(TextoHTML, "vDireccion_Empresa", Direccion)
+      TextoHTML = Replace(TextoHTML, "vObligado_Contabilidad", Obligado_Conta)
+        
+      TextoHTML = Replace(TextoHTML, "vInformacion_adicional", html_Informacion_adicional)
+      TextoHTML = Replace(TextoHTML, "vDetalle_adicional", html_Detalle_adicional)
+        
+      TextoHTML = Replace(TextoHTML, "vNombre_Cliente", FA.Cliente)
+      TextoHTML = Replace(TextoHTML, "vRUC_Cliente", FA.RUC_CI)
+      TextoHTML = Replace(TextoHTML, "vDireccion_Cliente", FA.DireccionC)
+      TextoHTML = Replace(TextoHTML, "vSerie_Cliente", FA.Serie)
+      TextoHTML = Replace(TextoHTML, "vFactura_Cliente", Format(FA.Factura, "000000000"))
+      TextoHTML = Replace(TextoHTML, "vAutorizacion_Factura", FA.Autorizacion)
+      TextoHTML = Replace(TextoHTML, "vRecibo_No", FA.Recibo_No)
+      TextoHTML = Replace(TextoHTML, "vLogoTipo", "./" & NLogoTipo)
+      TextoHTML = Replace(TextoHTML, "vValor_Total", Format(ValorTotal, "#,##0.00"))
+
       If Len(.MensajeHTML) > 1 Then
-         If Len(MensajeAutomatizado) > 1 Then .MensajeHTML = Replace(.MensajeHTML, "vMensajeFinal", MensajeAutomatizado) Else .MensajeHTML = Replace(.MensajeHTML, "vMensajeFinal", "")
-         If Len(MensajeEmpresa) > 1 Then .MensajeHTML = Replace(.MensajeHTML, "vMensajeEmpresa", MensajeEmpresa) Else .MensajeHTML = Replace(.MensajeHTML, "vMensajeEmpresa", "")
-         If Len(ComunicadoEntidad) > 1 Then .MensajeHTML = Replace(.MensajeHTML, "vMensaje_Comunicado", ComunicadoEntidad) Else .MensajeHTML = Replace(.MensajeHTML, "vMensaje_Comunicado", "")
-         If Len(EmailProcesos) > 1 Then .MensajeHTML = Replace(.MensajeHTML, "vEmails", EmailProcesos) Else .MensajeHTML = Replace(.MensajeHTML, "vEmails", "")
-        .MensajeHTML = Replace(.MensajeHTML, "vNombre_Usuario", NombreUsuario)
-        .MensajeHTML = Replace(.MensajeHTML, "vRepresentante_Legal", NombreGerente)
-        .MensajeHTML = Replace(.MensajeHTML, "vNumero_Telefono", Contactos)
-        .MensajeHTML = Replace(.MensajeHTML, "vRUC_Empresa", RUC)
-        .MensajeHTML = Replace(.MensajeHTML, "vRazon_Social", MsgAux)
-        .MensajeHTML = Replace(.MensajeHTML, "vNombre_Comercial", NombreComercial)
-        .MensajeHTML = Replace(.MensajeHTML, "vDireccion_Empresa", Direccion)
-        .MensajeHTML = Replace(.MensajeHTML, "vObligado_Contabilidad", Obligado_Conta)
-        
-        .MensajeHTML = Replace(.MensajeHTML, "vInformacion_adicional", html_Informacion_adicional)
-        .MensajeHTML = Replace(.MensajeHTML, "vDetalle_adicional", html_Detalle_adicional)
-        
-        .MensajeHTML = Replace(.MensajeHTML, "vNombre_Cliente", FA.Cliente)
-        .MensajeHTML = Replace(.MensajeHTML, "vRUC_Cliente", FA.RUC_CI)
-        .MensajeHTML = Replace(.MensajeHTML, "vDireccion_Cliente", FA.DireccionC)
-        .MensajeHTML = Replace(.MensajeHTML, "vSerie_Cliente", FA.Serie)
-        .MensajeHTML = Replace(.MensajeHTML, "vFactura_Cliente", Format(FA.Factura, "000000000"))
-        .MensajeHTML = Replace(.MensajeHTML, "vAutorizacion_Factura", FA.Autorizacion)
-        .MensajeHTML = Replace(.MensajeHTML, "vRecibo_No", FA.Recibo_No)
-        
-        .MensajeHTML = Replace(.MensajeHTML, vbCrLf, "<br>")
-        .MensajeHTML = Replace(.MensajeHTML, "<N>", "<strong>")
-        .MensajeHTML = Replace(.MensajeHTML, "</N>", "</strong>")
+         TextoHTML = Replace(TextoHTML, vbCrLf, "<br>")
+         TextoHTML = Replace(TextoHTML, "<N>", "<strong>")
+         TextoHTML = Replace(TextoHTML, "</N>", "</strong>")
+      End If
+  
+     'MsgBox InStr(.Mensaje, "Este correo electrónico fue generado automáticamente del Sistema Financiero")
+      'If InStr(.Mensaje, "Este correo electronico fue generado automaticamente a usted desde El Sistema Financiero") = 0 Then
+      
+      If Len(.MensajeHTML) > 1 Then
+        .MensajeHTML = TextoHTML
         .Mensaje = ""
       Else
-        'MsgBox InStr(.Mensaje, "Este correo electrónico fue generado automáticamente del Sistema Financiero")
-         'If InStr(.Mensaje, "Este correo electronico fue generado automaticamente a usted desde El Sistema Financiero") = 0 Then
-            If Len(MensajeAutomatizado) > 1 Then .Mensaje = .Mensaje & vbCrLf & MensajeAutomatizado
-            If Len(MensajeEmpresa) > 1 Then .Mensaje = Replace(.Mensaje, "vMensajeEmpresa", MensajeEmpresa) Else .Mensaje = Replace(.Mensaje, "vMensajeEmpresa", "")
-            If Len(ComunicadoEntidad) > 1 Then .Mensaje = Replace(.Mensaje, "vMensaje_Comunicado", ComunicadoEntidad) Else .Mensaje = Replace(.Mensaje, "vMensaje_Comunicado", "")
-            If Len(EmailProcesos) > 1 Then .Mensaje = Replace(.Mensaje, "vEmails", EmailProcesos) Else .Mensaje = Replace(.Mensaje, "vEmails", "")
-           .Mensaje = Replace(.Mensaje, "vNombre_Usuario", NombreUsuario)
-           .Mensaje = Replace(.Mensaje, "vRepresentante_Legal", NombreGerente)
-           .Mensaje = Replace(.Mensaje, "vNumero_Telefono", Contactos)
-           .Mensaje = Replace(.Mensaje, "vRUC_Empresa", RUC)
-           .Mensaje = Replace(.Mensaje, "vRazon_Social", MsgAux)
-           .Mensaje = Replace(.Mensaje, "vNombre_Comercial", NombreComercial)
-           .Mensaje = Replace(.Mensaje, "vDireccion_Empresa", Direccion)
-           .Mensaje = Replace(.Mensaje, "vObligado_Contabilidad", Obligado_Conta)
-           
-           .Mensaje = Replace(.Mensaje, "vInformacion_adicional", html_Informacion_adicional)
-           .Mensaje = Replace(.Mensaje, "vDetalle_adicional", html_Detalle_adicional)
-           
-           .Mensaje = Replace(.Mensaje, "vNombre_Cliente", FA.Cliente)
-           .Mensaje = Replace(.Mensaje, "vRUC_Cliente", FA.RUC_CI)
-           .Mensaje = Replace(.Mensaje, "vDireccion_Cliente", FA.DireccionC)
-           .Mensaje = Replace(.Mensaje, "vSerie_Cliente", FA.Serie)
-           .Mensaje = Replace(.Mensaje, "vFactura_Cliente", Format(FA.Factura, "000000000"))
-           .Mensaje = Replace(.Mensaje, "vAutorizacion_Factura", FA.Autorizacion)
-           .Mensaje = Replace(.Mensaje, "vRecibo_No", Format(FA.Fecha, "yyyymmdd"))
-         'End If
+        .Mensaje = TextoHTML
         .MensajeHTML = ""
       End If
      End With

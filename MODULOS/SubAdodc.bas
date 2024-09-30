@@ -4449,7 +4449,7 @@ End Sub
 
 Public Sub UPD_Actualizar_Datos_Defecto(ProgressBarEstado As ProgressBar, _
                                         LstStatud As ListBox, _
-                                        URLinet As Inet, _
+                                        URLInet As Inet, _
                                         Update_Dir As DirListBox, _
                                         Update_File As FileListBox, _
                                         Update_LstTablas As ListBox, _
@@ -6645,67 +6645,67 @@ Dim AdoFnSP As ADODB.Recordset
     End With
 End Sub
 
-Public Sub Crear_Script_SQL(ProgressBarEstado As ProgressBar, LstStatud As ListBox)
-Dim ContFile As Long
-Dim NumFile As Long
-Dim ArchivoActual As String
-Dim ArchivoSQL As String
-Dim ListaArchivo() As String
-Dim ListaArchivoSPFN() As String
-Dim InStrgIni As Integer
-Dim InStrgFin As Integer
-
-   Progreso_Barra.Mensaje_Box = "Eliminacion de Funciones y Procedimientos Almacenados"
-   ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
-   Eliminar_FN_SP_SQL
-   
-   Progreso_Barra.Mensaje_Box = "Creación de Funciones y Procedimientos Almacenados"
-   'Progreso_Iniciar
-   ArchivoActual = Dir(RutaSistema & "\BASES\UPDATE_DB\*.sql", vbNormal) 'Recupera la primera entrada.
-   NumFile = 1
-   Do While ArchivoActual <> ""
-      If ArchivoActual <> "." And ArchivoActual <> ".." Then
-         ArchivoSQL = ""
-         InStrgIni = InStr(ArchivoActual, "UserDefinedFunction")
-         If InStrgIni > 1 Then ArchivoSQL = MidStrg(ArchivoActual, 5, InStrgIni - 6)
-         InStrgIni = InStr(ArchivoActual, "StoredProcedure")
-         If InStrgIni > 1 Then ArchivoSQL = MidStrg(ArchivoActual, 5, InStrgIni - 6)
-        'Insertamos el nombre del SP o FN
-         If Len(ArchivoSQL) > 1 Then
-            ReDim Preserve ListaArchivo(NumFile) As String
-            ReDim Preserve ListaArchivoSPFN(NumFile) As String
-            
-            ListaArchivo(NumFile - 1) = ArchivoSQL
-            ListaArchivoSPFN(NumFile - 1) = ArchivoActual
-            NumFile = NumFile + 1
-         End If
-      End If
-      ArchivoActual = Dir
-   Loop
-   
+'''Public Sub Crear_Script_SQL(ProgressBarEstado As ProgressBar, LstStatud As ListBox)
+'''Dim ContFile As Long
+'''Dim NumFile As Long
+'''Dim ArchivoActual As String
+'''Dim ArchivoSQL As String
+'''Dim ListaArchivo() As String
+'''Dim ListaArchivoSPFN() As String
+'''Dim InStrgIni As Integer
+'''Dim InStrgFin As Integer
+'''
+'''   Progreso_Barra.Mensaje_Box = "Eliminacion de Funciones y Procedimientos Almacenados"
+'''   ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''   Eliminar_FN_SP_SQL
+'''
+'''   Progreso_Barra.Mensaje_Box = "Creación de Funciones y Procedimientos Almacenados"
+'''   'Progreso_Iniciar
+'''   ArchivoActual = Dir(RutaSistema & "\BASES\UPDATE_DB\*.sql", vbNormal) 'Recupera la primera entrada.
+'''   NumFile = 1
+'''   Do While ArchivoActual <> ""
+'''      If ArchivoActual <> "." And ArchivoActual <> ".." Then
+'''         ArchivoSQL = ""
+'''         InStrgIni = InStr(ArchivoActual, "UserDefinedFunction")
+'''         If InStrgIni > 1 Then ArchivoSQL = MidStrg(ArchivoActual, 5, InStrgIni - 6)
+'''         InStrgIni = InStr(ArchivoActual, "StoredProcedure")
+'''         If InStrgIni > 1 Then ArchivoSQL = MidStrg(ArchivoActual, 5, InStrgIni - 6)
+'''        'Insertamos el nombre del SP o FN
+'''         If Len(ArchivoSQL) > 1 Then
+'''            ReDim Preserve ListaArchivo(NumFile) As String
+'''            ReDim Preserve ListaArchivoSPFN(NumFile) As String
+'''
+'''            ListaArchivo(NumFile - 1) = ArchivoSQL
+'''            ListaArchivoSPFN(NumFile - 1) = ArchivoActual
+'''            NumFile = NumFile + 1
+'''         End If
+'''      End If
+'''      ArchivoActual = Dir
+'''   Loop
+'''
+''''''   For ContFile = 0 To UBound(ListaArchivo) - 1
+''''''       sSQL = ""
+''''''       ArchivoSQL = ListaArchivo(ContFile)
+''''''       Progreso_Barra.Mensaje_Box = "Eliminando: " & ArchivoSQL
+''''''       ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
+''''''       Select Case MidStrg(ArchivoSQL, 1, 3)
+''''''         Case "fn_": sSQL = "IF EXISTS (SELECT name FROM sysobjects WHERE name = '" & ArchivoSQL & "') DROP FUNCTION " & ArchivoSQL & ";"
+''''''         Case "sp_": sSQL = "IF EXISTS (SELECT name FROM sysobjects WHERE name = '" & ArchivoSQL & "') DROP PROCEDURE " & ArchivoSQL & ";"
+''''''       End Select
+''''''       If Len(sSQL) > 1 Then Ejecutar_SQL_AdoDB sSQL, True
+''''''   Next ContFile
+'''
+'''   RatonReloj
 '''   For ContFile = 0 To UBound(ListaArchivo) - 1
-'''       sSQL = ""
-'''       ArchivoSQL = ListaArchivo(ContFile)
-'''       Progreso_Barra.Mensaje_Box = "Eliminando: " & ArchivoSQL
+'''       Progreso_Barra.Mensaje_Box = "Creando " & ListaArchivo(ContFile)
 '''       ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
-'''       Select Case MidStrg(ArchivoSQL, 1, 3)
-'''         Case "fn_": sSQL = "IF EXISTS (SELECT name FROM sysobjects WHERE name = '" & ArchivoSQL & "') DROP FUNCTION " & ArchivoSQL & ";"
-'''         Case "sp_": sSQL = "IF EXISTS (SELECT name FROM sysobjects WHERE name = '" & ArchivoSQL & "') DROP PROCEDURE " & ArchivoSQL & ";"
-'''       End Select
-'''       If Len(sSQL) > 1 Then Ejecutar_SQL_AdoDB sSQL, True
+'''       Ejecutar_SQL_AdoDB Crear_FN_SP(RutaSistema & "\BASES\UPDATE_DB\" & ListaArchivoSPFN(ContFile)), True
+'''       'MsgBox Progreso_Barra.Mensaje_Box
 '''   Next ContFile
-   
-   RatonReloj
-   For ContFile = 0 To UBound(ListaArchivo) - 1
-       Progreso_Barra.Mensaje_Box = "Creando " & ListaArchivo(ContFile)
-       ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
-       Ejecutar_SQL_AdoDB Crear_FN_SP(RutaSistema & "\BASES\UPDATE_DB\" & ListaArchivoSPFN(ContFile)), True
-       'MsgBox Progreso_Barra.Mensaje_Box
-   Next ContFile
-   RatonNormal
-   Progreso_Barra.Mensaje_Box = ""
-   'Progreso_Final
-End Sub
+'''   RatonNormal
+'''   Progreso_Barra.Mensaje_Box = ""
+'''   'Progreso_Final
+'''End Sub
 
 'devuelve un objeto Recordset con los datos de la hoja
 Public Function Importar_Excel_AdoDB(ftpLinode As cFTP, LstStatud As ListBox, LstVwFTP As ListView, ByVal PathXls As String) As ADODB.Recordset
@@ -6984,7 +6984,6 @@ Dim FileCSV As String
 On Error GoTo error_Handler
 
    RatonReloj
-   If strIPServidor = "mysql.diskcoversystem.com" Then strIPServidor = "db.diskcoversystem.com"
    If strIPServidor = "db.diskcoversystem.com" Then
       With ftpLinode
            Progreso_Barra.Mensaje_Box = "Conectando al servidor"
@@ -7011,7 +7010,7 @@ On Error GoTo error_Handler
           '==================================================================================
            FileCSV = Right$(sOrigen, Len(sOrigen) - InStrRev(sOrigen, "\"))
            sDestino = "/files/" & FileCSV
-           MsgBox sDestino
+          'MsgBox sDestino
            Progreso_Barra.Mensaje_Box = "Subiendo: " & FileCSV
           .SubirArchivo sOrigen, sDestino, True
           .Desconectar

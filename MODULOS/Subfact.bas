@@ -403,7 +403,7 @@ Public Sub Encerar_Factura(TFA As Tipo_Facturas)
         .FechaGRF = FechaSistema
         .Pedido = Ninguno
         .Zona = Ninguno
-        .Orden_Compra = 0
+        .Orden_Compra = "0"
         .Serie_GR = Ninguno
         .Digitador = Ninguno
         .Error_SRI = Ninguno
@@ -5276,7 +5276,7 @@ If PonImpresoraDefecto(SetNombrePRN) Then
     If .RecordCount > 0 Then
         Orden_No = .fields("Orden_No")
         Do While (Not .EOF)
-           If Orden_No <> TFA.Orden_Compra And TFA.Orden_Compra > 0 Then
+           If Val(Orden_No) <> Val(TFA.Orden_Compra) And Val(TFA.Orden_Compra) > 0 Then
               Orden_No_S = Orden_No_S & CStr(Orden_No) & " "
               Orden_No = TFA.Orden_Compra
            End If
@@ -5645,7 +5645,7 @@ If PonImpresoraDefecto(SetNombrePRN) Then
            End If
            If PVP_Al_Inicio Then PFil = PFilT
            PFil = PFil + Printer.TextHeight("H")
-           If Orden_No <> TFA.Orden_Compra And TFA.Orden_Compra > 0 Then
+           If Val(Orden_No) <> Val(TFA.Orden_Compra) And Val(TFA.Orden_Compra) > 0 Then
               Orden_No_S = Orden_No_S & CStr(Orden_No) & " "
               Orden_No = TFA.Orden_Compra
            End If
@@ -14844,7 +14844,6 @@ Public Sub Prueba_Envio_de_Correos()
     Insertar_Mail TMail.para, "diskcover.system@yahoo.com"
     Insertar_Mail TMail.para, "diskcover.system@gmail.com"
     Insertar_Mail TMail.para, "informacion@diskcoversystem.com"
-    Insertar_Mail TMail.para, "electronicos@diskcoversystem.com"
     FEnviarCorreos.Show 1
     TMail.para = ""
     TMail.ListaMail = 255

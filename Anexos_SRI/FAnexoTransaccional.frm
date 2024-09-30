@@ -776,6 +776,13 @@ Begin VB.Form FAnexoTransaccional
             Key             =   "Anos"
             ImageIndex      =   2
             Style           =   5
+            BeginProperty ButtonMenus {66833FEC-8583-11D1-B16A-00C0F0283628} 
+               NumButtonMenus  =   1
+               BeginProperty ButtonMenu1 {66833FEE-8583-11D1-B16A-00C0F0283628} 
+                  Key             =   "A2000"
+                  Text            =   "2000"
+               EndProperty
+            EndProperty
          EndProperty
          BeginProperty Button2 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Caption         =   "Meses"
@@ -1188,7 +1195,7 @@ Dim ExisteAnioActual As Boolean
   End With
 
   'Toolbar1.buttons.Clear
-  Toolbar1.buttons.Item(1).ButtonMenus.Add (0), "A2000", 2000
+  'Toolbar1.buttons.Item(1).ButtonMenus.Add (0), "A2000", 2000
   ExisteAnioActual = False
   sSQL = "SELECT YEAR(Fecha) As Anio " _
        & "FROM Trans_Compras " _
@@ -1212,25 +1219,27 @@ Dim ExisteAnioActual As Boolean
        & "GROUP BY YEAR(Fecha) " _
        & "ORDER BY YEAR(Fecha) DESC "
   Select_Adodc AdoAux, sSQL, , , "Periodos_ATS"
-  With AdoAux.Recordset
-   If .RecordCount > 0 Then
-       Do While Not .EOF
-          MsgBox .fields("Anio")
-          'If .fields("Anio") <> "2000" Then
-              Toolbar1.buttons.Item(1).ButtonMenus.Add , "A" & .fields("Anio"), .fields("Anio")
-              If Year(FechaSistema) = .fields("Anio") Then ExisteAnioActual = True
-          'End If
-         .MoveNext
-       Loop
-   End If
-  End With
-  
-  'MsgBox sItem & vbCrLf & No_ATS
-
- 'MsgBox Toolbar1.Buttons.Item(1).ButtonMenus.Count
-  If Not ExisteAnioActual And Periodo_Contable = Ninguno Then
-     Toolbar1.buttons.Item(1).ButtonMenus.Add , "A" & Year(FechaSistema), Year(FechaSistema)
-  End If
+  MsgBox "."
+''  With AdoAux.Recordset
+''   If .RecordCount > 0 Then
+''       Do While Not .EOF
+''          'MsgBox .fields("Anio")
+''          'If .fields("Anio") <> "2000" Then
+''              Toolbar1.buttons.Item(1).ButtonMenus.Add , "A" & .fields("Anio"), CStr(.fields("Anio"))
+''              If Year(FechaSistema) = .fields("Anio") Then ExisteAnioActual = True
+''          'End If
+''         .MoveNext
+''       Loop
+''   End If
+''  End With
+''
+''  'MsgBox sItem & vbCrLf & No_ATS
+''
+'' 'MsgBox Toolbar1.Buttons.Item(1).ButtonMenus.Count
+''  If Not ExisteAnioActual And Periodo_Contable = Ninguno Then
+''     Toolbar1.buttons.Item(1).ButtonMenus.Add , "A" & Year(FechaSistema), Year(FechaSistema)
+''  End If
+''
 '  Toolbar1.buttons.Item(1).ButtonMenus.Remove ("A2000")
   
  'verificamos si la carpeta AT y la subcarpeta de la empresa existe sino la creamos

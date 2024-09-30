@@ -94,46 +94,46 @@ Begin VB.Form FSeteos
       TabCaption(2)   =   "&Niveles de Seguridad"
       TabPicture(2)   =   "FSeteos.frx":0342
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "Label4"
-      Tab(2).Control(1)=   "Label10"
-      Tab(2).Control(2)=   "Label1"
-      Tab(2).Control(3)=   "Label2"
-      Tab(2).Control(4)=   "Label5"
-      Tab(2).Control(5)=   "Label3"
-      Tab(2).Control(6)=   "DCBodega"
-      Tab(2).Control(7)=   "MBPeriodo"
-      Tab(2).Control(8)=   "TextClave"
-      Tab(2).Control(9)=   "Frame2"
-      Tab(2).Control(10)=   "TxtItem"
-      Tab(2).Control(11)=   "Command2"
-      Tab(2).Control(12)=   "Command3"
-      Tab(2).Control(13)=   "TxtUsuario"
-      Tab(2).Control(14)=   "Command7"
-      Tab(2).Control(15)=   "DCUsuario"
-      Tab(2).Control(16)=   "Command13"
-      Tab(2).Control(17)=   "Command5"
-      Tab(2).Control(18)=   "Command11"
-      Tab(2).Control(19)=   "DGEmp1"
-      Tab(2).Control(20)=   "Command10"
-      Tab(2).Control(21)=   "LstModulos"
-      Tab(2).Control(22)=   "Command6"
-      Tab(2).Control(23)=   "LstEmpresas"
-      Tab(2).Control(24)=   "Command1"
-      Tab(2).Control(25)=   "Command4"
+      Tab(2).Control(0)=   "Command4"
+      Tab(2).Control(1)=   "Command1"
+      Tab(2).Control(2)=   "LstEmpresas"
+      Tab(2).Control(3)=   "Command6"
+      Tab(2).Control(4)=   "LstModulos"
+      Tab(2).Control(5)=   "Command10"
+      Tab(2).Control(6)=   "DGEmp1"
+      Tab(2).Control(7)=   "Command11"
+      Tab(2).Control(8)=   "Command5"
+      Tab(2).Control(9)=   "Command13"
+      Tab(2).Control(10)=   "DCUsuario"
+      Tab(2).Control(11)=   "Command7"
+      Tab(2).Control(12)=   "TxtUsuario"
+      Tab(2).Control(13)=   "Command3"
+      Tab(2).Control(14)=   "Command2"
+      Tab(2).Control(15)=   "TxtItem"
+      Tab(2).Control(16)=   "Frame2"
+      Tab(2).Control(17)=   "TextClave"
+      Tab(2).Control(18)=   "MBPeriodo"
+      Tab(2).Control(19)=   "DCBodega"
+      Tab(2).Control(20)=   "Label3"
+      Tab(2).Control(21)=   "Label5"
+      Tab(2).Control(22)=   "Label2"
+      Tab(2).Control(23)=   "Label1"
+      Tab(2).Control(24)=   "Label10"
+      Tab(2).Control(25)=   "Label4"
       Tab(2).ControlCount=   26
       TabCaption(3)   =   "&Impresiones"
       TabPicture(3)   =   "FSeteos.frx":035E
       Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "DGFormato"
-      Tab(3).Control(1)=   "Command17(0)"
-      Tab(3).Control(2)=   "Command16"
-      Tab(3).Control(3)=   "PictFormatos"
-      Tab(3).Control(4)=   "DGSeteosPRN"
-      Tab(3).Control(5)=   "Command21"
-      Tab(3).Control(6)=   "Command17(1)"
-      Tab(3).Control(7)=   "Command17(2)"
-      Tab(3).Control(8)=   "Command17(3)"
-      Tab(3).Control(9)=   "Command8"
+      Tab(3).Control(0)=   "Command8"
+      Tab(3).Control(1)=   "Command17(3)"
+      Tab(3).Control(2)=   "Command17(2)"
+      Tab(3).Control(3)=   "Command17(1)"
+      Tab(3).Control(4)=   "Command21"
+      Tab(3).Control(5)=   "DGSeteosPRN"
+      Tab(3).Control(6)=   "PictFormatos"
+      Tab(3).Control(7)=   "Command16"
+      Tab(3).Control(8)=   "Command17(0)"
+      Tab(3).Control(9)=   "DGFormato"
       Tab(3).ControlCount=   10
       Begin VB.CommandButton Command4 
          Caption         =   "Migracion a MySQL"
@@ -3224,12 +3224,13 @@ Dim IdProc As Byte
                 Procesar_Indices_Base_Datos
            Case "Generar Documentos Electronicos"
                 Generar_Documentos_Electronicos
-           Case "Realizar Copia de Actualizacion"
-                Procesar_Update_DB
            Case "Prueba de Envio de Correos"
                 Prueba_Envio_de_Correos
            Case "Actualizar Avreviaturas Accesos Usuarios"
                 Poner_Avreviatura_Accesos
+                
+           Case "Realizar Copia de Actualizacion"
+                Procesar_Update_DB
          End Select
       End If
   Next IdProc
@@ -3514,20 +3515,15 @@ Dim Nombre_Base_Respaldo As String
         
         Progreso_Esperar
        'Volvemos a colocar la base a FULL
-        sSQL = "ALTER DATABASE " & strNombreBaseDatos & " " _
-             & "SET RECOVERY FULL; "
+        sSQL = "ALTER DATABASE " & strNombreBaseDatos & "SET RECOVERY FULL; "
         Ejecutar_SQL_SP sSQL
         
         Progreso_Esperar
        'Empezando a respaldar la base de datos
-        sSQL = "BACKUP DATABASE " & strNombreBaseDatos & " " _
-             & "TO DISK = '" & RutaOrigen & ".bak' " _
-             & "WITH FORMAT; "
+        sSQL = "BACKUP DATABASE " & strNombreBaseDatos & "TO DISK = '" & RutaOrigen & ".bak' " & "WITH FORMAT; "
        'MsgBox sSQL
        
-        sSQL = "BACKUP DATABASE " & strNombreBaseDatos & " " _
-             & "TO DISK = '" & RutaOrigen & ".bak' " _
-             & "WITH FORMAT, MEDIANAME = 'Z_SQLServerBackups', " _
+        sSQL = "BACKUP DATABASE " & strNombreBaseDatos & "TO DISK = '" & RutaOrigen & ".bak' WITH FORMAT, MEDIANAME = 'Z_SQLServerBackups', " _
              & "NAME = 'Full Backup of " & strNombreBaseDatos & "'; "
         Ejecutar_SQL_SP sSQL
        'Fin del Proceso respaldo de la base de datos
@@ -7213,6 +7209,7 @@ Dim itmX As ListItem
      Progreso_Barra.Mensaje_Box = "Reabriendo Periodo"
      Progreso_Iniciar
      Progreso_Barra.Valor_Maximo = LstTablas.ListCount + 10
+     
      sSQL = "SELECT Item " _
           & "FROM Empresas " _
           & "WHERE Item <> '.' " _
@@ -7226,6 +7223,7 @@ Dim itmX As ListItem
           Loop
       End If
      End With
+     
      Items = Items & "'000' "
      For I = 0 To LstTablas.ListCount - 1
          Si_No = False
@@ -7364,6 +7362,7 @@ Dim JCamp As Long
 Dim KCamp As Long
 Dim NombreTabla As String
 Dim CamposTabla As String
+Dim Si_Periodo As Boolean
 Dim Si_Fecha As Boolean
 Dim Si_Fecha_I As Boolean
 Dim Si_TP As Boolean
@@ -7473,6 +7472,7 @@ Next ITab
        Case Else: Si_Update = True
      End Select
      If Si_Update Then
+        Si_Periodo = False
         Si_No = False
         Si_Fecha = False
         Si_Fecha_I = False
@@ -7495,7 +7495,7 @@ Next ITab
              If .fields(JCamp).Name = "Campo" Then Si_Campo = True
              If .fields(JCamp).Name = "Codigo" Then Si_Codigo = True
              If .fields(JCamp).Name = "ID" Then Si_ID = True
-             
+             If .fields(JCamp).Name = "Periodo" Then Si_Periodo = True
              If .fields(JCamp).Name <> "ID" Then CamposTabla = CamposTabla & .fields(JCamp).Name & ","
          Next JCamp
         End With
@@ -7504,6 +7504,7 @@ Next ITab
              & "FROM " & LstTablas.List(ITab) & " "
         If Si_No Then
            sSQL = sSQL & "WHERE Item = '000' "
+           If Si_Periodo Then sSQL = sSQL & "AND Periodo = '.' "
         Else
            If LstTablas.List(ITab) = "Clientes" Then sSQL = sSQL & "WHERE Grupo = '999999' "
            If LstTablas.List(ITab) = "Accesos" Then sSQL = sSQL & "WHERE Codigo IN ('ACCESO01','ACCESO02','ACCESO03','ACCESO04','ACCESO05','ACCESO06','ACCESO07','ACCESO08','ACCESO09','ACCESO10','0702164179') "

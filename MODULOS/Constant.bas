@@ -1,5 +1,6 @@
 Attribute VB_Name = "Constantes"
 Option Explicit
+
 '-------------------------------------------------------
 'CORREOS PERSONALES DE DISKCOVER SYSTEM:
 '======================================

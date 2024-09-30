@@ -13,8 +13,8 @@ Begin VB.Form ListarGrupos
    ClientWidth     =   18120
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   12105
-   ScaleWidth      =   18120
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    WindowState     =   1  'Minimized
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top

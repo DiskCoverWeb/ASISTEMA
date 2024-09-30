@@ -3729,6 +3729,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 'mlucas/1210
+'7300002003
 Dim XProducto As String
 Dim AnchoDetalle As Single
 Dim CodArtOrden As String
@@ -3794,7 +3795,7 @@ Dim GuiaRemision As Long
      Total_FacturaME = 0
      
      FA.T = Pendiente
-     FA.Orden_Compra = 0
+     FA.Orden_Compra = "0"
      FA.SubCta = Ninguno
      FA.SP = False
      FA.Porc_IVA = Porc_IVA
@@ -3804,8 +3805,7 @@ Dim GuiaRemision As Long
      FA.Nota = TextNota
      FA.Pedido = TxtPedido
     'MsgBox Val(TxtCompra)
-     If IsNumeric(TxtCompra) Then FA.Orden_Compra = TxtCompra
-     
+     If IsNumeric(TxtCompra) Then FA.Orden_Compra = Format(Val(TxtCompra), "0000000000")
      If AdoMod.Recordset.RecordCount > 0 Then
         AdoMod.Recordset.MoveFirst
         AdoMod.Recordset.Find ("Detalle = '" & DCMod.Text & "' ")
@@ -3884,7 +3884,7 @@ Dim GuiaRemision As Long
         If Len(FA.Autorizacion) = 13 Then SRI_Crear_Clave_Acceso_Facturas FA, False, , True
          
         If Len(FA.Autorizacion_GR) = 13 Then
-           SRI_Crear_Clave_Acceso_Guia_Remision URLInet, FA, False, True
+           SRI_Crear_Clave_Acceso_Guia_Remision URLinet, FA, False, True
            If Len(FA.Autorizacion_GR) > 13 Then
               sSQL = "UPDATE Facturas_Auxiliares " _
                    & "SET Fecha_Aut_GR = #" & BuscarFecha(FA.Fecha_Aut_GR) & "#," _

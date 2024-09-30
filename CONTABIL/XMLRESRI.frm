@@ -99,7 +99,7 @@ Begin VB.Form FXMLRecibidosSRI
       _ExtentX        =   21325
       _ExtentY        =   4286
       _Version        =   393216
-      AllowUpdate     =   -1  'True
+      AllowUpdate     =   0   'False
       BackColor       =   16761024
       BorderStyle     =   0
       Enabled         =   0   'False
@@ -1014,6 +1014,7 @@ Option Explicit
 Dim Cta_Prov As String
 Dim Cta_Prov_Aut As String
 Dim CodRet As String
+Dim Archivo_TXT As String
 
 ''Dim Cta_D As String
 ''Dim Cta_C As String
@@ -1096,6 +1097,11 @@ Dim ClaveAcceso As String
 Dim RutaXMLAutorizado As String
 Dim RutaXMLRechazado As String
    
+   Progreso_Barra.Valor_Maximo = 100
+   Progreso_Barra.Incremento = 0
+   Progreso_Barra.Mensaje_Box = "SUBIENDO ARCHIVOS XML DEL SRI "
+   Progreso_Iniciar
+   
    FechaTexto = FechaSistema
    Cta_Prov_Aut = SinEspaciosIzq(DCCxP.Text)
    PrimeraLinea = True
@@ -1103,8 +1109,7 @@ Dim RutaXMLRechazado As String
    ArchivoValido = False
    
    TextoImprimio = ""
-   TextoFile = "Asiento_TXT_" & CodigoUsuario
-   
+
    sSQL = "DELETE * " _
         & "FROM Tabla_Temporal " _
         & "WHERE Item = '" & NumEmpresa & "' " _
@@ -1126,10 +1131,10 @@ Dim RutaXMLRechazado As String
   CDialogDir.ShowOpen
   If CodigoP <> CDialogDir.Filename Then NombreArchivo = CDialogDir.Filename Else NombreArchivo = ""
   If NombreArchivo <> "" Then
+     RatonReloj
      Toolbar1.buttons("Salir").Enabled = False
-     Progreso_Barra.Mensaje_Box = "SUBIENDO ARCHIVOS XML DEL SRI "
-     Progreso_Iniciar
-     
+     Progreso_Barra.Mensaje_Box = "Subiendo archivo Base: " & NombreArchivo
+     Progreso_Esperar
      DGDocSRI.Visible = False
      DGDocSRI.Caption = NombreArchivo
      
@@ -1138,15 +1143,16 @@ Dim RutaXMLRechazado As String
      Eliminar_Archivo_FTP_Linode ftp, LstStatud, LstVwFTP, NombreArchivo
 
     'Determinamos cantidad de archivos a subir
+     RatonReloj
      Contador = 1
-     Progreso_Barra.Valor_Maximo = 0
-     
-     sSQL = "SELECT IDENTIFICACION_RECEPTOR " _
-          & "FROM " & TextoFile & " " _
-          & "WHERE TIPO_COMPROBANTE <> '.' " _
+       
+     sSQL = "SELECT IDENTIFICACION_RECEPTOR, COUNT(IDENTIFICACION_RECEPTOR) As ContXML " _
+          & "FROM " & Archivo_TXT & " " _
+          & "WHERE LEN(IDENTIFICACION_RECEPTOR) = 13 " _
           & "GROUP BY IDENTIFICACION_RECEPTOR "
      Select_Adodc AdoTxt, sSQL
      If AdoTxt.Recordset.RecordCount > 0 Then
+        Progreso_Barra.Valor_Maximo = Progreso_Barra.Valor_Maximo + (AdoTxt.Recordset.fields("ContXML") * 2)
         Do While Not AdoTxt.Recordset.EOF
            If RUC = AdoTxt.Recordset.fields("IDENTIFICACION_RECEPTOR") Then ReceptorValido = True
            AdoTxt.Recordset.MoveNext
@@ -1155,20 +1161,28 @@ Dim RutaXMLRechazado As String
      
      If ReceptorValido Then
         ArchivoValido = True
-        sSQL = "SELECT " & Full_Fields(TextoFile) & " " _
-             & "FROM " & TextoFile & " " _
-             & "WHERE TIPO_COMPROBANTE <> '.' " _
+        sSQL = "SELECT " & Full_Fields(Archivo_TXT) & " " _
+             & "FROM " & Archivo_TXT & " " _
+             & "WHERE LEN(IDENTIFICACION_RECEPTOR) = 13 " _
              & "ORDER BY TIPO_COMPROBANTE, IDENTIFICACION_RECEPTOR, FECHA_EMISION "
         Select_Adodc AdoTxt, sSQL
         With AdoTxt.Recordset
          If .RecordCount > 0 Then
-             Progreso_Barra.Valor_Maximo = .RecordCount
              TotalIngreso = 0
              FileResp = 0
             'Establecemos los campos del archivo plano del Banco
              FechaTexto = FechaSistema
              Do While Not .EOF
+                RatonReloj
                 ClaveAcceso = .fields("CLAVE_ACCESO")
+                AXML.Razon_Social_Emisor = .fields("RAZON_SOCIAL_EMISOR")
+                AXML.RUC_Emisor = .fields("RUC_EMISOR")
+                AXML.Codigo_B = .fields("Codigo_B")
+                CodigoCli = .fields("Codigo_B")
+                
+                Progreso_Barra.Mensaje_Box = Format(Progreso_Barra.Incremento / Progreso_Barra.Valor_Maximo, "00.00%") & " - Subiendo archivo: " & ClaveAcceso
+                Progreso_Esperar
+                
                 ID_Reg = .fields("ID")
                 If Len(ClaveAcceso) = 49 Then
                    RutaXMLAutorizado = RutaSysBases & "\SRI\Comprobantes Recibidos\" & ClaveAcceso & ".xml"
@@ -1186,8 +1200,6 @@ Dim RutaXMLRechazado As String
                    End If
                   'Procedemos a leer la informacion del Documento
                    AXML.Documento = Ninguno
-                   AXML.Razon_Social_Emisor = Ninguno
-                   AXML.RUC_Emisor = Ninguno
                    AXML.Direccion_Emisor = Ninguno
                    AXML.Fecha_Emision = Ninguno
                    AXML.Serie = Ninguno
@@ -1201,7 +1213,6 @@ Dim RutaXMLRechazado As String
                    AXML.Cta_Ret_IVA_B = Ninguno
                    AXML.Cta_Ret_IVA_S = Ninguno
                    AXML.SubModulo = Ninguno
-                   AXML.Codigo_B = Ninguno
                    AXML.Ambiente = 0
                    AXML.CodPorIva = 0
                    AXML.Comprobante = 0
@@ -1218,13 +1229,10 @@ Dim RutaXMLRechazado As String
                    AXML.Cod_Ret_IVA_S = 0
         
                   'Recolectamos la informacion del documento electronico recibido y lo insertamos en la tabla
-                   Progreso_Barra.Mensaje_Box = "Procesando: " & RutaXMLAutorizado
+                   Progreso_Barra.Mensaje_Box = Format(Progreso_Barra.Incremento / Progreso_Barra.Valor_Maximo, "00.00%") & " - Procesando: " & RutaXMLAutorizado
                    Progreso_Esperar
-                    
                    Leer_Archivo_XML RutaXMLAutorizado
                    
-                   DigVerif = Digito_Verificador(AXML.RUC_Emisor)
-                   CodigoCli = Tipo_RUC_CI.Codigo_RUC_CI
                    If AXML.RUC_Emisor <> Ninguno And AXML.Ambiente = 2 And MidStrg(AXML.RUC_Receptor, 1, 10) = MidStrg(RUC, 1, 10) Then
                       If AXML.Documento = "Retencion" Then
                         '-----------------------------------------
@@ -1323,26 +1331,25 @@ Dim RutaXMLRechazado As String
                       Insertar_Texto_Temporal_SP RutaXMLAutorizado
                    End If
                 End If
+                RatonNormal
                .MoveNext
              Loop
          End If
         End With
      Else
-         TextoFile = "Asiento_TXT_" & CodigoUsuario
          sSQL = "DELETE " _
-              & "FROM " & TextoFile & " " _
+              & "FROM " & Archivo_TXT & " " _
               & "WHERE Item = '" & NumEmpresa & "' "
-         Ejecutar_SQL_SP sSQL
+         'Ejecutar_SQL_SP sSQL
          MsgBox "La informacion de este archivo no es para la Empresa. No se procede a procesar"
      End If
     'Si es el archivo correcto procedemosa subir los comprobantes
      If Not ArchivoValido Then MsgBox "ESTE ARCHIVO NO ES VALIDO, VUELVA A SUBIR"
      
      DGDocSRI.Visible = True
-     TextoFile = "Asiento_TXT_" & CodigoUsuario
-     
-     sSQL = "SELECT " & Full_Fields(TextoFile) & " " _
-          & "FROM " & TextoFile & " " _
+     RatonReloj
+     sSQL = "SELECT " & Full_Fields(Archivo_TXT) & " " _
+          & "FROM " & Archivo_TXT & " " _
           & "WHERE Item = '" & NumEmpresa & "' " _
           & "ORDER BY Serie_Receptor, Comprobante, RAZON_SOCIAL_EMISOR, FECHA_EMISION, ID "
      Select_Adodc_Grid DGDocSRI, AdoDocSRI, sSQL
@@ -1373,327 +1380,366 @@ Errorhandler:
 End Sub
 
 Public Sub Grabar_Comprobantes_XML()
+Dim AdoDBTemp As ADODB.Recordset
+
     Progreso_Barra.Mensaje_Box = "Generando Abonos o Comprobantes"
     Progreso_Iniciar
+    FechaIni = BuscarFecha(FechaSistema)
+    FechaFin = BuscarFecha(FechaSistema)
     
-    TextoFile = "Asiento_TXT_" & CodigoUsuario
+   '--------------------------------------------------------------------------------------------
+   '| Proceso: Subir los abonos de retenciones emitidas a las facturas emitidas a los Clientes |
+   '--------------------------------------------------------------------------------------------
+    sSQL = "SELECT Item, MIN(FECHA_EMISION) As Fecha_Min, MAX(FECHA_EMISION) As Fecha_Max  " _
+         & "FROM " & Archivo_TXT & " " _
+         & "WHERE Item = '" & NumEmpresa & "' " _
+         & "AND TIPO_COMPROBANTE = 'Retencion' " _
+         & "GROUP BY Item "
+    Select_AdoDB AdoDBTemp, sSQL
+    If AdoDBTemp.RecordCount > 0 Then
+       FechaIni = BuscarFecha(AdoDBTemp.fields("Fecha_Min"))
+       FechaFin = BuscarFecha(AdoDBTemp.fields("Fecha_Max"))
+    End If
+    AdoDBTemp.Close
 
-    sSQL = "SELECT " & Full_Fields(TextoFile) & " " _
-         & "FROM " & TextoFile & " " _
+    sSQL = "UPDATE Trans_Abonos " _
+         & "SET X = '.' " _
+         & "WHERE Item = '" & NumEmpresa & "' " _
+         & "AND Periodo = '" & Periodo_Contable & "' " _
+         & "AND TP = 'FA' " _
+         & "AND Fecha BETWEEN '" & FechaIni & "' and '" & FechaFin & "' "
+    Ejecutar_SQL_SP sSQL
+
+    sSQL = "UPDATE Trans_Abonos " _
+         & "SET X = 'D' " _
+         & "FROM Trans_Abonos As TA, " & Archivo_TXT & " As AT " _
+         & "WHERE TA.Item = '" & NumEmpresa & "' " _
+         & "AND TA.Periodo = '" & Periodo_Contable & "' " _
+         & "AND TA.Fecha BETWEEN '" & FechaIni & "' and '" & FechaFin & "' " _
+         & "AND TA.TP = 'FA' " _
+         & "AND AT.TIPO_COMPROBANTE = 'Retencion' " _
+         & "AND TA.Serie = AT.Serie_Receptor " _
+         & "AND TA.Factura = AT.Comprobante " _
+         & "AND TA.Item = AT.Item " _
+         & "AND TA.CodigoC = AT.Codigo_B " _
+         & "AND Serie_R = REPLACE(SUBSTRING(SERIE_COMPROBANTE, 1, 7), '-', '') " _
+         & "AND Secuencial_R = SUBSTRING(SERIE_COMPROBANTE, 9, 9) " _
+         & "AND Autorizacion_R = AT.CLAVE_ACCESO "
+    Ejecutar_SQL_SP sSQL
+    
+    sSQL = "DELETE * " _
+         & "FROM Trans_Abonos " _
+         & "WHERE Item = '" & NumEmpresa & "' " _
+         & "AND Periodo = '" & Periodo_Contable & "' " _
+         & "AND Fecha BETWEEN '" & FechaIni & "' and '" & FechaFin & "' " _
+         & "AND TP = 'FA' " _
+         & "AND X = 'D' "
+    Ejecutar_SQL_SP sSQL
+    
+   'Autorizacion, Tipo_Cta, Clave_Acceso, Estado_SRI, Hora_Aut, Fecha_Aut,
+   'Insertamos las Retenciones en la Fuente de los Clientes
+    sSQL = "INSERT INTO Trans_Abonos (Cta_CxP, Fecha, Recibo_No, Comprobante, Serie, Factura, CodigoC, Base_Imponible, Serie_R, Autorizacion_R, Secuencial_R, " _
+         & "CodigoU, Item, Periodo, T, TP, Cheque, Cta, Banco, Porc, Abono) " _
+         & "SELECT Cta_Credito, FECHA_EMISION, TRIM(SUBSTRING(NUMERO_DOCUMENTO_MODIFICADO,2,10)), SERIE_COMPROBANTE +' No. '+NUMERO_DOCUMENTO_MODIFICADO, " _
+         & "Serie_Receptor, Comprobante, Codigo_B, Subtotal, REPLACE(SUBSTRING(SERIE_COMPROBANTE, 1, 7), '-', ''), CLAVE_ACCESO, SUBSTRING(SERIE_COMPROBANTE, 9, 9), " _
+         & "'" & CodigoUsuario & "', Item,'" & Periodo_Contable & "', 'P', 'FA', REPLACE(SUBSTRING(SERIE_COMPROBANTE, 1, 7), '-', '')+'-'+SUBSTRING(SERIE_COMPROBANTE, 9, 9), " _
+         & "Cta_Ret_Fuente, 'RETENCION FUENTE - '+Cod_Ret, Porc_Ret, Ret_Fuente " _
+         & "FROM " & Archivo_TXT & " As AT " _
+         & "WHERE Item = '" & NumEmpresa & "' " _
+         & "AND TIPO_COMPROBANTE = 'Retencion' " _
+         & "AND Porc_Ret > 0 " _
+         & "AND Ret_Fuente > 0 "
+    Ejecutar_SQL_SP sSQL
+
+   'Insertamos las Retenciones del IVA en Servicios de los Clientes
+    sSQL = "INSERT INTO Trans_Abonos (Cta_CxP, Fecha, Recibo_No, Comprobante, Serie, Factura, CodigoC, Base_Imponible, Serie_R, Autorizacion_R, Secuencial_R, " _
+         & "CodigoU, Item, Periodo, T, TP, Cheque, Cta, Banco, Porc, Abono) " _
+         & "SELECT Cta_Credito, FECHA_EMISION, TRIM(SUBSTRING(NUMERO_DOCUMENTO_MODIFICADO,2,10)), SERIE_COMPROBANTE +' No. '+NUMERO_DOCUMENTO_MODIFICADO, " _
+         & "Serie_Receptor, Comprobante, Codigo_B, Total_IVA, REPLACE(SUBSTRING(SERIE_COMPROBANTE, 1, 7), '-', ''), CLAVE_ACCESO, SUBSTRING(SERIE_COMPROBANTE, 9, 9), " _
+         & "'" & CodigoUsuario & "', Item,'" & Periodo_Contable & "', 'P', 'FA', REPLACE(SUBSTRING(SERIE_COMPROBANTE, 1, 7), '-', '')+'-'+SUBSTRING(SERIE_COMPROBANTE, 9, 9), " _
+         & "Cta_Ret_IVA_S, 'RETENCION IVA SERVICIO', Porc_Ret_IVA_S, Ret_IVA_S " _
+         & "FROM " & Archivo_TXT & " As AT " _
+         & "WHERE Item = '" & NumEmpresa & "' " _
+         & "AND TIPO_COMPROBANTE = 'Retencion' " _
+         & "AND Porc_Ret_IVA_S > 0 " _
+         & "AND Ret_IVA_S > 0 "
+    Ejecutar_SQL_SP sSQL
+
+   'Insertamos las Retenciones del IVA en Bienes de los Clientes
+    sSQL = "INSERT INTO Trans_Abonos (Cta_CxP, Fecha, Recibo_No, Comprobante, Serie, Factura, CodigoC, Base_Imponible, Serie_R, Autorizacion_R, Secuencial_R, " _
+         & "CodigoU, Item, Periodo, T, TP, Cheque, Cta, Banco, Porc, Abono) " _
+         & "SELECT Cta_Credito, FECHA_EMISION, TRIM(SUBSTRING(NUMERO_DOCUMENTO_MODIFICADO,2,10)), SERIE_COMPROBANTE +' No. '+NUMERO_DOCUMENTO_MODIFICADO, " _
+         & "Serie_Receptor, Comprobante, Codigo_B, Total_IVA, REPLACE(SUBSTRING(SERIE_COMPROBANTE, 1, 7), '-', ''), CLAVE_ACCESO, SUBSTRING(SERIE_COMPROBANTE, 9, 9), " _
+         & "'" & CodigoUsuario & "', Item,'" & Periodo_Contable & "', 'P', 'FA', REPLACE(SUBSTRING(SERIE_COMPROBANTE, 1, 7), '-', '')+'-'+SUBSTRING(SERIE_COMPROBANTE, 9, 9), " _
+         & "Cta_Ret_IVA_B, 'RETENCION IVA BIENES', Porc_Ret_IVA_B, Ret_IVA_B " _
+         & "FROM " & Archivo_TXT & " As AT " _
+         & "WHERE Item = '" & NumEmpresa & "' " _
+         & "AND TIPO_COMPROBANTE = 'Retencion' " _
+         & "AND Porc_Ret_IVA_B > 0 " _
+         & "AND Ret_IVA_B > 0 "
+    Ejecutar_SQL_SP sSQL
+    
+    Eliminar_Nulos_SP "Trans_Abonos"
+        
+    sSQL = "UPDATE Trans_Abonos " _
+         & "SET Autorizacion = F.Autorizacion " _
+         & "FROM Trans_Abonos As TA, Facturas As F " _
+         & "WHERE TA.Item = '" & NumEmpresa & "' " _
+         & "AND TA.Periodo = '" & Periodo_Contable & "' " _
+         & "AND TA.Fecha BETWEEN '" & FechaIni & "' and '" & FechaFin & "' " _
+         & "AND TA.TP = F.TC " _
+         & "AND TA.Serie = F.Serie " _
+         & "AND TA.Factura = F.Factura " _
+         & "AND TA.Item = F.Item " _
+         & "AND TA.Periodo = F.Periodo " _
+         & "AND TA.CodigoC = F.CodigoC "
+    Ejecutar_SQL_SP sSQL
+    
+    sSQL = "UPDATE " & Archivo_TXT & " " _
+         & "SET Existe = 1 " _
+         & "FROM " & Archivo_TXT & " As AT, Facturas As F " _
+         & "WHERE F.Item = '" & NumEmpresa & "' " _
+         & "AND F.Periodo = '" & Periodo_Contable & "' " _
+         & "AND F.TC = 'FA' " _
+         & "AND F.T <> 'A' " _
+         & "AND AT.TIPO_COMPROBANTE = 'Retencion' " _
+         & "AND F.Serie = AT.Serie_Receptor " _
+         & "AND F.Factura = AT.Comprobante " _
+         & "AND F.Item = AT.Item " _
+         & "AND F.CodigoC = AT.Codigo_B "
+    Ejecutar_SQL_SP sSQL
+    
+   '------------------------------------------------------------------------------------------
+   '| Proceso: Subir las facturas emitidas de los proveedores a la institucion               |
+   '------------------------------------------------------------------------------------------
+    sSQL = "SELECT " & Full_Fields(Archivo_TXT) & " " _
+         & "FROM " & Archivo_TXT & " " _
          & "WHERE Item = '" & NumEmpresa & "' " _
          & "AND Procesar <> 0 " _
+         & "AND TIPO_COMPROBANTE IN ('Factura', 'Factura Al Gasto') " _
          & "ORDER BY Serie_Receptor, Comprobante, RAZON_SOCIAL_EMISOR, FECHA_EMISION, ID "
     Select_Adodc AdoAux, sSQL
-    
     With AdoAux.Recordset
      If .RecordCount > 0 Then
          Progreso_Barra.Valor_Maximo = .RecordCount
          Do While Not .EOF
-            Progreso_Barra.Mensaje_Box = .fields("COMPROBANTE") & ": " & .fields("SERIE_COMPROBANTE") & ", " & .fields("RAZON_SOCIAL_EMISOR")
+            Progreso_Barra.Mensaje_Box = .fields("SERIE_COMPROBANTE") & "-" & .fields("Comprobante") & ", " & .fields("RAZON_SOCIAL_EMISOR")
             Progreso_Esperar
             
             SecRetencion = Val(Label3.Caption)
-'''            CodRetBien = 0
-'''            CodRetServ = 0
-'''            If .fields("Porc_Ret_IVA_B") > 0 Then
-'''                sSQL = "SELECT Codigo " _
-'''                     & "FROM Tabla_Por_IVA " _
-'''                     & "WHERE Porc = '" & CStr(.fields("Porc_Ret_IVA_B")) & "' " _
-'''                     & "AND Bienes <> 0 "
-'''                Select_Adodc AdoAux, sSQL
-'''                If AdoAux.Recordset.RecordCount > 0 Then CodRetBien = AdoAux.Recordset.fields("Codigo")
-'''            End If
-'''            If .fields("Porc_Ret_IVA_S") > 0 Then
-'''                sSQL = "SELECT Codigo " _
-'''                     & "FROM Tabla_Por_IVA " _
-'''                     & "WHERE Porc = '" & CStr(.fields("Porc_Ret_IVA_S")) & "' " _
-'''                     & "AND Servicios <> 0 "
-'''                Select_Adodc AdoAux, sSQL
-'''                If AdoAux.Recordset.RecordCount > 0 Then CodRetServ = AdoAux.Recordset.fields("Codigo")
-'''            End If
 
             CodRetBien = AdoAux.Recordset.fields("Cod_Ret_Bien")
             CodRetServ = AdoAux.Recordset.fields("Cod_Ret_Servicio")
 
-            Select Case .fields("COMPROBANTE")
-              Case "Retencion"
-                   TA.T = Normal
-                   TA.CodigoC = Ninguno
-                   TA.TP = "FA"
-                   TA.Serie = .fields("Serie_Receptor")
-                   TA.Factura = .fields("Documento")
-                   TA.Fecha = .fields("FECHA_EMISION")
-                   TA.Cta_CxP = .fields("Cta_Credito")
+          'Generamos el Asiento
+           Trans_No = 79
+           FechaComp = Co.Fecha
+           
+           Co.Fecha = .fields("Fecha_Emision")
+           Co.CodigoB = AdoAbono.Recordset.fields("Codigo_B")
+           NombreCliente = AdoAbono.Recordset.fields("Razon_Social_Emisor")
+
+          'Insertamos las transacciones
+           Eliminar_Asientos_SP True
             
-                   sSQL = "SELECT CodigoC, Autorizacion " _
-                        & "FROM Facturas " _
-                        & "WHERE Item = '" & NumEmpresa & "' " _
-                        & "AND Periodo = '" & Periodo_Contable & "' " _
-                        & "AND T = '" & Pendiente & "' " _
-                        & "AND TC = '" & TA.TP & "' " _
-                        & "AND Serie = '" & TA.Serie & "' " _
-                        & "AND Factura = " & TA.Factura & " "
-                   Select_Adodc AdoAbono, sSQL
-                   If AdoAbono.Recordset.RecordCount > 0 Then
-                      TA.Autorizacion = AdoAbono.Recordset.fields("Autorizacion")
-                      TA.CodigoC = AdoAbono.Recordset.fields("CodigoC")
-                   End If
-                   If TA.CodigoC <> Ninguno Then
-                       TA.Serie_R = Replace(MidStrg(.fields("SERIE_COMPROBANTE"), 1, 7), "-", "")
-                       TA.Secuencial_R = Val(MidStrg(.fields("SERIE_COMPROBANTE"), 9, 9))
-                       TA.AutorizacionR = .fields("NUMERO_AUTORIZACION")
-                       TA.Cheque = TA.Serie_R & "-" & MidStrg(.fields("SERIE_COMPROBANTE"), 9, 9)
-                       
-                       sSQL = "DELETE " _
-                            & "FROM Trans_Abonos " _
-                            & "WHERE Item = '" & NumEmpresa & "' " _
-                            & "AND Periodo = '" & Periodo_Contable & "' " _
-                            & "AND TP = '" & TA.TP & "' " _
-                            & "AND Serie = '" & TA.Serie & "' " _
-                            & "AND Factura = " & TA.Factura & " " _
-                            & "AND Serie_R = '" & TA.Serie_R & "' " _
-                            & "AND Autorizacion_R = '" & TA.AutorizacionR & "' " _
-                            & "AND Secuencial_R = " & TA.Secuencial_R & " "
-                       Ejecutar_SQL_SP sSQL
-                       
-                      'Abono de Factura Retencion fuente
-                       If .fields("Ret_Fuente") >= 0 And Len(.fields("Cod_Ret")) > 1 Then
-                           TA.Abono = .fields("Ret_Fuente")
-                           TA.Banco = "RETENCION FUENTE - " & .fields("Cod_Ret")
-                           TA.Cta = TA.Cta_CxP
-                           TA.Porcentaje = .fields("Porc_Ret")
-                           Grabar_Abonos TA
-                       End If
-                    
-                      'Abono de Factura Retencion IVA Bientes
-                       If .fields("Ret_IVA_B") > 0 Then
-                           TA.Abono = .fields("Ret_IVA_B")
-                           TA.Banco = "RETENCION IVA BIENES"
-                           TA.Cta = .fields("Cta_Ret_IVA_B")
-                           TA.Porcentaje = .fields("Porc_Ret_IVA_B")
-                           Grabar_Abonos TA
-                       End If
-                    
-                      'Abono de Factura Retencion IVA Bientes
-                       If .fields("Ret_IVA_S") > 0 Then
-                           TA.Abono = .fields("Ret_IVA_S")
-                           TA.Banco = "RETENCION IVA SERVICIO"
-                           TA.Cta = .fields("Cta_Ret_IVA_S")
-                           TA.Porcentaje = .fields("Porc_Ret_IVA_S")
-                           Grabar_Abonos TA
-                       End If
-                   End If
-              Case "Factura", "Factura Al Gasto"
-                  'Generamos el Asiento
-                   Trans_No = 79
-                   FechaComp = Co.Fecha
-                   
-                   Co.Fecha = .fields("Fecha_Emision")
-                   Co.CodigoB = AdoAbono.Recordset.fields("Codigo_B")
-                   NombreCliente = AdoAbono.Recordset.fields("Razon_Social_Emisor")
+           sSQL = "SELECT " & Full_Fields("Asiento") & " " _
+                & "FROM Asiento " _
+                & "WHERE Item = '" & NumEmpresa & "' " _
+                & "AND CodigoU = '" & CodigoUsuario & "' " _
+                & "AND T_No = " & Trans_No & " "
+           Select_Adodc AdoAsiento, sSQL
+           InsertarAsientos AdoAsiento, .fields("Cta_Debito"), 0, .fields("Subtotal"), 0
+           If .fields("Total_IVA") > 0 Then
+               If Len(.fields("Cta_IVA_Gasto")) > 1 Then
+                  InsertarAsientos AdoAsiento, .fields("Cta_IVA_Gasto"), 0, .fields("Total_IVA"), 0
+               Else
+                  InsertarAsientos AdoAsiento, Cta_IVA_Inventario, 0, .fields("Total_IVA"), 0
+               End If
+           End If
+           InsertarAsientos AdoAsiento, .fields("Cta_Credito"), 0, 0, .fields("Total")
+            
+          'Insertamos el submodulo
+           SetAdoAddNew "Asiento_SC"
+           SetAdoFields "FECHA_V", Co.Fecha
+           SetAdoFields "Codigo", Co.CodigoB
+           SetAdoFields "TC", "P"
+           SetAdoFields "Cta", .fields("Cta_Credito")
+           SetAdoFields "Beneficiario", NombreCliente
+           SetAdoFields "TM", "1"
+           SetAdoFields "DH", "2"
+           SetAdoFields "Valor", .fields("Total")
+           SetAdoFields "Serie", .fields("Serie")
+           SetAdoFields "Factura", .fields("Comprobante")
+           SetAdoFields "Detalle_SubCta", "Aut. No. " & .fields("Autorizacion")
+           SetAdoFields "T_No", Trans_No
+           SetAdoFields "SC_No", 1
+           SetAdoFields "Item", NumEmpresa
+           SetAdoFields "CodigoU", CodigoUsuario
+           SetAdoUpdate
+           
+          'Grabo en el Asiento_Compras e implicito Asiento_Air
+           Total = 0
+           If .fields("Documento") = "Factura" And Len(.fields("Cod_Ret")) > 1 Then
+              'If ChRetB = 1 Then SetAdoFields "Cta_Bienes", SinEspaciosIzq(DCRetIBienes)
+              'If ChRetS = 1 Then SetAdoFields "Cta_Servicio", SinEspaciosIzq(DCRetISer)
+              SetAdoAddNew "Asiento_Compras"
+              SetAdoFields "IdProv", Co.CodigoB
+              SetAdoFields "DevIva", "N"
+              SetAdoFields "CodSustento", .fields("CodSustento")
+              SetAdoFields "TipoComprobante", 1
+              SetAdoFields "Establecimiento", MidStrg(.fields("Serie"), 1, 3)
+              SetAdoFields "PuntoEmision", MidStrg(.fields("Serie"), 4, 3)
+              SetAdoFields "Secuencial", .fields("Comprobante")
+              SetAdoFields "Autorizacion", .fields("Autorizacion")
+              SetAdoFields "FechaEmision", .fields("Fecha_Emision")
+              SetAdoFields "FechaRegistro", .fields("Fecha_Emision")
+              SetAdoFields "FechaCaducidad", .fields("Fecha_Emision")
+              SetAdoFields "BaseNoObjIVA", "0"
+              SetAdoFields "MontoIva", .fields("Total_IVA")
+              'Subtotal, Total_IVA, Total
+              If .fields("Total_IVA") = 0 Then
+                  SetAdoFields "BaseImponible", .fields("Subtotal")
+              Else
+                  SetAdoFields "BaseImpGrav", .fields("Subtotal")
+              End If
+              SetAdoFields "PorcentajeIva", AXML.CodPorIva
+              If .fields("Total_IVA") > 0 Then
+                  SetAdoFields "Porc_Bienes", .fields("Porc_Ret_IVA_B")
+                  SetAdoFields "MontoIvaBienes", .fields("Total_IVA")
+                  SetAdoFields "PorRetBienes", CodRetBien
+                  SetAdoFields "ValorRetBienes", .fields("Ret_IVA_B")
+                  SetAdoFields "Porc_Servicios", .fields("Porc_Ret_IVA_S")
+                  SetAdoFields "MontoIvaServicios", .fields("Total_IVA")
+                  SetAdoFields "PorRetServicios", CodRetServ
+                  SetAdoFields "ValorRetServicios", .fields("Ret_IVA_S")
+              End If
+              SetAdoFields "PagoLocExt", "01"
+              SetAdoFields "PaisEfecPago", "NA"
+              SetAdoFields "AplicConvDobTrib", "NA"
+              SetAdoFields "PagExtSujRetNorLeg", "NA"
+              SetAdoFields "BaseImpIce", 0
+              SetAdoFields "PorcentajeIce", 0
+              SetAdoFields "MontoIce", 0
+              SetAdoFields "DocModificado", "0"
+              SetAdoFields "FechaEmiModificado", FechaSistema
+              SetAdoFields "EstabModificado", "000"
+              SetAdoFields "PtoEmiModificado", "000"
+              SetAdoFields "SecModificado", "0000000"
+              SetAdoFields "AutModificado", "0000000000"
+              SetAdoFields "ContratoPartidoPolitico", "0000000000"
+              SetAdoFields "MontoTituloOneroso", 0
+              SetAdoFields "MontoTituloGratuito", 0
+             'Verifico si activaron los checks de retenciones: Forma de Pago
+              SetAdoFields "FormaPago", "20"
+              SetAdoFields "A_No", 1
+              SetAdoFields "T_No", Trans_No
+              SetAdoFields "CodigoU", CodigoUsuario
+              SetAdoUpdate
 
-                  'Insertamos las transacciones
-                   Eliminar_Asientos_SP True
-                    
-                   sSQL = "SELECT " & Full_Fields("Asiento") & " " _
-                        & "FROM Asiento " _
-                        & "WHERE Item = '" & NumEmpresa & "' " _
-                        & "AND CodigoU = '" & CodigoUsuario & "' " _
-                        & "AND T_No = " & Trans_No & " "
-                   Select_Adodc AdoAsiento, sSQL
-                   InsertarAsientos AdoAsiento, .fields("Cta_Debito"), 0, .fields("Subtotal"), 0
-                   If .fields("Total_IVA") > 0 Then
-                       If Len(.fields("Cta_IVA_Gasto")) > 1 Then
-                          InsertarAsientos AdoAsiento, .fields("Cta_IVA_Gasto"), 0, .fields("Total_IVA"), 0
-                       Else
-                          InsertarAsientos AdoAsiento, Cta_IVA_Inventario, 0, .fields("Total_IVA"), 0
-                       End If
-                   End If
-                   InsertarAsientos AdoAsiento, .fields("Cta_Credito"), 0, 0, .fields("Total")
-                    
-                  'Insertamos el submodulo
-                   SetAdoAddNew "Asiento_SC"
-                   SetAdoFields "FECHA_V", Co.Fecha
-                   SetAdoFields "Codigo", Co.CodigoB
-                   SetAdoFields "TC", "P"
-                   SetAdoFields "Cta", .fields("Cta_Credito")
-                   SetAdoFields "Beneficiario", NombreCliente
-                   SetAdoFields "TM", "1"
-                   SetAdoFields "DH", "2"
-                   SetAdoFields "Valor", .fields("Total")
-                   SetAdoFields "Serie", .fields("Serie")
-                   SetAdoFields "Factura", .fields("Comprobante")
-                   SetAdoFields "Detalle_SubCta", "Aut. No. " & .fields("Autorizacion")
-                   SetAdoFields "T_No", Trans_No
-                   SetAdoFields "SC_No", 1
-                   SetAdoFields "Item", NumEmpresa
-                   SetAdoFields "CodigoU", CodigoUsuario
-                   SetAdoUpdate
-                   
-                  'Grabo en el Asiento_Compras e implicito Asiento_Air
-                   Total = 0
-                   If .fields("Documento") = "Factura" And Len(.fields("Cod_Ret")) > 1 Then
-                      'If ChRetB = 1 Then SetAdoFields "Cta_Bienes", SinEspaciosIzq(DCRetIBienes)
-                      'If ChRetS = 1 Then SetAdoFields "Cta_Servicio", SinEspaciosIzq(DCRetISer)
-                      SetAdoAddNew "Asiento_Compras"
-                      SetAdoFields "IdProv", Co.CodigoB
-                      SetAdoFields "DevIva", "N"
-                      SetAdoFields "CodSustento", .fields("CodSustento")
-                      SetAdoFields "TipoComprobante", 1
-                      SetAdoFields "Establecimiento", MidStrg(.fields("Serie"), 1, 3)
-                      SetAdoFields "PuntoEmision", MidStrg(.fields("Serie"), 4, 3)
-                      SetAdoFields "Secuencial", .fields("Comprobante")
-                      SetAdoFields "Autorizacion", .fields("Autorizacion")
-                      SetAdoFields "FechaEmision", .fields("Fecha_Emision")
-                      SetAdoFields "FechaRegistro", .fields("Fecha_Emision")
-                      SetAdoFields "FechaCaducidad", .fields("Fecha_Emision")
-                      SetAdoFields "BaseNoObjIVA", "0"
-                      SetAdoFields "MontoIva", .fields("Total_IVA")
-                      'Subtotal, Total_IVA, Total
-                      If .fields("Total_IVA") = 0 Then
-                          SetAdoFields "BaseImponible", .fields("Subtotal")
-                      Else
-                          SetAdoFields "BaseImpGrav", .fields("Subtotal")
-                      End If
-                      SetAdoFields "PorcentajeIva", AXML.CodPorIva
-                      If .fields("Total_IVA") > 0 Then
-                          SetAdoFields "Porc_Bienes", .fields("Porc_Ret_IVA_B")
-                          SetAdoFields "MontoIvaBienes", .fields("Total_IVA")
-                          SetAdoFields "PorRetBienes", CodRetBien
-                          SetAdoFields "ValorRetBienes", .fields("Ret_IVA_B")
-                          SetAdoFields "Porc_Servicios", .fields("Porc_Ret_IVA_S")
-                          SetAdoFields "MontoIvaServicios", .fields("Total_IVA")
-                          SetAdoFields "PorRetServicios", CodRetServ
-                          SetAdoFields "ValorRetServicios", .fields("Ret_IVA_S")
-                      End If
-                      SetAdoFields "PagoLocExt", "01"
-                      SetAdoFields "PaisEfecPago", "NA"
-                      SetAdoFields "AplicConvDobTrib", "NA"
-                      SetAdoFields "PagExtSujRetNorLeg", "NA"
-                      SetAdoFields "BaseImpIce", 0
-                      SetAdoFields "PorcentajeIce", 0
-                      SetAdoFields "MontoIce", 0
-                      SetAdoFields "DocModificado", "0"
-                      SetAdoFields "FechaEmiModificado", FechaSistema
-                      SetAdoFields "EstabModificado", "000"
-                      SetAdoFields "PtoEmiModificado", "000"
-                      SetAdoFields "SecModificado", "0000000"
-                      SetAdoFields "AutModificado", "0000000000"
-                      SetAdoFields "ContratoPartidoPolitico", "0000000000"
-                      SetAdoFields "MontoTituloOneroso", 0
-                      SetAdoFields "MontoTituloGratuito", 0
-                     'Verifico si activaron los checks de retenciones: Forma de Pago
-                      SetAdoFields "FormaPago", "20"
-                      SetAdoFields "A_No", 1
-                      SetAdoFields "T_No", Trans_No
-                      SetAdoFields "CodigoU", CodigoUsuario
-                      SetAdoUpdate
-
-                      If Len(.fields("Cod_Ret")) > 1 Then
-                         RatonReloj
+              If Len(.fields("Cod_Ret")) > 1 Then
+                 RatonReloj
 '''                         Espizq = SinEspaciosIzq(DCConceptoRet)
 '''                         Espder = TrimStrg(MidStrg(DCConceptoRet, Len(Espizq) + 3, Len(DCConceptoRet)))
-                         SetAdoAddNew "Asiento_Air"
-                         SetAdoFields "CodRet", .fields("Cod_Ret")
-                         SetAdoFields "Detalle", "Retencion Fuente"
-                         SetAdoFields "BaseImp", .fields("Subtotal")
-                         SetAdoFields "Porcentaje", .fields("Porc_Ret") / 100
-                         SetAdoFields "ValRet", .fields("Ret_Fuente")
-                         SetAdoFields "EstabRetencion", MidStrg(DCSerieRetencion, 1, 3)
-                         SetAdoFields "PtoEmiRetencion", MidStrg(DCSerieRetencion, 4, 3)
-                         SetAdoFields "SecRetencion", SecRetencion
-                         SetAdoFields "AutRetencion", RUC
-                         SetAdoFields "FechaEmiRet", .fields("Fecha_Emision")
-                         SetAdoFields "EstabFactura", "001"
-                         SetAdoFields "PuntoEmiFactura", "001"
-                         SetAdoFields "Factura_No", .fields("Comprobante")
-                         SetAdoFields "Cta_Retencion", .fields("Cta_Ret_Fuente")
-                         SetAdoFields "IdProv", Co.CodigoB
-                         SetAdoFields "A_No", 1
-                         SetAdoFields "T_No", Trans_No
-                         SetAdoFields "Tipo_Trans", "C"
-                         SetAdoUpdate
-                      End If
+                 SetAdoAddNew "Asiento_Air"
+                 SetAdoFields "CodRet", .fields("Cod_Ret")
+                 SetAdoFields "Detalle", "Retencion Fuente"
+                 SetAdoFields "BaseImp", .fields("Subtotal")
+                 SetAdoFields "Porcentaje", .fields("Porc_Ret") / 100
+                 SetAdoFields "ValRet", .fields("Ret_Fuente")
+                 SetAdoFields "EstabRetencion", MidStrg(DCSerieRetencion, 1, 3)
+                 SetAdoFields "PtoEmiRetencion", MidStrg(DCSerieRetencion, 4, 3)
+                 SetAdoFields "SecRetencion", SecRetencion
+                 SetAdoFields "AutRetencion", RUC
+                 SetAdoFields "FechaEmiRet", .fields("Fecha_Emision")
+                 SetAdoFields "EstabFactura", "001"
+                 SetAdoFields "PuntoEmiFactura", "001"
+                 SetAdoFields "Factura_No", .fields("Comprobante")
+                 SetAdoFields "Cta_Retencion", .fields("Cta_Ret_Fuente")
+                 SetAdoFields "IdProv", Co.CodigoB
+                 SetAdoFields "A_No", 1
+                 SetAdoFields "T_No", Trans_No
+                 SetAdoFields "Tipo_Trans", "C"
+                 SetAdoUpdate
+              End If
 
-                      OpcDH = 2
-                      sSQL = "SELECT " & Full_Fields("Asiento_Compras") & " " _
-                           & "FROM Asiento_Compras " _
-                           & "WHERE Item = '" & NumEmpresa & "' " _
-                           & "AND CodigoU = '" & CodigoUsuario & "' " _
-                           & "AND T_No = " & Trans_No & " "
-                      Select_Adodc AdoAux, sSQL
-                      With AdoAux.Recordset
-                       If .RecordCount > 0 Then
-                        'Porcentaje por Servicio: 0,30,100
-                         Cta = .fields("Cta_Servicio")
-                         DetalleComp = "Retencion del " & .fields("Porc_Servicios") & "%, Factura No. " & .fields("Secuencial") & ", de " & NombreCliente
-                         Codigo = Leer_Cta_Catalogo(Cta)
-                         ValorDH = .fields("ValorRetServicios")
-                         Total_RetIVA = Total_RetIVA + .fields("ValorRetServicios")
-                '''         If ValorDH > 0 Then InsertarAsiento AdoAsientos
-                        'Porcentaje por Bienes: 0,70,100
-                         Cta = .fields("Cta_Bienes")
-                         DetalleComp = "Retencion del " & .fields("Porc_Bienes") & "%, Factura No. " & .fields("Secuencial") & ", de " & NombreCliente
-                         Codigo = Leer_Cta_Catalogo(Cta)
-                         ValorDH = .fields("ValorRetBienes")
-                         Total_RetIVA = Total_RetIVA + .fields("ValorRetBienes")
-                '''         If ValorDH > 0 Then InsertarAsiento AdoAsientos
-                       End If
-                      End With
-                     'Grabamos el Asiento de las Retenciones
-                      sSQL = "SELECT " & Full_Fields("Asiento_Air") & " " _
-                           & "FROM Asiento_Air " _
-                           & "WHERE Item = '" & NumEmpresa & "' " _
-                           & "AND CodigoU = '" & CodigoUsuario & "' " _
-                           & "AND T_No = " & Trans_No & " " _
-                           & "AND Tipo_Trans = 'C' " _
-                           & "ORDER BY Cta_Retencion,A_No,ValRet "
-                      Select_Adodc AdoAux, sSQL
-                      With AdoAux.Recordset
-                       If .RecordCount > 0 Then
-                           Do While Not .EOF
-                              Cta = .fields("Cta_Retencion")
-                              DetalleComp = "Retencion (" & .fields("CodRet") & ") No. " & .fields("SecRetencion") & " del " & (.fields("Porcentaje") * 100) & "%, de " & NombreCliente
-                              Codigo = Leer_Cta_Catalogo(Cta)
-                              ValorDH = .fields("ValRet")
-                              Total_Ret = Total_Ret + .fields("ValRet")
-                '''            If ValorDH > 0 Then InsertarAsiento AdoAsientos
-                             .MoveNext
-                           Loop
-                       End If
-                      End With
-                   End If
-                  'Procedemos a Grabar el Comprobante
-                   NumComp = ReadSetDataNum("Diario", True, True)
-                    
-                   DiarioCaja = NumComp
-                  'Grabacion del Comprobante
-                   Co.Concepto = "Doc. No. " & .fields("Serie") & "-" & Format(.fields("Comprobante"), "000000000") & ", Aut. " & .fields("Autorizacion") _
-                               & "; R.U.C. " & .fields("RUC_Emisor") & ", " & NombreCliente
-                   If .fields("Documento") = "Factura" Then Co.Concepto = "Compra, " & Co.Concepto Else Co.Concepto = "Gastos Personales, " & Co.Concepto
-                   Co.T = Normal
-                   Co.TP = CompDiario
-                   Co.Numero = NumComp
-                   Co.CodigoB = CodigoCli
-                   Co.Efectivo = Total
-                   Co.Monto_Total = Total
-                   Co.T_No = Trans_No
-                   Co.Usuario = CodigoUsuario
-                   Co.Item = NumEmpresa
-                   
-                   Co.RetNueva = True
-                   Co.RetSecuencial = True
-                   Co.Serie_R = DCSerieRetencion.Text
-                   GrabarComprobante Co
-                   Control_Procesos Normal, Co.Concepto
-            End Select
+              OpcDH = 2
+              sSQL = "SELECT " & Full_Fields("Asiento_Compras") & " " _
+                   & "FROM Asiento_Compras " _
+                   & "WHERE Item = '" & NumEmpresa & "' " _
+                   & "AND CodigoU = '" & CodigoUsuario & "' " _
+                   & "AND T_No = " & Trans_No & " "
+              Select_Adodc AdoAux, sSQL
+              With AdoAux.Recordset
+               If .RecordCount > 0 Then
+                'Porcentaje por Servicio: 0,30,100
+                 Cta = .fields("Cta_Servicio")
+                 DetalleComp = "Retencion del " & .fields("Porc_Servicios") & "%, Factura No. " & .fields("Secuencial") & ", de " & NombreCliente
+                 Codigo = Leer_Cta_Catalogo(Cta)
+                 ValorDH = .fields("ValorRetServicios")
+                 Total_RetIVA = Total_RetIVA + .fields("ValorRetServicios")
+        '''         If ValorDH > 0 Then InsertarAsiento AdoAsientos
+                'Porcentaje por Bienes: 0,70,100
+                 Cta = .fields("Cta_Bienes")
+                 DetalleComp = "Retencion del " & .fields("Porc_Bienes") & "%, Factura No. " & .fields("Secuencial") & ", de " & NombreCliente
+                 Codigo = Leer_Cta_Catalogo(Cta)
+                 ValorDH = .fields("ValorRetBienes")
+                 Total_RetIVA = Total_RetIVA + .fields("ValorRetBienes")
+        '''         If ValorDH > 0 Then InsertarAsiento AdoAsientos
+               End If
+              End With
+             'Grabamos el Asiento de las Retenciones
+              sSQL = "SELECT " & Full_Fields("Asiento_Air") & " " _
+                   & "FROM Asiento_Air " _
+                   & "WHERE Item = '" & NumEmpresa & "' " _
+                   & "AND CodigoU = '" & CodigoUsuario & "' " _
+                   & "AND T_No = " & Trans_No & " " _
+                   & "AND Tipo_Trans = 'C' " _
+                   & "ORDER BY Cta_Retencion,A_No,ValRet "
+              Select_Adodc AdoAux, sSQL
+              With AdoAux.Recordset
+               If .RecordCount > 0 Then
+                   Do While Not .EOF
+                      Cta = .fields("Cta_Retencion")
+                      DetalleComp = "Retencion (" & .fields("CodRet") & ") No. " & .fields("SecRetencion") & " del " & (.fields("Porcentaje") * 100) & "%, de " & NombreCliente
+                      Codigo = Leer_Cta_Catalogo(Cta)
+                      ValorDH = .fields("ValRet")
+                      Total_Ret = Total_Ret + .fields("ValRet")
+        '''            If ValorDH > 0 Then InsertarAsiento AdoAsientos
+                     .MoveNext
+                   Loop
+               End If
+              End With
+           End If
+          'Procedemos a Grabar el Comprobante
+           NumComp = ReadSetDataNum("Diario", True, True)
+            
+           DiarioCaja = NumComp
+          'Grabacion del Comprobante
+           Co.Concepto = "Doc. No. " & .fields("Serie") & "-" & Format(.fields("Comprobante"), "000000000") & ", Aut. " & .fields("Autorizacion") _
+                       & "; R.U.C. " & .fields("RUC_Emisor") & ", " & NombreCliente
+           If .fields("Documento") = "Factura" Then Co.Concepto = "Compra, " & Co.Concepto Else Co.Concepto = "Gastos Personales, " & Co.Concepto
+           Co.T = Normal
+           Co.TP = CompDiario
+           Co.Numero = NumComp
+           Co.CodigoB = CodigoCli
+           Co.Efectivo = Total
+           Co.Monto_Total = Total
+           Co.T_No = Trans_No
+           Co.Usuario = CodigoUsuario
+           Co.Item = NumEmpresa
+           
+           Co.RetNueva = True
+           Co.RetSecuencial = True
+           Co.Serie_R = DCSerieRetencion.Text
+           GrabarComprobante Co
+           Control_Procesos Normal, Co.Concepto
            .MoveNext
          Loop
-         Progreso_Final
-         MsgBox "Proceso Terminado, proceda a revisar la informacion subida"
-         Unload Me
      End If
     End With
+    Progreso_Final
+    MsgBox "Proceso Terminado, proceda a revisar la informacion subida"
+    Unload Me
 End Sub
 
 Public Sub Leer_Archivo_XML(RutaArchivoXML As String)
@@ -1865,29 +1911,29 @@ Dim VerXMLTemp As String
              Insertar_Texto_Temporal_SP RutaArchivoXML
              'MsgBox "No exite este documentos en la base"
       End Select
-      RatonReloj
-      DigVerif = Digito_Verificador(AXML.RUC_Emisor)
-      AXML.Codigo_B = Tipo_RUC_CI.Codigo_RUC_CI
-      sSQL = "SELECT Codigo, Cliente, TD, CI_RUC " _
-           & "FROM Clientes " _
-           & "WHERE Codigo = '" & AXML.Codigo_B & "' "
-      Select_Adodc AdoAux, sSQL
-      If AdoAux.Recordset.RecordCount <= 0 Then
-         SetAdoAddNew "Clientes"
-         SetAdoFields "T", Normal
-         SetAdoFields "Codigo", AXML.Codigo_B
-         SetAdoFields "TD", Tipo_RUC_CI.Tipo_Beneficiario
-         SetAdoFields "CI_RUC", AXML.RUC_Emisor
-         SetAdoFields "Cliente", AXML.Razon_Social_Emisor
-         SetAdoFields "Direccion", AXML.Direccion_Emisor
-         SetAdoFields "Fecha", FechaSistema
-         SetAdoFields "DirNumero", "SN"
-         SetAdoFields "Ciudad", NombreCiudad
-         SetAdoFields "Prov", "17"
-         SetAdoFields "Pais", "593"
-         SetAdoFields "CodigoU", CodigoUsuario
-         SetAdoUpdate
-      End If
+'''      RatonReloj
+'''      DigVerif = Digito_Verificador(AXML.RUC_Emisor)
+'''      AXML.Codigo_B = Tipo_RUC_CI.Codigo_RUC_CI
+'''      sSQL = "SELECT Codigo, Cliente, TD, CI_RUC " _
+'''           & "FROM Clientes " _
+'''           & "WHERE Codigo = '" & AXML.Codigo_B & "' "
+'''      Select_Adodc AdoAux, sSQL
+'''      If AdoAux.Recordset.RecordCount <= 0 Then
+'''         SetAdoAddNew "Clientes"
+'''         SetAdoFields "T", Normal
+'''         SetAdoFields "Codigo", AXML.Codigo_B
+'''         SetAdoFields "TD", Tipo_RUC_CI.Tipo_Beneficiario
+'''         SetAdoFields "CI_RUC", AXML.RUC_Emisor
+'''         SetAdoFields "Cliente", AXML.Razon_Social_Emisor
+'''         SetAdoFields "Direccion", AXML.Direccion_Emisor
+'''         SetAdoFields "Fecha", FechaSistema
+'''         SetAdoFields "DirNumero", "SN"
+'''         SetAdoFields "Ciudad", NombreCiudad
+'''         SetAdoFields "Prov", "17"
+'''         SetAdoFields "Pais", "593"
+'''         SetAdoFields "CodigoU", CodigoUsuario
+'''         SetAdoUpdate
+'''      End If
       'MsgBox Cadena
    End If
    RatonNormal
@@ -1991,7 +2037,7 @@ Private Sub DGDocSRI_BeforeColUpdate(ByVal ColIndex As Integer, OldValue As Vari
     Case Else
          Cancel = True
   End Select
-  If DGDocSRI.Columns("Documento").value = "Retencion" Then Cancel = True
+  If DGDocSRI.Columns("TIPO_COMPROBANTE").value = "Retencion" Then Cancel = True
 End Sub
 
 Private Sub DGDocSRI_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -2079,31 +2125,29 @@ Private Sub Form_Activate()
     CopiarComp = False
     Co.CodigoB = ""
     Co.Numero = 0
-  
+    Archivo_TXT = "Asiento_TXT_" & CodigoUsuario
+    
     Cta_Gastos = Leer_Seteos_Ctas("Cta_Gastos")
     Cta_Gastos_Personales = Leer_Seteos_Ctas("Cta_Gastos_Personales")
     
-    sSQL = "SELECT " & Full_Fields("Asiento_SRI") & " " _
-         & "FROM Asiento_SRI " _
+    sSQL = "SELECT " & Full_Fields(Archivo_TXT) & " " _
+         & "FROM " & Archivo_TXT & " " _
          & "WHERE Item = '" & NumEmpresa & "' " _
-         & "AND CodigoU = '" & CodigoUsuario & "' " _
-         & "ORDER BY No "
+         & "ORDER BY ID "
     Select_Adodc_Grid DGDocSRI, AdoDocSRI, sSQL
     If AdoDocSRI.Recordset.RecordCount > 0 Then
        Titulo = "PREGUNTA DE ELIMINACION"
        Mensajes = "Existen procesos pendientes, Desea Eliminar las Transacciones?"
        If BoxMensaje = vbYes Then
           sSQL = "DELETE * " _
-               & "FROM Asiento_SRI " _
-               & "WHERE Item = '" & NumEmpresa & "' " _
-               & "AND CodigoU = '" & CodigoUsuario & "' "
+               & "FROM " & Archivo_TXT & " " _
+               & "WHERE Item = '" & NumEmpresa & "' "
           Ejecutar_SQL_SP sSQL
           
-          sSQL = "SELECT " & Full_Fields("Asiento_SRI") & " " _
-               & "FROM Asiento_SRI " _
+          sSQL = "SELECT " & Full_Fields(Archivo_TXT) & " " _
+               & "FROM " & Archivo_TXT & " " _
                & "WHERE Item = '" & NumEmpresa & "' " _
-               & "AND CodigoU = '" & CodigoUsuario & "' " _
-               & "ORDER BY No "
+               & "ORDER BY ID "
           Select_Adodc_Grid DGDocSRI, AdoDocSRI, sSQL
        Else
           DGDocSRI.Enabled = True
