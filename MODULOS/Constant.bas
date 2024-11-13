@@ -76,6 +76,14 @@ Option Explicit
 'https://srienlinea.sri.gob.ec/sri-catastro-sujeto-servicio-internet/rest/ConsolidadoContribuyente/existePorNumeroRuc?numeroRuc=0702164179001
 'https://srienlinea.sri.gob.ec/facturacion-internet/consultas/publico/ruc-datos2.jspa?accion=siguiente&ruc=0702164179001
 '-----------------------------------------------------------------------------------------------------------------------
+'Recepcion/Autorizacion
+'Produccion:
+'https://cel.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl
+'https://cel.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl
+'Prueba:
+'https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl
+'https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl
+'-----------------------------------------------------------------------------------------------------------------------
 Global Const TextoLeyendaFA = "Para consultas, requerimientos o reclamos puede contactarse a nuestro Centro de Atención al Cliente Teléfono: 02-6052430, " _
                             & "o escriba al correo prisma_net@hotmail.es; para Transferencia o Depósitos hacer en El Banco Pichincha: Cta. Ahr. 4245946100 a " _
                             & "Nombre de Walter Vaca Prieto/Cta. Cte 3422225804, a Nombre de PRISMANET PROFESIONAL S.A."
@@ -83,33 +91,29 @@ Global Const TextoLeyendaFA = "Para consultas, requerimientos o reclamos puede c
 Global Const TextoLeyendaFA1 = "SERVIRLE ES NUESTRO OBJETIVO, DISFRUTARLO EL SUYO"
 
 Global Const MensajeAutomatizado = "vMensaje_Comunicado" & vbCrLf _
-                                 & "Este correo electronico fue generado automaticamente a usted desde El Sistema Financiero Contable DiskCover System, " _
-                                 & "porque figura como correo electronico alternativo de vRazon_Social. " _
-                                 & "Nosotros respetamos su privacidad y solamente se utiliza este medio para mantenerlo informado sobre nuestras ofertas, " _
-                                 & "promociones y comunicados. No compartimos, publicamos o vendemos su informacion personal fuera de nuestra empresa. " _
-                                 & "Este mensaje fue procesado por: vNombre_Usuario, funcionario que forma parte de la Institucion." & vbCrLf & vbCrLf _
-                                 & "Por la atencion que se de al presente quedo de usted." & vbCrLf _
-                                 & vbCrLf _
-                                 & "Atentamente," & vbCrLf _
-                                 & vbCrLf _
-                                 & "vRepresentante_Legal" & vbCrLf _
-                                 & "vRazon_Social" & vbCrLf _
-                                 & vbCrLf _
-                                 & "<N>NOTA:</N> Esta direccion de correo electronico no admite respuestas. En caso de requerir atencion personalizada por parte de un " _
-                                 & "asesor de Servicio al Cliente de vRazon_Social, podra solicitar ayuda mediante los canales oficiales que detallamos a " _
-                                 & "continuación: Telefonos: vNumero_Telefono, Correo: vEmails." & vbCrLf & vbCrLf _
-                                 & "Visita: diskcoversystem" & vbCrLf _
-                                 & "QUITO - ECUADOR" & vbCrLf
+                                 & "Este correo electronico fue generado automaticamente a usted desde El Sistema Financiero Contable DiskCover System, porque " _
+                                 & "figura como correo electronico alternativo de vRazon_Social. Nosotros respetamos su privacidad y solamente se utiliza este " _
+                                 & "medio para mantenerlo informado sobre nuestras ofertas, promociones y comunicados. No compartimos, publicamos o vendemos su " _
+                                 & "informacion personal fuera de nuestra empresa. Este mensaje fue procesado por: vNombre_Usuario, funcionario que forma parte " _
+                                 & "de la Institucion." & vbCrLf & vbCrLf _
+                                 & "Esta direccion de correo electronico no admite respuestas. En caso de requerir atencion personalizada por parte de un " _
+                                 & "asesor de Servicio al Cliente, podra solicitar ayuda mediante los canales oficiales que detallamos a continuacion: " _
+                                 & "Telefonos: vNumero_Telefono, Correo: vEmails." & vbCrLf & vbCrLf _
+                                 & "Por la atencion que se de al presente quedo de usted." & vbCrLf & vbCrLf _
+                                 & "Atentamente," & vbCrLf & vbCrLf _
+                                 & "vRepresentante_Legal" & vbCrLf & vbCrLf _
+                                 & "Visita: www.diskcoversystem.com" & vbCrLf _
+                                 & "QUITO - ECUADOR"
 
 Global Const MensajeNoAutorizarCE = "LA EMPRESA NO TIENE ACTIVADO EL PROCESO PARA SOLICITAR AUTORIZACION AL SRI, " _
                                   & "COMUNIQUESE AL CENTRO DE ATENCION AL CLIENTE DEL SISTEMA DISKCOVER SYSTEM. " _
                                   & "A LOS TELEFONOS: (+593) 098-652-4396/099-965-4196/098-910-5300."
                                   
-Global Const MensajeDeboPagare = "Debo y Pagaré incondicionalmente a la orden de Razon_Social el valor expresado en este documento mas " _
+Global Const MensajeDeboPagare = "Debo y Pagaré incondicionalmente a la orden de vRazon_Social el valor expresado en este documento mas " _
                                & "el máximo interés legal por mora, vigente en el Sistema Financiero Nacional desde la fecha de vencimiento, " _
                                & "SIN PROTESTO, exímase de presentación para el pago así como la falta de estos hechos. Renuncio fuero y domicilio " _
                                & "y me someto a los jueces competentes de la ciudad de Quito, Distrito Metropolitano, y al trámite verbal sumario o " _
-                               & "ejecutivo a elección de Razon_Social o de sus cesionarios. Acepto que Razon_Social, ceda y transfiera en cualquier " _
+                               & "ejecutivo a elección de vRazon_Social o de sus cesionarios. Acepto que vRazon_Social, ceda y transfiera en cualquier " _
                                & "momento los derechos que emanan de la presente factura-pagaré sin que sea necesaria notificación algún ni nueva " _
                                & "aceptación de mi parte. Suscribo la presente factura-pagaré en conformidad con todos sus términos."
                                
@@ -137,6 +141,7 @@ Global Const AdoStrCnnMySQL = "DRIVER={MySQL ODBC 5.1 Driver};" _
                                                            
 'Global Const AdoStrCnnMySQL = "Driver={MySQL ODBC 8.2 Unicode Driver};SERVER=db.diskcoversystem.com;DATABASE=diskcover_empresas;USER=diskcover;PASSWORD=disk2017@Cover;PORT=13306; OPTION=3"
 Global Const strServidor = "db.diskcoversystem.com"
+Global Const ServidorCorreos = "smtp.diskcoversystem.com"
 
 Global Const urlIdukay = "https://erp.diskcoversystem.com/php/vista/consultarEstudiante.php?id="
 Global Const urlEsUnRUC = "https://srienlinea.sri.gob.ec/sri-catastro-sujeto-servicio-internet/rest/ConsolidadoContribuyente/existePorNumeroRuc?numeroRuc="

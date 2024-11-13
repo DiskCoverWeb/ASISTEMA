@@ -130,3 +130,4 @@ Global Cierre_Periodo As Boolean
 'Global PresentaReloj As Boolean
 Global PorCtasCostos As Boolean
 Global EsFileCSV As Boolean
+Global Resultado As Boolean

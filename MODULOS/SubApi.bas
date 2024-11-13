@@ -1095,34 +1095,53 @@ Public Sub Color_Fondo(ByVal HWND_Prog As Long, _
   
 End Sub
 
-Public Sub Redondear_Cuadro(El_Form As Form, Radio As Long)
-
+Public Sub Redondear_Formulario(El_Form As Form, Radio As Long)
 Dim Region As Long
 Dim ret As Long
 Dim Ancho As Long
 Dim alto As Long
-Dim old_Scale As Integer
-    
-    ' guardar la escala
-    old_Scale = El_Form.ScaleMode
-    
-    ' cambiar la escala a pixeles
-    El_Form.ScaleMode = vbPixels
-    
-    'Obtenemos el ancho y alto de la region del Form
-    Ancho = El_Form.ScaleWidth
-    alto = El_Form.ScaleHeight
 
-    'Pasar el ancho alto del formualrio y el valor de redondeo .. es decir el radio
-    Region = CreateRoundRectRgn(0, 0, Ancho, alto, Radio, Radio)
+'Obtenemos el ancho y alto de la region del Form
+Ancho = El_Form.width / Screen.TwipsPerPixelX
+alto = El_Form.Height / Screen.TwipsPerPixelY
 
-    ' Aplica la región al formulario
-    ret = SetWindowRgn(El_Form.hwnd, Region, True)
-    
-    ' restaurar la escala
-    El_Form.ScaleMode = old_Scale
+'Le pasamos el ancho alto del formualrio y el valor de _
+ redondeo es decir el radio
+
+Region = CreateRoundRectRgn(0, 0, Ancho, alto, Radio, Radio)
+
+' Aplica la región al formulario
+ret = SetWindowRgn(El_Form.hwnd, Region, True)
 
 End Sub
+
+'''Public Sub Redondear_Cuadro(El_Form As Form, Radio As Long)
+'''Dim Region As Long
+'''Dim ret As Long
+'''Dim Ancho As Long
+'''Dim alto As Long
+'''Dim old_Scale As Integer
+'''
+'''    ' guardar la escala
+'''    old_Scale = El_Form.ScaleMode
+'''
+'''    ' cambiar la escala a pixeles
+'''    El_Form.ScaleMode = vbPixels
+'''
+'''    'Obtenemos el ancho y alto de la region del Form
+'''    Ancho = El_Form.ScaleWidth
+'''    alto = El_Form.ScaleHeight
+'''
+'''    'Pasar el ancho alto del formualrio y el valor de redondeo .. es decir el radio
+'''    Region = CreateRoundRectRgn(0, 0, Ancho, alto, Radio, Radio)
+'''
+'''    ' Aplica la región al formulario
+'''    ret = SetWindowRgn(El_Form.hwnd, Region, True)
+'''
+'''    ' restaurar la escala
+'''    El_Form.ScaleMode = old_Scale
+'''
+'''End Sub
 
 '-----------------------------------------------------------------
 'Obtener IP del PC
@@ -1551,7 +1570,6 @@ Public Function Utf8BytesFromString(strInput As String) As Byte()
     Utf8BytesFromString = abBuffer
 End Function
 
-
 ''' Return length of byte array or zero if uninitialized
 Private Function BytesLength(abBytes() As Byte) As Long
     ' Trap error if array is uninitialized
@@ -1575,26 +1593,6 @@ Public Function Utf8BytesToString(abUtf8Array() As Byte) As String
     nChars = MultiByteToWideChar(CP_UTF8, 0&, VarPtr(abUtf8Array(0)), nBytes, StrPtr(strOut), nChars)
     Utf8BytesToString = Left$(strOut, nChars)
 End Function
-
-Public Sub Redondear_Formulario(El_Form As Form, Radio As Long)
-Dim Region As Long
-Dim ret As Long
-Dim Ancho As Long
-Dim alto As Long
-
-'Obtenemos el ancho y alto de la region del Form
-Ancho = El_Form.width / Screen.TwipsPerPixelX
-alto = El_Form.Height / Screen.TwipsPerPixelY
-
-'Le pasamos el ancho alto del formualrio y el valor de _
- redondeo es decir el radio
-
-Region = CreateRoundRectRgn(0, 0, Ancho, alto, Radio, Radio)
-
-' Aplica la región al formulario
-ret = SetWindowRgn(El_Form.hwnd, Region, True)
-
-End Sub
 
 Public Function GetNetConnectString() As Boolean
 Dim dwFlags As Long
@@ -1761,8 +1759,28 @@ Dim hInternet As Long, hSession As Long, lReturn As Long
  
    'close the URL
     iResult = InternetCloseHandle(hInternet)
-    sData = Trim(Replace(sData, Chr(0), ""))
+    'sData = Trim(Replace(sData, Chr(0), ""))
     GetUrlSource = sData
+End Function
+
+Public Function PostUrlSource(vURLHTTP As String, vURLParams As String) As Boolean
+Dim DomDoc As MSXML2.xmlhttp
+
+    Set DomDoc = New xmlhttp
+    
+   'Parámetros en formato URLEncode
+   'Metodo a usar, url, y true en caso de manejar la respuesta en modo asíncrono
+    DomDoc.open "POST", vURLHTTP, False
+   'Encabezados
+    DomDoc.setRequestHeader "Content-type", "application/x-www-form-urlencoded"
+    DomDoc.setRequestHeader "Content-length", Len(vURLParams)
+    DomDoc.setRequestHeader "Connection", "close"
+    DomDoc.send vURLParams
+   'La respuesta, en caso de existir, está en responseBody.
+   'También puedes especificar responseXml si tu aplicación devolviese XML
+   'PostUrlSource = StrConv(DomDoc.responseBody, vbUnicode)
+    'MsgBox DomDoc.responseBody
+    PostUrlSource = Val(DomDoc.responseBody)
 End Function
 
 Public Function Ping_IP(My_IP_PC As String) As Boolean

@@ -883,9 +883,9 @@ Begin VB.Form Facturas
          Strikethrough   =   0   'False
       EndProperty
       Height          =   3735
-      Left            =   8715
+      Left            =   9555
       TabIndex        =   127
-      Top             =   3150
+      Top             =   5040
       Visible         =   0   'False
       Width           =   4815
       Begin VB.ListBox LstSeries 

@@ -456,6 +456,7 @@ Dim posPuntoComa As Byte
   'MsgBox MidStrg(TFA.ClaveAcceso, 9, 2)
    RatonReloj
   'MsgBox TFA.ClaveAcceso
+   Mifecha = FechaSistema
    TMail.TipoDeEnvio = "CE"
    TMail.ListaMail = 255
    TMail.Destinatario = TFA.Cliente
@@ -508,19 +509,33 @@ Dim posPuntoComa As Byte
                     & "Liquidacion de Compras No. " & TFA.Serie_LC & "-" & Format$(TFA.Factura, "000000000")
       TMail.Asunto = TFA.Cliente & ", Liquidacion de Compras No. " & TFA.Serie_LC & "-" & Format$(TFA.Factura, "000000000")
    Else
-      TMail.Mensaje = "Cliente: " & TFA.Cliente & vbCrLf _
-                    & "Clave de Acceso: " & vbCrLf & TFA.ClaveAcceso & vbCrLf _
-                    & "Emision: " & TFA.Fecha & vbCrLf _
+      TMail.Mensaje = "Cliente: " & TFA.Razon_Social & vbCrLf _
+                    & "Fecha Emision: " & TFA.Fecha & vbCrLf _
+                    & "C.I./R.U.C.: " & TFA.RUC_CI & vbCrLf _
+                    & "Documento " & TFA.TC & " No. " & TFA.Serie & "-" & Format$(TFA.Factura, "000000000") & vbCrLf _
                     & "Vencimiento: " & TFA.Fecha_V & vbCrLf _
                     & "Fecha Autorizado: " & TFA.Fecha_Aut & vbCrLf _
-                    & "Autorizacion: " & vbCrLf & TFA.Autorizacion & vbCrLf _
-                    & "Factura No. " & TFA.Serie & "-" & Format$(TFA.Factura, "000000000") & vbCrLf
-      If Tipo_Documento = "AB" Then
-         TMail.Mensaje = TMail.Mensaje & vbCrLf & "SU PAGO FUE REGISTRADO CON EXITO" & vbCrLf & "EL " & FechaStrg(FA.Fecha_C) & vbCrLf & FA.Nota & vbCrLf
-      Else
-         TMail.Mensaje = TMail.Mensaje & "Hora de Generacion: " & TFA.Hora_FA & vbCrLf
-      End If
-      TMail.Asunto = TFA.Cliente & ", Factura No. " & TFA.Serie & "-" & Format$(TFA.Factura, "000000000")
+                    & "Clave de Acceso: " & TFA.ClaveAcceso & vbCrLf
+       If TFA.Cliente <> Ninguno And TFA.Razon_Social <> TFA.Cliente Then
+          If Len(TFA.Cliente) > 1 Then TMail.Mensaje = TMail.Mensaje & "Beneficiario: " & TFA.Cliente & vbCrLf
+          If Len(TFA.CI_RUC) > 1 Then TMail.Mensaje = TMail.Mensaje & "Codigo: " & TFA.CI_RUC & vbCrLf
+          If Len(TFA.Curso) > 1 And Len(TFA.Grupo) > 1 Then TMail.Mensaje = TMail.Mensaje & "Ubicacion: " & TFA.Grupo & "-" & TFA.Curso & vbCrLf
+       End If
+       If Len(TFA.DireccionC) > 1 Then TMail.Mensaje = TMail.Mensaje & "Direccion: " & TFA.DireccionC & vbCrLf
+       If Len(TFA.TelefonoC) > 1 Then TMail.Mensaje = TMail.Mensaje & "Telefono: " & TFA.TelefonoC & vbCrLf
+'''       If EsUnEmail(TFA.EmailC) Then TMail.Mensaje = TMail.Mensaje & "Email Beneficiario: " & TFA.EmailC & vbCrLf
+'''       If EsUnEmail(TFA.EmailR) Then TMail.Mensaje = TMail.Mensaje & "Email Destinatario: " & TFA.EmailR & vbCrLf
+       If Len(TFA.Contacto) > 1 Then TMail.Mensaje = TMail.Mensaje & "Referencia: " & TFA.Contacto & vbCrLf
+       If Val(TFA.Orden_Compra) > 0 Then TMail.Mensaje = TMail.Mensaje & "Orden Compra: " & TFA.Orden_Compra & vbCrLf
+       If Len(TFA.Observacion) > 1 Then TMail.Mensaje = TMail.Mensaje & "Observacion: " & TFA.Observacion & vbCrLf
+       If Len(TFA.Nota) > 1 Then TMail.Mensaje = TMail.Mensaje & "Nota: " & TFA.Nota & vbCrLf
+
+       If Tipo_Documento = "AB" Then
+          TMail.Mensaje = TMail.Mensaje & vbCrLf & "SU PAGO FUE REGISTRADO CON EXITO" & vbCrLf & "EL " & FechaStrg(FA.Fecha_C) & vbCrLf & FA.Nota & vbCrLf
+       Else
+          TMail.Mensaje = TMail.Mensaje & "Hora de Generacion: " & TFA.Hora_FA & vbCrLf
+       End If
+      TMail.Asunto = TFA.Razon_Social & ", Documento " & TFA.TC & " No. " & TFA.Serie & "-" & Format$(TFA.Factura, "000000000")
    End If
   'Datos del destinatario de mails
    TMail.para = ""
@@ -528,16 +543,8 @@ Dim posPuntoComa As Byte
    Insertar_Mail TMail.para, TFA.EmailC2
    Insertar_Mail TMail.para, TFA.EmailR
   
-   TMail.Mensaje = TMail.Mensaje _
-                 & String(45, "-") & vbCrLf _
-                 & "Email(s) Destinatario(s):" & vbCrLf _
-                 & Replace(TMail.para, ";", "; ") & vbCrLf _
-                 & String(45, "_") & vbCrLf _
-                 & NombreComercial & vbCrLf _
-                 & RazonSocial & vbCrLf _
-                 & Telefono1 & "/" & Telefono1 & vbCrLf _
-                 & "Dir. " & Direccion & vbCrLf _
-                 & UCaseStrg(NombreCiudad) & "-" & UCaseStrg(NombrePais) & vbCrLf
+   TMail.Mensaje = TMail.Mensaje & "Email(s) Destinatario(s):" & vbCrLf & Replace(TMail.para, ";", "; ") & vbCrLf
+                 
    'TMail.MensajeHTML = Leer_Archivo_Texto(RutaSistema & "\FONDOS\EmailRolPagos.html")
 '''   = "<html>" _
 '''                     & "<body>" _
@@ -612,7 +619,7 @@ Dim Intento_Autorizar As Byte
  FConexion.TxtConexion.Refresh
  Intento_Enviar = 0
  Intento_Autorizar = 0
- EsperaEspera = 6
+ EsperaEspera = 3000
 
  Ambiente = Leer_Campo_Empresa("Ambiente")
  ContEspec = Leer_Campo_Empresa("Codigo_Contribuyente_Especial")
@@ -665,6 +672,7 @@ Volver_Firmar:
      FConexion.TxtConexion = FConexion.TxtConexion & "Firmando el Documento: " & MidStrg(ClaveDeAcceso, 25, 15) & vbCrLf
      FConexion.TxtConexion.Refresh
     'MsgBox "Firmar: " & RutaXML & vbCrLf & vbCrLf & RutaXMLFirmado & vbCrLf & vbCrLf & RutaCertificado & vbCrLf & vbCrLf & ClaveCertificado
+    
      Resultado = obj.FirmarXML(RutaCertificado, ClaveCertificado, RutaXML, RutaXMLFirmado, MensajeError)
     'MsgBox "Firmar: " & MensajeError
      If Resultado Then
@@ -676,17 +684,18 @@ Volver_Enviar:
         FConexion.TxtConexion.Refresh
        'MsgBox URLRecepcion & vbCrLf & RutaXMLFirmado & vbCrLf & RutaXMLRechazado
         ArrayRecepcion = ObjEnviar.FF_EnviaXML_SRI(RutaXMLFirmado, URLRecepcion, RutaXMLRechazado)
+        
         Intento_Enviar = Intento_Enviar + 1
        .Error_SRI = "Error al enviar: "
         For ContadorEstados = 0 To 4
             If Len(ArrayRecepcion(ContadorEstados)) > 1 Then .Error_SRI = .Error_SRI & ArrayRecepcion(ContadorEstados) & "; "
         Next ContadorEstados
         Sleep EsperaEspera
-        
         If ArrayRecepcion(1) = "43" Or ArrayRecepcion(1) = "45" Then GoTo Volver_Obtener
         If ArrayRecepcion(0) = "RECIBIDA" Then
           .Estado_SRI = "CR"
           .Documento_XML = Leer_Archivo_Texto(RutaXMLFirmado)
+          
 Volver_Autorizar:
            RatonReloj
            FConexion.TxtConexion = FConexion.TxtConexion & "Cargando Documento Firmado: " & MidStrg(ClaveDeAcceso, 25, 15) & vbCrLf
@@ -743,6 +752,7 @@ Volver_Obtener:
            Next ContadorEstados
            If Intento_Enviar < 3 Then GoTo Volver_Enviar
         End If
+        'MsgBox "...."
      Else
         FConexion.TxtConexion = FConexion.TxtConexion & "Error: CNF" & vbCrLf
         FConexion.TxtConexion.Refresh
@@ -813,7 +823,7 @@ Dim IDn As Long
         .Estado_SRI = "CG"
         .Documento_XML = ""
         .Error_SRI = ""
-         EsperaEspera = 6
+         EsperaEspera = 3000
          RatonReloj
         'Tiempo de Espera antes de averiguar al SRI de la autorizacion
          For Tiempo_Espera = 0 To 3
@@ -4442,32 +4452,40 @@ Dim RutaXMLFirmado As String
     AdoDBXMLFirmado.Close
 End Sub
 
-Public Sub Recibo_Enviar_Mails(TFA As Tipo_Facturas)
-Dim Comprobante As String
-
-    If Len(TFA.Serie) = 6 And (TFA.Factura) > 0 Then
-       Comprobante = "Recibo No " & TFA.Serie & "-" & Format$(TFA.Factura, "000000000")
-       Generar_Recibo_PDF TFA, False
-       TMail.TipoDeEnvio = "CO"
-       TMail.ListaMail = 255
-
-       TMail.Mensaje = "Cliente: " & TFA.Cliente & vbCrLf _
-                     & "Codigo: " & TFA.CI_RUC & vbCrLf _
-                     & "Emision: " & TFA.Fecha & vbCrLf _
-                     & Comprobante & vbCrLf
-       TMail.Asunto = TFA.Cliente & ", " & Comprobante
-       TMail.Adjunto = RutaSysBases & "\TEMP\" & Comprobante & ".pdf"
-       TMail.Credito_No = "R" & Format(TFA.Factura, "000000000")
-      'Enviamos lista de mails
-       TMail.para = ""
-       Insertar_Mail TMail.para, TFA.EmailC
-       Insertar_Mail TMail.para, TFA.EmailR
-      'MsgBox RutaPDF & "; " & RutaXML
-       If Email_CE_Copia Then
-          Insertar_Mail TMail.para, EmailProcesos
-          TMail.Credito_No = "X" & Format(TFA.Factura, "000000000")
-       End If
-       'FEnviarCorreos.Show 1
-    End If
- End Sub
+'''Public Sub Recibo_Enviar_Mails(TFA As Tipo_Facturas)
+'''Dim Comprobante As String
+'''
+'''    If Len(TFA.Serie) = 6 And (TFA.Factura) > 0 Then
+'''       Comprobante = "Documento No " & TFA.Serie & "-" & Format$(TFA.Factura, "000000000")
+'''       TMail.MensajeHTML = Leer_Archivo_Texto(RutaSistema & "\JAVASCRIPT\f_recibo.html")
+'''
+'''       html_Informacion_adicional = "<strong>INFORMACION ADICIONAL:</strong><br><br>" _
+'''                                  & "<strong>Importe total: USD </strong>150,00<br>" _
+'''                                  & "<strong>Importe total: USD </strong>150,00<br>" _
+'''                                  & "<strong>Importe total: USD </strong>150,00<br>"
+'''
+'''        html_Detalle_adicional = "<tr>" _
+'''                               & "<td>13/12/2024</td>" _
+'''                               & "<td>Madera</td>" _
+'''                               & "<td class='row text-right'>150,00</td>" _
+'''                               & "</tr>" _
+'''                               & "<tr>" _
+'''                               & "<td>13/12/2024</td>" _
+'''                               & "<td>Madera</td>" _
+'''                               & "<td class='row text-right'>180,00</td>" _
+'''                               & "</tr>"
+'''        TFA.Recibo_No = Format(FA.Fecha, "yyyymmdd") & TFA.Recibo_No
+'''        TMail.TipoDeEnvio = "CO"
+'''        TMail.ListaMail = 255
+'''       TMail.Asunto = TFA.Cliente & ", " & Comprobante
+'''       TMail.Adjunto = ""
+'''       TMail.Credito_No = "R" & TFA.Recibo_No
+'''      'Enviamos lista de mails
+'''       TMail.para = ""
+'''       Insertar_Mail TMail.para, TFA.EmailC
+'''       Insertar_Mail TMail.para, TFA.EmailR
+'''       If Email_CE_Copia Then Insertar_Mail TMail.para, EmailProcesos
+'''       FEnviarCorreos.Show 1
+'''    End If
+''' End Sub
 

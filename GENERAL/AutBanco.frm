@@ -1650,6 +1650,9 @@ Dim AuxNumEmp As String
   Separador = Ninguno
   Orden_Pago = Ninguno
   OrdenValida = False
+  
+  Subir_Archivo_Abonos_Bancos_SP RutaGeneraFile
+  
   ReDim Preserve CamposFile(100) As Campos_Tabla
   NumFile = FreeFile
   Open RutaGeneraFile For Input As #NumFile
@@ -1657,9 +1660,11 @@ Dim AuxNumEmp As String
        If Separador = Ninguno Then
           If InStr(Cod_Field, vbTab) > 0 Then Separador = vbTab
        End If
+
        Do While Len(Cod_Field) > 2
           No_Hasta = InStr(Cod_Field, Separador)
           CamposFile(CantCampos).Campo = "C" & Format$(CantCampos, "00")
+          CamposFile(CantCampos).Ancho = No_Hasta
           If No_Hasta > 1 Then
              CampoTemp = TrimStrg(MidStrg(Cod_Field, 1, No_Hasta - 1))
              Select Case TextoBanco
@@ -1680,13 +1685,17 @@ Dim AuxNumEmp As String
        Loop
   Close #NumFile
   
+  MsgBox "Ok"
+  
   Total_Alumnos = Contador
   
   Cadena = ""
   For I = 0 To CantCampos - 1
-      Cadena = Cadena & CamposFile(I).Campo & vbCrLf
+      Cadena = Cadena & CamposFile(I).Campo & "=" & CamposFile(I).Ancho & vbCrLf
   Next I
-  'MsgBox Total_Alumnos & " - " & CantCampos & " - " & OrdenValida & vbCrLf & String(100, "_") & vbCrLf & Cadena
+  MsgBox Total_Alumnos & " - " & CantCampos & " - " & OrdenValida & vbCrLf & String(100, "_") & vbCrLf & Cadena
+  
+ '--------------------------------------------------------
   
   Progreso_Barra.Valor_Maximo = (Total_Alumnos * 3) + 100
   
@@ -1995,24 +2004,24 @@ Dim AuxNumEmp As String
                 SetAdoFields "Recibo_No", TA.Recibo_No
                 SetAdoUpdate
                 
-               'Enviar por mail el Abono receptado
-                FA.TC = TA.TP
-                FA.Serie = TA.Serie
-                FA.Factura = TA.Factura
-                FA.ClaveAcceso = FA.Autorizacion
-                FA.Autorizacion = TA.Autorizacion
-                FA.Fecha_C = TA.Fecha
-                FA.Fecha_V = TA.Fecha
-                FA.Hora_FA = TA.Cheque
-                FA.Cliente = NombreCliente
-                FA.Fecha_Aut = FechaSistema
-                SRI_Autorizacion.Autorizacion = TA.Autorizacion
-                FA.Nota = "Tipo de Abono" & vbTab & ": " & TA.Banco & vbCrLf _
-                        & "Hora" & vbTab & vbTab & ": " & TA.Cheque & vbCrLf _
-                        & "Documento" & vbTab & ": " & TA.Recibo_No & vbCrLf _
-                        & "Valor Recibdo USD " & Format(TA.Abono, "#,##0.00") & vbCrLf
-                SRI_Enviar_Mails FA, SRI_Autorizacion, "AB"
-                
+'''               'Enviar por mail el Abono receptado
+'''                FA.TC = TA.TP
+'''                FA.Serie = TA.Serie
+'''                FA.Factura = TA.Factura
+'''                FA.ClaveAcceso = FA.Autorizacion
+'''                FA.Autorizacion = TA.Autorizacion
+'''                FA.Fecha_C = TA.Fecha
+'''                FA.Fecha_V = TA.Fecha
+'''                FA.Hora_FA = TA.Cheque
+'''                FA.Cliente = NombreCliente
+'''                FA.Fecha_Aut = FechaSistema
+'''                SRI_Autorizacion.Autorizacion = TA.Autorizacion
+'''                FA.Nota = "Tipo de Abono" & vbTab & ": " & TA.Banco & vbCrLf _
+'''                        & "Hora" & vbTab & vbTab & ": " & TA.Cheque & vbCrLf _
+'''                        & "Documento" & vbTab & ": " & TA.Recibo_No & vbCrLf _
+'''                        & "Valor Recibdo USD " & Format(TA.Abono, "#,##0.00") & vbCrLf
+'''                SRI_Enviar_Mails FA, SRI_Autorizacion, "AB"
+
              End If
           End If
          'MsgBox NombreCliente & vbCrLf & CodigoCli & vbCrLf & CodigoP

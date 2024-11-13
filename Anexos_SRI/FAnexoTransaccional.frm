@@ -17,13 +17,13 @@ Begin VB.Form FAnexoTransaccional
    WindowState     =   2  'Maximized
    Begin MSDataGridLib.DataGrid DGRolPagos 
       Bindings        =   "FAnexoTransaccional.frx":0946
-      Height          =   2430
+      Height          =   5475
       Left            =   105
-      TabIndex        =   7
-      Top             =   1680
-      Width           =   5895
-      _ExtentX        =   10398
-      _ExtentY        =   4286
+      TabIndex        =   13
+      Top             =   945
+      Width           =   7785
+      _ExtentX        =   13732
+      _ExtentY        =   9657
       _Version        =   393216
       AllowUpdate     =   0   'False
       HeadLines       =   1
@@ -81,25 +81,6 @@ Begin VB.Form FAnexoTransaccional
          EndProperty
       EndProperty
    End
-   Begin VB.CommandButton Command2 
-      Caption         =   "&Formularios 107"
-      BeginProperty Font 
-         Name            =   "Arial"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   645
-      Left            =   1680
-      Picture         =   "FAnexoTransaccional.frx":0960
-      Style           =   1  'Graphical
-      TabIndex        =   6
-      Top             =   945
-      Width           =   1485
-   End
    Begin VB.TextBox TxtCodigo 
       Alignment       =   2  'Center
       Enabled         =   0   'False
@@ -114,7 +95,7 @@ Begin VB.Form FAnexoTransaccional
       EndProperty
       Height          =   360
       Left            =   1410
-      TabIndex        =   4
+      TabIndex        =   11
       Text            =   "Codigo"
       Top             =   6930
       Width           =   1170
@@ -132,43 +113,43 @@ Begin VB.Form FAnexoTransaccional
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   10
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "FAnexoTransaccional.frx":122A
+            Picture         =   "FAnexoTransaccional.frx":0960
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "FAnexoTransaccional.frx":1B04
+            Picture         =   "FAnexoTransaccional.frx":123A
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "FAnexoTransaccional.frx":24B2
+            Picture         =   "FAnexoTransaccional.frx":1BE8
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "FAnexoTransaccional.frx":27CC
+            Picture         =   "FAnexoTransaccional.frx":1F02
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "FAnexoTransaccional.frx":2AE6
+            Picture         =   "FAnexoTransaccional.frx":221C
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "FAnexoTransaccional.frx":2E00
+            Picture         =   "FAnexoTransaccional.frx":2536
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "FAnexoTransaccional.frx":311A
+            Picture         =   "FAnexoTransaccional.frx":2850
             Key             =   ""
          EndProperty
          BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "FAnexoTransaccional.frx":3434
+            Picture         =   "FAnexoTransaccional.frx":2B6A
             Key             =   ""
          EndProperty
          BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "FAnexoTransaccional.frx":3ADA
+            Picture         =   "FAnexoTransaccional.frx":3210
             Key             =   ""
          EndProperty
          BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "FAnexoTransaccional.frx":4180
+            Picture         =   "FAnexoTransaccional.frx":38B6
             Key             =   ""
          EndProperty
       EndProperty
@@ -185,10 +166,10 @@ Begin VB.Form FAnexoTransaccional
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   3255
+      Left            =   210
       Style           =   1  'Graphical
-      TabIndex        =   0
-      Top             =   1050
+      TabIndex        =   9
+      Top             =   1155
       Width           =   330
    End
    Begin MSAdodcLib.Adodc AdoMes 
@@ -759,121 +740,44 @@ Begin VB.Form FAnexoTransaccional
       Align           =   1  'Align Top
       Height          =   900
       Left            =   0
-      TabIndex        =   1
+      TabIndex        =   0
       Top             =   0
       Width           =   16515
       _ExtentX        =   29131
       _ExtentY        =   1588
-      ButtonWidth     =   1799
+      ButtonWidth     =   1826
       ButtonHeight    =   1429
       Appearance      =   1
       ImageList       =   "ImageList2"
       _Version        =   393216
       BeginProperty Buttons {66833FE8-8583-11D1-B16A-00C0F0283628} 
-         NumButtons      =   8
+         NumButtons      =   6
          BeginProperty Button1 {66833FEA-8583-11D1-B16A-00C0F0283628} 
-            Caption         =   "Años"
-            Key             =   "Anos"
-            ImageIndex      =   2
-            Style           =   5
-            BeginProperty ButtonMenus {66833FEC-8583-11D1-B16A-00C0F0283628} 
-               NumButtonMenus  =   1
-               BeginProperty ButtonMenu1 {66833FEE-8583-11D1-B16A-00C0F0283628} 
-                  Key             =   "A2000"
-                  Text            =   "2000"
-               EndProperty
-            EndProperty
-         EndProperty
-         BeginProperty Button2 {66833FEA-8583-11D1-B16A-00C0F0283628} 
-            Caption         =   "Meses"
-            Key             =   "Meses"
-            ImageIndex      =   3
-            Style           =   5
-            BeginProperty ButtonMenus {66833FEC-8583-11D1-B16A-00C0F0283628} 
-               NumButtonMenus  =   14
-               BeginProperty ButtonMenu1 {66833FEE-8583-11D1-B16A-00C0F0283628} 
-                  Key             =   "Enero"
-                  Text            =   "Enero"
-               EndProperty
-               BeginProperty ButtonMenu2 {66833FEE-8583-11D1-B16A-00C0F0283628} 
-                  Key             =   "Febrero"
-                  Text            =   "Febrero"
-               EndProperty
-               BeginProperty ButtonMenu3 {66833FEE-8583-11D1-B16A-00C0F0283628} 
-                  Key             =   "Marzo"
-                  Text            =   "Marzo"
-               EndProperty
-               BeginProperty ButtonMenu4 {66833FEE-8583-11D1-B16A-00C0F0283628} 
-                  Key             =   "Abril"
-                  Text            =   "Abril"
-               EndProperty
-               BeginProperty ButtonMenu5 {66833FEE-8583-11D1-B16A-00C0F0283628} 
-                  Key             =   "Mayo"
-                  Text            =   "Mayo"
-               EndProperty
-               BeginProperty ButtonMenu6 {66833FEE-8583-11D1-B16A-00C0F0283628} 
-                  Key             =   "Junio"
-                  Text            =   "Junio"
-               EndProperty
-               BeginProperty ButtonMenu7 {66833FEE-8583-11D1-B16A-00C0F0283628} 
-                  Key             =   "Julio"
-                  Text            =   "Julio"
-               EndProperty
-               BeginProperty ButtonMenu8 {66833FEE-8583-11D1-B16A-00C0F0283628} 
-                  Key             =   "Agosto"
-                  Text            =   "Agosto"
-               EndProperty
-               BeginProperty ButtonMenu9 {66833FEE-8583-11D1-B16A-00C0F0283628} 
-                  Key             =   "Septiembre"
-                  Text            =   "Septiembre"
-               EndProperty
-               BeginProperty ButtonMenu10 {66833FEE-8583-11D1-B16A-00C0F0283628} 
-                  Key             =   "Octubre"
-                  Text            =   "Octubre"
-               EndProperty
-               BeginProperty ButtonMenu11 {66833FEE-8583-11D1-B16A-00C0F0283628} 
-                  Key             =   "Noviembre"
-                  Text            =   "Noviembre"
-               EndProperty
-               BeginProperty ButtonMenu12 {66833FEE-8583-11D1-B16A-00C0F0283628} 
-                  Key             =   "Diciembre"
-                  Text            =   "Diciembre"
-               EndProperty
-               BeginProperty ButtonMenu13 {66833FEE-8583-11D1-B16A-00C0F0283628} 
-                  Key             =   "1er_Semestre"
-                  Text            =   "1er_Semestre"
-               EndProperty
-               BeginProperty ButtonMenu14 {66833FEE-8583-11D1-B16A-00C0F0283628} 
-                  Key             =   "2do_Semestre"
-                  Text            =   "2do_Semestre"
-               EndProperty
-            EndProperty
-         EndProperty
-         BeginProperty Button3 {66833FEA-8583-11D1-B16A-00C0F0283628} 
-            ImageIndex      =   4
-            Style           =   3
-         EndProperty
-         BeginProperty Button4 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Caption         =   "ATS"
             Key             =   "ATS"
             ImageIndex      =   4
          EndProperty
-         BeginProperty Button5 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+         BeginProperty Button2 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Caption         =   "ATS Financ."
             Key             =   "ATSFinanc"
             ImageIndex      =   5
          EndProperty
-         BeginProperty Button6 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+         BeginProperty Button3 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Caption         =   "REOC"
             Key             =   "REOC"
             ImageIndex      =   6
          EndProperty
-         BeginProperty Button7 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+         BeginProperty Button4 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Caption         =   "RDEP"
             Key             =   "RDEP"
             ImageIndex      =   7
          EndProperty
-         BeginProperty Button8 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+         BeginProperty Button5 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Caption         =   "Form. 107"
+            Key             =   "F107"
+            ImageIndex      =   1
+         EndProperty
+         BeginProperty Button6 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Caption         =   "Salir"
             Key             =   "Salir"
             ImageIndex      =   10
@@ -881,11 +785,72 @@ Begin VB.Form FAnexoTransaccional
       EndProperty
       MousePointer    =   1
       Begin VB.Frame Frame1 
-         Height          =   855
-         Left            =   7770
-         TabIndex        =   2
-         Top             =   0
-         Width           =   8100
+         BorderStyle     =   0  'None
+         Height          =   960
+         Left            =   6195
+         TabIndex        =   10
+         Top             =   -105
+         Width           =   11985
+         Begin MSMask.MaskEdBox MBFechaE 
+            Height          =   330
+            Left            =   2730
+            TabIndex        =   6
+            ToolTipText     =   "Formato de Fecha: DD/MM/AA"
+            Top             =   525
+            Width           =   1485
+            _ExtentX        =   2619
+            _ExtentY        =   582
+            _Version        =   393216
+            AllowPrompt     =   -1  'True
+            AutoTab         =   -1  'True
+            MaxLength       =   10
+            BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Format          =   "dd/mm/yyyy"
+            Mask            =   "##/##/####"
+            PromptChar      =   "0"
+         End
+         Begin VB.ComboBox CATMes 
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   315
+            Left            =   945
+            TabIndex        =   4
+            Text            =   "Diciembre"
+            Top             =   525
+            Width           =   1695
+         End
+         Begin VB.ComboBox CATAnio 
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   315
+            Left            =   0
+            TabIndex        =   2
+            Text            =   "2000"
+            Top             =   525
+            Width           =   855
+         End
          Begin VB.CheckBox CheqATSConElect 
             Caption         =   "Generar ATS con Comprobante Electronicos"
             BeginProperty Font 
@@ -897,18 +862,75 @@ Begin VB.Form FAnexoTransaccional
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Height          =   435
-            Left            =   210
+            Height          =   750
+            Left            =   4305
+            TabIndex        =   7
+            Top             =   105
+            Width           =   1905
+         End
+         Begin VB.Label Label2 
+            Alignment       =   2  'Center
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   "&Meses"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   945
             TabIndex        =   3
             Top             =   210
-            Width           =   2640
+            Width           =   1695
+         End
+         Begin VB.Label Label1 
+            Alignment       =   2  'Center
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   "&Año"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   0
+            TabIndex        =   1
+            Top             =   210
+            Width           =   855
+         End
+         Begin VB.Label Label5 
+            Alignment       =   2  'Center
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   " &Fecha Entrega"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   2730
+            TabIndex        =   5
+            Top             =   210
+            Width           =   1485
          End
          Begin VB.Label LblATS 
             Alignment       =   2  'Center
             BackColor       =   &H00FF0000&
             BeginProperty Font 
                Name            =   "MS Sans Serif"
-               Size            =   13.5
+               Size            =   15
                Charset         =   0
                Weight          =   700
                Underline       =   0   'False
@@ -916,9 +938,9 @@ Begin VB.Form FAnexoTransaccional
                Strikethrough   =   0   'False
             EndProperty
             ForeColor       =   &H0080FFFF&
-            Height          =   435
-            Left            =   3045
-            TabIndex        =   10
+            Height          =   645
+            Left            =   6300
+            TabIndex        =   8
             Top             =   210
             Width           =   4740
          End
@@ -1017,51 +1039,6 @@ Begin VB.Form FAnexoTransaccional
       EndProperty
       _Version        =   393216
    End
-   Begin MSMask.MaskEdBox MBFechaE 
-      Height          =   330
-      Left            =   105
-      TabIndex        =   8
-      ToolTipText     =   "Formato de Fecha: DD/MM/AA"
-      Top             =   1260
-      Width           =   1485
-      _ExtentX        =   2619
-      _ExtentY        =   582
-      _Version        =   393216
-      AllowPrompt     =   -1  'True
-      AutoTab         =   -1  'True
-      MaxLength       =   10
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Format          =   "dd/mm/yyyy"
-      Mask            =   "##/##/####"
-      PromptChar      =   "0"
-   End
-   Begin VB.Label Label5 
-      Alignment       =   2  'Center
-      BorderStyle     =   1  'Fixed Single
-      Caption         =   " &Fecha Entrega"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   330
-      Left            =   105
-      TabIndex        =   9
-      Top             =   945
-      Width           =   1485
-   End
    Begin VB.Label LblA4 
       Alignment       =   2  'Center
       BackStyle       =   0  'Transparent
@@ -1079,7 +1056,7 @@ Begin VB.Form FAnexoTransaccional
       EndProperty
       Height          =   330
       Left            =   105
-      TabIndex        =   5
+      TabIndex        =   12
       Top             =   6930
       Width           =   1275
    End
@@ -1107,13 +1084,28 @@ Dim NumTrans As Long
 Dim Segunda_Pag As Boolean
 Dim EsSemestral As Boolean
 
-Private Sub CmdSalir_Click()
-  Unload Me
+Private Sub CATAnio_KeyDown(KeyCode As Integer, Shift As Integer)
+  PresionoEnter KeyCode
 End Sub
 
-Private Sub Command2_Click()
-  FechaValida MBFechaE
-  Imprimir_Formulario_107 Format(MBFechaE, "yyyymmdd")
+Private Sub CATAnio_LostFocus()
+    Anio_Anexo = CATAnio.Text
+    Mes_Anexo = CATMes.Text
+    LblATS.Caption = "GENERACION DEL ATS PERIODO " & Anio_Anexo & " - " & CATMes.Text
+End Sub
+
+Private Sub CATMes_KeyDown(KeyCode As Integer, Shift As Integer)
+    PresionoEnter KeyCode
+End Sub
+
+Private Sub CATMes_LostFocus()
+    Anio_Anexo = CATAnio.Text
+    Mes_Anexo = CATMes.Text
+    LblATS.Caption = "GENERACION DEL ATS PERIODO " & Anio_Anexo & " - " & Mes_Anexo
+End Sub
+
+Private Sub CmdSalir_Click()
+  Unload Me
 End Sub
 
 Private Sub DGRolPagos_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -1155,7 +1147,6 @@ Dim ExisteAnioActual As Boolean
   LblA4.Caption = ""
   
  'Empresas si es con sucursales
- 
   sItem = ""
   sSQL = "SELECT Sucursal " _
        & "FROM Acceso_Sucursales " _
@@ -1196,6 +1187,7 @@ Dim ExisteAnioActual As Boolean
 
   'Toolbar1.buttons.Clear
   'Toolbar1.buttons.Item(1).ButtonMenus.Add (0), "A2000", 2000
+  CATAnio.Clear
   ExisteAnioActual = False
   sSQL = "SELECT YEAR(Fecha) As Anio " _
        & "FROM Trans_Compras " _
@@ -1218,39 +1210,42 @@ Dim ExisteAnioActual As Boolean
   sSQL = sSQL _
        & "GROUP BY YEAR(Fecha) " _
        & "ORDER BY YEAR(Fecha) DESC "
-  Select_Adodc AdoAux, sSQL, , , "Periodos_ATS"
-  MsgBox "."
-''  With AdoAux.Recordset
-''   If .RecordCount > 0 Then
-''       Do While Not .EOF
-''          'MsgBox .fields("Anio")
-''          'If .fields("Anio") <> "2000" Then
-''              Toolbar1.buttons.Item(1).ButtonMenus.Add , "A" & .fields("Anio"), CStr(.fields("Anio"))
-''              If Year(FechaSistema) = .fields("Anio") Then ExisteAnioActual = True
-''          'End If
-''         .MoveNext
-''       Loop
-''   End If
-''  End With
-''
-''  'MsgBox sItem & vbCrLf & No_ATS
-''
-'' 'MsgBox Toolbar1.Buttons.Item(1).ButtonMenus.Count
-''  If Not ExisteAnioActual And Periodo_Contable = Ninguno Then
-''     Toolbar1.buttons.Item(1).ButtonMenus.Add , "A" & Year(FechaSistema), Year(FechaSistema)
-''  End If
-''
-'  Toolbar1.buttons.Item(1).ButtonMenus.Remove ("A2000")
-  
- 'verificamos si la carpeta AT y la subcarpeta de la empresa existe sino la creamos
+  Select_Adodc AdoAux, sSQL
+  With AdoAux.Recordset
+   If .RecordCount > 0 Then
+       Do While Not .EOF
+          CATAnio.AddItem .fields("Anio")
+          CATAnio.Text = .fields("Anio")
+         .MoveNext
+       Loop
+   End If
+  End With
+  CATMes.Clear
+  sSQL = "SELECT Dia_Mes " _
+       & "FROM Tabla_Dias_Meses " _
+       & "WHERE Tipo = 'M' " _
+       & "AND No_D_M > 0  " _
+       & "ORDER BY No_D_M "
+  Select_Adodc AdoAux, sSQL
+  With AdoAux.Recordset
+   If .RecordCount > 0 Then
+       Do While Not .EOF
+          CATMes.AddItem .fields("Dia_Mes")
+         .MoveNext
+       Loop
+   End If
+  End With
+  CATMes.AddItem "1er_Semestre"
+  CATMes.AddItem "2do_Semestre"
  
+ 'verificamos si la carpeta AT y la subcarpeta de la empresa existe sino la creamos
   Anio = Year(FechaSistema)
   Mes = MesesLetras(Month(FechaSistema))
   Anio_Anexo = Year(FechaSistema)
   Mes_Anexo = Month(FechaSistema)
-  Toolbar1.buttons(2).Caption = Anio
-  Toolbar1.buttons(3).Caption = Mes
-  Toolbar1.Refresh
+  CATMes.Text = MesesLetras(Month(FechaSistema))
+  
+  LblATS.Caption = "GENERACION DEL ATS PERIODO " & Anio_Anexo & " - " & CATMes.Text
 
   Codigo = RutaSysBases & "\AT"
   Cadena = Dir(Codigo, vbDirectory)
@@ -1270,8 +1265,8 @@ Dim ExisteAnioActual As Boolean
      Toolbar1.buttons("REOC").Enabled = False
      Toolbar1.buttons("RDEP").Enabled = False
   End If
-  
   RatonNormal
+  CATAnio.SetFocus
 End Sub
 
 Private Sub Form_Load()
@@ -3435,11 +3430,12 @@ End Sub
 
 Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
 Dim Id_Mes As Byte
-  Anio_Anexo = Toolbar1.buttons(2).Caption
-  Mes_Anexo = Toolbar1.buttons(3).Caption
+  RatonReloj
+  Anio_Anexo = CATAnio.Text
+  Mes_Anexo = CATMes.Text
   Progreso_Barra.Mensaje_Box = "Consultando el ATS de " & Anio_Anexo & "-" & Mes_Anexo
   Progreso_Iniciar
-  LblATS.Caption = "GENERACION DEL ATS DEL " & Anio_Anexo & " - " & Mes_Anexo
+  LblATS.Caption = "GENERACION DEL ATS PERIODO " & Anio_Anexo & " - " & Mes_Anexo
   Archivo_XML = ""
   If Button.key <> "Salir" Then
     'Determinamos la fecha del Anexo
@@ -3452,9 +3448,10 @@ Dim Id_Mes As Byte
      Progreso_Esperar
      
      If InStr(1, CStr(FechaFin), "-") > 0 Then Numero = CLng(Replace(FechaFin, "-", "")) Else Numero = CLng(FechaFin)
-     
+     RatonReloj
      Actualizar_Datos_ATS_SP NumEmpresa, FechaInicial, FechaFinal, Numero, CheqATSConElect.value
-               
+    'MsgBox FechaInicial & vbCrLf & FechaFinal & vbCrLf & Numero
+     
     'LISTA DE CODIGO DE ANEXOS
      Progreso_Esperar
      RatonReloj
@@ -3523,6 +3520,9 @@ Dim Id_Mes As Byte
          Archivo_XML = RutaSysBases & "\AT\AT" & NumEmpresa & "\RDEP" & Format(Anio, "0000") & ".xml"
          Crear_Anexos_RDEP Archivo_XML
          Carga_Paginas_RDEP
+    Case "F107"
+         FechaValida MBFechaE
+         Imprimir_Formulario_107 Format(MBFechaE, "yyyymmdd")
     Case "Salir"
          Progreso_Final
          Unload FAnexoTransaccional
@@ -3535,17 +3535,9 @@ Dim Id_Mes As Byte
 End Sub
 
 Private Sub Toolbar1_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMenu)
-  If IsNumeric(ButtonMenu) Then
-     Anio_Anexo = ButtonMenu
-     Toolbar1.buttons(2).Caption = Anio_Anexo
-  Else
-     Mes_Anexo = ButtonMenu
-     Toolbar1.buttons(3).Caption = Mes_Anexo
-  End If
-'  SSTab1.Caption = "ANEXO TRANSACIONAL DE " & Anio_Anexo & "-" & UCaseStrg(Mes_Anexo)
-  Anio_Anexo = Toolbar1.buttons(2).Caption
-  Mes_Anexo = Toolbar1.buttons(3).Caption
-  LblATS.Caption = "GENERACION DEL ATS DEL " & Anio_Anexo & " - " & Mes_Anexo
+  Anio_Anexo = CATAnio.Text
+  Mes_Anexo = CATMes.Text
+  LblATS.Caption = "GENERACION DEL ATS PERIODO " & Anio_Anexo & " - " & Mes_Anexo
   LblATS.Refresh
   Toolbar1.Refresh
 End Sub
@@ -3608,8 +3600,8 @@ Dim NombFilePict As String
   Vista_Retencion_Fuente_Iva
   
   sSQL = "SELECT TI.TipoComprobante,TCC.Descripcion,COUNT(TipoComprobante) As Cant,SUM(ValorCIF) As VC,SUM(MontoIva) As MI " _
-      & "FROM Trans_Importaciones As TI,Clientes As C,Tipo_Comprobante As TCC " _
-      & "WHERE TI.Fecha Between #" & FechaIni & "# AND #" & FechaFin & "#  "
+       & "FROM Trans_Importaciones As TI,Clientes As C,Tipo_Comprobante As TCC " _
+       & "WHERE TI.Fecha Between #" & FechaIni & "# AND #" & FechaFin & "#  "
   If ConSucursal Then
      If Len(No_ATS) > 3 Then sSQL = sSQL & "AND TI.Item NOT IN (" & No_ATS & ") "
   Else
@@ -4540,11 +4532,11 @@ Public Sub Vista_Retencion_Impuesto_Renta()
  Real1 = 0
  Real2 = 0
  'MsgBox FechaIni & vbCrLf & FechaFin
- sSQL = "SELECT TA.CodRet,CCR.Concepto,COUNT(Concepto) As Cant,SUM(BaseImp) As BI,SUM(ValRet) As VR " _
-      & "FROM Trans_Air As TA,Tipo_Concepto_Retencion As CCR " _
+ sSQL = "SELECT TA.CodRet, CCR.Concepto, COUNT(Concepto) As Cant, SUM(BaseImp) As BI, SUM(ValRet) As VR " _
+      & "FROM Trans_Air As TA, Tipo_Concepto_Retencion As CCR " _
       & "WHERE TA.Fecha Between #" & FechaIni & "# AND #" & FechaFin & "#  "
  If ConSucursal Then
-    If Len(No_ATS) > 3 Then sSQL = sSQL & "AND TA.Item NOT IN (" & No_ATS & ") "
+    If Len(No_ATS) > 3 Then sSQL = sSQL & "AND TA.Item IN (" & No_ATS & ") "
  Else
     sSQL = sSQL & "AND TA.Item = '" & NumEmpresa & "' "
  End If
@@ -4552,10 +4544,10 @@ Public Sub Vista_Retencion_Impuesto_Renta()
       & "AND TA.Tipo_Trans = 'C' " _
       & "AND CCR.Fecha_Inicio <= #" & FechaMid & "# " _
       & "AND CCR.Fecha_Final >= #" & FechaMid & "# " _
-      & "AND TA.CodRet = CCR.Codigo  " _
-      & "GROUP BY TA.CodRet,CCR.Concepto " _
+      & "AND TA.CodRet = CCR.Codigo " _
+      & "GROUP BY TA.CodRet, CCR.Concepto " _
       & "ORDER BY TA.CodRet "
- Select_Adodc AdoAux, sSQL
+ Select_Adodc AdoAux, sSQL     ', , , "Trans_Air - Tipo_Concepto_Retencion"
  With AdoAux.Recordset
   If .RecordCount > 0 Then
       cPrint.tipoDeLetra = TipoArial
@@ -4766,11 +4758,11 @@ Public Sub Vista_Retencion_Fuente_Iva()
  sSQL = "SELECT TA.CodRet, TR.Concepto, TR.Porcentaje, COUNT(TA.CodRet) As Cant, SUM(TA.BaseImp) As BI, SUM(TA.ValRet) As VR " _
       & "FROM Trans_Air As TA,Tipo_Concepto_Retencion As TR " _
       & "WHERE TA.Fecha Between #" & FechaIni & "# AND #" & FechaFin & "#  "
- If ConSucursal Then
-    If Len(No_ATS) > 3 Then sSQL = sSQL & "AND TA.Item NOT IN (" & No_ATS & ") "
- Else
+ 'If ConSucursal Then
+ '   If Len(No_ATS) > 3 Then sSQL = sSQL & "AND TA.Item NOT IN (" & No_ATS & ") "
+ 'Else
     sSQL = sSQL & "AND TA.Item = '" & NumEmpresa & "' "
- End If
+ 'End If
  sSQL = sSQL & "AND TA.Periodo = '" & Periodo_Contable & "' " _
       & "AND TA.Tipo_Trans = 'V' " _
       & "AND TR.Fecha_Inicio <= #" & FechaIni & "# " _
@@ -4851,8 +4843,8 @@ Public Sub Consultar_Anexos()
   Dim CodCiudad As String
   Dim Cont_RDEP As Integer
   
-  Anio_Anexo = Toolbar1.buttons(2).Caption
-  Mes_Anexo = Toolbar1.buttons(3).Caption
+  Anio_Anexo = CATAnio.Text
+  Mes_Anexo = CATMes.Text
   Fecha_Del_AT Mes_Anexo, Anio_Anexo
   
  'Asignar el contador de las Transacciones
@@ -4864,30 +4856,28 @@ Public Sub Consultar_Anexos()
       
   If Periodo_Contable = "" Then Periodo_Contable = Ninguno
  'CLIENTES
-  sSQL = "SELECT * " _
+  sSQL = "SELECT " & Full_Fields("Clientes") & " " _
        & "FROM Clientes " _
        & "WHERE Codigo <> '.' " _
        & "ORDER BY Cliente "
   Select_Adodc AdoClientes, sSQL
   
  'ANULADOS
-  sSQL = "SELECT * " _
+  sSQL = "SELECT " & Full_Fields("Trans_Anulados") & " " _
        & "FROM Trans_Anulados " _
        & "WHERE FechaAnulacion Between #" & FechaIni & "# AND #" & FechaFin & "# " _
        & "AND Periodo = '" & Periodo_Contable & "' " _
-       & "AND Item IN (" & sItem & ") " _
+       & "AND Item = '" & NumEmpresa & "' " _
        & "ORDER BY Linea_SRI,FechaAnulacion "
   Select_Adodc AdoAnulados, sSQL
-  
+
  'COMPRAS
   sSQL = "SELECT C.Cliente, C.Codigo, C.CI_RUC, C.TD, C.Tipo_Pasaporte, C.Parte_Relacionada, TC.* " _
        & "FROM Trans_Compras As TC, Clientes As C " _
        & "WHERE TC.Fecha Between #" & FechaIni & "# AND #" & FechaFin & "# " _
        & "AND TC.Periodo = '" & Periodo_Contable & "' " _
        & "AND TC.Item IN (" & sItem & ") "
-  
-  If CheqATSConElect.value = 0 Then sSQL = sSQL & "AND LEN(AutRetencion) < 13 "
-  
+  If CheqATSConElect.value = 0 Then sSQL = sSQL & "AND LEN(TC.AutRetencion) < 13 " Else sSQL = sSQL & "AND LEN(TC.AutRetencion) <> 13 "
   sSQL = sSQL _
        & "AND TC.IdProv = C.Codigo " _
        & "ORDER BY TC.Linea_SRI,C.Cliente, C.CI_RUC, C.TD "
@@ -4960,7 +4950,7 @@ Public Sub Consultar_Anexos()
        Loop
    End If
   End With
-  SQL2 = "SELECT E.RUC,C.Cliente,C.CI_RUC,C.TD,C.Direccion,C.DirNumero,C.Ciudad,C.Prov,C.Telefono,C.Pais,TD.* " _
+  SQL2 = "SELECT E.RUC, C.Cliente, C.CI_RUC, C.TD, C.Direccion, C.DirNumero, C.Ciudad, C.Prov, C.Telefono, C.Pais, TD.* " _
        & "FROM Catalogo_Rol_Pagos As TD, Clientes As C, Empresas As E " _
        & "WHERE TD.Fecha_107 Between #" & FechaIniDep & "# AND #" & FechaFinDep & "# " _
        & "AND TD.Periodo = '" & Periodo_Contable & "' " _
@@ -4968,56 +4958,53 @@ Public Sub Consultar_Anexos()
        & "AND (TD.SuelSal+TD.SobSuelComRemu) > 0 " _
        & "AND TD.Item = E.Item " _
        & "AND TD.Codigo = C.Codigo " _
-       & "ORDER BY TD.Linea_SRI,C.Cliente "
+       & "ORDER BY TD.Linea_SRI, C.Cliente "
   Select_Adodc_Grid DGRolPagos, AdoRolPagos, SQL2
  'MsgBox SQL2 & vbCrLf & AdoRolPagos.Recordset.RecordCount
  
  'VENTAS
-  sSQL = "SELECT X, RUC_CI,TB,Razon_Social,TipoComprobante,RetPresuntiva," _
-       & "PorcentajeIva,PorcentajeIce,IvaPresuntivo,PorRetBienes,PorRetServicios," _
-       & "SUM(NumeroComprobantes) As NumeroComprobantesV," _
-       & "SUM(BaseImponible) As BaseImponibleV," _
-       & "SUM(BaseImpGrav) As BaseImpGravV," _
-       & "SUM(MontoIva) As MontoIvaV," _
-       & "SUM(BaseImpIce) As BaseImpIceV," _
-       & "SUM(MontoIce) As MontoIceV," _
-       & "SUM(MontoIvaBienes) As MontoIvaBienesV," _
-       & "SUM(ValorRetBienes) As ValorRetBienesV," _
-       & "SUM(MontoIvaServicios) As MontoIvaServiciosV," _
+  sSQL = "SELECT X, RUC_CI, TB, Razon_Social, TipoComprobante, RetPresuntiva, PorcentajeIva, PorcentajeIce, IvaPresuntivo, PorRetBienes, PorRetServicios, " _
+       & "SUM(NumeroComprobantes) As NumeroComprobantesV, " _
+       & "SUM(BaseImponible) As BaseImponibleV, " _
+       & "SUM(BaseImpGrav) As BaseImpGravV, " _
+       & "SUM(MontoIva) As MontoIvaV, " _
+       & "SUM(BaseImpIce) As BaseImpIceV, " _
+       & "SUM(MontoIce) As MontoIceV, " _
+       & "SUM(MontoIvaBienes) As MontoIvaBienesV, " _
+       & "SUM(ValorRetBienes) As ValorRetBienesV, " _
+       & "SUM(MontoIvaServicios) As MontoIvaServiciosV, " _
        & "SUM(ValorRetServicios) As ValorRetServiciosV " _
        & "FROM Trans_Ventas " _
        & "WHERE Fecha Between #" & FechaIni & "# AND #" & FechaFin & "# " _
        & "AND Periodo = '" & Periodo_Contable & "' " _
-       & "AND Item IN (" & sItem & ") " _
-       & "GROUP BY X, RUC_CI,TB,Razon_Social,TipoComprobante,RetPresuntiva,PorcentajeIva,PorcentajeIce,PorRetBienes,PorRetServicios,IvaPresuntivo " _
-       & "ORDER BY X, RUC_CI,TB,Razon_Social "
+       & "AND Item = '" & NumEmpresa & "' " _
+       & "GROUP BY X, RUC_CI,TB, Razon_Social, TipoComprobante, RetPresuntiva, PorcentajeIva, PorcentajeIce, PorRetBienes, PorRetServicios, IvaPresuntivo " _
+       & "ORDER BY X, RUC_CI,TB, Razon_Social "
   Select_Adodc AdoVentas, sSQL
- 
+  
  'PUNTO DE VENTAS
  'TV.PuntoEmision,
-  sSQL = "SELECT TipoComprobante,Establecimiento, " _
-       & "RetPresuntiva,PorcentajeIva,PorcentajeIce," _
-       & "IvaPresuntivo,PorRetBienes,PorRetServicios," _
-       & "SUM(NumeroComprobantes) As NumeroComprobantesV," _
-       & "SUM(BaseImponible) As BaseImponibleV," _
-       & "SUM(BaseImpGrav) As BaseImpGravV," _
-       & "SUM(MontoIva) As MontoIvaV," _
-       & "SUM(BaseImpIce) As BaseImpIceV," _
-       & "SUM(MontoIce) As MontoIceV," _
-       & "SUM(MontoIvaBienes) As MontoIvaBienesV," _
-       & "SUM(ValorRetBienes) As ValorRetBienesV," _
-       & "SUM(MontoIvaServicios) As MontoIvaServiciosV," _
+  sSQL = "SELECT TipoComprobante, Establecimiento, RetPresuntiva, PorcentajeIva, PorcentajeIce, IvaPresuntivo, PorRetBienes, PorRetServicios, " _
+       & "SUM(NumeroComprobantes) As NumeroComprobantesV, " _
+       & "SUM(BaseImponible) As BaseImponibleV, " _
+       & "SUM(BaseImpGrav) As BaseImpGravV, " _
+       & "SUM(MontoIva) As MontoIvaV, " _
+       & "SUM(BaseImpIce) As BaseImpIceV, " _
+       & "SUM(MontoIce) As MontoIceV, " _
+       & "SUM(MontoIvaBienes) As MontoIvaBienesV, " _
+       & "SUM(ValorRetBienes) As ValorRetBienesV, " _
+       & "SUM(MontoIvaServicios) As MontoIvaServiciosV, " _
        & "SUM(ValorRetServicios) As ValorRetServiciosV " _
        & "FROM Trans_Ventas " _
        & "WHERE Fecha Between #" & FechaIni & "# AND #" & FechaFin & "# " _
        & "AND Periodo = '" & Periodo_Contable & "' " _
-       & "AND Item IN (" & sItem & ") " _
-       & "GROUP BY Establecimiento,PuntoEmision,TipoComprobante,RetPresuntiva,PorcentajeIva,PorcentajeIce,PorRetBienes,PorRetServicios,IvaPresuntivo " _
+       & "AND Item = '" & NumEmpresa & "' " _
+       & "GROUP BY Establecimiento, PuntoEmision, TipoComprobante, RetPresuntiva, PorcentajeIva, PorcentajeIce, PorRetBienes, PorRetServicios, IvaPresuntivo " _
        & "ORDER BY Establecimiento "
   Select_Adodc AdoPuntosVentas, sSQL
  'MsgBox AdoVentas.Recordset.RecordCount & vbCrLf & AdoPuntosVentas.Recordset.RecordCount
  'LISTA LA BASES DE CIUDADES
-  sSQL = "SELECT * " _
+  sSQL = "SELECT " & Full_Fields("Tabla_Naciones") & " " _
        & "FROM Tabla_Naciones " _
        & "WHERE TR = 'C' " _
        & "ORDER BY CProvincia, Descripcion_Rubro "

@@ -646,7 +646,7 @@ Private Sub Form_Activate()
      Unload EstadoResult12Meses
      RatonNormal
   Else
-     Eliminar_Duplicados_SP "Catalogo_Cuentas", "Codigo", "", ""
+     Eliminar_Duplicados_SP "Catalogo_Cuentas", "Codigo"
      Fechas_Balances "Balance_Analitico", MBFechaI, MBFechaF
      DGBalanceG.Caption = "ESTADO DE RESULTADOS ANALITICOS MENSUALES"
      sSQL = "SELECT (Item & '  ' & Empresa) As NombreEmpresa " _

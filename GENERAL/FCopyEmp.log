@@ -1,0 +1,6 @@
+Línea 97: la clase MSDataListLib.DataList del control DLEntidad no era una clase de control cargada.
+Línea 156: la clase MSDataListLib.DataList del control DLEmpresa no era una clase de control cargada.
+Línea 215: la clase MSAdodcLib.Adodc del control AdoCta no era una clase de control cargada.
+Línea 261: la clase MSAdodcLib.Adodc del control AdoEmp no era una clase de control cargada.
+Línea 307: la clase MSAdodcLib.Adodc del control AdoCopyOrigen no era una clase de control cargada.
+Línea 353: la clase MSAdodcLib.Adodc del control AdoEntidad no era una clase de control cargada.

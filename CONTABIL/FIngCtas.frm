@@ -1777,7 +1777,7 @@ Dim CodigoCtas() As String
          & "AND Periodo = '" & Periodo_Contable & "' "
     Ejecutar_SQL_SP sSQL
     
-    Eliminar_Duplicados_SP "Catalogo_Cuentas", "Codigo", "", ""
+    Eliminar_Duplicados_SP "Catalogo_Cuentas", "Codigo"
     
     TBarCuentas.buttons("Copiar").Enabled = False
     'TBarCuentas.buttons("Cambiar").Enabled = False

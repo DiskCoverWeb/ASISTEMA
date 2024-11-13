@@ -3881,9 +3881,6 @@ Private Sub Timer1_Timer()
 End Sub
 
 Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
-Dim Resultado As Boolean
-Dim urljavascript As String
-Dim XML As String
  'MsgBox Button.key
  RatonReloj
  Select Case Button.key
@@ -3914,8 +3911,8 @@ Dim XML As String
    Case "UpdateCliente"
         Actualiza_Datos_Cliente
    Case "LeerJS"
-        urljavascript = "C:\SISTEMA\JAVASCRIPT\estudiantes.html"
-        XML = Replace(GetUrlSource(urljavascript), """", "'")
+        URLHTTP = "C:\SISTEMA\JAVASCRIPT\estudiantes.html"
+        XML = Replace(GetUrlSource(URLHTTP), """", "'")
         MsgBox XML
    Case "Salir"
         Unload FacturasPension

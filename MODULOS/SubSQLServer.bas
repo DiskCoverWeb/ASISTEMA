@@ -532,7 +532,7 @@ Dim AdoCon1 As ADODB.Connection
   If Len(SQLQuery) > 1 Then
      Set AdoCon1 = New ADODB.Connection
      If Not NoCompilar Then SQLQuery = CompilarSQL(SQLQuery)
-     NombreFile = "Archivo_" & Format(Time, "hh-mm-ss") & ".sql"
+    'NombreFile = "Archivo_" & Format(Time, "hh-mm-ss") & ".sql"
      Generar_File_SQL NombreFile, SQLQuery
     'MsgBox SQLQuery & vbCrLf & String(70, "_") & vbCrLf & AdoStrCnn
      If SQL_Server Then AdoCon1.open AdoStrCnn Else AdoCon1.open AdoStrCnnMySQL
@@ -592,21 +592,17 @@ Dim MiReg As ADODB.Recordset
 End Sub
 
 Public Sub Actualizar_Base_Datos_SP()
-
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
 Dim MiReg As ADODB.Recordset
 
     Iniciar_Stored_Procedure "Actualizar Base Datos", MiSQL, MiCmd, MiReg
     MiCmd.CommandText = "sp_Actualizar_Base_Datos"
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@strIPServidor", adVarChar, adParamInput, 50, strIPServidor)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@ruta_file", adVarChar, adParamInput, 256, RutaSistema & "\BASES\UPDATE_DB\")
     Procesar_Stored_Procedure MiCmd, MiReg
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
 
 Public Sub Actualizar_SP_FN_SP()
-
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
 Dim MiReg As ADODB.Recordset
@@ -1265,7 +1261,6 @@ Dim FechaFin As String
     MiCmd.Parameters.Append MiCmd.CreateParameter("@ATFisico", adBoolean, adParamInput, 1, ATFisico)
     Procesar_Stored_Procedure MiCmd, MiReg
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
-    MsgBox "...."
 End Sub
 
 Public Sub Iniciar_Datos_Default_SP()
@@ -1307,7 +1302,7 @@ Dim MiReg As ADODB.Recordset
 '''         & Porc_IVA
 End Sub
 
-Public Sub Eliminar_Duplicados_SP(NombreTabla As String, CamposDuplicados As String, CampoPivote1 As String, CampoPivote2 As String, Optional Item_000 As Boolean)
+Public Sub Eliminar_Duplicados_SP(NombreTabla As String, CamposDuplicados As String)
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
 Dim MiReg As ADODB.Recordset
@@ -1317,14 +1312,15 @@ Dim AdoCtasDB As ADODB.Recordset
     MiCmd.CommandText = "sp_Eliminar_Duplicados"
     MiCmd.Parameters.Append MiCmd.CreateParameter("@NombreTabla", adVarChar, adParamInput, 60, NombreTabla)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@CamposDuplicados", adVarChar, adParamInput, 1024, CamposDuplicados)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@CampoPivote1", adVarChar, adParamInput, 60, CampoPivote1)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@CampoPivote2", adVarChar, adParamInput, 60, CampoPivote2)
-    If Item_000 Then
-       MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, "000")
-    Else
-       MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
-    End If
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
+    
+'''    MiCmd.Parameters.Append MiCmd.CreateParameter("@CampoPivote1", adVarChar, adParamInput, 60, CampoPivote1)
+'''    MiCmd.Parameters.Append MiCmd.CreateParameter("@CampoPivote2", adVarChar, adParamInput, 60, CampoPivote2)
+'''    If Item_000 Then
+'''       MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, "000")
+'''    Else
+'''       MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
+'''    End If
+'''    MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
     Procesar_Stored_Procedure MiCmd, MiReg
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
@@ -1603,6 +1599,72 @@ Dim NumFile As Long
           MiCmd.Parameters.Append MiCmd.CreateParameter("@Usuario", adVarChar, adParamInput, 10, CodigoUsuario)
           MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
           MiCmd.Parameters.Append MiCmd.CreateParameter("@TipoFile", adVarChar, adParamInput, 5, TipoFile)
+          Procesar_Stored_Procedure MiCmd, MiReg
+          Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+       End If
+    End If
+    RatonNormal
+End Sub
+
+Public Sub Subir_Archivo_Abonos_Bancos_SP(PathTXT As String)
+Dim MiSQL As ADODB.Connection
+Dim MiCmd As ADODB.Command
+Dim MiReg As ADODB.Recordset
+
+Dim FileTXT As String
+Dim PathTXTT As String
+Dim LineFile As String
+Dim Separador As String
+Dim TablaAbonos As String
+
+Dim NumFile As Long
+
+    RatonReloj
+    If Len(PathTXT) > 1 Then
+       CantCampos = 0
+       Separador = Ninguno
+       TablaAbonos = "CREATE TABLE Abonos_Bancos_" & CodigoUsuario & "(" & vbCrLf
+       NumFile = FreeFile
+       Open PathTXT For Input As #NumFile
+            Line Input #NumFile, LineFile
+            If Separador = Ninguno Then
+               If InStr(LineFile, vbTab) > 0 Then Separador = vbTab
+            End If
+            No_Hasta = 1
+            If Separador = vbTab Then
+               Do While Len(LineFile) > 0 And No_Hasta > 0
+                   No_Hasta = InStr(LineFile, Separador)
+                   If No_Hasta >= 30 Then
+                      TablaAbonos = TablaAbonos & "C" & Format$(CantCampos, "00") & " NVARCHAR(100)," & vbCrLf
+                   Else
+                      TablaAbonos = TablaAbonos & "C" & Format$(CantCampos, "00") & " NVARCHAR(" & No_Hasta + 1 & ")," & vbCrLf
+                   End If
+                   MsgBox No_Hasta & vbCrLf & LineFile & vbCrLf & String(80, "-") & vbCrLf & TablaAbonos
+                   'If No_Hasta >= 1 Then
+                      LineFile = TrimStrg(MidStrg(LineFile, No_Hasta + 1, Len(LineFile)))
+                   'Else
+                    '  LineFile = ""
+                   'End If
+                   CantCampos = CantCampos + 1
+               Loop
+            Else
+               TablaAbonos = TablaAbonos & "C00" & " NVARCHAR(1024)," & vbCrLf
+            End If
+       Close #NumFile
+       TablaAbonos = MidStrg(TablaAbonos, 1, Len(TablaAbonos) - 3) & ");"
+       MsgBox "Ok: " & vbCrLf & TablaAbonos
+    
+       If Len(TablaAbonos) >= 10 Then
+          FileTXT = Right$(PathTXT, Len(PathTXT) - InStrRev(PathTXT, "\"))
+          PathTXTT = MidStrg(PathTXT, 1, Len(PathTXT) - Len(FileTXT))
+          Iniciar_Stored_Procedure "sp Subir Archivo Abonos Bancos", MiSQL, MiCmd, MiReg
+          MiCmd.CommandText = "sp_Subir_Archivo_Abonos_Bancos"
+          MiCmd.Parameters.Append MiCmd.CreateParameter("@strIPServidor", adVarChar, adParamInput, 100, strIPServidor)
+          MiCmd.Parameters.Append MiCmd.CreateParameter("@PathFileTXT", adVarChar, adParamInput, 255, PathTXTT)
+          MiCmd.Parameters.Append MiCmd.CreateParameter("@FileTXT", adVarChar, adParamInput, 100, FileTXT)
+          MiCmd.Parameters.Append MiCmd.CreateParameter("@Usuario", adVarChar, adParamInput, 10, CodigoUsuario)
+          MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
+          MiCmd.Parameters.Append MiCmd.CreateParameter("@Tabla_Bancos", adVarChar, adParamInput, Len(TablaAbonos) + 10, TablaAbonos)
           Procesar_Stored_Procedure MiCmd, MiReg
           Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
        End If

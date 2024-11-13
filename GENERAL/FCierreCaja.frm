@@ -277,36 +277,36 @@ Begin VB.Form FCierreCaja
       TabCaption(1)   =   "&2.- ABONOS"
       TabPicture(1)   =   "FCierreCaja.frx":0036
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "Label4"
-      Tab(1).Control(1)=   "LabelCheque"
+      Tab(1).Control(0)=   "DGCxC"
+      Tab(1).Control(1)=   "AdoCxC"
       Tab(1).Control(2)=   "DGAnticipos"
-      Tab(1).Control(3)=   "AdoCxC"
-      Tab(1).Control(4)=   "DGCxC"
+      Tab(1).Control(3)=   "LabelCheque"
+      Tab(1).Control(4)=   "Label4"
       Tab(1).ControlCount=   5
       TabCaption(2)   =   "&3.- INVENTARIO"
       TabPicture(2)   =   "FCierreCaja.frx":0052
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "DGCierres"
+      Tab(2).Control(0)=   "DGInv"
       Tab(2).Control(1)=   "DGProductos"
-      Tab(2).Control(2)=   "DGInv"
+      Tab(2).Control(2)=   "DGCierres"
       Tab(2).ControlCount=   3
       TabCaption(3)   =   "&4.- CONTABILIDAD"
       TabPicture(3)   =   "FCierreCaja.frx":006E
       Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "Label11"
-      Tab(3).Control(1)=   "Label1"
-      Tab(3).Control(2)=   "LblDiferencia"
-      Tab(3).Control(3)=   "LabelDebe"
-      Tab(3).Control(4)=   "LabelHaber"
-      Tab(3).Control(5)=   "LblConcepto"
-      Tab(3).Control(6)=   "LblConcepto1"
-      Tab(3).Control(7)=   "LabelHaber1"
-      Tab(3).Control(8)=   "LabelDebe1"
-      Tab(3).Control(9)=   "LblDiferencia1"
-      Tab(3).Control(10)=   "Label13"
-      Tab(3).Control(11)=   "Label15"
-      Tab(3).Control(12)=   "DGAsiento1"
-      Tab(3).Control(13)=   "DGAsiento"
+      Tab(3).Control(0)=   "DGAsiento"
+      Tab(3).Control(1)=   "DGAsiento1"
+      Tab(3).Control(2)=   "Label15"
+      Tab(3).Control(3)=   "Label13"
+      Tab(3).Control(4)=   "LblDiferencia1"
+      Tab(3).Control(5)=   "LabelDebe1"
+      Tab(3).Control(6)=   "LabelHaber1"
+      Tab(3).Control(7)=   "LblConcepto1"
+      Tab(3).Control(8)=   "LblConcepto"
+      Tab(3).Control(9)=   "LabelHaber"
+      Tab(3).Control(10)=   "LabelDebe"
+      Tab(3).Control(11)=   "LblDiferencia"
+      Tab(3).Control(12)=   "Label1"
+      Tab(3).Control(13)=   "Label11"
       Tab(3).ControlCount=   14
       TabCaption(4)   =   "&5.- ANULADAS"
       TabPicture(4)   =   "FCierreCaja.frx":008A
@@ -316,26 +316,26 @@ Begin VB.Form FCierreCaja
       TabCaption(5)   =   "&6.- REPORTE DE AUDITORIA"
       TabPicture(5)   =   "FCierreCaja.frx":00A6
       Tab(5).ControlEnabled=   0   'False
-      Tab(5).Control(0)=   "LblTotalFacturado"
-      Tab(5).Control(1)=   "Label16"
-      Tab(5).Control(2)=   "LblServicio"
-      Tab(5).Control(3)=   "Label7"
-      Tab(5).Control(4)=   "LblIVA"
-      Tab(5).Control(5)=   "LblDescuento"
-      Tab(5).Control(6)=   "LblSinIVA"
-      Tab(5).Control(7)=   "LblConIVA"
-      Tab(5).Control(8)=   "Label18"
-      Tab(5).Control(9)=   "Label14"
-      Tab(5).Control(10)=   "Label12"
-      Tab(5).Control(11)=   "Label9"
-      Tab(5).Control(12)=   "AdoSRI"
-      Tab(5).Control(13)=   "DGSRI"
+      Tab(5).Control(0)=   "DGSRI"
+      Tab(5).Control(1)=   "AdoSRI"
+      Tab(5).Control(2)=   "Label9"
+      Tab(5).Control(3)=   "Label12"
+      Tab(5).Control(4)=   "Label14"
+      Tab(5).Control(5)=   "Label18"
+      Tab(5).Control(6)=   "LblConIVA"
+      Tab(5).Control(7)=   "LblSinIVA"
+      Tab(5).Control(8)=   "LblDescuento"
+      Tab(5).Control(9)=   "LblIVA"
+      Tab(5).Control(10)=   "Label7"
+      Tab(5).Control(11)=   "LblServicio"
+      Tab(5).Control(12)=   "Label16"
+      Tab(5).Control(13)=   "LblTotalFacturado"
       Tab(5).ControlCount=   14
       TabCaption(6)   =   "&7.- REPORTE DEL BANCO"
       TabPicture(6)   =   "FCierreCaja.frx":00C2
       Tab(6).ControlEnabled=   0   'False
-      Tab(6).Control(0)=   "DGBanco"
-      Tab(6).Control(1)=   "DCBanco"
+      Tab(6).Control(0)=   "DCBanco"
+      Tab(6).Control(1)=   "DGBanco"
       Tab(6).ControlCount=   2
       Begin MSDataGridLib.DataGrid DGInv 
          Bindings        =   "FCierreCaja.frx":00DE
@@ -3572,13 +3572,15 @@ Dim NoMes As Byte
                   SetAdoFields "FECHA_V", .fields("Fecha")
                   SetAdoFields "TC", .fields("Tipo_Cta")
                   SetAdoFields "Cta", .fields("Cta")
-                  SetAdoFields "Serie", .fields("Serie")
                   SetAdoFields "Detalle_SubCta", "Abono de " & .fields("TP") & ": " & .fields("Serie") & "-" & Format(.fields("Factura"), "000000000")
                   SetAdoFields "T_No", Trans_No
                   SetAdoFields "SC_No", ContSC
                   If NumeroFASubModulo Then
                      SetAdoFields "Serie", .fields("Serie")
                      SetAdoFields "Factura", .fields("Factura")
+                  Else
+                     SetAdoFields "Serie", "001001"
+                     SetAdoFields "Factura", 0
                   End If
                   SetAdoUpdate
                   ContSC = ContSC + 1

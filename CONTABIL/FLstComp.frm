@@ -2369,7 +2369,7 @@ Public Sub ListarComprobantes()
      LblTotalC.Caption = Format(Saldo, "#,##0.00")
      
     'Listar SubCtas CxC/CxP
-     sSQL = "SELECT TSC.Cta,TSC.TC,Be.Cliente As Detalles,Factura,Fecha_V,Parcial_ME,Debitos,Creditos,Prima," _
+     sSQL = "SELECT TSC.Cta,TSC.TC,Be.Cliente As Detalles,TSC.Serie,Factura,Fecha_V,Parcial_ME,Debitos,Creditos,Prima," _
           & "TSC.Detalle_SubCta,Be.Codigo " _
           & "FROM Trans_SubCtas As TSC, Clientes As Be " _
           & "WHERE TSC.Item = '" & Co.Item & "' " _

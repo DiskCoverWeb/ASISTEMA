@@ -81,25 +81,27 @@ Dim Results As String
   Crear_FN_SP = TrimStrg(TextFile)
 End Function
 
-Public Sub Generar_File_SQL(NombreFile As String, SQLQuery As String)
+Public Sub Generar_File_SQL(NombreFile As String, SQLQuery As String, Optional SinEnter As Boolean)
 Dim DatosFile As String
 Dim NumFile As Long
 
   If Len(NombreFile) > 1 Then
      RatonReloj
      DatosFile = SQLQuery
-     DatosFile = Replace(DatosFile, "SELECT ", vbCrLf & "SELECT ")
-     DatosFile = Replace(DatosFile, "UNION ", vbCrLf & "UNION ")
-     DatosFile = Replace(DatosFile, "FROM ", vbCrLf & "FROM ")
-     DatosFile = Replace(DatosFile, "WHERE ", vbCrLf & "WHERE ")
-     DatosFile = Replace(DatosFile, "AND ", vbCrLf & "AND ")
-     DatosFile = Replace(DatosFile, "OR ", vbCrLf & "OR ")
-     DatosFile = Replace(DatosFile, "SET ", vbCrLf & "SET ")
-     DatosFile = Replace(DatosFile, "GROUP BY ", vbCrLf & "GROUP BY ")
-     DatosFile = Replace(DatosFile, "ORDER BY ", vbCrLf & "ORDER BY ")
-     DatosFile = Replace(DatosFile, "HAVING ", vbCrLf & "HAVING ")
-     DatosFile = Replace(DatosFile, "VALUES ", vbCrLf & "VALUES" & vbCrLf)
-'     DatosFile = Replace(DatosFile, "NULL,", "NULL," & vbCrLf)
+     If SinEnter = False Then
+        DatosFile = Replace(DatosFile, "SELECT ", vbCrLf & "SELECT ")
+        DatosFile = Replace(DatosFile, "UNION ", vbCrLf & "UNION ")
+        DatosFile = Replace(DatosFile, "FROM ", vbCrLf & "FROM ")
+        DatosFile = Replace(DatosFile, "WHERE ", vbCrLf & "WHERE ")
+        DatosFile = Replace(DatosFile, "AND ", vbCrLf & "AND ")
+        DatosFile = Replace(DatosFile, "OR ", vbCrLf & "OR ")
+        DatosFile = Replace(DatosFile, "SET ", vbCrLf & "SET ")
+        DatosFile = Replace(DatosFile, "GROUP BY ", vbCrLf & "GROUP BY ")
+        DatosFile = Replace(DatosFile, "ORDER BY ", vbCrLf & "ORDER BY ")
+        DatosFile = Replace(DatosFile, "HAVING ", vbCrLf & "HAVING ")
+        DatosFile = Replace(DatosFile, "VALUES ", vbCrLf & "VALUES" & vbCrLf)
+'       DatosFile = Replace(DatosFile, "NULL,", "NULL," & vbCrLf)
+     End If
      NumFile = FreeFile
      Open RutaSysBases & "\TEMP\" & NombreFile & ".sql" For Output As #NumFile
      Print #NumFile, DatosFile
@@ -176,7 +178,6 @@ If BoxMensaje = vbYes Then
                If Not para.Recordset.EOF Then Codigo2 = para.Recordset.fields("Email")
             End If
          End If
-         
          TMail.Asunto = .fields("Asunto")
          TMail.Mensaje = String$(20, " ") & "M E M O R A N D O" & vbCrLf _
                        & String$(20, " ") & "-----------------" & vbCrLf _
@@ -3127,13 +3128,15 @@ Public Sub Select_AdoDBTabla(AdoReg As ADODB.Recordset, _
 End Sub
 
 Public Sub Conectar_Ado_Execute_MySQL(SQLQuery As String, _
-                                      Optional RegSN As Boolean)
+                                      Optional RegSN As Boolean, _
+                                      Optional NombreFile As String)
 Dim AdoCon1 As ADODB.Connection
 Dim IdTime As Long
      RatonReloj
     'Consultamos las cuentas de la tabla
-     SQLQuery = CompilarSQL(SQLQuery)
+    'SQLQuery = CompilarSQL(SQLQuery)
     'MsgBox SQLQuery & vbCrLf & String(70, "_") & vbCrLf & AdoStrCnnMySQL
+     Generar_File_SQL NombreFile, SQLQuery, True
      Set AdoCon1 = New ADODB.Connection
      If Ping_IP("db.diskcoversystem.com") Then
         AdoCon1.open AdoStrCnnMySQL
@@ -4449,7 +4452,7 @@ End Sub
 
 Public Sub UPD_Actualizar_Datos_Defecto(ProgressBarEstado As ProgressBar, _
                                         LstStatud As ListBox, _
-                                        URLInet As Inet, _
+                                        URLinet As Inet, _
                                         Update_Dir As DirListBox, _
                                         Update_File As FileListBox, _
                                         Update_LstTablas As ListBox, _
@@ -6762,7 +6765,6 @@ Dim sSheetName As String
         Subir_Archivo_FTP_Linode ftpLinode, LstStatud, LstVwFTP, PathXls
         Subir_Archivo_CSV_SP PathXls
         Eliminar_Archivo_FTP_Linode ftpLinode, LstStatud, LstVwFTP, PathXls
-        
         Select_AdoDB rs, "SELECT * FROM Asiento_CSV_" & CodigoUsuario
         Set Importar_Excel_AdoDB = rs
         Set rs = Nothing

@@ -42,19 +42,73 @@ C:\Windows\System32\IPHLPAPI.DLL=
 C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_5.82.22621.3527_none_fbe8b6227808ef55\comctl32.dll=
 C:\Windows\System32\wininet.dll=
 C:\Windows\System32\urlmon.dll=
+C:\Windows\LIBRERIA\IKVM.OpenJDK.Core.dll=
+C:\Windows\LIBRERIA\IKVM.OpenJDK.Security.dll=
+C:\Windows\LIBRERIA\IKVM.OpenJDK.Text.dll=
+C:\Windows\LIBRERIA\IKVM.OpenJDK.Util.dll=
+C:\Windows\LIBRERIA\IKVM.OpenJDK.XML.API.dll=
+C:\Windows\LIBRERIA\IKVM.OpenJDK.XML.Parse.dll=
+C:\Windows\LIBRERIA\IKVM.Runtime.dll=
+C:\Windows\LIBRERIA\jss-4.2.5.dll=
+C:\Windows\LIBRERIA\MITyCLibAPI-1.0.4.dll=
+C:\Windows\LIBRERIA\MITyCLibCert-1.0.4.dll=
+C:\Windows\LIBRERIA\MITyCLibOCSP-1.0.4.dll=
+C:\Windows\LIBRERIA\MITyCLibPolicy-1.0.4.dll=
+C:\Windows\LIBRERIA\MITyCLibTrust-1.0.4.dll=
+C:\Windows\LIBRERIA\MITyCLibTSA-1.0.4.dll=
+C:\Windows\LIBRERIA\MITyCLibXADES-1.0.4.dll=
+C:\Windows\LIBRERIA\pdfcom.dll=
+C:\Windows\LIBRERIA\serializer-2.7.1.dll=
+C:\Windows\LIBRERIA\VBMySQLDirect.dll=
+C:\Windows\LIBRERIA\vbSendMail.dll=
+C:\Windows\LIBRERIA\xalan-2.7.1.dll=
+C:\Windows\LIBRERIA\xml-apis-1.3.04.dll=
+C:\Windows\LIBRERIA\xmlsec-1.4.2-ADSI-1.0.dll=
 
 [Package|DiskCover System 32 o 64 Bits|Out-of-Date Dependency Information]
 C:\Windows\SysWOW64\scrrun.dll=
 C:\Windows\SysWOW64\msstdfmt.dll=
 
 [Package|DiskCover System 32 o 64 Bits|Files Added]
+C:\Windows\LIBRERIA\bcmail-jdk15-1.43.dll=
+C:\Windows\LIBRERIA\bcprov-jdk15-1.43.dll=
+C:\Windows\LIBRERIA\bctsp-jdk15-1.43.dll=
+C:\Windows\LIBRERIA\commons-codec-1.2.dll=
+C:\Windows\LIBRERIA\commons-httpclient-3.0.1.dll=
+C:\Windows\LIBRERIA\commons-lang-2.4.dll=
+C:\Windows\LIBRERIA\commons-logging-1.1.dll=
+C:\Windows\LIBRERIA\FacturacionElect.dll=
+C:\Windows\LIBRERIA\IKVM.OpenJDK.Core.dll=
+C:\Windows\LIBRERIA\IKVM.OpenJDK.Security.dll=
+C:\Windows\LIBRERIA\IKVM.OpenJDK.Text.dll=
+C:\Windows\LIBRERIA\IKVM.OpenJDK.Util.dll=
+C:\Windows\LIBRERIA\IKVM.OpenJDK.XML.API.dll=
+C:\Windows\LIBRERIA\IKVM.OpenJDK.XML.Parse.dll=
+C:\Windows\LIBRERIA\IKVM.Runtime.dll=
+C:\Windows\LIBRERIA\jss-4.2.5.dll=
+C:\Windows\LIBRERIA\libmySQL.dll=
+C:\Windows\LIBRERIA\MITyCLibAPI-1.0.4.dll=
+C:\Windows\LIBRERIA\MITyCLibCert-1.0.4.dll=
+C:\Windows\LIBRERIA\MITyCLibOCSP-1.0.4.dll=
+C:\Windows\LIBRERIA\MITyCLibPolicy-1.0.4.dll=
+C:\Windows\LIBRERIA\MITyCLibTrust-1.0.4.dll=
+C:\Windows\LIBRERIA\MITyCLibTSA-1.0.4.dll=
+C:\Windows\LIBRERIA\MITyCLibXADES-1.0.4.dll=
+C:\Windows\LIBRERIA\pdfcom.dll=
+C:\Windows\LIBRERIA\serializer-2.7.1.dll=
+C:\Windows\LIBRERIA\VBMySQLDirect.dll=
+C:\Windows\LIBRERIA\vbSendMail.dll=
+C:\Windows\LIBRERIA\xalan-2.7.1.dll=
+C:\Windows\LIBRERIA\xml-apis-1.3.04.dll=
+C:\Windows\LIBRERIA\xmlsec-1.4.2-ADSI-1.0.dll=
 
 [Package|DiskCover System 32 o 64 Bits|Files Removed]
 c:\program files\common files\adobe\acrobat\activex\acropdf.dll=
 c:\program files\microsoft office\root\office16\excel.exe=
+c:\sistema\contabilidad.exe=
 
 [Package|DiskCover System 32 o 64 Bits|Files In Project]
-C:\SISTEMA\Contabilidad.exe=Yes
+C:\SISTEMA\Contabilidad.exe=No
 C:\Windows\System32\msvbvm60.dll=Yes
 C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=Yes
 C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=Yes
@@ -64,7 +118,6 @@ C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMC
 C:\Windows\System32\VB6ES.DLL=Yes
 C:\Windows\System32\urlmon.dll=Yes
 C:\Windows\System32\wininet.dll=Yes
-C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_5.82.22621.3527_none_fbe8b6227808ef55\comctl32.dll=Yes
 C:\Windows\System32\IPHLPAPI.DLL=Yes
 C:\Windows\SysWOW64\msxml3.dll=Yes
 C:\Program Files (x86)\Common Files\Microsoft Shared\DAO\DAO350.DLL=Yes
@@ -133,6 +186,39 @@ C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE
 C:\Windows\LIBRERIA\FacturacionElect.tlb=Yes
 C:\Windows\SysWOW64\MSFlxGrd.ocx=Yes
 C:\Windows\SysWOW64\FlxGdES.dll=Yes
+C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_5.82.26100.1882_none_cfa083c68ea51e3b\comctl32.dll=Yes
+C:\Windows\SysWOW64\ieframe.dll=Yes
+C:\Windows\LIBRERIA\bcmail-jdk15-1.43.dll=Yes
+C:\Windows\LIBRERIA\bcprov-jdk15-1.43.dll=Yes
+C:\Windows\LIBRERIA\bctsp-jdk15-1.43.dll=Yes
+C:\Windows\LIBRERIA\commons-codec-1.2.dll=Yes
+C:\Windows\LIBRERIA\commons-httpclient-3.0.1.dll=Yes
+C:\Windows\LIBRERIA\commons-lang-2.4.dll=Yes
+C:\Windows\LIBRERIA\commons-logging-1.1.dll=Yes
+C:\Windows\LIBRERIA\FacturacionElect.dll=Yes
+C:\Windows\LIBRERIA\IKVM.OpenJDK.Core.dll=Yes
+C:\Windows\LIBRERIA\IKVM.OpenJDK.Security.dll=Yes
+C:\Windows\LIBRERIA\IKVM.OpenJDK.Text.dll=Yes
+C:\Windows\LIBRERIA\IKVM.OpenJDK.Util.dll=Yes
+C:\Windows\LIBRERIA\IKVM.OpenJDK.XML.API.dll=Yes
+C:\Windows\LIBRERIA\IKVM.OpenJDK.XML.Parse.dll=Yes
+C:\Windows\LIBRERIA\IKVM.Runtime.dll=Yes
+C:\Windows\LIBRERIA\jss-4.2.5.dll=Yes
+C:\Windows\LIBRERIA\libmySQL.dll=Yes
+C:\Windows\LIBRERIA\MITyCLibAPI-1.0.4.dll=Yes
+C:\Windows\LIBRERIA\MITyCLibCert-1.0.4.dll=Yes
+C:\Windows\LIBRERIA\MITyCLibOCSP-1.0.4.dll=Yes
+C:\Windows\LIBRERIA\MITyCLibPolicy-1.0.4.dll=Yes
+C:\Windows\LIBRERIA\MITyCLibTrust-1.0.4.dll=Yes
+C:\Windows\LIBRERIA\MITyCLibTSA-1.0.4.dll=Yes
+C:\Windows\LIBRERIA\MITyCLibXADES-1.0.4.dll=Yes
+C:\Windows\LIBRERIA\pdfcom.dll=Yes
+C:\Windows\LIBRERIA\serializer-2.7.1.dll=Yes
+C:\Windows\LIBRERIA\VBMySQLDirect.dll=Yes
+C:\Windows\LIBRERIA\vbSendMail.dll=Yes
+C:\Windows\LIBRERIA\xalan-2.7.1.dll=Yes
+C:\Windows\LIBRERIA\xml-apis-1.3.04.dll=Yes
+C:\Windows\LIBRERIA\xmlsec-1.4.2-ADSI-1.0.dll=Yes
 
 [Package|DiskCover System 32 o 64 Bits|Configure Registry Files]
 Applicable=No
@@ -226,12 +312,46 @@ C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE
 C:\Windows\LIBRERIA\FacturacionElect.tlb=$(WinSysPath)
 C:\Windows\SysWOW64\MSFlxGrd.ocx=$(WinSysPath)
 C:\Windows\SysWOW64\FlxGdES.dll=$(WinSysPath)
+C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_5.82.26100.1882_none_cfa083c68ea51e3b\comctl32.dll=$(WinSysPath)
+C:\Windows\SysWOW64\ieframe.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\bcmail-jdk15-1.43.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\bcprov-jdk15-1.43.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\bctsp-jdk15-1.43.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\commons-codec-1.2.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\commons-httpclient-3.0.1.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\commons-lang-2.4.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\commons-logging-1.1.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\FacturacionElect.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\IKVM.OpenJDK.Core.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\IKVM.OpenJDK.Security.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\IKVM.OpenJDK.Text.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\IKVM.OpenJDK.Util.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\IKVM.OpenJDK.XML.API.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\IKVM.OpenJDK.XML.Parse.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\IKVM.Runtime.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\jss-4.2.5.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\libmySQL.dll=$(AppPath)
+C:\Windows\LIBRERIA\MITyCLibAPI-1.0.4.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\MITyCLibCert-1.0.4.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\MITyCLibOCSP-1.0.4.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\MITyCLibPolicy-1.0.4.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\MITyCLibTrust-1.0.4.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\MITyCLibTSA-1.0.4.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\MITyCLibXADES-1.0.4.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\pdfcom.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\serializer-2.7.1.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\VBMySQLDirect.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\vbSendMail.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\xalan-2.7.1.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\xml-apis-1.3.04.dll=$(WinSysPath)
+C:\Windows\LIBRERIA\xmlsec-1.4.2-ADSI-1.0.dll=$(WinSysPath)
 
 [Package|DiskCover System 32 o 64 Bits|Configure Shared Files]
 Applicable=Yes
 C:\SISTEMA\Contabilidad.exe=No
 C:\Program Files\Microsoft Office\root\Office16\EXCEL.EXE=Yes
 C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=Yes
+C:\Windows\LIBRERIA\libmySQL.dll=Yes
 
 [Package|DiskCover System 32 o 64 Bits|Distribution]
 Type=single

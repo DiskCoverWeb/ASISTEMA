@@ -1,9 +1,9 @@
 VERSION 5.00
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Object = "{65E121D4-0C60-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSChrt20.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.Ocx"
 Begin VB.Form FGeneraPDF 
    Caption         =   "PDF"
@@ -245,8 +245,8 @@ Begin VB.Form FGeneraPDF
       End
    End
    Begin InetCtlsObjects.Inet Inet1 
-      Left            =   8400
-      Top             =   4725
+      Left            =   12390
+      Top             =   840
       _ExtentX        =   1005
       _ExtentY        =   1005
       _Version        =   393216
@@ -278,10 +278,9 @@ Begin VB.Form FGeneraPDF
    Begin MSDataGridLib.DataGrid DataGrid 
       Bindings        =   "FGeneraPDF.frx":1BAC
       Height          =   2010
-      Left            =   210
+      Left            =   105
       TabIndex        =   1
-      Top             =   8820
-      Visible         =   0   'False
+      Top             =   2205
       Width           =   3900
       _ExtentX        =   6879
       _ExtentY        =   3545
@@ -603,7 +602,14 @@ Option Explicit
 Dim obj_Excel As Object
 Dim Obj_Libro As Object
 Dim Obj_Hoja As Object
+
+'-----------------------
+Dim Resultado As Boolean
+
 'Dim cImp As cImpresion
+
+' Si estamos en Visual Basic para Aplicaciones agregar la referencia
+' WinHTTP, en el menú Herramientas, Referencias, Microsoft WinHTTP Services
 
 Private Sub CTipoCtrl_Click()
    SiguienteControl
@@ -679,7 +685,6 @@ Private Sub Form_Load()
   msgLabel.Visible = False    ' Mensaje Oculto
   
   'SRI_Presenta_PDF FGeneraPDF, "C:\SYSBASES\TEMP\Archivo de prueba.pdf"
-  
 End Sub
 
 Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
@@ -910,19 +915,44 @@ Dim v10 As Date
         
    Case "Exportar_Excel"
         'Exportar_Excel
-        sSQL = "SELECT F.CodigoC,C.Actividad,C.Cliente,CI_RUC,C.Direccion,C.Grupo,SUM(Saldo_MN) As Saldo_Pend " _
-               & "FROM Facturas As F, Clientes As C " _
-               & "WHERE F.Item = '" & NumEmpresa & "' " _
-               & "AND F.Periodo = '" & Periodo_Contable & "' " _
-               & "AND F.Fecha < #" & BuscarFecha(FechaSistema) & "# " _
-               & "AND F.T = 'P' " _
-               & "AND NOT F.TC IN ('C','P') " _
-               & "AND F.CodigoC = C.Codigo " _
-               & "GROUP BY F.CodigoC,C.Actividad,C.Cliente,CI_RUC,C.Direccion,C.Grupo " _
-               & "HAVING SUM(Saldo_MN) > 0 " _
-               & "ORDER BY F.CodigoC,C.Actividad,C.Cliente,CI_RUC,C.Direccion,C.Grupo "
+        
+        sSQL = "SELECT C.Actividad As Kilos_recibidos_por_fuente, CAST(ROUND(SUM(TK.Entrada),2,0) AS VARCHAR) As Total " _
+        & "FROM Clientes As C, Trans_Kardex As TK " _
+        & "WHERE TK.Item = '001' " _
+        & "AND TK.Periodo = '.' " _
+        & "AND C.Actividad <> '.' " _
+        & "AND TK.Codigo_P = C.Codigo " _
+        & "AND TK.Fecha BETWEEN '2024-01-01' and '2024-10-31' " _
+        & "GROUP BY C.Actividad " _
+        & "Having SUM(TK.Entrada) > 0 " _
+        & "Union " _
+            & "SELECT 'Total de Kilos recibidos por fuente' As Kilos_recibidos_por_fuente, CAST(ROUND(SUM(TK.Entrada),2,0) AS VARCHAR) As Total " _
+            & "FROM Clientes As C, Trans_Kardex As TK " _
+            & "WHERE TK.Item = '001' " _
+            & "AND TK.Periodo = '.' " _
+            & "AND C.Actividad <> '.' " _
+            & "AND TK.Codigo_P = C.Codigo " _
+            & "AND TK.Fecha BETWEEN '2024-01-01' and '2024-10-31' " _
+            & "GROUP BY C.T " _
+            & "Having SUM(TK.Entrada) > 0 " _
+           & "FOR JSON PATH; "
+    
+'''        sSQL = "SELECT F.CodigoC,C.Actividad,C.Cliente,CI_RUC,C.Direccion,C.Grupo,SUM(Saldo_MN) As Saldo_Pend " _
+'''               & "FROM Facturas As F, Clientes As C " _
+'''               & "WHERE F.Item = '" & NumEmpresa & "' " _
+'''               & "AND F.Periodo = '" & Periodo_Contable & "' " _
+'''               & "AND F.Fecha < #" & BuscarFecha(FechaSistema) & "# " _
+'''               & "AND F.T = 'P' " _
+'''               & "AND NOT F.TC IN ('C','P') " _
+'''               & "AND F.CodigoC = C.Codigo " _
+'''               & "GROUP BY F.CodigoC,C.Actividad,C.Cliente,CI_RUC,C.Direccion,C.Grupo " _
+'''               & "HAVING SUM(Saldo_MN) > 0 " _
+'''               & "ORDER BY F.CodigoC,C.Actividad,C.Cliente,CI_RUC,C.Direccion,C.Grupo "
         Select_Adodc AdoDataGrid, sSQL
-        Exportar_AdoDB_Excel AdoDataGrid.Recordset
+        DataGrid.Visible = True
+        DataGrid.Refresh
+        'If AdoDataGrid.Recordset.RecordCount > 0 Then MsgBox AdoDataGrid.Recordset.fields("hola")
+        'Exportar_AdoDB_Excel AdoDataGrid.Recordset
    Case "Estadistica"
         Estadisticas
    Case "Subir_CC"
@@ -932,34 +962,52 @@ Dim v10 As Date
    Case "Kardex_Trans"
         Kardex_Trans
    Case "Emails"
+       
+''''        URLHTTP = "https://erp.diskcoversystem.com/~diskcover/lib/phpmailer/EnvioEmailvisual.php?EnviarVisual" ' RutaSistema & "\JAVASCRIPT\emails.html"
+''''        URLParams = "from=CORREO DESDE VB6.0 RELAYHOST IMAP <diskcover@imap.diskcoversystem.com>" _
+''''                  & "&to=diskcoversystem@msn.com;diskcover.system@gmail.com" _
+''''                  & "&body=" & Leer_Archivo_Texto(RutaSistema & "\JAVASCRIPT\email_recibo.html") & " " _
+''''                  & "&subject=hola email como estas" _
+''''                  & "&HTML=1" _
+''''                  & "&Archivo="
+''''        Cadena = PostUrlSource(URLHTTP, URLParams)
+''''        MsgBox Cadena
+       
+''''        Prueba_Envio_de_Correos
+        
         TMail.ListaMail = 255
         TMail.TipoDeEnvio = "CO"
        'MsgBox RutaBackup
-        TMail.Asunto = "Prueba de Mails por smtp.diskcoversystem.com"
-        TMail.MensajeHTML = Leer_Archivo_Texto(RutaSistema & "\FORMATOS\credenciales.html")
-        With TMail
-             Cadena = Replace(MensajeAutomatizado, vbCrLf, "<br>")
-            .MensajeHTML = Replace(TMail.MensajeHTML, "vMensajeFinal", Cadena)
-            .MensajeHTML = Replace(.MensajeHTML, "Mensaje_Comunicado", "")
-            .MensajeHTML = Replace(.MensajeHTML, "Nombre_Usuario", NombreUsuario)
-            .MensajeHTML = Replace(.MensajeHTML, "Mensaje_Comunicado", ComunicadoEntidad)
-            .MensajeHTML = Replace(.MensajeHTML, "Representante_Legal", NombreGerente)
-            .MensajeHTML = Replace(.MensajeHTML, "Numero_Telefono", Telefono1)
-            .MensajeHTML = Replace(.MensajeHTML, "Emails", EmailProcesos)
-            .MensajeHTML = Replace(.MensajeHTML, "Razon_Social", RazonSocial)
-        End With
+        TMail.Asunto = "Prueba de Mails por imap.diskcoversystem.com"
+        'TMail.MensajeHTML = Leer_Archivo_Texto(RutaSistema & "\JAVASCRIPT\f_recibo.html")
+        TMail.MensajeHTML = Leer_Archivo_Texto(RutaSistema & "\JAVASCRIPT\f_cartera.html")
+        
+        html_Informacion_adicional = "<strong>INFORMACION ADICIONAL:</strong><br><br>" _
+                                   & "<strong>Importe total: USD </strong>150,00<br>" _
+                                   & "<strong>Importe total: USD </strong>150,00<br>" _
+                                   & "<strong>Importe total: USD </strong>150,00<br>"
+                                   
+        html_Detalle_adicional = "<tr>" _
+                               & "<td>13/12/2024</td>" _
+                               & "<td>Madera</td>" _
+                               & "<td class='row text-right'>150,00</td>" _
+                               & "</tr>" _
+                               & "<tr>" _
+                               & "<td>13/12/2024</td>" _
+                               & "<td>Madera</td>" _
+                               & "<td class='row text-right'>180,00</td>" _
+                               & "</tr>"
+        FA.Fecha = FechaSistema
+        FA.Recibo_No = Format(FA.Fecha, "yyyymmdd") & Format(FA.Factura, "000000000")
         'TMail.MensajeHTML = ""
-        TMail.Mensaje = "Esta es una prueba de Correo Electronico enviado por DNS-EXIT, " _
+        'TMail.Mensaje = "Esta es una prueba de Correo Electronico enviado por DNS-EXIT, " _
                       & "mensaje enviado desde el PC: " & IP_PC.Nombre_PC & ", a las: " & Time & ", " _
                       & "de la empresa: " & Empresa & "."
-                      
-        TMail.Adjunto = ""
+    
+        TMail.Adjunto = "C:\SYSBASES\TEMP\archivo.xml;C:\SYSBASES\TEMP\archivo.pdf;C:\TEMP\walter.png;C:\TEMP\Master Planes de Cuentasx.xls"
+        TMail.Adjunto = "C:\SYSBASES\TEMP\archivo.xml"
         TMail.para = ""
         Insertar_Mail TMail.para, "diskcoversystem@msn.com"
-        Insertar_Mail TMail.para, "diskcover.system@yahoo.com"
-        Insertar_Mail TMail.para, "diskcover.system@gmail.com"
-        Insertar_Mail TMail.para, "informacion@diskcoversystem.com"
-        Insertar_Mail TMail.para, "electronicos@diskcoversystem.com"
         FEnviarCorreos.Show 1
         TMail.para = ""
         TMail.ListaMail = 255

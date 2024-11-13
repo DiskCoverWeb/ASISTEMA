@@ -74,20 +74,19 @@ Begin VB.Form FDiskCover
             Style           =   2
          EndProperty
          BeginProperty Button7 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   "Tiempo"
-            Key             =   "Tiempo_Consulta"
-            Object.ToolTipText     =   "Tiempo de consulta"
-            Object.Tag             =   ""
-            ImageIndex      =   8
-            Style           =   2
-         EndProperty
-         BeginProperty Button8 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Historial"
             Key             =   "Historia_CPU"
             Object.ToolTipText     =   "Historial del CPU Saturado"
             Object.Tag             =   ""
             ImageIndex      =   9
             Style           =   2
+         EndProperty
+         BeginProperty Button8 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   "Tiempo"
+            Key             =   "Tiempo_Consulta"
+            Object.ToolTipText     =   "Tiempo de Consulta"
+            Object.Tag             =   ""
+            ImageIndex      =   8
          EndProperty
          BeginProperty Button9 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Excel"
@@ -251,7 +250,7 @@ Begin VB.Form FDiskCover
    Begin MSAdodcLib.Adodc AdoMySQL 
       Height          =   330
       Left            =   9975
-      Top             =   5145
+      Top             =   3885
       Visible         =   0   'False
       Width           =   2220
       _ExtentX        =   3916
@@ -284,147 +283,6 @@ Begin VB.Form FDiskCover
       Password        =   ""
       RecordSource    =   ""
       Caption         =   "MySQL"
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      _Version        =   393216
-   End
-   Begin MSAdodcLib.Adodc AdoMonitoreo1 
-      Height          =   330
-      Left            =   9975
-      Top             =   3780
-      Visible         =   0   'False
-      Width           =   2220
-      _ExtentX        =   3916
-      _ExtentY        =   582
-      ConnectMode     =   0
-      CursorLocation  =   3
-      IsolationLevel  =   -1
-      ConnectionTimeout=   15
-      CommandTimeout  =   30
-      CursorType      =   3
-      LockType        =   3
-      CommandType     =   8
-      CursorOptions   =   0
-      CacheSize       =   50
-      MaxRecords      =   0
-      BOFAction       =   0
-      EOFAction       =   0
-      ConnectStringType=   1
-      Appearance      =   1
-      BackColor       =   -2147483643
-      ForeColor       =   -2147483640
-      Orientation     =   0
-      Enabled         =   -1
-      Connect         =   ""
-      OLEDBString     =   ""
-      OLEDBFile       =   ""
-      DataSourceName  =   ""
-      OtherAttributes =   ""
-      UserName        =   ""
-      Password        =   ""
-      RecordSource    =   ""
-      Caption         =   "Monitoreo"
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      _Version        =   393216
-   End
-   Begin MSAdodcLib.Adodc AdoMonitoreo2 
-      Height          =   330
-      Left            =   9975
-      Top             =   4200
-      Visible         =   0   'False
-      Width           =   2220
-      _ExtentX        =   3916
-      _ExtentY        =   582
-      ConnectMode     =   0
-      CursorLocation  =   3
-      IsolationLevel  =   -1
-      ConnectionTimeout=   15
-      CommandTimeout  =   30
-      CursorType      =   3
-      LockType        =   3
-      CommandType     =   8
-      CursorOptions   =   0
-      CacheSize       =   50
-      MaxRecords      =   0
-      BOFAction       =   0
-      EOFAction       =   0
-      ConnectStringType=   1
-      Appearance      =   1
-      BackColor       =   -2147483643
-      ForeColor       =   -2147483640
-      Orientation     =   0
-      Enabled         =   -1
-      Connect         =   ""
-      OLEDBString     =   ""
-      OLEDBFile       =   ""
-      DataSourceName  =   ""
-      OtherAttributes =   ""
-      UserName        =   ""
-      Password        =   ""
-      RecordSource    =   ""
-      Caption         =   "Monitoreo"
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      _Version        =   393216
-   End
-   Begin MSAdodcLib.Adodc AdoMonitoreo3 
-      Height          =   330
-      Left            =   9975
-      Top             =   4620
-      Visible         =   0   'False
-      Width           =   2220
-      _ExtentX        =   3916
-      _ExtentY        =   582
-      ConnectMode     =   0
-      CursorLocation  =   3
-      IsolationLevel  =   -1
-      ConnectionTimeout=   15
-      CommandTimeout  =   30
-      CursorType      =   3
-      LockType        =   3
-      CommandType     =   8
-      CursorOptions   =   0
-      CacheSize       =   50
-      MaxRecords      =   0
-      BOFAction       =   0
-      EOFAction       =   0
-      ConnectStringType=   1
-      Appearance      =   1
-      BackColor       =   -2147483643
-      ForeColor       =   -2147483640
-      Orientation     =   0
-      Enabled         =   -1
-      Connect         =   ""
-      OLEDBString     =   ""
-      OLEDBFile       =   ""
-      DataSourceName  =   ""
-      OtherAttributes =   ""
-      UserName        =   ""
-      Password        =   ""
-      RecordSource    =   ""
-      Caption         =   "Monitoreo"
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "MS Sans Serif"
          Size            =   8.25
@@ -508,14 +366,52 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
-Dim LineaConexion(10) As String
-Dim TiempoSQL1 As Single
-Dim TiempoSQL2 As Single
-Dim TiempoSQL3 As Single
-Dim TiempoSQL4 As Single
+Dim TiempoSQL As Single
 Dim vTwipsPerPixelX As Single
 Dim vTwipsPerPixelY As Single
 
+Dim Opcion_CPU As Byte
+
+Dim LineaConexion(10) As String
+
+Const Opc_CPU_Saturado = 1
+Const Opc_Usuarios_En_Linea = 2
+Const Opc_CPU_Historia_Saturado = 3
+Const Opc_Tiempo_Consulta = 4
+
+Const SQL_CPU_Saturado = "SELECT TOP 10 s.login_name + ':' + s.host_name As login_host_name, s.session_id, r.status, r.cpu_time, r.logical_reads, " _
+                       & "r.reads, r.writes, r.total_elapsed_time / (1000 * 60) 'Elaps M', SUBSTRING(st.TEXT, (r.statement_start_offset / 2) + 1, " _
+                       & "((CASE r.statement_end_offset WHEN -1 THEN DATALENGTH(st.TEXT) ELSE r.statement_end_offset END - r.statement_start_offset) / 2) + 1) AS statement_text, " _
+                       & "COALESCE(QUOTENAME(DB_NAME(st.dbid)) + N'.' + QUOTENAME(OBJECT_SCHEMA_NAME(st.objectid, st.dbid)) " _
+                       & "+ N'.' + QUOTENAME(OBJECT_NAME(st.objectid, st.dbid)), '') AS command_text, r.command,  s.program_name, s.last_request_end_time, " _
+                       & "s.login_time, r.open_transaction_count " _
+                       & "FROM sys.dm_exec_sessions AS s JOIN sys.dm_exec_requests AS r " _
+                       & "ON r.session_id = s.session_id CROSS APPLY sys.Dm_exec_sql_text(r.sql_handle) AS st " _
+                       & "WHERE r.session_id != @@SPID " _
+                       & "ORDER BY r.cpu_time DESC "
+
+Const SQL_Usuarios_En_Linea = "SELECT C.client_net_address, (s.login_name + ':' + s.host_name) As login_host_name, s.program_name, " _
+                            & "(CAST(COUNT(s.host_name) As VARCHAR)+ ':' + CAST(SUM(c.session_id) As VARCHAR)) As Procesos_sessions, " _
+                            & "MAX(c.connect_time) As Conn_time, (c.net_transport + '-' + c.auth_scheme + ':' + s.client_interface_name) As Protocolo, " _
+                            & "MAX(s.login_time) AS Log_Time " _
+                            & "FROM sys.dm_exec_connections AS c JOIN sys.dm_exec_sessions AS s ON c.session_id = s.session_id " _
+                            & "GROUP BY s.login_name, s.host_name,C.client_net_address,s.program_name, c.net_transport, c.auth_scheme,s.client_interface_name " _
+                            & "ORDER BY C.client_net_address, s.login_name DESC, s.host_name, s.program_name "
+
+
+Const SQL_CPU_Historia_Saturado = "SELECT TOP 15 st.text AS batch_text, SUBSTRING(st.TEXT, (qs.statement_start_offset / 2) + 1,  " _
+                                & "((CASE qs.statement_end_offset WHEN - 1 THEN DATALENGTH(st.TEXT) ELSE qs.statement_end_offset END - qs.statement_start_offset) / 2) + 1) AS statement_text, " _
+                                & "(qs.total_worker_time / 1000) / qs.execution_count AS avg_cpu_time_ms,(qs.total_elapsed_time / 1000) / qs.execution_count AS avg_elapsed_time_ms, " _
+                                & "qs.total_logical_reads / qs.execution_count AS avg_logical_reads,(qs.total_worker_time / 1000) AS cumulative_cpu_time_all_executions_ms, " _
+                                & "(qs.total_elapsed_time / 1000) AS cumulative_elapsed_time_all_executions_ms " _
+                                & "FROM sys.dm_exec_query_stats qs CROSS APPLY sys.dm_exec_sql_text(sql_handle) st " _
+                                & "ORDER BY(qs.total_worker_time / qs.execution_count) DESC "
+         
+Const MySQL_Tiempo_Consulta = "SELECT login_host_name, program_name, statement_text,Fecha " _
+                            & "FROM lista_consulo_cpu " _
+                            & "WHERE login_host_name <> '.' " _
+                            & "ORDER BY login_host_name, program_name "
+                          
 '---------------------------------------------------------------------------------
 'Datos de Conexion a la Base de Datos en las nubes mysql.diskcoversystem.com:13306
 '---------------------------------------------------------------------------------
@@ -539,17 +435,13 @@ Dim Txt_SMTP_Mails As String
    'Datos de Conexion a la Base de Datos en las nubes mysql.diskcoversystem.com:13306
    '---------------------------------------------------------------------------------
     RatonReloj
-    
     vTwipsPerPixelX = Screen.TwipsPerPixelX
     vTwipsPerPixelY = Screen.TwipsPerPixelY
     
     FDiskCover.width = Screen.width
     FDiskCover.Height = Screen.Height - 550
 
-    TiempoSQL1 = Time
-    TiempoSQL2 = TiempoSQL1
-    TiempoSQL3 = TiempoSQL1
-    TiempoSQL4 = TiempoSQL1
+    TiempoSQL = Time
     
    'Formulario Principal
     FDiskCover.Top = 0
@@ -577,6 +469,7 @@ Dim Txt_SMTP_Mails As String
     For Idx = 0 To 4
         LineaConexion(Idx) = ""
     Next Idx
+    
     RatonReloj
     Unidad = Left(CurDir$, 2)
     RutaDestino = Unidad & "\SISTEMA"
@@ -590,6 +483,8 @@ Dim Txt_SMTP_Mails As String
     Evaluar = False
     SQL_Server = True
     Conectar_Base_Datos
+    ConectarAdodc AdoMonitoreo
+    ConectarAdodc_MySQL AdoMySQL
     
    'MsgBox Weekday(FechaSistema)
     NumEmpresa = "000"
@@ -598,54 +493,110 @@ Dim Txt_SMTP_Mails As String
     Empresa = "MODULO DE MONITOREO"
     Periodo_Contable = "."
     RatonReloj
-    ConectarAdodc AdoMonitoreo
-    ConectarAdodc AdoMonitoreo1
-    ConectarAdodc AdoMonitoreo2
-    ConectarAdodc_MySQL AdoMonitoreo3
-    ConectarAdodc_MySQL AdoMySQL
+    
     Tamano_Consultas
-    Consultar_Usuarios_En_Linea
-    Consultar_Tiempo_Consulta
-    Consultar_CPU_Saturado
-    Consultar_CPU_Historia_Saturado
+    Opcion_CPU = Opc_Usuarios_En_Linea
+    Select_Adodc AdoMonitoreo, SQL_Usuarios_En_Linea
     RatonNormal
     FDiskCover.Visible = False
+End Sub
+
+Public Sub Consultar_Servidor(sSQLServer As String)
+Dim Campo1 As String
+Dim Campo2 As String
+Dim Campo3 As String
+Dim Campo4 As String
+Dim InsertSQL As String
+Dim InsertReg As String
+Dim Insertar As Boolean
+    
+    Mifecha = BuscarFecha(FechaSistema)
+    Insertar = True
+    InsertSQL = ""
+    Select_Adodc AdoMonitoreo, sSQLServer
+    With AdoMonitoreo.Recordset
+     If .RecordCount > 0 Then
+         DGMonitoreo.Visible = False
+         sSQL = "SELECT login_host_name, program_name, statement_text, Fecha " _
+              & "FROM lista_consulo_cpu " _
+              & "WHERE Fecha = '" & Mifecha & "' " _
+              & "ORDER BY program_name "
+         Select_Adodc AdoMySQL, sSQL
+         Do While Not .EOF
+            Select Case sSQLServer
+              Case SQL_CPU_Saturado
+                   Campo1 = .Fields("program_name")
+                   Campo2 = "[Comando: " & .Fields("command") & "]" & " ->> " & .Fields("statement_text")
+                   Campo3 = "CPU-Full: " & TrimStrg(MidStrg(.Fields("login_host_name"), 1, 50))
+              Case SQL_CPU_Historia_Saturado
+                   Campo1 = .Fields("batch_text")
+                   Campo2 = .Fields("statement_text")
+                   Campo3 = "Historial SQL"
+              Case SQL_Usuarios_En_Linea
+                   Campo1 = .Fields("client_net_address") & " - " & .Fields("program_name")
+                   Campo2 = .Fields("Procesos_sessions") & " - " & .Fields("Protocolo") & " - " & .Fields("Log_Time") & " - " & .Fields("Conn_time")
+                   Campo3 = .Fields("login_host_name")
+            End Select
+            
+            Campo1 = Replace(Campo1, "'", "`")
+            Campo1 = Replace(Campo1, vbCr, "[CR]")
+            Campo1 = Replace(Campo1, vbLf, "[LF]")
+            Campo1 = TrimStrg(MidStrg(Campo1, 1, 250))
+            
+            Campo2 = Replace(Campo2, "'", "`")
+            Campo2 = Replace(Campo2, vbCr, "[CR]")
+            Campo2 = Replace(Campo2, vbLf, "[LF]")
+            
+            Campo3 = Replace(Campo3, "'", "`")
+            Campo3 = Replace(Campo3, vbCr, "[CR]")
+            Campo3 = Replace(Campo3, vbLf, "[LF]")
+
+            If AdoMySQL.Recordset.RecordCount > 0 Then AdoMySQL.Recordset.MoveFirst
+            AdoMySQL.Recordset.Find ("program_name = '" & Campo1 & "' ")
+            If AdoMySQL.Recordset.EOF Then
+               If Insertar Then
+                  InsertSQL = "INSERT INTO lista_consulo_cpu(state_type, login_host_name, program_name, statement_text, Fecha) VALUES " & vbCrLf
+                  Insertar = False
+               End If
+               InsertSQL = InsertSQL & "('state_type', '" & Campo3 & "', '" & Campo1 & "', '" & Campo2 & "', '" & Mifecha & "')," & vbCrLf
+            End If
+           .MoveNext
+         Loop
+        .MoveFirst
+         If InsertSQL <> "" Then
+            InsertSQL = MidStrg(InsertSQL, 1, Len(InsertSQL) - 3) & ";"
+           'MsgBox InsertSQL
+            Conectar_Ado_Execute_MySQL InsertSQL, , "Insertar_MySQL"
+         End If
+         DGMonitoreo.Visible = True
+     End If
+    End With
+    TiempoSQL = Time
 End Sub
 
 Private Sub Timer1_Timer()
   'If MDI_X_Max <> Screen.width - 250 Or MDI_Y_Max <> Screen.Height - 650 Then
   'Tamano_Consultas
   TiempoSistema = Time
+  MiTiempo = CSng(Format(Minute(TiempoSistema - TiempoSQL), "00") & "." & Format(Second(TiempoSistema - TiempoSQL), "00"))
   FDiskCover.Caption = Format(TiempoSistema, "HH:MM:SS") & " SERVIDOR: " & strIPServidor _
                      & " [" & Screen.width / vTwipsPerPixelX & " x " & Screen.Height / vTwipsPerPixelY & "]"
   FDiskCover.Refresh
-    
-  MiTiempo = TiempoSQL2
-  MiTiempo = CSng(Format(Minute(TiempoSistema - MiTiempo), "00") & "." & Format(Second(TiempoSistema - MiTiempo), "00"))
+  
   If MiTiempo >= 0.1 Then
-     Consultar_CPU_Saturado
-     TiempoSQL2 = TiempoSistema
-  End If
-
-  MiTiempo = TiempoSQL1
-  MiTiempo = CSng(Format(Minute(TiempoSistema - MiTiempo), "00") & "." & Format(Second(TiempoSistema - MiTiempo), "00"))
-  If MiTiempo >= 0.03 Then
-     Consultar_Usuarios_En_Linea
-     TiempoSQL1 = TiempoSistema
-  End If
-
-  MiTiempo = TiempoSQL3
-  MiTiempo = CSng(Format(Minute(TiempoSistema - MiTiempo), "00") & "." & Format(Second(TiempoSistema - MiTiempo), "00"))
-  If MiTiempo >= 1 Then
-     Consultar_CPU_Historia_Saturado
-     TiempoSQL3 = TiempoSistema
-  End If
-
-  MiTiempo = TiempoSQL4
-  MiTiempo = CSng(Format(Minute(TiempoSistema - MiTiempo), "00") & "." & Format(Second(TiempoSistema - MiTiempo), "00"))
-  If MiTiempo >= 5 Then
-     Consultar_Tiempo_Consulta
-     TiempoSQL4 = TiempoSistema
+    'MsgBox Opcion_CPU & " ............"
+     DGMonitoreo.Visible = False
+     Select Case Opcion_CPU
+       Case Opc_Usuarios_En_Linea
+            Consultar_Servidor SQL_Usuarios_En_Linea
+       Case Opc_CPU_Saturado
+            Consultar_Servidor SQL_CPU_Saturado
+       Case Opc_CPU_Historia_Saturado
+            Consultar_Servidor SQL_CPU_Historia_Saturado
+       Case Opc_Tiempo_Consulta
+            Consultar_Servidor MySQL_Tiempo_Consulta
+     End Select
+     DGMonitoreo.Visible = True
   End If
 End Sub
 
@@ -669,113 +620,6 @@ Dim MitadPantalla As Single
     DGMonitoreo.Visible = True
 End Sub
 
-Public Sub Consultar_Usuarios_En_Linea()
-   's.client_interface_name,
-    sSQL = "SELECT C.client_net_address, (s.login_name + ':' + s.host_name) As login_host_name, s.program_name, (CAST(COUNT(s.host_name) As VARCHAR)+ ':' + CAST(SUM(c.session_id) As VARCHAR)) As Procesos_sessions, " _
-         & "MAX(c.connect_time) As Conn_time, (c.net_transport + '-' + c.auth_scheme + ':' + s.client_interface_name) As Protocolo, MAX(s.login_time) AS Log_Time " _
-         & "FROM sys.dm_exec_connections AS c JOIN sys.dm_exec_sessions AS s ON c.session_id = s.session_id " _
-         & "GROUP BY s.login_name, s.host_name,C.client_net_address,s.program_name, c.net_transport, c.auth_scheme,s.client_interface_name " _
-         & "ORDER BY C.client_net_address, s.login_name DESC, s.host_name, s.program_name "
-    Select_Adodc AdoMonitoreo, sSQL
-    'MsgBox "0:" & Format(Time, "HH:MM:SS")
-End Sub
-
-Public Sub Consultar_CPU_Saturado()
-Dim Campo1 As String
-Dim Campo2 As String
-
-   '1:Presenta el consumo de Consultas SQL cuando el CPU esta saturado
-    sSQL = "SELECT TOP 10 s.login_name + ':' + s.host_name As login_host_name, s.session_id, r.status, r.cpu_time, r.logical_reads, " _
-         & "r.reads, r.writes, r.total_elapsed_time / (1000 * 60) 'Elaps M', SUBSTRING(st.TEXT, (r.statement_start_offset / 2) + 1, " _
-         & "((CASE r.statement_end_offset WHEN -1 THEN DATALENGTH(st.TEXT) ELSE r.statement_end_offset END - r.statement_start_offset) / 2) + 1) AS statement_text, " _
-         & "COALESCE(QUOTENAME(DB_NAME(st.dbid)) + N'.' + QUOTENAME(OBJECT_SCHEMA_NAME(st.objectid, st.dbid)) " _
-         & "+ N'.' + QUOTENAME(OBJECT_NAME(st.objectid, st.dbid)), '') AS command_text, r.command,  s.program_name, s.last_request_end_time, " _
-         & "s.login_time, r.open_transaction_count " _
-         & "FROM sys.dm_exec_sessions AS s JOIN sys.dm_exec_requests AS r " _
-         & "ON r.session_id = s.session_id CROSS APPLY sys.Dm_exec_sql_text(r.sql_handle) AS st " _
-         & "WHERE r.session_id != @@SPID " _
-         & "ORDER BY r.cpu_time DESC "
-    Select_Adodc AdoMonitoreo1, sSQL
-    DGMonitoreo.Visible = False
-    With AdoMonitoreo1.Recordset
-      If .RecordCount > 0 Then
-          Do While Not .EOF
-             Campo1 = TrimStrg(MidStrg(Replace(.Fields("program_name"), "'", """"), 1, 250))
-             Campo2 = "[Comando: " & .Fields("command") & "]" & vbCrLf & .Fields("statement_text")
-            'MsgBox "..."
-             sSQL = "SELECT login_host_name, program_name, statement_text, Fecha " _
-                  & "FROM lista_consulo_cpu " _
-                  & "WHERE program_name = '" & Campo1 & "' "
-             Select_Adodc AdoMySQL, sSQL
-             If AdoMySQL.Recordset.RecordCount <= 0 Then
-                AdoMySQL.Recordset.AddNew
-                AdoMySQL.Recordset.Fields("login_host_name") = "CPU-Full: " & TrimStrg(MidStrg(.Fields("login_host_name"), 1, 50))
-                AdoMySQL.Recordset.Fields("program_name") = Campo1
-                AdoMySQL.Recordset.Fields("statement_text") = Campo2
-                AdoMySQL.Recordset.Fields("Fecha") = FechaSistema
-                AdoMySQL.Recordset.Update
-             End If
-            .MoveNext
-          Loop
-         .MoveFirst
-      End If
-    End With
-    DGMonitoreo.Visible = True
-End Sub
-
-Public Sub Consultar_CPU_Historia_Saturado()
-Dim Campo1 As String
-Dim Campo2 As String
-
-   '2: Presenta los ultimos 12 registros que consumen demaciado CPU
-    DGMonitoreo.Visible = False
-    sSQL = "SELECT TOP 15 st.text AS batch_text, SUBSTRING(st.TEXT, (qs.statement_start_offset / 2) + 1,  " _
-         & "((CASE qs.statement_end_offset WHEN - 1 THEN DATALENGTH(st.TEXT) ELSE qs.statement_end_offset END - qs.statement_start_offset) / 2) + 1) AS statement_text, " _
-         & "(qs.total_worker_time / 1000) / qs.execution_count AS avg_cpu_time_ms,(qs.total_elapsed_time / 1000) / qs.execution_count AS avg_elapsed_time_ms, " _
-         & "qs.total_logical_reads / qs.execution_count AS avg_logical_reads,(qs.total_worker_time / 1000) AS cumulative_cpu_time_all_executions_ms, " _
-         & "(qs.total_elapsed_time / 1000) AS cumulative_elapsed_time_all_executions_ms " _
-         & "FROM sys.dm_exec_query_stats qs CROSS APPLY sys.dm_exec_sql_text(sql_handle) st " _
-         & "ORDER BY(qs.total_worker_time / qs.execution_count) DESC "
-    Select_Adodc AdoMonitoreo2, sSQL
-    
-    With AdoMonitoreo2.Recordset
-        ' MsgBox .RecordCount
-      If .RecordCount > 0 Then
-          Do While Not .EOF
-             Campo1 = TrimStrg(MidStrg(Replace(.Fields("batch_text"), "'", """"), 1, 250))
-             Campo2 = .Fields("statement_text")
-             
-             sSQL = "SELECT login_host_name, program_name, statement_text, Fecha " _
-                  & "FROM lista_consulo_cpu " _
-                  & "WHERE program_name = '" & Campo1 & "' "
-             Select_Adodc AdoMySQL, sSQL
-             If AdoMySQL.Recordset.RecordCount <= 0 Then
-                'MsgBox "...." & BuscarFecha(FechaSistema)
-                AdoMySQL.Recordset.AddNew
-                AdoMySQL.Recordset.Fields("login_host_name") = "Historial SQL"
-                AdoMySQL.Recordset.Fields("program_name") = Campo1
-                AdoMySQL.Recordset.Fields("statement_text") = Campo2
-                AdoMySQL.Recordset.Fields("Fecha") = FechaSistema
-                AdoMySQL.Recordset.Update
-             End If
-            .MoveNext
-          Loop
-         .MoveFirst
-      End If
-    End With
-    DGMonitoreo.Visible = True
-    'MsgBox "3:" & Format(Time, "HH:MM:SS")
-End Sub
-
-Public Sub Consultar_Tiempo_Consulta()
-   '3:Captura el tiempo total de CPU empleado por una consulta junto con el plan de consulta y las ejecuciones totales
-    sSQL = "SELECT login_host_name, program_name, statement_text,Fecha " _
-         & "FROM lista_consulo_cpu " _
-         & "WHERE login_host_name <> '.' " _
-         & "ORDER BY login_host_name, program_name "
-    Select_Adodc AdoMonitoreo3, sSQL
-End Sub
-
 Public Sub Descargar_Reporte()
 Dim NumFile As Long
 Dim NombreFile As String
@@ -787,21 +631,23 @@ Dim Campo4 As String
     NombreFile = RutaSysBases & "\TEMP\lista_consulo_cpu_" & Replace(FechaSistema, "/", "-") & ".xml"
   If Len(NombreFile) > 1 Then
      RatonReloj
+     ConectarAdodc_MySQL AdoMonitoreo
      sSQL = "SELECT login_host_name, program_name, statement_text, Fecha " _
           & "FROM lista_consulo_cpu " _
           & "WHERE login_host_name <> '.' " _
           & "ORDER BY login_host_name, program_name, Fecha "
-     Select_Adodc AdoMySQL, sSQL
-     If AdoMySQL.Recordset.RecordCount > 0 Then
+     Select_Adodc AdoMonitoreo, sSQL
+     With AdoMonitoreo.Recordset
+      If .RecordCount > 0 Then
           NumFile = FreeFile
           Open NombreFile For Output As #NumFile
           Print #NumFile, "LISTA DE PROCESOS QUE SATURAN EL SERVIDOR OCASIONANDO LENTITUD"
           Print #NumFile, String(120, "=")
-          Do While Not AdoMySQL.Recordset.EOF
-             Campo1 = AdoMySQL.Recordset.Fields("login_host_name")
-             Campo2 = AdoMySQL.Recordset.Fields("Fecha")
-             Campo3 = AdoMySQL.Recordset.Fields("program_name")
-             Campo4 = AdoMySQL.Recordset.Fields("statement_text")
+          Do While Not .EOF
+             Campo1 = .Fields("login_host_name")
+             Campo2 = .Fields("Fecha")
+             Campo3 = .Fields("program_name")
+             Campo4 = .Fields("statement_text")
 
              Print #NumFile, Campo1 & String(12, vbTab) & "FECHA DE INSIDENCIA: " & Campo2
              Print #NumFile, String(120, "=")
@@ -813,18 +659,18 @@ Dim Campo4 As String
              Print #NumFile, Campo4
              Print #NumFile, String(120, "_")
              Print #NumFile, String(120, "=") & vbCrLf
-             AdoMySQL.Recordset.MoveNext
+            .MoveNext
           Loop
           Close #NumFile
-     End If
+      End If
+     End With
      RatonNormal
      MsgBox "REVISE EL ARCHIVO SIGUIENTE:" & vbCrLf & NombreFile
      Titulo = "PREGUNTA DE ELIMINACION"
      Mensajes = "VACIAR TABLA TEMPORAL DE CPU SATURADOS?"
      If BoxMensaje = vbYes Then
         RatonReloj
-        sSQL = "DELETE " _
-             & "FROM lista_consulo_cpu " _
+        sSQL = "DELETE FROM lista_consulo_cpu " _
              & "WHERE login_host_name <> '.' "
         Conectar_Ado_Execute_MySQL sSQL
         RatonNormal
@@ -869,6 +715,7 @@ End Sub
 
 Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
    'MsgBox Button.key
+    TiempoSQL = Time
     Select Case Button.key
       Case "Salir"
            End
@@ -879,37 +726,51 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
            DeleteIcon
       Case "Descargar"
            Descargar_Reporte
-      Case "Usuario"
+      Case "Usuarios"
+           Opcion_CPU = Opc_Usuarios_En_Linea
            DGMonitoreo.Visible = False
-           Set DGMonitoreo.DataSource = AdoMonitoreo
-           DGMonitoreo.Refresh
+           Select_Adodc AdoMonitoreo, SQL_Usuarios_En_Linea
            DGMonitoreo.Caption = "ESTADO DE SESIONES ABIERTAS POR EQUIPO (" & AdoMonitoreo.Recordset.RecordCount & ") " & Format(Time, "HH:MM:SS")
-           DGMonitoreo.Visible = True
-      Case "Tiempo"
-           DGMonitoreo.Visible = False
-           Set DGMonitoreo.DataSource = AdoMonitoreo3
-           DGMonitoreo.Caption = "ESTADO DE TIEMPOS CONSUMIDOS POR CONSULTAS (" & AdoMonitoreo3.Recordset.RecordCount & ") " & Format(Time, "HH:MM:SS")
+           'DGMonitoreo.Refresh
            DGMonitoreo.Visible = True
       Case "Saturado"
+           Opcion_CPU = Opc_CPU_Saturado
            DGMonitoreo.Visible = False
-           Set DGMonitoreo.DataSource = AdoMonitoreo1
-           DGMonitoreo.Caption = "ESTADO DE CPU SATURADO (" & AdoMonitoreo1.Recordset.RecordCount & ") " & Format(Time, "HH:MM:SS")
+           Select_Adodc AdoMonitoreo, SQL_CPU_Saturado
+           DGMonitoreo.Caption = "ESTADO DE CPU SATURADO (" & AdoMonitoreo.Recordset.RecordCount & ") " & Format(Time, "HH:MM:SS")
+           'DGMonitoreo.Refresh
            DGMonitoreo.Visible = True
       Case "Historia_CPU"
+           Opcion_CPU = Opc_CPU_Historia_Saturado
            DGMonitoreo.Visible = False
-           Set DGMonitoreo.DataSource = AdoMonitoreo2
-           DGMonitoreo.Caption = "ESTADO DE HISTORIA DEL CPU SATURADO (" & AdoMonitoreo2.Recordset.RecordCount & ") " & Format(Time, "HH:MM:SS")
+           Select_Adodc AdoMonitoreo, SQL_CPU_Historia_Saturado
+           DGMonitoreo.Caption = "ESTADO DE HISTORIA DEL CPU SATURADO (" & AdoMonitoreo.Recordset.RecordCount & ") " & Format(Time, "HH:MM:SS")
+           DGMonitoreo.Refresh
+           DGMonitoreo.Visible = True
+      Case "Tiempo_Consulta"
+           Opcion_CPU = Opc_Tiempo_Consulta
+           DGMonitoreo.Visible = False
+           Select_Adodc AdoMySQL, MySQL_Tiempo_Consulta
+           DGMonitoreo.Caption = "ESTADO DE TIEMPOS CONSUMIDOS POR CONSULTAS (" & AdoMonitoreo.Recordset.RecordCount & ") " & Format(Time, "HH:MM:SS")
+           'DGMonitoreo.Refresh
            DGMonitoreo.Visible = True
       Case "Excel"
            DGMonitoreo.Visible = False
-           Consultar_Usuarios_En_Linea
+           ConectarAdodc AdoMonitoreo
+           Select_Adodc AdoMonitoreo, SQL_Usuarios_En_Linea
            Exportar_AdoDB_Solo_Excel AdoMonitoreo.Recordset, "USUARIOS_ACTIVOS"
-           Consultar_Tiempo_Consulta
-           Exportar_AdoDB_Solo_Excel AdoMonitoreo3.Recordset, "TIEMPO_CONSUMIDO"
-           Consultar_CPU_Saturado
-           Exportar_AdoDB_Solo_Excel AdoMonitoreo1.Recordset, "SERVIDOR_SATURADO"
-           Consultar_CPU_Historia_Saturado
-           Exportar_AdoDB_Solo_Excel AdoMonitoreo2.Recordset, "HISTORIAL_CONSUMO"
+
+           ConectarAdodc AdoMonitoreo
+           Select_Adodc AdoMonitoreo, SQL_CPU_Saturado
+           Exportar_AdoDB_Solo_Excel AdoMonitoreo.Recordset, "SERVIDOR_SATURADO"
+           
+           ConectarAdodc AdoMonitoreo
+           Select_Adodc AdoMonitoreo, SQL_CPU_Historia_Saturado
+           Exportar_AdoDB_Solo_Excel AdoMonitoreo.Recordset, "HISTORIAL_CONSUMO"
+           
+           ConectarAdodc_MySQL AdoMonitoreo
+           Select_Adodc AdoMonitoreo, MySQL_Tiempo_Consulta
+           Exportar_AdoDB_Solo_Excel AdoMonitoreo.Recordset, "TIEMPO_CONSUMIDO"
            DGMonitoreo.Visible = True
     End Select
 End Sub

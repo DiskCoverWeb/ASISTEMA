@@ -1577,6 +1577,8 @@ Dim Grupo As String
                     SetAdoFields "Factura", FA.Factura
                     SetAdoFields "Codigo_P", FA.CodigoC
                     SetAdoFields "CodigoL", FA.Cod_CxC
+                    SetAdoFields "CodBodega", .fields("CodBod")
+                    SetAdoFields "CodMarca", .fields("CodMar")
                     SetAdoFields "Codigo_Inv", .fields("CODIGO")
                     SetAdoFields "Total_IVA", .fields("Total_IVA")
                     SetAdoFields "Entrada", .fields("CANT")
@@ -1589,8 +1591,6 @@ Dim Grupo As String
                     SetAdoFields "Detalle", "NC: " + FA.Serie_NC + "-" + Format(FA.Nota_Credito, "000000000") + " -" + MidStrg(FA.Cliente, 1, 79)
                     SetAdoFields "Cta_Inv", .fields("Cta_Inventario")
                     SetAdoFields "Contra_Cta", .fields("Cta_Costo")
-                    SetAdoFields "CodBodega", .fields("CodBod")
-                    SetAdoFields "CodMarca", .fields("CodMar")
                     SetAdoFields "Item", NumEmpresa
                     SetAdoFields "Periodo", Periodo_Contable
                     SetAdoFields "CodigoU", CodigoUsuario

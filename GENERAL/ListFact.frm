@@ -1492,13 +1492,13 @@ Begin VB.Form ListFact
    End
    Begin MSComctlLib.Toolbar TBarFactura 
       Align           =   1  'Align Top
-      Height          =   1800
+      Height          =   660
       Left            =   0
       TabIndex        =   68
       Top             =   0
       Width           =   11280
       _ExtentX        =   19897
-      _ExtentY        =   3175
+      _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
       Appearance      =   1
@@ -3617,7 +3617,9 @@ Private Sub TBarFactura_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMe
           SRI_Generar_PDF_FA FA, True
      Case "PDF_LC"
           SRI_Generar_PDF_FA FA, True
-         'Generar_XML_Facturas FA
+    '=================================================================================
+    'Generar_XML_Facturas FA
+    '=================================================================================
      Case "PDF_NC"
           SRI_Generar_PDF_NC FA, True
      Case "PDF_GR"
@@ -3689,7 +3691,6 @@ Dim TempStrg As String
         Revertir_Facturas
    Case "Actualizar_Representantes"
         Actualizar_Representantes
-        
   'Barra de Separacion
    Case "Anular_Factura"
         sSQL = "SELECT T " _

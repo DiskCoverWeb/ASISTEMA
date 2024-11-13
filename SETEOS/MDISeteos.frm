@@ -204,13 +204,6 @@ Private Sub CambClave_Click()
 End Sub
 
 Private Sub ChangeEmp_Click()
-  
-  
-  
-  
-  
-  
-  
   Control_Procesos Normal, "Salir del Sistema"
   RatonReloj
   UnidadSistema
@@ -385,6 +378,7 @@ Private Sub MEjemploPDF_Click()
 '''
 '''Archivo = Shell("C:\Program Files (x86)\Adobe\Acrobat Reader DC\Reader\AcroRd32.exe c:\sysbases\temp\Ejemplo2_PDF.pdf", vbMaximizedFocus)
 '''
+   FGeneraPDF.Show
 End Sub
 
 Private Sub MigrarPlanCta_Click()
@@ -416,7 +410,7 @@ Private Sub MModAud_Click()
 End Sub
 
 Private Sub MSalidasxCostos_Click()
-  FGeneraPDF.Show
+    FGeneraPDF.Show
 End Sub
 
 Private Sub MVerifErrorMayor_Click()

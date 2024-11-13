@@ -182,7 +182,7 @@ Public Sub Insertar_Mail(ListaMails As String, InsertarMail As String)
 End Sub
 
 Public Sub Insertar_Cadena(ListaMails As String, InsertarMail As String)
-   If (InStr(ListaMails, InsertarMail) = 0) And (Len(InsertarMail) > 3) Then ListaMails = ListaMails & InsertarMail & " / "
+   If (InStr(ListaMails, InsertarMail) = 0) And (Len(InsertarMail) > 3) Then ListaMails = ListaMails & InsertarMail & "/"
 End Sub
 
 Public Sub Master_Documento_PDF(Optional PDF_Nombre_Documento As String, _
@@ -398,10 +398,13 @@ End Sub
 
 Public Sub Control_Procesos(TipoTrans As String, Proceso As String, Optional Tarea As String, Optional Credito_No As String)
 Dim BD1MySQL As ADODB.Connection
+Dim AdoSMTP As ADODB.Recordset
 Dim Modulos As String
 Dim Mifecha1 As String
 Dim MiHora1 As String
 Dim NombreUsuario1 As String
+Dim PausaMails As Long
+Dim TimeIni As Single
 
   If NumEmpresa = "" Then NumEmpresa = Ninguno
   If TMail.Credito_No = "" Then TMail.Credito_No = Ninguno
@@ -432,6 +435,25 @@ Dim NombreUsuario1 As String
                 & "','" & MiHora1 & "','" & TipoTrans & "','" & Tarea & "','" & Proceso & "','" & Credito_No & "','" & Periodo_Contable & "');"
           'MsgBox Cadena & vbCrLf & vbCrLf & "CONSULTA A REALIZAR:" & vbCrLf & sSQL
            Conectar_Ado_Execute_MySQL sSQL
+           
+           If TipoTrans = "EM" Then
+              PausaMails = 0
+              sSQL = "SELECT RUC, (COUNT(RUC) % 10) As PausaMails " _
+                   & "FROM acceso_pcs " _
+                   & "WHERE Fecha = '" & BuscarFecha(FechaSistema) & "' " _
+                   & "AND RUC = '" & RUC & "' " _
+                   & "AND ES IN ('EM') "
+              Select_AdoDB_MySQL AdoSMTP, sSQL
+              If AdoSMTP.RecordCount > 0 Then PausaMails = AdoSMTP.fields("PausaMails")
+              AdoSMTP.Close
+             'Hacer pausa si ya tiene 20 envios
+              If PausaMails = 0 Then
+                 RatonReloj
+                 Sleep 15000
+                'MsgBox Format(Timer - TimeIni, "mm:ss")
+                 RatonNormal
+              End If
+           End If
         End If
      End If
   End If
@@ -2296,6 +2318,9 @@ Dim HalfWidth As Single
 Dim HalfHeight As Single
 
    'MsgBox ContadorAyuda & vbCrLf & ContadorFondos
+   'Obtenemos la fecha del Sistema
+    FechaSistema = Format$(date, FormatoFechas)
+    
     If TiempoSistema = 0 Then TiempoSistema = Time
     If TiempoTarea = 0 Then TiempoTarea = Time
     Minutos = Time
@@ -2661,8 +2686,7 @@ If SQLs <> "" Then
               & "AND Item = '" & NumEmpresa & "' "
         Ejecutar_SQL_SP Strgs
     Else
-        Strgs = "INSERT INTO Codigos " _
-             & "(Item,Concepto,Numero) VALUES " _
+        Strgs = "INSERT INTO Codigos(Item,Concepto,Numero) VALUES " _
              & "('" & NumEmpresa & "','" & SQLs & "'," & Valor & ") "
         Ejecutar_SQL_SP Strgs
     End If
@@ -7634,9 +7658,9 @@ Public Sub Eliminar_Si_Existe_File(RutaArchivo As String)
 End Sub
 
 Public Function Existe_File(RutaArchivo As String) As Boolean
-'MsgBox "Ruta: " & RutaBuscar & FileBuscar
+   'MsgBox "Ruta: " & RutaArchivo
     If Len(RutaArchivo) > 1 Then
-       If Len(TrimStrg(Dir$(RutaArchivo))) Then
+       If Len(Dir$(TrimStrg(RutaArchivo))) Then
           Existe_File = True
        Else
           Existe_File = False
@@ -8399,8 +8423,8 @@ End Sub
 
 Public Sub TVAddNode(ByRef XML_Node As IXMLDOMNode, _
                      ByRef TVTreeView As TreeView, _
-                     Optional ByRef TreeNode As Node)
-Dim xNode As Node
+                     Optional ByRef TreeNode As node)
+Dim xNode As node
 Dim xNodeList As IXMLDOMNodeList
 Dim I As Long
     
@@ -8553,7 +8577,6 @@ Public Function consulta_RUC_SRI(NumRUC As String) As Tipo_Contribuyente
 Dim Cont As Integer
 Dim IniNodo As Integer
 Dim FinNodo As Integer
-Dim XML As String
 Dim vNodos() As String
 Dim Result As Tipo_Contribuyente
     RatonReloj

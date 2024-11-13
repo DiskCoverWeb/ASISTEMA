@@ -613,6 +613,7 @@ End Type
       Usuario              As String
       Password             As String
       de                   As String
+      Remitente            As String
       ListaError           As String
       TipoDeEnvio          As String
      'Posicion de la Lista de mails

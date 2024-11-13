@@ -69,6 +69,7 @@ Form=GENERAL\FConexion.frm
 Class=cFTP; CLASES\cFTP.cls
 Class=ClaseExcel; CLASES\ClaseExcel.cls
 Form=GENERAL\FBusq.frm
+Class=cPing; CLASES\cPing.cls
 IconForm="FDiskCover"
 Startup="FDiskCover"
 HelpFile=""

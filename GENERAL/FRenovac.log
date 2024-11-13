@@ -1,0 +1,14 @@
+Línea 56: la clase MSDataListLib.DataCombo del control DCAutorizacionOld no era una clase de control cargada.
+Línea 96: la clase MSDataListLib.DataCombo del control DCSerie no era una clase de control cargada.
+Línea 136: la clase MSAdodcLib.Adodc del control AdoTipoComprobante no era una clase de control cargada.
+Línea 246: la clase MSAdodcLib.Adodc del control AdoAutorizacion no era una clase de control cargada.
+Línea 293: la clase MSDataListLib.DataCombo del control DCAutorizacion no era una clase de control cargada.
+Línea 315: la clase MSDataListLib.DataCombo del control DCTipoTramite no era una clase de control cargada.
+Línea 337: la clase MSAdodcLib.Adodc del control AdoTipoTramite no era una clase de control cargada.
+Línea 384: la clase MSAdodcLib.Adodc del control AdoAux1 no era una clase de control cargada.
+Línea 431: la clase MSAdodcLib.Adodc del control AdoAux2 no era una clase de control cargada.
+Línea 478: la clase MSAdodcLib.Adodc del control AdoFacturas no era una clase de control cargada.
+Línea 525: la clase MSAdodcLib.Adodc del control AdoFacturasNew no era una clase de control cargada.
+Línea 572: la clase MSAdodcLib.Adodc del control AdoSerie no era una clase de control cargada.
+Línea 619: la clase MSAdodcLib.Adodc del control AdoAutorizacionOld no era una clase de control cargada.
+Línea 666: la clase MSAdodcLib.Adodc del control AdoAutorizaciones no era una clase de control cargada.

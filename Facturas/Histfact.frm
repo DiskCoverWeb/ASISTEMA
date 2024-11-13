@@ -225,7 +225,7 @@ Begin VB.Form HistorialFacturas
    End
    Begin VB.Frame Frame1 
       Height          =   645
-      Left            =   10815
+      Left            =   11025
       TabIndex        =   1
       Top             =   0
       Width           =   6105
@@ -359,8 +359,8 @@ Begin VB.Form HistorialFacturas
       Width           =   540
    End
    Begin MSComctlLib.ImageList ImageListFacturas 
-      Left            =   12075
-      Top             =   7560
+      Left            =   12390
+      Top             =   6720
       _ExtentX        =   1005
       _ExtentY        =   1005
       BackColor       =   -2147483643
@@ -979,9 +979,21 @@ Begin VB.Form HistorialFacturas
             Style           =   3
          EndProperty
          BeginProperty Button12 {66833FEA-8583-11D1-B16A-00C0F0283628} 
-            Key             =   "Retenciones_NC"
+            Key             =   "Tipo_de_Abonos"
             Object.ToolTipText     =   "Presentar Retenciones y Notas de Credito"
             ImageIndex      =   13
+            Style           =   5
+            BeginProperty ButtonMenus {66833FEC-8583-11D1-B16A-00C0F0283628} 
+               NumButtonMenus  =   2
+               BeginProperty ButtonMenu1 {66833FEE-8583-11D1-B16A-00C0F0283628} 
+                  Key             =   "Tipo_Abonos"
+                  Text            =   "Abonos Procesados"
+               EndProperty
+               BeginProperty ButtonMenu2 {66833FEE-8583-11D1-B16A-00C0F0283628} 
+                  Key             =   "Retenciones_NC"
+                  Text            =   "Notas de Creditos y Retenciones"
+               EndProperty
+            EndProperty
          EndProperty
          BeginProperty Button13 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "CxC_Clientes"
@@ -1246,7 +1258,7 @@ Begin VB.Form HistorialFacturas
       EndProperty
       ForeColor       =   &H000000FF&
       Height          =   330
-      Left            =   10395
+      Left            =   10920
       TabIndex        =   18
       Top             =   7770
       Width           =   1590
@@ -1264,7 +1276,7 @@ Begin VB.Form HistorialFacturas
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   9555
+      Left            =   10080
       TabIndex        =   19
       Top             =   7770
       Width           =   855
@@ -1285,7 +1297,7 @@ Begin VB.Form HistorialFacturas
       EndProperty
       ForeColor       =   &H000000FF&
       Height          =   330
-      Left            =   7980
+      Left            =   8400
       TabIndex        =   14
       Top             =   7770
       Width           =   1590
@@ -1303,7 +1315,7 @@ Begin VB.Form HistorialFacturas
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   7035
+      Left            =   7455
       TabIndex        =   15
       Top             =   7770
       Width           =   960
@@ -1324,7 +1336,7 @@ Begin VB.Form HistorialFacturas
       EndProperty
       ForeColor       =   &H000000FF&
       Height          =   330
-      Left            =   5460
+      Left            =   5775
       TabIndex        =   16
       Top             =   7770
       Width           =   1590
@@ -1345,7 +1357,7 @@ Begin VB.Form HistorialFacturas
       Left            =   4410
       TabIndex        =   17
       Top             =   7770
-      Width           =   1065
+      Width           =   1380
    End
 End
 Attribute VB_Name = "HistorialFacturas"
@@ -1409,7 +1421,7 @@ Public Sub Historico_Facturas()
  FechaFin = BuscarFecha(MBFechaF)
  
  DGQuery.Caption = "HISTORIAL DE FACTURAS"
- Label2.Caption = " Facturado"
+ Label2.Caption = "(" & Opcion & ") Facturado"
  Label4.Caption = " Cobrado"
  Label3.Caption = " Saldo"
  PorCxC = False
@@ -1449,7 +1461,7 @@ DGQuery.Visible = False
   If BoxMensaje = vbYes Then
      If ClaveAdministrador Then Si_No = True
   End If
-Label2.Caption = " Ventas"
+Label2.Caption = "(" & Opcion & ") Ventas"
 Label4.Caption = "  "
 Label3.Caption = "  "
 DGQuery.Visible = False
@@ -1510,7 +1522,7 @@ Total = 0: Abono = 0: Saldo = 0
     End With
 'End If
 '3301738
-Label2.Caption = "Facturado"
+Label2.Caption = "(" & Opcion & ") Facturado"
 Label4.Caption = "PVP"
 Label3.Caption = "Costo"
 
@@ -1528,7 +1540,7 @@ RatonReloj
 Opcion = 6
 FechaIni = BuscarFecha(MBFechaI)
 FechaFin = BuscarFecha(MBFechaF)
-Label2.Caption = " Facturado"
+Label2.Caption = "(" & Opcion & ") Facturado"
 Label4.Caption = " Cobrado"
 Label3.Caption = " Saldo"
 DGQuery.Visible = False
@@ -1562,20 +1574,18 @@ If CheqCxC.value = 1 Then PorCxC = True
   'Asientos de CxC Cheque
    
    If Ret_NC Then
-      sSQL = "SELECT F.TP,F.Fecha,C.Cliente,F.Serie,F.Factura,F.Banco,F.Cheque,F.Abono,F.Mes,F.Comprobante," _
-           & "F.Autorizacion,F.Serie_NC,Secuencial_NC,F.Autorizacion_NC,F.Base_Imponible,F.Porc,C.Representante As Razon_Social," _
-           & "F.Cta,F.Cta_CxP " _
+      sSQL = "SELECT F.TP, F.Fecha, C.Cliente, F.Serie, F.Factura, F.Banco, F.Cheque, F.Abono, F.Mes, F.Comprobante, F.Autorizacion, F.Serie_NC, " _
+           & "Secuencial_NC, F.Autorizacion_NC, F.Base_Imponible, F.Porc, C.Representante As Razon_Social, F.Cta,F.Cta_CxP " _
            & "FROM Trans_Abonos As F, Clientes C " _
            & "WHERE F.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
            & "AND F.Item = '" & NumEmpresa & "' " _
            & "AND F.Periodo = '" & Periodo_Contable & "' " _
            & Tipo_De_Consulta(True) _
-           & "AND MidStrg(F.Banco,1,9) = 'RETENCION' " _
+           & "AND F.Banco LIKE 'RETENCION%' " _
            & "AND F.CodigoC = C.Codigo " _
            & "UNION " _
-           & "SELECT F.TP,F.Fecha,C.Cliente,F.Serie,F.Factura,F.Banco,F.Cheque,F.Abono,F.Mes,F.Comprobante," _
-           & "F.Autorizacion,F.Serie_NC,Secuencial_NC,F.Autorizacion_NC,F.Base_Imponible,F.Porc,C.Representante As Razon_Social," _
-           & "F.Cta,F.Cta_CxP " _
+           & "SELECT F.TP, F.Fecha, C.Cliente, F.Serie, F.Factura, F.Banco, F.Cheque, F.Abono, F.Mes, F.Comprobante, F.Autorizacion, F.Serie_NC, " _
+           & "Secuencial_NC, F.Autorizacion_NC, F.Base_Imponible, F.Porc, C.Representante As Razon_Social, F.Cta,F.Cta_CxP " _
            & "FROM Trans_Abonos As F,Clientes C " _
            & "WHERE F.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
            & "AND F.Item = '" & NumEmpresa & "' " _
@@ -1583,18 +1593,17 @@ If CheqCxC.value = 1 Then PorCxC = True
            & Tipo_De_Consulta(True) _
            & "AND F.Banco = 'NOTA DE CREDITO' " _
            & "AND F.CodigoC = C.Codigo " _
-           & "ORDER BY F.Banco,F.Cheque,C.Cliente,F.Factura,F.Fecha "
+           & "ORDER BY F.Banco, F.Cheque, C.Cliente, F.Serie, F.Factura, F.Fecha "
    Else
-      sSQL = "SELECT F.TP,F.Fecha,C.Cliente,F.Serie,F.Factura,F.Banco,F.Cheque,F.Abono,F.Mes,F.Comprobante," _
-           & "F.Autorizacion,F.Serie_NC,Secuencial_NC,F.Autorizacion_NC,C.Representante As Razon_Social,F.Cta," _
-           & "F.Cta_CxP " _
+      sSQL = "SELECT F.TP, F.Fecha, C.Cliente, F.Serie, F.Factura, F.Recibo_No, F.Banco, F.Cheque, F.Abono, F.Mes, F.Comprobante, F.Autorizacion, F.Serie_NC, " _
+           & "Secuencial_NC, F.Autorizacion_NC, C.Representante As Razon_Social, C.Grupo, C.Direccion As Ubicacion, F.Cta, F.Cta_CxP " _
            & "FROM Trans_Abonos As F,Clientes C " _
            & "WHERE F.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
            & "AND F.Item = '" & NumEmpresa & "' " _
            & "AND F.Periodo = '" & Periodo_Contable & "' " _
            & Tipo_De_Consulta(True) _
            & "AND F.CodigoC = C.Codigo " _
-           & "ORDER BY C.Cliente,F.Factura,F.Fecha,F.Banco "
+           & "ORDER BY F.Fecha, C.Cliente, F.Serie, F.Factura, F.Banco "
    End If
    Select_Adodc_Grid DGQuery, AdoQuery, sSQL, , , True
    'Totales_CxC_Abonos
@@ -1669,7 +1678,7 @@ End Sub
 Public Sub Abonos_Anticipados()
 RatonReloj
 Opcion = 6
-Label2.Caption = " Facturado"
+Label2.Caption = "(" & Opcion & ") Facturado"
 Label4.Caption = " Cobrado"
 Label3.Caption = " Saldo"
 DGQuery.Visible = False
@@ -1702,7 +1711,7 @@ End Sub
 Public Sub Abonos_Erroneos()
 RatonReloj
 Opcion = 6
-Label2.Caption = " Facturado"
+Label2.Caption = "(" & Opcion & ") Facturado"
 Label4.Caption = " Cobrado"
 Label3.Caption = " Saldo"
 DGQuery.Visible = False
@@ -1755,7 +1764,7 @@ Public Sub Resumen_Productos()
 'Resumen Productos
 Opcion = 3
 RatonReloj
-Label2.Caption = " I.V.A."
+Label2.Caption = "(" & Opcion & ") I.V.A."
 Label4.Caption = " VENTAS"
 Label3.Caption = " TOTAL"
 DGQuery.Visible = False
@@ -1791,7 +1800,7 @@ Public Sub Ventas_Cliente()
 'Resumen Ventas por Cliente
 Opcion = 4
 RatonReloj
-Label2.Caption = " Ventas"
+Label2.Caption = "(" & Opcion & ") Ventas"
 Label4.Caption = " Cobrado"
 Label3.Caption = " Saldo"
 DGQuery.Visible = False
@@ -1840,7 +1849,7 @@ Dim PorCantidad As Boolean
     
     Opcion = 16
     RatonReloj
-    Label2.Caption = " Ventas"
+    Label2.Caption = "(" & Opcion & ") Ventas"
     Label4.Caption = " Cobrado"
     Label3.Caption = " Saldo"
     DGQuery.Visible = False
@@ -2000,7 +2009,7 @@ Dim CantProm As Integer
 
     Opcion = 14
     RatonReloj
-    Label2.Caption = " Ventas"
+    Label2.Caption = "(" & Opcion & ") Ventas"
     Label4.Caption = " Cobrado"
     Label3.Caption = " Saldo"
     
@@ -2195,7 +2204,7 @@ DGQuery.Visible = False
   If BoxMensaje = vbYes Then
      If ClaveAdministrador Then Si_No = True
   End If
-Label2.Caption = " Ventas"
+Label2.Caption = "(" & Opcion & ") Ventas"
 Label4.Caption = "  "
 Label3.Caption = "  "
 DGQuery.Visible = False
@@ -2296,9 +2305,9 @@ If Si_No Then
    Saldo = T_Fields("Costos")
 End If
 '3301738
-Label2.Caption = "Facturado"
-Label4.Caption = "PVP"
-Label3.Caption = "Costo"
+Label2.Caption = "(" & Opcion & ") Facturado"
+Label4.Caption = " PVP"
+Label3.Caption = " Costo"
 
 LabelFacturado.Caption = Format$(Total, "#,##0.00")
 LabelAbonado.Caption = Format$(Abono, "#,##0.00")
@@ -2502,7 +2511,7 @@ End Sub
 Public Sub Cheques_Protestados()
 'Cheques protestado
 RatonReloj
-Label2.Caption = " Facturado"
+Label2.Caption = "(" & Opcion & ") Facturado"
 Label4.Caption = " Cobrado"
 Label3.Caption = " Saldo"
 
@@ -2932,7 +2941,7 @@ Dim Nombre_Campo As String
      End Select
     'MsgBox Modulo & vbCrLf & sSQL
      SelectDB_Combo DCCliente, AdoCliente, sSQL, Nombre_Campo
-     DCCliente.SetFocus
+     If AdoCliente.Recordset.RecordCount > 0 Then DCCliente.SetFocus
   End If
 End Sub
 
@@ -3313,9 +3322,6 @@ Private Sub ToolbarMenu_ButtonClick(ByVal Button As MSComctlLib.Button)
          Historico_Facturas
     Case "Protestado"
          Cheques_Protestados
-    Case "Retenciones_NC"
-         'Actualizar_Abonos_Facturas FA
-         Abonos_Facturas True
     Case "Por_Buses"
          Por_Buses DCCliente
     Case "Listado_Tarjetas"
@@ -3464,6 +3470,13 @@ Private Sub ToolbarMenu_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMe
           Ventas_x_Excel
      Case "Reporte_Catastro"
           Catastro_Registro_Datos_Clientes
+    'Tipo de Abonos
+     Case "Tipo_Abonos"
+          'Actualizar_Abonos_Facturas FA
+          Abonos_Facturas
+     Case "Retenciones_NC"
+          'Actualizar_Abonos_Facturas FA
+          Abonos_Facturas True
     'Envios por mail
      Case "Enviar_FA_Email"
           Enviar_Emails_Facturas_Recibos "FA", Val(TxtDocDesde.Text), Val(TxtDocHasta.Text)
@@ -4331,6 +4344,7 @@ End Sub
 Public Sub Enviar_Emails_Facturas_Recibos(TipoEnvio As String, DocDesde As Long, DocHasta As Long)
 Dim MesNo As Byte
 Dim Cta_Aux_Mail As String
+Dim Detalle_Abono As String
 ''Dim Archivo_PDF As Boolean
 
     RatonReloj
@@ -4371,26 +4385,30 @@ Dim Cta_Aux_Mail As String
              & "AND F.Periodo = '" & Periodo_Contable & "' " _
              & "AND F.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
              & "AND F.TC IN ('FA','NV') " _
-             & Tipo_De_Consulta(, True)
+             & Tipo_De_Consulta(, True) & " "
         If DocDesde > 0 And DocHasta > 0 And DocDesde <= DocHasta Then sSQL = sSQL & "AND F.Factura BETWEEN " & DocDesde & " and " & DocHasta & " "
         If Cta_Aux_Mail <> Ninguno Then sSQL = sSQL & "AND F.X = '.' "
     Else
-        sSQL = "SELECT C.Cliente, F.CodigoC, F.TP As TC, F.Fecha, F.Serie, F.Factura, F.Hora_Aut, F.Fecha_Aut, F.Autorizacion, " _
-             & "F.Abono As Saldo_MN, C.Email, C.Email2, C.EmailR, C.CI_RUC " _
-             & "FROM Trans_Abonos As F, Clientes As C " _
-             & "WHERE F.Item = '" & NumEmpresa & "' " _
-             & "AND F.Periodo = '" & Periodo_Contable & "' " _
-             & "AND F.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-             & "AND F.TP IN ('FA','NV') " _
-             & Tipo_De_Consulta(, True)
+        Opcion = 14
+      sSQL = "SELECT F.TP, F.Fecha, C.Cliente, F.Serie, F.Factura, F.Recibo_No, F.Banco, F.Cheque, F.Abono, F.Mes, F.Comprobante, F.Autorizacion, F.Serie_NC, " _
+           & "Secuencial_NC, F.Autorizacion_NC, C.Representante As Razon_Social, C.Grupo, C.Direccion As Ubicacion, F.Cta, F.Cta_CxP, F.CodigoC, F.Hora_Aut, " _
+           & "F.Fecha_Aut, C.CI_RUC, C.Email, C.Email2, C.EmailR " _
+           & "FROM Trans_Abonos As F, Clientes C " _
+           & "WHERE F.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
+           & "AND F.Item = '" & NumEmpresa & "' " _
+           & "AND F.Periodo = '" & Periodo_Contable & "' " _
+           & Tipo_De_Consulta(True) & " "
         If DocDesde > 0 And DocHasta > 0 And DocDesde <= DocHasta Then sSQL = sSQL & "AND F.Factura BETWEEN " & DocDesde & " and " & DocHasta & " "
         If Cta_Aux_Mail <> Ninguno Then sSQL = sSQL & "AND F.Cta = '" & Cta_Aux_Mail & "' "
     End If
     sSQL = sSQL _
          & "AND F.CodigoC = C.Codigo " _
-         & "ORDER BY F.Serie, F.Factura "
-    Select_Adodc AdoQuery, sSQL, , , "Recibos_Mails"
+         & "ORDER BY F.Fecha, C.Cliente, F.Serie, F.Factura "
+    Select_Adodc AdoQuery, sSQL
     RatonReloj
+    TMail.TipoDeEnvio = "CO"
+    TMail.ListaMail = 255
+    
     With AdoQuery.Recordset
     'MsgBox "Total Registros: " & .RecordCount
      If .RecordCount > 0 Then
@@ -4403,12 +4421,12 @@ Dim Cta_Aux_Mail As String
                If TipoEnvio = "FA" Then
                   FA.Estado_SRI = .fields("Estado_SRI")
                   FA.Fecha_V = .fields("Fecha_V")
+                  FA.TC = .fields("TC")
                Else
                   FA.Estado_SRI = "OK"
+                  FA.TC = .fields("TP")
                End If
-               FA.TC = .fields("TC")
                FA.Fecha = .fields("Fecha")
-               
                FA.Serie = .fields("Serie")
                FA.CI_RUC = .fields("CI_RUC")
                FA.Factura = .fields("Factura")
@@ -4419,8 +4437,49 @@ Dim Cta_Aux_Mail As String
                FA.EmailR = .fields("Email2")
                FA.Cliente = .fields("Cliente")
                FA.Comercial = .fields("Cliente")
+               
                SRI_Autorizacion.Hora_Autorizacion = .fields("Hora_Aut")
-               If TipoEnvio = "FA" Then SRI_Enviar_Mails FA, SRI_Autorizacion, "FA" Else Recibo_Enviar_Mails FA
+               
+               If TipoEnvio = "FA" Then
+                  FA.Recibo_No = "000000000"
+                  SRI_Enviar_Mails FA, SRI_Autorizacion, "FA"
+               Else
+                  TMail.Adjunto = ""
+                  ValorTotal = .fields("Abono")
+                  TMail.MensajeHTML = Leer_Archivo_Texto(RutaSistema & "\JAVASCRIPT\f_recibo.html")
+                  FA.Recibo_No = Format(FA.Fecha, "yyyymm") & .fields("Recibo_No")
+                  TMail.Credito_No = "" ' "R" & FA.Recibo_No
+                  TMail.Asunto = FA.Cliente & ", " & "Documento No " & FA.Serie & "-" & Format$(FA.Factura, "000000000")
+                  Detalle_Abono = ""
+                  If Len(.fields("Banco")) > 1 Then Detalle_Abono = Detalle_Abono & .fields("Banco") & ", "
+                  If Len(.fields("Cheque")) > 1 Then Detalle_Abono = Detalle_Abono & .fields("Cheque") & ", "
+                  html_Detalle_adicional = "<tr>" _
+                                         & "<td>" & FA.Fecha & "</td>" _
+                                         & "<td>" & Detalle_Abono & "</td>" _
+                                         & "<td class='row text-right'>" & Format(.fields("Abono"), "#,##0.00") & "</td>" _
+                                         & "</tr>"
+                  
+                  If FA.Cliente <> Ninguno And FA.Cliente <> FA.Razon_Social Then
+                     html_Informacion_adicional = ""
+                     If Len(FA.Cliente) > 1 Then html_Informacion_adicional = html_Informacion_adicional & "<strong>Beneficiario:</strong>" & FA.Cliente & "<br>"
+                     If Len(FA.CI_RUC) > 1 Then html_Informacion_adicional = html_Informacion_adicional & "<strong>Codigo:</strong>" & FA.CI_RUC & "<br>"
+                     If Len(FA.Curso) > 1 Then html_Informacion_adicional = html_Informacion_adicional & "<strong>Ubicacion:</strong>" & FA.Grupo & " - " & FA.Curso & "<br>"
+                     If Len(FA.DireccionC) > 1 Then html_Informacion_adicional = html_Informacion_adicional & "<strong>Direccion:</strong>" & FA.DireccionC & "<br>"
+                     If Len(FA.TelefonoC) > 1 Then Insertar_Campo_XML html_Informacion_adicional = html_Informacion_adicional & "<strong>Telefono:</strong>" & FA.TelefonoC & "<br>"
+                     If EsUnEmail(FA.EmailC) Then html_Informacion_adicional = html_Informacion_adicional & "<strong>Email:</strong>" & FA.EmailC & "<br>"
+                     If EsUnEmail(FA.EmailR) And InStr(FA.EmailC, FA.EmailR) = 0 Then html_Informacion_adicional = html_Informacion_adicional & "<strong>Email 2:</strong>" & FA.EmailR & "<br>"
+                     If html_Informacion_adicional <> "" Then html_Informacion_adicional = "<strong>INFORMACION ADICIONAL:</strong><br>" & html_Informacion_adicional
+                  Else
+                     html_Informacion_adicional = ""
+                  End If
+                 'Enviamos lista de mails
+                  TMail.para = ""
+                  Insertar_Mail TMail.para, .fields("Email")
+                  Insertar_Mail TMail.para, .fields("Email2")
+                  Insertar_Mail TMail.para, .fields("EmailR")
+                  If Email_CE_Copia Then Insertar_Mail TMail.para, EmailProcesos
+                  FEnviarCorreos.Show 1
+               End If
               'MsgBox ">>>>>>>"
               .MoveNext
             Loop
@@ -4440,7 +4499,6 @@ End Sub
 
 Public Sub Deuda_x_Mail(TipoEnvio As String)
 Dim Si_Envia As Boolean
-Dim CadDeuda As String
 Dim posPuntoComa As Integer
 
   DGQuery.Visible = False
@@ -4460,31 +4518,40 @@ Dim posPuntoComa As Integer
        TBeneficiario.Email1 = .fields("Email")
        TBeneficiario.Email2 = .fields("Email2")
        TBeneficiario.EmailR = .fields("EmailR")
-       If Len(TBeneficiario.Representante) <= 1 And Len(TBeneficiario.Cliente) > 1 Then TBeneficiario.Representante = TBeneficiario.Cliente
+       'If Len(TBeneficiario.Representante) <= 1 And Len(TBeneficiario.Cliente) > 1 Then TBeneficiario.Representante = TBeneficiario.Cliente
         
-       CadDeuda = "TC " & vbTab & "FECHA EMIS " & vbTab & "SERIE " & vbTab & vbTab & "DOCUMENTO " & vbTab & "SALDO ACTUTAL" & vbCrLf
+       html_Detalle_adicional = "<thead><tr><strong><td>TC</td><td>FECHA EMIS</td><td>SERIE</td><td>DOCUMENTO</td><td>SALDO ACTUTAL</td></strong></tr></thead><tbody>"
+       
       'NombreRepresentante = TBeneficiario.Representante
        Do While Not .EOF
           If Codigo <> .fields("CodigoC") Then
              ComunicadoEntidad = ""
-             CodigoP = Format$(Total, "#,#0.00")
-             CodigoP = String(14 - Len(CodigoP), " ") & CodigoP
              TMail.Asunto = "Envio automatizado de su cartera pendiente por USD " & Format$(Total, "#,#0.00")
-             TMail.Mensaje = "Estimado(a): " & TBeneficiario.Representante & ", del Grupo " & TBeneficiario.Grupo_No & ". " _
+             
+             html_Detalle_adicional = html_Detalle_adicional _
+                                    & "<tr>" _
+                                    & "<td colspan='4'>TOTAL PENDIENTE POR CANCELAR</td>" _
+                                    & "<td class='row text-right'>" & Format$(Total, "#,#0.00") & "</td>" _
+                                    & "</tr></tbody>"
+             TMail.Mensaje = "Estimado(a): "
+             If Len(TBeneficiario.Representante) > 1 Then TMail.Mensaje = TMail.Mensaje & TBeneficiario.Representante & vbCrLf Else TMail.Mensaje = TMail.Mensaje & TBeneficiario.Cliente & vbCrLf
+             If Len(TBeneficiario.Representante) > 1 And TBeneficiario.Representante <> TBeneficiario.Cliente Then TMail.Mensaje = TMail.Mensaje & "Beneficiario: " & TBeneficiario.Cliente & vbCrLf
+             TMail.Mensaje = TMail.Mensaje _
+                           & "Grupo " & TBeneficiario.Grupo_No & vbCrLf _
                            & "Usted tiene los siguientes pendientes por cancelar:" & vbCrLf _
-                           & CadDeuda _
-                           & String(60, "_") & vbCrLf _
-                           & "TOTAL PENDIENTE POR CANCELAR" & String(26, " ") & "USD " & vbTab & CodigoP & vbCrLf _
-                           & "NOTA: En caso de tener inconformidad con los valores detallados en su Estado de Cuenta, comuniquese con atencion al Cliente." & vbCrLf
+                           & "<table BORDER CELLPADDING=10 CELLSPACING=0 class='content-table'>" & html_Detalle_adicional & "</table>" _
+                           & "<N>NOTA:</N> En caso de tener inconformidad con los valores detallados en su Estado de Cuenta, comuniquese con atencion al Cliente." & vbCrLf
             'Enviamos lista de mails
              TMail.para = ""
              Insertar_Mail TMail.para, TBeneficiario.EmailR
              Insertar_Mail TMail.para, TBeneficiario.Email1
              Insertar_Mail TMail.para, TBeneficiario.Email2
              Insertar_Mail TMail.para, EmailProcesos
-             
+            'MsgBox TBeneficiario.Representante & " -> " & TBeneficiario.Cliente & vbCrLf & TMail.Mensaje
              FEnviarCorreos.Show vbModal
-             CadDeuda = "TC " & vbTab & "FECHA EMIS " & vbTab & "SERIE " & vbTab & vbTab & "DOCUMENTO " & vbTab & "SALDO ACTUTAL" & vbCrLf
+             TMail.Mensaje = ""
+             TMail.MensajeHTML = ""
+             html_Detalle_adicional = "<thead><tr><strong><td>TC</td><td>FECHA EMIS</td><td>SERIE</td><td>DOCUMENTO</td><td>SALDO ACTUTAL</td></strong></tr></thead>"
              Codigo = .fields("CodigoC")
              TBeneficiario.Cliente = .fields("Cliente")
              TBeneficiario.Representante = .fields("Representante")
@@ -4492,37 +4559,48 @@ Dim posPuntoComa As Integer
              TBeneficiario.Email1 = .fields("Email")
              TBeneficiario.Email2 = .fields("Email2")
              TBeneficiario.EmailR = .fields("EmailR")
-             If Len(TBeneficiario.Representante) <= 1 And Len(TBeneficiario.Cliente) > 1 Then TBeneficiario.Representante = TBeneficiario.Cliente
              Total = 0
           End If
-          CodigoP = Format$(.fields("Saldo_Actual"), "#,#0.00")
-          CodigoP = String(14 - Len(CodigoP), " ") & CodigoP
-          CadDeuda = CadDeuda & .fields("TC") & " " & vbTab & .fields("Fecha") & " " & vbTab & .fields("Serie") & " " & vbTab & Format(.fields("Factura"), "000000000") & " " & vbTab & vbTab & CodigoP & vbCrLf
+          html_Detalle_adicional = html_Detalle_adicional _
+                                 & "<tr>" _
+                                 & "<td>" & .fields("TC") & "</td>" _
+                                 & "<td>" & .fields("Fecha") & "</td>" _
+                                 & "<td>" & .fields("Serie") & "</td>" _
+                                 & "<td>" & Format(.fields("Factura"), "000000000") & "</td>" _
+                                 & "<td class='row text-right'>" & Format$(.fields("Saldo_Actual"), "#,#0.00") & "</td>" _
+                                 & "</tr>"
           Total = Total + .fields("Saldo_Actual")
          .MoveNext
        Loop
        ComunicadoEntidad = ""
-       CodigoP = Format$(Total, "#,#0.00")
-       CodigoP = String(20 - Len(CodigoP), " ") & CodigoP
        TMail.Asunto = "Envio automatizado de su cartera pendiente por USD " & Format$(Total, "#,#0.00")
-       TMail.Mensaje = "Estimado(a): " & TBeneficiario.Representante & ", del Grupo " & TBeneficiario.Grupo_No & ". " _
+       html_Detalle_adicional = html_Detalle_adicional _
+                              & "<tr>" _
+                              & "<td colspan='4'>TOTAL PENDIENTE POR CANCELAR</td>" _
+                              & "<td class='row text-right'>" & Format$(Total, "#,#0.00") & "</td>" _
+                              & "</tr></tbody>"
+       TMail.Mensaje = "Estimado(a): "
+       If Len(TBeneficiario.Representante) > 1 Then TMail.Mensaje = TMail.Mensaje & TBeneficiario.Representante & vbCrLf Else TMail.Mensaje = TMail.Mensaje & TBeneficiario.Cliente & vbCrLf
+       If Len(TBeneficiario.Representante) > 1 And TBeneficiario.Representante <> TBeneficiario.Cliente Then TMail.Mensaje = TMail.Mensaje & "Beneficiario: " & TBeneficiario.Cliente & vbCrLf
+       TMail.Mensaje = TMail.Mensaje _
+                     & "Grupo " & TBeneficiario.Grupo_No & vbCrLf _
                      & "Usted tiene los siguientes pendientes por cancelar:" & vbCrLf _
-                     & CadDeuda _
-                     & String(60, "_") & vbCrLf _
-                     & "TOTAL PENDIENTE POR CANCELAR" & String(26, " ") & "USD " & vbTab & CodigoP & vbCrLf _
-                     & "NOTA: En caso de tener inconformidad con los valores detallados en su Estado de Cuenta, comuniquese con atencion al Cliente." & vbCrLf        'Enviamos lista de mails
+                     & "<table BORDER CELLPADDING=10 CELLSPACING=0 class='content-table'>" & html_Detalle_adicional & "</table>" _
+                     & "<N>NOTA:</N> En caso de tener inconformidad con los valores detallados en su Estado de Cuenta, comuniquese con atencion al Cliente." & vbCrLf
        TMail.para = ""
        Insertar_Mail TMail.para, TBeneficiario.Email1
        Insertar_Mail TMail.para, TBeneficiario.Email2
        Insertar_Mail TMail.para, TBeneficiario.EmailR
+'      MsgBox TBeneficiario.Representante & " -> " & TBeneficiario.Cliente & vbCrLf & TMail.Mensaje
        FEnviarCorreos.Show vbModal
+       TMail.Mensaje = ""
+       TMail.MensajeHTML = ""
       'If Len(TMail.ListaError) > 1 Then Lista_Error = Lista_Error & TBeneficiario.Representante & " - Email: " & TMail.para & " => " & TMail.ListaError & vbCrLf
    End If
   End With
   DGQuery.Visible = True
   If Len(TMail.ListaError) > 1 Then
      MsgBox "Rebice en su correo los errores "
-     TMail.para = ""
      TMail.para = Lista_De_Correos(0).Correo_Electronico
      TMail.Asunto = "CORREOS CON ERRORES"
      TMail.Mensaje = TMail.ListaError
@@ -4534,7 +4612,7 @@ Public Sub Por_Buses(Patron_Busqueda As String)
 'Por Buses
  Opcion = 12
  DGQuery.Caption = "HISTORIAL DE FACTURAS"
- Label2.Caption = " Facturado"
+ Label2.Caption = "(" & Opcion & ") Facturado"
  Label4.Caption = " Cobrado"
  Label3.Caption = " Saldo"
  PorCxC = False
@@ -4556,7 +4634,7 @@ Public Sub SMAbonos_Anticipados()
 'Abonos Anticipados de Clientes
     Opcion = 20
     RatonReloj
-    Label2.Caption = " Ventas"
+    Label2.Caption = "(" & Opcion & ") Ventas"
     Label4.Caption = " Cobrado"
     Label3.Caption = " Saldo"
     
@@ -4609,7 +4687,7 @@ Dim ContraCta As String
 'Abonos Anticipados de Clientes
     Opcion = 21
     RatonReloj
-    Label2.Caption = " Debitos"
+    Label2.Caption = "(" & Opcion & ") Debitos"
     Label4.Caption = " Creditos"
     Label3.Caption = " Saldo"
     

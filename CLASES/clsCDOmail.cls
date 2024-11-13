@@ -34,13 +34,15 @@ Public Event Error(Descripcion As String, Numero As Variant)
 Public Event EnvioCompleto()
 
 Function Enviar_Backup() As Boolean
- On Error GoTo GestionaError
-   'Variable de objeto Cdo.Message
-    Dim oCDO As Object
-    Dim archivoAdjunto As String
-    Dim posPuntoComa As String
-    Dim vAdjunto As String
+On Error GoTo GestionaError
+'Variable de objeto Cdo.Message
+Dim oCDO As Object
+Dim archivoAdjunto As String
+Dim posPuntoComa As String
+Dim vAdjunto As String
         
+   'mUsuario = "admin@imap.diskcoversystem.com"
+   
    'chequea si hay conexión
     If InternetGetConnectedState(0&, 0&) = False Then
        RaiseEvent Error("No se puede enviar el correo. " & "Verificar la conexión a internet si está disponible", 0)
@@ -55,41 +57,39 @@ Function Enviar_Backup() As Boolean
 
    'Crea un Nuevo objeto CDO.Message
     Set oCDO = CreateObject("CDO.Message")
-    With oCDO.configuration
-        'SMTP server IP or Name
-       .fields("http://schemas.microsoft.com/cdo/configuration/smtpserver").value = mServidor
-        'Indica el servidor Smtp para poder enviar el Mail (puede ser el nombre del servidor o su dirección IP)
-       .fields("http://schemas.microsoft.com/cdo/configuration/sendusing").value = 2
-        'Server port (typically 25, 465, 587) 'The next line is commented out because of the use of SSL encryption
-        'Puerto. Por defecto se usa el puerto 25, en el caso de Gmail se usa el puerto 465
-       .fields("http://schemas.microsoft.com/cdo/configuration/smtpserverport").value = mPuerto    'Commonly -> 465 SSL, 587 TLS
+    With oCDO.Configuration
+        'Indica el SMTP server para poder enviar el Mail (puede ser el nombre del servidor o su dirección IP)
+        .fields("http://schemas.microsoft.com/cdo/configuration/smtpserver").value = mServidor
+        'Tipo de envio de mail
+        .fields("http://schemas.microsoft.com/cdo/configuration/sendusing").value = 2
+        'Por defecto se usa el puerto (typically 25, 465, 587), en el caso de Gmail se usa el puerto 465
+        'The next line is commented out because of the use of SSL encryption
+        .fields("http://schemas.microsoft.com/cdo/configuration/smtpserverport").value = mPuerto     'Commonly -> 465 SSL, 587 TLS
         'Enviar un mensaje al servdor
-        If Len(mEhlo) > 1 Then .fields("http://schemas.microsoft.com/cdo/configuration/ehlo").value = mEhlo
+         If Len(mEhlo) > 1 Then .fields("http://schemas.microsoft.com/cdo/configuration/ehlo").value = mEhlo
         'Indica si se usa SSL para el envío. En el caso de Gmail requiere que esté en True
-        'Use SSL for the connection (False or True) -> If using SSL, do not specify the Port above
-        If mSSL Then .fields("http://schemas.microsoft.com/cdo/configuration/smtpusessl").value = mSSL
-        'Use TLS for the connection (False or True)
-        If mTLS Then .fields("http://schemas.microsoft.com/cdo/configuration/sendtls").value = mTLS
+         If mSSL Then .fields("http://schemas.microsoft.com/cdo/configuration/SMTPUseSSL").value = mSSL
+         If mTLS Then .fields("http://schemas.microsoft.com/cdo/configuration/sendtls").value = mTLS
         'Configura las opciones para el login en el SMTP
         'SMTP Account User ID
-        If mUseAuntentificacion Then
-          'Id de usuario del servidor Smtp (en el caso de gmail, debe ser la dirección de correro mas el @gmail.com)
-         .fields("http://schemas.microsoft.com/cdo/configuration/sendusername").value = mUsuario
-          'Password de la cuenta
-         .fields("http://schemas.microsoft.com/cdo/configuration/sendpassword").value = mPassword
-        End If
-        'Type of authentication, NONE, Basic (Base64 encoded), NTLM
-        'Indica el tipo de autentificación con el servidor de correo.
+         If mUseAuntentificacion Then
+           'Id de usuario del servidor Smtp (en el caso de gmail, debe ser la dirección de correro mas el @gmail.com)
+           .fields("http://schemas.microsoft.com/cdo/configuration/sendusername").value = mUsuario
+           'Password de la cuenta
+           .fields("http://schemas.microsoft.com/cdo/configuration/sendpassword").value = mPassword
+         End If
+        'Indica el tipo de autentificación con el servidor de correo. Type of authentication, NONE, Basic (Base64 encoded), NTLM
         'El valor 0 no requiere autentificarse, el valor 1 es con autentificación
-       .fields("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate").value = Abs(mUseAuntentificacion)
+        .fields("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate").value = Abs(mUseAuntentificacion)
         'Tiempo máximo de espera en segundos para la conexión
         'Number of seconds to wait for a response from the server before aborting
-       .fields("http://schemas.microsoft.com/cdo/configuration/smtpconnectiontimeout").value = 10
+        .fields("http://schemas.microsoft.com/cdo/configuration/smtpconnectiontimeout").value = 10
         'Cuerpo del mensaje
-       .fields("http://schemas.microsoft.com/cdo/configuration/BodyFormat").value = 2
+        .fields("http://schemas.microsoft.com/cdo/configuration/BodyFormat").value = 2
         'Actualiza los datos antes de enviar
-       .fields.Update
+        .fields.Update
     End With
+   'MsgBox "...."
    'Estructura del mail
    '''''''''''''''''''''''''''''''''''''''''''''''
    'Dirección del Destinatario
@@ -103,13 +103,13 @@ Function Enviar_Backup() As Boolean
 
    'Cuerpo del mensaje
     If Len(mMensajeHTML) > 10 Then
+       oCDO.BodyPart.charset = "utf-8"
        oCDO.HTMLBody = mMensajeHTML
        oCDO.TextBody = ""
     Else
        oCDO.TextBody = mMensaje
     End If
    'Ruta del archivo adjunto
-   'MsgBox mSSL      'mAdjunto
     vAdjunto = TrimStrg(mAdjunto)
     If Len(FirmaDigital) > 1 Then vAdjunto = vAdjunto & ";" & FirmaDigital
    'MsgBox vAdjunto & vbCrLf & FirmaDigital
@@ -137,7 +137,7 @@ Function Enviar_Backup() As Boolean
               & "DE: " & mDe & vbCrLf & vbCrLf _
               & "PARA: " & mPara
       'MsgBox Cadena
-       oCDO.send
+       If Len(mDe) > 3 Then oCDO.send
 GestionaError:
       'MsgBox Err.Number
        ' .. si no hubo error

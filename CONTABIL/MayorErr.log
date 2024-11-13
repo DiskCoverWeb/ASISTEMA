@@ -1,1 +1,4 @@
 Línea 18: la clase MSComctlLib.ProgressBar del control ProcBar no era una clase de control cargada.
+Línea 29: la clase MSAdodcLib.Adodc del control AdoCtas no era una clase de control cargada.
+Línea 76: la clase MSAdodcLib.Adodc del control AdoTrans no era una clase de control cargada.
+Línea 123: la clase MSAdodcLib.Adodc del control AdoSubCtas no era una clase de control cargada.

@@ -86,10 +86,10 @@ Begin VB.Form FSeteos
       TabCaption(1)   =   "&Duplicados/Mantenimiento"
       TabPicture(1)   =   "FSeteos.frx":0326
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "LstTablas"
-      Tab(1).Control(1)=   "CheqSCAlum"
-      Tab(1).Control(2)=   "LstDuplicados"
-      Tab(1).Control(3)=   "Command15"
+      Tab(1).Control(0)=   "Command15"
+      Tab(1).Control(1)=   "LstDuplicados"
+      Tab(1).Control(2)=   "CheqSCAlum"
+      Tab(1).Control(3)=   "LstTablas"
       Tab(1).ControlCount=   4
       TabCaption(2)   =   "&Niveles de Seguridad"
       TabPicture(2)   =   "FSeteos.frx":0342
@@ -124,16 +124,26 @@ Begin VB.Form FSeteos
       TabCaption(3)   =   "&Impresiones"
       TabPicture(3)   =   "FSeteos.frx":035E
       Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "Command8"
-      Tab(3).Control(1)=   "Command17(3)"
-      Tab(3).Control(2)=   "Command17(2)"
-      Tab(3).Control(3)=   "Command17(1)"
-      Tab(3).Control(4)=   "Command21"
-      Tab(3).Control(5)=   "DGSeteosPRN"
-      Tab(3).Control(6)=   "PictFormatos"
-      Tab(3).Control(7)=   "Command16"
-      Tab(3).Control(8)=   "Command17(0)"
-      Tab(3).Control(9)=   "DGFormato"
+      Tab(3).Control(0)=   "DGFormato"
+      Tab(3).Control(0).Enabled=   0   'False
+      Tab(3).Control(1)=   "Command17(0)"
+      Tab(3).Control(1).Enabled=   0   'False
+      Tab(3).Control(2)=   "Command16"
+      Tab(3).Control(2).Enabled=   0   'False
+      Tab(3).Control(3)=   "PictFormatos"
+      Tab(3).Control(3).Enabled=   0   'False
+      Tab(3).Control(4)=   "DGSeteosPRN"
+      Tab(3).Control(4).Enabled=   0   'False
+      Tab(3).Control(5)=   "Command21"
+      Tab(3).Control(5).Enabled=   0   'False
+      Tab(3).Control(6)=   "Command17(1)"
+      Tab(3).Control(6).Enabled=   0   'False
+      Tab(3).Control(7)=   "Command17(2)"
+      Tab(3).Control(7).Enabled=   0   'False
+      Tab(3).Control(8)=   "Command17(3)"
+      Tab(3).Control(8).Enabled=   0   'False
+      Tab(3).Control(9)=   "Command8"
+      Tab(3).Control(9).Enabled=   0   'False
       Tab(3).ControlCount=   10
       Begin VB.CommandButton Command4 
          Caption         =   "Migracion a MySQL"
@@ -3659,8 +3669,10 @@ With DtaAux.Recordset
      CadFileCampos = MidStrg(CadFileCampos, 1, Len(CadFileCampos) - 1)
      
     'Grabamos el encabezado de la tabla en el archivo plano
-     CadFileCampos = "INSERT INTO " & NombreTabla & " (" & CadFileCampos & ") "
-     'Print #NumFile, CadFileCampos
+     'CadFileCampos = "INSERT INTO " & NombreTabla & " (" & CadFileCampos & ") VALUES "
+     Print #NumFile, "INSERT INTO " & NombreTabla & " (" & CadFileCampos & ") VALUES "
+     
+     CadFileCampos = ""
     
      'FAConLineas = True
     .MoveFirst
@@ -3725,19 +3737,22 @@ With DtaAux.Recordset
             Codigo4 = TrimStrg(Codigo4) & ","
             CadFileReg = CadFileReg & Codigo4
         Next ILng
-        
         CadFileReg = MidStrg(CadFileReg, 1, Len(CadFileReg) - 1)
         
-        Print #NumFile, CadFileCampos & "VALUES (" & CadFileReg & "); "
+        CadFileCampos = CadFileCampos & "(" & CadFileReg & ")," & vbCrLf
+        
         Progreso_Esperar
        .MoveNext
      Loop
     .MoveFirst
      FileResp = FileResp + 1
+     CadFileCampos = MidStrg(CadFileCampos, 1, Len(CadFileCampos) - 3) & ";"
+     Print #NumFile, CadFileCampos;
  End If
 End With
 Close #NumFile
 RatonNormal
+'MsgBox "Archivo: (" & NombreTabla & ")" & RutaGeneraFile & " Procesado."
 End Sub
 
 '''Public Sub GenerarTablaEnArchivoPlano(FechaResp As String, _
@@ -4225,9 +4240,9 @@ Dim VectFields() As Variant
 '  Progreso_Barra.Mensaje_Box = "Determinando Duplicados de: Seteos Documentos"
 '  Progreso_Esperar
  'Campos de las Tablas a eliminar duplicados
-  Eliminar_Duplicados_SP "Seteos_Documentos", "Item, TP, Campo", "TP", ""
-  Eliminar_Duplicados_SP "Formato_Propio", "Item, Num, Codigo", "Codigo", "", True
-  Eliminar_Duplicados_SP "Formato", "Item, TP", "TP", ""
+  Eliminar_Duplicados_SP "Seteos_Documentos", "Item, TP, Campo"
+  Eliminar_Duplicados_SP "Formato_Propio", "Item, Num, Codigo"
+  Eliminar_Duplicados_SP "Formato", "Item, TP"
   Duplicar_Tabla_SP "Seteos_Documentos", "Seteos_Documentos_T"
 
  'Ahora pasamos a actualizar los formatos de Impresion de comprobantes
@@ -7357,6 +7372,8 @@ Public Sub Procesar_Indices_Base_Datos()
 End Sub
 
 Public Sub Procesar_Update_DB()
+Dim AdoCon1 As ADODB.Connection
+Dim RstSchema As ADODB.Recordset
 Dim ITab As Long
 Dim JCamp As Long
 Dim KCamp As Long
@@ -7392,6 +7409,24 @@ If Existe_File(RutaSistema & "\BASES\UPDATE_DB\*.upd") Then Kill RutaSistema & "
       & "FROM Trans_Documentos " _
       & "WHERE Item = '000' "
  Ejecutar_SQL_SP sSQL
+ 
+ Ejecutar_SQL_SP "DROP TABLE IF EXISTS Actualizacion"
+ 
+ ' Crea variables de objeto para los objetos de acceso a datos.
+'    Dim itmX As ListItem
+    Set AdoCon1 = New ADODB.Connection
+    AdoCon1.open AdoStrCnn
+    Set RstSchema = AdoCon1.OpenSchema(adSchemaTables)
+    Do Until RstSchema.EOF
+       If RstSchema!TABLE_TYPE = "TABLE" And MidStrg(RstSchema!TABLE_NAME, 1, 1) <> "~" Then
+         'Llenamos la lista de Tablas
+          LstTablas.AddItem RstSchema!TABLE_NAME
+          Contador = Contador + 1
+       End If
+       RstSchema.MoveNext
+    Loop
+
+ 
  
  Progreso_Barra.Incremento = 0
  Progreso_Barra.Valor_Maximo = LstTablas.ListCount - 1
@@ -7629,40 +7664,40 @@ Public Sub Procesar_Duplicados_Clientes()
   Progreso_Barra.Incremento = Progreso_Barra.Incremento + 5
   Progreso_Barra.Mensaje_Box = "Determinando Duplicados de: Catalogo de Cuentas "
   Progreso_Esperar
-  Eliminar_Duplicados_SP "Catalogo_Cuentas", "Codigo", "", ""
+  Eliminar_Duplicados_SP "Catalogo_Cuentas", "Codigo"
   
  'Codigo Repetidos de Clientes
   Progreso_Barra.Incremento = Progreso_Barra.Incremento + 5
   Progreso_Barra.Mensaje_Box = "Determinando Duplicados de: Codigos de Clientes "
   Progreso_Esperar
-  Eliminar_Duplicados_SP "Clientes", "Codigo", "", ""
+  Eliminar_Duplicados_SP "Clientes", "Codigo"
   
  'CI/RUC Repetidos
   Progreso_Barra.Incremento = Progreso_Barra.Incremento + 5
   Progreso_Barra.Mensaje_Box = "Determinando Duplicados de: Cédula o RUC "
   Progreso_Esperar
-  Eliminar_Duplicados_SP "Clientes", "CI_RUC", "CI_RUC", "Codigo"
+  Eliminar_Duplicados_SP "Clientes", "CI_RUC"
  
   Progreso_Barra.Incremento = Progreso_Barra.Incremento + 5
   Progreso_Barra.Mensaje_Box = "Determinando Duplicados de Nombres "
   Progreso_Esperar
-  Eliminar_Duplicados_SP "Clientes", "Cliente", "Cliente", "Codigo"
+  Eliminar_Duplicados_SP "Clientes", "Cliente"
   
   Progreso_Barra.Incremento = Progreso_Barra.Incremento + 5
   Progreso_Barra.Mensaje_Box = "Determinando Duplicados de: Notas "
   Progreso_Esperar
-  Eliminar_Duplicados_SP "Trans_Notas", "Item,Periodo,Codigo,CodE,CodMat", "", ""
+  Eliminar_Duplicados_SP "Trans_Notas", "Item, Periodo, Codigo, CodE, CodMat"
   
  'Codigo Repetidos de Clientes Matriculados
   Progreso_Barra.Incremento = Progreso_Barra.Incremento + 3
   Progreso_Barra.Mensaje_Box = "Determinando Duplicados de: Clientes de Matriculas"
   Progreso_Esperar
-  Eliminar_Duplicados_SP "Clientes_Matriculas", "Item,Periodo,Codigo", "", ""
+  Eliminar_Duplicados_SP "Clientes_Matriculas", "Item, Periodo, Codigo"
     
  'Codigo Repetidos de Catalogo Rol Rubros
   Progreso_Barra.Mensaje_Box = "Determinando Duplicados de: Catalogo Rol Rubros"
   Progreso_Esperar
-  Eliminar_Duplicados_SP "Catalogo_Rol_Rubros", "Codigo,Cod_Rol_Pago,Cta,Valor,I_E", "", ""
+  Eliminar_Duplicados_SP "Catalogo_Rol_Rubros", "Codigo, Cod_Rol_Pago, Cta,Valor, I_E"
   
  'Codigo Repetidos de Trans Notas
   Progreso_Barra.Mensaje_Box = "Determinando Duplicados de: Clientes de Matriculas"
@@ -8230,12 +8265,12 @@ Dim IdCampo As Integer
  'Codigos Catalogo Ctas_Proceso
   Progreso_Barra.Mensaje_Box = "Determinando Duplicados de: Ctas_Proceso"
   Progreso_Esperar
-  Eliminar_Duplicados_SP "Ctas_Proceso", "Periodo,Item,Detalle", "Detalle", ""
+  Eliminar_Duplicados_SP "Ctas_Proceso", "Periodo, Item, Detalle"
  
  'Codigos Catalogo Seteos_Documentos
   Progreso_Barra.Mensaje_Box = "Determinando Duplicados de: Seteos Documentos"
   Progreso_Esperar
-  Eliminar_Duplicados_SP "Seteos_Documentos", "Item, TP, Campo", "TP", ""
+  Eliminar_Duplicados_SP "Seteos_Documentos", "Item, TP, Campo"
    
  'Codigos Catalogo Modulos
   sSQL = "SELECT * " _

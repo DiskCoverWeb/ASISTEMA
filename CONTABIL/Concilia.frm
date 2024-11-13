@@ -1005,7 +1005,15 @@ Private Sub DCCtas_LostFocus()
 End Sub
 
 Private Sub DGBalance_Click()
-   If Opcion = 2 Then ID_Trans = DGBalance.Columns(16)
+    If AdoAsientos.Recordset.RecordCount > 0 Then
+       Select Case Opcion
+          Case 1: ID_Trans = DGBalance.Columns(15)
+          Case 2: ID_Trans = DGBalance.Columns(9)
+          Case Else: ID_Trans = -1
+       End Select
+    Else
+       ID_Trans = -1
+    End If
 End Sub
 
 Private Sub DGBalance_KeyDown(KeyCode As Integer, Shift As Integer)

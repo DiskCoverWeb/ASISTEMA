@@ -14813,13 +14813,13 @@ Public Sub Prueba_Envio_de_Correos()
     TMail.ListaMail = 255
     TMail.TipoDeEnvio = "CO"
    'MsgBox RutaBackup
-    TMail.Asunto = "Prueba de Mails por smtp.diskcoversystem.com"
+    TMail.Asunto = "Prueba de Mails por imap.diskcoversystem.com"
     TMail.MensajeHTML = Leer_Archivo_Texto(RutaSistema & "\JAVASCRIPT\email_recibo.html")
     
-    html_Informacion_adicional = "<strong>INFORMACION ADICIONAL:</strong><br><br>" _
-                               & "<strong>Importe total: USD </strong>150,00<br>" _
-                               & "<strong>Importe total: USD </strong>150,00<br>" _
-                               & "<strong>Importe total: USD </strong>150,00<br>"
+    html_Informacion_adicional = "<strong>INFORMACION ADICIONAL:</strong><br>" _
+                               & "Importe total: USD 150,00<br>" _
+                               & "Importe total: USD 150,00<br>" _
+                               & "Importe total: USD 150,00<br>"
                                
     html_Detalle_adicional = "<tr>" _
                            & "<td>13/12/2024</td>" _
@@ -14838,7 +14838,7 @@ Public Sub Prueba_Envio_de_Correos()
                   & "mensaje enviado desde el PC: " & IP_PC.Nombre_PC & ", a las: " & Time & ", " _
                   & "de la empresa: " & Empresa & "."
 
-    TMail.Adjunto = ""
+    TMail.Adjunto = "C:\SYSBASES\CE\CE999\Comprobantes Autorizados\2409202401070216417900110010030000025251234567816.xml"
     TMail.para = ""
     Insertar_Mail TMail.para, "diskcoversystem@msn.com"
     Insertar_Mail TMail.para, "diskcover.system@yahoo.com"
