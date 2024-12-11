@@ -3289,7 +3289,6 @@ Dim AdoRetAut As ADODB.Recordset
        Do While Not .EOF
           Valor = .fields("Valor")
           Valor_ME = .fields("Valor_ME")
-          Codigo = .fields("Codigo")
           TipoCta = .fields("TC")
           OpcDH = Val(.fields("DH"))
           SerieFactura = .fields("Serie")
@@ -3297,6 +3296,14 @@ Dim AdoRetAut As ADODB.Recordset
           Fecha_Vence = .fields("FECHA_V")
           Cta_Cobrar = TrimStrg(.fields("Cta"))
           If Len(SerieFactura) < 6 Then SerieFactura = "001001"
+          If IsNull(.fields("Codigo")) Then
+             Select Case TipoCta
+               Case "C", "P": Codigo = C1.CodigoB
+               Case Else: Codigo = Ninguno
+             End Select
+          Else
+             Codigo = .fields("Codigo")
+          End If
           If Valor <> 0 Or Valor_ME <> 0 Then
              SetAdoAddNew "Trans_SubCtas"
              SetAdoFields "T", C1.T

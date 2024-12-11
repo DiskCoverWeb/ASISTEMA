@@ -2,9 +2,9 @@ VERSION 5.00
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "Mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.Form FRecaudacionBancosPreFa 
    BackColor       =   &H00C0FFC0&
    Caption         =   "RECAUDACIONES POR BANCO"
@@ -15,8 +15,8 @@ Begin VB.Form FRecaudacionBancosPreFa
    Icon            =   "AutRecau.frx":0000
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   15615
-   ScaleWidth      =   28560
+   ScaleHeight     =   9450
+   ScaleWidth      =   12915
    WindowState     =   2  'Maximized
    Begin VB.CommandButton Command2 
       BackColor       =   &H00FFC0C0&
@@ -934,8 +934,8 @@ Begin VB.Form FRecaudacionBancosPreFa
       Left            =   0
       TabIndex        =   0
       Top             =   0
-      Width           =   28560
-      _ExtentX        =   50377
+      Width           =   12915
+      _ExtentX        =   22781
       _ExtentY        =   1588
       ButtonWidth     =   1720
       ButtonHeight    =   1429
@@ -1571,6 +1571,22 @@ Dim CostoTarjeta As Currency
   
  'Determinamos cuantos registro vamos a actualizar y
  'cuantos campos tiene el archivo del Banco
+ '--------------------------------------------------
+  Cadena = ""
+  NumFile = FreeFile
+  Open RutaGeneraFile For Input As #NumFile
+  Do While Not EOF(NumFile)
+     Line Input #NumFile, LineFile
+     Cadena = Cadena & LineFile & vbCrLf
+  Loop
+  Close #NumFile
+ 
+  NumFile = FreeFile
+  Open RutaGeneraFile For Output As #NumFile
+  Print #NumFile, MidStrg(Cadena, 1, Len(Cadena) - 2)
+  Close #NumFile
+  Cadena = ""
+ '---------------------------------------------------
   ContTAB = 0
   Open RutaGeneraFile For Input As #NumFile
     Do While Not EOF(NumFile)

@@ -1196,6 +1196,23 @@ Dim MiReg As ADODB.Recordset
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
 
+Public Sub Procesar_Cierre_Fiscal_SP(CtaResultadoEjercicio As String, SinConciliacion As Boolean)
+Dim MiSQL As ADODB.Connection
+Dim MiCmd As ADODB.Command
+Dim MiReg As ADODB.Recordset
+
+    Iniciar_Stored_Procedure "Procesar Cierre Fiscal", MiSQL, MiCmd, MiReg
+    MiCmd.CommandText = "sp_Procesar_Cierre_Fiscal"
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Modulo", adVarChar, adParamInput, 2, NumModulo)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Usuario", adVarChar, adParamInput, 10, CodigoUsuario)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@CtaResultadoEjercicio", adVarChar, adParamInput, 18, CtaResultadoEjercicio)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@SinConciliacion", adBoolean, adParamInput, 1, SinConciliacion)
+    Procesar_Stored_Procedure MiCmd, MiReg
+    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+End Sub
+
 Public Sub Duplicar_Tabla_SP(NombreTablaOrigen As String, NombreTablaDestino As String)
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
@@ -1606,7 +1623,7 @@ Dim NumFile As Long
     RatonNormal
 End Sub
 
-Public Sub Subir_Archivo_Abonos_Bancos_SP(PathTXT As String)
+Public Sub Subir_Archivo_Abonos_Bancos_SP(PathTXT As String, TipoBanco As String)
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
 Dim MiReg As ADODB.Recordset
@@ -1614,56 +1631,94 @@ Dim MiReg As ADODB.Recordset
 Dim FileTXT As String
 Dim PathTXTT As String
 Dim LineFile As String
+Dim LineTXT As String
 Dim Separador As String
 Dim TablaAbonos As String
 
+Dim CampoEsNumero As Boolean
+Dim AnchoMaxCampo As Integer
 Dim NumFile As Long
 
     RatonReloj
     If Len(PathTXT) > 1 Then
-       CantCampos = 0
        Separador = Ninguno
-       TablaAbonos = "CREATE TABLE Abonos_Bancos_" & CodigoUsuario & "(" & vbCrLf
+       FileTXT = Right$(PathTXT, Len(PathTXT) - InStrRev(PathTXT, "\"))
+       PathTXTT = MidStrg(PathTXT, 1, Len(PathTXT) - Len(FileTXT))
+       
+       LineTXT = ""
        NumFile = FreeFile
        Open PathTXT For Input As #NumFile
-            Line Input #NumFile, LineFile
-            If Separador = Ninguno Then
-               If InStr(LineFile, vbTab) > 0 Then Separador = vbTab
-            End If
-            No_Hasta = 1
-            If Separador = vbTab Then
+       Do While Not EOF(NumFile)
+          Line Input #NumFile, LineFile
+          If Separador = Ninguno And InStr(LineFile, vbTab) > 0 Then Separador = vbTab
+          LineTXT = LineTXT & LineFile & vbCrLf
+       Loop
+       Close #NumFile
+       
+       'If InStr(LineTXT, vbCrLf) = 0 Then
+         'MsgBox LineTXT
+       '   LineTXT = Replace(LineTXT, vbLf, vbCrLf)
+          NumFile = FreeFile
+          Open PathTXTT & FileTXT For Output As #NumFile
+          Print #NumFile, MidStrg(LineTXT, 1, Len(LineTXT) - 2)
+          Close #NumFile
+      ' End If
+       
+       LineFile = Replace(LineTXT, vbCrLf, vbTab)
+       No_Hasta = 1
+       AnchoMaxCampo = 0
+       Do While Len(LineFile) > 0 And No_Hasta > 0
+          No_Hasta = InStr(LineFile, Separador)
+          If No_Hasta > AnchoMaxCampo Then AnchoMaxCampo = No_Hasta
+          LineFile = TrimStrg(MidStrg(LineFile, No_Hasta + 1, Len(LineFile)))
+       Loop
+       
+       CantCampos = 0
+       TablaAbonos = "CREATE TABLE Asiento_Bancos_" & CodigoUsuario & " ("
+       If Separador = vbTab Then
+          NumFile = FreeFile
+          Open PathTXT For Input As #NumFile
+               Line Input #NumFile, LineFile
+               No_Hasta = 1
                Do While Len(LineFile) > 0 And No_Hasta > 0
                    No_Hasta = InStr(LineFile, Separador)
-                   If No_Hasta >= 30 Then
-                      TablaAbonos = TablaAbonos & "C" & Format$(CantCampos, "00") & " NVARCHAR(100)," & vbCrLf
+                   CampoEsNumero = False
+                   If No_Hasta > 1 Then CampoEsNumero = IsNumeric(Mid(LineFile, 1, No_Hasta - 1))
+                   If CampoEsNumero Then
+                      TablaAbonos = TablaAbonos & "C" & Format$(CantCampos, "00") & " VARCHAR(14), "
+'''                   ElseIf No_Hasta <= 13 Then
+'''                      TablaAbonos = TablaAbonos & "C" & Format$(CantCampos, "00") & " VARCHAR(" & No_Hasta + 1 & "), "
                    Else
-                      TablaAbonos = TablaAbonos & "C" & Format$(CantCampos, "00") & " NVARCHAR(" & No_Hasta + 1 & ")," & vbCrLf
+                      TablaAbonos = TablaAbonos & "C" & Format$(CantCampos, "00") & " VARCHAR(" & AnchoMaxCampo + 1 & "), "
                    End If
-                   MsgBox No_Hasta & vbCrLf & LineFile & vbCrLf & String(80, "-") & vbCrLf & TablaAbonos
-                   'If No_Hasta >= 1 Then
-                      LineFile = TrimStrg(MidStrg(LineFile, No_Hasta + 1, Len(LineFile)))
-                   'Else
-                    '  LineFile = ""
-                   'End If
+                  'MsgBox CantCampos & vbCrLf & No_Hasta & vbCrLf & LineFile
+                   LineFile = TrimStrg(MidStrg(LineFile, No_Hasta + 1, Len(LineFile)))
                    CantCampos = CantCampos + 1
                Loop
-            Else
-               TablaAbonos = TablaAbonos & "C00" & " NVARCHAR(1024)," & vbCrLf
-            End If
-       Close #NumFile
-       TablaAbonos = MidStrg(TablaAbonos, 1, Len(TablaAbonos) - 3) & ");"
-       MsgBox "Ok: " & vbCrLf & TablaAbonos
-    
+          Close #NumFile
+       Else
+           TablaAbonos = TablaAbonos & "C00" & " VARCHAR(1024), "
+       End If
+       TablaAbonos = MidStrg(TablaAbonos, 1, Len(TablaAbonos) - 2) & ")"
+      'MsgBox "Ok: " & vbCrLf & TablaAbonos
+      '----------------------------------------------------------------------------
+        NumFile = FreeFile
+        Open RutaSysBases & "\TEMP\Campos_Tabla.txt" For Output As #NumFile
+        Print #NumFile, TablaAbonos
+        Close #NumFile
+      '----------------------------------------------------------------------------
        If Len(TablaAbonos) >= 10 Then
           FileTXT = Right$(PathTXT, Len(PathTXT) - InStrRev(PathTXT, "\"))
           PathTXTT = MidStrg(PathTXT, 1, Len(PathTXT) - Len(FileTXT))
+         'MsgBox PathTXTT & vbCrLf & FileTXT
           Iniciar_Stored_Procedure "sp Subir Archivo Abonos Bancos", MiSQL, MiCmd, MiReg
           MiCmd.CommandText = "sp_Subir_Archivo_Abonos_Bancos"
           MiCmd.Parameters.Append MiCmd.CreateParameter("@strIPServidor", adVarChar, adParamInput, 100, strIPServidor)
-          MiCmd.Parameters.Append MiCmd.CreateParameter("@PathFileTXT", adVarChar, adParamInput, 255, PathTXTT)
+          MiCmd.Parameters.Append MiCmd.CreateParameter("@PathFileTXT", adVarChar, adParamInput, Len(PathTXTT) + 2, PathTXTT)
           MiCmd.Parameters.Append MiCmd.CreateParameter("@FileTXT", adVarChar, adParamInput, 100, FileTXT)
           MiCmd.Parameters.Append MiCmd.CreateParameter("@Usuario", adVarChar, adParamInput, 10, CodigoUsuario)
           MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
+          MiCmd.Parameters.Append MiCmd.CreateParameter("@TipoBanco", adVarChar, adParamInput, 20, TipoBanco)
           MiCmd.Parameters.Append MiCmd.CreateParameter("@Tabla_Bancos", adVarChar, adParamInput, Len(TablaAbonos) + 10, TablaAbonos)
           Procesar_Stored_Procedure MiCmd, MiReg
           Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg

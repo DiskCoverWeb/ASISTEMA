@@ -1,1 +1,15 @@
+Línea 55: la clase MSAdodcLib.Adodc del control AdoDiario no era una clase de control cargada.
 Línea 196: la clase TabDlg.SSTab del control SSTab1 no era una clase de control cargada.
+Línea 219: la clase MSDataGridLib.DataGrid del control DGDiario no era una clase de control cargada.
+Línea 285: la clase MSDataGridLib.DataGrid del control DGSubCtas no era una clase de control cargada.
+Línea 352: la clase MSDataListLib.DataCombo del control DCAgencia no era una clase de control cargada.
+Línea 374: la clase MSDataListLib.DataCombo del control DCUsuario no era una clase de control cargada.
+Línea 396: la clase MSAdodcLib.Adodc del control AdoAgencias no era una clase de control cargada.
+Línea 667: la clase MSMask.MaskEdBox del control MBoxFechaF no era una clase de control cargada.
+Línea 696: la clase MSMask.MaskEdBox del control MBoxFechaI no era una clase de control cargada.
+Línea 725: la clase MSAdodcLib.Adodc del control AdoUsuario no era una clase de control cargada.
+Línea 772: la clase MSAdodcLib.Adodc del control AdoCtas no era una clase de control cargada.
+Línea 819: la clase MSAdodcLib.Adodc del control AdoTrans no era una clase de control cargada.
+Línea 866: la clase MSAdodcLib.Adodc del control AdoAsientos no era una clase de control cargada.
+Línea 913: la clase MSAdodcLib.Adodc del control AdoSubCtas no era una clase de control cargada.
+Línea 960: la clase MSAdodcLib.Adodc del control AdoConceptos no era una clase de control cargada.

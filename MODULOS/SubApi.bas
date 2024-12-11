@@ -1749,10 +1749,12 @@ Dim hInternet As Long, hSession As Long, lReturn As Long
     If hInternet Then
        'get the first chunk & buffer it.
         iResult = InternetReadFile(hInternet, sBuffer, BUFFER_LEN, lReturn)
+       'sBuffer = StrConv(sBuffer, vbUnicode)
         sData = sBuffer
        'if there's more data then keep reading it into the buffer
         Do While lReturn <> 0
             iResult = InternetReadFile(hInternet, sBuffer, BUFFER_LEN, lReturn)
+           'sBuffer = StrConv(sBuffer, vbUnicode)
             sData = sData + Mid(sBuffer, 1, lReturn)
         Loop
     End If
@@ -1760,7 +1762,12 @@ Dim hInternet As Long, hSession As Long, lReturn As Long
    'close the URL
     iResult = InternetCloseHandle(hInternet)
     'sData = Trim(Replace(sData, Chr(0), ""))
-    GetUrlSource = sData
+   'MsgBox iResult & vbCrLf & sData
+    If MidStrg(sData, 1, 4) = "true" Then
+       GetUrlSource = "true"
+    Else
+       GetUrlSource = sData
+    End If
 End Function
 
 Public Function PostUrlSource(vURLHTTP As String, vURLParams As String) As Boolean
@@ -1781,6 +1788,28 @@ Dim DomDoc As MSXML2.xmlhttp
    'PostUrlSource = StrConv(DomDoc.responseBody, vbUnicode)
     'MsgBox DomDoc.responseBody
     PostUrlSource = Val(DomDoc.responseBody)
+End Function
+
+Public Function PostUrlSourceStr(vURLHTTP As String, vURLParams As String) As String
+Dim DomDoc As MSXML2.xmlhttp
+Dim RespuestaURL As String
+
+    Set DomDoc = New xmlhttp
+    
+   'Parámetros en formato URLEncode
+   'Metodo a usar, url, y true en caso de manejar la respuesta en modo asíncrono
+    DomDoc.open "POST", vURLHTTP, False
+   'Encabezados
+    DomDoc.setRequestHeader "Content-type", "application/x-www-form-urlencoded"
+    DomDoc.setRequestHeader "Content-length", Len(vURLParams)
+    DomDoc.setRequestHeader "Connection", "close"
+    DomDoc.send vURLParams
+   'La respuesta, en caso de existir, está en responseBody.
+   'También puedes especificar responseXml si tu aplicación devolviese XML
+   'PostUrlSource = StrConv(DomDoc.responseBody, vbUnicode)
+    'MsgBox DomDoc.responseBody
+    RespuestaURL = StrConv(DomDoc.responseBody, vbUnicode)
+    PostUrlSourceStr = Trim(Replace(RespuestaURL, """", ""))
 End Function
 
 Public Function Ping_IP(My_IP_PC As String) As Boolean

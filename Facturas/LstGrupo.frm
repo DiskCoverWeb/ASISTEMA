@@ -1,9 +1,9 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
-Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
+Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDATGRD.OCX"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "COMCTL32.OCX"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form ListarGrupos 
    Caption         =   "LISTADO POR GRUPOS"
@@ -13,8 +13,8 @@ Begin VB.Form ListarGrupos
    ClientWidth     =   18120
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   15615
-   ScaleWidth      =   28560
+   ScaleHeight     =   12105
+   ScaleWidth      =   18120
    WindowState     =   1  'Minimized
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
@@ -914,15 +914,16 @@ Begin VB.Form ListarGrupos
       _ExtentY        =   688
       _Version        =   393216
       Tabs            =   7
+      Tab             =   1
       TabsPerRow      =   7
       TabHeight       =   520
       TabCaption(0)   =   "LISTADO POR GRUPOS"
       TabPicture(0)   =   "LstGrupo.frx":00AA
-      Tab(0).ControlEnabled=   -1  'True
+      Tab(0).ControlEnabled=   0   'False
       Tab(0).ControlCount=   0
       TabCaption(1)   =   "PENSION MENSUAL DEL AÑO"
       TabPicture(1)   =   "LstGrupo.frx":00C6
-      Tab(1).ControlEnabled=   0   'False
+      Tab(1).ControlEnabled=   -1  'True
       Tab(1).ControlCount=   0
       TabCaption(2)   =   "ALUMNOS CON DESCUENTO"
       TabPicture(2)   =   "LstGrupo.frx":00E2

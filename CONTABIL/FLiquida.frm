@@ -1,8 +1,8 @@
 VERSION 5.00
-Object = "{05BFD3F1-6319-4F30-B752-C7A22889BCC4}#1.0#0"; "AcroPDF.dll"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
+Object = "{05BFD3F1-6319-4F30-B752-C7A22889BCC4}#1.0#0"; "AcroPDF.dll"
 Begin VB.Form FLiquidacionCompras 
    BackColor       =   &H00FFC0C0&
    Caption         =   "LISTAR COMPROBANTE DE LIQUIDACION DE COMPRAS"
@@ -12,17 +12,26 @@ Begin VB.Form FLiquidacionCompras
    ClientWidth     =   14430
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   15615
-   ScaleWidth      =   28560
+   ScaleHeight     =   7680
+   ScaleWidth      =   14430
    WindowState     =   2  'Maximized
+   Begin AcroPDFLibCtl.AcroPDF APDFLiquidacion 
+      Height          =   3480
+      Left            =   105
+      TabIndex        =   18
+      Top             =   2730
+      Width           =   6525
+      _cx             =   11509
+      _cy             =   6138
+   End
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
       Height          =   660
       Left            =   0
       TabIndex        =   15
       Top             =   0
-      Width           =   28560
-      _ExtentX        =   50377
+      Width           =   14430
+      _ExtentX        =   25453
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -93,18 +102,9 @@ Begin VB.Form FLiquidacionCompras
       Height          =   330
       Left            =   105
       Style           =   1  'Graphical
-      TabIndex        =   18
+      TabIndex        =   17
       Top             =   1260
       Width           =   6105
-   End
-   Begin AcroPDFLibCtl.AcroPDF APDFLiquidacion 
-      Height          =   3165
-      Left            =   105
-      TabIndex        =   17
-      Top             =   2730
-      Width           =   11355
-      _cx             =   5080
-      _cy             =   5080
    End
    Begin VB.ListBox LstResultado 
       BackColor       =   &H00FF8080&
@@ -942,7 +942,9 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
     Case "Autorizar"
          FA.TP = Co.TP
          FA.Numero = Co.Numero
-         SRI_Autorizacion = SRI_Generar_XML(FA.ClaveAcceso_LC, FA.Estado_SRI_LC)
+         SRI_Autorizacion.Clave_De_Acceso = FA.ClaveAcceso_LC
+         FAutorizaXmlSRI.Show 1
+         'SRI_Autorizacion = SRI_Generar_XML(FA.ClaveAcceso_LC, FA.Estado_SRI_LC)
          SRI_Actualizar_XML_Liquidacion SRI_Autorizacion, FA
          RatonReloj
          If SRI_Autorizacion.Estado_SRI = "OK" Then

@@ -6,13 +6,13 @@ Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "Mscomctl.ocx"
 Begin VB.Form FacturasPension 
    BackColor       =   &H00C0C0C0&
    Caption         =   "FACTURACION DE PENSIONES"
-   ClientHeight    =   10620
+   ClientHeight    =   9945
    ClientLeft      =   45
    ClientTop       =   345
    ClientWidth     =   16740
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   10620
+   ScaleHeight     =   9945
    ScaleWidth      =   16740
    WindowState     =   1  'Minimized
    Begin VB.ListBox LstMeses 

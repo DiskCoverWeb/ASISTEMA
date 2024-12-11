@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{65E121D4-0C60-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSChrt20.ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.Ocx"
 Begin VB.Form FGeneraPDF 
@@ -10,11 +10,11 @@ Begin VB.Form FGeneraPDF
    ClientHeight    =   11115
    ClientLeft      =   120
    ClientTop       =   450
-   ClientWidth     =   17280
+   ClientWidth     =   15960
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
    ScaleHeight     =   11115
-   ScaleWidth      =   17280
+   ScaleWidth      =   15960
    WindowState     =   2  'Maximized
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
@@ -22,8 +22,8 @@ Begin VB.Form FGeneraPDF
       Left            =   0
       TabIndex        =   0
       Top             =   0
-      Width           =   17280
-      _ExtentX        =   30480
+      Width           =   15960
+      _ExtentX        =   28152
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -1003,17 +1003,27 @@ Dim v10 As Date
         'TMail.Mensaje = "Esta es una prueba de Correo Electronico enviado por DNS-EXIT, " _
                       & "mensaje enviado desde el PC: " & IP_PC.Nombre_PC & ", a las: " & Time & ", " _
                       & "de la empresa: " & Empresa & "."
-    
+
         TMail.Adjunto = "C:\SYSBASES\TEMP\archivo.xml;C:\SYSBASES\TEMP\archivo.pdf;C:\TEMP\walter.png;C:\TEMP\Master Planes de Cuentasx.xls"
         TMail.Adjunto = "C:\SYSBASES\TEMP\archivo.xml"
         TMail.para = ""
         Insertar_Mail TMail.para, "diskcoversystem@msn.com"
+        Insertar_Mail TMail.para, "diskcover.system@yahoo.com"
+        Insertar_Mail TMail.para, "diskcover.system@gmail.com"
+        Insertar_Mail TMail.para, "actualizar@diskcoversystem.com"
         FEnviarCorreos.Show 1
         TMail.para = ""
         TMail.ListaMail = 255
    Case "SRI"
-        SRI_Autorizacion = SRI_Leer_XML_Autorizado(RutaSysBases & "\SRI\Comprobantes Recibidos\0110202101179185161700120010050000244741234567814.xml", RutaSysBases & "\SRI\Comprobantes no Autorizados\0110202101179185161700120010050000244741234567814.xml")
-        MsgBox SRI_Autorizacion.Estado_SRI & vbCrLf & SRI_Autorizacion.Fecha_Autorizacion & vbCrLf & SRI_Autorizacion.Hora_Autorizacion & vbCrLf & SRI_Autorizacion.Documento_XML
+        SRI_Autorizacion.Clave_De_Acceso = "1411202401070216417900110010030000025421234567811"
+        FAutorizaXmlSRI.Show 1
+        MsgBox SRI_Autorizacion.Estado_SRI
+'''        URLHTTP = "https://erp.diskcoversystem.com/~diskcover/php/comprobantes/SRI/autorizar_sri_visual.php?AutorizarXMLOnline=true"
+'''        URLParams = "XML=1311202401070216417900110010030000025301234567811.xml"
+'''        Cadena = PostUrlSourceStr(URLHTTP, URLParams)
+'''        MsgBox Cadena
+        'SRI_Autorizacion = SRI_Leer_XML_Autorizado(RutaSysBases & "\SRI\Comprobantes Recibidos\0110202101179185161700120010050000244741234567814.xml", RutaSysBases & "\SRI\Comprobantes no Autorizados\0110202101179185161700120010050000244741234567814.xml")
+        'MsgBox SRI_Autorizacion.Estado_SRI & vbCrLf & SRI_Autorizacion.Fecha_Autorizacion & vbCrLf & SRI_Autorizacion.Hora_Autorizacion & vbCrLf & SRI_Autorizacion.Documento_XML
    Case "LeerExcel"
         LeerExcel
    Case "LeerXML"

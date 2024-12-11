@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.Ocx"
 Begin VB.Form FActualizar 
    BackColor       =   &H00808080&
@@ -557,8 +557,14 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
+Dim AdoDBMySQL As ADODB.Recordset
+
 Dim IniIDBase As Integer
 Dim FinIDBase As Integer
+
+Dim RepresentanteEntidad As String
+Dim NombreEntidad As String
+'--------------------------------
 
 Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
 Dim hInst As Long
@@ -681,6 +687,7 @@ On Error GoTo error_Handler
           Progreso_Barra.Mensaje_Box = "Eliminando Version anterior"
          .Mostar_Estado_FTP ProgressBarEstado, LstStatud
           Eliminar_Si_Existe_File RutaSistema & "\FONDOS\*.*"
+          Eliminar_Si_Existe_File RutaSistema & "\JAVASCRIPT\*.*"
           Eliminar_Si_Existe_File RutaSistema & "\FONDOS\USUARIOS\*.*"
           Eliminar_Si_Existe_File RutaSistema & "\BASES\UPDATE_DB\*.*"
           
@@ -1059,6 +1066,7 @@ Dim HayCnn As Boolean
     MDI_X_Max = Screen.width - 150
     MDI_Y_Max = Screen.Height - 1850
     
+    
    'Redondear_Cuadro FActualizar, 25
     ConSubDir = False
     RutaDestino = UCase$(Left$(CurDir$, 2))
@@ -1070,7 +1078,12 @@ Dim HayCnn As Boolean
     RutaEmpresaOld = UCase(RutaSistema & "\EMPRESA")
     ChDir RutaSistema
     IngresarClave = True
-   
+    
+   'MsgBox RutaSistema & "\JAVASCRIPT"
+   '-----------------------------------------------------------------------------------------
+   'Determinamos si existen carpetas nuevas del sistema
+    If Not Existe_Carpeta(RutaSistema & "\JAVASCRIPT") Then MkDir RutaSistema & "\JAVASCRIPT"
+   '-----------------------------------------------------------------------------------------
    'MODULOS
     NumModulo = "98"
     Modulo = "UPDATE"
@@ -2268,11 +2281,27 @@ End Sub
 
 Public Sub Enviar_Mail_Actualizacion()
    'Enviamos el mail de confirmacion
+    sSQL = "SELECT E.Nombre_Entidad, E.Representante, E.RUC_CI_NIC, E.Email_Entidad, L.ID_Empresa " _
+         & "FROM entidad As E, lista_empresas As L " _
+         & "WHERE L.Base_Datos = '" & strNombreBaseDatos & "' " _
+         & "AND E.ID_Empresa = L.ID_Empresa " _
+         & "ORDER BY E.ID_Empresa "
+    Select_AdoDB_MySQL AdoDBMySQL, sSQL
+    If AdoDBMySQL.RecordCount > 0 Then
+       RepresentanteEntidad = AdoDBMySQL.fields("Representante")
+       NombreEntidad = AdoDBMySQL.fields("Nombre_Entidad")
+       EmailEmpresa = AdoDBMySQL.fields("Email_Entidad")
+    End If
+    AdoDBMySQL.Close
+   
     TMail.para = ""
     Insertar_Mail TMail.para, EmailEmpresa
     Insertar_Mail TMail.para, CorreoUpdate
     TMail.Asunto = "Proceso de actualizacion, exitoso"
-    TMail.Mensaje = TMail.Mensaje & vbCrLf & "SERVIRLES ES NUESTRO COMPROMISO, DISFRUTARLO ES EL SUYO."
+    TMail.Mensaje = NombreEntidad & vbCrLf _
+                  & "Representante. " & RepresentanteEntidad & vbCrLf _
+                  & TMail.Mensaje & vbCrLf _
+                  & "SERVIRLES ES NUESTRO COMPROMISO, DISFRUTARLO ES EL SUYO."
     FEnviarCorreos.Show 1
 End Sub
 

@@ -10,7 +10,7 @@ Línea 539: la clase MSAdodcLib.Adodc del control AdoRet no era una clase de cont
 Línea 586: la clase MSAdodcLib.Adodc del control AdoSubCtaDet no era una clase de control cargada.
 Línea 633: la clase MSAdodcLib.Adodc del control AdoIngKar no era una clase de control cargada.
 Línea 680: la clase MSAdodcLib.Adodc del control AdoBalGenCon no era una clase de control cargada.
-Línea 727: la clase MSAdodcLib.Adodc del control AdoCta no era una clase de control cargada.
+Línea 727: la clase MSAdodcLib.Adodc del control AdoAux no era una clase de control cargada.
 Línea 774: la clase MSAdodcLib.Adodc del control AdoFechaBal no era una clase de control cargada.
 Línea 821: la clase MSAdodcLib.Adodc del control AdoBalGen no era una clase de control cargada.
 Línea 868: la clase MSAdodcLib.Adodc del control AdoTrans no era una clase de control cargada.

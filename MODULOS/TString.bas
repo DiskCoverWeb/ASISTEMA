@@ -183,6 +183,7 @@ Global LimpiarCodigoC As String
 Global NLogoTipo As String
 Global NFirmaDigital As String
 Global NMarcaAgua As String
+Global RutaCertificado As String
 '-----------------------------------------
 Global Nombre_Cta_Ret As String
 Global Nombres As String

@@ -1,10 +1,10 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "Mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.Form FListComprobantes 
    Caption         =   "SubCtas"
    ClientHeight    =   8895
@@ -391,24 +391,24 @@ Begin VB.Form FListComprobantes
       TabCaption(1)   =   "&5.- RETENCIONES"
       TabPicture(1)   =   "FLstComp.frx":5FE8
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "DGFAV"
+      Tab(1).Control(0)=   "DGRet"
       Tab(1).Control(1)=   "DGFAC"
-      Tab(1).Control(2)=   "DGRet"
+      Tab(1).Control(2)=   "DGFAV"
       Tab(1).ControlCount=   3
       TabCaption(2)   =   "&6.- SUBCUENTAS"
       TabPicture(2)   =   "FLstComp.frx":6004
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "DGIxExCC"
-      Tab(2).Control(1)=   "DGCxCxP"
+      Tab(2).Control(0)=   "DGCxCxP"
+      Tab(2).Control(1)=   "DGIxExCC"
       Tab(2).ControlCount=   2
       TabCaption(3)   =   "&7.- KARDEX"
       TabPicture(3)   =   "FLstComp.frx":6020
       Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "LblTotalC"
-      Tab(3).Control(1)=   "LblTotalComp"
+      Tab(3).Control(0)=   "DGKardex"
+      Tab(3).Control(1)=   "Label11"
       Tab(3).Control(2)=   "Label10"
-      Tab(3).Control(3)=   "Label11"
-      Tab(3).Control(4)=   "DGKardex"
+      Tab(3).Control(3)=   "LblTotalComp"
+      Tab(3).Control(4)=   "LblTotalC"
       Tab(3).ControlCount=   5
       Begin MSDataGridLib.DataGrid DGAsientos 
          Bindings        =   "FLstComp.frx":603C

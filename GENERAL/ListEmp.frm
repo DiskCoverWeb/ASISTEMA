@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "COMCTL32.OCX"
 Begin VB.Form ListEmp 
    BackColor       =   &H00FF8080&
    BorderStyle     =   3  'Fixed Dialog
@@ -282,7 +282,7 @@ Begin VB.Form ListEmp
       Begin VB.TextBox TextClave 
          BeginProperty Font 
             Name            =   "Verdana"
-            Size            =   11.25
+            Size            =   12
             Charset         =   0
             Weight          =   700
             Underline       =   0   'False
@@ -301,7 +301,7 @@ Begin VB.Form ListEmp
       Begin VB.TextBox TextUsuario 
          BeginProperty Font 
             Name            =   "Verdana"
-            Size            =   11.25
+            Size            =   12
             Charset         =   0
             Weight          =   700
             Underline       =   0   'False
@@ -320,7 +320,7 @@ Begin VB.Form ListEmp
          Alignment       =   1  'Right Justify
          BeginProperty Font 
             Name            =   "Verdana"
-            Size            =   11.25
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -902,6 +902,7 @@ Dim SiActualizar As Boolean
          Fecha_Igualar = .fields("Fecha_Igualar")
          Porc_Serv = Redondear(.fields("Servicio") / 100, 2)
          SerieFactura = .fields("Serie_FA")
+         RutaCertificado = .fields("Ruta_Certificado")
          
          OpcCoop = CBool(.fields("Opc"))
          CentroDeCosto = CBool(.fields("Centro_Costos"))

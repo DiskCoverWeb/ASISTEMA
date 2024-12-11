@@ -1,3 +1,7 @@
 Línea 94: la clase MSDataListLib.DataCombo del control DCEjecNuevo no era una clase de control cargada.
 Línea 116: la clase MSDataListLib.DataCombo del control DCZonaActual no era una clase de control cargada.
 Línea 155: la clase MSDataListLib.DataCombo del control DCEjecActual no era una clase de control cargada.
+Línea 215: la clase MSAdodcLib.Adodc del control AdoEjecutivos no era una clase de control cargada.
+Línea 262: la clase MSAdodcLib.Adodc del control AdoClientes no era una clase de control cargada.
+Línea 309: la clase MSAdodcLib.Adodc del control AdoZonaAct no era una clase de control cargada.
+Línea 356: la clase MSAdodcLib.Adodc del control AdoAux no era una clase de control cargada.

@@ -74,6 +74,8 @@ Private Type WIN32_FIND_DATA
     cAlternate As String * 14
 End Type
 
+Public ConStatus As Boolean
+
 ' Declaraciones Apis
 '***************************************************************
 Private Declare Function InternetCloseHandle Lib "wininet.dll" (ByVal hInet As Long) As Integer
@@ -177,6 +179,7 @@ Private ctrl As Object
 'Rutina que conecta al Servidor Ftp
 Public Function ConectarFtp(Optional ControlStatus As Object = Nothing) As Boolean
     
+    
 'Conectamos al servidor FTP, con un puerto determinado
  If m_Puerto = 0 Then INTERNET_DEFAULT_FTP_PORT = 21 Else INTERNET_DEFAULT_FTP_PORT = m_Puerto
 
@@ -190,7 +193,7 @@ If m_Usuario = "" Or m_Servidor = "" Or m_PassWord = "" Then
 End If
     
    Set ctrl = ControlStatus
-   Status "...Intentando conectar a: " & m_Servidor
+   If Not SinStatus Then Status "...Intentando conectar a: " & m_Servidor
    m_form.MousePointer = vbHourglass
 'Abrimos una conección a Internet
 '
@@ -360,7 +363,7 @@ End Sub
 
 Private Sub Status(Mensaje As String)
 On Error GoTo SubError
-ctrl = Mensaje
+If Not ConStatus Then ctrl = Mensaje
 Exit Sub
 SubError:
 If Err.Number = 91 Then Resume Next
@@ -516,6 +519,7 @@ End Function
 
 Public Sub Inicializar(Formulario As Form)
     Set m_form = Formulario
+    ConStatus = False
 End Sub
 
 'Para mostrar los errores
@@ -526,6 +530,7 @@ Dim strMemoError As String
 Dim lngTamBuffer As Long
     '-----------------------------
     'Tamaño del buffer
+    ConStatus = False
     InternetGetLastResponseInfo lngNumError, strMemoError, lngTamBuffer
     'crea buffer
     strMemoError = String(lngTamBuffer, 0)

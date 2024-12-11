@@ -1,8 +1,9 @@
 VERSION 5.00
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "Mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.Form FRecaudacionBancosCxC 
    BackColor       =   &H00FFFFC0&
    Caption         =   "BANCO BOLIVARIANO"
@@ -16,6 +17,26 @@ Begin VB.Form FRecaudacionBancosCxC
    ScaleHeight     =   8865
    ScaleWidth      =   12300
    WindowState     =   2  'Maximized
+   Begin VB.ListBox LstStatud 
+      Appearance      =   0  'Flat
+      BackColor       =   &H00C00000&
+      BeginProperty Font 
+         Name            =   "Terminal"
+         Size            =   9
+         Charset         =   255
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   570
+      Left            =   5985
+      TabIndex        =   21
+      Top             =   8190
+      Visible         =   0   'False
+      Width           =   5685
+   End
    Begin MSComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
       Height          =   900
@@ -958,6 +979,56 @@ Begin VB.Form FRecaudacionBancosCxC
       EndProperty
       _Version        =   393216
    End
+   Begin ComctlLib.ListView LstVwFTP 
+      Height          =   645
+      Left            =   4095
+      TabIndex        =   22
+      Top             =   8190
+      Visible         =   0   'False
+      Width           =   1905
+      _ExtentX        =   3360
+      _ExtentY        =   1138
+      View            =   3
+      LabelWrap       =   -1  'True
+      HideSelection   =   -1  'True
+      _Version        =   327682
+      Icons           =   "ImgLstFTP"
+      SmallIcons      =   "ImgLstFTP"
+      ForeColor       =   -2147483640
+      BackColor       =   -2147483643
+      BorderStyle     =   1
+      Appearance      =   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      NumItems        =   3
+      BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+         Key             =   ""
+         Object.Tag             =   ""
+         Text            =   "Archivos"
+         Object.Width           =   3351
+      EndProperty
+      BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+         SubItemIndex    =   1
+         Key             =   ""
+         Object.Tag             =   ""
+         Text            =   "Tamaño"
+         Object.Width           =   1587
+      EndProperty
+      BeginProperty ColumnHeader(3) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+         SubItemIndex    =   2
+         Key             =   ""
+         Object.Tag             =   ""
+         Text            =   "Modificado"
+         Object.Width           =   2646
+      EndProperty
+   End
    Begin VB.Label Label4 
       BackColor       =   &H00FF8080&
       BorderStyle     =   1  'Fixed Single
@@ -1644,14 +1715,18 @@ Dim AuxNumEmp As String
   Label4.Caption = Replace(Label4.Caption, vbCrLf, "")
   Progreso_Barra.Mensaje_Box = ""
   Progreso_Iniciar
+ 'Subo el archivo al Servidor dse DB
+  Subir_Archivo_FTP_Linode ftp, LstStatud, LstVwFTP, RutaGeneraFile
+ 'Proceso el archivo de abonos
+  Subir_Archivo_Abonos_Bancos_SP RutaGeneraFile, TextoBanco
+'''  MsgBox "proceso terminado"
+'''  Exit Sub
   Contador = 0
   CantCampos = 0
   TotalIngreso = 0
   Separador = Ninguno
   Orden_Pago = Ninguno
   OrdenValida = False
-  
-  Subir_Archivo_Abonos_Bancos_SP RutaGeneraFile
   
   ReDim Preserve CamposFile(100) As Campos_Tabla
   NumFile = FreeFile
@@ -1660,7 +1735,6 @@ Dim AuxNumEmp As String
        If Separador = Ninguno Then
           If InStr(Cod_Field, vbTab) > 0 Then Separador = vbTab
        End If
-
        Do While Len(Cod_Field) > 2
           No_Hasta = InStr(Cod_Field, Separador)
           CamposFile(CantCampos).Campo = "C" & Format$(CantCampos, "00")
@@ -1685,7 +1759,7 @@ Dim AuxNumEmp As String
        Loop
   Close #NumFile
   
-  MsgBox "Ok"
+  'MsgBox "Ok"
   
   Total_Alumnos = Contador
   
@@ -1693,7 +1767,7 @@ Dim AuxNumEmp As String
   For I = 0 To CantCampos - 1
       Cadena = Cadena & CamposFile(I).Campo & "=" & CamposFile(I).Ancho & vbCrLf
   Next I
-  MsgBox Total_Alumnos & " - " & CantCampos & " - " & OrdenValida & vbCrLf & String(100, "_") & vbCrLf & Cadena
+  'MsgBox Total_Alumnos & " - " & CantCampos & " - " & OrdenValida & vbCrLf & String(100, "_") & vbCrLf & Cadena
   
  '--------------------------------------------------------
   
@@ -2251,6 +2325,8 @@ Private Sub Form_Activate()
   CopiarComp = False
   Co.CodigoB = ""
   Co.Numero = 0
+  Set ftp = New cFTP
+  
   Frame1.Caption = "| CUENTA A LA QUE SE VA ACREDITAR LOS ABONOS, CODIGO DEL BANCO: " & CodigoDelBanco & " |"
   Label4.Caption = Ninguno
   FRecaudacionBancosCxC.Caption = "FACTURACION DE BANCOS (" & CodigoDelBanco & ")"

@@ -1,19 +1,10 @@
-Línea 248: la clase SHDocVwCtl.WebBrowser del control WebBrowser1 no era una clase de control cargada.
-Línea 254: el nombre de la propiedad ExtentX de WebBrowser1 no es válido.
-Línea 255: el nombre de la propiedad ExtentY de WebBrowser1 no es válido.
-Línea 256: el nombre de la propiedad ViewMode de WebBrowser1 no es válido.
-Línea 257: el nombre de la propiedad Offline de WebBrowser1 no es válido.
-Línea 258: el nombre de la propiedad Silent de WebBrowser1 no es válido.
-Línea 259: el nombre de la propiedad RegisterAsBrowser de WebBrowser1 no es válido.
-Línea 260: el nombre de la propiedad RegisterAsDropTarget de WebBrowser1 no es válido.
-Línea 261: el nombre de la propiedad AutoArrange de WebBrowser1 no es válido.
-Línea 262: el nombre de la propiedad NoClientEdge de WebBrowser1 no es válido.
-Línea 263: el nombre de la propiedad AlignLeft de WebBrowser1 no es válido.
-Línea 264: el nombre de la propiedad NoWebView de WebBrowser1 no es válido.
-Línea 265: el nombre de la propiedad HideFileNames de WebBrowser1 no es válido.
-Línea 266: el nombre de la propiedad SingleClick de WebBrowser1 no es válido.
-Línea 267: el nombre de la propiedad SingleSelection de WebBrowser1 no es válido.
-Línea 268: el nombre de la propiedad NoFolders de WebBrowser1 no es válido.
-Línea 269: el nombre de la propiedad Transparent de WebBrowser1 no es válido.
-Línea 270: el nombre de la propiedad ViewID de WebBrowser1 no es válido.
-Línea 271: el nombre de la propiedad Location de WebBrowser1 no es válido.
+Línea 19: la clase ComctlLib.Toolbar del control Toolbar1 no era una clase de control cargada.
+Línea 199: la clase MSAdodcLib.Adodc del control AdoDataGrid no era una clase de control cargada.
+Línea 247: la clase InetCtlsObjects.Inet del control Inet1 no era una clase de control cargada.
+Línea 270: la clase MSChart20Lib.MSChart del control MSChart no era una clase de control cargada.
+Línea 278: la clase MSDataGridLib.DataGrid del control DataGrid no era una clase de control cargada.
+Línea 344: la clase MSAdodcLib.Adodc del control AdoUDET no era una clase de control cargada.
+Línea 391: la clase MSComDlg.CommonDialog del control CommonDialog1 no era una clase de control cargada.
+Línea 398: la clase MSAdodcLib.Adodc del control AdoCtas no era una clase de control cargada.
+Línea 445: la clase MSAdodcLib.Adodc del control AdoAsiento no era una clase de control cargada.
+Línea 500: la clase ComctlLib.ImageList del control ImageList1 no era una clase de control cargada.

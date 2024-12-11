@@ -1,1 +1,8 @@
 Línea 23: la clase TabDlg.SSTab del control SSTab1 no era una clase de control cargada.
+Línea 53: la clase MSAdodcLib.Adodc del control AdoCLI no era una clase de control cargada.
+Línea 99: la clase MSDataGridLib.DataGrid del control DGCLI no era una clase de control cargada.
+Línea 164: la clase MSDataGridLib.DataGrid del control DGPRO no era una clase de control cargada.
+Línea 229: la clase MSAdodcLib.Adodc del control AdoPRO no era una clase de control cargada.
+Línea 275: la clase MSDataGridLib.DataGrid del control DGTRA no era una clase de control cargada.
+Línea 340: la clase MSAdodcLib.Adodc del control AdoTRA no era una clase de control cargada.
+Línea 450: la clase MSAdodcLib.Adodc del control AdoAux no era una clase de control cargada.

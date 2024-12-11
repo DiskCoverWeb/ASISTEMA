@@ -1,10 +1,10 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "COMCTL32.OCX"
 Begin VB.Form FEnviarCorreos 
    BackColor       =   &H00FFFFFF&
    BorderStyle     =   0  'None
    Caption         =   "."
-   ClientHeight    =   1320
+   ClientHeight    =   1335
    ClientLeft      =   0
    ClientTop       =   15
    ClientWidth     =   10650
@@ -15,7 +15,7 @@ Begin VB.Form FEnviarCorreos
    MaxButton       =   0   'False
    MinButton       =   0   'False
    Picture         =   "FEnviarCorreos.frx":0000
-   ScaleHeight     =   1320
+   ScaleHeight     =   1335
    ScaleWidth      =   10650
    ShowInTaskbar   =   0   'False
    StartUpPosition =   3  'Windows Default
@@ -190,35 +190,39 @@ Private WithEvents oMail As clsCDOmail
 Attribute oMail.VB_VarHelpID = -1
 Dim Si_Enviar As Boolean
 Dim nFrames As Long
-Dim I As Integer
-Dim MsgAux As String
-Dim Contactos As String
 Dim ContMails As Long
+Dim I As Integer
+Dim Contactos As String
+Dim MsgAux As String
+
+Public Function ReplaceHTML(vExpression As String, vFind As String, vReplace As String) As String
+    'Cursor_Img
+    If Len(vReplace) > 1 Then
+       ReplaceHTML = Replace(vExpression, vFind, vReplace)
+    Else
+       ReplaceHTML = Replace(vExpression, vFind, "")
+    End If
+End Function
 
 'Empieza enviar correos
 Private Sub Form_Activate()
 Dim Tiempo_Espera As Single
 Dim MiTiempo_Espera As Single
 
+Dim EmailsCliente As String
 Dim EMailPara As String
 Dim File As String
 Dim Files As String
 Dim DirFiles() As String
 Dim DirFilesFTP() As String
 Dim TextoHTML As String
+Dim sOrigen As String
+Dim sDestino As String
 
 Dim CaracPiloto As Integer
 Dim ContFile As Integer
 
  If Si_Enviar Then
-    With ftp
-        .Inicializar Me
-        .Password = ftpPwr  'Le establecemos la contraseña de la cuenta Ftp
-        .Usuario = ftpUse   'Le establecemos el nombre de usuario de la cuenta
-        .servidor = ftpSvr  'Establecesmo el nombre del Servidor FTP
-         Set .ListView = LstVwFTP
-    End With
-    
     With TMail
       If .Asunto = "" Then .Asunto = "Sin asunto"
       If .Remitente = "" Then .Remitente = Replace(Empresa, """", "")
@@ -228,190 +232,225 @@ Dim ContFile As Integer
          TextoHTML = Leer_Archivo_Texto(RutaSistema & "\JAVASCRIPT\f_mail_basico.html")
          If Len(.Mensaje) > 1 Then html_Informacion_adicional = .Mensaje Else html_Informacion_adicional = ""
       End If
-      If Len(MensajeAutomatizado) > 1 Then TextoHTML = Replace(TextoHTML, "vMensajeFinal", MensajeAutomatizado) Else TextoHTML = Replace(TextoHTML, "vMensajeFinal", "")
-      If Len(MensajeDeboPagare) > 1 Then TextoHTML = Replace(TextoHTML, "vMensajeDeboPagare", MensajeDeboPagare) Else TextoHTML = Replace(TextoHTML, "vMensajeDeboPagare", "")
-      If Len(MensajeEmpresa) > 1 Then TextoHTML = Replace(TextoHTML, "vMensajeEmpresa", MensajeEmpresa) Else TextoHTML = Replace(TextoHTML, "vMensajeEmpresa", "")
-      If Len(ComunicadoEntidad) > 1 Then TextoHTML = Replace(TextoHTML, "vMensaje_Comunicado", ComunicadoEntidad) Else TextoHTML = Replace(TextoHTML, "vMensaje_Comunicado", "")
-      If Len(EmailProcesos) > 1 Then TextoHTML = Replace(TextoHTML, "vEmails", EmailProcesos) Else TextoHTML = Replace(TextoHTML, "vEmails", "")
-      If Len(RazonSocial) > 1 Then MsgAux = RazonSocial Else MsgAux = Empresa
       
-      Contactos = ""
-      Insertar_Cadena Contactos, Telefono1
-      Insertar_Cadena Contactos, Telefono2
-      Contactos = MidStrg(Contactos, 1, Len(Contactos) - 1)
+      If UCase(RazonSocial) = UCase(NombreComercial) Then MsgAux = "" Else MsgAux = NombreComercial
       
-      Cursor_Img
-      TextoHTML = Replace(TextoHTML, "vNombre_Usuario", NombreUsuario)
-      TextoHTML = Replace(TextoHTML, "vRepresentante_Legal", NombreGerente)
-      TextoHTML = Replace(TextoHTML, "vNumero_Telefono", Contactos)
-      TextoHTML = Replace(TextoHTML, "vRUC_Empresa", RUC)
-      TextoHTML = Replace(TextoHTML, "vRazon_Social", MsgAux)
-      TextoHTML = Replace(TextoHTML, "vNombre_Comercial", NombreComercial)
-      TextoHTML = Replace(TextoHTML, "vDireccion_Empresa", Direccion)
-      TextoHTML = Replace(TextoHTML, "vEmail_Empresa", EmailEmpresa)
-      TextoHTML = Replace(TextoHTML, "vObligado_Contabilidad", Obligado_Conta)
-        
-      TextoHTML = Replace(TextoHTML, "vFecha_Reporte", Mifecha)
-      TextoHTML = Replace(TextoHTML, "vCiudad_Empresa", NombreCiudad)
-      TextoHTML = Replace(TextoHTML, "vPais_Empresa", NombrePais)
+      If Contactos = "" Then
+         Insertar_Cadena Contactos, Telefono1
+         Insertar_Cadena Contactos, Telefono2
+         Contactos = MidStrg(Contactos, 1, Len(Contactos) - 1)
+      End If
       
-      TextoHTML = Replace(TextoHTML, "vInformacion_adicional", html_Informacion_adicional)
-      TextoHTML = Replace(TextoHTML, "vDetalle_adicional", html_Detalle_adicional)
-        
-      TextoHTML = Replace(TextoHTML, "vNombre_Cliente", FA.Cliente)
-      TextoHTML = Replace(TextoHTML, "vFecha_FA", FA.Fecha)
-      TextoHTML = Replace(TextoHTML, "vRUC_Cliente", FA.RUC_CI)
-      TextoHTML = Replace(TextoHTML, "vDireccion_Cliente", FA.DireccionC)
-      TextoHTML = Replace(TextoHTML, "vSerie_Cliente", FA.Serie)
-      TextoHTML = Replace(TextoHTML, "vFactura_Cliente", Format(FA.Factura, "000000000"))
-      TextoHTML = Replace(TextoHTML, "vAutorizacion_Factura", FA.Autorizacion)
-      TextoHTML = Replace(TextoHTML, "vRecibo_No", FA.Recibo_No)
-      TextoHTML = Replace(TextoHTML, "vLogoTipo", NLogoTipo)
-      TextoHTML = Replace(TextoHTML, "vValor_Total", Format(ValorTotal, "#,##0.00"))
+      EmailsCliente = ""
+      Insertar_Cadena EmailsCliente, FA.EmailC
+      Insertar_Cadena EmailsCliente, FA.EmailC2
+      Insertar_Cadena EmailsCliente, FA.EmailR
+      EmailsCliente = MidStrg(EmailsCliente, 1, Len(EmailsCliente) - 1)
+      
+      TextoHTML = ReplaceHTML(TextoHTML, "vInformacion_adicional", html_Informacion_adicional)
+      TextoHTML = ReplaceHTML(TextoHTML, "vDetalle_adicional", html_Detalle_adicional)
 
-      TextoHTML = Replace(TextoHTML, vbCrLf, "<br>")
-      TextoHTML = Replace(TextoHTML, "<N>", "<strong>")
-      TextoHTML = Replace(TextoHTML, "</N>", "</strong>")
+      TextoHTML = ReplaceHTML(TextoHTML, "vMensajeFinal", MensajeAutomatizado)
+      TextoHTML = ReplaceHTML(TextoHTML, "vMensajeDeboPagare", MensajeDeboPagare)
+      TextoHTML = ReplaceHTML(TextoHTML, "vMensajeEmpresa", MensajeEmpresa)
+      TextoHTML = ReplaceHTML(TextoHTML, "vMensaje_Comunicado", ComunicadoEntidad)
+      TextoHTML = ReplaceHTML(TextoHTML, "vEmails_Copia", EmailProcesos)
+
+      TextoHTML = ReplaceHTML(TextoHTML, "vLogoTipo", NLogoTipo)
+      TextoHTML = ReplaceHTML(TextoHTML, "vNombre_Usuario", NombreUsuario)
+      TextoHTML = ReplaceHTML(TextoHTML, "vRepresentante_Legal", NombreGerente)
+      TextoHTML = ReplaceHTML(TextoHTML, "vNumero_Telefono", Contactos)
+      TextoHTML = ReplaceHTML(TextoHTML, "vRUC_Empresa", RUC)
+
+      TextoHTML = ReplaceHTML(TextoHTML, "vRazon_Social", RazonSocial)
+      TextoHTML = ReplaceHTML(TextoHTML, "vNombre_Comercial", MsgAux)
+      
+      TextoHTML = ReplaceHTML(TextoHTML, "vDireccion_Empresa", Direccion)
+      TextoHTML = ReplaceHTML(TextoHTML, "vEmail_Empresa", EmailEmpresa)
+      TextoHTML = ReplaceHTML(TextoHTML, "vObligado_Contabilidad", Obligado_Conta)
+        
+      TextoHTML = ReplaceHTML(TextoHTML, "vFecha_Reporte", Mifecha)
+      TextoHTML = ReplaceHTML(TextoHTML, "vCiudad_Empresa", NombreCiudad)
+      TextoHTML = ReplaceHTML(TextoHTML, "vPais_Empresa", NombrePais)
+              
+      TextoHTML = ReplaceHTML(TextoHTML, "vGrupo_Cliente", FA.Grupo)
+      TextoHTML = ReplaceHTML(TextoHTML, "vNombre_Cliente", FA.Cliente)
+      TextoHTML = ReplaceHTML(TextoHTML, "vNombre_Representante", FA.Razon_Social)
+      
+      TextoHTML = ReplaceHTML(TextoHTML, "vFecha_FA_V", FA.Fecha_V)
+      TextoHTML = ReplaceHTML(TextoHTML, "vFecha_FA", FA.Fecha)
+      TextoHTML = ReplaceHTML(TextoHTML, "vFecha_RE", FA.Fecha_R)
+      
+      TextoHTML = ReplaceHTML(TextoHTML, "vHora_FA", FA.Hora)
+      TextoHTML = ReplaceHTML(TextoHTML, "vHora_RE", FA.Hora_R)
+      
+      TextoHTML = ReplaceHTML(TextoHTML, "vRUC_Cliente", FA.CI_RUC)
+      TextoHTML = ReplaceHTML(TextoHTML, "vRUC_Representante", FA.RUC_CI)
+      TextoHTML = ReplaceHTML(TextoHTML, "vDireccion_Cliente", FA.DireccionC)
+      
+      TextoHTML = ReplaceHTML(TextoHTML, "vSerie_Cliente", FA.Serie)
+      TextoHTML = ReplaceHTML(TextoHTML, "vFactura_Cliente", Format(FA.Factura, "000000000"))
+      
+      TextoHTML = ReplaceHTML(TextoHTML, "vAutorizacion_Retencion", FA.Autorizacion_R)
+      TextoHTML = ReplaceHTML(TextoHTML, "vAutorizacion_Factura", FA.Autorizacion)
+      TextoHTML = ReplaceHTML(TextoHTML, "vContacto", FA.Contacto)
+      TextoHTML = ReplaceHTML(TextoHTML, "vOrden_Compra", FA.Orden_Compra)
+      TextoHTML = ReplaceHTML(TextoHTML, "vObservacion", FA.Observacion)
+      TextoHTML = ReplaceHTML(TextoHTML, "vNota", FA.Nota)
+      TextoHTML = ReplaceHTML(TextoHTML, "vEmails_Cliente", EmailsCliente)
+      TextoHTML = ReplaceHTML(TextoHTML, "vTelefonos_Cliente", FA.TelefonoC)
+      TextoHTML = ReplaceHTML(TextoHTML, "vRecibo_No", FA.Recibo_No)
+      
+      TextoHTML = ReplaceHTML(TextoHTML, "vTipo_Documento_RE", FA.TR)
+      TextoHTML = ReplaceHTML(TextoHTML, "vTipo_Documento_FA", FA.TC)
+      
+      If FA.Factura > 0 Then
+         TextoHTML = ReplaceHTML(TextoHTML, "vSerie_Documento_FA", FA.Serie & "-" & Format(FA.Factura, "000000000"))
+      Else
+         TextoHTML = ReplaceHTML(TextoHTML, "vSerie_Documento_FA", "")
+      End If
+      If FA.Retencion > 0 Then
+         TextoHTML = ReplaceHTML(TextoHTML, "vSerie_Documento_RE", FA.Serie_R & "-" & Format(FA.Retencion, "000000000"))
+      Else
+         TextoHTML = ReplaceHTML(TextoHTML, "vSerie_Documento_RE", "")
+      End If
+      
+      TextoHTML = ReplaceHTML(TextoHTML, "vValor_Total", Format(ValorTotal, "#,##0.00"))
+            
+      TextoHTML = ReplaceHTML(TextoHTML, vbCrLf, "<br>")
+      TextoHTML = ReplaceHTML(TextoHTML, "<N>", "<strong>")
+      TextoHTML = ReplaceHTML(TextoHTML, "</N>", "</strong>")
       Cursor_Img
      .MensajeHTML = TextoHTML
      .Mensaje = ""
       Cursor_Img
     End With
-    
+    TMail.Adjunto = Replace(TMail.Adjunto, vbCrLf, "")
+    TMail.Adjunto = Replace(TMail.Adjunto, " ", "")
     Label1.Caption = "Remitente: " & TMail.de & String(86 - Len(TMail.de), " ") & "Cuota Diaria: " & Format(ContMails / 6000, "00%") & vbCrLf _
                    & "Para: " & Replace(TMail.para, ";", "; ") & vbCrLf & vbCrLf _
                    & "Asunto: " & TMail.Asunto
     Cursor_Img
-   'Obtenemos la ruta inicial de donde vienen los archivos
-    Files = TMail.Adjunto
-    ContFile = -1
-    If Len(Files) > 1 Then
-       CaracPiloto = InStr(Files, ";")
-       If CaracPiloto > 0 Then
-          Do While Len(Files) > 1 And CaracPiloto > 0
-             File = MidStrg(Files, 1, CaracPiloto - 1)
-             If Existe_File(File) Then
+    If TMail.servidor = "imap.diskcoversystem.com" Then
+      'Obtenemos la ruta inicial de donde vienen los archivos
+       Files = TMail.Adjunto
+      'MsgBox "Ruta Origen: " & Files
+       ContFile = -1
+       If Len(Files) > 1 Then
+          CaracPiloto = InStr(Files, ";")
+          If CaracPiloto > 0 Then
+            'Son varios archivos que se envian
+             Do While Len(Files) > 1 And CaracPiloto > 0
+                Cursor_Img
+                File = MidStrg(Files, 1, CaracPiloto - 1)
+                If Existe_File(File) Then
+                   ContFile = ContFile + 1
+                   ReDim Preserve DirFiles(ContFile) As String
+                   ReDim Preserve DirFilesFTP(ContFile) As String
+                   DirFiles(ContFile) = File
+                   DirFilesFTP(ContFile) = MidStrg(File, InStrRev(File, "\") + 1, Len(File))
+                End If
+                Files = MidStrg(Files, CaracPiloto + 1, Len(Files))
+                CaracPiloto = InStr(Files, ";")
+                Cursor_Img
+             Loop
+             If Existe_File(Files) Then
                 ContFile = ContFile + 1
                 ReDim Preserve DirFiles(ContFile) As String
                 ReDim Preserve DirFilesFTP(ContFile) As String
-                DirFiles(ContFile) = File
-                DirFilesFTP(ContFile) = MidStrg(File, InStrRev(File, "\") + 1, Len(File))
+                DirFiles(ContFile) = Files
+                DirFilesFTP(ContFile) = MidStrg(Files, InStrRev(Files, "\") + 1, Len(Files))
              End If
-             Files = MidStrg(Files, CaracPiloto + 1, Len(Files))
-             CaracPiloto = InStr(Files, ";")
-             Cursor_Img
-          Loop
-          If Existe_File(Files) Then
-             ContFile = ContFile + 1
-             ReDim Preserve DirFiles(ContFile) As String
-             ReDim Preserve DirFilesFTP(ContFile) As String
-             DirFiles(ContFile) = Files
-             DirFilesFTP(ContFile) = MidStrg(Files, InStrRev(Files, "\") + 1, Len(Files))
-          End If
-       Else
-          If Existe_File(Files) Then
-             ContFile = ContFile + 1
-             ReDim Preserve DirFiles(ContFile) As String
-             ReDim Preserve DirFilesFTP(ContFile) As String
-             DirFiles(ContFile) = Files
-             DirFilesFTP(ContFile) = MidStrg(Files, InStrRev(Files, "\") + 1, Len(Files))
+          Else
+            'Es un solo archivo
+             If Existe_File(Files) Then
+                Cursor_Img
+                ContFile = ContFile + 1
+                ReDim Preserve DirFiles(ContFile) As String
+                ReDim Preserve DirFilesFTP(ContFile) As String
+                DirFiles(ContFile) = Files
+                DirFilesFTP(ContFile) = MidStrg(Files, InStrRev(Files, "\") + 1, Len(Files))
+             End If
           End If
        End If
-    End If
-    
-    Cursor_Img
-    TMail.Adjunto = ""
-    If ContFile >= 0 Then
-       For I = 0 To UBound(DirFiles)
-           If TMail.servidor = "imap.diskcoversystem.com" Then
-              TMail.Adjunto = TMail.Adjunto & DirFilesFTP(I) & ";"
-           Else
-              TMail.Adjunto = TMail.Adjunto & DirFiles(I) & ";"
-           End If
-           Cursor_Img
-       Next I
-    End If
-    If Len(TMail.Adjunto) > 1 Then TMail.Adjunto = MidStrg(TMail.Adjunto, 1, Len(TMail.Adjunto) - 1)
-    
-    If TMail.servidor = "imap.diskcoversystem.com" Then
-      'Subiendo archivos que se van con los correos
        Cursor_Img
+       TMail.Adjunto = ""
        If ContFile >= 0 Then
+          For I = 0 To UBound(DirFiles)
+              Cursor_Img
+              TMail.Adjunto = TMail.Adjunto & DirFilesFTP(I) & ";"
+          Next I
+          TMail.Adjunto = MidStrg(TMail.Adjunto, 1, Len(TMail.Adjunto) - 1)
           Cursor_Img
+          
+         'Conectamos al servidor ERP
           With ftp
-               If .ConectarFtp(LstStatud) = False Then
-                   RatonNormal
-                   MsgBox "No se pudo conectar"
-                   Exit Sub
+            If ContFile >= 0 Then
+              .Inicializar FEnviarCorreos
+              .Password = ftpPwr  'Le establecemos la contraseña de la cuenta Ftp
+              .Usuario = ftpUse   'Le establecemos el nombre de usuario de la cuenta
+              .servidor = ftpSvr  'Establecesmo el nombre del Servidor FTP
+               Set .ListView = LstVwFTP
+              .ConStatus = True
+               If Not .ConectarFtp(LstStatud) Then
+                  TMail.Adjunto = ""
+               Else
+                 'Subiendo documento firmado para su autorizacion
+                  For I = 0 To UBound(DirFilesFTP)
+                      Cursor_Img
+                      sOrigen = DirFiles(I)
+                      sDestino = "/files/AddAttachment/" & DirFilesFTP(I)
+                     ' MsgBox "Subiendo: |" & sOrigen & "|" & vbCrLf & "|" & sDestino & "|"
+                     .SubirArchivo DirFiles(I), "/files/AddAttachment/" & DirFilesFTP(I), True
+                  Next I
                End If
-               Cursor_Img
-              'Le indicamos el ListView donde se listarán los archivos
-               For I = 0 To UBound(DirFilesFTP)
-                  .SubirArchivo DirFiles(I), "/files/AddAttachment/" & DirFilesFTP(I), True
-                   Cursor_Img
-               Next I
+            End If
           End With
        End If
-      'Generar_File_SQL "Email_" & TMail.Remitente, TMail.MensajeHTML
-      'MsgBox "Inicio Email: " & TMail.Adjunto
-      'Empezamos a enviar los correos
+       If InStrRev(TMail.para, ";") > 0 Then TMail.para = MidStrg(TMail.para, 1, Len(TMail.para) - 1)
        URLHTTP = "https://erp.diskcoversystem.com/lib/phpmailer/EnvioEmailvisual.php?EnviarVisual"
-'''       URLParams = "from=" & TMail.Remitente & " <" & TMail.de & "> "
-'''                 & "&to=" & TMail.para & " "
-'''                 & "&body=" & TMail.MensajeHTML & " "
-'''                 & "&subject=" & TMail.Asunto & " "
-'''                 & "&HTML=1 " _
-'''                 & "&Archivo=" & TMail.Adjunto & " "
-                 
        URLParams = "from=" & TMail.de & "" _
                  & "&fromName=" & TMail.Remitente & " <" & TMail.de & ">" _
                  & "&to=" & TMail.para & "" _
-                 & "&body=" & TMail.MensajeHTML & "" _
                  & "&subject=" & TMail.Asunto & "" _
                  & "&HTML=1" _
+                 & "&body=" & Sin_Signos_XML(TMail.MensajeHTML) & "" _
                  & "&Archivo=" & TMail.Adjunto & "" _
                  & "&reply=&replyName=&debug=0 "
        Si_No = PostUrlSource(URLHTTP, URLParams)
-      'MsgBox "Respuesta:" & vbCrLf & Si_No & vbCrLf & TMail.Adjunto
-       Cursor_Img
-      ' MsgBox Si_No & vbCrLf & TMail.MensajeHTML
+      ' Clipboard.Clear
+      ' Clipboard.SetText URLParams
+      'MsgBox Si_No ' & vbCrLf & URLParams ' TMail.MensajeHTML
        If Si_No Then
+          Cursor_Img
           EMailPara = TMail.para
           CaracPiloto = InStr(EMailPara, ";")
           If CaracPiloto > 0 Then
              Do While Len(EMailPara) > 1 And CaracPiloto > 0
                 File = MidStrg(EMailPara, 1, CaracPiloto - 1)
-                Control_Procesos "IM", "Email: " & TMail.de & " => " & File, "Asunto: " & TMail.Asunto
+                Control_Procesos "EF", "Email: " & TMail.de & " => " & File, "Asunto: " & TMail.Asunto
                 EMailPara = MidStrg(EMailPara, CaracPiloto + 1, Len(EMailPara))
                 CaracPiloto = InStr(EMailPara, ";")
                 Cursor_Img
              Loop
-             Control_Procesos "IM", "Email: " & TMail.de & " => " & EMailPara, "Asunto: " & TMail.Asunto
+             Control_Procesos "EM", "Email: " & TMail.de & " => " & EMailPara, "Asunto: " & TMail.Asunto
           Else
-             Control_Procesos "IM", "Email: " & TMail.de & " => " & EMailPara, "Asunto: " & TMail.Asunto
+             Control_Procesos "EM", "Email: " & TMail.de & " => " & EMailPara, "Asunto: " & TMail.Asunto
           End If
        Else
-          Control_Procesos "IM", "Email: " & TMail.de & " => " & TMail.para, "Asunto(Error): " & TMail.Asunto
+          Control_Procesos "EM", "Email: " & TMail.de & " => " & TMail.para, "Asunto(Error): " & TMail.Asunto
        End If
        Cursor_Img
       'Eliminando archivos que se fueron con los correos
        If ContFile >= 0 Then
-          With ftp
-               If .ConectarFtp(LstStatud) = False Then
-                   RatonNormal
-                   MsgBox "No se pudo conectar"
-                   Exit Sub
-               End If
-               Cursor_Img
-              'Le indicamos el ListView donde se listarán los archivos
-               For I = 0 To UBound(DirFilesFTP)
-                  .EliminarArchivo "/files/AddAttachment/" & DirFilesFTP(I)
-                   Cursor_Img
-               Next I
-              .Desconectar
-          End With
+         'Le indicamos el ListView donde se listarán los archivos
+          For I = 0 To UBound(DirFilesFTP)
+              Cursor_Img
+              ftp.EliminarArchivo "/files/AddAttachment/" & DirFilesFTP(I)
+          Next I
+          Cursor_Img
+          ftp.Desconectar
        End If
-       Cursor_Img
     Else
       'Activamos la clase para envios de los mails
        Set oMail = New clsCDOmail
@@ -426,7 +465,7 @@ Dim ContFile As Integer
            .useAuntentificacion = TMail.useAuntentificacion ' True
            .ssl = TMail.ssl                                 ' True
            .tls = TMail.tls                                 ' True
-           .ehlo = TMail.ehlo
+           '.ehlo = TMail.ehlo
            '---------------------------------------------------------------
            .Asunto = TMail.Asunto
            .Adjunto = TMail.Adjunto
@@ -438,7 +477,7 @@ Dim ContFile As Integer
               .de = TMail.Remitente & " <" & TMail.de & ">"
               .Enviar_Backup
                Cursor_Img
-               Control_Procesos "EM", "Email: " & TMail.de & " => " & TMail.para, "Asunto: " & TMail.Asunto
+               Control_Procesos "EX", "Email: " & TMail.de & " => " & TMail.para, "Asunto: " & TMail.Asunto
                Cursor_Img
             End If
        End With
@@ -448,7 +487,7 @@ Dim ContFile As Integer
  End If
  Cursor_Img
  RatonNormal
-' MsgBox "......."
+'MsgBox "......."
  Unload FEnviarCorreos
 End Sub
 
@@ -469,13 +508,14 @@ Dim IdImg As Integer
     Image1(FrameCount).Visible = True
     Image1(FrameCount).Refresh
     Cursor_Img
-    
+    MsgAux = ""
+    Contactos = ""
    'Contamos cuantos mails se han enviado por medio de MySQL
     ContMails = 0
     sSQL = "SELECT Fecha, COUNT(Fecha) As ContMails " _
          & "FROM acceso_pcs " _
          & "WHERE Fecha = '" & BuscarFecha(FechaSistema) & "' " _
-         & "AND ES IN ('IM') "
+         & "AND ES IN ('EM') "
     Select_AdoDB_MySQL AdoSMTP, sSQL
     If AdoSMTP.RecordCount > 0 Then
        ContMails = AdoSMTP.fields("ContMails")
@@ -529,7 +569,7 @@ Dim IdImg As Integer
      Else
         'Si enviamos mail desde el modulo de actualizacion se activa el servidor propio de DiskCover System
          If Modulo = "UPDATE" Then
-            TMail.servidor = "imap.diskcoversystem.com"
+            TMail.servidor = ServidorCorreos
             NombreUsuario = "Update DiskCover"
             ComunicadoEntidad = ""
             NombreGerente = "Walter Vaca Prieto"

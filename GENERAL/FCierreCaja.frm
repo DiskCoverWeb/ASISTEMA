@@ -1,10 +1,10 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
-Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
+Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDATGRD.OCX"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "COMCTL32.OCX"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form FCierreCaja 
    Caption         =   "CIERRE DE CAJA"
@@ -3050,7 +3050,6 @@ Private Sub Grabar_Cierre_Diario()
              Control_Procesos Normal, Co.Concepto
              ImprimirComprobantesDe False, Co
              
-             
              IniciarAsientosDe DGAsiento, AdoAsiento
           End If
           
@@ -3343,7 +3342,7 @@ Private Sub Form_Activate()
       TbarCierre.buttons("Grabar").Enabled = False
    End If
    RatonNormal
-  CierreDelDia
+   CierreDelDia
    MBFechaI.SetFocus
 End Sub
 
@@ -3438,7 +3437,7 @@ Dim NoMes As Byte
   'Listado de los tipos de abonos
    sSQL = "SELECT TA.TP,TA.Fecha,C.CI_RUC As COD_BANCO,C.Cliente,TA.Serie,TA.Autorizacion,TA.Factura,TA.Banco,TA.Cheque,TA.Abono," _
         & "TA.Comprobante,TA.Cta,TA.Cta_CxP,TA.CodigoC,C.Ciudad,C.Plan_Afiliado As Sectorizacion," _
-        & "A.Nombre_Completo As Ejecutivo,Recibo_No As Orden_No " _
+        & "A.Nombre_Completo As Ejecutivo, Recibo_No As Orden_No " _
         & "FROM Trans_Abonos As TA, Clientes C, Accesos As A " _
         & "WHERE TA.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
         & "AND TA.TP NOT IN ('OP') " _

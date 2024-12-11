@@ -72,6 +72,20 @@ Option Explicit
 '        Next I
 '       .Desconectar
 
+Public Function Color_Dias_Restantes(vDiasRestantes As Long) As Long
+Dim vColor As Long
+    Select Case vDiasRestantes
+      Case Is <= 10: vColor = QBColor(12)
+      Case 11 To 30: vColor = Fucsia_Claro
+      Case 31 To 60: vColor = QBColor(14)
+      Case 61 To 90: vColor = QBColor(6)
+      Case 91 To 120: vColor = QBColor(9)
+      Case 121 To 150: vColor = QBColor(10)
+      Case Is >= 151: vColor = QBColor(2)
+    End Select
+    Color_Dias_Restantes = vColor
+End Function
+
 Public Function Solo_Letras_Numeros(ByVal KeyAscii) As Integer
    If InStr(CadenaValida & Chr(8) & Chr(11) & Chr(13), Chr(KeyAscii)) = 0 Then
       Solo_Letras_Numeros = 0
@@ -1725,7 +1739,6 @@ End Sub
 Public Sub PonerDirEmpresa()
 Dim AnchoPantalla As Single
 Dim AnchoTemp As Single
-Dim RutaCertificado As String
 Dim Result As Long
   ContadorEstados = 0
   If Val(NumEmpresa) > 0 Then
@@ -2020,7 +2033,7 @@ Dim FinEjecucion As Boolean
   '1160
   NPicture.Line (0.1, 0.1)-(MDI_X_Max, 1400), Color2, BF
   NPicture.Line (50, 50)-(MDI_X_Max - 70, 1340), Blanco, BF
-  If Len(LogoTipo) > 1 Then NPicture.PaintPicture LoadPicture(LogoTipo), 70, 70, 2650, 1000
+  If Len(LogoTipo) > 1 Then NPicture.PaintPicture LoadPicture(LogoTipo), 70, 70, 2500, 1050
   
   Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Azul, Azul, DatosEmpresa
     
@@ -2058,79 +2071,60 @@ Dim FinEjecucion As Boolean
  'Fecha de Renovacion del sistema
  '-------------------------------
   Dias_Restantes = CFechaLong(Fecha_CO) - CFechaLong(FechaSistema) + 1
-  
-     Select Case Dias_Restantes
-       Case Is <= 1: ColorC = Rojo
-       Case 2 To 120: ColorC = Rojo_Claro
-       Case 121 To 240: ColorC = Amarillo
-       Case Is >= 241: ColorC = Verde_Claro
-     End Select
-     If Dias_Restantes > 0 Then
-        msg = "Fecha Renovación del " & vbCrLf _
-            & "Contrato: " & Fecha_CO & " " & vbCrLf _
-            & Dias_Restantes & " Dia(s) Restante(s) "
-     Else
-        msg = "Contrato Vencido "
-     End If
-     
+  ColorC = Color_Dias_Restantes(Dias_Restantes)
+  If Dias_Restantes > 0 Then
+     msg = "Fecha Renovación del " & vbCrLf _
+         & "Contrato: " & Fecha_CO & " " & vbCrLf _
+         & Dias_Restantes & " Dia(s) Restante(s) "
+  Else
+     msg = "Contrato Vencido "
+  End If
   msg = UCaseStrg(msg)
   AnchoWeb = Escribir_Texto_Picture_Ancho(NPicture, msg)
   PCol = MDI_X_Max - AnchoWeb - 1650
   PFil = 260
-  Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Color2, ColorC, msg
-  
-  'Ambiente = 0
+  Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Gris, ColorC, msg
+ 
  'Fecha de renovacion de Comprobantes Electronicos
  '------------------------------------------------
   Dias_Restantes = CFechaLong(Fecha_CE) - CFechaLong(FechaSistema) + 1
-  
-    Select Case Dias_Restantes
-      Case Is <= 1: ColorC = Rojo
-      Case 2 To 120: ColorC = Rojo_Claro
-      Case 121 To 240: ColorC = Amarillo
-      Case Is >= 241: ColorC = Verde_Claro
-    End Select
-    If Dias_Restantes > 0 Then
-       Select Case Ambiente
-         Case "1": msg = "Comprobantes Electrónicos Ambiente de Prueba " & vbCrLf _
-                       & "Fecha de Renovación: " & Fecha_CE & " " & vbCrLf _
-                       & Dias_Restantes & " Dia(s) Restante(s) para su renovacion " & vbCrLf
-         Case "2": msg = "Comprobantes Electrónicos Ambiente en Producción " & vbCrLf _
-                       & "Fecha de Renovación: " & Fecha_CE & " " & vbCrLf _
-                       & Dias_Restantes & " Dia(s) Restante(s) para su renovacion " & vbCrLf
-         Case Else
-                   msg = "Empresa sin Comprobantes Electrónicos " & vbCrLf
-       End Select
-    Else
-       msg = "Empresa sin Comprobantes Electrónicos" & vbCrLf
-    End If
+  ColorC = Color_Dias_Restantes(Dias_Restantes)
+  If Dias_Restantes > 0 Then
+     Select Case Ambiente
+       Case "1": msg = "Comprobantes Electrónicos Ambiente de Prueba " & vbCrLf _
+                     & "Fecha de Renovación: " & Fecha_CE & " " & vbCrLf _
+                     & Dias_Restantes & " Dia(s) Restante(s) para su renovacion " & vbCrLf
+       Case "2": msg = "Comprobantes Electrónicos Ambiente en Producción " & vbCrLf _
+                     & "Fecha de Renovación: " & Fecha_CE & " " & vbCrLf _
+                     & Dias_Restantes & " Dia(s) Restante(s) para su renovacion " & vbCrLf
+       Case Else
+                 msg = "Empresa sin Comprobantes Electrónicos " & vbCrLf
+     End Select
+  Else
+     msg = "Empresa sin Comprobantes Electrónicos" & vbCrLf
+  End If
   msg = UCaseStrg(msg)
   AnchoWeb = Escribir_Texto_Picture_Ancho(NPicture, msg)
-  PCol = MDI_X_Max - AnchoWeb - 120
+  PCol = (MDI_X_Max - AnchoWeb) / 2 - 120
   PFil = 1500
-  Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Color2, ColorC, msg
+  
+  If Len(RutaCertificado) > 1 Then Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Gris, ColorC, msg
         
  'Fecha de renovacion del Certificado Electronico
  '-----------------------------------------------
   Dias_Restantes = CFechaLong(Fecha_P12) - CFechaLong(FechaSistema) + 1
-  
-    Select Case Dias_Restantes
-      Case Is <= 1: ColorC = Rojo
-      Case 2 To 120: ColorC = Rojo_Claro
-      Case 121 To 240: ColorC = Amarillo
-      Case Is >= 241: ColorC = Verde_Claro
-    End Select
-    
-    Select Case Ambiente
-      Case "1", "2": msg = "Certificado Firma Electronica " & vbCrLf _
-                         & "Fecha de Renovación: " & Fecha_P12 & " " & vbCrLf _
-                         & Dias_Restantes & " Dia(s) Restante(s) para su renovacion " & vbCrLf
-                     msg = UCaseStrg(msg)
-                     AnchoWeb = Escribir_Texto_Picture_Ancho(NPicture, msg)
-                     PCol = MDI_X_Max - AnchoWeb - 110
-                     PFil = 2800
-                     Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Color2, ColorC, msg
-    End Select
+  ColorC = Color_Dias_Restantes(Dias_Restantes)
+  Select Case Ambiente
+    Case "1", "2": msg = "Certificado Firma Electronica " & vbCrLf _
+                       & "Fecha de Renovación: " & Fecha_P12 & " " & vbCrLf _
+                       & Dias_Restantes & " Dia(s) Restante(s) para su renovacion " & vbCrLf
+                   msg = UCaseStrg(msg)
+                   AnchoWeb = Escribir_Texto_Picture_Ancho(NPicture, msg)
+                   PCol = MDI_X_Max - AnchoWeb - 110
+                   'PFil = 2800
+                   PFil = 1500
+                   If Len(RutaCertificado) > 1 Then Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Gris, ColorC, msg
+  End Select
         
   msg = "Gerencia: gerencia@diskcoversystem.com " & vbCrLf _
       & "Teléfono: 099-965-4196 " & vbCrLf _
@@ -4832,13 +4826,13 @@ Dim Items As Long
         SetD(I).Encabezado = "."
     Next I
     ConLineas = False
-    SQLSet = "SELECT * " _
+    SQLSet = "SELECT Lineas " _
            & "FROM Formato " _
            & "WHERE TP = '" & BTP & "' " _
            & "AND Item = '" & NumEmpresa & "' "
     ConectarAdoRecordSet SQLSet
     If AdoReg.RecordCount > 0 Then ConLineas = AdoReg.fields("Lineas")
-    'MsgBox "Formato: " & SQLSet
+   'MsgBox "Formato: " & SQLSet
     SQLSet = "SELECT * " _
            & "FROM Seteos_Documentos "
     If ConLineas Then
@@ -4849,6 +4843,7 @@ Dim Items As Long
               & "AND Item = '" & NumEmpresa & "' "
     End If
     SQLSet = SQLSet & "ORDER BY Campo "
+   'MsgBox SQLSet
     ConectarAdoRecordSet SQLSet
     If AdoReg.RecordCount > 0 Then
        AdoReg.MoveLast
@@ -8256,6 +8251,46 @@ Dim cad As String
     Sin_Signos_Especiales = cad
 End Function
 
+Public Function Sin_Signos_XML(Cadena As String) As String
+Dim cad As String
+'ParaAux = Replace(ParaAux, "|", "")
+    cad = TrimStrg(Cadena)
+    cad = Replace(cad, "á", "a")
+    cad = Replace(cad, "é", "e")
+    cad = Replace(cad, "í", "i")
+    cad = Replace(cad, "ó", "o")
+    cad = Replace(cad, "ú", "u")
+    cad = Replace(cad, "Á", "A")
+    cad = Replace(cad, "É", "E")
+    cad = Replace(cad, "Í", "I")
+    cad = Replace(cad, "Ó", "O")
+    cad = Replace(cad, "Ú", "U")
+    cad = Replace(cad, "à", "a")
+    cad = Replace(cad, "è", "e")
+    cad = Replace(cad, "ì", "i")
+    cad = Replace(cad, "ò", "o")
+    cad = Replace(cad, "ù", "u")
+    cad = Replace(cad, "À", "A")
+    cad = Replace(cad, "È", "E")
+    cad = Replace(cad, "Ì", "I")
+    cad = Replace(cad, "Ò", "O")
+    cad = Replace(cad, "Ù", "U")
+    cad = Replace(cad, "ñ", "n")
+    cad = Replace(cad, "Ñ", "N")
+    cad = Replace(cad, "ü", "u")
+    cad = Replace(cad, "Ü", "U")
+    cad = Replace(cad, "&", "Y")
+    cad = Replace(cad, "Nº", "No.")
+    cad = Replace(cad, "ª", "a. ")
+    cad = Replace(cad, "°", "o. ")
+    cad = Replace(cad, "½", "1/2")
+    cad = Replace(cad, "½", "1/4")
+    cad = Replace(cad, Chr(255), " ")
+    cad = Replace(cad, Chr(254), " ")
+    cad = Replace(cad, "^", "")
+    Sin_Signos_XML = cad
+End Function
+
 'FoxitCtl
 ''      VerPDF.OpenFile " "
 ''      VerPDF.OpenFile RutaSysBases & "\TEMP\" & tPrint.NombreArchivo & ".pdf"
@@ -8578,7 +8613,9 @@ Dim Cont As Integer
 Dim IniNodo As Integer
 Dim FinNodo As Integer
 Dim vNodos() As String
+Dim ResultURL As String
 Dim Result As Tipo_Contribuyente
+
     RatonReloj
     With Result
         .Existe = False
@@ -8599,7 +8636,7 @@ Dim Result As Tipo_Contribuyente
         .MicroEmpresa = Ninguno
     End With
     
-    If Len(NumRUC) = 13 And Ping_IP("srienlinea.sri.gob.ec") And UCase(GetUrlSource(urlEsUnRUC & NumRUC)) = "TRUE" Then
+    If Len(NumRUC) = 13 And Ping_IP("srienlinea.sri.gob.ec") And GetUrlSource(urlEsUnRUC & NumRUC) = "true" Then
       'Verificamos que tipo de contribuyente es
        Tipo_Contribuyente_SP_MySQL NumRUC, Result.MicroEmpresa, Result.AgenteRetencion
        Result.Existe = True

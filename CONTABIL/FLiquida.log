@@ -1,1 +1,12 @@
-Línea 100: la clase AcroPDFLibCtl.AcroPDF del control APDFLiquidacion no era una clase de control cargada.
+Línea 18: la clase AcroPDFLibCtl.AcroPDF del control APDFLiquidacion no era una clase de control cargada.
+Línea 27: la clase ComctlLib.Toolbar del control Toolbar1 no era una clase de control cargada.
+Línea 219: la clase MSDataListLib.DataCombo del control DCComp no era una clase de control cargada.
+Línea 260: la clase MSAdodcLib.Adodc del control AdoComp1 no era una clase de control cargada.
+Línea 307: la clase MSAdodcLib.Adodc del control AdoComp no era una clase de control cargada.
+Línea 354: la clase MSAdodcLib.Adodc del control AdoDetRet no era una clase de control cargada.
+Línea 401: la clase MSAdodcLib.Adodc del control AdoDetCom no era una clase de control cargada.
+Línea 448: la clase MSDataListLib.DataCombo del control DCSerie no era una clase de control cargada.
+Línea 470: la clase MSAdodcLib.Adodc del control AdoSerie no era una clase de control cargada.
+Línea 517: la clase MSAdodcLib.Adodc del control AdoTP_Num no era una clase de control cargada.
+Línea 564: la clase MSDataListLib.DataCombo del control DCTP_Num no era una clase de control cargada.
+Línea 683: la clase ComctlLib.ImageList del control ImageList1 no era una clase de control cargada.

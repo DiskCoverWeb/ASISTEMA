@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDATGRD.OCX"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form FacturaReembolso 
    BackColor       =   &H00C0C0C0&
@@ -99,7 +99,7 @@ Begin VB.Form FacturaReembolso
       BackColor       =   &H00FFC0C0&
       Height          =   1275
       Left            =   105
-      TabIndex        =   35
+      TabIndex        =   37
       Top             =   8925
       Width           =   16080
       Begin VB.CommandButton Command1 
@@ -117,7 +117,7 @@ Begin VB.Form FacturaReembolso
          Left            =   14280
          Picture         =   "FacturaR.frx":5C2E
          Style           =   1  'Graphical
-         TabIndex        =   45
+         TabIndex        =   47
          Top             =   210
          Width           =   1590
       End
@@ -136,7 +136,7 @@ Begin VB.Form FacturaReembolso
          Left            =   12495
          Picture         =   "FacturaR.frx":64F8
          Style           =   1  'Graphical
-         TabIndex        =   44
+         TabIndex        =   46
          Top             =   210
          Width           =   1590
       End
@@ -154,7 +154,7 @@ Begin VB.Form FacturaReembolso
          EndProperty
          Height          =   435
          Left            =   105
-         TabIndex        =   36
+         TabIndex        =   38
          Top             =   210
          Width           =   2430
       End
@@ -172,7 +172,7 @@ Begin VB.Form FacturaReembolso
          EndProperty
          Height          =   435
          Left            =   2940
-         TabIndex        =   38
+         TabIndex        =   40
          Top             =   210
          Width           =   2430
       End
@@ -193,7 +193,7 @@ Begin VB.Form FacturaReembolso
          ForeColor       =   &H000000FF&
          Height          =   435
          Left            =   105
-         TabIndex        =   37
+         TabIndex        =   39
          Top             =   630
          Width           =   2430
       End
@@ -214,7 +214,7 @@ Begin VB.Form FacturaReembolso
          ForeColor       =   &H000000FF&
          Height          =   435
          Left            =   2940
-         TabIndex        =   39
+         TabIndex        =   41
          Top             =   630
          Width           =   2430
       End
@@ -233,7 +233,7 @@ Begin VB.Form FacturaReembolso
          ForeColor       =   &H00000000&
          Height          =   435
          Left            =   5775
-         TabIndex        =   40
+         TabIndex        =   42
          Top             =   210
          Width           =   2430
       End
@@ -251,7 +251,7 @@ Begin VB.Form FacturaReembolso
          EndProperty
          Height          =   435
          Left            =   8610
-         TabIndex        =   42
+         TabIndex        =   44
          Top             =   210
          Width           =   2430
       End
@@ -272,7 +272,7 @@ Begin VB.Form FacturaReembolso
          ForeColor       =   &H000000FF&
          Height          =   435
          Left            =   5775
-         TabIndex        =   41
+         TabIndex        =   43
          Top             =   630
          Width           =   2430
       End
@@ -293,7 +293,7 @@ Begin VB.Form FacturaReembolso
          ForeColor       =   &H000000FF&
          Height          =   435
          Left            =   8610
-         TabIndex        =   43
+         TabIndex        =   45
          Top             =   630
          Width           =   2430
       End
@@ -312,7 +312,7 @@ Begin VB.Form FacturaReembolso
       Left            =   8190
       MaxLength       =   60
       MultiLine       =   -1  'True
-      TabIndex        =   34
+      TabIndex        =   36
       Top             =   8505
       Width           =   7995
    End
@@ -330,7 +330,7 @@ Begin VB.Form FacturaReembolso
       Left            =   105
       MaxLength       =   60
       MultiLine       =   -1  'True
-      TabIndex        =   32
+      TabIndex        =   34
       Top             =   8505
       Width           =   7995
    End
@@ -350,7 +350,7 @@ Begin VB.Form FacturaReembolso
       Left            =   7455
       MaxLength       =   10
       MultiLine       =   -1  'True
-      TabIndex        =   25
+      TabIndex        =   27
       Text            =   "FacturaR.frx":6802
       Top             =   2835
       Width           =   1170
@@ -371,7 +371,7 @@ Begin VB.Form FacturaReembolso
       Left            =   6405
       MaxLength       =   6
       MultiLine       =   -1  'True
-      TabIndex        =   23
+      TabIndex        =   25
       Text            =   "FacturaR.frx":6807
       Top             =   2835
       Width           =   960
@@ -392,7 +392,7 @@ Begin VB.Form FacturaReembolso
       Left            =   10290
       MaxLength       =   30
       MultiLine       =   -1  'True
-      TabIndex        =   29
+      TabIndex        =   31
       Top             =   2835
       Width           =   5895
    End
@@ -441,7 +441,7 @@ Begin VB.Form FacturaReembolso
       Bindings        =   "FacturaR.frx":6823
       Height          =   4845
       Left            =   105
-      TabIndex        =   30
+      TabIndex        =   32
       Top             =   3255
       Width           =   16080
       _ExtentX        =   28363
@@ -910,7 +910,7 @@ Begin VB.Form FacturaReembolso
       DataSource      =   "AdoTipoComp"
       Height          =   315
       Left            =   105
-      TabIndex        =   46
+      TabIndex        =   23
       ToolTipText     =   $"FacturaR.frx":688F
       Top             =   2835
       Width           =   6210
@@ -992,7 +992,7 @@ Begin VB.Form FacturaReembolso
       EndProperty
       Height          =   330
       Left            =   105
-      TabIndex        =   47
+      TabIndex        =   22
       Top             =   2520
       Width           =   6210
    End
@@ -1131,7 +1131,7 @@ Begin VB.Form FacturaReembolso
       ForeColor       =   &H00FFFFFF&
       Height          =   330
       Left            =   8190
-      TabIndex        =   33
+      TabIndex        =   35
       Top             =   8190
       Width           =   7995
    End
@@ -1151,7 +1151,7 @@ Begin VB.Form FacturaReembolso
       ForeColor       =   &H00FFFFFF&
       Height          =   330
       Left            =   105
-      TabIndex        =   31
+      TabIndex        =   33
       Top             =   8190
       Width           =   7995
    End
@@ -1232,7 +1232,7 @@ Begin VB.Form FacturaReembolso
       ForeColor       =   &H00FF0000&
       Height          =   330
       Left            =   8715
-      TabIndex        =   27
+      TabIndex        =   29
       Top             =   2835
       Width           =   1485
    End
@@ -1252,7 +1252,7 @@ Begin VB.Form FacturaReembolso
       EndProperty
       Height          =   330
       Left            =   8715
-      TabIndex        =   26
+      TabIndex        =   28
       Top             =   2520
       Width           =   1485
    End
@@ -1272,7 +1272,7 @@ Begin VB.Form FacturaReembolso
       EndProperty
       Height          =   330
       Left            =   7455
-      TabIndex        =   24
+      TabIndex        =   26
       Top             =   2520
       Width           =   1170
    End
@@ -1292,7 +1292,7 @@ Begin VB.Form FacturaReembolso
       EndProperty
       Height          =   330
       Left            =   6405
-      TabIndex        =   22
+      TabIndex        =   24
       Top             =   2520
       Width           =   960
    End
@@ -1311,7 +1311,7 @@ Begin VB.Form FacturaReembolso
       EndProperty
       Height          =   330
       Left            =   10290
-      TabIndex        =   28
+      TabIndex        =   30
       Top             =   2520
       Width           =   5895
    End
@@ -1606,7 +1606,7 @@ Private Sub Command3_Click()
        FA.TDT = 41
        Moneda_US = False
        TextoFormaPago = "PENDIENTE"
-       ProcGrabar
+       ProcGrabarReembolso
        
        LblSerie.Caption = SerieFactura & "-"
        NumComp = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, False)
@@ -1805,7 +1805,7 @@ Private Sub TextVUnit_LostFocus()
    TxtDocumentos.SetFocus
 End Sub
 
-Public Sub ProcGrabar()
+Public Sub ProcGrabarReembolso()
  DGAsientoF.Visible = False
  FA.Porc_IVA = Porc_IVA
  FA.Gavetas = 0

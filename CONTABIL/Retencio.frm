@@ -1,8 +1,8 @@
 VERSION 5.00
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Object = "{05BFD3F1-6319-4F30-B752-C7A22889BCC4}#1.0#0"; "AcroPDF.dll"
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "COMCTL32.OCX"
 Begin VB.Form Retenciones 
    BackColor       =   &H00C0FFC0&
    Caption         =   "LISTAR COMPROBANTE DE RETENCION DE EGRESOS"
@@ -174,6 +174,15 @@ Begin VB.Form Retenciones
          End
       End
    End
+   Begin AcroPDFLibCtl.AcroPDF APDFRetencion 
+      Height          =   2640
+      Left            =   105
+      TabIndex        =   24
+      Top             =   2625
+      Width           =   6630
+      _cx             =   5080
+      _cy             =   5080
+   End
    Begin VB.CheckBox CheqClaveAcceso 
       Alignment       =   1  'Right Justify
       BackColor       =   &H00C0FFC0&
@@ -191,18 +200,9 @@ Begin VB.Form Retenciones
       Height          =   330
       Left            =   105
       Style           =   1  'Graphical
-      TabIndex        =   24
+      TabIndex        =   23
       Top             =   1260
       Width           =   2220
-   End
-   Begin AcroPDFLibCtl.AcroPDF APDFRetencion 
-      Height          =   4845
-      Left            =   105
-      TabIndex        =   23
-      Top             =   2625
-      Width           =   9255
-      _cx             =   5080
-      _cy             =   5080
    End
    Begin VB.OptionButton OpcManuales 
       BackColor       =   &H00C0FFC0&
@@ -321,8 +321,8 @@ Begin VB.Form Retenciones
       Left            =   9135
       TabIndex        =   8
       Top             =   735
-      Width           =   1380
-      _ExtentX        =   2434
+      Width           =   1590
+      _ExtentX        =   2805
       _ExtentY        =   609
       _Version        =   393216
       Text            =   "999999999"
@@ -661,11 +661,11 @@ Begin VB.Form Retenciones
       Bindings        =   "Retencio.frx":002D
       DataSource      =   "AdoTP_Num"
       Height          =   345
-      Left            =   11130
+      Left            =   11340
       TabIndex        =   10
       Top             =   735
-      Width           =   1485
-      _ExtentX        =   2619
+      Width           =   1800
+      _ExtentX        =   3175
       _ExtentY        =   609
       _Version        =   393216
       Text            =   "999999999"
@@ -693,7 +693,7 @@ Begin VB.Form Retenciones
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   10605
+      Left            =   10815
       TabIndex        =   9
       Top             =   735
       Width           =   540
@@ -772,7 +772,7 @@ Begin VB.Form Retenciones
       EndProperty
       ForeColor       =   &H000000FF&
       Height          =   330
-      Left            =   12705
+      Left            =   13230
       TabIndex        =   11
       Top             =   735
       Width           =   1590
@@ -1019,7 +1019,10 @@ Dim TipoProc As String
         FA.EmailR = .fields("Email2")
         FA.TP = Co.TP
         FA.Numero = Co.Numero
+        FA.TR = "RE"
+        FA.TC = "FA"
         FA.Fecha = .fields("FechaEmision")
+        FA.Fecha_R = .fields("FechaEmision")
         FA.Serie_R = .fields("Serie_Retencion")
         FA.Retencion = .fields("SecRetencion")
         FA.ClaveAcceso = .fields("Clave_Acceso")
@@ -1236,7 +1239,7 @@ Dim MesNo As Integer
        & "AND Periodo = '" & Periodo_Contable & "' " _
        & "AND Serie_Retencion = '" & Serie_R & "' " _
        & "AND SecRetencion > 0 "
-  If OpcNoAut.Value Then
+  If OpcNoAut.value Then
       sSQL = sSQL _
           & "AND LEN(AutRetencion) = 13 " _
           & "AND LEN(Clave_Acceso) >= 1 " _
@@ -1258,12 +1261,12 @@ Dim MesNo As Integer
        & "WHERE Item = '" & NumEmpresa & "' " _
        & "AND Periodo = '" & Periodo_Contable & "' " _
        & "AND LEN(Serie_Retencion) = 6 "
-  If OpcNoAut.Value Then
+  If OpcNoAut.value Then
       sSQL = sSQL _
           & "AND LEN(AutRetencion) BETWEEN 13 and 49 " _
           & "AND LEN(Clave_Acceso) >= 1 " _
           & "AND Estado_SRI <> 'OK' "
-  ElseIf OpcManuales.Value Then
+  ElseIf OpcManuales.value Then
     sSQL = sSQL _
           & "AND LEN(AutRetencion) < 13 " _
           & "AND LEN(Clave_Acceso) = 1 "
@@ -1374,7 +1377,7 @@ Dim RutaXMLFirmado As String
           FA.TP = Co.TP
           FA.Serie_R = DCSerie.Text
           FA.Retencion = Val(DCComp.Text)
-          SRI_Crear_Clave_Acceso_Retenciones FA, False, CBool(CheqClaveAcceso.Value)
+          SRI_Crear_Clave_Acceso_Retenciones FA, False, CBool(CheqClaveAcceso.value)
           RatonNormal
          'MsgBox SRI_Autorizacion.Estado_SRI & "...."
          If SRI_Autorizacion.Estado_SRI <> "OK" Then

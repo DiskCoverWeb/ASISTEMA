@@ -1,10 +1,10 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
-Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
+Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDATGRD.OCX"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "Mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.Ocx"
 Begin VB.Form ListFact 
    BackColor       =   &H80000002&
@@ -32,9 +32,9 @@ Begin VB.Form ListFact
       Caption         =   "| SELECCIONE EL EJECUTIVO DE VENTA |"
       ForeColor       =   &H0000FFFF&
       Height          =   3690
-      Left            =   9765
+      Left            =   9555
       TabIndex        =   57
-      Top             =   2520
+      Top             =   9030
       Visible         =   0   'False
       Width           =   8520
       Begin VB.CommandButton Command1 
@@ -1492,13 +1492,13 @@ Begin VB.Form ListFact
    End
    Begin MSComctlLib.Toolbar TBarFactura 
       Align           =   1  'Align Top
-      Height          =   660
+      Height          =   1800
       Left            =   0
       TabIndex        =   68
       Top             =   0
       Width           =   11280
       _ExtentX        =   19897
-      _ExtentY        =   1164
+      _ExtentY        =   3175
       ButtonWidth     =   1032
       ButtonHeight    =   1005
       Appearance      =   1
@@ -1750,10 +1750,30 @@ Begin VB.Form ListFact
       Caption         =   "_"
       ForeColor       =   &H000000C0&
       Height          =   960
-      Left            =   7875
+      Left            =   9765
       TabIndex        =   13
       Top             =   2520
-      Width           =   6630
+      Width           =   4950
+   End
+   Begin VB.Label LabelBultos 
+      Alignment       =   1  'Right Justify
+      BackColor       =   &H00FFFFFF&
+      BorderStyle     =   1  'Fixed Single
+      Caption         =   "-"
+      Height          =   330
+      Left            =   8820
+      TabIndex        =   19
+      Top             =   3150
+      Width           =   960
+   End
+   Begin VB.Label Label14 
+      BorderStyle     =   1  'Fixed Single
+      Caption         =   " No. de Bultos:"
+      Height          =   330
+      Left            =   7350
+      TabIndex        =   18
+      Top             =   3150
+      Width           =   1485
    End
    Begin VB.Label LabelTransp 
       BackColor       =   &H00FFFFFF&
@@ -1766,15 +1786,14 @@ Begin VB.Form ListFact
       Width           =   13035
    End
    Begin VB.Label LabelVendedor 
-      Alignment       =   2  'Center
       BackColor       =   &H00FFFFFF&
       BorderStyle     =   1  'Fixed Single
       Caption         =   "999999999"
       Height          =   330
-      Left            =   2415
+      Left            =   105
       TabIndex        =   14
       Top             =   2835
-      Width           =   5475
+      Width           =   9675
    End
    Begin VB.Label Label21 
       BackColor       =   &H00E0E0E0&
@@ -1813,7 +1832,7 @@ Begin VB.Form ListFact
       Left            =   945
       TabIndex        =   12
       Top             =   2520
-      Width           =   6945
+      Width           =   8835
    End
    Begin VB.Label Label15 
       BackColor       =   &H00FFFFFF&
@@ -1823,7 +1842,7 @@ Begin VB.Form ListFact
       Left            =   1470
       TabIndex        =   21
       Top             =   3150
-      Width           =   6420
+      Width           =   5895
    End
    Begin VB.Label Label17 
       BorderStyle     =   1  'Fixed Single
@@ -1833,26 +1852,6 @@ Begin VB.Form ListFact
       TabIndex        =   22
       Top             =   3150
       Width           =   1380
-   End
-   Begin VB.Label LabelBultos 
-      Alignment       =   1  'Right Justify
-      BackColor       =   &H00FFFFFF&
-      BorderStyle     =   1  'Fixed Single
-      Caption         =   "-"
-      Height          =   330
-      Left            =   1470
-      TabIndex        =   19
-      Top             =   2835
-      Width           =   960
-   End
-   Begin VB.Label Label14 
-      BorderStyle     =   1  'Fixed Single
-      Caption         =   " No. de Bultos:"
-      Height          =   330
-      Left            =   105
-      TabIndex        =   18
-      Top             =   2835
-      Width           =   1485
    End
    Begin VB.Label Label10 
       BorderStyle     =   1  'Fixed Single
@@ -2602,6 +2601,7 @@ Dim FAPend() As Tipo_Facturas
           & "WHERE Item = '" & NumEmpresa & "' " _
           & "AND Periodo = '" & Periodo_Contable & "' " _
           & "AND Serie = '" & DCSerie & "' " _
+          & "AND T <> 'A' " _
           & "AND LEN(Autorizacion) = 13 "
      If CheqAutxRangos.value <> 0 And Val(TextFDesde) <= Val(TextFHasta) Then sSQL = sSQL & "AND Factura BETWEEN " & Val(TextFDesde) & " AND " & Val(TextFHasta) & " "
      sSQL = sSQL & "ORDER BY TC,Serie,Factura "
@@ -3292,7 +3292,6 @@ End Sub
 Public Sub BuscarFactura()
 'Dim CSQL1, CSQL2, CSQL3, CSQL4, CSQL5, CSQL6 As String
   RatonReloj
-  Actualizar_Saldos_Facturas_SP FA.TC, FA.Serie, FA.Factura
   TxtXML = ""
   DGDetalle.Visible = False
   DGDetalle.BackColor = &H80000005
@@ -3307,6 +3306,15 @@ Public Sub BuscarFactura()
   Leer_Datos_FA_NV FA
  'Procesamos Factura
   If FA.Si_Existe_Doc Then
+     Actualizar_Saldos_Facturas_SP FA.TC, FA.Serie, FA.Factura
+  Else
+     DGDetalle.Visible = True
+     RatonNormal
+     MsgBox "Esta Factura no existe."
+     FA.Factura = 0
+     DCTipo.SetFocus
+  End If
+
     'Consultamos el detalle de la factura
      SQL2 = "SELECT DF.Codigo,DF.Producto,DF.Cantidad,DF.Precio,DF.Total,DF.Total_Desc,DF.Total_Desc2,DF.Total_IVA," _
           & "ROUND(((DF.Total-(DF.Total_Desc+DF.Total_Desc2))+DF.Total_IVA),2,0) As Valor_Total,DF.Mes,DF.Ticket," _
@@ -3327,7 +3335,6 @@ Public Sub BuscarFactura()
      SQLDec = "Precio " & CStr(Dec_PVP) & "|Total 2|Total_IVA 4|."
      Select_Adodc_Grid DGDetalle, AdoDetalle, SQL2, SQLDec
      DGDetalle.Visible = True
-     
      FinBucle = True
     'Recolectamos los item de la factura a buscar
      LabelEstado.Caption = FA.T
@@ -3365,12 +3372,6 @@ Public Sub BuscarFactura()
      End Select
     'Consultamos los pagos Interes de Tarjetas y Abonos de Bancos con efectivo
     'Procesamos el Saldo de la Factura
-  Else
-     DGDetalle.Visible = True
-     RatonNormal
-     MsgBox "Esta Factura no existe."
-     DCTipo.SetFocus
-  End If
   SSTabDetalle.Tab = 0
 End Sub
 
@@ -4309,73 +4310,57 @@ Dim IdFact As Long
 End Sub
 
 Public Sub Anular_en_masa()
-Dim IdFact As Long
+Dim Motivo As String
   If ClaveAdministrador Then
-     RatonReloj
+     RatonNormal
      If Val(TextFDesde) <= 0 Then TextFDesde = "0"
      If Val(TextFHasta) <= 0 Then TextFHasta = "0"
      TextoValido TextFDesde
      TextoValido TextFHasta
      Factura_Desde = Val(TextFDesde)
      Factura_Hasta = Val(TextFHasta)
-     Control_Procesos "F", "Anulacion de Facturas en masa desde " & Factura_Desde & " a la " & Factura_Hasta
      Progreso_Barra.Mensaje_Box = "Anulacion de Facturas en masa"
      Progreso_Iniciar
      If (Factura_Hasta - Factura_Desde) >= 0 Then
-        For IdFact = Factura_Desde To Factura_Hasta
-            Progreso_Barra.Mensaje_Box = "Anular Factura No. " & Format(IdFact, "000000000")
-            Progreso_Esperar
-            FA.Factura = IdFact
-            sSQL = "DELETE * " _
-                 & "FROM Facturas " _
-                 & "WHERE Item = '" & NumEmpresa & "' " _
-                 & "AND Periodo = '" & Periodo_Contable & "' " _
-                 & "AND TC = '" & FA.TC & "' " _
-                 & "AND Serie = '" & FA.Serie & "' " _
-                 & "AND Factura = '" & FA.Factura & "' " _
-                 & "AND Autorizacion = '" & FA.Autorizacion & "' "
-            Ejecutar_SQL_SP sSQL
-            
-            sSQL = "DELETE * " _
-                 & "FROM Detalle_Factura " _
-                 & "WHERE Item = '" & NumEmpresa & "' " _
-                 & "AND Periodo = '" & Periodo_Contable & "' " _
-                 & "AND TC = '" & FA.TC & "' " _
-                 & "AND Serie = '" & FA.Serie & "' " _
-                 & "AND Factura = '" & FA.Factura & "' " _
-                 & "AND Autorizacion = '" & FA.Autorizacion & "' "
-            Ejecutar_SQL_SP sSQL
-            
-            sSQL = "DELETE * " _
-                 & "FROM Trans_Abonos " _
-                 & "WHERE Item = '" & NumEmpresa & "' " _
-                 & "AND Periodo = '" & Periodo_Contable & "' " _
-                 & "AND TP = '" & FA.TC & "' " _
-                 & "AND Serie = '" & FA.Serie & "' " _
-                 & "AND Factura = '" & FA.Factura & "' " _
-                 & "AND Autorizacion = '" & FA.Autorizacion & "' "
-            Ejecutar_SQL_SP sSQL
-            
-            SetAdoAddNew "Facturas"
-            SetAdoFields "T", "A"
-            SetAdoFields "CodigoC", "9999999999"
-            SetAdoFields "Razon_Social", "CONSUMIDOR FINAL"
-            SetAdoFields "RUC_CI", "9999999999999"
-            SetAdoFields "TB", "R"
-            SetAdoFields "Fecha", MBFecha
-            SetAdoFields "Fecha_C", MBFecha
-            SetAdoFields "Fecha_V", MBFecha
-            SetAdoFields "TC", FA.TC
-            SetAdoFields "Cod_CxC", FA.Cod_CxC
-            SetAdoFields "Cta_CxP", FA.Cta_CxP
-            SetAdoFields "Factura", FA.Factura
-            SetAdoFields "Serie", FA.Serie
-            SetAdoFields "Autorizacion", FA.Autorizacion
-            SetAdoFields "Item", NumEmpresa
-            SetAdoFields "Periodo", Periodo_Contable
-            SetAdoFields "CodigoU", CodigoUsuario
-            SetAdoUpdate
-        Next IdFact
+        Mensajes = "Esta Seguro de Anular las " & FA.TC & " de la Serie: " & FA.Serie & vbCrLf & vbCrLf _
+                 & "desde la " & Factura_Desde & " hasta la " & Factura_Hasta & "en bloque " & vbCrLf & vbCrLf _
+                 & "DIGITE EL MOTIVO DE LA ANULACION:"
+        Titulo = "Formulario de Anulación"
+        Motivo = InputBox(Mensajes, UCase(Titulo), "Anulacion en masa")
+        If Len(Motivo) > 1 Then
+           Control_Procesos "F", "Anulacion de Facturas desde la " & Factura_Desde & " hasta la " & Factura_Hasta
+           RatonReloj
+           sSQL = "UPDATE Facturas " _
+                & "SET T = 'A', Nota = 'Motivo de la Anulacion: " & Motivo & ".' " _
+                & "WHERE Item = '" & NumEmpresa & "' " _
+                & "AND Periodo = '" & Periodo_Contable & "' " _
+                & "AND TC = '" & FA.TC & "' " _
+                & "AND Serie = '" & FA.Serie & "' " _
+                & "AND Factura BETWEEN " & Factura_Desde & " AND " & Factura_Hasta & " "
+           Ejecutar_SQL_SP sSQL
+           
+           sSQL = "UPDATE Detalle_Factura " _
+                & "SET T = 'A' " _
+                & "WHERE Item = '" & NumEmpresa & "' " _
+                & "AND Periodo = '" & Periodo_Contable & "' " _
+                & "AND TC = '" & FA.TC & "' " _
+                & "AND Serie = '" & FA.Serie & "' " _
+                & "AND Factura BETWEEN " & Factura_Desde & " AND " & Factura_Hasta & " "
+           Ejecutar_SQL_SP sSQL
+     
+           sSQL = "DELETE * " _
+                & "FROM Trans_Abonos " _
+                & "WHERE Item = '" & NumEmpresa & "' " _
+                & "AND Periodo = '" & Periodo_Contable & "' " _
+                & "AND TP = '" & FA.TC & "' " _
+                & "AND Serie = '" & FA.Serie & "' " _
+                & "AND Factura BETWEEN " & Factura_Desde & " AND " & Factura_Hasta & " "
+           Ejecutar_SQL_SP sSQL
+           RatonNormal
+           MsgBox "Proceso realizado con exito"
+        Else
+           MsgBox "Proceso de anulacion cancelado"
+        End If
      End If
      Progreso_Final
   End If

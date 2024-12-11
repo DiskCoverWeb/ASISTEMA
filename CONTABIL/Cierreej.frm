@@ -1,9 +1,9 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "Mscomctl.ocx"
+Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDATGRD.OCX"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Begin VB.Form CierreEjercicio 
    Caption         =   "BALANCE DE COMPROBACION"
    ClientHeight    =   8505
@@ -1446,6 +1446,24 @@ Dim SiTieneSubModulo As Boolean
 '''  Ejecutar_SQL_SP sSQL
 '''  RatonNormal
 '''End Sub
+
+Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
+  Label5.Caption = "CIERRE DEL EJERCICIO AL " & FechaDeCierre(FechaFinal)
+  If CheqDetalle.value = 1 Then
+     DetalleComp = "CIERRE DEL EJERCICIO AL " & FechaDeCierre(FechaFinal)
+  Else
+     DetalleComp = Ninguno
+  End If
+ 'MsgBox Button.key
+  Select Case Button.key
+    Case "Salir":      Unload CierreEjercicio
+    Case "Procesar":   Procesar_Cierre_Ejercicio
+    Case "Grabar":     Grabar_Cierre_Ejercicio
+    Case "Actualizar": Actualizar_Cierre_Ejercicio
+    Case "Imprimir":   Imprimir
+  End Select
+End Sub
+
 Public Sub Renumerar_Codigos(Renumerar As Boolean)
 Dim AdoNum As ADODB.Recordset
 Dim AdoComp As ADODB.Recordset
@@ -1540,6 +1558,19 @@ Dim Fecha_V1 As String
 Dim FechaEmision As String
 Dim Factura_No1 As Long
 
+    Ln_No = 1
+    SQL2 = "SELECT * " _
+         & "FROM Asiento " _
+         & "WHERE Item = '" & NumEmpresa & "' " _
+         & "AND T_No = " & Trans_No & " " _
+         & "AND CodigoU = '" & CodigoUsuario & "' " _
+         & "ORDER BY Codigo,DEBE DESC,HABER "
+    Select_Adodc_Grid DGBalance, AdoCtas, SQL2
+    
+   'Leemos la Cta de Utilidad/Perdida
+    Codigo = Leer_Cta_Catalogo(CambioCodigoCta(MBoxCtaI.Text))
+    If Cuenta = Ninguno Then MsgBox "Cuenta no asignada en el Catalogo de Cuentas"
+    
     RatonReloj
     DGBalance.Visible = False
     Evaluar = True
@@ -1550,552 +1581,183 @@ Dim Factura_No1 As Long
     Fecha_V1 = FechaFinal
     FechaEmision = FechaFinal
     
-    Mayorizar_Inventario_SP FechaFinal
-  
    'Variables Generales de Entrada
-   'CodigoCli, ValorDH, Dolar, OpcTM, OpcDH, Codigo, Cuenta, Fecha_Vence, NoCheque, Trans_No, DetalleComp
+    CodigoCli = Ninguno
+    Procesar_Cierre_Fiscal_SP Codigo, CheqSinConc.value
 
-    sSQL = "UPDATE Trans_SubCtas " _
-         & "SET Fecha_V = Fecha " _
-         & "WHERE Periodo = '" & Periodo_Contable & "' " _
-         & "AND Item = '" & NumEmpresa & "' " _
-         & "AND Fecha <= #" & FechaFin & "# " _
-         & "AND Fecha < Fecha_V " _
-         & "AND TC = 'C' " _
-         & "AND Creditos > 0 "
-    Ejecutar_SQL_SP sSQL
-    
-    sSQL = "UPDATE Trans_SubCtas " _
-         & "SET Fecha_V = Fecha " _
-         & "WHERE Periodo = '" & Periodo_Contable & "' " _
-         & "AND Item = '" & NumEmpresa & "' " _
-         & "AND Fecha <= #" & FechaFin & "# " _
-         & "AND Fecha < Fecha_V " _
-         & "AND TC = 'P' " _
-         & "AND Debitos > 0 "
-    Ejecutar_SQL_SP sSQL
-
-  If CheqSinConc.value <> 0 Then
-     sSQL = "UPDATE Transacciones " _
-          & "SET C = " & Val(adTrue) & " " _
-          & "WHERE Periodo = '" & Periodo_Contable & "' " _
-          & "AND Item = '" & NumEmpresa & "' " _
-          & "AND Fecha <= #" & FechaFin & "# "
-     Ejecutar_SQL_SP sSQL
-  End If
- 'IniciarAsientosDe DGBalance, AdoCtas
-  CodigoCli = Ninguno
-  sSQL = "DELETE * " _
-       & "FROM Asiento_K " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND T_No = " & Trans_No & " " _
-       & "AND CodigoU = '" & CodigoUsuario & "' "
-  Ejecutar_SQL_SP sSQL
-  
-  sSQL = "DELETE * " _
-       & "FROM Asiento_R " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND T_No = " & Trans_No & " " _
-       & "AND CodigoU = '" & CodigoUsuario & "' "
-  Ejecutar_SQL_SP sSQL
-    
- 'ProcesarBalance CierreEjercicio, FechaIni, FechaFin, AdoCtas, AdoTrans, False
-  IniciarAsientosDe DGBalance, AdoCtas
-  DGBalance.Visible = False
-  RatonReloj
-  Codigo1 = CambioCodigoCta(MBoxCtaI.Text)
-  Codigo = Leer_Cta_Catalogo(Codigo1)
-  If Cuenta = Ninguno Then MsgBox "Cuenta no asignada en el Catalogo de Cuentas"
-   
-  sSQL = "SELECT * " _
-       & "FROM Catalogo_Cuentas " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND Periodo = '" & Periodo_Contable & "' " _
-       & "AND DG = 'D' " _
-       & "AND MidStrg(Codigo,1,1) IN ('1','2','3','8','9') " _
-       & "AND Saldo_Total <> 0 " _
-       & "ORDER BY Codigo "
-  Select_Adodc AdoTrans, sSQL
-  Contador = 0
-  With AdoTrans.Recordset
-   If .RecordCount > 0 Then
-       Progreso_Barra.Incremento = 0
-       Progreso_Barra.Valor_Maximo = .RecordCount
-       Progreso_Barra.Mensaje_Box = "CONTABILIZANDO"
-       Progreso_Esperar
-      .MoveFirst
-       Do While Not .EOF
-          DetalleComp = Ninguno
-          Contador = Contador + 1
-          Debe = 0: Haber = 0
-          TipoCta = .fields("DG")
-          Moneda_US = .fields("ME")
-          Codigo = .fields("Codigo")
-          Cuenta = .fields("Cuenta")
-          TipoDoc = .fields("TC")
-          Total = Redondear(.fields("Saldo_Total"), 2)
-          Total_ME = Redondear(.fields("Saldo_Total_ME"), 2)
-          If OpcCoop Then
-             If Moneda_US Then
-                Select Case MidStrg(Codigo, 1, 1)
-                  Case "1": If Total_ME >= 0 Then Debe = Total_ME Else Haber = -Total_ME
-                  Case "2": If Total_ME >= 0 Then Haber = Total_ME Else Debe = -Total_ME
-                  Case "3": If Total_ME >= 0 Then Haber = Total_ME Else Debe = -Total_ME
-                End Select
-             Else
-                Select Case MidStrg(Codigo, 1, 1)
-                  Case "1": If Total >= 0 Then Debe = Total Else Haber = -Total
-                  Case "2": If Total >= 0 Then Haber = Total Else Debe = -Total
-                  Case "3": If Total >= 0 Then Haber = Total Else Debe = -Total
-                End Select
-             End If
-          Else
-             Select Case MidStrg(Codigo, 1, 1)
-               Case "1": If Total >= 0 Then Debe = Total Else Haber = -Total
-               Case "2": If Total >= 0 Then Haber = Total Else Debe = -Total
-               Case "3": If Total >= 0 Then Haber = Total Else Debe = -Total
-             End Select
-          End If
-          OpcTM = 1
-         'If Debe < 0 Or Haber < 0 Then MsgBox Debe & vbCrLf & Haber
-          If Debe > 0 Then
-             OpcDH = 1
-             ValorDH = Debe
-          Else
-             OpcDH = 2
-             ValorDH = Haber
-          End If
-         'MsgBox Codigo & vbCrLf & ValorDH
-         'If Codigo = "1.1.03.11.04" Then MsgBox TipoDoc & vbCrLf & TCredito
-          Select Case TipoDoc
-            Case "BA"               '(BA) Si la cuenta es de bancos
-                 SumaCheqDebe = 0
-                 SumaCheqHaber = 0
-                 TempBaOpcDH = OpcDH
-                 TempBaValorDH = ValorDH
-                 sSQL = "SELECT C.Cliente,T.Fecha_Efec,T.Cheq_Dep,T.Debe,T.Haber,T.TP,T.Numero,T.Cta,CC.Cuenta,CC.TC,T.Codigo_C " _
-                      & "FROM Transacciones As T,Catalogo_Cuentas As CC,Clientes As C " _
-                      & "WHERE T.Item = '" & NumEmpresa & "' " _
-                      & "AND T.Periodo = '" & Periodo_Contable & "' " _
-                      & "AND T.Fecha <= #" & FechaFin & "# " _
-                      & "AND T.C = " & Val(adFalse) & " " _
-                      & "AND T.Cta = '" & Codigo & "' " _
-                      & "AND T.T <> 'A' " _
-                      & "AND CC.TC = 'BA' " _
-                      & "AND T.Item = CC.Item " _
-                      & "AND T.Periodo = CC.Periodo " _
-                      & "AND T.Cta = CC.Codigo " _
-                      & "AND T.Codigo_C = C.Codigo " _
-                      & "ORDER BY T.Cta,C.Cliente,T.Fecha_Efec,T.Cheq_Dep "
-                 Select_Adodc AdoCheques, sSQL
-                 If AdoCheques.Recordset.RecordCount > 0 Then
-                   'Insertamos Cheques girados y no cobrados
-                    Do While Not AdoCheques.Recordset.EOF
-                       ValorDH = 0
-                       SumaCheqDebe = SumaCheqDebe + AdoCheques.Recordset.fields("Debe")
-                       SumaCheqHaber = SumaCheqHaber + AdoCheques.Recordset.fields("Haber")
-                       CodigoCli = AdoCheques.Recordset.fields("Codigo_C")
-                       If AdoCheques.Recordset.fields("Debe") > 0 Then
-                          ValorDH = AdoCheques.Recordset.fields("Debe")
-                          OpcDH = 1
-                       ElseIf AdoCheques.Recordset.fields("Haber") > 0 Then
-                          ValorDH = AdoCheques.Recordset.fields("Haber")
-                          OpcDH = 2
-                       End If
-                       Fecha_Vence = AdoCheques.Recordset.fields("Fecha_Efec")
-                       NoCheque = AdoCheques.Recordset.fields("Cheq_Dep")
-                       DetalleComp = AdoCheques.Recordset.fields("TP") & "-" _
-                                   & Format(AdoCheques.Recordset.fields("Numero"), "00000000") & ". " _
-                                   & TrimStrg(AdoCheques.Recordset.fields("Cliente"))
-                      'MsgBox "Cheq: " & ValorDH
-                       InsertarAsiento AdoCtas
-                       AdoCheques.Recordset.MoveNext
-                    Loop
-                 End If
-                 CodigoCli = Ninguno
-                 Fecha_Vence = FechaFinal
-                 NoCheque = Ninguno
-                 DetalleComp = Ninguno
-                 OpcDH = TempBaOpcDH
-                 ValorDH = TempBaValorDH
-                'MsgBox ValorDH
-                 If OpcDH = 1 Then
-                    ValorDH = ValorDH + SumaCheqHaber - SumaCheqDebe
-                 Else
-                    ValorDH = ValorDH - SumaCheqDebe + SumaCheqHaber
-                 End If
-                 If ValorDH < 0 Then
-                    ValorDH = -ValorDH
-                    OpcDH = 2
-                 End If
-                 InsertarAsiento AdoCtas
-            Case "C"    'CxC Asignamos los submodulos
-                 If SiTieneSubModulo Then
-                    TDebito = 0
-                    TCredito = 0
-                    sSQL = "SELECT Codigo, Serie, Factura, (SUM(Debitos)-SUM(Creditos)) AS TSaldo " _
-                         & "FROM Trans_SubCtas " _
-                         & "WHERE Fecha <= #" & FechaFin & "# " _
-                         & "AND Periodo = '" & Periodo_Contable & "' " _
-                         & "AND Item = '" & NumEmpresa & "' " _
-                         & "AND Cta = '" & Codigo & "' " _
-                         & "AND T <> 'A' " _
-                         & "GROUP BY Codigo, Serie, Factura "
-                    Select_Adodc AdoSubCtaDet, sSQL
-                    If AdoSubCtaDet.Recordset.RecordCount > 0 Then
-                       Do While Not AdoSubCtaDet.Recordset.EOF
-                          If AdoSubCtaDet.Recordset.fields("TSaldo") > 0 Then
-                             TDebito = TDebito + AdoSubCtaDet.Recordset.fields("TSaldo")
-                          ElseIf AdoSubCtaDet.Recordset.fields("TSaldo") < 0 Then
-                             TCredito = TCredito + (-AdoSubCtaDet.Recordset.fields("TSaldo"))
-                          End If
-                          AdoSubCtaDet.Recordset.MoveNext
-                       Loop
-                    End If
-                    OpcDH = 1
-                    ValorDH = TDebito
-                    InsertarAsiento AdoCtas
-                    OpcDH = 2
-                    ValorDH = TCredito
-                    InsertarAsiento AdoCtas
-                 End If
-            Case "P"   'CxP Asignamos los submodulos
-                 If SiTieneSubModulo Then
-                    TDebito = 0
-                    TCredito = 0
-                    sSQL = "SELECT Codigo, Serie, Factura, (SUM(Creditos)-SUM(Debitos)) AS TSaldo " _
-                         & "FROM Trans_SubCtas " _
-                         & "WHERE Fecha <= #" & FechaFin & "# " _
-                         & "AND Periodo = '" & Periodo_Contable & "' " _
-                         & "AND Item = '" & NumEmpresa & "' " _
-                         & "AND Cta = '" & Codigo & "' " _
-                         & "AND T <> 'A' " _
-                         & "GROUP BY Codigo, Serie, Factura "
-                    Select_Adodc AdoSubCtaDet, sSQL
-                    If AdoSubCtaDet.Recordset.RecordCount > 0 Then
-                       Do While Not AdoSubCtaDet.Recordset.EOF
-                          If AdoSubCtaDet.Recordset.fields("TSaldo") > 0 Then
-                             TCredito = TCredito + AdoSubCtaDet.Recordset.fields("TSaldo")
-                          ElseIf AdoSubCtaDet.Recordset.fields("TSaldo") < 0 Then
-                             TDebito = TDebito + (-AdoSubCtaDet.Recordset.fields("TSaldo"))
-                          End If
-                          AdoSubCtaDet.Recordset.MoveNext
-                       Loop
-                    End If
-                    OpcDH = 2
-                    ValorDH = TCredito
-                    InsertarAsiento AdoCtas
-                    OpcDH = 1
-                    ValorDH = TDebito
-                    InsertarAsiento AdoCtas
-                 End If
-            Case Else
-                 InsertarAsiento AdoCtas
-          End Select
-          Progreso_Esperar
-         .MoveNext
-       Loop
-   End If
-  End With
-  SumaDebe = 0: SumaHaber = 0
- 'Leemos la Cta de Utilidad/Perdida
-  Codigo1 = CambioCodigoCta(MBoxCtaI.Text)
-  Codigo = Leer_Cta_Catalogo(Codigo1)
-  Ln_No = 1
-  SQL2 = "SELECT * " _
-       & "FROM Asiento " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND T_No = " & Trans_No & " " _
-       & "AND CodigoU = '" & CodigoUsuario & "' " _
-       & "ORDER BY Codigo,DEBE DESC,HABER "
-  Select_Adodc_Grid DGBalance, AdoCtas, SQL2
-  DGBalance.Visible = False
-  With AdoCtas.Recordset
-   If .RecordCount > 0 Then
-      .MoveFirst
-       Do While Not .EOF
-          SumaDebe = SumaDebe + .fields("DEBE")
-          SumaHaber = SumaHaber + .fields("HABER")
-         .fields("A_No") = Ln_No
-         .MoveNext
-          Ln_No = Ln_No + 1
-       Loop
-       Diferencia = SumaDebe - SumaHaber
-       Codigo = Codigo1
-       OpcTM = 1
-       If Diferencia > 0 Then
-          OpcDH = 2
-          ValorDH = Diferencia
-       Else
-          OpcDH = 1
-          ValorDH = -Diferencia
-       End If
-       InsertarAsiento AdoCtas
-       SumaDebe = 0: SumaHaber = 0
-      .MoveFirst
-       Do While Not .EOF
-          SumaDebe = SumaDebe + .fields("DEBE")
-          SumaHaber = SumaHaber + .fields("HABER")
-         .MoveNext
-       Loop
-   End If
-  End With
-  
- 'Asiento de SubCtas de los saldos con fecha de vencimiento
-  RatonReloj
-  TipoSubCta = Ninguno
-  DGBanco.Visible = False
-  
-  sSQL = "SELECT * " _
-       & "FROM Asiento_SC " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND CodigoU = '" & CodigoUsuario & "' " _
-       & "AND T_No = " & Trans_No & " "
-  Select_Adodc AdoBanco, sSQL
-  
-  sSQL = "SELECT TS.Codigo, C.Cliente, TS.Serie, TS.Factura, TS.TC, TS.Cta, MIN(TS.Fecha_V) As Fecha_Venc, MIN(TS.Fecha_E) As Fecha_Emis, " _
-       & "SUM(TS.Debitos) As TDebitos, SUM(TS.Creditos) As TCreditos " _
-       & "FROM Clientes As C, Catalogo_Cuentas As CC, Trans_SubCtas As TS " _
-       & "WHERE TS.Item = '" & NumEmpresa & "' " _
-       & "AND TS.Periodo = '" & Periodo_Contable & "' " _
-       & "AND TS.Fecha <= #" & FechaFin & "# " _
-       & "AND TS.TC IN ('C','P') " _
-       & "AND TS.Codigo = C.Codigo " _
-       & "AND TS.Cta = CC.Codigo " _
-       & "AND TS.Item = CC.Item " _
-       & "AND TS.Periodo = CC.Periodo " _
-       & "GROUP BY TS.Codigo, C.Cliente, TS.Serie, TS.Factura, TS.TC, TS.Cta " _
-       & "HAVING (SUM(TS.Debitos)-SUM(TS.Creditos)) <> 0 " _
-       & "ORDER BY TS.TC, TS.Cta, C.Cliente, TS.Serie, TS.Factura, SUM(TS.Debitos) DESC, SUM(TS.Creditos) DESC "
-  Select_Adodc AdoTrans, sSQL
- 'MsgBox sSQL
-  Contador = 0
-  With AdoTrans.Recordset
-   If .RecordCount > 0 Then
-      .MoveFirst
-       Progreso_Barra.Incremento = 0
-       Progreso_Barra.Valor_Maximo = .RecordCount
-       Progreso_Barra.Mensaje_Box = "SUBMODULOS"
-       Progreso_Esperar
-       Do While Not .EOF
-          Contador = Contador + 1
-          Saldo = 0
-          Saldo_ME = 0
-          Valor = 0
-          OpcTM = 1
-          FechaEmision = .fields("Fecha_Emis")
-          SerieFactura = .fields("Serie")
-          Debitos = .fields("TDebitos")
-          Creditos = .fields("TCreditos")
-          Codigo = .fields("Codigo")
-          Beneficiario = .fields("Cliente")
-          SubCtaGen = .fields("Cta")
-          Mifecha = .fields("Fecha_Venc")
-          Factura_No = .fields("Factura")
-          TipoSubCta = .fields("TC")
-          Progreso_Barra.Mensaje_Box = "Submódulos de: " & SubCtaGen & " => " & Beneficiario
-          Select Case .fields("TC")
-            Case "C"
-                 Saldo = Debitos - Creditos
-                 ValorDH = Saldo
-                 OpcDH = 1
-                 If ValorDH < 0 Then
-                    ValorDH = -ValorDH
-                    OpcDH = 2
-                 End If
-            Case "P"
-                 Saldo = Creditos - Debitos
-                 ValorDH = Saldo
-                 OpcDH = 2
-                 If ValorDH < 0 Then
-                    ValorDH = -ValorDH
-                    OpcDH = 1
-                 End If
-          End Select
-         'If SubCtaGen = "1.1.04.03.01" And Codigo = "GRUP2" And Factura_No = 18553 Then MsgBox ValorDH & " .."
-          If ValorDH > 0 Then
-             OpcDH1 = OpcDH
-             Factura_No1 = Factura_No
-             ValorSubModulo = ValorDH
-             sSQL = "SELECT TS.Factura, TS.Fecha_V, TS.Debitos, TS.Creditos, C.Codigo " _
-                  & "FROM Trans_SubCtas As TS, Clientes As C " _
-                  & "WHERE TS.Item = '" & NumEmpresa & "' " _
-                  & "AND TS.Periodo = '" & Periodo_Contable & "' " _
-                  & "AND TS.Fecha <= #" & FechaFin & "# " _
-                  & "AND TS.Fecha_V > #" & FechaFin & "# " _
-                  & "AND TS.Codigo = '" & Codigo & "' " _
-                  & "AND TS.Cta = '" & SubCtaGen & "' " _
-                  & "AND TS.TC = '" & TipoSubCta & "' " _
-                  & "AND TS.Serie = '" & SerieFactura & "' " _
-                  & "AND TS.Factura = " & Factura_No & " " _
-                  & "AND TS.T <> 'A' " _
-                  & "AND TS.Codigo = C.Codigo "
-             Select_Adodc AdoRet, sSQL
-             If AdoRet.Recordset.RecordCount > 0 Then
-               'MsgBox "Tiene prestamos superiores: " & SubCtaGen & vbCrLf & Codigo & vbCrLf & AdoRet.Recordset.RecordCount
-                Do While Not AdoRet.Recordset.EOF
-                   If AdoRet.Recordset.fields("Debitos") > 0 Then
-                      ValorDH = AdoRet.Recordset.fields("Debitos")
-                      If ValorDH = Debitos Then ValorDH = 0
-                      OpcDH = 1
-                   Else
-                      ValorDH = AdoRet.Recordset.fields("Creditos")
-                      If ValorDH = Creditos Then ValorDH = 0
-                      OpcDH = 2
-                   End If
-                   Fecha_V1 = AdoRet.Recordset.fields("Fecha_V")
-                   Factura_No = AdoRet.Recordset.fields("Factura")
-                  'If SubCtaGen = "2.1.03.01.03" And Factura_No = 79498 Then MsgBox ValorSubModulo & " .."
-                  'If SubCtaGen = "1.1.04.03.01" And Codigo = "GRUP2" And Factura_No = 18553 Then MsgBox ValorDH & " .."
-                   If ValorDH > 0 Then
-                      SetAddNew AdoBanco
-                      SetFields AdoBanco, "FECHA_E", FechaEmision
-                      SetFields AdoBanco, "FECHA_V", Fecha_V1
-                      SetFields AdoBanco, "TC", TipoSubCta
-                      SetFields AdoBanco, "Serie", SerieFactura
-                      SetFields AdoBanco, "Factura", Factura_No
-                      SetFields AdoBanco, "Codigo", Codigo
-                      SetFields AdoBanco, "Beneficiario", Beneficiario
-                      SetFields AdoBanco, "Cta", SubCtaGen
-                      SetFields AdoBanco, "DH", OpcDH
-                      SetFields AdoBanco, "Valor", ValorDH
-                      SetFields AdoBanco, "TM", OpcTM
-                      SetFields AdoBanco, "Item", NumEmpresa
-                      SetFields AdoBanco, "T_No", Trans_No
-                      SetFields AdoBanco, "CodigoU", CodigoUsuario
-                      SetUpdate AdoBanco
-                      ValorSubModulo = ValorSubModulo - ValorDH
-                   End If
-                   AdoRet.Recordset.MoveNext
-                Loop
-             End If
-            'If SubCtaGen = "2.1.03.01.03" And ValorSubModulo < 0 Then MsgBox ValorSubModulo & " .."
-            'If ValorSubModulo < 0 Then MsgBox "Negativo: " & SubCtaGen & vbCrLf & ValorSubModulo
-             If ValorSubModulo <> 0 Then
-               'MsgBox SubCtaGen & vbCrLf & Codigo & vbCrLf & " Valor Submodulo = " & ValorSubModulo
-                OpcDH = OpcDH1
-                Factura_No = Factura_No1
-                ValorDH = ValorSubModulo
-                Select Case TipoSubCta
-                  Case "C"
-                       If ValorDH < 0 Then
-                          OpcDH = 2
-                          ValorDH = -ValorDH
-                       End If
-                  Case "P"
-                       If ValorDH < 0 Then
-                          OpcDH = 1
-                          ValorDH = -ValorDH
-                       End If
-                End Select
-                SetAddNew AdoBanco
-                SetFields AdoBanco, "FECHA_E", FechaEmision
-                SetFields AdoBanco, "FECHA_V", Fecha_V1
-                SetFields AdoBanco, "TC", TipoSubCta
-                SetFields AdoBanco, "Serie", SerieFactura
-                SetFields AdoBanco, "Factura", Factura_No
-                SetFields AdoBanco, "Codigo", Codigo
-                SetFields AdoBanco, "Beneficiario", Beneficiario
-                SetFields AdoBanco, "Cta", SubCtaGen
-                SetFields AdoBanco, "DH", OpcDH
-                SetFields AdoBanco, "Valor", ValorDH
-                SetFields AdoBanco, "TM", OpcTM
-                SetFields AdoBanco, "Item", NumEmpresa
-                SetFields AdoBanco, "T_No", Trans_No
-                SetFields AdoBanco, "CodigoU", CodigoUsuario
-                SetUpdate AdoBanco
-             End If
-          End If
-          Progreso_Esperar
-         .MoveNext
-       Loop
-   End If
-  End With
-  
- 'Procedemos sacar los stock segun el tipo de inventario
-  Progreso_Barra.Mensaje_Box = "RECORRIENDO INVENTARIO"
-  Progreso_Iniciar
-  Select Case TipoKardex
-    Case "SERIE": sSQL = "SELECT TK.CodBodega, TK.Codigo_Inv, TK.Serie_No, CP.Cta_Inventario, CP.Producto, CP.Costo, "
-    Case "BARRA": sSQL = "SELECT TK.CodBodega, TK.Codigo_Inv, TK.Codigo_Barra, CP.Cta_Inventario, CP.Producto, CP.Costo, "
-    Case Else:    sSQL = "SELECT TK.CodBodega, TK.Codigo_Inv, CP.Cta_Inventario, CP.Producto, CP.Costo, "
-  End Select
-  sSQL = sSQL _
-       & "(SUM(TK.Entrada) - SUM(TK.Salida)) As TExistencia " _
-       & "FROM Trans_Kardex As TK, Catalogo_Productos As CP " _
-       & "WHERE TK.Fecha <= #" & FechaFin & "# " _
-       & "AND TK.Item = '" & NumEmpresa & "' " _
-       & "AND TK.Periodo = '" & Periodo_Contable & "' " _
-       & "AND TK.T <> '" & Anulado & "' " _
-       & "AND TK.Item = CP.Item " _
-       & "AND TK.Periodo = CP.Periodo " _
-       & "AND TK.Codigo_Inv = CP.Codigo_Inv "
-  Select Case TipoKardex
-    Case "SERIE"
-         sSQL = sSQL _
-              & "GROUP BY TK.CodBodega,TK.Codigo_Inv,TK.Serie_No,CP.Cta_Inventario,CP.Producto, CP.Costo " _
-              & "HAVING (SUM(TK.Entrada) - SUM(TK.Salida)) <> 0 " _
-              & "ORDER BY TK.CodBodega,TK.Codigo_Inv,TK.Serie_No,CP.Cta_Inventario,CP.Producto, CP.Costo "
-    Case "BARRA"
-         sSQL = sSQL _
-              & "GROUP BY TK.CodBodega,TK.Codigo_Inv,TK.Codigo_Barra,CP.Cta_Inventario,CP.Producto, CP.Costo " _
-              & "HAVING (SUM(TK.Entrada) - SUM(TK.Salida)) <> 0 " _
-              & "ORDER BY TK.CodBodega,TK.Codigo_Inv,TK.Codigo_Barra,CP.Cta_Inventario,CP.Producto, CP.Costo "
-    Case Else
-         sSQL = sSQL _
-              & "GROUP BY TK.CodBodega,TK.Codigo_Inv,CP.Cta_Inventario,CP.Producto, CP.Costo " _
-              & "HAVING (SUM(TK.Entrada) - SUM(TK.Salida)) <> 0 " _
-              & "ORDER BY TK.CodBodega,TK.Codigo_Inv,CP.Cta_Inventario,CP.Producto, CP.Costo "
-  End Select
-  Select_Adodc AdoInv, sSQL
-  Contra_Cta = CambioCodigoCta(MBoxCtaI)
-  Total = 0
-  With AdoInv.Recordset
-   If .RecordCount > 0 Then
-       Progreso_Barra.Valor_Maximo = .RecordCount + 100
-       Do While Not .EOF
-          CodigoInv = .fields("Codigo_Inv")
-          Cta_Inventario = .fields("Cta_Inventario")
-          Cantidad = .fields("TExistencia")
-          Producto = .fields("Producto")
-          Cod_Bodega = .fields("CodBodega")
-          Precio = Redondear(.fields("Costo"), Dec_Costo)
-          If Precio <= 0 Then Precio = 0.01
-          If Cantidad > 0 Then
-             OpcDH = 1
-             Total = Total + Redondear(Cantidad * Precio, 2)
-          Else
-             OpcDH = 2
-             Total = Total + Redondear(Cantidad * Precio, 2)
-             Cantidad = -Cantidad
-          End If
-          Progreso_Barra.Mensaje_Box = "Inventario de " & CodigoInv & " - " & Producto
-          Progreso_Esperar
-          SetAdoAddNew "Asiento_K"
-          SetAdoFields "CODIGO_INV", CodigoInv
-          SetAdoFields "PRODUCTO", Producto
-          SetAdoFields "CANT_ES", Cantidad
-          SetAdoFields "CANTIDAD", Cantidad
-          SetAdoFields "VALOR_UNIT", Precio
-          SetAdoFields "VALOR_TOTAL", Redondear(Cantidad * Precio, 2)
-          SetAdoFields "DH", OpcDH
-          SetAdoFields "CTA_INVENTARIO", Cta_Inventario
-          SetAdoFields "CONTRA_CTA", Codigo1
-          SetAdoFields "Item", NumEmpresa
-          SetAdoFields "CodigoU", CodigoUsuario
-          SetAdoFields "T_No", Trans_No
-          SetAdoFields "A_No", Contador
-          SetAdoFields "TC", Pendiente
-          SetAdoFields "CodBod", Cod_Bodega
-          Select Case TipoKardex
-            Case "SERIE": SetAdoFields "Serie_No", .fields("Serie_No")
-            Case "BARRA": SetAdoFields "COD_BAR", .fields("Codigo_Barra")
-          End Select
-          SetAdoUpdate
-         .MoveNext
-       Loop
-   End If
-  End With
+'''
+'''
+''' 'Asiento de SubCtas de los saldos con fecha de vencimiento
+'''  RatonReloj
+'''  TipoSubCta = Ninguno
+'''  DGBanco.Visible = False
+'''
+'''  sSQL = "SELECT * " _
+'''       & "FROM Asiento_SC " _
+'''       & "WHERE Item = '" & NumEmpresa & "' " _
+'''       & "AND CodigoU = '" & CodigoUsuario & "' " _
+'''       & "AND T_No = " & Trans_No & " "
+'''  Select_Adodc AdoBanco, sSQL
+'''
+'''  sSQL = "SELECT TS.Codigo, C.Cliente, TS.Serie, TS.Factura, TS.TC, TS.Cta, MIN(TS.Fecha_V) As Fecha_Venc, MIN(TS.Fecha_E) As Fecha_Emis, " _
+'''       & "SUM(TS.Debitos) As TDebitos, SUM(TS.Creditos) As TCreditos " _
+'''       & "FROM Clientes As C, Catalogo_Cuentas As CC, Trans_SubCtas As TS " _
+'''       & "WHERE TS.Item = '" & NumEmpresa & "' " _
+'''       & "AND TS.Periodo = '" & Periodo_Contable & "' " _
+'''       & "AND TS.Fecha <= #" & FechaFin & "# " _
+'''       & "AND TS.TC IN ('C','P') " _
+'''       & "AND TS.Codigo = C.Codigo " _
+'''       & "AND TS.Cta = CC.Codigo " _
+'''       & "AND TS.Item = CC.Item " _
+'''       & "AND TS.Periodo = CC.Periodo " _
+'''       & "GROUP BY TS.Codigo, C.Cliente, TS.Serie, TS.Factura, TS.TC, TS.Cta " _
+'''       & "HAVING (SUM(TS.Debitos)-SUM(TS.Creditos)) <> 0 " _
+'''       & "ORDER BY TS.TC, TS.Cta, C.Cliente, TS.Serie, TS.Factura, SUM(TS.Debitos) DESC, SUM(TS.Creditos) DESC "
+'''  Select_Adodc AdoTrans, sSQL
+''' 'MsgBox sSQL
+'''  Contador = 0
+'''  With AdoTrans.Recordset
+'''   If .RecordCount > 0 Then
+'''      .MoveFirst
+'''       Progreso_Barra.Incremento = 0
+'''       Progreso_Barra.Valor_Maximo = .RecordCount
+'''       Progreso_Barra.Mensaje_Box = "SUBMODULOS"
+'''       Progreso_Esperar
+'''       Do While Not .EOF
+'''          Contador = Contador + 1
+'''          Saldo = 0
+'''          Saldo_ME = 0
+'''          Valor = 0
+'''          OpcTM = 1
+'''          FechaEmision = .fields("Fecha_Emis")
+'''          SerieFactura = .fields("Serie")
+'''          Debitos = .fields("TDebitos")
+'''          Creditos = .fields("TCreditos")
+'''          Codigo = .fields("Codigo")
+'''          Beneficiario = .fields("Cliente")
+'''          SubCtaGen = .fields("Cta")
+'''          Mifecha = .fields("Fecha_Venc")
+'''          Factura_No = .fields("Factura")
+'''          TipoSubCta = .fields("TC")
+'''          Progreso_Barra.Mensaje_Box = "Submódulos de: " & SubCtaGen & " => " & Beneficiario
+'''          Select Case .fields("TC")
+'''            Case "C"
+'''                 Saldo = Debitos - Creditos
+'''                 ValorDH = Saldo
+'''                 OpcDH = 1
+'''                 If ValorDH < 0 Then
+'''                    ValorDH = -ValorDH
+'''                    OpcDH = 2
+'''                 End If
+'''            Case "P"
+'''                 Saldo = Creditos - Debitos
+'''                 ValorDH = Saldo
+'''                 OpcDH = 2
+'''                 If ValorDH < 0 Then
+'''                    ValorDH = -ValorDH
+'''                    OpcDH = 1
+'''                 End If
+'''          End Select
+'''         'If SubCtaGen = "1.1.04.03.01" And Codigo = "GRUP2" And Factura_No = 18553 Then MsgBox ValorDH & " .."
+'''          If ValorDH > 0 Then
+'''             OpcDH1 = OpcDH
+'''             Factura_No1 = Factura_No
+'''             ValorSubModulo = ValorDH
+'''             sSQL = "SELECT TS.Factura, TS.Fecha_V, TS.Debitos, TS.Creditos, C.Codigo " _
+'''                  & "FROM Trans_SubCtas As TS, Clientes As C " _
+'''                  & "WHERE TS.Item = '" & NumEmpresa & "' " _
+'''                  & "AND TS.Periodo = '" & Periodo_Contable & "' " _
+'''                  & "AND TS.Fecha <= #" & FechaFin & "# " _
+'''                  & "AND TS.Fecha_V > #" & FechaFin & "# " _
+'''                  & "AND TS.Codigo = '" & Codigo & "' " _
+'''                  & "AND TS.Cta = '" & SubCtaGen & "' " _
+'''                  & "AND TS.TC = '" & TipoSubCta & "' " _
+'''                  & "AND TS.Serie = '" & SerieFactura & "' " _
+'''                  & "AND TS.Factura = " & Factura_No & " " _
+'''                  & "AND TS.T <> 'A' " _
+'''                  & "AND TS.Codigo = C.Codigo "
+'''             Select_Adodc AdoRet, sSQL
+'''             If AdoRet.Recordset.RecordCount > 0 Then
+'''               'MsgBox "Tiene prestamos superiores: " & SubCtaGen & vbCrLf & Codigo & vbCrLf & AdoRet.Recordset.RecordCount
+'''                Do While Not AdoRet.Recordset.EOF
+'''                   If AdoRet.Recordset.fields("Debitos") > 0 Then
+'''                      ValorDH = AdoRet.Recordset.fields("Debitos")
+'''                      If ValorDH = Debitos Then ValorDH = 0
+'''                      OpcDH = 1
+'''                   Else
+'''                      ValorDH = AdoRet.Recordset.fields("Creditos")
+'''                      If ValorDH = Creditos Then ValorDH = 0
+'''                      OpcDH = 2
+'''                   End If
+'''                   Fecha_V1 = AdoRet.Recordset.fields("Fecha_V")
+'''                   Factura_No = AdoRet.Recordset.fields("Factura")
+'''                  'If SubCtaGen = "2.1.03.01.03" And Factura_No = 79498 Then MsgBox ValorSubModulo & " .."
+'''                  'If SubCtaGen = "1.1.04.03.01" And Codigo = "GRUP2" And Factura_No = 18553 Then MsgBox ValorDH & " .."
+'''                   If ValorDH > 0 Then
+'''                      SetAddNew AdoBanco
+'''                      SetFields AdoBanco, "FECHA_E", FechaEmision
+'''                      SetFields AdoBanco, "FECHA_V", Fecha_V1
+'''                      SetFields AdoBanco, "TC", TipoSubCta
+'''                      SetFields AdoBanco, "Serie", SerieFactura
+'''                      SetFields AdoBanco, "Factura", Factura_No
+'''                      SetFields AdoBanco, "Codigo", Codigo
+'''                      SetFields AdoBanco, "Beneficiario", Beneficiario
+'''                      SetFields AdoBanco, "Cta", SubCtaGen
+'''                      SetFields AdoBanco, "DH", OpcDH
+'''                      SetFields AdoBanco, "Valor", ValorDH
+'''                      SetFields AdoBanco, "TM", OpcTM
+'''                      SetFields AdoBanco, "Item", NumEmpresa
+'''                      SetFields AdoBanco, "T_No", Trans_No
+'''                      SetFields AdoBanco, "CodigoU", CodigoUsuario
+'''                      SetUpdate AdoBanco
+'''                      ValorSubModulo = ValorSubModulo - ValorDH
+'''                   End If
+'''                   AdoRet.Recordset.MoveNext
+'''                Loop
+'''             End If
+'''            'If SubCtaGen = "2.1.03.01.03" And ValorSubModulo < 0 Then MsgBox ValorSubModulo & " .."
+'''            'If ValorSubModulo < 0 Then MsgBox "Negativo: " & SubCtaGen & vbCrLf & ValorSubModulo
+'''             If ValorSubModulo <> 0 Then
+'''               'MsgBox SubCtaGen & vbCrLf & Codigo & vbCrLf & " Valor Submodulo = " & ValorSubModulo
+'''                OpcDH = OpcDH1
+'''                Factura_No = Factura_No1
+'''                ValorDH = ValorSubModulo
+'''                Select Case TipoSubCta
+'''                  Case "C"
+'''                       If ValorDH < 0 Then
+'''                          OpcDH = 2
+'''                          ValorDH = -ValorDH
+'''                       End If
+'''                  Case "P"
+'''                       If ValorDH < 0 Then
+'''                          OpcDH = 1
+'''                          ValorDH = -ValorDH
+'''                       End If
+'''                End Select
+'''                SetAddNew AdoBanco
+'''                SetFields AdoBanco, "FECHA_E", FechaEmision
+'''                SetFields AdoBanco, "FECHA_V", Fecha_V1
+'''                SetFields AdoBanco, "TC", TipoSubCta
+'''                SetFields AdoBanco, "Serie", SerieFactura
+'''                SetFields AdoBanco, "Factura", Factura_No
+'''                SetFields AdoBanco, "Codigo", Codigo
+'''                SetFields AdoBanco, "Beneficiario", Beneficiario
+'''                SetFields AdoBanco, "Cta", SubCtaGen
+'''                SetFields AdoBanco, "DH", OpcDH
+'''                SetFields AdoBanco, "Valor", ValorDH
+'''                SetFields AdoBanco, "TM", OpcTM
+'''                SetFields AdoBanco, "Item", NumEmpresa
+'''                SetFields AdoBanco, "T_No", Trans_No
+'''                SetFields AdoBanco, "CodigoU", CodigoUsuario
+'''                SetUpdate AdoBanco
+'''             End If
+'''          End If
+'''          Progreso_Esperar
+'''         .MoveNext
+'''       Loop
+'''   End If
+'''  End With
+'''
   
   sSQL = "SELECT * " _
        & "FROM Asiento_SC " _
@@ -2129,8 +1791,9 @@ Dim Factura_No1 As Long
        & "AND T.Codigo_C = C.Codigo " _
        & "ORDER BY T.Cta,C.Cliente,T.Fecha_Efec,T.Cheq_Dep "
   Select_Adodc_Grid DGCheques, AdoCheques, sSQL
-  DGBanco.Visible = True
+  
  'Fin de subCtas
+  SumaDebe = 0: SumaHaber = 0
   SQL2 = "SELECT * " _
        & "FROM Asiento " _
        & "WHERE Item = '" & NumEmpresa & "' " _
@@ -2138,13 +1801,24 @@ Dim Factura_No1 As Long
        & "AND CodigoU = '" & CodigoUsuario & "' " _
        & "ORDER BY A_No "
   Select_Adodc_Grid DGBalance, AdoCtas, SQL2
-  If AdoCtas.Recordset.RecordCount > 0 Then AdoCtas.Recordset.MoveLast
+  DGBalance.Visible = False
+  With AdoCtas.Recordset
+   If .RecordCount > 0 Then
+      .MoveFirst
+       Do While Not .EOF
+          SumaDebe = SumaDebe + .fields("DEBE")
+          SumaHaber = SumaHaber + .fields("HABER")
+         .MoveNext
+       Loop
+   End If
+  End With
   LabelTotInv.Caption = Format(Total, "#,##0.00")
   LabelTotDebe.Caption = Format(SumaDebe, "#,##0.00")
   LabelTotHaber.Caption = Format(SumaHaber, "#,##0.00")
   LabelTotSaldo.Caption = Format(SumaDebe - SumaHaber, "#,##0.00")
   CierreEjercicio.Caption = "CIERRE DEL EJERCICIO"
   RatonNormal
+  DGBanco.Visible = True
   DGBalance.Visible = True
   Progreso_Final
   If Round(SumaDebe - SumaHaber) <> 0 Then
@@ -2754,19 +2428,3 @@ Private Sub MBoxCtaI_LostFocus()
     Toolbar1.Refresh
 End Sub
 
-Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
-  Label5.Caption = "CIERRE DEL EJERCICIO AL " & FechaDeCierre(FechaFinal)
-  If CheqDetalle.value = 1 Then
-     DetalleComp = "CIERRE DEL EJERCICIO AL " & FechaDeCierre(FechaFinal)
-  Else
-     DetalleComp = Ninguno
-  End If
- 'MsgBox Button.key
-  Select Case Button.key
-    Case "Salir":      Unload CierreEjercicio
-    Case "Procesar":   Procesar_Cierre_Ejercicio
-    Case "Grabar":     Grabar_Cierre_Ejercicio
-    Case "Actualizar": Actualizar_Cierre_Ejercicio
-    Case "Imprimir":   Imprimir
-  End Select
-End Sub

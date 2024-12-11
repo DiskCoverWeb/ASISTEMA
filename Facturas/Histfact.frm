@@ -4,7 +4,7 @@ Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{65E121D4-0C60-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSChrt20.ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "Mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.Form HistorialFacturas 
    Caption         =   "RESUMEN HISTORICO DE FACTURAS/NOTAS DE VENTA"
    ClientHeight    =   10050
@@ -4379,7 +4379,7 @@ Dim Detalle_Abono As String
     End If
     If TipoEnvio = "FA" Then
         sSQL = "SELECT C.Cliente, F.CodigoC, F.Estado_SRI, F.TC, F.Fecha, F.Fecha_V, F.Serie, F.Factura, F.Hora_Aut, F.Fecha_Aut, F.Autorizacion, " _
-             & "F.Saldo_MN, C.Email, C.Email2, C.EmailR, C.CI_RUC " _
+             & "F.Saldo_MN, C.Email, C.Email2, C.EmailR, C.CI_RUC, C.Grupo " _
              & "FROM Facturas As F, Clientes As C " _
              & "WHERE F.Item = '" & NumEmpresa & "' " _
              & "AND F.Periodo = '" & Periodo_Contable & "' " _
@@ -4390,14 +4390,14 @@ Dim Detalle_Abono As String
         If Cta_Aux_Mail <> Ninguno Then sSQL = sSQL & "AND F.X = '.' "
     Else
         Opcion = 14
-      sSQL = "SELECT F.TP, F.Fecha, C.Cliente, F.Serie, F.Factura, F.Recibo_No, F.Banco, F.Cheque, F.Abono, F.Mes, F.Comprobante, F.Autorizacion, F.Serie_NC, " _
-           & "Secuencial_NC, F.Autorizacion_NC, C.Representante As Razon_Social, C.Grupo, C.Direccion As Ubicacion, F.Cta, F.Cta_CxP, F.CodigoC, F.Hora_Aut, " _
-           & "F.Fecha_Aut, C.CI_RUC, C.Email, C.Email2, C.EmailR " _
-           & "FROM Trans_Abonos As F, Clientes C " _
-           & "WHERE F.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-           & "AND F.Item = '" & NumEmpresa & "' " _
-           & "AND F.Periodo = '" & Periodo_Contable & "' " _
-           & Tipo_De_Consulta(True) & " "
+        sSQL = "SELECT F.TP, F.Fecha, C.Cliente, F.Serie, F.Factura, F.Recibo_No, F.Banco, F.Cheque, F.Abono, F.Mes, F.Comprobante, F.Autorizacion, " _
+             & "F.Serie_NC, Secuencial_NC, F.Autorizacion_NC, C.Representante As Razon_Social, C.Grupo, C.Direccion As Ubicacion, F.Cta, F.Cta_CxP, " _
+             & "F.CodigoC, F.Hora_Aut, F.Fecha_Aut, C.CI_RUC, C.Email, C.Email2, C.EmailR " _
+             & "FROM Trans_Abonos As F, Clientes C " _
+             & "WHERE F.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
+             & "AND F.Item = '" & NumEmpresa & "' " _
+             & "AND F.Periodo = '" & Periodo_Contable & "' " _
+             & Tipo_De_Consulta(True) & " "
         If DocDesde > 0 And DocHasta > 0 And DocDesde <= DocHasta Then sSQL = sSQL & "AND F.Factura BETWEEN " & DocDesde & " and " & DocHasta & " "
         If Cta_Aux_Mail <> Ninguno Then sSQL = sSQL & "AND F.Cta = '" & Cta_Aux_Mail & "' "
     End If
@@ -4425,6 +4425,7 @@ Dim Detalle_Abono As String
                Else
                   FA.Estado_SRI = "OK"
                   FA.TC = .fields("TP")
+                  FA.DireccionC = .fields("Ubicacion")
                End If
                FA.Fecha = .fields("Fecha")
                FA.Serie = .fields("Serie")
@@ -4454,6 +4455,7 @@ Dim Detalle_Abono As String
                   If Len(.fields("Banco")) > 1 Then Detalle_Abono = Detalle_Abono & .fields("Banco") & ", "
                   If Len(.fields("Cheque")) > 1 Then Detalle_Abono = Detalle_Abono & .fields("Cheque") & ", "
                   html_Detalle_adicional = "<tr>" _
+                                         & "<td>vSerie_Documento_FA</td>" _
                                          & "<td>" & FA.Fecha & "</td>" _
                                          & "<td>" & Detalle_Abono & "</td>" _
                                          & "<td class='row text-right'>" & Format(.fields("Abono"), "#,##0.00") & "</td>" _
@@ -4461,13 +4463,13 @@ Dim Detalle_Abono As String
                   
                   If FA.Cliente <> Ninguno And FA.Cliente <> FA.Razon_Social Then
                      html_Informacion_adicional = ""
-                     If Len(FA.Cliente) > 1 Then html_Informacion_adicional = html_Informacion_adicional & "<strong>Beneficiario:</strong>" & FA.Cliente & "<br>"
-                     If Len(FA.CI_RUC) > 1 Then html_Informacion_adicional = html_Informacion_adicional & "<strong>Codigo:</strong>" & FA.CI_RUC & "<br>"
-                     If Len(FA.Curso) > 1 Then html_Informacion_adicional = html_Informacion_adicional & "<strong>Ubicacion:</strong>" & FA.Grupo & " - " & FA.Curso & "<br>"
-                     If Len(FA.DireccionC) > 1 Then html_Informacion_adicional = html_Informacion_adicional & "<strong>Direccion:</strong>" & FA.DireccionC & "<br>"
-                     If Len(FA.TelefonoC) > 1 Then Insertar_Campo_XML html_Informacion_adicional = html_Informacion_adicional & "<strong>Telefono:</strong>" & FA.TelefonoC & "<br>"
-                     If EsUnEmail(FA.EmailC) Then html_Informacion_adicional = html_Informacion_adicional & "<strong>Email:</strong>" & FA.EmailC & "<br>"
-                     If EsUnEmail(FA.EmailR) And InStr(FA.EmailC, FA.EmailR) = 0 Then html_Informacion_adicional = html_Informacion_adicional & "<strong>Email 2:</strong>" & FA.EmailR & "<br>"
+                     If Len(FA.Cliente) > 1 Then html_Informacion_adicional = html_Informacion_adicional & "<a class='col-6'><strong>Beneficiario:</strong> " & FA.Cliente & "</a>"
+                     If Len(FA.CI_RUC) > 1 Then html_Informacion_adicional = html_Informacion_adicional & "<a class='col-6'><strong>Codigo:</strong> " & FA.CI_RUC & "</a>"
+                     If Len(FA.Curso) > 1 Then html_Informacion_adicional = html_Informacion_adicional & "<a class='col-6'><strong>Ubicacion:</strong> " & FA.Grupo & " - " & FA.Curso & "</a>"
+                     If Len(FA.DireccionC) > 1 Then html_Informacion_adicional = html_Informacion_adicional & "<a class='col-6'><strong>Direccion:</strong> " & FA.DireccionC & "</a>"
+                     If Len(FA.TelefonoC) > 1 Then Insertar_Campo_XML html_Informacion_adicional = html_Informacion_adicional & "<a class='col-6'><strong>Telefono:</strong> " & FA.TelefonoC & "</a>"
+                     If EsUnEmail(FA.EmailC) Then html_Informacion_adicional = html_Informacion_adicional & "<a class='col-6'><strong>Email:</strong> " & FA.EmailC & "</a>"
+                     If EsUnEmail(FA.EmailR) And InStr(FA.EmailC, FA.EmailR) = 0 Then html_Informacion_adicional = html_Informacion_adicional & "<a class='col-6'><strong>Email 2:</strong> " & FA.EmailR & "</a>"
                      If html_Informacion_adicional <> "" Then html_Informacion_adicional = "<strong>INFORMACION ADICIONAL:</strong><br>" & html_Informacion_adicional
                   Else
                      html_Informacion_adicional = ""

@@ -239,6 +239,7 @@ Type CtasAsiento
       Razon_Social     As String
       RUC_CI           As String 'Clientes Matriculas
       TB               As String
+      TR               As String
       DireccionC       As String
       DireccionS       As String
       CiudadC          As String
@@ -265,6 +266,7 @@ Type CtasAsiento
       Declaracion      As String
       SubCta           As String
       Hora             As String
+      Hora_R           As String
       Hora_FA          As String
       Hora_NC          As String
       Hora_GR          As String
@@ -286,6 +288,7 @@ Type CtasAsiento
       ClaveAcceso_LC   As String
       Fecha            As String
       Fecha_C          As String
+      Fecha_R          As String
       Fecha_V          As String
       Fecha_NC         As String
       Fecha_Aut        As String

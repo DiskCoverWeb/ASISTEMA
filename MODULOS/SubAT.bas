@@ -2,7 +2,8 @@ Attribute VB_Name = "SubATSRI"
 Option Explicit
 
 Global CodPorIce, CodPorIva, CodRetBien, CodRetServ As String
-
+Dim LstStatud As ListBox
+Dim LstVwFTP As ListView
 Dim DocumentoXML As MSXML2.DOMDocument30
 
 Public Function CampoXML(Campo_XML As String, Valor_XML As Variant, Optional Decimales As Byte) As String
@@ -460,12 +461,14 @@ Dim posPuntoComa As Byte
    TMail.TipoDeEnvio = "CE"
    TMail.ListaMail = 255
    TMail.Destinatario = TFA.Cliente
-   TMail.MensajeHTML = ""
+   TMail.MensajeHTML = Leer_Archivo_Texto(RutaSistema & "\JAVASCRIPT\f_envio_ce.html")
    TMail.Adjunto = ""
    Select Case Tipo_Documento
      Case "FA"
           SRI_Generar_PDF_FA TFA, False
           SRI_Generar_XML_Firmado TFA.ClaveAcceso
+          TFA.Hora_R = ""
+          TFA.Autorizacion_R = ""
      Case "NC"
           SRI_Generar_PDF_NC TFA, False
           SRI_Generar_XML_Firmado TFA.ClaveAcceso_LC
@@ -490,51 +493,31 @@ Dim posPuntoComa As Byte
       If InStr(TFA.PDF_ClaveAcceso, "_No_") = 0 Then RutaXML = RutaSysBases & "\TEMP\" & TFA.PDF_ClaveAcceso & ".xml"
    End If
    If MidStrg(TFA.ClaveAcceso, 9, 2) = "07" Then
-      TMail.Mensaje = "Cliente: " & TFA.Cliente & vbCrLf _
-                    & "Clave de Acceso: " & vbCrLf & TFA.ClaveAcceso & vbCrLf _
-                    & "Hora de Generacion: " & SRI_Autorizacion.Hora_Autorizacion & vbCrLf _
-                    & "Emision: " & TFA.Fecha & vbCrLf _
-                    & "Vencimiento: " & SRI_Autorizacion.Fecha_Autorizacion & vbCrLf _
-                    & "Autorizacion: " & vbCrLf & SRI_Autorizacion.Autorizacion & vbCrLf _
-                    & "Retencion No. " & TFA.Serie_R & "-" & Format$(TFA.Retencion, "000000000") & vbCrLf _
-                    & "Factura No. " & TFA.Serie & "-" & Format$(TFA.Factura, "000000000") & vbCrLf
+      TFA.Hora_R = SRI_Autorizacion.Hora_Autorizacion
+      TFA.Autorizacion_R = SRI_Autorizacion.Autorizacion
+
       TMail.Asunto = TFA.Cliente & ", Retencion No. " & TFA.Serie_R & "-" & Format$(TFA.Retencion, "000000000")
    ElseIf MidStrg(TFA.ClaveAcceso, 9, 2) = "03" Then
-      TMail.Mensaje = "Cliente: " & TFA.Cliente & vbCrLf _
-                    & "Clave de Acceso: " & vbCrLf & TFA.ClaveAcceso_LC & vbCrLf _
-                    & "Hora de Generacion: " & SRI_Autorizacion.Hora_Autorizacion & vbCrLf _
-                    & "Emision: " & TFA.Fecha & vbCrLf _
-                    & "Vencimiento: " & SRI_Autorizacion.Fecha_Autorizacion & vbCrLf _
-                    & "Autorizacion: " & vbCrLf & SRI_Autorizacion.Autorizacion & vbCrLf _
-                    & "Liquidacion de Compras No. " & TFA.Serie_LC & "-" & Format$(TFA.Factura, "000000000")
+      TFA.Autorizacion = SRI_Autorizacion.Fecha_Autorizacion
+      TFA.Hora = SRI_Autorizacion.Hora_Autorizacion
+      'TFA.Fecha = SRI_Autorizacion.Fecha_Autorizacion
+      TFA.Serie = TFA.Serie_LC
+      TFA.TC = "LC"
+      TFA.TR = ""
+      TFA.Retencion = 0
+      TFA.Serie_R = ""
+''      TMail.Mensaje = "Cliente: " & TFA.Cliente & vbCrLf _
+''                    & "Clave de Acceso: " & vbCrLf & TFA.ClaveAcceso_LC & vbCrLf _
+''                    & "Hora de Generacion: " & SRI_Autorizacion.Hora_Autorizacion & vbCrLf _
+''                    & "Emision: " & TFA.Fecha & vbCrLf _
+''                    & "Vencimiento: " & SRI_Autorizacion.Fecha_Autorizacion & vbCrLf _
+''                    & "Autorizacion: " & vbCrLf & SRI_Autorizacion.Autorizacion & vbCrLf _
+''                    & "Liquidacion de Compras No. " & TFA.Serie_LC & "-" & Format$(TFA.Factura, "000000000")
       TMail.Asunto = TFA.Cliente & ", Liquidacion de Compras No. " & TFA.Serie_LC & "-" & Format$(TFA.Factura, "000000000")
    Else
-      TMail.Mensaje = "Cliente: " & TFA.Razon_Social & vbCrLf _
-                    & "Fecha Emision: " & TFA.Fecha & vbCrLf _
-                    & "C.I./R.U.C.: " & TFA.RUC_CI & vbCrLf _
-                    & "Documento " & TFA.TC & " No. " & TFA.Serie & "-" & Format$(TFA.Factura, "000000000") & vbCrLf _
-                    & "Vencimiento: " & TFA.Fecha_V & vbCrLf _
-                    & "Fecha Autorizado: " & TFA.Fecha_Aut & vbCrLf _
-                    & "Clave de Acceso: " & TFA.ClaveAcceso & vbCrLf
-       If TFA.Cliente <> Ninguno And TFA.Razon_Social <> TFA.Cliente Then
-          If Len(TFA.Cliente) > 1 Then TMail.Mensaje = TMail.Mensaje & "Beneficiario: " & TFA.Cliente & vbCrLf
-          If Len(TFA.CI_RUC) > 1 Then TMail.Mensaje = TMail.Mensaje & "Codigo: " & TFA.CI_RUC & vbCrLf
-          If Len(TFA.Curso) > 1 And Len(TFA.Grupo) > 1 Then TMail.Mensaje = TMail.Mensaje & "Ubicacion: " & TFA.Grupo & "-" & TFA.Curso & vbCrLf
-       End If
-       If Len(TFA.DireccionC) > 1 Then TMail.Mensaje = TMail.Mensaje & "Direccion: " & TFA.DireccionC & vbCrLf
-       If Len(TFA.TelefonoC) > 1 Then TMail.Mensaje = TMail.Mensaje & "Telefono: " & TFA.TelefonoC & vbCrLf
-'''       If EsUnEmail(TFA.EmailC) Then TMail.Mensaje = TMail.Mensaje & "Email Beneficiario: " & TFA.EmailC & vbCrLf
-'''       If EsUnEmail(TFA.EmailR) Then TMail.Mensaje = TMail.Mensaje & "Email Destinatario: " & TFA.EmailR & vbCrLf
-       If Len(TFA.Contacto) > 1 Then TMail.Mensaje = TMail.Mensaje & "Referencia: " & TFA.Contacto & vbCrLf
-       If Val(TFA.Orden_Compra) > 0 Then TMail.Mensaje = TMail.Mensaje & "Orden Compra: " & TFA.Orden_Compra & vbCrLf
-       If Len(TFA.Observacion) > 1 Then TMail.Mensaje = TMail.Mensaje & "Observacion: " & TFA.Observacion & vbCrLf
-       If Len(TFA.Nota) > 1 Then TMail.Mensaje = TMail.Mensaje & "Nota: " & TFA.Nota & vbCrLf
-
-       If Tipo_Documento = "AB" Then
-          TMail.Mensaje = TMail.Mensaje & vbCrLf & "SU PAGO FUE REGISTRADO CON EXITO" & vbCrLf & "EL " & FechaStrg(FA.Fecha_C) & vbCrLf & FA.Nota & vbCrLf
-       Else
-          TMail.Mensaje = TMail.Mensaje & "Hora de Generacion: " & TFA.Hora_FA & vbCrLf
-       End If
+      TFA.TR = ""
+      TFA.Fecha_R = ""
+      TFA.Retencion = 0
       TMail.Asunto = TFA.Razon_Social & ", Documento " & TFA.TC & " No. " & TFA.Serie & "-" & Format$(TFA.Factura, "000000000")
    End If
   'Datos del destinatario de mails
@@ -543,231 +526,256 @@ Dim posPuntoComa As Byte
    Insertar_Mail TMail.para, TFA.EmailC2
    Insertar_Mail TMail.para, TFA.EmailR
   
-   TMail.Mensaje = TMail.Mensaje & "Email(s) Destinatario(s):" & vbCrLf & Replace(TMail.para, ";", "; ") & vbCrLf
+'''   TMail.Mensaje = TMail.Mensaje & "Email(s) Destinatario(s):" & vbCrLf & Replace(TMail.para, ";", "; ") & vbCrLf
                  
-   'TMail.MensajeHTML = Leer_Archivo_Texto(RutaSistema & "\FONDOS\EmailRolPagos.html")
-'''   = "<html>" _
-'''                     & "<body>" _
-'''                     & "<font face='calibri'><img src='https://erp.diskcoversystem.com/img/jpg/logo.jpg'><br><Br><font face='calibri'>" _
-'''                     & "Thank you for contacting the Bank of America Service Desk. We're committed to providing seamless support in the moments that matter." _
-'''                     & "<br><br>We heard your concerns with Skype for Business audio/video, and recommend using approved Skype for Business devices to resolve the issue." _
-'''                     & "<br><br><h4><font color='red'>What do I need to do?</font></h4>" _
-'''                     & "<div style='background-color: #FFF8DC;'>" _
-'''                     & "1. Visit the <a href='http://u.go/pchk'>Skype for Business Peripheral Checker</a> & complete the form.<br>" _
-'''                     & "<img src='https://erp.diskcoversystem.com/img/jpg/logo.jpg'><br>" _
-'''                     & "4. Once approved, your new device(s) will be shipped to you. To get started, visit the <a href='http://u.go/tIxvB5'>Skype for Business page</a> and select <i>Setup your equipment</i> tab." _
-'''                     & "</div>" _
-'''                     & "<br><br>" _
-'''                     & "<br>" _
-'''                     & "If you still encounter Skype for Business audio/visual issues with your new device(s), please <a href='http://u.go/7I76vm'>submit a web ticket</a> and one of our expert Bank of America Service Desk employees will reach out to you." _
-'''                     & "Thank you," _
-'''                     & "<br>" _
-'''                     & "Premium Service Desk" _
-'''                     & "<br><Br>" _
-'''                     & "<img src='https://erp.diskcoversystem.com/img/jpg/logo.jpg'>" _
-'''                     & "</font>" _
-'''                     & "</body>" _
-'''                     & "</html>"
-  'Enviamos lista de mails
-  'MsgBox RutaPDF & "; " & RutaXML
    If Email_CE_Copia Then
       TMail.Credito_No = "X" & Format(TFA.Factura, "000000000")
       Insertar_Mail TMail.para, EmailProcesos
    End If
    If Existe_File(RutaPDF) Then TMail.Adjunto = RutaPDF & "; "
    If Existe_File(RutaXML) Then TMail.Adjunto = TMail.Adjunto & RutaXML
-  'MsgBox TMail.para
+   
    FEnviarCorreos.Show vbModal
    If Existe_File(RutaPDF) Then Kill RutaPDF
    If Existe_File(RutaXML) Then Kill RutaXML
    TMail.Volver_Envial = False
 End Sub
 
-Public Function SRI_Generar_XML(ClaveDeAcceso As String, _
-                                EstadoDelSRI As String) As Tipo_Estado_SRI
-Dim obj As New Cls_FirmarXML
-Dim ObjEnviar As New WS_Recepcion
-Dim ObjAutori As New WS_Autorizacion
-Dim URLRecepcion As String
-Dim URLAutorizacion As String
-Dim Resultado As Boolean
-Dim RutaCertificado As String
-Dim ClaveCertificado As String
-Dim RutaXML As String
-Dim RutaXMLFirmado As String
-Dim RutaXMLAutorizado As String
-Dim RutaXMLRechazado As String
-Dim MensajeError As String
-Dim ArrayRecepcion() As String
-Dim ArrayAutorizacion() As String
-Dim Tiempo_Espera As Integer
-Dim Tiempo_SRI As Integer
-Dim EsperaEspera As Integer
-Dim SRI_Aut As Tipo_Estado_SRI
-Dim Intento_Enviar As Byte
-Dim Intento_Autorizar As Byte
-
- RatonReloj
- FConexion.Show
- FConexion.TxtConexion = "CONECTANDO AL SRI..." & vbCrLf
- 
- For Tiempo_Espera = 0 To 25
-     FConexion.TxtConexion.Refresh
- Next Tiempo_Espera
-
- FConexion.TxtConexion = FConexion.TxtConexion & "Leer Certificado del Documento: " & MidStrg(ClaveDeAcceso, 25, 15) & vbCrLf
- FConexion.TxtConexion.Refresh
- Intento_Enviar = 0
- Intento_Autorizar = 0
- EsperaEspera = 3000
-
- Ambiente = Leer_Campo_Empresa("Ambiente")
- ContEspec = Leer_Campo_Empresa("Codigo_Contribuyente_Especial")
- Obligado_Conta = Leer_Campo_Empresa("Obligado_Conta")
- 
-'Ruta del Certificado para Firmar el documento
- RutaCertificado = RutaSistema & "\CERTIFIC\" & Leer_Campo_Empresa("Ruta_Certificado")
- ClaveCertificado = Leer_Campo_Empresa("Clave_Certificado")
- 
- FConexion.TxtConexion = FConexion.TxtConexion & "Conectandose al S.R.I." & vbCrLf
- FConexion.TxtConexion.Refresh
- 
-'Pagina de Conexion con el SRI
- URLRecepcion = Leer_Campo_Empresa("Web_SRI_Recepcion")
- URLAutorizacion = Leer_Campo_Empresa("Web_SRI_Autorizado")
- 
- RutaXML = RutaDocumentos & "\Comprobantes Generados\" & ClaveDeAcceso & ".xml"
- RutaXMLFirmado = RutaDocumentos & "\Comprobantes Firmados\" & ClaveDeAcceso & ".xml"
- RutaXMLAutorizado = RutaDocumentos & "\Comprobantes Autorizados\" & ClaveDeAcceso & ".xml"
- RutaXMLRechazado = RutaDocumentos & "\Comprobantes no Autorizados\" & ClaveDeAcceso & ".xml"
- 
- SRI_Aut = SRI_Leer_XML_Autorizado(RutaXMLAutorizado, RutaXMLRechazado)
- 
-With SRI_Aut
-    'MsgBox .Estado_SRI & vbCrLf & .Error_SRI
-     RatonReloj
-     If .Estado_SRI = "OK" Then GoTo Fin_Autorizacion:
-     FConexion.TxtConexion = FConexion.TxtConexion & "Determinando Carpetas de Conexion" & vbCrLf
-     FConexion.TxtConexion.Refresh
-    .Clave_De_Acceso = ClaveDeAcceso
-    .Estado_SRI = EstadoDelSRI
-    .Documento_XML = ""
-    .Error_SRI = ""
-     If Dir$(RutaXML) = "" Then
-       .Estado_SRI = "CNG"
-       .Error_SRI = "Error: Comprobante no generado"
-        GoTo Fin_Autorizacion
-     End If
-     If Dir$(RutaXMLFirmado) = "" Then .Estado_SRI = "CNF"
-     
-    'MsgBox "Primer face: " & .Estado_SRI
-     Select Case .Estado_SRI
-       Case "CNA", "CNF": GoTo Volver_Firmar
-       Case "ESC": GoTo Volver_Autorizar
-       Case "CF", "CR", "ESI": GoTo Volver_Enviar
-     End Select
-Volver_Firmar:
-    'Firmamos el documento
-     RatonReloj
-     FConexion.TxtConexion = FConexion.TxtConexion & "Firmando el Documento: " & MidStrg(ClaveDeAcceso, 25, 15) & vbCrLf
-     FConexion.TxtConexion.Refresh
-    'MsgBox "Firmar: " & RutaXML & vbCrLf & vbCrLf & RutaXMLFirmado & vbCrLf & vbCrLf & RutaCertificado & vbCrLf & vbCrLf & ClaveCertificado
-    
-     Resultado = obj.FirmarXML(RutaCertificado, ClaveCertificado, RutaXML, RutaXMLFirmado, MensajeError)
-    'MsgBox "Firmar: " & MensajeError
-     If Resultado Then
-       .Estado_SRI = "CF"
-       .Documento_XML = Leer_Archivo_Texto(RutaXMLFirmado)
-Volver_Enviar:
-        RatonReloj
-        FConexion.TxtConexion = FConexion.TxtConexion & "Enviando el Documento al S.R.I.: " & MidStrg(ClaveDeAcceso, 25, 15) & vbCrLf
-        FConexion.TxtConexion.Refresh
-       'MsgBox URLRecepcion & vbCrLf & RutaXMLFirmado & vbCrLf & RutaXMLRechazado
-        ArrayRecepcion = ObjEnviar.FF_EnviaXML_SRI(RutaXMLFirmado, URLRecepcion, RutaXMLRechazado)
-        
-        Intento_Enviar = Intento_Enviar + 1
-       .Error_SRI = "Error al enviar: "
-        For ContadorEstados = 0 To 4
-            If Len(ArrayRecepcion(ContadorEstados)) > 1 Then .Error_SRI = .Error_SRI & ArrayRecepcion(ContadorEstados) & "; "
-        Next ContadorEstados
-        Sleep EsperaEspera
-        If ArrayRecepcion(1) = "43" Or ArrayRecepcion(1) = "45" Then GoTo Volver_Obtener
-        If ArrayRecepcion(0) = "RECIBIDA" Then
-          .Estado_SRI = "CR"
-          .Documento_XML = Leer_Archivo_Texto(RutaXMLFirmado)
-          
-Volver_Autorizar:
-           RatonReloj
-           FConexion.TxtConexion = FConexion.TxtConexion & "Cargando Documento Firmado: " & MidStrg(ClaveDeAcceso, 25, 15) & vbCrLf
-           FConexion.TxtConexion.Refresh
-          
-Volver_Obtener:
-          'Tiempo de Espera antes de averiguar al SRI de la autorizacion
-           For Tiempo_Espera = 0 To 3
-               Sleep EsperaEspera
-               ArrayAutorizacion = ObjAutori.FF_ObtieneNumAutorizado(URLAutorizacion, .Clave_De_Acceso, RutaXMLAutorizado, RutaXMLRechazado)
-               If ArrayAutorizacion(0) = "AUTORIZADO" Then Tiempo_Espera = 3
-           Next Tiempo_Espera
-           Intento_Autorizar = Intento_Autorizar + 1
-           If ArrayAutorizacion(0) = "AUTORIZADO" Then
-             'MsgBox "Ok Documento Firmado y Autorizado"
-              FConexion.TxtConexion = FConexion.TxtConexion & "Extrayendo Documentos Autorizado: " & MidStrg(ClaveDeAcceso, 25, 15) & vbCrLf
-              FConexion.TxtConexion.Refresh
-              RatonReloj
-             .Estado_SRI = "OK"
-             .Error_SRI = "OK"
-             .Autorizacion = ArrayAutorizacion(1)
-             .Fecha_Autorizacion = Format$(MidStrg(ArrayAutorizacion(2), 1, 10), "dd/MM/yyyy")
-             .Hora_Autorizacion = MidStrg(ArrayAutorizacion(2), 12, 8)
-             .Documento_XML = Leer_Archivo_Texto(RutaXMLAutorizado)
-              SRI_Actualizar_Documento_XML .Clave_De_Acceso
-              FConexion.TxtConexion = FConexion.TxtConexion & "Grabando en la base el Documento: " & MidStrg(ClaveDeAcceso, 25, 15) & vbCrLf
-              FConexion.TxtConexion.Refresh
-           Else
-              FConexion.TxtConexion = FConexion.TxtConexion & "Error: CNA" & vbCrLf
-              FConexion.TxtConexion.Refresh
-             .Estado_SRI = "CNA"
-             .Error_SRI = "Error al Autorizar: "
-              For ContadorEstados = 0 To 4
-                  If Len(ArrayAutorizacion(ContadorEstados)) > 1 Then .Error_SRI = .Error_SRI & ArrayAutorizacion(ContadorEstados) & ", "
-              Next ContadorEstados
-              If Intento_Autorizar < 3 Then GoTo Volver_Autorizar
-           End If
-        ElseIf ArrayRecepcion(0) = "ERROR" Then
-           FConexion.TxtConexion = FConexion.TxtConexion & "Error: ESI"
-           FConexion.TxtConexion.Refresh
-          .Estado_SRI = "ESI"
-          .Error_SRI = " Error al enviar: "
-           For ContadorEstados = 0 To 4
-               If Len(ArrayRecepcion(ContadorEstados)) > 1 Then .Error_SRI = .Error_SRI & ArrayRecepcion(ContadorEstados) & ", "
-           Next ContadorEstados
-           If Intento_Enviar < 3 Then GoTo Volver_Enviar
-        Else
-           FConexion.TxtConexion = FConexion.TxtConexion & "Error: ESC" & vbCrLf
-           FConexion.TxtConexion.Refresh
-          .Estado_SRI = "ESC"
-          .Error_SRI = "Error al enviar: "
-           For ContadorEstados = 0 To 4
-               If Len(ArrayRecepcion(ContadorEstados)) > 1 Then .Error_SRI = .Error_SRI & ArrayRecepcion(ContadorEstados) & "; "
-           Next ContadorEstados
-           If Intento_Enviar < 3 Then GoTo Volver_Enviar
-        End If
-        'MsgBox "...."
-     Else
-        FConexion.TxtConexion = FConexion.TxtConexion & "Error: CNF" & vbCrLf
-        FConexion.TxtConexion.Refresh
-       .Estado_SRI = "CNF"
-       .Error_SRI = MensajeError
-       .Documento_XML = MensajeError
-     End If
-    .Error_SRI = TrimStrg(.Error_SRI)
-End With
-Fin_Autorizacion:
-Progreso_Final
-RatonNormal
-Unload FConexion
-SRI_Generar_XML = SRI_Aut     'Error_XML_SRI
-End Function
+'''Public Function SRI_Generar_XML(ClaveDeAcceso As String, _
+'''                                EstadoDelSRI As String) As Tipo_Estado_SRI
+'''Dim obj As New Cls_FirmarXML
+'''Dim ObjEnviar As New WS_Recepcion
+'''Dim ObjAutori As New WS_Autorizacion
+'''Dim URLRecepcion As String
+'''Dim URLAutorizacion As String
+'''Dim Resultado As Boolean
+'''
+'''Dim ClaveCertificado As String
+'''Dim RutaXML As String
+'''Dim RutaXMLFirmado As String
+'''Dim RutaXMLAutorizado As String
+'''Dim RutaXMLRechazado As String
+'''Dim MensajeError As String
+'''Dim ArrayRecepcion() As String
+'''Dim ArrayAutorizacion() As String
+'''Dim Tiempo_Espera As Integer
+'''Dim Tiempo_SRI As Integer
+'''Dim EsperaEspera As Integer
+'''Dim SRI_Aut As Tipo_Estado_SRI
+'''Dim Intento_Enviar As Byte
+'''Dim Intento_Autorizar As Byte
+'''
+''' RatonReloj
+''' FConexion.Show
+'''
+''' Intento_Enviar = 0
+''' Intento_Autorizar = 0
+''' EsperaEspera = 3000
+'''
+''' FConexion.TxtConexion = "CONECTANDO AL SRI..."
+''' FConexion.TxtConexion.Refresh
+'''
+''' Sleep EsperaEspera
+'''
+''' Set ftp = New cFTP
+'''
+''' ReDim ArrayRecepcion(0 To 4) As String
+''' ReDim ArrayAutorizacion(0 To 4) As String
+'''
+''' For ContadorEstados = 0 To 4
+'''     ArrayRecepcion(ContadorEstados) = ""
+'''     ArrayAutorizacion(ContadorEstados) = ""
+''' Next ContadorEstados
+'''
+''' FConexion.TxtConexion = FConexion.TxtConexion & "Leer Certificado del Documento: " & MidStrg(ClaveDeAcceso, 25, 15) & vbCrLf
+''' FConexion.TxtConexion.Refresh
+'''
+''' Ambiente = Leer_Campo_Empresa("Ambiente")
+''' ContEspec = Leer_Campo_Empresa("Codigo_Contribuyente_Especial")
+''' Obligado_Conta = Leer_Campo_Empresa("Obligado_Conta")
+'''
+''''Ruta del Certificado para Firmar el documento
+''' RutaCertificado = RutaSistema & "\CERTIFIC\" & Leer_Campo_Empresa("Ruta_Certificado")
+''' ClaveCertificado = Leer_Campo_Empresa("Clave_Certificado")
+'''
+''' FConexion.TxtConexion = FConexion.TxtConexion & "Conectandose al S.R.I." & vbCrLf
+''' FConexion.TxtConexion.Refresh
+'''
+''''Pagina de Conexion con el SRI
+''' URLRecepcion = Leer_Campo_Empresa("Web_SRI_Recepcion")
+''' URLAutorizacion = Leer_Campo_Empresa("Web_SRI_Autorizado")
+'''
+''' RutaXML = RutaDocumentos & "\Comprobantes Generados\" & ClaveDeAcceso & ".xml"
+''' RutaXMLFirmado = RutaDocumentos & "\Comprobantes Firmados\" & ClaveDeAcceso & ".xml"
+''' RutaXMLAutorizado = RutaDocumentos & "\Comprobantes Autorizados\" & ClaveDeAcceso & ".xml"
+''' RutaXMLRechazado = RutaDocumentos & "\Comprobantes no Autorizados\" & ClaveDeAcceso & ".xml"
+'''
+''' SRI_Aut = SRI_Leer_XML_Autorizado(RutaXMLAutorizado, RutaXMLRechazado)
+'''
+'''With SRI_Aut
+'''    'MsgBox .Estado_SRI & vbCrLf & .Error_SRI
+'''     RatonReloj
+'''     If .Estado_SRI = "OK" Then GoTo Fin_Autorizacion:
+'''     FConexion.TxtConexion = FConexion.TxtConexion & "Determinando Carpetas de Conexion" & vbCrLf
+'''     FConexion.TxtConexion.Refresh
+'''    .Clave_De_Acceso = ClaveDeAcceso
+'''    .Estado_SRI = EstadoDelSRI
+'''    .Documento_XML = ""
+'''    .Error_SRI = ""
+'''     If Dir$(RutaXML) = "" Then
+'''       .Estado_SRI = "CNG"
+'''       .Error_SRI = "Error: Comprobante no generado"
+'''        GoTo Fin_Autorizacion
+'''     End If
+'''     If Dir$(RutaXMLFirmado) = "" Then .Estado_SRI = "CNF"
+'''
+'''    'MsgBox "Primer face: " & .Estado_SRI
+'''     Select Case .Estado_SRI
+'''       Case "CNA", "CNF": GoTo Volver_Firmar
+'''       Case "ESC": GoTo Volver_Autorizar
+'''       Case "CF", "CR", "ESI": GoTo Volver_Enviar
+'''     End Select
+'''Volver_Firmar:
+'''    'Firmamos el documento
+'''     RatonReloj
+'''     FConexion.TxtConexion = FConexion.TxtConexion & "Firmando el Documento: " & MidStrg(ClaveDeAcceso, 25, 15) & vbCrLf
+'''     FConexion.TxtConexion.Refresh
+'''    'MsgBox "Firmar: " & RutaXML & vbCrLf & vbCrLf & RutaXMLFirmado & vbCrLf & vbCrLf & RutaCertificado & vbCrLf & vbCrLf & ClaveCertificado
+'''
+'''     Resultado = obj.FirmarXML(RutaCertificado, ClaveCertificado, RutaXML, RutaXMLFirmado, MensajeError)
+'''    'MsgBox "Firmar: " & MensajeError
+'''     If Resultado Then
+'''        ftp.Inicializar MDIFormulario
+'''        ftp.Password = ftpPwr  'Le establecemos la contraseña de la cuenta Ftp
+'''        ftp.Usuario = ftpUse   'Le establecemos el nombre de usuario de la cuenta
+'''        ftp.servidor = ftpSvr  'Establecesmo el nombre del Servidor FTP
+'''        Set ftp.ListView = LstVwFTP
+'''        ftp.ConStatus = True
+'''         'LstStatud
+'''        If ftp.ConectarFtp(LstStatud) = False Then
+'''            RatonNormal
+'''            MsgBox "No se pudo conectar"
+'''            GoTo Fin_Autorizacion
+'''        End If
+'''       'Le indicamos el ListView donde se listarán los archivos
+'''        ftp.SubirArchivo RutaXMLFirmado, "/files/ComprobantesElectronicos/" & ClaveDeAcceso & ".xml", True
+'''       'MsgBox "Archivo Subido: " & ClaveDeAcceso & ".xml" & vbCrLf & RutaXMLFirmado
+'''        Sleep EsperaEspera
+'''       .Estado_SRI = "CF"
+'''       .Documento_XML = Leer_Archivo_Texto(RutaXMLFirmado)
+'''       'MsgBox URLRecepcion & vbCrLf & RutaXMLFirmado & vbCrLf & RutaXMLRechazado
+'''       '~diskcover/
+'''       '----------------------------------------------------------------------------------------------------------------------------
+'''        URLHTTP = "https://erp.diskcoversystem.com/php/comprobantes/SRI/autorizar_sri_visual.php?AutorizarXMLOnline=true"
+'''        URLParams = "XML=" & ClaveDeAcceso & ".xml"
+'''        MensajeError = PostUrlSourceStr(URLHTTP, URLParams)
+'''        MsgBox MensajeError
+'''       '----------------------------------------------------------------------------------------------------------------------------
+'''       'Le indicamos el ListView donde se listarán los archivos
+'''        ftp.EliminarArchivo "/files/ComprobantesElectronicos/" & ClaveDeAcceso & ".xml"
+'''        ftp.Desconectar
+'''Volver_Enviar:
+'''        RatonReloj
+'''        FConexion.TxtConexion = FConexion.TxtConexion & "Enviando el Documento al S.R.I.: " & MidStrg(ClaveDeAcceso, 25, 15) & vbCrLf
+'''        FConexion.TxtConexion.Refresh
+'''        If MensajeError = "Autorizado" Then
+'''           ArrayRecepcion(0) = "RECIBIDA"
+'''           ArrayRecepcion(1) = "45"
+'''           ArrayAutorizacion(0) = "AUTORIZADO"
+'''          .Estado_SRI = "OK"
+'''          .Error_SRI = ""
+'''          .Autorizacion = ClaveDeAcceso
+'''          .Clave_De_Acceso = ClaveDeAcceso
+'''        Else
+'''          .Estado_SRI = "Err"
+'''          '.Error_SRI = "Error al enviar: "
+'''          .Error_SRI = "Error al Autorizar: " & MensajeError
+'''        End If
+'''
+'''        'ArrayRecepcion = ObjEnviar.FF_EnviaXML_SRI(RutaXMLFirmado, URLRecepcion, RutaXMLRechazado)
+'''
+'''        Intento_Enviar = Intento_Enviar + 1
+'''       '
+'''        For ContadorEstados = 0 To 4
+'''            If Len(ArrayRecepcion(ContadorEstados)) > 1 Then .Error_SRI = .Error_SRI & ArrayRecepcion(ContadorEstados) & "; "
+'''        Next ContadorEstados
+'''
+'''        If ArrayRecepcion(1) = "43" Or ArrayRecepcion(1) = "45" Then GoTo Volver_Obtener
+'''        If ArrayRecepcion(0) = "RECIBIDA" Then
+'''          .Estado_SRI = "CR"
+'''          .Documento_XML = Leer_Archivo_Texto(RutaXMLFirmado)
+'''Volver_Autorizar:
+'''           RatonReloj
+'''           FConexion.TxtConexion = FConexion.TxtConexion & "Cargando Documento Firmado: " & MidStrg(ClaveDeAcceso, 25, 15) & vbCrLf
+'''           FConexion.TxtConexion.Refresh
+'''
+'''Volver_Obtener:
+'''          'Tiempo de Espera antes de averiguar al SRI de la autorizacion
+'''           Sleep EsperaEspera
+'''           For Tiempo_Espera = 0 To 3
+'''               ArrayAutorizacion = ObjAutori.FF_ObtieneNumAutorizado(URLAutorizacion, .Clave_De_Acceso, RutaXMLAutorizado, RutaXMLRechazado)
+'''               If ArrayAutorizacion(0) = "AUTORIZADO" Then Tiempo_Espera = 3
+'''           Next Tiempo_Espera
+'''           Intento_Autorizar = Intento_Autorizar + 1
+'''           If ArrayAutorizacion(0) = "AUTORIZADO" Then
+'''             'MsgBox "Ok Documento Firmado y Autorizado"
+'''              FConexion.TxtConexion = FConexion.TxtConexion & "Extrayendo Documentos Autorizado: " & MidStrg(ClaveDeAcceso, 25, 15) & vbCrLf
+'''              FConexion.TxtConexion.Refresh
+'''              RatonReloj
+'''             .Estado_SRI = "OK"
+'''             .Error_SRI = "OK"
+'''             .Autorizacion = ArrayAutorizacion(1)
+'''             .Fecha_Autorizacion = Format$(MidStrg(ArrayAutorizacion(2), 1, 10), "dd/MM/yyyy")
+'''             .Hora_Autorizacion = MidStrg(ArrayAutorizacion(2), 12, 8)
+'''             .Documento_XML = Leer_Archivo_Texto(RutaXMLAutorizado)
+'''              SRI_Actualizar_Documento_XML .Clave_De_Acceso
+'''              FConexion.TxtConexion = FConexion.TxtConexion & "Grabando en la base el Documento: " & MidStrg(ClaveDeAcceso, 25, 15) & vbCrLf
+'''              FConexion.TxtConexion.Refresh
+'''           Else
+'''              FConexion.TxtConexion = FConexion.TxtConexion & "Error: CNA" & vbCrLf
+'''              FConexion.TxtConexion.Refresh
+'''             .Estado_SRI = "CNA"
+'''             .Error_SRI = "Error al Autorizar: "
+'''              For ContadorEstados = 0 To 4
+'''                  If Len(ArrayAutorizacion(ContadorEstados)) > 1 Then .Error_SRI = .Error_SRI & ArrayAutorizacion(ContadorEstados) & ", "
+'''              Next ContadorEstados
+'''              If Intento_Autorizar < 3 Then GoTo Volver_Autorizar
+'''           End If
+'''        ElseIf ArrayRecepcion(0) = "ERROR" Then
+'''           FConexion.TxtConexion = FConexion.TxtConexion & "Error: ESI"
+'''           FConexion.TxtConexion.Refresh
+'''          .Estado_SRI = "ESI"
+'''          .Error_SRI = " Error al enviar: "
+'''           For ContadorEstados = 0 To 4
+'''               If Len(ArrayRecepcion(ContadorEstados)) > 1 Then .Error_SRI = .Error_SRI & ArrayRecepcion(ContadorEstados) & ", "
+'''           Next ContadorEstados
+'''           If Intento_Enviar < 3 Then GoTo Volver_Enviar
+'''        Else
+'''           FConexion.TxtConexion = FConexion.TxtConexion & "Error: ESC" & vbCrLf
+'''           FConexion.TxtConexion.Refresh
+'''          .Estado_SRI = "ESC"
+'''          .Error_SRI = "Error al enviar: "
+'''           For ContadorEstados = 0 To 4
+'''               If Len(ArrayRecepcion(ContadorEstados)) > 1 Then .Error_SRI = .Error_SRI & ArrayRecepcion(ContadorEstados) & "; "
+'''           Next ContadorEstados
+'''           If Intento_Enviar < 3 Then GoTo Volver_Enviar
+'''        End If
+'''        'MsgBox "...."
+'''     Else
+'''        FConexion.TxtConexion = FConexion.TxtConexion & "Error: CNF" & vbCrLf
+'''        FConexion.TxtConexion.Refresh
+'''       .Estado_SRI = "CNF"
+'''       .Error_SRI = MensajeError
+'''       .Documento_XML = MensajeError
+'''     End If
+'''    .Error_SRI = TrimStrg(.Error_SRI)
+'''End With
+'''Fin_Autorizacion:
+'''Progreso_Final
+'''RatonNormal
+'''Unload FConexion
+'''SRI_Generar_XML = SRI_Aut     'Error_XML_SRI
+'''End Function
 
 Public Function SRI_Leer_XML_Autorizado(RutaAutorizado As String, RutaRechazado As String) As Tipo_Estado_SRI
 Dim obj As New Cls_FirmarXML
@@ -776,7 +784,7 @@ Dim ObjAutori As New WS_Autorizacion
 Dim URLRecepcion As String
 Dim URLAutorizacion As String
 Dim Resultado As Boolean
-Dim RutaCertificado As String
+
 Dim ClaveCertificado As String
 Dim MensajeError As String
 Dim ArrayRecepcion() As String
@@ -1114,7 +1122,7 @@ Dim TPosLinea As Single
                     PosLinea = PosLinea + 0.35
                     cPrint.printTexto 1.6, PosLinea, "Vendedor: " & TFA.Cod_Ejec & " - " & ULCase(TFA.Ejecutivo_Venta)
                  End If
-                 If TFA.Orden_Compra > 0 Then
+                 If Len(TFA.Orden_Compra) > 0 Then
                     If TFA.Cod_Ejec = Ninguno Then PosLinea = PosLinea + 0.35
                     cPrint.printTexto 13, PosLinea, "No. Orden de Compra: " & TFA.Orden_Compra
                  End If
@@ -1634,6 +1642,13 @@ Dim TempPosLineaAbono As Single
        PosLinea = TempPosLineaAbono
        Cadena = TrimStrg(Debo_Pagare)
        PosLinea = cPrint.printTextoMultiple(1.6, PosLinea, Cadena, 18.6)
+    End If
+    If Len(Resolucion_Retencion) > 1 Then
+      'PosLinea = TempPosLineaAbono
+       PosLinea = PosLinea + 0.35
+       cPrint.printLinea 1.5, PosLinea, 20, PosLinea, Negro
+       PosLinea = PosLinea + 0.1
+       PosLinea = cPrint.printTextoMultiple(1.6, PosLinea, Resolucion_Retencion, 18.6)
     End If
    'cPrint.printLinea 3.1, 5.5, 20, 5.5, Rojo, 2
     AdoDBDet.Close
@@ -2485,6 +2500,7 @@ Dim Documento As Long
  If Len(ClaveDeAcceso) >= 13 Then
     RutaXMLAutorizado = RutaDocumentos & "\Comprobantes Autorizados\" & ClaveDeAcceso & ".xml"
     DatosXMLA = Leer_Archivo_Texto(RutaXMLAutorizado)
+   'MsgBox DatosXMLA
     If Len(DatosXMLA) > 1 Then
        SerieF = MidStrg(ClaveDeAcceso, 25, 6)
        Documento = Val(MidStrg(ClaveDeAcceso, 31, 9))
@@ -3062,10 +3078,9 @@ Dim Autorizar_XML As Boolean
              Insertar_Campo_XML CerrarXML("comprobanteRetencion")
              
              If CFechaLong(TFA.Fecha) <= CFechaLong(Fecha_CE) Then
-                'Grabamos el comprobante XML de la Retencion
-                 RutaGeneraFile = RutaDocumentos & "\Comprobantes Generados\" & TFA.ClaveAcceso & ".xml"
-                'Copiar todo el contenido de la caja de texto
-                
+               'Grabamos el comprobante XML de la Retencion
+                RutaGeneraFile = RutaDocumentos & "\Comprobantes Generados\" & TFA.ClaveAcceso & ".xml"
+               'Copiar todo el contenido de la caja de texto
                  If GeneraXML Then
                     Clipboard.Clear
                     Clipboard.SetText TextoXML
@@ -3082,7 +3097,9 @@ Dim Autorizar_XML As Boolean
                  
                      TFA.Estado_SRI = "CG"
                     'Enviamos al SRI para que me autorice la Retencion
-                     SRI_Autorizacion = SRI_Generar_XML(TFA.ClaveAcceso, TFA.Estado_SRI)
+                     SRI_Autorizacion.Clave_De_Acceso = TFA.ClaveAcceso
+                     FAutorizaXmlSRI.Show 1
+                     'SRI_Autorizacion = SRI_Generar_XML(TFA.ClaveAcceso, TFA.Estado_SRI)
                      SRI_Actualizar_XML_Retencion SRI_Autorizacion, FA
                      RatonReloj
                      If SRI_Autorizacion.Estado_SRI = "OK" Then
@@ -3334,7 +3351,9 @@ Dim Autorizar_XML As Boolean
                  
                      TFA.Estado_SRI = "CG"
                     'Enviamos al SRI para que me autorice la Retencion
-                     SRI_Autorizacion = SRI_Generar_XML(TFA.ClaveAcceso_LC, TFA.Estado_SRI_LC)
+                     SRI_Autorizacion.Clave_De_Acceso = TFA.ClaveAcceso_LC
+                     FAutorizaXmlSRI.Show 1
+                    'SRI_Autorizacion = SRI_Generar_XML(TFA.ClaveAcceso_LC, TFA.Estado_SRI_LC)
                      SRI_Actualizar_XML_Liquidacion SRI_Autorizacion, FA
                      RatonReloj
                      If SRI_Autorizacion.Estado_SRI = "OK" Then
@@ -3738,13 +3757,13 @@ Dim SecuencialReembolo As String
                           Insertar_Campo_XML CampoXML("codigo", "2")
                           If .fields("Total_IVA") > 0 Then
                              Insertar_Campo_XML CampoXML("codigoPorcentaje", Cod_Porc_IVA)
-                             Insertar_Campo_XML CampoXML("tarifa", "12")
-                             Insertar_Campo_XML CampoXML("baseImponibleReembolso", SubTotal)
-                             Insertar_Campo_XML CampoXML("impuestoReembolso", .fields("Total_IVA"))
+                             Insertar_Campo_XML CampoXML("tarifa", Porc_IVA * 100)
+                             Insertar_Campo_XML CampoXML("baseImponibleReembolso", Format$(SubTotal, "#0.00"))
+                             Insertar_Campo_XML CampoXML("impuestoReembolso", Format$(.fields("Total_IVA"), "#0.00"))
                           Else
                              Insertar_Campo_XML CampoXML("codigoPorcentaje", "0")
                              Insertar_Campo_XML CampoXML("tarifa", "0")
-                             Insertar_Campo_XML CampoXML("baseImponibleReembolso", SubTotal)
+                             Insertar_Campo_XML CampoXML("baseImponibleReembolso", Format$(SubTotal, "#0.00"))
                              Insertar_Campo_XML CampoXML("impuestoReembolso", "0.00")
                           End If
                        Insertar_Campo_XML CerrarXML("detalleImpuesto")
@@ -3775,6 +3794,7 @@ Dim SecuencialReembolo As String
        If Val(TFA.Orden_Compra) > 0 Then Insertar_Campo_XML "<campoAdicional nombre=""ordenCompra"">" & TFA.Orden_Compra & "</campoAdicional>"
        If Len(TFA.Observacion) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Observacion"">" & TFA.Observacion & "</campoAdicional>"
        If Len(TFA.Nota) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Nota"">" & TFA.Nota & "</campoAdicional>"
+       If Len(Resolucion_Retencion) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Resolucion"">" & Resolucion_Retencion & "</campoAdicional>"
      Insertar_Campo_XML CerrarXML("infoAdicional")
     ' MsgBox MicroEmpresa
     'Fin del Archivo Xml
@@ -3808,7 +3828,9 @@ Dim SecuencialReembolo As String
 ''                TFA.ClaveAcceso = "1410202201070439419600110010020000000030704394114"
 ''                MsgBox TFA.ClaveAcceso
                '---------------------------------------------------------------------
-                SRI_Autorizacion = SRI_Generar_XML(TFA.ClaveAcceso, TFA.Estado_SRI)
+                SRI_Autorizacion.Clave_De_Acceso = TFA.ClaveAcceso
+                FAutorizaXmlSRI.Show 1
+                'SRI_Autorizacion = SRI_Generar_XML(TFA.ClaveAcceso, TFA.Estado_SRI)
                  
                 SRI_Actualizar_Autorizacion_Factura TFA, SRI_Autorizacion
                'MsgBox SRI_Autorizacion.Estado_SRI
@@ -3825,8 +3847,8 @@ Dim SecuencialReembolo As String
                       MsgBox "No se pudo realizar la conexion, Liste la Factura (" & TFA.Estado_SRI & ")"
                    Else
                       TextoImprimio = TextoImprimio _
-                                    & TFA.TC & " No. " & TFA.Serie & vbTab & TFA.Factura & vbTab _
-                                    & TFA.Cliente & vbTab & TFA.Error_SRI & vbCrLf
+                                    & TFA.TC & " No. " & TFA.Serie & "-" & Format(TFA.Factura, "000000000") & vbTab & "Beneficiario: " & TFA.Cliente & vbCrLf _
+                                    & "Clave Acceso: " & TFA.ClaveAcceso & vbCrLf & TFA.Error_SRI & vbCrLf & String(80, "-") & vbCrLf
                    End If
                 End If
              End If
@@ -4098,7 +4120,9 @@ Dim Autorizar_XML As Boolean
              DocumentoXML.save (RutaGeneraFile)
              
              TFA.Estado_SRI_GR = "CG"
-             SRI_Autorizacion = SRI_Generar_XML(TFA.ClaveAcceso_GR, SRI_Autorizacion.Estado_SRI)
+             SRI_Autorizacion.Clave_De_Acceso = TFA.ClaveAcceso_GR
+             FAutorizaXmlSRI.Show 1
+            'SRI_Autorizacion = SRI_Generar_XML(TFA.ClaveAcceso_GR, SRI_Autorizacion.Estado_SRI)
             'MsgBox SRI_Autorizacion.Estado_SRI
              TFA.Estado_SRI_GR = SRI_Autorizacion.Estado_SRI
              TFA.Error_SRI = SRI_Autorizacion.Error_SRI
@@ -4406,8 +4430,10 @@ Dim Con_Inv As Boolean
                 DocumentoXML.save (RutaGeneraFile)
 
                     TFA.Estado_SRI_NC = "CG"
-                   'Enviamos al SRI para que me autorice la Retencion
-                    SRI_Autorizacion = SRI_Generar_XML(TFA.ClaveAcceso_NC, TFA.Estado_SRI_NC)
+                   'Enviamos al SRI para que me autorice la Nota de Credito
+                    SRI_Autorizacion.Clave_De_Acceso = TFA.ClaveAcceso_NC
+                    FAutorizaXmlSRI.Show 1
+                   'SRI_Autorizacion = SRI_Generar_XML(TFA.ClaveAcceso_NC, TFA.Estado_SRI_NC)
                     SRI_Actualizar_XML_Nota_Credito SRI_Autorizacion, TFA
                     RatonReloj
                     If SRI_Autorizacion.Estado_SRI = "OK" Then

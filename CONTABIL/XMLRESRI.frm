@@ -1,9 +1,9 @@
 VERSION 5.00
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
-Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
+Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDATGRD.OCX"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "COMCTL32.OCX"
 Begin VB.Form FXMLRecibidosSRI 
    BackColor       =   &H80000002&
    Caption         =   "ftpLinode"
@@ -2125,35 +2125,37 @@ Private Sub Form_Activate()
     CopiarComp = False
     Co.CodigoB = ""
     Co.Numero = 0
-    Archivo_TXT = "Asiento_TXT_" & CodigoUsuario
-    
+        
     Cta_Gastos = Leer_Seteos_Ctas("Cta_Gastos")
     Cta_Gastos_Personales = Leer_Seteos_Ctas("Cta_Gastos_Personales")
     
-    sSQL = "SELECT " & Full_Fields(Archivo_TXT) & " " _
-         & "FROM " & Archivo_TXT & " " _
-         & "WHERE Item = '" & NumEmpresa & "' " _
-         & "ORDER BY ID "
-    Select_Adodc_Grid DGDocSRI, AdoDocSRI, sSQL
-    If AdoDocSRI.Recordset.RecordCount > 0 Then
-       Titulo = "PREGUNTA DE ELIMINACION"
-       Mensajes = "Existen procesos pendientes, Desea Eliminar las Transacciones?"
-       If BoxMensaje = vbYes Then
-          sSQL = "DELETE * " _
-               & "FROM " & Archivo_TXT & " " _
-               & "WHERE Item = '" & NumEmpresa & "' "
-          Ejecutar_SQL_SP sSQL
-          
-          sSQL = "SELECT " & Full_Fields(Archivo_TXT) & " " _
-               & "FROM " & Archivo_TXT & " " _
-               & "WHERE Item = '" & NumEmpresa & "' " _
-               & "ORDER BY ID "
-          Select_Adodc_Grid DGDocSRI, AdoDocSRI, sSQL
-       Else
-          DGDocSRI.Enabled = True
-       End If
+    Archivo_TXT = "Asiento_TXT_" & CodigoUsuario
+
+    If Existe_Tabla(Archivo_TXT) Then
+        sSQL = "SELECT " & Full_Fields(Archivo_TXT) & " " _
+             & "FROM " & Archivo_TXT & " " _
+             & "WHERE Item = '" & NumEmpresa & "' " _
+             & "ORDER BY ID "
+        Select_Adodc_Grid DGDocSRI, AdoDocSRI, sSQL
+        If AdoDocSRI.Recordset.RecordCount > 0 Then
+           Titulo = "PREGUNTA DE ELIMINACION"
+           Mensajes = "Existen procesos pendientes, Desea Eliminar las Transacciones?"
+           If BoxMensaje = vbYes Then
+              sSQL = "DELETE * " _
+                   & "FROM " & Archivo_TXT & " " _
+                   & "WHERE Item = '" & NumEmpresa & "' "
+              Ejecutar_SQL_SP sSQL
+              
+              sSQL = "SELECT " & Full_Fields(Archivo_TXT) & " " _
+                   & "FROM " & Archivo_TXT & " " _
+                   & "WHERE Item = '" & NumEmpresa & "' " _
+                   & "ORDER BY ID "
+              Select_Adodc_Grid DGDocSRI, AdoDocSRI, sSQL
+           Else
+              DGDocSRI.Enabled = True
+           End If
+        End If
     End If
-    
     sSQL = "SELECT Codigo & ' - ' & Cuenta As Nombre_Cta " _
          & "FROM Catalogo_Cuentas " _
          & "WHERE Item = '" & NumEmpresa & "' " _

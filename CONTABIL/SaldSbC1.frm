@@ -14,8 +14,8 @@ Begin VB.Form SaldoSubCtasVence
    DrawStyle       =   1  'Dash
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   15615
-   ScaleWidth      =   28560
+   ScaleHeight     =   8985
+   ScaleWidth      =   11280
    WindowState     =   2  'Maximized
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
@@ -23,8 +23,8 @@ Begin VB.Form SaldoSubCtasVence
       Left            =   0
       TabIndex        =   0
       Top             =   0
-      Width           =   28560
-      _ExtentX        =   50377
+      Width           =   11280
+      _ExtentX        =   19897
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -1081,7 +1081,7 @@ Public Sub Consultar()
               & "ORDER BY CC.Cuenta,C.Detalle,TS.Detalle_SubCta "
   End Select
  'MsgBox sSQL
-  Select_Adodc_Grid DGBanco, AdoBanco, sSQL
+  Select_Adodc_Grid DGBanco, AdoBanco, sSQL, , , , "CxC SubModulos"
   Saldo = 0: Total = 0: Valor = 0
   RatonReloj
   DGBanco.Visible = False

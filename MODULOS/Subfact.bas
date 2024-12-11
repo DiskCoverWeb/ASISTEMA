@@ -14007,6 +14007,7 @@ Dim AdoDBFac As ADODB.Recordset
 Dim TotDescuento As Currency
 
     TFA.Fecha_Aut_GR = FechaSistema
+    TFA.Hora = HoraSistema
     TFA.Hora_GR = HoraSistema
     TFA.Estado_SRI_GR = Ninguno
     TFA.Serie_GR = Ninguno
@@ -14034,6 +14035,7 @@ Dim TotDescuento As Currency
     TFA.Gavetas = 0
     TFA.Servicio = 0
     TFA.EsPorReembolso = False
+    TFA.Si_Existe_Doc = False
 
     sSQL = "SELECT F.*,C.Cliente,C.CI_RUC,C.TD,C.Grupo,C.Direccion,C.DireccionT,C.Celular,C.Codigo,C.Ciudad,C.Email,C.Email2,C.EmailR," _
          & "C.Contacto,C.DirNumero,C.Fecha As Fecha_C " _
@@ -14048,7 +14050,6 @@ Dim TotDescuento As Currency
     Select_AdoDB AdoDBFac, sSQL
     With AdoDBFac
      If .RecordCount > 0 Then
-     
         'Datos del SRI
          TFA.Si_Existe_Doc = True
          TFA.T = .fields("T")
@@ -14151,19 +14152,21 @@ Dim TotDescuento As Currency
     End With
     AdoDBFac.Close
             
-    sSQL = "SELECT Direccion " _
-         & "FROM Clientes " _
-         & "WHERE CI_RUC = '" & TFA.CIRUCComercial & "' "
-    Select_AdoDB AdoDBFac, sSQL
-    If AdoDBFac.RecordCount > 0 Then TFA.Dir_PartidaGR = AdoDBFac.fields("Direccion")
-    AdoDBFac.Close
-    
-    sSQL = "SELECT Direccion " _
-         & "FROM Clientes " _
-         & "WHERE CI_RUC = '" & TFA.CIRUCEntrega & "' "
-    Select_AdoDB AdoDBFac, sSQL
-    If AdoDBFac.RecordCount > 0 Then TFA.Dir_EntregaGR = AdoDBFac.fields("Direccion")
-    AdoDBFac.Close
+    If Len(TFA.CIRUCComercial) > 1 And Len(TFA.CIRUCEntrega) > 1 Then
+       sSQL = "SELECT Direccion " _
+            & "FROM Clientes " _
+            & "WHERE CI_RUC = '" & TFA.CIRUCComercial & "' "
+       Select_AdoDB AdoDBFac, sSQL
+       If AdoDBFac.RecordCount > 0 Then TFA.Dir_PartidaGR = AdoDBFac.fields("Direccion")
+       AdoDBFac.Close
+        
+       sSQL = "SELECT Direccion " _
+            & "FROM Clientes " _
+            & "WHERE CI_RUC = '" & TFA.CIRUCEntrega & "' "
+       Select_AdoDB AdoDBFac, sSQL
+       If AdoDBFac.RecordCount > 0 Then TFA.Dir_EntregaGR = AdoDBFac.fields("Direccion")
+       AdoDBFac.Close
+    End If
     
     sSQL = "SELECT Nombre_Completo " _
          & "FROM Accesos " _

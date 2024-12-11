@@ -68,7 +68,7 @@ Dim vAdjunto As String
         'Enviar un mensaje al servdor
          If Len(mEhlo) > 1 Then .fields("http://schemas.microsoft.com/cdo/configuration/ehlo").value = mEhlo
         'Indica si se usa SSL para el envío. En el caso de Gmail requiere que esté en True
-         If mSSL Then .fields("http://schemas.microsoft.com/cdo/configuration/SMTPUseSSL").value = mSSL
+         If mSSL Then .fields("http://schemas.microsoft.com/cdo/configuration/smtpusessl").value = mSSL
          If mTLS Then .fields("http://schemas.microsoft.com/cdo/configuration/sendtls").value = mTLS
         'Configura las opciones para el login en el SMTP
         'SMTP Account User ID
@@ -93,6 +93,7 @@ Dim vAdjunto As String
    'Estructura del mail
    '''''''''''''''''''''''''''''''''''''''''''''''
    'Dirección del Destinatario
+   'mPara = "diskcover.system@gmail.com;diskcoversystem@msn.com;contabilidad@segurileja.com"
     oCDO.To = mPara
 
    'Dirección del remitente

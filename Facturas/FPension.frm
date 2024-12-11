@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "COMCTL32.OCX"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form FPensiones 
    BackColor       =   &H00C0FFC0&
@@ -725,7 +725,7 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
 End Sub
 
 Private Sub CheqRangos_Click()
- If CheqRangos.Value = 0 Then
+ If CheqRangos.value = 0 Then
     DCGrupoI.Enabled = False
     DCGrupoF.Enabled = False
  Else
@@ -778,7 +778,7 @@ Public Sub Eliminar_Pensiones()
             & "WHERE Codigo_Inv = '" & CodigoP & "' " _
             & "AND Item = '" & NumEmpresa & "' " _
             & "AND Fecha BETWEEN '" & BuscarFecha(FechaTexto) & "' and '" & BuscarFecha(Mifecha) & "' "
-       If CheqRangos.Value <> 0 Then sSQL = sSQL & "AND GrupoNo BETWEEN '" & Codigo1 & "' and '" & Codigo2 & "' "
+       If CheqRangos.value <> 0 Then sSQL = sSQL & "AND GrupoNo BETWEEN '" & Codigo1 & "' and '" & Codigo2 & "' "
        Ejecutar_SQL_SP sSQL
        RatonNormal
        MsgBox "Proceso Terminado"
@@ -803,7 +803,7 @@ Dim Proceder As Boolean
             & "WHERE Codigo_Inv = '" & CodigoP & "' " _
             & "AND Item = '" & NumEmpresa & "' " _
             & "AND Fecha BETWEEN '" & BuscarFecha(FechaTexto) & "' and '" & BuscarFecha(Mifecha) & "' "
-       If CheqRangos.Value <> 0 Then sSQL = sSQL & "AND GrupoNo BETWEEN '" & Codigo1 & "' and '" & Codigo2 & "' "
+       If CheqRangos.value <> 0 Then sSQL = sSQL & "AND GrupoNo BETWEEN '" & Codigo1 & "' and '" & Codigo2 & "' "
        Select_Adodc AdoAux, sSQL
        
        If AdoAux.Recordset.RecordCount > 0 Then
@@ -819,22 +819,22 @@ Dim Proceder As Boolean
                & "WHERE Codigo_Inv = '" & CodigoP & "' " _
                & "AND Item = '" & NumEmpresa & "' " _
                & "AND Fecha BETWEEN '" & BuscarFecha(FechaTexto) & "' and '" & BuscarFecha(Mifecha) & "' "
-          If CheqRangos.Value <> 0 Then sSQL = sSQL & "AND GrupoNo BETWEEN '" & Codigo1 & "' and '" & Codigo2 & "' "
+          If CheqRangos.value <> 0 Then sSQL = sSQL & "AND GrupoNo BETWEEN '" & Codigo1 & "' and '" & Codigo2 & "' "
           Ejecutar_SQL_SP sSQL
           Mifecha = MBFechaI.Text
-          For i = 1 To Contador
+          For I = 1 To Contador
               NoDias = Day(Mifecha)
               NoMes = Month(Mifecha)
               NoAnio = Year(Mifecha)
               Mes1 = MesesLetras(NoMes)
-              FPensiones.Caption = Format$(i / Contador, "00%") & " - ASIGNACION DE CODIGOS DE FACTURARION - GRUPO: " & Codigo1 & " - " & Codigo2
+              FPensiones.Caption = Format$(I / Contador, "00%") & " - ASIGNACION DE CODIGOS DE FACTURARION - GRUPO: " & Codigo1 & " - " & Codigo2
               sSQL = "INSERT INTO Clientes_Facturacion (T, GrupoNo, Codigo, Codigo_Inv, Valor, Descuento, Descuento2, CodigoU, Item, Periodo, Num_Mes, Mes, Fecha) " _
                    & "SELECT 'N', Grupo, Codigo, '" & CodigoP & "', " & CStr(Valor) & ", " & CStr(Total_Desc) & ", " & CStr(Total_Desc2) & ", '" & CodigoUsuario & "', '" & NumEmpresa & "', '" & NoAnio & "', " _
                    & NoMes & ", '" & Mes1 & "', '" & BuscarFecha(Mifecha) & "' " _
                    & "FROM Clientes " _
                    & "WHERE FA <> " & Val(adFalse) & " "
               If Mas_Grupos Then sSQL = sSQL & "AND DirNumero = '" & NumEmpresa & "' "
-              If CheqRangos.Value <> 0 Then sSQL = sSQL & "AND Grupo BETWEEN '" & Codigo1 & "' and '" & Codigo2 & "' "
+              If CheqRangos.value <> 0 Then sSQL = sSQL & "AND Grupo BETWEEN '" & Codigo1 & "' and '" & Codigo2 & "' "
               sSQL = sSQL & "ORDER BY Grupo, Cliente, Sexo "
               Ejecutar_SQL_SP sSQL
              'MsgBox I & ":" & vbCrLf & sSQL
@@ -843,7 +843,7 @@ Dim Proceder As Boolean
               NoMes = Month(Mifecha)
               NoAnio = Year(Mifecha)
               Mifecha = Format(NoDiaT, "00") & "/" & Format(NoMes, "00") & "/" & Format(NoAnio, "0000")
-          Next i
+          Next I
           Eliminar_Nulos_SP "Clientes_Facturacion"
           RatonNormal
           MsgBox "Proceso Terminado"
@@ -888,7 +888,7 @@ Dim Valor_Cambiar As Currency
                 & "AND Item = '" & NumEmpresa & "' " _
                 & "AND Fecha BETWEEN '" & BuscarFecha(FechaTexto) & "' and '" & BuscarFecha(Mifecha) & "' "
            If Tipo_Cambio = "Descuento2" Then sSQL = sSQL & "AND Descuento = 0 "
-           If CheqRangos.Value <> 0 Then sSQL = sSQL & "AND GrupoNo BETWEEN '" & Codigo1 & "' and '" & Codigo2 & "' "
+           If CheqRangos.value <> 0 Then sSQL = sSQL & "AND GrupoNo BETWEEN '" & Codigo1 & "' and '" & Codigo2 & "' "
            
            'MsgBox sSQL
            
@@ -925,7 +925,7 @@ Public Sub Multas()
           & "WHERE Codigo_Inv = '" & CodigoP & "' " _
           & "AND Item = '" & NumEmpresa & "' " _
           & "AND Fecha BETWEEN '" & BuscarFecha(FechaTexto) & "' and '" & BuscarFecha(Mifecha) & "' "
-     If CheqRangos.Value <> 0 Then sSQL = sSQL & "AND GrupoNo BETWEEN '" & Codigo1 & "' and '" & Codigo2 & "' "
+     If CheqRangos.value <> 0 Then sSQL = sSQL & "AND GrupoNo BETWEEN '" & Codigo1 & "' and '" & Codigo2 & "' "
      Ejecutar_SQL_SP sSQL
 
      sSQL = "UPDATE Clientes " _
@@ -940,17 +940,17 @@ Public Sub Multas()
           & "AND F.TC IN ('FA','FM','NV') " _
           & "AND F.T <> 'A' " _
           & "AND F.Fecha BETWEEN #" & BuscarFecha(FechaTexto) & "# and #" & BuscarFecha(Mifecha) & "# "
-     If CheqRangos.Value <> 0 Then sSQL = sSQL & "AND C.Grupo BETWEEN '" & Codigo1 & "' and '" & Codigo2 & "' "
+     If CheqRangos.value <> 0 Then sSQL = sSQL & "AND C.Grupo BETWEEN '" & Codigo1 & "' and '" & Codigo2 & "' "
      sSQL = sSQL & "AND  C.Codigo = F.CodigoC  "
      Ejecutar_SQL_SP sSQL
       
      Mifecha = MBFechaI.Text
-     For i = 1 To Contador
+     For I = 1 To Contador
          NoDias = Day(Mifecha)
          NoMes = Month(Mifecha)
          NoAnio = Year(Mifecha)
          Mes1 = MesesLetras(NoMes)
-         FPensiones.Caption = Format$(i / Contador, "00%") & " - ASIGNACION DE CODIGOS DE FACTURARION - GRUPO: " & Codigo1 & " - " & Codigo2
+         FPensiones.Caption = Format$(I / Contador, "00%") & " - ASIGNACION DE CODIGOS DE FACTURARION - GRUPO: " & Codigo1 & " - " & Codigo2
          sSQL = "INSERT INTO Clientes_Facturacion (T, GrupoNo, Codigo, Codigo_Inv, Valor, CodigoU, Item, Periodo, Num_Mes, Mes, Fecha) " _
               & "SELECT 'N', Grupo, Codigo, '" & CodigoP & "', " & CStr(Valor) & ", '" & CodigoUsuario & "', '" & NumEmpresa & "', '" & NoAnio & "', " _
               & NoMes & ", '" & Mes1 & "', '" & BuscarFecha(Mifecha) & "' " _
@@ -958,7 +958,7 @@ Public Sub Multas()
               & "WHERE FA <> " & Val(adFalse) & " " _
               & "AND X = 'M' "
          If Mas_Grupos Then sSQL = sSQL & "AND DirNumero = '" & NumEmpresa & "' "
-         If CheqRangos.Value <> 0 Then sSQL = sSQL & "AND Grupo BETWEEN '" & Codigo1 & "' and '" & Codigo2 & "' "
+         If CheqRangos.value <> 0 Then sSQL = sSQL & "AND Grupo BETWEEN '" & Codigo1 & "' and '" & Codigo2 & "' "
          sSQL = sSQL & "ORDER BY Grupo, Cliente, Sexo "
          Ejecutar_SQL_SP sSQL
          'MsgBox I & ":" & vbCrLf & sSQL
@@ -967,7 +967,7 @@ Public Sub Multas()
          NoMes = Month(Mifecha)
          NoAnio = Year(Mifecha)
          Mifecha = Format(NoDiaT, "00") & "/" & Format(NoMes, "00") & "/" & Format(NoAnio, "0000")
-     Next i
+     Next I
      Eliminar_Nulos_SP "Clientes_Facturacion"
      RatonNormal
      MsgBox "Proceso Terminado"
@@ -1116,16 +1116,16 @@ Dim FechaSigMes As String
              & "FROM Clientes_Facturacion " _
              & "WHERE Item = '" & NumEmpresa & "' " _
              & "AND Fecha BETWEEN '" & BuscarFecha(FechaTexto) & "' and '" & BuscarFecha(Mifecha) & "' "
-        If CheqRangos.Value <> 0 Then sSQL = sSQL & "AND GrupoNo BETWEEN '" & Codigo1 & "' and '" & Codigo2 & "' "
+        If CheqRangos.value <> 0 Then sSQL = sSQL & "AND GrupoNo BETWEEN '" & Codigo1 & "' and '" & Codigo2 & "' "
         Ejecutar_SQL_SP sSQL
         'MsgBox sSQL
         Mifecha = MBFechaI.Text
-        For i = 1 To Contador
+        For I = 1 To Contador
             NoDias = Day(Mifecha)
             NoMes = Month(Mifecha)
             NoAnio = Year(Mifecha)
             Mes1 = MesesLetras(NoMes)
-            FPensiones.Caption = Format$(i / Contador, "00%") & " - ASIGNACION DE CODIGOS DE FACTURARION - GRUPO: " & Codigo1 & " - " & Codigo2
+            FPensiones.Caption = Format$(I / Contador, "00%") & " - ASIGNACION DE CODIGOS DE FACTURARION - GRUPO: " & Codigo1 & " - " & Codigo2
             sSQL = "INSERT INTO Clientes_Facturacion (T, GrupoNo, Codigo, Codigo_Inv, Valor, Item, CodigoU, Periodo, Num_Mes, Mes, Fecha, D) " _
                  & "SELECT 'N', GrupoNo, Codigo, Codigo_Inv, Valor, Item, '" & CodigoUsuario & "', '" & NoAnio & "', " _
                  & NoMes & ", '" & Mes1 & "', '" & BuscarFecha(Mifecha) & "', 0 " _
@@ -1133,9 +1133,9 @@ Dim FechaSigMes As String
                  & "WHERE Item = '" & NumEmpresa & "' " _
                  & "AND Periodo = '" & Copiar_Periodo & "' " _
                  & "AND Num_Mes = " & Copiar_Mes & " "
-            If CheqRangos.Value <> 0 Then sSQL = sSQL & "AND GrupoNo BETWEEN '" & Codigo1 & "' and '" & Codigo2 & "' "
+            If CheqRangos.value <> 0 Then sSQL = sSQL & "AND GrupoNo BETWEEN '" & Codigo1 & "' and '" & Codigo2 & "' "
             sSQL = sSQL & "ORDER BY GrupoNo, Codigo, Codigo_Inv "
-            MsgBox sSQL
+           'MsgBox sSQL
             Ejecutar_SQL_SP sSQL
            'MsgBox I & ":" & vbCrLf & sSQL
             Mifecha = CLongFecha(CFechaLong(Mifecha) + 31)
@@ -1143,7 +1143,7 @@ Dim FechaSigMes As String
             NoMes = Month(Mifecha)
             NoAnio = Year(Mifecha)
             Mifecha = Format(NoDiaT, "00") & "/" & Format(NoMes, "00") & "/" & Format(NoAnio, "0000")
-        Next i
+        Next I
         Eliminar_Nulos_SP "Clientes_Facturacion"
         RatonNormal
         MsgBox "Proceso Terminado"
@@ -1217,18 +1217,18 @@ Private Sub TxtDesc2_LostFocus()
 End Sub
 
 Public Sub Rago_Fechas_Proceso()
-    For i = 1 To Contador
+    For I = 1 To Contador
         NoDias = Day(Mifecha)
         NoMes = Month(Mifecha)
         NoAnio = Year(Mifecha)
         Mes1 = MesesLetras(NoMes)
-        If i < Contador Then
+        If I < Contador Then
            Mifecha = CLongFecha(CFechaLong(Mifecha) + 31)
            NoDias = Day(Mifecha)
            NoMes = Month(Mifecha)
            NoAnio = Year(Mifecha)
            Mifecha = Format(NoDiaT, "00") & "/" & Format(NoMes, "00") & "/" & Format(NoAnio, "0000")
         End If
-    Next i
+    Next I
     Mifecha = UltimoDiaMes(Mifecha)
 End Sub

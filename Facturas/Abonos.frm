@@ -1,14 +1,14 @@
 VERSION 5.00
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form Abonos 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "INGRESO DE CAJA"
-   ClientHeight    =   8940
+   ClientHeight    =   8955
    ClientLeft      =   5025
    ClientTop       =   4380
-   ClientWidth     =   11355
+   ClientWidth     =   12000
    BeginProperty Font 
       Name            =   "MS Sans Serif"
       Size            =   8.25
@@ -21,14 +21,23 @@ Begin VB.Form Abonos
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   8940
-   ScaleWidth      =   11355
+   ScaleHeight     =   8955
+   ScaleWidth      =   12000
    ShowInTaskbar   =   0   'False
+   Begin VB.CommandButton Command2 
+      Height          =   435
+      Left            =   105
+      Picture         =   "Abonos.frx":0000
+      Style           =   1  'Graphical
+      TabIndex        =   67
+      Top             =   105
+      Width           =   540
+   End
    Begin VB.CommandButton Command3 
       Caption         =   "&Salir"
       Height          =   855
-      Left            =   10185
-      Picture         =   "Abonos.frx":0000
+      Left            =   10815
+      Picture         =   "Abonos.frx":014A
       Style           =   1  'Graphical
       TabIndex        =   66
       Top             =   1050
@@ -46,7 +55,7 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   8190
+      Left            =   8715
       MaxLength       =   10
       TabIndex        =   60
       Text            =   "0.00"
@@ -65,12 +74,12 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   285
-      Left            =   5670
+      Left            =   6090
       MaxLength       =   10
       TabIndex        =   36
       Text            =   "0"
       Top             =   4830
-      Width           =   435
+      Width           =   540
    End
    Begin VB.TextBox TextRet 
       Alignment       =   1  'Right Justify
@@ -84,7 +93,7 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   465
-      Left            =   8190
+      Left            =   8715
       MaxLength       =   10
       TabIndex        =   38
       Text            =   "0.00"
@@ -103,7 +112,7 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   8190
+      Left            =   8715
       MaxLength       =   10
       TabIndex        =   32
       Text            =   "0.00"
@@ -121,7 +130,7 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   360
-      Left            =   5355
+      Left            =   5880
       TabIndex        =   30
       Text            =   "100"
       Top             =   4095
@@ -138,7 +147,7 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   360
-      Left            =   5355
+      Left            =   5880
       TabIndex        =   25
       Text            =   "100"
       Top             =   3360
@@ -156,7 +165,7 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   8190
+      Left            =   8715
       MaxLength       =   10
       TabIndex        =   27
       Text            =   "0.00"
@@ -174,11 +183,11 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   5040
-      MaxLength       =   25
+      Left            =   5145
+      MaxLength       =   40
       TabIndex        =   42
       Top             =   5565
-      Width           =   2325
+      Width           =   2745
    End
    Begin VB.TextBox TextCompRet 
       BeginProperty Font 
@@ -214,7 +223,7 @@ Begin VB.Form Abonos
       TabIndex        =   22
       Text            =   "0000000000"
       Top             =   2625
-      Width           =   7890
+      Width           =   8415
    End
    Begin VB.TextBox TxtSerieRet 
       BeginProperty Font 
@@ -249,7 +258,7 @@ Begin VB.Form Abonos
       MaxLength       =   8
       TabIndex        =   41
       Top             =   5565
-      Width           =   960
+      Width           =   1065
    End
    Begin VB.TextBox TextInteres 
       Alignment       =   1  'Right Justify
@@ -263,7 +272,7 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   5040
+      Left            =   5565
       MaxLength       =   10
       TabIndex        =   48
       Text            =   "0"
@@ -282,7 +291,7 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   8190
+      Left            =   8715
       MaxLength       =   10
       TabIndex        =   50
       Text            =   "0.00"
@@ -300,21 +309,21 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   4095
+      Left            =   4620
       MaxLength       =   8
       TabIndex        =   47
       Top             =   6300
       Width           =   960
    End
    Begin MSDataListLib.DataCombo DCTarjeta 
-      Bindings        =   "Abonos.frx":08CA
+      Bindings        =   "Abonos.frx":0A14
       DataSource      =   "AdoTarjeta"
       Height          =   360
       Left            =   105
       TabIndex        =   46
       Top             =   6300
-      Width           =   4005
-      _ExtentX        =   7064
+      Width           =   4530
+      _ExtentX        =   7990
       _ExtentY        =   635
       _Version        =   393216
       Text            =   "Banco"
@@ -340,7 +349,7 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   8190
+      Left            =   8715
       MaxLength       =   14
       TabIndex        =   44
       Text            =   "0.00"
@@ -348,7 +357,7 @@ Begin VB.Form Abonos
       Width           =   1905
    End
    Begin MSDataListLib.DataCombo DCBanco 
-      Bindings        =   "Abonos.frx":08E3
+      Bindings        =   "Abonos.frx":0A2D
       DataSource      =   "AdoBanco"
       Height          =   360
       Left            =   105
@@ -381,7 +390,7 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   8190
+      Left            =   8715
       MaxLength       =   10
       TabIndex        =   56
       Text            =   "0.00"
@@ -400,7 +409,7 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   8190
+      Left            =   8715
       MaxLength       =   14
       TabIndex        =   54
       Text            =   "0.00"
@@ -419,7 +428,7 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   450
-      Left            =   2520
+      Left            =   3150
       MaxLength       =   14
       TabIndex        =   1
       Text            =   "0000000000"
@@ -438,21 +447,21 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   105
+      Left            =   840
       TabIndex        =   0
       Top             =   105
       Value           =   1  'Checked
-      Width           =   2325
+      Width           =   2220
    End
    Begin MSDataListLib.DataCombo DCFactura 
-      Bindings        =   "Abonos.frx":08FA
+      Bindings        =   "Abonos.frx":0A44
       DataSource      =   "AdoFactura"
       Height          =   420
-      Left            =   5250
+      Left            =   5460
       TabIndex        =   11
       Top             =   630
-      Width           =   1485
-      _ExtentX        =   2619
+      Width           =   1695
+      _ExtentX        =   2990
       _ExtentY        =   741
       _Version        =   393216
       ForeColor       =   16711680
@@ -469,8 +478,8 @@ Begin VB.Form Abonos
    End
    Begin MSAdodcLib.Adodc AdoCliente 
       Height          =   330
-      Left            =   10185
-      Top             =   4095
+      Left            =   10815
+      Top             =   4200
       Visible         =   0   'False
       Width           =   2430
       _ExtentX        =   4286
@@ -516,8 +525,8 @@ Begin VB.Form Abonos
    End
    Begin MSAdodcLib.Adodc AdoIngCaja 
       Height          =   330
-      Left            =   10185
-      Top             =   3360
+      Left            =   10815
+      Top             =   3465
       Visible         =   0   'False
       Width           =   2430
       _ExtentX        =   4286
@@ -563,8 +572,8 @@ Begin VB.Form Abonos
    End
    Begin MSAdodcLib.Adodc AdoFactura 
       Height          =   330
-      Left            =   10185
-      Top             =   5145
+      Left            =   10815
+      Top             =   5250
       Visible         =   0   'False
       Width           =   2430
       _ExtentX        =   4286
@@ -610,8 +619,8 @@ Begin VB.Form Abonos
    End
    Begin MSAdodcLib.Adodc AdoRecibo 
       Height          =   330
-      Left            =   10185
-      Top             =   3045
+      Left            =   10815
+      Top             =   3150
       Visible         =   0   'False
       Width           =   2430
       _ExtentX        =   4286
@@ -658,8 +667,8 @@ Begin VB.Form Abonos
    Begin VB.CommandButton Command1 
       Caption         =   "&Aceptar"
       Height          =   855
-      Left            =   10185
-      Picture         =   "Abonos.frx":0913
+      Left            =   10815
+      Picture         =   "Abonos.frx":0A5D
       Style           =   1  'Graphical
       TabIndex        =   65
       Top             =   105
@@ -667,11 +676,11 @@ Begin VB.Form Abonos
    End
    Begin MSMask.MaskEdBox MBFecha 
       Height          =   435
-      Left            =   8715
+      Left            =   9345
       TabIndex        =   5
       Top             =   105
-      Width           =   1380
-      _ExtentX        =   2434
+      Width           =   1275
+      _ExtentX        =   2249
       _ExtentY        =   767
       _Version        =   393216
       AllowPrompt     =   -1  'True
@@ -692,8 +701,8 @@ Begin VB.Form Abonos
    End
    Begin MSAdodcLib.Adodc AdoBanco 
       Height          =   330
-      Left            =   10185
-      Top             =   4410
+      Left            =   10815
+      Top             =   4515
       Visible         =   0   'False
       Width           =   2430
       _ExtentX        =   4286
@@ -739,8 +748,8 @@ Begin VB.Form Abonos
    End
    Begin MSAdodcLib.Adodc AdoDetAcomp 
       Height          =   330
-      Left            =   10185
-      Top             =   5460
+      Left            =   10815
+      Top             =   5565
       Visible         =   0   'False
       Width           =   2430
       _ExtentX        =   4286
@@ -785,14 +794,14 @@ Begin VB.Form Abonos
       _Version        =   393216
    End
    Begin MSDataListLib.DataCombo DCTipo 
-      Bindings        =   "Abonos.frx":0D55
+      Bindings        =   "Abonos.frx":0E9F
       DataSource      =   "AdoDetAcomp"
       Height          =   420
       Left            =   2100
       TabIndex        =   7
       Top             =   630
-      Width           =   750
-      _ExtentX        =   1323
+      Width           =   855
+      _ExtentX        =   1508
       _ExtentY        =   741
       _Version        =   393216
       ForeColor       =   16711680
@@ -809,8 +818,8 @@ Begin VB.Form Abonos
    End
    Begin MSAdodcLib.Adodc AdoTarjeta 
       Height          =   330
-      Left            =   10185
-      Top             =   1995
+      Left            =   10815
+      Top             =   2100
       Visible         =   0   'False
       Width           =   2430
       _ExtentX        =   4286
@@ -855,14 +864,14 @@ Begin VB.Form Abonos
       _Version        =   393216
    End
    Begin MSDataListLib.DataCombo DCRetIBienes 
-      Bindings        =   "Abonos.frx":0D6F
+      Bindings        =   "Abonos.frx":0EB9
       DataSource      =   "AdoRetIvaBienes"
       Height          =   360
       Left            =   105
       TabIndex        =   24
       Top             =   3360
-      Width           =   5265
-      _ExtentX        =   9287
+      Width           =   5790
+      _ExtentX        =   10213
       _ExtentY        =   635
       _Version        =   393216
       Text            =   ""
@@ -877,14 +886,14 @@ Begin VB.Form Abonos
       EndProperty
    End
    Begin MSDataListLib.DataCombo DCRetISer 
-      Bindings        =   "Abonos.frx":0D8D
+      Bindings        =   "Abonos.frx":0ED7
       DataSource      =   "AdoRetIvaServicio"
       Height          =   360
       Left            =   105
       TabIndex        =   29
       Top             =   4095
-      Width           =   5265
-      _ExtentX        =   9287
+      Width           =   5790
+      _ExtentX        =   10213
       _ExtentY        =   635
       _Version        =   393216
       Text            =   ""
@@ -899,14 +908,14 @@ Begin VB.Form Abonos
       EndProperty
    End
    Begin MSDataListLib.DataCombo DCRetFuente 
-      Bindings        =   "Abonos.frx":0DAD
+      Bindings        =   "Abonos.frx":0EF7
       DataSource      =   "AdoRetFuente"
       Height          =   360
       Left            =   105
       TabIndex        =   34
       Top             =   4830
-      Width           =   4530
-      _ExtentX        =   7990
+      Width           =   4950
+      _ExtentX        =   8731
       _ExtentY        =   635
       _Version        =   393216
       Text            =   ""
@@ -921,10 +930,10 @@ Begin VB.Form Abonos
       EndProperty
    End
    Begin MSDataListLib.DataCombo DCCodRet 
-      Bindings        =   "Abonos.frx":0DC8
+      Bindings        =   "Abonos.frx":0F12
       DataSource      =   "AdoCodRet"
       Height          =   360
-      Left            =   4620
+      Left            =   5040
       TabIndex        =   35
       ToolTipText     =   "Corresponde al porcentaje retenido en el IVA generado en la prestación de servicios"
       Top             =   4830
@@ -945,8 +954,8 @@ Begin VB.Form Abonos
    End
    Begin MSAdodcLib.Adodc AdoRetIvaBienes 
       Height          =   330
-      Left            =   10185
-      Top             =   2310
+      Left            =   10815
+      Top             =   2415
       Visible         =   0   'False
       Width           =   2430
       _ExtentX        =   4286
@@ -992,8 +1001,8 @@ Begin VB.Form Abonos
    End
    Begin MSAdodcLib.Adodc AdoRetIvaServicio 
       Height          =   330
-      Left            =   10185
-      Top             =   4725
+      Left            =   10815
+      Top             =   4830
       Visible         =   0   'False
       Width           =   2430
       _ExtentX        =   4286
@@ -1039,8 +1048,8 @@ Begin VB.Form Abonos
    End
    Begin MSAdodcLib.Adodc AdoRetFuente 
       Height          =   330
-      Left            =   10185
-      Top             =   5775
+      Left            =   10815
+      Top             =   5880
       Visible         =   0   'False
       Width           =   2430
       _ExtentX        =   4286
@@ -1086,8 +1095,8 @@ Begin VB.Form Abonos
    End
    Begin MSAdodcLib.Adodc AdoCodRet 
       Height          =   330
-      Left            =   10185
-      Top             =   3675
+      Left            =   10815
+      Top             =   3780
       Visible         =   0   'False
       Width           =   2430
       _ExtentX        =   4286
@@ -1132,14 +1141,14 @@ Begin VB.Form Abonos
       _Version        =   393216
    End
    Begin MSDataListLib.DataCombo DCSerie 
-      Bindings        =   "Abonos.frx":0DE0
+      Bindings        =   "Abonos.frx":0F2A
       DataSource      =   "AdoSerie"
       Height          =   420
-      Left            =   3570
+      Left            =   3675
       TabIndex        =   9
       Top             =   630
-      Width           =   1065
-      _ExtentX        =   1879
+      Width           =   1170
+      _ExtentX        =   2064
       _ExtentY        =   741
       _Version        =   393216
       ForeColor       =   16711680
@@ -1155,14 +1164,14 @@ Begin VB.Form Abonos
       EndProperty
    End
    Begin MSDataListLib.DataCombo DCAutorizacion 
-      Bindings        =   "Abonos.frx":0DF7
+      Bindings        =   "Abonos.frx":0F41
       DataSource      =   "AdoAutorizacion"
       Height          =   420
       Left            =   1470
       TabIndex        =   15
       Top             =   1155
-      Width           =   8625
-      _ExtentX        =   15214
+      Width           =   7575
+      _ExtentX        =   13361
       _ExtentY        =   741
       _Version        =   393216
       ForeColor       =   16711680
@@ -1179,8 +1188,8 @@ Begin VB.Form Abonos
    End
    Begin MSAdodcLib.Adodc AdoSerie 
       Height          =   330
-      Left            =   10185
-      Top             =   6195
+      Left            =   10815
+      Top             =   6300
       Visible         =   0   'False
       Width           =   1905
       _ExtentX        =   3360
@@ -1226,8 +1235,8 @@ Begin VB.Form Abonos
    End
    Begin MSAdodcLib.Adodc AdoAutorizacion 
       Height          =   330
-      Left            =   10185
-      Top             =   2625
+      Left            =   10815
+      Top             =   2730
       Visible         =   0   'False
       Width           =   2430
       _ExtentX        =   4286
@@ -1272,14 +1281,14 @@ Begin VB.Form Abonos
       _Version        =   393216
    End
    Begin MSDataListLib.DataCombo DCVendedor 
-      Bindings        =   "Abonos.frx":0E15
+      Bindings        =   "Abonos.frx":0F5F
       DataSource      =   "AdoRecibo"
       Height          =   330
       Left            =   105
       TabIndex        =   64
       Top             =   8505
-      Width           =   4845
-      _ExtentX        =   8546
+      Width           =   5370
+      _ExtentX        =   9472
       _ExtentY        =   582
       _Version        =   393216
       ForeColor       =   16711680
@@ -1310,13 +1319,13 @@ Begin VB.Form Abonos
       Left            =   105
       TabIndex        =   63
       Top             =   8190
-      Width           =   4845
+      Width           =   5370
    End
    Begin VB.Line Line1 
       BorderColor     =   &H00000000&
       BorderWidth     =   3
       X1              =   105
-      X2              =   10080
+      X2              =   10605
       Y1              =   2205
       Y2              =   2205
    End
@@ -1334,7 +1343,7 @@ Begin VB.Form Abonos
       EndProperty
       ForeColor       =   &H000000C0&
       Height          =   435
-      Left            =   2940
+      Left            =   3045
       TabIndex        =   8
       Top             =   630
       Width           =   645
@@ -1360,7 +1369,7 @@ Begin VB.Form Abonos
    End
    Begin VB.Label Label20 
       BorderStyle     =   1  'Fixed Single
-      Caption         =   " CUENTA DEL BANCO                                                    CHEQUE      NOMBRE DEL BANCO"
+      Caption         =   " CUENTA DEL BANCO                                                      CHEQUE      NOMBRE DEL BANCO"
       BeginProperty Font 
          Name            =   "Arial Narrow"
          Size            =   9.75
@@ -1374,11 +1383,11 @@ Begin VB.Form Abonos
       Left            =   105
       TabIndex        =   39
       Top             =   5250
-      Width           =   7260
+      Width           =   7785
    End
    Begin VB.Label Label28 
       BorderStyle     =   1  'Fixed Single
-      Caption         =   " RETENCION EN LA FUENTE                                                    CODIGO           %"
+      Caption         =   " RETENCION EN LA FUENTE                                                             CODIGO           %"
       BeginProperty Font 
          Name            =   "Arial Narrow"
          Size            =   9.75
@@ -1392,11 +1401,11 @@ Begin VB.Form Abonos
       Left            =   105
       TabIndex        =   33
       Top             =   4515
-      Width           =   6000
+      Width           =   6525
    End
    Begin VB.Label Label26 
       BorderStyle     =   1  'Fixed Single
-      Caption         =   " RETENCION DEL I.V.A. EN SERVICIO                                                      %"
+      Caption         =   " RETENCION DEL I.V.A. EN SERVICIO                                                                  %"
       BeginProperty Font 
          Name            =   "Arial Narrow"
          Size            =   9.75
@@ -1410,7 +1419,7 @@ Begin VB.Form Abonos
       Left            =   105
       TabIndex        =   28
       Top             =   3780
-      Width           =   6000
+      Width           =   6525
    End
    Begin VB.Label LabelCambio 
       Alignment       =   1  'Right Justify
@@ -1428,7 +1437,7 @@ Begin VB.Form Abonos
       EndProperty
       ForeColor       =   &H000000C0&
       Height          =   435
-      Left            =   8190
+      Left            =   8715
       TabIndex        =   62
       Top             =   8400
       Width           =   1905
@@ -1449,7 +1458,7 @@ Begin VB.Form Abonos
       EndProperty
       ForeColor       =   &H000000C0&
       Height          =   435
-      Left            =   8190
+      Left            =   8715
       TabIndex        =   58
       Top             =   7560
       Width           =   1905
@@ -1467,7 +1476,7 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   5040
+      Left            =   5565
       TabIndex        =   61
       Top             =   8400
       Width           =   3165
@@ -1485,7 +1494,7 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   5040
+      Left            =   5565
       TabIndex        =   59
       Top             =   7980
       Width           =   3165
@@ -1503,7 +1512,7 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   5040
+      Left            =   5565
       TabIndex        =   57
       Top             =   7560
       Width           =   3165
@@ -1521,7 +1530,7 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   6195
+      Left            =   6720
       TabIndex        =   37
       Top             =   4620
       Width           =   2010
@@ -1539,14 +1548,14 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   6195
+      Left            =   6720
       TabIndex        =   31
       Top             =   3885
       Width           =   2010
    End
    Begin VB.Label Label24 
       BorderStyle     =   1  'Fixed Single
-      Caption         =   " RETENCION DEL I.V.A. EN BIENES                                                          %"
+      Caption         =   " RETENCION DEL I.V.A. EN BIENES                                                                      %"
       BeginProperty Font 
          Name            =   "Arial Narrow"
          Size            =   9.75
@@ -1560,7 +1569,7 @@ Begin VB.Form Abonos
       Left            =   105
       TabIndex        =   23
       Top             =   3045
-      Width           =   6000
+      Width           =   6525
    End
    Begin VB.Label Label11 
       BorderStyle     =   1  'Fixed Single
@@ -1575,7 +1584,7 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   6195
+      Left            =   6720
       TabIndex        =   26
       Top             =   3150
       Width           =   2010
@@ -1614,7 +1623,7 @@ Begin VB.Form Abonos
       Left            =   2205
       TabIndex        =   21
       Top             =   2310
-      Width           =   7890
+      Width           =   8415
    End
    Begin VB.Label Label22 
       BorderStyle     =   1  'Fixed Single
@@ -1629,7 +1638,7 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   7455
+      Left            =   7980
       TabIndex        =   43
       Top             =   5355
       Width           =   750
@@ -1647,7 +1656,7 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   7455
+      Left            =   7980
       TabIndex        =   49
       Top             =   6090
       Width           =   750
@@ -1668,7 +1677,7 @@ Begin VB.Form Abonos
       Left            =   105
       TabIndex        =   45
       Top             =   5985
-      Width           =   7260
+      Width           =   7785
    End
    Begin VB.Label Label8 
       BorderStyle     =   1  'Fixed Single
@@ -1683,7 +1692,7 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   5040
+      Left            =   5565
       TabIndex        =   55
       Top             =   7140
       Width           =   3165
@@ -1701,7 +1710,7 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   5040
+      Left            =   5565
       TabIndex        =   53
       Top             =   6720
       Width           =   3165
@@ -1721,7 +1730,7 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   5355
+      Left            =   5985
       TabIndex        =   3
       Top             =   105
       Width           =   1170
@@ -1739,7 +1748,7 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   3885
+      Left            =   4515
       TabIndex        =   2
       Top             =   105
       Width           =   1485
@@ -1762,7 +1771,7 @@ Begin VB.Form Abonos
       Left            =   105
       TabIndex        =   52
       Top             =   7455
-      Width           =   4845
+      Width           =   5370
    End
    Begin VB.Label LblObs 
       BackColor       =   &H00FFFFFF&
@@ -1782,7 +1791,7 @@ Begin VB.Form Abonos
       Left            =   105
       TabIndex        =   51
       Top             =   6720
-      Width           =   4845
+      Width           =   5370
    End
    Begin VB.Label LabelSaldo 
       Alignment       =   1  'Right Justify
@@ -1800,10 +1809,10 @@ Begin VB.Form Abonos
       EndProperty
       ForeColor       =   &H000000C0&
       Height          =   435
-      Left            =   8190
+      Left            =   8610
       TabIndex        =   13
       Top             =   630
-      Width           =   1905
+      Width           =   2010
    End
    Begin VB.Label Label6 
       BorderStyle     =   1  'Fixed Single
@@ -1818,7 +1827,7 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   6825
+      Left            =   7245
       TabIndex        =   12
       Top             =   630
       Width           =   1380
@@ -1857,9 +1866,9 @@ Begin VB.Form Abonos
       EndProperty
       ForeColor       =   &H00C00000&
       Height          =   435
-      Left            =   8610
+      Left            =   9135
       TabIndex        =   17
-      Top             =   1680
+      Top             =   1155
       Width           =   1485
    End
    Begin VB.Label Label2 
@@ -1876,7 +1885,7 @@ Begin VB.Form Abonos
       EndProperty
       ForeColor       =   &H000000C0&
       Height          =   435
-      Left            =   4725
+      Left            =   4935
       TabIndex        =   10
       Top             =   630
       Width           =   540
@@ -1894,7 +1903,7 @@ Begin VB.Form Abonos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   435
-      Left            =   6615
+      Left            =   7245
       TabIndex        =   4
       Top             =   105
       Width           =   2115
@@ -1917,7 +1926,7 @@ Begin VB.Form Abonos
       Left            =   105
       TabIndex        =   16
       Top             =   1680
-      Width           =   8520
+      Width           =   10515
    End
 End
 Attribute VB_Name = "Abonos"
@@ -2085,6 +2094,13 @@ Private Sub Command1_Click()
   End If
 End Sub
 
+Private Sub Command2_Click()
+   FA.TC = Ninguno
+   FA.Serie = Ninguno
+   FA.Factura = 0
+   Actualizar_Saldos_Facturas_SP FA.TC, FA.Serie, FA.Factura
+End Sub
+
 Private Sub Command3_Click()
    Unload Abonos
 End Sub
@@ -2197,7 +2213,7 @@ Private Sub Form_Activate()
   CServicio.AddItem "70"
   CServicio.AddItem "100"
   CServicio.Text = "0"
- 
+
   If ComisionEjec Then
      sSQL = "SELECT RP.Codigo, A.Usuario, A.Nombre_Completo " _
           & "FROM Accesos As A, Catalogo_Rol_Pagos As RP " _
@@ -2224,6 +2240,7 @@ Private Sub Form_Activate()
   If CheqRecibo.value = 1 Then TxtRecibo = Format$(DiarioCaja, "0000000") Else TxtRecibo = ""
   'If Factura_No = 0 Then Command2.Caption = "&Salir"
   Mifecha = BuscarFecha(FechaSistema)
+
   sSQL = "SELECT Codigo & Space(2) & Cuenta As NomCuenta " _
        & "FROM Catalogo_Cuentas " _
        & "WHERE Item = '" & NumEmpresa & "' " _
@@ -2277,7 +2294,7 @@ Private Sub Form_Activate()
        & "AND Fecha_Final >= #" & BuscarFecha(MBFecha) & "# " _
        & "ORDER BY Codigo "
   SelectDB_Combo DCCodRet, AdoCodRet, sSQL, "Codigo"
-  
+
   sSQL = "SELECT TC " _
        & "FROM Facturas " _
        & "WHERE Item = '" & NumEmpresa & "' " _
@@ -2313,10 +2330,6 @@ Private Sub Form_Load()
    ConectarAdodc AdoRetIvaBienes
    ConectarAdodc AdoRetIvaServicio
    FechaTexto = FechaSistema
-   FA.TC = Ninguno
-   FA.Serie = Ninguno
-   FA.Factura = 0
-   Actualizar_Saldos_Facturas_SP FA.TC, FA.Serie, FA.Factura
 End Sub
 
 Private Sub MBFecha_GotFocus()

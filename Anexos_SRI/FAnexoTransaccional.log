@@ -1,2 +1,18 @@
-Línea 758: no se pudo establecer la propiedad Left de Toolbar1.
-Línea 758: no se pudo establecer la propiedad Width de Toolbar1.
+Línea 18: la clase MSDataGridLib.DataGrid del control DGRolPagos no era una clase de control cargada.
+Línea 103: la clase MSComctlLib.ImageList del control ImageList2 no era una clase de control cargada.
+Línea 175: la clase MSAdodcLib.Adodc del control AdoMes no era una clase de control cargada.
+Línea 222: la clase MSAdodcLib.Adodc del control AdoCompras no era una clase de control cargada.
+Línea 269: la clase MSAdodcLib.Adodc del control AdoVentas no era una clase de control cargada.
+Línea 316: la clase MSAdodcLib.Adodc del control AdoAir no era una clase de control cargada.
+Línea 363: la clase MSAdodcLib.Adodc del control AdoImportaciones no era una clase de control cargada.
+Línea 410: la clase MSAdodcLib.Adodc del control AdoExportaciones no era una clase de control cargada.
+Línea 457: la clase MSAdodcLib.Adodc del control AdoClientes no era una clase de control cargada.
+Línea 504: la clase MSAdodcLib.Adodc del control AdoAux no era una clase de control cargada.
+Línea 551: la clase MSAdodcLib.Adodc del control AdoSaldos no era una clase de control cargada.
+Línea 598: la clase MSAdodcLib.Adodc del control AdoAnulados no era una clase de control cargada.
+Línea 645: la clase MSAdodcLib.Adodc del control AdoCiudades no era una clase de control cargada.
+Línea 692: la clase MSAdodcLib.Adodc del control AdoCodRet no era una clase de control cargada.
+Línea 739: la clase MSComctlLib.Toolbar del control Toolbar1 no era una clase de control cargada.
+Línea 794: la clase MSMask.MaskEdBox del control MBFechaE no era una clase de control cargada.
+Línea 949: la clase MSAdodcLib.Adodc del control AdoPuntosVentas no era una clase de control cargada.
+Línea 996: la clase MSAdodcLib.Adodc del control AdoRolPagos no era una clase de control cargada.

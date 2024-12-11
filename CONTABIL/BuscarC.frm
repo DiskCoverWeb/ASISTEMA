@@ -722,11 +722,11 @@ Dim CampoBuscar As String
   FechaFin = BuscarFecha(MBoxFechaF.Text)
   LenStrg = Len(TextPatron.Text)
  'Seteos de Transacciones
+ '& "AND 1 = 0 "
   sSQL = "SELECT T.T,T.Fecha,T.TP,T.Numero,T.Cheq_Dep,Cl.Cliente,C.CodigoU,C.Concepto,C.Cotizacion,T.Cta,T.Debe,T.Haber,T.Parcial_ME " _
        & "FROM Comprobantes AS C,Transacciones As T,Clientes AS Cl " _
        & "WHERE C.Item = '" & NumEmpresa & "' " _
        & "AND C.Periodo = '" & Periodo_Contable & "' " _
-       & "AND 1 = 0 " _
        & "AND C.TP = T.TP " _
        & "AND C.Fecha = T.Fecha " _
        & "AND C.Numero = T.Numero " _
@@ -787,11 +787,11 @@ Dim CampoBuscar As String
   Select_Adodc_Grid DGQuery, AdoQuery, sSQL
   
  'Seteos de Trans_SubCtas
+ '& "AND 1 = 0 "
   SQL2 = "SELECT T.T,T.Fecha,T.TP,T.Numero,B.Detalle,T.Cta,T.Detalle_SubCta,T.Factura,T.Debitos,T.Creditos,T.Parcial_ME,T.CodigoU,T.Item " _
        & "FROM Catalogo_SubCtas As B, Trans_SubCtas As T " _
        & "WHERE T.Item = '" & NumEmpresa & "' " _
        & "AND T.Periodo = '" & Periodo_Contable & "' " _
-       & "AND 1 = 0 " _
        & "AND B.Periodo = T.Periodo " _
        & "AND B.Item = T.Item " _
        & "AND B.Codigo = T.Codigo "

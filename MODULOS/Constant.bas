@@ -83,7 +83,10 @@ Option Explicit
 'Prueba:
 'https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl
 'https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl
-'-----------------------------------------------------------------------------------------------------------------------
+'--------------------------------------------------------------------------------------------
+    '    Clipboard.Clear
+    '    Clipboard.SetText URLParams
+'--------------------------------------------------------------------------------------------
 Global Const TextoLeyendaFA = "Para consultas, requerimientos o reclamos puede contactarse a nuestro Centro de Atención al Cliente Teléfono: 02-6052430, " _
                             & "o escriba al correo prisma_net@hotmail.es; para Transferencia o Depósitos hacer en El Banco Pichincha: Cta. Ahr. 4245946100 a " _
                             & "Nombre de Walter Vaca Prieto/Cta. Cte 3422225804, a Nombre de PRISMANET PROFESIONAL S.A."
@@ -98,7 +101,7 @@ Global Const MensajeAutomatizado = "vMensaje_Comunicado" & vbCrLf _
                                  & "de la Institucion." & vbCrLf & vbCrLf _
                                  & "Esta direccion de correo electronico no admite respuestas. En caso de requerir atencion personalizada por parte de un " _
                                  & "asesor de Servicio al Cliente, podra solicitar ayuda mediante los canales oficiales que detallamos a continuacion: " _
-                                 & "Telefonos: vNumero_Telefono, Correo: vEmails." & vbCrLf & vbCrLf _
+                                 & "Telefonos: vNumero_Telefono, Correo: vEmails_Copia." & vbCrLf & vbCrLf _
                                  & "Por la atencion que se de al presente quedo de usted." & vbCrLf & vbCrLf _
                                  & "Atentamente," & vbCrLf & vbCrLf _
                                  & "vRepresentante_Legal" & vbCrLf & vbCrLf _
@@ -123,6 +126,10 @@ Global Const MensajeDeAdvertencia = "DISKCOVER SYSTEM representado por PrismaNet
 Global Const ServidorEnLineaSRI = "En estos momentos el servidor de Aprobacion de Documentos Electronicos en Ambiente de XXXX no esta en linea, " _
                                 & "no se podra aprobar sus documentos, podra generar los comprobantes y despues enviar autorizar al SRI."
 
+Global Const Resolucion_Retencion = "RESOLUCION DEL SRI: El Articulo 97 del Reglamento para la Aplicacion de la Ley de Regimen Tributario Interno manifiesta " _
+                                  & "que los agentes de retencion de impuestos deberan extender un comprobante de retencion dentro del plazo maximo de CINCO " _
+                                  & "dias de recibido el comprobante de venta."
+
 '-------------------------------------------------------------------------------
 'Datos de Conexion a la Base de Datos en las nubes db.diskcoversystem.com:13306
 '-------------------------------------------------------------------------------
@@ -141,7 +148,7 @@ Global Const AdoStrCnnMySQL = "DRIVER={MySQL ODBC 5.1 Driver};" _
                                                            
 'Global Const AdoStrCnnMySQL = "Driver={MySQL ODBC 8.2 Unicode Driver};SERVER=db.diskcoversystem.com;DATABASE=diskcover_empresas;USER=diskcover;PASSWORD=disk2017@Cover;PORT=13306; OPTION=3"
 Global Const strServidor = "db.diskcoversystem.com"
-Global Const ServidorCorreos = "smtp.diskcoversystem.com"
+Global Const ServidorCorreos = "imap.diskcoversystem.com"
 
 Global Const urlIdukay = "https://erp.diskcoversystem.com/php/vista/consultarEstudiante.php?id="
 Global Const urlEsUnRUC = "https://srienlinea.sri.gob.ec/sri-catastro-sujeto-servicio-internet/rest/ConsolidadoContribuyente/existePorNumeroRuc?numeroRuc="

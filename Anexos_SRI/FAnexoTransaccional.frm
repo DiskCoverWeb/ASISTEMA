@@ -2,18 +2,18 @@ VERSION 5.00
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "Mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.Form FAnexoTransaccional 
    Caption         =   "Talón Resumen"
    ClientHeight    =   10470
    ClientLeft      =   60
    ClientTop       =   450
-   ClientWidth     =   16515
+   ClientWidth     =   15960
    Icon            =   "FAnexoTransaccional.frx":0000
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
    ScaleHeight     =   10470
-   ScaleWidth      =   16515
+   ScaleWidth      =   15960
    WindowState     =   2  'Maximized
    Begin MSDataGridLib.DataGrid DGRolPagos 
       Bindings        =   "FAnexoTransaccional.frx":0946
@@ -742,8 +742,8 @@ Begin VB.Form FAnexoTransaccional
       Left            =   0
       TabIndex        =   0
       Top             =   0
-      Width           =   16515
-      _ExtentX        =   29131
+      Width           =   15960
+      _ExtentX        =   28152
       _ExtentY        =   1588
       ButtonWidth     =   1826
       ButtonHeight    =   1429
@@ -1806,6 +1806,8 @@ Dim Suma_Ventas As Currency
 Dim ValRetBien10 As Currency
 Dim ValRetServ20 As Currency
 Dim ValRetServ50 As Currency
+Dim ContV As Long
+
   RatonReloj
   Total_Reembolso_Estab = 0
   Total_Ventas_Estab = 0
@@ -2042,7 +2044,7 @@ Dim ValRetServ50 As Currency
        Print #NumFile, VacioXML("compras")
    End If
   End With
-  
+
  'VENTAS
   Generar_Ventas = False
   If CFechaLong(FechaInicial) < CFechaLong("01/01/2016") Then Generar_Ventas = True
@@ -2062,12 +2064,16 @@ Dim ValRetServ50 As Currency
   End If
  'MsgBox TipoDeFactura & vbCrLf & Generar_Ventas
  'Generar_Ventas = True
-  
+  ContV = 0
   If Generar_Ventas Then
   With AdoVentas.Recordset
    If .RecordCount > 0 Then
        Print #NumFile, AbrirXML("ventas")
        Do While Not .EOF
+          ContV = ContV + 1
+          Progreso_Barra.Mensaje_Box = "V(" & ContV & "/" & .RecordCount & ") ATS-Generando en: " & Archivo_XML
+          Progreso_Esperar
+         
           Contador = .fields("NumeroComprobantesV")
           If Contador <= 0 Then Contador = 1
           Factura_No = Contador
@@ -2113,99 +2119,95 @@ Dim ValRetServ50 As Currency
           Select Case Val(.fields("TipoComprobante"))
             Case 4, 41: Cargar_Air_AT = False   ' NC o ND
           End Select
-          SubTotal = 0
-          If Cargar_Air_AT Then
-             sSQL = "SELECT IdProv,SUM(ValRet) As TValRet " _
-                  & "FROM Trans_Air " _
-                  & "WHERE Fecha Between #" & FechaIni & "# AND #" & FechaFin & "#  " _
-                  & "AND Periodo = '" & Periodo_Contable & "' " _
-                  & "AND Item IN (" & sItem & ") " _
-                  & "AND T = '" & Normal & "' " _
-                  & "AND Tipo_Trans = 'V' " _
-                  & "AND RUC_CI = '" & CodigoCliente & "' " _
-                  & "GROUP BY IdProv "
-             Select_Adodc AdoAir, sSQL
-             'MsgBox sSQL & vbCrLf & AdoAir.Recordset.RecordCount
-             If AdoAir.Recordset.RecordCount > 0 Then SubTotal = SubTotal + AdoAir.Recordset.fields("TValRet")
-            'MsgBox sSQL & vbCrLf & AdoAir.Recordset.RecordCount
-          End If
+'''          SubTotal = 0
+'''          If Cargar_Air_AT Then
+'''             sSQL = "SELECT IdProv, SUM(ValRet) As TValRet " _
+'''                  & "FROM Trans_Air " _
+'''                  & "WHERE Fecha Between #" & FechaIni & "# AND #" & FechaFin & "#  " _
+'''                  & "AND Periodo = '" & Periodo_Contable & "' " _
+'''                  & "AND Item IN (" & sItem & ") " _
+'''                  & "AND T = '" & Normal & "' " _
+'''                  & "AND Tipo_Trans = 'V' " _
+'''                  & "AND RUC_CI = '" & CodigoCliente & "' " _
+'''                  & "GROUP BY IdProv "
+'''             Select_Adodc AdoAir, sSQL
+'''             'MsgBox sSQL & vbCrLf & AdoAir.Recordset.RecordCount
+'''             If AdoAir.Recordset.RecordCount > 0 Then SubTotal = SubTotal + AdoAir.Recordset.fields("TValRet")
+'''            'MsgBox sSQL & vbCrLf & AdoAir.Recordset.RecordCount
+'''          End If
          'MsgBox SubTotal
-          Print #NumFile, CampoXML("valorRetRenta", Format(SubTotal, "#0.00"))
+          Print #NumFile, CampoXML("valorRetRenta", Format(.fields("ValorRetRentaV"), "#0.00"))
           
           If CFechaLong(FechaInicial) >= CFechaLong("01/06/2016") Then
              For I = 0 To 7
                  Tipo_Pagos(I) = ""
              Next I
-            'Ventas Normales
-             sSQL = "SELECT Tipo_Pago " _
-                  & "FROM Facturas " _
-                  & "WHERE Fecha Between #" & FechaIni & "# AND #" & FechaFin & "#  " _
-                  & "AND Periodo = '" & Periodo_Contable & "' " _
-                  & "AND LEN(Tipo_Pago) > 1 " _
-                  & "AND Item IN (" & sItem & ") " _
-                  & "AND RUC_CI = '" & CodigoCliente & "' " _
-                  & "GROUP BY Tipo_Pago " _
-                  & "ORDER BY Tipo_Pago "
-             Select_Adodc AdoAir, sSQL
-             If AdoAir.Recordset.RecordCount > 0 Then
-                Do While Not AdoAir.Recordset.EOF
-                   Tipo_Pago = AdoAir.Recordset.fields("Tipo_Pago")
-                   For I = 0 To 7
-                       If Tipo_Pago <> Tipo_Pagos(I) Then
-                          Tipo_Pagos(I) = Tipo_Pago
-                          Exit For
-                       End If
-                   Next I
-                   AdoAir.Recordset.MoveNext
-                Loop
-             End If
+'''            'Ventas Normales
+'''             sSQL = "SELECT Tipo_Pago " _
+'''                  & "FROM Facturas " _
+'''                  & "WHERE Fecha Between #" & FechaIni & "# AND #" & FechaFin & "#  " _
+'''                  & "AND Periodo = '" & Periodo_Contable & "' " _
+'''                  & "AND LEN(Tipo_Pago) > 1 " _
+'''                  & "AND Item IN (" & sItem & ") " _
+'''                  & "AND RUC_CI = '" & CodigoCliente & "' " _
+'''                  & "GROUP BY Tipo_Pago " _
+'''                  & "ORDER BY Tipo_Pago "
+'''             Select_Adodc AdoAir, sSQL
+'''             If AdoAir.Recordset.RecordCount > 0 Then
+'''                Do While Not AdoAir.Recordset.EOF
+'''                   Tipo_Pago = AdoAir.Recordset.fields("Tipo_Pago")
+'''                   For I = 0 To 7
+'''                       If Tipo_Pago <> Tipo_Pagos(I) Then
+'''                          Tipo_Pagos(I) = Tipo_Pago
+'''                          Exit For
+'''                       End If
+'''                   Next I
+'''                   AdoAir.Recordset.MoveNext
+'''                Loop
+'''             End If
              
             'Ventas sin modulos de Facturacion
-             sSQL = "SELECT Tipo_Pago " _
-                  & "FROM Trans_Ventas " _
-                  & "WHERE Fecha Between #" & FechaIni & "# AND #" & FechaFin & "#  " _
-                  & "AND Periodo = '" & Periodo_Contable & "' " _
-                  & "AND LEN(Tipo_Pago) > 1 " _
-                  & "AND Item IN (" & sItem & ") " _
-                  & "AND RUC_CI = '" & CodigoCliente & "' " _
-                  & "GROUP BY Tipo_Pago " _
-                  & "ORDER BY Tipo_Pago "
-             Select_Adodc AdoAir, sSQL
-             If AdoAir.Recordset.RecordCount > 0 Then
-                Do While Not AdoAir.Recordset.EOF
-                   Tipo_Pago = AdoAir.Recordset.fields("Tipo_Pago")
-                   For I = 0 To 7
-                       If Tipo_Pago <> Tipo_Pagos(I) Then
-                          Tipo_Pagos(I) = Tipo_Pago
-                          Exit For
-                       End If
-                   Next I
-                   AdoAir.Recordset.MoveNext
-                Loop
-             End If
-             
-            'Verificamos si ponemo o no el tipo de pago
              Select Case Val(.fields("TipoComprobante"))
                Case 4
                     Tipo_Pago = ""
                Case Else
-                    Tipo_Pago = ""
-                    For I = 0 To 7
-                        If Tipo_Pagos(I) <> "" Then Tipo_Pago = Tipo_Pago & Tipo_Pagos(I) & ","
-                    Next I
-                    If Tipo_Pago = "" Then
-                       Tipo_Pago = "01,"
-                       Tipo_Pagos(0) = "01"
-                    End If
+                    Print #NumFile, AbrirXML("formasDePago")
+                    Print #NumFile, CampoXML("formaPago", .fields("Tipo_Pago"))
+                    Print #NumFile, CerrarXML("formasDePago")
              End Select
+            
+'''             sSQL = "SELECT Tipo_Pago " _
+'''                  & "FROM Trans_Ventas " _
+'''                  & "WHERE Fecha Between #" & FechaIni & "# AND #" & FechaFin & "#  " _
+'''                  & "AND Periodo = '" & Periodo_Contable & "' " _
+'''                  & "AND LEN(Tipo_Pago) > 1 " _
+'''                  & "AND Item IN (" & sItem & ") " _
+'''                  & "AND RUC_CI = '" & CodigoCliente & "' " _
+'''                  & "GROUP BY Tipo_Pago " _
+'''                  & "ORDER BY Tipo_Pago "
+'''             Select_Adodc AdoAir, sSQL
+'''             If AdoAir.Recordset.RecordCount > 0 Then
+'''                Do While Not AdoAir.Recordset.EOF
+'''                   Tipo_Pago = AdoAir.Recordset.fields("Tipo_Pago")
+'''                   For I = 0 To 7
+'''                       If Tipo_Pago <> Tipo_Pagos(I) Then
+'''                          Tipo_Pagos(I) = Tipo_Pago
+'''                          Exit For
+'''                       End If
+'''                   Next I
+'''                   AdoAir.Recordset.MoveNext
+'''                Loop
+'''             End If
+             
+            'Verificamos si ponemo o no el tipo de pago
             'If Len(Tipo_Pago) > 3 Then MsgBox Tipo_Pago
-             If Tipo_Pago <> "" Then
-                Print #NumFile, AbrirXML("formasDePago")
-                For I = 0 To 7
-                    If Tipo_Pagos(I) <> "" Then Print #NumFile, CampoXML("formaPago", Tipo_Pagos(I))
-                Next I
-                Print #NumFile, CerrarXML("formasDePago")
-             End If
+'''             If Tipo_Pago <> "" Then
+'''                Print #NumFile, AbrirXML("formasDePago")
+'''                For I = 0 To 7
+'''                    If Tipo_Pagos(I) <> "" Then Print #NumFile, CampoXML("formaPago", Tipo_Pagos(I))
+'''                Next I
+'''                Print #NumFile, CerrarXML("formasDePago")
+'''             End If
           End If
           Print #NumFile, CerrarXML("detalleVentas")
          .MoveNext
@@ -3475,6 +3477,7 @@ Dim Id_Mes As Byte
          'Insertar_Liquidacion_Compras_ATS
          RatonReloj
          Consultar_Anexos
+                  
          Archivo_XML = RutaSysBases & "\AT\AT" & NumEmpresa & "\AT"
          Select Case Mes_Anexo
            Case "1er_Semestre", "2do_Semestre"
@@ -3482,6 +3485,7 @@ Dim Id_Mes As Byte
            Case Else
                 Archivo_XML = Archivo_XML & Format(LetrasMeses(Mes_Anexo), "00")
          End Select
+         
          Archivo_XML = Archivo_XML & "_" & Anio_Anexo & ".xml"
          RutaSubDirTemp = Archivo_XML
          Progreso_Barra.Mensaje_Box = "ATS-Generando en: " & Archivo_XML
@@ -4963,7 +4967,7 @@ Public Sub Consultar_Anexos()
  'MsgBox SQL2 & vbCrLf & AdoRolPagos.Recordset.RecordCount
  
  'VENTAS
-  sSQL = "SELECT X, RUC_CI, TB, Razon_Social, TipoComprobante, RetPresuntiva, PorcentajeIva, PorcentajeIce, IvaPresuntivo, PorRetBienes, PorRetServicios, " _
+  sSQL = "SELECT X, RUC_CI, TB, Razon_Social, TipoComprobante, RetPresuntiva, PorcentajeIva, PorcentajeIce, IvaPresuntivo, PorRetBienes, PorRetServicios, Tipo_Pago, " _
        & "SUM(NumeroComprobantes) As NumeroComprobantesV, " _
        & "SUM(BaseImponible) As BaseImponibleV, " _
        & "SUM(BaseImpGrav) As BaseImpGravV, " _
@@ -4973,15 +4977,16 @@ Public Sub Consultar_Anexos()
        & "SUM(MontoIvaBienes) As MontoIvaBienesV, " _
        & "SUM(ValorRetBienes) As ValorRetBienesV, " _
        & "SUM(MontoIvaServicios) As MontoIvaServiciosV, " _
-       & "SUM(ValorRetServicios) As ValorRetServiciosV " _
+       & "SUM(ValorRetServicios) As ValorRetServiciosV, " _
+       & "SUM(ValorRetRenta) As ValorRetRentaV " _
        & "FROM Trans_Ventas " _
        & "WHERE Fecha Between #" & FechaIni & "# AND #" & FechaFin & "# " _
        & "AND Periodo = '" & Periodo_Contable & "' " _
        & "AND Item = '" & NumEmpresa & "' " _
-       & "GROUP BY X, RUC_CI,TB, Razon_Social, TipoComprobante, RetPresuntiva, PorcentajeIva, PorcentajeIce, PorRetBienes, PorRetServicios, IvaPresuntivo " _
+       & "GROUP BY X, RUC_CI,TB, Razon_Social, TipoComprobante, RetPresuntiva, PorcentajeIva, PorcentajeIce, PorRetBienes, PorRetServicios, IvaPresuntivo, Tipo_Pago " _
        & "ORDER BY X, RUC_CI,TB, Razon_Social "
-  Select_Adodc AdoVentas, sSQL
-  
+  Select_Adodc AdoVentas, sSQL, , , "Ventas_Mes"
+ 'MsgBox AdoVentas.Recordset.RecordCount & "..."
  'PUNTO DE VENTAS
  'TV.PuntoEmision,
   sSQL = "SELECT TipoComprobante, Establecimiento, RetPresuntiva, PorcentajeIva, PorcentajeIce, IvaPresuntivo, PorRetBienes, PorRetServicios, " _
@@ -5001,7 +5006,8 @@ Public Sub Consultar_Anexos()
        & "AND Item = '" & NumEmpresa & "' " _
        & "GROUP BY Establecimiento, PuntoEmision, TipoComprobante, RetPresuntiva, PorcentajeIva, PorcentajeIce, PorRetBienes, PorRetServicios, IvaPresuntivo " _
        & "ORDER BY Establecimiento "
-  Select_Adodc AdoPuntosVentas, sSQL
+  Select_Adodc AdoPuntosVentas, sSQL, , , "Punto_Ventas_Mes"
+
  'MsgBox AdoVentas.Recordset.RecordCount & vbCrLf & AdoPuntosVentas.Recordset.RecordCount
  'LISTA LA BASES DE CIUDADES
   sSQL = "SELECT " & Full_Fields("Tabla_Naciones") & " " _

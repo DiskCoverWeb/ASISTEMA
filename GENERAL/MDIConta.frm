@@ -1,12 +1,12 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.MDIForm MDIConta 
    BackColor       =   &H00FFFFFF&
    Caption         =   " "
-   ClientHeight    =   8220
+   ClientHeight    =   10575
    ClientLeft      =   225
    ClientTop       =   870
-   ClientWidth     =   11280
+   ClientWidth     =   13380
    Icon            =   "MDIConta.frx":0000
    LinkTopic       =   "MDIForm1"
    Picture         =   "MDIConta.frx":164A
@@ -19,11 +19,11 @@ Begin VB.MDIForm MDIConta
       Height          =   15
       Left            =   0
       ScaleHeight     =   15
-      ScaleWidth      =   11280
+      ScaleWidth      =   13380
       TabIndex        =   0
       Top             =   0
       Visible         =   0   'False
-      Width           =   11280
+      Width           =   13380
    End
    Begin VB.Timer Timer1 
       Left            =   105
@@ -34,13 +34,13 @@ Begin VB.MDIForm MDIConta
       Height          =   375
       Left            =   0
       TabIndex        =   1
-      Top             =   7845
-      Width           =   11280
-      _ExtentX        =   19897
+      Top             =   10200
+      Width           =   13380
+      _ExtentX        =   23601
       _ExtentY        =   661
       _Version        =   393216
       BeginProperty Panels {8E3867A5-8586-11D1-B16A-00C0F0283628} 
-         NumPanels       =   6
+         NumPanels       =   5
          BeginProperty Panel1 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             Object.Width           =   4410
             MinWidth        =   4410
@@ -54,28 +54,22 @@ Begin VB.MDIForm MDIConta
             Key             =   "Usuario"
          EndProperty
          BeginProperty Panel3 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
-            Object.Width           =   4939
-            MinWidth        =   4939
-            Picture         =   "MDIConta.frx":2876C
-            Key             =   "Fecha"
-         EndProperty
-         BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             Object.Width           =   4410
             MinWidth        =   4410
-            Picture         =   "MDIConta.frx":28A86
+            Picture         =   "MDIConta.frx":2876C
             Key             =   "Periodo"
          EndProperty
-         BeginProperty Panel5 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
-            Picture         =   "MDIConta.frx":29360
+         BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
+            Picture         =   "MDIConta.frx":29046
             Key             =   "Plataforma"
          EndProperty
-         BeginProperty Panel6 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
+         BeginProperty Panel5 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             Key             =   "Procesando"
          EndProperty
       EndProperty
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Arial"
-         Size            =   8,25
+         Size            =   8.25
          Charset         =   186
          Weight          =   400
          Underline       =   0   'False
@@ -88,9 +82,9 @@ Begin VB.MDIForm MDIConta
       Height          =   120
       Left            =   0
       TabIndex        =   2
-      Top             =   7725
-      Width           =   11280
-      _ExtentX        =   19897
+      Top             =   10080
+      Width           =   13380
+      _ExtentX        =   23601
       _ExtentY        =   212
       _Version        =   393216
       Appearance      =   0
@@ -99,11 +93,11 @@ Begin VB.MDIForm MDIConta
       Caption         =   "&Archivos"
       Begin VB.Menu DelSyst 
          Caption         =   "Del &Sistema"
-         Begin VB.Menu CambClave 
-            Caption         =   "Cambio de Clave"
-         End
          Begin VB.Menu NuevoUsu 
             Caption         =   "Ingresar nuevo usuario"
+         End
+         Begin VB.Menu CambClave 
+            Caption         =   "Cambio de Clave"
          End
          Begin VB.Menu y1 
             Caption         =   "-"
@@ -125,9 +119,6 @@ Begin VB.MDIForm MDIConta
          End
          Begin VB.Menu MCamboPeriodo 
             Caption         =   "Cambio de Periodo"
-         End
-         Begin VB.Menu RPeriodo 
-            Caption         =   "ReAbrir Periodo"
          End
       End
       Begin VB.Menu DelOper 
@@ -153,6 +144,9 @@ Begin VB.MDIForm MDIConta
             Caption         =   "Ingresar Clientes/Proveedores"
             Shortcut        =   ^{F8}
          End
+         Begin VB.Menu MSubCtaProyectos 
+            Caption         =   "Ingresar SubCuentas de Proyectos"
+         End
          Begin VB.Menu B13 
             Caption         =   "-"
          End
@@ -170,11 +164,18 @@ Begin VB.MDIForm MDIConta
          Begin VB.Menu MModPrimas 
             Caption         =   "Modificacion de Primas"
          End
+         Begin VB.Menu MCostoDelProyecto 
+            Caption         =   "Contabilizacion de Costos de Proyectos"
+         End
          Begin VB.Menu xxxxxx 
             Caption         =   "-"
          End
          Begin VB.Menu ConcBank 
             Caption         =   "Conciliación &Bancaria de Debitos/Creditos"
+         End
+         Begin VB.Menu RecibirXML 
+            Caption         =   "Recepcion de Archivos Autorizados (SRI)"
+            Shortcut        =   ^X
          End
       End
       Begin VB.Menu xxxxx 
@@ -182,23 +183,7 @@ Begin VB.MDIForm MDIConta
       End
       Begin VB.Menu MArchivoExcel 
          Caption         =   "Archivos de Excel"
-         Begin VB.Menu MImportExcel 
-            Caption         =   "Importar Compras/Debitos de Excel"
-            Shortcut        =   ^I
-         End
-         Begin VB.Menu MImporVentasATS 
-            Caption         =   "Importar Ventas de Excel"
-            Shortcut        =   ^J
-         End
-         Begin VB.Menu MImportarCliProv 
-            Caption         =   "Importar Clientes/Proveedores"
-         End
-         Begin VB.Menu MImpSubMod 
-            Caption         =   "Importar Submodulos"
-         End
-         Begin VB.Menu MImportContaExt 
-            Caption         =   "Importar Contabilidad Externa"
-         End
+         Shortcut        =   ^I
       End
       Begin VB.Menu Mxx1 
          Caption         =   "-"
@@ -244,7 +229,7 @@ Begin VB.MDIForm MDIConta
       End
       Begin VB.Menu LibrosBanco 
          Caption         =   "Libro Banco"
-         Shortcut        =   ^F
+         Shortcut        =   ^B
       End
       Begin VB.Menu ListMayor 
          Caption         =   "Mayores Auxiliares"
@@ -268,6 +253,10 @@ Begin VB.MDIForm MDIConta
          Caption         =   "Comprobantes de Retencion"
          Shortcut        =   ^R
       End
+      Begin VB.Menu MComprobantesLC 
+         Caption         =   "Comprobantes de Liquidacion de Compras"
+         Shortcut        =   {F5}
+      End
       Begin VB.Menu ImpCheques 
          Caption         =   "Cheques Procesados"
       End
@@ -275,7 +264,7 @@ Begin VB.MDIForm MDIConta
          Caption         =   "Conciliacion Bancaria"
       End
       Begin VB.Menu MImpComp 
-         Caption         =   "Imprimir Lista de Comprobantes"
+         Caption         =   "Imprimir Comprobantes en Bloque"
       End
       Begin VB.Menu MBarAT 
          Caption         =   "-"
@@ -285,6 +274,7 @@ Begin VB.MDIForm MDIConta
       End
       Begin VB.Menu MSaldoFactSubMod 
          Caption         =   "Saldo de Facturas en SubModulos"
+         Shortcut        =   ^Z
       End
       Begin VB.Menu MSaldoCtasEsp 
          Caption         =   "Flujo de Caja Chica"
@@ -310,6 +300,7 @@ Begin VB.MDIForm MDIConta
       End
       Begin VB.Menu BuscarDatos 
          Caption         =   "Buscar Datos"
+         Shortcut        =   ^F
       End
    End
    Begin VB.Menu MAnexosTrans 
@@ -325,25 +316,6 @@ Begin VB.MDIForm MDIConta
       Begin VB.Menu MResumenAT 
          Caption         =   "Resumen de Retenciones"
          Shortcut        =   {F9}
-      End
-      Begin VB.Menu MCorrFormularios 
-         Caption         =   "Correccion de Formularios"
-         Begin VB.Menu MCorreccionCompras 
-            Caption         =   "Compras"
-            Shortcut        =   +{F1}
-         End
-         Begin VB.Menu MCorreccionVentas 
-            Caption         =   "Ventas"
-            Shortcut        =   +{F2}
-         End
-         Begin VB.Menu MCorreccionExportaciones 
-            Caption         =   "Exportaciones"
-            Shortcut        =   +{F3}
-         End
-         Begin VB.Menu MCorreccionImportaciones 
-            Caption         =   "Importaciones"
-            Shortcut        =   +{F4}
-         End
       End
       Begin VB.Menu MRelacionDependencia 
          Caption         =   "Relación por Dependencia"
@@ -376,7 +348,6 @@ Begin VB.MDIForm MDIConta
       End
       Begin VB.Menu MEstResul12M 
          Caption         =   "Resumen Analitico de Utilidad/Perdida"
-         Shortcut        =   ^U
       End
       Begin VB.Menu xxx 
          Caption         =   "-"
@@ -389,10 +360,13 @@ Begin VB.MDIForm MDIConta
       Caption         =   "&Herramientas"
       Begin VB.Menu Calculadora 
          Caption         =   "Calculadora"
-         Shortcut        =   ^{F1}
+         Shortcut        =   ^{F2}
       End
       Begin VB.Menu Programador 
          Caption         =   "Programador"
+      End
+      Begin VB.Menu MReindexa_Cuentas 
+         Caption         =   "Reindexar Cuentas"
       End
       Begin VB.Menu MMemos 
          Caption         =   "Memorando"
@@ -409,7 +383,7 @@ Begin VB.MDIForm MDIConta
       End
    End
    Begin VB.Menu MAmbiente 
-      Caption         =   "Ambiente"
+      Caption         =   "Ambiwnte"
       Enabled         =   0   'False
    End
 End
@@ -432,9 +406,13 @@ Dim RetVal
 End Sub
 
 Private Sub CambClave_Click()
-  RatonReloj
-  Control_Procesos Normal, "Cambio de Clave"
-  CambClav.Show
+    Titulo = "CAMBIO DE CLAVE"
+    Mensajes = "Estimado " & NombreUsuario & ", desea cambiar su clave de acceso?"
+    If BoxMensaje = vbYes Then
+       RatonReloj
+       Control_Procesos Normal, "Cambio de Clave"
+       CambClav.Show
+    End If
 End Sub
 
 Private Sub CatSubCtas_Click()
@@ -538,6 +516,11 @@ Private Sub MAnulados_Click()
   FAnulados.Show
 End Sub
 
+Private Sub MArchivoExcel_Click()
+  RatonReloj
+  FImporta.Show
+End Sub
+
 Private Sub MAutorizacionSRI_Click()
 If ClaveAdministrador Then
    RatonReloj
@@ -605,6 +588,12 @@ Private Sub MCodigosAir_Click()
   FReportes.Show
 End Sub
 
+Private Sub MComprobantesLC_Click()
+   Control_Procesos Normal, "Listar Retenciones"
+   RatonReloj
+   FLiquidacionCompras.Show
+End Sub
+
 Private Sub MComps_Click()
   RatonReloj
   Control_Procesos Normal, "Procesar Comprobantes Contables"
@@ -622,33 +611,15 @@ Private Sub MConexionOracle_Click()
    FGeneraPDF.Show
 End Sub
 
-Private Sub MCorreccionCompras_Click()
- ' RatonReloj
-  Trans_No = 1
- 'FCompras.Show
-End Sub
-
-Private Sub MCorreccionExportaciones_Click()
- ' RatonReloj
-  Trans_No = 1
- 'FExportaciones.Show
-End Sub
-
-Private Sub MCorreccionImportaciones_Click()
- ' RatonReloj
-  Trans_No = 1
- 'FImportaciones.Show
-End Sub
-
-Private Sub MCorreccionVentas_Click()
- ' RatonReloj
-  Trans_No = 1
- 'FVentas.Show
+Private Sub MCostoDelProyecto_Click()
+  Control_Procesos Normal, "Generacion de Costos del Proyecto"
+  RatonReloj
+  FCostosDelProyecto.Show
 End Sub
 
 Private Sub MDIForm_Activate()
-  MDI_Y_Max = MDIFormulario.ScaleHeight - 100
-  MDI_X_Max = MDIFormulario.ScaleWidth - 100
+    MDI_X_Max = Screen.width - 150
+    MDI_Y_Max = Screen.Height - 1900
 End Sub
 
 Private Sub MDIForm_Load()
@@ -658,7 +629,10 @@ Private Sub MDIForm_Load()
   UnidadSistema
   TipoModulo = conta
   IngresarClave = True
-  MDIConta.RPeriodo.Visible = False
+''  FEsperar.Show
+''  MsgBox ".."
+''  Unload FEsperar
+''  MsgBox "..."
  'MODULOS
   NumModulo = "0"
   Modulo = "CONTABILIDAD"
@@ -667,6 +641,7 @@ Private Sub MDIForm_Load()
   TiempoSistema = Time
   Timer1.Enabled = True
   Timer1.Interval = 1000
+  
   ListEmp.Show 1
   PonerDirEmpresa
 End Sub
@@ -678,10 +653,14 @@ End Sub
 
 Private Sub Mdiskcoversystem_Click()
 Dim X
-  Control_Procesos "Q", "Salir por ingresar a la Pagina WEB"
-  MsgBox "Estas a punto de ingresar al Centro de descargas del sistema"
-  X = ShellExecute(Me.hwnd, "Open", "http://www.diskcoversystem.com", &O0, &O0, SW_NORMAL)
-  End
+  If IP_PC.InterNet Then
+     Control_Procesos "Q", "Salir por ingresar a la Pagina WEB"
+     MsgBox "Estas a punto de ingresar al Centro de descargas del sistema"
+     X = ShellExecute(Me.hwnd, "Open", "http://www.diskcoversystem.com", &O0, &O0, SW_NORMAL)
+     End
+  Else
+     MsgBox "No puede acceder a la pagina web de www.diskcoversystem.com por que no tiene internet"
+  End If
 End Sub
 
 Private Sub MEmails_Click()
@@ -723,31 +702,6 @@ Private Sub MImpComp_Click()
   Control_Procesos Normal, "Imprimir Comprobates por Lotes"
   RatonReloj
   ImprimirComprobantes.Show
-End Sub
-
-Private Sub MImportarCliProv_Click()
-  RatonReloj
-  FImporta.Show
-End Sub
-
-Private Sub MImportContaExt_Click()
-  RatonReloj
-  FImporta.Show
-End Sub
-
-Private Sub MImportExcel_Click()
-  RatonReloj
-  FImporta.Show
-End Sub
-
-Private Sub MImporVentasATS_Click()
-  RatonReloj
-  FImporta.Show
-End Sub
-
-Private Sub MImpSubMod_Click()
-  RatonReloj
-  FImporta.Show
 End Sub
 
 Private Sub MIngBenef_Click()
@@ -812,6 +766,16 @@ Private Sub MPagoProgBancos_Click()
   FPagosBancos.Show
 End Sub
 
+Private Sub MReindexa_Cuentas_Click()
+    RatonReloj
+    Parametros = "'" & NumEmpresa & "','" & Periodo_Contable & "' "
+    Ejecutar_SP "sp_Reindexar_Periodo", Parametros
+    
+    Mayorizar_Cuentas_SP
+    Presenta_Errores_Contabilidad_SP
+    RatonNormal
+End Sub
+
 Private Sub MRelacionDependencia_Click()
   RatonReloj
   FRetencion.Show
@@ -846,6 +810,11 @@ Private Sub MSalVencSubCtas_Click()
   BalanceSubCtas.Show
 End Sub
 
+Private Sub MSubCtaProyectos_Click()
+  RatonReloj
+  FCatalogo_Costos.Show
+End Sub
+
 Private Sub MSubIngEgr_Click()
   Control_Procesos Normal, "Catalogo de I/E/CC"
   RatonReloj
@@ -862,13 +831,13 @@ End Sub
 
 Private Sub PRN_LPT1_Click()
     'Establecer CancelError a True
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
     CommonDialog1.CancelError = False
     'Presentar el cuadro de diálogo Imprimir
     CommonDialog1.Flags = cdlPDPrintSetup
     CommonDialog1.ShowPrinter
     Exit Sub
-ErrHandler:
+errHandler:
     'El usuario ha hecho clic en el botón Cancelar
     Exit Sub
 End Sub
@@ -899,9 +868,14 @@ Private Sub Programador_Click()
    'Unload FHola
 End Sub
 
-Private Sub RPeriodo_Click()
-   AbrirPeriodo.Show
+Private Sub RecibirXML_Click()
+  RatonReloj
+  FXMLRecibidosSRI.Show
 End Sub
+
+'''Private Sub RPeriodo_Click()
+'''   AbrirPeriodo.Show
+'''End Sub
 
 Private Sub SalBanco_Click()
   Control_Procesos Normal, "Saldo de Caja Bancos"
