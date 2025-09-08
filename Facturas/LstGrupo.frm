@@ -1,20 +1,20 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
-Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDATGRD.OCX"
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "COMCTL32.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
+Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form ListarGrupos 
    Caption         =   "LISTADO POR GRUPOS"
-   ClientHeight    =   12105
+   ClientHeight    =   10935
    ClientLeft      =   60
    ClientTop       =   345
-   ClientWidth     =   18120
+   ClientWidth     =   11280
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   12105
-   ScaleWidth      =   18120
+   ScaleHeight     =   10935
+   ScaleWidth      =   11280
    WindowState     =   1  'Minimized
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
@@ -31,7 +31,7 @@ Begin VB.Form ListarGrupos
       ImageList       =   "ImageList1"
       _Version        =   327682
       BeginProperty Buttons {0713E452-850A-101B-AFC0-4210102A8DA7} 
-         NumButtons      =   9
+         NumButtons      =   10
          BeginProperty Button1 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "Salir"
             Object.ToolTipText     =   "Salir del Modulo"
@@ -86,15 +86,21 @@ Begin VB.Form ListarGrupos
             Object.Tag             =   ""
             ImageIndex      =   9
          EndProperty
+         BeginProperty Button10 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   "Email_Tutor"
+            Object.ToolTipText     =   "Enviar al Tutor la Nomina por mail"
+            Object.Tag             =   ""
+            ImageIndex      =   10
+         EndProperty
       EndProperty
       Begin VB.Frame Frame1 
          Height          =   645
-         Left            =   5355
+         Left            =   5985
          TabIndex        =   0
          Top             =   0
-         Width           =   16500
+         Width           =   14400
          Begin VB.CheckBox CheqRangos 
-            Caption         =   "&Por Rangos Grupos:"
+            Caption         =   "&Por Rangos:"
             BeginProperty Font 
                Name            =   "MS Sans Serif"
                Size            =   8.25
@@ -108,7 +114,7 @@ Begin VB.Form ListarGrupos
             Left            =   105
             TabIndex        =   1
             Top             =   210
-            Width           =   2115
+            Width           =   1380
          End
          Begin VB.CheckBox CheqPendientes 
             Caption         =   "Listar Solo Pendientes"
@@ -122,19 +128,11 @@ Begin VB.Form ListarGrupos
                Strikethrough   =   0   'False
             EndProperty
             Height          =   330
-            Left            =   6090
+            Left            =   5460
             TabIndex        =   4
             Top             =   210
             Value           =   1  'Checked
-            Width           =   2325
-         End
-         Begin VB.CommandButton Command2 
-            Caption         =   "&S"
-            Height          =   330
-            Left            =   15645
-            TabIndex        =   52
-            Top             =   210
-            Width           =   330
+            Width           =   1380
          End
          Begin VB.CommandButton Command1 
             Caption         =   "&?"
@@ -148,7 +146,7 @@ Begin VB.Form ListarGrupos
                Strikethrough   =   0   'False
             EndProperty
             Height          =   330
-            Left            =   16065
+            Left            =   13965
             Style           =   1  'Graphical
             TabIndex        =   51
             Top             =   210
@@ -158,15 +156,15 @@ Begin VB.Form ListarGrupos
             Bindings        =   "LstGrupo.frx":0000
             DataSource      =   "AdoGrupo"
             Height          =   360
-            Left            =   2310
+            Left            =   1575
             TabIndex        =   2
             Top             =   210
+            Visible         =   0   'False
             Width           =   1800
             _ExtentX        =   3175
             _ExtentY        =   635
             _Version        =   393216
-            Enabled         =   0   'False
-            Text            =   "GrupoI"
+            Text            =   ""
             BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
                Name            =   "MS Sans Serif"
                Size            =   9.75
@@ -181,11 +179,11 @@ Begin VB.Form ListarGrupos
             Bindings        =   "LstGrupo.frx":0017
             DataSource      =   "AdoTipoPago"
             Height          =   315
-            Left            =   9975
+            Left            =   8505
             TabIndex        =   6
             Top             =   210
-            Width           =   5580
-            _ExtentX        =   9843
+            Width           =   5370
+            _ExtentX        =   9472
             _ExtentY        =   556
             _Version        =   393216
             Text            =   ""
@@ -203,15 +201,15 @@ Begin VB.Form ListarGrupos
             Bindings        =   "LstGrupo.frx":0031
             DataSource      =   "AdoGrupo"
             Height          =   360
-            Left            =   4200
+            Left            =   3360
             TabIndex        =   3
             Top             =   210
+            Visible         =   0   'False
             Width           =   1800
             _ExtentX        =   3175
             _ExtentY        =   635
             _Version        =   393216
-            Enabled         =   0   'False
-            Text            =   "GrupoF"
+            Text            =   ""
             BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
                Name            =   "MS Sans Serif"
                Size            =   9.75
@@ -235,7 +233,7 @@ Begin VB.Form ListarGrupos
                Strikethrough   =   0   'False
             EndProperty
             Height          =   330
-            Left            =   8505
+            Left            =   7035
             TabIndex        =   5
             Top             =   210
             Width           =   1485
@@ -245,9 +243,9 @@ Begin VB.Form ListarGrupos
    Begin VB.Frame FrmEmail 
       BackColor       =   &H00800000&
       Height          =   2955
-      Left            =   420
+      Left            =   105
       TabIndex        =   32
-      Top             =   2835
+      Top             =   2730
       Visible         =   0   'False
       Width           =   20070
       Begin VB.ListBox LstClientes 
@@ -410,6 +408,81 @@ Begin VB.Form ListarGrupos
          Width           =   7260
       End
    End
+   Begin MSDataGridLib.DataGrid DGQuery 
+      Bindings        =   "LstGrupo.frx":0048
+      Height          =   3480
+      Left            =   105
+      TabIndex        =   31
+      Top             =   2730
+      Width           =   20385
+      _ExtentX        =   35957
+      _ExtentY        =   6138
+      _Version        =   393216
+      AllowUpdate     =   0   'False
+      HeadLines       =   1
+      RowHeight       =   15
+      WrapCellPointer =   -1  'True
+      BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ColumnCount     =   2
+      BeginProperty Column00 
+         DataField       =   ""
+         Caption         =   ""
+         BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
+            Type            =   0
+            Format          =   ""
+            HaveTrueFalseNull=   0
+            FirstDayOfWeek  =   0
+            FirstWeekOfYear =   0
+            LCID            =   2058
+            SubFormatType   =   0
+         EndProperty
+      EndProperty
+      BeginProperty Column01 
+         DataField       =   ""
+         Caption         =   ""
+         BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
+            Type            =   0
+            Format          =   ""
+            HaveTrueFalseNull=   0
+            FirstDayOfWeek  =   0
+            FirstWeekOfYear =   0
+            LCID            =   2058
+            SubFormatType   =   0
+         EndProperty
+      EndProperty
+      SplitCount      =   1
+      BeginProperty Split0 
+         BeginProperty Column00 
+         EndProperty
+         BeginProperty Column01 
+         EndProperty
+      EndProperty
+   End
+   Begin VB.CommandButton Command2 
+      Caption         =   "&S"
+      Height          =   330
+      Left            =   105
+      TabIndex        =   52
+      Top             =   6300
+      Width           =   330
+   End
    Begin VB.Frame Frame3 
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -420,11 +493,11 @@ Begin VB.Form ListarGrupos
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   1380
+      Height          =   1485
       Left            =   105
       TabIndex        =   7
       Top             =   735
-      Width           =   21750
+      Width           =   20280
       Begin VB.TextBox TxtNota 
          BeginProperty Font 
             Name            =   "MS Sans Serif"
@@ -437,11 +510,11 @@ Begin VB.Form ListarGrupos
          EndProperty
          ForeColor       =   &H00C00000&
          Height          =   330
-         Left            =   11760
+         Left            =   11550
          MaxLength       =   100
          TabIndex        =   27
-         Top             =   945
-         Width           =   9885
+         Top             =   1050
+         Width           =   8625
       End
       Begin VB.TextBox TxtObs 
          BeginProperty Font 
@@ -458,8 +531,8 @@ Begin VB.Form ListarGrupos
          Left            =   1575
          MaxLength       =   100
          TabIndex        =   25
-         Top             =   945
-         Width           =   9360
+         Top             =   1050
+         Width           =   8625
       End
       Begin VB.CheckBox CheqFA 
          Caption         =   "Fecha FA"
@@ -473,20 +546,20 @@ Begin VB.Form ListarGrupos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   225
-         Left            =   9660
+         Left            =   9765
          TabIndex        =   16
          Top             =   210
-         Width           =   1380
+         Width           =   1170
       End
       Begin MSDataListLib.DataCombo DCCliente 
-         Bindings        =   "LstGrupo.frx":0048
+         Bindings        =   "LstGrupo.frx":005F
          DataSource      =   "AdoCliente"
          Height          =   360
          Left            =   2835
          TabIndex        =   15
          Top             =   525
-         Width           =   6735
-         _ExtentX        =   11880
+         Width           =   8100
+         _ExtentX        =   14288
          _ExtentY        =   635
          _Version        =   393216
          Text            =   "Clientes"
@@ -537,15 +610,15 @@ Begin VB.Form ListarGrupos
          Width           =   3060
       End
       Begin MSDataListLib.DataCombo DCProductos 
-         Bindings        =   "LstGrupo.frx":0061
+         Bindings        =   "LstGrupo.frx":0078
          DataSource      =   "AdoProductos"
          Height          =   360
-         Left            =   15750
+         Left            =   14700
          TabIndex        =   23
-         Top             =   525
+         Top             =   630
          Visible         =   0   'False
-         Width           =   5895
-         _ExtentX        =   10398
+         Width           =   5475
+         _ExtentX        =   9657
          _ExtentY        =   635
          _Version        =   393216
          Text            =   "Clientes"
@@ -570,10 +643,10 @@ Begin VB.Form ListarGrupos
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Height          =   225
-         Left            =   18480
+         Height          =   330
+         Left            =   12390
          TabIndex        =   21
-         Top             =   210
+         Top             =   630
          Value           =   -1  'True
          Width           =   960
       End
@@ -588,14 +661,14 @@ Begin VB.Form ListarGrupos
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Height          =   225
-         Left            =   19530
+         Height          =   330
+         Left            =   13545
          TabIndex        =   22
-         Top             =   210
+         Top             =   630
          Width           =   1170
       End
       Begin VB.CheckBox CheqPorRubro 
-         Caption         =   "Por Rubros de Facturacion"
+         Caption         =   "Por Rubros:"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
             Size            =   8.25
@@ -605,11 +678,11 @@ Begin VB.Form ListarGrupos
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Height          =   225
-         Left            =   15750
+         Height          =   330
+         Left            =   11025
          TabIndex        =   20
-         Top             =   210
-         Width           =   2640
+         Top             =   630
+         Width           =   1380
       End
       Begin VB.CheckBox CheqDesc 
          Caption         =   "D&escuentos"
@@ -629,14 +702,15 @@ Begin VB.Form ListarGrupos
          Width           =   1380
       End
       Begin MSDataListLib.DataCombo DCLinea 
-         Bindings        =   "LstGrupo.frx":007C
+         Bindings        =   "LstGrupo.frx":0093
          DataSource      =   "AdoLinea"
          Height          =   360
-         Left            =   11025
+         Left            =   14490
          TabIndex        =   19
-         Top             =   525
-         Width           =   4635
-         _ExtentX        =   8176
+         Top             =   210
+         Visible         =   0   'False
+         Width           =   3480
+         _ExtentX        =   6138
          _ExtentY        =   635
          _Version        =   393216
          Text            =   "CxC Clientes"
@@ -720,9 +794,9 @@ Begin VB.Form ListarGrupos
       End
       Begin MSMask.MaskEdBox MBFecha 
          Height          =   330
-         Left            =   9660
+         Left            =   11025
          TabIndex        =   17
-         Top             =   525
+         Top             =   210
          Visible         =   0   'False
          Width           =   1275
          _ExtentX        =   2249
@@ -744,6 +818,26 @@ Begin VB.Form ListarGrupos
          Mask            =   "##/##/####"
          PromptChar      =   "0"
       End
+      Begin VB.Label LblFactura 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   "No. 000000-000000000"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   17955
+         TabIndex        =   53
+         Top             =   210
+         Visible         =   0   'False
+         Width           =   2220
+      End
       Begin VB.Label Label15 
          BorderStyle     =   1  'Fixed Single
          Caption         =   " NOTA:"
@@ -757,10 +851,10 @@ Begin VB.Form ListarGrupos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   11025
+         Left            =   10290
          TabIndex        =   26
-         Top             =   945
-         Width           =   750
+         Top             =   1050
+         Width           =   1275
       End
       Begin VB.Label Label14 
          BorderStyle     =   1  'Fixed Single
@@ -777,7 +871,7 @@ Begin VB.Form ListarGrupos
          Height          =   330
          Left            =   105
          TabIndex        =   24
-         Top             =   945
+         Top             =   1050
          Width           =   1485
       End
       Begin VB.Label Label2 
@@ -793,10 +887,11 @@ Begin VB.Form ListarGrupos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   11025
+         Left            =   12390
          TabIndex        =   18
          Top             =   210
-         Width           =   4635
+         Visible         =   0   'False
+         Width           =   2115
       End
       Begin VB.Label Label5 
          BorderStyle     =   1  'Fixed Single
@@ -833,123 +928,51 @@ Begin VB.Form ListarGrupos
       MultiLine       =   -1  'True
       ScrollBars      =   2  'Vertical
       TabIndex        =   29
-      Top             =   7980
+      Top             =   8610
       Visible         =   0   'False
       Width           =   7575
-   End
-   Begin MSDataGridLib.DataGrid DGQuery 
-      Bindings        =   "LstGrupo.frx":0093
-      Height          =   3480
-      Left            =   105
-      TabIndex        =   31
-      Top             =   2520
-      Width           =   20385
-      _ExtentX        =   35957
-      _ExtentY        =   6138
-      _Version        =   393216
-      AllowUpdate     =   0   'False
-      HeadLines       =   1
-      RowHeight       =   15
-      WrapCellPointer =   -1  'True
-      BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ColumnCount     =   2
-      BeginProperty Column00 
-         DataField       =   ""
-         Caption         =   ""
-         BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
-            Type            =   0
-            Format          =   ""
-            HaveTrueFalseNull=   0
-            FirstDayOfWeek  =   0
-            FirstWeekOfYear =   0
-            LCID            =   2058
-            SubFormatType   =   0
-         EndProperty
-      EndProperty
-      BeginProperty Column01 
-         DataField       =   ""
-         Caption         =   ""
-         BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
-            Type            =   0
-            Format          =   ""
-            HaveTrueFalseNull=   0
-            FirstDayOfWeek  =   0
-            FirstWeekOfYear =   0
-            LCID            =   2058
-            SubFormatType   =   0
-         EndProperty
-      EndProperty
-      SplitCount      =   1
-      BeginProperty Split0 
-         BeginProperty Column00 
-         EndProperty
-         BeginProperty Column01 
-         EndProperty
-      EndProperty
    End
    Begin TabDlg.SSTab SSTab2 
       Height          =   390
       Left            =   105
       TabIndex        =   30
-      Top             =   2205
+      Top             =   2310
       Width           =   21750
       _ExtentX        =   38365
       _ExtentY        =   688
       _Version        =   393216
-      Tabs            =   7
-      Tab             =   1
-      TabsPerRow      =   7
+      Tabs            =   6
+      TabsPerRow      =   6
       TabHeight       =   520
       TabCaption(0)   =   "LISTADO POR GRUPOS"
       TabPicture(0)   =   "LstGrupo.frx":00AA
-      Tab(0).ControlEnabled=   0   'False
+      Tab(0).ControlEnabled=   -1  'True
       Tab(0).ControlCount=   0
       TabCaption(1)   =   "PENSION MENSUAL DEL AÑO"
       TabPicture(1)   =   "LstGrupo.frx":00C6
-      Tab(1).ControlEnabled=   -1  'True
+      Tab(1).ControlEnabled=   0   'False
       Tab(1).ControlCount=   0
       TabCaption(2)   =   "ALUMNOS CON DESCUENTO"
       TabPicture(2)   =   "LstGrupo.frx":00E2
       Tab(2).ControlEnabled=   0   'False
       Tab(2).ControlCount=   0
-      TabCaption(3)   =   "NOMINA DE ALUMNOS"
+      TabCaption(3)   =   "ENVIOS POR MAIL"
       TabPicture(3)   =   "LstGrupo.frx":00FE
       Tab(3).ControlEnabled=   0   'False
       Tab(3).ControlCount=   0
-      TabCaption(4)   =   "ENVIOS POR MAIL"
+      TabCaption(4)   =   "RESUMEN PENSIONES POR MES"
       TabPicture(4)   =   "LstGrupo.frx":011A
       Tab(4).ControlEnabled=   0   'False
       Tab(4).ControlCount=   0
-      TabCaption(5)   =   "RESUMEN PENSIONES POR MES"
+      TabCaption(5)   =   "ENVIAR DEUDA POR API Y EMAIL"
       TabPicture(5)   =   "LstGrupo.frx":0136
       Tab(5).ControlEnabled=   0   'False
       Tab(5).ControlCount=   0
-      TabCaption(6)   =   "ENVIAR DEUDA POR API Y EMAIL"
-      TabPicture(6)   =   "LstGrupo.frx":0152
-      Tab(6).ControlEnabled=   0   'False
-      Tab(6).ControlCount=   0
    End
    Begin MSAdodcLib.Adodc AdoCiudad 
       Height          =   330
       Left            =   2835
-      Top             =   3570
+      Top             =   3990
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -996,7 +1019,7 @@ Begin VB.Form ListarGrupos
    Begin MSAdodcLib.Adodc AdoCliente 
       Height          =   330
       Left            =   2835
-      Top             =   3255
+      Top             =   3675
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -1043,7 +1066,7 @@ Begin VB.Form ListarGrupos
    Begin MSAdodcLib.Adodc AdoNiveles 
       Height          =   330
       Left            =   2835
-      Top             =   5775
+      Top             =   6195
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -1090,7 +1113,7 @@ Begin VB.Form ListarGrupos
    Begin MSAdodcLib.Adodc AdoLinea 
       Height          =   330
       Left            =   2835
-      Top             =   5460
+      Top             =   5880
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -1137,7 +1160,7 @@ Begin VB.Form ListarGrupos
    Begin MSAdodcLib.Adodc AdoAux 
       Height          =   330
       Left            =   2835
-      Top             =   3885
+      Top             =   4305
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -1184,7 +1207,7 @@ Begin VB.Form ListarGrupos
    Begin MSAdodcLib.Adodc AdoGrupo 
       Height          =   330
       Left            =   2835
-      Top             =   4515
+      Top             =   4935
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -1231,7 +1254,7 @@ Begin VB.Form ListarGrupos
    Begin MSAdodcLib.Adodc AdoAux2 
       Height          =   330
       Left            =   2835
-      Top             =   4200
+      Top             =   4620
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -1278,7 +1301,7 @@ Begin VB.Form ListarGrupos
    Begin MSAdodcLib.Adodc AdoProductos 
       Height          =   330
       Left            =   2835
-      Top             =   4830
+      Top             =   5250
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -1325,7 +1348,7 @@ Begin VB.Form ListarGrupos
    Begin MSAdodcLib.Adodc AdoTipoPago 
       Height          =   330
       Left            =   2835
-      Top             =   5145
+      Top             =   5565
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -1372,7 +1395,7 @@ Begin VB.Form ListarGrupos
    Begin MSAdodcLib.Adodc AdoQuery 
       Height          =   330
       Left            =   9870
-      Top             =   6510
+      Top             =   6930
       Width           =   10305
       _ExtentX        =   18177
       _ExtentY        =   582
@@ -1418,7 +1441,7 @@ Begin VB.Form ListarGrupos
    Begin MSAdodcLib.Adodc AdoParte 
       Height          =   330
       Left            =   4935
-      Top             =   3255
+      Top             =   3675
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -1477,7 +1500,7 @@ Begin VB.Form ListarGrupos
       Height          =   330
       Left            =   6510
       TabIndex        =   49
-      Top             =   6510
+      Top             =   6930
       Width           =   1590
    End
    Begin VB.Label Label8 
@@ -1495,7 +1518,7 @@ Begin VB.Form ListarGrupos
       Height          =   330
       Left            =   105
       TabIndex        =   48
-      Top             =   6510
+      Top             =   6930
       Width           =   1380
    End
    Begin VB.Label Label9 
@@ -1515,7 +1538,7 @@ Begin VB.Form ListarGrupos
       Height          =   330
       Left            =   1470
       TabIndex        =   47
-      Top             =   6510
+      Top             =   6930
       Width           =   1695
    End
    Begin VB.Label Label11 
@@ -1533,7 +1556,7 @@ Begin VB.Form ListarGrupos
       Height          =   330
       Left            =   3255
       TabIndex        =   46
-      Top             =   6510
+      Top             =   6930
       Width           =   1485
    End
    Begin VB.Label Label10 
@@ -1553,7 +1576,7 @@ Begin VB.Form ListarGrupos
       Height          =   330
       Left            =   4725
       TabIndex        =   45
-      Top             =   6510
+      Top             =   6930
       Width           =   1695
    End
    Begin VB.Label Label4 
@@ -1573,12 +1596,12 @@ Begin VB.Form ListarGrupos
       Height          =   330
       Left            =   8085
       TabIndex        =   44
-      Top             =   6510
+      Top             =   6930
       Width           =   1695
    End
    Begin ComctlLib.ImageList ImageList1 
       Left            =   20790
-      Top             =   3150
+      Top             =   3780
       _ExtentX        =   1005
       _ExtentY        =   1005
       BackColor       =   -2147483643
@@ -1587,41 +1610,45 @@ Begin VB.Form ListarGrupos
       MaskColor       =   12632256
       _Version        =   327682
       BeginProperty Images {0713E8C2-850A-101B-AFC0-4210102A8DA7} 
-         NumListImages   =   9
+         NumListImages   =   10
          BeginProperty ListImage1 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "LstGrupo.frx":016E
+            Picture         =   "LstGrupo.frx":0152
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "LstGrupo.frx":0488
+            Picture         =   "LstGrupo.frx":046C
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "LstGrupo.frx":07A2
+            Picture         =   "LstGrupo.frx":0786
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "LstGrupo.frx":0ABC
+            Picture         =   "LstGrupo.frx":0AA0
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "LstGrupo.frx":0DD6
+            Picture         =   "LstGrupo.frx":0DBA
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "LstGrupo.frx":10F0
+            Picture         =   "LstGrupo.frx":10D4
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "LstGrupo.frx":140A
+            Picture         =   "LstGrupo.frx":13EE
             Key             =   ""
          EndProperty
          BeginProperty ListImage8 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "LstGrupo.frx":1724
+            Picture         =   "LstGrupo.frx":1708
             Key             =   ""
          EndProperty
          BeginProperty ListImage9 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "LstGrupo.frx":1A3E
+            Picture         =   "LstGrupo.frx":1A22
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage10 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "LstGrupo.frx":2674
             Key             =   ""
          EndProperty
       EndProperty
@@ -1660,6 +1687,143 @@ Dim Tiene_Cursos As Boolean
 Dim PorGrupo As Boolean
 Dim PorDireccion As Boolean
 Dim ListaDeCampos As String
+Dim Tutor As String
+Dim TutorEmail As String
+Dim MesesNominaGrupo As String
+
+Public Sub Reporte_CxC_Mes_PDF(VerDocumento As Boolean, PorValor As Boolean)
+Dim AdoCarteraDB As ADODB.Recordset
+Dim ValorCampo As String
+Dim EmailCli As String
+Dim PosCampo(1 To 15) As Single
+Dim Cont As Byte
+
+    If CFechaLong(MBFechaI) <= CFechaLong(MBFechaF) And Len(MesesNominaGrupo) > 1 Then
+       Cont = 1
+       If Len(Tutor) = 1 Then Tutor = "Ninguno"
+       sSQL = "SELECT CI_RUC, Cliente, " & MesesNominaGrupo & ", Grupo, Direccion " _
+            & "FROM Clientes " _
+            & "WHERE Cliente <> '.' "
+       If PorGrupo Then
+          sSQL = sSQL & "AND Grupo = '" & DCCliente & "' "
+       ElseIf PorDireccion Then
+          sSQL = sSQL & "AND Direccion = '" & DCCliente & "' "
+       End If
+       If OpcActivos.value Then sSQL = sSQL & "AND T = 'N' " Else sSQL = sSQL & "AND T <> 'N' "
+       sSQL = sSQL _
+            & "AND FA <> " & Val(adFalse) & " " _
+            & "ORDER BY Grupo, Cliente "
+       Select_AdoDB AdoCarteraDB, sSQL
+       With AdoCarteraDB
+        If .RecordCount > 0 Then
+            DireccionCli = .fields("Direccion")
+            EmailCli = ""
+            Insertar_Mail EmailCli, TutorEmail
+             
+            RutaDocumentoPDF = ""
+            MensajeEncabData = "REPORTE CARTERA DE " & DireccionCli
+            SQLMsg1 = ""
+            SQLMsg2 = ""
+            SQLMsg3 = ""
+            NombreArchivo = "Nomina_CxC_Meses-" & Replace(Tutor, " ", "_")
+            SetNombrePRN = Impresota_PDF
+           'Geneeramos el documento
+            tPrint.TipoImpresion = Es_PDF
+            tPrint.NombreArchivo = NombreArchivo
+            tPrint.TituloArchivo = "Reporte de CxC Por Meses " & Tutor
+            tPrint.TipoLetra = TipoHelvetica
+            tPrint.OrientacionPagina = 1
+            tPrint.PaginaA4 = True
+            tPrint.EsCampoCorto = True
+            tPrint.VerDocumento = VerDocumento
+            Set cPrint = New cImpresion
+            cPrint.iniciaImpresion
+            PosLinea = 1
+            PosCampo(1) = 1.1    ' No
+            PosCampo(2) = 2.9    ' Cedula
+            PosCampo(3) = 4.5    ' Apellidos y Nombres
+            PosCampo(4) = 8.5    ' Enero
+            PosCampo(5) = 9.5    ' Febrero
+            PosCampo(6) = 10.5    ' Marzo
+            PosCampo(7) = 11.5    ' Abril
+            PosCampo(8) = 12.5   ' Mayo
+            PosCampo(9) = 13.5   ' Junio
+            PosCampo(10) = 14.5  ' Julio
+            PosCampo(11) = 15.5  ' Agosto
+            PosCampo(12) = 16.5  ' Septiembre
+            PosCampo(13) = 17.5  ' Octubre
+            PosCampo(14) = 18.5  ' Noviembre
+            PosCampo(15) = 19.5  ' Diciembre
+            cPrint.printEncabezado 1.2, PosLinea, TipoHelvetica
+           'Pagina No. 1
+            
+            TipoCta = Ninguno
+            SerieFactura = Ninguno
+            Factura_No = 0
+            CodigoP = Ninguno
+               
+            cPrint.fondoDeLetra = Negro
+            cPrint.tipoNegrilla = True
+            cPrint.PorteDeLetra = 8
+            cPrint.colorDeLetra = Negro
+            'PosLinea = 3.1
+            cPrint.printTexto PosCampo(1), PosLinea, "TUTOR: " & Tutor
+            PosLinea = PosLinea + 0.4
+            
+            Cadena = "La informacion presente reposa en la base de dato de la Institucion, corte realizado desde " & FechaStrg(MBFechaI) & " al " & FechaStrg(FechaSistema) & ", " _
+                   & "cualquier informacion adicional comuniquese a la institucion."
+            PosLinea = cPrint.printTextoMultiple(1.1, PosLinea, Cadena, 18)
+            PosLinea = PosLinea + 0.5
+            PrimeraLinea = PosLinea
+            cPrint.printLinea 2.3, PosLinea, cPrint.dAnchoPapel - 1.1, PosLinea
+            PosLinea = PosLinea + 0.1
+            cPrint.printTexto PosCampo(1), PosLinea, "No"
+            cPrint.printTexto PosCampo(2), PosLinea, "Cedula"
+            cPrint.printTexto PosCampo(3), PosLinea, "Apellidos_Nombres"
+            For I = 4 To 15
+                cPrint.printTexto PosCampo(I), PosLinea, MidStrg(.fields(I - 2).Name, 1, 3)
+            Next I
+            PosLinea = PosLinea + 0.4
+            cPrint.printLinea 2.3, PosLinea, cPrint.dAnchoPapel - 1.1, PosLinea
+            PosLinea = PosLinea + 0.1
+            cPrint.colorDeLetra = Negro
+            cPrint.tipoNegrilla = False
+            cPrint.PorteDeLetra = 7
+            Do While Not .EOF
+               cPrint.printTexto PosCampo(1), PosLinea, Format(Cont, "00")
+               cPrint.printFields PosCampo(2), PosLinea, .fields("CI_RUC")
+               cPrint.printTexto PosCampo(3), PosLinea, ULCase(.fields("Cliente"))
+               cPrint.printCuadro PosCampo(4) - 0.1, PosLinea, PosCampo(4) + 0.5, PosLinea + 0.4, Blanco_Claro, "BF"
+               For I = 4 To 15
+                   If .fields(I - 2) <> 0 Then ValorCampo = Format(.fields(I - 2), "#,#0.00") Else ValorCampo = " "
+                   If Not PorValor And Len(ValorCampo) > 1 Then ValorCampo = "Pag."
+                   cPrint.printTexto PosCampo(I), PosLinea, ValorCampo
+               Next I
+               Cont = Cont + 1
+               PosLinea = PosLinea + 0.4
+               cPrint.printLinea 2.3, PosLinea, cPrint.dAnchoPapel - 1.1, PosLinea
+               PosLinea = PosLinea + 0.1
+              .MoveNext
+            Loop
+            cPrint.printLinea 2.3, PrimeraLinea, 2.3, PosLinea - 0.1
+            cPrint.printLinea 20.4, PrimeraLinea, 20.4, PosLinea - 0.1
+            For I = 2 To 15
+                cPrint.printLinea PosCampo(I) - 0.05, PrimeraLinea, PosCampo(I) - 0.05, PosLinea - 0.1
+            Next I
+            cPrint.printTexto PosCampo(1), PosLinea, "OBSERVACIONES:"
+            PosLinea = PosLinea + 0.3
+            For I = 1 To 4
+                PosLinea = PosLinea + 0.5
+                cPrint.printLinea 2.3, PosLinea, cPrint.dAnchoPapel - 1.1, PosLinea
+                PosLinea = PosLinea + 0.1
+            Next I
+           'fin del documento
+            cPrint.finalizaImpresion
+        End If
+       End With
+       AdoCarteraDB.Close
+   End If
+End Sub
 
 Public Sub Tipo_Rango_Grupos()
   If CheqRangos.value <> 0 Then
@@ -1955,23 +2119,51 @@ End Sub
 Private Sub CheqFA_Click()
   If CheqFA.value = 0 Then
      MBFecha.Visible = False
+     Label2.Visible = False
+     DCLinea.Visible = False
+     LblFactura.Visible = False
   Else
      MBFecha.Visible = True
+     Label2.Visible = True
+     DCLinea.Visible = True
+     LblFactura.Visible = True
      MBFecha.SetFocus
   End If
 End Sub
 
 Private Sub CheqPorRubro_Click()
- If CheqPorRubro.value = 1 Then DCProductos.Visible = True Else DCProductos.Visible = False
+ If CheqPorRubro.value = 0 Then
+    DCProductos.Visible = False
+ Else
+    sSQL = "SELECT Codigo_Inv, Producto, Detalle, Codigo_Barra, Cta_Inventario " _
+         & "FROM Catalogo_Productos " _
+         & "WHERE Item = '" & NumEmpresa & "' " _
+         & "AND Periodo = '" & Periodo_Contable & "' " _
+         & "AND TC = 'P' " _
+         & "AND LEN(Cta_Inventario) = 1 " _
+         & "AND INV <> " & Val(adFalse) & " " _
+         & "ORDER BY Producto "
+    SelectDB_Combo DCProductos, AdoProductos, sSQL, "Producto"
+    DCProductos.Visible = True
+ End If
 End Sub
 
 Private Sub CheqRangos_Click()
  If CheqRangos.value = 0 Then
-    DCGrupoI.Enabled = False
-    DCGrupoF.Enabled = False
+    DCGrupoI.Visible = False
+    DCGrupoF.Visible = False
  Else
-    DCGrupoI.Enabled = True
-    DCGrupoF.Enabled = True
+    sSQL = "SELECT Grupo " _
+         & "FROM Clientes " _
+         & "WHERE FA <> " & Val(adFalse) & " "
+    If Mas_Grupos Then sSQL = sSQL & "AND DirNumero = '" & NumEmpresa & "' "
+    sSQL = sSQL & "GROUP BY Grupo " _
+         & "ORDER BY Grupo "
+    SelectDB_Combo DCGrupoI, AdoGrupo, sSQL, "Grupo"
+    SelectDB_Combo DCGrupoF, AdoGrupo, sSQL, "Grupo", True
+ 
+    DCGrupoI.Visible = True
+    DCGrupoF.Visible = True
  End If
 End Sub
 
@@ -2105,11 +2297,8 @@ Private Sub Command2_Click()
 End Sub
 
 Private Sub Command3_Click()
-    Dir_Dialog.Filter = "Todos los archivos|*.*"
-    'Dir_Dialog.InitDir = RutaSysBases & "\"
-    Dir_Dialog.Filename = Abrir_Archivo(Me.hwnd, Dir_Dialog, OpenFile)
-    NombreArchivo = Dir_Dialog.File
-    RutaGeneraFile = Dir_Dialog.Filename
+    NombreArchivo = SelectDialogFile(, "Todos los archivos|*.*")
+    RutaGeneraFile = NombreArchivo
     If NombreArchivo <> "" Then
        LblArchivo.Caption = RutaGeneraFile
     Else
@@ -2165,68 +2354,91 @@ Dim IdMail As Long
           & "AND RCC.Codigo = C.Codigo " _
           & "ORDER BY RCC.GrupoNo, RCC.Cliente "
   Else
-     sSQL = "SELECT Cliente, 0 As CxC_20XX, 0 As SubTotal, 0 As Anticipos, 0 As Total, Direccion As Detalle_Grupo, Grupo As GrupoNo , Representante, CI_RUC, Email, EmailR " _
+     sSQL = "SELECT Cliente, 0 As CxC_20XX, 0 As SubTotal, 0 As Anticipos, 0 As Total, Direccion As Detalle_Grupo, Grupo As GrupoNo, Representante, CI_RUC, Email, EmailR " _
           & "FROM Clientes " _
           & "WHERE FA <> " & Val(adFalse) & " " _
           & "AND FactM <> " & Val(adFalse) & " " _
           & "ORDER BY GrupoNo, Cliente "
   End If
-  Select_Adodc AdoAux, sSQL
+  Select_Adodc AdoAux, sSQL, , , "CxC en Grupo"
   'DGQuery1.Visible = False
   TMail.ListaMail = 255
   TMail.ListaError = ""
   TMail.para = ""
-  If Len(TxtAsunto) > 1 Then TMail.Asunto = TxtAsunto Else TMail.Asunto = ""
-  If Len(LblArchivo.Caption) > 1 Then TMail.Adjunto = LblArchivo.Caption Else TMail.Adjunto = ""
-  
   With AdoAux.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
-          NombreRepresentante = .fields("Representante")
-          NombreCli = .fields("Cliente")
-          Codigo_Banco = .fields("CI_RUC")
+          ComunicadoEntidad = ""
+          Mifecha = FechaStrg(FechaSistema)
+          Total = .fields("Total")
           Curso = .fields("Detalle_Grupo")
+          TBeneficiario.Cliente = .fields("Cliente")
+          TBeneficiario.Representante = .fields("Representante")
+          TBeneficiario.Grupo_No = .fields("GrupoNo")
+          TBeneficiario.CI_RUC = .fields("CI_RUC")
           
+          TMail.Mensaje = "Estimado/a "
+          If Len(TBeneficiario.Representante) > 1 Then TMail.Mensaje = TMail.Mensaje & TBeneficiario.Representante Else TMail.Mensaje = TMail.Mensaje & TBeneficiario.Cliente
+          If Len(TBeneficiario.Representante) > 1 And TBeneficiario.Representante <> TBeneficiario.Cliente Then TMail.Mensaje = TMail.Mensaje & ", Representante de: " & TBeneficiario.Cliente
+          
+          If CheqConDeuda.value <> 0 Then
+             TMail.Asunto = "Envio automatizado de su cartera pendiente por USD " & Format$(Total, "#,#0.00")
+             
+             html_Detalle_adicional = "<thead><tr><strong><td>DETALLE</td><td>PENDIENTE</td><td>MONTO</td></strong></tr></thead><tbody>"
+             For J = 2 To .fields.Count - 7
+                 If .fields(J) > 0 Then
+                     Select Case .fields(J).Name
+                       Case "SubTotal", "Total", "Anticipos"
+                            'No hace nada
+                       Case Else
+                            html_Detalle_adicional = html_Detalle_adicional _
+                                                   & "<tr>" _
+                                                   & "<td>Valor Pendiente</td>" _
+                                                   & "<td>" & .fields(J).Name & "</td>" _
+                                                   & "<td class='row text-right'>" & Format(.fields(J), "#,#0.00") & "</td>" _
+                                                   & "</tr>"
+                     End Select
+                 End If
+             Next J
+             
+             html_Detalle_adicional = html_Detalle_adicional _
+                                    & "<tr>" _
+                                    & "<td colspan='2'><N>TOTAL PENDIENTE POR CANCELAR</N></td>" _
+                                    & "<td class='row text-right'><N>" & Format$(Total, "#,#0.00") & "</N></td>" _
+                                    & "</tr></tbody>"
+
+             TMail.Mensaje = TMail.Mensaje _
+                           & ", Le escribimos para recordarle que su saldo actual es USD " & Format$(Total, "#,#0.00") & ". Pensando " _
+                           & "en nuevas maneras de brindarle un mejor servicio, detallamos a continuación el estado de cuenta digital " _
+                           & "con corte al " & Mifecha & ". En caso de tener inconformidad, comuniquese con atencion al Cliente." & vbCrLf & vbCrLf _
+                           & "<N>Su codigo de Referencia es:</N> " & TBeneficiario.CI_RUC & "." & vbCrLf _
+                           & "<N>Usted pertenece al grupo:</N> " & TBeneficiario.Grupo_No & " - " & Curso & "." _
+                           & "<table BORDER CELLPADDING=10 CELLSPACING=0 class='content-table'>" & html_Detalle_adicional & "</table>" _
+                           & "Necesita asistencia para realizar su pago? Estamos aquí para ayudarle, cualquier consulta comuniquese al teléfono: " & Telefono1 & "." & vbCrLf
+          Else
+             If Len(TxtAsunto) > 1 Then TMail.Asunto = TxtAsunto Else TMail.Asunto = "Envio automatizado para Usted."
+             TMail.Mensaje = TMail.Mensaje & vbCrLf & "Ubicacion: " & TBeneficiario.Grupo_No & " - " & Curso & "." & vbCrLf
+          End If
+          If Len(TxtMensaje.Text) > 1 Then TMail.Mensaje = TMail.Mensaje & TxtMensaje.Text & "." & vbCrLf
+          If CheqConDeuda.value <> 0 Then TMail.Mensaje = TMail.Mensaje & "<N>NOTA:</N> Si realizo su pago con transferencia bancaria, considere que el pago se verá reflejado en un maximo de hasta 72 horas. "
+          TMail.Mensaje = TMail.Mensaje & vbCrLf & "<N>SERVIRLE ES NUESTRO OBJETIVO, DISFRUTARLO EL SUYO.</N>"
+          
+          TMail.TipoDeEnvio = "CE"
+          Email_CE_Copia = True
+          TMail.Destinatario = TBeneficiario.Representante
+          If Len(LblArchivo.Caption) > 1 Then TMail.Adjunto = LblArchivo.Caption & ";" Else TMail.Adjunto = ""
           TMail.para = ""
           Insertar_Mail TMail.para, .fields("EmailR")
           Insertar_Mail TMail.para, .fields("Email")
-          If Email_CE_Copia Then Insertar_Mail TMail.para, EmailProcesos
-
-          Grupo_No = .fields("GrupoNo")
-          TMail.Destinatario = NombreRepresentante
-          
-          If Len(TxtMensaje) > 1 Then TMail.Mensaje = TxtMensaje Else TMail.Mensaje = ""
-          If CheqConDeuda.value <> 0 Then
-             CadDeuda = ""
-             SubTotal = 0
-             For J = 2 To .fields.Count - 7
-                 SubTotal = SubTotal + .fields("Total")
-                 Cadena = Format(.fields(J), "#,#0.00")
-                 Cadena = String$(14 - Len(Cadena), " ") & Cadena
-                 If .fields(J) > 0 Then CadDeuda = CadDeuda & .fields(J).Name & " USD " & Cadena & vbCrLf
-             Next J
-             
-             If Len(CadDeuda) > 1 Then
-                TMail.Mensaje = TMail.Mensaje & vbCrLf
-                If Len(NombreRepresentante) > 1 Then
-                   TMail.Mensaje = TMail.Mensaje & "Estimado(a): " & NombreRepresentante & ", de su representado(a) " & NombreCli & " del " & Curso & ", "
-                Else
-                   TMail.Mensaje = TMail.Mensaje & "Estimado(a), su representado(a) " & NombreCli & ", Ubicacion: " & Grupo_No & ", "
-                End If
-                TMail.Mensaje = TMail.Mensaje & "tiene los siguientes pendientes por cancelar:" & vbCrLf & CadDeuda _
-                              & "SU CODIGO DE REFERENCIA ES: " & Codigo_Banco & vbCrLf _
-                              & "Cualquier consulta comuniquese al teléfono: " & Telefono1 & vbCrLf
-             End If
-          End If
-          TMail.TipoDeEnvio = "CE"
-          Email_CE_Copia = True
           FEnviarCorreos.Show 1
+          TMail.Mensaje = ""
+          TMail.MensajeHTML = ""
          .MoveNext
        Loop
     End If
   End With
-  
   DGQuery.Visible = True
+  MsgBox "Proceso Terminado con exito."
   If Len(TMail.ListaError) > 1 Then
      MsgBox "Revice en su correo los errores "
      TMail.para = Lista_De_Correos(0).Correo_Electronico
@@ -2302,7 +2514,7 @@ Private Sub DCLinea_LostFocus()
   Cta_Ventas = Ninguno
   FA.Cod_CxC = DCLinea.Text
   Lineas_De_CxC FA
-  Label2.Caption = "&Linea de Facturacion:" & String(8, " ") & "No. " & FA.Serie & "-" & Format(ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, False), "000000000")
+  LblFactura.Caption = " No. " & FA.Serie & "-" & Format(ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, False), "000000000")
   If FA.Cta_CxP <> Ninguno Then DCLinea.Visible = True Else DCLinea.Visible = False
 End Sub
 
@@ -2647,8 +2859,9 @@ Private Sub Form_Activate()
    FechaValida MBFecha
    FechaValida MBFechaI
    FechaValida MBFechaF
+
    Actualizar_Datos_Representantes_SP Mas_Grupos
-   
+
    CTipoConsulta.Clear
    CTipoConsulta.AddItem "Listar por Grupo"
    CTipoConsulta.AddItem "Listar por Direccion"
@@ -2672,36 +2885,16 @@ Private Sub Form_Activate()
 ''        & "ORDER BY Curso "
 ''   Select_Adodc AdoRepresentante, sSQL
 ''   If AdoRepresentante.Recordset.RecordCount > 0 Then Tiene_Cursos = True Else Tiene_Cursos = False
-   
-   sSQL = "SELECT Grupo " _
-        & "FROM Clientes " _
-        & "WHERE FA <> " & Val(adFalse) & " "
-   If Mas_Grupos Then sSQL = sSQL & "AND DirNumero = '" & NumEmpresa & "' "
-   sSQL = sSQL & "GROUP BY Grupo " _
-        & "ORDER BY Grupo "
-   SelectDB_Combo DCGrupoI, AdoGrupo, sSQL, "Grupo"
-   SelectDB_Combo DCGrupoF, AdoGrupo, sSQL, "Grupo", True
-   
+      
    sSQL = "SELECT (Codigo & ' ' & Descripcion) As CTipoPago " _
         & "FROM Tabla_Referenciales_SRI " _
         & "WHERE Tipo_Referencia = 'FORMA DE PAGO' " _
         & "AND Codigo IN ('01','16','17','18','19','20','21') " _
         & "ORDER BY Codigo "
    SelectDB_Combo DCTipoPago, AdoTipoPago, sSQL, "CTipoPago"
-   
-   sSQL = "SELECT * " _
-        & "FROM Catalogo_Productos " _
-        & "WHERE Item = '" & NumEmpresa & "' " _
-        & "AND Periodo = '" & Periodo_Contable & "' " _
-        & "AND TC = 'P' " _
-        & "AND LEN(Cta_Inventario) = 1 " _
-        & "AND INV <> " & Val(adFalse) & " " _
-        & "ORDER BY Producto "
-   SelectDB_Combo DCProductos, AdoProductos, sSQL, "Producto"
-   
+      
    FA.TC = TipoFactura
    FA.Fecha = PrimerDiaMes(FechaSistema)
-   DCLinea.Visible = False
          
    Label13.Caption = Lista_De_Correos(0).Correo_Electronico
    
@@ -2717,7 +2910,6 @@ Private Sub Form_Activate()
    
    LstClientes.Height = FrmEmail.Height - LstClientes.Top - 200
    LstClientes.width = FrmEmail.width - LstClientes.Left - FrmEmail.Left - 100
-
    
    Label3.Top = DGQuery.Top + DGQuery.Height + 10
    Label4.Top = DGQuery.Top + DGQuery.Height + 10
@@ -2842,7 +3034,40 @@ End Sub
 Public Sub Listar_Clientes_Grupo()
 Dim sSaldo_Pendiente As String
   RatonReloj
-  sSQL = "SELECT T,Cliente,Grupo,Direccion,Codigo,CI_RUC,Email,Email2,Fecha_N,Representante,TD_R, CI_RUC_R,DireccionT,Telefono_R,TelefonoT,EmailR,Saldo_Pendiente " _
+  Tutor = Ninguno
+  TutorEmail = Ninguno
+  MesesNominaGrupo = ""
+  
+  If CFechaLong(MBFechaI) <= CFechaLong(MBFechaF) Then
+     sSQL = "SELECT Tutor, Email_Tutor " _
+          & "FROM Catalogo_Cursos " _
+          & "WHERE Periodo = '" & Periodo_Contable & "' " _
+          & "AND Item = '" & NumEmpresa & "' "
+     If PorGrupo Then
+        sSQL = sSQL & "AND Curso = '" & DCCliente & "' "
+     ElseIf PorDireccion Then
+        sSQL = sSQL & "AND Descripcion = '" & DCCliente & "' "
+     End If
+     Select_Adodc AdoAux, sSQL
+     If AdoAux.Recordset.RecordCount > 0 Then
+       Tutor = AdoAux.Recordset.fields("Tutor")
+       TutorEmail = AdoAux.Recordset.fields("Email_Tutor")
+     End If
+    FechaIni = BuscarFecha(MBFechaI)
+    FechaFin = BuscarFecha(MBFechaF)
+    Mifecha = MBFechaI
+    Do While CFechaLong(Mifecha) < CFechaLong(MBFechaF)
+       Mes = MesesLetras(Month(Mifecha))
+       MesesNominaGrupo = MesesNominaGrupo & Mes & ","
+       Mifecha = CLongFecha(CFechaLong(Mifecha) + 31)
+    Loop
+    MesesNominaGrupo = MidStrg(MesesNominaGrupo, 1, Len(MesesNominaGrupo) - 1)
+    Procesar_Saldos_CxC_Meses_SP DCCliente, MBFechaI, MBFechaF
+  End If
+  sSQL = "SELECT T,Cliente,"
+  If Len(MesesNominaGrupo) > 1 Then sSQL = sSQL & MesesNominaGrupo & ", "
+  sSQL = sSQL _
+       & "Grupo,Direccion,Codigo,CI_RUC,Email,Email2,Fecha_N,Representante,TD_R, CI_RUC_R,DireccionT,Telefono_R,TelefonoT,EmailR,Saldo_Pendiente " _
        & "FROM Clientes " _
        & "WHERE Cliente <> '.' "
   If Mas_Grupos Then sSQL = sSQL & "AND DirNumero = '" & NumEmpresa & "' "
@@ -2851,15 +3076,16 @@ Dim sSaldo_Pendiente As String
   Else
     'Tipo de Consulta
      If PorGrupo Then
-        DGQuery.Caption = "LISTADO DE CLIENTES (Grupo No. " & DCCliente.Text & ")"
+        DGQuery.Caption = "LISTADO DE CLIENTES (GRUPO No. " & DCCliente.Text & ")"
         sSQL = sSQL & "AND Grupo = '" & DCCliente & "' "
      ElseIf PorDireccion Then
-        DGQuery.Caption = "LISTADO DE CLIENTES (Direccion: " & DCCliente.Text & ")"
+        DGQuery.Caption = "LISTADO DE CLIENTES (DIRECCION: " & DCCliente.Text & ")"
         sSQL = sSQL & "AND Direccion = '" & DCCliente & "' "
      Else
         DGQuery.Caption = "LISTADO DE CLIENTES"
         DCCliente.Text = "Todos"
      End If
+     If Len(TutorEmail) > 1 And Len(Tutor) > 1 Then DGQuery.Caption = DGQuery.Caption & ", TUTOR: " & Tutor & ", EMAIL TUTOR: " & TutorEmail
   End If
   sSQL = sSQL & "AND FA <> " & Val(adFalse) & " " _
        & "ORDER BY Grupo,Cliente "
@@ -2959,29 +3185,7 @@ Private Sub SSTab2_Click(PreviousTab As Integer)
                    & "AND CF.Codigo = C.Codigo " _
                    & "ORDER BY C.Grupo,C.Cliente,CF.Num_Mes "
               Select_Adodc_Grid DGQuery, AdoQuery, sSQL
-      Case 3: 'Nomina de Alumnos
-              DGQuery.Visible = True
-              sSQL = "SELECT C.Cliente As Estudiantes,' ' As T_1,' ' As T_2,' ' As T_3,' ' As T_4,' ' As T_5,C.Grupo,C.Direccion,C.Email,Count(DF.Codigo) As No_Facturas " _
-                   & "FROM Clientes AS C,Detalle_Factura As DF " _
-                   & "WHERE C.Cliente <> '.' "
-              If PorGrupo Then
-                 sSQL = sSQL & "AND C.Grupo = '" & DCCliente & "' "
-              ElseIf PorDireccion Then
-                 sSQL = sSQL & "AND C.Direccion = '" & DCCliente & "' "
-              End If
-              If CheqRangos.value <> 0 Then sSQL = sSQL & "AND C.Grupo BETWEEN '" & Codigo1 & "' and '" & Codigo2 & "' "
-              If DCProductos.Visible Then sSQL = sSQL & "AND DF.Codigo = '" & Codigo3 & "' "
-              If OpcActivos.value Then sSQL = sSQL & "AND C.T = 'N' " Else sSQL = sSQL & "AND C.T <> 'N' "
-              sSQL = sSQL _
-                   & "AND C.FA <> " & Val(adFalse) & " " _
-                   & "AND DF.T <> '" & Anulado & "' " _
-                   & "AND DF.Periodo = '" & Periodo_Contable & "' " _
-                   & "AND DF.Item = '" & NumEmpresa & "' " _
-                   & "AND C.Codigo = DF.CodigoC " _
-                   & "GROUP BY C.Grupo,C.Cliente,C.Direccion,C.Email " _
-                   & "ORDER BY C.Grupo,C.Cliente "
-              Select_Adodc AdoQuery, sSQL, , True
-      Case 4: 'Envio por mails
+      Case 3: 'Envio por mails
               Reporte_CxC_Cuotas_SP Codigo1, Codigo2, MBFechaI, MBFechaF, SubTotal, Diferencia, TotalIngreso, ListaDeCampos, CheqResumen.value, CheqVenc.value
               Listar_Clientes_Grupo
               Listar_Clientes_Email
@@ -2989,7 +3193,7 @@ Private Sub SSTab2_Click(PreviousTab As Integer)
               ListaDeCampos = Replace(ListaDeCampos, "GrupoNo,", "RCC.GrupoNo,")
               FrmEmail.Visible = True
               LstClientes.SetFocus
-      Case 5: 'Resumen pensiones por mes
+      Case 4: 'Resumen pensiones por mes
               sSQL = "SELECT CF.Periodo,COUNT(CP.Producto) AS Cant,CF.GrupoNo,CP.Producto,SUM(CF.Valor-(CF.Descuento+CF.Descuento2)) As Total " _
                    & "FROM Clientes_Facturacion As CF,Catalogo_Productos As CP " _
                    & "WHERE CP.Periodo = '" & Periodo_Contable & "' " _
@@ -3021,13 +3225,15 @@ Private Sub SSTab2_Click(PreviousTab As Integer)
                    & "ORDER BY CF.Periodo,CF.GrupoNo,CP.Producto "
               Select_Adodc_Grid DGQuery, AdoQuery, sSQL, 2
               DGQuery.Visible = True
-      Case 6: 'Listado Buses y Rubros
+      Case 5: 'Listado Buses y Rubros
               DGQuery.Visible = True
               Listar_Deuda_por_Api
     End Select
 End Sub
 
 Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
+Dim PorValor As Boolean
+
   ListarGrupos.Caption = "FACTURACION MULTIPLE"
   FechaValida MBFechaI
   FechaValida MBFechaF
@@ -3064,6 +3270,7 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
                     End With
                     Imprimir_CxC_Grupos AdoQuery, 7, True
             Case 2: ImprimirAdo AdoQuery, True, 1, 9
+            Case 3: ImprimirAdo AdoQuery, True, 1, 9, True
           End Select
           DGQuery.Visible = True
      Case "Recibos"
@@ -3102,6 +3309,28 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
           DGQuery.Visible = False
           GenerarDataTexto ListarGrupos, AdoQuery
           DGQuery.Visible = True
+     Case "Email_Tutor"
+          Mensajes = "Reporte por Valor (SI), Por Referencia (NO):"
+          Titulo = "FORMULARIO DE CONFIRMACION"
+          If BoxMensaje = vbYes Then PorValor = True Else PorValor = False
+          Reporte_CxC_Mes_PDF False, PorValor
+          
+          Mifecha = FechaSistema
+          TMail.de = Lista_De_Correos(4).Correo_Electronico
+          TMail.ListaMail = 255
+          TMail.TipoDeEnvio = "NN"
+          TMail.MensajeHTML = Leer_Archivo_Texto(RutaSistema & "\JAVASCRIPT\f_mail_basico.html")
+          TMail.Asunto = "Listado de Cartera de " & DireccionCli & ", Hora (" & Time & ")"
+          html_Informacion_adicional = "Reporte de cartera enviado al Tutor " & Tutor & ", Fecha de Envio: " & FechaSistema
+          html_Detalle_adicional = ""
+          FA.Fecha = FechaSistema
+          FA.Recibo_No = Format(FA.Fecha, "yyyymmdd") & Format(FA.Factura, "000000000")
+          TMail.Adjunto = RutaSysBases & "\TEMP\" & NombreArchivo & ".pdf"
+          TMail.para = ""
+          Insertar_Mail TMail.para, TutorEmail
+          FEnviarCorreos.Show 1
+          TMail.para = ""
+          TMail.ListaMail = 0
      Case "Salir": Unload ListarGrupos
    End Select
 End Sub
@@ -3122,7 +3351,7 @@ Dim ExisteUno As Boolean
     If CheqVenc.value <> 0 Then FechaTope = BuscarFecha(MBFechaF.Text)
 
     sSQL = "UPDATE Clientes " _
-         & "SET Saldo_Pendiente = 0, Credito = 0 " _
+         & "SET Saldo_Pendiente = 0, Dias_Mora = 0 " _
          & "WHERE Codigo <> '.' "
     Ejecutar_SQL_SP sSQL
         
@@ -3157,11 +3386,11 @@ Dim ExisteUno As Boolean
     Ejecutar_SQL_SP sSQL
     
     sSQL = "UPDATE Clientes " _
-         & "SET Credito = DATEDIFF(day,Fecha_Cad,'" & FechaTope & "') " _
+         & "SET Dias_Mora = DATEDIFF(day,Fecha_Cad,'" & FechaTope & "') " _
          & "WHERE Codigo <> '.' "
     Ejecutar_SQL_SP sSQL
     Total = 0
-    sSQL = "SELECT Grupo, Cliente As Estudiante, CI_RUC As Cedula, Saldo_Pendiente, Credito As Dias_Mora, EmailR, Codigo " _
+    sSQL = "SELECT Grupo, Cliente As Estudiante, CI_RUC As Cedula, Saldo_Pendiente, Dias_Mora, EmailR, Codigo " _
          & "FROM Clientes " _
          & "WHERE FA <> 0 "
     If CheqRangos.value Then sSQL = sSQL & "AND Grupo BETWEEN '" & DCGrupoI.Text & "' and '" & DCGrupoF.Text & "' "

@@ -4,223 +4,302 @@ Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Begin VB.Form LibroDiario 
+   Caption         =   "DIARIO GENERAL"
    ClientHeight    =   8595
    ClientLeft      =   60
    ClientTop       =   345
    ClientWidth     =   11940
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   15615
-   ScaleWidth      =   28560
+   ScaleHeight     =   8595
+   ScaleWidth      =   11940
    WindowState     =   2  'Maximized
-   Begin VB.CommandButton Command7 
-      Caption         =   "&Excel"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   750
-      Left            =   210
-      Picture         =   "LibroD.frx":0000
-      Style           =   1  'Graphical
-      TabIndex        =   40
-      Top             =   3570
-      Width           =   960
-   End
-   Begin VB.CommandButton Command6 
-      Caption         =   "Eliminar Comproban. Incompletos"
-      BeginProperty Font 
-         Name            =   "MS Serif"
-         Size            =   6
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   645
-      Left            =   10500
-      Picture         =   "LibroD.frx":0C42
-      TabIndex        =   38
-      Top             =   7980
-      Visible         =   0   'False
-      Width           =   855
-   End
-   Begin MSAdodcLib.Adodc AdoDiario 
-      Height          =   330
-      Left            =   105
-      Top             =   7560
-      Width           =   4845
-      _ExtentX        =   8546
-      _ExtentY        =   582
-      ConnectMode     =   0
-      CursorLocation  =   3
-      IsolationLevel  =   -1
-      ConnectionTimeout=   15
-      CommandTimeout  =   30
-      CursorType      =   3
-      LockType        =   3
-      CommandType     =   8
-      CursorOptions   =   0
-      CacheSize       =   50
-      MaxRecords      =   0
-      BOFAction       =   0
-      EOFAction       =   0
-      ConnectStringType=   1
+   Begin ComctlLib.Toolbar Toolbar1 
+      Align           =   1  'Align Top
+      Height          =   660
+      Left            =   0
+      TabIndex        =   0
+      Top             =   0
+      Width           =   11940
+      _ExtentX        =   21061
+      _ExtentY        =   1164
+      ButtonWidth     =   1032
+      ButtonHeight    =   1005
       Appearance      =   1
-      BackColor       =   -2147483643
-      ForeColor       =   -2147483640
-      Orientation     =   0
-      Enabled         =   -1
-      Connect         =   ""
-      OLEDBString     =   ""
-      OLEDBFile       =   ""
-      DataSourceName  =   ""
-      OtherAttributes =   ""
-      UserName        =   ""
-      Password        =   ""
-      RecordSource    =   ""
-      Caption         =   "Diario"
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
+      ImageList       =   "ImageList1"
+      _Version        =   327682
+      BeginProperty Buttons {0713E452-850A-101B-AFC0-4210102A8DA7} 
+         NumButtons      =   8
+         BeginProperty Button1 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   "Salir"
+            Object.ToolTipText     =   "Salir del Modulo"
+            Object.Tag             =   ""
+            ImageIndex      =   1
+         EndProperty
+         BeginProperty Button2 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   "Imprimir"
+            Object.ToolTipText     =   "Imprimir"
+            Object.Tag             =   ""
+            ImageIndex      =   2
+         EndProperty
+         BeginProperty Button3 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   "Imprimir2"
+            Object.Tag             =   ""
+            ImageIndex      =   3
+         EndProperty
+         BeginProperty Button4 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   "Excel"
+            Object.ToolTipText     =   "Bajar a Excel el Reporte"
+            Object.Tag             =   ""
+            ImageIndex      =   4
+         EndProperty
+         BeginProperty Button5 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   "DiarioG"
+            Object.ToolTipText     =   "Consultar Diario General"
+            Object.Tag             =   ""
+            ImageIndex      =   5
+         EndProperty
+         BeginProperty Button6 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   "Autorizar"
+            Object.ToolTipText     =   "Autorizar Diarios procesados"
+            Object.Tag             =   ""
+            ImageIndex      =   6
+         EndProperty
+         BeginProperty Button7 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   "Eliminar"
+            Object.ToolTipText     =   "Eliminar Comprobantes Incompletos"
+            Object.Tag             =   ""
+            ImageIndex      =   7
+         EndProperty
+         BeginProperty Button8 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   "Buscar"
+            Object.ToolTipText     =   "Patron de Busqueda"
+            Object.Tag             =   ""
+            ImageIndex      =   8
+         EndProperty
       EndProperty
-      _Version        =   393216
-   End
-   Begin VB.CommandButton Command5 
-      Caption         =   "I&mprimir"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   750
-      Left            =   210
-      Picture         =   "LibroD.frx":1084
-      Style           =   1  'Graphical
-      TabIndex        =   21
-      Top             =   4410
-      Width           =   960
-   End
-   Begin VB.CommandButton Command1 
-      Caption         =   "&Consultar"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   750
-      Left            =   210
-      Picture         =   "LibroD.frx":1906
-      Style           =   1  'Graphical
-      TabIndex        =   19
-      Top             =   1890
-      Width           =   960
-   End
-   Begin VB.CommandButton Command4 
-      Caption         =   "&Autorizar"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   750
-      Left            =   210
-      Picture         =   "LibroD.frx":1D48
-      Style           =   1  'Graphical
-      TabIndex        =   22
-      Top             =   5355
-      Width           =   960
-   End
-   Begin VB.CommandButton Command2 
-      Caption         =   "&Imprimir"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   750
-      Left            =   210
-      Picture         =   "LibroD.frx":218A
-      Style           =   1  'Graphical
-      TabIndex        =   20
-      Top             =   2730
-      Width           =   960
-   End
-   Begin VB.CommandButton Command3 
-      Caption         =   "&Salir"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   750
-      Left            =   210
-      Picture         =   "LibroD.frx":2A54
-      Style           =   1  'Graphical
-      TabIndex        =   23
-      Top             =   6195
-      Width           =   960
+      Begin VB.Frame Frame2 
+         Height          =   645
+         Left            =   4830
+         TabIndex        =   1
+         Top             =   0
+         Width           =   13140
+         Begin VB.TextBox TextNumNo 
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   10395
+            TabIndex        =   9
+            Text            =   "0"
+            Top             =   210
+            Visible         =   0   'False
+            Width           =   1275
+         End
+         Begin VB.CheckBox CheckNum 
+            Caption         =   "Rango de Numeros &No."
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   8820
+            TabIndex        =   8
+            Top             =   210
+            Width           =   1485
+         End
+         Begin VB.TextBox TextNumNo1 
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   11760
+            TabIndex        =   10
+            Text            =   "0"
+            Top             =   210
+            Visible         =   0   'False
+            Width           =   1275
+         End
+         Begin VB.ComboBox CmbComprobante 
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   315
+            Left            =   2205
+            TabIndex        =   3
+            Text            =   "Diario"
+            Top             =   210
+            Width           =   2325
+         End
+         Begin MSMask.MaskEdBox MBoxFechaI 
+            Height          =   330
+            Left            =   5355
+            TabIndex        =   5
+            Top             =   210
+            Width           =   1275
+            _ExtentX        =   2249
+            _ExtentY        =   582
+            _Version        =   393216
+            AllowPrompt     =   -1  'True
+            AutoTab         =   -1  'True
+            MaxLength       =   10
+            OLEDragMode     =   1
+            OLEDropMode     =   2
+            BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Format          =   "dd/mm/yyyy"
+            Mask            =   "##/##/####"
+            PromptChar      =   "0"
+            OLEDragMode     =   1
+            OLEDropMode     =   2
+         End
+         Begin MSMask.MaskEdBox MBoxFechaF 
+            Height          =   330
+            Left            =   7455
+            TabIndex        =   7
+            Top             =   210
+            Width           =   1275
+            _ExtentX        =   2249
+            _ExtentY        =   582
+            _Version        =   393216
+            AllowPrompt     =   -1  'True
+            AutoTab         =   -1  'True
+            MaxLength       =   10
+            OLEDragMode     =   1
+            OLEDropMode     =   2
+            BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Format          =   "dd/mm/yyyy"
+            Mask            =   "##/##/####"
+            PromptChar      =   "0"
+            OLEDragMode     =   1
+            OLEDropMode     =   2
+         End
+         Begin VB.Label Label1 
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   " Tipo de Comprobante:"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   105
+            TabIndex        =   2
+            Top             =   210
+            Width           =   2115
+         End
+         Begin VB.Label Label2 
+            Alignment       =   2  'Center
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   "&Hasta"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   6720
+            TabIndex        =   6
+            Top             =   210
+            Width           =   750
+         End
+         Begin VB.Label Label8 
+            Alignment       =   2  'Center
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   "&Desde"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   4620
+            TabIndex        =   4
+            Top             =   210
+            Width           =   750
+         End
+      End
    End
    Begin TabDlg.SSTab SSTab1 
-      Height          =   6000
+      Height          =   6630
       Left            =   105
-      TabIndex        =   36
-      Top             =   1470
+      TabIndex        =   15
+      Top             =   1155
       Width           =   11355
       _ExtentX        =   20029
-      _ExtentY        =   10583
+      _ExtentY        =   11695
       _Version        =   393216
       Tabs            =   2
       TabsPerRow      =   2
       TabHeight       =   520
       TabCaption(0)   =   "DIARIO GENERAL"
-      TabPicture(0)   =   "LibroD.frx":331E
+      TabPicture(0)   =   "LibroD.frx":0000
       Tab(0).ControlEnabled=   -1  'True
       Tab(0).Control(0)=   "DGDiario"
       Tab(0).Control(0).Enabled=   0   'False
       Tab(0).ControlCount=   1
       TabCaption(1)   =   "SUB MODULOS"
-      TabPicture(1)   =   "LibroD.frx":333A
+      TabPicture(1)   =   "LibroD.frx":001C
       Tab(1).ControlEnabled=   0   'False
       Tab(1).Control(0)=   "DGSubCtas"
       Tab(1).ControlCount=   1
       Begin MSDataGridLib.DataGrid DGDiario 
-         Bindings        =   "LibroD.frx":3356
+         Bindings        =   "LibroD.frx":0038
          Height          =   4320
-         Left            =   1155
-         TabIndex        =   39
+         Left            =   105
+         TabIndex        =   30
          Top             =   420
          Width           =   10095
          _ExtentX        =   17806
@@ -283,10 +362,10 @@ Begin VB.Form LibroDiario
          EndProperty
       End
       Begin MSDataGridLib.DataGrid DGSubCtas 
-         Bindings        =   "LibroD.frx":336E
+         Bindings        =   "LibroD.frx":0050
          Height          =   4320
-         Left            =   -73845
-         TabIndex        =   37
+         Left            =   -74895
+         TabIndex        =   29
          Top             =   420
          Width           =   10095
          _ExtentX        =   17806
@@ -349,13 +428,77 @@ Begin VB.Form LibroDiario
          EndProperty
       End
    End
+   Begin MSAdodcLib.Adodc AdoDiario 
+      Height          =   330
+      Left            =   420
+      Top             =   9240
+      Width           =   4845
+      _ExtentX        =   8546
+      _ExtentY        =   582
+      ConnectMode     =   0
+      CursorLocation  =   3
+      IsolationLevel  =   -1
+      ConnectionTimeout=   15
+      CommandTimeout  =   30
+      CursorType      =   3
+      LockType        =   3
+      CommandType     =   8
+      CursorOptions   =   0
+      CacheSize       =   50
+      MaxRecords      =   0
+      BOFAction       =   0
+      EOFAction       =   0
+      ConnectStringType=   1
+      Appearance      =   1
+      BackColor       =   -2147483643
+      ForeColor       =   -2147483640
+      Orientation     =   0
+      Enabled         =   -1
+      Connect         =   ""
+      OLEDBString     =   ""
+      OLEDBFile       =   ""
+      DataSourceName  =   ""
+      OtherAttributes =   ""
+      UserName        =   ""
+      Password        =   ""
+      RecordSource    =   ""
+      Caption         =   "Diario"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      _Version        =   393216
+   End
+   Begin VB.CommandButton Command3 
+      Caption         =   "&S"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   105
+      Style           =   1  'Graphical
+      TabIndex        =   16
+      Top             =   9240
+      Width           =   330
+   End
    Begin MSDataListLib.DataCombo DCAgencia 
-      Bindings        =   "LibroD.frx":3387
+      Bindings        =   "LibroD.frx":0069
       DataSource      =   "AdoAgencias"
       Height          =   345
-      Left            =   7455
-      TabIndex        =   18
-      Top             =   1050
+      Left            =   7560
+      TabIndex        =   14
+      Top             =   735
       Width           =   4740
       _ExtentX        =   8361
       _ExtentY        =   609
@@ -372,12 +515,12 @@ Begin VB.Form LibroDiario
       EndProperty
    End
    Begin MSDataListLib.DataCombo DCUsuario 
-      Bindings        =   "LibroD.frx":33A1
+      Bindings        =   "LibroD.frx":0083
       DataSource      =   "AdoUsuario"
       Height          =   345
       Left            =   1575
-      TabIndex        =   16
-      Top             =   1050
+      TabIndex        =   12
+      Top             =   735
       Width           =   4635
       _ExtentX        =   8176
       _ExtentY        =   609
@@ -395,8 +538,8 @@ Begin VB.Form LibroDiario
    End
    Begin MSAdodcLib.Adodc AdoAgencias 
       Height          =   330
-      Left            =   315
-      Top             =   2520
+      Left            =   420
+      Top             =   3570
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -453,8 +596,8 @@ Begin VB.Form LibroDiario
       EndProperty
       Height          =   330
       Left            =   105
-      TabIndex        =   15
-      Top             =   1050
+      TabIndex        =   11
+      Top             =   735
       Width           =   1380
    End
    Begin VB.CheckBox CheckAgencia 
@@ -470,262 +613,14 @@ Begin VB.Form LibroDiario
       EndProperty
       Height          =   330
       Left            =   6300
-      TabIndex        =   17
-      Top             =   1050
+      TabIndex        =   13
+      Top             =   735
       Width           =   1170
-   End
-   Begin VB.Frame Frame1 
-      Caption         =   "COMPROBANTES DE:"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   855
-      Left            =   2205
-      TabIndex        =   4
-      Top             =   105
-      Width           =   9255
-      Begin VB.TextBox TextNumNo1 
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   7980
-         TabIndex        =   14
-         Text            =   "0"
-         Top             =   420
-         Visible         =   0   'False
-         Width           =   1170
-      End
-      Begin VB.OptionButton OpcNC 
-         Caption         =   "Notas de &Crédito"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   225
-         Left            =   2100
-         TabIndex        =   9
-         Top             =   525
-         Width           =   1800
-      End
-      Begin VB.OptionButton OpcND 
-         Caption         =   "Notas de &Débito"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   225
-         Left            =   105
-         TabIndex        =   8
-         Top             =   525
-         Width           =   1800
-      End
-      Begin VB.TextBox TextNumNo 
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   6825
-         TabIndex        =   13
-         Text            =   "0"
-         Top             =   420
-         Visible         =   0   'False
-         Width           =   1170
-      End
-      Begin VB.CheckBox CheckNum 
-         Caption         =   "Desde el &No."
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   225
-         Left            =   5355
-         TabIndex        =   12
-         Top             =   525
-         Width           =   1485
-      End
-      Begin VB.OptionButton OpcA 
-         Caption         =   "&Anulados"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   225
-         Left            =   5355
-         TabIndex        =   11
-         Top             =   210
-         Width           =   1275
-      End
-      Begin VB.OptionButton OpcT 
-         Caption         =   "&Todos"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   225
-         Left            =   4095
-         TabIndex        =   10
-         Top             =   525
-         Width           =   960
-      End
-      Begin VB.OptionButton OpcCD 
-         Caption         =   "&Diario"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   225
-         Left            =   4095
-         TabIndex        =   7
-         Top             =   210
-         Width           =   960
-      End
-      Begin VB.OptionButton OpcCE 
-         Caption         =   "&Egreso"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   225
-         Left            =   2100
-         TabIndex        =   6
-         Top             =   210
-         Width           =   1065
-      End
-      Begin VB.OptionButton OpcCI 
-         Caption         =   "&Ingreso"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   225
-         Left            =   105
-         TabIndex        =   5
-         Top             =   210
-         Value           =   -1  'True
-         Width           =   1065
-      End
-   End
-   Begin MSMask.MaskEdBox MBoxFechaF 
-      Height          =   330
-      Left            =   840
-      TabIndex        =   3
-      Top             =   630
-      Width           =   1275
-      _ExtentX        =   2249
-      _ExtentY        =   582
-      _Version        =   393216
-      AllowPrompt     =   -1  'True
-      AutoTab         =   -1  'True
-      MaxLength       =   10
-      OLEDragMode     =   1
-      OLEDropMode     =   2
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Format          =   "dd/mm/yyyy"
-      Mask            =   "##/##/####"
-      PromptChar      =   "0"
-      OLEDragMode     =   1
-      OLEDropMode     =   2
-   End
-   Begin MSMask.MaskEdBox MBoxFechaI 
-      Height          =   330
-      Left            =   840
-      TabIndex        =   1
-      Top             =   210
-      Width           =   1275
-      _ExtentX        =   2249
-      _ExtentY        =   582
-      _Version        =   393216
-      AllowPrompt     =   -1  'True
-      AutoTab         =   -1  'True
-      MaxLength       =   10
-      OLEDragMode     =   1
-      OLEDropMode     =   2
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Format          =   "dd/mm/yyyy"
-      Mask            =   "##/##/####"
-      PromptChar      =   "0"
-      OLEDragMode     =   1
-      OLEDropMode     =   2
    End
    Begin MSAdodcLib.Adodc AdoUsuario 
       Height          =   330
-      Left            =   315
-      Top             =   2835
+      Left            =   420
+      Top             =   3885
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -771,8 +666,8 @@ Begin VB.Form LibroDiario
    End
    Begin MSAdodcLib.Adodc AdoCtas 
       Height          =   330
-      Left            =   315
-      Top             =   3150
+      Left            =   420
+      Top             =   4200
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -818,8 +713,8 @@ Begin VB.Form LibroDiario
    End
    Begin MSAdodcLib.Adodc AdoTrans 
       Height          =   330
-      Left            =   315
-      Top             =   3465
+      Left            =   420
+      Top             =   4515
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -865,8 +760,8 @@ Begin VB.Form LibroDiario
    End
    Begin MSAdodcLib.Adodc AdoAsientos 
       Height          =   330
-      Left            =   315
-      Top             =   3780
+      Left            =   420
+      Top             =   4830
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -912,8 +807,8 @@ Begin VB.Form LibroDiario
    End
    Begin MSAdodcLib.Adodc AdoSubCtas 
       Height          =   330
-      Left            =   315
-      Top             =   4095
+      Left            =   420
+      Top             =   5145
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -959,8 +854,8 @@ Begin VB.Form LibroDiario
    End
    Begin MSAdodcLib.Adodc AdoConceptos 
       Height          =   330
-      Left            =   315
-      Top             =   4410
+      Left            =   420
+      Top             =   5460
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -1004,6 +899,63 @@ Begin VB.Form LibroDiario
       EndProperty
       _Version        =   393216
    End
+   Begin ComctlLib.ImageList ImageList1 
+      Left            =   15540
+      Top             =   1155
+      _ExtentX        =   1005
+      _ExtentY        =   1005
+      BackColor       =   -2147483643
+      ImageWidth      =   32
+      ImageHeight     =   32
+      MaskColor       =   12632256
+      _Version        =   327682
+      BeginProperty Images {0713E8C2-850A-101B-AFC0-4210102A8DA7} 
+         NumListImages   =   8
+         BeginProperty ListImage1 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "LibroD.frx":009C
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage2 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "LibroD.frx":03B6
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage3 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "LibroD.frx":06D0
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage4 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "LibroD.frx":09EA
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage5 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "LibroD.frx":163C
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage6 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "LibroD.frx":1956
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage7 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "LibroD.frx":1C70
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage8 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "LibroD.frx":1F8A
+            Key             =   ""
+         EndProperty
+      EndProperty
+   End
+   Begin VB.Label LblPatron 
+      BackColor       =   &H00FF0000&
+      BorderStyle     =   1  'Fixed Single
+      Caption         =   "Patron"
+      ForeColor       =   &H00FFFFFF&
+      Height          =   330
+      Left            =   12390
+      TabIndex        =   31
+      Top             =   735
+      Width           =   5580
+   End
    Begin VB.Label LabelTotHaberME 
       Alignment       =   1  'Right Justify
       BackColor       =   &H00FFFFFF&
@@ -1019,9 +971,9 @@ Begin VB.Form LibroDiario
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   4935
-      TabIndex        =   33
-      Top             =   8295
+      Left            =   15330
+      TabIndex        =   26
+      Top             =   9660
       Width           =   1905
    End
    Begin VB.Label Label5 
@@ -1037,9 +989,9 @@ Begin VB.Form LibroDiario
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   3465
-      TabIndex        =   32
-      Top             =   8295
+      Left            =   13860
+      TabIndex        =   25
+      Top             =   9660
       Width           =   1485
    End
    Begin VB.Label LabelTotHaber 
@@ -1058,8 +1010,8 @@ Begin VB.Form LibroDiario
       EndProperty
       Height          =   330
       Left            =   4935
-      TabIndex        =   26
-      Top             =   7980
+      TabIndex        =   19
+      Top             =   9660
       Width           =   1905
    End
    Begin VB.Label LabelTotDebeME 
@@ -1077,9 +1029,9 @@ Begin VB.Form LibroDiario
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   1575
-      TabIndex        =   31
-      Top             =   8295
+      Left            =   11970
+      TabIndex        =   24
+      Top             =   9660
       Width           =   1905
    End
    Begin VB.Label Label34 
@@ -1095,9 +1047,9 @@ Begin VB.Form LibroDiario
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   105
-      TabIndex        =   30
-      Top             =   8295
+      Left            =   10500
+      TabIndex        =   23
+      Top             =   9660
       Width           =   1485
    End
    Begin VB.Label LabelTotDebe 
@@ -1116,8 +1068,8 @@ Begin VB.Form LibroDiario
       EndProperty
       Height          =   330
       Left            =   1575
-      TabIndex        =   28
-      Top             =   7980
+      TabIndex        =   21
+      Top             =   9660
       Width           =   1905
    End
    Begin VB.Label Label6 
@@ -1134,8 +1086,8 @@ Begin VB.Form LibroDiario
       EndProperty
       Height          =   330
       Left            =   105
-      TabIndex        =   29
-      Top             =   7980
+      TabIndex        =   22
+      Top             =   9660
       Width           =   1485
    End
    Begin VB.Label LabelTotSaldoME 
@@ -1153,9 +1105,9 @@ Begin VB.Form LibroDiario
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   8505
-      TabIndex        =   35
-      Top             =   8295
+      Left            =   18900
+      TabIndex        =   28
+      Top             =   9660
       Width           =   1905
    End
    Begin VB.Label Label7 
@@ -1171,9 +1123,9 @@ Begin VB.Form LibroDiario
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   6825
-      TabIndex        =   34
-      Top             =   8295
+      Left            =   17220
+      TabIndex        =   27
+      Top             =   9660
       Width           =   1695
    End
    Begin VB.Label LabelTotSaldo 
@@ -1192,8 +1144,8 @@ Begin VB.Form LibroDiario
       EndProperty
       Height          =   330
       Left            =   8505
-      TabIndex        =   24
-      Top             =   7980
+      TabIndex        =   17
+      Top             =   9660
       Width           =   1905
    End
    Begin VB.Label Label11 
@@ -1210,8 +1162,8 @@ Begin VB.Form LibroDiario
       EndProperty
       Height          =   330
       Left            =   6825
-      TabIndex        =   25
-      Top             =   7980
+      TabIndex        =   18
+      Top             =   9660
       Width           =   1695
    End
    Begin VB.Label Label9 
@@ -1228,47 +1180,9 @@ Begin VB.Form LibroDiario
       EndProperty
       Height          =   330
       Left            =   3465
-      TabIndex        =   27
-      Top             =   7980
+      TabIndex        =   20
+      Top             =   9660
       Width           =   1485
-   End
-   Begin VB.Label Label2 
-      Alignment       =   2  'Center
-      BorderStyle     =   1  'Fixed Single
-      Caption         =   "&Hasta"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   330
-      Left            =   105
-      TabIndex        =   2
-      Top             =   630
-      Width           =   750
-   End
-   Begin VB.Label Label8 
-      Alignment       =   2  'Center
-      BorderStyle     =   1  'Fixed Single
-      Caption         =   "&Desde"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   330
-      Left            =   105
-      TabIndex        =   0
-      Top             =   210
-      Width           =   750
    End
 End
 Attribute VB_Name = "LibroDiario"
@@ -1276,8 +1190,9 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+Option Explicit
 
-Private Sub Command1_Click()
+Public Sub Consultar_Libro_Diario()
   Progreso_Barra.Incremento = 0
   Progreso_Barra.Valor_Maximo = 5
   Progreso_Barra.Mensaje_Box = "Consultando Diario General"
@@ -1288,23 +1203,24 @@ Private Sub Command1_Click()
   FechaValida MBoxFechaF
   FechaIni = BuscarFecha(MBoxFechaI)
   FechaFin = BuscarFecha(MBoxFechaF)
-  sSQL = "SELECT T.Fecha,T.TP,T.Numero,CL.Cliente As Beneficiario,Co.Concepto,T.Cta,C.Cuenta," _
-       & "T.Parcial_ME,T.Debe,T.Haber,T.Detalle,Ac.Nombre_Completo,Co.CodigoU,Co.Autorizado,T.Item,T.ID " _
-       & "FROM Transacciones As T,Catalogo_Cuentas As C,Comprobantes As Co,Clientes As CL,Accesos As Ac " _
+  sSQL = "SELECT T.Fecha, T.TP, T.Numero, Cl.Cliente As Beneficiario, Co.Concepto, T.Cta, CC.Cuenta, " _
+       & "T.Parcial_ME, T.Debe, T.Haber, T.Detalle, Ac.Nombre_Completo, Co.CodigoU, Co.Autorizado, T.Item, T.ID " _
+       & "FROM Transacciones As T, Catalogo_Cuentas As CC, Comprobantes As Co, Clientes As Cl, Accesos As Ac " _
        & "WHERE T.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
        & "AND T.Periodo = '" & Periodo_Contable & "' "
-  If OpcCI.value Then
-     sSQL = sSQL & "AND T.TP = '" & CompIngreso & "' "
-  ElseIf OpcCE.value Then
-     sSQL = sSQL & "AND T.TP = '" & CompEgreso & "' "
-  ElseIf OpcCD.value Then
-     sSQL = sSQL & "AND T.TP = '" & CompDiario & "' "
-  ElseIf OpcND.value Then
-     sSQL = sSQL & "AND T.TP = '" & CompNotaDebito & "' "
-  ElseIf OpcNC.value Then
-     sSQL = sSQL & "AND T.TP = '" & CompNotaCredito & "' "
-  End If
-  If OpcA.value Then
+  Select Case CmbComprobante.Text
+    Case "Diarios"
+          sSQL = sSQL & "AND T.TP = '" & CompDiario & "' "
+    Case "Ingresos"
+          sSQL = sSQL & "AND T.TP = '" & CompIngreso & "' "
+    Case "Egresos"
+          sSQL = sSQL & "AND T.TP = '" & CompEgreso & "' "
+    Case "Nota de Debitos"
+          sSQL = sSQL & "AND T.TP = '" & CompNotaDebito & "' "
+    Case "Nota de Creditos"
+          sSQL = sSQL & "AND T.TP = '" & CompNotaCredito & "' "
+  End Select
+  If CmbComprobante.Text = "Anulados" Then
      sSQL = sSQL & "AND T.T = '" & Anulado & "' "
   Else
      sSQL = sSQL & "AND T.T = '" & Normal & "' "
@@ -1314,41 +1230,40 @@ Private Sub Command1_Click()
   Else
      If Not ConSucursal Then sSQL = sSQL & "AND Co.Item = '" & NumEmpresa & "' "
   End If
+  If InStr("T.", SQLPatron) Then sSQL = sSQL & SQLPatron
   If CheckUsuario.value = 1 Then sSQL = sSQL & "AND Co.CodigoU = '" & SinEspaciosDer(DCUsuario.Text) & "' "
   If CheckNum.value = 1 Then sSQL = sSQL & "AND Co.Numero BETWEEN " & CLng(TextNumNo.Text) & " and " & CLng(TextNumNo1.Text) & " "
   sSQL = sSQL _
        & "AND T.Item = Co.Item " _
-       & "AND T.Item = C.Item " _
-       & "AND C.Item = Co.Item " _
-       & "AND T.Periodo = C.Periodo " _
+       & "AND T.Item = CC.Item " _
        & "AND T.Periodo = Co.Periodo " _
-       & "AND C.Periodo = Co.Periodo " _
-       & "AND T.Cta = C.Codigo " _
+       & "AND T.Periodo = Cc.Periodo " _
+       & "AND T.Cta = CC.Codigo " _
        & "AND T.TP = Co.TP " _
        & "AND T.Numero = Co.Numero " _
        & "AND T.Fecha = Co.Fecha " _
-       & "AND Co.Codigo_B = CL.Codigo " _
+       & "AND Co.Codigo_B = Cl.Codigo " _
        & "AND Co.CodigoU = Ac.Codigo " _
-       & "ORDER BY T.Fecha,T.TP,T.Numero,T.ID "
+       & "ORDER BY T.Fecha, T.TP, T.Numero, T.ID "
+  Select_Adodc_Grid DGDiario, AdoDiario, sSQL
  'MsgBox sSQL
-  Select_Adodc_Grid DGDiario, AdoDiario, sSQL, , , , "Diario_General"
-  
-  sSQLTotales = "SELECT T.Fecha,SUM(T.Parcial_ME) As TParcial_ME, SUM(T.Debe) As TDebe, SUM(T.Haber) As THaber " _
-              & "FROM Transacciones As T,Catalogo_Cuentas As C,Comprobantes As Co,Clientes As CL,Accesos As Ac " _
+  sSQLTotales = "SELECT T.Fecha, SUM(T.Parcial_ME) As TParcial_ME, SUM(T.Debe) As TDebe, SUM(T.Haber) As THaber " _
+              & "FROM Transacciones As T, Catalogo_Cuentas As CC, Comprobantes As Co, Clientes As Cl, Accesos As Ac " _
               & "WHERE T.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
               & "AND T.Periodo = '" & Periodo_Contable & "' "
-  If OpcCI.value Then
-     sSQLTotales = sSQLTotales & "AND T.TP = '" & CompIngreso & "' "
-  ElseIf OpcCE.value Then
-     sSQLTotales = sSQLTotales & "AND T.TP = '" & CompEgreso & "' "
-  ElseIf OpcCD.value Then
-     sSQLTotales = sSQLTotales & "AND T.TP = '" & CompDiario & "' "
-  ElseIf OpcND.value Then
-     sSQLTotales = sSQLTotales & "AND T.TP = '" & CompNotaDebito & "' "
-  ElseIf OpcNC.value Then
-     sSQLTotales = sSQLTotales & "AND T.TP = '" & CompNotaCredito & "' "
-  End If
-  If OpcA.value Then
+  Select Case CmbComprobante.Text
+    Case "Diarios"
+          sSQLTotales = sSQLTotales & "AND T.TP = '" & CompDiario & "' "
+    Case "Ingresos"
+          sSQLTotales = sSQLTotales & "AND T.TP = '" & CompIngreso & "' "
+    Case "Egresos"
+          sSQLTotales = sSQLTotales & "AND T.TP = '" & CompEgreso & "' "
+    Case "Nota de Debitos"
+          sSQLTotales = sSQLTotales & "AND T.TP = '" & CompNotaDebito & "' "
+    Case "Nota de Creditos"
+          sSQLTotales = sSQLTotales & "AND T.TP = '" & CompNotaCredito & "' "
+  End Select
+  If CmbComprobante.Text = "Anulados" Then
      sSQLTotales = sSQLTotales & "AND T.T = '" & Anulado & "' "
   Else
      sSQLTotales = sSQLTotales & "AND T.T = '" & Normal & "' "
@@ -1360,18 +1275,17 @@ Private Sub Command1_Click()
   End If
   If CheckUsuario.value = 1 Then sSQLTotales = sSQLTotales & "AND Co.CodigoU = '" & SinEspaciosDer(DCUsuario.Text) & "' "
   If CheckNum.value = 1 Then sSQLTotales = sSQLTotales & "AND Co.Numero BETWEEN " & CLng(TextNumNo.Text) & " and " & CLng(TextNumNo1.Text) & " "
+  If InStr("T.", SQLPatron) Then sSQLTotales = sSQLTotales & SQLPatron
   sSQLTotales = sSQLTotales _
               & "AND T.Item = Co.Item " _
-              & "AND T.Item = C.Item " _
-              & "AND C.Item = Co.Item " _
-              & "AND T.Periodo = C.Periodo " _
+              & "AND T.Item = CC.Item " _
               & "AND T.Periodo = Co.Periodo " _
-              & "AND C.Periodo = Co.Periodo " _
-              & "AND T.Cta = C.Codigo " _
+              & "AND T.Periodo = CC.Periodo " _
+              & "AND T.Cta = CC.Codigo " _
               & "AND T.TP = Co.TP " _
               & "AND T.Numero = Co.Numero " _
               & "AND T.Fecha = Co.Fecha " _
-              & "AND Co.Codigo_B = CL.Codigo " _
+              & "AND Co.Codigo_B = Cl.Codigo " _
               & "AND Co.CodigoU = Ac.Codigo " _
               & "GROUP BY T.Fecha "
   Select_Adodc AdoTrans, sSQLTotales
@@ -1404,70 +1318,76 @@ Private Sub Command1_Click()
 ' SubModulos
   Progreso_Barra.Mensaje_Box = "Consultando SubModulos del Diario General"
   Progreso_Esperar
-  sSQL = "SELECT T.Fecha,T.TP,T.Numero,C.Cliente,T.Cta,T.TC,T.Factura,T.Debitos,T.Creditos,T.Prima,T.Codigo " _
-       & "FROM Trans_SubCtas As T,Clientes As C " _
-       & "WHERE T.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-       & "AND T.Periodo = '" & Periodo_Contable & "' "
+  sSQL = "SELECT TS.Fecha, TS.TP, TS.Numero, Cl.Cliente, TS.Cta, TS.TC, TS.Serie, TS.Factura, TS.Debitos, TS.Creditos, TS.Detalle_SubCta, " _
+       & "TS.Fecha_E, TS.Fecha_V, TS.Prima, TS.Codigo " _
+       & "FROM Trans_SubCtas As TS, Clientes As Cl " _
+       & "WHERE TS.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
+       & "AND TS.Periodo = '" & Periodo_Contable & "' "
   If CheckAgencia.value = 1 Then
-     sSQL = sSQL & "AND T.Item = '" & SinEspaciosIzq(DCAgencia.Text) & "' "
+     sSQL = sSQL & "AND TS.Item = '" & SinEspaciosIzq(DCAgencia.Text) & "' "
   Else
-     sSQL = sSQL & "AND T.Item = '" & NumEmpresa & "' "
+     sSQL = sSQL & "AND TS.Item = '" & NumEmpresa & "' "
   End If
-  If OpcCI.value Then
-     sSQL = sSQL & "AND T.TP = '" & CompIngreso & "' "
-  ElseIf OpcCE.value Then
-     sSQL = sSQL & "AND T.TP = '" & CompEgreso & "' "
-  ElseIf OpcCD.value Then
-     sSQL = sSQL & "AND T.TP = '" & CompDiario & "' "
-  ElseIf OpcND.value Then
-     sSQL = sSQL & "AND T.TP = '" & CompNotaDebito & "' "
-  ElseIf OpcNC.value Then
-     sSQL = sSQL & "AND T.TP = '" & CompNotaCredito & "' "
-  End If
-  If OpcA.value Then
-     sSQL = sSQL & "AND T.T = '" & Anulado & "' "
+  
+  Select Case CmbComprobante.Text
+    Case "Diarios"
+          sSQL = sSQL & "AND TS.TP = '" & CompDiario & "' "
+    Case "Ingresos"
+          sSQL = sSQL & "AND TS.TP = '" & CompIngreso & "' "
+    Case "Egresos"
+          sSQL = sSQL & "AND TS.TP = '" & CompEgreso & "' "
+    Case "Nota de Debitos"
+          sSQL = sSQL & "AND TS.TP = '" & CompNotaDebito & "' "
+    Case "Nota de Creditos"
+          sSQL = sSQL & "AND TS.TP = '" & CompNotaCredito & "' "
+  End Select
+  If CmbComprobante.Text = "Anulados" Then
+     sSQL = sSQL & "AND TS.T = '" & Anulado & "' "
   Else
-     sSQL = sSQL & "AND T.T = '" & Normal & "' "
+     sSQL = sSQL & "AND TS.T = '" & Normal & "' "
   End If
-  If CheckUsuario.value = 1 Then sSQL = sSQL & "AND T.CodigoU = '" & SinEspaciosIzq(DCUsuario.Text) & "' "
-  If CheckNum.value = 1 Then sSQL = sSQL & "AND T.Numero BETWEEN " & CLng(TextNumNo.Text) & " and " & CLng(TextNumNo1.Text) & " "
+  If CheckUsuario.value = 1 Then sSQL = sSQL & "AND TS.CodigoU = '" & SinEspaciosIzq(DCUsuario.Text) & "' "
+  If CheckNum.value = 1 Then sSQL = sSQL & "AND TS.Numero BETWEEN " & CLng(TextNumNo.Text) & " and " & CLng(TextNumNo1.Text) & " "
   sSQL = sSQL _
-       & "AND T.TC IN ('C','P') " _
-       & "AND T.Codigo = C.Codigo " _
+       & "AND TS.TC IN ('C','P') " _
+       & "AND TS.Codigo = Cl.Codigo " _
        & "UNION " _
-       & "SELECT T.Fecha,T.TP,T.Numero,Detalle As Cliente,T.Cta,T.TC,T.Factura,T.Debitos,T.Creditos,T.Prima,T.Codigo " _
-       & "FROM Trans_SubCtas As T,Catalogo_SubCtas As C " _
-       & "WHERE T.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-       & "AND T.Periodo = '" & Periodo_Contable & "' "
+       & "SELECT TS.Fecha, TS.TP, TS.Numero, CS.Detalle As Cliente, TS.Cta, TS.TC, TS.Serie, TS.Factura, TS.Debitos, TS.Creditos, TS.Detalle_SubCta, " _
+       & "TS.Fecha_E, TS.Fecha_V, TS.Prima, TS.Codigo " _
+       & "FROM Trans_SubCtas As TS, Catalogo_SubCtas As CS " _
+       & "WHERE TS.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
+       & "AND TS.Periodo = '" & Periodo_Contable & "' "
   If CheckAgencia.value = 1 Then
-     sSQL = sSQL & "AND T.Item = '" & SinEspaciosIzq(DCAgencia.Text) & "' "
+     sSQL = sSQL & "AND TS.Item = '" & SinEspaciosIzq(DCAgencia.Text) & "' "
   Else
-     sSQL = sSQL & "AND T.Item = '" & NumEmpresa & "' "
+     sSQL = sSQL & "AND TS.Item = '" & NumEmpresa & "' "
   End If
-  If OpcCI.value Then
-     sSQL = sSQL & "AND T.TP = '" & CompIngreso & "' "
-  ElseIf OpcCE.value Then
-     sSQL = sSQL & "AND T.TP = '" & CompEgreso & "' "
-  ElseIf OpcCD.value Then
-     sSQL = sSQL & "AND T.TP = '" & CompDiario & "' "
-  ElseIf OpcND.value Then
-     sSQL = sSQL & "AND T.TP = '" & CompNotaDebito & "' "
-  ElseIf OpcNC.value Then
-     sSQL = sSQL & "AND T.TP = '" & CompNotaCredito & "' "
-  End If
-  If OpcA.value Then
-     sSQL = sSQL & "AND T.T = '" & Anulado & "' "
+  Select Case CmbComprobante.Text
+    Case "Diarios"
+          sSQL = sSQL & "AND TS.TP = '" & CompDiario & "' "
+    Case "Ingresos"
+          sSQL = sSQL & "AND TS.TP = '" & CompIngreso & "' "
+    Case "Egresos"
+          sSQL = sSQL & "AND TS.TP = '" & CompEgreso & "' "
+    Case "Nota de Debitos"
+          sSQL = sSQL & "AND TS.TP = '" & CompNotaDebito & "' "
+    Case "Nota de Creditos"
+          sSQL = sSQL & "AND TS.TP = '" & CompNotaCredito & "' "
+  End Select
+  If CmbComprobante.Text = "Anulados" Then
+     sSQL = sSQL & "AND TS.T = '" & Anulado & "' "
   Else
-     sSQL = sSQL & "AND T.T = '" & Normal & "' "
+     sSQL = sSQL & "AND TS.T = '" & Normal & "' "
   End If
-  If CheckUsuario.value = 1 Then sSQL = sSQL & "AND T.CodigoU = '" & SinEspaciosIzq(DCUsuario.Text) & "' "
-  If CheckNum.value = 1 Then sSQL = sSQL & "AND T.Numero BETWEEN " & CLng(TextNumNo.Text) & " and " & CLng(TextNumNo1.Text) & " "
+  If CheckUsuario.value = 1 Then sSQL = sSQL & "AND TS.CodigoU = '" & SinEspaciosIzq(DCUsuario.Text) & "' "
+  If CheckNum.value = 1 Then sSQL = sSQL & "AND TS.Numero BETWEEN " & CLng(TextNumNo.Text) & " and " & CLng(TextNumNo1.Text) & " "
+  If InStr("TS.", SQLPatron) Then sSQL = sSQL & SQLPatron
   sSQL = sSQL _
-       & "AND T.TC NOT IN ('C','P') " _
-       & "AND T.Item = C.Item " _
-       & "AND T.Periodo = C.Periodo " _
-       & "AND T.Codigo = C.Codigo " _
-       & "ORDER BY T.Fecha,T.TP,T.Numero,T.Cta,T.Factura "
+       & "AND TS.TC NOT IN ('C', 'P') " _
+       & "AND TS.Item = CS.Item " _
+       & "AND TS.Periodo = CS.Periodo " _
+       & "AND TS.Codigo = CS.Codigo " _
+       & "ORDER BY TS.Fecha, TS.TP, TS.Numero, TS.Cta, TS.Factura "
   Select_Adodc_Grid DGSubCtas, AdoSubCtas, sSQL
   Progreso_Esperar
   LabelTotDebe.Caption = Format(Debe, "#,###.00")
@@ -1482,61 +1402,8 @@ Private Sub Command1_Click()
   Progreso_Final
 End Sub
 
-Private Sub Command2_Click()
-  DGDiario.Visible = False
-  DGSubCtas.Visible = False
-  RatonReloj
-  If OpcCoop Then
-     Imprimir_Diario_General_Coop AdoDiario
-  Else
-     Imprimir_Diario_General AdoDiario, AdoSubCtas, AdoConceptos
-  End If
-  RatonNormal
-  DGDiario.Visible = True
-  DGSubCtas.Visible = True
-End Sub
-
 Private Sub Command3_Click()
   Unload LibroDiario
-End Sub
-
-Private Sub Command4_Click()
-  RatonReloj
-  FechaValida MBoxFechaI, False
-  FechaValida MBoxFechaF, False
-  FechaIni = BuscarFecha(MBoxFechaI.Text)
-  FechaFin = BuscarFecha(MBoxFechaF.Text)
-  sSQL = "UPDATE Comprobantes " _
-       & "SET Autorizado = '" & CodigoUsuario & "' " _
-       & "WHERE Fecha " _
-       & "BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-       & "AND Autorizado = '" & Ninguno & "' "
-  Ejecutar_SQL_SP sSQL
-  DGDiario.Visible = False
-  sSQL = "SELECT T.Fecha,T.TP,T.Numero,Cta,Cuenta,Co.Concepto," _
-       & "Parcial_ME,Debe,Haber,CodigoU,Autorizado " _
-       & "FROM Transacciones As T,Catalogo_Cuentas As C,Comprobantes As Co " _
-       & "WHERE T.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-       & "AND T.Periodo = '" & Periodo_Contable & "' " _
-       & "AND T.Periodo = C.Periodo " _
-       & "AND T.Periodo = Co.Periodo " _
-       & "AND T.T = '" & Normal & "' " _
-       & "AND T.Cta = C.Codigo " _
-       & "AND T.TP = Co.TP " _
-       & "AND T.Numero = Co.Numero " _
-       & "AND T.Fecha = Co.Fecha " _
-       & "AND T.Item = Co.Item "
-  If OpcCI.value Then
-     sSQL = sSQL & "AND T.TP = '" & CompIngreso & "' "
-  ElseIf OpcCE.value Then
-     sSQL = sSQL & "AND T.TP = '" & CompEgreso & "' "
-  ElseIf OpcCD.value Then
-     sSQL = sSQL & "AND T.TP = '" & CompDiario & "' "
-  End If
-  sSQL = sSQL & "ORDER BY T.Fecha,T.TP,T.Numero,T.ID "
-  Select_Adodc_Grid DGDiario, AdoTrans, sSQL
-  DGDiario.Visible = True
-  RatonNormal
 End Sub
 
 Private Sub CheckNum_Click()
@@ -1555,34 +1422,9 @@ Private Sub CheckNum_LostFocus()
    End If
 End Sub
 
-Private Sub Command5_Click()
-  DGDiario.Visible = False
-  RatonReloj
-  SQLMsg1 = "D I A R I O    G E N E R A L"
-  SQLMsg2 = "Desde " & MBoxFechaI.Text & " al " & MBoxFechaF.Text
-  ImprimirDiarioGeneralSimple AdoDiario
-  RatonNormal
-  DGDiario.Visible = True
-End Sub
-
-Private Sub Command6_Click()
-  RatonReloj
-  Actualiza_Comprobantes_Incompletos "Trans_Kardex"
-  Actualiza_Comprobantes_Incompletos "Trans_SubCtas"
-  Actualiza_Comprobantes_Incompletos "Transacciones"
-  'Actualiza_Comprobantes_Incompletos ""
-  RatonNormal
-  MsgBox "Fin del Proceso"
-End Sub
-
 Private Sub DGDiario_KeyDown(KeyCode As Integer, Shift As Integer)
 Dim NombreArchivo As String
   Keys_Especiales Shift
-  If CtrlDown And KeyCode = vbKeyF1 Then
-     DGDiario.Visible = False
-     GenerarDataTexto LibroDiario, AdoDiario
-     DGDiario.Visible = True
-  End If
   If CtrlDown And KeyCode = vbKeyA Then
      RatonReloj
      DGDiario.Visible = False
@@ -1641,20 +1483,31 @@ End Sub
 Private Sub DGSubCtas_KeyDown(KeyCode As Integer, Shift As Integer)
     Keys_Especiales Shift
     If CtrlDown And KeyCode = vbKeyF1 Then
-       DGSubCtas.Visible = False
-       GenerarDataTexto LibroDiario, AdoSubCtas
-       DGSubCtas.Visible = True
     End If
 End Sub
 
 Private Sub Form_Activate()
+  MBoxFechaI = FechaSistema
+  MBoxFechaF = FechaSistema
+  
+  CmbComprobante.Clear
+  CmbComprobante.AddItem "Todos"
+  CmbComprobante.AddItem "Diarios"
+  CmbComprobante.AddItem "Ingresos"
+  CmbComprobante.AddItem "Egresos"
+  CmbComprobante.AddItem "Nota de Debitos"
+  CmbComprobante.AddItem "Nota de Creditos"
+  CmbComprobante.AddItem "Anulados"
+  CmbComprobante.Text = "Todos"
+  
   If Supervisor = False Then
-     Command2.Enabled = CNivel(1) Or CNivel(2)
-     Command4.Enabled = CNivel(1) Or CNivel(2)
-     Command5.Enabled = CNivel(1) Or CNivel(2)
+     Toolbar1.buttons("Imprimir").Enabled = CNivel(1) Or CNivel(2)
+     Toolbar1.buttons("Imprimir2").Enabled = CNivel(1) Or CNivel(2)
+     Toolbar1.buttons("DiarioG").Enabled = CNivel(1) Or CNivel(2)
   End If
-  If NombreUsuario = "Administrador de Red" Then Command6.Visible = True
-  Command4.Visible = OpcCoop
+  'If NombreUsuario = "Administrador de Red" Then Command6.Visible = True
+  
+  Toolbar1.buttons("Imprimir2").Enabled = OpcCoop
   sSQL = "SELECT (Nombre_Completo & '  ' & Codigo) As CodUsuario " _
        & "FROM Accesos " _
        & "WHERE Codigo <> '*' " _
@@ -1673,8 +1526,11 @@ Private Sub Form_Activate()
      DCAgencia.Visible = False
      CheckAgencia.Visible = False
   End If
+  Consultar_Libro_Diario
+  Obtener_Campos_Patron_Busqueda AdoDiario
   LibroDiario.Caption = "DIARIO GENERAL"
   RatonNormal
+  CmbComprobante.SetFocus
 End Sub
 
 Private Sub Form_Load()
@@ -1687,10 +1543,10 @@ Private Sub Form_Load()
   ConectarAdodc AdoAsientos
   ConectarAdodc AdoConceptos
   
-   SSTab1.Height = MDI_Y_Max - SSTab1.Top - 1050
+   SSTab1.Height = MDI_Y_Max - SSTab1.Top - 850
    SSTab1.width = MDI_X_Max - SSTab1.Left
    
-   DGSubCtas.Left = SSTab1.Left + Command1.width + 100
+   DGSubCtas.Left = SSTab1.Left + 100
    DGSubCtas.Height = SSTab1.Height - DGSubCtas.Top - 100
    DGSubCtas.width = SSTab1.width - DGSubCtas.Left - 100
    
@@ -1699,22 +1555,23 @@ Private Sub Form_Load()
    
    AdoDiario.Top = SSTab1.Top + SSTab1.Height + 50
    AdoDiario.width = SSTab1.width - 50
-   Command6.Top = AdoDiario.Top + AdoDiario.Height + 50
+   
+   Command3.Top = AdoDiario.Top
    Label6.Top = AdoDiario.Top + AdoDiario.Height + 50
    Label9.Top = AdoDiario.Top + AdoDiario.Height + 50
    Label11.Top = AdoDiario.Top + AdoDiario.Height + 50
+   Label34.Top = AdoDiario.Top + AdoDiario.Height + 50
+   Label5.Top = AdoDiario.Top + AdoDiario.Height + 50
+   Label7.Top = AdoDiario.Top + AdoDiario.Height + 50
    
    LabelTotDebe.Top = AdoDiario.Top + AdoDiario.Height + 50
    LabelTotHaber.Top = AdoDiario.Top + AdoDiario.Height + 50
    LabelTotSaldo.Top = AdoDiario.Top + AdoDiario.Height + 50
+   LabelTotDebeME.Top = AdoDiario.Top + AdoDiario.Height + 50
+   LabelTotHaberME.Top = AdoDiario.Top + AdoDiario.Height + 50
+   LabelTotSaldoME.Top = AdoDiario.Top + AdoDiario.Height + 50
    
-   Label34.Top = Label6.Top + Label6.Height + 20
-   Label5.Top = Label6.Top + Label6.Height + 20
-   Label7.Top = Label6.Top + Label6.Height + 20
-
-   LabelTotDebeME.Top = Label6.Top + Label6.Height + 50
-   LabelTotHaberME.Top = Label6.Top + Label6.Height + 50
-   LabelTotSaldoME.Top = Label6.Top + Label6.Height + 50
+   LblPatron.width = MDI_X_Max - LblPatron.Left - 10
 End Sub
 
 Private Sub MBoxFechaF_GotFocus()
@@ -1731,6 +1588,13 @@ End Sub
 
 Private Sub MBoxFechaI_LostFocus()
   FechaValida MBoxFechaI
+End Sub
+
+Private Sub SSTab1_Click(PreviousTab As Integer)
+    Select Case SSTab1.Tab
+      Case 0: Obtener_Campos_Patron_Busqueda AdoDiario
+      Case 1: Obtener_Campos_Patron_Busqueda AdoSubCtas
+    End Select
 End Sub
 
 Private Sub TextNumNo_GotFocus()
@@ -1757,7 +1621,6 @@ Private Sub TextNumNo1_LostFocus()
   TextoValido TextNumNo1, True
 End Sub
 
-
 Public Sub Actualiza_Comprobantes_Incompletos(Nombre_Tabla As String)
  'Enceramos Bandera de Verificacion
   sSQL = "UPDATE " & Nombre_Tabla & " " _
@@ -1768,12 +1631,13 @@ Public Sub Actualiza_Comprobantes_Incompletos(Nombre_Tabla As String)
   If SQL_Server Then
      sSQL = "UPDATE " & Nombre_Tabla & " " _
           & "SET X = 'X' " _
-          & "FROM " & Nombre_Tabla & " As X,Comprobantes As C "
+          & "FROM " & Nombre_Tabla & " As X, Comprobantes As C "
   Else
-     sSQL = "UPDATE " & Nombre_Tabla & " As X,Comprobantes As C " _
+     sSQL = "UPDATE " & Nombre_Tabla & " As X, Comprobantes As C " _
           & "SET X.X = 'X' "
   End If
-  sSQL = sSQL & "WHERE C.Item = '" & NumEmpresa & "' " _
+  sSQL = sSQL _
+       & "WHERE C.Item = '" & NumEmpresa & "' " _
        & "AND C.Periodo = '" & Periodo_Contable & "' " _
        & "AND X.Item = C.Item " _
        & "AND X.Periodo = C.Periodo " _
@@ -1788,4 +1652,89 @@ Public Sub Actualiza_Comprobantes_Incompletos(Nombre_Tabla As String)
        & "AND Item = '" & NumEmpresa & "' " _
        & "AND Periodo = '" & Periodo_Contable & "' "
   Ejecutar_SQL_SP sSQL
+End Sub
+
+Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
+   'MsgBox Button.key & " - " & BalanceCC
+    RatonReloj
+    DGDiario.Visible = False
+    FechaValida MBoxFechaI
+    FechaValida MBoxFechaF
+    FechaIni = BuscarFecha(MBoxFechaI)
+    FechaFin = BuscarFecha(MBoxFechaF)
+    Select Case Button.key
+      Case "Salir"
+            RatonNormal
+            Unload LibroDiario
+      Case "Imprimir"
+            DGDiario.Visible = False
+            DGSubCtas.Visible = False
+            RatonReloj
+            If OpcCoop Then
+               Imprimir_Diario_General_Coop AdoDiario
+            Else
+               Imprimir_Diario_General AdoDiario, AdoSubCtas, AdoConceptos
+            End If
+            RatonNormal
+            DGDiario.Visible = True
+            DGSubCtas.Visible = True
+      Case "Imprimir2"
+            DGDiario.Visible = False
+            RatonReloj
+            SQLMsg1 = "D I A R I O    G E N E R A L"
+            SQLMsg2 = "Desde " & MBoxFechaI.Text & " al " & MBoxFechaF.Text
+            ImprimirDiarioGeneralSimple AdoDiario
+            RatonNormal
+            DGDiario.Visible = True
+      Case "Excel"
+            DGDiario.Visible = False
+            DGSubCtas.Visible = False
+            GenerarDataTexto LibroDiario, AdoDiario
+            GenerarDataTexto LibroDiario, AdoSubCtas
+            DGSubCtas.Visible = True
+            DGDiario.Visible = True
+      Case "DiarioG"
+            Consultar_Libro_Diario
+      Case "Autorizar"
+            RatonReloj
+            DGDiario.Visible = False
+            FechaValida MBoxFechaI, False
+            FechaValida MBoxFechaF, False
+            FechaIni = BuscarFecha(MBoxFechaI.Text)
+            FechaFin = BuscarFecha(MBoxFechaF.Text)
+            sSQL = "UPDATE Comprobantes " _
+                 & "SET Autorizado = '" & CodigoUsuario & "' " _
+                 & "WHERE Fecha " _
+                 & "BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
+                 & "AND Autorizado = '" & Ninguno & "' "
+            Ejecutar_SQL_SP sSQL
+            
+            Consultar_Libro_Diario
+            
+            DGDiario.Visible = True
+            RatonNormal
+      Case "Eliminar"
+            RatonReloj
+            Actualiza_Comprobantes_Incompletos "Trans_Kardex"
+            Actualiza_Comprobantes_Incompletos "Trans_SubCtas"
+            Actualiza_Comprobantes_Incompletos "Transacciones"
+            'Actualiza_Comprobantes_Incompletos ""
+            RatonNormal
+            MsgBox "Fin del Proceso"
+      Case "Buscar"
+            FPatronBusqueda.Show 1
+            If SQLPatron <> "" Then
+               LblPatron.Caption = "Patron Busqueda: " & SQLPatron
+               LblPatron.Refresh
+               Consultar_Libro_Diario
+            End If
+    End Select
+    If Button.key <> "Salir" Then
+       DGDiario.Visible = True
+       DGDiario.Caption = " DIARIO GENERAL"
+       RatonNormal
+       LblPatron.Caption = "Patron Busqueda: " & SQLPatron
+       LblPatron.Refresh
+       CmbComprobante.SetFocus
+    End If
 End Sub

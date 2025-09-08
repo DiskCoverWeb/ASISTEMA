@@ -1,4 +1,6 @@
 VERSION 5.00
+Object = "{05BFD3F1-6319-4F30-B752-C7A22889BCC4}#1.0#0"; "AcroPDF.dll"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
@@ -15,90 +17,193 @@ Begin VB.Form FAnexoTransaccional
    ScaleHeight     =   10470
    ScaleWidth      =   15960
    WindowState     =   2  'Maximized
-   Begin MSDataGridLib.DataGrid DGRolPagos 
-      Bindings        =   "FAnexoTransaccional.frx":0946
-      Height          =   5475
+   Begin TabDlg.SSTab SSTab1 
+      Height          =   7365
       Left            =   105
-      TabIndex        =   13
+      TabIndex        =   11
       Top             =   945
-      Width           =   7785
-      _ExtentX        =   13732
-      _ExtentY        =   9657
+      Width           =   14925
+      _ExtentX        =   26326
+      _ExtentY        =   12991
       _Version        =   393216
-      AllowUpdate     =   0   'False
-      HeadLines       =   1
-      RowHeight       =   15
-      BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ColumnCount     =   2
-      BeginProperty Column00 
-         DataField       =   ""
-         Caption         =   ""
-         BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
-            Type            =   0
-            Format          =   ""
-            HaveTrueFalseNull=   0
-            FirstDayOfWeek  =   0
-            FirstWeekOfYear =   0
-            LCID            =   12298
-            SubFormatType   =   0
+      Tabs            =   2
+      TabsPerRow      =   2
+      TabHeight       =   520
+      TabCaption(0)   =   "Presentacion del ATS"
+      TabPicture(0)   =   "FAnexoTransaccional.frx":0946
+      Tab(0).ControlEnabled=   -1  'True
+      Tab(0).Control(0)=   "APDFATS"
+      Tab(0).Control(0).Enabled=   0   'False
+      Tab(0).ControlCount=   1
+      TabCaption(1)   =   "Resumen del RDEP"
+      TabPicture(1)   =   "FAnexoTransaccional.frx":0962
+      Tab(1).ControlEnabled=   0   'False
+      Tab(1).Control(0)=   "LblA4"
+      Tab(1).Control(1)=   "AdoRolPagos"
+      Tab(1).Control(2)=   "DGRolPagos"
+      Tab(1).Control(3)=   "TxtCodigo"
+      Tab(1).ControlCount=   4
+      Begin AcroPDFLibCtl.AcroPDF APDFATS 
+         Height          =   2325
+         Left            =   105
+         TabIndex        =   15
+         Top             =   420
+         Width           =   9255
+         _cx             =   5080
+         _cy             =   5080
+      End
+      Begin VB.TextBox TxtCodigo 
+         Alignment       =   2  'Center
+         Enabled         =   0   'False
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
          EndProperty
-      EndProperty
-      BeginProperty Column01 
-         DataField       =   ""
-         Caption         =   ""
-         BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
-            Type            =   0
-            Format          =   ""
-            HaveTrueFalseNull=   0
-            FirstDayOfWeek  =   0
-            FirstWeekOfYear =   0
-            LCID            =   12298
-            SubFormatType   =   0
+         Height          =   360
+         Left            =   -73590
+         TabIndex        =   13
+         Text            =   "Codigo"
+         Top             =   6825
+         Width           =   1170
+      End
+      Begin MSDataGridLib.DataGrid DGRolPagos 
+         Bindings        =   "FAnexoTransaccional.frx":097E
+         Height          =   6315
+         Left            =   -74895
+         TabIndex        =   12
+         Top             =   420
+         Width           =   14610
+         _ExtentX        =   25770
+         _ExtentY        =   11139
+         _Version        =   393216
+         AllowUpdate     =   0   'False
+         HeadLines       =   1
+         RowHeight       =   15
+         BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
          EndProperty
-      EndProperty
-      SplitCount      =   1
-      BeginProperty Split0 
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ColumnCount     =   2
          BeginProperty Column00 
+            DataField       =   ""
+            Caption         =   ""
+            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
+               Type            =   0
+               Format          =   ""
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   12298
+               SubFormatType   =   0
+            EndProperty
          EndProperty
          BeginProperty Column01 
+            DataField       =   ""
+            Caption         =   ""
+            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
+               Type            =   0
+               Format          =   ""
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   12298
+               SubFormatType   =   0
+            EndProperty
          EndProperty
-      EndProperty
-   End
-   Begin VB.TextBox TxtCodigo 
-      Alignment       =   2  'Center
-      Enabled         =   0   'False
-      BeginProperty Font 
-         Name            =   "Arial"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   360
-      Left            =   1410
-      TabIndex        =   11
-      Text            =   "Codigo"
-      Top             =   6930
-      Width           =   1170
+         SplitCount      =   1
+         BeginProperty Split0 
+            BeginProperty Column00 
+            EndProperty
+            BeginProperty Column01 
+            EndProperty
+         EndProperty
+      End
+      Begin MSAdodcLib.Adodc AdoRolPagos 
+         Height          =   330
+         Left            =   -72375
+         Top             =   6825
+         Width           =   3690
+         _ExtentX        =   6509
+         _ExtentY        =   582
+         ConnectMode     =   0
+         CursorLocation  =   3
+         IsolationLevel  =   -1
+         ConnectionTimeout=   15
+         CommandTimeout  =   30
+         CursorType      =   3
+         LockType        =   3
+         CommandType     =   8
+         CursorOptions   =   0
+         CacheSize       =   50
+         MaxRecords      =   0
+         BOFAction       =   0
+         EOFAction       =   0
+         ConnectStringType=   1
+         Appearance      =   1
+         BackColor       =   -2147483643
+         ForeColor       =   -2147483640
+         Orientation     =   0
+         Enabled         =   -1
+         Connect         =   ""
+         OLEDBString     =   ""
+         OLEDBFile       =   ""
+         DataSourceName  =   ""
+         OtherAttributes =   ""
+         UserName        =   ""
+         Password        =   ""
+         RecordSource    =   ""
+         Caption         =   "RolPagos"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         _Version        =   393216
+      End
+      Begin VB.Label LblA4 
+         Alignment       =   2  'Center
+         BackStyle       =   0  'Transparent
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   "Label1"
+         Enabled         =   0   'False
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -74895
+         TabIndex        =   14
+         Top             =   6825
+         Width           =   1275
+      End
    End
    Begin MSComctlLib.ImageList ImageList2 
       Left            =   20265
@@ -113,43 +218,43 @@ Begin VB.Form FAnexoTransaccional
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   10
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "FAnexoTransaccional.frx":0960
+            Picture         =   "FAnexoTransaccional.frx":0998
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "FAnexoTransaccional.frx":123A
+            Picture         =   "FAnexoTransaccional.frx":1272
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "FAnexoTransaccional.frx":1BE8
+            Picture         =   "FAnexoTransaccional.frx":1C20
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "FAnexoTransaccional.frx":1F02
+            Picture         =   "FAnexoTransaccional.frx":1F3A
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "FAnexoTransaccional.frx":221C
+            Picture         =   "FAnexoTransaccional.frx":2254
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "FAnexoTransaccional.frx":2536
+            Picture         =   "FAnexoTransaccional.frx":256E
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "FAnexoTransaccional.frx":2850
+            Picture         =   "FAnexoTransaccional.frx":2888
             Key             =   ""
          EndProperty
          BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "FAnexoTransaccional.frx":2B6A
+            Picture         =   "FAnexoTransaccional.frx":2BA2
             Key             =   ""
          EndProperty
          BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "FAnexoTransaccional.frx":3210
+            Picture         =   "FAnexoTransaccional.frx":3248
             Key             =   ""
          EndProperty
          BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "FAnexoTransaccional.frx":38B6
+            Picture         =   "FAnexoTransaccional.frx":38EE
             Key             =   ""
          EndProperty
       EndProperty
@@ -166,10 +271,10 @@ Begin VB.Form FAnexoTransaccional
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   210
+      Left            =   13860
       Style           =   1  'Graphical
       TabIndex        =   9
-      Top             =   1155
+      Top             =   1050
       Width           =   330
    End
    Begin MSAdodcLib.Adodc AdoMes 
@@ -793,7 +898,7 @@ Begin VB.Form FAnexoTransaccional
          Width           =   11985
          Begin MSMask.MaskEdBox MBFechaE 
             Height          =   330
-            Left            =   2730
+            Left            =   2835
             TabIndex        =   6
             ToolTipText     =   "Formato de Fecha: DD/MM/AA"
             Top             =   525
@@ -828,7 +933,7 @@ Begin VB.Form FAnexoTransaccional
                Strikethrough   =   0   'False
             EndProperty
             Height          =   315
-            Left            =   945
+            Left            =   1050
             TabIndex        =   4
             Text            =   "Diciembre"
             Top             =   525
@@ -845,7 +950,7 @@ Begin VB.Form FAnexoTransaccional
                Strikethrough   =   0   'False
             EndProperty
             Height          =   315
-            Left            =   0
+            Left            =   105
             TabIndex        =   2
             Text            =   "2000"
             Top             =   525
@@ -863,7 +968,7 @@ Begin VB.Form FAnexoTransaccional
                Strikethrough   =   0   'False
             EndProperty
             Height          =   750
-            Left            =   4305
+            Left            =   4410
             TabIndex        =   7
             Top             =   105
             Width           =   1905
@@ -882,7 +987,7 @@ Begin VB.Form FAnexoTransaccional
                Strikethrough   =   0   'False
             EndProperty
             Height          =   330
-            Left            =   945
+            Left            =   1050
             TabIndex        =   3
             Top             =   210
             Width           =   1695
@@ -901,7 +1006,7 @@ Begin VB.Form FAnexoTransaccional
                Strikethrough   =   0   'False
             EndProperty
             Height          =   330
-            Left            =   0
+            Left            =   105
             TabIndex        =   1
             Top             =   210
             Width           =   855
@@ -920,7 +1025,7 @@ Begin VB.Form FAnexoTransaccional
                Strikethrough   =   0   'False
             EndProperty
             Height          =   330
-            Left            =   2730
+            Left            =   2835
             TabIndex        =   5
             Top             =   210
             Width           =   1485
@@ -939,7 +1044,7 @@ Begin VB.Form FAnexoTransaccional
             EndProperty
             ForeColor       =   &H0080FFFF&
             Height          =   645
-            Left            =   6300
+            Left            =   6405
             TabIndex        =   8
             Top             =   210
             Width           =   4740
@@ -992,73 +1097,6 @@ Begin VB.Form FAnexoTransaccional
          Strikethrough   =   0   'False
       EndProperty
       _Version        =   393216
-   End
-   Begin MSAdodcLib.Adodc AdoRolPagos 
-      Height          =   330
-      Left            =   2625
-      Top             =   6930
-      Width           =   3690
-      _ExtentX        =   6509
-      _ExtentY        =   582
-      ConnectMode     =   0
-      CursorLocation  =   3
-      IsolationLevel  =   -1
-      ConnectionTimeout=   15
-      CommandTimeout  =   30
-      CursorType      =   3
-      LockType        =   3
-      CommandType     =   8
-      CursorOptions   =   0
-      CacheSize       =   50
-      MaxRecords      =   0
-      BOFAction       =   0
-      EOFAction       =   0
-      ConnectStringType=   1
-      Appearance      =   1
-      BackColor       =   -2147483643
-      ForeColor       =   -2147483640
-      Orientation     =   0
-      Enabled         =   -1
-      Connect         =   ""
-      OLEDBString     =   ""
-      OLEDBFile       =   ""
-      DataSourceName  =   ""
-      OtherAttributes =   ""
-      UserName        =   ""
-      Password        =   ""
-      RecordSource    =   ""
-      Caption         =   "RolPagos"
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      _Version        =   393216
-   End
-   Begin VB.Label LblA4 
-      Alignment       =   2  'Center
-      BackStyle       =   0  'Transparent
-      BorderStyle     =   1  'Fixed Single
-      Caption         =   "Label1"
-      Enabled         =   0   'False
-      BeginProperty Font 
-         Name            =   "Arial"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   330
-      Left            =   105
-      TabIndex        =   12
-      Top             =   6930
-      Width           =   1275
    End
 End
 Attribute VB_Name = "FAnexoTransaccional"
@@ -1135,14 +1173,25 @@ End Sub
 
 Private Sub Form_Activate()
 Dim ExisteAnioActual As Boolean
-  DGRolPagos.width = MDI_X_Max - 100
-  DGRolPagos.Height = MDI_Y_Max - 1800
-  AdoRolPagos.Top = DGRolPagos.Height - 500
+  
   Frame1.width = MDI_X_Max - Frame1.Left - 50
   LblATS.width = Frame1.width - LblATS.Left - 150
   
-  LblA4.Top = DGRolPagos.Height - 500
-  TxtCodigo.Top = LblA4.Top
+  SSTab1.width = MDI_X_Max - 100
+  SSTab1.Height = MDI_Y_Max - 1050
+  
+  SSTab1.Tab = 1
+  DGRolPagos.width = SSTab1.width - 200
+  DGRolPagos.Height = SSTab1.Height - 900
+  AdoRolPagos.Top = DGRolPagos.Top + DGRolPagos.Height + 10
+  AdoRolPagos.width = SSTab1.width - AdoRolPagos.Left - 100
+  LblA4.Top = DGRolPagos.Top + DGRolPagos.Height + 10
+  TxtCodigo.Top = DGRolPagos.Top + DGRolPagos.Height + 10
+  
+  SSTab1.Tab = 0
+  APDFATS.width = SSTab1.width - 200
+  APDFATS.Height = SSTab1.Height - APDFATS.Top - 100
+
   TxtCodigo = ""
   LblA4.Caption = ""
   
@@ -1157,7 +1206,7 @@ Dim ExisteAnioActual As Boolean
   With AdoAux.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
-          sItem = sItem & "'" & .fields("Sucursal") & "',"
+          sItem = sItem & "'" & .Fields("Sucursal") & "',"
          .MoveNext
        Loop
        sItem = sItem & "'XXX'"
@@ -1176,7 +1225,7 @@ Dim ExisteAnioActual As Boolean
   With AdoAux.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
-          No_ATS = No_ATS & "'" & .fields("Sucursal") & "',"
+          No_ATS = No_ATS & "'" & .Fields("Sucursal") & "',"
          .MoveNext
        Loop
        No_ATS = No_ATS & "'XXX'"
@@ -1214,8 +1263,8 @@ Dim ExisteAnioActual As Boolean
   With AdoAux.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
-          CATAnio.AddItem .fields("Anio")
-          CATAnio.Text = .fields("Anio")
+          CATAnio.AddItem .Fields("Anio")
+          CATAnio.Text = .Fields("Anio")
          .MoveNext
        Loop
    End If
@@ -1230,7 +1279,7 @@ Dim ExisteAnioActual As Boolean
   With AdoAux.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
-          CATMes.AddItem .fields("Dia_Mes")
+          CATMes.AddItem .Fields("Dia_Mes")
          .MoveNext
        Loop
    End If
@@ -1825,13 +1874,13 @@ Dim ContV As Long
   With AdoPuntosVentas.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
-          If .fields("Establecimiento") = "." Then KE = 1 Else KE = CInt(.fields("Establecimiento"))
-          Suma_Ventas = .fields("BaseImponibleV")
-          If Not IsNull(.fields("BaseImpGravV")) Then Suma_Ventas = Suma_Ventas + .fields("BaseImpGravV")  ' + .Fields("MontoIvaV")
-          If .fields("TipoComprobante") = 4 Then
+          If .Fields("Establecimiento") = "." Then KE = 1 Else KE = CInt(.Fields("Establecimiento"))
+          Suma_Ventas = .Fields("BaseImponibleV")
+          If Not IsNull(.Fields("BaseImpGravV")) Then Suma_Ventas = Suma_Ventas + .Fields("BaseImpGravV")  ' + .Fields("MontoIvaV")
+          If .Fields("TipoComprobante") = 4 Then
               Total_NC_Estab = Total_NC_Estab + Suma_Ventas
               Total_NC(KE) = Total_NC(KE) + Suma_Ventas
-          ElseIf .fields("TipoComprobante") = 41 Then
+          ElseIf .Fields("TipoComprobante") = 41 Then
               Total_Reembolso(KE) = Total_Reembolso(KE) + Suma_Ventas
               Total_Reembolso_Estab = Total_Reembolso_Estab + Suma_Ventas
           Else
@@ -1880,64 +1929,64 @@ Dim ContV As Long
        Do While Not .EOF
           'If .Fields("TP") = "CE" And .Fields("Numero") = 3000338 Then MsgBox "..."
           TipoDoc = "03"
-          Select Case .fields("TD")
+          Select Case .Fields("TD")
              Case "R": TipoDoc = "01"
              Case "C": TipoDoc = "02"
              Case "P": TipoDoc = "03"
           End Select
          'Aqui genero el Detalle de Compras
           Print #NumFile, AbrirXML("detalleCompras")
-          Print #NumFile, CampoXML("codSustento", .fields("CodSustento"))
+          Print #NumFile, CampoXML("codSustento", .Fields("CodSustento"))
           Print #NumFile, CampoXML("tpIdProv", TipoDoc)
-          Print #NumFile, CampoXML("idProv", .fields("CI_RUC"))
-          Print #NumFile, CampoXML("tipoComprobante", Format(.fields("TipoComprobante"), "00"))
+          Print #NumFile, CampoXML("idProv", .Fields("CI_RUC"))
+          Print #NumFile, CampoXML("tipoComprobante", Format(.Fields("TipoComprobante"), "00"))
          'Si es Pasaporte genera la parte relacionada
-          If .fields("TD") = "P" Then
+          If .Fields("TD") = "P" Then
              If CFechaLong(FechaInicial) >= CFechaLong("01/05/2016") Then
                 Print #NumFile, CampoXML("tipoProv", "01")
-                Print #NumFile, CampoXML("denoProv", .fields("Cliente"))
-                Print #NumFile, CampoXML("parteRel", .fields("Parte_Relacionada"))
+                Print #NumFile, CampoXML("denoProv", .Fields("Cliente"))
+                Print #NumFile, CampoXML("parteRel", .Fields("Parte_Relacionada"))
              Else
-                Print #NumFile, CampoXML("tipoProv", .fields("Tipo_Pasaporte"))
-                Print #NumFile, CampoXML("parteRel", .fields("Parte_Relacionada"))
+                Print #NumFile, CampoXML("tipoProv", .Fields("Tipo_Pasaporte"))
+                Print #NumFile, CampoXML("parteRel", .Fields("Parte_Relacionada"))
              End If
           Else
              Print #NumFile, CampoXML("tipoProv", "01")
              Print #NumFile, CampoXML("parteRel", "NO")
           End If
-          Print #NumFile, CampoXML("fechaRegistro", .fields("FechaRegistro"))
-          Print #NumFile, CampoXML("establecimiento", .fields("Establecimiento"))
-          Print #NumFile, CampoXML("puntoEmision", .fields("PuntoEmision"))
-          Print #NumFile, CampoXML("secuencial", .fields("Secuencial"))
-          Print #NumFile, CampoXML("fechaEmision", .fields("FechaEmision"))
-          Print #NumFile, CampoXML("autorizacion", .fields("Autorizacion"))
-          Print #NumFile, CampoXML("baseNoGraIva", Format(.fields("BaseNoObjIVA"), "#0.00"))         ' hay que aumentar
-          Print #NumFile, CampoXML("baseImponible", Format(.fields("BaseImponible"), "#0.00"))
-          Print #NumFile, CampoXML("baseImpGrav", Format(.fields("BaseImpGrav"), "#0.00"))
+          Print #NumFile, CampoXML("fechaRegistro", .Fields("FechaRegistro"))
+          Print #NumFile, CampoXML("establecimiento", .Fields("Establecimiento"))
+          Print #NumFile, CampoXML("puntoEmision", .Fields("PuntoEmision"))
+          Print #NumFile, CampoXML("secuencial", .Fields("Secuencial"))
+          Print #NumFile, CampoXML("fechaEmision", .Fields("FechaEmision"))
+          Print #NumFile, CampoXML("autorizacion", .Fields("Autorizacion"))
+          Print #NumFile, CampoXML("baseNoGraIva", Format(.Fields("BaseNoObjIVA"), "#0.00"))         ' hay que aumentar
+          Print #NumFile, CampoXML("baseImponible", Format(.Fields("BaseImponible"), "#0.00"))
+          Print #NumFile, CampoXML("baseImpGrav", Format(.Fields("BaseImpGrav"), "#0.00"))
           Print #NumFile, CampoXML("baseImpExe", "0.00")      'Por Adaptar en la pantalla
-          Print #NumFile, CampoXML("montoIce", Format(.fields("MontoIce"), "#0.00"))
-          Print #NumFile, CampoXML("montoIva", Format(.fields("MontoIva"), "#0.00"))
+          Print #NumFile, CampoXML("montoIce", Format(.Fields("MontoIce"), "#0.00"))
+          Print #NumFile, CampoXML("montoIva", Format(.Fields("MontoIva"), "#0.00"))
           ValRetBien10 = 0
           ValRetServ20 = 0
           ValRetServ50 = 0
-          If .fields("Porc_Bienes") = "10" Then ValRetBien10 = .fields("valorRetBienes")
-          If .fields("Porc_Servicios") = "20" Then ValRetServ20 = .fields("ValorRetServicios")
-          If .fields("Porc_Servicios") = "50" Then ValRetServ50 = .fields("ValorRetServicios")
+          If .Fields("Porc_Bienes") = "10" Then ValRetBien10 = .Fields("valorRetBienes")
+          If .Fields("Porc_Servicios") = "20" Then ValRetServ20 = .Fields("ValorRetServicios")
+          If .Fields("Porc_Servicios") = "50" Then ValRetServ50 = .Fields("ValorRetServicios")
            
           Print #NumFile, CampoXML("valRetBien10", Format(ValRetBien10, "#0.00"))
           Print #NumFile, CampoXML("valRetServ20", Format(ValRetServ20, "#0.00"))
           If ValRetBien10 = 0 Then
-             Print #NumFile, CampoXML("valorRetBienes", Format(.fields("valorRetBienes"), "#0.00"))
+             Print #NumFile, CampoXML("valorRetBienes", Format(.Fields("valorRetBienes"), "#0.00"))
           Else
              Print #NumFile, CampoXML("valorRetBienes", "0.00")
           End If
           Print #NumFile, CampoXML("valRetServ50", Format(ValRetServ50, "#0.00"))
           If ValRetServ20 = 0 Then
-             If .fields("ValorRetServicios") = .fields("MontoIva") Then
+             If .Fields("ValorRetServicios") = .Fields("MontoIva") Then
                  Print #NumFile, CampoXML("valorRetServicios", Format(0, "#0.00"))
-                 Print #NumFile, CampoXML("valRetServ100", Format(.fields("ValorRetServicios"), "#0.00"))    'hay que aumentar
+                 Print #NumFile, CampoXML("valRetServ100", Format(.Fields("ValorRetServicios"), "#0.00"))    'hay que aumentar
              Else
-                 Print #NumFile, CampoXML("valorRetServicios", Format(.fields("ValorRetServicios"), "#0.00"))
+                 Print #NumFile, CampoXML("valorRetServicios", Format(.Fields("ValorRetServicios"), "#0.00"))
                  Print #NumFile, CampoXML("valRetServ100", Format(0, "#0.00"))    'hay que aumentar
              End If
           Else
@@ -1947,30 +1996,30 @@ Dim ContV As Long
                     
           Print #NumFile, CampoXML("totbasesImpReemb", "0.00")      'Por Adaptar en la pantalla
           Print #NumFile, AbrirXML("pagoExterior")
-                Print #NumFile, CampoXML("pagoLocExt", .fields("PagoLocExt"))
-                If IsNumeric(.fields("PaisEfecPago")) Then
-                   Print #NumFile, CampoXML("paisEfecPago", Val(.fields("PaisEfecPago")))
+                Print #NumFile, CampoXML("pagoLocExt", .Fields("PagoLocExt"))
+                If IsNumeric(.Fields("PaisEfecPago")) Then
+                   Print #NumFile, CampoXML("paisEfecPago", Val(.Fields("PaisEfecPago")))
                 Else
-                   Print #NumFile, CampoXML("paisEfecPago", .fields("PaisEfecPago"))
+                   Print #NumFile, CampoXML("paisEfecPago", .Fields("PaisEfecPago"))
                 End If
-                Print #NumFile, CampoXML("aplicConvDobTrib", .fields("AplicConvDobTrib"))
-                Print #NumFile, CampoXML("pagExtSujRetNorLeg", .fields("PagExtSujRetNorLeg"))
+                Print #NumFile, CampoXML("aplicConvDobTrib", .Fields("AplicConvDobTrib"))
+                Print #NumFile, CampoXML("pagExtSujRetNorLeg", .Fields("PagExtSujRetNorLeg"))
                'Print #NumFile, CampoXML("pagoRegFis", "NA")  'Por programar en la pantalla
           Print #NumFile, CerrarXML("pagoExterior")
           
-          If (.fields("BaseNoObjIVA") + .fields("BaseImponible") + .fields("BaseImpGrav") + .fields("MontoIva")) >= 1000 Then
+          If (.Fields("BaseNoObjIVA") + .Fields("BaseImponible") + .Fields("BaseImpGrav") + .Fields("MontoIva")) >= 500 Then
              Print #NumFile, AbrirXML("formasDePago")
-                   Print #NumFile, CampoXML("formaPago", .fields("FormaPago"))
+                   Print #NumFile, CampoXML("formaPago", .Fields("FormaPago"))
              Print #NumFile, CerrarXML("formasDePago")
           End If
          'Asigno a variables los campos para el concepto Air
-          CodigoCliente = .fields("IdProv")
-          Factura_No = .fields("Secuencial")
-          Codigo1 = .fields("Establecimiento")
-          Codigo2 = .fields("PuntoEmision")
+          CodigoCliente = .Fields("IdProv")
+          Factura_No = .Fields("Secuencial")
+          Codigo1 = .Fields("Establecimiento")
+          Codigo2 = .Fields("PuntoEmision")
           Estab = "000"
           PtoRet = "000"
-          FechaRet = .fields("FechaRegistro")
+          FechaRet = .Fields("FechaRegistro")
           AutRet = "0000000000"
           SecRet = 0
           Number = False
@@ -1994,14 +2043,14 @@ Dim ContV As Long
              Do While Not AdoAir.Recordset.EOF
                'Asigno en variables los campos
                 If Porcentaje <> 0 Then Poner_Porc_Air = True
-                Codigo = AdoAir.Recordset.fields("CodRet")
-                Total_SubTotal = AdoAir.Recordset.fields("BaseImp")
-                Porcentaje = AdoAir.Recordset.fields("Porcentaje")
-                Valor = AdoAir.Recordset.fields("ValRet")
-                Estab = AdoAir.Recordset.fields("EstabRetencion")
-                PtoRet = AdoAir.Recordset.fields("PtoEmiRetencion")
-                SecRet = AdoAir.Recordset.fields("SecRetencion")
-                AutRet = AdoAir.Recordset.fields("AutRetencion")
+                Codigo = AdoAir.Recordset.Fields("CodRet")
+                Total_SubTotal = AdoAir.Recordset.Fields("BaseImp")
+                Porcentaje = AdoAir.Recordset.Fields("Porcentaje")
+                Valor = AdoAir.Recordset.Fields("ValRet")
+                Estab = AdoAir.Recordset.Fields("EstabRetencion")
+                PtoRet = AdoAir.Recordset.Fields("PtoEmiRetencion")
+                SecRet = AdoAir.Recordset.Fields("SecRetencion")
+                AutRet = AdoAir.Recordset.Fields("AutRetencion")
                 If Len(AutRet) < 3 Then AutRet = "0000000000"
                 Number = True
                 Print #NumFile, AbrirXML("detalleAir")
@@ -2028,13 +2077,13 @@ Dim ContV As Long
              End If
           End If
          'Aqui colocamos si existe una nota de credito o debito
-          Select Case Val(.fields("TipoComprobante"))
+          Select Case Val(.Fields("TipoComprobante"))
             Case 4, 5, 41
-                 Print #NumFile, CampoXML("docModificado", Format(Val(.fields("DocModificado")), "00"))
-                 Print #NumFile, CampoXML("estabModificado", .fields("EstabModificado"))
-                 Print #NumFile, CampoXML("ptoEmiModificado", .fields("PtoEmiModificado"))
-                 Print #NumFile, CampoXML("secModificado", .fields("SecModificado"))
-                 Print #NumFile, CampoXML("autModificado", .fields("AutModificado"))
+                 Print #NumFile, CampoXML("docModificado", Format(Val(.Fields("DocModificado")), "00"))
+                 Print #NumFile, CampoXML("estabModificado", .Fields("EstabModificado"))
+                 Print #NumFile, CampoXML("ptoEmiModificado", .Fields("PtoEmiModificado"))
+                 Print #NumFile, CampoXML("secModificado", .Fields("SecModificado"))
+                 Print #NumFile, CampoXML("autModificado", .Fields("AutModificado"))
           End Select
           Print #NumFile, CerrarXML("detalleCompras")
          .MoveNext
@@ -2074,10 +2123,10 @@ Dim ContV As Long
           Progreso_Barra.Mensaje_Box = "V(" & ContV & "/" & .RecordCount & ") ATS-Generando en: " & Archivo_XML
           Progreso_Esperar
          
-          Contador = .fields("NumeroComprobantesV")
+          Contador = .Fields("NumeroComprobantesV")
           If Contador <= 0 Then Contador = 1
           Factura_No = Contador
-          CodigoCliente = .fields("RUC_CI")
+          CodigoCliente = .Fields("RUC_CI")
            
           'Codigo1 = .Fields("Establecimiento") '"001" '
           'Codigo2 = .Fields("PuntoEmision") ' "001" '
@@ -2087,36 +2136,36 @@ Dim ContV As Long
           FechaRet = FechaFinal
           AutRet = "0000000000"
           TipoDoc = "06"
-          Select Case .fields("TB")
+          Select Case .Fields("TB")
             Case "R": TipoDoc = "04"
             Case "C": TipoDoc = "05"
             Case "P": TipoDoc = "06"
             Case "F": TipoDoc = "07"
           End Select
-          If .fields("RUC_CI") = "9999999999999" Then TipoDoc = "07"
+          If .Fields("RUC_CI") = "9999999999999" Then TipoDoc = "07"
          'Genero el talón de Ventas
           'If .Fields("RUC_CI") = Ninguno Then MsgBox .Fields("RUC_CI")
           Print #NumFile, AbrirXML("detalleVentas")
           Print #NumFile, CampoXML("tpIdCliente", TipoDoc)
-          Print #NumFile, CampoXML("idCliente", .fields("RUC_CI"))
+          Print #NumFile, CampoXML("idCliente", .Fields("RUC_CI"))
           If TipoDoc <> "07" Then Print #NumFile, CampoXML("parteRelVtas", "NO")
           If TipoDoc = "06" And CFechaLong(FechaInicial) >= CFechaLong("01/05/2016") Then
              Print #NumFile, CampoXML("tipoCliente", "01")
-             Print #NumFile, CampoXML("denoCli", .fields("Razon_Social"))
+             Print #NumFile, CampoXML("denoCli", .Fields("Razon_Social"))
           End If
-          Print #NumFile, CampoXML("tipoComprobante", Format(.fields("TipoComprobante"), "00"))
+          Print #NumFile, CampoXML("tipoComprobante", Format(.Fields("TipoComprobante"), "00"))
           Print #NumFile, CampoXML("tipoEmision", TipoDeFactura)
           Print #NumFile, CampoXML("numeroComprobantes", Contador)
           Print #NumFile, CampoXML("baseNoGraIva", Format(0, "#0.00"))         ' hay que aumentar
-          Print #NumFile, CampoXML("baseImponible", Format(.fields("BaseImponibleV"), "#0.00"))
-          Print #NumFile, CampoXML("baseImpGrav", Format(.fields("BaseImpGravV"), "#0.00"))
-          Print #NumFile, CampoXML("montoIva", Format(.fields("MontoIvaV"), "#0.00"))
+          Print #NumFile, CampoXML("baseImponible", Format(.Fields("BaseImponibleV"), "#0.00"))
+          Print #NumFile, CampoXML("baseImpGrav", Format(.Fields("BaseImpGravV"), "#0.00"))
+          Print #NumFile, CampoXML("montoIva", Format(.Fields("MontoIvaV"), "#0.00"))
           Print #NumFile, CampoXML("montoIce", "0.00")
-          Print #NumFile, CampoXML("valorRetIva", Format(.fields("ValorRetBienesV") + .fields("ValorRetServiciosV"), "#0.00"))
+          Print #NumFile, CampoXML("valorRetIva", Format(.Fields("ValorRetBienesV") + .Fields("ValorRetServiciosV"), "#0.00"))
          'Asigno a variables los campos
          'Genero el AIR
           Cargar_Air_AT = True
-          Select Case Val(.fields("TipoComprobante"))
+          Select Case Val(.Fields("TipoComprobante"))
             Case 4, 41: Cargar_Air_AT = False   ' NC o ND
           End Select
 '''          SubTotal = 0
@@ -2136,7 +2185,7 @@ Dim ContV As Long
 '''            'MsgBox sSQL & vbCrLf & AdoAir.Recordset.RecordCount
 '''          End If
          'MsgBox SubTotal
-          Print #NumFile, CampoXML("valorRetRenta", Format(.fields("ValorRetRentaV"), "#0.00"))
+          Print #NumFile, CampoXML("valorRetRenta", Format(.Fields("ValorRetRentaV"), "#0.00"))
           
           If CFechaLong(FechaInicial) >= CFechaLong("01/06/2016") Then
              For I = 0 To 7
@@ -2167,12 +2216,12 @@ Dim ContV As Long
 '''             End If
              
             'Ventas sin modulos de Facturacion
-             Select Case Val(.fields("TipoComprobante"))
+             Select Case Val(.Fields("TipoComprobante"))
                Case 4
                     Tipo_Pago = ""
                Case Else
                     Print #NumFile, AbrirXML("formasDePago")
-                    Print #NumFile, CampoXML("formaPago", .fields("Tipo_Pago"))
+                    Print #NumFile, CampoXML("formaPago", .Fields("Tipo_Pago"))
                     Print #NumFile, CerrarXML("formasDePago")
              End Select
             
@@ -2236,30 +2285,30 @@ Dim ContV As Long
        Print #NumFile, AbrirXML("exportaciones")
        Do While Not .EOF
           TipoDoc = "1"
-          Select Case .fields("TD")
+          Select Case .Fields("TD")
             Case "R", "C": TipoDoc = "2"
           End Select
          'Genero el talón de Exportaciones
           Print #NumFile, AbrirXML("detalleExportaciones")
-          Print #NumFile, CampoXML("exportacionDe", .fields("ExportacionDe"))
-          Print #NumFile, CampoXML("tipoComprobante", Format(.fields("TipoComprobante"), "00"))
-          If .fields("ExportacionDe") = 1 Then
-              Print #NumFile, CampoXML("distAduanero", .fields("DistAduanero"))
-              Print #NumFile, CampoXML("anio", .fields("Anio"))
-              Print #NumFile, CampoXML("regimen", .fields("Regimen"))
-              Print #NumFile, CampoXML("correlativo", .fields("Correlativo"))
-              Print #NumFile, CampoXML("verificador", .fields("Verificador"))
-              Print #NumFile, CampoXML("docTransp", .fields("NumeroDctoTransporte"))
+          Print #NumFile, CampoXML("exportacionDe", .Fields("ExportacionDe"))
+          Print #NumFile, CampoXML("tipoComprobante", Format(.Fields("TipoComprobante"), "00"))
+          If .Fields("ExportacionDe") = 1 Then
+              Print #NumFile, CampoXML("distAduanero", .Fields("DistAduanero"))
+              Print #NumFile, CampoXML("anio", .Fields("Anio"))
+              Print #NumFile, CampoXML("regimen", .Fields("Regimen"))
+              Print #NumFile, CampoXML("correlativo", .Fields("Correlativo"))
+              Print #NumFile, CampoXML("verificador", .Fields("Verificador"))
+              Print #NumFile, CampoXML("docTransp", .Fields("NumeroDctoTransporte"))
           End If
-          Print #NumFile, CampoXML("fechaEmbarque", .fields("FechaEmbarque"))
+          Print #NumFile, CampoXML("fechaEmbarque", .Fields("FechaEmbarque"))
           Print #NumFile, CampoXML("fue", "000001")                                       '*
-          Print #NumFile, CampoXML("valorFOB", Format(.fields("ValorFOB"), "#0.00"))
-          Print #NumFile, CampoXML("valorFOBComprobante", Format(.fields("ValorFOBComprobante")))
-          Print #NumFile, CampoXML("establecimiento", .fields("Establecimiento"))
-          Print #NumFile, CampoXML("puntoEmision", .fields("PuntoEmision"))
-          Print #NumFile, CampoXML("secuencial", .fields("Secuencial"))
-          Print #NumFile, CampoXML("autorizacion", Format(Val(.fields("Autorizacion")), "#0"))
-          Print #NumFile, CampoXML("fechaEmision", .fields("FechaEmision"))
+          Print #NumFile, CampoXML("valorFOB", Format(.Fields("ValorFOB"), "#0.00"))
+          Print #NumFile, CampoXML("valorFOBComprobante", Format(.Fields("ValorFOBComprobante")))
+          Print #NumFile, CampoXML("establecimiento", .Fields("Establecimiento"))
+          Print #NumFile, CampoXML("puntoEmision", .Fields("PuntoEmision"))
+          Print #NumFile, CampoXML("secuencial", .Fields("Secuencial"))
+          Print #NumFile, CampoXML("autorizacion", Format(Val(.Fields("Autorizacion")), "#0"))
+          Print #NumFile, CampoXML("fechaEmision", .Fields("FechaEmision"))
           Print #NumFile, CerrarXML("detalleExportaciones")
          .MoveNext
        Loop
@@ -2272,12 +2321,12 @@ Dim ContV As Long
         Print #NumFile, AbrirXML("anulados")
         Do While Not .EOF
            Print #NumFile, AbrirXML("detalleAnulados")
-           Print #NumFile, CampoXML("tipoComprobante", Format(.fields("TipoComprobante"), "00"))
-           Print #NumFile, CampoXML("establecimiento", .fields("Establecimiento"))
-           Print #NumFile, CampoXML("puntoEmision", .fields("PuntoEmision"))
-           Print #NumFile, CampoXML("secuencialInicio", .fields("Secuencial1"))
-           Print #NumFile, CampoXML("secuencialFin", .fields("Secuencial2"))
-           Print #NumFile, CampoXML("autorizacion", .fields("Autorizacion"))
+           Print #NumFile, CampoXML("tipoComprobante", Format(.Fields("TipoComprobante"), "00"))
+           Print #NumFile, CampoXML("establecimiento", .Fields("Establecimiento"))
+           Print #NumFile, CampoXML("puntoEmision", .Fields("PuntoEmision"))
+           Print #NumFile, CampoXML("secuencialInicio", .Fields("Secuencial1"))
+           Print #NumFile, CampoXML("secuencialFin", .Fields("Secuencial2"))
+           Print #NumFile, CampoXML("autorizacion", .Fields("Autorizacion"))
            Print #NumFile, CerrarXML("detalleAnulados")
           .MoveNext
         Loop
@@ -2663,46 +2712,46 @@ Public Sub Crear_Anexos_Tipo_02(NombreArchivo As String)
        Print #NumFile, AbrirXML("compras")
        Do While Not .EOF
           TipoDoc = "03"
-          Select Case .fields("TD")
+          Select Case .Fields("TD")
              Case "R": TipoDoc = "01"
              Case "C": TipoDoc = "02"
              Case "P": TipoDoc = "03"
           End Select
          'Aqui genero el Detalle de Compras
           Print #NumFile, AbrirXML("detalleCompras")
-          Print #NumFile, CampoXML("codSustento", .fields("CodSustento"))
-          Print #NumFile, CampoXML("devIva", .fields("DevIva"))
+          Print #NumFile, CampoXML("codSustento", .Fields("CodSustento"))
+          Print #NumFile, CampoXML("devIva", .Fields("DevIva"))
           Print #NumFile, CampoXML("tpIdProv", TipoDoc)
-          Print #NumFile, CampoXML("idProv", .fields("CI_RUC"))
-          Print #NumFile, CampoXML("tipoComprobante", .fields("TipoComprobante"))
-          Print #NumFile, CampoXML("fechaRegistro", .fields("FechaRegistro"))
-          Print #NumFile, CampoXML("establecimiento", .fields("Establecimiento"))
-          Print #NumFile, CampoXML("puntoEmision", .fields("PuntoEmision"))
-          Print #NumFile, CampoXML("secuencial", .fields("Secuencial"))
-          Print #NumFile, CampoXML("fechaEmision", .fields("FechaEmision"))
-          Print #NumFile, CampoXML("autorizacion", Format(Val(.fields("Autorizacion")), "0000000000"))
-          Print #NumFile, CampoXML("fechaCaducidad", Mes_Año(.fields("FechaCaducidad")))
-          Print #NumFile, CampoXML("baseImponible", Format(.fields("BaseImponible")))
-          Print #NumFile, CampoXML("baseImpGrav", Format(.fields("BaseImpGrav"), "#0.00"))
-          Print #NumFile, CampoXML("porcentajeIva", .fields("PorcentajeIva"))
-          Print #NumFile, CampoXML("montoIva", Format(.fields("MontoIva"), "#0.00"))
-          Print #NumFile, CampoXML("baseImpIce", Format(.fields("BaseImpIce"), "#0.00"))
-          Print #NumFile, CampoXML("porcentajeIce", Format(.fields("PorcentajeIce"), "#0"))
-          Print #NumFile, CampoXML("montoIce", Format(.fields("MontoIce"), "#0.00"))
-          Print #NumFile, CampoXML("montoIvaBienes", Format(.fields("MontoIvaBienes"), "#0.00"))
-          Print #NumFile, CampoXML("porRetBienes", .fields("PorRetBienes"))
-          Print #NumFile, CampoXML("valorRetBienes", Format(.fields("valorRetBienes"), "#0.00"))
-          Print #NumFile, CampoXML("montoIvaServicios", Format(.fields("MontoIvaServicios"), "#0.00"))
-          Print #NumFile, CampoXML("porRetServicios", .fields("PorRetServicios"))
-          Print #NumFile, CampoXML("valorRetServicios", Format(.fields("ValorRetServicios"), "#0.00"))
+          Print #NumFile, CampoXML("idProv", .Fields("CI_RUC"))
+          Print #NumFile, CampoXML("tipoComprobante", .Fields("TipoComprobante"))
+          Print #NumFile, CampoXML("fechaRegistro", .Fields("FechaRegistro"))
+          Print #NumFile, CampoXML("establecimiento", .Fields("Establecimiento"))
+          Print #NumFile, CampoXML("puntoEmision", .Fields("PuntoEmision"))
+          Print #NumFile, CampoXML("secuencial", .Fields("Secuencial"))
+          Print #NumFile, CampoXML("fechaEmision", .Fields("FechaEmision"))
+          Print #NumFile, CampoXML("autorizacion", Format(Val(.Fields("Autorizacion")), "0000000000"))
+          Print #NumFile, CampoXML("fechaCaducidad", Mes_Año(.Fields("FechaCaducidad")))
+          Print #NumFile, CampoXML("baseImponible", Format(.Fields("BaseImponible")))
+          Print #NumFile, CampoXML("baseImpGrav", Format(.Fields("BaseImpGrav"), "#0.00"))
+          Print #NumFile, CampoXML("porcentajeIva", .Fields("PorcentajeIva"))
+          Print #NumFile, CampoXML("montoIva", Format(.Fields("MontoIva"), "#0.00"))
+          Print #NumFile, CampoXML("baseImpIce", Format(.Fields("BaseImpIce"), "#0.00"))
+          Print #NumFile, CampoXML("porcentajeIce", Format(.Fields("PorcentajeIce"), "#0"))
+          Print #NumFile, CampoXML("montoIce", Format(.Fields("MontoIce"), "#0.00"))
+          Print #NumFile, CampoXML("montoIvaBienes", Format(.Fields("MontoIvaBienes"), "#0.00"))
+          Print #NumFile, CampoXML("porRetBienes", .Fields("PorRetBienes"))
+          Print #NumFile, CampoXML("valorRetBienes", Format(.Fields("valorRetBienes"), "#0.00"))
+          Print #NumFile, CampoXML("montoIvaServicios", Format(.Fields("MontoIvaServicios"), "#0.00"))
+          Print #NumFile, CampoXML("porRetServicios", .Fields("PorRetServicios"))
+          Print #NumFile, CampoXML("valorRetServicios", Format(.Fields("ValorRetServicios"), "#0.00"))
          'Asigno a variables los campos
-          CodigoCliente = .fields("IdProv")
-          Factura_No = .fields("Secuencial")
-          Codigo1 = .fields("Establecimiento")
-          Codigo2 = .fields("PuntoEmision")
+          CodigoCliente = .Fields("IdProv")
+          Factura_No = .Fields("Secuencial")
+          Codigo1 = .Fields("Establecimiento")
+          Codigo2 = .Fields("PuntoEmision")
           Estab = "000"
           PtoRet = "000"
-          FechaRet = .fields("FechaRegistro")
+          FechaRet = .Fields("FechaRegistro")
           AutRet = "0000000000"
           Number = False
          'Genero el AIR
@@ -2728,14 +2777,14 @@ Public Sub Crear_Anexos_Tipo_02(NombreArchivo As String)
              Print #NumFile, AbrirXML("air")
              Do While Not AdoAir.Recordset.EOF
                'Asigno en variables los campos
-                Codigo = AdoAir.Recordset.fields("CodRet")
-                Total_SubTotal = AdoAir.Recordset.fields("BaseImp")
-                Porcentaje = AdoAir.Recordset.fields("Porcentaje")
-                Valor = AdoAir.Recordset.fields("ValRet")
-                Estab = AdoAir.Recordset.fields("EstabRetencion")
-                PtoRet = AdoAir.Recordset.fields("PtoEmiRetencion")
-                SecRet = AdoAir.Recordset.fields("SecRetencion")
-                AutRet = AdoAir.Recordset.fields("AutRetencion")
+                Codigo = AdoAir.Recordset.Fields("CodRet")
+                Total_SubTotal = AdoAir.Recordset.Fields("BaseImp")
+                Porcentaje = AdoAir.Recordset.Fields("Porcentaje")
+                Valor = AdoAir.Recordset.Fields("ValRet")
+                Estab = AdoAir.Recordset.Fields("EstabRetencion")
+                PtoRet = AdoAir.Recordset.Fields("PtoEmiRetencion")
+                SecRet = AdoAir.Recordset.Fields("SecRetencion")
+                AutRet = AdoAir.Recordset.Fields("AutRetencion")
                 Number = True
                 Print #NumFile, AbrirXML("detalleAir")
                 Print #NumFile, CampoXML("codRetAir", Codigo)
@@ -2759,17 +2808,17 @@ Public Sub Crear_Anexos_Tipo_02(NombreArchivo As String)
           End If
           Print #NumFile, CampoXML("autRetencion1", Format(Val(AutRet), "#0"))
           Print #NumFile, CampoXML("fechaEmiRet1", FechaRet)
-          Print #NumFile, CampoXML("docModificado", .fields("DocModificado"))
-          Print #NumFile, CampoXML("fechaEmiModificado", .fields("FechaEmiModificado"))
-          Print #NumFile, CampoXML("estabModificado", .fields("EstabModificado"))
-          Print #NumFile, CampoXML("ptoEmiModificado", .fields("PtoEmiModificado"))
-          Print #NumFile, CampoXML("secModificado", .fields("SecModificado"))
-          Print #NumFile, CampoXML("autModificado", .fields("AutModificado"))
-          If .fields("ContratoPartidoPolitico") <> "0000000000" Then
-              Print #NumFile, CampoXML("contratoPartidoPolitico", Format(.fields("ContratoPartidoPolitico"), "#0"))
+          Print #NumFile, CampoXML("docModificado", .Fields("DocModificado"))
+          Print #NumFile, CampoXML("fechaEmiModificado", .Fields("FechaEmiModificado"))
+          Print #NumFile, CampoXML("estabModificado", .Fields("EstabModificado"))
+          Print #NumFile, CampoXML("ptoEmiModificado", .Fields("PtoEmiModificado"))
+          Print #NumFile, CampoXML("secModificado", .Fields("SecModificado"))
+          Print #NumFile, CampoXML("autModificado", .Fields("AutModificado"))
+          If .Fields("ContratoPartidoPolitico") <> "0000000000" Then
+              Print #NumFile, CampoXML("contratoPartidoPolitico", Format(.Fields("ContratoPartidoPolitico"), "#0"))
           End If
-          Print #NumFile, CampoXML("montoTituloOneroso", Format(.fields("MontoTituloOneroso"), "#0.00"))
-          Print #NumFile, CampoXML("montoTituloGratuito", Format(.fields("MontoTituloGratuito"), "#0.00"))
+          Print #NumFile, CampoXML("montoTituloOneroso", Format(.Fields("MontoTituloOneroso"), "#0.00"))
+          Print #NumFile, CampoXML("montoTituloGratuito", Format(.Fields("MontoTituloGratuito"), "#0.00"))
           Print #NumFile, CerrarXML("detalleCompras")
          .MoveNext
        Loop
@@ -2784,7 +2833,7 @@ Public Sub Crear_Anexos_Tipo_02(NombreArchivo As String)
        Print #NumFile, AbrirXML("ventas")
        Do While Not .EOF
           TipoDoc = "06"
-          Select Case .fields("TD")
+          Select Case .Fields("TD")
             Case "R": TipoDoc = "04"
             Case "C": TipoDoc = "05"
             Case "P": TipoDoc = "06"
@@ -2793,45 +2842,45 @@ Public Sub Crear_Anexos_Tipo_02(NombreArchivo As String)
          'Genero el talón de Ventas
          
           Print #NumFile, AbrirXML("detalleVentas")
-          If .fields("CI_RUC") = "9999999999999" Then
+          If .Fields("CI_RUC") = "9999999999999" Then
               Print #NumFile, CampoXML("tpIdCliente", "07")
-              Print #NumFile, CampoXML("idCliente", .fields("CI_RUC"))
-              Print #NumFile, CampoXML("tipoComprobante", .fields("TipoComprobante"))
+              Print #NumFile, CampoXML("idCliente", .Fields("CI_RUC"))
+              Print #NumFile, CampoXML("tipoComprobante", .Fields("TipoComprobante"))
           Else
               Print #NumFile, CampoXML("tpIdCliente", TipoDoc)
-              Print #NumFile, CampoXML("idCliente", .fields("CI_RUC"))
-              Print #NumFile, CampoXML("tipoComprobante", .fields("TipoComprobante"))
+              Print #NumFile, CampoXML("idCliente", .Fields("CI_RUC"))
+              Print #NumFile, CampoXML("tipoComprobante", .Fields("TipoComprobante"))
           End If
           
-          Print #NumFile, CampoXML("fechaRegistro", UltimoDiaMes(.fields("FechaRegistro")))
-          Contador = .fields("NumeroComprobantesV")
+          Print #NumFile, CampoXML("fechaRegistro", UltimoDiaMes(.Fields("FechaRegistro")))
+          Contador = .Fields("NumeroComprobantesV")
           If Contador <= 0 Then Contador = 1
           Print #NumFile, CampoXML("numeroComprobantes", Contador)
-          Print #NumFile, CampoXML("fechaEmision", UltimoDiaMes(.fields("FechaEmision")))
-          Print #NumFile, CampoXML("baseImponible", Format(.fields("BaseImponibleV"), "#0.00"))
-          Print #NumFile, CampoXML("ivaPresuntivo", .fields("IvaPresuntivo"))
-          Print #NumFile, CampoXML("baseImpGrav", Format(.fields("BaseImpGravV"), "#0.00"))
-          Print #NumFile, CampoXML("porcentajeIva", .fields("PorcentajeIva"))
-          Print #NumFile, CampoXML("montoIva", Format(.fields("MontoIvaV"), "#0.00"))
-          Print #NumFile, CampoXML("baseImpIce", Format(.fields("BaseImpIceV"), "#0.00"))
-          Print #NumFile, CampoXML("porcentajeIce", .fields("PorcentajeIce"))
-          Print #NumFile, CampoXML("montoIce", Format(.fields("MontoIceV"), "#0.00"))
-          Print #NumFile, CampoXML("montoIvaBienes", Format(.fields("MontoIvaBienesV"), "#0.00"))
-          Print #NumFile, CampoXML("porRetBienes", .fields("PorRetBienes"))
-          Print #NumFile, CampoXML("valorRetBienes", Format(.fields("ValorRetBienesV"), "#0.00"))
-          Print #NumFile, CampoXML("montoIvaServicios", Format(.fields("MontoIvaServiciosV"), "#0.00"))
-          Print #NumFile, CampoXML("porRetServicios", .fields("PorRetServicios"))
-          Print #NumFile, CampoXML("valorRetServicios", Format(.fields("ValorRetServiciosV"), "#0.00"))
-          Print #NumFile, CampoXML("retPresuntiva", .fields("RetPresuntiva"))
+          Print #NumFile, CampoXML("fechaEmision", UltimoDiaMes(.Fields("FechaEmision")))
+          Print #NumFile, CampoXML("baseImponible", Format(.Fields("BaseImponibleV"), "#0.00"))
+          Print #NumFile, CampoXML("ivaPresuntivo", .Fields("IvaPresuntivo"))
+          Print #NumFile, CampoXML("baseImpGrav", Format(.Fields("BaseImpGravV"), "#0.00"))
+          Print #NumFile, CampoXML("porcentajeIva", .Fields("PorcentajeIva"))
+          Print #NumFile, CampoXML("montoIva", Format(.Fields("MontoIvaV"), "#0.00"))
+          Print #NumFile, CampoXML("baseImpIce", Format(.Fields("BaseImpIceV"), "#0.00"))
+          Print #NumFile, CampoXML("porcentajeIce", .Fields("PorcentajeIce"))
+          Print #NumFile, CampoXML("montoIce", Format(.Fields("MontoIceV"), "#0.00"))
+          Print #NumFile, CampoXML("montoIvaBienes", Format(.Fields("MontoIvaBienesV"), "#0.00"))
+          Print #NumFile, CampoXML("porRetBienes", .Fields("PorRetBienes"))
+          Print #NumFile, CampoXML("valorRetBienes", Format(.Fields("ValorRetBienesV"), "#0.00"))
+          Print #NumFile, CampoXML("montoIvaServicios", Format(.Fields("MontoIvaServiciosV"), "#0.00"))
+          Print #NumFile, CampoXML("porRetServicios", .Fields("PorRetServicios"))
+          Print #NumFile, CampoXML("valorRetServicios", Format(.Fields("ValorRetServiciosV"), "#0.00"))
+          Print #NumFile, CampoXML("retPresuntiva", .Fields("RetPresuntiva"))
           
           'Asigno a variables los campos
-          CodigoCliente = .fields("IdProv")
-          Factura_No = .fields("NumeroComprobantes")
-          Codigo1 = .fields("Establecimiento")
-          Codigo2 = .fields("PuntoEmision")
+          CodigoCliente = .Fields("IdProv")
+          Factura_No = .Fields("NumeroComprobantes")
+          Codigo1 = .Fields("Establecimiento")
+          Codigo2 = .Fields("PuntoEmision")
           Estab = "000"
           PtoRet = "000"
-          FechaRet = .fields("FechaRegistro")
+          FechaRet = .Fields("FechaRegistro")
           AutRet = "0000000000"
           
           'Genero el AIR
@@ -2856,14 +2905,14 @@ Public Sub Crear_Anexos_Tipo_02(NombreArchivo As String)
           If AdoAir.Recordset.RecordCount > 0 Then
              Print #NumFile, AbrirXML("air")
              Do While Not AdoAir.Recordset.EOF
-                Codigo = AdoAir.Recordset.fields("CodRet")
-                Total_SubTotal = AdoAir.Recordset.fields("BaseImp")
-                Porcentaje = AdoAir.Recordset.fields("Porcentaje")
-                Valor = AdoAir.Recordset.fields("ValRet")
-                Estab = AdoAir.Recordset.fields("EstabRetencion")
-                PtoRet = AdoAir.Recordset.fields("PtoEmiRetencion")
-                SecRet = AdoAir.Recordset.fields("SecRetencion")
-                AutRet = AdoAir.Recordset.fields("AutRetencion")
+                Codigo = AdoAir.Recordset.Fields("CodRet")
+                Total_SubTotal = AdoAir.Recordset.Fields("BaseImp")
+                Porcentaje = AdoAir.Recordset.Fields("Porcentaje")
+                Valor = AdoAir.Recordset.Fields("ValRet")
+                Estab = AdoAir.Recordset.Fields("EstabRetencion")
+                PtoRet = AdoAir.Recordset.Fields("PtoEmiRetencion")
+                SecRet = AdoAir.Recordset.Fields("SecRetencion")
+                AutRet = AdoAir.Recordset.Fields("AutRetencion")
                 
                 Print #NumFile, AbrirXML("detalleAir")
                 Print #NumFile, CampoXML("codRetAir", Codigo)
@@ -2892,33 +2941,33 @@ Public Sub Crear_Anexos_Tipo_02(NombreArchivo As String)
        Print #NumFile, AbrirXML("importaciones")
        Do While Not .EOF
           TipoDoc = "1"
-          If .fields("TD") = "R" Then TipoDoc = "2"
+          If .Fields("TD") = "R" Then TipoDoc = "2"
           'Genero el talón de Importaciones
           Print #NumFile, AbrirXML("detalleImportaciones")
-          Print #NumFile, CampoXML("codSustento", .fields("CodSustento"))
-          Print #NumFile, CampoXML("importacionDe", .fields("ImportacionDe"))
-          Print #NumFile, CampoXML("fechaLiquidacion", .fields("FechaLiquidacion"))
-          Print #NumFile, CampoXML("tipoComprobante", .fields("TipoComprobante"))
-          Print #NumFile, CampoXML("distAduanero", .fields("DistAduanero"))
-          Print #NumFile, CampoXML("anio", .fields("Anio"))
-          Print #NumFile, CampoXML("regimen", .fields("Regimen"))
-          Print #NumFile, CampoXML("correlativo", .fields("Correlativo"))
-          Print #NumFile, CampoXML("verificador", .fields("Verificador"))
-          Print #NumFile, CampoXML("idFiscalProv", .fields("CI_RUC"))
-          Print #NumFile, CampoXML("valorCIF", Format(.fields("ValorCIF"), "#0.00"))
+          Print #NumFile, CampoXML("codSustento", .Fields("CodSustento"))
+          Print #NumFile, CampoXML("importacionDe", .Fields("ImportacionDe"))
+          Print #NumFile, CampoXML("fechaLiquidacion", .Fields("FechaLiquidacion"))
+          Print #NumFile, CampoXML("tipoComprobante", .Fields("TipoComprobante"))
+          Print #NumFile, CampoXML("distAduanero", .Fields("DistAduanero"))
+          Print #NumFile, CampoXML("anio", .Fields("Anio"))
+          Print #NumFile, CampoXML("regimen", .Fields("Regimen"))
+          Print #NumFile, CampoXML("correlativo", .Fields("Correlativo"))
+          Print #NumFile, CampoXML("verificador", .Fields("Verificador"))
+          Print #NumFile, CampoXML("idFiscalProv", .Fields("CI_RUC"))
+          Print #NumFile, CampoXML("valorCIF", Format(.Fields("ValorCIF"), "#0.00"))
           Print #NumFile, CampoXML("razonSocialProv", UCaseStrg(NombreComercial))
           Print #NumFile, CampoXML("tipoSujeto", TipoDoc)
-          Print #NumFile, CampoXML("baseImponible", Format(.fields("BaseImponible"), "#0.00"))
-          Print #NumFile, CampoXML("baseImpGrav", Format(.fields("BaseImpGrav"), "#0.00"))
-          Print #NumFile, CampoXML("porcentajeIva", .fields("PorcentajeIva"))
-          Print #NumFile, CampoXML("montoIva", Format(.fields("MontoIva"), "#0.00"))
-          Print #NumFile, CampoXML("baseImpIce", Format(.fields("BaseImpIce"), "#0.00"))
-          Print #NumFile, CampoXML("porcentajeIce", .fields("PorcentajeIce"))
-          Print #NumFile, CampoXML("montoIce", Format(.fields("MontoIce"), "#0.00"))
+          Print #NumFile, CampoXML("baseImponible", Format(.Fields("BaseImponible"), "#0.00"))
+          Print #NumFile, CampoXML("baseImpGrav", Format(.Fields("BaseImpGrav"), "#0.00"))
+          Print #NumFile, CampoXML("porcentajeIva", .Fields("PorcentajeIva"))
+          Print #NumFile, CampoXML("montoIva", Format(.Fields("MontoIva"), "#0.00"))
+          Print #NumFile, CampoXML("baseImpIce", Format(.Fields("BaseImpIce"), "#0.00"))
+          Print #NumFile, CampoXML("porcentajeIce", .Fields("PorcentajeIce"))
+          Print #NumFile, CampoXML("montoIce", Format(.Fields("MontoIce"), "#0.00"))
                  
           'Asigno a variables los campos
-          CodigoCliente = .fields("IdFiscalProv")
-          Factura_No = .fields("Correlativo")
+          CodigoCliente = .Fields("IdFiscalProv")
+          Factura_No = .Fields("Correlativo")
           Estab = "000"
           PtoRet = "000"
           FechaRet = "00/00/0000"
@@ -2945,15 +2994,15 @@ Public Sub Crear_Anexos_Tipo_02(NombreArchivo As String)
              Print #NumFile, AbrirXML("air")
              Do While Not AdoAir.Recordset.EOF
                 'Asigno en variables los campos
-                Codigo = AdoAir.Recordset.fields("CodRet")
-                Total_SubTotal = AdoAir.Recordset.fields("BaseImp")
-                Porcentaje = AdoAir.Recordset.fields("Porcentaje")
-                Valor = AdoAir.Recordset.fields("ValRet")
-                Estab = AdoAir.Recordset.fields("EstabRetencion")
-                PtoRet = AdoAir.Recordset.fields("PtoEmiRetencion")
-                SecRet = AdoAir.Recordset.fields("SecRetencion")
-                AutRet = AdoAir.Recordset.fields("AutRetencion")
-                FechaRet = AdoAir.Recordset.fields("Fecha")
+                Codigo = AdoAir.Recordset.Fields("CodRet")
+                Total_SubTotal = AdoAir.Recordset.Fields("BaseImp")
+                Porcentaje = AdoAir.Recordset.Fields("Porcentaje")
+                Valor = AdoAir.Recordset.Fields("ValRet")
+                Estab = AdoAir.Recordset.Fields("EstabRetencion")
+                PtoRet = AdoAir.Recordset.Fields("PtoEmiRetencion")
+                SecRet = AdoAir.Recordset.Fields("SecRetencion")
+                AutRet = AdoAir.Recordset.Fields("AutRetencion")
+                FechaRet = AdoAir.Recordset.Fields("Fecha")
                 
                 Print #NumFile, AbrirXML("detalleAir")
                 Print #NumFile, CampoXML("codRetAir", Codigo)
@@ -2982,35 +3031,35 @@ Public Sub Crear_Anexos_Tipo_02(NombreArchivo As String)
        Print #NumFile, AbrirXML("exportaciones")
        Do While Not .EOF
           TipoDoc = "1"
-          Select Case .fields("TD")
+          Select Case .Fields("TD")
             Case "R", "C": TipoDoc = "2"
           End Select
           'Genero el talón de Exportaciones
           Print #NumFile, AbrirXML("detalleExportaciones")
-          Print #NumFile, CampoXML("exportacionDe", .fields("ExportacionDe"))
-          Print #NumFile, CampoXML("tipoComprobante", .fields("TipoComprobante"))
-          If .fields("ExportacionDe") = 1 Then
-              Print #NumFile, CampoXML("distAduanero", .fields("DistAduanero"))
-              Print #NumFile, CampoXML("anio", .fields("Anio"))
-              Print #NumFile, CampoXML("regimen", .fields("Regimen"))
-              Print #NumFile, CampoXML("correlativo", .fields("Correlativo"))
-              Print #NumFile, CampoXML("verificador", .fields("Verificador"))
-              Print #NumFile, CampoXML("docTransp", .fields("NumeroDctoTransporte"))
+          Print #NumFile, CampoXML("exportacionDe", .Fields("ExportacionDe"))
+          Print #NumFile, CampoXML("tipoComprobante", .Fields("TipoComprobante"))
+          If .Fields("ExportacionDe") = 1 Then
+              Print #NumFile, CampoXML("distAduanero", .Fields("DistAduanero"))
+              Print #NumFile, CampoXML("anio", .Fields("Anio"))
+              Print #NumFile, CampoXML("regimen", .Fields("Regimen"))
+              Print #NumFile, CampoXML("correlativo", .Fields("Correlativo"))
+              Print #NumFile, CampoXML("verificador", .Fields("Verificador"))
+              Print #NumFile, CampoXML("docTransp", .Fields("NumeroDctoTransporte"))
           End If
-          Print #NumFile, CampoXML("fechaEmbarque", .fields("FechaEmbarque"))
-          Print #NumFile, CampoXML("idFiscalCliente", .fields("CI_RUC"))
+          Print #NumFile, CampoXML("fechaEmbarque", .Fields("FechaEmbarque"))
+          Print #NumFile, CampoXML("idFiscalCliente", .Fields("CI_RUC"))
           Print #NumFile, CampoXML("tipoSujeto", TipoDoc)
-          Print #NumFile, CampoXML("valorFOB", Format(.fields("ValorFOB"), "#0.00"))
+          Print #NumFile, CampoXML("valorFOB", Format(.Fields("ValorFOB"), "#0.00"))
           Print #NumFile, CampoXML("razonSocialCliente", UCaseStrg(NombreComercial))
-          Print #NumFile, CampoXML("devIva", .fields("DevIva"))
-          Print #NumFile, CampoXML("facturaExportacion", .fields("FacturaExportacion"))
-          Print #NumFile, CampoXML("valorFOBComprobante", Format(.fields("ValorFOBComprobante")))
-          Print #NumFile, CampoXML("establecimiento", .fields("Establecimiento"))
-          Print #NumFile, CampoXML("puntoEmision", .fields("PuntoEmision"))
-          Print #NumFile, CampoXML("secuencial", .fields("Secuencial"))
-          Print #NumFile, CampoXML("fechaRegistro", .fields("FechaRegistro"))
-          Print #NumFile, CampoXML("autorizacion", Format(Val(.fields("Autorizacion")), "#0"))
-          Print #NumFile, CampoXML("fechaEmision", .fields("FechaEmision"))
+          Print #NumFile, CampoXML("devIva", .Fields("DevIva"))
+          Print #NumFile, CampoXML("facturaExportacion", .Fields("FacturaExportacion"))
+          Print #NumFile, CampoXML("valorFOBComprobante", Format(.Fields("ValorFOBComprobante")))
+          Print #NumFile, CampoXML("establecimiento", .Fields("Establecimiento"))
+          Print #NumFile, CampoXML("puntoEmision", .Fields("PuntoEmision"))
+          Print #NumFile, CampoXML("secuencial", .Fields("Secuencial"))
+          Print #NumFile, CampoXML("fechaRegistro", .Fields("FechaRegistro"))
+          Print #NumFile, CampoXML("autorizacion", Format(Val(.Fields("Autorizacion")), "#0"))
+          Print #NumFile, CampoXML("fechaEmision", .Fields("FechaEmision"))
           Print #NumFile, CerrarXML("detalleExportaciones")
          .MoveNext
        Loop
@@ -3080,13 +3129,13 @@ Public Sub Crear_Anexos_Tipo_02(NombreArchivo As String)
         Print #NumFile, AbrirXML("anulados")
         Do While Not .EOF
            Print #NumFile, AbrirXML("detalleAnulados")
-           Print #NumFile, CampoXML("tipoComprobante", .fields("TipoComprobante"))
-           Print #NumFile, CampoXML("establecimiento", .fields("Establecimiento"))
-           Print #NumFile, CampoXML("puntoEmision", .fields("PuntoEmision"))
-           Print #NumFile, CampoXML("secuencialInicio", .fields("Secuencial1"))
-           Print #NumFile, CampoXML("secuencialFin", .fields("Secuencial2"))
-           Print #NumFile, CampoXML("autorizacion", .fields("Autorizacion"))
-           Print #NumFile, CampoXML("fechaAnulacion", .fields("FechaAnulacion"))
+           Print #NumFile, CampoXML("tipoComprobante", .Fields("TipoComprobante"))
+           Print #NumFile, CampoXML("establecimiento", .Fields("Establecimiento"))
+           Print #NumFile, CampoXML("puntoEmision", .Fields("PuntoEmision"))
+           Print #NumFile, CampoXML("secuencialInicio", .Fields("Secuencial1"))
+           Print #NumFile, CampoXML("secuencialFin", .Fields("Secuencial2"))
+           Print #NumFile, CampoXML("autorizacion", .Fields("Autorizacion"))
+           Print #NumFile, CampoXML("fechaAnulacion", .Fields("FechaAnulacion"))
            Print #NumFile, CerrarXML("detalleAnulados")
           .MoveNext
         Loop
@@ -3155,19 +3204,19 @@ Public Sub Crear_Anexos_REOC(NombreArchivo As String)
        Print #NumFile, vbTab & AbrirXML("compras")
        Do While Not .EOF
          'Asigno a variables los campos
-          CodigoCliente = .fields("IdProv")
-          Factura_No = .fields("Secuencial")
-          Codigo1 = .fields("Establecimiento")
-          Codigo2 = .fields("PuntoEmision")
-          Saldo = .fields("BaseImpGrav")
-          FechaRet = .fields("FechaRegistro")
+          CodigoCliente = .Fields("IdProv")
+          Factura_No = .Fields("Secuencial")
+          Codigo1 = .Fields("Establecimiento")
+          Codigo2 = .Fields("PuntoEmision")
+          Saldo = .Fields("BaseImpGrav")
+          FechaRet = .Fields("FechaRegistro")
           Estab = "000"
           PtoRet = "000"
           
           AutRet = "0000000000"
           Number = False
           TipoDoc = "03"
-          Select Case .fields("TD")
+          Select Case .Fields("TD")
              Case "R": TipoDoc = "01"
              Case "C": TipoDoc = "02"
              Case "P": TipoDoc = "03"
@@ -3175,13 +3224,13 @@ Public Sub Crear_Anexos_REOC(NombreArchivo As String)
          'Aqui genero el Detalle de Compras
           Print #NumFile, vbTab & vbTab & AbrirXML("detalleCompras")
           Print #NumFile, vbTab & vbTab & vbTab & CampoXML("tpIdProv", TipoDoc)
-          Print #NumFile, vbTab & vbTab & vbTab & CampoXML("idProv", .fields("CI_RUC"))
-          Print #NumFile, vbTab & vbTab & vbTab & CampoXML("tipoComp", .fields("TipoComprobante"))
-          Print #NumFile, vbTab & vbTab & vbTab & CampoXML("aut", Val(.fields("Autorizacion")))
-          Print #NumFile, vbTab & vbTab & vbTab & CampoXML("estab", .fields("Establecimiento"))
-          Print #NumFile, vbTab & vbTab & vbTab & CampoXML("ptoEmi", .fields("PuntoEmision"))
-          Print #NumFile, vbTab & vbTab & vbTab & CampoXML("sec", .fields("Secuencial"))
-          Print #NumFile, vbTab & vbTab & vbTab & CampoXML("fechaEmiCom", .fields("FechaEmision"))
+          Print #NumFile, vbTab & vbTab & vbTab & CampoXML("idProv", .Fields("CI_RUC"))
+          Print #NumFile, vbTab & vbTab & vbTab & CampoXML("tipoComp", .Fields("TipoComprobante"))
+          Print #NumFile, vbTab & vbTab & vbTab & CampoXML("aut", Val(.Fields("Autorizacion")))
+          Print #NumFile, vbTab & vbTab & vbTab & CampoXML("estab", .Fields("Establecimiento"))
+          Print #NumFile, vbTab & vbTab & vbTab & CampoXML("ptoEmi", .Fields("PuntoEmision"))
+          Print #NumFile, vbTab & vbTab & vbTab & CampoXML("sec", .Fields("Secuencial"))
+          Print #NumFile, vbTab & vbTab & vbTab & CampoXML("fechaEmiCom", .Fields("FechaEmision"))
           AutRet = Ninguno
           Total = 0
          'Genero el AIR
@@ -3207,26 +3256,26 @@ Public Sub Crear_Anexos_REOC(NombreArchivo As String)
           If AdoAir.Recordset.RecordCount > 0 Then
              Do While Not AdoAir.Recordset.EOF
                'Asigno en variables los campos
-                Estab = AdoAir.Recordset.fields("EstabRetencion")
-                PtoRet = AdoAir.Recordset.fields("PtoEmiRetencion")
-                SecRet = AdoAir.Recordset.fields("SecRetencion")
-                AutRet = AdoAir.Recordset.fields("AutRetencion")
+                Estab = AdoAir.Recordset.Fields("EstabRetencion")
+                PtoRet = AdoAir.Recordset.Fields("PtoEmiRetencion")
+                SecRet = AdoAir.Recordset.Fields("SecRetencion")
+                AutRet = AdoAir.Recordset.Fields("AutRetencion")
                'MsgBox AdoAir.Recordset.Fields("Porcentaje") & vbCrLf & AdoAir.Recordset.Fields("BaseImp") & vbCrLf & SubTotal
                 Print #NumFile, vbTab & vbTab & vbTab & vbTab & AbrirXML("detalleAir")
-                Print #NumFile, vbTab & vbTab & vbTab & vbTab & vbTab & CampoXML("codRetAir", AdoAir.Recordset.fields("CodRet"))
-                Print #NumFile, vbTab & vbTab & vbTab & vbTab & vbTab & CampoXML("porcentaje", (AdoAir.Recordset.fields("Porcentaje") * 100), 1)
+                Print #NumFile, vbTab & vbTab & vbTab & vbTab & vbTab & CampoXML("codRetAir", AdoAir.Recordset.Fields("CodRet"))
+                Print #NumFile, vbTab & vbTab & vbTab & vbTab & vbTab & CampoXML("porcentaje", (AdoAir.Recordset.Fields("Porcentaje") * 100), 1)
                 If Saldo > 0 Then
                    Print #NumFile, vbTab & vbTab & vbTab & vbTab & vbTab & CampoXML("base0", "0.00")
-                   Print #NumFile, vbTab & vbTab & vbTab & vbTab & vbTab & CampoXML("baseGrav", AdoAir.Recordset.fields("BaseImp"), 2)
+                   Print #NumFile, vbTab & vbTab & vbTab & vbTab & vbTab & CampoXML("baseGrav", AdoAir.Recordset.Fields("BaseImp"), 2)
                 Else
-                   Print #NumFile, vbTab & vbTab & vbTab & vbTab & vbTab & CampoXML("base0", AdoAir.Recordset.fields("BaseImp"))
+                   Print #NumFile, vbTab & vbTab & vbTab & vbTab & vbTab & CampoXML("base0", AdoAir.Recordset.Fields("BaseImp"))
                    Print #NumFile, vbTab & vbTab & vbTab & vbTab & vbTab & CampoXML("baseGrav", "0.00", 2)
                 End If
                 Print #NumFile, vbTab & vbTab & vbTab & vbTab & vbTab & CampoXML("baseNoGrav", "0.00")
-                Print #NumFile, vbTab & vbTab & vbTab & vbTab & vbTab & CampoXML("valRetAir", AdoAir.Recordset.fields("ValRet"), 2)
+                Print #NumFile, vbTab & vbTab & vbTab & vbTab & vbTab & CampoXML("valRetAir", AdoAir.Recordset.Fields("ValRet"), 2)
                 'MsgBox AdoAir.Recordset.Fields("BaseImp") & vbTab & AdoAir.Recordset.Fields("ValRet")
                 Print #NumFile, vbTab & vbTab & vbTab & vbTab & CerrarXML("detalleAir")
-                Total = Total + AdoAir.Recordset.fields("ValRet")
+                Total = Total + AdoAir.Recordset.Fields("ValRet")
                 AdoAir.Recordset.MoveNext
              Loop
           End If
@@ -3283,8 +3332,8 @@ Dim Nombre2 As String
            ApellidoM = ""
            Nombre1 = ""
            Nombre2 = ""
-           If Len(.fields("Cliente")) > 1 Then
-              Empleado = .fields("Cliente")
+           If Len(.Fields("Cliente")) > 1 Then
+              Empleado = .Fields("Cliente")
               ApellidoP = SinEspaciosIzq(Empleado)
               Empleado = TrimStrg(MidStrg(Empleado, Len(ApellidoP) + 1, Len(Empleado)))
               ApellidoM = SinEspaciosIzq(Empleado)
@@ -3311,7 +3360,7 @@ Dim Nombre2 As String
 '''                 End If
 '''              End If
 '''           End If
-           Ruc_Empleado = .fields("CI_RUC")
+           Ruc_Empleado = .Fields("CI_RUC")
            
            Print #NumFile, vbTab & AbrirXML("datRetRelDep")
            
@@ -3319,27 +3368,27 @@ Dim Nombre2 As String
            Print #NumFile, vbTab & vbTab & vbTab & CampoXML("benGalpg", "NO")
            Print #NumFile, vbTab & vbTab & vbTab & CampoXML("enfcatastro", "NO")
            Print #NumFile, vbTab & vbTab & vbTab & CampoXML("numCargRebGastPers", "0")
-           If .fields("TD") = "R" Then
+           If .Fields("TD") = "R" Then
                Print #NumFile, vbTab & vbTab & vbTab & CampoXML("tipIdRet", "C")
                Print #NumFile, vbTab & vbTab & vbTab & CampoXML("idRet", MidStrg(Ruc_Empleado, 1, 10))
            Else
-               Print #NumFile, vbTab & vbTab & vbTab & CampoXML("tipIdRet", .fields("TD"))
+               Print #NumFile, vbTab & vbTab & vbTab & CampoXML("tipIdRet", .Fields("TD"))
                Print #NumFile, vbTab & vbTab & vbTab & CampoXML("idRet", Ruc_Empleado)
            End If
            Print #NumFile, vbTab & vbTab & vbTab & CampoXML("apellidoTrab", TrimStrg(ApellidoP & " " & ApellidoM))
            Print #NumFile, vbTab & vbTab & vbTab & CampoXML("nombreTrab", TrimStrg(Nombre1 & " " & Nombre2))
            Print #NumFile, vbTab & vbTab & vbTab & CampoXML("estab", "001")
-           If Val(.fields("Pais")) = 593 Then
+           If Val(.Fields("Pais")) = 593 Then
                Print #NumFile, vbTab & vbTab & vbTab & CampoXML("residenciaTrab", "01")
            Else
                Print #NumFile, vbTab & vbTab & vbTab & CampoXML("residenciaTrab", "02")
            End If
-           Print #NumFile, vbTab & vbTab & vbTab & CampoXML("paisResidencia", .fields("Pais"))
-           Print #NumFile, vbTab & vbTab & vbTab & CampoXML("aplicaConvenio", .fields("Aplica"))
-           Print #NumFile, vbTab & vbTab & vbTab & CampoXML("tipoTrabajDiscap", .fields("Condicion"))
-           Print #NumFile, vbTab & vbTab & vbTab & CampoXML("porcentajeDiscap", .fields("Porcentaje"))
-           Print #NumFile, vbTab & vbTab & vbTab & CampoXML("tipIdDiscap", .fields("TIdentificacion"))
-           Print #NumFile, vbTab & vbTab & vbTab & CampoXML("idDiscap", .fields("Identificacion"))
+           Print #NumFile, vbTab & vbTab & vbTab & CampoXML("paisResidencia", .Fields("Pais"))
+           Print #NumFile, vbTab & vbTab & vbTab & CampoXML("aplicaConvenio", .Fields("Aplica"))
+           Print #NumFile, vbTab & vbTab & vbTab & CampoXML("tipoTrabajDiscap", .Fields("Condicion"))
+           Print #NumFile, vbTab & vbTab & vbTab & CampoXML("porcentajeDiscap", .Fields("Porcentaje"))
+           Print #NumFile, vbTab & vbTab & vbTab & CampoXML("tipIdDiscap", .Fields("TIdentificacion"))
+           Print #NumFile, vbTab & vbTab & vbTab & CampoXML("idDiscap", .Fields("Identificacion"))
            Print #NumFile, vbTab & vbTab & CerrarXML("empleado")
            
            
@@ -3352,54 +3401,54 @@ Dim Nombre2 As String
 '''              Print #NumFile, vbTab & vbTab & CampoXML("tel", .Fields("Telefono"))
 '''           End If
            Totales_SRI(1) = Totales_SRI(1) + 1
-           Print #NumFile, vbTab & vbTab & CampoXML("suelSal", .fields("SuelSal"))
-           Totales_SRI(2) = Totales_SRI(2) + .fields("SuelSal")
-           Print #NumFile, vbTab & vbTab & CampoXML("sobSuelComRemu", .fields("SobSuelComRemu"))
-           Totales_SRI(3) = Totales_SRI(3) + .fields("SobSuelComRemu")
-           Print #NumFile, vbTab & vbTab & CampoXML("partUtil", .fields("PartUtil"))
-           Totales_SRI(6) = Totales_SRI(6) + .fields("PartUtil")
-           Print #NumFile, vbTab & vbTab & CampoXML("intGrabGen", .fields("IngOtrosEmp"))
-           Print #NumFile, vbTab & vbTab & CampoXML("impRentEmpl", .fields("ImpRentEmpl"))
-           Print #NumFile, vbTab & vbTab & CampoXML("decimTer", .fields("Valor_Dec_3ro"))
-           Totales_SRI(4) = Totales_SRI(4) + .fields("Valor_Dec_3ro")
-           Print #NumFile, vbTab & vbTab & CampoXML("decimCuar", .fields("Valor_Dec_4to"))
-           Totales_SRI(5) = Totales_SRI(5) + .fields("Valor_Dec_4to")
-           Print #NumFile, vbTab & vbTab & CampoXML("fondoReserva", .fields("FondoReserva"))
+           Print #NumFile, vbTab & vbTab & CampoXML("suelSal", .Fields("SuelSal"))
+           Totales_SRI(2) = Totales_SRI(2) + .Fields("SuelSal")
+           Print #NumFile, vbTab & vbTab & CampoXML("sobSuelComRemu", .Fields("SobSuelComRemu"))
+           Totales_SRI(3) = Totales_SRI(3) + .Fields("SobSuelComRemu")
+           Print #NumFile, vbTab & vbTab & CampoXML("partUtil", .Fields("PartUtil"))
+           Totales_SRI(6) = Totales_SRI(6) + .Fields("PartUtil")
+           Print #NumFile, vbTab & vbTab & CampoXML("intGrabGen", .Fields("IngOtrosEmp"))
+           Print #NumFile, vbTab & vbTab & CampoXML("impRentEmpl", .Fields("ImpRentEmpl"))
+           Print #NumFile, vbTab & vbTab & CampoXML("decimTer", .Fields("Valor_Dec_3ro"))
+           Totales_SRI(4) = Totales_SRI(4) + .Fields("Valor_Dec_3ro")
+           Print #NumFile, vbTab & vbTab & CampoXML("decimCuar", .Fields("Valor_Dec_4to"))
+           Totales_SRI(5) = Totales_SRI(5) + .Fields("Valor_Dec_4to")
+           Print #NumFile, vbTab & vbTab & CampoXML("fondoReserva", .Fields("FondoReserva"))
            Print #NumFile, vbTab & vbTab & CampoXML("salarioDigno", "0.00")
            Print #NumFile, vbTab & vbTab & CampoXML("otrosIngRenGrav", "0.00")
-           Print #NumFile, vbTab & vbTab & CampoXML("ingGravConEsteEmpl", .fields("SuelSal"))
-           Print #NumFile, vbTab & vbTab & CampoXML("sisSalNet", .fields("SN"))
-           Print #NumFile, vbTab & vbTab & CampoXML("apoPerIess", .fields("ApoPerIess"))
-           Totales_SRI(7) = Totales_SRI(7) + .fields("ApoPerIess")
-           Print #NumFile, vbTab & vbTab & CampoXML("aporPerIessConOtrosEmpls", .fields("Rebajas"))
-           Print #NumFile, vbTab & vbTab & CampoXML("deducVivienda", .fields("Vivienda"))
-           Print #NumFile, vbTab & vbTab & CampoXML("deducSalud", .fields("Salud"))
+           Print #NumFile, vbTab & vbTab & CampoXML("ingGravConEsteEmpl", .Fields("SuelSal"))
+           Print #NumFile, vbTab & vbTab & CampoXML("sisSalNet", .Fields("SN"))
+           Print #NumFile, vbTab & vbTab & CampoXML("apoPerIess", .Fields("ApoPerIess"))
+           Totales_SRI(7) = Totales_SRI(7) + .Fields("ApoPerIess")
+           Print #NumFile, vbTab & vbTab & CampoXML("aporPerIessConOtrosEmpls", .Fields("Rebajas"))
+           Print #NumFile, vbTab & vbTab & CampoXML("deducVivienda", .Fields("Vivienda"))
+           Print #NumFile, vbTab & vbTab & CampoXML("deducSalud", .Fields("Salud"))
            'Print #NumFile, vbTab & vbTab & CampoXML("deducEduca", .Fields("Educacion"))
-           Print #NumFile, vbTab & vbTab & CampoXML("deducEducartcult", .fields("Educacion"))
-           Print #NumFile, vbTab & vbTab & CampoXML("deducAliement", .fields("Alimentacion"))
-           Print #NumFile, vbTab & vbTab & CampoXML("deducVestim", .fields("Vestimenta"))
+           Print #NumFile, vbTab & vbTab & CampoXML("deducEducartcult", .Fields("Educacion"))
+           Print #NumFile, vbTab & vbTab & CampoXML("deducAliement", .Fields("Alimentacion"))
+           Print #NumFile, vbTab & vbTab & CampoXML("deducVestim", .Fields("Vestimenta"))
            Print #NumFile, vbTab & vbTab & CampoXML("deduccionTurismo", 0)
-           Print #NumFile, vbTab & vbTab & CampoXML("exoDiscap", .fields("RebEspDiscap"))
-           Totales_SRI(8) = Totales_SRI(8) + .fields("RebEspDiscap")
-           Print #NumFile, vbTab & vbTab & CampoXML("exoTerEd", .fields("RebEspTerEd"))
-           Totales_SRI(9) = Totales_SRI(9) + .fields("RebEspTerEd")
-           Print #NumFile, vbTab & vbTab & CampoXML("basImp", .fields("BasImp"))
-           Totales_SRI(11) = Totales_SRI(11) + .fields("BasImp")
-           Valor_Retenido = .fields("ImpRentCaus") + .fields("Deduccion") + .fields("ImpAnterior")
-           Print #NumFile, vbTab & vbTab & CampoXML("impRentCaus", .fields("ImpRentCaus"))
+           Print #NumFile, vbTab & vbTab & CampoXML("exoDiscap", .Fields("RebEspDiscap"))
+           Totales_SRI(8) = Totales_SRI(8) + .Fields("RebEspDiscap")
+           Print #NumFile, vbTab & vbTab & CampoXML("exoTerEd", .Fields("RebEspTerEd"))
+           Totales_SRI(9) = Totales_SRI(9) + .Fields("RebEspTerEd")
+           Print #NumFile, vbTab & vbTab & CampoXML("basImp", .Fields("BasImp"))
+           Totales_SRI(11) = Totales_SRI(11) + .Fields("BasImp")
+           Valor_Retenido = .Fields("ImpRentCaus") + .Fields("Deduccion") + .Fields("ImpAnterior")
+           Print #NumFile, vbTab & vbTab & CampoXML("impRentCaus", .Fields("ImpRentCaus"))
            
            Print #NumFile, vbTab & vbTab & CampoXML("rebajaGastosPersonales", "0.00")
            Print #NumFile, vbTab & vbTab & CampoXML("impuestoRentaRebajaGastosPersonales", "0.00")
            
-           Print #NumFile, vbTab & vbTab & CampoXML("valRetAsuOtrosEmpls", .fields("Deduccion"))
-           Print #NumFile, vbTab & vbTab & CampoXML("valImpAsuEsteEmpl", .fields("ImpAnterior"))
+           Print #NumFile, vbTab & vbTab & CampoXML("valRetAsuOtrosEmpls", .Fields("Deduccion"))
+           Print #NumFile, vbTab & vbTab & CampoXML("valImpAsuEsteEmpl", .Fields("ImpAnterior"))
            Print #NumFile, vbTab & vbTab & CampoXML("valRet", Valor_Retenido)
            
            Totales_SRI(12) = Totales_SRI(12) + Valor_Retenido
-           Total = .fields("SuelSal") + .fields("SobSuelComRemu") + .fields("PartUtil") + .fields("ImpRentEmpl")
+           Total = .Fields("SuelSal") + .Fields("SobSuelComRemu") + .Fields("PartUtil") + .Fields("ImpRentEmpl")
 
-           Totales_SRI(10) = Totales_SRI(10) + .fields("SubTotal")
-           Totales_SRI(13) = Totales_SRI(13) + .fields("NumRet")
+           Totales_SRI(10) = Totales_SRI(10) + .Fields("SubTotal")
+           Totales_SRI(13) = Totales_SRI(13) + .Fields("NumRet")
            
 '''           Print #NumFile, vbTab & vbTab & CampoXML("desauOtras", .Fields("Desahucio"))
 '''           Print #NumFile, vbTab & vbTab & CampoXML("subTotal", .Fields("SubTotal"))
@@ -3533,6 +3582,8 @@ Dim Id_Mes As Byte
   End Select
   If Button.key <> "Salir" Then
      Progreso_Final
+     'MsgBox RutaDocumentoPDF
+     APDFATS.Object.src = RutaDocumentoPDF
      MsgBox "EL ARCHIVO SE GENERO EN: " & vbCrLf & vbCrLf & Archivo_XML
   End If
   
@@ -3561,7 +3612,7 @@ Dim NombFilePict As String
   tPrint.OrientacionPagina = 1
   tPrint.PaginaA4 = True
   tPrint.EsCampoCorto = False
-  tPrint.VerDocumento = True
+  tPrint.VerDocumento = False 'True
   Set cPrint = New cImpresion
   cPrint.iniciaImpresion
 
@@ -3683,7 +3734,7 @@ Dim NombFilePict As String
   tPrint.OrientacionPagina = 1
   tPrint.PaginaA4 = True
   tPrint.EsCampoCorto = False
-  tPrint.VerDocumento = True
+  tPrint.VerDocumento = False 'True
   Set cPrint = New cImpresion
   cPrint.iniciaImpresion
  
@@ -3875,14 +3926,14 @@ Dim PosYf As Single
   Cantidad = 0
   With AdoAir.Recordset
    If .RecordCount > 0 Then
-       Codigo = .fields("CodRet")
+       Codigo = .Fields("CodRet")
        Do While Not .EOF
-          If Codigo <> .fields("CodRet") Then
+          If Codigo <> .Fields("CodRet") Then
              DetalleComp = Ninguno
              If AdoCodRet.Recordset.RecordCount > 0 Then
                 AdoCodRet.Recordset.MoveFirst
                 AdoCodRet.Recordset.Find ("Codigo = '" & Codigo & "' ")
-                If Not AdoCodRet.Recordset.EOF Then DetalleComp = UCaseStrg(AdoCodRet.Recordset.fields("Concepto"))
+                If Not AdoCodRet.Recordset.EOF Then DetalleComp = UCaseStrg(AdoCodRet.Recordset.Fields("Concepto"))
              End If
              cPrint.tipoDeLetra = TipoArialNarrow
              cPrint.printTexto 0.9, PosLinea, Codigo
@@ -3895,21 +3946,21 @@ Dim PosYf As Single
              Total = 0
              Saldo = 0
              Cantidad = 0
-             Codigo = .fields("CodRet")
+             Codigo = .Fields("CodRet")
           End If
-          Select Case .fields("TipoComprobante")
-            Case 4: Totales_SRI(1) = Totales_SRI(1) + .fields("Cantidad")  '04
-            Case 5: Totales_SRI(2) = Totales_SRI(2) + .fields("Cantidad")  '05
-            Case 41: Totales_SRI(3) = Totales_SRI(3) + .fields("Cantidad") '41
-            Case 47: Totales_SRI(4) = Totales_SRI(4) + .fields("Cantidad") '47
-            Case 48: Totales_SRI(5) = Totales_SRI(5) + .fields("Cantidad") '48
+          Select Case .Fields("TipoComprobante")
+            Case 4: Totales_SRI(1) = Totales_SRI(1) + .Fields("Cantidad")  '04
+            Case 5: Totales_SRI(2) = Totales_SRI(2) + .Fields("Cantidad")  '05
+            Case 41: Totales_SRI(3) = Totales_SRI(3) + .Fields("Cantidad") '41
+            Case 47: Totales_SRI(4) = Totales_SRI(4) + .Fields("Cantidad") '47
+            Case 48: Totales_SRI(5) = Totales_SRI(5) + .Fields("Cantidad") '48
             Case Else
-                 Totales_SRI(0) = Totales_SRI(0) + .fields("Cantidad")     '04-05-47-48-07-41
-                 Totales_SRI(10) = Totales_SRI(10) + .fields("BaseImpo")
-                 Totales_SRI(11) = Totales_SRI(11) + .fields("Retenido")
-                 Cantidad = Cantidad + .fields("Cantidad")
-                 Total = Total + .fields("BaseImpo")
-                 Saldo = Saldo + .fields("Retenido")
+                 Totales_SRI(0) = Totales_SRI(0) + .Fields("Cantidad")     '04-05-47-48-07-41
+                 Totales_SRI(10) = Totales_SRI(10) + .Fields("BaseImpo")
+                 Totales_SRI(11) = Totales_SRI(11) + .Fields("Retenido")
+                 Cantidad = Cantidad + .Fields("Cantidad")
+                 Total = Total + .Fields("BaseImpo")
+                 Saldo = Saldo + .Fields("Retenido")
           End Select
          .MoveNext
        Loop
@@ -3917,7 +3968,7 @@ Dim PosYf As Single
        If AdoCodRet.Recordset.RecordCount > 0 Then
           AdoCodRet.Recordset.MoveFirst
           AdoCodRet.Recordset.Find ("Codigo = '" & Codigo & "' ")
-          If Not AdoCodRet.Recordset.EOF Then DetalleComp = UCaseStrg(AdoCodRet.Recordset.fields("Concepto"))
+          If Not AdoCodRet.Recordset.EOF Then DetalleComp = UCaseStrg(AdoCodRet.Recordset.Fields("Concepto"))
        End If
        cPrint.tipoDeLetra = TipoArialNarrow
        cPrint.printTexto 0.9, PosLinea, Codigo
@@ -4032,18 +4083,18 @@ Public Sub Vista_Compras()
       cPrint.printLinea 1.5, PosLinea, 19.5, PosLinea, Negro
       PosLinea = PosLinea + 0.1
       Do While Not .EOF
-         cPrint.printTexto 1.5, PosLinea, .fields("TipoComprobante")
-         cPrint.printTexto 2, PosLinea, UCaseStrg(.fields("Descripcion"))
-         cPrint.printVariable 11.2, PosLinea, .fields("Cant")
-         cPrint.printVariable 13, PosLinea, .fields("BI")
-         cPrint.printVariable 15.1, PosLinea, .fields("BIG")
-         cPrint.printVariable 17.3, PosLinea, .fields("MI")
+         cPrint.printTexto 1.5, PosLinea, .Fields("TipoComprobante")
+         cPrint.printTexto 2, PosLinea, UCaseStrg(.Fields("Descripcion"))
+         cPrint.printVariable 11.2, PosLinea, .Fields("Cant")
+         cPrint.printVariable 13, PosLinea, .Fields("BI")
+         cPrint.printVariable 15.1, PosLinea, .Fields("BIG")
+         cPrint.printVariable 17.3, PosLinea, .Fields("MI")
          PosLinea = PosLinea + 0.35
          
          'MsgBox .Fields("TipoComprobante")
-         Real1 = Real1 + .fields("BI")
-         Real2 = Real2 + .fields("BIG")
-         Real3 = Real3 + .fields("MI")
+         Real1 = Real1 + .Fields("BI")
+         Real2 = Real2 + .Fields("BIG")
+         Real3 = Real3 + .Fields("MI")
         .MoveNext
       Loop
       PosLinea = PosLinea + 0.1
@@ -4092,15 +4143,15 @@ Public Sub Vista_Compras()
       Real5 = 0 ' IVA 12% 8 y 9
       Real6 = 0 ' 0% 8 y 9
       Do While Not .EOF
-         Select Case .fields("CodSustento")
+         Select Case .Fields("CodSustento")
            Case "01", "03", "06"
-                Real1 = Real1 + .fields("BIG")
-                Real2 = Real2 + .fields("MI")
-                Real3 = Real3 + .fields("BI")
+                Real1 = Real1 + .Fields("BIG")
+                Real2 = Real2 + .Fields("MI")
+                Real3 = Real3 + .Fields("BI")
            Case "08", "09"
-                Real4 = Real4 + .fields("BIG")
-                Real5 = Real5 + .fields("MI")
-                Real6 = Real6 + .fields("BI")
+                Real4 = Real4 + .Fields("BIG")
+                Real5 = Real5 + .Fields("MI")
+                Real6 = Real6 + .Fields("BI")
          End Select
         .MoveNext
       Loop
@@ -4171,22 +4222,22 @@ Public Sub Vista_Ventas()
       cPrint.printLinea 1.5, PosLinea, 19.5, PosLinea, Negro
       PosLinea = PosLinea + 0.1
       Do While Not .EOF
-         cPrint.printTexto 1.5, PosLinea, .fields("TipoComprobante")
-         cPrint.printTexto 2, PosLinea, UCaseStrg(.fields("Descripcion"))
-         cPrint.printTexto 12, PosLinea, .fields("Cant"), True, 1
-         cPrint.printVariable 13.4, PosLinea, .fields("BI")
-         cPrint.printVariable 15.5, PosLinea, .fields("BIG")
-         cPrint.printVariable 17.7, PosLinea, .fields("MI")
+         cPrint.printTexto 1.5, PosLinea, .Fields("TipoComprobante")
+         cPrint.printTexto 2, PosLinea, UCaseStrg(.Fields("Descripcion"))
+         cPrint.printTexto 12, PosLinea, .Fields("Cant"), True, 1
+         cPrint.printVariable 13.4, PosLinea, .Fields("BI")
+         cPrint.printVariable 15.5, PosLinea, .Fields("BIG")
+         cPrint.printVariable 17.7, PosLinea, .Fields("MI")
          PosLinea = PosLinea + 0.35
-         If .fields("TipoComprobante") = 4 Then
+         If .Fields("TipoComprobante") = 4 Then
              'MsgBox .Fields("TipoComprobante")
-             Real1 = Real1 - .fields("BI")
-             Real2 = Real2 - .fields("BIG")
-             Real3 = Real3 - .fields("MI")
+             Real1 = Real1 - .Fields("BI")
+             Real2 = Real2 - .Fields("BIG")
+             Real3 = Real3 - .Fields("MI")
          Else
-             Real1 = Real1 + .fields("BI")
-             Real2 = Real2 + .fields("BIG")
-             Real3 = Real3 + .fields("MI")
+             Real1 = Real1 + .Fields("BI")
+             Real2 = Real2 + .Fields("BIG")
+             Real3 = Real3 + .Fields("MI")
          End If
         .MoveNext
       Loop
@@ -4234,12 +4285,12 @@ Public Sub Vista_Ventas()
  With AdoAux.Recordset
   If .RecordCount > 0 Then
       Do While Not .EOF
-         Real1 = Real1 + .fields("BIG")
-         Real2 = Real2 + .fields("MI")
-         Real3 = Real3 + .fields("BI")
-         Real4 = Real4 + .fields("BIG")
-         Real5 = Real5 + .fields("MI")
-         Real6 = Real6 + .fields("BI")
+         Real1 = Real1 + .Fields("BIG")
+         Real2 = Real2 + .Fields("MI")
+         Real3 = Real3 + .Fields("BI")
+         Real4 = Real4 + .Fields("BIG")
+         Real5 = Real5 + .Fields("MI")
+         Real6 = Real6 + .Fields("BI")
         .MoveNext
       Loop
       cPrint.printTexto 1.5, PosLinea, "Ventas Netas Base Imponible 12%"
@@ -4288,7 +4339,7 @@ Dim Total_A As Integer
  sSQL = sSQL & "AND Periodo = '" & Periodo_Contable & "' " _
       & "GROUP BY T "
  Select_Adodc AdoAux, sSQL
- If AdoAux.Recordset.RecordCount > 0 Then Total_A = AdoAux.Recordset.fields("Cantidad")
+ If AdoAux.Recordset.RecordCount > 0 Then Total_A = AdoAux.Recordset.Fields("Cantidad")
  cPrint.printTexto 1.5, PosLinea, "Total de Comprobantes Anulados en el período informado(no incluye los dados de baja)"
  cPrint.printTexto 15.8, PosLinea, "SUMATORIA"
  cPrint.printVariable 19, PosLinea, Total_A
@@ -4336,14 +4387,14 @@ Public Sub Vista_Importaciones()
       cPrint.tipoNegrilla = False
       Do While Not .EOF
          cPrint.tipoNegrilla = False
-         cPrint.printTexto 1.5, PosLinea, .fields("TipoComprobante")
-         cPrint.printTexto 2.5, PosLinea, UCaseStrg(.fields("Descripcion"))
-         cPrint.printVariable 12, PosLinea, .fields("Cant")
-         cPrint.printVariable 15.5, PosLinea, .fields("VC")
-         cPrint.printVariable 17.7, PosLinea, .fields("MI")
+         cPrint.printTexto 1.5, PosLinea, .Fields("TipoComprobante")
+         cPrint.printTexto 2.5, PosLinea, UCaseStrg(.Fields("Descripcion"))
+         cPrint.printVariable 12, PosLinea, .Fields("Cant")
+         cPrint.printVariable 15.5, PosLinea, .Fields("VC")
+         cPrint.printVariable 17.7, PosLinea, .Fields("MI")
          PosLinea = PosLinea + 0.4
-         Real1 = Real1 + .fields("VC")
-         Real2 = Real2 + .fields("MI")
+         Real1 = Real1 + .Fields("VC")
+         Real2 = Real2 + .Fields("MI")
         .MoveNext
       Loop
       PosLinea = PosLinea + 0.4
@@ -4384,11 +4435,11 @@ Public Sub Vista_Importaciones()
       cPrint.printTexto 18, PosLinea, "Impuesto"
       PosLinea = PosLinea + 0.4
       Do While Not .EOF
-         Select Case .fields("CodSustento")
+         Select Case .Fields("CodSustento")
            Case "01", "03", "06"
-                Real1 = Real1 + .fields("BIG")
-                Real2 = Real2 + .fields("MI")
-                Real3 = Real3 + .fields("BI")
+                Real1 = Real1 + .Fields("BIG")
+                Real2 = Real2 + .Fields("MI")
+                Real3 = Real3 + .Fields("BI")
          End Select
         .MoveNext
       Loop
@@ -4444,12 +4495,12 @@ Public Sub Vista_Exportaciones()
       cPrint.tipoNegrilla = False
       Do While Not .EOF
          cPrint.tipoNegrilla = False
-         cPrint.printTexto 1.2, PosLinea, .fields("TipoComprobante")
-         cPrint.printTexto 2.5, PosLinea, UCaseStrg(.fields("Descripcion"))
-         cPrint.printVariable 12, PosLinea, .fields("Cant")
-         cPrint.printVariable 15.5, PosLinea, .fields("VF")
+         cPrint.printTexto 1.2, PosLinea, .Fields("TipoComprobante")
+         cPrint.printTexto 2.5, PosLinea, UCaseStrg(.Fields("Descripcion"))
+         cPrint.printVariable 12, PosLinea, .Fields("Cant")
+         cPrint.printVariable 15.5, PosLinea, .Fields("VF")
          PosLinea = PosLinea + 0.4
-         Real1 = Real1 + .fields("VF")
+         Real1 = Real1 + .Fields("VF")
         .MoveNext
       Loop
       cPrint.printLinea 1.5, PosLinea, 20, PosLinea, Negro
@@ -4482,7 +4533,7 @@ Public Sub Vista_Exportaciones()
       cPrint.printTexto 15.6, PosLinea, "Base"
       PosLinea = PosLinea + 0.4
       Do While Not .EOF
-         Real1 = Real1 + .fields("VF")
+         Real1 = Real1 + .Fields("VF")
         .MoveNext
       Loop
       cPrint.printTexto 1.5, PosLinea, "Exportaciones Netas"
@@ -4572,14 +4623,14 @@ Public Sub Vista_Retencion_Impuesto_Renta()
       cPrint.printLinea 1.5, PosLinea, 20, PosLinea, Negro
       PosLinea = PosLinea + 0.1
       Do While Not .EOF
-         cPrint.printTexto 1.5, PosLinea, .fields("CodRet")
-         PosLinea = cPrint.printTextoMultiple(2.5, PosLinea, UCaseStrg(.fields("Concepto")), 11.5)
-         cPrint.printFields 13.5, PosLinea, .fields("Cant")
-         cPrint.printFields 15.5, PosLinea, .fields("BI")
-         cPrint.printFields 17.7, PosLinea, .fields("VR")
+         cPrint.printTexto 1.5, PosLinea, .Fields("CodRet")
+         PosLinea = cPrint.printTextoMultiple(2.5, PosLinea, UCaseStrg(.Fields("Concepto")), 11.5)
+         cPrint.printFields 13.5, PosLinea, .Fields("Cant")
+         cPrint.printFields 15.5, PosLinea, .Fields("BI")
+         cPrint.printFields 17.7, PosLinea, .Fields("VR")
          PosLinea = PosLinea + 0.35
-         Real1 = Real1 + .fields("BI")
-         Real2 = Real2 + .fields("VR")
+         Real1 = Real1 + .Fields("BI")
+         Real2 = Real2 + .Fields("VR")
         .MoveNext
       Loop
       PosLinea = PosLinea + 0.1
@@ -4626,52 +4677,52 @@ Public Sub Vista_Retencion_Fuente_Iva()
       cPrint.printLinea 1.5, PosLinea, 20, PosLinea, Negro
       PosLinea = PosLinea + 0.1
       Do While Not .EOF
-         Select Case .fields("PorRetBienes")
+         Select Case .Fields("PorRetBienes")
            Case 1
                 cPrint.printTexto 3, PosLinea, "Retención en Bienes"
-                cPrint.printVariable 12, PosLinea, .fields("Cant")
-                cPrint.printVariable 14, PosLinea, .fields("BIB")
-                cPrint.printVariable 17.7, PosLinea, .fields("VRB")
+                cPrint.printVariable 12, PosLinea, .Fields("Cant")
+                cPrint.printVariable 14, PosLinea, .Fields("BIB")
+                cPrint.printVariable 17.7, PosLinea, .Fields("VRB")
                 cPrint.printTexto 17.3, PosLinea, "30%"
-                Real1 = Real1 + .fields("VRB")
+                Real1 = Real1 + .Fields("VRB")
                 PosLinea = PosLinea + 0.35
            Case 3
                 cPrint.printTexto 3, PosLinea, "Retención en Bienes"
-                cPrint.printVariable 12, PosLinea, .fields("Cant")
-                cPrint.printVariable 14, PosLinea, .fields("BIB")
-                cPrint.printVariable 17.7, PosLinea, .fields("VRB")
+                cPrint.printVariable 12, PosLinea, .Fields("Cant")
+                cPrint.printVariable 14, PosLinea, .Fields("BIB")
+                cPrint.printVariable 17.7, PosLinea, .Fields("VRB")
                 cPrint.printTexto 17.3, PosLinea, "100%"
-                Real2 = Real2 + .fields("VRB")
+                Real2 = Real2 + .Fields("VRB")
                 PosLinea = PosLinea + 0.35
          End Select
-         Select Case .fields("PorRetServicios")
+         Select Case .Fields("PorRetServicios")
            Case 2
                 cPrint.printTexto 3, PosLinea, "Retención en Servicios"
-                cPrint.printVariable 12, PosLinea, .fields("Cant")
-                cPrint.printVariable 14, PosLinea, .fields("BIS")
-                cPrint.printVariable 17.7, PosLinea, .fields("VRS")
+                cPrint.printVariable 12, PosLinea, .Fields("Cant")
+                cPrint.printVariable 14, PosLinea, .Fields("BIS")
+                cPrint.printVariable 17.7, PosLinea, .Fields("VRS")
                 cPrint.printTexto 17.3, PosLinea, "70%"
-                Real3 = Real3 + .fields("VRS")
+                Real3 = Real3 + .Fields("VRS")
                 PosLinea = PosLinea + 0.35
            Case 4
                 cPrint.printTexto 3, PosLinea, "Retención en Servicios"
-                cPrint.printVariable 12, PosLinea, .fields("Cant")
-                cPrint.printVariable 14, PosLinea, .fields("BIS")
-                cPrint.printVariable 17.7, PosLinea, .fields("VRS")
+                cPrint.printVariable 12, PosLinea, .Fields("Cant")
+                cPrint.printVariable 14, PosLinea, .Fields("BIS")
+                cPrint.printVariable 17.7, PosLinea, .Fields("VRS")
                 cPrint.printTexto 17.3, PosLinea, "70%"
                 PosLinea = PosLinea + 0.35
-                Real4 = Real4 + .fields("VRS")
+                Real4 = Real4 + .Fields("VRS")
                 PosLinea = PosLinea + 0.35
            Case 3
                 cPrint.printTexto 3, PosLinea, "Retención en Servicios"
-                cPrint.printVariable 12, PosLinea, .fields("Cant")
-                cPrint.printVariable 14, PosLinea, .fields("BIS")
-                cPrint.printVariable 17.7, PosLinea, .fields("VRS")
+                cPrint.printVariable 12, PosLinea, .Fields("Cant")
+                cPrint.printVariable 14, PosLinea, .Fields("BIS")
+                cPrint.printVariable 17.7, PosLinea, .Fields("VRS")
                 cPrint.printTexto 17.3, PosLinea, "100%"
-                Real2 = Real2 + .fields("VRS")
+                Real2 = Real2 + .Fields("VRS")
                 PosLinea = PosLinea + 0.35
          End Select
-         Real5 = Real5 + .fields("BIB") + .fields("BIS")
+         Real5 = Real5 + .Fields("BIB") + .Fields("BIS")
          Total = Real1 + Real2 + Real3 + Real4
         .MoveNext
       Loop
@@ -4719,32 +4770,32 @@ Public Sub Vista_Retencion_Fuente_Iva()
       Do While Not .EOF
         'MsgBox .Fields("PorRetBienes") & vbCrLf & .Fields("PorRetServicios")
          cPrint.printTexto 1.5, PosLinea, "VENTAS"
-         cPrint.printVariable 13, PosLinea, .fields("Cant")
-         Saldo = .fields("BIB") + .fields("BIS")
+         cPrint.printVariable 13, PosLinea, .Fields("Cant")
+         Saldo = .Fields("BIB") + .Fields("BIS")
          cPrint.printVariable 14.5, PosLinea, Saldo
         'MsgBox .Fields("PorRetBienes") & vbCrLf & .Fields("PorRetServicios")
-         Select Case .fields("PorRetBienes")
+         Select Case .Fields("PorRetBienes")
            Case 1
                 cPrint.printTexto 3, PosLinea, "Retención en Bienes"
                 cPrint.printTexto 17.3, PosLinea, "30%"
-                Real1 = Real1 + .fields("VRB")
+                Real1 = Real1 + .Fields("VRB")
            Case 3
                 cPrint.printTexto 3, PosLinea, "Retención en Bienes"
                 cPrint.printTexto 17.3, PosLinea, "100%"
-                Real2 = Real2 + .fields("VRB")
+                Real2 = Real2 + .Fields("VRB")
          End Select
-         Select Case .fields("PorRetServicios")
+         Select Case .Fields("PorRetServicios")
            Case 2
                 cPrint.printTexto 3, PosLinea, "Retención en Servicios"
                 cPrint.printTexto 17.3, PosLinea, "70%"
-                Real3 = Real3 + .fields("VRS")
+                Real3 = Real3 + .Fields("VRS")
            Case 3
                 cPrint.printTexto 3, PosLinea, "Retención en Servicios"
                 cPrint.printTexto 17.3, PosLinea, "100%"
-                Real4 = Real4 + .fields("VRS")
+                Real4 = Real4 + .Fields("VRS")
          End Select
-         cPrint.printVariable 17.7, PosLinea, .fields("VRB")
-         Real5 = Real5 + .fields("BIB") + .fields("BIS")
+         cPrint.printVariable 17.7, PosLinea, .Fields("VRB")
+         Real5 = Real5 + .Fields("BIB") + .Fields("BIS")
          Total = Real1 + Real2 + Real3 + Real4
          PosLinea = PosLinea + 0.35
         .MoveNext
@@ -4800,15 +4851,15 @@ Public Sub Vista_Retencion_Fuente_Iva()
       Real1 = 0
       Real2 = 0
       Do While Not .EOF
-         cPrint.printTexto 1.5, PosLinea, .fields("CodRet")
-         PosLinea = cPrint.printTextoMultiple(2.7, PosLinea, .fields("Concepto"), 11.5)
-         cPrint.printVariable 13.5, PosLinea, .fields("Cant")
-         cPrint.printVariable 14.7, PosLinea, .fields("BI")
-         cPrint.printTexto 17.5, PosLinea, CStr(.fields("Porcentaje")) & "%"
-         cPrint.printVariable 17.7, PosLinea, .fields("VR")
+         cPrint.printTexto 1.5, PosLinea, .Fields("CodRet")
+         PosLinea = cPrint.printTextoMultiple(2.7, PosLinea, .Fields("Concepto"), 11.5)
+         cPrint.printVariable 13.5, PosLinea, .Fields("Cant")
+         cPrint.printVariable 14.7, PosLinea, .Fields("BI")
+         cPrint.printTexto 17.5, PosLinea, CStr(.Fields("Porcentaje")) & "%"
+         cPrint.printVariable 17.7, PosLinea, .Fields("VR")
          PosLinea = PosLinea + 0.35
-         Real1 = Real1 + .fields("BI")
-         Real2 = Real2 + .fields("VR")
+         Real1 = Real1 + .Fields("BI")
+         Real2 = Real2 + .Fields("VR")
         .MoveNext
       Loop
       PosLinea = PosLinea + 0.1
@@ -4885,7 +4936,7 @@ Public Sub Consultar_Anexos()
   sSQL = sSQL _
        & "AND TC.IdProv = C.Codigo " _
        & "ORDER BY TC.Linea_SRI,C.Cliente, C.CI_RUC, C.TD "
-  Select_Adodc AdoCompras, sSQL, , , "ATS_Compras"
+  Select_Adodc AdoCompras, sSQL
   
  'IMPORTACIONES
   sSQL = "SELECT C.Cliente, C.Codigo, C.CI_RUC, C.TD,TI.* " _
@@ -4924,7 +4975,7 @@ Public Sub Consultar_Anexos()
    If .RecordCount > 0 Then
        Cont_RDEP = 0
        Do While Not .EOF
-          CodigoCli = .fields("Codigo")
+          CodigoCli = .Fields("Codigo")
           Cont_RDEP = Cont_RDEP + 1
          'Redondeamos los campos
           sSQL = "UPDATE Catalogo_Rol_Pagos " _
@@ -4985,7 +5036,7 @@ Public Sub Consultar_Anexos()
        & "AND Item = '" & NumEmpresa & "' " _
        & "GROUP BY X, RUC_CI,TB, Razon_Social, TipoComprobante, RetPresuntiva, PorcentajeIva, PorcentajeIce, PorRetBienes, PorRetServicios, IvaPresuntivo, Tipo_Pago " _
        & "ORDER BY X, RUC_CI,TB, Razon_Social "
-  Select_Adodc AdoVentas, sSQL, , , "Ventas_Mes"
+  Select_Adodc AdoVentas, sSQL
  'MsgBox AdoVentas.Recordset.RecordCount & "..."
  'PUNTO DE VENTAS
  'TV.PuntoEmision,
@@ -5006,7 +5057,7 @@ Public Sub Consultar_Anexos()
        & "AND Item = '" & NumEmpresa & "' " _
        & "GROUP BY Establecimiento, PuntoEmision, TipoComprobante, RetPresuntiva, PorcentajeIva, PorcentajeIce, PorRetBienes, PorRetServicios, IvaPresuntivo " _
        & "ORDER BY Establecimiento "
-  Select_Adodc AdoPuntosVentas, sSQL, , , "Punto_Ventas_Mes"
+  Select_Adodc AdoPuntosVentas, sSQL
 
  'MsgBox AdoVentas.Recordset.RecordCount & vbCrLf & AdoPuntosVentas.Recordset.RecordCount
  'LISTA LA BASES DE CIUDADES
@@ -5072,7 +5123,7 @@ On Error GoTo Errorhandler
        'ENCABEZADO DEL EMPLEADO
         Printer.FontSize = SetD(2).Tamaño
         Printer.FontBold = True
-        Codigo = CStr(.fields("AñoRet"))
+        Codigo = CStr(.Fields("AñoRet"))
         AnchoLetra = SetD(2).PosX
         For I = 1 To 4
             PrinterTexto AnchoLetra, SetD(2).PosY, MidStrg(Codigo, I, 1)
@@ -5096,38 +5147,38 @@ On Error GoTo Errorhandler
         AnchoLetra = SetD(6).PosX
         For I = 1 To 10
             Printer.FontSize = SetD(6).Tamaño
-            PrinterTexto AnchoLetra, SetD(6).PosY, MidStrg(.fields("CI_RUC"), I, 1)
+            PrinterTexto AnchoLetra, SetD(6).PosY, MidStrg(.Fields("CI_RUC"), I, 1)
             AnchoLetra = AnchoLetra + 0.5
         Next I
         Printer.FontSize = SetD(7).Tamaño
-        PrinterTexto SetD(7).PosX, SetD(7).PosY, .fields("Cliente")
+        PrinterTexto SetD(7).PosX, SetD(7).PosY, .Fields("Cliente")
        'LIQUIDACION DE IMPUESTOS
         Printer.FontSize = SetD(8).Tamaño
-        PrinterFields SetD(8).PosX, SetD(8).PosY, .fields("SuelSal"), , True
-        PrinterFields SetD(9).PosX, SetD(9).PosY, .fields("SobSuelComRemu"), , True
-        PrinterFields SetD(10).PosX, SetD(10).PosY, .fields("PartUtil"), , True
-        PrinterFields SetD(11).PosX, SetD(11).PosY, .fields("IngOtrosEmp"), , True
-        PrinterFields SetD(12).PosX, SetD(12).PosY, .fields("DecimTer"), , True
-        PrinterFields SetD(13).PosX, SetD(13).PosY, .fields("DecimCuar"), , True
-        PrinterFields SetD(14).PosX, SetD(14).PosY, .fields("FondoReserva"), , True
-        PrinterFields SetD(15).PosX, SetD(15).PosY, .fields("Desahucio"), , True
-        PrinterFields SetD(16).PosX, SetD(16).PosY, .fields("ApoPerIess"), , True
-        PrinterFields SetD(17).PosX, SetD(17).PosY, .fields("Rebajas"), , True
-        PrinterFields SetD(18).PosX, SetD(18).PosY, .fields("Vivienda"), , True
-        PrinterFields SetD(19).PosX, SetD(19).PosY, .fields("Salud"), , True
-        PrinterFields SetD(20).PosX, SetD(20).PosY, .fields("Educacion"), , True
-        PrinterFields SetD(21).PosX, SetD(21).PosY, .fields("Alimentacion"), , True
-        PrinterFields SetD(22).PosX, SetD(22).PosY, .fields("Vestimenta"), , True
-        PrinterFields SetD(23).PosX, SetD(23).PosY, .fields("RebEspDiscap"), , True
-        PrinterFields SetD(24).PosX, SetD(24).PosY, .fields("RebEspTerEd"), , True
-        PrinterFields SetD(25).PosX, SetD(25).PosY, .fields("ImpRentEmpl"), , True
-        PrinterFields SetD(26).PosX, SetD(26).PosY, .fields("BasImp"), , True     ' .Fields("SubTotal")
-        PrinterFields SetD(27).PosX, SetD(27).PosY, .fields("ImpRentCaus"), , True
-        PrinterFields SetD(28).PosX, SetD(28).PosY, .fields("ImpAnterior"), , True
-        PrinterFields SetD(29).PosX, SetD(29).PosY, .fields("ValRet"), , True
+        PrinterFields SetD(8).PosX, SetD(8).PosY, .Fields("SuelSal"), , True
+        PrinterFields SetD(9).PosX, SetD(9).PosY, .Fields("SobSuelComRemu"), , True
+        PrinterFields SetD(10).PosX, SetD(10).PosY, .Fields("PartUtil"), , True
+        PrinterFields SetD(11).PosX, SetD(11).PosY, .Fields("IngOtrosEmp"), , True
+        PrinterFields SetD(12).PosX, SetD(12).PosY, .Fields("DecimTer"), , True
+        PrinterFields SetD(13).PosX, SetD(13).PosY, .Fields("DecimCuar"), , True
+        PrinterFields SetD(14).PosX, SetD(14).PosY, .Fields("FondoReserva"), , True
+        PrinterFields SetD(15).PosX, SetD(15).PosY, .Fields("Desahucio"), , True
+        PrinterFields SetD(16).PosX, SetD(16).PosY, .Fields("ApoPerIess"), , True
+        PrinterFields SetD(17).PosX, SetD(17).PosY, .Fields("Rebajas"), , True
+        PrinterFields SetD(18).PosX, SetD(18).PosY, .Fields("Vivienda"), , True
+        PrinterFields SetD(19).PosX, SetD(19).PosY, .Fields("Salud"), , True
+        PrinterFields SetD(20).PosX, SetD(20).PosY, .Fields("Educacion"), , True
+        PrinterFields SetD(21).PosX, SetD(21).PosY, .Fields("Alimentacion"), , True
+        PrinterFields SetD(22).PosX, SetD(22).PosY, .Fields("Vestimenta"), , True
+        PrinterFields SetD(23).PosX, SetD(23).PosY, .Fields("RebEspDiscap"), , True
+        PrinterFields SetD(24).PosX, SetD(24).PosY, .Fields("RebEspTerEd"), , True
+        PrinterFields SetD(25).PosX, SetD(25).PosY, .Fields("ImpRentEmpl"), , True
+        PrinterFields SetD(26).PosX, SetD(26).PosY, .Fields("BasImp"), , True     ' .Fields("SubTotal")
+        PrinterFields SetD(27).PosX, SetD(27).PosY, .Fields("ImpRentCaus"), , True
+        PrinterFields SetD(28).PosX, SetD(28).PosY, .Fields("ImpAnterior"), , True
+        PrinterFields SetD(29).PosX, SetD(29).PosY, .Fields("ValRet"), , True
         Saldo = 0
         PrinterVariables SetD(30).PosX, SetD(30).PosY, Saldo, True
-        Total = .fields("SuelSal") + .fields("SobSuelComRemu") + .fields("PartUtil") + .fields("ImpRentEmpl")
+        Total = .Fields("SuelSal") + .Fields("SobSuelComRemu") + .Fields("PartUtil") + .Fields("ImpRentEmpl")
         PrinterVariables SetD(31).PosX, SetD(31).PosY, Total, True
 '''        PrinterFields SetD(25).PosX, SetD(36).PosY, .Fields("Numero")
        'CONSOLIDACION DE INGRESOS
@@ -5805,12 +5856,12 @@ Dim DatosSelect As String
  'Insertamos Retenciones en la Fuente en ventas
   If RegAdodc.RecordCount > 0 Then
      Do While Not RegAdodc.EOF
-        TipoDoc = SinEspaciosDer(RegAdodc.fields("Banco"))
-        Total = RegAdodc.fields("BaseImp")
+        TipoDoc = SinEspaciosDer(RegAdodc.Fields("Banco"))
+        Total = RegAdodc.Fields("BaseImp")
         CR_ATS = Leer_Concepto_Retencion(FechaInicial, TipoDoc)
         Porc = CR_ATS.Porcentaje
         'MsgBox TipoDoc
-        Insertar_Ventas_Air CodigoCli, Total, Porc, RegAdodc.fields("Abonos"), Factura_No, 0, "001", "001", String(10, "9"), Ninguno
+        Insertar_Ventas_Air CodigoCli, Total, Porc, RegAdodc.Fields("Abonos"), Factura_No, 0, "001", "001", String(10, "9"), Ninguno
         RegAdodc.MoveNext
      Loop
      DatosSelect = "UPDATE Trans_Abonos " _

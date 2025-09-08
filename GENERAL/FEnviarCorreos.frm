@@ -1,13 +1,13 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "COMCTL32.OCX"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Begin VB.Form FEnviarCorreos 
-   BackColor       =   &H00FFFFFF&
+   BackColor       =   &H0000C0C0&
    BorderStyle     =   0  'None
    Caption         =   "."
-   ClientHeight    =   1335
+   ClientHeight    =   2115
    ClientLeft      =   0
    ClientTop       =   15
-   ClientWidth     =   10650
+   ClientWidth     =   6015
    ClipControls    =   0   'False
    ControlBox      =   0   'False
    DrawStyle       =   5  'Transparent
@@ -15,10 +15,15 @@ Begin VB.Form FEnviarCorreos
    MaxButton       =   0   'False
    MinButton       =   0   'False
    Picture         =   "FEnviarCorreos.frx":0000
-   ScaleHeight     =   1335
-   ScaleWidth      =   10650
+   ScaleHeight     =   2115
+   ScaleWidth      =   6015
    ShowInTaskbar   =   0   'False
    StartUpPosition =   3  'Windows Default
+   Begin VB.Timer Timer1 
+      Interval        =   120
+      Left            =   210
+      Top             =   2415
+   End
    Begin VB.ListBox LstStatud 
       Appearance      =   0  'Flat
       BackColor       =   &H00C00000&
@@ -33,17 +38,17 @@ Begin VB.Form FEnviarCorreos
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   570
-      Left            =   105
-      TabIndex        =   2
-      Top             =   1680
+      Left            =   3465
+      TabIndex        =   1
+      Top             =   2310
       Visible         =   0   'False
-      Width           =   6315
+      Width           =   2430
    End
    Begin ComctlLib.ListView LstVwFTP 
       Height          =   645
-      Left            =   6615
-      TabIndex        =   1
-      Top             =   1680
+      Left            =   1365
+      TabIndex        =   0
+      Top             =   2310
       Visible         =   0   'False
       Width           =   1905
       _ExtentX        =   3360
@@ -89,9 +94,55 @@ Begin VB.Form FEnviarCorreos
          Object.Width           =   2646
       EndProperty
    End
+   Begin VB.Label Label2 
+      Alignment       =   2  'Center
+      BackStyle       =   0  'Transparent
+      Caption         =   "Consumo"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00000080&
+      Height          =   645
+      Left            =   210
+      TabIndex        =   3
+      Top             =   1050
+      Width           =   960
+   End
+   Begin VB.Label Label1 
+      BackStyle       =   0  'Transparent
+      Caption         =   "Label1"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   1485
+      Left            =   1260
+      TabIndex        =   2
+      Top             =   315
+      Width           =   4425
+   End
+   Begin VB.Image Image1 
+      Height          =   720
+      Index           =   0
+      Left            =   315
+      Picture         =   "FEnviarCorreos.frx":1B3A
+      Top             =   210
+      Width           =   720
+   End
    Begin ComctlLib.ImageList ImgLstFTP 
-      Left            =   8715
-      Top             =   1785
+      Left            =   735
+      Top             =   2310
       _ExtentX        =   1005
       _ExtentY        =   1005
       BackColor       =   -2147483643
@@ -102,81 +153,54 @@ Begin VB.Form FEnviarCorreos
       BeginProperty Images {0713E8C2-850A-101B-AFC0-4210102A8DA7} 
          NumListImages   =   12
          BeginProperty ListImage1 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FEnviarCorreos.frx":4D68
+            Picture         =   "FEnviarCorreos.frx":8FB5
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FEnviarCorreos.frx":5082
+            Picture         =   "FEnviarCorreos.frx":92CF
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FEnviarCorreos.frx":539C
+            Picture         =   "FEnviarCorreos.frx":95E9
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FEnviarCorreos.frx":56A2
+            Picture         =   "FEnviarCorreos.frx":98EF
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FEnviarCorreos.frx":59BC
+            Picture         =   "FEnviarCorreos.frx":9C09
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FEnviarCorreos.frx":5CD6
+            Picture         =   "FEnviarCorreos.frx":9F23
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FEnviarCorreos.frx":5FC8
+            Picture         =   "FEnviarCorreos.frx":A215
             Key             =   ""
          EndProperty
          BeginProperty ListImage8 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FEnviarCorreos.frx":67E2
+            Picture         =   "FEnviarCorreos.frx":AA2F
             Key             =   "archivo"
          EndProperty
          BeginProperty ListImage9 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FEnviarCorreos.frx":6AFC
+            Picture         =   "FEnviarCorreos.frx":AD49
             Key             =   "carpeta"
          EndProperty
          BeginProperty ListImage10 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FEnviarCorreos.frx":6E16
+            Picture         =   "FEnviarCorreos.frx":B063
             Key             =   ""
          EndProperty
          BeginProperty ListImage11 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FEnviarCorreos.frx":7054
+            Picture         =   "FEnviarCorreos.frx":B2A1
             Key             =   ""
          EndProperty
          BeginProperty ListImage12 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FEnviarCorreos.frx":736E
+            Picture         =   "FEnviarCorreos.frx":B5BB
             Key             =   ""
          EndProperty
       EndProperty
-   End
-   Begin VB.Label Label1 
-      BackStyle       =   0  'Transparent
-      Caption         =   "Label1"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H00FFFFFF&
-      Height          =   1065
-      Left            =   1260
-      TabIndex        =   0
-      Top             =   105
-      Width           =   9255
-   End
-   Begin VB.Image Image1 
-      Height          =   735
-      Index           =   0
-      Left            =   210
-      Picture         =   "FEnviarCorreos.frx":7688
-      Top             =   315
-      Width           =   735
    End
 End
 Attribute VB_Name = "FEnviarCorreos"
@@ -206,9 +230,11 @@ End Function
 
 'Empieza enviar correos
 Private Sub Form_Activate()
+Dim CaracPiloto As Integer
+Dim ContFile As Integer
+Dim NumFile As Long
 Dim Tiempo_Espera As Single
 Dim MiTiempo_Espera As Single
-
 Dim EmailsCliente As String
 Dim EMailPara As String
 Dim File As String
@@ -218,10 +244,8 @@ Dim DirFilesFTP() As String
 Dim TextoHTML As String
 Dim sOrigen As String
 Dim sDestino As String
-
-Dim CaracPiloto As Integer
-Dim ContFile As Integer
-
+Dim ArchivoHTML As String
+Dim RutaGeneraFile As String
  If Si_Enviar Then
     With TMail
       If .Asunto = "" Then .Asunto = "Sin asunto"
@@ -233,6 +257,17 @@ Dim ContFile As Integer
          If Len(.Mensaje) > 1 Then html_Informacion_adicional = .Mensaje Else html_Informacion_adicional = ""
       End If
       
+      TMail.Adjunto = TrimStrg(Replace(TMail.Adjunto, vbCrLf, ""))
+      Label1.Caption = "Remitente: " & TMail.de & vbCrLf _
+                     & "Para: " & Replace(TMail.para, ";", "; ") & vbCrLf _
+                     & "Asunto: " & TMail.Asunto
+                     
+      Label2.Caption = "Consumo" & vbCrLf _
+                     & "diario: " & vbCrLf _
+                     & Format(ContMails / 6000, "00%")
+      
+      Cursor_Img
+     'MsgBox Label1.Caption
       If UCase(RazonSocial) = UCase(NombreComercial) Then MsgAux = "" Else MsgAux = NombreComercial
       
       If Contactos = "" Then
@@ -241,17 +276,24 @@ Dim ContFile As Integer
          Contactos = MidStrg(Contactos, 1, Len(Contactos) - 1)
       End If
       
+      html_Informacion_adicional = Replace(html_Informacion_adicional, vbCrLf, "<br>")
+      MensajeEmpresa = Replace(MensajeEmpresa, vbCrLf, "<br>")
+      ComunicadoEntidad = Replace(ComunicadoEntidad, vbCrLf, "<br>")
+      FA.Observacion = Replace(FA.Observacion, vbCrLf, "<br>")
+      FA.Nota = Replace(FA.Nota, vbCrLf, "<br>")
+      
       EmailsCliente = ""
       Insertar_Cadena EmailsCliente, FA.EmailC
       Insertar_Cadena EmailsCliente, FA.EmailC2
       Insertar_Cadena EmailsCliente, FA.EmailR
       EmailsCliente = MidStrg(EmailsCliente, 1, Len(EmailsCliente) - 1)
       
+      TextoHTML = ReplaceHTML(TextoHTML, "vTitulo_Mensaje", html_Titulo_Mensaje)
       TextoHTML = ReplaceHTML(TextoHTML, "vInformacion_adicional", html_Informacion_adicional)
       TextoHTML = ReplaceHTML(TextoHTML, "vDetalle_adicional", html_Detalle_adicional)
 
-      TextoHTML = ReplaceHTML(TextoHTML, "vMensajeFinal", MensajeAutomatizado)
-      TextoHTML = ReplaceHTML(TextoHTML, "vMensajeDeboPagare", MensajeDeboPagare)
+      TextoHTML = ReplaceHTML(TextoHTML, "vMensajeFinal", Replace(MensajeAutomatizado, vbCrLf, "<br>"))
+      TextoHTML = ReplaceHTML(TextoHTML, "vMensajeDeboPagare", Replace(MensajeDeboPagare, vbCrLf, "<br>"))
       TextoHTML = ReplaceHTML(TextoHTML, "vMensajeEmpresa", MensajeEmpresa)
       TextoHTML = ReplaceHTML(TextoHTML, "vMensaje_Comunicado", ComunicadoEntidad)
       TextoHTML = ReplaceHTML(TextoHTML, "vEmails_Copia", EmailProcesos)
@@ -315,9 +357,10 @@ Dim ContFile As Integer
          TextoHTML = ReplaceHTML(TextoHTML, "vSerie_Documento_RE", "")
       End If
       
+      TextoHTML = ReplaceHTML(TextoHTML, "vSuma_Debe", Format(SumaDebe, "#,##0.00"))
+      TextoHTML = ReplaceHTML(TextoHTML, "vSuma_Haber", Format(SumaHaber, "#,##0.00"))
       TextoHTML = ReplaceHTML(TextoHTML, "vValor_Total", Format(ValorTotal, "#,##0.00"))
-            
-      TextoHTML = ReplaceHTML(TextoHTML, vbCrLf, "<br>")
+
       TextoHTML = ReplaceHTML(TextoHTML, "<N>", "<strong>")
       TextoHTML = ReplaceHTML(TextoHTML, "</N>", "</strong>")
       Cursor_Img
@@ -325,15 +368,14 @@ Dim ContFile As Integer
      .Mensaje = ""
       Cursor_Img
     End With
-    TMail.Adjunto = Replace(TMail.Adjunto, vbCrLf, "")
-    TMail.Adjunto = Replace(TMail.Adjunto, " ", "")
-    Label1.Caption = "Remitente: " & TMail.de & String(86 - Len(TMail.de), " ") & "Cuota Diaria: " & Format(ContMails / 6000, "00%") & vbCrLf _
-                   & "Para: " & Replace(TMail.para, ";", "; ") & vbCrLf & vbCrLf _
-                   & "Asunto: " & TMail.Asunto
     Cursor_Img
-    If TMail.servidor = "imap.diskcoversystem.com" Then
+   '------------------
+   ' MsgBox TMail.para
+   '------------------
+    If TMail.servidor = imapHost Then
       'Obtenemos la ruta inicial de donde vienen los archivos
        Files = TMail.Adjunto
+       If MidStrg(Files, Len(Files), 1) <> ";" Then Files = Files & ";"
       'MsgBox "Ruta Origen: " & Files
        ContFile = -1
        If Len(Files) > 1 Then
@@ -343,6 +385,12 @@ Dim ContFile As Integer
              Do While Len(Files) > 1 And CaracPiloto > 0
                 Cursor_Img
                 File = MidStrg(Files, 1, CaracPiloto - 1)
+                File = Replace(File, vbCr, "")
+                File = Replace(File, vbLf, "")
+                File = TrimStrg(File)
+''                Clipboard.Clear
+''                Clipboard.SetText File
+''                MsgBox "|" & File & "|"
                 If Existe_File(File) Then
                    ContFile = ContFile + 1
                    ReDim Preserve DirFiles(ContFile) As String
@@ -363,6 +411,7 @@ Dim ContFile As Integer
              End If
           Else
             'Es un solo archivo
+             'MsgBox "|" & Files & "|"
              If Existe_File(Files) Then
                 Cursor_Img
                 ContFile = ContFile + 1
@@ -374,15 +423,17 @@ Dim ContFile As Integer
           End If
        End If
        Cursor_Img
+       
        TMail.Adjunto = ""
        If ContFile >= 0 Then
+         'MsgBox UBound(DirFiles)
           For I = 0 To UBound(DirFiles)
               Cursor_Img
               TMail.Adjunto = TMail.Adjunto & DirFilesFTP(I) & ";"
           Next I
           TMail.Adjunto = MidStrg(TMail.Adjunto, 1, Len(TMail.Adjunto) - 1)
           Cursor_Img
-          
+         'MsgBox ContFile & vbCrLf & TMail.Adjunto
          'Conectamos al servidor ERP
           With ftp
             If ContFile >= 0 Then
@@ -395,32 +446,44 @@ Dim ContFile As Integer
                If Not .ConectarFtp(LstStatud) Then
                   TMail.Adjunto = ""
                Else
-                 'Subiendo documento firmado para su autorizacion
-                  For I = 0 To UBound(DirFilesFTP)
+               'Subiendo documento firmado para su autorizacion
+                  ContFile = UBound(DirFilesFTP)
+                  For I = 0 To ContFile
                       Cursor_Img
                       sOrigen = DirFiles(I)
                       sDestino = "/files/AddAttachment/" & DirFilesFTP(I)
-                     ' MsgBox "Subiendo: |" & sOrigen & "|" & vbCrLf & "|" & sDestino & "|"
+                     'MsgBox "Origen: |" & sOrigen & "|" & vbCrLf & "Destino: |" & sDestino & "|"
                      .SubirArchivo DirFiles(I), "/files/AddAttachment/" & DirFilesFTP(I), True
                   Next I
                End If
             End If
           End With
        End If
+       
        If InStrRev(TMail.para, ";") > 0 Then TMail.para = MidStrg(TMail.para, 1, Len(TMail.para) - 1)
+      ' If ContFile = 0 Then TMail.Adjunto = TMail.Adjunto & ";"
+      'MsgBox ContFile & vbCrLf & "Archivos Subidos"
+      '----------------------------------------------------------------------------------------------
+      'Enviar el mail al servidor IMAP
+       'TMail.Adjunto = ""
+       Cursor_Img
        URLHTTP = "https://erp.diskcoversystem.com/lib/phpmailer/EnvioEmailvisual.php?EnviarVisual"
-       URLParams = "from=" & TMail.de & "" _
+       URLParams = "from=" & TMail.de _
                  & "&fromName=" & TMail.Remitente & " <" & TMail.de & ">" _
-                 & "&to=" & TMail.para & "" _
-                 & "&subject=" & TMail.Asunto & "" _
+                 & "&to=" & TMail.para _
+                 & "&subject=" & TMail.Asunto _
                  & "&HTML=1" _
-                 & "&body=" & Sin_Signos_XML(TMail.MensajeHTML) & "" _
-                 & "&Archivo=" & TMail.Adjunto & "" _
-                 & "&reply=&replyName=&debug=0 "
+                 & "&body=" & Sin_Signos_XML(TMail.MensajeHTML) _
+                 & "&Archivo=" & TMail.Adjunto _
+                 & "&reply=&replyName=&debug=0"
        Si_No = PostUrlSource(URLHTTP, URLParams)
-      ' Clipboard.Clear
-      ' Clipboard.SetText URLParams
-      'MsgBox Si_No ' & vbCrLf & URLParams ' TMail.MensajeHTML
+       Cursor_Img
+      'MsgBox Si_No
+      'Clipboard.Clear
+      'Clipboard.SetText Si_No & vbCrLf & URLParams & vbCrLf & TMail.MensajeHTML
+      'MsgBox Si_No & vbCrLf & URLParams & vbCrLf & TMail.MensajeHTML
+      'MsgBox Si_No & vbCrLf & TMail.Adjunto
+      '----------------------------------------------------------------------------------------------
        If Si_No Then
           Cursor_Img
           EMailPara = TMail.para
@@ -428,7 +491,7 @@ Dim ContFile As Integer
           If CaracPiloto > 0 Then
              Do While Len(EMailPara) > 1 And CaracPiloto > 0
                 File = MidStrg(EMailPara, 1, CaracPiloto - 1)
-                Control_Procesos "EF", "Email: " & TMail.de & " => " & File, "Asunto: " & TMail.Asunto
+                Control_Procesos "EM", "Email: " & TMail.de & " => " & File, "Asunto: " & TMail.Asunto
                 EMailPara = MidStrg(EMailPara, CaracPiloto + 1, Len(EMailPara))
                 CaracPiloto = InStr(EMailPara, ";")
                 Cursor_Img
@@ -438,7 +501,7 @@ Dim ContFile As Integer
              Control_Procesos "EM", "Email: " & TMail.de & " => " & EMailPara, "Asunto: " & TMail.Asunto
           End If
        Else
-          Control_Procesos "EM", "Email: " & TMail.de & " => " & TMail.para, "Asunto(Error): " & TMail.Asunto
+          Control_Procesos "Err", "Email: " & TMail.de & " => " & TMail.para, "Asunto(Error): " & TMail.Asunto
        End If
        Cursor_Img
       'Eliminando archivos que se fueron con los correos
@@ -452,7 +515,7 @@ Dim ContFile As Integer
           ftp.Desconectar
        End If
     Else
-      'Activamos la clase para envios de los mails
+      'Activamos la clase para envios de los mails con otros servidores
        Set oMail = New clsCDOmail
       'Empezamos a enviar el mails
        Cursor_Img
@@ -473,15 +536,32 @@ Dim ContFile As Integer
            .Mensaje = TMail.Mensaje
            .MensajeHTML = TMail.MensajeHTML
            .para = TMail.para
+           
+           'MsgBox TMail.para
+            
             If Len(TMail.para) > 3 Then
               .de = TMail.Remitente & " <" & TMail.de & ">"
               .Enviar_Backup
                Cursor_Img
                Control_Procesos "EX", "Email: " & TMail.de & " => " & TMail.para, "Asunto: " & TMail.Asunto
                Cursor_Img
+              'MsgBox "Desktop Test: " & TMail.para
             End If
        End With
        Set oMail = Nothing
+       TMail.Asunto = ""
+       TMail.Adjunto = ""
+    End If
+    ArchivoHTML = ""
+    'ArchivoHTML = "Archivo"
+    If Len(ArchivoHTML) > 1 Then
+       RutaGeneraFile = RutaSysBases & "\TEMP\" & ArchivoHTML & ".html"
+       NumFile = FreeFile
+       Open RutaGeneraFile For Output As #NumFile ' Abre el archivo.
+            Print #NumFile, TMail.MensajeHTML;
+       Close #NumFile
+       'Clipboard.Clear
+       'Clipboard.SetText File
     End If
    'If Len(TMail.ListaError) > 1 Then MsgBox TMail.ListaError
  End If
@@ -499,8 +579,8 @@ Dim IdImg As Integer
 
     RatonReloj
     CentrarForm FEnviarCorreos
-    Redondear_Formulario FEnviarCorreos, 40
-    nFrames = Load_Gif(RutaSistema & "\FORMATOS\MAILS.gif", Image1)
+    Redondear_Formulario FEnviarCorreos, 30
+    nFrames = Load_Gif(RutaSistema & "\mails.gif", Image1)
     If nFrames > 0 Then FrameCount = 0
     For IdImg = 0 To Image1.Count - 1
         Image1(IdImg).Visible = False
@@ -526,8 +606,8 @@ Dim IdImg As Integer
     Si_Enviar = False
     Set ftp = New cFTP
         
-    Label1.Caption = "CONECTANDOSE AL SERVIDOR" & vbCrLf & vbCrLf & "DE CORREOS ELECTRONICOS"
-    Label1.Refresh
+    'Label1.Caption = "CONECTANDOSE AL SERVIDOR" & vbCrLf & vbCrLf & "DE CORREOS ELECTRONICOS"
+    'Label1.Refresh
     TMail.ContadorTiempo = 0
    'ErrorMails = ""
     Cursor_Img
@@ -556,28 +636,29 @@ Dim IdImg As Integer
          Else
             TMail.Usuario = .fields("Email_Conexion")
             TMail.Password = .fields("Email_Contraseña")
-            TMail.de = .fields("Email_Conexion")
+            If TMail.TipoDeEnvio <> "NN" Then TMail.de = .fields("Email_Conexion")
          End If
          
          If Email_CE_Copia Then Insertar_Mail TMail.para, EmailProcesos
          If TMail.de = "" And 0 <= TMail.ListaMail And TMail.ListaMail <= 6 Then TMail.de = Lista_De_Correos(TMail.ListaMail).Correo_Electronico
         'Si utilizamos el correo de DiskCover System
          If TMail.servidor = "mail.diskcoversystem.com" Then
-            TMail.servidor = "imap.diskcoversystem.com"
-            TMail.de = Replace(TMail.de, "@diskcoversystem.com", "@imap.diskcoversystem.com")
+            TMail.servidor = imapHost
+            TMail.de = Replace(TMail.de, "@diskcoversystem.com", "@" & imapHost)
          End If
      Else
         'Si enviamos mail desde el modulo de actualizacion se activa el servidor propio de DiskCover System
          If Modulo = "UPDATE" Then
-            TMail.servidor = ServidorCorreos
+            TMail.servidor = imapHost
             NombreUsuario = "Update DiskCover"
             ComunicadoEntidad = ""
             NombreGerente = "Walter Vaca Prieto"
             Contactos = "09-9965-4196/09-8910-5300"
             EmailProcesos = CorreoUpdate
             MsgAux = "DISKCOVER SYSTEM"
-            TMail.de = "Actualizacion de DiskCover System" & " <" & CorreoDiskCover & ">"
-            TMail.de = Replace(TMail.de, "@diskcoversystem.com", "@imap.diskcoversystem.com")
+            TMail.Remitente = "Actualizacion de DiskCover System"
+            TMail.de = CorreoDiskCover
+            TMail.de = Replace(TMail.de, "@diskcoversystem.com", "@" & imapHost)
          End If
      End If
     End With
@@ -589,6 +670,29 @@ Dim IdImg As Integer
     Else
        TMail.ListaError = TMail.ListaError = ". Credenciales no asignadas para el envio de Correos electronicos, solicite ayuda al Administrador del Sistema"
     End If
+    DoEvents
+End Sub
+
+Private Sub Timer1_Timer()
+On Error Resume Next
+Dim I As Long
+
+'MsgBox TotalFrames
+If FrameCount < TotalFrames Then
+   Image1(FrameCount).Visible = False
+   FrameCount = FrameCount + 1
+Else
+   FrameCount = 0
+   For I = 1 To Image1.Count - 1
+       Image1(I).Visible = False
+   Next I
+End If
+Image1(FrameCount).Visible = True
+'Timer1.Interval = 120 ' CLng(Image1(FrameCount).Tag)
+'FEsperar.width = LblMensaje.Left + LblMensaje.width + 100
+'LblMensaje.Refresh
+'Label1.ForeColor = Verde   ' &HC00000
+If Err Then Exit Sub
 End Sub
 
 ' envio completo
@@ -610,7 +714,6 @@ Dim Tiempo_Espera As Single
        Loop
     End If
    'Unload FEnviarCorreos
-
 End Sub
 
 ' error al enviar
@@ -632,10 +735,10 @@ On Local Error Resume Next
     TMail.ContadorTiempo = TMail.ContadorTiempo + 1
     If TMail.ContadorTiempo > 3 Then TMail.ContadorTiempo = 0
     Select Case TMail.ContadorTiempo
-      Case 0: Label1.ForeColor = Blanco_Claro ' &HC00000
-      Case 1: Label1.ForeColor = Amarillo_Claro
-      Case 2: Label1.ForeColor = Verde_Claro
-      Case 3: Label1.ForeColor = Azul
+      Case 0: Label1.ForeColor = Negro ' &HC00000
+      Case 1: Label1.ForeColor = Amarillo
+      Case 2: Label1.ForeColor = Azul
+      Case 3: Label1.ForeColor = Rojo
     End Select
     If Err Then Exit Sub
 End Sub

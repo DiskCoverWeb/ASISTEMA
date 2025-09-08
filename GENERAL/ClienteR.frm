@@ -1410,11 +1410,10 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
-
+Dim AdoRegs As ADODB.Recordset
 Dim Archivo_Foto As String
 Dim Cliente_Ant As String
 Dim NombFilePict As String
-Dim AdoRegs As ADODB.Recordset
 Dim Imprime As Boolean
 Dim Estudiante As String
 Dim SexoEst As String
@@ -1614,7 +1613,7 @@ Public Sub GrabarCliente()
   Estudiante_DBF.direcpaga = TxtLugarTrabajoR
   'Actualizar_Pagos
   FA.CodigoC = Codigo
-  TBeneficiario = Leer_Datos_Clientes(FA.CodigoC)
+  TBeneficiario = Leer_Datos_Cliente_SP(FA.CodigoC)
   ListarClientes CliFact
 End Sub
 
@@ -1987,9 +1986,9 @@ Private Sub TxtCedulaR_KeyDown(KeyCode As Integer, Shift As Integer)
   PresionoEnter KeyCode
 End Sub
 
-Private Sub TxtCedulaR_KeyPress(KeyAscii As Integer)
-   KeyAscii = Solo_Letras_Numeros(KeyAscii)
-End Sub
+'Private Sub TxtCedulaR_KeyPress(KeyAscii As Integer)
+'   KeyAscii = Solo_Letras_Numeros(KeyAscii)
+'End Sub
 
 Private Sub TxtCedulaR_LostFocus()
     If Len(TxtCedulaR) > 1 Then
@@ -2184,7 +2183,7 @@ Public Sub Actualizar_Alumnos_DBF()
        Do While Not .EOF
           RatonReloj
           TBeneficiario.Patron_Busqueda = .fields("CI_RUC")
-          TBeneficiario = Leer_Datos_Clientes(TBeneficiario.Patron_Busqueda)
+          TBeneficiario = Leer_Datos_Cliente_SP(TBeneficiario.Patron_Busqueda)
           Progreso_Barra.Mensaje_Box = "Actualizando: " & TBeneficiario.Cliente
           Progreso_Esperar
           Estudiante_DBF.codest = TBeneficiario.CI_RUC

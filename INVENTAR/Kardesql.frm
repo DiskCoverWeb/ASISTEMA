@@ -3,7 +3,7 @@ Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.Form KardexSQLs 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "INVENTARIO DE KARDEX"
@@ -754,7 +754,7 @@ Private Sub ListarDetallesInv(Optional ConTotales As Boolean)
   Select_Adodc AdoDetKardex, sSQL
   With AdoDetKardex.Recordset
   If .RecordCount > 0 Then
-      TextConcepto.Text = .RecordCount & vbCrLf & .Fields("Cliente") & vbCrLf & .Fields("Concepto")
+      TextConcepto.Text = .RecordCount & vbCrLf & .fields("Cliente") & vbCrLf & .fields("Concepto")
   Else
      TextConcepto.Text = "No existen datos"
   End If
@@ -795,8 +795,8 @@ Private Sub ListarDetallesInv(Optional ConTotales As Boolean)
      With AdoDetKardex.Recordset
       If .RecordCount > 0 Then
           Do While Not .EOF
-             If .Fields("Salida") > 0 Then Haber = Haber + .Fields("Valor_Total")
-             Total = Total + .Fields("Valor_Total")
+             If .fields("Salida") > 0 Then Haber = Haber + .fields("Valor_Total")
+             Total = Total + .fields("Valor_Total")
             .MoveNext
           Loop
       End If
@@ -889,7 +889,7 @@ If ClaveContador Then
       With AdoDetKardex.Recordset
        If .RecordCount > 0 Then
            Do While Not .EOF
-              Codigo = .Fields("Codigo_Inv")
+              Codigo = .fields("Codigo_Inv")
               sSQL = "UPDATE Trans_Kardex " _
                    & "SET Procesado = 0 " _
                    & "WHERE Codigo_Inv = '" & Codigo & "' " _

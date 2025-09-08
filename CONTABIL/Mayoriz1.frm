@@ -12,8 +12,8 @@ Begin VB.Form ListMayorizacion1
    ClientWidth     =   11340
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   15615
-   ScaleWidth      =   28560
+   ScaleHeight     =   7365
+   ScaleWidth      =   11340
    WindowState     =   2  'Maximized
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
@@ -21,8 +21,8 @@ Begin VB.Form ListMayorizacion1
       Left            =   0
       TabIndex        =   25
       Top             =   0
-      Width           =   28560
-      _ExtentX        =   50377
+      Width           =   11340
+      _ExtentX        =   20003
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -30,7 +30,7 @@ Begin VB.Form ListMayorizacion1
       ImageList       =   "ImageList1"
       _Version        =   327682
       BeginProperty Buttons {0713E452-850A-101B-AFC0-4210102A8DA7} 
-         NumButtons      =   5
+         NumButtons      =   6
          BeginProperty Button1 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "Salir"
             Object.ToolTipText     =   "Salir del Modulo"
@@ -61,10 +61,17 @@ Begin VB.Form ListMayorizacion1
             Object.Tag             =   ""
             ImageIndex      =   4
          EndProperty
+         BeginProperty Button6 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   "Buscar"
+            Key             =   "Buscar"
+            Object.ToolTipText     =   "Patron de Busqueda"
+            Object.Tag             =   ""
+            ImageIndex      =   6
+         EndProperty
       EndProperty
       Begin VB.Frame Frame2 
          Height          =   645
-         Left            =   3045
+         Left            =   3570
          TabIndex        =   0
          Top             =   0
          Width           =   16920
@@ -292,6 +299,24 @@ Begin VB.Form ListMayorizacion1
             Width           =   1695
          End
       End
+   End
+   Begin VB.CommandButton Command1 
+      Caption         =   "&S"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   105
+      Style           =   1  'Graphical
+      TabIndex        =   28
+      Top             =   7665
+      Width           =   330
    End
    Begin MSDataListLib.DataCombo DCAgencia 
       Bindings        =   "Mayoriz1.frx":0014
@@ -534,7 +559,7 @@ Begin VB.Form ListMayorizacion1
    End
    Begin MSAdodcLib.Adodc AdoMayor 
       Height          =   330
-      Left            =   315
+      Left            =   420
       Top             =   7665
       Width           =   2955
       _ExtentX        =   5212
@@ -788,9 +813,20 @@ Begin VB.Form ListMayorizacion1
       EndProperty
       _Version        =   393216
    End
-   Begin ComctlLib.ImageList ImageList1 
-      Left            =   15435
+   Begin VB.Label LblPatron 
+      BackColor       =   &H00FF0000&
+      BorderStyle     =   1  'Fixed Single
+      Caption         =   "Patron"
+      ForeColor       =   &H00FFFFFF&
+      Height          =   330
+      Left            =   14910
+      TabIndex        =   27
       Top             =   735
+      Width           =   5580
+   End
+   Begin ComctlLib.ImageList ImageList1 
+      Left            =   15540
+      Top             =   1155
       _ExtentX        =   1005
       _ExtentY        =   1005
       BackColor       =   -2147483643
@@ -799,7 +835,7 @@ Begin VB.Form ListMayorizacion1
       MaskColor       =   12632256
       _Version        =   327682
       BeginProperty Images {0713E8C2-850A-101B-AFC0-4210102A8DA7} 
-         NumListImages   =   5
+         NumListImages   =   6
          BeginProperty ListImage1 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
             Picture         =   "Mayoriz1.frx":0074
             Key             =   ""
@@ -818,6 +854,10 @@ Begin VB.Form ListMayorizacion1
          EndProperty
          BeginProperty ListImage5 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
             Picture         =   "Mayoriz1.frx":0CDC
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage6 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "Mayoriz1.frx":2ADE
             Key             =   ""
          EndProperty
       EndProperty
@@ -874,7 +914,7 @@ Begin VB.Form ListMayorizacion1
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   9765
+      Left            =   9870
       TabIndex        =   21
       Top             =   7665
       Width           =   1695
@@ -892,7 +932,7 @@ Begin VB.Form ListMayorizacion1
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   8085
+      Left            =   8190
       TabIndex        =   20
       Top             =   7665
       Width           =   1695
@@ -912,7 +952,7 @@ Begin VB.Form ListMayorizacion1
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   6405
+      Left            =   6510
       TabIndex        =   19
       Top             =   7665
       Width           =   1695
@@ -930,7 +970,7 @@ Begin VB.Form ListMayorizacion1
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   5670
+      Left            =   5775
       TabIndex        =   18
       Top             =   7665
       Width           =   750
@@ -950,7 +990,7 @@ Begin VB.Form ListMayorizacion1
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   3990
+      Left            =   4095
       TabIndex        =   17
       Top             =   7665
       Width           =   1695
@@ -968,7 +1008,7 @@ Begin VB.Form ListMayorizacion1
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   3255
+      Left            =   3360
       TabIndex        =   16
       Top             =   7665
       Width           =   750
@@ -1044,6 +1084,11 @@ Private Sub CheqTC_Click()
   If CheqTC.value = 0 Then DCTC.Visible = False Else DCTC.Visible = True
 End Sub
 
+Private Sub Command1_Click()
+    RatonNormal
+    Unload ListMayorizacion1
+End Sub
+
 Private Sub DCCtas_KeyDown(KeyCode As Integer, Shift As Integer)
   PresionoEnter KeyCode
 End Sub
@@ -1099,6 +1144,8 @@ Private Sub DGMayor_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub Form_Activate()
+  SQLPatron = ""
+  LblPatron.Caption = "Patron Busqueda:"
   Co.Item = NumEmpresa
   If CNivel(7) Then
      MsgBox "Usted no esta autorizado para ingrersar a este modulo"
@@ -1162,6 +1209,15 @@ Private Sub Form_Activate()
      DCAgencia.Visible = False
      CheckAgencia.Visible = False
   End If
+  MBoxFechaI.Text = FechaSistema
+  MBoxFechaF.Text = FechaSistema
+  MBoxCtaI.SelText = "1"
+  MBoxCtaF.SelText = "9"
+  Codigo1 = SinEspaciosIzq(DCCtas.Text)
+  ListarMayoresAux True, Individual
+  Obtener_Campos_Patron_Busqueda AdoMayor
+  ListMayorizacion1.Caption = "MAYOR ANALITICO"
+  Opcion = 1
   MBoxCtaI.SetFocus
   RatonNormal
 End Sub
@@ -1176,9 +1232,11 @@ Private Sub Form_Load()
   ConectarAdodc AdoUsuario
   ConectarAdodc AdoAgencias
   
-  DGMayor.Height = MDI_Y_Max - DGMayor.Top - 300
+  DGMayor.Height = MDI_Y_Max - DGMayor.Top - 400
   DGMayor.width = MDI_X_Max - DGMayor.Left
   AdoMayor.Top = DGMayor.Top + DGMayor.Height + 10
+  Command1.Top = AdoMayor.Top
+  LblPatron.width = MDI_X_Max - LblPatron.Left - 10
   
   Label6.Top = DGMayor.Top + DGMayor.Height + 10
   Label9.Top = DGMayor.Top + DGMayor.Height + 10
@@ -1187,6 +1245,7 @@ Private Sub Form_Load()
   LabelTotDebe.Top = DGMayor.Top + DGMayor.Height + 10
   LabelTotHaber.Top = DGMayor.Top + DGMayor.Height + 10
   Opcion = 0
+  SQLPatron = ""
 End Sub
 
 Private Sub MBoxCtaF_GotFocus()
@@ -1251,11 +1310,11 @@ Public Sub ListarMayoresAux(OpcUno As Boolean, PorConceptos As Boolean)
   If PorConceptos Then
      sSQL = "SELECT T.Fecha,T.TP,T.Numero,Cl.Cliente,T.Detalle As Concepto,T.Cheq_Dep,T.Debe,T.Haber,T.Saldo," _
           & "T.Parcial_ME,T.Saldo_ME,T.ID,T.Cta,T.Item " _
-          & "FROM Transacciones As T,Clientes As Cl "
+          & "FROM Transacciones As T, Clientes As Cl "
   Else
-     sSQL = "SELECT T.Fecha,T.TP,T.Numero,Cl.Cliente,C.Concepto,T.Cheq_Dep,Debe,Haber,Saldo," _
+     sSQL = "SELECT T.Fecha,T.TP,T.Numero,Cl.Cliente,Co.Concepto,T.Cheq_Dep,Debe,Haber,Saldo," _
           & "Parcial_ME,Saldo_ME,T.ID,T.Cta,CC.TC,CC.Cuenta,T.Item " _
-          & "FROM Catalogo_Cuentas As CC, Transacciones As T, Comprobantes As C, Clientes As Cl "
+          & "FROM Catalogo_Cuentas As CC, Transacciones As T, Comprobantes As Co, Clientes As Cl "
   End If
   sSQL = sSQL & "WHERE T.Periodo = '" & Periodo_Contable & "' "
   If CheckAgencia.value = 1 Then
@@ -1275,23 +1334,25 @@ Public Sub ListarMayoresAux(OpcUno As Boolean, PorConceptos As Boolean)
      sSQL = sSQL & "AND CC.TC = '" & DCTC.Text & "' "
   End If
   
+  sSQL = sSQL & SQLPatron
+  
   If PorConceptos Then
      sSQL = sSQL & "AND T.Codigo_C = Cl.Codigo "
   Else
      If CheckUsuario.value = 1 Then sSQL = sSQL & "AND C.CodigoU = '" & SinEspaciosDer(DCUsuario.Text) & "' "
      sSQL = sSQL _
-          & "AND T.Item = C.Item " _
+          & "AND T.Item = Co.Item " _
           & "AND T.Item = CC.Item " _
-          & "AND T.Periodo = C.Periodo " _
+          & "AND T.Periodo = Co.Periodo " _
           & "AND T.Periodo = CC.Periodo " _
           & "AND T.Cta = CC.Codigo " _
-          & "AND T.Fecha = C.Fecha " _
-          & "AND T.TP = C.TP " _
-          & "AND T.Numero = C.Numero " _
-          & "AND C.Codigo_B = Cl.Codigo "
+          & "AND T.Fecha = Co.Fecha " _
+          & "AND T.TP = Co.TP " _
+          & "AND T.Numero = Co.Numero " _
+          & "AND Co.Codigo_B = Cl.Codigo "
   End If
   sSQL = sSQL & "ORDER BY T.Cta,T.Fecha,T.TP,T.Numero,Debe DESC,Haber,T.ID "
-  Select_Adodc_Grid DGMayor, AdoMayor, sSQL, , , , "Mayores multiples"
+  Select_Adodc_Grid DGMayor, AdoMayor, sSQL
   'MsgBox "..."
  'Consulta de Totales
   sSQL = "SELECT T.Cta,SUM(T.Debe) As TDebe, SUM(T.Haber) As THaber, SUM(T.Parcial_ME) As TParcial_ME "
@@ -1338,18 +1399,18 @@ Public Sub ListarMayoresAux(OpcUno As Boolean, PorConceptos As Boolean)
        Progreso_Barra.Valor_Maximo = .RecordCount + 1
        If .RecordCount = 1 Then
            Do While Not .EOF
-              Cta = .fields("Cta")
+              Cta = .Fields("Cta")
               Progreso_Barra.Mensaje_Box = "Totalozando Cta: " & Cta
               Progreso_Esperar
-              Suma_ME = Suma_ME + .fields("TParcial_ME")
-              SumaDebe = SumaDebe + .fields("TDebe")
-              SumaHaber = SumaHaber + .fields("THaber")
+              Suma_ME = Suma_ME + .Fields("TParcial_ME")
+              SumaDebe = SumaDebe + .Fields("TDebe")
+              SumaHaber = SumaHaber + .Fields("THaber")
              .MoveNext
            Loop
           'Obtenemos el ultimo Saldo de la Cta
            If AdoMayor.Recordset.RecordCount > 0 Then
               AdoMayor.Recordset.MoveLast
-              SaldoTotal = AdoMayor.Recordset.fields("Saldo")
+              SaldoTotal = AdoMayor.Recordset.Fields("Saldo")
               AdoMayor.Recordset.MoveFirst
            End If
        End If
@@ -1378,8 +1439,8 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
     FechaFin = BuscarFecha(MBoxFechaF)
     Select Case Button.key
       Case "Salir"
-           RatonNormal
-           Unload ListMayorizacion1
+            RatonNormal
+            Unload ListMayorizacion1
       Case "Imprimir"
             FechaCorte = "Desde " & MBoxFechaI & " al " & MBoxFechaF
             Select Case Opcion
@@ -1397,10 +1458,10 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
             Imprimir_Mayor AdoMayor, CheqImpSubCtas.value
             DGMayor.Caption = " Mayor de: " & DCCtas.Text & "."
       Case "Excel"
-           DGMayor.Visible = False
-           Exportar_AdoDB_Excel AdoMayor.Recordset, "Mayores " & BuscarFecha(MBoxFechaI) & " al " & BuscarFecha(MBoxFechaF)
-          'GenerarDataTexto ListMayorizacion1, AdoMayor
-           DGMayor.Visible = True
+            DGMayor.Visible = False
+            Exportar_AdoDB_Excel AdoMayor.Recordset, "Mayores " & BuscarFecha(MBoxFechaI) & " al " & BuscarFecha(MBoxFechaF)
+           'GenerarDataTexto ListMayorizacion1, AdoMayor
+            DGMayor.Visible = True
       Case "UnMayor"
             Codigo1 = SinEspaciosIzq(DCCtas.Text)
             ListarMayoresAux True, Individual
@@ -1415,11 +1476,23 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
             ListarMayoresAux False, Individual
             ListMayorizacion1.Caption = "MAYOR ANALITICO"
             Opcion = 2
+      Case "Buscar"
+            FPatronBusqueda.Show 1
+            If SQLPatron <> "" Then
+               LblPatron.Caption = "Patron Busqueda: " & SQLPatron
+               LblPatron.Refresh
+               Codigo1 = SinEspaciosIzq(DCCtas.Text)
+               ListarMayoresAux True, Individual
+               ListMayorizacion1.Caption = "MAYOR ANALITICO"
+               Opcion = 1
+            End If
     End Select
     If Button.key <> "Salir" Then
         DGMayor.Visible = True
         DGMayor.Caption = " Mayor de: " & DCCtas.Text & "."
         RatonNormal
+        LblPatron.Caption = "Patron Busqueda: " & SQLPatron
+        LblPatron.Refresh
         DCCtas.SetFocus
     End If
 End Sub

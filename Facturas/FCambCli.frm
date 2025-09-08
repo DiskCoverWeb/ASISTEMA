@@ -189,8 +189,8 @@ Private Sub DCCliente_LostFocus()
       .MoveFirst
       .Find ("Cliente = '" & DCCliente & "' ")
        If Not .EOF Then
-          CodigoCliente = .Fields("Codigo")
-          NombreCliente = .Fields("Cliente")
+          CodigoCliente = .fields("Codigo")
+          NombreCliente = .fields("Cliente")
        End If
    End If
   End With

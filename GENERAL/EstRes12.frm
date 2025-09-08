@@ -3,7 +3,7 @@ Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "Mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.Form EstadoResult12Meses 
    Caption         =   "ESTADO DE RESULTADOS POR MES"
    ClientHeight    =   7410
@@ -704,9 +704,9 @@ Dim NumPos As Long
 Dim RutaGeneraFile As String
 Dim LineaTexto As String
   
+  DGBalanceG.Visible = False
   Control_Procesos Normal, "(" & TipoBalance & ") Analitico Mensual del " & MBFechaI & "  al " & MBFechaF
   Update_Fechas "Balance_Analitico", MBFechaI, MBFechaF
-  DGBalanceG.Visible = False
   RatonReloj
   NumItemTemp = 0
   If CheckAgencia.value = 1 Then
@@ -737,7 +737,7 @@ Dim LineaTexto As String
   With AdoBalanceG.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
-          Total_Presupuesto = Total_Presupuesto + .fields("Presupuesto")
+          Total_Presupuesto = Total_Presupuesto + .Fields("Presupuesto")
          .MoveNext
        Loop
       .MoveFirst

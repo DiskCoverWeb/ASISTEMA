@@ -152,8 +152,8 @@ Private Sub Form_Activate()
        & "WHERE Usuario = '" & TipoSuper & "' "
   Select_Adodc AdoSup, sSQL
   If AdoSup.Recordset.RecordCount > 0 Then
-     ClaveGeneral = AdoSup.Recordset.Fields("Clave")
-     IngClaves.Caption = AdoSup.Recordset.Fields("Nombre_Completo")
+     ClaveGeneral = AdoSup.Recordset.fields("Clave")
+     IngClaves.Caption = AdoSup.Recordset.fields("Nombre_Completo")
   End If
   Intentos = 0
   ResultClaveSup = False

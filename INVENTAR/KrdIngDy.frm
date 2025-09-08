@@ -1932,7 +1932,7 @@ Private Sub Command1_Click()
        Cadena = DCBenef.Text
       .MoveFirst
       .Find ("Cliente Like '" & Cadena & "' ")
-       If Not .EOF Then CodigoBenef = .Fields("Codigo")
+       If Not .EOF Then CodigoBenef = .fields("Codigo")
    End If
   End With
   Valor = 0
@@ -1963,30 +1963,30 @@ Private Sub Command1_Click()
      Select_Adodc AdoAsientos, sSQL
      With AdoKardex.Recordset
       If .RecordCount > 0 Then
-          CodigoInv = .Fields("Codigo_Inv")
-          Cta_Inventario = .Fields("CTA_INVENTARIO")
-          Contra_Cta = .Fields("CONTRA_CTA")
+          CodigoInv = .fields("Codigo_Inv")
+          Cta_Inventario = .fields("CTA_INVENTARIO")
+          Contra_Cta = .fields("CONTRA_CTA")
           Total = 0: ValorDH = 0
           Asiento = 1
          'Llenamos los datos ingresados al Kardex
           Do While Not .EOF
-             If Cta_Inventario <> .Fields("CTA_INVENTARIO") Then
+             If Cta_Inventario <> .fields("CTA_INVENTARIO") Then
                 InsertarAsientos AdoAsientos, Cta_Inventario, 0, ValorDH, 0
-                CodigoInv = .Fields("Codigo_Inv")
-                Cta_Inventario = .Fields("CTA_INVENTARIO")
-                Contra_Cta = .Fields("CONTRA_CTA")
+                CodigoInv = .fields("Codigo_Inv")
+                Cta_Inventario = .fields("CTA_INVENTARIO")
+                Contra_Cta = .fields("CONTRA_CTA")
                 ValorDH = 0
              End If
-             Total = Total + .Fields("VALOR_TOTAL")
-             ValorDH = ValorDH + .Fields("VALOR_TOTAL")
+             Total = Total + .fields("VALOR_TOTAL")
+             ValorDH = ValorDH + .fields("VALOR_TOTAL")
             .MoveNext
           Loop
           InsertarAsientos AdoAsientos, Cta_Inventario, 0, ValorDH, 0
           InsertarAsientos AdoAsientos, Contra_Cta, 0, 0, ValorDH
           Debe = 0: Haber = 0
           Do While Not .EOF
-             Debe = Debe + .Fields("DEBE")
-             Haber = Haber + .Fields("HABER")
+             Debe = Debe + .fields("DEBE")
+             Haber = Haber + .fields("HABER")
             .MoveNext
           Loop
           If (Debe - Haber) <> 0 Then MsgBox "Verifique el comprobante, no cuadra por: " & Round(Debe - Haber, 2)
@@ -2005,7 +2005,7 @@ Private Sub Command1_Click()
           Co.Item = NumEmpresa
           If TextOrden <> Ninguno Then Co.Concepto = Co.Concepto & ", Orden No. " & TextOrden
           'MsgBox Total_ME
-          GrabarComprobante Co
+          Grabar_Comprobante Co
           ImprimirComprobantesDe False, Co
           Imprimir_Nota_Inventario AdoBenef, AdoKardex, NumComp, TextOrden.Text, "CD", FechaTexto, FechaTexto, Total
           Mensajes = "Imprimir Copia de Nota de Entrada/Salida"
@@ -2035,10 +2035,10 @@ Private Sub DCBenef_LostFocus()
       .MoveFirst
       .Find ("Cliente Like '" & Cadena & "' ")
        If Not .EOF Then
-          CodigoBenef = .Fields("Codigo")
-          CodigoCliente = .Fields("Codigo")
-          TipoDoc = .Fields("TD")
-          InvImp = .Fields("Importaciones")
+          CodigoBenef = .fields("Codigo")
+          CodigoCliente = .fields("Codigo")
+          TipoDoc = .fields("TD")
+          InvImp = .fields("Importaciones")
           If InvImp Then Label2.Caption = " IMPORTACION"
           Si_No = True
           If TipoDoc = "R" Then Si_No = False
@@ -2094,16 +2094,16 @@ Private Sub DCDiario_LostFocus()
      Contador = 0
      With AdoAux.Recordset
       If .RecordCount > 0 Then
-          CodigoBenef = .Fields("Codigo_P")
-          TextOrden = .Fields("Orden_No")
-          Cod_Bodega = .Fields("CodBodega")
-          Mifecha = .Fields("Fecha")
-          Numero = .Fields("Numero")
+          CodigoBenef = .fields("Codigo_P")
+          TextOrden = .fields("Orden_No")
+          Cod_Bodega = .fields("CodBodega")
+          Mifecha = .fields("Fecha")
+          Numero = .fields("Numero")
           Sumatoria = 0
           Do While Not .EOF
-             ValorUnit = (.Fields("Precio_FOB") * .Fields("Comision")) + .Fields("Trans_Unit") + .Fields("Precio_FOB")
-             Entrada = .Fields("Entrada")
-             SubTotal = .Fields("Trans_Unit") * Entrada
+             ValorUnit = (.fields("Precio_FOB") * .fields("Comision")) + .fields("Trans_Unit") + .fields("Precio_FOB")
+             Entrada = .fields("Entrada")
+             SubTotal = .fields("Trans_Unit") * Entrada
              Sumatoria = Sumatoria + SubTotal
            ' Llenamos el ultimo saldo del kardex
              If Entrada > 0 And ValorUnit > 0 Then
@@ -2111,19 +2111,19 @@ Private Sub DCDiario_LostFocus()
                 SetAddNew AdoKardex
                 SetFields AdoKardex, "DH", "1"
                 SetFields AdoKardex, "CANT_ES", Entrada
-                SetFields AdoKardex, "CODIGO_INV", .Fields("Codigo_Inv")
-                SetFields AdoKardex, "PRODUCTO", .Fields("Producto")
-                SetFields AdoKardex, "VALOR_FOB", .Fields("Precio_FOB")
-                SetFields AdoKardex, "TRANS_UNIT", .Fields("Trans_Unit")
-                SetFields AdoKardex, "COMIS", .Fields("Comision")
-                SetFields AdoKardex, "UTIL", .Fields("Utilidad")
-                SetFields AdoKardex, "VALOR_UNIT", .Fields("Valor_Unitario")
-                SetFields AdoKardex, "VALOR_TOTAL", .Fields("Valor_Total")
-                SetFields AdoKardex, "CTA_INVENTARIO", .Fields("Cta_Inv")
-                SetFields AdoKardex, "PVP", .Fields("PVP")
+                SetFields AdoKardex, "CODIGO_INV", .fields("Codigo_Inv")
+                SetFields AdoKardex, "PRODUCTO", .fields("Producto")
+                SetFields AdoKardex, "VALOR_FOB", .fields("Precio_FOB")
+                SetFields AdoKardex, "TRANS_UNIT", .fields("Trans_Unit")
+                SetFields AdoKardex, "COMIS", .fields("Comision")
+                SetFields AdoKardex, "UTIL", .fields("Utilidad")
+                SetFields AdoKardex, "VALOR_UNIT", .fields("Valor_Unitario")
+                SetFields AdoKardex, "VALOR_TOTAL", .fields("Valor_Total")
+                SetFields AdoKardex, "CTA_INVENTARIO", .fields("Cta_Inv")
+                SetFields AdoKardex, "PVP", .fields("PVP")
                 SetFields AdoKardex, "PRECIO_CIF", ValorUnit
                 SetFields AdoKardex, "TRANS_TOTAL", SubTotal
-                SetFields AdoKardex, "CONTRA_CTA", .Fields("Contra_Cta")
+                SetFields AdoKardex, "CONTRA_CTA", .fields("Contra_Cta")
                 SetFields AdoKardex, "ORDEN", Val(CCur(TextOrden))
                 SetFields AdoKardex, "Codigo_B", CodigoBenef
                 SetFields AdoKardex, "CodBod", Cod_Bodega
@@ -2141,10 +2141,10 @@ Private Sub DCDiario_LostFocus()
              AdoBenef.Recordset.MoveFirst
              AdoBenef.Recordset.Find ("Codigo Like '" & CodigoBenef & "' ")
              If Not AdoBenef.Recordset.EOF Then
-                DCBenef = AdoBenef.Recordset.Fields("Cliente")
-                CodigoCliente = AdoBenef.Recordset.Fields("Codigo")
-                TipoDoc = AdoBenef.Recordset.Fields("TD")
-                InvImp = AdoBenef.Recordset.Fields("Importaciones")
+                DCBenef = AdoBenef.Recordset.fields("Cliente")
+                CodigoCliente = AdoBenef.Recordset.fields("Codigo")
+                TipoDoc = AdoBenef.Recordset.fields("TD")
+                InvImp = AdoBenef.Recordset.fields("Importaciones")
                 If InvImp Then Label2.Caption = " IMPORTACION"
                 Si_No = True
                 If TipoDoc = "R" Then Si_No = False
@@ -2177,37 +2177,37 @@ Private Sub DCInv_LostFocus()
       .MoveFirst
       .Find ("Producto Like '" & CodigoInv & "' ")
        If Not .EOF Then
-          Si_No = .Fields("IVA")
-          Unidad = .Fields("Unidad")
-          CodigoInv = .Fields("Codigo_Inv")
-          Producto = .Fields("Producto")
-          Cta_Inventario = .Fields("Cta_Inventario")
-          Contra_Cta = .Fields("Cta_Proveedor")
-          Contra_Cta1 = .Fields("Cta_Costo_Venta")
+          Si_No = .fields("IVA")
+          Unidad = .fields("Unidad")
+          CodigoInv = .fields("Codigo_Inv")
+          Producto = .fields("Producto")
+          Cta_Inventario = .fields("Cta_Inventario")
+          Contra_Cta = .fields("Cta_Proveedor")
+          Contra_Cta1 = .fields("Cta_Costo_Venta")
           DCBodega.SetFocus
        Else
          .MoveFirst
          .Find ("Codigo_Barra Like '" & CodigoInv & "' ")
           If Not .EOF Then
-             Si_No = .Fields("IVA")
-             Unidad = .Fields("Unidad")
-             CodigoInv = .Fields("Codigo_Inv")
-             Producto = .Fields("Producto")
-             Cta_Inventario = .Fields("Cta_Inventario")
-             Contra_Cta = .Fields("Cta_Proveedor")
-             Contra_Cta1 = .Fields("Cta_Costo_Venta")
+             Si_No = .fields("IVA")
+             Unidad = .fields("Unidad")
+             CodigoInv = .fields("Codigo_Inv")
+             Producto = .fields("Producto")
+             Cta_Inventario = .fields("Cta_Inventario")
+             Contra_Cta = .fields("Cta_Proveedor")
+             Contra_Cta1 = .fields("Cta_Costo_Venta")
              DCBodega.SetFocus
           Else
             .MoveFirst
             .Find ("Codigo_Inv Like '" & CodigoInv & "' ")
              If Not .EOF Then
-                Si_No = .Fields("IVA")
-                Unidad = .Fields("Unidad")
-                CodigoInv = .Fields("Codigo_Inv")
-                Producto = .Fields("Producto")
-                Cta_Inventario = .Fields("Cta_Inventario")
-                Contra_Cta = .Fields("Cta_Proveedor")
-                Contra_Cta1 = .Fields("Cta_Costo_Venta")
+                Si_No = .fields("IVA")
+                Unidad = .fields("Unidad")
+                CodigoInv = .fields("Codigo_Inv")
+                Producto = .fields("Producto")
+                Cta_Inventario = .fields("Cta_Inventario")
+                Contra_Cta = .fields("Cta_Proveedor")
+                Contra_Cta1 = .fields("Cta_Costo_Venta")
                 DCBodega.SetFocus
              Else
                 MsgBox "No existe Productos asignados"
@@ -2239,14 +2239,14 @@ Private Sub DGKardex_KeyDown(KeyCode As Integer, Shift As Integer)
   If CtrlDown And KeyCode = vbKeyF10 Then
      With AdoKardex.Recordset
       If .RecordCount > 0 Then
-          TxtCant1 = .Fields("CANT_ES")
-          TxtFOB1 = .Fields("VALOR_FOB")
-          TxtCom1 = .Fields("COMIS") * 100
-          TxtTransUnit1 = .Fields("TRANS_UNIT")
-          Label23.Caption = .Fields("TRANS_TOTAL")
-          TxtCIF1 = .Fields("PRECIO_CIF")
-          TxtUtil1 = .Fields("UTIL") * 100
-          TxtTxtPVP1 = .Fields("PVP")
+          TxtCant1 = .fields("CANT_ES")
+          TxtFOB1 = .fields("VALOR_FOB")
+          TxtCom1 = .fields("COMIS") * 100
+          TxtTransUnit1 = .fields("TRANS_UNIT")
+          Label23.Caption = .fields("TRANS_TOTAL")
+          TxtCIF1 = .fields("PRECIO_CIF")
+          TxtUtil1 = .fields("UTIL") * 100
+          TxtTxtPVP1 = .fields("PVP")
           FrmCambios.Visible = True
           TxtCant1.SetFocus
       End If
@@ -2484,9 +2484,9 @@ Dim TotalInvs As Currency
        .MoveFirst
        .MoveFirst
         Do While Not .EOF
-           Total = Total + .Fields("TRANS_TOTAL")
-           Total_ME = Total_ME + .Fields("VALOR_TOTAL")
-           Total_IVA = Total_IVA + .Fields("IVA")
+           Total = Total + .fields("TRANS_TOTAL")
+           Total_ME = Total_ME + .fields("VALOR_TOTAL")
+           Total_IVA = Total_IVA + .fields("IVA")
           .MoveNext
         Loop
        .MoveFirst

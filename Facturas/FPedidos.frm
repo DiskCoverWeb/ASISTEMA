@@ -351,17 +351,17 @@ Dim Cod_Sub_Inv As String
              End If
              sSQL = sSQL & "ORDER BY ID DESC "
              Select_Adodc AdoAux, sSQL
-             If AdoAux.Recordset.RecordCount > 0 Then Ln_No = AdoAux.Recordset.Fields("ID") + 1
+             If AdoAux.Recordset.RecordCount > 0 Then Ln_No = AdoAux.Recordset.fields("ID") + 1
              Cod_Sub_Inv = CodigoCuentaSup(CodigoP)
              SetAdoAddNew "Trans_Pedidos"
              SetAdoFields "Fecha", FechaSistema
              SetAdoFields "Codigo", CodigoP
              SetAdoFields "Hora", Format$(Time, "HH:SS")
-             SetAdoFields "Producto", .Fields("Producto")
+             SetAdoFields "Producto", .fields("Producto")
              SetAdoFields "Cantidad", Val(TxtCantidad)
              SetAdoFields "Precio", Val(TxtPVP)
              Total_IVA = 0
-             If .Fields("IVA") Then Total_IVA = Redondear((Val(TxtPVP.Text) * Val(TxtCantidad.Text)) * Porc_IVA, 2)
+             If .fields("IVA") Then Total_IVA = Redondear((Val(TxtPVP.Text) * Val(TxtCantidad.Text)) * Porc_IVA, 2)
              SetAdoFields "Total_IVA", Total_IVA
              SetAdoFields "Total", (Val(TxtPVP.Text) * Val(TxtCantidad.Text))
              If IsNumeric(TxtOrden) Then
@@ -370,7 +370,7 @@ Dim Cod_Sub_Inv As String
              Else
                 SetAdoFields "No_Hab", UCaseStrg(TxtOrden)
              End If
-             SetAdoFields "Cta_Venta", .Fields("Cta_Ventas")
+             SetAdoFields "Cta_Venta", .fields("Cta_Ventas")
              SetAdoFields "Codigo_Sup", Cod_Sub_Inv
              SetAdoFields "Item", NumEmpresa
              SetAdoFields "ID", Ln_No
@@ -429,7 +429,7 @@ Private Sub TxtOrden_GotFocus()
       .MoveFirst
       .Find ("Codigo_Inv = '" & CodigoP & "' ")
        If Not .EOF Then
-          TxtPVP = Format$(.Fields("PVP"), "#,##0.00")
+          TxtPVP = Format$(.fields("PVP"), "#,##0.00")
        End If
    End If
   End With

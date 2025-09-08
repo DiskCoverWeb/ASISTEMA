@@ -5,135 +5,29 @@ Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Begin VB.Form FComprasAT 
-   BackColor       =   &H00FFC0C0&
+   BackColor       =   &H00FF8080&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "COMPRAS"
-   ClientHeight    =   8580
+   ClientHeight    =   7530
    ClientLeft      =   30
    ClientTop       =   420
-   ClientWidth     =   12060
+   ClientWidth     =   14130
    ForeColor       =   &H8000000F&
    Icon            =   "FComprasAT.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
    Moveable        =   0   'False
-   ScaleHeight     =   8580
-   ScaleWidth      =   12060
-   Begin VB.CommandButton CmdCerrar 
-      BackColor       =   &H00FF8080&
-      Caption         =   "&Cancelar"
-      Height          =   855
-      Left            =   10920
-      Picture         =   "FComprasAT.frx":0696
-      Style           =   1  'Graphical
-      TabIndex        =   110
-      ToolTipText     =   "Salir"
-      Top             =   105
-      Width           =   1065
-   End
-   Begin VB.Frame FrmRetencion 
-      BackColor       =   &H00FFC0C0&
-      Caption         =   "RETENCIONES DE IVA POR:"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   960
-      Left            =   105
-      TabIndex        =   0
-      Top             =   105
-      Width           =   9570
-      Begin MSDataListLib.DataCombo DCRetISer 
-         Bindings        =   "FComprasAT.frx":0AD8
-         DataSource      =   "AdoRetIvaSerCC"
-         Height          =   315
-         Left            =   1260
-         TabIndex        =   4
-         Top             =   525
-         Visible         =   0   'False
-         Width           =   8205
-         _ExtentX        =   14473
-         _ExtentY        =   556
-         _Version        =   393216
-         Text            =   ""
-      End
-      Begin MSDataListLib.DataCombo DCRetIBienes 
-         Bindings        =   "FComprasAT.frx":0AF5
-         DataSource      =   "AdoRetIvaBienesCC"
-         Height          =   315
-         Left            =   1260
-         TabIndex        =   2
-         Top             =   210
-         Visible         =   0   'False
-         Width           =   8205
-         _ExtentX        =   14473
-         _ExtentY        =   556
-         _Version        =   393216
-         Text            =   ""
-      End
-      Begin VB.CheckBox ChRetB 
-         BackColor       =   &H00FFC0C0&
-         Caption         =   "Bienes"
-         BeginProperty Font 
-            Name            =   "Arial"
-            Size            =   9
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   105
-         TabIndex        =   1
-         Top             =   210
-         Width           =   1170
-      End
-      Begin VB.CheckBox ChRetS 
-         BackColor       =   &H00FFC0C0&
-         Caption         =   "Servicios"
-         BeginProperty Font 
-            Name            =   "Arial"
-            Size            =   9
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   105
-         TabIndex        =   3
-         Top             =   525
-         Width           =   1170
-      End
-   End
-   Begin VB.CommandButton CmdGrabar 
-      BackColor       =   &H00FF8080&
-      Caption         =   "&Aceptar"
-      Height          =   855
-      Left            =   9765
-      Picture         =   "FComprasAT.frx":0B15
-      Style           =   1  'Graphical
-      TabIndex        =   109
-      ToolTipText     =   "Grabar"
-      Top             =   105
-      Width           =   1065
-   End
+   ScaleHeight     =   7530
+   ScaleWidth      =   14130
    Begin TabDlg.SSTab SSTCompras 
-      Height          =   6555
+      Height          =   6585
       Left            =   105
-      TabIndex        =   8
-      Top             =   1890
-      Width           =   11850
-      _ExtentX        =   20902
-      _ExtentY        =   11562
+      TabIndex        =   5
+      Top             =   840
+      Width           =   13950
+      _ExtentX        =   24606
+      _ExtentY        =   11615
       _Version        =   393216
       TabHeight       =   420
       BackColor       =   16761024
@@ -147,52 +41,365 @@ Begin VB.Form FComprasAT
          Strikethrough   =   0   'False
       EndProperty
       TabCaption(0)   =   "Comprobante de Compra"
-      TabPicture(0)   =   "FComprasAT.frx":0E1F
+      TabPicture(0)   =   "FComprasAT.frx":0696
       Tab(0).ControlEnabled=   -1  'True
       Tab(0).Control(0)=   "Label4"
       Tab(0).Control(0).Enabled=   0   'False
       Tab(0).Control(1)=   "Label15"
       Tab(0).Control(1).Enabled=   0   'False
-      Tab(0).Control(2)=   "DCSustento"
+      Tab(0).Control(2)=   "Label41"
       Tab(0).Control(2).Enabled=   0   'False
-      Tab(0).Control(3)=   "OpcSi"
+      Tab(0).Control(3)=   "DCTipoPago"
       Tab(0).Control(3).Enabled=   0   'False
-      Tab(0).Control(4)=   "OpcNo"
+      Tab(0).Control(4)=   "DGAsientoCompras"
       Tab(0).Control(4).Enabled=   0   'False
-      Tab(0).Control(5)=   "Frame1"
+      Tab(0).Control(5)=   "DCSustento"
       Tab(0).Control(5).Enabled=   0   'False
-      Tab(0).Control(6)=   "FraDctoModificado"
+      Tab(0).Control(6)=   "OpcSi"
       Tab(0).Control(6).Enabled=   0   'False
-      Tab(0).Control(7)=   "Frame5"
+      Tab(0).Control(7)=   "OpcNo"
       Tab(0).Control(7).Enabled=   0   'False
-      Tab(0).Control(8)=   "Frame4"
+      Tab(0).Control(8)=   "Frame1"
       Tab(0).Control(8).Enabled=   0   'False
-      Tab(0).Control(9)=   "CmdAir"
+      Tab(0).Control(9)=   "FraDctoModificado"
       Tab(0).Control(9).Enabled=   0   'False
-      Tab(0).ControlCount=   10
+      Tab(0).Control(10)=   "CmdAir"
+      Tab(0).Control(10).Enabled=   0   'False
+      Tab(0).Control(11)=   "FrmRetencion"
+      Tab(0).Control(11).Enabled=   0   'False
+      Tab(0).ControlCount=   12
       TabCaption(1)   =   "Conceptos AIR"
-      TabPicture(1)   =   "FComprasAT.frx":0E3B
+      TabPicture(1)   =   "FComprasAT.frx":06B2
       Tab(1).ControlEnabled=   0   'False
       Tab(1).Control(0)=   "Label44"
-      Tab(1).Control(1)=   "Label41"
-      Tab(1).Control(2)=   "DCTipoPago"
-      Tab(1).Control(3)=   "Frame2"
-      Tab(1).Control(4)=   "CFormaPago"
-      Tab(1).Control(5)=   "FrmPagoExterior"
-      Tab(1).ControlCount=   6
+      Tab(1).Control(0).Enabled=   0   'False
+      Tab(1).Control(1)=   "LblResolucion"
+      Tab(1).Control(1).Enabled=   0   'False
+      Tab(1).Control(2)=   "Frame2"
+      Tab(1).Control(2).Enabled=   0   'False
+      Tab(1).Control(3)=   "CFormaPago"
+      Tab(1).Control(3).Enabled=   0   'False
+      Tab(1).Control(4)=   "FrmPagoExterior"
+      Tab(1).Control(4).Enabled=   0   'False
+      Tab(1).Control(5)=   "CmdCerrar"
+      Tab(1).Control(5).Enabled=   0   'False
+      Tab(1).Control(6)=   "CmdGrabar"
+      Tab(1).Control(6).Enabled=   0   'False
+      Tab(1).ControlCount=   7
       TabCaption(2)   =   "Partidos Políticos"
-      TabPicture(2)   =   "FComprasAT.frx":0E57
+      TabPicture(2)   =   "FComprasAT.frx":06CE
       Tab(2).ControlEnabled=   0   'False
       Tab(2).Control(0)=   "Frame8"
       Tab(2).ControlCount=   1
+      Begin VB.CommandButton CmdGrabar 
+         BackColor       =   &H00FF8080&
+         Caption         =   "&Aceptar"
+         Height          =   1065
+         Left            =   -63450
+         Picture         =   "FComprasAT.frx":06EA
+         Style           =   1  'Graphical
+         TabIndex        =   121
+         ToolTipText     =   "Grabar"
+         Top             =   5355
+         Width           =   1065
+      End
+      Begin VB.CommandButton CmdCerrar 
+         BackColor       =   &H00FF8080&
+         Caption         =   "&Cancelar"
+         Height          =   1065
+         Left            =   -62295
+         Picture         =   "FComprasAT.frx":09F4
+         Style           =   1  'Graphical
+         TabIndex        =   120
+         ToolTipText     =   "Salir"
+         Top             =   5355
+         Width           =   1065
+      End
+      Begin VB.Frame FrmRetencion 
+         BackColor       =   &H00FFC0C0&
+         Caption         =   "RETENCIONES DEL IVA POR  BIENES Y/O SERVICIOS"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   1065
+         Left            =   105
+         TabIndex        =   56
+         Top             =   4200
+         Width           =   13665
+         Begin VB.TextBox TxtIvaSerValRet 
+            Alignment       =   1  'Right Justify
+            Height          =   336
+            Left            =   12285
+            TabIndex        =   72
+            Text            =   " "
+            Top             =   630
+            Visible         =   0   'False
+            Width           =   1275
+         End
+         Begin VB.TextBox TxtIvaSerMonIva 
+            Alignment       =   1  'Right Justify
+            Height          =   336
+            Left            =   8295
+            MultiLine       =   -1  'True
+            TabIndex        =   68
+            Text            =   "FComprasAT.frx":0E36
+            ToolTipText     =   $"FComprasAT.frx":0E3B
+            Top             =   630
+            Visible         =   0   'False
+            Width           =   1275
+         End
+         Begin VB.TextBox TxtIvaBienValRet 
+            Alignment       =   1  'Right Justify
+            Height          =   336
+            Left            =   12285
+            TabIndex        =   64
+            Top             =   210
+            Visible         =   0   'False
+            Width           =   1275
+         End
+         Begin VB.TextBox TxtIvaBienMonIva 
+            Alignment       =   1  'Right Justify
+            Height          =   336
+            Left            =   8295
+            MultiLine       =   -1  'True
+            TabIndex        =   60
+            Text            =   "FComprasAT.frx":0ED1
+            ToolTipText     =   $"FComprasAT.frx":0ED8
+            Top             =   210
+            Visible         =   0   'False
+            Width           =   1275
+         End
+         Begin MSDataListLib.DataCombo DCRetIBienes 
+            Bindings        =   "FComprasAT.frx":0F77
+            DataSource      =   "AdoRetIvaBienesCC"
+            Height          =   315
+            Left            =   1365
+            TabIndex        =   58
+            Top             =   210
+            Visible         =   0   'False
+            Width           =   5055
+            _ExtentX        =   8916
+            _ExtentY        =   556
+            _Version        =   393216
+            Text            =   ""
+         End
+         Begin MSDataListLib.DataCombo DCRetISer 
+            Bindings        =   "FComprasAT.frx":0F97
+            DataSource      =   "AdoRetIvaSerCC"
+            Height          =   315
+            Left            =   1365
+            TabIndex        =   66
+            Top             =   630
+            Visible         =   0   'False
+            Width           =   5055
+            _ExtentX        =   8916
+            _ExtentY        =   556
+            _Version        =   393216
+            Text            =   ""
+         End
+         Begin VB.CheckBox ChRetS 
+            BackColor       =   &H00FFC0C0&
+            Caption         =   "Servicios"
+            BeginProperty Font 
+               Name            =   "Arial"
+               Size            =   9
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   105
+            TabIndex        =   65
+            Top             =   630
+            Width           =   1170
+         End
+         Begin VB.CheckBox ChRetB 
+            BackColor       =   &H00FFC0C0&
+            Caption         =   "Bienes"
+            BeginProperty Font 
+               Name            =   "Arial"
+               Size            =   9
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   105
+            TabIndex        =   57
+            Top             =   210
+            Width           =   1170
+         End
+         Begin MSDataListLib.DataCombo DCPorcenRetenIvaBien 
+            Bindings        =   "FComprasAT.frx":0FB4
+            DataSource      =   "AdoRetIvaBienes"
+            Height          =   315
+            Left            =   9975
+            TabIndex        =   62
+            ToolTipText     =   $"FComprasAT.frx":0FD2
+            Top             =   210
+            Visible         =   0   'False
+            Width           =   960
+            _ExtentX        =   1693
+            _ExtentY        =   556
+            _Version        =   393216
+            Text            =   ""
+         End
+         Begin MSDataListLib.DataCombo DCPorcenRetenIvaServ 
+            Bindings        =   "FComprasAT.frx":105E
+            DataSource      =   "AdoRetIvaServicios"
+            Height          =   315
+            Left            =   9975
+            TabIndex        =   70
+            ToolTipText     =   "Corresponde al porcentaje retenido en el IVA generado en la prestación de servicios"
+            Top             =   630
+            Visible         =   0   'False
+            Width           =   960
+            _ExtentX        =   1693
+            _ExtentY        =   556
+            _Version        =   393216
+            Text            =   ""
+         End
+         Begin VB.Label Label47 
+            BackColor       =   &H00FFC0C0&
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   " VALOR"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   11025
+            TabIndex        =   71
+            Top             =   630
+            Visible         =   0   'False
+            Width           =   1275
+         End
+         Begin VB.Label Label46 
+            BackColor       =   &H00FFC0C0&
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   " %"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   9660
+            TabIndex        =   69
+            Top             =   630
+            Visible         =   0   'False
+            Width           =   330
+         End
+         Begin VB.Label Label20 
+            BackColor       =   &H00FFC0C0&
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   " BASE IMPONIBLE"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   6510
+            TabIndex        =   67
+            Top             =   630
+            Visible         =   0   'False
+            Width           =   1800
+         End
+         Begin VB.Label Label24 
+            BackColor       =   &H00FFC0C0&
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   " VALOR RET."
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   11025
+            TabIndex        =   63
+            Top             =   210
+            Visible         =   0   'False
+            Width           =   1275
+         End
+         Begin VB.Label Label22 
+            BackColor       =   &H00FFC0C0&
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   " %"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   9660
+            TabIndex        =   61
+            Top             =   210
+            Visible         =   0   'False
+            Width           =   330
+         End
+         Begin VB.Label Label19 
+            BackColor       =   &H00FFC0C0&
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   " BASE IMPONIBLE"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   6510
+            TabIndex        =   59
+            Top             =   210
+            Visible         =   0   'False
+            Width           =   1800
+         End
+      End
       Begin VB.Frame FrmPagoExterior 
-         Height          =   960
-         Left            =   -74895
-         TabIndex        =   75
-         Top             =   735
+         BackColor       =   &H00FFC0C0&
+         Height          =   855
+         Left            =   -73005
+         TabIndex        =   77
+         Top             =   420
          Visible         =   0   'False
-         Width           =   11565
+         Width           =   11775
          Begin VB.Frame Frame3 
+            BackColor       =   &H00FFC0C0&
             BorderStyle     =   0  'None
             BeginProperty Font 
                Name            =   "MS Sans Serif"
@@ -204,31 +411,34 @@ Begin VB.Form FComprasAT
                Strikethrough   =   0   'False
             EndProperty
             Height          =   330
-            Left            =   10080
-            TabIndex        =   79
-            Top             =   210
-            Width           =   1380
+            Left            =   10605
+            TabIndex        =   81
+            Top             =   105
+            Width           =   1065
             Begin VB.OptionButton OpcSiAplicaDoble 
+               BackColor       =   &H00FFC0C0&
                Caption         =   "SI"
                Height          =   225
-               Left            =   105
+               Left            =   0
                Style           =   1  'Graphical
-               TabIndex        =   80
+               TabIndex        =   82
                Top             =   105
                Value           =   -1  'True
                Width           =   540
             End
             Begin VB.OptionButton OpcNoAplicaDoble 
+               BackColor       =   &H00FFC0C0&
                Caption         =   "NO"
                Height          =   225
-               Left            =   735
+               Left            =   525
                Style           =   1  'Graphical
-               TabIndex        =   81
+               TabIndex        =   83
                Top             =   105
                Width           =   540
             End
          End
          Begin VB.Frame Frame6 
+            BackColor       =   &H00FFC0C0&
             BorderStyle     =   0  'None
             BeginProperty Font 
                Name            =   "MS Sans Serif"
@@ -240,39 +450,41 @@ Begin VB.Form FComprasAT
                Strikethrough   =   0   'False
             EndProperty
             Height          =   330
-            Left            =   10080
-            TabIndex        =   83
-            Top             =   525
-            Width           =   1380
+            Left            =   10605
+            TabIndex        =   85
+            Top             =   420
+            Width           =   1065
             Begin VB.OptionButton OpcNoFormaLegal 
+               BackColor       =   &H00FFC0C0&
                Caption         =   "NO"
                Height          =   225
-               Left            =   735
+               Left            =   525
                Style           =   1  'Graphical
-               TabIndex        =   85
+               TabIndex        =   87
                Top             =   105
                Width           =   540
             End
             Begin VB.OptionButton OpcSiFormaLegal 
+               BackColor       =   &H00FFC0C0&
                Caption         =   "SI"
                Height          =   225
-               Left            =   105
+               Left            =   0
                Style           =   1  'Graphical
-               TabIndex        =   84
+               TabIndex        =   86
                Top             =   105
                Value           =   -1  'True
                Width           =   540
             End
          End
          Begin MSDataListLib.DataCombo DCPais 
-            Bindings        =   "FComprasAT.frx":0E73
+            Bindings        =   "FComprasAT.frx":107F
             DataSource      =   "AdoPais"
             Height          =   315
             Left            =   105
-            TabIndex        =   77
-            Top             =   525
-            Width           =   5370
-            _ExtentX        =   9472
+            TabIndex        =   79
+            Top             =   420
+            Width           =   5895
+            _ExtentX        =   10398
             _ExtentY        =   556
             _Version        =   393216
             Text            =   "DataCombo1"
@@ -287,8 +499,9 @@ Begin VB.Form FComprasAT
             EndProperty
          End
          Begin VB.Label Label45 
+            BackColor       =   &H00FFC0C0&
             BorderStyle     =   1  'Fixed Single
-            Caption         =   "Pais al que se efectua el pago"
+            Caption         =   "PAIS AL QUE SE EFECTUA EL PAGO"
             BeginProperty Font 
                Name            =   "MS Sans Serif"
                Size            =   8.25
@@ -298,47 +511,51 @@ Begin VB.Form FComprasAT
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Height          =   330
+            Height          =   225
             Left            =   105
-            TabIndex        =   76
+            TabIndex        =   78
             Top             =   210
-            Width           =   5370
+            Width           =   5895
          End
          Begin VB.Label Label42 
+            BackColor       =   &H00FFC0C0&
             Caption         =   "Aplica convenio de doble tributación?"
             Height          =   225
-            Left            =   5880
-            TabIndex        =   78
-            Top             =   315
+            Left            =   6300
+            TabIndex        =   80
+            Top             =   210
             Width           =   4005
          End
          Begin VB.Label Label43 
+            BackColor       =   &H00FFC0C0&
             Caption         =   "Pago Sujeto a retención en aplicación de la forma legal?"
             Height          =   225
-            Left            =   5880
-            TabIndex        =   82
-            Top             =   630
+            Left            =   6300
+            TabIndex        =   84
+            Top             =   525
             Width           =   4005
          End
       End
       Begin VB.ComboBox CFormaPago 
+         BackColor       =   &H8000000B&
          Height          =   315
-         Left            =   -73425
-         TabIndex        =   72
+         Left            =   -74895
+         TabIndex        =   76
          Text            =   "Combo1"
-         Top             =   420
+         Top             =   840
          Width           =   1800
       End
       Begin VB.CommandButton CmdAir 
+         BackColor       =   &H00C0FFFF&
          Caption         =   "&AIR"
-         Height          =   765
-         Left            =   10920
-         Picture         =   "FComprasAT.frx":0E89
+         Height          =   1080
+         Left            =   12915
+         Picture         =   "FComprasAT.frx":1095
          Style           =   1  'Graphical
-         TabIndex        =   70
+         TabIndex        =   74
          ToolTipText     =   "Se ubica en la pestaña de Retenciones"
-         Top             =   420
-         Width           =   765
+         Top             =   5355
+         Width           =   870
       End
       Begin VB.Frame Frame8 
          Caption         =   "SOLO PARTIDOS POLITICOS"
@@ -351,11 +568,11 @@ Begin VB.Form FComprasAT
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Height          =   4815
+         Height          =   5970
          Left            =   -74895
          TabIndex        =   111
          Top             =   420
-         Width           =   10050
+         Width           =   13725
          Begin VB.TextBox TxtMonTitGrat 
             Alignment       =   1  'Right Justify
             BeginProperty Font 
@@ -410,7 +627,7 @@ Begin VB.Form FComprasAT
             MaxLength       =   10
             TabIndex        =   112
             Text            =   "0000000000"
-            ToolTipText     =   $"FComprasAT.frx":13AF
+            ToolTipText     =   $"FComprasAT.frx":15BB
             Top             =   1260
             Width           =   1905
          End
@@ -469,323 +686,8 @@ Begin VB.Form FComprasAT
             Width           =   4635
          End
       End
-      Begin VB.Frame Frame4 
-         Caption         =   "PORCENTAJE DE LAS BASES IMPONIBLES"
-         BeginProperty Font 
-            Name            =   "Arial"
-            Size            =   9
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   1485
-         Left            =   105
-         TabIndex        =   38
-         Top             =   3150
-         Width           =   4950
-         Begin VB.TextBox TxtMontoIva 
-            Alignment       =   1  'Right Justify
-            Height          =   336
-            Left            =   3465
-            TabIndex        =   42
-            Text            =   "0.00"
-            ToolTipText     =   "Este valor se calcula automaticamente, es el resultado de aplicarle un porcentaje IVA a la Base Imponible gravada"
-            Top             =   420
-            Width           =   1275
-         End
-         Begin VB.TextBox TxtMontoIce 
-            Alignment       =   1  'Right Justify
-            Enabled         =   0   'False
-            Height          =   336
-            Left            =   3465
-            TabIndex        =   46
-            Top             =   945
-            Width           =   1275
-         End
-         Begin MSDataListLib.DataCombo DCPorcenIva 
-            Bindings        =   "FComprasAT.frx":146A
-            DataSource      =   "AdoPorIva"
-            Height          =   315
-            Left            =   945
-            TabIndex        =   40
-            ToolTipText     =   $"FComprasAT.frx":1482
-            Top             =   420
-            Width           =   960
-            _ExtentX        =   1693
-            _ExtentY        =   556
-            _Version        =   393216
-            Text            =   ""
-         End
-         Begin MSDataListLib.DataCombo DCPorcenIce 
-            Bindings        =   "FComprasAT.frx":1514
-            DataSource      =   "AdoPorIce"
-            Height          =   315
-            Left            =   945
-            TabIndex        =   44
-            ToolTipText     =   $"FComprasAT.frx":152C
-            Top             =   945
-            Width           =   960
-            _ExtentX        =   1693
-            _ExtentY        =   556
-            _Version        =   393216
-            Text            =   ""
-         End
-         Begin VB.Label Label8 
-            BorderStyle     =   1  'Fixed Single
-            Caption         =   " I.V.A."
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   330
-            Left            =   105
-            TabIndex        =   39
-            Top             =   420
-            Width           =   855
-         End
-         Begin VB.Label Label16 
-            BorderStyle     =   1  'Fixed Single
-            Caption         =   " ICE"
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   330
-            Left            =   105
-            TabIndex        =   43
-            Top             =   945
-            Width           =   855
-         End
-         Begin VB.Label Label17 
-            BorderStyle     =   1  'Fixed Single
-            Caption         =   " VALOR I.V.A."
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   330
-            Left            =   1995
-            TabIndex        =   41
-            Top             =   420
-            Width           =   1485
-         End
-         Begin VB.Label Label18 
-            BorderStyle     =   1  'Fixed Single
-            Caption         =   " VALOR ICE"
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   330
-            Left            =   1995
-            TabIndex        =   45
-            Top             =   945
-            Width           =   1485
-         End
-      End
-      Begin VB.Frame Frame5 
-         Caption         =   "RETENCION DEL IVA POR BIENES Y/O SERVICIOS"
-         BeginProperty Font 
-            Name            =   "Arial"
-            Size            =   9
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   1485
-         Left            =   6615
-         TabIndex        =   47
-         Top             =   3150
-         Width           =   5055
-         Begin MSDataListLib.DataCombo DCPorcenRetenIvaServ 
-            Bindings        =   "FComprasAT.frx":15BD
-            DataSource      =   "AdoRetIvaServicios"
-            Height          =   315
-            Left            =   3360
-            TabIndex        =   57
-            ToolTipText     =   "Corresponde al porcentaje retenido en el IVA generado en la prestación de servicios"
-            Top             =   735
-            Width           =   1590
-            _ExtentX        =   2805
-            _ExtentY        =   556
-            _Version        =   393216
-            Enabled         =   0   'False
-            Text            =   ""
-         End
-         Begin MSDataListLib.DataCombo DCPorcenRetenIvaBien 
-            Bindings        =   "FComprasAT.frx":15DE
-            DataSource      =   "AdoRetIvaBienes"
-            Height          =   315
-            Left            =   1680
-            TabIndex        =   52
-            ToolTipText     =   $"FComprasAT.frx":15FC
-            Top             =   735
-            Width           =   1590
-            _ExtentX        =   2805
-            _ExtentY        =   556
-            _Version        =   393216
-            Enabled         =   0   'False
-            Text            =   ""
-         End
-         Begin VB.TextBox TxtIvaBienMonIva 
-            Alignment       =   1  'Right Justify
-            Enabled         =   0   'False
-            Height          =   336
-            Left            =   1680
-            MultiLine       =   -1  'True
-            TabIndex        =   50
-            Text            =   "FComprasAT.frx":1688
-            ToolTipText     =   $"FComprasAT.frx":168D
-            Top             =   420
-            Width           =   1590
-         End
-         Begin VB.TextBox TxtIvaBienValRet 
-            Alignment       =   1  'Right Justify
-            Enabled         =   0   'False
-            Height          =   336
-            Left            =   1680
-            TabIndex        =   54
-            Top             =   1050
-            Width           =   1590
-         End
-         Begin VB.TextBox TxtIvaSerMonIva 
-            Alignment       =   1  'Right Justify
-            Enabled         =   0   'False
-            Height          =   336
-            Left            =   3360
-            MultiLine       =   -1  'True
-            TabIndex        =   56
-            Text            =   "FComprasAT.frx":172C
-            ToolTipText     =   $"FComprasAT.frx":1731
-            Top             =   420
-            Width           =   1590
-         End
-         Begin VB.TextBox TxtIvaSerValRet 
-            Alignment       =   1  'Right Justify
-            Enabled         =   0   'False
-            Height          =   336
-            Left            =   3360
-            TabIndex        =   58
-            Text            =   " "
-            Top             =   1080
-            Width           =   1590
-         End
-         Begin VB.Label Label19 
-            BorderStyle     =   1  'Fixed Single
-            Caption         =   " BIENES"
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   225
-            Left            =   1680
-            TabIndex        =   48
-            Top             =   210
-            Width           =   1590
-         End
-         Begin VB.Label Label20 
-            BorderStyle     =   1  'Fixed Single
-            Caption         =   " SERVICIOS"
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   225
-            Left            =   3360
-            TabIndex        =   55
-            Top             =   210
-            Width           =   1590
-         End
-         Begin VB.Label Label21 
-            BorderStyle     =   1  'Fixed Single
-            Caption         =   " MONTO"
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   330
-            Left            =   105
-            TabIndex        =   49
-            Top             =   420
-            Width           =   1590
-         End
-         Begin VB.Label Label22 
-            BorderStyle     =   1  'Fixed Single
-            Caption         =   " PORCENTAJE"
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   330
-            Left            =   105
-            TabIndex        =   51
-            Top             =   735
-            Width           =   1590
-         End
-         Begin VB.Label Label24 
-            BorderStyle     =   1  'Fixed Single
-            Caption         =   " VALOR RET."
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   330
-            Left            =   105
-            TabIndex        =   53
-            Top             =   1050
-            Width           =   1590
-         End
-      End
       Begin VB.Frame FraDctoModificado 
+         BackColor       =   &H00FFC0C0&
          Caption         =   "NOTAS DE DEBITO/NOTAS DE CREDITO"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
@@ -798,23 +700,23 @@ Begin VB.Form FComprasAT
          EndProperty
          Height          =   855
          Left            =   105
-         TabIndex        =   59
-         Top             =   4725
+         TabIndex        =   45
+         Top             =   3255
          Visible         =   0   'False
-         Width           =   11565
+         Width           =   13665
          Begin VB.ComboBox CNumSerieTresComp 
             DataSource      =   "AdoAux"
             Height          =   315
-            Left            =   5775
-            TabIndex        =   65
+            Left            =   7560
+            TabIndex        =   51
             Top             =   420
             Width           =   1275
          End
          Begin VB.TextBox TxtNumSerieUnoComp 
             Height          =   330
-            Left            =   4935
+            Left            =   6720
             MaxLength       =   3
-            TabIndex        =   63
+            TabIndex        =   49
             Text            =   "001"
             ToolTipText     =   "En este campo se debe ingresar el número de serie del comprobante, la parte correspondiente al código del establecimiento"
             Top             =   420
@@ -822,9 +724,9 @@ Begin VB.Form FComprasAT
          End
          Begin VB.TextBox TxtNumSerieDosComp 
             Height          =   336
-            Left            =   5355
+            Left            =   7140
             MaxLength       =   3
-            TabIndex        =   64
+            TabIndex        =   50
             Text            =   "001"
             ToolTipText     =   "En este campo se debe ingresar el número de serie del comprobante, la parte correspondiente al punto dde emisión"
             Top             =   420
@@ -833,23 +735,23 @@ Begin VB.Form FComprasAT
          Begin VB.TextBox TxtNumAutComp 
             Alignment       =   1  'Right Justify
             Height          =   336
-            Left            =   8190
+            Left            =   10185
             MaxLength       =   49
-            TabIndex        =   69
-            ToolTipText     =   $"FComprasAT.frx":17C7
+            TabIndex        =   55
+            ToolTipText     =   $"FComprasAT.frx":1676
             Top             =   420
-            Width           =   3270
+            Width           =   3375
          End
          Begin MSDataListLib.DataCombo DCDctoModif 
-            Bindings        =   "FComprasAT.frx":1853
+            Bindings        =   "FComprasAT.frx":1702
             DataSource      =   "AdoTipoComprobante"
             Height          =   315
             Left            =   105
-            TabIndex        =   61
+            TabIndex        =   47
             ToolTipText     =   "Corresponde al tipo de comprobante que ha sido originalmente modificado antre la emisión de una nota de débito o crédito"
             Top             =   420
-            Width           =   4845
-            _ExtentX        =   8546
+            Width           =   6525
+            _ExtentX        =   11509
             _ExtentY        =   556
             _Version        =   393216
             BackColor       =   16777215
@@ -857,9 +759,9 @@ Begin VB.Form FComprasAT
          End
          Begin MSMask.MaskEdBox MBFechaEmiComp 
             Height          =   330
-            Left            =   7035
-            TabIndex        =   67
-            ToolTipText     =   $"FComprasAT.frx":1874
+            Left            =   8925
+            TabIndex        =   53
+            ToolTipText     =   $"FComprasAT.frx":1723
             Top             =   420
             Width           =   1170
             _ExtentX        =   2064
@@ -873,6 +775,7 @@ Begin VB.Form FComprasAT
             PromptChar      =   "0"
          End
          Begin VB.Label Label27 
+            BackColor       =   &H00FFC0C0&
             BorderStyle     =   1  'Fixed Single
             Caption         =   " Autorización SRI"
             BeginProperty Font 
@@ -885,12 +788,13 @@ Begin VB.Form FComprasAT
                Strikethrough   =   0   'False
             EndProperty
             Height          =   225
-            Left            =   8190
-            TabIndex        =   68
+            Left            =   10185
+            TabIndex        =   54
             Top             =   210
-            Width           =   3270
+            Width           =   3375
          End
          Begin VB.Label Label26 
+            BackColor       =   &H00FFC0C0&
             BorderStyle     =   1  'Fixed Single
             Caption         =   "Fecha"
             BeginProperty Font 
@@ -903,12 +807,13 @@ Begin VB.Form FComprasAT
                Strikethrough   =   0   'False
             EndProperty
             Height          =   225
-            Left            =   7035
-            TabIndex        =   66
+            Left            =   8925
+            TabIndex        =   52
             Top             =   210
             Width           =   1170
          End
          Begin VB.Label Label2 
+            BackColor       =   &H00FFC0C0&
             BorderStyle     =   1  'Fixed Single
             Caption         =   " Serie      Numero"
             BeginProperty Font 
@@ -921,12 +826,13 @@ Begin VB.Form FComprasAT
                Strikethrough   =   0   'False
             EndProperty
             Height          =   225
-            Left            =   4935
-            TabIndex        =   62
+            Left            =   6720
+            TabIndex        =   48
             Top             =   210
             Width           =   2115
          End
          Begin VB.Label Label1 
+            BackColor       =   &H00FFC0C0&
             BorderStyle     =   1  'Fixed Single
             Caption         =   " TIPO DE COMPROBANTE"
             BeginProperty Font 
@@ -940,12 +846,13 @@ Begin VB.Form FComprasAT
             EndProperty
             Height          =   225
             Left            =   105
-            TabIndex        =   60
+            TabIndex        =   46
             Top             =   210
-            Width           =   4845
+            Width           =   6525
          End
       End
       Begin VB.Frame Frame1 
+         BackColor       =   &H00FFC0C0&
          Caption         =   "INGRESE LOS DATOS DE LA FACTURA, NOTA DE VENTA, ETC. ______________________ FORMULARIO 104"
          BeginProperty Font 
             Name            =   "Arial"
@@ -957,39 +864,58 @@ Begin VB.Form FComprasAT
             Strikethrough   =   0   'False
          EndProperty
          ForeColor       =   &H00800000&
-         Height          =   1590
+         Height          =   1905
          Left            =   105
-         TabIndex        =   14
-         Top             =   1470
-         Width           =   11565
+         TabIndex        =   13
+         Top             =   1260
+         Width           =   13665
+         Begin VB.TextBox TxtMontoIce 
+            Alignment       =   1  'Right Justify
+            Enabled         =   0   'False
+            Height          =   336
+            Left            =   12285
+            TabIndex        =   44
+            Top             =   1365
+            Width           =   1275
+         End
+         Begin VB.TextBox TxtMontoIva 
+            Alignment       =   1  'Right Justify
+            Height          =   336
+            Left            =   8820
+            TabIndex        =   38
+            Text            =   "0.00"
+            ToolTipText     =   "Este valor se calcula automaticamente, es el resultado de aplicarle un porcentaje IVA a la Base Imponible gravada"
+            Top             =   1365
+            Width           =   1380
+         End
          Begin VB.TextBox TxtBaseImpoNoObjIVA 
             Alignment       =   1  'Right Justify
             Height          =   336
-            Left            =   3990
+            Left            =   3885
             MaxLength       =   14
             MultiLine       =   -1  'True
-            TabIndex        =   31
-            Text            =   "FComprasAT.frx":1920
+            TabIndex        =   30
+            Text            =   "FComprasAT.frx":17CF
             ToolTipText     =   "En este campo se debe ingresar el valor del comprobante cuya base imponible esta gravado con la tarifa del 0% de IVA"
-            Top             =   1155
-            Width           =   1380
+            Top             =   1365
+            Width           =   1275
          End
          Begin VB.TextBox TxtNumAutor 
             Alignment       =   1  'Right Justify
             Height          =   336
-            Left            =   6930
+            Left            =   9030
             MaxLength       =   49
-            TabIndex        =   23
+            TabIndex        =   22
             Text            =   "0000000000000000000000000000000000000000000000001"
-            Top             =   540
+            Top             =   645
             Width           =   4560
          End
          Begin MSMask.MaskEdBox MBFechaCad 
             Height          =   330
-            Left            =   2625
-            TabIndex        =   29
-            ToolTipText     =   $"FComprasAT.frx":1927
-            Top             =   1155
+            Left            =   1365
+            TabIndex        =   26
+            ToolTipText     =   $"FComprasAT.frx":17D6
+            Top             =   1365
             Width           =   1275
             _ExtentX        =   2249
             _ExtentY        =   582
@@ -1012,12 +938,12 @@ Begin VB.Form FComprasAT
          End
          Begin MSMask.MaskEdBox MBFechaRegis 
             Height          =   330
-            Left            =   1365
-            TabIndex        =   27
-            ToolTipText     =   $"FComprasAT.frx":19DE
-            Top             =   1155
-            Width           =   1170
-            _ExtentX        =   2064
+            Left            =   2625
+            TabIndex        =   28
+            ToolTipText     =   $"FComprasAT.frx":188D
+            Top             =   1365
+            Width           =   1275
+            _ExtentX        =   2249
             _ExtentY        =   582
             _Version        =   393216
             AllowPrompt     =   -1  'True
@@ -1039,77 +965,77 @@ Begin VB.Form FComprasAT
          Begin VB.TextBox TxtBaseImpo 
             Alignment       =   1  'Right Justify
             Height          =   336
-            Left            =   5460
+            Left            =   5145
             MaxLength       =   14
             MultiLine       =   -1  'True
-            TabIndex        =   33
-            Text            =   "FComprasAT.frx":1A66
+            TabIndex        =   32
+            Text            =   "FComprasAT.frx":1915
             ToolTipText     =   "En este campo se debe ingresar el valor del comprobante cuya base imponible esta gravado con la tarifa del 0% de IVA"
-            Top             =   1155
-            Width           =   1485
+            Top             =   1365
+            Width           =   1275
          End
-         Begin VB.TextBox TxtNumSerietres 
+         Begin VB.TextBox TxtNumSerieTres 
             Height          =   336
-            Left            =   5985
+            Left            =   8085
             MaxLength       =   9
-            TabIndex        =   21
+            TabIndex        =   20
             Text            =   "0000001"
-            ToolTipText     =   $"FComprasAT.frx":1A6D
-            Top             =   525
+            ToolTipText     =   $"FComprasAT.frx":191C
+            Top             =   630
             Width           =   960
          End
          Begin VB.TextBox TxtNumSerieDos 
             Height          =   336
-            Left            =   5565
+            Left            =   7665
             MaxLength       =   3
-            TabIndex        =   19
+            TabIndex        =   18
             Text            =   "001"
             ToolTipText     =   "En este campo se debe ingresar el número de serie del comprobante, la parte correspondiente al punto dde emisión"
-            Top             =   525
+            Top             =   630
             Width           =   435
          End
          Begin VB.TextBox TxtNumSerieUno 
             Height          =   336
-            Left            =   5145
+            Left            =   7245
             MaxLength       =   3
-            TabIndex        =   18
+            TabIndex        =   17
             Text            =   "001"
             ToolTipText     =   "En este campo se debe ingresar el número de serie del comprobante, la parte correspondiente al código del establecimiento"
-            Top             =   525
+            Top             =   630
             Width           =   435
          End
          Begin VB.TextBox TxtBaseImpoGrav 
             Alignment       =   1  'Right Justify
             Height          =   336
-            Left            =   7035
+            Left            =   7245
             MultiLine       =   -1  'True
-            TabIndex        =   35
-            Text            =   "FComprasAT.frx":1B10
-            ToolTipText     =   $"FComprasAT.frx":1B17
-            Top             =   1155
-            Width           =   1485
+            TabIndex        =   36
+            Text            =   "FComprasAT.frx":19BF
+            ToolTipText     =   $"FComprasAT.frx":19C6
+            Top             =   1365
+            Width           =   1590
          End
          Begin VB.TextBox TxtBaseImpoIce 
             Alignment       =   1  'Right Justify
             Height          =   330
-            Left            =   8610
+            Left            =   10185
             MultiLine       =   -1  'True
-            TabIndex        =   37
-            Text            =   "FComprasAT.frx":1BDD
-            ToolTipText     =   $"FComprasAT.frx":1BE2
-            Top             =   1155
-            Width           =   1380
+            TabIndex        =   40
+            Text            =   "FComprasAT.frx":1A8C
+            ToolTipText     =   $"FComprasAT.frx":1A91
+            Top             =   1365
+            Width           =   1275
          End
          Begin MSDataListLib.DataCombo DCTipoComprobante 
-            Bindings        =   "FComprasAT.frx":1C74
+            Bindings        =   "FComprasAT.frx":1B23
             DataSource      =   "AdoTipoComp"
             Height          =   315
             Left            =   105
-            TabIndex        =   16
-            ToolTipText     =   $"FComprasAT.frx":1C95
-            Top             =   525
-            Width           =   5055
-            _ExtentX        =   8916
+            TabIndex        =   15
+            ToolTipText     =   $"FComprasAT.frx":1B44
+            Top             =   630
+            Width           =   7155
+            _ExtentX        =   12621
             _ExtentY        =   556
             _Version        =   393216
             Text            =   ""
@@ -1126,11 +1052,11 @@ Begin VB.Form FComprasAT
          Begin MSMask.MaskEdBox MBFechaEmi 
             Height          =   330
             Left            =   105
-            TabIndex        =   25
-            ToolTipText     =   $"FComprasAT.frx":1D3D
-            Top             =   1155
-            Width           =   1170
-            _ExtentX        =   2064
+            TabIndex        =   24
+            ToolTipText     =   $"FComprasAT.frx":1BEC
+            Top             =   1365
+            Width           =   1275
+            _ExtentX        =   2249
             _ExtentY        =   582
             _Version        =   393216
             AllowPrompt     =   -1  'True
@@ -1149,133 +1075,36 @@ Begin VB.Form FComprasAT
             Mask            =   "##/##/####"
             PromptChar      =   "0"
          End
-         Begin VB.Label Label40 
-            BorderStyle     =   1  'Fixed Single
-            Caption         =   " NO OBJ. IVA"
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   225
-            Left            =   3990
-            TabIndex        =   30
-            Top             =   945
-            Width           =   1380
-         End
-         Begin VB.Label Label5 
-            BorderStyle     =   1  'Fixed Single
-            Caption         =   " TIPO DE COMPROBANTE"
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   225
-            Left            =   105
-            TabIndex        =   15
-            Top             =   315
-            Width           =   5055
-         End
-         Begin VB.Label Label6 
-            BorderStyle     =   1  'Fixed Single
-            Caption         =   " Serie"
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   225
-            Left            =   5145
-            TabIndex        =   17
-            Top             =   315
-            Width           =   855
-         End
-         Begin VB.Label Label7 
-            BorderStyle     =   1  'Fixed Single
-            Caption         =   " Numero"
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   225
-            Left            =   5985
-            TabIndex        =   20
-            Top             =   315
-            Width           =   960
-         End
-         Begin VB.Label Label3 
-            BorderStyle     =   1  'Fixed Single
-            Caption         =   " Autorización"
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   225
-            Left            =   6930
-            TabIndex        =   22
-            Top             =   315
-            Width           =   4530
-         End
-         Begin VB.Label Label12 
-            BorderStyle     =   1  'Fixed Single
-            Caption         =   " TARIFA 0%"
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   225
-            Left            =   5460
-            TabIndex        =   32
-            Top             =   945
-            Width           =   1485
-         End
-         Begin VB.Label Label13 
-            BorderStyle     =   1  'Fixed Single
-            Caption         =   " TARIFA 12%"
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   225
-            Left            =   7035
+         Begin MSDataListLib.DataCombo DCPorcenIva 
+            Bindings        =   "FComprasAT.frx":1C98
+            DataSource      =   "AdoPorIva"
+            Height          =   315
+            Left            =   6405
             TabIndex        =   34
-            Top             =   945
-            Width           =   1485
+            ToolTipText     =   $"FComprasAT.frx":1CB0
+            Top             =   1365
+            Width           =   855
+            _ExtentX        =   1508
+            _ExtentY        =   556
+            _Version        =   393216
+            Text            =   ""
          End
-         Begin VB.Label Label14 
+         Begin MSDataListLib.DataCombo DCPorcenIce 
+            Bindings        =   "FComprasAT.frx":1D42
+            DataSource      =   "AdoPorIce"
+            Height          =   315
+            Left            =   11445
+            TabIndex        =   42
+            ToolTipText     =   $"FComprasAT.frx":1D5A
+            Top             =   1365
+            Width           =   855
+            _ExtentX        =   1508
+            _ExtentY        =   556
+            _Version        =   393216
+            Text            =   ""
+         End
+         Begin VB.Label Label18 
+            BackColor       =   &H00FFC0C0&
             BorderStyle     =   1  'Fixed Single
             Caption         =   " VALOR ICE"
             BeginProperty Font 
@@ -1287,15 +1116,54 @@ Begin VB.Form FComprasAT
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Height          =   225
-            Left            =   8610
-            TabIndex        =   36
-            Top             =   945
+            Height          =   330
+            Left            =   12285
+            TabIndex        =   43
+            Top             =   1050
+            Width           =   1275
+         End
+         Begin VB.Label Label16 
+            BackColor       =   &H00FFC0C0&
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   " ICE"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   11445
+            TabIndex        =   41
+            Top             =   1050
+            Width           =   855
+         End
+         Begin VB.Label Label17 
+            BackColor       =   &H00FFC0C0&
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   " VALOR I.V.A."
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   8820
+            TabIndex        =   37
+            Top             =   1050
             Width           =   1380
          End
-         Begin VB.Label Label9 
+         Begin VB.Label Label8 
+            BackColor       =   &H00FFC0C0&
             BorderStyle     =   1  'Fixed Single
-            Caption         =   " EMISIÓN"
+            Caption         =   " I.V.A."
             BeginProperty Font 
                Name            =   "MS Sans Serif"
                Size            =   8.25
@@ -1305,15 +1173,187 @@ Begin VB.Form FComprasAT
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Height          =   225
+            Height          =   330
+            Left            =   6405
+            TabIndex        =   33
+            Top             =   1050
+            Width           =   855
+         End
+         Begin VB.Label Label3 
+            BackColor       =   &H00FFC0C0&
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   " Autorización"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   9030
+            TabIndex        =   21
+            Top             =   315
+            Width           =   4530
+         End
+         Begin VB.Label Label7 
+            BackColor       =   &H00FFC0C0&
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   " Numero"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   8085
+            TabIndex        =   19
+            Top             =   315
+            Width           =   960
+         End
+         Begin VB.Label Label6 
+            BackColor       =   &H00FFC0C0&
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   " Serie"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   7245
+            TabIndex        =   16
+            Top             =   315
+            Width           =   855
+         End
+         Begin VB.Label Label40 
+            BackColor       =   &H00FFC0C0&
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   " NO OBJ. IVA"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   3885
+            TabIndex        =   29
+            Top             =   1050
+            Width           =   1275
+         End
+         Begin VB.Label Label5 
+            BackColor       =   &H00FFC0C0&
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   " TIPO DE COMPROBANTE"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
             Left            =   105
-            TabIndex        =   24
-            Top             =   945
-            Width           =   1170
+            TabIndex        =   14
+            Top             =   315
+            Width           =   7155
+         End
+         Begin VB.Label Label12 
+            BackColor       =   &H00FFC0C0&
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   " TARIFA 0%"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   5145
+            TabIndex        =   31
+            Top             =   1050
+            Width           =   1275
+         End
+         Begin VB.Label Label13 
+            BackColor       =   &H00FFC0C0&
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   " TARIFA XX%"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   7245
+            TabIndex        =   35
+            Top             =   1050
+            Width           =   1590
+         End
+         Begin VB.Label Label14 
+            BackColor       =   &H00FFC0C0&
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   " VALOR ICE"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   10185
+            TabIndex        =   39
+            Top             =   1050
+            Width           =   1275
+         End
+         Begin VB.Label Label9 
+            BackColor       =   &H00FFC0C0&
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   " Emision Fa."
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   105
+            TabIndex        =   23
+            Top             =   1050
+            Width           =   1275
          End
          Begin VB.Label Label10 
+            BackColor       =   &H00FFC0C0&
             BorderStyle     =   1  'Fixed Single
-            Caption         =   " REGISTRO"
+            Caption         =   " Registro RE"
             BeginProperty Font 
                Name            =   "MS Sans Serif"
                Size            =   8.25
@@ -1323,15 +1363,16 @@ Begin VB.Form FComprasAT
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Height          =   225
-            Left            =   1365
-            TabIndex        =   26
-            Top             =   945
-            Width           =   1170
+            Height          =   330
+            Left            =   2625
+            TabIndex        =   27
+            Top             =   1050
+            Width           =   1275
          End
          Begin VB.Label Label11 
+            BackColor       =   &H00FFC0C0&
             BorderStyle     =   1  'Fixed Single
-            Caption         =   " CADUCIDAD"
+            Caption         =   " Caduci. Fa"
             BeginProperty Font 
                Name            =   "MS Sans Serif"
                Size            =   8.25
@@ -1341,10 +1382,10 @@ Begin VB.Form FComprasAT
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Height          =   225
-            Left            =   2625
-            TabIndex        =   28
-            Top             =   945
+            Height          =   330
+            Left            =   1365
+            TabIndex        =   25
+            Top             =   1050
             Width           =   1275
          End
       End
@@ -1361,10 +1402,10 @@ Begin VB.Form FComprasAT
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   3465
+         Left            =   13125
          Style           =   1  'Graphical
-         TabIndex        =   11
-         ToolTipText     =   $"FComprasAT.frx":1DE9
+         TabIndex        =   10
+         ToolTipText     =   $"FComprasAT.frx":1DEB
          Top             =   420
          Value           =   -1  'True
          Width           =   636
@@ -1381,14 +1422,15 @@ Begin VB.Form FComprasAT
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   2730
+         Left            =   12390
          Style           =   1  'Graphical
-         TabIndex        =   10
-         ToolTipText     =   $"FComprasAT.frx":1E81
+         TabIndex        =   9
+         ToolTipText     =   $"FComprasAT.frx":1E83
          Top             =   420
          Width           =   636
       End
       Begin VB.Frame Frame2 
+         BackColor       =   &H00FFC0C0&
          Caption         =   "INGRESE LOS DATOS DE LA RETENCION _________________________________________ FORMULARIO 103"
          BeginProperty Font 
             Name            =   "Arial"
@@ -1400,21 +1442,21 @@ Begin VB.Form FComprasAT
             Strikethrough   =   0   'False
          EndProperty
          ForeColor       =   &H00800000&
-         Height          =   4320
-         Left            =   -74892
-         TabIndex        =   86
-         Top             =   1785
-         Width           =   11565
+         Height          =   3900
+         Left            =   -74895
+         TabIndex        =   88
+         Top             =   1365
+         Width           =   13665
          Begin MSDataListLib.DataCombo DCRetFuente 
-            Bindings        =   "FComprasAT.frx":1F19
+            Bindings        =   "FComprasAT.frx":1F1B
             DataSource      =   "AdoRetFuente"
             Height          =   315
-            Left            =   2415
-            TabIndex        =   88
+            Left            =   3465
+            TabIndex        =   90
             Top             =   315
             Visible         =   0   'False
-            Width           =   9045
-            _ExtentX        =   15954
+            Width           =   10095
+            _ExtentX        =   17806
             _ExtentY        =   556
             _Version        =   393216
             Text            =   ""
@@ -1429,7 +1471,8 @@ Begin VB.Form FComprasAT
             EndProperty
          End
          Begin VB.CheckBox ChRetF 
-            Caption         =   "Retención en la Fuente"
+            BackColor       =   &H00FFC0C0&
+            Caption         =   "Cuenta de Retención en la Fuente"
             BeginProperty Font 
                Name            =   "Arial"
                Size            =   9
@@ -1439,29 +1482,29 @@ Begin VB.Form FComprasAT
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Height          =   225
+            Height          =   330
             Left            =   105
-            TabIndex        =   87
+            TabIndex        =   89
             Top             =   315
             Visible         =   0   'False
-            Width           =   2328
+            Width           =   3165
          End
          Begin VB.TextBox TxtValConA 
             Enabled         =   0   'False
             Height          =   336
-            Left            =   10185
-            TabIndex        =   105
-            Top             =   1995
-            Width           =   1275
+            Left            =   12180
+            TabIndex        =   107
+            Top             =   1890
+            Width           =   1380
          End
          Begin VB.TextBox TxtPorRetConA 
             Alignment       =   1  'Right Justify
             Enabled         =   0   'False
             Height          =   336
-            Left            =   9555
-            TabIndex        =   103
-            Top             =   1995
-            Width           =   645
+            Left            =   11340
+            TabIndex        =   105
+            Top             =   1890
+            Width           =   750
          End
          Begin VB.TextBox TxtTotalReten 
             Alignment       =   1  'Right Justify
@@ -1476,11 +1519,11 @@ Begin VB.Form FComprasAT
                Strikethrough   =   0   'False
             EndProperty
             Height          =   336
-            Left            =   9870
-            TabIndex        =   108
+            Left            =   11970
+            TabIndex        =   110
             Text            =   "0.00"
             ToolTipText     =   "Sumatoria total de las retenciones"
-            Top             =   3885
+            Top             =   3465
             Width           =   1590
          End
          Begin VB.TextBox TxtSumatoria 
@@ -1488,7 +1531,7 @@ Begin VB.Form FComprasAT
             Enabled         =   0   'False
             BeginProperty Font 
                Name            =   "MS Sans Serif"
-               Size            =   8.25
+               Size            =   9.75
                Charset         =   0
                Weight          =   700
                Underline       =   0   'False
@@ -1496,70 +1539,107 @@ Begin VB.Form FComprasAT
                Strikethrough   =   0   'False
             EndProperty
             Height          =   336
-            Left            =   9555
+            Left            =   1575
             MultiLine       =   -1  'True
-            TabIndex        =   97
-            Text            =   "FComprasAT.frx":1F34
+            TabIndex        =   92
+            Text            =   "FComprasAT.frx":1F36
             Top             =   735
-            Width           =   1905
+            Width           =   1800
          End
          Begin VB.TextBox TxtBimpConA 
             Alignment       =   1  'Right Justify
             Height          =   336
-            Left            =   8190
-            TabIndex        =   101
-            Top             =   1995
-            Width           =   1380
+            Left            =   9765
+            TabIndex        =   103
+            Top             =   1890
+            Width           =   1485
          End
          Begin VB.TextBox TxtNumUnoAutComRet 
             Alignment       =   1  'Right Justify
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   9.75
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
             Height          =   330
-            Left            =   2415
+            Left            =   6720
             MaxLength       =   49
-            TabIndex        =   95
-            ToolTipText     =   $"FComprasAT.frx":1F3B
-            Top             =   840
-            Width           =   5580
+            TabIndex        =   97
+            Text            =   "XXXXXXXXXXXXXXX"
+            ToolTipText     =   $"FComprasAT.frx":1F3D
+            Top             =   735
+            Width           =   4110
          End
          Begin VB.TextBox TxtNumTresComRet 
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   9.75
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
             Height          =   336
-            Left            =   1260
+            Left            =   12180
             MaxLength       =   9
-            TabIndex        =   93
-            Text            =   "0000001"
-            ToolTipText     =   $"FComprasAT.frx":1FC7
-            Top             =   840
-            Width           =   1065
+            TabIndex        =   99
+            Text            =   "999999999"
+            ToolTipText     =   $"FComprasAT.frx":1FC9
+            Top             =   735
+            Width           =   1380
          End
          Begin VB.TextBox TxtNumDosComRet 
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   9.75
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
             Height          =   336
-            Left            =   630
+            Left            =   4725
             MaxLength       =   3
-            TabIndex        =   91
+            TabIndex        =   95
             Text            =   "001"
             ToolTipText     =   "En este campo se debe ingresar el número de serie del comprobante, la parte correspondiente al punto dde emisión"
-            Top             =   840
+            Top             =   735
             Width           =   540
          End
          Begin VB.TextBox TxtNumUnoComRet 
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   9.75
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
             Height          =   336
-            Left            =   105
+            Left            =   4200
             MaxLength       =   3
-            TabIndex        =   90
+            TabIndex        =   94
             Text            =   "001"
             ToolTipText     =   "En este campo se debe ingresar el número de serie del comprobante, la parte correspondiente al código del establecimiento"
-            Top             =   840
+            Top             =   735
             Width           =   540
          End
          Begin MSDataListLib.DataCombo DCConceptoRet 
-            Bindings        =   "FComprasAT.frx":2069
+            Bindings        =   "FComprasAT.frx":206B
             DataSource      =   "AdoConceptoRet"
             Height          =   345
-            Left            =   1470
-            TabIndex        =   99
-            Top             =   1260
-            Width           =   9990
-            _ExtentX        =   17621
+            Left            =   2205
+            TabIndex        =   101
+            Top             =   1155
+            Width           =   11355
+            _ExtentX        =   20029
             _ExtentY        =   609
             _Version        =   393216
             Text            =   ""
@@ -1574,16 +1654,17 @@ Begin VB.Form FComprasAT
             EndProperty
          End
          Begin MSDataGridLib.DataGrid DGConceptoAir 
-            Bindings        =   "FComprasAT.frx":2086
-            Height          =   1380
+            Bindings        =   "FComprasAT.frx":2088
+            Height          =   1065
             Left            =   105
-            TabIndex        =   106
-            Top             =   2415
-            Width           =   11355
-            _ExtentX        =   20029
-            _ExtentY        =   2434
+            TabIndex        =   108
+            Top             =   2310
+            Width           =   13455
+            _ExtentX        =   23733
+            _ExtentY        =   1879
             _Version        =   393216
             AllowUpdate     =   0   'False
+            BackColor       =   16761024
             HeadLines       =   1
             RowHeight       =   19
             BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -1604,7 +1685,6 @@ Begin VB.Form FComprasAT
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Caption         =   "Datos Ingresados"
             ColumnCount     =   2
             BeginProperty Column00 
                DataField       =   ""
@@ -1641,17 +1721,18 @@ Begin VB.Form FComprasAT
             EndProperty
          End
          Begin VB.Label LblCodRet 
-            BackColor       =   &H00FF0000&
+            BackColor       =   &H00C00000&
             BorderStyle     =   1  'Fixed Single
             Caption         =   "Codigo Retencion"
             ForeColor       =   &H00FFFFFF&
             Height          =   645
             Left            =   105
-            TabIndex        =   120
-            Top             =   1680
-            Width           =   7995
+            TabIndex        =   118
+            Top             =   1575
+            Width           =   9570
          End
          Begin VB.Label Label36 
+            BackColor       =   &H00FFC0C0&
             BorderStyle     =   1  'Fixed Single
             Caption         =   " Total Retenciones"
             BeginProperty Font 
@@ -1664,12 +1745,13 @@ Begin VB.Form FComprasAT
                Strikethrough   =   0   'False
             EndProperty
             Height          =   330
-            Left            =   8085
-            TabIndex        =   107
-            Top             =   3885
+            Left            =   10080
+            TabIndex        =   109
+            Top             =   3465
             Width           =   1800
          End
          Begin VB.Label Label35 
+            BackColor       =   &H00FFC0C0&
             BorderStyle     =   1  'Fixed Single
             Caption         =   " VALOR RET."
             BeginProperty Font 
@@ -1682,12 +1764,13 @@ Begin VB.Form FComprasAT
                Strikethrough   =   0   'False
             EndProperty
             Height          =   330
-            Left            =   10185
-            TabIndex        =   104
-            Top             =   1680
-            Width           =   1275
+            Left            =   12180
+            TabIndex        =   106
+            Top             =   1575
+            Width           =   1380
          End
          Begin VB.Label Label34 
+            BackColor       =   &H00FFC0C0&
             BorderStyle     =   1  'Fixed Single
             Caption         =   " PORC"
             BeginProperty Font 
@@ -1700,12 +1783,13 @@ Begin VB.Form FComprasAT
                Strikethrough   =   0   'False
             EndProperty
             Height          =   330
-            Left            =   9555
-            TabIndex        =   102
-            Top             =   1680
-            Width           =   645
+            Left            =   11340
+            TabIndex        =   104
+            Top             =   1575
+            Width           =   750
          End
          Begin VB.Label Label33 
+            BackColor       =   &H00FFC0C0&
             BorderStyle     =   1  'Fixed Single
             Caption         =   " BASE IMP."
             BeginProperty Font 
@@ -1718,14 +1802,15 @@ Begin VB.Form FComprasAT
                Strikethrough   =   0   'False
             EndProperty
             Height          =   330
-            Left            =   8190
-            TabIndex        =   100
-            Top             =   1680
-            Width           =   1380
+            Left            =   9765
+            TabIndex        =   102
+            Top             =   1575
+            Width           =   1485
          End
          Begin VB.Label Label32 
+            BackColor       =   &H00FFC0C0&
             BorderStyle     =   1  'Fixed Single
-            Caption         =   " CODIGO RET."
+            Caption         =   " CODIGO RETENCION"
             BeginProperty Font 
                Name            =   "MS Sans Serif"
                Size            =   8.25
@@ -1737,13 +1822,14 @@ Begin VB.Form FComprasAT
             EndProperty
             Height          =   330
             Left            =   105
-            TabIndex        =   98
-            Top             =   1260
-            Width           =   1380
+            TabIndex        =   100
+            Top             =   1155
+            Width           =   2115
          End
          Begin VB.Label Label31 
+            BackColor       =   &H00FFC0C0&
             BorderStyle     =   1  'Fixed Single
-            Caption         =   " SUMATORIA"
+            Caption         =   " Base Imponible"
             BeginProperty Font 
                Name            =   "MS Sans Serif"
                Size            =   8.25
@@ -1754,32 +1840,34 @@ Begin VB.Form FComprasAT
                Strikethrough   =   0   'False
             EndProperty
             Height          =   330
-            Left            =   8190
+            Left            =   105
+            TabIndex        =   91
+            Top             =   735
+            Width           =   1485
+         End
+         Begin VB.Label Label30 
+            BackColor       =   &H00FFC0C0&
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   " Autorizacion"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   330
+            Left            =   5355
             TabIndex        =   96
             Top             =   735
             Width           =   1380
          End
-         Begin VB.Label Label30 
-            BorderStyle     =   1  'Fixed Single
-            Caption         =   " Autorización"
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   225
-            Left            =   2415
-            TabIndex        =   94
-            Top             =   630
-            Width           =   5580
-         End
          Begin VB.Label Label29 
+            BackColor       =   &H00FFC0C0&
             BorderStyle     =   1  'Fixed Single
-            Caption         =   " Numero"
+            Caption         =   " Secuencial"
             BeginProperty Font 
                Name            =   "MS Sans Serif"
                Size            =   8.25
@@ -1789,13 +1877,14 @@ Begin VB.Form FComprasAT
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Height          =   225
-            Left            =   1260
-            TabIndex        =   92
-            Top             =   630
-            Width           =   1065
+            Height          =   330
+            Left            =   10920
+            TabIndex        =   98
+            Top             =   735
+            Width           =   1275
          End
          Begin VB.Label Label28 
+            BackColor       =   &H00FFC0C0&
             BorderStyle     =   1  'Fixed Single
             Caption         =   " Serie"
             BeginProperty Font 
@@ -1807,23 +1896,23 @@ Begin VB.Form FComprasAT
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Height          =   225
-            Left            =   105
-            TabIndex        =   89
-            Top             =   630
-            Width           =   1065
+            Height          =   330
+            Left            =   3465
+            TabIndex        =   93
+            Top             =   735
+            Width           =   750
          End
       End
       Begin MSDataListLib.DataCombo DCSustento 
-         Bindings        =   "FComprasAT.frx":20A2
+         Bindings        =   "FComprasAT.frx":20A4
          DataSource      =   "AdoSustento"
          Height          =   360
-         Left            =   105
-         TabIndex        =   13
+         Left            =   3360
+         TabIndex        =   12
          ToolTipText     =   "En este campo de selección se despliega un lista de tipos de sustentos tributarios correspondientes a la transacción escogida"
-         Top             =   1050
-         Width           =   10725
-         _ExtentX        =   18918
+         Top             =   840
+         Width           =   10410
+         _ExtentX        =   18362
          _ExtentY        =   635
          _Version        =   393216
          Text            =   ""
@@ -1837,15 +1926,83 @@ Begin VB.Form FComprasAT
             Strikethrough   =   0   'False
          EndProperty
       End
+      Begin MSDataGridLib.DataGrid DGAsientoCompras 
+         Bindings        =   "FComprasAT.frx":20BE
+         Height          =   1065
+         Left            =   105
+         TabIndex        =   73
+         Top             =   5355
+         Width           =   12720
+         _ExtentX        =   22437
+         _ExtentY        =   1879
+         _Version        =   393216
+         AllowUpdate     =   0   'False
+         BackColor       =   16761024
+         HeadLines       =   1
+         RowHeight       =   15
+         AllowDelete     =   -1  'True
+         BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ColumnCount     =   2
+         BeginProperty Column00 
+            DataField       =   ""
+            Caption         =   ""
+            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
+               Type            =   0
+               Format          =   ""
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   3082
+               SubFormatType   =   0
+            EndProperty
+         EndProperty
+         BeginProperty Column01 
+            DataField       =   ""
+            Caption         =   ""
+            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
+               Type            =   0
+               Format          =   ""
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   3082
+               SubFormatType   =   0
+            EndProperty
+         EndProperty
+         SplitCount      =   1
+         BeginProperty Split0 
+            BeginProperty Column00 
+            EndProperty
+            BeginProperty Column01 
+            EndProperty
+         EndProperty
+      End
       Begin MSDataListLib.DataCombo DCTipoPago 
-         Bindings        =   "FComprasAT.frx":20BC
+         Bindings        =   "FComprasAT.frx":20DE
          DataSource      =   "AdoTipoPago"
          Height          =   315
-         Left            =   -69960
-         TabIndex        =   74
+         Left            =   1680
+         TabIndex        =   7
          Top             =   420
-         Width           =   6630
-         _ExtentX        =   11695
+         Width           =   8310
+         _ExtentX        =   14658
          _ExtentY        =   556
          _Version        =   393216
          Text            =   ""
@@ -1872,12 +2029,33 @@ Begin VB.Form FComprasAT
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   -71535
-         TabIndex        =   73
+         Left            =   105
+         TabIndex        =   6
          Top             =   420
          Width           =   1590
       End
+      Begin VB.Label LblResolucion 
+         BackColor       =   &H00C0FFFF&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Codigo Retencion"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   12
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   960
+         Left            =   -74895
+         TabIndex        =   119
+         Top             =   5355
+         Width           =   11355
+      End
       Begin VB.Label Label44 
+         BackColor       =   &H00FFC0C0&
          BorderStyle     =   1  'Fixed Single
          Caption         =   " Forma de Pago"
          BeginProperty Font 
@@ -1891,9 +2069,9 @@ Begin VB.Form FComprasAT
          EndProperty
          Height          =   330
          Left            =   -74895
-         TabIndex        =   71
-         Top             =   420
-         Width           =   1485
+         TabIndex        =   75
+         Top             =   525
+         Width           =   1800
       End
       Begin VB.Label Label15 
          Caption         =   " DEVOLUCION DE I.V.A. "
@@ -1906,9 +2084,9 @@ Begin VB.Form FComprasAT
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Height          =   225
-         Left            =   105
-         TabIndex        =   9
+         Height          =   330
+         Left            =   10080
+         TabIndex        =   8
          Top             =   420
          Width           =   2220
       End
@@ -1924,11 +2102,11 @@ Begin VB.Form FComprasAT
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Height          =   225
+         Height          =   330
          Left            =   105
-         TabIndex        =   12
+         TabIndex        =   11
          Top             =   840
-         Width           =   10725
+         Width           =   3270
       End
    End
    Begin MSAdodcLib.Adodc AdoSustento 
@@ -2731,15 +2909,15 @@ Begin VB.Form FComprasAT
       _Version        =   393216
    End
    Begin MSDataListLib.DataCombo DCProveedor 
-      Bindings        =   "FComprasAT.frx":20D6
+      Bindings        =   "FComprasAT.frx":20F8
       DataSource      =   "AdoClientes"
       Height          =   315
       Left            =   105
-      TabIndex        =   118
+      TabIndex        =   2
       ToolTipText     =   "En este combo de selección se despliega una lista de todos los proveedores"
-      Top             =   1470
-      Width           =   9780
-      _ExtentX        =   17251
+      Top             =   420
+      Width           =   11460
+      _ExtentX        =   20214
       _ExtentY        =   556
       _Version        =   393216
       Text            =   ""
@@ -2768,9 +2946,9 @@ Begin VB.Form FComprasAT
       EndProperty
       ForeColor       =   &H00C0FFC0&
       Height          =   330
-      Left            =   9660
-      TabIndex        =   119
-      Top             =   1155
+      Left            =   11655
+      TabIndex        =   1
+      Top             =   105
       Width           =   2325
    End
    Begin VB.Label LblNumIdent 
@@ -2788,10 +2966,10 @@ Begin VB.Form FComprasAT
       EndProperty
       ForeColor       =   &H8000000F&
       Height          =   330
-      Left            =   10185
-      TabIndex        =   7
-      Top             =   1470
-      Width           =   1800
+      Left            =   11970
+      TabIndex        =   4
+      Top             =   420
+      Width           =   2010
    End
    Begin VB.Label LblTD 
       Alignment       =   2  'Center
@@ -2808,9 +2986,9 @@ Begin VB.Form FComprasAT
       EndProperty
       ForeColor       =   &H008080FF&
       Height          =   330
-      Left            =   9870
-      TabIndex        =   6
-      Top             =   1470
+      Left            =   11655
+      TabIndex        =   3
+      Top             =   420
       Width           =   330
    End
    Begin VB.Label Label25 
@@ -2829,9 +3007,9 @@ Begin VB.Form FComprasAT
       ForeColor       =   &H00C0FFC0&
       Height          =   330
       Left            =   105
-      TabIndex        =   5
-      Top             =   1155
-      Width           =   9570
+      TabIndex        =   0
+      Top             =   105
+      Width           =   11460
    End
 End
 Attribute VB_Name = "FComprasAT"
@@ -2873,14 +3051,21 @@ Private Sub ChRetB_Click()
        ch = 1
        Ch1 = "B"
        DCRetIBienes.Visible = True
-       TxtIvaBienMonIva.Enabled = True
-       DCPorcenRetenIvaBien.Enabled = True
-       TxtIvaBienValRet.Enabled = True
+       TxtIvaBienMonIva.Visible = True
+       DCPorcenRetenIvaBien.Visible = True
+       TxtIvaBienValRet.Visible = True
+       Label19.Visible = True
+       Label22.Visible = True
+       Label24.Visible = True
     Else
+       TxtIvaBienMonIva = "0.00"
        DCRetIBienes.Visible = False
-       TxtIvaBienMonIva.Enabled = False
-       DCPorcenRetenIvaBien.Enabled = False
-       TxtIvaBienValRet.Enabled = False
+       TxtIvaBienMonIva.Visible = False
+       DCPorcenRetenIvaBien.Visible = False
+       TxtIvaBienValRet.Visible = False
+       Label19.Visible = False
+       Label22.Visible = False
+       Label24.Visible = False
        ch = 1
        Ch1 = "S"
     End If
@@ -2898,14 +3083,21 @@ Private Sub ChRetS_Click()
        ch = 1
        Ch1 = "S"
        DCRetISer.Visible = True
-       TxtIvaSerMonIva.Enabled = True
-       DCPorcenRetenIvaServ.Enabled = True
-       TxtIvaSerValRet.Enabled = True
+       TxtIvaSerMonIva.Visible = True
+       DCPorcenRetenIvaServ.Visible = True
+       TxtIvaSerValRet.Visible = True
+       Label20.Visible = True
+       Label46.Visible = True
+       Label47.Visible = True
     Else
+       TxtIvaSerMonIva = "0.00"
        DCRetISer.Visible = False
-       TxtIvaSerMonIva.Enabled = False
-       DCPorcenRetenIvaServ.Enabled = False
-       TxtIvaSerValRet.Enabled = False
+       TxtIvaSerMonIva.Visible = False
+       DCPorcenRetenIvaServ.Visible = False
+       TxtIvaSerValRet.Visible = False
+       Label20.Visible = False
+       Label46.Visible = False
+       Label47.Visible = False
     End If
     If ChRetB.value <> 0 And ChRetS.value <> 0 Then
        Ch1 = "X"
@@ -2913,23 +3105,43 @@ Private Sub ChRetS_Click()
 End Sub
 
 Private Sub CmdAir_Click()
+Dim SumaBasesImponibles As Currency
+
   'Carga los conceptos de Retencion segun la fecha de Registro
    If Len(MBFechaEmi) < 10 Then MBFechaEmi = FechaSistema
-   sSQL = "SELECT (Codigo & ' - ' & Concepto) As Detalle_Conceptos,* " _
-       & "FROM Tipo_Concepto_Retencion " _
-       & "WHERE Codigo <> '.' " _
-       & "AND Fecha_Inicio <= #" & BuscarFecha(MBFechaEmi) & "# " _
-       & "AND Fecha_Final >= #" & BuscarFecha(MBFechaEmi) & "# " _
-       & "ORDER BY Codigo "
-   SelectDB_Combo DCConceptoRet, AdoConceptoRet, sSQL, "Detalle_Conceptos"
+   
+   sSQL = "SELECT (Codigo & ' - ' & Cuenta) As Cuentas  " _
+        & "FROM Catalogo_Cuentas " _
+        & "WHERE Item = '" & NumEmpresa & "' " _
+        & "AND Periodo = '" & Periodo_Contable & "' " _
+        & "AND TC = 'RF' " _
+        & "AND DG = 'D' " _
+        & "ORDER BY Codigo "
+   SelectDB_Combo DCRetFuente, AdoRetFuente, sSQL, "Cuentas"
+   If AdoRetFuente.Recordset.RecordCount > 0 Then Rf = 1 Else Rf = 0
+
   'DCConceptoRet = "329 - Por Otros Servicios (N)"
+        
+  'Calcula la sumatoria de Monto Iva Bienes, Monto Iva Servicios y Base Imponible
+   SumaBasesImponibles = CTNumero(TxtBaseImpoNoObjIVA, 2) + CTNumero(TxtBaseImpo, 2)
+   sSQL = "SELECT BaseNoObjIVA, BaseImponible, BaseImpGrav " _
+        & "FROM Asiento_Compras " _
+        & "WHERE Item = '" & NumEmpresa & "' " _
+        & "AND CodigoU = '" & CodigoUsuario & "' " _
+        & "AND T_No = " & Trans_No & " "
+   Select_Adodc AdoAux, sSQL
+   With AdoAux.Recordset
+    If .RecordCount > 0 Then
+        Do While Not .EOF
+           SumaBasesImponibles = SumaBasesImponibles + .Fields("BaseImpGrav")
+          .MoveNext
+        Loop
+    End If
+   End With
+   TxtSumatoria = Format(SumaBasesImponibles, "#,##0.00")
     
-    sSQL = "SELECT (Codigo & ' ' & Descripcion) As CTipoPago " _
-         & "FROM Tabla_Referenciales_SRI " _
-         & "WHERE Tipo_Referencia = 'FORMA DE PAGO' " _
-         & "ORDER BY Codigo "
-    SelectDB_Combo DCTipoPago, AdoTipoPago, sSQL, "CTipoPago"
     SSTCompras.Tab = 1
+    
     CFormaPago.SetFocus   ' TxtNumUnoComRet
 End Sub
 
@@ -2968,19 +3180,7 @@ Private Sub CmdCerrar_Click()
 End Sub
 
 Private Sub CmdGrabar_Click()
-   'Valido por si acaso exista algun valor con 0
-    TextoValido TxtIvaBienMonIva, True, , 2
-    TextoValido TxtBaseImpo, True, , 2
-    TextoValido TxtBaseImpoGrav, True, , 2
-    TextoValido TxtBaseImpoNoObjIVA, True, , 2
-    TextoValido TxtBaseImpoIce, True, , 2
-    TextoValido TxtMontoIva, True, , 2
-    TextoValido TxtMontoIce, True, , 2
-    TextoValido TxtIvaBienMonIva, True, , 2
-    TextoValido TxtIvaBienValRet, True, , 2
-    TextoValido TxtIvaSerMonIva, True, , 2
-    TextoValido TxtIvaSerValRet, True, , 2
-    Grabacion
+    
     Total_Ret = 0
     Total_RetIVA = 0
     sSQL = "SELECT * " _
@@ -3009,22 +3209,26 @@ Private Sub CmdGrabar_Click()
     Select_Adodc AdoAux, sSQL
     With AdoAux.Recordset
      If .RecordCount > 0 Then
-        'Porcentaje por Servicio: 0,30,100
-         Cta = .fields("Cta_Servicio")
-         DetalleComp = "Retencion del " & .fields("Porc_Servicios") & "%, Factura No. " & .fields("Secuencial") & ", de " & NombreCliente
-         Codigo = Leer_Cta_Catalogo(Cta)
-         ValorDH = .fields("ValorRetServicios")
-         Total_RetIVA = Total_RetIVA + .fields("ValorRetServicios")
-         If ValorDH > 0 Then InsertarAsiento AdoAsientos
-        'Porcentaje por Bienes: 0,70,100
-         Cta = .fields("Cta_Bienes")
-         DetalleComp = "Retencion del " & .fields("Porc_Bienes") & "%, Factura No. " & .fields("Secuencial") & ", de " & NombreCliente
-         Codigo = Leer_Cta_Catalogo(Cta)
-         ValorDH = .fields("ValorRetBienes")
-         Total_RetIVA = Total_RetIVA + .fields("ValorRetBienes")
-         If ValorDH > 0 Then InsertarAsiento AdoAsientos
+         Do While Not .EOF
+           'Porcentaje por Servicio: 0,30,100
+            Cta = .Fields("Cta_Servicio")
+            DetalleComp = "Retencion del " & .Fields("Porc_Servicios") & "%, Factura No. " & .Fields("Establecimiento") & .Fields("PuntoEmision") & "-" & Format(.Fields("Secuencial"), "000000000") & ", de " & NombreCliente
+            Codigo = Leer_Cta_Catalogo(Cta)
+            ValorDH = .Fields("ValorRetServicios")
+            Total_RetIVA = Total_RetIVA + .Fields("ValorRetServicios")
+            If ValorDH > 0 Then InsertarAsiento AdoAsientos
+           'Porcentaje por Bienes: 0,70,100
+            Cta = .Fields("Cta_Bienes")
+            DetalleComp = "Retencion del " & .Fields("Porc_Bienes") & "%, Factura No. " & .Fields("Establecimiento") & .Fields("PuntoEmision") & "-" & Format(.Fields("Secuencial"), "000000000") & ", de " & NombreCliente
+            Codigo = Leer_Cta_Catalogo(Cta)
+            ValorDH = .Fields("ValorRetBienes")
+            Total_RetIVA = Total_RetIVA + .Fields("ValorRetBienes")
+            If ValorDH > 0 Then InsertarAsiento AdoAsientos
+           .MoveNext
+         Loop
      End If
     End With
+    
    'Grabamos el Asiento de las Retenciones
     sSQL = "SELECT * " _
          & "FROM Asiento_Air " _
@@ -3037,35 +3241,17 @@ Private Sub CmdGrabar_Click()
     With AdoAux.Recordset
      If .RecordCount > 0 Then
          Do While Not .EOF
-            Cta = .fields("Cta_Retencion")
-            DetalleComp = "Retencion (" & .fields("CodRet") & ") No. " & .fields("SecRetencion") & " del " & (.fields("Porcentaje") * 100) & "%, de " & NombreCliente
+            Cta = .Fields("Cta_Retencion")
+            DetalleComp = "Retencion del (" & .Fields("CodRet") & ") " & (.Fields("Porcentaje") * 100) & "% No. " & .Fields("EstabRetencion") & .Fields("PtoEmiRetencion") & "-" & Format(.Fields("SecRetencion"), "000000000") & ", de " & NombreCliente
             Codigo = Leer_Cta_Catalogo(Cta)
-            ValorDH = .fields("ValRet")
-            Total_Ret = Total_Ret + .fields("ValRet")
+            ValorDH = .Fields("ValRet")
+            Total_Ret = Total_Ret + .Fields("ValRet")
             If ValorDH > 0 Then InsertarAsiento AdoAsientos
            .MoveNext
          Loop
      End If
     End With
     DetalleComp = Ninguno
-    
-'''    DesConectar_Adodc AdoAux
-'''    DesConectar_Adodc AdoPais
-'''    DesConectar_Adodc AdoTipoPago
-'''    DesConectar_Adodc AdoSustento
-'''    DesConectar_Adodc AdoTipoComprobante
-'''    DesConectar_Adodc AdoRetIvaBienes
-'''    DesConectar_Adodc AdoRetIvaServicios
-'''    DesConectar_Adodc AdoPorIce
-'''    DesConectar_Adodc AdoPorIva
-'''    DesConectar_Adodc AdoConceptoRet
-'''    ''DesConectar_Adodc AdoAsientoCompras
-'''    DesConectar_Adodc AdoAsientoAir
-'''    'DesConectar_Adodc AdoTransAir
-'''    DesConectar_Adodc AdoAsientos
-'''    DesConectar_Adodc AdoRetFuente
-'''    DesConectar_Adodc AdoRetIvaSerCC
-'''    DesConectar_Adodc AdoRetIvaBienesCC
     Unload FComprasAT
 End Sub
 
@@ -3089,9 +3275,9 @@ Private Sub DCConceptoRet_LostFocus()
            .MoveFirst
            .Find ("Codigo = '" & SinEspaciosIzq(DCConceptoRet) & "' ")
             If Not .EOF Then
-               LblCodRet.Caption = .fields("Codigo") & ": " & .fields("Concepto")
-               TxtPorRetConA = .fields("Porcentaje")
-               If .fields("Ingresar_Porcentaje") = "S" Then OP = True
+               LblCodRet.Caption = .Fields("Codigo") & ": " & .Fields("Concepto")
+               TxtPorRetConA = .Fields("Porcentaje")
+               If .Fields("Ingresar_Porcentaje") = "S" Then OP = True
               'MsgBox .Fields("Porcentaje")
             Else
                MsgBox "No encontro este código vuelva a buscar"
@@ -3135,20 +3321,75 @@ Private Sub DCPorcenIva_LostFocus()
         If .RecordCount > 0 Then
            .MoveFirst
            .Find ("Porc = '" & PorIva & "' ")
-            If Not .EOF Then CodPorIva = .fields("Codigo")
+            If Not .EOF Then CodPorIva = .Fields("Codigo")
         End If
        End With
 
-       Total_IVA = 0
        Total_IVA = CTNumero(TxtBaseImpoGrav, 2)
       'Calcula el Porcentaje de Iva
        CalmIva = (Total_IVA * DCPorcenIva) / 100
        TxtMontoIva = CalmIva
+      'MsgBox "Desktop Test:"
+       TxtIvaBienMonIva.Text = "0"
+       TxtIvaSerMonIva.Text = "0"
+       DCPorcenRetenIvaBien.Text = "0"
+       DCPorcenRetenIvaServ.Text = "0"
+       TxtIvaBienValRet.Text = "0"
+       TxtIvaSerValRet.Text = "0"
     End If
 End Sub
 
 Private Sub DCRetFuente_KeyDown(KeyCode As Integer, Shift As Integer)
   PresionoEnter KeyCode
+End Sub
+
+Private Sub DCRetFuente_LostFocus()
+Dim TextoPorc As String
+Dim PosPorc As Long
+
+    TextoPorc = ""
+    PosPorc = InStr(DCRetFuente, "%")
+    If PosPorc > 0 Then TextoPorc = SinEspaciosDer(MidStrg(DCRetFuente, 1, PosPorc - 1))
+    If TextoPorc = "" Then TextoPorc = Ninguno
+    
+    sSQL = "SELECT (Codigo & ' - ' & Concepto) As Detalle_Conceptos,* " _
+         & "FROM Tipo_Concepto_Retencion " _
+         & "WHERE Codigo <> '.' " _
+         & "AND Fecha_Inicio <= #" & BuscarFecha(MBFechaEmi) & "# " _
+         & "AND Fecha_Final >= #" & BuscarFecha(MBFechaEmi) & "# "
+    If TextoPorc <> Ninguno Then sSQL = sSQL & "AND Porcentaje = " & Val(TextoPorc) & " "
+    sSQL = sSQL & "ORDER BY Codigo "
+    SelectDB_Combo DCConceptoRet, AdoConceptoRet, sSQL, "Detalle_Conceptos"
+End Sub
+
+Private Sub DCRetIBienes_KeyDown(KeyCode As Integer, Shift As Integer)
+  PresionoEnter KeyCode
+End Sub
+
+Private Sub DCRetIBienes_LostFocus()
+Dim TextoPorc As String
+Dim PosPorc As Long
+    PosPorc = InStr(DCRetIBienes, "%")
+    If PosPorc > 0 Then
+       TextoPorc = SinEspaciosDer(MidStrg(DCRetIBienes, 1, PosPorc - 1))
+       If TextoPorc = "" Then TextoPorc = "0"
+       DCPorcenRetenIvaBien.Text = TextoPorc
+    End If
+End Sub
+
+Private Sub DCRetISer_KeyDown(KeyCode As Integer, Shift As Integer)
+  PresionoEnter KeyCode
+End Sub
+
+Private Sub DCRetISer_LostFocus()
+Dim TextoPorc As String
+Dim PosPorc As Long
+    PosPorc = InStr(DCRetISer, "%")
+    If PosPorc > 0 Then
+       TextoPorc = SinEspaciosDer(MidStrg(DCRetISer, 1, PosPorc - 1))
+       If TextoPorc = "" Then TextoPorc = "0"
+       DCPorcenRetenIvaServ.Text = TextoPorc
+    End If
 End Sub
 
 Private Sub DCTipoComprobante_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -3167,17 +3408,20 @@ Private Sub DCTipoComprobante_LostFocus()
       'Ultima Factura del Proveedor: CodigoCliente
        sSQL = "SELECT TOP 1 Secuencial, FechaCaducidad, Establecimiento, PuntoEmision, Autorizacion " _
             & "FROM Trans_Compras " _
-            & "WHERE IdProv = '" & CodigoCliente & "' " _
-            & "AND Item = '" & NumEmpresa & "' " _
-            & "ORDER BY Fecha DESC,Secuencial DESC "
+            & "WHERE Item = '" & NumEmpresa & "' " _
+            & "AND IdProv = '" & CodigoCliente & "' " _
+            & "ORDER BY Secuencial DESC, Fecha DESC "
        Select_Adodc AdoAux, sSQL
        If AdoAux.Recordset.RecordCount > 0 Then
-          TxtNumSerieUno = AdoAux.Recordset.fields("Establecimiento")
-          TxtNumSerieDos = AdoAux.Recordset.fields("PuntoEmision")
-          If Val(TxtNumSerietres) <= 0 Then TxtNumSerietres = AdoAux.Recordset.fields("Secuencial") + 1
-          If Len(AdoAux.Recordset.fields("Autorizacion")) < 13 Then
-             TxtNumAutor = AdoAux.Recordset.fields("Autorizacion")
-             MBFechaCad = AdoAux.Recordset.fields("FechaCaducidad")
+          MBFechaCad = AdoAux.Recordset.Fields("FechaCaducidad")
+          TxtNumSerieUno = AdoAux.Recordset.Fields("Establecimiento")
+          TxtNumSerieDos = AdoAux.Recordset.Fields("PuntoEmision")
+          TxtNumSerietres = AdoAux.Recordset.Fields("Secuencial") + 1
+          If Val(TxtNumSerietres) <= 0 Then TxtNumSerietres = 1
+          If Len(AdoAux.Recordset.Fields("Autorizacion")) >= 13 Then
+             TxtNumAutor = RUC
+          Else
+             TxtNumAutor = AdoAux.Recordset.Fields("Autorizacion")
           End If
        Else
           TxtNumAutor = Autorizacion
@@ -3189,10 +3433,6 @@ Private Sub DCTipoPago_KeyDown(KeyCode As Integer, Shift As Integer)
   PresionoEnter KeyCode
 End Sub
 
-Private Sub DCTipoPago_LostFocus()
-  If CFormaPago.Text = "Exterior" Then DCPais.SetFocus
-End Sub
-
 Private Sub DGConceptoAir_KeyDown(KeyCode As Integer, Shift As Integer)
  Keys_Especiales Shift
  If CtrlDown And KeyCode = vbKeyDelete Then
@@ -3201,11 +3441,11 @@ Private Sub DGConceptoAir_KeyDown(KeyCode As Integer, Shift As Integer)
    If BoxMensaje = vbYes Then
       With AdoAsientoAir.Recordset
        If .RecordCount > 0 Then
-           Codigo = .fields("CodRet")
-           No_Desde = .fields("SecRetencion")
-           Mifecha = BuscarFecha(.fields("FechaEmiRet"))
-           Codigo1 = .fields("AutRetencion")
-           J = .fields("A_No")
+           Codigo = .Fields("CodRet")
+           No_Desde = .Fields("SecRetencion")
+           Mifecha = BuscarFecha(.Fields("FechaEmiRet"))
+           Codigo1 = .Fields("AutRetencion")
+           J = .Fields("A_No")
            sSQL = "DELETE * " _
                 & "FROM Asiento_Air " _
                 & "WHERE Item = '" & NumEmpresa & "' " _
@@ -3263,7 +3503,7 @@ End Sub
 
 Private Sub SSTCompras_Click(PreviousTab As Integer)
     Select Case PreviousTab
-        Case 0: If ChRetF.Visible Then ChRetF.SetFocus
+        Case 0: DCTipoPago.SetFocus
         Case 1: OpcSi.SetFocus
     End Select
 End Sub
@@ -3310,6 +3550,8 @@ End Sub
 
 Private Sub TxtBaseImpoGrav_LostFocus()
     TextoValido TxtBaseImpoGrav, True, , 2
+    TxtMontoIva = Format((Val(DCPorcenIva) / 100) * Val(TxtBaseImpoGrav), "#,##0.00")
+   ' MsgBox "Desktop Test"
    'Carga la Tabla de Porcentaje Iva
 ''    sSQL = "SELECT * " _
 ''         & "FROM Tabla_Por_ICE_IVA " _
@@ -3318,7 +3560,7 @@ Private Sub TxtBaseImpoGrav_LostFocus()
 ''         & "AND Fecha_Final >= #" & FechaPorcIVA & "# " _
 ''         & "ORDER BY Porc DESC "
 ''    SelectDB_Combo DCPorcenIva, AdoPorIva, sSQL, "Porc"
-    DCPorcenIva = Porc_IVA * 100
+    'DCPorcenIva = Porc_IVA * 100
 End Sub
 
 Private Sub TxtBaseImpoIce_GotFocus()
@@ -3436,7 +3678,7 @@ Private Sub DCPorcenIce_LostFocus()
                .MoveFirst
                .Find ("Porc = '" & PorIce & "' ")
                If Not .EOF Then
-                  CodPorIce = .fields("Codigo")
+                  CodPorIce = .Fields("Codigo")
                Else
                   'MsgBox "Vuelva a seleccionar", vbInformation, "Aviso"
                End If
@@ -3464,6 +3706,7 @@ Private Sub DCPorcenIce_LostFocus()
           TxtIvaBienMonIva = 0
        End If
     End If
+    Grabacion
 End Sub
 
 Private Sub DCPorcenRetenIvaBien_LostFocus()
@@ -3479,7 +3722,7 @@ Private Sub DCPorcenRetenIvaBien_LostFocus()
         If .RecordCount > 0 Then
            .MoveFirst
            .Find ("Porc = " & SinEspaciosDer(DCPorcenRetenIvaBien) & " ")
-            If Not .EOF Then CodRetBien = .fields("Codigo")
+            If Not .EOF Then CodRetBien = .Fields("Codigo")
         Else
             MsgBox "Código incorrecto", vbInformation, "Aviso"
         End If
@@ -3498,7 +3741,7 @@ Private Sub DCPorcenRetenIvaServ_LostFocus()
     If DCPorcenRetenIvaServ = "70/100" Then
        Ct = "Si"
        TxtIvaSerValRet.Text = ""
-       TxtIvaSerValRet.Enabled = True
+       'TxtIvaSerValRet.Enabled = True
        TxtIvaSerValRet.SetFocus
     Else
       If Not IsNumeric(DCPorcenRetenIvaServ) Then
@@ -3514,7 +3757,7 @@ Private Sub DCPorcenRetenIvaServ_LostFocus()
      If .RecordCount > 0 Then
         .MoveFirst
         .Find ("Porc = " & SinEspaciosDer(DCPorcenRetenIvaServ) & " ")
-         If Not .EOF Then CodRetServ = .fields("Codigo")
+         If Not .EOF Then CodRetServ = .Fields("Codigo")
      Else
         MsgBox "Código Incorrecto", vbInformation, "Aviso"
      End If
@@ -3526,7 +3769,7 @@ Private Sub DCPorcenRetenIvaServ_LostFocus()
     Else
        CalIsMi = (Total_IVA * CInt(DCPorcenRetenIvaServ)) / 100
        TxtIvaSerValRet = CalIsMi
-       TxtIvaSerValRet.Enabled = False
+       'TxtIvaSerValRet.Enabled = False
     End If
     SSTCompras.Tab = 0
     SSTCompras.SetFocus
@@ -3549,6 +3792,12 @@ Private Sub DCSustento_LostFocus()
 End Sub
 
 Private Sub Form_Activate()
+    sSQL = "SELECT (Codigo & ' ' & Descripcion) As CTipoPago " _
+         & "FROM Tabla_Referenciales_SRI " _
+         & "WHERE Tipo_Referencia = 'FORMA DE PAGO' " _
+         & "ORDER BY Codigo "
+    SelectDB_Combo DCTipoPago, AdoTipoPago, sSQL, "CTipoPago"
+
    Select Case Co.TD
      Case "C", "R", "P"
           Label23.Caption = " Estado: ACTIVO"
@@ -3562,10 +3811,15 @@ Private Sub Form_Activate()
    If Len(Co.AgenteRetencion) > 1 Then Label25.Caption = Label25.Caption & " " & Co.AgenteRetencion
    If Len(Co.Estado) > 1 Then Label23.Caption = " Estado: " & Co.Estado
    MBFechaEmi = FechaComp
+   MBFechaRegis = FechaComp
+   MBFechaCad = FechaComp
+   
    Co.Serie_R = Ninguno
    Co.Retencion = 0
+   Co.Liquidacion = 0
    Co.Autorizacion_R = Ninguno
    Co.RetNueva = True
+   Co.LCNueva = True
    Co.Autorizacion_R = Ninguno
    Factura_CxP = 0
    TxtBaseImpo = "0.00"
@@ -3577,9 +3831,6 @@ Private Sub Form_Activate()
    LblTD.Caption = TipoBenef                  ' Tipo de Cliente: C,R,P,O
    LblNumIdent = CICliente                    ' CI o RUC del Cliente
    DCProveedor.Text = NombreCliente           ' Nombre del Cliente
-   MBFechaEmi = FechaComp
-   MBFechaRegis = FechaComp
-   MBFechaCad = FechaComp
    TxtNumSerietres = "0000001"
    TxtNumSerieUno = "001"
    TxtNumSerieDos = "001"
@@ -3615,6 +3866,7 @@ Private Sub Form_Load()
    ConectarAdodc AdoRetFuente
    ConectarAdodc AdoRetIvaSerCC
    ConectarAdodc AdoRetIvaBienesCC
+   LblResolucion.Caption = Resolucion_Retencion
 End Sub
 
 Private Sub MBFechaCad_LostFocus()
@@ -3670,7 +3922,7 @@ Private Sub MBFechaRegis_GotFocus()
 End Sub
 
 Private Sub MBFechaRegis_KeyDown(KeyCode As Integer, Shift As Integer)
- PresionoEnter KeyCode
+    PresionoEnter KeyCode
 End Sub
 
 Private Sub MBFechaRegis_LostFocus()
@@ -3681,15 +3933,18 @@ Private Sub MBFechaRegis_LostFocus()
       MBFechaRegis = "01/01/2000"
       MBFechaRegis.SetFocus
    Else
-      If MBFechaRegis < MBFechaEmi Then
+      If CFechaLong(MBFechaRegis) < CFechaLong(MBFechaEmi) Then
          MsgBox "La Fecha de Registro debe ser mayor o igual que la Fecha de Emisión", vbInformation, "Aviso"
+         MBFechaRegis.SetFocus
+      ElseIf (CFechaLong(MBFechaRegis) - CFechaLong(MBFechaEmi)) > 5 Then
+         MsgBox "La Fecha de Registro debe ser menor o igual a cinco dias despues de la Fecha de Emisión", vbInformation, "Aviso"
          MBFechaRegis.SetFocus
       End If
    End If
    FechaValida MBFechaRegis
  ' Carga la Tabla de Porcentaje Iva en el DataCombo
  ' Carga_PorcentajeIva (MBFechaRegis)
-'   Carga_ConceptosRetencion MBFechaRegis
+'  Carga_ConceptosRetencion MBFechaRegis
 End Sub
 
 Private Sub TxtIvaBienMonIva_GotFocus()
@@ -3699,6 +3954,10 @@ End Sub
 Private Sub TxtIvaBienMonIva_LostFocus()
     ' MsgBox CTNumero(TxtIvaBienMonIva, 2)
     TextoValido TxtIvaBienMonIva, True, , 0
+End Sub
+
+Private Sub TxtIvaBienValRet_LostFocus()
+    Grabacion
 End Sub
 
 Private Sub TxtIvaSerMonIva_GotFocus()
@@ -3713,11 +3972,11 @@ Dim Total_IVA_S As Currency
     
     'Verifica el Monto Iva Servicios
     Total_IVA_S = CDbl(TxtIvaBienMonIva) + CDbl(TxtIvaSerMonIva)
-    If Total_IVA_S > CDbl(TxtMontoIva) Then
-       MsgBox "Monto IVA Servicios no puede ser > que Monto IVA", vbInformation, "Aviso de Compras"
-       TxtIvaSerMonIva.Text = ""
-       TxtIvaSerMonIva.SetFocus
-    End If
+''    If Total_IVA_S > CDbl(TxtMontoIva) Then
+''       MsgBox "Monto IVA Servicios no puede ser > que Monto IVA", vbInformation, "Aviso de Compras"
+''       TxtIvaSerMonIva.Text = ""
+''       TxtIvaSerMonIva.SetFocus
+''    End If
 End Sub
 
 Private Sub TxtIvaSerValRet_GotFocus()
@@ -3729,7 +3988,8 @@ Private Sub TxtIvaSerValRet_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub TxtIvaSerValRet_LostFocus()
- CmdAir.SetFocus
+    Grabacion
+'    CmdAir.SetFocus
 End Sub
 
 Private Sub TxtMonTitGrat_GotFocus()
@@ -3756,6 +4016,10 @@ Private Sub TxtMonTitOner_LostFocus()
    TextoValido TxtMonTitOner, True, , 0
 End Sub
 
+Private Sub TxtMontoIce_KeyDown(KeyCode As Integer, Shift As Integer)
+    PresionoEnter KeyCode
+End Sub
+
 Private Sub TxtMontoIva_GotFocus()
     MarcarTexto TxtMontoIva
 End Sub
@@ -3779,31 +4043,31 @@ End Sub
 Private Sub TxtNumAutComp_LostFocus()
     If Val(TxtNumAutComp) <= 0 Then TxtNumAutComp = "0000000000"
     'TxtNumAutComp = Format(Val(Round(TxtNumAutComp)), String(10, "0"))
-     
-   'Verifico si escogio dcto modificado
-   If (cod = 4) Or (cod = 5) Then
-      'Selecciona el numero mayor para continuar la secuencia en el
-      'campo T_No y A_No
-      sSQL = "SELECT TOP 1 * " _
-           & "FROM Asiento_Compras " _
-           & "WHERE Item = '" & NumEmpresa & "' " _
-           & "ORDER BY A_No DESC "
-      Select_Adodc AdoAsientoCompras, sSQL
-      If AdoAsientoCompras.Recordset.RecordCount > 0 Then Ln_No = AdoAsientoCompras.Recordset.fields("A_No") + 1
-         RatonReloj
-         SetAdoAddNew "Asiento_Compras", True
-         SetAdoFields "DocModificado", cod
-         SetAdoFields "FechaEmiModificado", MBFechaEmiComp
-         SetAdoFields "EstabModificado", TxtNumSerieUnoComp
-         SetAdoFields "PtoEmiModificado", TxtNumSerieDosComp
-         SetAdoFields "SecModificado", CNumSerieTresComp
-         SetAdoFields "AutModificado", TxtNumAutComp
-         SetAdoFields "MontoTituloOneroso", TxtMonTitOner
-         SetAdoFields "MontoTituloGratuito", TxtMonTitGrat
-         SetAdoFields "A_No", Maximo_De("Asiento_Compras", "A_No")
-         SetAdoFields "T_No", Trans_No
-         SetAdoUpdate
-   End If
+   Grabacion
+'''   'Verifico si escogio dcto modificado
+'''   If (cod = 4) Or (cod = 5) Then
+'''      'Selecciona el numero mayor para continuar la secuencia en el
+'''      'campo T_No y A_No
+'''      sSQL = "SELECT TOP 1 * " _
+'''           & "FROM Asiento_Compras " _
+'''           & "WHERE Item = '" & NumEmpresa & "' " _
+'''           & "ORDER BY A_No DESC "
+'''      Select_Adodc AdoAsientoCompras, sSQL
+'''      If AdoAsientoCompras.Recordset.RecordCount > 0 Then Ln_No = AdoAsientoCompras.Recordset.Fields("A_No") + 1
+'''         RatonReloj
+'''         SetAdoAddNew "Asiento_Compras", True
+'''         SetAdoFields "DocModificado", cod
+'''         SetAdoFields "FechaEmiModificado", MBFechaEmiComp
+'''         SetAdoFields "EstabModificado", TxtNumSerieUnoComp
+'''         SetAdoFields "PtoEmiModificado", TxtNumSerieDosComp
+'''         SetAdoFields "SecModificado", CNumSerieTresComp
+'''         SetAdoFields "AutModificado", TxtNumAutComp
+'''         SetAdoFields "MontoTituloOneroso", TxtMonTitOner
+'''         SetAdoFields "MontoTituloGratuito", TxtMonTitGrat
+'''         SetAdoFields "A_No", Maximo_De("Asiento_Compras", "A_No")
+'''         SetAdoFields "T_No", Trans_No
+'''         SetAdoUpdate
+'''   End If
    CmdAir.SetFocus
 End Sub
 
@@ -3816,8 +4080,8 @@ Private Sub TxtNumAutor_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub TxtNumAutor_LostFocus()
-    If Val(TxtNumAutor) <= 0 Then TxtNumAutor = "0000000001"
-    sSQL = "SELECT TOP 1 * " _
+    If Len(TxtNumAutor) < 10 Then TxtNumAutor = String(10 - Len(TxtNumAutor), "0") & TxtNumAutor
+    sSQL = "SELECT TOP 1 Fecha, Secuencial " _
          & "FROM Trans_Compras " _
          & "WHERE IdProv = '" & CodigoCliente & "' " _
          & "AND Item = '" & NumEmpresa & "' " _
@@ -3828,7 +4092,17 @@ Private Sub TxtNumAutor_LostFocus()
          & "ORDER BY Fecha DESC, Secuencial DESC "
     Select_Adodc AdoAux, sSQL
     If AdoAux.Recordset.RecordCount > 0 Then MsgBox "USTED ESTA TRATANDO DE INGRESAR UNA FACTURA EXISTENTE"
-    If cod = 3 Then Co.Autorizacion_LC = TxtNumAutor Else Co.Autorizacion_LC = Ninguno
+    If cod = 3 Then
+       Co.Autorizacion_LC = TxtNumAutor
+       If Val(TxtNumSerietres) <> ReadSetDataNum("LC_SERIE_" & Co.Serie_LC, True, False) Then
+          Titulo = "SECUENCIAL DE LIQUIDACION DE COMPRAS"
+          Mensajes = "Número de Liquidacion de Compras: " & Co.Serie_LC & "-" & Format(Co.Liquidacion, "000000000") & ", no esta en orden secuencial." & vbCrLf & vbCrLf _
+                   & "QUIERE PROCESARLA?"
+          If BoxMensaje = vbYes Then Co.LCSecuencial = False
+       End If
+    Else
+        Co.Autorizacion_LC = Ninguno
+    End If
 End Sub
 
 Private Sub TxtNumConParPol_GotFocus()
@@ -3862,26 +4136,21 @@ Private Sub TxtNumDosComRet_LostFocus()
    Co.Retencion = 0
    Co.RetSecuencial = True
    sSQL = "SELECT TOP 1 AutRetencion " _
-        & "FROM Trans_Air " _
-        & "WHERE Tipo_Trans = 'C' " _
-        & "AND Item = '" & NumEmpresa & "' " _
+        & "FROM Trans_Compras " _
+        & "WHERE Item = '" & NumEmpresa & "' " _
         & "AND Periodo = '" & Periodo_Contable & "' " _
         & "AND Fecha <= #" & BuscarFecha(MBFechaRegis) & "# " _
-        & "AND EstabRetencion = '" & TxtNumUnoComRet & "' " _
-        & "AND PtoEmiRetencion = '" & TxtNumDosComRet & "' " _
-        & "ORDER BY SecRetencion DESC, Fecha DESC, AutRetencion DESC "
+        & "AND Serie_Retencion = '" & Co.Serie_R & "' " _
+        & "AND AutRetencion <> '.' " _
+        & "ORDER BY AutRetencion DESC "
    Select_Adodc AdoAux, sSQL
    If AdoAux.Recordset.RecordCount > 0 Then
-      If Len(AdoAux.Recordset.fields("AutRetencion")) >= 13 Then
-         TxtNumUnoAutComRet = RUC
-      Else
-         TxtNumUnoAutComRet = AdoAux.Recordset.fields("AutRetencion")
-      End If
+      TxtNumUnoAutComRet = AdoAux.Recordset.Fields("AutRetencion")
+      If Len(TxtNumUnoAutComRet) >= 13 Then TxtNumUnoAutComRet = RUC
    Else
-      TxtNumUnoAutComRet = "1"
+      TxtNumUnoAutComRet = MidStrg(RUC, 1, 10)
       TxtNumTresComRet = "1"
    End If
-   Co.Autorizacion_R = TxtNumUnoAutComRet
 End Sub
 
 Private Sub TxtNumSerieDos_GotFocus()
@@ -3893,35 +4162,43 @@ Private Sub TxtNumSerieDos_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub TxtNumSerieDos_LostFocus()
-    If cod = 3 Then
-       Co.Serie_LC = TxtNumSerieUno & TxtNumSerieDos
-       TxtNumSerietres = ReadSetDataNum("LC_SERIE_" & Co.Serie_LC, True, False)
-    Else
-       Co.Serie_LC = Ninguno
-    End If
     TextoValido TxtNumSerieDos, True, , 0
     If Val(TxtNumSerieDos) <= 0 Then TxtNumSerieDos = "001"
     TxtNumSerieDos = Format(Val(TxtNumSerieDos), "000")
-    If cod = 4 Then
-       sSQL = "SELECT TOP 1 * " _
-            & "FROM Trans_Compras " _
-            & "WHERE TipoComprobante = " & cod & " " _
-            & "AND Establecimiento = '" & TxtNumSerieUno & "' " _
-            & "AND PuntoEmision = '" & TxtNumSerieDos & "' " _
-            & "AND Item = '" & NumEmpresa & "' " _
-            & "ORDER BY Fecha DESC,Secuencial DESC "
-       Select_Adodc AdoAux, sSQL
-       If AdoAux.Recordset.RecordCount > 0 Then
-          TxtNumSerietres = AdoAux.Recordset.fields("Secuencial") + 1
-          MBFechaCad = AdoAux.Recordset.fields("FechaCaducidad")
-          TxtNumSerieUno = AdoAux.Recordset.fields("Establecimiento")
-          TxtNumSerieDos = AdoAux.Recordset.fields("PuntoEmision")
-          TxtNumAutor = AdoAux.Recordset.fields("Autorizacion")
-       Else
-          TxtNumAutor = Autorizacion
-          TxtNumSerietres = "000000001"
-       End If
-    End If
+    Co.Serie_LC = Ninguno
+    TxtNumAutor = "0000000001"
+    TxtNumSerietres = "000000001"
+    sSQL = "SELECT TOP 1 Fecha, Secuencial, FechaCaducidad, Establecimiento, PuntoEmision, Autorizacion " _
+         & "FROM Trans_Compras " _
+         & "WHERE TipoComprobante = " & cod & " " _
+         & "AND Establecimiento = '" & TxtNumSerieUno & "' " _
+         & "AND PuntoEmision = '" & TxtNumSerieDos & "' " _
+         & "AND Item = '" & NumEmpresa & "' " _
+         & "ORDER BY Secuencial DESC, Fecha DESC "
+    Select_Adodc AdoAux, sSQL
+    Select Case cod
+      Case 3 ' Liquidacion de Compras
+           Co.Serie_LC = TxtNumSerieUno & TxtNumSerieDos
+           TxtNumSerietres = ReadSetDataNum("LC_SERIE_" & Co.Serie_LC, True, False)
+           If AdoAux.Recordset.RecordCount > 0 Then
+              TxtNumAutor = AdoAux.Recordset.Fields("Autorizacion")
+              If Len(TxtNumAutor) >= 13 Then TxtNumAutor = RUC
+           End If
+      Case 4 ' Notas de Credito
+           If AdoAux.Recordset.RecordCount > 0 Then
+              TxtNumSerietres = AdoAux.Recordset.Fields("Secuencial") + 1
+              MBFechaCad = AdoAux.Recordset.Fields("FechaCaducidad")
+              TxtNumSerieUno = AdoAux.Recordset.Fields("Establecimiento")
+              TxtNumSerieDos = AdoAux.Recordset.Fields("PuntoEmision")
+              TxtNumAutor = AdoAux.Recordset.Fields("Autorizacion")
+           End If
+      Case Else
+           If AdoAux.Recordset.RecordCount > 0 Then
+              TxtNumSerietres = AdoAux.Recordset.Fields("Secuencial") + 1
+              TxtNumAutor = AdoAux.Recordset.Fields("Autorizacion")
+              If Len(TxtNumAutor) >= 13 Then TxtNumAutor = RUC
+           End If
+    End Select
 End Sub
 
 Private Sub TxtNumSerieDosComp_GotFocus()
@@ -3940,6 +4217,10 @@ End Sub
 
 Private Sub TxtNumSerietres_GotFocus()
     TxtNumSerietres = Format(Val(Round(TxtNumSerietres)), "000000000")
+    Co.LCNueva = True
+    Co.LCSecuencial = True
+    Co.Liquidacion = 0
+    Co.Serie_LC = Ninguno
     MarcarTexto TxtNumSerietres
 End Sub
 
@@ -3948,7 +4229,33 @@ Private Sub TxtNumSerietres_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub TxtNumSerietres_LostFocus()
-    If Val(TxtNumSerietres) <= 0 Then TxtNumSerietres = "000000001"
+   If Val(TxtNumSerietres) <= 0 Then TxtNumSerietres = "000000001"
+   TxtNumSerietres = Format(Round(Val(TxtNumSerietres)), "000000000")
+   If cod = 3 Then
+      Co.Serie_LC = TxtNumSerieUno & TxtNumSerieDos
+      Co.Liquidacion = Val(TxtNumSerietres)
+      sSQL = "SELECT * " _
+           & "FROM Trans_Compras " _
+           & "WHERE Item = '" & NumEmpresa & "' " _
+           & "AND Periodo = '" & Periodo_Contable & "' " _
+           & "AND TipoComprobante = 3 " _
+           & "AND Establecimiento = '" & TxtNumSerieUno & "' " _
+           & "AND PuntoEmision = '" & TxtNumSerieDos & "' " _
+           & "AND Secuencial = " & Co.Liquidacion & " "
+      Select_Adodc AdoAux, sSQL
+      If AdoAux.Recordset.RecordCount > 0 Then
+         Titulo = "LIQUIDACION DE COMPRAS REPETIDA"
+         Mensajes = "Número de Liquidacion de Compras ya existe," & vbCrLf _
+                  & "si continua se borrará los datos de este " & vbCrLf _
+                  & "número de Liquidacion de Compras." & vbCrLf & vbCrLf _
+                  & "QUIERE REPROCESARLA"
+         If BoxMensaje = vbYes Then
+            Co.Liquidacion = Val(TxtNumSerietres)
+            Co.LCNueva = False
+            Co.LCSecuencial = False
+         End If
+      End If
+   End If
 End Sub
 
 Private Sub TxtNumSerieUno_GotFocus()
@@ -3962,7 +4269,7 @@ End Sub
 Private Sub TxtNumSerieUno_LostFocus()
    TextoValido TxtNumSerieUno, True, , 0
    If Val(TxtNumSerieUno) <= 0 Then TxtNumSerieUno = "001"
-      TxtNumSerieUno = Format(Val(TxtNumSerieUno), "000")
+    TxtNumSerieUno = Format(Val(TxtNumSerieUno), "000")
 End Sub
 
 Private Sub TxtNumSerieUnoComp_GotFocus()
@@ -3976,7 +4283,7 @@ End Sub
 Private Sub TxtNumSerieUnoComp_LostFocus()
     TextoValido TxtNumSerieUnoComp, True, , 0
     If Val(TxtNumSerieUnoComp) <= 0 Then TxtNumSerieUnoComp = "001"
-       TxtNumSerieUnoComp = Format(Val(TxtNumSerieUnoComp), "000")
+    TxtNumSerieUnoComp = Format(Val(TxtNumSerieUnoComp), "000")
 End Sub
 
 Private Sub TxtNumTresComRet_GotFocus()
@@ -3988,34 +4295,37 @@ Private Sub TxtNumTresComRet_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub TxtNumTresComRet_LostFocus()
+' Secuencial de Retencion
    Co.Retencion = 0
    If Val(TxtNumTresComRet) <= 0 Then TxtNumTresComRet = "000000001"
    TxtNumTresComRet = Format(Round(Val(TxtNumTresComRet)), "000000000")
-  'Calcula la sumatoria de Monto Iva Bienes, Monto Iva Servicios y Base Imponible
-   TxtSumatoria = Format(CTNumero(TxtBaseImpoNoObjIVA, 2) + CTNumero(TxtBaseImpo, 2) + CTNumero(TxtBaseImpoGrav, 2), "#,##0.00")
   'TxtSumatoria = TxtBaseImpoGrav
    Co.Serie_R = TxtNumUnoComRet & TxtNumDosComRet
    Co.Retencion = Val(TxtNumTresComRet)
    Co.RetNueva = True
-   sSQL = "SELECT * " _
-        & "FROM Trans_Air " _
-        & "WHERE Tipo_Trans = 'C' " _
-        & "AND Item = '" & NumEmpresa & "' " _
+   Co.RetSecuencial = True
+   
+   sSQL = "SELECT TOP 1 AutRetencion " _
+        & "FROM Trans_Compras " _
+        & "WHERE Item = '" & NumEmpresa & "' " _
         & "AND Periodo = '" & Periodo_Contable & "' " _
-        & "AND EstabRetencion = '" & TxtNumUnoComRet & "' " _
-        & "AND PtoEmiRetencion = '" & TxtNumDosComRet & "' " _
+        & "AND Serie_Retencion = '" & Co.Serie_R & "' " _
         & "AND SecRetencion = " & Co.Retencion & " "
-   'If Len(Co.Autorizacion_R) < 13 Then sSQL = sSQL & "AND Porcentaje > 0 "
    Select_Adodc AdoAux, sSQL
    If AdoAux.Recordset.RecordCount > 0 Then
       Titulo = "RETENCION REPETIDA"
-      Mensajes = "Número de Retención ya existe," & vbCrLf _
-               & "si continua se borrará los datos" & vbCrLf _
-               & "de este número de retención." & vbCrLf & vbCrLf _
-               & "QUIERE REPROCESARLA"
+      Mensajes = "Número de Retención ya existe, si continua se borrará los datos de este número de retención." & vbCrLf & vbCrLf _
+               & "DESEA REPROCESAR ESTE SECUENCIAL?"
+      If BoxMensaje = vbYes Then Co.RetNueva = False
+   End If
+   
+   If Val(TxtNumTresComRet) <> ReadSetDataNum("RE_SERIE_" & Co.Serie_R, True, False) Then
+      Titulo = "SECUENCIAL DE RETENCION"
+      Mensajes = "Número de Retención: " & Co.Serie_R & "-" & Format(Co.Retencion, "000000000") & ", no esta en orden secuencial." & vbCrLf & vbCrLf _
+               & "DESEAS PROCESARLA?"
       If BoxMensaje = vbYes Then
-         Co.Retencion = Val(TxtNumTresComRet)
          Co.RetNueva = False
+         Co.RetSecuencial = False
       End If
    End If
 End Sub
@@ -4029,16 +4339,9 @@ Private Sub TxtNumUnoAutComRet_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub TxtNumUnoAutComRet_LostFocus()
-    If Val(TxtNumUnoAutComRet) <= 0 Then TxtNumUnoAutComRet = "0000000000"
+    If Val(TxtNumUnoAutComRet) <= 0 Then TxtNumUnoAutComRet = "0000000001"
    'TxtNumUnoAutComRet = Format(Val(Round(TxtNumUnoAutComRet)), String(13, "0"))
     Co.Autorizacion_R = TxtNumUnoAutComRet
-    If Val(TxtNumTresComRet) <> ReadSetDataNum("RE_SERIE_" & Co.Serie_R, True, False) Then
-       Titulo = "SECUENCIAL DE RETENCION"
-       Mensajes = "Número de Retención: " & Co.Serie_R & "-" & Format(Co.Retencion, "000000000") & vbCrLf _
-                & "no esta en orden secuencial." & vbCrLf & vbCrLf _
-                & "QUIERE PROCESARLA?"
-       If BoxMensaje = vbYes Then Co.RetSecuencial = False
-    End If
 End Sub
 
 Private Sub TxtNumUnoComRet_GotFocus()
@@ -4081,7 +4384,7 @@ Public Sub Carga_TipoComprobante(CargaTC As String)
      If .RecordCount > 0 Then
         .MoveFirst
         .Find ("Credito_Tributario = '" & CargaTC & "' ")
-         If Not .EOF Then Cadena = Replace(.fields("Codigo_Tipo_Comprobante"), " ", ",")
+         If Not .EOF Then Cadena = Replace(.Fields("Codigo_Tipo_Comprobante"), " ", ",")
      End If
     End With
     sSQL = "SELECT * " _
@@ -4099,7 +4402,7 @@ End Sub
 
 Public Sub Captura_TipoComprobante()
    'Captura lo que tiene el Combo de Tipo de Comprobante
-    Label15.Caption = "Fechas de " & DCTipoComprobante
+   'Label15.Caption = "Fechas de " & DCTipoComprobante
     Captc = SinEspaciosIzq(DCTipoComprobante.Text)
     Cap1 = TrimStrg(DCTipoComprobante.Text)
      
@@ -4109,7 +4412,7 @@ Public Sub Captura_TipoComprobante()
            .MoveFirst
            .Find ("Descripcion = '" & Cap1 & "' ")
            If Not .EOF Then
-              cod = .fields("Tipo_Comprobante_Codigo")
+              cod = .Fields("Tipo_Comprobante_Codigo")
            Else
               MsgBox "Vuelva a seleccionar", vbInformation, "Aviso"
            End If
@@ -4140,7 +4443,7 @@ Public Sub Captura_TipoComprobante_DctoModificado()
            .MoveFirst
            .Find ("Descripcion = '" & CapDcto & "' ")
            If Not .EOF Then
-              CapDm = .fields("Tipo_Comprobante_Codigo")
+              CapDm = .Fields("Tipo_Comprobante_Codigo")
            Else
               MsgBox "Vuelva a seleccionar", vbInformation, "Aviso"
            End If
@@ -4167,7 +4470,7 @@ Sub Documento_Modificado()
      With AdoAux.Recordset
       If .RecordCount > 0 Then
           Do While Not .EOF
-             CNumSerieTresComp.AddItem .fields("Secuencial")
+             CNumSerieTresComp.AddItem .Fields("Secuencial")
             .MoveNext
           Loop
       End If
@@ -4191,6 +4494,7 @@ End Sub
 Public Sub Carga_ConceptosRetencion(MBFecha As String)
 Dim FechaCodAir As String
   FechaCodAir = BuscarFecha(MBFecha)
+ 
  'Carga la Tabla de Porcentaje Iva
   sSQL = "SELECT * " _
        & "FROM Tabla_Por_ICE_IVA " _
@@ -4199,6 +4503,7 @@ Dim FechaCodAir As String
        & "AND Fecha_Final >= #" & FechaCodAir & "# " _
        & "ORDER BY Porc DESC "
   SelectDB_Combo DCPorcenIva, AdoPorIva, sSQL, "Porc"
+  
  'Carga los Porcentajes de ICE
   sSQL = "SELECT * " _
        & "FROM Tabla_Por_ICE_IVA " _
@@ -4282,7 +4587,7 @@ Dim SumaReten As Currency
    If .RecordCount > 0 Then
       .MoveFirst
        Do While Not .EOF
-          SumaReten = SumaReten + .fields("ValRet")
+          SumaReten = SumaReten + .Fields("ValRet")
          .MoveNext
        Loop
    End If
@@ -4324,15 +4629,6 @@ Public Sub Carga_Datos_Iniciales(MBFecha As MaskEdBox, EsNuevo As Boolean)
    'Verifico si existen registros caso contrario despliego mensaje
    'Carga los Conceptos de retención en la Fuente al DataCombo
     Carga_ConceptosRetencion MBFechaEmi
-    sSQL = "SELECT (Codigo & ' - ' & Cuenta) As Cuentas  " _
-         & "FROM Catalogo_Cuentas " _
-         & "WHERE Item = '" & NumEmpresa & "' " _
-         & "AND Periodo = '" & Periodo_Contable & "' " _
-         & "AND TC = 'RF' " _
-         & "AND DG = 'D' " _
-         & "ORDER BY Codigo "
-    SelectDB_Combo DCRetFuente, AdoRetFuente, sSQL, "Cuentas"
-    If AdoRetFuente.Recordset.RecordCount > 0 Then Rf = 1 Else Rf = 0
    'Carga los Conceptos de retención IVA Servicios al DataCombo
     sSQL = "SELECT (Codigo & ' - ' & Cuenta) As Cuentas  " _
          & "FROM Catalogo_Cuentas " _
@@ -4343,7 +4639,7 @@ Public Sub Carga_Datos_Iniciales(MBFecha As MaskEdBox, EsNuevo As Boolean)
          & "ORDER BY Codigo "
     SelectDB_Combo DCRetISer, AdoRetIvaSerCC, sSQL, "Cuentas"
     If AdoRetIvaSerCC.Recordset.RecordCount > 0 Then rs = 1 Else rs = 0
-    'Carga los Conceptos de retención IVA Bienes al DataCombo
+   'Carga los Conceptos de retención IVA Bienes al DataCombo
     sSQL = "SELECT (Codigo & ' - ' & Cuenta) As Cuentas  " _
          & "FROM Catalogo_Cuentas " _
          & "WHERE Item = '" & NumEmpresa & "' " _
@@ -4358,7 +4654,7 @@ Public Sub Carga_Datos_Iniciales(MBFecha As MaskEdBox, EsNuevo As Boolean)
     ChRetF.value = 1
     DCRetFuente.Visible = True
     FrmRetencion.Visible = True
-'    LblMensaje.Visible = False
+'   LblMensaje.Visible = False
     If EsNuevo Then
        'Si todas las variables tienen cero despliego mensaje y no cargo nada
        'No hay cuentas
@@ -4368,7 +4664,7 @@ Public Sub Carga_Datos_Iniciales(MBFecha As MaskEdBox, EsNuevo As Boolean)
            DCRetFuente.Visible = False
            FrmRetencion.Visible = False
            'LblMensaje.Visible = True
-           Activar_BS
+           'Activar_BS
        Else
            ChRetB.SetFocus
        End If
@@ -4382,12 +4678,26 @@ Dim AplicConvDobTrib As String
 Dim PagExtSujRetNorLeg As String
 Dim FormaPago As String
 
+   'Valido por si acaso exista algun valor con 0
+    TextoValido TxtIvaBienMonIva, True, , 2
+    TextoValido TxtBaseImpo, True, , 2
+    TextoValido TxtBaseImpoGrav, True, , 2
+    TextoValido TxtBaseImpoNoObjIVA, True, , 2
+    TextoValido TxtBaseImpoIce, True, , 2
+    TextoValido TxtMontoIva, True, , 2
+    TextoValido TxtMontoIce, True, , 2
+    TextoValido TxtIvaBienMonIva, True, , 2
+    TextoValido TxtIvaBienValRet, True, , 2
+    TextoValido TxtIvaSerMonIva, True, , 2
+    TextoValido TxtIvaSerValRet, True, , 2
+
    'Grabo en el Asiento_Compras e implicito Asiento_Air
     If OpcSi.value = True Then ValorP = "S" Else ValorP = "N"
     sSQL = "DELETE * " _
          & "FROM Asiento_Compras " _
          & "WHERE Item = '" & NumEmpresa & "' " _
          & "AND CodigoU = '" & CodigoUsuario & "' " _
+         & "AND PorcentajeIva = " & CodPorIva & " " _
          & "AND T_No = " & Trans_No & " "
     Ejecutar_SQL_SP sSQL
    'MsgBox Cod & vbCrLf & Cap
@@ -4407,6 +4717,7 @@ Dim FormaPago As String
     SetAdoFields "BaseImponible", CTNumero(TxtBaseImpo, 2)
     SetAdoFields "BaseImpGrav", CTNumero(TxtBaseImpoGrav, 2)
     SetAdoFields "PorcentajeIva", CodPorIva
+    SetAdoFields "Porc_IVA", Val(DCPorcenIva.Text) / 100
     SetAdoFields "MontoIva", CTNumero(TxtMontoIva, 2)
     SetAdoFields "BaseImpIce", CTNumero(TxtBaseImpoIce, 2)
     SetAdoFields "PorcentajeIce", CodPorIce
@@ -4429,7 +4740,7 @@ Dim FormaPago As String
        SetAdoFields "AutModificado", TxtNumAutComp
     Else
        SetAdoFields "DocModificado", "0"
-       SetAdoFields "FechaEmiModificado", date
+       SetAdoFields "FechaEmiModificado", Date
        SetAdoFields "EstabModificado", "000"
        SetAdoFields "PtoEmiModificado", "000"
        SetAdoFields "SecModificado", "0000000"
@@ -4456,7 +4767,7 @@ Dim FormaPago As String
        If AdoPais.Recordset.RecordCount > 0 Then
           AdoPais.Recordset.MoveFirst
           AdoPais.Recordset.Find ("Descripcion_Rubro = '" & DCPais.Text & "' ")
-          If Not AdoPais.Recordset.EOF Then PaisEfecPago = AdoPais.Recordset.fields("CPais")
+          If Not AdoPais.Recordset.EOF Then PaisEfecPago = AdoPais.Recordset.Fields("CPais")
        End If
        If OpcSiAplicaDoble.value Then AplicConvDobTrib = "SI" Else AplicConvDobTrib = "NO"
        If OpcSiFormaLegal.value Then PagExtSujRetNorLeg = "SI" Else PagExtSujRetNorLeg = "NO"
@@ -4470,6 +4781,16 @@ Dim FormaPago As String
     SetAdoFields "T_No", Trans_No
     SetAdoFields "CodigoU", CodigoUsuario
     SetAdoUpdate
+    sSQL = "SELECT Porc_IVA, MontoIvaBienes, Porc_Bienes, ValorRetBienes, MontoIvaServicios, Porc_Servicios, ValorRetServicios, TipoComprobante, CodSustento, Establecimiento, PuntoEmision, " _
+         & "Secuencial, Autorizacion, FechaEmision, FechaRegistro, FechaCaducidad, BaseNoObjIVA, BaseImponible, BaseImpGrav, PorcentajeIva, MontoIva, BaseImpIce, PorcentajeIce, " _
+         & "MontoIce, DevIva, Cta_Servicio, Cta_Bienes, PorRetServicios, PorRetBienes, DocModificado, FechaEmiModificado, EstabModificado, PtoEmiModificado, SecModificado, " _
+         & "AutModificado, ContratoPartidoPolitico, MontoTituloOneroso, MontoTituloGratuito, Item, CodigoU, A_No, T_No, PagoLocExt, PaisEfecPago, AplicConvDobTrib, " _
+         & "PagExtSujRetNorLeg, FormaPago, Clave_Acceso_NCD, IdProv, Devolucion " _
+         & "FROM Asiento_Compras " _
+         & "WHERE Item = '" & NumEmpresa & "' " _
+         & "AND CodigoU = '" & CodigoUsuario & "' " _
+         & "AND T_No = " & Trans_No & " "
+    Select_Adodc_Grid DGAsientoCompras, AdoAsientoCompras, sSQL
     'MsgBox "* ======> " & Trans_No
 End Sub
 
@@ -4489,14 +4810,14 @@ Public Sub Deshabilita_Controles()
     'Label23.Visible = False
 End Sub
 
-Public Sub Activar_BS()
-    TxtIvaBienMonIva.Enabled = True
-    DCPorcenRetenIvaBien.Enabled = True
-    TxtIvaBienValRet.Enabled = True
-    TxtIvaSerMonIva.Enabled = True
-    DCPorcenRetenIvaServ.Enabled = True
-    TxtIvaSerValRet.Enabled = True
-End Sub
+''Public Sub Activar_BS()
+''    TxtIvaBienMonIva.Enabled = True
+''    DCPorcenRetenIvaBien.Enabled = True
+''    TxtIvaBienValRet.Enabled = True
+''    TxtIvaSerMonIva.Enabled = True
+''    DCPorcenRetenIvaServ.Enabled = True
+''    TxtIvaSerValRet.Enabled = True
+''End Sub
 
 Public Sub Listar_Air()
   'Enceramos el espacio de cada usuario para emprezar con una nueva retencion

@@ -55,6 +55,7 @@ Global PresionoEsc As Boolean
 Global Remit As Boolean
 Global Benef As Boolean
 Global Opcion_Mulp As Boolean
+Global NumeroFASubModulo As Boolean
 'Global SonidoActivo As Boolean
 Global No_Repite As Boolean
 Global Si_Repite As Boolean
@@ -71,7 +72,6 @@ Global Bandera As Boolean
 Global BanCli As Boolean
 Global BanArt As Boolean
 Global BanIVA As Boolean
-Global Grabar As Boolean
 Global Nuevo As Boolean
 Global Modificar As Boolean
 Global Encontro As Boolean
@@ -86,6 +86,7 @@ Global IniciarPrograma As Boolean
 Global FacturaNueva As Boolean
 Global FacturaMatricula As Boolean
 Global ConciliacionAut As Boolean
+Global Mod_PVP As Boolean
 Global Mod_Fact As Boolean
 Global Mod_Fecha As Boolean
 Global Plazo_Fijo As Boolean

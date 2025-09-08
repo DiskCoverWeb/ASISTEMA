@@ -10,7 +10,8 @@ Public Function CampoXML(Campo_XML As String, Valor_XML As Variant, Optional Dec
 Dim Result_XML As String
 Dim sValor_XML As String
     Result_XML = ""
-    sValor_XML = Sin_Signos_Especiales(CStr(Valor_XML))
+    'sValor_XML = Sin_Signos_Especiales(CStr(Valor_XML))
+    sValor_XML = CStr(Valor_XML)
     If IsNumeric(sValor_XML) Then
        If Decimales > 0 Then sValor_XML = Format$(Val(sValor_XML), "#0." & String$(Decimales, "0"))
     End If
@@ -67,6 +68,38 @@ Public Function Mes_Año(Fecha As String) As String
    Mes_Año = Format$(Month(Fecha), "00") & "/" & Format$(Year(Fecha), "0000")
 End Function
 
+Public Sub SRI_Obtener_Datos_Comprobantes_Electronicos()
+Dim AdoDBEmpresa As ADODB.Recordset
+
+   'Determinamos si esta activado envio de correos
+    sSQL = "SELECT Mod_PVP, Comision_Ejecutivo, Mod_Fact, Ambiente, Codigo_Contribuyente_Especial, Obligado_Conta, Ruta_Certificado, Clave_Certificado, Web_SRI_Recepcion, Web_SRI_Autorizado " _
+         & "FROM Empresas " _
+         & "WHERE Item = '" & NumEmpresa & "' "
+    Select_AdoDB AdoDBEmpresa, sSQL
+    With AdoDBEmpresa
+     If .RecordCount > 0 Then
+         Mod_PVP = .Fields("Mod_PVP")
+         Mod_Fact = .Fields("Mod_Fact")
+         ComisionEjec = .Fields("Comision_Ejecutivo")
+
+         Ambiente = .Fields("Ambiente")
+         ContEspec = .Fields("Codigo_Contribuyente_Especial")
+         Obligado_Conta = .Fields("Obligado_Conta")
+         
+        
+        'Ruta del Certificado para Firmar el documento
+         NombreCertificado = .Fields("Ruta_Certificado")
+         RutaCertificado = RutaSistema & "\CERTIFIC\" & .Fields("Ruta_Certificado")
+         ClaveCertificado = .Fields("Clave_Certificado")
+    
+        'Pagina de Conexion con el SRI
+         URLRecepcion = .Fields("Web_SRI_Recepcion")
+         URLAutorizacion = .Fields("Web_SRI_Autorizado")
+     End If
+    End With
+    AdoDBEmpresa.Close
+End Sub
+
 Public Sub ImprimirAdoAT(Datas As Adodc, _
                          Optional EsCampoCorto As Boolean)
 Dim FormaImp As Byte
@@ -107,7 +140,7 @@ If .RecordCount > 0 Then
      Printer.FontName = TipoLetra
      Do While Not .EOF
         Printer.FontBold = False
-        If .fields("Ln") = 9999 Then
+        If .Fields("Ln") = 9999 Then
             Imprimir_Linea_H PosLinea - 0.05, Ancho(0), LimiteAncho
             PosLinea = PosLinea + 0.05
             Printer.FontBold = True
@@ -174,7 +207,7 @@ Dim AdoListAT As ADODB.Recordset
   With AdoListAT
    If .RecordCount > 0 Then
        Do While Not .EOF
-          CModificaciones.AddItem Format$(.fields("Linea_SRI"), "000") & " " & .fields("Cliente")
+          CModificaciones.AddItem Format$(.Fields("Linea_SRI"), "000") & " " & .Fields("Cliente")
          .MoveNext
        Loop
        CModificaciones.Text = CModificaciones.List(0)
@@ -283,10 +316,10 @@ Set DBAT_Air = New ADODB.Recordset
      With DBAT_Air
       If .RecordCount > 0 Then
           Do While Not .EOF
-             Secuencial = .fields("SecRetencion")
-             Autorizacion_No = .fields("AutRetencion")
-             Establecimiento = .fields("EstabRetencion")
-             Emision = .fields("PtoEmiRetencion")
+             Secuencial = .Fields("SecRetencion")
+             Autorizacion_No = .Fields("AutRetencion")
+             Establecimiento = .Fields("EstabRetencion")
+             Emision = .Fields("PtoEmiRetencion")
              sSQL = "DELETE * " _
                   & "FROM Trans_Air " _
                   & "WHERE Item = '" & NumEmpresa & "' " _
@@ -425,13 +458,13 @@ Dim DatosSelect As String
   RegAdodc.open DatosSelect, AdoStrCnn, , , adCmdText
   If RegAdodc.RecordCount > 0 Then
      With CR_AT
-         .Codigo = RegAdodc.fields("Codigo")
-         .Concepto = RegAdodc.fields("Concepto")
-         .Fecha_Final = RegAdodc.fields("Fecha_Final")
-         .Fecha_Inicio = RegAdodc.fields("Fecha_Inicio")
-         .Ingresar_Porcentaje = RegAdodc.fields("Ingresar_Porcentaje")
-         .Porcentaje = RegAdodc.fields("Porcentaje")
-         .T = RegAdodc.fields("T")
+         .Codigo = RegAdodc.Fields("Codigo")
+         .Concepto = RegAdodc.Fields("Concepto")
+         .Fecha_Final = RegAdodc.Fields("Fecha_Final")
+         .Fecha_Inicio = RegAdodc.Fields("Fecha_Inicio")
+         .Ingresar_Porcentaje = RegAdodc.Fields("Ingresar_Porcentaje")
+         .Porcentaje = RegAdodc.Fields("Porcentaje")
+         .T = RegAdodc.Fields("T")
      End With
   End If
   RegAdodc.Close
@@ -442,442 +475,205 @@ End Function
 Public Sub Insertar_Campo_XML(CampoXML As String)
 Dim CampoXMLAux As String
   If CampoXML <> "" Then
-     CampoXMLAux = Sin_Signos_Especiales(CampoXML)
-     TextoXML = TextoXML & CampoXMLAux & vbCrLf
+     CampoXML = Sin_Signos_Especiales(CampoXML)
+'     TextoXML = TextoXML & CampoXMLAux & vbCrLf
+     TextoXML = TextoXML & CampoXML & vbCrLf
   End If
 End Sub
 
 Public Sub SRI_Enviar_Mails(TFA As Tipo_Facturas, _
-                            SRI_Autorizacion As Tipo_Estado_SRI, _
-                            Tipo_Documento As String)
+                            SRI_Autorizacion As Tipo_Estado_SRI)
 Dim RutaPDF As String
-Dim RutaXML As String
 Dim Email As String
+Dim Tipo_Documento As String
 Dim posPuntoComa As Byte
-  'MsgBox MidStrg(TFA.ClaveAcceso, 9, 2)
-   RatonReloj
-  'MsgBox TFA.ClaveAcceso
-   Mifecha = FechaSistema
-   TMail.TipoDeEnvio = "CE"
-   TMail.ListaMail = 255
-   TMail.Destinatario = TFA.Cliente
-   TMail.MensajeHTML = Leer_Archivo_Texto(RutaSistema & "\JAVASCRIPT\f_envio_ce.html")
-   TMail.Adjunto = ""
-   Select Case Tipo_Documento
-     Case "FA"
-          SRI_Generar_PDF_FA TFA, False
-          SRI_Generar_XML_Firmado TFA.ClaveAcceso
-          TFA.Hora_R = ""
-          TFA.Autorizacion_R = ""
-     Case "NC"
-          SRI_Generar_PDF_NC TFA, False
-          SRI_Generar_XML_Firmado TFA.ClaveAcceso_LC
-     Case "LC"
-          SRI_Generar_PDF_LC TFA, False
-          SRI_Generar_XML_Firmado TFA.ClaveAcceso_NC
-     Case "GR"
-          SRI_Generar_PDF_GR TFA, False
-          SRI_Generar_XML_Firmado TFA.ClaveAcceso_GR
-     Case "RE"
-          SRI_Generar_PDF_RE TFA, False
-          SRI_Generar_XML_Firmado TFA.ClaveAcceso
-     Case "AB"
-          RutaPDF = "ninguno.pdf"
-          RutaXML = "ninguno.xml"
-   End Select
-   
-   If Len(TFA.ClaveAcceso) >= 13 Or Len(TFA.ClaveAcceso_GR) >= 13 Or Len(TFA.ClaveAcceso_LC) >= 13 Or Len(TFA.ClaveAcceso_NC) >= 13 Then TMail.TipoDeEnvio = "CE"
+      'MsgBox MidStrg(TFA.ClaveAcceso, 9, 2)
+       RatonReloj
+       Tipo_Documento = SRI_Autorizacion.Tipo_Doc_SRI
+      'MsgBox TFA.ClaveAcceso
+       Mifecha = FechaSistema
+       TMail.TipoDeEnvio = "CE"
+       TMail.ListaMail = 255
+       TMail.Destinatario = TFA.Cliente
+       TMail.MensajeHTML = Leer_Archivo_Texto(RutaSistema & "\JAVASCRIPT\f_envio_ce.html")
+       TMail.Adjunto = ""
+       Select Case Tipo_Documento
+         Case "FA"
+              SRI_Generar_PDF_FA TFA, False
+              SRI_Generar_XML_Firmado TFA.ClaveAcceso
+              TFA.Hora_R = ""
+              TFA.Autorizacion_R = ""
+         Case "NC"
+              SRI_Generar_PDF_NC TFA, False
+              SRI_Generar_XML_Firmado TFA.ClaveAcceso_LC
+         Case "LC"
+              SRI_Generar_PDF_LC TFA, False
+              SRI_Generar_XML_Firmado TFA.ClaveAcceso_NC
+         Case "GR"
+              SRI_Generar_PDF_GR TFA, False
+              SRI_Generar_XML_Firmado TFA.ClaveAcceso_GR
+         Case "RE"
+              SRI_Generar_PDF_RE TFA, False
+              SRI_Generar_XML_Firmado TFA.ClaveAcceso
+         Case "AB"
+              RutaPDF = "ninguno.pdf"
+              RutaXML = "ninguno.xml"
+       End Select
        
-   If Len(TFA.PDF_ClaveAcceso) > 1 Then
-      RutaPDF = RutaSysBases & "\TEMP\" & TFA.PDF_ClaveAcceso & ".pdf"
-      If InStr(TFA.PDF_ClaveAcceso, "_No_") = 0 Then RutaXML = RutaSysBases & "\TEMP\" & TFA.PDF_ClaveAcceso & ".xml"
-   End If
-   If MidStrg(TFA.ClaveAcceso, 9, 2) = "07" Then
-      TFA.Hora_R = SRI_Autorizacion.Hora_Autorizacion
-      TFA.Autorizacion_R = SRI_Autorizacion.Autorizacion
+       If Len(TFA.ClaveAcceso) >= 13 Or Len(TFA.ClaveAcceso_GR) >= 13 Or Len(TFA.ClaveAcceso_LC) >= 13 Or Len(TFA.ClaveAcceso_NC) >= 13 Then TMail.TipoDeEnvio = "CE"
+           
+       If Len(TFA.PDF_ClaveAcceso) > 1 Then
+          RutaPDF = RutaSysBases & "\TEMP\" & TFA.PDF_ClaveAcceso & ".pdf"
+          If InStr(TFA.PDF_ClaveAcceso, "_No_") = 0 Then RutaXML = RutaSysBases & "\TEMP\" & TFA.PDF_ClaveAcceso & ".xml"
+       End If
+       If MidStrg(TFA.ClaveAcceso, 9, 2) = "07" Then
+          TFA.Hora_R = SRI_Autorizacion.Hora_Autorizacion
+          TFA.Autorizacion_R = SRI_Autorizacion.Autorizacion
+    
+          TMail.Asunto = TFA.Cliente & ", Retencion No. " & TFA.Serie_R & "-" & Format$(TFA.Retencion, "000000000")
+       ElseIf MidStrg(TFA.ClaveAcceso, 9, 2) = "03" Then
+          TFA.Autorizacion = SRI_Autorizacion.Fecha_Autorizacion
+          TFA.Hora = SRI_Autorizacion.Hora_Autorizacion
+          'TFA.Fecha = SRI_Autorizacion.Fecha_Autorizacion
+          TFA.Serie = TFA.Serie_LC
+          TFA.TC = "LC"
+          TFA.TR = ""
+          TFA.Retencion = 0
+          TFA.Serie_R = ""
+    ''      TMail.Mensaje = "Cliente: " & TFA.Cliente & vbCrLf _
+    ''                    & "Clave de Acceso: " & vbCrLf & TFA.ClaveAcceso_LC & vbCrLf _
+    ''                    & "Hora de Generacion: " & SRI_Autorizacion.Hora_Autorizacion & vbCrLf _
+    ''                    & "Emision: " & TFA.Fecha & vbCrLf _
+    ''                    & "Vencimiento: " & SRI_Autorizacion.Fecha_Autorizacion & vbCrLf _
+    ''                    & "Autorizacion: " & vbCrLf & SRI_Autorizacion.Autorizacion & vbCrLf _
+    ''                    & "Liquidacion de Compras No. " & TFA.Serie_LC & "-" & Format$(TFA.Factura, "000000000")
+          TMail.Asunto = TFA.Cliente & ", Liquidacion de Compras No. " & TFA.Serie_LC & "-" & Format$(TFA.Factura, "000000000")
+       Else
+          TFA.TR = ""
+          TFA.Fecha_R = ""
+          TFA.Retencion = 0
+          TMail.Asunto = TFA.Razon_Social & ", Documento " & TFA.TC & " No. " & TFA.Serie & "-" & Format$(TFA.Factura, "000000000")
+       End If
+      'Datos del destinatario de mails
+       TMail.para = ""
+       Insertar_Mail TMail.para, TFA.EmailC
+       Insertar_Mail TMail.para, TFA.EmailC2
+       Insertar_Mail TMail.para, TFA.EmailR
 
-      TMail.Asunto = TFA.Cliente & ", Retencion No. " & TFA.Serie_R & "-" & Format$(TFA.Retencion, "000000000")
-   ElseIf MidStrg(TFA.ClaveAcceso, 9, 2) = "03" Then
-      TFA.Autorizacion = SRI_Autorizacion.Fecha_Autorizacion
-      TFA.Hora = SRI_Autorizacion.Hora_Autorizacion
-      'TFA.Fecha = SRI_Autorizacion.Fecha_Autorizacion
-      TFA.Serie = TFA.Serie_LC
-      TFA.TC = "LC"
-      TFA.TR = ""
-      TFA.Retencion = 0
-      TFA.Serie_R = ""
-''      TMail.Mensaje = "Cliente: " & TFA.Cliente & vbCrLf _
-''                    & "Clave de Acceso: " & vbCrLf & TFA.ClaveAcceso_LC & vbCrLf _
-''                    & "Hora de Generacion: " & SRI_Autorizacion.Hora_Autorizacion & vbCrLf _
-''                    & "Emision: " & TFA.Fecha & vbCrLf _
-''                    & "Vencimiento: " & SRI_Autorizacion.Fecha_Autorizacion & vbCrLf _
-''                    & "Autorizacion: " & vbCrLf & SRI_Autorizacion.Autorizacion & vbCrLf _
-''                    & "Liquidacion de Compras No. " & TFA.Serie_LC & "-" & Format$(TFA.Factura, "000000000")
-      TMail.Asunto = TFA.Cliente & ", Liquidacion de Compras No. " & TFA.Serie_LC & "-" & Format$(TFA.Factura, "000000000")
-   Else
-      TFA.TR = ""
-      TFA.Fecha_R = ""
-      TFA.Retencion = 0
-      TMail.Asunto = TFA.Razon_Social & ", Documento " & TFA.TC & " No. " & TFA.Serie & "-" & Format$(TFA.Factura, "000000000")
-   End If
-  'Datos del destinatario de mails
-   TMail.para = ""
-   Insertar_Mail TMail.para, TFA.EmailC
-   Insertar_Mail TMail.para, TFA.EmailC2
-   Insertar_Mail TMail.para, TFA.EmailR
-  
-'''   TMail.Mensaje = TMail.Mensaje & "Email(s) Destinatario(s):" & vbCrLf & Replace(TMail.para, ";", "; ") & vbCrLf
-                 
-   If Email_CE_Copia Then
-      TMail.Credito_No = "X" & Format(TFA.Factura, "000000000")
-      Insertar_Mail TMail.para, EmailProcesos
-   End If
-   If Existe_File(RutaPDF) Then TMail.Adjunto = RutaPDF & "; "
-   If Existe_File(RutaXML) Then TMail.Adjunto = TMail.Adjunto & RutaXML
-   
-   FEnviarCorreos.Show vbModal
-   If Existe_File(RutaPDF) Then Kill RutaPDF
-   If Existe_File(RutaXML) Then Kill RutaXML
-   TMail.Volver_Envial = False
+    '''   TMail.Mensaje = TMail.Mensaje & "Email(s) Destinatario(s):" & vbCrLf & Replace(TMail.para, ";", "; ") & vbCrLf
+                     
+       If Email_CE_Copia Then
+          TMail.Credito_No = "X" & Format(TFA.Factura, "000000000")
+          Insertar_Mail TMail.para, EmailProcesos
+       End If
+       If Existe_File(RutaPDF) Then TMail.Adjunto = RutaPDF & "; "
+       If Existe_File(RutaXML) Then TMail.Adjunto = TMail.Adjunto & RutaXML
+      '-----------------------------------------
+      ' MsgBox TFA.CodigoC & vbCrLf & TMail.para
+      '-----------------------------------------
+       FEnviarCorreos.Show vbModal
+       If Existe_File(RutaPDF) Then Kill RutaPDF
+       If Existe_File(RutaXML) Then Kill RutaXML
+       TMail.Volver_Envial = False
 End Sub
 
-'''Public Function SRI_Generar_XML(ClaveDeAcceso As String, _
-'''                                EstadoDelSRI As String) As Tipo_Estado_SRI
-'''Dim obj As New Cls_FirmarXML
-'''Dim ObjEnviar As New WS_Recepcion
-'''Dim ObjAutori As New WS_Autorizacion
-'''Dim URLRecepcion As String
-'''Dim URLAutorizacion As String
-'''Dim Resultado As Boolean
-'''
-'''Dim ClaveCertificado As String
-'''Dim RutaXML As String
-'''Dim RutaXMLFirmado As String
-'''Dim RutaXMLAutorizado As String
-'''Dim RutaXMLRechazado As String
-'''Dim MensajeError As String
-'''Dim ArrayRecepcion() As String
-'''Dim ArrayAutorizacion() As String
-'''Dim Tiempo_Espera As Integer
-'''Dim Tiempo_SRI As Integer
-'''Dim EsperaEspera As Integer
-'''Dim SRI_Aut As Tipo_Estado_SRI
-'''Dim Intento_Enviar As Byte
-'''Dim Intento_Autorizar As Byte
-'''
-''' RatonReloj
-''' FConexion.Show
-'''
-''' Intento_Enviar = 0
-''' Intento_Autorizar = 0
-''' EsperaEspera = 3000
-'''
-''' FConexion.TxtConexion = "CONECTANDO AL SRI..."
-''' FConexion.TxtConexion.Refresh
-'''
-''' Sleep EsperaEspera
-'''
-''' Set ftp = New cFTP
-'''
-''' ReDim ArrayRecepcion(0 To 4) As String
-''' ReDim ArrayAutorizacion(0 To 4) As String
-'''
-''' For ContadorEstados = 0 To 4
-'''     ArrayRecepcion(ContadorEstados) = ""
-'''     ArrayAutorizacion(ContadorEstados) = ""
-''' Next ContadorEstados
-'''
-''' FConexion.TxtConexion = FConexion.TxtConexion & "Leer Certificado del Documento: " & MidStrg(ClaveDeAcceso, 25, 15) & vbCrLf
-''' FConexion.TxtConexion.Refresh
-'''
-''' Ambiente = Leer_Campo_Empresa("Ambiente")
-''' ContEspec = Leer_Campo_Empresa("Codigo_Contribuyente_Especial")
-''' Obligado_Conta = Leer_Campo_Empresa("Obligado_Conta")
-'''
-''''Ruta del Certificado para Firmar el documento
-''' RutaCertificado = RutaSistema & "\CERTIFIC\" & Leer_Campo_Empresa("Ruta_Certificado")
-''' ClaveCertificado = Leer_Campo_Empresa("Clave_Certificado")
-'''
-''' FConexion.TxtConexion = FConexion.TxtConexion & "Conectandose al S.R.I." & vbCrLf
-''' FConexion.TxtConexion.Refresh
-'''
-''''Pagina de Conexion con el SRI
-''' URLRecepcion = Leer_Campo_Empresa("Web_SRI_Recepcion")
-''' URLAutorizacion = Leer_Campo_Empresa("Web_SRI_Autorizado")
-'''
-''' RutaXML = RutaDocumentos & "\Comprobantes Generados\" & ClaveDeAcceso & ".xml"
-''' RutaXMLFirmado = RutaDocumentos & "\Comprobantes Firmados\" & ClaveDeAcceso & ".xml"
-''' RutaXMLAutorizado = RutaDocumentos & "\Comprobantes Autorizados\" & ClaveDeAcceso & ".xml"
-''' RutaXMLRechazado = RutaDocumentos & "\Comprobantes no Autorizados\" & ClaveDeAcceso & ".xml"
-'''
-''' SRI_Aut = SRI_Leer_XML_Autorizado(RutaXMLAutorizado, RutaXMLRechazado)
-'''
-'''With SRI_Aut
-'''    'MsgBox .Estado_SRI & vbCrLf & .Error_SRI
-'''     RatonReloj
-'''     If .Estado_SRI = "OK" Then GoTo Fin_Autorizacion:
-'''     FConexion.TxtConexion = FConexion.TxtConexion & "Determinando Carpetas de Conexion" & vbCrLf
-'''     FConexion.TxtConexion.Refresh
-'''    .Clave_De_Acceso = ClaveDeAcceso
-'''    .Estado_SRI = EstadoDelSRI
-'''    .Documento_XML = ""
-'''    .Error_SRI = ""
-'''     If Dir$(RutaXML) = "" Then
-'''       .Estado_SRI = "CNG"
-'''       .Error_SRI = "Error: Comprobante no generado"
-'''        GoTo Fin_Autorizacion
-'''     End If
-'''     If Dir$(RutaXMLFirmado) = "" Then .Estado_SRI = "CNF"
-'''
-'''    'MsgBox "Primer face: " & .Estado_SRI
-'''     Select Case .Estado_SRI
-'''       Case "CNA", "CNF": GoTo Volver_Firmar
-'''       Case "ESC": GoTo Volver_Autorizar
-'''       Case "CF", "CR", "ESI": GoTo Volver_Enviar
-'''     End Select
-'''Volver_Firmar:
-'''    'Firmamos el documento
-'''     RatonReloj
-'''     FConexion.TxtConexion = FConexion.TxtConexion & "Firmando el Documento: " & MidStrg(ClaveDeAcceso, 25, 15) & vbCrLf
-'''     FConexion.TxtConexion.Refresh
-'''    'MsgBox "Firmar: " & RutaXML & vbCrLf & vbCrLf & RutaXMLFirmado & vbCrLf & vbCrLf & RutaCertificado & vbCrLf & vbCrLf & ClaveCertificado
-'''
-'''     Resultado = obj.FirmarXML(RutaCertificado, ClaveCertificado, RutaXML, RutaXMLFirmado, MensajeError)
-'''    'MsgBox "Firmar: " & MensajeError
-'''     If Resultado Then
-'''        ftp.Inicializar MDIFormulario
-'''        ftp.Password = ftpPwr  'Le establecemos la contraseña de la cuenta Ftp
-'''        ftp.Usuario = ftpUse   'Le establecemos el nombre de usuario de la cuenta
-'''        ftp.servidor = ftpSvr  'Establecesmo el nombre del Servidor FTP
-'''        Set ftp.ListView = LstVwFTP
-'''        ftp.ConStatus = True
-'''         'LstStatud
-'''        If ftp.ConectarFtp(LstStatud) = False Then
-'''            RatonNormal
-'''            MsgBox "No se pudo conectar"
-'''            GoTo Fin_Autorizacion
-'''        End If
-'''       'Le indicamos el ListView donde se listarán los archivos
-'''        ftp.SubirArchivo RutaXMLFirmado, "/files/ComprobantesElectronicos/" & ClaveDeAcceso & ".xml", True
-'''       'MsgBox "Archivo Subido: " & ClaveDeAcceso & ".xml" & vbCrLf & RutaXMLFirmado
-'''        Sleep EsperaEspera
-'''       .Estado_SRI = "CF"
-'''       .Documento_XML = Leer_Archivo_Texto(RutaXMLFirmado)
-'''       'MsgBox URLRecepcion & vbCrLf & RutaXMLFirmado & vbCrLf & RutaXMLRechazado
-'''       '~diskcover/
-'''       '----------------------------------------------------------------------------------------------------------------------------
-'''        URLHTTP = "https://erp.diskcoversystem.com/php/comprobantes/SRI/autorizar_sri_visual.php?AutorizarXMLOnline=true"
-'''        URLParams = "XML=" & ClaveDeAcceso & ".xml"
-'''        MensajeError = PostUrlSourceStr(URLHTTP, URLParams)
-'''        MsgBox MensajeError
-'''       '----------------------------------------------------------------------------------------------------------------------------
-'''       'Le indicamos el ListView donde se listarán los archivos
-'''        ftp.EliminarArchivo "/files/ComprobantesElectronicos/" & ClaveDeAcceso & ".xml"
-'''        ftp.Desconectar
-'''Volver_Enviar:
-'''        RatonReloj
-'''        FConexion.TxtConexion = FConexion.TxtConexion & "Enviando el Documento al S.R.I.: " & MidStrg(ClaveDeAcceso, 25, 15) & vbCrLf
-'''        FConexion.TxtConexion.Refresh
-'''        If MensajeError = "Autorizado" Then
-'''           ArrayRecepcion(0) = "RECIBIDA"
-'''           ArrayRecepcion(1) = "45"
-'''           ArrayAutorizacion(0) = "AUTORIZADO"
-'''          .Estado_SRI = "OK"
-'''          .Error_SRI = ""
-'''          .Autorizacion = ClaveDeAcceso
-'''          .Clave_De_Acceso = ClaveDeAcceso
-'''        Else
-'''          .Estado_SRI = "Err"
-'''          '.Error_SRI = "Error al enviar: "
-'''          .Error_SRI = "Error al Autorizar: " & MensajeError
-'''        End If
-'''
-'''        'ArrayRecepcion = ObjEnviar.FF_EnviaXML_SRI(RutaXMLFirmado, URLRecepcion, RutaXMLRechazado)
-'''
-'''        Intento_Enviar = Intento_Enviar + 1
-'''       '
-'''        For ContadorEstados = 0 To 4
-'''            If Len(ArrayRecepcion(ContadorEstados)) > 1 Then .Error_SRI = .Error_SRI & ArrayRecepcion(ContadorEstados) & "; "
-'''        Next ContadorEstados
-'''
-'''        If ArrayRecepcion(1) = "43" Or ArrayRecepcion(1) = "45" Then GoTo Volver_Obtener
-'''        If ArrayRecepcion(0) = "RECIBIDA" Then
-'''          .Estado_SRI = "CR"
-'''          .Documento_XML = Leer_Archivo_Texto(RutaXMLFirmado)
-'''Volver_Autorizar:
-'''           RatonReloj
-'''           FConexion.TxtConexion = FConexion.TxtConexion & "Cargando Documento Firmado: " & MidStrg(ClaveDeAcceso, 25, 15) & vbCrLf
-'''           FConexion.TxtConexion.Refresh
-'''
-'''Volver_Obtener:
-'''          'Tiempo de Espera antes de averiguar al SRI de la autorizacion
-'''           Sleep EsperaEspera
-'''           For Tiempo_Espera = 0 To 3
-'''               ArrayAutorizacion = ObjAutori.FF_ObtieneNumAutorizado(URLAutorizacion, .Clave_De_Acceso, RutaXMLAutorizado, RutaXMLRechazado)
-'''               If ArrayAutorizacion(0) = "AUTORIZADO" Then Tiempo_Espera = 3
-'''           Next Tiempo_Espera
-'''           Intento_Autorizar = Intento_Autorizar + 1
-'''           If ArrayAutorizacion(0) = "AUTORIZADO" Then
-'''             'MsgBox "Ok Documento Firmado y Autorizado"
-'''              FConexion.TxtConexion = FConexion.TxtConexion & "Extrayendo Documentos Autorizado: " & MidStrg(ClaveDeAcceso, 25, 15) & vbCrLf
-'''              FConexion.TxtConexion.Refresh
-'''              RatonReloj
-'''             .Estado_SRI = "OK"
-'''             .Error_SRI = "OK"
-'''             .Autorizacion = ArrayAutorizacion(1)
-'''             .Fecha_Autorizacion = Format$(MidStrg(ArrayAutorizacion(2), 1, 10), "dd/MM/yyyy")
-'''             .Hora_Autorizacion = MidStrg(ArrayAutorizacion(2), 12, 8)
-'''             .Documento_XML = Leer_Archivo_Texto(RutaXMLAutorizado)
-'''              SRI_Actualizar_Documento_XML .Clave_De_Acceso
-'''              FConexion.TxtConexion = FConexion.TxtConexion & "Grabando en la base el Documento: " & MidStrg(ClaveDeAcceso, 25, 15) & vbCrLf
-'''              FConexion.TxtConexion.Refresh
-'''           Else
-'''              FConexion.TxtConexion = FConexion.TxtConexion & "Error: CNA" & vbCrLf
-'''              FConexion.TxtConexion.Refresh
-'''             .Estado_SRI = "CNA"
-'''             .Error_SRI = "Error al Autorizar: "
-'''              For ContadorEstados = 0 To 4
-'''                  If Len(ArrayAutorizacion(ContadorEstados)) > 1 Then .Error_SRI = .Error_SRI & ArrayAutorizacion(ContadorEstados) & ", "
-'''              Next ContadorEstados
-'''              If Intento_Autorizar < 3 Then GoTo Volver_Autorizar
-'''           End If
-'''        ElseIf ArrayRecepcion(0) = "ERROR" Then
-'''           FConexion.TxtConexion = FConexion.TxtConexion & "Error: ESI"
-'''           FConexion.TxtConexion.Refresh
-'''          .Estado_SRI = "ESI"
-'''          .Error_SRI = " Error al enviar: "
-'''           For ContadorEstados = 0 To 4
-'''               If Len(ArrayRecepcion(ContadorEstados)) > 1 Then .Error_SRI = .Error_SRI & ArrayRecepcion(ContadorEstados) & ", "
-'''           Next ContadorEstados
-'''           If Intento_Enviar < 3 Then GoTo Volver_Enviar
-'''        Else
-'''           FConexion.TxtConexion = FConexion.TxtConexion & "Error: ESC" & vbCrLf
-'''           FConexion.TxtConexion.Refresh
-'''          .Estado_SRI = "ESC"
-'''          .Error_SRI = "Error al enviar: "
-'''           For ContadorEstados = 0 To 4
-'''               If Len(ArrayRecepcion(ContadorEstados)) > 1 Then .Error_SRI = .Error_SRI & ArrayRecepcion(ContadorEstados) & "; "
-'''           Next ContadorEstados
-'''           If Intento_Enviar < 3 Then GoTo Volver_Enviar
-'''        End If
-'''        'MsgBox "...."
-'''     Else
-'''        FConexion.TxtConexion = FConexion.TxtConexion & "Error: CNF" & vbCrLf
-'''        FConexion.TxtConexion.Refresh
-'''       .Estado_SRI = "CNF"
-'''       .Error_SRI = MensajeError
-'''       .Documento_XML = MensajeError
-'''     End If
-'''    .Error_SRI = TrimStrg(.Error_SRI)
-'''End With
-'''Fin_Autorizacion:
-'''Progreso_Final
-'''RatonNormal
-'''Unload FConexion
-'''SRI_Generar_XML = SRI_Aut     'Error_XML_SRI
-'''End Function
-
-Public Function SRI_Leer_XML_Autorizado(RutaAutorizado As String, RutaRechazado As String) As Tipo_Estado_SRI
-Dim obj As New Cls_FirmarXML
-Dim ObjEnviar As New WS_Recepcion
-Dim ObjAutori As New WS_Autorizacion
-Dim URLRecepcion As String
-Dim URLAutorizacion As String
-Dim Resultado As Boolean
-
-Dim ClaveCertificado As String
-Dim MensajeError As String
-Dim ArrayRecepcion() As String
-Dim ArrayAutorizacion() As String
-Dim Tiempo_Espera As Integer
-Dim Tiempo_SRI As Integer
-Dim EsperaEspera As Integer
-Dim SRI_Aut As Tipo_Estado_SRI
-Dim Intento_Enviar As Byte
-Dim Intento_Autorizar As Byte
-Dim IDo As Long
-Dim IDn As Long
-
-    RatonReloj
-    Progreso_Barra.Mensaje_Box = "CONECTANDOSE AL S.R.I. ..."
-    Progreso_Iniciar
-    Progreso_Barra.Incremento = 0
-    Progreso_Barra.Valor_Maximo = 100
-    Progreso_Esperar True
-    
-    Intento_Enviar = 0
-    Intento_Autorizar = 0
-
-   'Pagina de Conexion con el SRI
-   'ClaveDeAcceso = "0909202101179186152300120010040000056111234567815"
-          
-    'MsgBox URLAutorizacion & vbCrLf & ClaveDeAcceso & vbCrLf & MidStrg(ClaveDeAcceso, 24, 1)
-          
-    RatonReloj
-    With SRI_Aut
-         Progreso_Barra.Mensaje_Box = "Determinando Carpetas de Conexion"
-         Progreso_Esperar True
-         IDo = Len(RutaAutorizado)
-         Do While MidStrg(RutaAutorizado, IDo, 1) <> "\"
-            IDo = IDo - 1
-         Loop
-         IDn = InStr(RutaAutorizado, ".xml")
-        .Clave_De_Acceso = MidStrg(RutaAutorizado, IDo + 1, IDn - IDo - 1)
-        '.Clave_De_Acceso = "0103202407179130545000120030370000231671791305419"
-         Select Case MidStrg(.Clave_De_Acceso, 24, 1)
-           Case "1": URLAutorizacion = "https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl"
-           Case "2": URLAutorizacion = "https://cel.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl"
-         End Select
-        .Estado_SRI = "CG"
-        .Documento_XML = ""
-        .Error_SRI = ""
-         EsperaEspera = 3000
-         RatonReloj
-        'Tiempo de Espera antes de averiguar al SRI de la autorizacion
-         For Tiempo_Espera = 0 To 3
-             RatonReloj
-             Sleep EsperaEspera
-             ArrayAutorizacion = ObjAutori.FF_ObtieneNumAutorizado(URLAutorizacion, .Clave_De_Acceso, RutaAutorizado, RutaRechazado)
-             Progreso_Barra.Mensaje_Box = ArrayAutorizacion(0)
-             Progreso_Esperar True
-             If ArrayAutorizacion(0) = "AUTORIZADO" Then Tiempo_Espera = 3
-         Next Tiempo_Espera
-         If ArrayAutorizacion(0) = "AUTORIZADO" Then
-            Progreso_Barra.Mensaje_Box = "Extrayendo Documentos Autorizado: " & MidStrg(.Clave_De_Acceso, 25, 15)
-            Progreso_Esperar True
-            RatonReloj
-           .Estado_SRI = "OK"
-           .Error_SRI = "OK"
-           .Autorizacion = ArrayAutorizacion(1)
-           .Fecha_Autorizacion = Format$(MidStrg(ArrayAutorizacion(2), 1, 10), "dd/MM/yyyy")
-           .Hora_Autorizacion = MidStrg(ArrayAutorizacion(2), 12, 8)
-           .Documento_XML = Leer_Archivo_Texto(RutaAutorizado)
-            
-            'SRI_Actualizar_Documento_XML .Clave_De_Acceso
-            'Progreso_Barra.Mensaje_Box = "Grabando en la base el Documento: " & MidStrg(ClaveDeAcceso, 25, 15)
-            Cadena = ""
-            For ContadorEstados = 0 To 3
-                If Len(ArrayAutorizacion(ContadorEstados)) > 1 Then Cadena = Cadena & ArrayAutorizacion(ContadorEstados) & ", "
-            Next ContadorEstados
-           'MsgBox Cadena
-            Progreso_Esperar True
-         Else
-           .Error_SRI = "Error al Autorizar: "
-            For ContadorEstados = 0 To 4
-                If Len(ArrayAutorizacion(ContadorEstados)) > 1 Then .Error_SRI = .Error_SRI & ArrayAutorizacion(ContadorEstados) & ", "
-            Next ContadorEstados
-           .Error_SRI = TrimStrg(.Error_SRI)
-            'MsgBox .Error_SRI & "....."
-         End If
-         Progreso_Barra.Mensaje_Box = ArrayAutorizacion(0) & " " & .Estado_SRI & " -> " & ArrayAutorizacion(2)
-         Progreso_Esperar True
-         Progreso_Final
-         RatonNormal
-         
-    End With
-    Progreso_Final
-    SRI_Leer_XML_Autorizado = SRI_Aut
-End Function
+''Public Function SRI_Leer_XML_Autorizado(RutaAutorizado As String, RutaRechazado As String) As Tipo_Estado_SRI
+''Dim obj As New Cls_FirmarXML
+''Dim ObjEnviar As New WS_Recepcion
+''Dim ObjAutori As New WS_Autorizacion
+''Dim Resultado As Boolean
+''Dim MensajeError As String
+''Dim ArrayRecepcion() As String
+''Dim ArrayAutorizacion() As String
+''Dim Tiempo_Espera As Integer
+''Dim Tiempo_SRI As Integer
+''Dim EsperaEspera As Integer
+''Dim SRI_Aut As Tipo_Estado_SRI
+''Dim Intento_Enviar As Byte
+''Dim Intento_Autorizar As Byte
+''Dim IDo As Long
+''Dim IDn As Long
+''
+''    RatonReloj
+''    Progreso_Barra.Mensaje_Box = "CONECTANDOSE AL S.R.I. ..."
+''    Progreso_Iniciar
+''    Progreso_Barra.Incremento = 0
+''    Progreso_Barra.Valor_Maximo = 100
+''    Progreso_Esperar True
+''
+''    Intento_Enviar = 0
+''    Intento_Autorizar = 0
+''
+''   'Pagina de Conexion con el SRI
+''   'ClaveDeAcceso = "0909202101179186152300120010040000056111234567815"
+''
+''    'MsgBox URLAutorizacion & vbCrLf & ClaveDeAcceso & vbCrLf & MidStrg(ClaveDeAcceso, 24, 1)
+''
+''    RatonReloj
+''    With SRI_Aut
+''         Progreso_Barra.Mensaje_Box = "Determinando Carpetas de Conexion"
+''         Progreso_Esperar True
+''         IDo = Len(RutaAutorizado)
+''         Do While MidStrg(RutaAutorizado, IDo, 1) <> "\"
+''            IDo = IDo - 1
+''         Loop
+''         IDn = InStr(RutaAutorizado, ".xml")
+''        .Clave_De_Acceso = MidStrg(RutaAutorizado, IDo + 1, IDn - IDo - 1)
+''        '.Clave_De_Acceso = "0103202407179130545000120030370000231671791305419"
+''         Select Case MidStrg(.Clave_De_Acceso, 24, 1)
+''           Case "1": URLAutorizacion = "https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl"
+''           Case "2": URLAutorizacion = "https://cel.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl"
+''         End Select
+''        .Estado_SRI = "CG"
+''        .Documento_XML = ""
+''        .Error_SRI = ""
+''         EsperaEspera = 3000
+''         RatonReloj
+''        'Tiempo de Espera antes de averiguar al SRI de la autorizacion
+''         For Tiempo_Espera = 0 To 3
+''             RatonReloj
+''            'Sleep EsperaEspera
+''             ArrayAutorizacion = ObjAutori.FF_ObtieneNumAutorizado(URLAutorizacion, .Clave_De_Acceso, RutaAutorizado, RutaRechazado)
+''             Progreso_Barra.Mensaje_Box = ArrayAutorizacion(0)
+''             Progreso_Esperar True
+''             If ArrayAutorizacion(0) = "AUTORIZADO" Then Tiempo_Espera = 3
+''         Next Tiempo_Espera
+''         If ArrayAutorizacion(0) = "AUTORIZADO" Then
+''            Progreso_Barra.Mensaje_Box = "Extrayendo Documentos Autorizado: " & MidStrg(.Clave_De_Acceso, 25, 15)
+''            Progreso_Esperar True
+''            RatonReloj
+''           .Estado_SRI = "OK"
+''           .Error_SRI = "OK"
+''           .Autorizacion = ArrayAutorizacion(1)
+''           .Fecha_Autorizacion = Format$(MidStrg(ArrayAutorizacion(2), 1, 10), "dd/MM/yyyy")
+''           .Hora_Autorizacion = MidStrg(ArrayAutorizacion(2), 12, 8)
+''           .Documento_XML = Leer_Archivo_Texto(RutaAutorizado)
+''
+''            'SRI_Actualizar_Documento_XML .Clave_De_Acceso
+''            'Progreso_Barra.Mensaje_Box = "Grabando en la base el Documento: " & MidStrg(ClaveDeAcceso, 25, 15)
+''            Cadena = ""
+''            For ContadorEstados = 0 To 3
+''                If Len(ArrayAutorizacion(ContadorEstados)) > 1 Then Cadena = Cadena & ArrayAutorizacion(ContadorEstados) & ", "
+''            Next ContadorEstados
+''           'MsgBox Cadena
+''            Progreso_Esperar True
+''         Else
+''           .Error_SRI = "Error al Autorizar: "
+''            For ContadorEstados = 0 To 4
+''                If Len(ArrayAutorizacion(ContadorEstados)) > 1 Then .Error_SRI = .Error_SRI & ArrayAutorizacion(ContadorEstados) & ", "
+''            Next ContadorEstados
+''           .Error_SRI = TrimStrg(.Error_SRI)
+''            'MsgBox .Error_SRI & "....."
+''         End If
+''         Progreso_Barra.Mensaje_Box = ArrayAutorizacion(0) & " " & .Estado_SRI & " -> " & ArrayAutorizacion(2)
+''         Progreso_Esperar True
+''         Progreso_Final
+''         RatonNormal
+''
+''    End With
+''    Progreso_Final
+''    SRI_Leer_XML_Autorizado = SRI_Aut
+''End Function
 
 Public Function SRI_Generar_Documento_PDF(NombreTipoDeLetra As String, _
                                           TFA As Tipo_Facturas, _
@@ -1107,8 +903,11 @@ Dim TPosLinea As Single
     cPrint.tipoNegrilla = False
     cPrint.printTexto 3, PosLinea, TFA.DireccionC
     Select Case Tipo_Documento
+    
+    'MsgBox TFA.Vencimiento & vbCrLf & TFA.Fecha
+    
       Case "FA": DiasPago = CStr(CFechaLong(TFA.Fecha_V) - CFechaLong(TFA.Fecha))
-                 cPrint.printTexto 13, PosLinea, "Fecha Emisión: " & TFA.Fecha
+                 cPrint.printTexto 13, PosLinea, "Fecha Emisión: " & TFA.Fecha  'TFA.Vencimiento
                  If CFechaLong(TFA.Fecha) < CFechaLong(TFA.Fecha_V) Then cPrint.printTexto 17, PosLinea, "Fecha de pago: " & TFA.Fecha_V
                  PosLinea = PosLinea + 0.35
                  
@@ -1242,6 +1041,8 @@ Dim IVA_Porc As Currency
 Dim TempPosLinea As Single
 Dim PosLineaTemp As Single
 Dim TempPosLineaAbono As Single
+Dim PosLineaFinal As Single
+
     RatonReloj
     Leer_Datos_FA_NV TFA
     
@@ -1321,89 +1122,89 @@ Dim TempPosLineaAbono As Single
             Progreso_Barra.Mensaje_Box = "Generando documento PDF"
             Progreso_Esperar
             
-            If Len(.fields("Codigo_Barra")) > 1 Then Cod_Bar = .fields("Codigo_Barra") Else Cod_Bar = .fields("Cod_Barras")
-            Cod_Aux = .fields("Desc_Item")
-            Total_Desc = .fields("Total_Desc") + .fields("Total_Desc2")
-            If Total_Desc > 0 And .fields("Total") <> 0 Then Porc_Str = Format(Total_Desc / .fields("Total"), "00%") Else Porc_Str = ""
+            If Len(.Fields("Codigo_Barra")) > 1 Then Cod_Bar = .Fields("Codigo_Barra") Else Cod_Bar = .Fields("Cod_Barras")
+            Cod_Aux = .Fields("Desc_Item")
+            Total_Desc = .Fields("Total_Desc") + .Fields("Total_Desc2")
+            If Total_Desc > 0 And .Fields("Total") <> 0 Then Porc_Str = Format(Total_Desc / .Fields("Total"), "00%") Else Porc_Str = ""
 
             If TFA.EsPorReembolso Then
-               cPrint.printTexto 1.55, PosLinea, .fields("Codigo"), PorteDeLetra
-               cPrint.printTexto 3.4, PosLinea, TrimStrg(MidStrg(.fields("Ruta"), 1, 10)), PorteDeLetra
+               cPrint.printTexto 1.55, PosLinea, .Fields("Codigo"), PorteDeLetra
+               cPrint.printTexto 3.4, PosLinea, TrimStrg(MidStrg(.Fields("Ruta"), 1, 10)), PorteDeLetra
             Else
                 If TFA.SP Then
                    If Len(Cod_Bar) > 1 Then cPrint.printTexto 1.55, PosLinea, Cod_Bar, PorteDeLetra
                    If Len(Cod_Aux) > 1 Then
                       cPrint.printTexto 3.4, PosLinea, Cod_Aux, PorteDeLetra
                    Else
-                      cPrint.printTexto 3.4, PosLinea, .fields("Codigo"), PorteDeLetra
+                      cPrint.printTexto 3.4, PosLinea, .Fields("Codigo"), PorteDeLetra
                    End If
                 Else
                    If Len(Cod_Aux) > 1 Then
                       cPrint.printTexto 1.55, PosLinea, Cod_Aux, PorteDeLetra
                    Else
-                      cPrint.printTexto 1.55, PosLinea, .fields("Codigo"), PorteDeLetra
+                      cPrint.printTexto 1.55, PosLinea, .Fields("Codigo"), PorteDeLetra
                    End If
                    If Len(Cod_Bar) > 1 Then cPrint.printTexto 3.4, PosLinea, Cod_Bar, PorteDeLetra
                 End If
             End If
-            cPrint.printFields 4.45, PosLinea, .fields("Cantidad"), PorteDeLetra
+            cPrint.printFields 4.45, PosLinea, .Fields("Cantidad"), PorteDeLetra
             
-            Producto = .fields("Producto")
-            If .fields("Codigo") <> "99.41" And TFA.Imp_Mes Then Producto = Producto & " " & .fields("Ticket") & " " & .fields("Mes")
+            Producto = .Fields("Producto")
+            If .Fields("Codigo") <> "99.41" And TFA.Imp_Mes Then Producto = Producto & " " & .Fields("Ticket") & " " & .Fields("Mes")
             
             PosLineaTemp = cPrint.printTextoMultiple(7.6, PosLinea, Producto, 6.5)
             If PosLineaTemp > PosLinea Then PosLinea = PosLineaTemp 'Else PosLinea = PosLinea + 0.35
             If TFA.SP Then
                PosLinea = PosLinea + 0.32
-               If CFechaLong(.fields("Fecha_Fab")) <> CFechaLong(.fields("Fecha_Exp")) Then
-                  Producto = "ELAB. " & .fields("Fecha_Fab") & ", VENC. " & .fields("Fecha_Exp") & " " & vbCrLf
+               If CFechaLong(.Fields("Fecha_Fab")) <> CFechaLong(.Fields("Fecha_Exp")) Then
+                  Producto = "ELAB. " & .Fields("Fecha_Fab") & ", VENC. " & .Fields("Fecha_Exp") & " " & vbCrLf
                   cPrint.printTexto 7.6, PosLinea, Producto, PorteDeLetra
                End If
-               If Len(.fields("Reg_Sanitario")) > 1 Then
+               If Len(.Fields("Reg_Sanitario")) > 1 Then
                   PosLinea = PosLinea + 0.32
-                  Producto = "Reg. Sanit. " & .fields("Reg_Sanitario")
+                  Producto = "Reg. Sanit. " & .Fields("Reg_Sanitario")
                   cPrint.printTexto 7.6, PosLinea, Producto, PorteDeLetra
                End If
-               If Len(.fields("Modelo")) > 1 Then
+               If Len(.Fields("Modelo")) > 1 Then
                   PosLinea = PosLinea + 0.32
-                  Producto = "Modelo: " & .fields("Modelo")
+                  Producto = "Modelo: " & .Fields("Modelo")
                   cPrint.printTexto 7.6, PosLinea, Producto, PorteDeLetra
                End If
-               If Len(.fields("Procedencia")) > 1 Then
+               If Len(.Fields("Procedencia")) > 1 Then
                   PosLinea = PosLinea + 0.32
-                  Producto = "Procedencia: " & .fields("Procedencia")
+                  Producto = "Procedencia: " & .Fields("Procedencia")
                   cPrint.printTexto 7.6, PosLinea, Producto, PorteDeLetra
                End If
             End If
-            If Len(.fields("Serie_No")) > 1 Then
+            If Len(.Fields("Serie_No")) > 1 Then
                PosLinea = PosLinea + 0.32
-               Producto = "Serie No. " & .fields("Serie_No")
+               Producto = "Serie No. " & .Fields("Serie_No")
                cPrint.printTexto 7.6, PosLinea, Producto, PorteDeLetra
             End If
             If TFA.EsPorReembolso Then
                PosLinea = PosLinea + 0.32
-               Cod_Aux = "Autorizacion(" & .fields("Lote_No") & ") " & .fields("Procedencia")
+               Cod_Aux = "Autorizacion(" & .Fields("Lote_No") & ") " & .Fields("Procedencia")
                cPrint.printTexto 7.6, PosLinea, Cod_Aux, PorteDeLetra
                PosLinea = PosLinea + 0.32
                Cod_Aux = "Reembolso de Gastos"
-               If Len(.fields("Tipo_Hab")) > 1 Then Cod_Aux = Cod_Aux & " por " & .fields("Tipo_Hab")
+               If Len(.Fields("Tipo_Hab")) > 1 Then Cod_Aux = Cod_Aux & " por " & .Fields("Tipo_Hab")
                cPrint.printTexto 7.6, PosLinea, Cod_Aux, PorteDeLetra
                
             End If
-            If .fields("Orden_No") <> 0 Then cPrint.printTexto 14.3, PosLinea, Format$(.fields("Orden_No"), "00000000"), PorteDeLetra
+            If .Fields("Orden_No") <> 0 Then cPrint.printTexto 14.3, PosLinea, Format$(.Fields("Orden_No"), "00000000"), PorteDeLetra
             
-            If Len(.fields("Lote_No")) > 1 Then Cadena = .fields("Lote_No") Else Cadena = TrimStrg(MidStrg(.fields("Ruta"), 1, 13))
+            If Len(.Fields("Lote_No")) > 1 Then Cadena = .Fields("Lote_No") Else Cadena = TrimStrg(MidStrg(.Fields("Ruta"), 1, 13))
             If Len(Cadena) > 1 Then cPrint.printTexto 14.25, PosLinea, Cadena, PorteDeLetra
             
             TDec_PVP = Dec_PVP
             If TDec_PVP > 6 Then TDec_PVP = 6
-            cPrint.printFields 15.55, PosLinea, .fields("Precio"), PorteDeLetra, , , TDec_PVP
-            cPrint.printFields 18.65, PosLinea, .fields("Total"), PorteDeLetra, , , 2
+            cPrint.printFields 15.55, PosLinea, .Fields("Precio"), PorteDeLetra, , , TDec_PVP
+            cPrint.printFields 18.65, PosLinea, .Fields("Total"), PorteDeLetra, , , 2
 
-            If Len(.fields("Tipo_Hab")) > 1 Then
+            If Len(.Fields("Tipo_Hab")) > 1 Then
                If Total_Desc > 0 Then
                   PosLinea = PosLinea + 0.32
-                  cPrint.printTexto 7.6, PosLinea, .fields("Tipo_Hab"), PorteDeLetra
+                  cPrint.printTexto 7.6, PosLinea, .Fields("Tipo_Hab"), PorteDeLetra
                   cPrint.printVariable 18.6, PosLinea, Total_Desc, PorteDeLetra, , , 2
                End If
             Else
@@ -1536,6 +1337,8 @@ Dim TempPosLineaAbono As Single
          PosLinea = PosLinea + 0.35
          cPrint.printTexto PosColumna, PosLinea, "VALOR TOTAL:", PorteDeLetra
          PosLinea = PosLinea + 0.35
+         PosLineaFinal = PosLinea
+         
          cPrint.tipoNegrilla = False
          cPrint.letraTipo tipoDeLetra, 6
          PosLinea = TempPosLinea + 0.05
@@ -1578,9 +1381,9 @@ Dim TempPosLineaAbono As Single
             cPrint.tipoNegrilla = False
             cPrint.letraTipo tipoDeLetra, 6
             Do While Not AdoDBAbo.EOF
-               cPrint.printFields 8.4, PosLinea, AdoDBAbo.fields("Fecha"), PorteDeLetra
-               cPrint.printTexto 9.8, PosLinea, ULCase(AdoDBAbo.fields("Banco")), PorteDeLetra
-               cPrint.printFields 12.25, PosLinea, AdoDBAbo.fields("Abono"), PorteDeLetra, , , 2
+               cPrint.printFields 8.4, PosLinea, AdoDBAbo.Fields("Fecha"), PorteDeLetra
+               cPrint.printTexto 9.8, PosLinea, ULCase(AdoDBAbo.Fields("Banco")), PorteDeLetra
+               cPrint.printFields 12.25, PosLinea, AdoDBAbo.Fields("Abono"), PorteDeLetra, , , 2
                PosLinea = PosLinea + 0.3
                AdoDBAbo.MoveNext
             Loop
@@ -1638,14 +1441,13 @@ Dim TempPosLineaAbono As Single
        Cadena = TrimStrg(Informativo_FA)
        PosLinea = cPrint.printTextoMultiple(1.6, PosLinea, Cadena, 12.3)
     End If
+    PosLinea = PosLineaFinal
     If Debo_Pagare <> Ninguno Then
-       PosLinea = TempPosLineaAbono
        Cadena = TrimStrg(Debo_Pagare)
        PosLinea = cPrint.printTextoMultiple(1.6, PosLinea, Cadena, 18.6)
+       PosLinea = PosLinea + 0.35
     End If
     If Len(Resolucion_Retencion) > 1 Then
-      'PosLinea = TempPosLineaAbono
-       PosLinea = PosLinea + 0.35
        cPrint.printLinea 1.5, PosLinea, 20, PosLinea, Negro
        PosLinea = PosLinea + 0.1
        PosLinea = cPrint.printTextoMultiple(1.6, PosLinea, Resolucion_Retencion, 18.6)
@@ -1655,6 +1457,9 @@ Dim TempPosLineaAbono As Single
     AdoDBAbo.Close
     RatonNormal
     cPrint.finalizaImpresion
+    Progreso_Barra.Mensaje_Box = "OK"
+    Progreso_Esperar
+    Progreso_Final
 End Sub
 
 Public Sub SRI_Generar_PDF_NC(TFA As Tipo_Facturas, _
@@ -1743,16 +1548,16 @@ Dim tipoDeLetra As String
     Select_AdoDB AdoDBDet, sSQL
     With AdoDBDet
      If .RecordCount > 0 Then
-         TFA.Fecha_NC = .fields("Fecha")
-         TFA.Serie_NC = .fields("Serie_NC")
-         TFA.ClaveAcceso_NC = .fields("Clave_Acceso_NC")
-         TFA.Autorizacion_NC = .fields("Autorizacion_NC")
-         TFA.Nota_Credito = .fields("Secuencial_NC")
+         TFA.Fecha_NC = .Fields("Fecha")
+         TFA.Serie_NC = .Fields("Serie_NC")
+         TFA.ClaveAcceso_NC = .Fields("Clave_Acceso_NC")
+         TFA.Autorizacion_NC = .Fields("Autorizacion_NC")
+         TFA.Nota_Credito = .Fields("Secuencial_NC")
          Do While Not .EOF
-            If .fields("Cheque") = "I.V.A." Then
-                TFA.Total_IVA_NC = TFA.Total_IVA_NC + .fields("Abono")
+            If .Fields("Cheque") = "I.V.A." Then
+                TFA.Total_IVA_NC = TFA.Total_IVA_NC + .Fields("Abono")
             Else
-                TFA.SubTotal_NC = TFA.SubTotal_NC + .fields("Abono")
+                TFA.SubTotal_NC = TFA.SubTotal_NC + .Fields("Abono")
             End If
            .MoveNext
          Loop
@@ -1797,22 +1602,22 @@ Dim tipoDeLetra As String
             Do While Not AdoDBDetFA.EOF
                Progreso_Barra.Mensaje_Box = "Generando documento PDF"
                Progreso_Esperar
-               cPrint.printTexto 1.6, PosLinea, AdoDBDetFA.fields("Codigo_Inv")
+               cPrint.printTexto 1.6, PosLinea, AdoDBDetFA.Fields("Codigo_Inv")
                
-               PosLineaTemp = cPrint.printTextoMultiple(4.3, PosLinea, AdoDBDetFA.fields("Producto"), 6.5)
+               PosLineaTemp = cPrint.printTextoMultiple(4.3, PosLinea, AdoDBDetFA.Fields("Producto"), 6.5)
                If PosLineaTemp > PosLinea Then PosLinea = PosLineaTemp
                'If cPrint.dNoLineas > 0 Then PosLinea = cPrint.dNoLineas
-               cPrint.printVariable 11.4, PosLinea, AdoDBDetFA.fields("Cantidad")
-               cPrint.printVariable 13.9, PosLinea, AdoDBDetFA.fields("Precio"), , , , 4
-               cPrint.printFields 15.9, PosLinea, AdoDBDetFA.fields("Descuento"), , , , 2
-               cPrint.printFields 18.3, PosLinea, AdoDBDetFA.fields("Total"), , , , 2
+               cPrint.printVariable 11.4, PosLinea, AdoDBDetFA.Fields("Cantidad")
+               cPrint.printVariable 13.9, PosLinea, AdoDBDetFA.Fields("Precio"), , , , 4
+               cPrint.printFields 15.9, PosLinea, AdoDBDetFA.Fields("Descuento"), , , , 2
+               cPrint.printFields 18.3, PosLinea, AdoDBDetFA.Fields("Total"), , , , 2
                
-               TFA.SubTotal_NC = TFA.SubTotal_NC + AdoDBDetFA.fields("Total")
-               Total_Desc = Total_Desc + AdoDBDetFA.fields("Descuento")
-               If AdoDBDetFA.fields("Total_IVA") > 0 Then
-                  Total_Con_IVA = Total_Con_IVA + AdoDBDetFA.fields("Total")
+               TFA.SubTotal_NC = TFA.SubTotal_NC + AdoDBDetFA.Fields("Total")
+               Total_Desc = Total_Desc + AdoDBDetFA.Fields("Descuento")
+               If AdoDBDetFA.Fields("Total_IVA") > 0 Then
+                  Total_Con_IVA = Total_Con_IVA + AdoDBDetFA.Fields("Total")
                Else
-                  Total_Sin_IVA = Total_Sin_IVA + AdoDBDetFA.fields("Total")
+                  Total_Sin_IVA = Total_Sin_IVA + AdoDBDetFA.Fields("Total")
                End If
                PosLinea = PosLinea + 0.4
                AdoDBDetFA.MoveNext
@@ -1901,6 +1706,9 @@ Dim tipoDeLetra As String
     End With
     AdoDBDet.Close
     AdoDBDetFA.Close
+    Progreso_Barra.Mensaje_Box = "OK"
+    Progreso_Esperar
+    Progreso_Final
 End Sub
 
 Public Sub SRI_Generar_PDF_GR(TFA As Tipo_Facturas, _
@@ -1958,19 +1766,19 @@ Dim TempPosLineaAbono As Single
          Do While Not .EOF
             Progreso_Barra.Mensaje_Box = "Generando documento PDF"
             Progreso_Esperar
-            Producto = .fields("Producto")
-            If .fields("Ticket") <> Ninguno Then Producto = Producto & " " & .fields("Ticket")
-            If .fields("Mes") <> Ninguno And TFA.Imp_Mes Then Producto = Producto & " " & .fields("Mes")
+            Producto = .Fields("Producto")
+            If .Fields("Ticket") <> Ninguno Then Producto = Producto & " " & .Fields("Ticket")
+            If .Fields("Mes") <> Ninguno And TFA.Imp_Mes Then Producto = Producto & " " & .Fields("Mes")
             If TFA.SP Then
                Producto = Producto & vbCrLf _
-                        & "Lote No. " & .fields("Lote_No") & ", ELAB. " & .fields("Fecha_Fab") & ", VENC. " & .fields("Fecha_Exp") _
-                        & ", Reg. Sanit. " & .fields("Reg_Sanitario") _
-                        & ", Modelo: " & .fields("Modelo") & ", Serie No. " & .fields("Serie_No") _
-                        & ", Procedencia: " & .fields("Procedencia")
+                        & "Lote No. " & .Fields("Lote_No") & ", ELAB. " & .Fields("Fecha_Fab") & ", VENC. " & .Fields("Fecha_Exp") _
+                        & ", Reg. Sanit. " & .Fields("Reg_Sanitario") _
+                        & ", Modelo: " & .Fields("Modelo") & ", Serie No. " & .Fields("Serie_No") _
+                        & ", Procedencia: " & .Fields("Procedencia")
             End If
-            cPrint.printFields 1.65, PosLinea, .fields("Codigo")
-            If Len(.fields("Codigo_Barra")) > 1 Then cPrint.printFields 3.4, PosLinea, .fields("Codigo_Barra")
-            cPrint.printFields 4.5, PosLinea, .fields("Cantidad")
+            cPrint.printFields 1.65, PosLinea, .Fields("Codigo")
+            If Len(.Fields("Codigo_Barra")) > 1 Then cPrint.printFields 3.4, PosLinea, .Fields("Codigo_Barra")
+            cPrint.printFields 4.5, PosLinea, .Fields("Cantidad")
             PosLinea = cPrint.printTextoMultiple(6.5, PosLinea, Producto, 14)
             If cPrint.dNoLineas > 0 Then PosLinea = cPrint.dNoLineas Else PosLinea = PosLinea + 0.35
             If PosLinea > 27 Then
@@ -2044,6 +1852,9 @@ Dim TempPosLineaAbono As Single
     AdoDBDet.Close
     RatonNormal
     cPrint.finalizaImpresion
+    Progreso_Barra.Mensaje_Box = "OK"
+    Progreso_Esperar
+    Progreso_Final
 End Sub
 
 Public Sub SRI_Generar_PDF_RE(TFA As Tipo_Facturas, _
@@ -2072,22 +1883,22 @@ Dim NombreTipoDeLetra As String
     Select_AdoDB AdoDBCompras, sSQL
     With AdoDBCompras
      If .RecordCount > 0 Then
-         TFA.Fecha = .fields("Fecha")
-         TFA.Cliente = .fields("Cliente")
-         TFA.Razon_Social = .fields("Cliente")
-         TFA.CI_RUC = .fields("CI_RUC")
-         TFA.RUC_CI = .fields("CI_RUC")
-         TFA.DireccionC = .fields("Direccion")
+         TFA.Fecha = .Fields("Fecha")
+         TFA.Cliente = .Fields("Cliente")
+         TFA.Razon_Social = .Fields("Cliente")
+         TFA.CI_RUC = .Fields("CI_RUC")
+         TFA.RUC_CI = .Fields("CI_RUC")
+         TFA.DireccionC = .Fields("Direccion")
         'TFA.Serie_R
         'TFA.Retencion
-         TFA.Fecha_Aut = .fields("Fecha_Aut")
-         TFA.Hora = .fields("Hora_Aut")
-         TFA.Autorizacion_R = .fields("AutRetencion")
-         TFA.ClaveAcceso = .fields("Clave_Acceso")
-         TFA.Serie = .fields("Establecimiento") & .fields("PuntoEmision")
-         TFA.Factura = .fields("Secuencial")
-         TFA.Fecha = .fields("Fecha")
-         TFA.Tipo_Comp = CStr(.fields("TipoComprobante"))
+         TFA.Fecha_Aut = .Fields("Fecha_Aut")
+         TFA.Hora = .Fields("Hora_Aut")
+         TFA.Autorizacion_R = .Fields("AutRetencion")
+         TFA.ClaveAcceso = .Fields("Clave_Acceso")
+         TFA.Serie = .Fields("Establecimiento") & .Fields("PuntoEmision")
+         TFA.Factura = .Fields("Secuencial")
+         TFA.Fecha = .Fields("Fecha")
+         TFA.Tipo_Comp = CStr(.Fields("TipoComprobante"))
          FechaTexto = TFA.Fecha
          EjercicioFiscal = CStr(Year(TFA.Fecha))
          Validar_Porc_IVA TFA.Fecha
@@ -2101,7 +1912,7 @@ Dim NombreTipoDeLetra As String
          & "WHERE TC = 'TDC' " _
          & "AND Tipo_Comprobante_Codigo = " & Val(TFA.Tipo_Comp) & " "
     Select_AdoDB AdoDBAir, sSQL
-    If AdoDBAir.RecordCount > 0 Then TFA.Tipo_Comp = AdoDBAir.fields("Descripcion")
+    If AdoDBAir.RecordCount > 0 Then TFA.Tipo_Comp = AdoDBAir.Fields("Descripcion")
     AdoDBAir.Close
     
    'Listar las Retenciones de la Fuente
@@ -2152,43 +1963,48 @@ Dim NombreTipoDeLetra As String
     If ConsultarDetalle Then
        With AdoDBCompras
         If .RecordCount > 0 Then
-            If .fields("ValorRetBienes") > 0 Then
-                cPrint.printTexto 1.6, PosLinea, "I.V.A."
-                cPrint.printTexto 2.9, PosLinea, "Retención I.V.A. Bienes"
-                cPrint.printTexto 13.8, PosLinea, .fields("PorRetBienes")    '"---"
-                cPrint.printVariable 14.7, PosLinea, .fields("MontoIvaBienes")
-                cPrint.printTexto 17.3, PosLinea, .fields("Porc_Bienes") & "%"
-                cPrint.printVariable 18.2, PosLinea, .fields("ValorRetBienes")
-                Sumatoria = Sumatoria + .fields("ValorRetBienes")
-                PosLinea = PosLinea + 0.4
-            End If
-            If .fields("ValorRetServicios") > 0 Then
-                cPrint.printTexto 1.6, PosLinea, "I.V.A."
-                cPrint.printTexto 2.9, PosLinea, "Retención I.V.A. Servicios"
-                cPrint.printTexto 13.8, PosLinea, .fields("PorRetServicios")  '"---"
-                cPrint.printVariable 14.7, PosLinea, .fields("MontoIvaServicios")
-                cPrint.printTexto 17.3, PosLinea, .fields("Porc_Servicios") & "%"
-                cPrint.printVariable 18.2, PosLinea, .fields("ValorRetServicios")
-                Sumatoria = Sumatoria + .fields("ValorRetServicios")
-                PosLinea = PosLinea + 0.4
-            End If
+            Do While Not .EOF
+               If .Fields("ValorRetBienes") > 0 Then
+                   cPrint.printTexto 1.6, PosLinea, "I.V.A."
+                   cPrint.printTexto 2.9, PosLinea, "Retención I.V.A. Bienes"
+                   cPrint.printTexto 13.8, PosLinea, .Fields("PorRetBienes")    '"---"
+                   cPrint.printVariable 14.7, PosLinea, .Fields("MontoIvaBienes")
+                   cPrint.printTexto 17.3, PosLinea, .Fields("Porc_Bienes") & "%"
+                   cPrint.printVariable 18.2, PosLinea, .Fields("ValorRetBienes")
+                   Sumatoria = Sumatoria + .Fields("ValorRetBienes")
+                   PosLinea = PosLinea + 0.4
+               End If
+               If .Fields("ValorRetServicios") > 0 Then
+                   cPrint.printTexto 1.6, PosLinea, "I.V.A."
+                   cPrint.printTexto 2.9, PosLinea, "Retención I.V.A. Servicios"
+                   cPrint.printTexto 13.8, PosLinea, .Fields("PorRetServicios")  '"---"
+                   cPrint.printVariable 14.7, PosLinea, .Fields("MontoIvaServicios")
+                   cPrint.printTexto 17.3, PosLinea, .Fields("Porc_Servicios") & "%"
+                   cPrint.printVariable 18.2, PosLinea, .Fields("ValorRetServicios")
+                   Sumatoria = Sumatoria + .Fields("ValorRetServicios")
+                   PosLinea = PosLinea + 0.4
+               End If
+              .MoveNext
+            Loop
+           .MoveFirst
          End If
        End With
+       
        With AdoDBAir
         If .RecordCount > 0 Then
             Progreso_Barra.Valor_Maximo = Progreso_Barra.Valor_Maximo + .RecordCount
             Do While Not .EOF
                Progreso_Barra.Mensaje_Box = "Generando documento PDF"
                Progreso_Esperar
-               ConceptoRet = .fields("Concepto")
+               ConceptoRet = .Fields("Concepto")
                cPrint.printTexto 1.6, PosLinea, "RENTA"
                PosLinea = cPrint.printTextoMultiple(2.9, PosLinea, ConceptoRet, 10.5)
                If cPrint.dNoLineas > 0 Then PosLinea = cPrint.dNoLineas
-               cPrint.printTexto 13.8, PosLinea, .fields("CodRet")
-               cPrint.printVariable 14.7, PosLinea, .fields("BaseImp")
-               cPrint.printTexto 17.3, PosLinea, Format$(.fields("Porcentaje"), "00.00%")
-               cPrint.printVariable 18.2, PosLinea, .fields("ValRet")
-               Sumatoria = Sumatoria + .fields("ValRet")
+               cPrint.printTexto 13.8, PosLinea, .Fields("CodRet")
+               cPrint.printVariable 14.7, PosLinea, .Fields("BaseImp")
+               cPrint.printTexto 17.3, PosLinea, Format$(.Fields("Porcentaje"), "00.00%")
+               cPrint.printVariable 18.2, PosLinea, .Fields("ValRet")
+               Sumatoria = Sumatoria + .Fields("ValRet")
                PosLinea = PosLinea + 0.4
               .MoveNext
             Loop
@@ -2216,13 +2032,13 @@ Dim NombreTipoDeLetra As String
          cPrint.tipoNegrilla = False
          PosLinea = PosLinea + 0.4
          Cadena = ""
-         Codigo = TrimStrg(.fields("Telefono"))
+         Codigo = TrimStrg(.Fields("Telefono"))
          Codigo = Replace(Codigo, " ", "")
          Codigo = Replace(Codigo, ".", "")
          Codigo = Replace(Codigo, "-", "")
          If Val(Codigo) > 0 Then Cadena = Cadena & "Teléfono: " & Codigo & ", "
          Cadena = Cadena & "Tipo Comprobante: " & TFA.TP & "-" & Format$(TFA.Numero, "00000000") & ", "
-         Codigo = TrimStrg(.fields("Email"))
+         Codigo = TrimStrg(.Fields("Email"))
          If InStr(Codigo, "@") And Len(Codigo) > 3 Then Cadena = Cadena & "Email: " & Codigo
          cPrint.printTexto 1.6, PosLinea, Cadena
          cPrint.printCuadro 1.5, TempPosLinea, 14.5, PosLinea - 0.25, Negro, "B"
@@ -2234,6 +2050,9 @@ Dim NombreTipoDeLetra As String
  '  ObjPDF.PDFEndPage
     AdoDBAir.Close
     AdoDBCompras.Close
+    Progreso_Barra.Mensaje_Box = "OK"
+    Progreso_Esperar
+    Progreso_Final
     RatonNormal
 End Sub
 
@@ -2267,33 +2086,33 @@ Dim NombreTipoDeLetra As String
          & "AND TC.TP = Co.TP " _
          & "AND TC.Numero = Co.Numero " _
          & "ORDER BY Establecimiento, PuntoEmision,Secuencial "
-    Select_AdoDB AdoDBCompras, sSQL, "Encabezado_LC"
+    Select_AdoDB AdoDBCompras, sSQL
     With AdoDBCompras
      If .RecordCount > 0 Then
-         TFA.Fecha = .fields("Fecha")
-         TFA.Cliente = .fields("Cliente")
-         TFA.Razon_Social = .fields("Cliente")
-         TFA.CI_RUC = .fields("CI_RUC")
-         TFA.RUC_CI = .fields("CI_RUC")
-         TFA.DireccionC = .fields("Direccion")
-         TFA.Fecha_Aut = .fields("Fecha_Aut")
-         TFA.Hora = .fields("Hora_Aut")
-         TFA.Autorizacion_LC = .fields("Autorizacion")
-         TFA.ClaveAcceso_LC = .fields("Clave_Acceso_LC")
-         TFA.Serie_LC = .fields("Establecimiento") & .fields("PuntoEmision")
-         TFA.Factura = .fields("Secuencial")
-         TFA.Fecha = .fields("Fecha")
-         TFA.EmailC = .fields("Email")
-         TFA.Sin_IVA = .fields("BaseImponible")
-         TFA.Con_IVA = .fields("BaseImpGrav")
-         TFA.Total_IVA = .fields("MontoIva")
-         TFA.Nota = .fields("Concepto")
+         TFA.Fecha = .Fields("Fecha")
+         TFA.Cliente = .Fields("Cliente")
+         TFA.Razon_Social = .Fields("Cliente")
+         TFA.CI_RUC = .Fields("CI_RUC")
+         TFA.RUC_CI = .Fields("CI_RUC")
+         TFA.DireccionC = .Fields("Direccion")
+         TFA.Fecha_Aut = .Fields("Fecha_Aut")
+         TFA.Hora = .Fields("Hora_Aut")
+         TFA.Autorizacion_LC = .Fields("Autorizacion")
+         TFA.ClaveAcceso_LC = .Fields("Clave_Acceso_LC")
+         TFA.Serie_LC = .Fields("Establecimiento") & .Fields("PuntoEmision")
+         TFA.Factura = .Fields("Secuencial")
+         TFA.Fecha = .Fields("Fecha")
+         TFA.EmailC = .Fields("Email")
+         TFA.Sin_IVA = .Fields("BaseImponible")
+         TFA.Con_IVA = .Fields("BaseImpGrav")
+         TFA.Total_IVA = .Fields("MontoIva")
+         TFA.Nota = .Fields("Concepto")
          If TFA.Nota = Ninguno Then TFA.Nota = "Liquidacion de Compras"
          TFA.Total_MN = TFA.Sin_IVA + TFA.Con_IVA + TFA.Total_IVA
          TFA.SubTotal = TFA.Sin_IVA + TFA.Con_IVA
          Validar_Porc_IVA TFA.Fecha
          TFA.Porc_IVA = Porc_IVA * 100
-         TFA.Tipo_Comp = CStr(.fields("TipoComprobante"))
+         TFA.Tipo_Comp = CStr(.Fields("TipoComprobante"))
          TFA.Si_Existe_Doc = True
          FechaTexto = TFA.Fecha
          EjercicioFiscal = CStr(Year(TFA.Fecha))
@@ -2307,7 +2126,7 @@ Dim NombreTipoDeLetra As String
          & "WHERE TC = 'TDC' " _
          & "AND Tipo_Comprobante_Codigo = " & Val(TFA.Tipo_Comp) & " "
     Select_AdoDB AdoDBAir, sSQL
-    If AdoDBAir.RecordCount > 0 Then TFA.Tipo_Comp = AdoDBAir.fields("Descripcion")
+    If AdoDBAir.RecordCount > 0 Then TFA.Tipo_Comp = AdoDBAir.Fields("Descripcion")
     AdoDBAir.Close
     PorteDeLetra = 7
    'Listar las Retenciones de la Fuente
@@ -2325,7 +2144,7 @@ Dim NombreTipoDeLetra As String
          & "AND TIV.Fecha_Final >= #" & BuscarFecha(FechaTexto) & "# " _
          & "AND R.CodRet = TIV.Codigo " _
          & "ORDER BY R.Cta_Retencion "
-    Select_AdoDB AdoDBAir, sSQL, "Detalle_LC"
+    Select_AdoDB AdoDBAir, sSQL
    'Encabezado Factura
     With AdoDBCompras
      If .RecordCount > 0 Then
@@ -2474,10 +2293,10 @@ Dim NombreTipoDeLetra As String
     With AdoDBCompras
      If .RecordCount > 0 Then
          PosLinea = InfoPosLinea
-         cPrint.printTexto 1.6, PosLinea, "Teléfono: " & .fields("Telefono")
+         cPrint.printTexto 1.6, PosLinea, "Teléfono: " & .Fields("Telefono")
          cPrint.printTexto 7.5, PosLinea, "Tipo Comprobante: " & TFA.TP & "-" & Format$(TFA.Numero, "00000000")
          PosLinea = PosLinea + 0.35
-         cPrint.printTexto 1.6, PosLinea, "Email: " & .fields("Email")
+         cPrint.printTexto 1.6, PosLinea, "Email: " & .Fields("Email")
          'cPrint.printCuadroLinea 1.5, TempPosLinea, 12.9, PosLinea + 0.5, Negro, "B"
          'cPrint.printCuadroLinea 1.1, TempPosLinea + 0.2, 13.2, TempPosLinea + 0.2, Negro
      End If
@@ -2485,26 +2304,26 @@ Dim NombreTipoDeLetra As String
     cPrint.finalizaImpresion
     AdoDBAir.Close
     AdoDBCompras.Close
+    Progreso_Barra.Mensaje_Box = "OK"
+    Progreso_Esperar
+    Progreso_Final
     RatonNormal
 End Sub
 
-Public Sub SRI_Actualizar_Documento_XML(ClaveDeAcceso As String)
+Public Sub SRI_Actualizar_Documento_XML(SRI_Auto As Tipo_Estado_SRI)
 Dim AdoDBXML As ADODB.Recordset
-Dim RutaXMLAutorizado As String
 Dim DatosXMLA As String
-Dim FileXML As String
 Dim TD As String
 Dim SerieF As String
 Dim Documento As Long
 
- If Len(ClaveDeAcceso) >= 13 Then
-    RutaXMLAutorizado = RutaDocumentos & "\Comprobantes Autorizados\" & ClaveDeAcceso & ".xml"
-    DatosXMLA = Leer_Archivo_Texto(RutaXMLAutorizado)
+ If Len(SRI_Auto.Clave_De_Acceso) >= 13 Then
+    DatosXMLA = Leer_Archivo_Texto(RutaSysBases & "\CE\CE" & NumEmpresa & "\Comprobantes Autorizados\" & SRI_Auto.Clave_De_Acceso & ".xml")
    'MsgBox DatosXMLA
     If Len(DatosXMLA) > 1 Then
-       SerieF = MidStrg(ClaveDeAcceso, 25, 6)
-       Documento = Val(MidStrg(ClaveDeAcceso, 31, 9))
-       Select Case MidStrg(ClaveDeAcceso, 9, 2)
+       SerieF = MidStrg(SRI_Auto.Clave_De_Acceso, 25, 6)
+       Documento = Val(MidStrg(SRI_Auto.Clave_De_Acceso, 31, 9))
+       Select Case MidStrg(SRI_Auto.Clave_De_Acceso, 9, 2)
          Case "01": TD = "FA"
          Case "03": TD = "LC"
          Case "04": TD = "NC"
@@ -2516,34 +2335,28 @@ Dim Documento As Long
             & "FROM Trans_Documentos " _
             & "WHERE Item = '" & NumEmpresa & "' " _
             & "AND Periodo = '" & Periodo_Contable & "' " _
-            & "AND Clave_Acceso = '" & ClaveDeAcceso & "' "
+            & "AND Clave_Acceso = '" & SRI_Auto.Clave_De_Acceso & "' "
        Select_AdoDB AdoDBXML, sSQL
        If AdoDBXML.RecordCount <= 0 Then
           AdoDBXML.AddNew
-          AdoDBXML.fields("Item") = NumEmpresa
-          AdoDBXML.fields("Periodo") = Periodo_Contable
-          AdoDBXML.fields("Clave_Acceso") = ClaveDeAcceso
+          AdoDBXML.Fields("Item") = NumEmpresa
+          AdoDBXML.Fields("Periodo") = Periodo_Contable
+          AdoDBXML.Fields("Clave_Acceso") = SRI_Auto.Clave_De_Acceso
        End If
-       AdoDBXML.fields("TD") = TD
-       AdoDBXML.fields("Serie") = SerieF
-       AdoDBXML.fields("Documento") = Documento
-       AdoDBXML.fields("Documento_Autorizado") = DatosXMLA
+       AdoDBXML.Fields("TD") = TD
+       AdoDBXML.Fields("Serie") = SerieF
+       AdoDBXML.Fields("Documento") = Documento
+       AdoDBXML.Fields("Documento_Autorizado") = DatosXMLA
+       AdoDBXML.Fields("Fecha") = SRI_Auto.Fecha_Autorizacion & " " & SRI_Auto.Hora_Autorizacion
        AdoDBXML.Update
        AdoDBXML.Close
     End If
  End If
 End Sub
 
-'''Public Sub SRI_Actualizar_XML_Factura(TFA As Tipo_Facturas, _
-'''                                      SRI_Autorizacion As Tipo_Estado_SRI)
-'''Dim SRI_Error As String
-'''    SRI_Error = SRI_Autorizacion.Error_SRI
-'''    SRI_Error = Replace(SRI_Error, "'", "`")
-'''    SRI_Error = Replace(SRI_Error, vbCrLf, "||")
-'''    SRI_Error = Replace(SRI_Error, "&", " y ")
-'''    SRI_Error = Replace(SRI_Error, "#", "No.")
-'''    SRI_Error = TrimStrg(MidStrg(SRI_Error, 1, 100))
-'''    If SRI_Error = "" Then SRI_Error = Ninguno
+Public Sub SRI_Actualizar_XML_Comprobantes(TipoDoc As String, SRI_Autorizacion As Tipo_Estado_SRI, TFA As Tipo_Facturas)
+    Select Case TipoDoc
+      Case "FA"
 '''    sSQL = "UPDATE Facturas " _
 '''         & "SET Estado_SRI = '" & SRI_Autorizacion.Estado_SRI & "', " _
 '''         & "Clave_Acceso = '" & TFA.ClaveAcceso & "', "
@@ -2557,277 +2370,228 @@ End Sub
 '''         & "AND Factura = " & TFA.Factura & " " _
 '''         & "AND CodigoC = '" & TFA.CodigoC & "' " _
 '''         & "AND Autorizacion = '" & TFA.Autorizacion & "' "
-'''    Ejecutar_SQL_SP sSQL
-'''End Sub
-
-Public Sub SRI_Actualizar_XML_Retencion(SRI_Autorizacion As Tipo_Estado_SRI, _
-                                        TFA As Tipo_Facturas)
-   sSQL = "UPDATE Trans_Compras " _
-        & "SET Estado_SRI = '" & SRI_Autorizacion.Estado_SRI & "', " _
-        & "Clave_Acceso = '" & TFA.ClaveAcceso & "' " _
-        & "WHERE Item = '" & NumEmpresa & "' " _
-        & "AND Periodo = '" & Periodo_Contable & "' " _
-        & "AND TP = '" & TFA.TP & "' " _
-        & "AND Numero = '" & TFA.Numero & "' " _
-        & "AND Serie_Retencion = '" & TFA.Serie_R & "' " _
-        & "AND SecRetencion = '" & TFA.Retencion & "' " _
-        & "AND AutRetencion = '" & TFA.Autorizacion_R & "' "
-   Ejecutar_SQL_SP sSQL
-End Sub
-
-Public Sub SRI_Actualizar_XML_Liquidacion(SRI_Autorizacion As Tipo_Estado_SRI, _
-                                          TFA As Tipo_Facturas)
-   sSQL = "UPDATE Trans_Compras " _
-        & "SET Estado_SRI_LC = '" & SRI_Autorizacion.Estado_SRI & "', " _
-        & "Clave_Acceso_LC = '" & TFA.ClaveAcceso_LC & "' " _
-        & "WHERE Item = '" & NumEmpresa & "' " _
-        & "AND Periodo = '" & Periodo_Contable & "' " _
-        & "AND TP = '" & TFA.TP & "' " _
-        & "AND Numero = '" & TFA.Numero & "' " _
-        & "AND Establecimiento+PuntoEmision = '" & TFA.Serie_LC & "' "
-   Ejecutar_SQL_SP sSQL
-End Sub
-
-Public Sub SRI_Actualizar_XML_Nota_Credito(SRI_Autorizacion As Tipo_Estado_SRI, _
-                                           TFA As Tipo_Facturas)
-   sSQL = "UPDATE Trans_Abonos " _
-        & "SET Estado_SRI_NC = '" & SRI_Autorizacion.Estado_SRI & "', " _
-        & "Clave_Acceso_NC = '" & TFA.ClaveAcceso_NC & "' " _
-        & "WHERE Item = '" & NumEmpresa & "' " _
-        & "AND Periodo = '" & Periodo_Contable & "' " _
-        & "AND TP = '" & TFA.TC & "' " _
-        & "AND Serie = '" & TFA.Serie & "' " _
-        & "AND Factura = " & TFA.Factura & " " _
-        & "AND CodigoC = '" & TFA.CodigoC & "' " _
-        & "AND Autorizacion = '" & TFA.Autorizacion & "' " _
-        & "AND Serie_NC = '" & TFA.Serie_NC & "' " _
-        & "AND Secuencial_NC = " & TFA.Nota_Credito & " " _
-        & "AND Banco = 'NOTA DE CREDITO' "
-  'MsgBox sSQL
-   Ejecutar_SQL_SP sSQL
-End Sub
-
-Public Sub SRI_Actualizar_XML_Guia_Remision(SRI_Autorizacion As Tipo_Estado_SRI, _
-                                            TFA As Tipo_Facturas)
-   sSQL = "UPDATE Facturas_Auxiliares " _
-        & "SET Estado_SRI_GR = '" & SRI_Autorizacion.Estado_SRI & "', " _
-        & "Clave_Acceso_GR = '" & TFA.ClaveAcceso_NC & "' " _
-        & "WHERE Item = '" & NumEmpresa & "' " _
-        & "AND Periodo = '" & Periodo_Contable & "' " _
-        & "AND TP = '" & TFA.TC & "' " _
-        & "AND Serie = '" & TFA.Serie & "' " _
-        & "AND Factura = " & TFA.Factura & " " _
-        & "AND CodigoC = '" & TFA.CodigoC & "' " _
-        & "AND Autorizacion = '" & TFA.Autorizacion & "' "
-   'MsgBox sSQL
-   Ejecutar_SQL_SP sSQL
-End Sub
-
-Public Function SRI_Mensaje_Error(ClaveAcceso As String) As String
-Dim SI As Long
-Dim SF As Long
-Dim Result As String
-Dim Mensaje As String
-    Result = ""
-    Mensaje = Leer_Archivo_Texto(RutaDocumentos & "\Comprobantes no Autorizados\" & ClaveAcceso & ".xml")
-    If Len(Mensaje) > 1 Then
-       Mensaje = Replace(Mensaje, "  ", "")
-       SI = InStr(Mensaje, "<mensajes>")
-       SF = InStr(Mensaje, "</mensajes>")
-       If SI > 0 And SF > 0 Then
-          SI = SI + 12
-          Result = TrimStrg(MidStrg(Mensaje, SI, SF - SI))
-       End If
-    End If
-    SRI_Mensaje_Error = Result
-End Function
-
-Public Sub SRI_Actualizar_Autorizacion_Factura(TFA As Tipo_Facturas, _
-                                               SRI_Autorizacion As Tipo_Estado_SRI)
-Dim Error_SRI As String
-With SRI_Autorizacion
-   'MsgBox "Actualizacion de la Factura: " & .Fecha_Autorizacion
-    If Len(.Autorizacion) >= 13 Then
-       'Determinamos el tipo de Error
-        Error_SRI = Replace(.Error_SRI, "'", "`")
-        Error_SRI = Replace(Error_SRI, vbCrLf, "||")
-        Error_SRI = Replace(Error_SRI, "&", " y ")
-        Error_SRI = Replace(Error_SRI, "#", "No.")
-        Error_SRI = TrimStrg(MidStrg(Error_SRI, 1, 100))
-        If Error_SRI = "" Then Error_SRI = Ninguno
-        
-       'Actualizamos el estado del documento
-        sSQL = "UPDATE Facturas " _
-             & "SET Clave_Acceso = '" & .Clave_De_Acceso & "', "
-        If .Estado_SRI = "OK" Then sSQL = sSQL & "Autorizacion = '" & .Autorizacion & "', "
-        sSQL = sSQL _
-             & "Fecha_Aut = #" & BuscarFecha(.Fecha_Autorizacion) & "#, " _
-             & "Hora_Aut = '" & .Hora_Autorizacion & "', " _
-             & "Estado_SRI = '" & .Estado_SRI & "', " _
-             & "Error_FA_SRI = '" & Error_SRI & "' " _
-             & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND Periodo = '" & Periodo_Contable & "' " _
-             & "AND TC = '" & TFA.TC & "' " _
-             & "AND Serie = '" & TFA.Serie & "' " _
-             & "AND Factura = " & TFA.Factura & " " _
-             & "AND Autorizacion = '" & TFA.Autorizacion & "' " _
-             & "AND CodigoC = '" & TFA.CodigoC & "' "
-        Ejecutar_SQL_SP sSQL
-        TFA.Estado_SRI = .Estado_SRI
-        If .Estado_SRI = "OK" Then
-            sSQL = "UPDATE Detalle_Factura " _
-                 & "SET Autorizacion = '" & .Autorizacion & "' " _
-                 & "WHERE Item = '" & NumEmpresa & "' " _
-                 & "AND Periodo = '" & Periodo_Contable & "' " _
-                 & "AND TC = '" & TFA.TC & "' " _
-                 & "AND Serie = '" & TFA.Serie & "' " _
-                 & "AND Factura = " & TFA.Factura & " " _
-                 & "AND CodigoC = '" & TFA.CodigoC & "' " _
-                 & "AND Autorizacion = '" & TFA.Autorizacion & "' "
-            Ejecutar_SQL_SP sSQL
-            sSQL = "UPDATE Trans_Abonos " _
-                 & "SET Autorizacion = '" & .Autorizacion & "' " _
-                 & "WHERE Item = '" & NumEmpresa & "' " _
-                 & "AND Periodo = '" & Periodo_Contable & "' " _
-                 & "AND TP = '" & TFA.TC & "' " _
-                 & "AND Serie = '" & TFA.Serie & "' " _
-                 & "AND Factura = " & TFA.Factura & " " _
-                 & "AND CodigoC = '" & TFA.CodigoC & "' " _
-                 & "AND Autorizacion = '" & TFA.Autorizacion & "' "
-            Ejecutar_SQL_SP sSQL
-            sSQL = "UPDATE Facturas_Auxiliares " _
-                 & "SET Autorizacion = '" & .Autorizacion & "' " _
-                 & "WHERE Item = '" & NumEmpresa & "' " _
-                 & "AND Periodo = '" & Periodo_Contable & "' " _
-                 & "AND TC = '" & TFA.TC & "' " _
-                 & "AND Serie = '" & TFA.Serie & "' " _
-                 & "AND Factura = " & TFA.Factura & " " _
-                 & "AND CodigoC = '" & TFA.CodigoC & "' " _
-                 & "AND Autorizacion = '" & TFA.Autorizacion & "' "
-            Ejecutar_SQL_SP sSQL
-           'Actualizamos el documento autorizado en la base de datos del sistema
-            SRI_Actualizar_Documento_XML .Clave_De_Acceso
-        End If
-    End If
-End With
-End Sub
-
-Public Sub SRI_Actualizar_Autorizacion_Nota_Credito(TFA As Tipo_Facturas, _
-                                                    SRI_Autorizacion As Tipo_Estado_SRI)
-    With SRI_Autorizacion
-        'MsgBox TFA.Autorizacion_NC
-        TFA.Fecha_Aut_NC = .Fecha_Autorizacion
-        TFA.Hora_NC = .Hora_Autorizacion
-        sSQL = "UPDATE Trans_Abonos " _
-             & "SET Autorizacion_NC = '" & .Autorizacion & "', " _
-             & "Fecha_Aut_NC = #" & BuscarFecha(.Fecha_Autorizacion) & "#, " _
-             & "Hora_Aut_NC = '" & .Hora_Autorizacion & "', " _
-             & "Estado_SRI_NC = '" & .Estado_SRI & "' " _
-             & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND Periodo = '" & Periodo_Contable & "' " _
-             & "AND TP = '" & TFA.TC & "' " _
-             & "AND Serie = '" & TFA.Serie & "' " _
-             & "AND Factura = " & TFA.Factura & " " _
-             & "AND CodigoC = '" & TFA.CodigoC & "' " _
-             & "AND Autorizacion = '" & TFA.Autorizacion & "' " _
-             & "AND Serie_NC = '" & TFA.Serie_NC & "' " _
-             & "AND Secuencial_NC = " & TFA.Nota_Credito & " " _
-             & "AND Banco = 'NOTA DE CREDITO' "
-        Ejecutar_SQL_SP sSQL
-        
-        sSQL = "UPDATE Detalle_Nota_Credito " _
-             & "SET Autorizacion = '" & .Autorizacion & "' " _
-             & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND Periodo = '" & Periodo_Contable & "' " _
-             & "AND TC = '" & TFA.TC & "' " _
-             & "AND Serie_FA = '" & TFA.Serie & "' " _
-             & "AND Factura = " & TFA.Factura & " " _
-             & "AND Serie = '" & TFA.Serie_NC & "' " _
-             & "AND Secuencial = " & TFA.Nota_Credito & " "
-        Ejecutar_SQL_SP sSQL
-    End With
-End Sub
-
-Public Sub SRI_Actualizar_Autorizacion_Guia_Remision(TFA As Tipo_Facturas, _
-                                                     SRI_Autorizacion As Tipo_Estado_SRI)
-With SRI_Autorizacion
-    'MsgBox TFA.Autorizacion_NC
-    TFA.Fecha_Aut_GR = .Fecha_Autorizacion
-    TFA.Hora_GR = .Hora_Autorizacion
-    sSQL = "UPDATE Facturas_Auxiliares " _
-         & "SET Autorizacion_GR = '" & .Autorizacion & "', " _
-         & "Fecha_Aut_GR = #" & BuscarFecha(.Fecha_Autorizacion) & "#, " _
-         & "Hora_Aut_GR = '" & .Hora_Autorizacion & "', " _
-         & "Estado_SRI_GR = '" & .Estado_SRI & "' " _
-         & "WHERE Item = '" & NumEmpresa & "' " _
-         & "AND Periodo = '" & Periodo_Contable & "' " _
-         & "AND TC = '" & TFA.TC & "' " _
-         & "AND Serie = '" & TFA.Serie & "' " _
-         & "AND Factura = " & TFA.Factura & " " _
-         & "AND CodigoC = '" & TFA.CodigoC & "' " _
-         & "AND Autorizacion = '" & TFA.Autorizacion & "' "
+      Case "NC"
+           sSQL = "UPDATE Trans_Abonos " _
+                & "SET Estado_SRI_NC = '" & SRI_Autorizacion.Estado_SRI & "', " _
+                & "Clave_Acceso_NC = '" & TFA.ClaveAcceso_NC & "' " _
+                & "WHERE Item = '" & NumEmpresa & "' " _
+                & "AND Periodo = '" & Periodo_Contable & "' " _
+                & "AND TP = '" & TFA.TC & "' " _
+                & "AND Serie = '" & TFA.Serie & "' " _
+                & "AND Factura = " & TFA.Factura & " " _
+                & "AND CodigoC = '" & TFA.CodigoC & "' " _
+                & "AND Autorizacion = '" & TFA.Autorizacion & "' " _
+                & "AND Serie_NC = '" & TFA.Serie_NC & "' " _
+                & "AND Secuencial_NC = " & TFA.Nota_Credito & " " _
+                & "AND Banco = 'NOTA DE CREDITO' "
+      Case "LC"
+           sSQL = "UPDATE Trans_Compras " _
+                & "SET Estado_SRI_LC = '" & SRI_Autorizacion.Estado_SRI & "', " _
+                & "Clave_Acceso_LC = '" & TFA.ClaveAcceso_LC & "' " _
+                & "WHERE Item = '" & NumEmpresa & "' " _
+                & "AND Periodo = '" & Periodo_Contable & "' " _
+                & "AND TP = '" & TFA.TP & "' " _
+                & "AND Numero = '" & TFA.Numero & "' " _
+                & "AND Establecimiento+PuntoEmision = '" & TFA.Serie_LC & "' "
+      Case "GR"
+           sSQL = "UPDATE Facturas_Auxiliares " _
+                & "SET Estado_SRI_GR = '" & SRI_Autorizacion.Estado_SRI & "', " _
+                & "Clave_Acceso_GR = '" & TFA.ClaveAcceso_NC & "' " _
+                & "WHERE Item = '" & NumEmpresa & "' " _
+                & "AND Periodo = '" & Periodo_Contable & "' " _
+                & "AND TP = '" & TFA.TC & "' " _
+                & "AND Serie = '" & TFA.Serie & "' " _
+                & "AND Factura = " & TFA.Factura & " " _
+                & "AND CodigoC = '" & TFA.CodigoC & "' " _
+                & "AND Autorizacion = '" & TFA.Autorizacion & "' "
+      Case "RE"
+           sSQL = "UPDATE Trans_Compras " _
+                & "SET Estado_SRI = '" & SRI_Autorizacion.Estado_SRI & "', " _
+                & "Clave_Acceso = '" & TFA.ClaveAcceso & "' " _
+                & "WHERE Item = '" & NumEmpresa & "' " _
+                & "AND Periodo = '" & Periodo_Contable & "' " _
+                & "AND TP = '" & TFA.TP & "' " _
+                & "AND Numero = '" & TFA.Numero & "' " _
+                & "AND Serie_Retencion = '" & TFA.Serie_R & "' " _
+                & "AND SecRetencion = '" & TFA.Retencion & "' " _
+                & "AND AutRetencion = '" & TFA.Autorizacion_R & "' "
+    End Select
     Ejecutar_SQL_SP sSQL
-End With
 End Sub
 
-Public Sub SRI_Actualizar_Autorizacion_Retencion(SRI_Autorizacion As Tipo_Estado_SRI, _
-                                                 TFA As Tipo_Facturas)
-With SRI_Autorizacion
-   sSQL = "UPDATE Trans_Compras " _
-        & "SET AutRetencion = '" & .Autorizacion & "', " _
-        & "Fecha_Aut = #" & BuscarFecha(.Fecha_Autorizacion) & "#, " _
-        & "Hora_Aut = '" & .Hora_Autorizacion & "' " _
-        & "WHERE Item = '" & NumEmpresa & "' " _
-        & "AND Periodo = '" & Periodo_Contable & "' " _
-        & "AND TP = '" & TFA.TP & "' " _
-        & "AND Numero = '" & TFA.Numero & "' " _
-        & "AND Serie_Retencion = '" & TFA.Serie_R & "' " _
-        & "AND SecRetencion = '" & TFA.Retencion & "' " _
-        & "AND AutRetencion = '" & TFA.Autorizacion_R & "' "
-   Ejecutar_SQL_SP sSQL
-   
-   sSQL = "UPDATE Trans_Air " _
-        & "SET AutRetencion = '" & .Autorizacion & "' " _
-        & "WHERE Item = '" & NumEmpresa & "' " _
-        & "AND Periodo = '" & Periodo_Contable & "' " _
-        & "AND Tipo_Trans = 'C' " _
-        & "AND TP = '" & TFA.TP & "' " _
-        & "AND Numero = '" & TFA.Numero & "' " _
-        & "AND EstabRetencion = '" & MidStrg(TFA.Serie_R, 1, 3) & "' " _
-        & "AND PtoEmiRetencion = '" & MidStrg(TFA.Serie_R, 4, 3) & "' " _
-        & "AND SecRetencion = '" & TFA.Retencion & "' " _
-        & "AND AutRetencion = '" & TFA.Autorizacion_R & "' "
-   Ejecutar_SQL_SP sSQL
-End With
+Public Sub Generar_Informe_Errores()
+    If TextoImprimio <> "" Then
+       RutaGeneraFile = RutaSysBases & "\TEMP\Informe de Errores (" & NumEmpresa & ") " & Replace(FechaSistema, "/", "-") & ".txt"
+       NumFile = FreeFile
+       Open RutaGeneraFile For Output As #NumFile ' Abre el archivo.
+            Print #NumFile, TextoImprimio;
+       Close #NumFile
+       
+       MsgBox "ARCHIVO DE INFORME DE ERRORES:" & vbCrLf & vbCrLf & RutaGeneraFile
+    End If
 End Sub
 
-Public Sub SRI_Actualizar_Autorizacion_Liquidacion(SRI_Autorizacion As Tipo_Estado_SRI, _
-                                                   TFA As Tipo_Facturas)
-With SRI_Autorizacion
-   sSQL = "UPDATE Trans_Compras " _
-        & "SET Autorizacion = '" & .Autorizacion & "', " _
-        & "Fecha_Aut_LC = #" & BuscarFecha(.Fecha_Autorizacion) & "#, " _
-        & "Hora_Aut_LC = '" & .Hora_Autorizacion & "' " _
-        & "WHERE Item = '" & NumEmpresa & "' " _
-        & "AND Periodo = '" & Periodo_Contable & "' " _
-        & "AND TP = '" & TFA.TP & "' " _
-        & "AND Numero = '" & TFA.Numero & "' " _
-        & "AND Establecimiento+PuntoEmision = '" & TFA.Serie_LC & "' "
-   Ejecutar_SQL_SP sSQL
-   
-'''   sSQL = "UPDATE Trans_Air " _
-'''        & "SET AutRetencion = '" & .Autorizacion & "' " _
-'''        & "WHERE Item = '" & NumEmpresa & "' " _
-'''        & "AND Periodo = '" & Periodo_Contable & "' " _
-'''        & "AND Tipo_Trans = 'C' " _
-'''        & "AND TP = '" & TFA.TP & "' " _
-'''        & "AND Numero = '" & TFA.Numero & "' " _
-'''        & "AND EstabRetencion = '" & MidStrg(TFA.Serie_R, 1, 3) & "' " _
-'''        & "AND PtoEmiRetencion = '" & MidStrg(TFA.Serie_R, 4, 3) & "' " _
-'''        & "AND SecRetencion = '" & TFA.Retencion & "' " _
-'''        & "AND AutRetencion = '" & TFA.Autorizacion_R & "' "
-'''   Ejecutar_SQL_SP sSQL
-End With
+Public Sub SRI_Actualizar_Autorizacion_Comprobante(TipoDoc As String, SRI_Autorizacion As Tipo_Estado_SRI, TFA As Tipo_Facturas)
+Dim Error_SRI As String
+
+    With SRI_Autorizacion
+      If Len(.Autorizacion) >= 13 Then
+         Select Case TipoDoc
+           Case "FA"
+               'MsgBox TipoDoc
+               'Determinamos el tipo de Error
+                Error_SRI = Replace(.Error_SRI, "'", "`")
+                Error_SRI = Replace(Error_SRI, vbCrLf, "||")
+                Error_SRI = Replace(Error_SRI, "&", " y ")
+                Error_SRI = Replace(Error_SRI, "#", "No.")
+                Error_SRI = TrimStrg(MidStrg(Error_SRI, 1, 100))
+                If Error_SRI = "" Then Error_SRI = Ninguno
+
+               'Actualizamos el estado del documento
+                sSQL = "UPDATE Facturas " _
+                     & "SET Clave_Acceso = '" & .Clave_De_Acceso & "', "
+                If .Estado_SRI = "OK" Then sSQL = sSQL & "Autorizacion = '" & .Autorizacion & "', "
+                sSQL = sSQL _
+                     & "Fecha_Aut = #" & BuscarFecha(.Fecha_Autorizacion) & "#, " _
+                     & "Hora_Aut = '" & .Hora_Autorizacion & "', " _
+                     & "Estado_SRI = '" & .Estado_SRI & "', " _
+                     & "Error_FA_SRI = '" & Error_SRI & "' " _
+                     & "WHERE Item = '" & NumEmpresa & "' " _
+                     & "AND Periodo = '" & Periodo_Contable & "' " _
+                     & "AND TC = '" & TFA.TC & "' " _
+                     & "AND Serie = '" & TFA.Serie & "' " _
+                     & "AND Factura = " & TFA.Factura & " " _
+                     & "AND Autorizacion = '" & TFA.Autorizacion & "' " _
+                     & "AND CodigoC = '" & TFA.CodigoC & "' "
+                Ejecutar_SQL_SP sSQL
+                TFA.Estado_SRI = .Estado_SRI
+                If .Estado_SRI = "OK" Then
+                    sSQL = "UPDATE Detalle_Factura " _
+                         & "SET Autorizacion = '" & .Autorizacion & "' " _
+                         & "WHERE Item = '" & NumEmpresa & "' " _
+                         & "AND Periodo = '" & Periodo_Contable & "' " _
+                         & "AND TC = '" & TFA.TC & "' " _
+                         & "AND Serie = '" & TFA.Serie & "' " _
+                         & "AND Factura = " & TFA.Factura & " " _
+                         & "AND CodigoC = '" & TFA.CodigoC & "' " _
+                         & "AND Autorizacion = '" & TFA.Autorizacion & "' "
+                    Ejecutar_SQL_SP sSQL
+                    sSQL = "UPDATE Trans_Abonos " _
+                         & "SET Autorizacion = '" & .Autorizacion & "' " _
+                         & "WHERE Item = '" & NumEmpresa & "' " _
+                         & "AND Periodo = '" & Periodo_Contable & "' " _
+                         & "AND TP = '" & TFA.TC & "' " _
+                         & "AND Serie = '" & TFA.Serie & "' " _
+                         & "AND Factura = " & TFA.Factura & " " _
+                         & "AND CodigoC = '" & TFA.CodigoC & "' " _
+                         & "AND Autorizacion = '" & TFA.Autorizacion & "' "
+                    Ejecutar_SQL_SP sSQL
+                    sSQL = "UPDATE Facturas_Auxiliares " _
+                         & "SET Autorizacion = '" & .Autorizacion & "' " _
+                         & "WHERE Item = '" & NumEmpresa & "' " _
+                         & "AND Periodo = '" & Periodo_Contable & "' " _
+                         & "AND TC = '" & TFA.TC & "' " _
+                         & "AND Serie = '" & TFA.Serie & "' " _
+                         & "AND Factura = " & TFA.Factura & " " _
+                         & "AND CodigoC = '" & TFA.CodigoC & "' " _
+                         & "AND Autorizacion = '" & TFA.Autorizacion & "' "
+                    Ejecutar_SQL_SP sSQL
+                    TFA.Autorizacion = .Autorizacion
+                End If
+           Case "NC"
+               'MsgBox TipoDoc
+                TFA.Estado_SRI_NC = .Estado_SRI
+                TFA.Fecha_Aut_NC = .Fecha_Autorizacion
+                TFA.Hora_NC = .Hora_Autorizacion
+                sSQL = "UPDATE Trans_Abonos " _
+                     & "SET Autorizacion_NC = '" & .Autorizacion & "', " _
+                     & "Fecha_Aut_NC = #" & BuscarFecha(.Fecha_Autorizacion) & "#, " _
+                     & "Hora_Aut_NC = '" & .Hora_Autorizacion & "', " _
+                     & "Estado_SRI_NC = '" & .Estado_SRI & "' " _
+                     & "WHERE Item = '" & NumEmpresa & "' " _
+                     & "AND Periodo = '" & Periodo_Contable & "' " _
+                     & "AND TP = '" & TFA.TC & "' " _
+                     & "AND Serie = '" & TFA.Serie & "' " _
+                     & "AND Factura = " & TFA.Factura & " " _
+                     & "AND CodigoC = '" & TFA.CodigoC & "' " _
+                     & "AND Autorizacion = '" & TFA.Autorizacion & "' " _
+                     & "AND Serie_NC = '" & TFA.Serie_NC & "' " _
+                     & "AND Secuencial_NC = " & TFA.Nota_Credito & " " _
+                     & "AND Banco = 'NOTA DE CREDITO' "
+                Ejecutar_SQL_SP sSQL
+                
+                sSQL = "UPDATE Detalle_Nota_Credito " _
+                     & "SET Autorizacion = '" & .Autorizacion & "' " _
+                     & "WHERE Item = '" & NumEmpresa & "' " _
+                     & "AND Periodo = '" & Periodo_Contable & "' " _
+                     & "AND TC = '" & TFA.TC & "' " _
+                     & "AND Serie_FA = '" & TFA.Serie & "' " _
+                     & "AND Factura = " & TFA.Factura & " " _
+                     & "AND Serie = '" & TFA.Serie_NC & "' " _
+                     & "AND Secuencial = " & TFA.Nota_Credito & " "
+                Ejecutar_SQL_SP sSQL
+           Case "LC"
+               'MsgBox TipoDoc
+                sSQL = "UPDATE Trans_Compras " _
+                     & "SET Autorizacion = '" & .Autorizacion & "', " _
+                     & "Fecha_Aut_LC = #" & BuscarFecha(.Fecha_Autorizacion) & "#, " _
+                     & "Hora_Aut_LC = '" & .Hora_Autorizacion & "' " _
+                     & "WHERE Item = '" & NumEmpresa & "' " _
+                     & "AND Periodo = '" & Periodo_Contable & "' " _
+                     & "AND TP = '" & TFA.TP & "' " _
+                     & "AND Numero = '" & TFA.Numero & "' " _
+                     & "AND Establecimiento+PuntoEmision = '" & TFA.Serie_LC & "' "
+                Ejecutar_SQL_SP sSQL
+           Case "GR"
+               'MsgBox TipoDoc
+                TFA.Autorizacion_GR = .Autorizacion
+                TFA.Fecha_Aut_GR = .Fecha_Autorizacion
+                TFA.Hora_GR = .Hora_Autorizacion
+                sSQL = "UPDATE Facturas_Auxiliares " _
+                     & "SET Autorizacion_GR = '" & .Autorizacion & "', " _
+                     & "Fecha_Aut_GR = #" & BuscarFecha(.Fecha_Autorizacion) & "#, " _
+                     & "Hora_Aut_GR = '" & .Hora_Autorizacion & "', " _
+                     & "Estado_SRI_GR = '" & .Estado_SRI & "' " _
+                     & "WHERE Item = '" & NumEmpresa & "' " _
+                     & "AND Periodo = '" & Periodo_Contable & "' " _
+                     & "AND TC = '" & TFA.TC & "' " _
+                     & "AND Serie = '" & TFA.Serie & "' " _
+                     & "AND Factura = " & TFA.Factura & " " _
+                     & "AND CodigoC = '" & TFA.CodigoC & "' " _
+                     & "AND Autorizacion = '" & TFA.Autorizacion & "' "
+                Ejecutar_SQL_SP sSQL
+           Case "RE"
+               'MsgBox TipoDoc
+                sSQL = "UPDATE Trans_Compras " _
+                     & "SET AutRetencion = '" & .Autorizacion & "', " _
+                     & "Clave_Acceso = '" & .Clave_De_Acceso & "', " _
+                     & "Estado_SRI = '" & .Estado_SRI & "', " _
+                     & "Fecha_Aut = #" & BuscarFecha(.Fecha_Autorizacion) & "#, " _
+                     & "Hora_Aut = '" & .Hora_Autorizacion & "' " _
+                     & "WHERE Item = '" & NumEmpresa & "' " _
+                     & "AND Periodo = '" & Periodo_Contable & "' " _
+                     & "AND TP = '" & TFA.TP & "' " _
+                     & "AND Numero = '" & TFA.Numero & "' " _
+                     & "AND Serie_Retencion = '" & TFA.Serie_R & "' " _
+                     & "AND SecRetencion = '" & TFA.Retencion & "' " _
+                     & "AND AutRetencion = '" & TFA.Autorizacion_R & "' "
+                Ejecutar_SQL_SP sSQL
+             
+                sSQL = "UPDATE Trans_Air " _
+                     & "SET AutRetencion = '" & .Autorizacion & "' " _
+                     & "WHERE Item = '" & NumEmpresa & "' " _
+                     & "AND Periodo = '" & Periodo_Contable & "' " _
+                     & "AND Tipo_Trans = 'C' " _
+                     & "AND TP = '" & TFA.TP & "' " _
+                     & "AND Numero = '" & TFA.Numero & "' " _
+                     & "AND EstabRetencion = '" & MidStrg(TFA.Serie_R, 1, 3) & "' " _
+                     & "AND PtoEmiRetencion = '" & MidStrg(TFA.Serie_R, 4, 3) & "' " _
+                     & "AND SecRetencion = '" & TFA.Retencion & "' " _
+                     & "AND AutRetencion = '" & TFA.Autorizacion_R & "' "
+                Ejecutar_SQL_SP sSQL
+         End Select
+      End If
+    End With
 End Sub
 
 Public Sub SRI_Crear_Clave_Acceso_Retenciones(TFA As Tipo_Facturas, _
@@ -2846,59 +2610,57 @@ Dim Autorizar_XML As Boolean
 
   RatonReloj
  'AgenteRetencion = "NAC-DNCRASC20-00000001"
-  Autorizar_XML = True
+  If CFechaLong(TFA.Fecha) <= CFechaLong(Fecha_CE) Then Autorizar_XML = True Else Autorizar_XML = False
   If Len(Fecha_Igualar) = 10 Then
      If CFechaLong(TFA.Fecha) < CFechaLong(Fecha_Igualar) Then Autorizar_XML = False
   End If
-    
+
  'Autorizamos la Retenciones
   If Autorizar_XML Then
-
-' RETENCIONES COMPRAS
-  sSQL = "SELECT C.Cliente,C.CI_RUC,C.TD,C.Direccion,C.Telefono,C.Email,TC.* " _
-       & "FROM Trans_Compras As TC, Clientes As C " _
-       & "WHERE TC.Item = '" & NumEmpresa & "' " _
-       & "AND TC.Periodo = '" & Periodo_Contable & "' " _
-       & "AND TC.Serie_Retencion = '" & TFA.Serie_R & "' " _
-       & "AND TC.SecRetencion = " & TFA.Retencion & " " _
-       & "AND TC.TP = '" & TFA.TP & "' " _
-       & "AND TC.Numero = " & TFA.Numero & " " _
-       & "AND LEN(TC.AutRetencion) = 13 " _
-       & "AND TC.IdProv = C.Codigo " _
-       & "ORDER BY Serie_Retencion,SecRetencion "
-  Select_AdoDB AdoCompras, sSQL
-  With AdoCompras
-   If .RecordCount > 0 Then
-      'Generacion de la Retencion si es Electronica
-       Do While Not .EOF
+    'RETENCIONES COMPRAS
+     sSQL = "SELECT C.Cliente,C.CI_RUC,C.TD,C.Direccion,C.Telefono,C.Email,TC.* " _
+          & "FROM Trans_Compras As TC, Clientes As C " _
+          & "WHERE TC.Item = '" & NumEmpresa & "' " _
+          & "AND TC.Periodo = '" & Periodo_Contable & "' " _
+          & "AND TC.Serie_Retencion = '" & TFA.Serie_R & "' " _
+          & "AND TC.SecRetencion = " & TFA.Retencion & " " _
+          & "AND TC.TP = '" & TFA.TP & "' " _
+          & "AND TC.Numero = " & TFA.Numero & " " _
+          & "AND LEN(TC.AutRetencion) = 13 " _
+          & "AND TC.IdProv = C.Codigo " _
+          & "ORDER BY Serie_Retencion,SecRetencion, BaseImponible DESC "
+     Select_AdoDB AdoCompras, sSQL  ', "Retencion-" & TFA.Retencion
+     With AdoCompras
+      If .RecordCount > 0 Then
+         'MsgBox .RecordCount
+         'Generacion de la Retencion si es Electronica
           TextoXML = ""
-''          TFA.Serie_R = .Fields("Serie_Retencion")
-''          TFA.Retencion = .Fields("SecRetencion")
-          TFA.Autorizacion_R = .fields("AutRetencion")
-          TFA.Autorizacion = .fields("Autorizacion")
-          TFA.Fecha = .fields("FechaRegistro")
-          TFA.Vencimiento = .fields("FechaRegistro")
-          TFA.Serie = .fields("Establecimiento") & .fields("PuntoEmision")
-          TFA.Factura = .fields("Secuencial")
+''        TFA.Serie_R = .Fields("Serie_Retencion")
+''        TFA.Retencion = .Fields("SecRetencion")
+          TFA.Autorizacion_R = .Fields("AutRetencion")
+          TFA.Autorizacion = .Fields("Autorizacion")
+          TFA.Fecha = .Fields("FechaEmision")      '.Fields("FechaRegistro")
+          TFA.Vencimiento = .Fields("FechaRegistro")
+          TFA.Serie = .Fields("Establecimiento") & .Fields("PuntoEmision")
+          TFA.Factura = .Fields("Secuencial")
           TFA.Hora = Format$(Time, FormatoTimes)
-          TFA.Cliente = .fields("Cliente")
-          TFA.CI_RUC = .fields("CI_RUC")
-          TFA.TD = .fields("TD")
-          TFA.DireccionC = .fields("Direccion")
-          TFA.TelefonoC = .fields("Telefono")
-          TFA.EmailC = .fields("Email")
-          CodSustento = Format$(.fields("CodSustento"), "00")
-          tipoCodComprobante = Format$(.fields("TipoComprobante"), "00")
+          TFA.Cliente = .Fields("Cliente")
+          TFA.CI_RUC = .Fields("CI_RUC")
+          TFA.TD = .Fields("TD")
+          TFA.DireccionC = .Fields("Direccion")
+          TFA.TelefonoC = .Fields("Telefono")
+          TFA.EmailC = .Fields("Email")
+          CodSustento = Format$(.Fields("CodSustento"), "00")
+          tipoCodComprobante = Format$(.Fields("TipoComprobante"), "00")
          'Obtener_Cod_Porc_IVA TFA.Fecha, (TFA.Porc_IVA * 100)
-          Obtener_Porc_IVA TFA.Fecha, .fields("PorcentajeIva")
+          Obtener_Porc_IVA TFA.Fecha, .Fields("PorcentajeIva")
          'Validar_Porc_IVA TFA.Fecha
          'Algoritmo Modulo 11 para la clave de la retencion
          '& Format$(TFA.Vencimiento, "ddmmyyyy")
-          TFA.ClaveAcceso = Format$(TFA.Fecha, "ddmmyyyy") & "07" & RUC & Ambiente & TFA.Serie_R & Format$(TFA.Retencion, String(9, "0")) _
-                         & "123456781"
+          'TFA.ClaveAcceso = Format$(TFA.Fecha, "ddmmyyyy") & "07" & RUC & Ambiente & TFA.Serie_R & Format$(TFA.Retencion, String(9, "0")) & "123456781"
+          TFA.ClaveAcceso = Format$(TFA.Vencimiento, "ddmmyyyy") & "07" & RUC & Ambiente & TFA.Serie_R & Format$(TFA.Retencion, String(9, "0")) & "123456781"
           TFA.ClaveAcceso = Replace(TFA.ClaveAcceso, ".", "1")
           TFA.ClaveAcceso = TFA.ClaveAcceso & Digito_Verificador_Modulo11(TFA.ClaveAcceso)
-          
           If Len(TFA.Autorizacion_R) >= 13 Then
             'ENCABEZADO XML PARA EL SRI DE LA RETENCION
              Insertar_Campo_XML "<?xml version=""1.0"" encoding=""UTF-8""?>"
@@ -2919,9 +2681,10 @@ Dim Autorizar_XML As Boolean
                 If AgenteRetencion <> Ninguno Then Insertar_Campo_XML CampoXML("agenteRetencion", "1")
                 If MicroEmpresa = "CONTRIBUYENTE RÉGIMEN RIMPE" Then Insertar_Campo_XML CampoXML("contribuyenteRimpe", "CONTRIBUYENTE RÉGIMEN RIMPE")
              Insertar_Campo_XML CerrarXML("infoTributaria")
-             
+            
              Insertar_Campo_XML AbrirXML("infoCompRetencion")
-                Insertar_Campo_XML CampoXML("fechaEmision", TFA.Fecha)
+                'Insertar_Campo_XML CampoXML("fechaEmision", TFA.Fecha)
+                Insertar_Campo_XML CampoXML("fechaEmision", TFA.Vencimiento)
                 Insertar_Campo_XML CampoXML("dirEstablecimiento", ULCase(DireccionEstab))
                 If Len(ContEspec) > 1 Then Insertar_Campo_XML CampoXML("contribuyenteEspecial", ContEspec)
                 Insertar_Campo_XML CampoXML("obligadoContabilidad", Obligado_Conta)
@@ -2931,26 +2694,32 @@ Dim Autorizar_XML As Boolean
                   Case "P": TFA.TD = "06"
                 End Select
                 Insertar_Campo_XML CampoXML("tipoIdentificacionSujetoRetenido", TFA.TD)
-                If .fields("PagoLocExt") = "01" Then
+                If .Fields("PagoLocExt") = "01" Then
                     Insertar_Campo_XML CampoXML("parteRel", "NO")
                 Else
-                    Insertar_Campo_XML CampoXML("tipoSujetoRetenido", .fields("PagoLocExt"))
+                    Insertar_Campo_XML CampoXML("tipoSujetoRetenido", .Fields("PagoLocExt"))
                     Insertar_Campo_XML CampoXML("parteRel", "SI")
                 End If
                 Insertar_Campo_XML CampoXML("razonSocialSujetoRetenido", TFA.Cliente)
                 Insertar_Campo_XML CampoXML("identificacionSujetoRetenido", TFA.CI_RUC)
                 Insertar_Campo_XML CampoXML("periodoFiscal", Format$(TFA.Fecha, "mm/yyyy"))
              Insertar_Campo_XML CerrarXML("infoCompRetencion")
-             
+                
              Insertar_Campo_XML AbrirXML("docsSustento")
                 Insertar_Campo_XML AbrirXML("docSustento")
                     Total_Servicio = 0
                     Total_Propinas = 0
                     Total_Comision = 0
+                    Total_IVA = 0
                     Total_Sin_No_IVA = 0
-                    Total_Sin_IVA = .fields("BaseImponible")
-                    Total_Con_IVA = .fields("BaseImpGrav")
-                    Total_IVA = .fields("MontoIva")
+                    Total_Con_IVA = 0
+                    Total_Sin_IVA = .Fields("BaseImponible")
+                    Do While Not .EOF
+                       Total_Con_IVA = Total_Con_IVA + .Fields("BaseImpGrav")
+                       Total_IVA = Total_IVA + .Fields("MontoIva")
+                      .MoveNext
+                    Loop
+                   .MoveFirst
                     Total_SubTotal = Total_Sin_IVA + Total_Con_IVA
                     Total_Factura = Total_SubTotal + Total_IVA
                     
@@ -2958,75 +2727,50 @@ Dim Autorizar_XML As Boolean
                     Insertar_Campo_XML CampoXML("codDocSustento", tipoCodComprobante) 'OJO
                     Insertar_Campo_XML CampoXML("numDocSustento", TFA.Serie & Format(TFA.Factura, "000000000"))
                     Insertar_Campo_XML CampoXML("fechaEmisionDocSustento", TFA.Fecha)
-                    Insertar_Campo_XML CampoXML("fechaRegistroContable", TFA.Vencimiento)
+                    Insertar_Campo_XML CampoXML("fechaRegistroContable", TFA.Fecha)
+                    'Insertar_Campo_XML CampoXML("fechaRegistroContable", TFA.Vencimiento)
                     Insertar_Campo_XML CampoXML("numAutDocSustento", TFA.Autorizacion)
-                    Insertar_Campo_XML CampoXML("pagoLocExt", .fields("PagoLocExt"))
+                    Insertar_Campo_XML CampoXML("pagoLocExt", .Fields("PagoLocExt"))
                     Insertar_Campo_XML CampoXML("totalSinImpuestos", Total_SubTotal, 2)
                     Insertar_Campo_XML CampoXML("importeTotal", Total_Factura, 2)
                     
                     Insertar_Campo_XML AbrirXML("impuestosDocSustento")
+                    Do While Not .EOF
                         Insertar_Campo_XML AbrirXML("impuestoDocSustento")
                             Insertar_Campo_XML CampoXML("codImpuestoDocSustento", "2")
-                            Insertar_Campo_XML CampoXML("codigoPorcentaje", .fields("PorcentajeIva"))
-                            Insertar_Campo_XML CampoXML("baseImponible", Total_Con_IVA, 2)
-                            Insertar_Campo_XML CampoXML("tarifa", Porc_IVA * 100)
-                            Insertar_Campo_XML CampoXML("valorImpuesto", Total_IVA, 2)
+                            Insertar_Campo_XML CampoXML("codigoPorcentaje", .Fields("PorcentajeIva"))
+                            Insertar_Campo_XML CampoXML("baseImponible", .Fields("BaseImpGrav"), 2) 'Total_Con_IVA
+                            Insertar_Campo_XML CampoXML("tarifa", .Fields("Porc_IVA") * 100) 'Porc_IVA * 100
+                            Insertar_Campo_XML CampoXML("valorImpuesto", .Fields("MontoIva"), 2) 'Total_IVA
                         Insertar_Campo_XML CerrarXML("impuestoDocSustento")
-                        
+                       .MoveNext
+                    Loop
+                   .MoveFirst
+                    If .Fields("BaseImponible") > 0 Then
                         Insertar_Campo_XML AbrirXML("impuestoDocSustento")
                             Insertar_Campo_XML CampoXML("codImpuestoDocSustento", "2")
                             Insertar_Campo_XML CampoXML("codigoPorcentaje", "0")
-                            Insertar_Campo_XML CampoXML("baseImponible", Total_Sin_IVA, 2)
+                            Insertar_Campo_XML CampoXML("baseImponible", .Fields("BaseImponible"), 2) 'Total_Sin_IVA
                             Insertar_Campo_XML CampoXML("tarifa", "0")
                             Insertar_Campo_XML CampoXML("valorImpuesto", "0.00")
                         Insertar_Campo_XML CerrarXML("impuestoDocSustento")
+                    End If
+                   
                     Insertar_Campo_XML CerrarXML("impuestosDocSustento")
                     
                     Insertar_Campo_XML AbrirXML("retenciones")
-                   'RETENCIONES AIR
-                     sSQL = "SELECT * " _
-                          & "FROM Trans_Air " _
-                          & "WHERE Item = '" & NumEmpresa & "' " _
-                          & "AND Periodo = '" & Periodo_Contable & "' " _
-                          & "AND Numero = " & TFA.Numero & " " _
-                          & "AND TP = '" & TFA.TP & "' " _
-                          & "AND Tipo_Trans = 'C' " _
-                          & "AND EstabRetencion = '" & MidStrg(TFA.Serie_R, 1, 3) & "' " _
-                          & "AND PtoEmiRetencion = '" & MidStrg(TFA.Serie_R, 4, 3) & "' " _
-                          & "AND SecRetencion = " & TFA.Retencion & " " _
-                          & "AND AutRetencion = '" & TFA.Autorizacion_R & "' " _
-                          & "ORDER BY ID "
-                     Select_AdoDB AdoAir, sSQL, "Retencion_" & CStr(TFA.Retencion)
-                     If AdoAir.RecordCount > 0 Then
-                       'MsgBox sSQL
-                       ' MsgBox AdoAir.RecordCount
-                        Do While Not AdoAir.EOF
-                           If AdoAir.fields("BaseImp") > 0 Then
-                              Insertar_Campo_XML AbrirXML("retencion")
-                                 Insertar_Campo_XML CampoXML("codigo", "1")
-                                 Insertar_Campo_XML CampoXML("codigoRetencion", AdoAir.fields("CodRet"))
-                                 Insertar_Campo_XML CampoXML("baseImponible", AdoAir.fields("BaseImp"), 2)
-                                 Insertar_Campo_XML CampoXML("porcentajeRetener", (AdoAir.fields("Porcentaje") * 100), 2)
-                                 Insertar_Campo_XML CampoXML("valorRetenido", AdoAir.fields("ValRet"), 2)
-                              Insertar_Campo_XML CerrarXML("retencion")
-                           End If
-                           AdoAir.MoveNext
-                        Loop
-                     
-                     End If
-                     AdoAir.Close
-                    
-                    If Val(.fields("Porc_Bienes")) > 0 Then
+                    Do While Not .EOF
+                    If Val(.Fields("Porc_Bienes")) > 0 Then
                        Insertar_Campo_XML AbrirXML("retencion")
-                          Select Case Val(.fields("Porc_Bienes"))
+                          Select Case Val(.Fields("Porc_Bienes"))
                             Case 10: CodigoA = "9"
                             Case 30: CodigoA = "1"
                             Case 70: CodigoA = "2"
                             Case 100: CodigoA = "3"
                             Case Else: CodigoA = "2"
                           End Select
-                          Total = .fields("MontoIvaBienes")
-                          Retencion = Val(.fields("Porc_Bienes"))
+                          Total = .Fields("MontoIvaBienes")
+                          Retencion = Val(.Fields("Porc_Bienes"))
                           Valor = Redondear(Total * (Retencion / 100), 2)
                           Insertar_Campo_XML CampoXML("codigo", "2")
                           Insertar_Campo_XML CampoXML("codigoRetencion", CodigoA)
@@ -3036,17 +2780,17 @@ Dim Autorizar_XML As Boolean
                        Insertar_Campo_XML CerrarXML("retencion")
                     End If
                     'MsgBox "|" & .fields("Porc_Servicios") & "|"
-                    If Val(.fields("Porc_Servicios")) > 0 Then
+                    If Val(.Fields("Porc_Servicios")) > 0 Then
                        Insertar_Campo_XML AbrirXML("retencion")
-                          Select Case Val(.fields("Porc_Servicios"))
+                          Select Case Val(.Fields("Porc_Servicios"))
                             Case 20: CodigoA = "10"
                             Case 30: CodigoA = "1"
                             Case 70: CodigoA = "2"
                             Case 100: CodigoA = "3"
                             Case Else: CodigoA = "2"
                           End Select
-                          Total = .fields("MontoIvaServicios")
-                          Retencion = Val(.fields("Porc_Servicios"))
+                          Total = .Fields("MontoIvaServicios")
+                          Retencion = Val(.Fields("Porc_Servicios"))
                           Valor = Redondear(Total * (Retencion / 100), 2)
                           Insertar_Campo_XML CampoXML("codigo", "2")
                           Insertar_Campo_XML CampoXML("codigoRetencion", CodigoA)
@@ -3055,19 +2799,52 @@ Dim Autorizar_XML As Boolean
                           Insertar_Campo_XML CampoXML("valorRetenido", Valor, 2)
                        Insertar_Campo_XML CerrarXML("retencion")
                     End If
+                       .MoveNext
+                    Loop
+                   .MoveFirst
+                   
+                   'RETENCIONES AIR
+                    sSQL = "SELECT * " _
+                         & "FROM Trans_Air " _
+                         & "WHERE Item = '" & NumEmpresa & "' " _
+                         & "AND Periodo = '" & Periodo_Contable & "' " _
+                         & "AND Numero = " & TFA.Numero & " " _
+                         & "AND TP = '" & TFA.TP & "' " _
+                         & "AND Tipo_Trans = 'C' " _
+                         & "AND EstabRetencion = '" & MidStrg(TFA.Serie_R, 1, 3) & "' " _
+                         & "AND PtoEmiRetencion = '" & MidStrg(TFA.Serie_R, 4, 3) & "' " _
+                         & "AND SecRetencion = " & TFA.Retencion & " " _
+                         & "AND AutRetencion = '" & TFA.Autorizacion_R & "' " _
+                         & "ORDER BY ID "
+                    Select_AdoDB AdoAir, sSQL
+                    If AdoAir.RecordCount > 0 Then
+                       Do While Not AdoAir.EOF
+                          If AdoAir.Fields("BaseImp") > 0 Then
+                             Insertar_Campo_XML AbrirXML("retencion")
+                                 Insertar_Campo_XML CampoXML("codigo", "1")
+                                 Insertar_Campo_XML CampoXML("codigoRetencion", AdoAir.Fields("CodRet"))
+                                 Insertar_Campo_XML CampoXML("baseImponible", AdoAir.Fields("BaseImp"), 2)
+                                 Insertar_Campo_XML CampoXML("porcentajeRetener", (AdoAir.Fields("Porcentaje") * 100), 2)
+                                 Insertar_Campo_XML CampoXML("valorRetenido", AdoAir.Fields("ValRet"), 2)
+                             Insertar_Campo_XML CerrarXML("retencion")
+                          End If
+                          AdoAir.MoveNext
+                       Loop
+                    End If
+                    AdoAir.Close
                     Insertar_Campo_XML CerrarXML("retenciones")
                     
                     Insertar_Campo_XML AbrirXML("pagos")
                        Insertar_Campo_XML AbrirXML("pago")
-                          Insertar_Campo_XML CampoXML("formaPago", .fields("FormaPago"))
+                          Insertar_Campo_XML CampoXML("formaPago", .Fields("FormaPago"))
                           Insertar_Campo_XML CampoXML("total", Total_Factura, 2)
                        Insertar_Campo_XML CerrarXML("pago")
                     Insertar_Campo_XML CerrarXML("pagos")
                     
                 Insertar_Campo_XML CerrarXML("docSustento")
              Insertar_Campo_XML CerrarXML("docsSustento")
-             'FIN DE XML DE RETENCION
-             'MsgBox AgenteRetencion & vbCrLf & MicroEmpresa
+               
+            'MsgBox AgenteRetencion & vbCrLf & MicroEmpresa
              Insertar_Campo_XML AbrirXML("infoAdicional")
                 If Len(TFA.DireccionC) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Direccion"">" & TFA.DireccionC & "</campoAdicional>"
                 If Len(TFA.TelefonoC) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Telefono"">" & TFA.TelefonoC & "</campoAdicional>"
@@ -3076,63 +2853,17 @@ Dim Autorizar_XML As Boolean
                 If AgenteRetencion <> Ninguno Then Insertar_Campo_XML "<campoAdicional nombre=""Agente de Retencion"">No. Resolución: 1</campoAdicional>"
              Insertar_Campo_XML CerrarXML("infoAdicional")
              Insertar_Campo_XML CerrarXML("comprobanteRetencion")
-             
-             If CFechaLong(TFA.Fecha) <= CFechaLong(Fecha_CE) Then
-               'Grabamos el comprobante XML de la Retencion
-                RutaGeneraFile = RutaDocumentos & "\Comprobantes Generados\" & TFA.ClaveAcceso & ".xml"
-               'Copiar todo el contenido de la caja de texto
-                 If GeneraXML Then
-                    Clipboard.Clear
-                    Clipboard.SetText TextoXML
-                    Grabar_Consulta_Archivo "RE_" & TFA.Serie_R & "-" & Format$(TFA.Retencion, String(9, "0")), TextoXML
-                 End If
-                                  
-                 Set DocumentoXML = New DOMDocument30
-                 DocumentoXML.loadXML (TextoXML)
-                 DocumentoXML.save (RutaGeneraFile)
-                'MsgBox "Crear Archivos CE: " & RutaGeneraFile
-                 If Len(Fecha_Igualar) = 10 Then
-                    If CFechaLong(TFA.Fecha) < CFechaLong(Fecha_Igualar) Then Autorizar_XML = False
-                 End If
-                 
-                     TFA.Estado_SRI = "CG"
-                    'Enviamos al SRI para que me autorice la Retencion
-                     SRI_Autorizacion.Clave_De_Acceso = TFA.ClaveAcceso
-                     FAutorizaXmlSRI.Show 1
-                     'SRI_Autorizacion = SRI_Generar_XML(TFA.ClaveAcceso, TFA.Estado_SRI)
-                     SRI_Actualizar_XML_Retencion SRI_Autorizacion, FA
-                     RatonReloj
-                     If SRI_Autorizacion.Estado_SRI = "OK" Then
-                        Control_Procesos "R", "RE-" & TFA.Serie_R & " No. " & Format(TFA.Retencion, "000000000") & " Autorizada"
-                        SRI_Actualizar_Autorizacion_Retencion SRI_Autorizacion, FA
-                        SRI_Actualizar_Documento_XML TFA.ClaveAcceso
-                        If Ambiente = "2" Then SRI_Enviar_Mails FA, SRI_Autorizacion, "RE"
-                        SRI_Generar_PDF_RE TFA, VerRetenciones
-                        RatonNormal
-                        'If VerRetenciones Then MsgBox "Comprobante de Retencion Autorizado con exito"
-                     Else
-                        RatonNormal
-                        If TextoImprimio = "" Then TextoImprimio = "INFORME DE ERRORES EN LAS RETENCIONES:" & vbCrLf _
-                                                                 & "--------------------------------------" & vbCrLf
-                        TextoImprimio = TextoImprimio _
-                                      & "Fecha: " & TFA.Fecha & ", Retencion No. " & TFA.Serie_R & "-" & TFA.Retencion _
-                                      & ", Documento No. " & TFA.Serie & "-" & TFA.Factura _
-                                      & ", De: " & TFA.Cliente & ", CI/RUC: " & TFA.CI_RUC & vbCrLf _
-                                      & SRI_Autorizacion.Estado_SRI & " - " & SRI_Autorizacion.Error_SRI & vbCrLf _
-                                      & String(80, "-") & vbCrLf
-                        If VerRetenciones Then MsgBox SRI_Autorizacion.Error_SRI
-                     End If
-                 
-             Else
-                RatonNormal
-                MsgBox MensajeNoAutorizarCE
-             End If
+            'FIN DE XML DE RETENCION
+            '-------------------------------------------------------------------
+             SRI_Enviar_Documento_Autorizar "RE", VerRetenciones, GeneraXML, TFA
+            '-------------------------------------------------------------------
           End If
-         .MoveNext
-      Loop
-   End If
-  End With
-      AdoCompras.Close
+      End If
+     End With
+     AdoCompras.Close
+  Else
+     RatonNormal
+     If VerRetenciones Then MsgBox MensajeNoAutorizarCE
   End If
   RatonNormal
 End Sub
@@ -3153,248 +2884,331 @@ Dim Autorizar_XML As Boolean
 
   RatonReloj
   Autorizar_XML = True
+  If CFechaLong(TFA.Fecha) <= CFechaLong(Fecha_CE) Then Autorizar_XML = True Else Autorizar_XML = False
   If Len(Fecha_Igualar) = 10 Then
      If CFechaLong(TFA.Fecha) < CFechaLong(Fecha_Igualar) Then Autorizar_XML = False
   End If
  'Autorizamos la Retencion Electronica
   If Autorizar_XML Then
-
-' RETENCIONES COMPRAS
-  sSQL = "SELECT C.Cliente,C.CI_RUC,C.TD,C.Direccion,C.Telefono,C.Email,Co.Concepto,TC.* " _
-       & "FROM Trans_Compras As TC, Clientes As C, Comprobantes AS Co " _
-       & "WHERE TC.Item = '" & NumEmpresa & "' " _
-       & "AND TC.Periodo = '" & Periodo_Contable & "' " _
-       & "AND TC.Numero = " & TFA.Numero & " " _
-       & "AND TC.TP = '" & TFA.TP & "' " _
-       & "AND LEN(TC.Autorizacion) = 13 " _
-       & "AND TC.TipoComprobante IN(3,41) " _
-       & "AND TC.IdProv = C.Codigo " _
-       & "AND TC.Item = Co.Item " _
-       & "AND TC.Periodo = Co.Periodo " _
-       & "AND TC.TP = Co.TP " _
-       & "AND TC.Numero = Co.Numero " _
-       & "ORDER BY Establecimiento, PuntoEmision,Secuencial "
-  Select_AdoDB AdoCompras, sSQL        ' , "Liquidacion_Compras_" & TFA.TP & "-" & TFA.Numero
-  With AdoCompras
-   If .RecordCount > 0 Then
-      'Generacion de la Retencion si es Electronica
-       Do While Not .EOF
-          TextoXML = ""
-          TFA.Autorizacion = .fields("Autorizacion")
-          TFA.Fecha = .fields("FechaRegistro")
-          TFA.Vencimiento = .fields("FechaRegistro")
-          TFA.Serie_LC = .fields("Establecimiento") & .fields("PuntoEmision")
-          TFA.Factura = .fields("Secuencial")
-          TFA.Hora = Format$(Time, FormatoTimes)
-          TFA.Cliente = .fields("Cliente")
-          TFA.CI_RUC = .fields("CI_RUC")
-          TFA.TD = .fields("TD")
-          TFA.DireccionC = .fields("Direccion")
-          TFA.TelefonoC = .fields("Telefono")
-          TFA.EmailC = .fields("Email")
-          TFA.Sin_IVA = .fields("BaseImponible")
-          TFA.Con_IVA = .fields("BaseImpGrav")
-          TFA.Total_IVA = .fields("MontoIva")
-          TFA.Nota = .fields("Concepto")
-          TFA.Total_MN = TFA.Sin_IVA + TFA.Con_IVA + TFA.Total_IVA
-          TFA.SubTotal = TFA.Sin_IVA + TFA.Con_IVA
-          If TFA.Nota = Ninguno Then TFA.Nota = "Liquidacion de Compras"
-          tipoCodComprobante = Format$(.fields("TipoComprobante"), "00")
-         'Validar_Porc_IVA TFA.Fecha
-          Obtener_Porc_IVA TFA.Fecha, .fields("PorcentajeIva")
-          TFA.Porc_IVA = Porc_IVA * 100
-          
-         'Algoritmo Modulo 11 para la clave de la retencion
-         '& Format$(TFA.Vencimiento, "ddmmyyyy")
-          TFA.ClaveAcceso_LC = Format$(TFA.Fecha, "ddmmyyyy") & "03" & RUC & Ambiente & TFA.Serie_LC _
-                             & Format$(TFA.Factura, String(9, "0")) & "123456781"
-          TFA.ClaveAcceso_LC = Replace(TFA.ClaveAcceso_LC, ".", "1")
-          TFA.ClaveAcceso_LC = TFA.ClaveAcceso_LC & Digito_Verificador_Modulo11(TFA.ClaveAcceso_LC)
-         'MsgBox TFA.Autorizacion_LC
-          If Len(TFA.Autorizacion_LC) >= 13 Then
-            'ENCABEZADO XML PARA EL SRI DE LA RETENCION
-             Insertar_Campo_XML "<?xml version=""1.0"" encoding=""UTF-8""?>"
-             Insertar_Campo_XML "<liquidacionCompra id=""comprobante"" version=""1.0.0"">"
-             Insertar_Campo_XML AbrirXML("infoTributaria")
-                Insertar_Campo_XML CampoXML("ambiente", Ambiente)
-                Insertar_Campo_XML CampoXML("tipoEmision", "1")
-                Insertar_Campo_XML CampoXML("razonSocial", RazonSocial)
-                Insertar_Campo_XML CampoXML("nombreComercial", NombreComercial)
-                Insertar_Campo_XML CampoXML("ruc", RUC)
-                Insertar_Campo_XML CampoXML("claveAcceso", TFA.ClaveAcceso_LC)
-                Insertar_Campo_XML CampoXML("codDoc", "03")
-                Insertar_Campo_XML CampoXML("estab", MidStrg(TFA.Serie_LC, 1, 3))
-                Insertar_Campo_XML CampoXML("ptoEmi", MidStrg(TFA.Serie_LC, 4, 3))
-                Insertar_Campo_XML CampoXML("secuencial", Format$(TFA.Factura, String(9, "0")))
-                Insertar_Campo_XML CampoXML("dirMatriz", ULCase(Direccion))
-               'Tipo de Contribuyente
-                If AgenteRetencion <> Ninguno Then Insertar_Campo_XML CampoXML("agenteRetencion", "1")
-                If MicroEmpresa = "CONTRIBUYENTE RÉGIMEN RIMPE" Then Insertar_Campo_XML CampoXML("contribuyenteRimpe", "CONTRIBUYENTE RÉGIMEN RIMPE")
-             Insertar_Campo_XML CerrarXML("infoTributaria")
-             
-             Insertar_Campo_XML AbrirXML("infoLiquidacionCompra")
-                Insertar_Campo_XML CampoXML("fechaEmision", TFA.Fecha)
-                Insertar_Campo_XML CampoXML("dirEstablecimiento", ULCase(DireccionEstab))
-                If Len(ContEspec) > 1 Then Insertar_Campo_XML CampoXML("contribuyenteEspecial", ContEspec)
-                Insertar_Campo_XML CampoXML("obligadoContabilidad", Obligado_Conta)
-                Select Case TFA.TD
-                  Case "C": TFA.TD = "05"
-                  Case "P": TFA.TD = "06"
-                  Case Else: TFA.TD = "05"
-                End Select
-                Insertar_Campo_XML CampoXML("tipoIdentificacionProveedor", TFA.TD)
-                Insertar_Campo_XML CampoXML("razonSocialProveedor", TFA.Cliente)
-                Insertar_Campo_XML CampoXML("identificacionProveedor", TFA.CI_RUC)
-                Insertar_Campo_XML CampoXML("direccionProveedor", TFA.DireccionC)
+    'RETENCIONES COMPRAS
+     sSQL = "SELECT C.Cliente,C.CI_RUC,C.TD,C.Direccion,C.Telefono,C.Email,Co.Concepto,TC.* " _
+          & "FROM Trans_Compras As TC, Clientes As C, Comprobantes AS Co " _
+          & "WHERE TC.Item = '" & NumEmpresa & "' " _
+          & "AND TC.Periodo = '" & Periodo_Contable & "' " _
+          & "AND TC.Numero = " & TFA.Numero & " " _
+          & "AND TC.TP = '" & TFA.TP & "' " _
+          & "AND LEN(TC.Autorizacion) = 13 " _
+          & "AND TC.TipoComprobante IN(3,41) " _
+          & "AND TC.IdProv = C.Codigo " _
+          & "AND TC.Item = Co.Item " _
+          & "AND TC.Periodo = Co.Periodo " _
+          & "AND TC.TP = Co.TP " _
+          & "AND TC.Numero = Co.Numero " _
+          & "ORDER BY Establecimiento, PuntoEmision,Secuencial "
+     Select_AdoDB AdoCompras, sSQL        ' , "Liquidacion_Compras_" & TFA.TP & "-" & TFA.Numero
+     With AdoCompras
+      If .RecordCount > 0 Then
+         'Generacion de la Retencion si es Electronica
+          Do While Not .EOF
+             TextoXML = ""
+             TFA.Autorizacion = .Fields("Autorizacion")
+             TFA.Fecha = .Fields("FechaRegistro")
+             TFA.Vencimiento = .Fields("FechaRegistro")
+             TFA.Serie_LC = .Fields("Establecimiento") & .Fields("PuntoEmision")
+             TFA.Factura = .Fields("Secuencial")
+             TFA.Hora = Format$(Time, FormatoTimes)
+             TFA.Cliente = .Fields("Cliente")
+             TFA.CI_RUC = .Fields("CI_RUC")
+             TFA.TD = .Fields("TD")
+             TFA.DireccionC = .Fields("Direccion")
+             TFA.TelefonoC = .Fields("Telefono")
+             TFA.EmailC = .Fields("Email")
+             TFA.Sin_IVA = .Fields("BaseImponible")
+             TFA.Con_IVA = .Fields("BaseImpGrav")
+             TFA.Total_IVA = .Fields("MontoIva")
+             TFA.Nota = .Fields("Concepto")
+             TFA.Total_MN = TFA.Sin_IVA + TFA.Con_IVA + TFA.Total_IVA
+             TFA.SubTotal = TFA.Sin_IVA + TFA.Con_IVA
+             If TFA.Nota = Ninguno Then TFA.Nota = "Liquidacion de Compras"
+             tipoCodComprobante = Format$(.Fields("TipoComprobante"), "00")
+            'Validar_Porc_IVA TFA.Fecha
+             Obtener_Porc_IVA TFA.Fecha, .Fields("PorcentajeIva")
+             TFA.Porc_IVA = Porc_IVA * 100
+              
+            'Algoritmo Modulo 11 para la clave de la retencion
+            '& Format$(TFA.Vencimiento, "ddmmyyyy")
+             TFA.ClaveAcceso_LC = Format$(TFA.Fecha, "ddmmyyyy") & "03" & RUC & Ambiente & TFA.Serie_LC & Format$(TFA.Factura, String(9, "0")) & "123456781"
+             TFA.ClaveAcceso_LC = Replace(TFA.ClaveAcceso_LC, ".", "1")
+             TFA.ClaveAcceso_LC = TFA.ClaveAcceso_LC & Digito_Verificador_Modulo11(TFA.ClaveAcceso_LC)
+            'MsgBox TFA.Autorizacion_LC
+             If Len(TFA.Autorizacion_LC) >= 13 Then
+               'ENCABEZADO XML PARA EL SRI DE LA RETENCION
+                Insertar_Campo_XML "<?xml version=""1.0"" encoding=""UTF-8""?>"
+                Insertar_Campo_XML "<liquidacionCompra id=""comprobante"" version=""1.0.0"">"
+                Insertar_Campo_XML AbrirXML("infoTributaria")
+                    Insertar_Campo_XML CampoXML("ambiente", Ambiente)
+                    Insertar_Campo_XML CampoXML("tipoEmision", "1")
+                    Insertar_Campo_XML CampoXML("razonSocial", RazonSocial)
+                    Insertar_Campo_XML CampoXML("nombreComercial", NombreComercial)
+                    Insertar_Campo_XML CampoXML("ruc", RUC)
+                    Insertar_Campo_XML CampoXML("claveAcceso", TFA.ClaveAcceso_LC)
+                    Insertar_Campo_XML CampoXML("codDoc", "03")
+                    Insertar_Campo_XML CampoXML("estab", MidStrg(TFA.Serie_LC, 1, 3))
+                    Insertar_Campo_XML CampoXML("ptoEmi", MidStrg(TFA.Serie_LC, 4, 3))
+                    Insertar_Campo_XML CampoXML("secuencial", Format$(TFA.Factura, String(9, "0")))
+                    Insertar_Campo_XML CampoXML("dirMatriz", ULCase(Direccion))
+                   'Tipo de Contribuyente
+                    If AgenteRetencion <> Ninguno Then Insertar_Campo_XML CampoXML("agenteRetencion", "1")
+                    If MicroEmpresa = "CONTRIBUYENTE RÉGIMEN RIMPE" Then Insertar_Campo_XML CampoXML("contribuyenteRimpe", "CONTRIBUYENTE RÉGIMEN RIMPE")
+                Insertar_Campo_XML CerrarXML("infoTributaria")
                  
-                Insertar_Campo_XML CampoXML("totalSinImpuestos", TFA.SubTotal)
-                Insertar_Campo_XML CampoXML("totalDescuento", "0.00")
-                
-''                If tipoCodComprobante = "41" Then
-''                   Insertar_Campo_XML CampoXML("codDocReembolso", tipoCodComprobante)
-''                   Insertar_Campo_XML CampoXML("totalComprobantesReembolso", TFA.Total_MN)
-''                   Insertar_Campo_XML CampoXML("totalBaseImponibleReembolso", TFA.SubTotal)
-''                   Insertar_Campo_XML CampoXML("totalImpuestoReembolso", TFA.Total_IVA)
-''                End If
-                
-                Insertar_Campo_XML AbrirXML("totalConImpuestos")
-                   Insertar_Campo_XML AbrirXML("totalImpuesto")
-                      Insertar_Campo_XML CampoXML("codigo", "2")
-                      Insertar_Campo_XML CampoXML("codigoPorcentaje", "0")
-                      Insertar_Campo_XML CampoXML("baseImponible", TFA.Sin_IVA)
-                      Insertar_Campo_XML CampoXML("tarifa", "0.00")
-                      Insertar_Campo_XML CampoXML("valor", "0.00")
-                   Insertar_Campo_XML CerrarXML("totalImpuesto")
-                   
-                   Insertar_Campo_XML AbrirXML("totalImpuesto")
-                      Insertar_Campo_XML CampoXML("codigo", "2")
-                      Insertar_Campo_XML CampoXML("codigoPorcentaje", .fields("PorcentajeIva"))
-                      Insertar_Campo_XML CampoXML("baseImponible", TFA.Con_IVA)
-                      Insertar_Campo_XML CampoXML("tarifa", TFA.Porc_IVA)
-                      Insertar_Campo_XML CampoXML("valor", TFA.Total_IVA)
-                   Insertar_Campo_XML CerrarXML("totalImpuesto")
-                Insertar_Campo_XML CerrarXML("totalConImpuestos")
-                
-                Insertar_Campo_XML CampoXML("importeTotal", TFA.Total_MN)
-                Insertar_Campo_XML CampoXML("moneda", "DOLAR")
-                Insertar_Campo_XML AbrirXML("pagos")
-                   Insertar_Campo_XML AbrirXML("pago")
-                      Insertar_Campo_XML CampoXML("formaPago", "20")
-                      Insertar_Campo_XML CampoXML("total", TFA.Total_MN)
-                      Insertar_Campo_XML CampoXML("plazo", "0")
-                      Insertar_Campo_XML CampoXML("unidadTiempo", "dias")
-                   Insertar_Campo_XML CerrarXML("pago")
-                Insertar_Campo_XML CerrarXML("pagos")
-             Insertar_Campo_XML CerrarXML("infoLiquidacionCompra")
-             
-             Insertar_Campo_XML AbrirXML("detalles")
-                Insertar_Campo_XML AbrirXML("detalle")
-                   Insertar_Campo_XML CampoXML("codigoPrincipal", "99")
-                   Insertar_Campo_XML CampoXML("codigoAuxiliar", "99.98")
-                   Insertar_Campo_XML CampoXML("descripcion", TFA.Nota & ", Tarifa 0%")
-                   Insertar_Campo_XML CampoXML("cantidad", "1")
-                   Insertar_Campo_XML CampoXML("precioUnitario", TFA.Sin_IVA)
-                   Insertar_Campo_XML CampoXML("descuento", "0.00")
-                   Insertar_Campo_XML CampoXML("precioTotalSinImpuesto", TFA.Sin_IVA)
-                   Insertar_Campo_XML AbrirXML("impuestos")
-                      Insertar_Campo_XML AbrirXML("impuesto")
-                         Insertar_Campo_XML CampoXML("codigo", "2")
-                         Insertar_Campo_XML CampoXML("codigoPorcentaje", "0")
-                         Insertar_Campo_XML CampoXML("tarifa", "0.00")
-                         Insertar_Campo_XML CampoXML("baseImponible", TFA.Sin_IVA)
-                         Insertar_Campo_XML CampoXML("valor", "0.00")
-                      Insertar_Campo_XML CerrarXML("impuesto")
-                   Insertar_Campo_XML CerrarXML("impuestos")
-                Insertar_Campo_XML CerrarXML("detalle")
-                
-                Insertar_Campo_XML AbrirXML("detalle")
-                   Insertar_Campo_XML CampoXML("codigoPrincipal", "99")
-                   Insertar_Campo_XML CampoXML("codigoAuxiliar", "99.99")
-                   Insertar_Campo_XML CampoXML("descripcion", TFA.Nota & ", Tarifa " & TFA.Porc_IVA & "%")
-                   Insertar_Campo_XML CampoXML("cantidad", "1")
-                   Insertar_Campo_XML CampoXML("precioUnitario", TFA.Con_IVA)
-                   Insertar_Campo_XML CampoXML("descuento", "0.00")
-                   Insertar_Campo_XML CampoXML("precioTotalSinImpuesto", TFA.Con_IVA)
-                   Insertar_Campo_XML AbrirXML("impuestos")
-                      Insertar_Campo_XML AbrirXML("impuesto")
-                         Insertar_Campo_XML CampoXML("codigo", "2")
-                         Insertar_Campo_XML CampoXML("codigoPorcentaje", .fields("PorcentajeIva"))
-                         Insertar_Campo_XML CampoXML("tarifa", TFA.Porc_IVA)
-                         Insertar_Campo_XML CampoXML("baseImponible", TFA.Con_IVA)
-                         Insertar_Campo_XML CampoXML("valor", TFA.Total_IVA)
-                      Insertar_Campo_XML CerrarXML("impuesto")
-                   Insertar_Campo_XML CerrarXML("impuestos")
-                Insertar_Campo_XML CerrarXML("detalle")
-             Insertar_Campo_XML CerrarXML("detalles")
-             
-            'FIN DE XML DE LIQUIDACION DE COMPRAS
-             Insertar_Campo_XML AbrirXML("infoAdicional")
-                If Len(TFA.DireccionC) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Direccion"">" & TFA.DireccionC & "</campoAdicional>"
-                If Len(TFA.TelefonoC) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Telefono"">" & TFA.TelefonoC & "</campoAdicional>"
-                If Len(TFA.EmailC) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Email"">" & TFA.EmailC & "</campoAdicional>"
-                Insertar_Campo_XML "<campoAdicional nombre=""Comprobante No"">" & TFA.TP & "-" & Format$(TFA.Numero, "0000000000") & "</campoAdicional>"
-             Insertar_Campo_XML CerrarXML("infoAdicional")
-             Insertar_Campo_XML CerrarXML("liquidacionCompra")
-             If CFechaLong(TFA.Fecha) <= CFechaLong(Fecha_CE) Then
-                'Grabamos el comprobante XML de la Retencion
-                 RutaGeneraFile = RutaDocumentos & "\Comprobantes Generados\" & TFA.ClaveAcceso_LC & ".xml"
+                Insertar_Campo_XML AbrirXML("infoLiquidacionCompra")
+                    Insertar_Campo_XML CampoXML("fechaEmision", TFA.Fecha)
+                    Insertar_Campo_XML CampoXML("dirEstablecimiento", ULCase(DireccionEstab))
+                    If Len(ContEspec) > 1 Then Insertar_Campo_XML CampoXML("contribuyenteEspecial", ContEspec)
+                    Insertar_Campo_XML CampoXML("obligadoContabilidad", Obligado_Conta)
+                    Select Case TFA.TD
+                      Case "C": TFA.TD = "05"
+                      Case "P": TFA.TD = "06"
+                      Case Else: TFA.TD = "05"
+                    End Select
+                    Insertar_Campo_XML CampoXML("tipoIdentificacionProveedor", TFA.TD)
+                    Insertar_Campo_XML CampoXML("razonSocialProveedor", TFA.Cliente)
+                    Insertar_Campo_XML CampoXML("identificacionProveedor", TFA.CI_RUC)
+                    Insertar_Campo_XML CampoXML("direccionProveedor", TFA.DireccionC)
+                     
+                    Insertar_Campo_XML CampoXML("totalSinImpuestos", TFA.SubTotal)
+                    Insertar_Campo_XML CampoXML("totalDescuento", "0.00")
+                    
+    ''                If tipoCodComprobante = "41" Then
+    ''                   Insertar_Campo_XML CampoXML("codDocReembolso", tipoCodComprobante)
+    ''                   Insertar_Campo_XML CampoXML("totalComprobantesReembolso", TFA.Total_MN)
+    ''                   Insertar_Campo_XML CampoXML("totalBaseImponibleReembolso", TFA.SubTotal)
+    ''                   Insertar_Campo_XML CampoXML("totalImpuestoReembolso", TFA.Total_IVA)
+    ''                End If
+                    
+                    Insertar_Campo_XML AbrirXML("totalConImpuestos")
+                       Insertar_Campo_XML AbrirXML("totalImpuesto")
+                          Insertar_Campo_XML CampoXML("codigo", "2")
+                          Insertar_Campo_XML CampoXML("codigoPorcentaje", "0")
+                          Insertar_Campo_XML CampoXML("baseImponible", TFA.Sin_IVA)
+                          Insertar_Campo_XML CampoXML("tarifa", "0.00")
+                          Insertar_Campo_XML CampoXML("valor", "0.00")
+                       Insertar_Campo_XML CerrarXML("totalImpuesto")
+                       
+                       Insertar_Campo_XML AbrirXML("totalImpuesto")
+                          Insertar_Campo_XML CampoXML("codigo", "2")
+                          Insertar_Campo_XML CampoXML("codigoPorcentaje", .Fields("PorcentajeIva"))
+                          Insertar_Campo_XML CampoXML("baseImponible", TFA.Con_IVA)
+                          Insertar_Campo_XML CampoXML("tarifa", TFA.Porc_IVA)
+                          Insertar_Campo_XML CampoXML("valor", TFA.Total_IVA)
+                       Insertar_Campo_XML CerrarXML("totalImpuesto")
+                    Insertar_Campo_XML CerrarXML("totalConImpuestos")
+                    
+                    Insertar_Campo_XML CampoXML("importeTotal", TFA.Total_MN)
+                    Insertar_Campo_XML CampoXML("moneda", "DOLAR")
+                    Insertar_Campo_XML AbrirXML("pagos")
+                       Insertar_Campo_XML AbrirXML("pago")
+                          Insertar_Campo_XML CampoXML("formaPago", "20")
+                          Insertar_Campo_XML CampoXML("total", TFA.Total_MN)
+                          Insertar_Campo_XML CampoXML("plazo", "0")
+                          Insertar_Campo_XML CampoXML("unidadTiempo", "dias")
+                       Insertar_Campo_XML CerrarXML("pago")
+                    Insertar_Campo_XML CerrarXML("pagos")
+                Insertar_Campo_XML CerrarXML("infoLiquidacionCompra")
                  
-                 If GeneraXML Then
-                    Clipboard.Clear
-                    Clipboard.SetText TextoXML
-                    Grabar_Consulta_Archivo "LC_" & TFA.Serie_LC & "-" & Format$(TFA.Factura, String(9, "0")), TextoXML
-                 End If
-                 
-                 Set DocumentoXML = New DOMDocument30
-                 DocumentoXML.loadXML (TextoXML)
-                 DocumentoXML.save (RutaGeneraFile)
-                 
-                     TFA.Estado_SRI = "CG"
-                    'Enviamos al SRI para que me autorice la Retencion
-                     SRI_Autorizacion.Clave_De_Acceso = TFA.ClaveAcceso_LC
-                     FAutorizaXmlSRI.Show 1
-                    'SRI_Autorizacion = SRI_Generar_XML(TFA.ClaveAcceso_LC, TFA.Estado_SRI_LC)
-                     SRI_Actualizar_XML_Liquidacion SRI_Autorizacion, FA
-                     RatonReloj
-                     If SRI_Autorizacion.Estado_SRI = "OK" Then
-                        Control_Procesos "R", "LC-" & TFA.Serie_LC & " No. " & Format(TFA.Autorizacion, "000000000") & " Autorizada"
-                        SRI_Actualizar_Autorizacion_Liquidacion SRI_Autorizacion, FA
-                        SRI_Actualizar_Documento_XML TFA.ClaveAcceso_LC
-                        
-                        SRI_Enviar_Mails FA, SRI_Autorizacion, "LC"
-                        SRI_Generar_PDF_LC TFA, VerLiquidacion
-                        RatonNormal
-                     Else
-                        RatonNormal
-                        If TextoImprimio = "" Then TextoImprimio = "INFORME DE ERRORES EN LAS LIQUIDACIONES DE COMPRAS:" & vbCrLf _
-                                                                 & "--------------------------------------------------" & vbCrLf
-                        TextoImprimio = TextoImprimio _
-                                      & "Fecha: " & TFA.Fecha & ", Retencion No. " & TFA.Serie_R & "-" & TFA.Retencion _
-                                      & ", Documento No. " & TFA.Serie & "-" & TFA.Factura _
-                                      & ", De: " & TFA.Cliente & ", CI/RUC: " & TFA.CI_RUC & vbCrLf _
-                                      & SRI_Autorizacion.Estado_SRI & " - " & SRI_Autorizacion.Error_SRI & vbCrLf _
-                                      & String(80, "-") & vbCrLf
-                        If VerLiquidacion Then MsgBox SRI_Autorizacion.Error_SRI
-                     End If
-                 
-             Else
-                RatonNormal
-                MsgBox MensajeNoAutorizarCE
+                Insertar_Campo_XML AbrirXML("detalles")
+                    Insertar_Campo_XML AbrirXML("detalle")
+                       Insertar_Campo_XML CampoXML("codigoPrincipal", "99")
+                       Insertar_Campo_XML CampoXML("codigoAuxiliar", "99.98")
+                       Insertar_Campo_XML CampoXML("descripcion", TFA.Nota & ", Tarifa 0%")
+                       Insertar_Campo_XML CampoXML("cantidad", "1")
+                       Insertar_Campo_XML CampoXML("precioUnitario", TFA.Sin_IVA)
+                       Insertar_Campo_XML CampoXML("descuento", "0.00")
+                       Insertar_Campo_XML CampoXML("precioTotalSinImpuesto", TFA.Sin_IVA)
+                       Insertar_Campo_XML AbrirXML("impuestos")
+                          Insertar_Campo_XML AbrirXML("impuesto")
+                             Insertar_Campo_XML CampoXML("codigo", "2")
+                             Insertar_Campo_XML CampoXML("codigoPorcentaje", "0")
+                             Insertar_Campo_XML CampoXML("tarifa", "0.00")
+                             Insertar_Campo_XML CampoXML("baseImponible", TFA.Sin_IVA)
+                             Insertar_Campo_XML CampoXML("valor", "0.00")
+                          Insertar_Campo_XML CerrarXML("impuesto")
+                       Insertar_Campo_XML CerrarXML("impuestos")
+                    Insertar_Campo_XML CerrarXML("detalle")
+                    
+                    Insertar_Campo_XML AbrirXML("detalle")
+                       Insertar_Campo_XML CampoXML("codigoPrincipal", "99")
+                       Insertar_Campo_XML CampoXML("codigoAuxiliar", "99.99")
+                       Insertar_Campo_XML CampoXML("descripcion", TFA.Nota & ", Tarifa " & TFA.Porc_IVA & "%")
+                       Insertar_Campo_XML CampoXML("cantidad", "1")
+                       Insertar_Campo_XML CampoXML("precioUnitario", TFA.Con_IVA)
+                       Insertar_Campo_XML CampoXML("descuento", "0.00")
+                       Insertar_Campo_XML CampoXML("precioTotalSinImpuesto", TFA.Con_IVA)
+                       Insertar_Campo_XML AbrirXML("impuestos")
+                          Insertar_Campo_XML AbrirXML("impuesto")
+                             Insertar_Campo_XML CampoXML("codigo", "2")
+                             Insertar_Campo_XML CampoXML("codigoPorcentaje", .Fields("PorcentajeIva"))
+                             Insertar_Campo_XML CampoXML("tarifa", TFA.Porc_IVA)
+                             Insertar_Campo_XML CampoXML("baseImponible", TFA.Con_IVA)
+                             Insertar_Campo_XML CampoXML("valor", TFA.Total_IVA)
+                          Insertar_Campo_XML CerrarXML("impuesto")
+                       Insertar_Campo_XML CerrarXML("impuestos")
+                    Insertar_Campo_XML CerrarXML("detalle")
+                Insertar_Campo_XML CerrarXML("detalles")
+    
+                Insertar_Campo_XML AbrirXML("infoAdicional")
+                    If Len(TFA.DireccionC) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Direccion"">" & TFA.DireccionC & "</campoAdicional>"
+                    If Len(TFA.TelefonoC) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Telefono"">" & TFA.TelefonoC & "</campoAdicional>"
+                    If Len(TFA.EmailC) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Email"">" & TFA.EmailC & "</campoAdicional>"
+                    Insertar_Campo_XML "<campoAdicional nombre=""Comprobante No"">" & TFA.TP & "-" & Format$(TFA.Numero, "0000000000") & "</campoAdicional>"
+                Insertar_Campo_XML CerrarXML("infoAdicional")
+                Insertar_Campo_XML CerrarXML("liquidacionCompra")
+               'FIN DE XML DE LIQUIDACION DE COMPRAS
+               '-------------------------------------------------------------------
+                SRI_Enviar_Documento_Autorizar "LC", VerLiquidacion, GeneraXML, TFA
+               '-------------------------------------------------------------------
              End If
-          End If
-         .MoveNext
-      Loop
-   End If
-  End With
+            .MoveNext
+          Loop
+      End If
+     End With
      AdoCompras.Close
+  Else
+     RatonNormal
+     MsgBox MensajeNoAutorizarCE
   End If
   RatonNormal
+End Sub
+
+Public Sub SRI_Enviar_Documento_Autorizar(TipoDoc As String, VerMsgDoc As Boolean, GeneraXML As Boolean, TFA As Tipo_Facturas, Optional EnviarxMail As Boolean)
+Dim DocXML As String
+  
+  If InStr("FA,NC,LC,GR,RE", TipoDoc) > 0 Then
+    'MsgBox "Crear Archivos CE: " & RutaGeneraFile
+     SRI_Autorizacion.Tipo_Doc_SRI = TipoDoc
+     TFA.Estado_SRI = "CG"
+     Select Case TipoDoc
+       Case "FA"
+            SRI_Autorizacion.Clave_De_Acceso = TFA.ClaveAcceso
+            DocXML = TFA.TC & "_" & TFA.Serie & "-" & Format$(TFA.Factura, "000000000")
+       Case "NC"
+            SRI_Autorizacion.Clave_De_Acceso = TFA.ClaveAcceso_NC
+            DocXML = "NC-" & TFA.Serie_NC & " No. " & Format(TFA.Nota_Credito, "000000000")
+       Case "LC"
+            SRI_Autorizacion.Clave_De_Acceso = TFA.ClaveAcceso_LC
+            DocXML = "LC_" & TFA.Serie_LC & "-" & Format$(TFA.Factura, "000000000")
+       Case "GR"
+            SRI_Autorizacion.Clave_De_Acceso = TFA.ClaveAcceso_GR
+            DocXML = "GR_" & TFA.Serie_GR & "-" & Format$(TFA.Remision, "000000000")
+            
+            TFA.Estado_SRI_GR = SRI_Autorizacion.Estado_SRI
+            TFA.Error_SRI = SRI_Autorizacion.Error_SRI
+            TFA.Fecha_Aut_GR = SRI_Autorizacion.Fecha_Autorizacion
+            TFA.Hora_GR = SRI_Autorizacion.Hora_Autorizacion
+       Case "RE" 'Grabamos el comprobante XML de la Retencion
+            SRI_Autorizacion.Clave_De_Acceso = TFA.ClaveAcceso
+            DocXML = "RE_" & TFA.Serie_R & "-" & Format(TFA.Retencion, "000000000")
+     End Select
+    'Borramos los resultados de intentos anteriores
+     RutaOrigen = RutaDocumentos & "\Comprobantes Generados\" & SRI_Autorizacion.Clave_De_Acceso & ".xml"
+     If Dir$(RutaOrigen) <> "" Then Kill RutaOrigen
+     RutaOrigen = RutaDocumentos & "\Comprobantes no Autorizados\" & SRI_Autorizacion.Clave_De_Acceso & ".xml"
+     If Dir$(RutaOrigen) <> "" Then Kill RutaOrigen
+    'MsgBox "Desktop Test: " & RutaDocumentos
+    'Generamos el archivo y que soporte XML valido
+''     Clipboard.Clear
+''     Clipboard.SetText TextoXML
+    
+     Set DocumentoXML = New DOMDocument30
+     DocumentoXML.loadXML (TextoXML)
+     DocumentoXML.save (RutaDocumentos & "\Comprobantes Generados\" & SRI_Autorizacion.Clave_De_Acceso & ".xml")
+     
+    'MsgBox "Desktop Test:" & vbCrLf & TextoXML
+     
+     SRI_Actualizar_XML_Comprobantes TipoDoc, SRI_Autorizacion, TFA
+                 
+    'Enviamos al SRI para que me autorice la Retencion
+     RatonReloj
+    'MsgBox Len(SRI_Autorizacion.Clave_De_Acceso) & vbCrLf & SRI_Autorizacion.Clave_De_Acceso
+     FAutorizaXmlSRI.Show 1
+    '----------------------------------------------------------------------------------------------------------------------
+     RatonReloj
+    'MsgBox "Desktop Test: " & SRI_Autorizacion.Estado_SRI
+    '----------------------------------
+    ' SRI_Autorizacion.Estado_SRI = "OK"
+    '----------------------------------
+     If SRI_Autorizacion.Estado_SRI = "OK" Then
+        Control_Procesos TipoDoc, DocXML & " Autorizada"
+        SRI_Actualizar_Autorizacion_Comprobante TipoDoc, SRI_Autorizacion, TFA
+        Select Case TipoDoc
+          Case "FA": SRI_Generar_PDF_FA TFA, VerMsgDoc
+          Case "NC": SRI_Generar_PDF_NC TFA, VerMsgDoc
+          Case "LC": SRI_Generar_PDF_LC TFA, VerMsgDoc
+          Case "GR": SRI_Generar_PDF_GR TFA, VerMsgDoc
+          Case "RE": SRI_Generar_PDF_RE TFA, VerMsgDoc
+        End Select
+       'Actualizamos el documento autorizado en la base de datos del sistema
+        SRI_Actualizar_Documento_XML SRI_Autorizacion
+        RatonNormal
+        If VerMsgDoc Then MsgBox "Comprobante Autorizado con exito"
+        
+'''        If PreguntarEnvio Then
+'''           Titulo = "ENVIAR MAIL DOCUMENTO"
+'''           Mensajes = "Enviar por Mail Documento Autorizado?"
+'''           If BoxMensaje Then EnviarDocARI = True Else EnviarDocARI = False
+'''        Else
+'''           EnviarDocARI = True
+'''        End If
+'''        If EnviarDocARI Then
+        If Not EnviarxMail Then SRI_Enviar_Mails TFA, SRI_Autorizacion
+     Else
+        Control_Procesos TipoDoc, DocXML & " No Autorizada"
+        If TextoImprimio = "" Then TextoImprimio = "INFORME DE ERRORES EN LOS DOCUMENTOS:" & vbCrLf _
+                                                 & "------------------------------------" & vbCrLf
+        Select Case TipoDoc
+          Case "FA"
+               TextoImprimio = TextoImprimio _
+                             & TFA.TC & " No. " & TFA.Serie & "-" & Format(TFA.Factura, "000000000") & vbTab & "Beneficiario: " & TFA.Cliente & vbCrLf _
+                             & "Clave Acceso: " & TFA.ClaveAcceso & vbCrLf & TFA.Error_SRI & vbCrLf & String(80, "-") & vbCrLf
+          Case "NC"
+          Case "LC"
+               TextoImprimio = TextoImprimio _
+                             & Co.TP & "-" & Format(Co.Numero, "000000000") & " - Fecha: " & TFA.Fecha & ", Documento No. " & TFA.Serie_LC & "-" & TFA.Factura & vbCrLf _
+                             & "De: " & TFA.Cliente & ", CI/RUC: " & TFA.CI_RUC & vbCrLf
+          Case "GR"
+               TextoImprimio = TextoImprimio _
+                             & TFA.TC & " No. " & TFA.Serie_GR & vbTab & TFA.Factura & vbTab _
+                             & TFA.Cliente & vbTab & TFA.Error_SRI & vbCrLf _
+                             & TFA.Error_SRI
+          Case "RE"
+               TextoImprimio = TextoImprimio _
+                             & Co.TP & "-" & Format(Co.Numero, "000000000") & " - Fecha: " & TFA.Fecha & ", Retencion No. " & TFA.Serie_R & "-" & TFA.Retencion _
+                             & ", Documento No. " & TFA.Serie & "-" & TFA.Factura & vbCrLf _
+                             & "De: " & TFA.Cliente & ", CI/RUC: " & TFA.CI_RUC & vbCrLf
+        End Select
+       'Copiar todo el contenido de la caja de texto a un archivo y al corta papeles
+       'MsgBox GeneraXML
+        If GeneraXML Then
+          ' Clipboard.Clear
+          ' Clipboard.SetText TextoXML
+           Grabar_Consulta_Archivo DocXML, TextoXML
+        End If
+        RatonNormal
+        SRI_Autorizacion.Error_SRI = DocXML & " No Autorizada"
+        If VerMsgDoc Then MsgBox SRI_Autorizacion.Error_SRI
+     End If
+     Progreso_Barra.Mensaje_Box = "OK"
+     Progreso_Esperar
+     Progreso_Final
+  End If
 End Sub
 
 Public Sub SRI_Crear_Clave_Acceso_Facturas(TFA As Tipo_Facturas, _
                                            VerFactura As Boolean, _
                                            Optional GeneraXML As Boolean, _
-                                           Optional Autorizar As Boolean)
+                                           Optional Autorizar As Boolean, _
+                                           Optional EnviarxMail As Boolean)
 Dim AdoDBFA As ADODB.Recordset
 Dim AdoDBDet As ADODB.Recordset
 Dim AdoDBCli As ADODB.Recordset
@@ -3413,457 +3227,406 @@ Dim Serie2Reembolo As String
 Dim SecuencialReembolo As String
 
     RatonReloj
-    Autorizar_XML = True
+    If CFechaLong(TFA.Fecha) <= CFechaLong(Fecha_CE) Then Autorizar_XML = True Else Autorizar_XML = False
     If Len(Fecha_Igualar) = 10 Then
        If CFechaLong(TFA.Fecha) < CFechaLong(Fecha_Igualar) Then Autorizar_XML = False
     End If
     TextoXML = ""
     
-    'MsgBox Autorizar_XML
+   'MsgBox Autorizar_XML
     If Autorizar_XML Then
-    
-    Leer_Datos_FA_NV TFA
+         Leer_Datos_FA_NV TFA
+             
+        'Detalle de descuentos
+         sSQL = "SELECT DF.*,CP.Reg_Sanitario, CP.Marca, CP.Desc_Item, CP.Codigo_Barra " _
+              & "FROM Detalle_Factura As DF, Catalogo_Productos As CP " _
+              & "WHERE DF.Item = '" & NumEmpresa & "' " _
+              & "AND DF.Periodo = '" & Periodo_Contable & "' " _
+              & "AND DF.TC = '" & TFA.TC & "' " _
+              & "AND DF.Serie = '" & TFA.Serie & "' " _
+              & "AND DF.Autorizacion = '" & TFA.Autorizacion & "' " _
+              & "AND DF.Factura = " & TFA.Factura & " " _
+              & "AND LEN(DF.Autorizacion) >= 13 " _
+              & "AND DF.T <> 'A' " _
+              & "AND DF.Item = CP.Item " _
+              & "AND DF.Periodo = CP.Periodo " _
+              & "AND DF.Codigo = CP.Codigo_Inv " _
+              & "ORDER BY DF.ID,DF.Codigo "
+         Select_AdoDB AdoDBDet, sSQL
         
-   'Detalle de descuentos
-    sSQL = "SELECT DF.*,CP.Reg_Sanitario, CP.Marca, CP.Desc_Item, CP.Codigo_Barra " _
-         & "FROM Detalle_Factura As DF, Catalogo_Productos As CP " _
-         & "WHERE DF.Item = '" & NumEmpresa & "' " _
-         & "AND DF.Periodo = '" & Periodo_Contable & "' " _
-         & "AND DF.TC = '" & TFA.TC & "' " _
-         & "AND DF.Serie = '" & TFA.Serie & "' " _
-         & "AND DF.Autorizacion = '" & TFA.Autorizacion & "' " _
-         & "AND DF.Factura = " & TFA.Factura & " " _
-         & "AND LEN(DF.Autorizacion) >= 13 " _
-         & "AND DF.T <> 'A' " _
-         & "AND DF.Item = CP.Item " _
-         & "AND DF.Periodo = CP.Periodo " _
-         & "AND DF.Codigo = CP.Codigo_Inv " _
-         & "ORDER BY DF.ID,DF.Codigo "
-    Select_AdoDB AdoDBDet, sSQL
-   
-   'Encabezado de la Factura
-    sSQL = "SELECT T, TDT, SP, Porc_IVA, Imp_Mes, Fecha, Vencimiento, SubTotal, Sin_IVA, Con_IVA, IVA, Total_MN, Razon_Social, RUC_CI, TB, Descuento, " _
-         & "Orden_Compra, Descuento2, Servicio " _
-         & "FROM Facturas " _
-         & "WHERE Item = '" & NumEmpresa & "' " _
-         & "AND Periodo = '" & Periodo_Contable & "' " _
-         & "AND TC = '" & TFA.TC & "' " _
-         & "AND Serie = '" & TFA.Serie & "' " _
-         & "AND Autorizacion = '" & TFA.Autorizacion & "' " _
-         & "AND Factura = " & TFA.Factura & " " _
-         & "AND LEN(Autorizacion) = 13 " _
-         & "AND T <> 'A' "
-    Select_AdoDB AdoDBFA, sSQL
-    
-    RatonReloj
-    With AdoDBFA
-     If .RecordCount > 0 Then
-         
-         Autorizar_XML = True
-         TFA.T = .fields("T")
-         TFA.SP = .fields("SP")
-         TFA.TDT = .fields("TDT")
-         TFA.Porc_IVA = .fields("Porc_IVA")
-         TFA.Imp_Mes = .fields("Imp_Mes")
-         TFA.Fecha = .fields("Fecha")
-         TFA.Vencimiento = .fields("Vencimiento")
-         TFA.SubTotal = .fields("SubTotal")
-         TFA.Sin_IVA = .fields("Sin_IVA")
-         TFA.Con_IVA = .fields("Con_IVA")
-         TFA.Total_IVA = .fields("IVA")
-         TFA.Servicio = .fields("Servicio")
-         TFA.Total_MN = .fields("Total_MN")
-         TFA.Razon_Social = .fields("Razon_Social")
-         TFA.RUC_CI = .fields("RUC_CI")
-         TFA.TB = .fields("TB")
-         TFA.Descuento = .fields("Descuento")
-         TFA.Descuento2 = .fields("Descuento2")
-         TFA.Orden_Compra = .fields("Orden_Compra")
-         TFA.Total_Descuento = TFA.Descuento + TFA.Descuento2
-         
-         If TFA.TDT = 41 Then TFA.EsPorReembolso = True
-         
-        'MsgBox "Validar Porc IVA"
-         
-         Obtener_Cod_Porc_IVA TFA.Fecha, (TFA.Porc_IVA * 100)
-        'MsgBox TFA.Porc_IVA & vbCrLf & Cod_Porc_IVA
-         
-        'Generamos la Clave de acceso
-        '& Format$(TFA.Vencimiento, "ddmmyyyy")
-         If Len(TFA.Autorizacion) >= 13 Then
-            TFA.ClaveAcceso = Format$(TFA.Fecha, "ddmmyyyy") & "01" & RUC & Ambiente & TFA.Serie & Format$(TFA.Factura, String(9, "0")) _
-            & "123456781"
-            TFA.ClaveAcceso = TFA.ClaveAcceso & Digito_Verificador_Modulo11(TFA.ClaveAcceso)
-         Else
-            TFA.ClaveAcceso = Ninguno
-         End If
-         TFA.Hora = Format$(Time, FormatoTimes)
-         SRI_Autorizacion.Clave_De_Acceso = TFA.ClaveAcceso
-         TipoIdent = "P"
-         Select Case TFA.TB
-           Case "R": If TFA.CI_RUC = String(13, "9") Then TipoIdent = "07" Else TipoIdent = "04"
-           Case "C": TipoIdent = "05"
-           Case "P": TipoIdent = "06"
-           Case Else: TipoIdent = "07"
-         End Select
-         
-         If MidStrg(TFA.CI_RUC, 3, 1) = "9" Then TipoProvReemb = "02" Else TipoProvReemb = "01"
-         
-         sSQL = "UPDATE Facturas " _
-              & "SET Clave_Acceso = '" & TFA.ClaveAcceso & "' " _
+        'Encabezado de la Factura
+         sSQL = "SELECT T, TDT, SP, Porc_IVA, Imp_Mes, Fecha, Vencimiento, SubTotal, Sin_IVA, Con_IVA, IVA, Total_MN, Razon_Social, RUC_CI, TB, Descuento, " _
+              & "Orden_Compra, Descuento2, Servicio " _
+              & "FROM Facturas " _
               & "WHERE Item = '" & NumEmpresa & "' " _
               & "AND Periodo = '" & Periodo_Contable & "' " _
               & "AND TC = '" & TFA.TC & "' " _
               & "AND Serie = '" & TFA.Serie & "' " _
+              & "AND Autorizacion = '" & TFA.Autorizacion & "' " _
               & "AND Factura = " & TFA.Factura & " " _
-              & "AND CodigoC = '" & TFA.CodigoC & "' " _
-              & "AND Autorizacion = '" & TFA.Autorizacion & "' "
-         Ejecutar_SQL_SP sSQL
+              & "AND LEN(Autorizacion) = 13 " _
+              & "AND T <> 'A' "
+         Select_AdoDB AdoDBFA, sSQL
          
-        'ENCABEZADO XML PARA EL SRI DE LA FACTURA/NOTA DE VENTA
-        'standalone=""yes""
-         Insertar_Campo_XML "<?xml version=""1.0"" encoding=""UTF-8""?>"
-         Select Case TFA.TC
-           Case "FA": Insertar_Campo_XML "<factura id=""comprobante"" version=""1.1.0"">"
-           Case "NV": Insertar_Campo_XML AbrirXML("<notaVenta>")
-           Case Else: Insertar_Campo_XML AbrirXML("<puntoVenta>")
-         End Select
-         
-         Insertar_Campo_XML AbrirXML("infoTributaria")
-            Insertar_Campo_XML CampoXML("ambiente", Ambiente)
-            Insertar_Campo_XML CampoXML("tipoEmision", "1")
-            Insertar_Campo_XML CampoXML("razonSocial", RazonSocial)
-            Insertar_Campo_XML CampoXML("nombreComercial", NombreComercial)
-            Insertar_Campo_XML CampoXML("ruc", RUC)
-            Insertar_Campo_XML CampoXML("claveAcceso", TFA.ClaveAcceso)
-           ' If TFA.EsPorReembolso Then
-           '    Insertar_Campo_XML CampoXML("codDoc", "41")
-           ' Else
-                Select Case TFA.TC
-                  Case "FA": Insertar_Campo_XML CampoXML("codDoc", "01")
-                  Case "NV": Insertar_Campo_XML CampoXML("codDoc", "02")
-                  Case Else: Insertar_Campo_XML CampoXML("codDoc", "00")
-                End Select
-           ' End If
-            Insertar_Campo_XML CampoXML("estab", MidStrg(TFA.Serie, 1, 3))
-            Insertar_Campo_XML CampoXML("ptoEmi", MidStrg(TFA.Serie, 4, 3))
-            Insertar_Campo_XML CampoXML("secuencial", Format$(TFA.Factura, String(9, "0")))
-            Insertar_Campo_XML CampoXML("dirMatriz", ULCase(Direccion))
-           'Tipo de Contribuyente
-            'MsgBox "..."
-            If AgenteRetencion <> Ninguno Then Insertar_Campo_XML CampoXML("agenteRetencion", "00000001")
-            If MicroEmpresa = "CONTRIBUYENTE RÉGIMEN RIMPE" Then Insertar_Campo_XML CampoXML("contribuyenteRimpe", "CONTRIBUYENTE RÉGIMEN RIMPE")
-         Insertar_Campo_XML CerrarXML("infoTributaria")
-         
-         Insertar_Campo_XML AbrirXML("infoFactura")
-            Insertar_Campo_XML CampoXML("fechaEmision", TFA.Fecha)
-            Insertar_Campo_XML CampoXML("dirEstablecimiento", ULCase(DireccionEstab))
-            
-            If Len(ContEspec) > 1 Then Insertar_Campo_XML CampoXML("contribuyenteEspecial", ContEspec)
-            
-            Insertar_Campo_XML CampoXML("obligadoContabilidad", Obligado_Conta)
-            Insertar_Campo_XML CampoXML("tipoIdentificacionComprador", TipoIdent)
-            Insertar_Campo_XML CampoXML("razonSocialComprador", TFA.Razon_Social)
-            Insertar_Campo_XML CampoXML("identificacionComprador", TFA.RUC_CI)
-            Insertar_Campo_XML CampoXML("direccionComprador", TFA.DireccionC)
-            If TFA.EsPorReembolso Then
-               Insertar_Campo_XML CampoXML("totalSinImpuestos", Format$(TFA.Total_MN, "#0.00"))
-            Else
-               Insertar_Campo_XML CampoXML("totalSinImpuestos", Format$(TFA.Sin_IVA + TFA.Con_IVA - TFA.Total_Descuento, "#0.00"))
-            End If
-            Insertar_Campo_XML CampoXML("totalDescuento", Format$(TFA.Total_Descuento, "#0.00"))
-            If TFA.EsPorReembolso Then
-               Insertar_Campo_XML CampoXML("codDocReembolso", "41")
-               Insertar_Campo_XML CampoXML("totalComprobantesReembolso", Format$(TFA.Total_MN, "#0.00"))
-               Insertar_Campo_XML CampoXML("totalBaseImponibleReembolso", Format$(TFA.SubTotal, "#0.00"))
-               Insertar_Campo_XML CampoXML("totalImpuestoReembolso", Format$(TFA.Total_IVA, "#0.00"))
-            End If
-            Insertar_Campo_XML AbrirXML("totalConImpuestos")
-                Insertar_Campo_XML AbrirXML("totalImpuesto")
+         RatonReloj
+         With AdoDBFA
+          If .RecordCount > 0 Then
+              
+              Autorizar_XML = True
+              TFA.T = .Fields("T")
+              TFA.SP = .Fields("SP")
+              TFA.TDT = .Fields("TDT")
+              TFA.Porc_IVA = .Fields("Porc_IVA")
+              TFA.Imp_Mes = .Fields("Imp_Mes")
+              TFA.Fecha = .Fields("Fecha")
+              TFA.Vencimiento = .Fields("Vencimiento")
+              TFA.SubTotal = .Fields("SubTotal")
+              TFA.Sin_IVA = .Fields("Sin_IVA")
+              TFA.Con_IVA = .Fields("Con_IVA")
+              TFA.Total_IVA = .Fields("IVA")
+              TFA.Servicio = .Fields("Servicio")
+              TFA.Total_MN = .Fields("Total_MN")
+              TFA.Razon_Social = .Fields("Razon_Social")
+              TFA.RUC_CI = .Fields("RUC_CI")
+              TFA.TB = .Fields("TB")
+              TFA.Descuento = .Fields("Descuento")
+              TFA.Descuento2 = .Fields("Descuento2")
+              TFA.Orden_Compra = .Fields("Orden_Compra")
+              TFA.Total_Descuento = TFA.Descuento + TFA.Descuento2
+              
+              If TFA.TDT = 41 Then TFA.EsPorReembolso = True
+              
+             'MsgBox "Validar Porc IVA"
+              
+              Obtener_Cod_Porc_IVA TFA.Fecha, (TFA.Porc_IVA * 100)
+             'MsgBox TFA.Porc_IVA & vbCrLf & Cod_Porc_IVA
+              
+             'Generamos la Clave de acceso
+             '& Format$(TFA.Vencimiento, "ddmmyyyy")
+              If Len(TFA.Autorizacion) >= 13 Then
+                 TFA.ClaveAcceso = Format$(TFA.Fecha, "ddmmyyyy") & "01" & RUC & Ambiente & TFA.Serie & Format$(TFA.Factura, String(9, "0")) & "123456781"
+                 TFA.ClaveAcceso = TFA.ClaveAcceso & Digito_Verificador_Modulo11(TFA.ClaveAcceso)
+              Else
+                 TFA.ClaveAcceso = Ninguno
+              End If
+              
+              TFA.Hora = Format$(Time, FormatoTimes)
+              SRI_Autorizacion.Clave_De_Acceso = TFA.ClaveAcceso
+             'MsgBox SRI_Autorizacion.Clave_De_Acceso
+              TipoIdent = "P"
+              Select Case TFA.TB
+                Case "R": If TFA.CI_RUC = String(13, "9") Then TipoIdent = "07" Else TipoIdent = "04"
+                Case "C": TipoIdent = "05"
+                Case "P": TipoIdent = "06"
+                Case Else: TipoIdent = "07"
+              End Select
+              
+              If MidStrg(TFA.CI_RUC, 3, 1) = "9" Then TipoProvReemb = "02" Else TipoProvReemb = "01"
+              
+              sSQL = "UPDATE Facturas " _
+                   & "SET Clave_Acceso = '" & TFA.ClaveAcceso & "' " _
+                   & "WHERE Item = '" & NumEmpresa & "' " _
+                   & "AND Periodo = '" & Periodo_Contable & "' " _
+                   & "AND TC = '" & TFA.TC & "' " _
+                   & "AND Serie = '" & TFA.Serie & "' " _
+                   & "AND Factura = " & TFA.Factura & " " _
+                   & "AND CodigoC = '" & TFA.CodigoC & "' " _
+                   & "AND Autorizacion = '" & TFA.Autorizacion & "' "
+              Ejecutar_SQL_SP sSQL
+              
+             'ENCABEZADO XML PARA EL SRI DE LA FACTURA/NOTA DE VENTA
+             'standalone=""yes""148
+              Insertar_Campo_XML "<?xml version=""1.0"" encoding=""UTF-8""?>"
+              Select Case TFA.TC
+                Case "FA": Insertar_Campo_XML "<factura id=""comprobante"" version=""1.1.0"">"
+                Case "NV": Insertar_Campo_XML AbrirXML("<notaVenta>")
+                Case Else: Insertar_Campo_XML AbrirXML("<puntoVenta>")
+              End Select
+              
+              Insertar_Campo_XML AbrirXML("infoTributaria")
+                 Insertar_Campo_XML CampoXML("ambiente", Ambiente)
+                 Insertar_Campo_XML CampoXML("tipoEmision", "1")
+                 Insertar_Campo_XML CampoXML("razonSocial", RazonSocial)
+                 Insertar_Campo_XML CampoXML("nombreComercial", NombreComercial)
+                 Insertar_Campo_XML CampoXML("ruc", RUC)
+                 Insertar_Campo_XML CampoXML("claveAcceso", TFA.ClaveAcceso)
+                ' If TFA.EsPorReembolso Then
+                '    Insertar_Campo_XML CampoXML("codDoc", "41")
+                ' Else
+                     Select Case TFA.TC
+                       Case "FA": Insertar_Campo_XML CampoXML("codDoc", "01")
+                       Case "NV": Insertar_Campo_XML CampoXML("codDoc", "02")
+                       Case Else: Insertar_Campo_XML CampoXML("codDoc", "00")
+                     End Select
+                ' End If
+                 Insertar_Campo_XML CampoXML("estab", MidStrg(TFA.Serie, 1, 3))
+                 Insertar_Campo_XML CampoXML("ptoEmi", MidStrg(TFA.Serie, 4, 3))
+                 Insertar_Campo_XML CampoXML("secuencial", Format$(TFA.Factura, String(9, "0")))
+                 Insertar_Campo_XML CampoXML("dirMatriz", ULCase(Direccion))
+                'Tipo de Contribuyente
+                 'MsgBox "..."
+                 If AgenteRetencion <> Ninguno Then Insertar_Campo_XML CampoXML("agenteRetencion", "00000001")
+                 If MicroEmpresa = "CONTRIBUYENTE RÉGIMEN RIMPE" Then Insertar_Campo_XML CampoXML("contribuyenteRimpe", "CONTRIBUYENTE RÉGIMEN RIMPE")
+              Insertar_Campo_XML CerrarXML("infoTributaria")
+              
+              Insertar_Campo_XML AbrirXML("infoFactura")
+                 Insertar_Campo_XML CampoXML("fechaEmision", TFA.Fecha)
+                 Insertar_Campo_XML CampoXML("dirEstablecimiento", ULCase(DireccionEstab))
+                 
+                 If Len(ContEspec) > 1 Then Insertar_Campo_XML CampoXML("contribuyenteEspecial", ContEspec)
+                 
+                 Insertar_Campo_XML CampoXML("obligadoContabilidad", Obligado_Conta)
+                 Insertar_Campo_XML CampoXML("tipoIdentificacionComprador", TipoIdent)
+                 Insertar_Campo_XML CampoXML("razonSocialComprador", TFA.Razon_Social)
+                 Insertar_Campo_XML CampoXML("identificacionComprador", TFA.RUC_CI)
+                 Insertar_Campo_XML CampoXML("direccionComprador", TFA.DireccionC)
                  If TFA.EsPorReembolso Then
-                    Insertar_Campo_XML CampoXML("codigo", "2")
-                    Insertar_Campo_XML CampoXML("codigoPorcentaje", "0")
-                    Insertar_Campo_XML CampoXML("baseImponible", Format$(TFA.Total_MN, "#0.00"))
-                    Insertar_Campo_XML CampoXML("valor", "0.00")
+                    Insertar_Campo_XML CampoXML("totalSinImpuestos", Format$(TFA.Total_MN, "#0.00"))
                  Else
-                    Insertar_Campo_XML CampoXML("codigo", "2")
-                    Insertar_Campo_XML CampoXML("codigoPorcentaje", "0")
-                    Insertar_Campo_XML CampoXML("descuentoAdicional", "0")
-                    Insertar_Campo_XML CampoXML("baseImponible", Format$(TFA.Sin_IVA - TFA.Descuento_0, "#0.00"))
-                   'Insertar_Campo_XML CampoXML("tarifa", "0.00")
-                    Insertar_Campo_XML CampoXML("valor", "0.00")
+                    Insertar_Campo_XML CampoXML("totalSinImpuestos", Format$(TFA.Sin_IVA + TFA.Con_IVA - TFA.Total_Descuento, "#0.00"))
                  End If
-                Insertar_Campo_XML CerrarXML("totalImpuesto")
-               'MsgBox "..."
-                If TFA.Total_IVA > 0 And Not TFA.EsPorReembolso Then
-                   Insertar_Campo_XML AbrirXML("totalImpuesto")
-                       Insertar_Campo_XML CampoXML("codigo", "2")
-                      'MsgBox Porc_IVA
-                       Insertar_Campo_XML CampoXML("codigoPorcentaje", Cod_Porc_IVA)
-                       'Insertar_Campo_XML CampoXML("descuentoAdicional", "0")
-                       Insertar_Campo_XML CampoXML("baseImponible", Format$(TFA.Con_IVA - TFA.Descuento_X, "#0.00"))
-                       Insertar_Campo_XML CampoXML("tarifa", Porc_IVA * 100)
-                       Insertar_Campo_XML CampoXML("valor", Format$(TFA.Total_IVA, "#0.00"))
-                   Insertar_Campo_XML CerrarXML("totalImpuesto")
-                End If
-            Insertar_Campo_XML CerrarXML("totalConImpuestos")
-            
-            Insertar_Campo_XML CampoXML("propina", Format$(TFA.Servicio, "#0.00"))
-            Insertar_Campo_XML CampoXML("importeTotal", Format$(TFA.Total_MN, "#0.00"))
-            Insertar_Campo_XML CampoXML("moneda", "DOLAR")
-            Insertar_Campo_XML AbrirXML("pagos")
-                Insertar_Campo_XML AbrirXML("pago")
-                    Insertar_Campo_XML CampoXML("formaPago", TFA.Tipo_Pago)
-                    Insertar_Campo_XML CampoXML("total", TFA.Total_MN)
-                    If Val(TFA.Tipo_Pago) = 19 Then
-                       Insertar_Campo_XML CampoXML("plazo", "60")
-                       Insertar_Campo_XML CampoXML("unidadTiempo", "dias")
-                    End If
-                Insertar_Campo_XML CerrarXML("pago")
-            Insertar_Campo_XML CerrarXML("pagos")
-         Insertar_Campo_XML CerrarXML("infoFactura")
-     End If
-    End With
-   '-----------------------------------
-   'Detalle de la Factura/Nota de Venta
-   '-----------------------------------
-    RatonReloj
-    With AdoDBDet
-     If .RecordCount > 0 Then
-         Insertar_Campo_XML AbrirXML("detalles")
-         Do While Not .EOF
-            Producto = .fields("Producto")
-            Cod_Aux = .fields("Desc_Item")
-            Cod_Bar = .fields("Codigo_Barra")
-            SubTotal = (.fields("Cantidad") * .fields("Precio")) - (.fields("Total_Desc") + .fields("Total_Desc2"))
-            If TFA.EsPorReembolso Then
-               Cod_Aux = "Reembolso de Gastos"
-               If Len(.fields("Tipo_Hab")) > 1 Then Cod_Aux = Cod_Aux & " por " & .fields("Tipo_Hab")
-               SubTotal = SubTotal + .fields("Total_IVA")
-               Insertar_Campo_XML AbrirXML("detalle")
-                    Insertar_Campo_XML CampoXML("codigoPrincipal", .fields("Codigo"))
-                    Insertar_Campo_XML CampoXML("codigoAuxiliar", TrimStrg(MidStrg(.fields("Ruta"), 1, 10)))
-                    Insertar_Campo_XML CampoXML("descripcion", .fields("Producto"))
-                    Insertar_Campo_XML CampoXML("cantidad", "1.000000")
-                    Insertar_Campo_XML CampoXML("precioUnitario", Format$(SubTotal, "#0.000000"))
-                    Insertar_Campo_XML CampoXML("descuento", "0.00")
-                    Insertar_Campo_XML CampoXML("precioTotalSinImpuesto", Format$(SubTotal, "#0.00"))
-                    Insertar_Campo_XML AbrirXML("detallesAdicionales")
-                        Insertar_Campo_XML "<detAdicional nombre=""RUC Factura"" valor = """ & .fields("Ruta") & """/>"
-                        Insertar_Campo_XML "<detAdicional nombre=""Serie y Factura"" valor = """ & .fields("Serie_No") & """/>"
-                        Insertar_Campo_XML "<detAdicional nombre=""Descripcion Reembolso"" valor = """ & Cod_Aux & """/>"
-                    Insertar_Campo_XML CerrarXML("detallesAdicionales")
-                    Insertar_Campo_XML AbrirXML("impuestos")
-                        Insertar_Campo_XML AbrirXML("impuesto")
-                           Insertar_Campo_XML CampoXML("codigo", "2")
-                           Insertar_Campo_XML CampoXML("codigoPorcentaje", "0")
-                           Insertar_Campo_XML CampoXML("tarifa", 0) ' POR SI ACASO
-                           Insertar_Campo_XML CampoXML("baseImponible", Format$(SubTotal, "#0.00"))
-                           Insertar_Campo_XML CampoXML("valor", "0.00")
-                       Insertar_Campo_XML CerrarXML("impuesto")
-                    Insertar_Campo_XML CerrarXML("impuestos")
-               Insertar_Campo_XML CerrarXML("detalle")
-            Else
-                If TFA.Imp_Mes Then Producto = Producto & ", " & .fields("Ticket") & ": " & .fields("Mes") & " "
-                If TFA.SP Then
-                   Producto = Producto _
-                            & ", Lote No. " & .fields("Lote_No") _
-                            & ", ELAB. " & .fields("Fecha_Fab") _
-                            & ", VENC. " & .fields("Fecha_Exp") _
-                            & ", Reg. Sanit. " & .fields("Reg_Sanitario") _
-                            & ", Modelo: " & .fields("Modelo") _
-                            & ", Procedencia: " & .fields("Procedencia")
-                End If
-        '''            If Len(.Fields("Serie_No")) > 1 Then
-        '''               Producto = Producto & ", Serie No. " & .Fields("Serie_No")
-        '''            End If
-                Insertar_Campo_XML AbrirXML("detalle")
-                If TFA.SP Then
-                   If Len(Cod_Bar) > 1 Then Insertar_Campo_XML CampoXML("codigoPrincipal", Cod_Bar)
-                   If Len(Cod_Aux) > 1 Then
-                      Insertar_Campo_XML CampoXML("codigoAuxiliar", Cod_Aux)
-                   Else
-                      Insertar_Campo_XML CampoXML("codigoAuxiliar", .fields("Codigo"))
-                   End If
-                Else
-                   If Len(Cod_Aux) > 1 Then
-                      Insertar_Campo_XML CampoXML("codigoPrincipal", Cod_Aux)
-                   Else
-                      Insertar_Campo_XML CampoXML("codigoPrincipal", .fields("Codigo"))
-                   End If
-                   If Len(Cod_Bar) > 1 Then Insertar_Campo_XML CampoXML("codigoAuxiliar", Cod_Bar)
-                End If
-                Insertar_Campo_XML CampoXML("descripcion", Producto)
-                Insertar_Campo_XML CampoXML("unidadMedida", "DOLAR")
-                Insertar_Campo_XML CampoXML("cantidad", Format$(.fields("Cantidad"), "#0.000000"))
-                Insertar_Campo_XML CampoXML("precioUnitario", Format$(.fields("Precio"), "#0.000000"))
-                Insertar_Campo_XML CampoXML("descuento", Format$(.fields("Total_Desc") + .fields("Total_Desc2"), "#0.00"))
-                Insertar_Campo_XML CampoXML("precioTotalSinImpuesto", Format$(SubTotal, "#0.00"))
-                
-                If Len(.fields("Serie_No")) > 1 Then
-                   Insertar_Campo_XML AbrirXML("detallesAdicionales")
-                       Insertar_Campo_XML "<detAdicional nombre=""Serie_No"" valor=""" & .fields("Serie_No") & """/>"
-                   Insertar_Campo_XML CerrarXML("detallesAdicionales")
-                End If
-                    Insertar_Campo_XML AbrirXML("impuestos")
-                        Insertar_Campo_XML AbrirXML("impuesto")
-                           Insertar_Campo_XML CampoXML("codigo", "2")
-                           If .fields("Total_IVA") = 0 Then
-                               Insertar_Campo_XML CampoXML("codigoPorcentaje", "0")
-                               Insertar_Campo_XML CampoXML("tarifa", "0")
-                           Else
-                               Insertar_Campo_XML CampoXML("codigoPorcentaje", Cod_Porc_IVA)
-                               Insertar_Campo_XML CampoXML("tarifa", Porc_IVA * 100)
-                           End If
-                           Insertar_Campo_XML CampoXML("baseImponible", Format$(.fields("Total") - (.fields("Total_Desc") + .fields("Total_Desc2")), "#0.00"))
-                           Insertar_Campo_XML CampoXML("valor", Format$(.fields("Total_IVA"), "#0.00"))
-                       Insertar_Campo_XML CerrarXML("impuesto")
-                    Insertar_Campo_XML CerrarXML("impuestos")
-                Insertar_Campo_XML CerrarXML("detalle")
-            End If
-           .MoveNext
-         Loop
-         Insertar_Campo_XML CerrarXML("detalles")
-     End If
-    End With
-   '--------------------------------
-   'Detalle del Reembolso de Gastos
-   '--------------------------------
-    If TFA.EsPorReembolso Then
-       With AdoDBDet
-        If .RecordCount > 0 Then
-           .MoveFirst
-            Insertar_Campo_XML AbrirXML("reembolsos")
-            Do While Not .EOF
-               If .fields("Ruta") = String(13, "9") Then TipoIdent = "07" Else TipoIdent = "04"
-               If MidStrg(.fields("Ruta"), 3, 1) = "9" Then TipoProvReemb = "02" Else TipoProvReemb = "01"
-               Serie1Reembolo = MidStrg(.fields("Serie_No"), 1, 3)
-               Serie2Reembolo = MidStrg(.fields("Serie_No"), 4, 3)
-               SecuencialReembolo = MidStrg(.fields("Serie_No"), 8, 9)
-               SubTotal = (.fields("Cantidad") * .fields("Precio")) - (.fields("Total_Desc") + .fields("Total_Desc2"))
-               Insertar_Campo_XML AbrirXML("reembolsoDetalle")
-                    Insertar_Campo_XML CampoXML("tipoIdentificacionProveedorReembolso", TipoIdent)
-                    Insertar_Campo_XML CampoXML("identificacionProveedorReembolso", .fields("Ruta"))
-                    Insertar_Campo_XML CampoXML("codPaisPagoProveedorReembolso", "593")
-                    Insertar_Campo_XML CampoXML("tipoProveedorReembolso", TipoProvReemb)
-                    Insertar_Campo_XML CampoXML("codDocReembolso", .fields("Lote_No"))
-                    Insertar_Campo_XML CampoXML("estabDocReembolso", Serie1Reembolo)
-                    Insertar_Campo_XML CampoXML("ptoEmiDocReembolso", Serie2Reembolo)
-                    Insertar_Campo_XML CampoXML("secuencialDocReembolso", SecuencialReembolo)
-                    Insertar_Campo_XML CampoXML("fechaEmisionDocReembolso", TFA.Fecha)
-                    Insertar_Campo_XML CampoXML("numeroautorizacionDocReemb", .fields("Procedencia")) 'String(10, "9"))
-                    Insertar_Campo_XML AbrirXML("detalleImpuestos")
-                       Insertar_Campo_XML AbrirXML("detalleImpuesto")
-                          Insertar_Campo_XML CampoXML("codigo", "2")
-                          If .fields("Total_IVA") > 0 Then
-                             Insertar_Campo_XML CampoXML("codigoPorcentaje", Cod_Porc_IVA)
-                             Insertar_Campo_XML CampoXML("tarifa", Porc_IVA * 100)
-                             Insertar_Campo_XML CampoXML("baseImponibleReembolso", Format$(SubTotal, "#0.00"))
-                             Insertar_Campo_XML CampoXML("impuestoReembolso", Format$(.fields("Total_IVA"), "#0.00"))
-                          Else
-                             Insertar_Campo_XML CampoXML("codigoPorcentaje", "0")
-                             Insertar_Campo_XML CampoXML("tarifa", "0")
-                             Insertar_Campo_XML CampoXML("baseImponibleReembolso", Format$(SubTotal, "#0.00"))
-                             Insertar_Campo_XML CampoXML("impuestoReembolso", "0.00")
-                          End If
-                       Insertar_Campo_XML CerrarXML("detalleImpuesto")
-                    Insertar_Campo_XML CerrarXML("detalleImpuestos")
-               Insertar_Campo_XML CerrarXML("reembolsoDetalle")
-              .MoveNext
-            Loop
-            Insertar_Campo_XML CerrarXML("reembolsos")
-        End If
-       End With
-    End If
-        
-     Insertar_Campo_XML AbrirXML("infoAdicional")
-       If TFA.Cliente <> Ninguno And TFA.Razon_Social <> TFA.Cliente Then
-          If Len(TFA.Cliente) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Beneficiario"">" & TFA.Cliente & "</campoAdicional>"
-          If Len(TFA.CI_RUC) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Codigo"">" & TFA.CI_RUC & "</campoAdicional>"
-          If Len(TFA.Curso) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Ubicacion"">" & TFA.Grupo & "-" & TFA.Curso & "</campoAdicional>"
-       End If
-       If Len(TFA.DireccionC) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Direccion"">" & TFA.DireccionC & "</campoAdicional>"
-       If Len(TFA.TelefonoC) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Telefono"">" & TFA.TelefonoC & "</campoAdicional>"
-       If Len(TFA.EmailC) > 1 And InStr(TFA.EmailC, "@") > 0 Then
-          Insertar_Campo_XML "<campoAdicional nombre=""Email"">" & TFA.EmailC & "</campoAdicional>"
-       End If
-       If Len(TFA.EmailR) > 1 And InStr(TFA.EmailR, "@") > 0 And InStr(TFA.EmailC, TFA.EmailR) = 0 Then
-          Insertar_Campo_XML "<campoAdicional nombre=""Email2"">" & TFA.EmailR & "</campoAdicional>"
-       End If
-       If Len(TFA.Contacto) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Referencia"">" & TFA.Contacto & "</campoAdicional>"
-       If Val(TFA.Orden_Compra) > 0 Then Insertar_Campo_XML "<campoAdicional nombre=""ordenCompra"">" & TFA.Orden_Compra & "</campoAdicional>"
-       If Len(TFA.Observacion) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Observacion"">" & TFA.Observacion & "</campoAdicional>"
-       If Len(TFA.Nota) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Nota"">" & TFA.Nota & "</campoAdicional>"
-       If Len(Resolucion_Retencion) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Resolucion"">" & Resolucion_Retencion & "</campoAdicional>"
-     Insertar_Campo_XML CerrarXML("infoAdicional")
-    ' MsgBox MicroEmpresa
-    'Fin del Archivo Xml
-     Select Case TFA.TC
-       Case "FA": Insertar_Campo_XML CerrarXML("factura")
-       Case "NV": Insertar_Campo_XML CerrarXML("notaVenta")
-       Case Else: Insertar_Campo_XML CerrarXML("puntoVenta")
-     End Select
-        
-      'Grabamos el comprobante XML
-       RatonReloj
-       If Len(TFA.Autorizacion) = 13 Then
-          
-          If CFechaLong(TFA.Fecha) <= CFechaLong(Fecha_CE) Then
-             RutaGeneraFile = RutaDocumentos & "\Comprobantes Generados\" & TFA.ClaveAcceso & ".xml"
-             
-             If GeneraXML Then
-                Clipboard.Clear
-                Clipboard.SetText TextoXML
-                Grabar_Consulta_Archivo TFA.TC & "_" & TFA.Serie & "-" & Format$(TFA.Factura, String(9, "0")), TextoXML
-             End If
-             
-             Set DocumentoXML = New DOMDocument30
-             DocumentoXML.loadXML (TextoXML)
-             DocumentoXML.save (RutaGeneraFile)
-             
-             If TFA.TC <> "DO" Then
-                TFA.Estado_SRI = "CG"
-               '---------------------------------------------------------------------
-               'Solo cuando es un XML externo
-''                TFA.ClaveAcceso = "1410202201070439419600110010020000000030704394114"
-''                MsgBox TFA.ClaveAcceso
-               '---------------------------------------------------------------------
-                SRI_Autorizacion.Clave_De_Acceso = TFA.ClaveAcceso
-                FAutorizaXmlSRI.Show 1
-                'SRI_Autorizacion = SRI_Generar_XML(TFA.ClaveAcceso, TFA.Estado_SRI)
+                 Insertar_Campo_XML CampoXML("totalDescuento", Format$(TFA.Total_Descuento, "#0.00"))
+                 If TFA.EsPorReembolso Then
+                    Insertar_Campo_XML CampoXML("codDocReembolso", "41")
+                    Insertar_Campo_XML CampoXML("totalComprobantesReembolso", Format$(TFA.Total_MN, "#0.00"))
+                    Insertar_Campo_XML CampoXML("totalBaseImponibleReembolso", Format$(TFA.SubTotal, "#0.00"))
+                    Insertar_Campo_XML CampoXML("totalImpuestoReembolso", Format$(TFA.Total_IVA, "#0.00"))
+                 End If
+                 Insertar_Campo_XML AbrirXML("totalConImpuestos")
+                     Insertar_Campo_XML AbrirXML("totalImpuesto")
+                      If TFA.EsPorReembolso Then
+                         Insertar_Campo_XML CampoXML("codigo", "2")
+                         Insertar_Campo_XML CampoXML("codigoPorcentaje", "0")
+                         Insertar_Campo_XML CampoXML("baseImponible", Format$(TFA.Total_MN, "#0.00"))
+                         Insertar_Campo_XML CampoXML("valor", "0.00")
+                      Else
+                         Insertar_Campo_XML CampoXML("codigo", "2")
+                         Insertar_Campo_XML CampoXML("codigoPorcentaje", "0")
+                         Insertar_Campo_XML CampoXML("descuentoAdicional", "0")
+                         Insertar_Campo_XML CampoXML("baseImponible", Format$(TFA.Sin_IVA - TFA.Descuento_0, "#0.00"))
+                        'Insertar_Campo_XML CampoXML("tarifa", "0.00")
+                         Insertar_Campo_XML CampoXML("valor", "0.00")
+                      End If
+                     Insertar_Campo_XML CerrarXML("totalImpuesto")
+                    'MsgBox "..."
+                     If TFA.Total_IVA > 0 And Not TFA.EsPorReembolso Then
+                        Insertar_Campo_XML AbrirXML("totalImpuesto")
+                            Insertar_Campo_XML CampoXML("codigo", "2")
+                           'MsgBox Porc_IVA
+                            Insertar_Campo_XML CampoXML("codigoPorcentaje", Cod_Porc_IVA)
+                            'Insertar_Campo_XML CampoXML("descuentoAdicional", "0")
+                            Insertar_Campo_XML CampoXML("baseImponible", Format$(TFA.Con_IVA - TFA.Descuento_X, "#0.00"))
+                            Insertar_Campo_XML CampoXML("tarifa", Porc_IVA * 100)
+                            Insertar_Campo_XML CampoXML("valor", Format$(TFA.Total_IVA, "#0.00"))
+                        Insertar_Campo_XML CerrarXML("totalImpuesto")
+                     End If
+                 Insertar_Campo_XML CerrarXML("totalConImpuestos")
                  
-                SRI_Actualizar_Autorizacion_Factura TFA, SRI_Autorizacion
-               'MsgBox SRI_Autorizacion.Estado_SRI
-                 
-                TFA.Estado_SRI = SRI_Autorizacion.Estado_SRI
-                TFA.Error_SRI = SRI_Autorizacion.Error_SRI
-                If SRI_Autorizacion.Estado_SRI = "OK" Then
-                   Control_Procesos "F", TFA.TC & "-" & TFA.Serie & " No. " & Format(TFA.Factura, "000000000") & " Autorizada"
-                   TFA.Autorizacion = SRI_Autorizacion.Autorizacion
-                   If Autorizar Then SRI_Enviar_Mails TFA, SRI_Autorizacion, "FA"
-                   If VerFactura Then SRI_Generar_PDF_FA TFA, VerFactura
-                Else
-                   If VerFactura Then
-                      MsgBox "No se pudo realizar la conexion, Liste la Factura (" & TFA.Estado_SRI & ")"
-                   Else
-                      TextoImprimio = TextoImprimio _
-                                    & TFA.TC & " No. " & TFA.Serie & "-" & Format(TFA.Factura, "000000000") & vbTab & "Beneficiario: " & TFA.Cliente & vbCrLf _
-                                    & "Clave Acceso: " & TFA.ClaveAcceso & vbCrLf & TFA.Error_SRI & vbCrLf & String(80, "-") & vbCrLf
-                   End If
-                End If
-             End If
-          Else
-             RatonNormal
-             MsgBox MensajeNoAutorizarCE
+                 Insertar_Campo_XML CampoXML("propina", Format$(TFA.Servicio, "#0.00"))
+                 Insertar_Campo_XML CampoXML("importeTotal", Format$(TFA.Total_MN, "#0.00"))
+                 Insertar_Campo_XML CampoXML("moneda", "DOLAR")
+                 Insertar_Campo_XML AbrirXML("pagos")
+                     Insertar_Campo_XML AbrirXML("pago")
+                         Insertar_Campo_XML CampoXML("formaPago", TFA.Tipo_Pago)
+                         Insertar_Campo_XML CampoXML("total", TFA.Total_MN)
+                         If Val(TFA.Tipo_Pago) = 19 Then
+                            Insertar_Campo_XML CampoXML("plazo", "60")
+                            Insertar_Campo_XML CampoXML("unidadTiempo", "dias")
+                         End If
+                     Insertar_Campo_XML CerrarXML("pago")
+                 Insertar_Campo_XML CerrarXML("pagos")
+              Insertar_Campo_XML CerrarXML("infoFactura")
           End If
-       End If
+         End With
+        '-----------------------------------
+        'Detalle de la Factura/Nota de Venta
+        '-----------------------------------
+         RatonReloj
+         With AdoDBDet
+          If .RecordCount > 0 Then
+              Insertar_Campo_XML AbrirXML("detalles")
+              Do While Not .EOF
+                 Producto = .Fields("Producto")
+                 Cod_Aux = .Fields("Desc_Item")
+                 Cod_Bar = .Fields("Codigo_Barra")
+                 SubTotal = (.Fields("Cantidad") * .Fields("Precio")) - (.Fields("Total_Desc") + .Fields("Total_Desc2"))
+                 If TFA.EsPorReembolso Then
+                    Cod_Aux = "Reembolso de Gastos"
+                    If Len(.Fields("Tipo_Hab")) > 1 Then Cod_Aux = Cod_Aux & " por " & .Fields("Tipo_Hab")
+                    SubTotal = SubTotal + .Fields("Total_IVA")
+                    Insertar_Campo_XML AbrirXML("detalle")
+                         Insertar_Campo_XML CampoXML("codigoPrincipal", .Fields("Codigo"))
+                         Insertar_Campo_XML CampoXML("codigoAuxiliar", TrimStrg(MidStrg(.Fields("Ruta"), 1, 10)))
+                         Insertar_Campo_XML CampoXML("descripcion", .Fields("Producto"))
+                         Insertar_Campo_XML CampoXML("cantidad", "1.000000")
+                         Insertar_Campo_XML CampoXML("precioUnitario", Format$(SubTotal, "#0.000000"))
+                         Insertar_Campo_XML CampoXML("descuento", "0.00")
+                         Insertar_Campo_XML CampoXML("precioTotalSinImpuesto", Format$(SubTotal, "#0.00"))
+                         Insertar_Campo_XML AbrirXML("detallesAdicionales")
+                             Insertar_Campo_XML "<detAdicional nombre=""RUC Factura"" valor = """ & .Fields("Ruta") & """/>"
+                             Insertar_Campo_XML "<detAdicional nombre=""Serie y Factura"" valor = """ & .Fields("Serie_No") & """/>"
+                             Insertar_Campo_XML "<detAdicional nombre=""Descripcion Reembolso"" valor = """ & Cod_Aux & """/>"
+                         Insertar_Campo_XML CerrarXML("detallesAdicionales")
+                         Insertar_Campo_XML AbrirXML("impuestos")
+                             Insertar_Campo_XML AbrirXML("impuesto")
+                                Insertar_Campo_XML CampoXML("codigo", "2")
+                                Insertar_Campo_XML CampoXML("codigoPorcentaje", "0")
+                                Insertar_Campo_XML CampoXML("tarifa", 0) ' POR SI ACASO
+                                Insertar_Campo_XML CampoXML("baseImponible", Format$(SubTotal, "#0.00"))
+                                Insertar_Campo_XML CampoXML("valor", "0.00")
+                            Insertar_Campo_XML CerrarXML("impuesto")
+                         Insertar_Campo_XML CerrarXML("impuestos")
+                    Insertar_Campo_XML CerrarXML("detalle")
+                 Else
+                     If TFA.Imp_Mes Then Producto = Producto & ", " & .Fields("Ticket") & ": " & .Fields("Mes") & " "
+                     If TFA.SP Then
+                        Producto = Producto _
+                                 & ", Lote No. " & .Fields("Lote_No") _
+                                 & ", ELAB. " & .Fields("Fecha_Fab") _
+                                 & ", VENC. " & .Fields("Fecha_Exp") _
+                                 & ", Reg. Sanit. " & .Fields("Reg_Sanitario") _
+                                 & ", Modelo: " & .Fields("Modelo") _
+                                 & ", Procedencia: " & .Fields("Procedencia")
+                     End If
+             '''            If Len(.Fields("Serie_No")) > 1 Then
+             '''               Producto = Producto & ", Serie No. " & .Fields("Serie_No")
+             '''            End If
+                     Insertar_Campo_XML AbrirXML("detalle")
+                     If TFA.SP Then
+                        If Len(Cod_Bar) > 1 Then Insertar_Campo_XML CampoXML("codigoPrincipal", Cod_Bar)
+                        If Len(Cod_Aux) > 1 Then
+                           Insertar_Campo_XML CampoXML("codigoAuxiliar", Cod_Aux)
+                        Else
+                           Insertar_Campo_XML CampoXML("codigoAuxiliar", .Fields("Codigo"))
+                        End If
+                     Else
+                        If Len(Cod_Aux) > 1 Then
+                           Insertar_Campo_XML CampoXML("codigoPrincipal", Cod_Aux)
+                        Else
+                           Insertar_Campo_XML CampoXML("codigoPrincipal", .Fields("Codigo"))
+                        End If
+                        If Len(Cod_Bar) > 1 Then Insertar_Campo_XML CampoXML("codigoAuxiliar", Cod_Bar)
+                     End If
+                     Insertar_Campo_XML CampoXML("descripcion", Producto)
+                     Insertar_Campo_XML CampoXML("unidadMedida", "DOLAR")
+                     Insertar_Campo_XML CampoXML("cantidad", Format$(.Fields("Cantidad"), "#0.000000"))
+                     Insertar_Campo_XML CampoXML("precioUnitario", Format$(.Fields("Precio"), "#0.000000"))
+                     Insertar_Campo_XML CampoXML("descuento", Format$(.Fields("Total_Desc") + .Fields("Total_Desc2"), "#0.00"))
+                     Insertar_Campo_XML CampoXML("precioTotalSinImpuesto", Format$(SubTotal, "#0.00"))
+                     
+                     If Len(.Fields("Serie_No")) > 1 Then
+                        Insertar_Campo_XML AbrirXML("detallesAdicionales")
+                            Insertar_Campo_XML "<detAdicional nombre=""Serie_No"" valor=""" & .Fields("Serie_No") & """/>"
+                        Insertar_Campo_XML CerrarXML("detallesAdicionales")
+                     End If
+                         Insertar_Campo_XML AbrirXML("impuestos")
+                             Insertar_Campo_XML AbrirXML("impuesto")
+                                Insertar_Campo_XML CampoXML("codigo", "2")
+                                If .Fields("Total_IVA") = 0 Then
+                                    Insertar_Campo_XML CampoXML("codigoPorcentaje", "0")
+                                    Insertar_Campo_XML CampoXML("tarifa", "0")
+                                Else
+                                    Insertar_Campo_XML CampoXML("codigoPorcentaje", Cod_Porc_IVA)
+                                    Insertar_Campo_XML CampoXML("tarifa", Porc_IVA * 100)
+                                End If
+                                Insertar_Campo_XML CampoXML("baseImponible", Format$(.Fields("Total") - (.Fields("Total_Desc") + .Fields("Total_Desc2")), "#0.00"))
+                                Insertar_Campo_XML CampoXML("valor", Format$(.Fields("Total_IVA"), "#0.00"))
+                            Insertar_Campo_XML CerrarXML("impuesto")
+                         Insertar_Campo_XML CerrarXML("impuestos")
+                     Insertar_Campo_XML CerrarXML("detalle")
+                 End If
+                .MoveNext
+              Loop
+              Insertar_Campo_XML CerrarXML("detalles")
+          End If
+         End With
+        '--------------------------------
+        'Detalle del Reembolso de Gastos
+        '--------------------------------
+         If TFA.EsPorReembolso Then
+            With AdoDBDet
+             If .RecordCount > 0 Then
+                .MoveFirst
+                 Insertar_Campo_XML AbrirXML("reembolsos")
+                 Do While Not .EOF
+                    If .Fields("Ruta") = String(13, "9") Then TipoIdent = "07" Else TipoIdent = "04"
+                    If MidStrg(.Fields("Ruta"), 3, 1) = "9" Then TipoProvReemb = "02" Else TipoProvReemb = "01"
+                    Serie1Reembolo = MidStrg(.Fields("Serie_No"), 1, 3)
+                    Serie2Reembolo = MidStrg(.Fields("Serie_No"), 4, 3)
+                    SecuencialReembolo = MidStrg(.Fields("Serie_No"), 8, 9)
+                    SubTotal = (.Fields("Cantidad") * .Fields("Precio")) - (.Fields("Total_Desc") + .Fields("Total_Desc2"))
+                    Insertar_Campo_XML AbrirXML("reembolsoDetalle")
+                         Insertar_Campo_XML CampoXML("tipoIdentificacionProveedorReembolso", TipoIdent)
+                         Insertar_Campo_XML CampoXML("identificacionProveedorReembolso", .Fields("Ruta"))
+                         Insertar_Campo_XML CampoXML("codPaisPagoProveedorReembolso", "593")
+                         Insertar_Campo_XML CampoXML("tipoProveedorReembolso", TipoProvReemb)
+                         Insertar_Campo_XML CampoXML("codDocReembolso", .Fields("Lote_No"))
+                         Insertar_Campo_XML CampoXML("estabDocReembolso", Serie1Reembolo)
+                         Insertar_Campo_XML CampoXML("ptoEmiDocReembolso", Serie2Reembolo)
+                         Insertar_Campo_XML CampoXML("secuencialDocReembolso", SecuencialReembolo)
+                         Insertar_Campo_XML CampoXML("fechaEmisionDocReembolso", TFA.Fecha)
+                         Insertar_Campo_XML CampoXML("numeroautorizacionDocReemb", .Fields("Procedencia")) 'String(10, "9"))
+                         Insertar_Campo_XML AbrirXML("detalleImpuestos")
+                            Insertar_Campo_XML AbrirXML("detalleImpuesto")
+                               Insertar_Campo_XML CampoXML("codigo", "2")
+                               If .Fields("Total_IVA") > 0 Then
+                                  Insertar_Campo_XML CampoXML("codigoPorcentaje", Cod_Porc_IVA)
+                                  Insertar_Campo_XML CampoXML("tarifa", Porc_IVA * 100)
+                                  Insertar_Campo_XML CampoXML("baseImponibleReembolso", Format$(SubTotal, "#0.00"))
+                                  Insertar_Campo_XML CampoXML("impuestoReembolso", Format$(.Fields("Total_IVA"), "#0.00"))
+                               Else
+                                  Insertar_Campo_XML CampoXML("codigoPorcentaje", "0")
+                                  Insertar_Campo_XML CampoXML("tarifa", "0")
+                                  Insertar_Campo_XML CampoXML("baseImponibleReembolso", Format$(SubTotal, "#0.00"))
+                                  Insertar_Campo_XML CampoXML("impuestoReembolso", "0.00")
+                               End If
+                            Insertar_Campo_XML CerrarXML("detalleImpuesto")
+                         Insertar_Campo_XML CerrarXML("detalleImpuestos")
+                    Insertar_Campo_XML CerrarXML("reembolsoDetalle")
+                   .MoveNext
+                 Loop
+                 Insertar_Campo_XML CerrarXML("reembolsos")
+             End If
+            End With
+         End If
+             
+         Insertar_Campo_XML AbrirXML("infoAdicional")
+            If TFA.Cliente <> Ninguno And TFA.Razon_Social <> TFA.Cliente Then
+               If Len(TFA.Cliente) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Beneficiario"">" & TFA.Cliente & "</campoAdicional>"
+               If Len(TFA.CI_RUC) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Codigo"">" & TFA.CI_RUC & "</campoAdicional>"
+               If Len(TFA.Curso) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Ubicacion"">" & TFA.Grupo & "-" & TFA.Curso & "</campoAdicional>"
+            End If
+            If Len(TFA.DireccionC) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Direccion"">" & TFA.DireccionC & "</campoAdicional>"
+            If Len(TFA.TelefonoC) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Telefono"">" & TFA.TelefonoC & "</campoAdicional>"
+            If Len(TFA.EmailC) > 1 And InStr(TFA.EmailC, "@") > 0 Then
+               Insertar_Campo_XML "<campoAdicional nombre=""Email"">" & TFA.EmailC & "</campoAdicional>"
+            End If
+            If Len(TFA.EmailR) > 1 And InStr(TFA.EmailR, "@") > 0 And InStr(TFA.EmailC, TFA.EmailR) = 0 Then
+               Insertar_Campo_XML "<campoAdicional nombre=""Email2"">" & TFA.EmailR & "</campoAdicional>"
+            End If
+            If Len(TFA.Contacto) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Referencia"">" & TFA.Contacto & "</campoAdicional>"
+            If Val(TFA.Orden_Compra) > 0 Then Insertar_Campo_XML "<campoAdicional nombre=""ordenCompra"">" & TFA.Orden_Compra & "</campoAdicional>"
+            If Len(TFA.Observacion) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Observacion"">" & TFA.Observacion & "</campoAdicional>"
+            If Len(TFA.Nota) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Nota"">" & TFA.Nota & "</campoAdicional>"
+            If Len(Resolucion_Retencion) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Resolucion"">" & Resolucion_Retencion & "</campoAdicional>"
+         Insertar_Campo_XML CerrarXML("infoAdicional")
+         Select Case TFA.TC
+           Case "FA": Insertar_Campo_XML CerrarXML("factura")
+           Case "NV": Insertar_Campo_XML CerrarXML("notaVenta")
+           Case Else: Insertar_Campo_XML CerrarXML("puntoVenta")
+         End Select
+        'FIN XML DE FACTURA/NOTA DE VENTA
+        '-------------------------------------------------------------------
+         SRI_Enviar_Documento_Autorizar "FA", VerFactura, GeneraXML, TFA, EnviarxMail
+        '-------------------------------------------------------------------
+
        AdoDBDet.Close
        AdoDBFA.Close
     End If
     RatonNormal
 End Sub
 
-Public Sub SRI_Crear_Clave_Acceso_Guia_Remision(URLinet As Inet, _
+Public Sub SRI_Crear_Clave_Acceso_Guia_Remision(URLInet As Inet, _
                                                 TFA As Tipo_Facturas, _
                                                 VerGuiaRemision As Boolean, _
                                                 Optional GeneraXML As Boolean, _
@@ -3881,277 +3644,229 @@ Dim TotalDescuento_X As Currency
 Dim Autorizar_XML As Boolean
 
     RatonReloj
-    Autorizar_XML = True
+    If CFechaLong(TFA.Fecha) <= CFechaLong(Fecha_CE) Then Autorizar_XML = True Else Autorizar_XML = False
     If Len(Fecha_Igualar) = 10 Then
        If CFechaLong(TFA.Fecha) < CFechaLong(Fecha_Igualar) Then Autorizar_XML = False
     End If
     TextoXML = ""
     
     If Autorizar_XML Then
-   'Averiguamos si la Factura esta a nombre del Representante
-    TBeneficiario = Leer_Datos_Clientes(TFA.CodigoC)
-   'MsgBox TBeneficiario.RUC_CI_Rep & vbCrLf & TBeneficiario.Representante & vbCrLf & TBeneficiario.TD_Rep
-    
-    TFA.Cliente = TBeneficiario.Representante
-    TFA.TD = TBeneficiario.TD_Rep
-    TFA.CI_RUC = TBeneficiario.RUC_CI_Rep
-    TFA.TelefonoC = TBeneficiario.Telefono1
-    TFA.DireccionC = TBeneficiario.Direccion_Rep
-    TFA.Curso = TBeneficiario.Direccion
-    TFA.Grupo = TBeneficiario.Grupo_No
-    TFA.EmailC = TBeneficiario.Email1
-    TFA.EmailR = TBeneficiario.Email2
-     
-   'Detalle de descuentos
-    sSQL = "SELECT DF.*,CP.Reg_Sanitario,CP.Marca " _
-         & "FROM Detalle_Factura As DF, Catalogo_Productos As CP " _
-         & "WHERE DF.Item = '" & NumEmpresa & "' " _
-         & "AND DF.Periodo = '" & Periodo_Contable & "' " _
-         & "AND DF.TC = '" & TFA.TC & "' " _
-         & "AND DF.Serie = '" & TFA.Serie & "' " _
-         & "AND DF.Autorizacion = '" & TFA.Autorizacion & "' " _
-         & "AND DF.Factura = " & TFA.Factura & " " _
-         & "AND LEN(DF.Autorizacion) >= 13 " _
-         & "AND DF.T <> 'A' " _
-         & "AND DF.Item = CP.Item " _
-         & "AND DF.Periodo = CP.Periodo " _
-         & "AND DF.Codigo = CP.Codigo_Inv " _
-         & "ORDER BY DF.ID,DF.Codigo "
-    Select_AdoDB AdoDBDet, sSQL
-    RatonReloj
-      
-   'Encabezado de la Guia de Remision
-    sSQL = "SELECT F.*,GR.Remision,GR.Comercial,GR.CIRUC_Comercial,GR.Entrega,GR.CIRUC_Entrega,GR.CiudadGRI,GR.CiudadGRF," _
-         & "GR.Placa_Vehiculo,GR.FechaGRE,GR.FechaGRI,GR.FechaGRF,GR.Pedido,GR.Zona,GR.Serie_GR,GR.Autorizacion_GR," _
-         & "GR.Clave_Acceso_GR,GR.Hora_Aut_GR,GR.Estado_SRI_GR,GR.Error_FA_SRI,GR.Fecha_Aut_GR " _
-         & "FROM Facturas As F, Facturas_Auxiliares As GR " _
-         & "WHERE F.Item = '" & NumEmpresa & "' " _
-         & "AND F.Periodo = '" & Periodo_Contable & "' " _
-         & "AND F.TC = '" & TFA.TC & "' " _
-         & "AND F.Serie = '" & TFA.Serie & "' " _
-         & "AND F.Autorizacion = '" & TFA.Autorizacion & "' " _
-         & "AND F.Factura = " & TFA.Factura & " " _
-         & "AND LEN(GR.Autorizacion_GR) = 13 " _
-         & "AND GR.Remision > 0 " _
-         & "AND F.T <> 'A' " _
-         & "AND F.Item = GR.Item " _
-         & "AND F.Periodo = GR.Periodo " _
-         & "AND F.TC = GR.TC " _
-         & "AND F.Serie = GR.Serie " _
-         & "AND F.Autorizacion = GR.Autorizacion " _
-         & "AND F.Factura = GR.Factura "
-    Select_AdoDB AdoDBFA, sSQL
-    RatonReloj
-    With AdoDBFA
-     If .RecordCount > 0 Then
-         Autorizar_XML = True
-         TFA.T = .fields("T")
-         TFA.SP = .fields("SP")
-         TFA.Porc_IVA = .fields("Porc_IVA")
-         TFA.Imp_Mes = .fields("Imp_Mes")
-         TFA.Fecha = .fields("Fecha")
-         TFA.Vencimiento = .fields("Vencimiento")
-         TFA.SubTotal = .fields("SubTotal")
-         TFA.Sin_IVA = .fields("Sin_IVA")
-         TFA.Con_IVA = .fields("Con_IVA")
-         TFA.Descuento = .fields("Descuento")
-         TFA.Descuento2 = .fields("Descuento2")
-         TFA.Total_IVA = .fields("IVA")
-         TFA.Total_MN = .fields("Total_MN")
-         TFA.Razon_Social = .fields("Razon_Social")
-         TFA.RUC_CI = .fields("RUC_CI")
-         TFA.TB = .fields("TB")
-         
-        'MsgBox "Validar Porc IVA"
-         
-         Validar_Porc_IVA TFA.Fecha
-        'Generamos la Clave de acceso
-        '& Format$(TFA.Fecha, "ddmmyyyy") &
-         If Len(TFA.Autorizacion_GR) >= 13 Then
-            TFA.ClaveAcceso_GR = Format$(TFA.Fecha, "ddmmyyyy") & "06" & RUC & Ambiente & TFA.Serie_GR _
-                               & Format$(TFA.Remision, String(9, "0")) _
-                               & "123456781"
-            TFA.ClaveAcceso_GR = TFA.ClaveAcceso_GR & Digito_Verificador_Modulo11(TFA.ClaveAcceso_GR)
-         Else
-            TFA.ClaveAcceso_GR = Ninguno
-         End If
-         TFA.Hora_GR = Format$(Time, FormatoTimes)
-         SRI_Autorizacion.Clave_De_Acceso = TFA.ClaveAcceso_GR
-         sSQL = "UPDATE Facturas_Auxiliares " _
-              & "SET Clave_Acceso_GR = '" & TFA.ClaveAcceso_GR & "' " _
-              & "WHERE Item = '" & NumEmpresa & "' " _
-              & "AND Periodo = '" & Periodo_Contable & "' " _
-              & "AND TC = '" & TFA.TC & "' " _
-              & "AND Serie = '" & TFA.Serie & "' " _
-              & "AND Factura = " & TFA.Factura & " " _
-              & "AND CodigoC = '" & TFA.CodigoC & "' " _
-              & "AND Autorizacion = '" & TFA.Autorizacion & "' "
-         Ejecutar_SQL_SP sSQL
-         
-         
-        'ENCABEZADO XML PARA EL SRI DE LA GUIA DE REMISION
-        'standalone=""yes""
-         Insertar_Campo_XML "<?xml version=""1.0"" encoding=""UTF-8""?>"
-         Insertar_Campo_XML "<guiaRemision id=""comprobante"" version=""1.1.0"">"
-         
-         Insertar_Campo_XML AbrirXML("infoTributaria")
-            Insertar_Campo_XML CampoXML("ambiente", Ambiente)
-            Insertar_Campo_XML CampoXML("tipoEmision", "1")
-            Insertar_Campo_XML CampoXML("razonSocial", RazonSocial)
-            Insertar_Campo_XML CampoXML("nombreComercial", NombreComercial)
-            Insertar_Campo_XML CampoXML("ruc", RUC)
-            Insertar_Campo_XML CampoXML("claveAcceso", TFA.ClaveAcceso_GR)
-            Insertar_Campo_XML CampoXML("codDoc", "06")
-            Insertar_Campo_XML CampoXML("estab", MidStrg(TFA.Serie_GR, 1, 3))
-            Insertar_Campo_XML CampoXML("ptoEmi", MidStrg(TFA.Serie_GR, 4, 3))
-            Insertar_Campo_XML CampoXML("secuencial", Format$(TFA.Remision, String(9, "0")))
-            Insertar_Campo_XML CampoXML("dirMatriz", ULCase(Direccion))
-           'Tipo de Contribuyente
-            If AgenteRetencion <> Ninguno Then Insertar_Campo_XML CampoXML("agenteRetencion", "1")
-            If MicroEmpresa = "CONTRIBUYENTE RÉGIMEN RIMPE" Then Insertar_Campo_XML CampoXML("contribuyenteRimpe", "CONTRIBUYENTE RÉGIMEN RIMPE")
-         Insertar_Campo_XML CerrarXML("infoTributaria")
-         
-         Insertar_Campo_XML AbrirXML("infoGuiaRemision")
-            Insertar_Campo_XML CampoXML("dirEstablecimiento", ULCase(DireccionEstab))
-            Insertar_Campo_XML CampoXML("dirPartida", .fields("CiudadGRI"))
-            Insertar_Campo_XML CampoXML("razonSocialTransportista", .fields("Comercial"))
-            DigVerif = Digito_Verificador(.fields("CIRUC_Comercial"))
-            TipoIdent = "P"
-            Select Case Tipo_RUC_CI.Tipo_Beneficiario
-              Case "R": If .fields("CIRUC_Comercial") = String(13, "9") Then TipoIdent = "07" Else TipoIdent = "04"
-              Case "C": TipoIdent = "05"
-              Case "P": TipoIdent = "06"
-              Case Else: TipoIdent = "07"
-            End Select
-            Insertar_Campo_XML CampoXML("tipoIdentificacionTransportista", TipoIdent)
-            Insertar_Campo_XML CampoXML("rucTransportista", .fields("CIRUC_Comercial"))
-            Insertar_Campo_XML CampoXML("rise", "000")
-            Insertar_Campo_XML CampoXML("obligadoContabilidad", Obligado_Conta)
-            If Len(ContEspec) > 1 Then Insertar_Campo_XML CampoXML("contribuyenteEspecial", ContEspec)
-            Insertar_Campo_XML CampoXML("fechaIniTransporte", .fields("FechaGRI"))
-            Insertar_Campo_XML CampoXML("fechaFinTransporte", .fields("FechaGRF"))
-            Insertar_Campo_XML CampoXML("placa", .fields("Placa_Vehiculo"))
-         Insertar_Campo_XML CerrarXML("infoGuiaRemision")
-         
-         Insertar_Campo_XML AbrirXML("destinatarios")
-            Insertar_Campo_XML AbrirXML("destinatario")
-            Insertar_Campo_XML CampoXML("identificacionDestinatario", .fields("CIRUC_Entrega"))
-            Insertar_Campo_XML CampoXML("razonSocialDestinatario", .fields("Entrega"))
-            Insertar_Campo_XML CampoXML("dirDestinatario", .fields("CiudadGRF"))
-            Insertar_Campo_XML CampoXML("motivoTraslado", "Translado de mercaderia")
-''            Insertar_Campo_XML CampoXML("docAduaneroUnico", "")
-''            Insertar_Campo_XML CampoXML("codEstabDestino", "001")
-            Insertar_Campo_XML CampoXML("ruta", "De " & .fields("CiudadGRI") & " a " & .fields("CiudadGRF"))
-            Select Case TFA.TC
-              Case "FA": Insertar_Campo_XML CampoXML("codDocSustento", "01")
-              Case "NV": Insertar_Campo_XML CampoXML("codDocSustento", "02")
-              Case Else: Insertar_Campo_XML CampoXML("codDocSustento", "00")
-            End Select
-            Cadena = MidStrg(TFA.Serie, 1, 3) & "-" & MidStrg(TFA.Serie, 4, 3) & "-" & Format(TFA.Factura, "000000000")
-            Insertar_Campo_XML CampoXML("numDocSustento", Cadena)
-            Insertar_Campo_XML CampoXML("numAutDocSustento", TFA.Autorizacion)
-            Insertar_Campo_XML CampoXML("fechaEmisionDocSustento", TFA.Fecha)
-            
-           'Detalle de la Factura/Nota de Venta
-            RatonReloj
-            With AdoDBDet
-             If .RecordCount > 0 Then
-                 Insertar_Campo_XML AbrirXML("detalles")
-                 Do While Not .EOF
-                    Producto = TrimStrg(.fields("Producto"))
-                    If TFA.Imp_Mes Then
-                       If Len(.fields("Ticket")) > 1 Then Producto = Producto & ", " & .fields("Ticket")
-                       If Len(.fields("Mes")) > 1 Then Producto = Producto & ": " & .fields("Mes")
-                    End If
-                    If TFA.SP Then
-                       Producto = Producto _
-                                & ", Lote No. " & .fields("Lote_No") _
-                                & ", ELAB. " & .fields("Fecha_Fab") _
-                                & ", VENC. " & .fields("Fecha_Exp") _
-                                & ", Reg. Sanit. " & .fields("Reg_Sanitario") _
-                                & ", Modelo: " & .fields("Modelo") _
-                                & ", Serie No. " & .fields("Serie_No") _
-                                & ", Procedencia: " & .fields("Procedencia")
-                    End If
-                    SubTotal = (.fields("Cantidad") * .fields("Precio")) - (.fields("Total_Desc") + .fields("Total_Desc2"))
-                    Insertar_Campo_XML AbrirXML("detalle")
-                        Insertar_Campo_XML CampoXML("codigoInterno", .fields("Codigo"))
-                        If Len(.fields("Codigo_Barra")) > 1 Then Insertar_Campo_XML CampoXML("codigoAdicional", .fields("Codigo_Barra"))
-                        Insertar_Campo_XML CampoXML("descripcion", Producto)
-                        Insertar_Campo_XML CampoXML("cantidad", Format$(.fields("Cantidad"), "#0.000000"))
-                    Insertar_Campo_XML CerrarXML("detalle")
-                   .MoveNext
-                 Loop
-                 Insertar_Campo_XML CerrarXML("detalles")
-             End If
-            End With
-            Insertar_Campo_XML CerrarXML("destinatario")
-         Insertar_Campo_XML CerrarXML("destinatarios")
-         
-         Insertar_Campo_XML AbrirXML("infoAdicional")
-            If TFA.Cliente <> Ninguno And TFA.Razon_Social <> TFA.Cliente Then
-               If Len(TFA.Cliente) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Beneficiario"">" & TFA.Cliente & "</campoAdicional>"
-               If Len(TFA.Curso) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Ubicacion"">" & TFA.Grupo & "-" & TFA.Curso & "</campoAdicional>"
-            End If
-            If Len(TFA.DireccionC) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Direccion"">" & TFA.DireccionC & "</campoAdicional>"
-            If Len(TFA.TelefonoC) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Telefono"">" & TFA.TelefonoC & "</campoAdicional>"
-            If Len(TFA.EmailC) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Email"">" & TFA.EmailC & "</campoAdicional>"
-         Insertar_Campo_XML CerrarXML("infoAdicional")
-        'Fin del Archivo Xml
-         Insertar_Campo_XML CerrarXML("guiaRemision")
-     End If
-    End With
+       'Averiguamos si la Factura esta a nombre del Representante
+        TBeneficiario = Leer_Datos_Cliente_SP(TFA.CodigoC)
+       'MsgBox TBeneficiario.RUC_CI_Rep & vbCrLf & TBeneficiario.Representante & vbCrLf & TBeneficiario.TD_Rep
         
-      'Grabamos el comprobante XML
-       RatonReloj
-       If Len(TFA.Autorizacion_GR) = 13 Then
-          If CFechaLong(TFA.Fecha) <= CFechaLong(Fecha_CE) Then
-            'MsgBox RutaDocumentos
-             RutaGeneraFile = RutaDocumentos & "\Comprobantes Generados\" & TFA.ClaveAcceso_GR & ".xml"
+        TFA.Cliente = TBeneficiario.Representante
+        TFA.TD = TBeneficiario.TD_Rep
+        TFA.CI_RUC = TBeneficiario.RUC_CI_Rep
+        TFA.TelefonoC = TBeneficiario.Telefono1
+        TFA.DireccionC = TBeneficiario.Direccion_Rep
+        TFA.Curso = TBeneficiario.Direccion
+        TFA.Grupo = TBeneficiario.Grupo_No
+        TFA.EmailC = TBeneficiario.Email1
+        TFA.EmailR = TBeneficiario.Email2
+         
+       'Detalle de descuentos
+        sSQL = "SELECT DF.*,CP.Reg_Sanitario,CP.Marca " _
+             & "FROM Detalle_Factura As DF, Catalogo_Productos As CP " _
+             & "WHERE DF.Item = '" & NumEmpresa & "' " _
+             & "AND DF.Periodo = '" & Periodo_Contable & "' " _
+             & "AND DF.TC = '" & TFA.TC & "' " _
+             & "AND DF.Serie = '" & TFA.Serie & "' " _
+             & "AND DF.Autorizacion = '" & TFA.Autorizacion & "' " _
+             & "AND DF.Factura = " & TFA.Factura & " " _
+             & "AND LEN(DF.Autorizacion) >= 13 " _
+             & "AND DF.T <> 'A' " _
+             & "AND DF.Item = CP.Item " _
+             & "AND DF.Periodo = CP.Periodo " _
+             & "AND DF.Codigo = CP.Codigo_Inv " _
+             & "ORDER BY DF.ID,DF.Codigo "
+        Select_AdoDB AdoDBDet, sSQL
+        RatonReloj
+          
+       'Encabezado de la Guia de Remision
+        sSQL = "SELECT F.*,GR.Remision,GR.Comercial,GR.CIRUC_Comercial,GR.Entrega,GR.CIRUC_Entrega,GR.CiudadGRI,GR.CiudadGRF," _
+             & "GR.Placa_Vehiculo,GR.FechaGRE,GR.FechaGRI,GR.FechaGRF,GR.Pedido,GR.Zona,GR.Serie_GR,GR.Autorizacion_GR," _
+             & "GR.Clave_Acceso_GR,GR.Hora_Aut_GR,GR.Estado_SRI_GR,GR.Error_FA_SRI,GR.Fecha_Aut_GR " _
+             & "FROM Facturas As F, Facturas_Auxiliares As GR " _
+             & "WHERE F.Item = '" & NumEmpresa & "' " _
+             & "AND F.Periodo = '" & Periodo_Contable & "' " _
+             & "AND F.TC = '" & TFA.TC & "' " _
+             & "AND F.Serie = '" & TFA.Serie & "' " _
+             & "AND F.Autorizacion = '" & TFA.Autorizacion & "' " _
+             & "AND F.Factura = " & TFA.Factura & " " _
+             & "AND LEN(GR.Autorizacion_GR) >= 13 " _
+             & "AND GR.Remision > 0 " _
+             & "AND F.T <> 'A' " _
+             & "AND F.Item = GR.Item " _
+             & "AND F.Periodo = GR.Periodo " _
+             & "AND F.TC = GR.TC " _
+             & "AND F.Serie = GR.Serie " _
+             & "AND F.Autorizacion = GR.Autorizacion " _
+             & "AND F.Factura = GR.Factura "
+        Select_AdoDB AdoDBFA, sSQL
+        RatonReloj
+        With AdoDBFA
+         If .RecordCount > 0 Then
+             Autorizar_XML = True
+             TFA.T = .Fields("T")
+             TFA.SP = .Fields("SP")
+             TFA.Porc_IVA = .Fields("Porc_IVA")
+             TFA.Imp_Mes = .Fields("Imp_Mes")
+             TFA.Fecha = .Fields("Fecha")
+             TFA.Vencimiento = .Fields("Vencimiento")
+             TFA.SubTotal = .Fields("SubTotal")
+             TFA.Sin_IVA = .Fields("Sin_IVA")
+             TFA.Con_IVA = .Fields("Con_IVA")
+             TFA.Descuento = .Fields("Descuento")
+             TFA.Descuento2 = .Fields("Descuento2")
+             TFA.Total_IVA = .Fields("IVA")
+             TFA.Total_MN = .Fields("Total_MN")
+             TFA.Razon_Social = .Fields("Razon_Social")
+             TFA.RUC_CI = .Fields("RUC_CI")
+             TFA.TB = .Fields("TB")
              
-             If GeneraXML Then
-                Clipboard.Clear
-                Clipboard.SetText TextoXML
-                Grabar_Consulta_Archivo "GR_" & TFA.Serie_GR & "-" & Format$(TFA.Remision, String(9, "0")), TextoXML
-             End If
-                          
-             Set DocumentoXML = New DOMDocument30
-             DocumentoXML.loadXML (TextoXML)
-             DocumentoXML.save (RutaGeneraFile)
+            'MsgBox "Validar Porc IVA"
              
-             TFA.Estado_SRI_GR = "CG"
-             SRI_Autorizacion.Clave_De_Acceso = TFA.ClaveAcceso_GR
-             FAutorizaXmlSRI.Show 1
-            'SRI_Autorizacion = SRI_Generar_XML(TFA.ClaveAcceso_GR, SRI_Autorizacion.Estado_SRI)
-            'MsgBox SRI_Autorizacion.Estado_SRI
-             TFA.Estado_SRI_GR = SRI_Autorizacion.Estado_SRI
-             TFA.Error_SRI = SRI_Autorizacion.Error_SRI
-             TFA.Fecha_Aut_GR = SRI_Autorizacion.Fecha_Autorizacion
-             TFA.Hora_GR = SRI_Autorizacion.Hora_Autorizacion
-             If SRI_Autorizacion.Estado_SRI = "OK" Then
-                Control_Procesos "F", "GR-" & TFA.Serie_GR & " No. " & Format(TFA.Remision, "000000000") & " Autorizada"
-                TFA.Autorizacion_GR = SRI_Autorizacion.Autorizacion
-                SRI_Actualizar_Autorizacion_Guia_Remision TFA, SRI_Autorizacion
-                If Autorizar Then SRI_Enviar_Mails TFA, SRI_Autorizacion, "GR"
-                If VerGuiaRemision Then SRI_Generar_PDF_GR TFA, VerGuiaRemision
+             Validar_Porc_IVA TFA.Fecha
+            'Generamos la Clave de acceso
+            '& Format$(TFA.Fecha, "ddmmyyyy") &
+             If Len(TFA.Autorizacion_GR) >= 13 Then
+                TFA.ClaveAcceso_GR = Format$(TFA.Fecha, "ddmmyyyy") & "06" & RUC & Ambiente & TFA.Serie_GR & Format$(TFA.Remision, String(9, "0")) & "123456781"
+                TFA.ClaveAcceso_GR = TFA.ClaveAcceso_GR & Digito_Verificador_Modulo11(TFA.ClaveAcceso_GR)
              Else
-                If VerGuiaRemision Then
-                   MsgBox "No se pudo realizar la conexion, Liste la Factura (" & TFA.Estado_SRI_GR & ")" & vbCrLf _
-                         & TFA.Error_SRI
-                Else
-                   TextoImprimio = TextoImprimio _
-                                 & TFA.TC & " No. " & TFA.Serie_GR & vbTab & TFA.Factura & vbTab _
-                                 & TFA.Cliente & vbTab & TFA.Error_SRI & vbCrLf _
-                                 & TFA.Error_SRI
-                End If
+                TFA.ClaveAcceso_GR = Ninguno
              End If
-          Else
-             RatonNormal
-             MsgBox MensajeNoAutorizarCE
-          End If
-       End If
-       AdoDBDet.Close
-       AdoDBFA.Close
+             TFA.Hora_GR = Format$(Time, FormatoTimes)
+             SRI_Autorizacion.Clave_De_Acceso = TFA.ClaveAcceso_GR
+             sSQL = "UPDATE Facturas_Auxiliares " _
+                  & "SET Clave_Acceso_GR = '" & TFA.ClaveAcceso_GR & "' " _
+                  & "WHERE Item = '" & NumEmpresa & "' " _
+                  & "AND Periodo = '" & Periodo_Contable & "' " _
+                  & "AND TC = '" & TFA.TC & "' " _
+                  & "AND Serie = '" & TFA.Serie & "' " _
+                  & "AND Factura = " & TFA.Factura & " " _
+                  & "AND CodigoC = '" & TFA.CodigoC & "' " _
+                  & "AND Autorizacion = '" & TFA.Autorizacion & "' "
+             Ejecutar_SQL_SP sSQL
+             
+             
+            'ENCABEZADO XML PARA EL SRI DE LA GUIA DE REMISION
+            'standalone=""yes""
+             Insertar_Campo_XML "<?xml version=""1.0"" encoding=""UTF-8""?>"
+             Insertar_Campo_XML "<guiaRemision id=""comprobante"" version=""1.1.0"">"
+             
+             Insertar_Campo_XML AbrirXML("infoTributaria")
+                Insertar_Campo_XML CampoXML("ambiente", Ambiente)
+                Insertar_Campo_XML CampoXML("tipoEmision", "1")
+                Insertar_Campo_XML CampoXML("razonSocial", RazonSocial)
+                Insertar_Campo_XML CampoXML("nombreComercial", NombreComercial)
+                Insertar_Campo_XML CampoXML("ruc", RUC)
+                Insertar_Campo_XML CampoXML("claveAcceso", TFA.ClaveAcceso_GR)
+                Insertar_Campo_XML CampoXML("codDoc", "06")
+                Insertar_Campo_XML CampoXML("estab", MidStrg(TFA.Serie_GR, 1, 3))
+                Insertar_Campo_XML CampoXML("ptoEmi", MidStrg(TFA.Serie_GR, 4, 3))
+                Insertar_Campo_XML CampoXML("secuencial", Format$(TFA.Remision, String(9, "0")))
+                Insertar_Campo_XML CampoXML("dirMatriz", ULCase(Direccion))
+               'Tipo de Contribuyente
+                If AgenteRetencion <> Ninguno Then Insertar_Campo_XML CampoXML("agenteRetencion", "1")
+                If MicroEmpresa = "CONTRIBUYENTE RÉGIMEN RIMPE" Then Insertar_Campo_XML CampoXML("contribuyenteRimpe", "CONTRIBUYENTE RÉGIMEN RIMPE")
+             Insertar_Campo_XML CerrarXML("infoTributaria")
+             
+             Insertar_Campo_XML AbrirXML("infoGuiaRemision")
+                Insertar_Campo_XML CampoXML("dirEstablecimiento", ULCase(DireccionEstab))
+                Insertar_Campo_XML CampoXML("dirPartida", .Fields("CiudadGRI"))
+                Insertar_Campo_XML CampoXML("razonSocialTransportista", .Fields("Comercial"))
+                DigVerif = Digito_Verificador(.Fields("CIRUC_Comercial"))
+                TipoIdent = "P"
+                Select Case Tipo_RUC_CI.Tipo_Beneficiario
+                  Case "R": If .Fields("CIRUC_Comercial") = String(13, "9") Then TipoIdent = "07" Else TipoIdent = "04"
+                  Case "C": TipoIdent = "05"
+                  Case "P": TipoIdent = "06"
+                  Case Else: TipoIdent = "07"
+                End Select
+                Insertar_Campo_XML CampoXML("tipoIdentificacionTransportista", TipoIdent)
+                Insertar_Campo_XML CampoXML("rucTransportista", .Fields("CIRUC_Comercial"))
+                Insertar_Campo_XML CampoXML("rise", "000")
+                Insertar_Campo_XML CampoXML("obligadoContabilidad", Obligado_Conta)
+                If Len(ContEspec) > 1 Then Insertar_Campo_XML CampoXML("contribuyenteEspecial", ContEspec)
+                Insertar_Campo_XML CampoXML("fechaIniTransporte", .Fields("FechaGRI"))
+                Insertar_Campo_XML CampoXML("fechaFinTransporte", .Fields("FechaGRF"))
+                Insertar_Campo_XML CampoXML("placa", .Fields("Placa_Vehiculo"))
+             Insertar_Campo_XML CerrarXML("infoGuiaRemision")
+             
+             Insertar_Campo_XML AbrirXML("destinatarios")
+                Insertar_Campo_XML AbrirXML("destinatario")
+                Insertar_Campo_XML CampoXML("identificacionDestinatario", .Fields("CIRUC_Entrega"))
+                Insertar_Campo_XML CampoXML("razonSocialDestinatario", .Fields("Entrega"))
+                Insertar_Campo_XML CampoXML("dirDestinatario", .Fields("CiudadGRF"))
+                Insertar_Campo_XML CampoXML("motivoTraslado", "Translado de mercaderia")
+    ''            Insertar_Campo_XML CampoXML("docAduaneroUnico", "")
+    ''            Insertar_Campo_XML CampoXML("codEstabDestino", "001")
+                Insertar_Campo_XML CampoXML("ruta", "De " & .Fields("CiudadGRI") & " a " & .Fields("CiudadGRF"))
+                Select Case TFA.TC
+                  Case "FA": Insertar_Campo_XML CampoXML("codDocSustento", "01")
+                  Case "NV": Insertar_Campo_XML CampoXML("codDocSustento", "02")
+                  Case Else: Insertar_Campo_XML CampoXML("codDocSustento", "00")
+                End Select
+                Cadena = MidStrg(TFA.Serie, 1, 3) & "-" & MidStrg(TFA.Serie, 4, 3) & "-" & Format(TFA.Factura, "000000000")
+                Insertar_Campo_XML CampoXML("numDocSustento", Cadena)
+                Insertar_Campo_XML CampoXML("numAutDocSustento", TFA.Autorizacion)
+                Insertar_Campo_XML CampoXML("fechaEmisionDocSustento", TFA.Fecha)
+                
+               'Detalle de la Factura/Nota de Venta
+                RatonReloj
+                With AdoDBDet
+                 If .RecordCount > 0 Then
+                     Insertar_Campo_XML AbrirXML("detalles")
+                     Do While Not .EOF
+                        Producto = TrimStrg(.Fields("Producto"))
+                        If TFA.Imp_Mes Then
+                           If Len(.Fields("Ticket")) > 1 Then Producto = Producto & ", " & .Fields("Ticket")
+                           If Len(.Fields("Mes")) > 1 Then Producto = Producto & ": " & .Fields("Mes")
+                        End If
+                        If TFA.SP Then
+                           Producto = Producto _
+                                    & ", Lote No. " & .Fields("Lote_No") _
+                                    & ", ELAB. " & .Fields("Fecha_Fab") _
+                                    & ", VENC. " & .Fields("Fecha_Exp") _
+                                    & ", Reg. Sanit. " & .Fields("Reg_Sanitario") _
+                                    & ", Modelo: " & .Fields("Modelo") _
+                                    & ", Serie No. " & .Fields("Serie_No") _
+                                    & ", Procedencia: " & .Fields("Procedencia")
+                        End If
+                        SubTotal = (.Fields("Cantidad") * .Fields("Precio")) - (.Fields("Total_Desc") + .Fields("Total_Desc2"))
+                        Insertar_Campo_XML AbrirXML("detalle")
+                            Insertar_Campo_XML CampoXML("codigoInterno", .Fields("Codigo"))
+                            If Len(.Fields("Codigo_Barra")) > 1 Then Insertar_Campo_XML CampoXML("codigoAdicional", .Fields("Codigo_Barra"))
+                            Insertar_Campo_XML CampoXML("descripcion", Producto)
+                            Insertar_Campo_XML CampoXML("cantidad", Format$(.Fields("Cantidad"), "#0.000000"))
+                        Insertar_Campo_XML CerrarXML("detalle")
+                       .MoveNext
+                     Loop
+                     Insertar_Campo_XML CerrarXML("detalles")
+                 End If
+                End With
+                Insertar_Campo_XML CerrarXML("destinatario")
+             Insertar_Campo_XML CerrarXML("destinatarios")
+             
+             Insertar_Campo_XML AbrirXML("infoAdicional")
+                If TFA.Cliente <> Ninguno And TFA.Razon_Social <> TFA.Cliente Then
+                   If Len(TFA.Cliente) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Beneficiario"">" & TFA.Cliente & "</campoAdicional>"
+                   If Len(TFA.Curso) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Ubicacion"">" & TFA.Grupo & "-" & TFA.Curso & "</campoAdicional>"
+                End If
+                If Len(TFA.DireccionC) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Direccion"">" & TFA.DireccionC & "</campoAdicional>"
+                If Len(TFA.TelefonoC) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Telefono"">" & TFA.TelefonoC & "</campoAdicional>"
+                If Len(TFA.EmailC) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Email"">" & TFA.EmailC & "</campoAdicional>"
+             Insertar_Campo_XML CerrarXML("infoAdicional")
+             Insertar_Campo_XML CerrarXML("guiaRemision")
+            'Fin del Archivo Xml
+         End If
+        End With
+       '-------------------------------------------------------------------
+        SRI_Enviar_Documento_Autorizar "GR", VerGuiaRemision, GeneraXML, TFA
+       '-------------------------------------------------------------------
+        AdoDBDet.Close
+        AdoDBFA.Close
     End If
     RatonNormal
 End Sub
@@ -4172,297 +3887,292 @@ Dim Con_Inv As Boolean
     RatonReloj
      
     Con_Inv = False
-    Autorizar_XML = True
+    If CFechaLong(TFA.Fecha) <= CFechaLong(Fecha_CE) Then Autorizar_XML = True Else Autorizar_XML = False
     If Len(Fecha_Igualar) = 10 Then
        If CFechaLong(TFA.Fecha_NC) < CFechaLong(Fecha_Igualar) Then Autorizar_XML = False
     End If
 
    'Autorizamos la Nota de Credito
     If Autorizar_XML Then
-    
-    Leer_Datos_FA_NV TFA
-   'Averiguamos si la Factura esta a nombre del Representante
-'''    TBeneficiario = Leer_Datos_Clientes(TFA.CodigoC)
-'''    With TBeneficiario
-'''         TFA.Cliente = .Cliente
-'''         TFA.TD = .TD
-'''         TFA.CI_RUC = .CI_RUC
-'''         TFA.TelefonoC = .Telefono1
-'''         If Len(.Representante) > 1 And Len(.RUC_CI_Rep) > 1 Then
-'''            TFA.Razon_Social = .Representante
-'''            TFA.RUC_CI = .RUC_CI_Rep
-'''            TFA.TB = .TD_Rep
-'''         Else
-'''            Select Case TFA.TD
-'''              Case "C", "R", "P"
-'''                   TFA.Razon_Social = TFA.Cliente
-'''                   TFA.RUC_CI = TFA.CI_RUC
-'''                   TFA.TB = TFA.TD
-'''                   TFA.TelefonoC = .TelefonoT
-'''              Case Else
-'''                   TFA.Razon_Social = "CONSUMIDOR FINAL"
-'''                   TFA.RUC_CI = "9999999999999"
-'''                   TFA.TB = "R"
-'''            End Select
-'''         End If
-'''         TFA.DireccionC = .Direccion
-'''         TFA.EmailC = .Email1
-'''         TFA.EmailR = .Email2
-'''    End With
-    
-    'TFA.Porc_NC = 0.15
-    Obtener_Cod_Porc_IVA TFA.Fecha, (TFA.Porc_NC * 100)
-    'MsgBox Cod_Porc_IVA
-   'NOTA DE CREDITO
-    SubT_Con_Inv = False
-    Total_Sin_IVA = 0
-    Total_Con_IVA = 0
-    Total_Desc = 0
-    Total_Desc2 = 0
-    TFA.Total_IVA_NC = 0
-    
-    sSQL = "SELECT Autorizacion, Codigo_Inv, Producto, Cantidad, Precio, Total, Total_IVA, Descuento, Cta_Devolucion, CodBodega, Porc_IVA, Mes, Mes_No , Anio, ID " _
-         & "FROM Detalle_Nota_Credito " _
-         & "WHERE Item = '" & NumEmpresa & "' " _
-         & "AND Periodo = '" & Periodo_Contable & "' " _
-         & "AND Serie = '" & TFA.Serie_NC & "' " _
-         & "AND Secuencial = " & TFA.Nota_Credito & " " _
-         & "ORDER BY ID "
-    Select_AdoDB AdoDBNC, sSQL, "Generacion NC"
-    With AdoDBNC
-     If .RecordCount > 0 Then
-         Con_Inv = True
-         Do While Not .EOF
-            Total_Desc = Total_Desc + .fields("Descuento")
-            If .fields("Total_IVA") = 0 Then
-                Total_Sin_IVA = Total_Sin_IVA + .fields("Total")
-            Else
-                Total_Con_IVA = Total_Con_IVA + .fields("Total")
-            End If
-            TFA.Total_IVA_NC = TFA.Total_IVA_NC + .fields("Total_IVA")
-           .MoveNext
-         Loop
-     End If
-    End With
-    If AdoDBNC.RecordCount <= 0 Then
-       AdoDBNC.Close
-       sSQL = "SELECT * " _
-            & "FROM Trans_Abonos " _
-            & "WHERE Item = '" & NumEmpresa & "' " _
-            & "AND Periodo = '" & Periodo_Contable & "' " _
-            & "AND Autorizacion = '" & TFA.Autorizacion & "' " _
-            & "AND Serie = '" & TFA.Serie & "' " _
-            & "AND TP = '" & TFA.TC & "' " _
-            & "AND Factura = " & TFA.Factura & " " _
-            & "AND Serie_NC = '" & TFA.Serie_NC & "' " _
-            & "AND Secuencial_NC = " & TFA.Nota_Credito & " " _
-            & "AND Banco = 'NOTA DE CREDITO' " _
-            & "ORDER BY TP,Fecha,Cta,Cta_CxP,Abono,Banco,Cheque "
-       Select_AdoDB AdoDBNC, sSQL
+        Leer_Datos_FA_NV TFA
+        Obtener_Cod_Porc_IVA TFA.Fecha, (TFA.Porc_NC * 100)
+       'NOTA DE CREDITO
+        SubT_Con_Inv = False
+        Total_Sin_IVA = 0
+        Total_Con_IVA = 0
+        Total_Desc = 0
+        Total_Desc2 = 0
+        TFA.Total_IVA_NC = 0
+        
+        sSQL = "SELECT Autorizacion, Codigo_Inv, Producto, Cantidad, Precio, Total, Total_IVA, Descuento, Cta_Devolucion, CodBodega, Porc_IVA, Mes, Mes_No , Anio, ID " _
+             & "FROM Detalle_Nota_Credito " _
+             & "WHERE Item = '" & NumEmpresa & "' " _
+             & "AND Periodo = '" & Periodo_Contable & "' " _
+             & "AND Serie = '" & TFA.Serie_NC & "' " _
+             & "AND Secuencial = " & TFA.Nota_Credito & " " _
+             & "ORDER BY ID "
+        Select_AdoDB AdoDBNC, sSQL
         With AdoDBNC
-          'MsgBox .RecordCount
          If .RecordCount > 0 Then
+             Con_Inv = True
              Do While Not .EOF
-                If .fields("Cheque") = "I.V.A." Then
-                    TFA.Total_IVA_NC = .fields("Abono")
-                    SubT_Con_Inv = True
-                ElseIf .fields("Cheque") = "VENTAS SIN IVA" Then
-                    Total_Sin_IVA = .fields("Abono")
+                Total_Desc = Total_Desc + .Fields("Descuento")
+                If .Fields("Total_IVA") = 0 Then
+                    Total_Sin_IVA = Total_Sin_IVA + .Fields("Total")
                 Else
-                    Total_Con_IVA = .fields("Abono")
+                    Total_Con_IVA = Total_Con_IVA + .Fields("Total")
                 End If
+                TFA.Total_IVA_NC = TFA.Total_IVA_NC + .Fields("Total_IVA")
                .MoveNext
              Loop
-''             If SubT_Con_Inv Then
-''                Total_Con_IVA = Total_Sin_IVA
-''                Total_Sin_IVA = 0
-''             End If
          End If
         End With
-    End If
-    Total_Sin_IVA = Redondear(Total_Sin_IVA, 2)
-    Total_Con_IVA = Redondear(Total_Con_IVA, 2)
-    TFA.Total_IVA_NC = Redondear(TFA.Total_IVA_NC, 2)
-    TFA.SubTotal_NC = Redondear(Total_Sin_IVA + Total_Con_IVA, 2)
-    TextoXML = ""
-   'Generacion de la Nota Credito si es Electronica
-    With TFA
-     'MsgBox .Total_IVA_NC
-      If (.SubTotal_NC + .Total_IVA_NC) > 0 Then
-         If TFA.Porc_NC = 0 Then
-            Validar_Porc_IVA TFA.Fecha_NC
-         Else
-            Porc_IVA = TFA.Porc_NC
-         End If
-        .Hora_NC = Format$(Time, FormatoTimes)
-        'Algoritmo Modulo 11 para la clave de la retencion
-        '& Format$(.Fecha_NC, "ddmmyyyy")
-        .ClaveAcceso_NC = Format$(.Fecha_NC, "ddmmyyyy") & "04" & RUC & Ambiente _
-                        & .Serie_NC & Format$(.Nota_Credito, String(9, "0")) _
-                        & "123456781"
-        .ClaveAcceso_NC = Replace(.ClaveAcceso_NC, ".", "1")
-        .ClaveAcceso_NC = .ClaveAcceso_NC & Digito_Verificador_Modulo11(.ClaveAcceso_NC)
-         
-        'MsgBox .ClaveAcceso_NC
-         
-        'ENCABEZADO XML PARA EL SRI DE LA NOTA DE CREDITO
-         Insertar_Campo_XML "<?xml version=""1.0"" encoding=""UTF-8""?>"
-        
-        ' Insertar_Campo_XML "<?xml version=""1.0"" encoding=""UTF-8"" standalone=""yes""?>"
-         Insertar_Campo_XML "<notaCredito id=""comprobante"" version=""1.1.0"">"
-         Insertar_Campo_XML AbrirXML("infoTributaria")
-            Insertar_Campo_XML CampoXML("ambiente", Ambiente)
-            Insertar_Campo_XML CampoXML("tipoEmision", "1")
-            Insertar_Campo_XML CampoXML("razonSocial", RazonSocial)
-            Insertar_Campo_XML CampoXML("nombreComercial", NombreComercial)
-            Insertar_Campo_XML CampoXML("ruc", RUC)
-            Insertar_Campo_XML CampoXML("claveAcceso", .ClaveAcceso_NC)
-            Insertar_Campo_XML CampoXML("codDoc", "04")
-            Insertar_Campo_XML CampoXML("estab", MidStrg(.Serie_NC, 1, 3))
-            Insertar_Campo_XML CampoXML("ptoEmi", MidStrg(.Serie_NC, 4, 3))
-            Insertar_Campo_XML CampoXML("secuencial", Format$(.Nota_Credito, String(9, "0")))
-            Insertar_Campo_XML CampoXML("dirMatriz", ULCase(Direccion))
-           'Tipo de Contribuyente
-            If AgenteRetencion <> Ninguno Then Insertar_Campo_XML CampoXML("agenteRetencion", "1")
-            If MicroEmpresa = "CONTRIBUYENTE RÉGIMEN RIMPE" Then Insertar_Campo_XML CampoXML("contribuyenteRimpe", "CONTRIBUYENTE RÉGIMEN RIMPE")
-         Insertar_Campo_XML CerrarXML("infoTributaria")
-         
-         Insertar_Campo_XML AbrirXML("infoNotaCredito")
-            Insertar_Campo_XML CampoXML("fechaEmision", .Fecha_NC)
-            Insertar_Campo_XML CampoXML("dirEstablecimiento", ULCase(DireccionEstab))
-            Select Case .TB
-              Case "R": If .RUC_CI = "9999999999999" Then TipoIdent = "07" Else TipoIdent = "04"
-              Case "C": TipoIdent = "05"
-              Case "P": TipoIdent = "06"
-            End Select
-            Insertar_Campo_XML CampoXML("tipoIdentificacionComprador", TipoIdent)
-            Insertar_Campo_XML CampoXML("razonSocialComprador", .Razon_Social)
-            Insertar_Campo_XML CampoXML("identificacionComprador", .RUC_CI)
-            If Len(ContEspec) > 1 Then Insertar_Campo_XML CampoXML("contribuyenteEspecial", ContEspec)
-            Insertar_Campo_XML CampoXML("obligadoContabilidad", Obligado_Conta)
-            Insertar_Campo_XML CampoXML("codDocModificado", "01")
-            Insertar_Campo_XML CampoXML("numDocModificado", MidStrg(.Serie, 1, 3) & "-" & MidStrg(.Serie, 4, 3) & "-" & Format$(.Factura, String(9, "0")))
-            Insertar_Campo_XML CampoXML("fechaEmisionDocSustento", .Fecha)
-            Insertar_Campo_XML CampoXML("totalSinImpuestos", Format$(Total_Sin_IVA + Total_Con_IVA - Total_Desc, "#0.00"))
-            Insertar_Campo_XML CampoXML("valorModificacion", Format$(Total_Sin_IVA + Total_Con_IVA - Total_Desc + .Total_IVA_NC, "#0.00"))
-            Insertar_Campo_XML CampoXML("moneda", "DOLAR")
-            Insertar_Campo_XML AbrirXML("totalConImpuestos")
-                Insertar_Campo_XML AbrirXML("totalImpuesto")
-                   Insertar_Campo_XML CampoXML("codigo", "2")
-                   Insertar_Campo_XML CampoXML("codigoPorcentaje", Cod_Porc_IVA)
-                   Insertar_Campo_XML CampoXML("baseImponible", Total_Con_IVA - Total_Desc)
-                   Insertar_Campo_XML CampoXML("valor", Format$(.Total_IVA_NC, "#0.00"))
-                Insertar_Campo_XML CerrarXML("totalImpuesto")
-            Insertar_Campo_XML CerrarXML("totalConImpuestos")
-            Insertar_Campo_XML CampoXML("motivo", "Anulacion por Nota de Credito")
-         Insertar_Campo_XML CerrarXML("infoNotaCredito")
-         
-        'Detalle de la Nota de Credito
-         RatonReloj
-         With AdoDBNC
-          If .RecordCount > 0 Then
-             'MsgBox .RecordCount
-             .MoveFirst
-              Insertar_Campo_XML AbrirXML("detalles")
-                Do While Not .EOF
-                   CodAdicional = CambioCodigoCtaSup(.fields("Codigo_Inv"))
-                   'MsgBox PVP_NC & vbCrLf & .Fields("Cantidad_NC")
-                   Insertar_Campo_XML AbrirXML("detalle")
-                       Insertar_Campo_XML CampoXML("codigoInterno", .fields("Codigo_Inv"))
-                       Insertar_Campo_XML CampoXML("codigoAdicional", CodAdicional)
-                       Insertar_Campo_XML CampoXML("descripcion", .fields("Producto"))
-                       Insertar_Campo_XML CampoXML("cantidad", .fields("Cantidad"))
-                       Insertar_Campo_XML CampoXML("precioUnitario", Format$(.fields("Precio"), "#0.0000"))
-                       Insertar_Campo_XML CampoXML("descuento", Format$(.fields("Descuento"), "#0.00"))
-                       Insertar_Campo_XML CampoXML("precioTotalSinImpuesto", Format$(.fields("Total") - .fields("Descuento"), "#0.00"))
-                      'MsgBox .Fields("Codigo_Inv") & vbCrLf & .Fields("Total_IVA")
-                       Insertar_Campo_XML AbrirXML("impuestos")
-                           Insertar_Campo_XML AbrirXML("impuesto")
-                              Insertar_Campo_XML CampoXML("codigo", "2")
-                             ' MsgBox "....."
-                              If .fields("Total_IVA") = 0 Then
-                                  Insertar_Campo_XML CampoXML("codigoPorcentaje", "0")
-                                  Insertar_Campo_XML CampoXML("tarifa", "0")
-                              Else
-'''                                  If (Porc_IVA * 100) > 12 Then
-'''                                     Insertar_Campo_XML CampoXML("codigoPorcentaje", "3")
-'''                                  Else
-'''                                     Insertar_Campo_XML CampoXML("codigoPorcentaje", "2")
-'''                                  End If
-                                  Insertar_Campo_XML CampoXML("codigoPorcentaje", Cod_Porc_IVA)
-                                  Insertar_Campo_XML CampoXML("tarifa", Porc_IVA * 100)
-                              End If
-                              Insertar_Campo_XML CampoXML("baseImponible", Format$(.fields("Total") - .fields("Descuento"), "#0.00"))
-                              Insertar_Campo_XML CampoXML("valor", Format$(.fields("Total_IVA"), "#0.00"))
-                          Insertar_Campo_XML CerrarXML("impuesto")
-                       Insertar_Campo_XML CerrarXML("impuestos")
-                   Insertar_Campo_XML CerrarXML("detalle")
-                  .MoveNext
-                Loop
-              Insertar_Campo_XML CerrarXML("detalles")
-          End If
-         End With
-         AdoDBNC.Close
-         
-        'FIN DE XML DE NOTA CREDITO
-         Insertar_Campo_XML AbrirXML("infoAdicional")
-            If Len(TFA.DireccionC) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Direccion"">" & TFA.DireccionC & "</campoAdicional>"
-            If Len(TFA.TelefonoC) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Telefono"">" & TFA.TelefonoC & "</campoAdicional>"
-            If Len(TFA.EmailC) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Email"">" & TFA.EmailC & "</campoAdicional>"
-            Insertar_Campo_XML "<campoAdicional nombre=""Comprobante No"">" & TFA.TC & "-" & Format$(TFA.Factura, "0000000000") & "</campoAdicional>"
-         Insertar_Campo_XML CerrarXML("infoAdicional")
-         Insertar_Campo_XML CerrarXML("notaCredito")
-         
-        'Grabamos el comprobante XML de la Retencion
-         If Len(TFA.Autorizacion_NC) >= 13 Then
-            If CFechaLong(TFA.Fecha) <= CFechaLong(Fecha_CE) Then
-               'MsgBox TFA.ClaveAcceso_NC
-                RutaGeneraFile = RutaDocumentos & "\Comprobantes Generados\" & TFA.ClaveAcceso_NC & ".xml"
-                
-                If GeneraXML Then
-                   Clipboard.Clear
-                   Clipboard.SetText TextoXML
-                   Grabar_Consulta_Archivo "NC_" & TFA.Serie_NC & "-" & Format$(TFA.Nota_Credito, String(9, "0")), TextoXML
-                End If
-                 
-                Set DocumentoXML = New DOMDocument30
-                DocumentoXML.loadXML (TextoXML)
-                DocumentoXML.save (RutaGeneraFile)
-
-                    TFA.Estado_SRI_NC = "CG"
-                   'Enviamos al SRI para que me autorice la Nota de Credito
-                    SRI_Autorizacion.Clave_De_Acceso = TFA.ClaveAcceso_NC
-                    FAutorizaXmlSRI.Show 1
-                   'SRI_Autorizacion = SRI_Generar_XML(TFA.ClaveAcceso_NC, TFA.Estado_SRI_NC)
-                    SRI_Actualizar_XML_Nota_Credito SRI_Autorizacion, TFA
-                    RatonReloj
-                    If SRI_Autorizacion.Estado_SRI = "OK" Then
-                       Control_Procesos "F", "NC-" & TFA.Serie_NC & " No. " & Format(TFA.Nota_Credito, "000000000") & " Autorizada"
-                       TFA.Estado_SRI_NC = SRI_Autorizacion.Estado_SRI
-                       SRI_Actualizar_Autorizacion_Nota_Credito TFA, SRI_Autorizacion
-                       SRI_Actualizar_Documento_XML TFA.ClaveAcceso_NC
-                       SRI_Enviar_Mails TFA, SRI_Autorizacion, "NC"
-                       SRI_Generar_PDF_NC TFA, VerNotaCredito
-                       RatonNormal
+        If AdoDBNC.RecordCount <= 0 Then
+           AdoDBNC.Close
+           sSQL = "SELECT * " _
+                & "FROM Trans_Abonos " _
+                & "WHERE Item = '" & NumEmpresa & "' " _
+                & "AND Periodo = '" & Periodo_Contable & "' " _
+                & "AND Autorizacion = '" & TFA.Autorizacion & "' " _
+                & "AND Serie = '" & TFA.Serie & "' " _
+                & "AND TP = '" & TFA.TC & "' " _
+                & "AND Factura = " & TFA.Factura & " " _
+                & "AND Serie_NC = '" & TFA.Serie_NC & "' " _
+                & "AND Secuencial_NC = " & TFA.Nota_Credito & " " _
+                & "AND Banco = 'NOTA DE CREDITO' " _
+                & "ORDER BY TP,Fecha,Cta,Cta_CxP,Abono,Banco,Cheque "
+           Select_AdoDB AdoDBNC, sSQL
+            With AdoDBNC
+              'MsgBox .RecordCount
+             If .RecordCount > 0 Then
+                 Do While Not .EOF
+                    If .Fields("Cheque") = "I.V.A." Then
+                        TFA.Total_IVA_NC = .Fields("Abono")
+                        SubT_Con_Inv = True
+                    ElseIf .Fields("Cheque") = "VENTAS SIN IVA" Then
+                        Total_Sin_IVA = .Fields("Abono")
                     Else
-                       RatonNormal
-                       TFA.Estado_SRI_NC = SRI_Autorizacion.Estado_SRI
-                       If VerNotaCredito Then MsgBox "(" & SRI_Autorizacion.Estado_SRI & ")"
+                        Total_Con_IVA = .Fields("Abono")
                     End If
-            Else
-                RatonNormal
-                MsgBox MensajeNoAutorizarCE
-            End If
+                   .MoveNext
+                 Loop
+    ''             If SubT_Con_Inv Then
+    ''                Total_Con_IVA = Total_Sin_IVA
+    ''                Total_Sin_IVA = 0
+    ''             End If
+             End If
+            End With
+        End If
+        Total_Sin_IVA = Redondear(Total_Sin_IVA, 2)
+        Total_Con_IVA = Redondear(Total_Con_IVA, 2)
+        TFA.Total_IVA_NC = Redondear(TFA.Total_IVA_NC, 2)
+        TFA.SubTotal_NC = Redondear(Total_Sin_IVA + Total_Con_IVA, 2)
+        TextoXML = ""
+       'Generacion de la Nota Credito si es Electronica
+        With TFA
+         'MsgBox .Total_IVA_NC
+          If (.SubTotal_NC + .Total_IVA_NC) > 0 Then
+             
+             If .Total_IVA_NC = 0 Then Validar_Porc_IVA TFA.Fecha Else Porc_IVA = TFA.Porc_NC
+            .Hora_NC = Format$(Time, FormatoTimes)
+            'Algoritmo Modulo 11 para la clave de la retencion
+            '& Format$(.Fecha_NC, "ddmmyyyy")
+            .ClaveAcceso_NC = Format$(.Fecha_NC, "ddmmyyyy") & "04" & RUC & Ambiente & .Serie_NC & Format$(.Nota_Credito, String(9, "0")) & "123456781"
+            .ClaveAcceso_NC = Replace(.ClaveAcceso_NC, ".", "1")
+            .ClaveAcceso_NC = .ClaveAcceso_NC & Digito_Verificador_Modulo11(.ClaveAcceso_NC)
+             
+            'MsgBox .ClaveAcceso_NC
+            'MsgBox TFA.Fecha
+             
+            'ENCABEZADO XML PARA EL SRI DE LA NOTA DE CREDITO
+             Insertar_Campo_XML "<?xml version=""1.0"" encoding=""UTF-8""?>"
+            
+            ' Insertar_Campo_XML "<?xml version=""1.0"" encoding=""UTF-8"" standalone=""yes""?>"
+             Insertar_Campo_XML "<notaCredito id=""comprobante"" version=""1.1.0"">"
+             Insertar_Campo_XML AbrirXML("infoTributaria")
+                Insertar_Campo_XML CampoXML("ambiente", Ambiente)
+                Insertar_Campo_XML CampoXML("tipoEmision", "1")
+                Insertar_Campo_XML CampoXML("razonSocial", RazonSocial)
+                Insertar_Campo_XML CampoXML("nombreComercial", NombreComercial)
+                Insertar_Campo_XML CampoXML("ruc", RUC)
+                Insertar_Campo_XML CampoXML("claveAcceso", .ClaveAcceso_NC)
+                Insertar_Campo_XML CampoXML("codDoc", "04")
+                Insertar_Campo_XML CampoXML("estab", MidStrg(.Serie_NC, 1, 3))
+                Insertar_Campo_XML CampoXML("ptoEmi", MidStrg(.Serie_NC, 4, 3))
+                Insertar_Campo_XML CampoXML("secuencial", Format$(.Nota_Credito, String(9, "0")))
+                Insertar_Campo_XML CampoXML("dirMatriz", ULCase(Direccion))
+               'Tipo de Contribuyente
+                'If AgenteRetencion <> Ninguno Then Insertar_Campo_XML CampoXML("agenteRetencion", "1")
+                If MicroEmpresa = "CONTRIBUYENTE RÉGIMEN RIMPE" Then Insertar_Campo_XML CampoXML("contribuyenteRimpe", "CONTRIBUYENTE RÉGIMEN RIMPE")
+             Insertar_Campo_XML CerrarXML("infoTributaria")
+             
+             Insertar_Campo_XML AbrirXML("infoNotaCredito")
+                Insertar_Campo_XML CampoXML("fechaEmision", .Fecha_NC)
+                Insertar_Campo_XML CampoXML("dirEstablecimiento", ULCase(DireccionEstab))
+                
+                TipoIdent = "P"
+                Select Case .TB
+                  Case "R": If .RUC_CI = String(13, "9") Then TipoIdent = "07" Else TipoIdent = "04"
+                  Case "C": TipoIdent = "05"
+                  Case "P": TipoIdent = "06"
+                  Case Else: TipoIdent = "07"
+                End Select
+                Insertar_Campo_XML CampoXML("tipoIdentificacionComprador", TipoIdent)
+                
+                If Len(.Razon_Social) > 1 Then
+                   Insertar_Campo_XML CampoXML("razonSocialComprador", .Razon_Social)
+                   Insertar_Campo_XML CampoXML("identificacionComprador", .RUC_CI)
+                Else
+                   Insertar_Campo_XML CampoXML("razonSocialComprador", .Cliente)
+                   Insertar_Campo_XML CampoXML("identificacionComprador", .CI_RUC)
+                End If
+                If Len(ContEspec) > 1 Then Insertar_Campo_XML CampoXML("contribuyenteEspecial", ContEspec)
+                Insertar_Campo_XML CampoXML("obligadoContabilidad", Obligado_Conta)
+               'RISE
+                Insertar_Campo_XML CampoXML("codDocModificado", "01")
+                Insertar_Campo_XML CampoXML("numDocModificado", MidStrg(.Serie, 1, 3) & "-" & MidStrg(.Serie, 4, 3) & "-" & Format$(.Factura, String(9, "0")))
+                Insertar_Campo_XML CampoXML("fechaEmisionDocSustento", .Fecha)
+                Insertar_Campo_XML CampoXML("totalSinImpuestos", Format$(Total_Sin_IVA + Total_Con_IVA - Total_Desc, "#0.00"))
+                Insertar_Campo_XML CampoXML("valorModificacion", Format$(Total_Sin_IVA + Total_Con_IVA - Total_Desc + .Total_IVA_NC, "#0.00"))
+                Insertar_Campo_XML CampoXML("moneda", "DOLAR")
+                Insertar_Campo_XML AbrirXML("totalConImpuestos")
+                    Insertar_Campo_XML AbrirXML("totalImpuesto")
+                       Insertar_Campo_XML CampoXML("codigo", "2")
+                       Insertar_Campo_XML CampoXML("codigoPorcentaje", Cod_Porc_IVA)
+                       If .Total_IVA_NC > 0 Then
+                           Insertar_Campo_XML CampoXML("baseImponible", Format$(Total_Con_IVA - Total_Desc, "#0.00"))
+                       Else
+                           Insertar_Campo_XML CampoXML("baseImponible", "0.00")
+                       End If
+                       Insertar_Campo_XML CampoXML("valor", Format$(.Total_IVA_NC, "#0.00"))
+                    Insertar_Campo_XML CerrarXML("totalImpuesto")
+                Insertar_Campo_XML CerrarXML("totalConImpuestos")
+                Insertar_Campo_XML CampoXML("motivo", "Anulacion por Nota de Credito")
+             Insertar_Campo_XML CerrarXML("infoNotaCredito")
+             
+            'Detalle de la Nota de Credito
+             RatonReloj
+             With AdoDBNC
+              If .RecordCount > 0 Then
+                 'MsgBox .RecordCount
+                 .MoveFirst
+                  Insertar_Campo_XML AbrirXML("detalles")
+                    Do While Not .EOF
+                       CodAdicional = CambioCodigoCtaSup(.Fields("Codigo_Inv"))
+                       'MsgBox PVP_NC & vbCrLf & .Fields("Cantidad_NC")
+                       Insertar_Campo_XML AbrirXML("detalle")
+                           Insertar_Campo_XML CampoXML("codigoInterno", .Fields("Codigo_Inv"))
+                           Insertar_Campo_XML CampoXML("codigoAdicional", CodAdicional)
+                           Insertar_Campo_XML CampoXML("descripcion", .Fields("Producto"))
+                           Insertar_Campo_XML CampoXML("cantidad", Format$(.Fields("Cantidad"), "#0.00"))
+                           Insertar_Campo_XML CampoXML("precioUnitario", Format$(.Fields("Precio"), "#0.0000"))
+                           Insertar_Campo_XML CampoXML("descuento", Format$(.Fields("Descuento"), "#0.00"))
+                           Insertar_Campo_XML CampoXML("precioTotalSinImpuesto", Format$(.Fields("Total") - .Fields("Descuento"), "#0.00"))
+                          'MsgBox .Fields("Codigo_Inv") & vbCrLf & .Fields("Total_IVA")
+                           
+                           Insertar_Campo_XML AbrirXML("impuestos")
+                              Insertar_Campo_XML AbrirXML("impuesto")
+                                  Insertar_Campo_XML CampoXML("codigo", "2")
+                                 ' MsgBox "....."
+                                  If .Fields("Total_IVA") = 0 Then
+                                      Insertar_Campo_XML CampoXML("codigoPorcentaje", "0")
+                                      Insertar_Campo_XML CampoXML("tarifa", "0")
+                                  Else
+                                      Insertar_Campo_XML CampoXML("codigoPorcentaje", Cod_Porc_IVA)
+                                      Insertar_Campo_XML CampoXML("tarifa", Porc_IVA * 100)
+                                  End If
+                                  Insertar_Campo_XML CampoXML("baseImponible", Format$(.Fields("Total") - .Fields("Descuento"), "#0.00"))
+                                  Insertar_Campo_XML CampoXML("valor", Format$(.Fields("Total_IVA"), "#0.00"))
+                              Insertar_Campo_XML CerrarXML("impuesto")
+                           Insertar_Campo_XML CerrarXML("impuestos")
+                       Insertar_Campo_XML CerrarXML("detalle")
+                      .MoveNext
+                    Loop
+                  Insertar_Campo_XML CerrarXML("detalles")
+              End If
+             End With
+             AdoDBNC.Close
+             Insertar_Campo_XML AbrirXML("infoAdicional")
+                If Len(TFA.DireccionC) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Direccion"">" & TFA.DireccionC & "</campoAdicional>"
+                If Len(TFA.TelefonoC) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Telefono"">" & TFA.TelefonoC & "</campoAdicional>"
+                If Len(TFA.EmailC) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""E-MAIL"">" & TFA.EmailC & "</campoAdicional>"
+                Insertar_Campo_XML "<campoAdicional nombre=""Comprobante No"">" & TFA.TC & " " & .Serie & "-" & Format$(TFA.Factura, "0000000000") & "</campoAdicional>"
+             Insertar_Campo_XML CerrarXML("infoAdicional")
+             Insertar_Campo_XML CerrarXML("notaCredito")
+            'FIN DE XML DE NOTA CREDITO
+            '-------------------------------------------------------------------
+             SRI_Enviar_Documento_Autorizar "NC", VerNotaCredito, GeneraXML, TFA
+            '-------------------------------------------------------------------
          End If
-     End If
-    End With
+        End With
     End If
     RatonNormal
 End Sub
 
+'ClaveDeAcceso As String, ErrorAutorizacion As String
+Public Function SRI_Leer_Comprobantes_no_Autorizados(ClaveDeAcceso As String) As String
+Dim doc As New MSXML2.DOMDocument
+Dim node As MSXML2.IXMLDOMNode
+Dim nodeList As MSXML2.IXMLDOMNodeList
+Dim success As Boolean
+Dim ErrorEmitido As String
+Dim EstadoXML As String
+Dim Documento As String
+
+    RutaXMLRechazado = RutaSysBases & "\CE\CE" & NumEmpresa & "\Comprobantes no Autorizados\" & ClaveDeAcceso & ".xml"
+    ErrorEmitido = ""
+    success = doc.Load(RutaXMLRechazado)
+    If success Then
+       ErrorEmitido = "Clave de Acceso: " & ClaveDeAcceso & vbCrLf & "ERROR: "
+       If InStr(doc.XML, "<autorizacion") Then
+          Set nodeList = doc.selectNodes("/autorizacion")
+          If Not nodeList Is Nothing Then
+             For Each node In nodeList
+                 EstadoXML = node.selectSingleNode("estado").Text
+                 ErrorEmitido = ErrorEmitido & EstadoXML & " "
+                 Select Case EstadoXML
+                   Case "RECHAZADA", "DEVUELTA"
+                        ErrorEmitido = ErrorEmitido & EstadoXML
+                   Case Else
+                        Documento = node.selectSingleNode("fechaAutorizacion").Text
+                        ErrorEmitido = ErrorEmitido & "Fecha: " & SinEspaciosIzq(Documento) & " "
+                        ErrorEmitido = ErrorEmitido & "Hora: " & MidStrg(SinEspaciosDer(Documento), 1, 8) & " "
+                 End Select
+             Next node
+             Set nodeList = doc.selectNodes("/autorizacion/mensajes/mensaje/mensaje")
+          End If
+       ElseIf InStr(doc.XML, "<factura") Then
+          Set nodeList = doc.selectNodes("/factura/ns2:respuestaSolicitud/comprobantes/comprobante/mensajes/mensaje")
+       ElseIf InStr(doc.XML, "<comprobanteRetencion") Then
+          Set nodeList = doc.selectNodes("/comprobanteRetencion/ns2:respuestaSolicitud/comprobantes/comprobante/mensajes/mensaje")
+       ElseIf InStr(doc.XML, "<notaCredito") Then
+          Set nodeList = doc.selectNodes("/notaCredito/ns2:respuestaSolicitud/comprobantes/comprobante/mensajes/mensaje")
+       ElseIf InStr(doc.XML, "<guiaRemision") Then
+          Set nodeList = doc.selectNodes("/guiaRemision/ns2:respuestaSolicitud/comprobantes/comprobante/mensajes/mensaje")
+       End If
+       'MsgBox "Desktop Test: " & SRI_Autorizacion.Estado_SRI
+       ''ErrorEmitido = ErrorEmitido & vbCrLf
+       If Not nodeList Is Nothing Then
+          For Each node In nodeList
+              ErrorEmitido = ErrorEmitido & " (" & node.selectSingleNode("identificador").Text & ") "
+              ErrorEmitido = ErrorEmitido & node.selectSingleNode("mensaje").Text & ": "
+              Select Case SRI_Autorizacion.Estado_SRI
+                Case "RECHAZADA", "DEVUELTA"
+                     ErrorEmitido = ErrorEmitido & node.selectSingleNode("tipo").Text
+                Case Else
+                     ErrorEmitido = ErrorEmitido & node.selectSingleNode("informacionAdicional").Text
+              End Select
+          Next node
+       End If
+       ErrorEmitido = Replace(ErrorEmitido, vbTab, " ")
+      'ErrorEmitido = Sin_Signos_Especiales(ErrorEmitido)
+    End If
+    SRI_Leer_Comprobantes_no_Autorizados = ErrorEmitido
+End Function
+
 Public Sub SRI_Generar_XML_Firmado(ClaveDeAcceso As String)
 Dim AdoDBXMLFirmado As ADODB.Recordset
-Dim RutaXMLFirmado As String
+
     sSQL = "SELECT Documento_Autorizado " _
          & "FROM Trans_Documentos " _
          & "WHERE Item = '" & NumEmpresa & "' " _
@@ -4472,46 +4182,9 @@ Dim RutaXMLFirmado As String
    'MsgBox "Documento Firmado: " & AdoDBXMLFirmado.RecordCount
     If AdoDBXMLFirmado.RecordCount > 0 Then
        RutaXMLFirmado = RutaSysBases & "\TEMP\" & ClaveDeAcceso & ".xml"
-       Escribir_Archivo RutaXMLFirmado, AdoDBXMLFirmado.fields("Documento_Autorizado")
+       Escribir_Archivo RutaXMLFirmado, AdoDBXMLFirmado.Fields("Documento_Autorizado")
       'MsgBox RutaXMLFirmado
     End If
     AdoDBXMLFirmado.Close
 End Sub
-
-'''Public Sub Recibo_Enviar_Mails(TFA As Tipo_Facturas)
-'''Dim Comprobante As String
-'''
-'''    If Len(TFA.Serie) = 6 And (TFA.Factura) > 0 Then
-'''       Comprobante = "Documento No " & TFA.Serie & "-" & Format$(TFA.Factura, "000000000")
-'''       TMail.MensajeHTML = Leer_Archivo_Texto(RutaSistema & "\JAVASCRIPT\f_recibo.html")
-'''
-'''       html_Informacion_adicional = "<strong>INFORMACION ADICIONAL:</strong><br><br>" _
-'''                                  & "<strong>Importe total: USD </strong>150,00<br>" _
-'''                                  & "<strong>Importe total: USD </strong>150,00<br>" _
-'''                                  & "<strong>Importe total: USD </strong>150,00<br>"
-'''
-'''        html_Detalle_adicional = "<tr>" _
-'''                               & "<td>13/12/2024</td>" _
-'''                               & "<td>Madera</td>" _
-'''                               & "<td class='row text-right'>150,00</td>" _
-'''                               & "</tr>" _
-'''                               & "<tr>" _
-'''                               & "<td>13/12/2024</td>" _
-'''                               & "<td>Madera</td>" _
-'''                               & "<td class='row text-right'>180,00</td>" _
-'''                               & "</tr>"
-'''        TFA.Recibo_No = Format(FA.Fecha, "yyyymmdd") & TFA.Recibo_No
-'''        TMail.TipoDeEnvio = "CO"
-'''        TMail.ListaMail = 255
-'''       TMail.Asunto = TFA.Cliente & ", " & Comprobante
-'''       TMail.Adjunto = ""
-'''       TMail.Credito_No = "R" & TFA.Recibo_No
-'''      'Enviamos lista de mails
-'''       TMail.para = ""
-'''       Insertar_Mail TMail.para, TFA.EmailC
-'''       Insertar_Mail TMail.para, TFA.EmailR
-'''       If Email_CE_Copia Then Insertar_Mail TMail.para, EmailProcesos
-'''       FEnviarCorreos.Show 1
-'''    End If
-''' End Sub
 

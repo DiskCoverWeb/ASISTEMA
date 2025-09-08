@@ -51,6 +51,7 @@ Global Formulario As Form
 Global CamposRol() As Campos_Rol
 Global VCyber_Tiempo() As Cyber_Tiempo
 Global Vect_Dec() As Campos_Decimal
+Global Campos_Patron_Busqueda() As Campos_Decimal
 Global Fondos_Pantalla() As String
 'Global Fondos_Ayuda() As String
 Global DBF_Grupo() As String

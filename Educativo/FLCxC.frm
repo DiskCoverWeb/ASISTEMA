@@ -3,7 +3,7 @@ Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.4#0"; "comctl32.Ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form FMatriculados 
    Caption         =   "Apertura de cuenta"
@@ -979,7 +979,7 @@ Public Sub ListarCuenta(TextoBusqueda As String)
       .MoveFirst
       .Find ("Cliente = '" & TextoBusqueda & "' ")
        If Not .EOF Then
-          CodigoCli = .Fields("Codigo")
+          CodigoCli = .fields("Codigo")
           Mifecha = PrimerDiaMes(FechaSistema)
           Dia = Day(Mifecha)
           Mes = Month(Mifecha)
@@ -1077,7 +1077,7 @@ Else
       AdoMaterias.Recordset.MoveFirst
       AdoMaterias.Recordset.Find ("Materia = '" & DCMaterias & "' ")
       If Not AdoMaterias.Recordset.EOF Then
-         CodigoMat = AdoMaterias.Recordset.Fields("CodMat")
+         CodigoMat = AdoMaterias.Recordset.fields("CodMat")
       End If
    End If
    If OpcListas.value <> 0 Then
@@ -1113,13 +1113,13 @@ With AdoAux.Recordset
  If .RecordCount > 0 Then
     'MsgBox sSQL & vbCrLf & .RecordCount
     .MoveFirst
-     Codigo = .Fields("Grupo_No")
-     Cadena = Leer_Datos_del_Curso(.Fields("Grupo_No"), 1)
-     If PorCodMat Then CodigoMat = .Fields("CodMat")
+     Codigo = .fields("Grupo_No")
+     Cadena = Leer_Datos_del_Curso(.fields("Grupo_No"), 1)
+     If PorCodMat Then CodigoMat = .fields("CodMat")
     'MsgBox Codigo
      Do While Not .EOF
-        If Codigo <> .Fields("Grupo_No") Then
-           Codigo = .Fields("Grupo_No")
+        If Codigo <> .fields("Grupo_No") Then
+           Codigo = .fields("Grupo_No")
            Contador = 0
         End If
         Contador = Contador + 1
@@ -1130,23 +1130,23 @@ With AdoAux.Recordset
         SetAdoFields "Item", NumEmpresa
         SetAdoFields "CodigoU", CodigoUsuario
         If OpcFact.value Then
-           SetAdoFields "CodigoC", .Fields("CodigoC")
+           SetAdoFields "CodigoC", .fields("CodigoC")
         Else
-           SetAdoFields "CodigoC", .Fields("Codigo")
+           SetAdoFields "CodigoC", .fields("Codigo")
         End If
-        Cta = MidStrg(.Fields("Casilla"), 1, 1)
+        Cta = MidStrg(.fields("Casilla"), 1, 1)
         Select Case Cta
           Case "D", "V": Cta = Cta
           Case Else: Cta = Ninguno
         End Select
-        If PorCodMat Then CodigoMat = .Fields("CodMat")
+        If PorCodMat Then CodigoMat = .fields("CodMat")
         SetAdoFields "T", Cta
         If AdoMaterias.Recordset.RecordCount > 0 Then
            AdoMaterias.Recordset.MoveFirst
            AdoMaterias.Recordset.Find ("CodMat = '" & CodigoMat & "' ")
            If Not AdoMaterias.Recordset.EOF Then
-              SetAdoFields "Dato_Aux1", TrimStrg(UCaseStrg(MidStrg(AdoMaterias.Recordset.Fields("Materia"), 1, 50)))
-              SetAdoFields "Dato_Aux2", TrimStrg(UCaseStrg(MidStrg(AdoMaterias.Recordset.Fields("Profesores"), 1, 50)))
+              SetAdoFields "Dato_Aux1", TrimStrg(UCaseStrg(MidStrg(AdoMaterias.Recordset.fields("Materia"), 1, 50)))
+              SetAdoFields "Dato_Aux2", TrimStrg(UCaseStrg(MidStrg(AdoMaterias.Recordset.fields("Profesores"), 1, 50)))
            End If
         End If
         If OpcListas.value Or OpcListasProf.value Or OpcNotas.value Then
@@ -1154,7 +1154,7 @@ With AdoAux.Recordset
            SetAdoFields "Dato_Aux3", TrimStrg(MidStrg(Dato_Curso.Especialidad, 1, 50))
         End If
         SetAdoFields "Dato_Aux4", TrimStrg(MidStrg(Dato_Curso.Descripcion, 1, 50))
-        SetAdoFields "Cta", .Fields("Grupo_No")
+        SetAdoFields "Cta", .fields("Grupo_No")
         SetAdoUpdate
         FMatriculados.Caption = Format$(Contador / .RecordCount, "00%")
        .MoveNext
@@ -1339,19 +1339,19 @@ Private Sub Form_Activate()
   SQL1 = SQL1 & "GROUP BY C.Grupo,C.Direccion " _
        & "ORDER BY C.Grupo "
   Select_Adodc_Grid DGTotalCursos, AdoTotalCursos, SQL1
-  i = 0
+  I = 0
   With AdoCuentas.Recordset
    If .RecordCount > 0 Then
       .MoveFirst
        Do While Not .EOF
-          If i < .Fields("CantAlum") Then i = .Fields("CantAlum")
+          If I < .fields("CantAlum") Then I = .fields("CantAlum")
          .MoveNext
        Loop
       .MoveFirst
    End If
   End With
   Lista_Materias_Curso Ninguno
-  Frame1.Caption = " |Tope máxino Estudiantes: " & i & "| "
+  Frame1.Caption = " |Tope máxino Estudiantes: " & I & "| "
   DCMaterias.Text = "SELECCIONE UN GRADO"
   FMatriculados.WindowState = vbMaximized
   RatonNormal

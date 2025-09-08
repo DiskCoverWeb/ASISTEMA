@@ -306,7 +306,6 @@ Private Sub Form_Load()
     ConectarAdodc AdoInfoError
 End Sub
 
-
 Public Sub Eliminar_Tabla_Temporal()
     sSQL = "DELETE * " _
          & "FROM Tabla_Temporal " _

@@ -1627,19 +1627,19 @@ Dim GrabarVentas As Boolean
           FechaComp = MBFechaI
           FechaTexto = MBFechaI
           NumComp = ReadSetDataNum("Diario", True, True)
-          CodigoInv = .Fields("Codigo_Inv")
-          Cta_Inventario = .Fields("CTA_INVENTARIO")
+          CodigoInv = .fields("Codigo_Inv")
+          Cta_Inventario = .fields("CTA_INVENTARIO")
           Total = 0: ValorDH = 0
          'Llenamos los datos ingresados al Kardex
           Do While Not .EOF
-             If Cta_Inventario <> .Fields("CTA_INVENTARIO") Then
+             If Cta_Inventario <> .fields("CTA_INVENTARIO") Then
                 InsertarAsientos AdoAsientos, Cta_Inventario, 0, 0, ValorDH
-                CodigoInv = .Fields("Codigo_Inv")
-                Cta_Inventario = .Fields("CTA_INVENTARIO")
+                CodigoInv = .fields("Codigo_Inv")
+                Cta_Inventario = .fields("CTA_INVENTARIO")
                 ValorDH = 0
              End If
-             ValorDH = ValorDH + .Fields("VALOR_TOTAL")
-             If .Fields("TOTAL_PVP") <> 0 Then GrabarVentas = True
+             ValorDH = ValorDH + .fields("VALOR_TOTAL")
+             If .fields("TOTAL_PVP") <> 0 Then GrabarVentas = True
             .MoveNext
           Loop
           InsertarAsientos AdoAsientos, Cta_Inventario, 0, 0, ValorDH
@@ -1666,18 +1666,18 @@ Dim GrabarVentas As Boolean
      With AdoKardex.Recordset
       If .RecordCount > 0 Then
           RatonReloj
-          SubCta = .Fields("TC")
-          Contra_Cta = .Fields("CTA_COSTO")
+          SubCta = .fields("TC")
+          Contra_Cta = .fields("CTA_COSTO")
           Total = 0: ValorDH = 0
          'Llenamos los datos ingresados al Kardex
           Do While Not .EOF
-             If Contra_Cta <> .Fields("CTA_COSTO") Then
+             If Contra_Cta <> .fields("CTA_COSTO") Then
                 InsertarAsientos AdoAsientos, Contra_Cta, 0, ValorDH, 0
-                SubCta = .Fields("TC")
-                Contra_Cta = .Fields("CTA_COSTO")
+                SubCta = .fields("TC")
+                Contra_Cta = .fields("CTA_COSTO")
                 ValorDH = 0
              End If
-             ValorDH = ValorDH + .Fields("VALOR_TOTAL")
+             ValorDH = ValorDH + .fields("VALOR_TOTAL")
             .MoveNext
           Loop
           InsertarAsientos AdoAsientos, Contra_Cta, 0, ValorDH, 0
@@ -1696,18 +1696,18 @@ Dim GrabarVentas As Boolean
      With AdoKardex.Recordset
       If .RecordCount > 0 Then
           RatonReloj
-          SubCta = .Fields("TC")
-          Contra_Cta = .Fields("CTA_VENTA")
+          SubCta = .fields("TC")
+          Contra_Cta = .fields("CTA_VENTA")
           Total = 0: ValorDH = 0
          'Llenamos los datos ingresados al Kardex
           Do While Not .EOF
-             If Contra_Cta <> .Fields("CTA_VENTA") Then
+             If Contra_Cta <> .fields("CTA_VENTA") Then
                 InsertarAsientos AdoAsientos, Contra_Cta, 0, 0, ValorDH
-                SubCta = .Fields("TC")
-                Contra_Cta = .Fields("CTA_VENTA")
+                SubCta = .fields("TC")
+                Contra_Cta = .fields("CTA_VENTA")
                 ValorDH = 0
              End If
-             ValorDH = ValorDH + .Fields("TOTAL_PVP")
+             ValorDH = ValorDH + .fields("TOTAL_PVP")
             .MoveNext
           Loop
           InsertarAsientos AdoAsientos, Contra_Cta, 0, 0, ValorDH
@@ -1730,8 +1730,8 @@ Dim GrabarVentas As Boolean
       If .RecordCount > 0 Then
           Debe = 0: Haber = 0
           Do While Not .EOF
-             Debe = Debe + .Fields("DEBE")
-             Haber = Haber + .Fields("HABER")
+             Debe = Debe + .fields("DEBE")
+             Haber = Haber + .fields("HABER")
             .MoveNext
           Loop
       End If
@@ -1773,9 +1773,9 @@ Dim GrabarVentas As Boolean
    If .RecordCount > 0 Then
        Debe = 0: Haber = 0
        Do While Not .EOF
-          Debe = Debe + .Fields("DEBE")
-          Haber = Haber + .Fields("HABER")
-         .Fields("A_No") = Contador
+          Debe = Debe + .fields("DEBE")
+          Haber = Haber + .fields("HABER")
+         .fields("A_No") = Contador
          .Update
          .MoveNext
           Contador = Contador + 1
@@ -1801,7 +1801,7 @@ Dim GrabarVentas As Boolean
           If Len(TextOrden) > 1 Then Co.Concepto = Co.Concepto & ", Orden No. " & TextOrden
           If Val(TxtFactNo) > 0 Then Co.Concepto = Co.Concepto & ", Factura No. " & TxtFactNo
           
-          GrabarComprobante Co
+          Grabar_Comprobante Co
           'MsgBox "Hola"
           ImprimirComprobantesDe False, Co
           Imprimir_Nota_Inventario AdoBenef, AdoKardex, NumComp, TextOrden.Text, "CD", FechaTexto, FechaTexto, Total
@@ -1838,15 +1838,15 @@ Private Sub DCBenef_LostFocus()
       .MoveFirst
       .Find ("Cliente Like '" & NombreCliente & "' ")
        If Not .EOF Then
-          CICliente = .Fields("CI_RUC")
-          CodigoBenef = .Fields("Codigo")
-          CodigoCliente = .Fields("Codigo")
-          NombreCliente = .Fields("Cliente")
-          Grupo_No = .Fields("Grupo")
-          TipoDoc = .Fields("TD")
-          TipoBenef = .Fields("TD")
-          Cod_Benef = .Fields("TipoBenef")
-          InvImp = .Fields("Importaciones")
+          CICliente = .fields("CI_RUC")
+          CodigoBenef = .fields("Codigo")
+          CodigoCliente = .fields("Codigo")
+          NombreCliente = .fields("Cliente")
+          Grupo_No = .fields("Grupo")
+          TipoDoc = .fields("TD")
+          TipoBenef = .fields("TD")
+          Cod_Benef = .fields("TipoBenef")
+          InvImp = .fields("Importaciones")
           If InvImp Then Label2.Caption = " IMPORTACION"
           Si_No = True
           If TipoDoc = "R" Then Si_No = False
@@ -2099,14 +2099,14 @@ Dim DValorTotal As Double
     If .RecordCount > 0 Then
        .MoveFirst
        .Find ("Bodega Like '" & DCBodega & "' ")
-        If Not .EOF Then Cod_Bodega = .Fields("CodBod")
+        If Not .EOF Then Cod_Bodega = .fields("CodBod")
     End If
    End With
    With AdoMarca.Recordset
     If .RecordCount > 0 Then
        .MoveFirst
        .Find ("Marca Like '" & DCMarca & "' ")
-        If Not .EOF Then Cod_Marca = .Fields("CodMar")
+        If Not .EOF Then Cod_Marca = .fields("CodMar")
     End If
    End With
    Entrada = Val(CCur(TextEntrada))
@@ -2197,7 +2197,7 @@ Dim TotalInvs As Currency
     If .RecordCount > 0 Then
        .MoveFirst
         Do While Not .EOF
-           Total = Total + .Fields("TOTAL_PVP")
+           Total = Total + .fields("TOTAL_PVP")
           .MoveNext
         Loop
        .MoveFirst

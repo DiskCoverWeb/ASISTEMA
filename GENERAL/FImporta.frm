@@ -1,10 +1,9 @@
 VERSION 5.00
-Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
+Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form FImporta 
    Caption         =   "Importar Datos"
    ClientHeight    =   9180
@@ -228,14 +227,6 @@ Begin VB.Form FImporta
       TabIndex        =   11
       Top             =   105
       Width           =   1065
-   End
-   Begin MSComDlg.CommonDialog CDialogDir 
-      Left            =   11760
-      Top             =   7455
-      _ExtentX        =   847
-      _ExtentY        =   847
-      _Version        =   393216
-      CancelError     =   -1  'True
    End
    Begin MSAdodcLib.Adodc AdoAct 
       Height          =   330
@@ -1170,7 +1161,7 @@ Private Sub Command1_Click()
        Co.Usuario = CodigoUsuario
        Co.Item = NumEmpresa
         
-        GrabarComprobante Co
+        Grabar_Comprobante Co
         Control_Procesos Normal, Co.Concepto
         ImprimirComprobantesDe False, Co
         
@@ -1318,7 +1309,7 @@ End Sub
 ''''
 ''''  CDialogDir.Filter = "Todos los archivos|*.*"
 ''''  CDialogDir.InitDir = RutaSysBases & "\Datos"
-''''  RutaGeneraFile = SelectZipFile(CDialogDir, SelectAll)
+''''  RutaGeneraFile = SelectDialogFile(CDialogDir, SelectAll)
 ''''  If RutaGeneraFile <> "" Then
 ''''     DGAsiento.Visible = False
 ''''     Progreso_Barra.Mensaje_Box = ""
@@ -1467,9 +1458,8 @@ Private Sub CommandButton1_Click()
 Dim Tipo_Carga1 As Integer
   DGAsiento.Visible = False
   DGExcelAdodc.Visible = False
-  CDialogDir.InitDir = RutaSysBases 'LeftStrg(CurDir$, 3)
-  RutaOrigen = SelectZipFile(CDialogDir, SelectAll)
-  'Le pasamos el Path del Libro y una variable de tipo T_Rango para retornar los valores
+  RutaOrigen = SelectDialogFile(RutaSysBases)
+ 'Le pasamos el Path del Libro y una variable de tipo T_Rango para retornar los valores
   If RutaOrigen <> "" Then
      Tipo_Carga = 0
      Set AdoExcelAdodc.Recordset = Importar_Excel_AdoDB(ftp, LstStatud, LstVwFTP, RutaOrigen)
@@ -2241,6 +2231,7 @@ Dim ComentarioHaber As String
        Do While Not .EOF
           For IdField = 0 To .fields.Count - 1
               Codigo = Dato_Campo(.fields(IdField))
+             ' MsgBox Codigo
               If Codigo = "" Then Codigo = Ninguno
               Select Case IdField + 1
                 Case 1: TipoCta = Codigo     'TC
@@ -2256,6 +2247,7 @@ Dim ComentarioHaber As String
               End Select
           Next IdField
          'Insertamos el Codigo nuevo
+          'MsgBox Codigo2
           If Codigo2 <> Ninguno And Len(Codigo2) >= 1 Then
              Progreso_Barra.Mensaje_Box = "Migracion en Curso, Cuenta: " & Codigo2
              Progreso_Esperar
@@ -3067,7 +3059,7 @@ Dim Crear_Nuevo As Boolean
             Datos_Default_Beneficiario
             Crear_Nuevo = False
             Codigo = Dato_Campo(.fields(1))
-            MsgBox Codigo
+           'MsgBox Codigo
            'RUC/Cedula/Codigo Alumno/Consumidor Final
             If Len(Codigo) > 1 Then
                If IsNumeric(Codigo) Then
@@ -3112,7 +3104,7 @@ Dim Crear_Nuevo As Boolean
                      Case 16: TBeneficiario.Plan_Afiliado = Format(Val(Codigo), "0000")
                    End Select
                Next IdField
-               MsgBox TBeneficiario.CI_RUC
+               'MsgBox TBeneficiario.CI_RUC
                If Len(TBeneficiario.CI_RUC) > 1 Then
                   sSQL = "SELECT * " _
                        & "FROM Clientes " _
@@ -3183,6 +3175,7 @@ Dim I As Long
 Dim N As Long
 Dim Lista_Clientes_Nuevos As String
 Dim CodigoPT As String
+Dim Novedad As String
 Dim NoMesT As Integer
 Dim Crear_Nuevo As Boolean
 Dim Aplica_FP As Boolean
@@ -3203,15 +3196,18 @@ Dim Aplica_FP As Boolean
      If .RecordCount > 0 Then
          Progreso_Barra.Valor_Maximo = .RecordCount * 2
         .MoveFirst
-         Cuenta = Dato_Campo(.fields(4))
+         'Cuenta = Dato_Campo(.fields(4))
          NoMes = Dato_Campo(.fields(5))
-         CodigoP = Rubro_Rol_Pago(Cuenta)
+         Codigo = Dato_Campo(.fields(3))
+         Cta = Leer_Cta_Catalogo(Codigo)
+         CodigoP = CodRolPago ' Rubro_Rol_Pago(Cuenta)
+         CodigoPT = Codigo
          Do While Not .EOF
-            Cuenta = Dato_Campo(.fields(4))
             NoMesT = Dato_Campo(.fields(5))
-            CodigoPT = Rubro_Rol_Pago(Cuenta)
+            'CodigoPT = Rubro_Rol_Pago(Cuenta)
             NombreCliente = Dato_Campo(.fields(1))
-            If NoMesT <> NoMes Or CodigoPT <> CodigoP Then
+            CodigoPT = Dato_Campo(.fields(3))
+            If NoMesT <> NoMes Or CodigoPT <> Codigo Then
                sSQL = "DELETE * " _
                     & "FROM Catalogo_Rol_Rubros " _
                     & "WHERE Item = '" & NumEmpresa & "' " _
@@ -3220,7 +3216,10 @@ Dim Aplica_FP As Boolean
                     & "AND Cod_Rol_Pago = '" & CodigoP & "' "
                Ejecutar_SQL_SP sSQL
                NoMes = NoMesT
-               CodigoP = CodigoPT
+               Codigo = Dato_Campo(.fields(3))
+               Cta = Leer_Cta_Catalogo(Codigo)
+               CodigoP = CodRolPago ' Rubro_Rol_Pago(Cuenta)
+               'CodigoP = CodigoPT
             End If
             Progreso_Barra.Mensaje_Box = "Verificando rubros del Empleado: " & NombreCliente
             Progreso_Esperar
@@ -3233,6 +3232,7 @@ Dim Aplica_FP As Boolean
               & "AND Mes = " & NoMes & " " _
               & "AND Cod_Rol_Pago = '" & CodigoP & "' "
          Ejecutar_SQL_SP sSQL
+         
         .MoveFirst
          Do While Not .EOF
             NombreCliente = Dato_Campo(.fields(1))
@@ -3252,10 +3252,11 @@ Dim Aplica_FP As Boolean
                    Select Case IdField + 1
                      Case 2: CodigoCliente = Codigo
                      Case 4: Cta = Leer_Cta_Catalogo(Codigo)
-                     Case 5: Cuenta = Codigo
-                             CodigoP = Rubro_Rol_Pago(Cuenta)
+                     Case 5: 'Cuenta = Codigo
+                             CodigoP = CodRolPago   'Rubro_Rol_Pago(Cuenta)
                      Case 6: NoMes = Val(Codigo)
                      Case 7: TipoDoc = UCaseStrg(Codigo)
+                     Case 8: Novedad = Codigo
                    End Select
                Next IdField
               'Creamos los Clientes Rol de Pagos
@@ -3285,7 +3286,7 @@ Dim Aplica_FP As Boolean
                   SetAdoFields "Detalle", Cuenta
                   SetAdoFields "Cta", Cta
                   SetAdoFields "TV", "V"
-                  SetAdoFields "Valor", Valor
+                  SetAdoFields "Valor", Redondear(Valor, 2)
                   SetAdoFields "CPais", "593"
                   SetAdoFields "Cod_Rol_Pago", CodigoP
                   Select Case TipoDoc
@@ -3296,6 +3297,29 @@ Dim Aplica_FP As Boolean
                   End Select
                   SetAdoUpdate
                End If
+               
+               Mifecha = UltimoDiaMes("01/" & Format(NoMes, "00") & "/" & Year(FechaSistema))
+               sSQL = "DELETE * " _
+                    & "FROM Trans_Entrada_Salida " _
+                    & "WHERE Item = '" & NumEmpresa & "' " _
+                    & "AND Periodo = '" & Periodo_Contable & "' " _
+                    & "AND Fecha = #" & BuscarFecha(Mifecha) & "# " _
+                    & "AND Codigo = '" & CICliente & "' "
+               Ejecutar_SQL_SP sSQL
+               If Len(Novedad) > 1 Then
+                  SetAdoAddNew "Trans_Entrada_Salida"
+                  SetAdoFields "ES", "R"
+                  SetAdoFields "Codigo", CICliente
+                  SetAdoFields "Hora", Format(Time, FormatoTimes)
+                  SetAdoFields "Fecha", Mifecha
+                  SetAdoFields "Proceso", "NOVEDADES"
+                  SetAdoFields "Tarea", TrimStrg(MidStrg(Novedad, 1, 50))
+                  SetAdoFields "CodigoU", CodigoUsuario
+                  SetAdoFields "Periodo", Periodo_Contable
+                  SetAdoFields "Item", NumEmpresa
+                  SetAdoUpdate
+               End If
+               
             End If
             If CICliente = Ninguno Then Lista_Clientes_Nuevos = Lista_Clientes_Nuevos & CICliente & vbTab & CodigoCliente & vbCrLf
             Progreso_Barra.Mensaje_Box = "Importando El Beneficiario: " & NombreCliente & ", en Rol Pagos"

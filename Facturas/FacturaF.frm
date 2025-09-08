@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form FacturaFarmacia 
    Caption         =   "FACTURACION:  Ingreso de Facturas"
@@ -11,8 +11,8 @@ Begin VB.Form FacturaFarmacia
    ClientWidth     =   11580
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   7890
-   ScaleWidth      =   11580
+   ScaleHeight     =   15615
+   ScaleWidth      =   15960
    WindowState     =   1  'Minimized
    Begin VB.CommandButton CmdCIBenef3 
       Appearance      =   0  'Flat
@@ -1602,6 +1602,8 @@ Private Sub Form_Load()
   ConectarAdodc AdoDetalle
   ConectarAdodc AdoArticulo
   ConectarAdodc AdoAsientoF
+  
+  SRI_Obtener_Datos_Comprobantes_Electronicos
 End Sub
 
 Private Sub MBFecha_LostFocus()
@@ -1689,7 +1691,7 @@ Public Sub ProcGrabar()
     Codigo1 = TxtAfiliado
     If Codigo1 = "" Then Codigo1 = Ninguno
     TBeneficiario.Patron_Busqueda = Codigo1
-    TBeneficiario = Leer_Datos_Clientes(Codigo1)
+    TBeneficiario = Leer_Datos_Cliente_SP(Codigo1)
     If TBeneficiario.Codigo <> Ninguno Then
        CodigoCliente = TBeneficiario.Codigo
        NombreCliente = TBeneficiario.Cliente
@@ -1724,7 +1726,7 @@ Public Sub ProcGrabar()
        SetAdoFields "Periodo", Periodo_Contable
        SetAdoFields "CodigoU", CodigoUsuario
        SetAdoUpdate
-       TBeneficiario = Leer_Datos_Clientes(FA.CodigoC)
+       TBeneficiario = Leer_Datos_Cliente_SP(FA.CodigoC)
     End If
     
 '''    sSQL = "UPDATE Clientes " _
@@ -1820,7 +1822,7 @@ Dim EncontroCliente As Boolean
   EncontroCliente = False
   Codigo1 = TxtAfiliado
   TBeneficiario.Patron_Busqueda = Codigo1
-  TBeneficiario = Leer_Datos_Clientes(TBeneficiario.Patron_Busqueda)
+  TBeneficiario = Leer_Datos_Cliente_SP(TBeneficiario.Patron_Busqueda)
   'MsgBox TBeneficiario.Codigo
   '0705280113
   If TBeneficiario.Codigo = Ninguno Then
@@ -1867,7 +1869,7 @@ Dim EncontroCliente As Boolean
   Codigo2 = TxtBeneficiario
   If Codigo2 = "" Then Codigo2 = Ninguno
   TBeneficiario.Patron_Busqueda = Codigo2
-  TBeneficiario = Leer_Datos_Clientes(TBeneficiario.Patron_Busqueda)
+  TBeneficiario = Leer_Datos_Cliente_SP(TBeneficiario.Patron_Busqueda)
   If TBeneficiario.Codigo = Ninguno Then
      TBeneficiario.Patron_Busqueda = Codigo2
      FBuscarClientes.Show 1
@@ -1905,7 +1907,7 @@ Dim EncontroCliente As Boolean
   Codigo3 = TxtBeneficiario2
   If Codigo3 = "" Then Codigo3 = Ninguno
   TBeneficiario.Patron_Busqueda = Codigo3
-  TBeneficiario = Leer_Datos_Clientes(TBeneficiario.Patron_Busqueda)
+  TBeneficiario = Leer_Datos_Cliente_SP(TBeneficiario.Patron_Busqueda)
   If TBeneficiario.Codigo = Ninguno Then
      TBeneficiario.Patron_Busqueda = Codigo3
      FBuscarClientes.Show 1

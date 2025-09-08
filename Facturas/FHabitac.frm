@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.4#0"; "comctl32.Ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Begin VB.Form FHabitacion 
    Caption         =   "DETALLE DE HABITACIONES"
    ClientHeight    =   7485
@@ -759,19 +759,19 @@ Private Sub Form_Activate()
   With ImgList
    If AdoNivel.Recordset.RecordCount > 0 Then
       Do While Not AdoNivel.Recordset.EOF
-         Codigo = AdoNivel.Recordset.Fields("Codigo")
-         Codigo1 = AdoNivel.Recordset.Fields("Habitacion")
-         If AdoNivel.Recordset.Fields("Lleno") Then
-            Cadena = AdoNivel.Recordset.Fields("Cliente")
+         Codigo = AdoNivel.Recordset.fields("Codigo")
+         Codigo1 = AdoNivel.Recordset.fields("Habitacion")
+         If AdoNivel.Recordset.fields("Lleno") Then
+            Cadena = AdoNivel.Recordset.fields("Cliente")
          Else
-            Cadena = AdoNivel.Recordset.Fields("Detalle")
+            Cadena = AdoNivel.Recordset.fields("Detalle")
          End If
-         If AdoNivel.Recordset.Fields("TC") = "H" Then Cadena = Codigo1 & " - " & Cadena
+         If AdoNivel.Recordset.fields("TC") = "H" Then Cadena = Codigo1 & " - " & Cadena
          If Len(Codigo) = 3 Then
             Set nodX = TVNivel.Nodes.Add(, , Codigo, Cadena, .ListImages(2).key, .ListImages(2).key)
          Else
                                    'Hijo de                     es hijo   su papa, Detalle,
-            Select Case AdoNivel.Recordset.Fields("Est")
+            Select Case AdoNivel.Recordset.fields("Est")
               Case "L": Set nodX = TVNivel.Nodes.Add(CambioCodigoCtaSup(Codigo), tvwChild, Codigo, Cadena, .ListImages(1).key, .ListImages(1).key)
               Case "O": Set nodX = TVNivel.Nodes.Add(CambioCodigoCtaSup(Codigo), tvwChild, Codigo, Cadena, .ListImages(3).key, .ListImages(2).key)
               Case "R": Set nodX = TVNivel.Nodes.Add(CambioCodigoCtaSup(Codigo), tvwChild, Codigo, Cadena, .ListImages(4).key, .ListImages(4).key)
@@ -807,8 +807,8 @@ Private Sub TVNivel_KeyDown(KeyCode As Integer, Shift As Integer)
                  & "AND Item = '" & NumEmpresa & "' "
             Select_Adodc AdoNivel, sSQL
             If AdoNivel.Recordset.RecordCount > 0 Then
-               Mifecha = AdoNivel.Recordset.Fields("Fecha")
-               Valor = AdoNivel.Recordset.Fields("Valor")
+               Mifecha = AdoNivel.Recordset.fields("Fecha")
+               Valor = AdoNivel.Recordset.fields("Valor")
             End If
             LblValor.Caption = Format$(Valor, "#,##0.00")
             LblFecha.Caption = Mifecha
@@ -826,7 +826,7 @@ Private Sub TVNivel_KeyDown(KeyCode As Integer, Shift As Integer)
             With AdoDetalle.Recordset
              If .RecordCount > 0 Then
                  Do While Not .EOF
-                    Total = Total + .Fields("Total")
+                    Total = Total + .fields("Total")
                    .MoveNext
                  Loop
              End If

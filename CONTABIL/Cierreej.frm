@@ -1,9 +1,9 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDATGRD.OCX"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.Form CierreEjercicio 
    Caption         =   "BALANCE DE COMPROBACION"
    ClientHeight    =   8505
@@ -1497,7 +1497,7 @@ Dim ListaCodigos(5) As String
                & "AND Concepto = '" & TipoCodigo & "' "
           Select_AdoDB AdoNum, sSQL
           If AdoNum.RecordCount > 0 Then
-             Numero1 = AdoNum.fields("Numero")
+             Numero1 = AdoNum.Fields("Numero")
              sSQL = "SELECT Concepto, Numero, ID " _
                   & "FROM Comprobantes " _
                   & "WHERE Periodo = '" & Periodo_Contable & "' " _
@@ -1520,12 +1520,12 @@ End Sub
 Public Sub InsertarTotales(AdoG As Adodc, cod, Cta, Anal, Parc, Tot)
    With AdoG.Recordset
         .AddNew
-        .fields("Codigo") = cod
-        .fields("Cuenta") = Cta
-        .fields("Analitico") = Anal
-        .fields("Parcial") = Parc
-        .fields("Total") = Tot
-        .fields("Item") = NumEmpresa
+        .Fields("Codigo") = cod
+        .Fields("Cuenta") = Cta
+        .Fields("Analitico") = Anal
+        .Fields("Parcial") = Parc
+        .Fields("Total") = Tot
+        .Fields("Item") = NumEmpresa
         .Update
    End With
 End Sub
@@ -1533,13 +1533,13 @@ End Sub
 Public Sub InsertarTotalesCon(AdoG As Adodc, cod, CtaDG, Cta, Sal_ME, Sal_MN, Tot)
    With AdoG.Recordset
         .AddNew
-        .fields("Codigo") = cod
-        .fields("Cuenta") = Cta
-        .fields("Saldo_ME") = Sal_ME
-        .fields("Saldo_MN") = Sal_MN
-        .fields("Total") = Tot
-        .fields("DG") = CtaDG
-        .fields("Item") = NumEmpresa
+        .Fields("Codigo") = cod
+        .Fields("Cuenta") = Cta
+        .Fields("Saldo_ME") = Sal_ME
+        .Fields("Saldo_MN") = Sal_MN
+        .Fields("Total") = Tot
+        .Fields("DG") = CtaDG
+        .Fields("Item") = NumEmpresa
         .Update
    End With
 End Sub
@@ -1806,8 +1806,8 @@ Dim Factura_No1 As Long
    If .RecordCount > 0 Then
       .MoveFirst
        Do While Not .EOF
-          SumaDebe = SumaDebe + .fields("DEBE")
-          SumaHaber = SumaHaber + .fields("HABER")
+          SumaDebe = SumaDebe + .Fields("DEBE")
+          SumaHaber = SumaHaber + .Fields("HABER")
          .MoveNext
        Loop
    End If
@@ -2051,7 +2051,7 @@ If Diferencia = 0 Then
              With AdoAux.Recordset
               If .RecordCount > 0 Then
                   Do While Not .EOF
-                    .fields("Numero") = Numero
+                    .Fields("Numero") = Numero
                     .MoveNext
                   Loop
                  .UpdateBatch
@@ -2103,7 +2103,7 @@ If Diferencia = 0 Then
          Co.Item = NumEmpresa
          Co.Usuario = CodigoUsuario
          Co.T_No = Trans_No
-         GrabarComprobante Co
+         Grabar_Comprobante Co
          Progreso_Barra.Incremento = Progreso_Barra.Valor_Maximo
          Progreso_Esperar
          RatonNormal
@@ -2198,7 +2198,7 @@ If ClaveContador Then
              Progreso_Barra.Incremento = Progreso_Barra.Incremento + 30
              Progreso_Esperar
             'Procedemos a grabar el comprobante
-             GrabarComprobante Co
+             Grabar_Comprobante Co
              Progreso_Barra.Incremento = Progreso_Barra.Incremento + 30
              Progreso_Esperar
              RatonNormal
@@ -2331,8 +2331,8 @@ Private Sub Form_Activate()
        & "AND Periodo = '" & Periodo_Contable & "' "
   Select_Adodc AdoTrans, sSQL
   If AdoTrans.Recordset.RecordCount > 0 Then
-     FechaInicial = AdoTrans.Recordset.fields("Fecha_Inicial")
-     FechaFinal = AdoTrans.Recordset.fields("Fecha_Final")
+     FechaInicial = AdoTrans.Recordset.Fields("Fecha_Inicial")
+     FechaFinal = AdoTrans.Recordset.Fields("Fecha_Final")
      FechaIni = BuscarFecha(FechaInicial)
      FechaFin = BuscarFecha(FechaFinal)
      FechaTexto = FechaFinal
@@ -2369,7 +2369,7 @@ Private Sub Form_Activate()
        & "GROUP BY Item "
   Select_Adodc AdoAux, sSQL
   If AdoAux.Recordset.RecordCount > 0 Then
-     If AdoAux.Recordset.fields("ContSM") > 0 Then SiTieneSubModulo = True
+     If AdoAux.Recordset.Fields("ContSM") > 0 Then SiTieneSubModulo = True
   End If
   DGBalance.Visible = True
   RatonNormal

@@ -3,7 +3,7 @@ Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.Form MayorAux 
    Caption         =   "Movimientos de Sub Cuentas"
    ClientHeight    =   7395
@@ -12,8 +12,8 @@ Begin VB.Form MayorAux
    ClientWidth     =   11280
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   15615
-   ScaleWidth      =   28560
+   ScaleHeight     =   7395
+   ScaleWidth      =   11280
    WindowState     =   2  'Maximized
    Begin MSComctlLib.ImageList ImageList1 
       Left            =   11865
@@ -26,7 +26,7 @@ Begin VB.Form MayorAux
       MaskColor       =   12632256
       _Version        =   393216
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
-         NumListImages   =   6
+         NumListImages   =   7
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
             Picture         =   "MayorAux.frx":0000
             Key             =   ""
@@ -51,10 +51,14 @@ Begin VB.Form MayorAux
             Picture         =   "MayorAux.frx":455A
             Key             =   ""
          EndProperty
+         BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "MayorAux.frx":635C
+            Key             =   ""
+         EndProperty
       EndProperty
    End
    Begin MSDataListLib.DataCombo DCAgencia 
-      Bindings        =   "MayorAux.frx":635C
+      Bindings        =   "MayorAux.frx":67AE
       DataSource      =   "AdoAgencias"
       Height          =   345
       Left            =   3885
@@ -76,7 +80,7 @@ Begin VB.Form MayorAux
       EndProperty
    End
    Begin MSDataListLib.DataCombo DCUsuario 
-      Bindings        =   "MayorAux.frx":6376
+      Bindings        =   "MayorAux.frx":67C8
       DataSource      =   "AdoUsuario"
       Height          =   345
       Left            =   3885
@@ -201,7 +205,7 @@ Begin VB.Form MayorAux
       End
    End
    Begin MSDataListLib.DataList DLCtas 
-      Bindings        =   "MayorAux.frx":638F
+      Bindings        =   "MayorAux.frx":67E1
       DataSource      =   "AdoSubCta"
       Height          =   1635
       Left            =   2415
@@ -222,7 +226,7 @@ Begin VB.Form MayorAux
       EndProperty
    End
    Begin MSDataGridLib.DataGrid DGMayor 
-      Bindings        =   "MayorAux.frx":63A7
+      Bindings        =   "MayorAux.frx":67F9
       Height          =   2220
       Left            =   105
       TabIndex        =   17
@@ -292,7 +296,7 @@ Begin VB.Form MayorAux
       EndProperty
    End
    Begin MSDataListLib.DataCombo DCCtas 
-      Bindings        =   "MayorAux.frx":63C0
+      Bindings        =   "MayorAux.frx":6812
       DataSource      =   "AdoCtas"
       Height          =   345
       Left            =   2415
@@ -806,8 +810,8 @@ Begin VB.Form MayorAux
       Left            =   0
       TabIndex        =   32
       Top             =   0
-      Width           =   28560
-      _ExtentX        =   50377
+      Width           =   11280
+      _ExtentX        =   19897
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -815,7 +819,7 @@ Begin VB.Form MayorAux
       ImageList       =   "ImageList1"
       _Version        =   393216
       BeginProperty Buttons {66833FE8-8583-11D1-B16A-00C0F0283628} 
-         NumButtons      =   6
+         NumButtons      =   7
          BeginProperty Button1 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Salir"
             Object.ToolTipText     =   "Salir del SubModulo"
@@ -823,7 +827,7 @@ Begin VB.Form MayorAux
          EndProperty
          BeginProperty Button2 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "UnSubmodulo"
-            Object.ToolTipText     =   "Consulta una Submodulo"
+            Object.ToolTipText     =   "Consulta un Submodulo"
             ImageIndex      =   2
          EndProperty
          BeginProperty Button3 {66833FEA-8583-11D1-B16A-00C0F0283628} 
@@ -842,6 +846,11 @@ Begin VB.Form MayorAux
             ImageIndex      =   5
          EndProperty
          BeginProperty Button6 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "CxCxP"
+            Object.ToolTipText     =   "Consulta Ordenado por Serie y Factura"
+            ImageIndex      =   7
+         EndProperty
+         BeginProperty Button7 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Excel"
             Object.ToolTipText     =   "Exportar a Excel los resultados"
             ImageIndex      =   6
@@ -1079,12 +1088,12 @@ Public Sub Tipo_Modulo(TipoM As String)
   SelectDB_List DLCtas, AdoSubCta, sSQL, "Nombre_Cta"
 End Sub
 
-Public Sub Consultar_Submodulo(Individual As Boolean)
+Public Sub Consultar_Submodulo(Individual As Boolean, Optional OrdenarFA As Boolean)
      If Individual Then
         If AdoSubCta.Recordset.RecordCount > 0 Then
            AdoSubCta.Recordset.MoveFirst
            AdoSubCta.Recordset.Find ("Nombre_Cta = '" & Codigo1 & "'")
-           If Not AdoSubCta.Recordset.EOF Then Codigo1 = AdoSubCta.Recordset.fields("Codigo")
+           If Not AdoSubCta.Recordset.EOF Then Codigo1 = AdoSubCta.Recordset.Fields("Codigo")
         End If
      End If
     'Consultamos el SubModulo
@@ -1096,9 +1105,9 @@ Public Sub Consultar_Submodulo(Individual As Boolean)
             sSQL = "SELECT TSC.Cta,TSC.Fecha,TSC.TP,TSC.Numero,C.Detalle As Cliente,Concepto,Debitos,Creditos,"
      End Select
      If TipoDoc = "PM" Then
-        sSQL = sSQL & "TSC.Saldo_MN,TSC.Prima,"
+        sSQL = sSQL & "TSC.Saldo_MN,TSC.Serie,TSC.Prima,"
      Else
-        sSQL = sSQL & "TSC.Saldo_MN,TSC.Factura,"
+        sSQL = sSQL & "TSC.Saldo_MN,TSC.Serie,TSC.Factura,"
      End If
      Select Case TipoDoc
        Case "C", "P"
@@ -1140,8 +1149,12 @@ Public Sub Consultar_Submodulo(Individual As Boolean)
                  & "AND C.Periodo = TSC.Periodo "
      End Select
      sSQL = sSQL _
-          & "AND TSC.Codigo = C.Codigo " _
-          & "ORDER BY TSC.Codigo,TSC.Cta,TSC.Fecha,TSC.TP,TSC.Numero,Factura,Debitos DESC,Creditos,TSC.ID "
+          & "AND TSC.Codigo = C.Codigo "
+     If OrdenarFA Then
+        sSQL = sSQL & "ORDER BY TSC.Codigo,TSC.Cta,TSC.Serie,TSC.Factura,TSC.Fecha,TSC.TP,TSC.Numero,Debitos DESC,Creditos,TSC.ID "
+     Else
+         sSQL = sSQL & "ORDER BY TSC.Codigo,TSC.Cta,TSC.Fecha,TSC.TP,TSC.Numero,TSC.Factura,Debitos DESC,Creditos,TSC.ID "
+     End If
      Select_Adodc_Grid DGMayor, AdoSubCta1, sSQL
      DGMayor.Visible = False
      Debe = 0
@@ -1196,14 +1209,14 @@ Public Sub Consultar_Submodulo(Individual As Boolean)
       If .RecordCount > 0 Then
           
           Do While Not .EOF
-             Debe = Debe + .fields("TDebitos")
-             Haber = Haber + .fields("TCreditos")
-             Cta = .fields("Cta")
+             Debe = Debe + .Fields("TDebitos")
+             Haber = Haber + .Fields("TCreditos")
+             Cta = .Fields("Cta")
             .MoveNext
           Loop
           If AdoSubCta1.Recordset.RecordCount > 0 Then
              AdoSubCta1.Recordset.MoveLast
-             Saldo = AdoSubCta1.Recordset.fields("Saldo_MN")
+             Saldo = AdoSubCta1.Recordset.Fields("Saldo_MN")
           End If
           SaldoAnterior = CalculosSaldoAnt(Cta, Debe, Haber, Saldo)
       End If
@@ -1413,6 +1426,8 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
    Case "Abonos_Anticipados"
         Control_Procesos "I", "Imprimio Comprobante de: " & Co.TP & ", No. " & NumComp
         ImprimirComprobantesDe False, Co
+   Case "CxCxP"
+        Consultar_Submodulo True, True
    Case "Excel"
         DGMayor.Visible = False
         Exportar_AdoDB_Excel AdoSubCta1.Recordset, "Mayores " & BuscarFecha(MBFechaI) & " al " & BuscarFecha(MBFechaF)

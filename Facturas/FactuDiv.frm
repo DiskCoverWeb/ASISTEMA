@@ -1592,6 +1592,9 @@ Private Sub Form_Load()
   ConectarAdodc AdoFactura
   ConectarAdodc AdoArticulo
   ConectarAdodc AdoAsientoF
+  
+  SRI_Obtener_Datos_Comprobantes_Electronicos
+  
   MBFecha.Text = FechaSistema
 End Sub
 

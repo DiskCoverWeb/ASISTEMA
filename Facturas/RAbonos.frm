@@ -975,7 +975,7 @@ End Sub
 
 Public Sub Listar_Recibos()
   If OpcFactura.value Then
-     sSQL = "SELECT (TP+' '+Serie+' '+ convert(varchar(10),Factura) ) As Recibo " _
+     sSQL = "SELECT (TP+' '+Serie+' '+ convert(varchar(10), Factura) ) As Recibo " _
           & "FROM Trans_Abonos " _
           & "WHERE Item = '" & NumEmpresa & "' " _
           & "AND Periodo = '" & Periodo_Contable & "' " _
@@ -999,7 +999,7 @@ Public Sub Listar_Recibos()
           & "AND Periodo = '" & Periodo_Contable & "' "
      If CheqFecha.value <> 0 Then sSQL = sSQL & "AND Fecha = #" & BuscarFecha(MBFecha) & "# "
      sSQL = sSQL & "GROUP BY Fecha " _
-          & "ORDER BY Fecha "
+          & "ORDER BY Fecha DESC "
   Else
      sSQL = "SELECT TA.CodigoC,C.Cliente As Recibo " _
           & "FROM Clientes As C, Trans_Abonos As TA " _
@@ -1011,7 +1011,7 @@ Public Sub Listar_Recibos()
           & "GROUP BY C.Cliente,TA.CodigoC " _
           & "ORDER BY C.Cliente "
   End If
-  SelectDB_Combo DCRecibo, AdoRecibo, sSQL, "Recibo", True
+  SelectDB_Combo DCRecibo, AdoRecibo, sSQL, "Recibo"
 End Sub
 
 Public Sub Procesar_Abonos()

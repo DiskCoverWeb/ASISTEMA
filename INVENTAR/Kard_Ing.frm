@@ -3,7 +3,6 @@ Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.Ocx"
 Begin VB.Form Kard_Ing 
    Caption         =   "CONTROL DE INVENTARIO PARA INGRESOS/EGRESOS"
@@ -677,13 +676,13 @@ Begin VB.Form Kard_Ing
    End
    Begin MSDataGridLib.DataGrid DGKardex 
       Bindings        =   "Kard_Ing.frx":108D
-      Height          =   3165
+      Height          =   3060
       Left            =   105
       TabIndex        =   66
       Top             =   4725
       Width           =   15030
       _ExtentX        =   26511
-      _ExtentY        =   5583
+      _ExtentY        =   5398
       _Version        =   393216
       BackColor       =   16761024
       BorderStyle     =   0
@@ -1424,14 +1423,6 @@ Begin VB.Form Kard_Ing
          Strikethrough   =   0   'False
       EndProperty
       _Version        =   393216
-   End
-   Begin MSComDlg.CommonDialog CDialogDir 
-      Left            =   5145
-      Top             =   8610
-      _ExtentX        =   847
-      _ExtentY        =   847
-      _Version        =   393216
-      CancelError     =   -1  'True
    End
    Begin MSAdodcLib.Adodc AdoAux 
       Height          =   330
@@ -2822,7 +2813,7 @@ Private Sub Command1_Click()
           TxtFactNo = Factura_No
           If Len(TextOrden) > 1 Then Co.Concepto = Co.Concepto & ", Orden No. " & TextOrden
           If Val(TxtFactNo) > 0 Then Co.Concepto = Co.Concepto & ", Factura No. " & TxtFactNo
-          GrabarComprobante Co
+          Grabar_Comprobante Co
          'MsgBox "Hola"
           ImprimirComprobantesDe False, Co
           Imprimir_Nota_Inventario AdoBenef, AdoKardex, NumComp, TextOrden.Text, "CD", FechaTexto, FechaTexto, Total
@@ -2914,8 +2905,7 @@ Private Sub Command3_Click()
 End Sub
 
 Private Sub Command4_Click()
-  CDialogDir.InitDir = RutaSysBases 'SubStrgIzq(CurDir$, 3)
-  RutaOrigen = UCase$(SelectZipFile(CDialogDir, SelectAll))
+  RutaOrigen = SelectDialogFile(RutaSysBases)
   If RutaOrigen <> "" Then
     'Le pasamos el Path del Libro y una variable de tipo T_Rango para retornar los valores
      Call Obtener_Rango_Excel(RutaOrigen, Rango)
@@ -3239,6 +3229,25 @@ Private Sub Form_Activate()
 'Consultamos las cuentas de la tabla
  Trans_No = 97
  IniciarAsientosAdo AdoAsientos
+ 
+ DGKardex.Height = MDI_Y_Max - DGKardex.Top - 950
+ DGKardex.width = MDI_X_Max - DGKardex.Left
+ Label3.Top = DGKardex.Top + DGKardex.Height + 50
+ Label10.Top = DGKardex.Top + DGKardex.Height + 50
+ Label11.Top = DGKardex.Top + DGKardex.Height + 50
+ Label16.Top = DGKardex.Top + DGKardex.Height + 50
+ Label18.Top = DGKardex.Top + DGKardex.Height + 50
+ Label1.Top = Label11.Top + Label11.Height
+ TxtDifxDec.Top = Label11.Top + Label11.Height
+ TxtSubTotal.Top = Label11.Top + Label11.Height
+ TextIVA.Top = Label11.Top + Label11.Height
+ Command1.Top = DGKardex.Top + DGKardex.Height + 50
+ Command2.Top = DGKardex.Top + DGKardex.Height + 50
+ Command3.Top = DGKardex.Top + DGKardex.Height + 50
+ 
+' AdoDetKardex.Top = DGQuery.Top + DGQuery.Height + 50
+
+ 
  If Inv_Promedio Then
     Kard_Ing.Caption = "CONTROL DE INVENTARIO EN PROMEDIO"
  Else

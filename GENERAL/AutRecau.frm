@@ -542,8 +542,8 @@ Begin VB.Form FRecaudacionBancosPreFa
    End
    Begin MSAdodcLib.Adodc AdoFactura 
       Height          =   330
-      Left            =   1575
-      Top             =   9450
+      Left            =   105
+      Top             =   9240
       Width           =   2955
       _ExtentX        =   5212
       _ExtentY        =   582
@@ -1194,9 +1194,9 @@ Begin VB.Form FRecaudacionBancosPreFa
       EndProperty
       ForeColor       =   &H00000000&
       Height          =   330
-      Left            =   6930
+      Left            =   5460
       TabIndex        =   24
-      Top             =   9450
+      Top             =   9240
       Width           =   2115
    End
    Begin VB.Label Label6 
@@ -1251,9 +1251,9 @@ Begin VB.Form FRecaudacionBancosPreFa
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   4620
+      Left            =   3150
       TabIndex        =   23
-      Top             =   9450
+      Top             =   9240
       Width           =   2325
    End
    Begin VB.Label Label3 
@@ -1828,27 +1828,48 @@ Dim CostoTarjeta As Currency
                  FechaTexto = Mifecha
               End If
          Case "PRODUBANCO"
-              CodigoP = CamposFile(7).Valor
-              CodigoCli = CamposFile(7).Valor
-              NombreCliente = CamposFile(8).Valor
-              SubTotal = Val(CamposFile(9).Valor)
-              Total = Val(CamposFile(9).Valor)
-              FechaTexto = CamposFile(12).Valor
-              Producto = CamposFile(14).Valor
-              CodigoB = CamposFile(14).Valor
-             'MsgBox CodigoB
-             
-              NoAnio = Val(MidStrg(TrimStrg(SinEspaciosDer(CodigoB)), 1, 4))
-              CodigoB = LCase(TrimStrg(MidStrg(TrimStrg(SinEspaciosDer(CodigoB)), 6, 3)))
-              NoMeses = LetrasMeses(CodigoB)
-              Codigo3 = CamposFile(27).Valor
-              Codigo4 = CamposFile(31).Valor
-              Codigo2 = CamposFile(31).Valor
+              CodigoP = CamposFile(8).Valor
+              CodigoCli = CamposFile(8).Valor
+              NombreCliente = CamposFile(9).Valor
+              SubTotal = Val(Replace(CamposFile(11).Valor, "$", ""))
+              Total = SubTotal
+              FechaTexto = CamposFile(3).Valor
+              Producto = CamposFile(16).Valor
+              CodigoB = CamposFile(16).Valor
+              
+              NoAnio = Val(SinEspaciosDer(CodigoB))
+              CodigoB = ULCase(TrimStrg(MidStrg(CodigoB, 1, Len(CodigoB) - 4)))
+              Mes = SinEspaciosDer(CodigoB)
+              NoMeses = LetrasMeses(Mes)
+              CodigoInv = SinEspaciosIzq(CodigoB)
+              
+             'Este Valor es Provisional hasta que se suba la carga por DiskCover
+              If NoMeses = 1 And CodigoInv = "Matricula" Then NoMeses = 4
+             '------------------------------------------------------------------
+              Codigo3 = CamposFile(19).Valor
+              Codigo4 = CamposFile(29).Valor
+              Codigo2 = CamposFile(25).Valor
               If NoAnio <= "1900" And IsDate(FechaTexto) Then
                  NoMeses = Month(FechaTexto)
                  NoAnio = CStr(Year(FechaTexto))
                  Mes = MesesLetras(NoMeses)
               End If
+              
+              sSQL = "SELECT Codigo_Inv, Producto " _
+                   & "FROM Catalogo_Productos " _
+                   & "WHERE Item = '" & NumEmpresa & "' " _
+                   & "AND Periodo = '" & Periodo_Contable & "' " _
+                   & "AND Producto LIKE ('%" & CodigoInv & "%') " _
+                   & "AND TC = 'P' "
+              Select_Adodc AdoAux, sSQL
+              If AdoAux.Recordset.RecordCount > 0 Then
+                 CodigoInv = AdoAux.Recordset.fields("Codigo_Inv")
+                 Producto = AdoAux.Recordset.fields("Producto")
+              Else
+                 CodigoInv = Ninguno
+              End If
+              
+              'MsgBox Producto
          Case "BOLIVARIANO"
              'MsgBox "1234567890123456789012345678901234567890" & vbCrLf & Cod_Field
               If MidStrg(Cod_Field, 12, 2) = "00" Then
@@ -1986,7 +2007,7 @@ Dim CostoTarjeta As Currency
                   sSQL = "SELECT Codigo,Cliente,Grupo, CI_RUC " _
                        & "FROM Clientes " _
                        & "WHERE CI_RUC = '" & CodigoCli & "' "
-                  Select_AdoDB AdoCliDB, sSQL, "Clientes"
+                  Select_AdoDB AdoCliDB, sSQL
                   If AdoCliDB.RecordCount > 0 Then
                      CodigoCli = AdoCliDB.fields("Codigo")
                      NombreCliente = AdoCliDB.fields("Cliente")
@@ -2382,11 +2403,12 @@ Dim CaptionTemp As String
     Case Else
          sSQL = "SELECT C.Codigo As CodigoC,F.Codigo,C.Grupo,C.Cliente,C.CI_RUC,C.Direccion,C.Casilla,C.Actividad,C.Plan_Afiliado,F.Periodo,F.Num_Mes,F.Fecha," _
               & "C.Representante,C.CI_RUC_R,C.TD_R,C.Telefono_R,C.Tipo_Cta,C.Cod_Banco,C.Cta_Numero,C.DireccionT,C.Fecha_Cad,C.Email2,C.EmailR," _
-              & "F.Codigo_Inv,C.Saldo_Pendiente,SUM(F.Valor-(F.Descuento+F.Descuento2)) As Valor_Cobro,"
-         If CheqMatricula.value = 1 Then sSQL = sSQL & "'MATRICULAS Y PENSION DE ' As Producto " Else sSQL = sSQL & "'PENSION DE ' As Producto "
+              & "F.Codigo_Inv, CC.Producto, C.Saldo_Pendiente,SUM(F.Valor-(F.Descuento+F.Descuento2)) As Valor_Cobro "
+         'If CheqMatricula.value = 1 Then sSQL = sSQL & "'MATRICULAS Y PENSION DE ' As Producto " Else sSQL = sSQL & "'PENSION DE ' As Producto "
          sSQL = sSQL _
-              & "FROM Clientes_Facturacion As F, Clientes As C " _
-              & "WHERE F.Item = '" & NumEmpresa & "' "
+              & "FROM Clientes_Facturacion As F, Clientes As C, Catalogo_Productos As CC " _
+              & "WHERE CC.Item = '" & NumEmpresa & "' " _
+              & "AND CC.Periodo = '" & Periodo_Contable & "' "
               
   End Select
   sSQL = sSQL & "AND F.Fecha BETWEEN #" & BuscarFecha(MBFechaI) & "# and #" & BuscarFecha(MBFechaF) & "# "
@@ -2428,12 +2450,14 @@ Dim CaptionTemp As String
     Case Else
          sSQL = sSQL _
               & "AND F.Codigo = C.Codigo " _
-              & "GROUP BY C.Codigo,F.Codigo,C.Grupo,C.Cliente,C.CI_RUC,C.Direccion,C.Casilla,C.Actividad,C.Plan_Afiliado,F.Periodo,F.Codigo_Inv,F.Num_Mes,F.Fecha," _
+              & "AND F.Codigo_Inv = CC.Codigo_Inv " _
+              & "AND F.Item = CC.Item " _
+              & "GROUP BY C.Codigo,F.Codigo,C.Grupo,C.Cliente,C.CI_RUC,C.Direccion,C.Casilla,C.Actividad,C.Plan_Afiliado,F.Periodo,F.Codigo_Inv, CC.Producto, F.Num_Mes,F.Fecha," _
               & "C.Representante,C.CI_RUC_R,C.TD_R,C.Telefono_R,C.Tipo_Cta,C.Cod_Banco,C.Cta_Numero,C.DireccionT,C.Fecha_Cad,C.Email2,C.EmailR,C.Saldo_Pendiente " _
               & "HAVING SUM(F.Valor-(F.Descuento+F.Descuento2)) > 0 " _
               & "ORDER BY C.Grupo,C.Cliente,F.Fecha "
   End Select
-  Select_Adodc AdoFactura, sSQL  ', , , "Envio_Banco_GYE"
+  Select_Adodc AdoFactura, sSQL
   
 '''  sSQL = "SELECT F.CodigoC,C.Actividad,C.Cliente,CI_RUC,C.Direccion,C.Grupo,SUM(Saldo_MN) As Saldo_Pend " _
 '''       & "FROM Facturas As F, Clientes As C " _
@@ -2569,7 +2593,7 @@ Dim Cod_Ok As Boolean
              'MsgBox FA.Factura
               
               CodigoCli = .fields("Codigo_Cliente")
-              TBenef = Leer_Datos_Clientes(CodigoCli)
+              TBenef = Leer_Datos_Cliente_SP(CodigoCli)
               'MsgBox TBenef.Representante & vbCrLf & TBenef.RUC_CI_Rep & vbCrLf & TBenef.TD_Rep & vbCrLf & TBenef.Cliente
               
               NombreCliente = TBenef.Cliente
@@ -2804,7 +2828,9 @@ Dim Cod_Ok As Boolean
       End With
    End If
    FA.Fecha_Corte = FechaSistema
-   Procesar_Saldo_De_Facturas FRecaudacionBancosPreFa, True
+   
+   Actualizar_Saldos_Facturas_SP
+   
   'Actualizar_Abonos_Facturas FA, True
    sSQL = "UPDATE Detalle_Factura " _
         & "SET Producto = CP.Producto " _
@@ -3091,7 +3117,7 @@ Private Sub Form_Load()
   
   TxtFile.Height = ((MDI_Y_Max - TxtFile.Top) / 2) - 200
   DGFactura.Top = TxtFile.Top + TxtFile.Height + 10
-  DGFactura.Height = DGFactura.Top - 3300
+  DGFactura.Height = DGFactura.Top - 2500
   AdoFactura.Top = DGFactura.Top + DGFactura.Height + 10
   Frame1.width = MDI_X_Max - Frame1.Left - 50
   DCBanco.width = Frame1.width - 200
@@ -3753,7 +3779,7 @@ Dim TipoCta As String
 
           Progreso_Barra.Mensaje_Box = NombreCliente
           Progreso_Esperar
-          'TRep = Leer_Datos_Clientes(CodigoCli)
+          'TRep = Leer_Datos_Cliente_SP(CodigoCli)
           TipoCta = Ninguno
           Select Case .fields("Tipo_Cta")
             Case "AHORROS":   TipoCta = "AHO"
@@ -3942,7 +3968,7 @@ Dim Total_Banco As Currency
           
           Progreso_Barra.Mensaje_Box = NombreCliente
           Progreso_Esperar
-          'TRep = Leer_Datos_Clientes(CodigoCli)
+          'TRep = Leer_Datos_Cliente_SP(CodigoCli)
           TipoCta = Ninguno
           Select Case .fields("Tipo_Cta")
             Case "AHORROS":   TipoCta = "AHO"
@@ -4048,6 +4074,7 @@ End Sub
 Public Sub Generar_Tarjetas()
 Dim AuxNumEmp As String
 Dim Fecha_Meses As String
+Dim NumAut As String
 Dim Total_Banco As Currency
 Dim NombreArchivos As String
 Dim ContadorTarjeta As Integer
@@ -4072,13 +4099,14 @@ Dim TRep As Tipo_Beneficiarios
           Progreso_Barra.Mensaje_Box = "Buscando Datos"
           CodigoCli = .fields("Codigo")
           CodigoP = Format$(.fields("CI_RUC"), "00000000000000000")
-          TRep = Leer_Datos_Clientes(CodigoCli)
+          TRep = Leer_Datos_Cliente_SP(CodigoCli)
           If .fields("Tipo_Cta") = "TARJETA" And Len(TRep.Cta_Numero) >= 14 Then
              'MsgBox TRep.Cta_Numero & " - " & Len(TRep.Cta_Numero)
              ContadorTarjeta = ContadorTarjeta + 1
              Progreso_Barra.Mensaje_Box = Format(ContadorTarjeta, "000") & " " & .fields("Cliente")
              Total = .fields("Valor_Cobro")
              Saldo = .fields("Valor_Cobro") * 100
+             NumAut = Format$(MidStrg(.fields("Periodo"), 3, 2), "00") & Format$(.fields("Num_Mes"), "00") & Format$(ContadorTarjeta, "00")
              TRep.Cta_Numero = MidStrg(TRep.Cta_Numero, 1, 16)
              TRep.Cta_Numero = String(16 - Len(TRep.Cta_Numero), "0") & TRep.Cta_Numero
              
@@ -4089,17 +4117,22 @@ Dim TRep As Tipo_Beneficiarios
              Print #NumFileFacturas, "00000000000000000";  ' CodigoP
              Print #NumFileFacturas, "202";
              Print #NumFileFacturas, "000000";
+             'Print #NumFileFacturas, NumAut;
              Print #NumFileFacturas, "00";
             'Transaccion/Secuencial
-            'MsgBox TRep.CI_RUC & " - " & MidStrg(TRep.CI_RUC, 5, 6)
-             Print #NumFileFacturas, MidStrg(TRep.CI_RUC, 7, 4);              ' Codigo Alumno
+             Print #NumFileFacturas, NumAut;
+             'Print #NumFileFacturas, Format(ContadorTarjeta, "000000");
+''            MsgBox TRep.Fecha_Cad & vbCrLf & Format(TRep.Fecha_Cad, "YYYYMM") & vbCrLf & TRep.CI_RUC & " - " & MidStrg(TRep.CI_RUC, 5, 6)
+'''             Print #NumFileFacturas, MidStrg(TRep.CI_RUC, 7, 4);              ' Codigo Alumno
 '''             Print #NumFileFacturas, MidStrg(.Fields("Periodo"), 4, 1);    ' Año
 '''             Print #NumFileFacturas, Format$(.Fields("Num_Mes"), "00");    ' Mes
-             Print #NumFileFacturas, Format$(ContadorTarjeta, "00");      ' Secuencial
-             Print #NumFileFacturas, "439473";
+            'Print #NumFileFacturas, Format$(ContadorTarjeta, "00");      ' Secuencial
+             Print #NumFileFacturas, "439473";      'BIN FUENTE?
              Print #NumFileFacturas, Format(TRep.Fecha_Cad, "YYYYMM");
              Print #NumFileFacturas, "00000000000000000";   ' IVA
-             Print #NumFileFacturas, "00D00000";
+             Print #NumFileFacturas, "00";
+             Print #NumFileFacturas, "D";
+             Print #NumFileFacturas, "00000";
              Print #NumFileFacturas, "000000000000000";
              Print #NumFileFacturas, Format$(Saldo, "000000000000000")
              Total_Banco = Total_Banco + Total
@@ -4178,11 +4211,11 @@ Dim Total_Banco As Currency
           Codigo3 = TrimStrg(SinEspaciosDer(DireccionCli))
           Codigo1 = Format$(MidStrg(GrupoNo, 1, 1), "00")
           If Len(Cta_Bancaria) < 11 Then Cta_Bancaria = String(11 - Len(Cta_Bancaria), "0") & Cta_Bancaria
-          If Tipo_Carga = 3 Then
-             Codigo4 = "Transporte " & .fields("Grupo")
-          Else
-             Codigo4 = "Transporte " & .fields("Grupo") & " De: " & .fields("Periodo") & "-" & MesesLetras(.fields("Num_Mes"))
-          End If
+'          If Tipo_Carga = 3 Then
+'             Codigo4 = "Transporte " & .fields("Grupo")
+'          Else
+             Codigo4 = .fields("Producto") & " de " & .fields("Periodo") & "-" & MesesLetras(.fields("Num_Mes")) & " " & .fields("Grupo")
+'          End If
 ''          If AdoAux.Recordset.RecordCount > 0 Then
 ''             AdoAux.Recordset.MoveFirst
 ''             AdoAux.Recordset.Find ("Codigo = '" & CodigoCli & "' ")
@@ -4197,6 +4230,7 @@ Dim Total_Banco As Currency
 ''             Loop
 ''             Codigo4 = MidStrg(Codigo4, 1, Len(Codigo4) - 1)
 ''          End If
+          'MsgBox Codigo4
           Print #NumFileFacturas, "CO" & vbTab;            '01
           Print #NumFileFacturas, Cta_Bancaria & vbTab;    '02
           Print #NumFileFacturas, Contador & vbTab;        '03

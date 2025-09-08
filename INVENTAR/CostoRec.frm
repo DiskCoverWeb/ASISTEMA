@@ -891,7 +891,7 @@ Private Sub Command1_Click()
        Cadena = DCBenef.Text
       .MoveFirst
       .Find ("Cliente Like '" & Cadena & "' ")
-       If Not .EOF Then CodigoBenef = .Fields("Codigo")
+       If Not .EOF Then CodigoBenef = .fields("Codigo")
    End If
   End With
   Valor = 0
@@ -904,16 +904,16 @@ Private Sub Command1_Click()
        TipoDoc = Day(FechaSistema) & "-" & Month(FechaSistema) & "-" & Cod_Bodega & "-" & Cod_Bodega1
       .MoveFirst
        Total = 0: ValorDH = 0
-       Cta_Inventario = .Fields("CTA_INVENTARIO")
+       Cta_Inventario = .fields("CTA_INVENTARIO")
        Do While Not .EOF
-          ValorDH = .Fields("VALOR_TOTAL")
-          Cta_Inventario = .Fields("CTA_INVENTARIO")
-          If .Fields("DH") = 1 Then
+          ValorDH = .fields("VALOR_TOTAL")
+          Cta_Inventario = .fields("CTA_INVENTARIO")
+          If .fields("DH") = 1 Then
               InsertarAsientos AdoAsientos, Cta_Inventario, 0, ValorDH, 0
           Else
               InsertarAsientos AdoAsientos, Cta_Inventario, 0, 0, ValorDH
           End If
-          Total = Total + .Fields("VALOR_TOTAL")
+          Total = Total + .fields("VALOR_TOTAL")
          .MoveNext
        Loop
        Total = Round(Total, 2)
@@ -930,8 +930,8 @@ Private Sub Command1_Click()
    If .RecordCount > 0 Then
        Debe = 0: Haber = 0
        Do While Not .EOF
-          Debe = Debe + .Fields("DEBE")
-          Haber = Haber + .Fields("HABER")
+          Debe = Debe + .fields("DEBE")
+          Haber = Haber + .fields("HABER")
          .MoveNext
        Loop
        If (Debe - Haber) <> 0 Then MsgBox "Verifique el comprobante, no cuadra por: " & Round(Debe - Haber, 2)
@@ -951,7 +951,7 @@ Private Sub Command1_Click()
           Co.Usuario = CodigoUsuario
           Co.T_No = Trans_No
           Co.Item = NumEmpresa
-          GrabarComprobante Co
+          Grabar_Comprobante Co
           ImprimirComprobantesDe False, Co
           Imprimir_Nota_Inventario AdoBenef, AdoKardex, NumComp, TipoDoc, "CD", FechaTexto, FechaTexto, Total
           Mensajes = "Imprimir Copia de Nota de Entrada/Salida"
@@ -985,10 +985,10 @@ Private Sub DCBenef_LostFocus()
       .MoveFirst
       .Find ("Cliente Like '" & Cadena & "' ")
        If Not .EOF Then
-          CodigoBenef = .Fields("Codigo")
-          CodigoCliente = .Fields("Codigo")
-          TipoDoc = .Fields("TD")
-          InvImp = .Fields("Importaciones")
+          CodigoBenef = .fields("Codigo")
+          CodigoCliente = .fields("Codigo")
+          TipoDoc = .fields("TD")
+          InvImp = .fields("Importaciones")
           If InvImp Then Label2.Caption = " IMPORTACION"
           Si_No = True
           If TipoDoc = "R" Then Si_No = False
@@ -1010,7 +1010,7 @@ Private Sub DCBodega1_LostFocus()
    If .RecordCount > 0 Then
       .MoveFirst
       .Find ("Bodega Like '" & DCBodega1.Text & "' ")
-       If Not .EOF Then Cod_Bodega1 = .Fields("CodBod")
+       If Not .EOF Then Cod_Bodega1 = .fields("CodBod")
    End If
   End With
 End Sub
@@ -1028,25 +1028,25 @@ Private Sub DCInv1_LostFocus()
       .MoveFirst
       .Find ("Producto Like '" & CodigoInv1 & "' ")
        If Not .EOF Then
-          CodigoInv = .Fields("Codigo_Inv")
-          Producto = .Fields("Producto")
-          Contra_Cta = .Fields("Cta_Inventario")
+          CodigoInv = .fields("Codigo_Inv")
+          Producto = .fields("Producto")
+          Contra_Cta = .fields("Cta_Inventario")
           TextEntrada.SetFocus
        Else
          .MoveFirst
          .Find ("Codigo_Barra Like '" & CodigoInv1 & "' ")
           If Not .EOF Then
-             CodigoInv = .Fields("Codigo_Inv")
-             Producto = .Fields("Producto")
-             Contra_Cta = .Fields("Cta_Inventario")
+             CodigoInv = .fields("Codigo_Inv")
+             Producto = .fields("Producto")
+             Contra_Cta = .fields("Cta_Inventario")
              TextEntrada.SetFocus
           Else
             .MoveFirst
             .Find ("Codigo_Inv Like '" & CodigoInv1 & "' ")
              If Not .EOF Then
-                CodigoInv = .Fields("Codigo_Inv")
-                Producto = .Fields("Producto")
-                Contra_Cta = .Fields("Cta_Inventario")
+                CodigoInv = .fields("Codigo_Inv")
+                Producto = .fields("Producto")
+                Contra_Cta = .fields("Cta_Inventario")
                 TextEntrada.SetFocus
              Else
                 MsgBox "No existe Productos asignados"
@@ -1147,7 +1147,7 @@ Dim TotalInvs As Currency
     If .RecordCount > 0 Then
        .MoveFirst
         Do While Not .EOF
-           If .Fields("DH") = "2" Then Total = Total + .Fields("VALOR_TOTAL")
+           If .fields("DH") = "2" Then Total = Total + .fields("VALOR_TOTAL")
           .MoveNext
         Loop
        .MoveFirst

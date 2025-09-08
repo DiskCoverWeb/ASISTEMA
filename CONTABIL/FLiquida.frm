@@ -1,8 +1,8 @@
 VERSION 5.00
+Object = "{05BFD3F1-6319-4F30-B752-C7A22889BCC4}#1.0#0"; "AcroPDF.dll"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
-Object = "{05BFD3F1-6319-4F30-B752-C7A22889BCC4}#1.0#0"; "AcroPDF.dll"
 Begin VB.Form FLiquidacionCompras 
    BackColor       =   &H00FFC0C0&
    Caption         =   "LISTAR COMPROBANTE DE LIQUIDACION DE COMPRAS"
@@ -15,15 +15,6 @@ Begin VB.Form FLiquidacionCompras
    ScaleHeight     =   7680
    ScaleWidth      =   14430
    WindowState     =   2  'Maximized
-   Begin AcroPDFLibCtl.AcroPDF APDFLiquidacion 
-      Height          =   3480
-      Left            =   105
-      TabIndex        =   18
-      Top             =   2730
-      Width           =   6525
-      _cx             =   11509
-      _cy             =   6138
-   End
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
       Height          =   660
@@ -85,6 +76,15 @@ Begin VB.Form FLiquidacionCompras
       EndProperty
       BorderStyle     =   1
    End
+   Begin AcroPDFLibCtl.AcroPDF APDFLiquidacion 
+      Height          =   5475
+      Left            =   0
+      TabIndex        =   17
+      Top             =   3045
+      Width           =   12405
+      _cx             =   5080
+      _cy             =   5080
+   End
    Begin VB.CheckBox CheqClaveAcceso 
       Alignment       =   1  'Right Justify
       BackColor       =   &H00FFC0C0&
@@ -100,29 +100,11 @@ Begin VB.Form FLiquidacionCompras
       EndProperty
       ForeColor       =   &H00000000&
       Height          =   330
-      Left            =   105
+      Left            =   420
       Style           =   1  'Graphical
-      TabIndex        =   17
-      Top             =   1260
-      Width           =   6105
-   End
-   Begin VB.ListBox LstResultado 
-      BackColor       =   &H00FF8080&
-      BeginProperty Font 
-         Name            =   "Courier New"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H00FFFFFF&
-      Height          =   690
-      Left            =   105
       TabIndex        =   16
-      Top             =   1995
-      Width           =   12720
+      Top             =   1260
+      Width           =   3165
    End
    Begin VB.OptionButton OpcManuales 
       BackColor       =   &H00FFC0C0&
@@ -202,19 +184,21 @@ Begin VB.Form FLiquidacionCompras
    End
    Begin VB.TextBox TxtAutorizacion 
       Height          =   330
-      Left            =   6300
+      Left            =   9660
+      MaxLength       =   50
       TabIndex        =   14
       ToolTipText     =   "<Ctrl+A> Autorizar manualmente desde el SRI"
-      Top             =   1575
-      Width           =   6525
+      Top             =   1260
+      Width           =   4635
    End
    Begin VB.TextBox TxtClave 
       Height          =   330
-      Left            =   105
+      Left            =   3570
+      MaxLength       =   50
       TabIndex        =   12
       ToolTipText     =   "<Ctrl+A> Volver a Generar y Firmar el Documento Electronico"
-      Top             =   1575
-      Width           =   6105
+      Top             =   1260
+      Width           =   4635
    End
    Begin MSDataListLib.DataCombo DCComp 
       Bindings        =   "FLiquida.frx":0000
@@ -239,7 +223,7 @@ Begin VB.Form FLiquidacionCompras
       EndProperty
    End
    Begin VB.CommandButton Command1 
-      BackColor       =   &H00FFFFFF&
+      BackColor       =   &H00FFC0C0&
       Caption         =   "&S"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -250,11 +234,12 @@ Begin VB.Form FLiquidacionCompras
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   435
+      Height          =   330
       Left            =   105
       MaskColor       =   &H00FFC0C0&
+      Style           =   1  'Graphical
       TabIndex        =   11
-      Top             =   2100
+      Top             =   1260
       Width           =   330
    End
    Begin MSAdodcLib.Adodc AdoComp1 
@@ -583,6 +568,24 @@ Begin VB.Form FLiquidacionCompras
          Strikethrough   =   0   'False
       EndProperty
    End
+   Begin VB.Label LblResultado 
+      BackColor       =   &H00FF8080&
+      BorderStyle     =   1  'Fixed Single
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   855
+      Left            =   105
+      TabIndex        =   18
+      Top             =   1680
+      Width           =   14190
+   End
    Begin VB.Label Label6 
       BackColor       =   &H00FFC0C0&
       BorderStyle     =   1  'Fixed Single
@@ -656,10 +659,10 @@ Begin VB.Form FLiquidacionCompras
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   6300
+      Left            =   8295
       TabIndex        =   13
       Top             =   1260
-      Width           =   6525
+      Width           =   1380
    End
    Begin VB.Label Label12 
       BackColor       =   &H00FFC0C0&
@@ -748,15 +751,8 @@ Option Explicit
 
 Dim Retencion_No As Long
 Dim Serie_R As String
- 
-Dim ObjAutori As New WS_Autorizacion
-Dim URLRecepcion  As String
-Dim URLAutorizacion As String
-
-Dim RutaXMLAutorizado As String
-Dim RutaXMLRechazado As String
-Dim RutaXMLFirmado As String
-Dim ArrayAutorizacion() As String
+'Dim ObjAutori As New WS_Autorizacion
+'Dim ArrayAutorizacion() As String
 'Dim SRI_Aut As Tipo_Estado_SRI
 Dim Resultado_Ret As String
  
@@ -804,12 +800,12 @@ Private Sub Form_Activate()
         & "WHERE Item = '" & NumEmpresa & "' " _
         & "AND Periodo = '" & Periodo_Contable & "' " _
         & "AND TipoComprobante IN (3,41) " _
-        & "AND LEN(Clave_Acceso) = 49 " _
-        & "AND LEN(AutRetencion) = 49 " _
+        & "AND LEN(Clave_Acceso_LC) = 49 " _
+        & "AND LEN(Autorizacion) = 49 " _
         & "AND Estado_SRI_LC <> 'OK' "
    Ejecutar_SQL_SP sSQL
    
-   LstResultado.width = FLiquidacionCompras.width - 400
+   LblResultado.width = FLiquidacionCompras.width - 400
    APDFLiquidacion.width = FLiquidacionCompras.width - 400
    APDFLiquidacion.Height = MDI_Y_Max - APDFLiquidacion.Top - 100
    
@@ -848,8 +844,7 @@ Private Sub Form_Load()
    CMeses.Text = "Todos"
    
   'Pagina de Conexion con el SRI
-   URLRecepcion = Leer_Campo_Empresa("Web_SRI_Recepcion")
-   URLAutorizacion = Leer_Campo_Empresa("Web_SRI_Autorizado")
+   SRI_Obtener_Datos_Comprobantes_Electronicos
 End Sub
 
 Public Sub Listar_Liquidacion(Serie_R As String, Comp_No As Long, TP As String, TP_No As Long)
@@ -878,29 +873,29 @@ Dim TipoProc As String
    With AdoDetCom.Recordset
     If .RecordCount > 0 Then
        'MsgBox .RecordCount
-        Co.Fecha = .fields("Fecha")
-        Co.Beneficiario = .fields("Cliente")
-        Co.RUC_CI = .fields("CI_RUC")
-        Co.Direccion = .fields("Direccion")
-        Co.TD = .fields("TD")
-        Co.Email = .fields("Email")
-        Co.TP = .fields("TP")
-        Co.Numero = .fields("Numero")
-        Co.Concepto = .fields("Concepto")
+        Co.Fecha = .Fields("Fecha")
+        Co.Beneficiario = .Fields("Cliente")
+        Co.RUC_CI = .Fields("CI_RUC")
+        Co.Direccion = .Fields("Direccion")
+        Co.TD = .Fields("TD")
+        Co.Email = .Fields("Email")
+        Co.TP = .Fields("TP")
+        Co.Numero = .Fields("Numero")
+        Co.Concepto = .Fields("Concepto")
         
-        FA.EmailC = .fields("Email")
-        FA.EmailR = .fields("Email2")
+        FA.EmailC = .Fields("Email")
+        FA.EmailR = .Fields("Email2")
         FA.TP = Co.TP
         FA.Numero = Co.Numero
-        FA.Fecha = .fields("FechaEmision")
-        FA.ClaveAcceso_LC = .fields("Clave_Acceso_LC")
-        FA.Estado_SRI_LC = .fields("Estado_SRI_LC")
-        FA.Autorizacion_LC = .fields("Autorizacion")
-        FA.Serie_LC = .fields("Establecimiento") & .fields("PuntoEmision")
-        FA.Factura = .fields("Secuencial")
-        FA.Sin_IVA = .fields("BaseImponible")
-        FA.Con_IVA = .fields("BaseImpGrav")
-        FA.Total_IVA = .fields("MontoIva")
+        FA.Fecha = .Fields("FechaEmision")
+        FA.ClaveAcceso_LC = .Fields("Clave_Acceso_LC")
+        FA.Estado_SRI_LC = .Fields("Estado_SRI_LC")
+        FA.Autorizacion_LC = .Fields("Autorizacion")
+        FA.Serie_LC = .Fields("Establecimiento") & .Fields("PuntoEmision")
+        FA.Factura = .Fields("Secuencial")
+        FA.Sin_IVA = .Fields("BaseImponible")
+        FA.Con_IVA = .Fields("BaseImpGrav")
+        FA.Total_IVA = .Fields("MontoIva")
         FA.Total_MN = FA.Sin_IVA + FA.Con_IVA + FA.Total_IVA
         FA.SubTotal = FA.Sin_IVA + FA.Con_IVA
         TxtAutorizacion = FA.Autorizacion_LC
@@ -922,7 +917,6 @@ End Sub
 
 Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
   TextoImprimio = ""
-  LstResultado.Clear
   Select Case Button.key
     Case "Salir"
          Unload FLiquidacionCompras
@@ -942,24 +936,11 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
     Case "Autorizar"
          FA.TP = Co.TP
          FA.Numero = Co.Numero
-         SRI_Autorizacion.Clave_De_Acceso = FA.ClaveAcceso_LC
-         FAutorizaXmlSRI.Show 1
-         'SRI_Autorizacion = SRI_Generar_XML(FA.ClaveAcceso_LC, FA.Estado_SRI_LC)
-         SRI_Actualizar_XML_Liquidacion SRI_Autorizacion, FA
-         RatonReloj
-         If SRI_Autorizacion.Estado_SRI = "OK" Then
-            FA.Numero = Co.Numero
-            FA.TP = Co.TP
-            SRI_Actualizar_Autorizacion_Liquidacion SRI_Autorizacion, FA
-            
-            SRI_Generar_PDF_LC FA, True
-            SRI_Enviar_Mails FA, SRI_Autorizacion, "LC"
-            LstResultado.AddItem SRI_Autorizacion.Estado_SRI
-            RatonNormal
-         Else
-            LstResultado.AddItem SRI_Autorizacion.Estado_SRI & " - " & Replace(SRI_Autorizacion.Error_SRI, vbCrLf, " ")
-            RatonNormal
-         End If
+         FA.Fecha = Co.Fecha
+         FA.Serie_R = DCSerie.Text
+         FA.Retencion = Val(DCComp.Text)
+         SRI_Crear_Clave_Acceso_Liquidacion FA, False
+         LblResultado.Caption = SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion.Clave_De_Acceso)
     Case "Autorizar_Grupo"
 '''         If Len(DCSerie) < 6 Then DCSerie = "001001"
 '''         sSQL = "SELECT C.Cliente,C.CI_RUC,C.TD,C.Direccion,C.Email,C.Ciudad,C.DirNumero,C.Telefono,TC.* " _
@@ -1021,7 +1002,7 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
          SRI_Autorizacion.Autorizacion = FA.Autorizacion_LC
          'FA.Retencion = 1
          'FA.Serie_R = 1
-         SRI_Enviar_Mails FA, SRI_Autorizacion, "LC"
+         SRI_Enviar_Mails FA, SRI_Autorizacion
   End Select
 '''  If AdoComp.Recordset.RecordCount > 0 Then
 '''     DCComp = AdoComp.Recordset.Fields("SecRetencion")
@@ -1084,7 +1065,7 @@ Dim MesNo As Integer
   sSQL = sSQL _
        & "GROUP BY Secuencial " _
        & "ORDER BY Secuencial "
-  SelectDB_Combo DCComp, AdoComp, sSQL, "Secuencial", True
+  SelectDB_Combo DCComp, AdoComp, sSQL, "Secuencial", True, "Liquidacion Compras"
   'If AdoComp.Recordset.RecordCount > 0 Then ListarRetencion Serie_R, DCComp
 End Sub
 
@@ -1143,17 +1124,14 @@ Dim Secuencial As String
                     & "Autorizacion: " & TxtAutorizacion & ":"
          Autorizacion = InputBox(Secuencial, "CAMBIO DE AUTORIZACION", TxtAutorizacion)
          If IsNumeric(Autorizacion) And Len(Autorizacion) >= 3 Then
-            SQL1 = "UPDATE Trans_Air " _
-                 & "SET Autorizacion = '" & Autorizacion & "' " _
+            sSQL = "UPDATE Trans_Compras " _
+                 & "SET Autorizacion = '" & TxtAutorizacion.Text & "' " _
                  & "WHERE Item = '" & NumEmpresa & "' " _
                  & "AND Periodo = '" & Periodo_Contable & "' " _
-                 & "AND Numero = " & Co.Numero & " " _
                  & "AND TP = '" & Co.TP & "' " _
-                 & "AND Establecimiento = '" & MidStrg(FA.Serie_LC, 1, 3) & "' " _
-                 & "AND PuntoEmision = '" & MidStrg(FA.Serie_LC, 4, 3) & "' " _
-                 & "AND Secuencial = '" & FA.Factura & "' "
-            Ejecutar_SQL_SP SQL1
-        
+                 & "AND Numero = '" & Co.Numero & "' " _
+                 & "AND TipoComprobante IN(3,41) "
+            Ejecutar_SQL_SP sSQL
             MsgBox "Proceso terminado"
          End If
        Else
@@ -1164,20 +1142,19 @@ Dim Secuencial As String
 End Sub
 
 Private Sub TxtClave_KeyDown(KeyCode As Integer, Shift As Integer)
-Dim RutaXMLFirmado As String
     Keys_Especiales Shift
+    
     If CtrlDown And KeyCode = vbKeyA Then
        If CFechaLong(FechaSistema) <= CFechaLong(Fecha_CE) Then
           RatonReloj
           TextoImprimio = ""
           sSQL = "UPDATE Trans_Compras " _
-               & "SET Estado_SRI_LC = '.', Clave_Acceso_LC = '.' " _
+               & "SET Estado_SRI_LC = '.', Clave_Acceso_LC = '.', Autorizacion = '" & RUC & "' " _
                & "WHERE Item = '" & NumEmpresa & "' " _
                & "AND Periodo = '" & Periodo_Contable & "' " _
                & "AND TP = '" & Co.TP & "' " _
                & "AND Numero = '" & Co.Numero & "' " _
-               & "AND TipoComprobante IN(3,41) " _
-               & "AND Estado_SRI_LC <> 'OK' "
+               & "AND TipoComprobante IN(3,41) "
           Ejecutar_SQL_SP sSQL
           If Len(FA.ClaveAcceso_LC) > 1 Then
              RutaXMLFirmado = RutaDocumentos & "\Comprobantes Generados\" & FA.ClaveAcceso_LC & ".xml"
@@ -1189,30 +1166,20 @@ Dim RutaXMLFirmado As String
              RutaXMLFirmado = RutaDocumentos & "\Comprobantes Firmados\" & FA.ClaveAcceso_LC & ".xml"
              If Dir$(RutaXMLFirmado) <> "" Then Kill RutaXMLFirmado
           End If
-
-          If CFechaLong(FechaSistema) <= CFechaLong(Fecha_CE) Then
-            'MsgBox "ClaveAcceso_LC: " & FA.ClaveAcceso_LC
-             FA.Numero = Co.Numero
-             FA.TP = Co.TP
-             SRI_Crear_Clave_Acceso_Liquidacion FA, False, CBool(CheqClaveAcceso.value)
-             RatonNormal
-          Else
-             RatonNormal
-             MsgBox MensajeNoAutorizarCE
-          End If
+         'MsgBox "ClaveAcceso_LC: " & FA.ClaveAcceso_LC
+          FA.Numero = Co.Numero
+          FA.TP = Co.TP
+          SRI_Crear_Clave_Acceso_Liquidacion FA, False, CBool(CheqClaveAcceso.value)
           RatonNormal
-         If SRI_Autorizacion.Estado_SRI <> "OK" Then
-            LstResultado.AddItem SRI_Autorizacion.Estado_SRI & " - " & Replace(SRI_Autorizacion.Error_SRI, vbCrLf, ", ")
-            RatonNormal
-         End If
-         If TextoImprimio <> "" Then
-            RutaGeneraFile = RutaSysBases & "\TEMP\Informe de Errores de Liquidacion de Compras " & Replace(FechaSistema, "/", "-") & ".txt"
-            NumFile = FreeFile
-            Open RutaGeneraFile For Output As #NumFile ' Abre el archivo.
-                 Print #NumFile, TextoImprimio;
-            Close #NumFile
-            MsgBox "ARCHIVO DE INFORME DE ERRORES:" & vbCrLf & vbCrLf & RutaGeneraFile
-         End If
+          LblResultado.Caption = SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion.Clave_De_Acceso)
+          If TextoImprimio <> "" Then
+             RutaGeneraFile = RutaSysBases & "\TEMP\Informe de Errores de Liquidacion de Compras " & Replace(FechaSistema, "/", "-") & ".txt"
+             NumFile = FreeFile
+             Open RutaGeneraFile For Output As #NumFile ' Abre el archivo.
+                  Print #NumFile, TextoImprimio;
+             Close #NumFile
+             MsgBox "ARCHIVO DE INFORME DE ERRORES:" & vbCrLf & vbCrLf & RutaGeneraFile
+          End If
         'MsgBox "Proceso Exitoso, Vuelva a Intentar conectarce con el S.R.I."
        Else
           RatonNormal

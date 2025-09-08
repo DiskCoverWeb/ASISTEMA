@@ -522,24 +522,24 @@ Private Sub Command1_Click()
           Do While Not .EOF
             'Abono de Factura
              TA.T = Normal
-             TA.TP = .Fields("TC")
+             TA.TP = .fields("TC")
              TA.Fecha = MBFecha
-             TA.Factura = .Fields("Factura")
-             TA.Serie = .Fields("Serie")
-             TA.Autorizacion = .Fields("Autorizacion")
-             TA.Cta = .Fields("Cta_Abono")
-             TA.Cta_CxP = .Fields("Cta_Cobrar")
+             TA.Factura = .fields("Factura")
+             TA.Serie = .fields("Serie")
+             TA.Autorizacion = .fields("Autorizacion")
+             TA.Cta = .fields("Cta_Abono")
+             TA.Cta_CxP = .fields("Cta_Cobrar")
              TA.Banco = "ABONO ANTICIPADO"
-             TA.Cheque = .Fields("Grupo")
-             TA.Abono = .Fields("Abono")
-             TA.CodigoC = .Fields("Codigo_Cliente")
-             TA.Recibi_de = .Fields("Cliente")
+             TA.Cheque = .fields("Grupo")
+             TA.Abono = .fields("Abono")
+             TA.CodigoC = .fields("Codigo_Cliente")
+             TA.Recibi_de = .fields("Cliente")
              TA.Recibo_No = Format$(DiarioCaja, "0000000000")
              Grabar_Abonos TA
             'Tipo de Abonos con SubCtas
             ' Grabar_Anticipos TA
              T = "P"
-             Saldo = .Fields("Saldo") - .Fields("Abono")
+             Saldo = .fields("Saldo") - .fields("Abono")
              If Saldo <= 0 Then T = "C"
              sSQL = "UPDATE Facturas " _
                   & "SET Saldo_MN = " & Saldo & ", T = '" & T & "' " _
@@ -557,7 +557,7 @@ Private Sub Command1_Click()
       End If
      End With
      DGFactura.Visible = False
-     Procesar_Saldo_De_Facturas AbonoAnticipoGrupo, True
+     Actualizar_Saldos_Facturas_SP
      RatonNormal
      DGFactura.Visible = True
      MsgBox "Abonos Realizados con éxito"
@@ -602,10 +602,10 @@ Private Sub Command3_Click()
   With AdoCliente.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
-          CodigoCli = .Fields("Codigo")
-          NombreCliente = .Fields("Cliente")
-          Total = .Fields("Saldo_Pendiente")
-          Grupo_No = .Fields("Grupo")
+          CodigoCli = .fields("Codigo")
+          NombreCliente = .fields("Cliente")
+          Total = .fields("Saldo_Pendiente")
+          Grupo_No = .fields("Grupo")
           SQL1 = "SELECT TC,Factura,Autorizacion,Serie,CodigoC,Saldo_MN,Cta_CxP " _
                & "FROM Facturas " _
                & "WHERE T = '" & Pendiente & "' " _
@@ -618,12 +618,12 @@ Private Sub Command3_Click()
           Select_Adodc AdoFactura, SQL1
           If AdoFactura.Recordset.RecordCount > 0 Then
              Do While Not AdoFactura.Recordset.EOF
-                TipoCta = AdoFactura.Recordset.Fields("TC")
-                Factura_No = AdoFactura.Recordset.Fields("Factura")
-                Autorizacion = AdoFactura.Recordset.Fields("Autorizacion")
-                SerieFactura = AdoFactura.Recordset.Fields("Serie")
-                Cta = AdoFactura.Recordset.Fields("Cta_CxP")
-                Saldo = AdoFactura.Recordset.Fields("Saldo_MN")
+                TipoCta = AdoFactura.Recordset.fields("TC")
+                Factura_No = AdoFactura.Recordset.fields("Factura")
+                Autorizacion = AdoFactura.Recordset.fields("Autorizacion")
+                SerieFactura = AdoFactura.Recordset.fields("Serie")
+                Cta = AdoFactura.Recordset.fields("Cta_CxP")
+                Saldo = AdoFactura.Recordset.fields("Saldo_MN")
                 If Total > 0 Then
                    SetAdoAddNew "Asiento_F"
                    SetAdoFields "CODIGO", Cta_Aux
@@ -665,7 +665,7 @@ Private Sub Command3_Click()
   With AdoFactura.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
-          Total = Total + .Fields("Abono")
+          Total = Total + .fields("Abono")
          .MoveNext
        Loop
       .MoveFirst

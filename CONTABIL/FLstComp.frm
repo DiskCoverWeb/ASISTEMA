@@ -246,7 +246,7 @@ Begin VB.Form FListComprobantes
       MaskColor       =   12632256
       _Version        =   393216
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
-         NumListImages   =   12
+         NumListImages   =   14
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
             Picture         =   "FLstComp.frx":0018
             Key             =   ""
@@ -295,6 +295,14 @@ Begin VB.Form FListComprobantes
             Picture         =   "FLstComp.frx":537A
             Key             =   ""
          EndProperty
+         BeginProperty ListImage13 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "FLstComp.frx":5FCC
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage14 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "FLstComp.frx":68A6
+            Key             =   ""
+         EndProperty
       EndProperty
    End
    Begin MSComctlLib.Toolbar Toolbar1 
@@ -341,7 +349,7 @@ Begin VB.Form FListComprobantes
          BeginProperty Button6 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Anular_Comprobante"
             Object.ToolTipText     =   "Anular el Comprobante"
-            ImageIndex      =   6
+            ImageIndex      =   14
          EndProperty
          BeginProperty Button7 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Autorizar_Comprobante"
@@ -383,26 +391,26 @@ Begin VB.Form FListComprobantes
       TabsPerRow      =   4
       TabHeight       =   520
       TabCaption(0)   =   "&4.- CONTABILIZACION"
-      TabPicture(0)   =   "FLstComp.frx":5FCC
+      TabPicture(0)   =   "FLstComp.frx":6BC0
       Tab(0).ControlEnabled=   -1  'True
       Tab(0).Control(0)=   "DGAsientos"
       Tab(0).Control(0).Enabled=   0   'False
       Tab(0).ControlCount=   1
       TabCaption(1)   =   "&5.- RETENCIONES"
-      TabPicture(1)   =   "FLstComp.frx":5FE8
+      TabPicture(1)   =   "FLstComp.frx":6BDC
       Tab(1).ControlEnabled=   0   'False
       Tab(1).Control(0)=   "DGRet"
       Tab(1).Control(1)=   "DGFAC"
       Tab(1).Control(2)=   "DGFAV"
       Tab(1).ControlCount=   3
       TabCaption(2)   =   "&6.- SUBCUENTAS"
-      TabPicture(2)   =   "FLstComp.frx":6004
+      TabPicture(2)   =   "FLstComp.frx":6BF8
       Tab(2).ControlEnabled=   0   'False
       Tab(2).Control(0)=   "DGCxCxP"
       Tab(2).Control(1)=   "DGIxExCC"
       Tab(2).ControlCount=   2
       TabCaption(3)   =   "&7.- KARDEX"
-      TabPicture(3)   =   "FLstComp.frx":6020
+      TabPicture(3)   =   "FLstComp.frx":6C14
       Tab(3).ControlEnabled=   0   'False
       Tab(3).Control(0)=   "DGKardex"
       Tab(3).Control(1)=   "Label11"
@@ -411,7 +419,7 @@ Begin VB.Form FListComprobantes
       Tab(3).Control(4)=   "LblTotalC"
       Tab(3).ControlCount=   5
       Begin MSDataGridLib.DataGrid DGAsientos 
-         Bindings        =   "FLstComp.frx":603C
+         Bindings        =   "FLstComp.frx":6C30
          Height          =   3585
          Left            =   105
          TabIndex        =   36
@@ -479,14 +487,14 @@ Begin VB.Form FListComprobantes
          EndProperty
       End
       Begin MSDataGridLib.DataGrid DGRet 
-         Bindings        =   "FLstComp.frx":6056
-         Height          =   1695
+         Bindings        =   "FLstComp.frx":6C4A
+         Height          =   1275
          Left            =   -74895
          TabIndex        =   22
-         Top             =   1365
+         Top             =   1470
          Width           =   9990
          _ExtentX        =   17621
-         _ExtentY        =   2990
+         _ExtentY        =   2249
          _Version        =   393216
          AllowUpdate     =   0   'False
          BackColor       =   12640511
@@ -546,7 +554,7 @@ Begin VB.Form FListComprobantes
          EndProperty
       End
       Begin MSDataGridLib.DataGrid DGCxCxP 
-         Bindings        =   "FLstComp.frx":606B
+         Bindings        =   "FLstComp.frx":6C5F
          Height          =   1800
          Left            =   -74895
          TabIndex        =   23
@@ -613,7 +621,7 @@ Begin VB.Form FListComprobantes
          EndProperty
       End
       Begin MSDataGridLib.DataGrid DGKardex 
-         Bindings        =   "FLstComp.frx":6082
+         Bindings        =   "FLstComp.frx":6C76
          Height          =   3060
          Left            =   -74895
          TabIndex        =   24
@@ -681,14 +689,14 @@ Begin VB.Form FListComprobantes
          EndProperty
       End
       Begin MSDataGridLib.DataGrid DGFAC 
-         Bindings        =   "FLstComp.frx":609A
-         Height          =   855
+         Bindings        =   "FLstComp.frx":6C8E
+         Height          =   1065
          Left            =   -74895
          TabIndex        =   20
          Top             =   420
          Width           =   9990
          _ExtentX        =   17621
-         _ExtentY        =   1508
+         _ExtentY        =   1879
          _Version        =   393216
          AllowUpdate     =   0   'False
          BackColor       =   12640511
@@ -748,7 +756,7 @@ Begin VB.Form FListComprobantes
          EndProperty
       End
       Begin MSDataGridLib.DataGrid DGFAV 
-         Bindings        =   "FLstComp.frx":60AF
+         Bindings        =   "FLstComp.frx":6CA3
          Height          =   960
          Left            =   -74895
          TabIndex        =   21
@@ -815,7 +823,7 @@ Begin VB.Form FListComprobantes
          EndProperty
       End
       Begin MSDataGridLib.DataGrid DGIxExCC 
-         Bindings        =   "FLstComp.frx":60C4
+         Bindings        =   "FLstComp.frx":6CB8
          Height          =   1800
          Left            =   -74895
          TabIndex        =   37
@@ -1845,10 +1853,10 @@ If PonImpresoraDefecto(SetNombrePRN) Then
         Printer.FontSize = 10
         Printer.FontName = TipoCourier
         Do While Not .EOF
-           If IsNumeric(.fields("Cheq_Dep")) And .fields("Haber") > 0 Then
-              Codigo = .fields("Cta")
+           If IsNumeric(.Fields("Cheq_Dep")) And .Fields("Haber") > 0 Then
+              Codigo = .Fields("Cta")
               CCHQConLineas = ProcesarSeteos(Format(Val(MidStrg(Codigo, Len(Codigo) - 1, 3)), "00"))
-              Total = .fields("Haber")
+              Total = .Fields("Haber")
               Printer.FontSize = SetD(2).Tamaño
               PrinterTexto SetD(2).PosX, PosLinea + SetD(2).PosY, NombreCliente
               Printer.FontSize = SetD(3).Tamaño
@@ -1995,27 +2003,28 @@ End Sub
 Private Sub DGAsientos_KeyDown(KeyCode As Integer, Shift As Integer)
 Dim ID_Temp As Long
   Keys_Especiales Shift
+  Codigo1 = DGAsientos.Columns(0)
+  Cta = DGAsientos.Columns(0)
+  CuentaBanco = DGAsientos.Columns(1)
+  Cuenta_No = DGAsientos.Columns(1)
+  Debe = DGAsientos.Columns(3)
+  Haber = DGAsientos.Columns(4)
+  NomCtaSup = DGAsientos.Columns(5)
+  NoCheque = DGAsientos.Columns(6)
+  Asiento = DGAsientos.Columns(DGAsientos.Columns.Count - 1)
   If CtrlDown And KeyCode = vbKeyZ Then
      If ClaveContador Then
         RatonReloj
         'DGAsientos.Visible = False
         Producto = "Transacciones"
-        Codigo1 = DGAsientos.Columns(0)
-        Asiento = DGAsientos.Columns(13)
-        Codigo3 = Codigo1 & " - " & DGAsientos.Columns(1)
         FChangeCta.Show 1
         RatonNormal
         'DGAsientos.Visible = True
      End If
   End If
+  
   If CtrlDown And KeyCode = vbKeyD Then
      DGAsientos.Visible = False
-     Cta = DGAsientos.Columns(0)
-     CuentaBanco = DGAsientos.Columns(1)
-     Debe = DGAsientos.Columns(3)
-     Haber = DGAsientos.Columns(4)
-     Asiento = DGAsientos.Columns(13)
-     
      Mensajes = "Esta seguro de eliminar la cuenta:" & vbCrLf & vbCrLf & Cta & " - " & CuentaBanco
      Titulo = "PREGUNTA DE ELIMINACION"
      If BoxMensaje = vbYes Then
@@ -2037,17 +2046,11 @@ Dim ID_Temp As Long
      DGAsientos.Visible = True
      DCComp.SetFocus
   End If
+  
   If CtrlDown And KeyCode = vbKeyX Then
      If ClaveContador Then
         RatonReloj
         NomCta = LabelConcepto.Caption
-        Cta = DGAsientos.Columns(0)
-        Cuenta_No = DGAsientos.Columns(1)
-        Debe = DGAsientos.Columns(3)
-        Haber = DGAsientos.Columns(4)
-        NomCtaSup = DGAsientos.Columns(5)
-        NoCheque = DGAsientos.Columns(6)
-        Asiento = DGAsientos.Columns(13)
         FChangeValores.Show
         RatonNormal
      End If
@@ -2205,7 +2208,7 @@ Private Sub MBFecha_GotFocus()
 End Sub
 
 Private Sub MBFecha_LostFocus()
-  FechaValida MBFecha
+  FechaValida MBFecha, True
   If MBFecha.Text <> FechaTemp Then
      Mensajes = "Seguro de realizar el cambio"
      Titulo = "PREGUNTA DE MODIFICACION"
@@ -2284,18 +2287,18 @@ Public Sub ListarComprobantes()
   With AdoComp.Recordset
    If .RecordCount > 0 Then
        LabelEst.Caption = "Normal"
-       Co.T = .fields("T")
-       Co.Fecha = .fields("Fecha")
-       Co.CodigoB = .fields("Codigo_B")
-       Co.Beneficiario = .fields("Cliente")
-       Co.Concepto = .fields("Concepto")
-       Co.Efectivo = .fields("Efectivo")
+       Co.T = .Fields("T")
+       Co.Fecha = .Fields("Fecha")
+       Co.CodigoB = .Fields("Codigo_B")
+       Co.Beneficiario = .Fields("Cliente")
+       Co.Concepto = .Fields("Concepto")
+       Co.Efectivo = .Fields("Efectivo")
        If Co.T = Anulado Then LabelEst.Caption = "Anulado"
        MBFecha.Text = Format(Co.Fecha, FormatoFechas)
        LabelRecibi.Caption = Co.Beneficiario
        LabelConcepto.Caption = Co.Concepto
        LabelFormaPago.Caption = Co.Efectivo
-       LabelUsuario.Caption = " " & .fields("Nombre_Completo")
+       LabelUsuario.Caption = " " & .Fields("Nombre_Completo")
        ExisteComp = True
        RatonNormal
    Else
@@ -2307,7 +2310,7 @@ Public Sub ListarComprobantes()
     'Llenar Cuentas de Transacciones
      Co.Cheque = Ninguno
      Co.Cta_Banco = Ninguno
-     sSQL = "SELECT T.Cta,Ca.Cuenta,T.Parcial_ME,T.Debe,T.Haber,T.Detalle,T.Cheq_Dep,T.Fecha_Efec,T.Codigo_C,Ca.Item,T.TP,T.Numero,T.Fecha,T.ID " _
+     sSQL = "SELECT T.Cta,Ca.Cuenta,T.Parcial_ME,T.Debe,T.Haber,Ca.TC,T.Detalle,T.Cheq_Dep,T.Fecha_Efec,T.Codigo_C,Ca.Item,T.TP,T.Numero,T.Fecha,T.ID " _
           & "FROM Transacciones As T, Catalogo_Cuentas As Ca " _
           & "WHERE T.TP = '" & Co.TP & "' " _
           & "AND T.Numero = " & Co.Numero & " " _
@@ -2323,12 +2326,12 @@ Public Sub ListarComprobantes()
       If .RecordCount > 0 Then
          .MoveFirst
           Do While Not .EOF
-             SumaDebe = SumaDebe + .fields("Debe")
-             SumaHaber = SumaHaber + .fields("Haber")
+             SumaDebe = SumaDebe + .Fields("Debe")
+             SumaHaber = SumaHaber + .Fields("Haber")
              
-             If IsNumeric(.fields("Cheq_Dep")) And .fields("Haber") > 0 Then
-                Co.Cheque = .fields("Cheq_Dep")
-                Co.Cta_Banco = .fields("Cta")
+             If IsNumeric(.Fields("Cheq_Dep")) And .Fields("Haber") > 0 Then
+                Co.Cheque = .Fields("Cheq_Dep")
+                Co.Cta_Banco = .Fields("Cta")
              End If
             .MoveNext
           Loop
@@ -2358,8 +2361,8 @@ Public Sub ListarComprobantes()
      With AdoIngKar.Recordset
       If .RecordCount > 0 Then
           Do While Not .EOF
-             Total = Total + Redondear(.fields("Valor_Total"), 2)
-             Saldo = Saldo + Redondear(.fields("Total"), 2)
+             Total = Total + Redondear(.Fields("Valor_Total"), 2)
+             Saldo = Saldo + Redondear(.Fields("Total"), 2)
             .MoveNext
           Loop
           DGKardex.Visible = True
@@ -2425,9 +2428,9 @@ Public Sub ListarComprobantes()
            & "ORDER BY TC.Linea_SRI,C.Cliente,C.CI_RUC,C.TD "
       Select_Adodc_Grid DGFAC, AdoFAC, sSQL
       If AdoFAC.Recordset.RecordCount > 0 Then
-         FA.ClaveAcceso = AdoFAC.Recordset.fields("Clave_Acceso")
-         FA.Estado_SRI = AdoFAC.Recordset.fields("Estado_SRI")
-         FA.Autorizacion_R = AdoFAC.Recordset.fields("AutRetencion")
+         FA.ClaveAcceso = AdoFAC.Recordset.Fields("Clave_Acceso")
+         FA.Estado_SRI = AdoFAC.Recordset.Fields("Estado_SRI")
+         FA.Autorizacion_R = AdoFAC.Recordset.Fields("AutRetencion")
          DGFAC.Visible = True
       End If
      'Ventas
@@ -2477,6 +2480,7 @@ End Sub
 
 Public Sub AnularComprobante()
 Dim AdoDBAux As ADODB.Recordset
+Dim SoloSalida As Boolean
 Dim AnularComprobanteDe As String
 Dim MotivoAnulacion As String
 Dim CtasComp As String
@@ -2484,13 +2488,13 @@ Dim CodigosKardex As String
 Dim UnaFecha As Boolean
 
 If ClaveSupervisor Then
-   Mensajes = "Seguro de Anular" & vbCrLf & "El Comprobante No. " & Co.TP & "-" & Co.Numero
+   Mensajes = "Seguro de Anular El Comprobante No. " & Co.TP & "-" & Co.Numero
    Titulo = "Pregunta de Anulacion"
    If BoxMensaje = vbYes Then
       If InStr(Co.Concepto, "Cierre de Caja de") > 0 Then
          FechaInicial = Co.Fecha
          FechaFinal = Co.Fecha
-         
+         SoloSalida = False
          Contra_Cta = LabelConcepto.Caption
          UnaFecha = True
          Do While Len(Contra_Cta) > 0
@@ -2543,7 +2547,7 @@ If ClaveSupervisor Then
       With AdoDBAux
        If .RecordCount > 0 Then
            Do While Not .EOF
-              If InStr(CtasComp, .fields("Cta")) = 0 Then CtasComp = CtasComp & "'" & .fields("Cta") & "', "
+              If InStr(CtasComp, .Fields("Cta")) = 0 Then CtasComp = CtasComp & "'" & .Fields("Cta") & "', "
              .MoveNext
            Loop
        End If
@@ -2552,7 +2556,7 @@ If ClaveSupervisor Then
       CtasComp = CtasComp & "'.'"
   
      'Determinamos los Kardex a re-mayorizar despues de anular
-      sSQL = "SELECT Codigo_Inv " _
+      sSQL = "SELECT Codigo_Inv, Salida " _
            & "FROM Trans_Kardex " _
            & AnularComprobanteDe _
            & "ORDER BY Codigo_Inv "
@@ -2560,7 +2564,8 @@ If ClaveSupervisor Then
       With AdoDBAux
        If .RecordCount > 0 Then
            Do While Not .EOF
-              If InStr(CodigosKardex, .fields("Codigo_Inv")) = 0 Then CodigosKardex = CodigosKardex & "'" & .fields("Codigo_Inv") & "', "
+              If .Fields("Salida") > 0 Then SoloSalida = True
+              If InStr(CodigosKardex, .Fields("Codigo_Inv")) = 0 Then CodigosKardex = CodigosKardex & "'" & .Fields("Codigo_Inv") & "', "
              .MoveNext
            Loop
        End If
@@ -2626,12 +2631,7 @@ If ClaveSupervisor Then
               & "FROM Trans_Compras " _
               & AnularComprobanteDe
          Ejecutar_SQL_SP sSQL
-          
-         sSQL = "DELETE * " _
-              & "FROM Trans_Kardex " _
-              & AnularComprobanteDe
-         Ejecutar_SQL_SP sSQL
-          
+                    
          sSQL = "DELETE * " _
               & "FROM Trans_Ventas " _
               & AnularComprobanteDe
@@ -2651,6 +2651,22 @@ If ClaveSupervisor Then
               & "FROM Trans_Rol_de_Pagos " _
               & AnularComprobanteDe
          Ejecutar_SQL_SP sSQL
+         
+         If CodigosKardex <> "" Then
+            Mensajes = "Desea Conservar los movimientos del Kardex del Comprobante No. " & Co.TP & "-" & Co.Numero & ", para volver a procesar el Cierre Diario de Caja"
+            Titulo = "Pregunta de Anulacion con Eliminacion"
+            If BoxMensaje = vbYes Then
+               sSQL = "UPDATE Trans_Kardex " _
+                    & "SET TP = '.', Numero = 0 " _
+                    & AnularComprobanteDe
+               Ejecutar_SQL_SP sSQL
+            Else
+               sSQL = "DELETE * " _
+                    & "FROM Trans_Kardex " _
+                    & AnularComprobanteDe
+               Ejecutar_SQL_SP sSQL
+            End If
+         End If
          Control_Procesos "A", "Anulo Comprobante de: " & Co.TP & " No. " & Co.Numero, "MOTIVO DE LA ANULACION: " & MotivoAnulacion
          MsgBox "Comprobante de: " & Co.TP & " No. " & Co.Numero & ", ANULADO CORRECTAMENTE"
       Else
@@ -2780,11 +2796,11 @@ Public Sub Copiar_Comprobantes_Item(ItemA As String, Tabla As String)
      If .RecordCount > 0 Then
          Do While Not .EOF
             SetAdoAddNew Tabla
-            For K = 0 To .fields.Count - 1
-                If .fields(K).Name = "Item" Then
-                    SetAdoFields .fields(K).Name, ItemA
+            For K = 0 To .Fields.Count - 1
+                If .Fields(K).Name = "Item" Then
+                    SetAdoFields .Fields(K).Name, ItemA
                 Else
-                    SetAdoFields .fields(K).Name, .fields(K)
+                    SetAdoFields .Fields(K).Name, .Fields(K)
                 End If
             Next K
             SetAdoUpdate

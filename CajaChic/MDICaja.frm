@@ -1,5 +1,6 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.MDIForm MDICajaChica 
    BackColor       =   &H00FFFFFF&
    Caption         =   " "
@@ -88,6 +89,13 @@ Begin VB.MDIForm MDICajaChica
       _ExtentY        =   212
       _Version        =   393216
       Appearance      =   0
+   End
+   Begin MSComDlg.CommonDialog Dir_Dialog 
+      Left            =   630
+      Top             =   105
+      _ExtentX        =   847
+      _ExtentY        =   847
+      _Version        =   393216
    End
    Begin VB.Menu DatosRel 
       Caption         =   "&Archivos"
@@ -250,8 +258,7 @@ Private Sub MCamboPeriodo_Click()
 End Sub
 
 Private Sub MDIForm_Activate()
-    MDI_X_Max = Screen.width - 150
-    MDI_Y_Max = Screen.Height - 1900
+    screen_size
 End Sub
 
 Private Sub MDIForm_Load()
@@ -307,13 +314,13 @@ End Sub
 
 Private Sub PRN_LPT1_Click()
     'Establecer CancelError a True
-    On Error GoTo ErrHandler
+    On Error GoTo errHandler
     CommonDialog1.CancelError = False
     'Presentar el cuadro de diálogo Imprimir
     CommonDialog1.Flags = cdlPDPrintSetup
     CommonDialog1.ShowPrinter
     Exit Sub
-ErrHandler:
+errHandler:
     'El usuario ha hecho clic en el botón Cancelar
     Exit Sub
 End Sub

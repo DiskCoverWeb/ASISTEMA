@@ -75,7 +75,7 @@ Begin VB.Form CambioPeriodo
    Begin MSAdodcLib.Adodc AdoPeriodo 
       Height          =   330
       Left            =   105
-      Top             =   1995
+      Top             =   2100
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -119,53 +119,6 @@ Begin VB.Form CambioPeriodo
       EndProperty
       _Version        =   393216
    End
-   Begin MSAdodcLib.Adodc AdoEmp 
-      Height          =   330
-      Left            =   210
-      Top             =   630
-      Visible         =   0   'False
-      Width           =   1695
-      _ExtentX        =   2990
-      _ExtentY        =   582
-      ConnectMode     =   0
-      CursorLocation  =   3
-      IsolationLevel  =   -1
-      ConnectionTimeout=   15
-      CommandTimeout  =   30
-      CursorType      =   3
-      LockType        =   3
-      CommandType     =   8
-      CursorOptions   =   0
-      CacheSize       =   50
-      MaxRecords      =   0
-      BOFAction       =   0
-      EOFAction       =   0
-      ConnectStringType=   1
-      Appearance      =   1
-      BackColor       =   -2147483643
-      ForeColor       =   -2147483640
-      Orientation     =   0
-      Enabled         =   -1
-      Connect         =   ""
-      OLEDBString     =   ""
-      OLEDBFile       =   ""
-      DataSourceName  =   ""
-      OtherAttributes =   ""
-      UserName        =   ""
-      Password        =   ""
-      RecordSource    =   ""
-      Caption         =   "Emp"
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      _Version        =   393216
-   End
    Begin VB.Label Label1 
       BorderStyle     =   1  'Fixed Single
       Caption         =   "Seleccione el &Periodo"
@@ -196,38 +149,46 @@ Private Sub Command1_Click()
 Dim IdP As Integer
 Dim IdPS As Integer
 
-  Periodo_Contable = LstPeriodo.Text
-  If Periodo_Contable = "Periodo Actual" Then Periodo_Contable = Ninguno
-  If Periodo_Contable <> Ninguno Then
-     Periodo_Superior = Periodo_Contable
-     IdPS = 0
-     For IdP = 0 To LstPeriodo.ListCount - 1
-         If Periodo_Contable = LstPeriodo.List(IdP) Then IdPS = IdP
-     Next IdP
-     If IdPS > 0 Then Periodo_Superior = LstPeriodo.List(IdPS - 1)
-  Else
-     Periodo_Superior = Ninguno
-  End If
-  If Periodo_Superior = "Periodo Actual" Then Periodo_Superior = Ninguno
-  Anio_Lectivo = Ninguno
-  Director = Ninguno: Secretario1 = Ninguno
-  Rector = Ninguno:   Secretario2 = Ninguno
-  sSQL = "SELECT * " _
-       & "FROM Catalogo_Periodo_Lectivo " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND Periodo = '" & Periodo_Contable & "' "
-  Select_Adodc AdoEmp, sSQL
-  With AdoEmp.Recordset
-   If .RecordCount > 0 Then
-       Anio_Lectivo = .Fields("Anio_Lectivo")
-       Director = .Fields("Director")
-       Secretario1 = .Fields("Secretario1")
-       Rector = .Fields("Rector")
-       Secretario2 = .Fields("Secretario2")
-   End If
-  End With
-  Crear_Cierre_Mes
-  Unload Me
+    Periodo_Contable = LstPeriodo.Text
+    If Periodo_Contable = "Periodo Actual" Then
+       Periodo_Contable = Ninguno
+       Periodo_Superior = Ninguno
+    Else
+       Periodo_Superior = Periodo_Contable
+       IdPS = 0
+       For IdP = 0 To LstPeriodo.ListCount - 1
+           If Periodo_Contable = LstPeriodo.List(IdP) Then IdPS = IdP
+       Next IdP
+       If IdPS > 0 Then Periodo_Superior = LstPeriodo.List(IdPS - 1)
+    End If
+    If Periodo_Superior = "Periodo Actual" Then Periodo_Superior = Ninguno
+      
+    Anio_Lectivo = Ninguno
+    Director = Ninguno: Secretario1 = Ninguno
+    Rector = Ninguno:   Secretario2 = Ninguno
+    sSQL = "SELECT * " _
+         & "FROM Catalogo_Periodo_Lectivo " _
+         & "WHERE Item = '" & NumEmpresa & "' " _
+         & "AND Periodo = '" & Periodo_Contable & "' "
+    Select_Adodc AdoPeriodo, sSQL
+    With AdoPeriodo.Recordset
+     If .RecordCount > 0 Then
+         Anio_Lectivo = .fields("Anio_Lectivo")
+         Director = .fields("Director")
+         Secretario1 = .fields("Secretario1")
+         Rector = .fields("Rector")
+         Secretario2 = .fields("Secretario2")
+     End If
+    End With
+    sSQL = "SELECT MIN(Fecha) As FechaCierreFiscal " _
+         & "FROM Comprobantes " _
+         & "WHERE Periodo = '" & Periodo_Contable & "' " _
+         & "AND Item = '" & NumEmpresa & "' "
+    Select_Adodc AdoPeriodo, sSQL
+    If AdoPeriodo.Recordset.RecordCount > 0 Then FechaCierreFiscal = AdoPeriodo.Recordset.fields("FechaCierreFiscal") Else FechaCierreFiscal = "01/01/" & Year(FechaSistema)
+    
+   'Crear_Cierre_Mes
+    Unload Me
 End Sub
 
 Private Sub Command2_Click()
@@ -256,7 +217,7 @@ Private Sub Form_Activate()
   With AdoPeriodo.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
-          LstPeriodo.AddItem CStr(.Fields("Periodo"))
+          LstPeriodo.AddItem CStr(.fields("Periodo"))
          .MoveNext
        Loop
    Else
@@ -274,7 +235,6 @@ End Sub
 
 Private Sub Form_Load()
   CentrarForm CambioPeriodo
-  ConectarAdodc AdoEmp
   ConectarAdodc AdoPeriodo
 End Sub
 

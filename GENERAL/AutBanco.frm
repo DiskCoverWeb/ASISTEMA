@@ -1408,7 +1408,7 @@ Dim CaptionTemp As String
 End Sub
 
 Private Sub Visualizar_Archivo()
-'Dir_Dialog.Filename = Abrir_Archivo(Me.hwnd, Dir_Dialog)
+'Dir_Dialog.Filename = SelectDialogFile(Me.hwnd, Dir_Dialog)
 'Dir_Dialog.Filename = Guardar_Archivo(Me.hwnd, Dir_Dialog)
 'Dir_Dialog.Filter = "Archivo de texto|*.txt|" _
 '                  & "Mapa de bits|*.bmp|" _
@@ -1417,12 +1417,8 @@ Dim MaxCar As Integer
 Dim Result As String
 Label4.Caption = Ninguno
 
-Dir_Dialog.Filter = "Todos los archivos|*.*"
-Dir_Dialog.InitDir = RutaSysBases & "\Banco\Abonos\"
-Dir_Dialog.Filename = Abrir_Archivo(Me.hwnd, Dir_Dialog, OpenFile)
-  
-  NombreArchivo = Dir_Dialog.File
-  RutaGeneraFile = TrimStrg(Dir_Dialog.Filename)
+  NombreArchivo = SelectDialogFile(RutaSysBases & "\Banco\Abonos\")
+  RutaGeneraFile = TrimStrg(NombreArchivo)
   Label4.Caption = RutaGeneraFile
   If NombreArchivo <> "" Then
      'TxtFile = Leer_Archivo_Texto(RutaGeneraFile)
@@ -1693,22 +1689,18 @@ Dim AuxNumEmp As String
   FechaValida MBFechaI
   FechaValida MBFechaF
   
-  Dir_Dialog.Filter = "Todos los archivos|*.txt"
-  Dir_Dialog.InitDir = RutaSysBases & "\Banco\Abonos\"
   If Label4.Caption <> Ninguno Then
      Mensajes = "SUBIR EL ARCHIVO DE LA PANTALLA"
      Titulo = "Formulario de Grabacion"
      If BoxMensaje = vbYes Then
         NombreArchivo = Label4.Caption
      Else
-        Dir_Dialog.Filename = Abrir_Archivo(Me.hwnd, Dir_Dialog, OpenFile)
-        NombreArchivo = Dir_Dialog.File
-        RutaGeneraFile = Dir_Dialog.Filename
+        NombreArchivo = SelectDialogFile(RutaSysBases & "\Banco\Abonos\", "Todos los archivos|*.txt")
+        RutaGeneraFile = NombreArchivo
      End If
   Else
-     Dir_Dialog.Filename = Abrir_Archivo(Me.hwnd, Dir_Dialog, OpenFile)
-     NombreArchivo = Dir_Dialog.File
-     RutaGeneraFile = Dir_Dialog.Filename
+     NombreArchivo = SelectDialogFile(RutaSysBases & "\Banco\Abonos\", "Todos los archivos|*.txt")
+     RutaGeneraFile = NombreArchivo
   End If
   NombreArchivo = Replace(NombreArchivo, vbCrLf, "")
   RutaGeneraFile = Replace(RutaGeneraFile, vbCrLf, "")
@@ -1718,7 +1710,7 @@ Dim AuxNumEmp As String
  'Subo el archivo al Servidor dse DB
   Subir_Archivo_FTP_Linode ftp, LstStatud, LstVwFTP, RutaGeneraFile
  'Proceso el archivo de abonos
-  Subir_Archivo_Abonos_Bancos_SP RutaGeneraFile, TextoBanco
+  '''''Subir_Archivo_Abonos_Bancos_SP RutaGeneraFile, TextoBanco
 '''  MsgBox "proceso terminado"
 '''  Exit Sub
   Contador = 0
@@ -2912,7 +2904,7 @@ Dim TRep As Tipo_Beneficiarios
       .MoveFirst
        Do While Not .EOF
           CodigoCli = .fields("CodigoC")
-          TRep = Leer_Datos_Clientes(CodigoCli)
+          TRep = Leer_Datos_Cliente_SP(CodigoCli)
           NombreCliente = TrimStrg(MidStrg(.fields("Cliente"), 1, 40))
           CodigoB = Format$(.fields("CI_RUC"), "00000000")
           Abono = .fields("Total") - .fields("Total_Desc") - .fields("Total_Desc2")
@@ -2976,7 +2968,7 @@ Dim TRep As Tipo_Beneficiarios
       .MoveFirst
        Do While Not .EOF
           CodigoCli = .fields("CodigoC")
-          TRep = Leer_Datos_Clientes(CodigoCli)
+          TRep = Leer_Datos_Cliente_SP(CodigoCli)
           NombreCliente = TrimStrg(MidStrg(.fields("Cliente"), 1, 40))
           CodigoB = Format$(.fields("CI_RUC"), "00000000")
           Abono = .fields("Saldo_Pend")

@@ -506,9 +506,9 @@ Private Sub Command1_Click()
               Select_Adodc AdoClientes, sSQL
               With AdoClientes.Recordset
                If .RecordCount > 0 Then
-                  .Fields("Cod_Ejec") = CodigoVen
-                  .Fields("Cta_CxP") = Cta_Zona
-                  .Fields("FA") = True
+                  .fields("Cod_Ejec") = CodigoVen
+                  .fields("Cta_CxP") = Cta_Zona
+                  .fields("FA") = True
                   .Update
                End If
               End With
@@ -578,8 +578,8 @@ Private Sub Command1_Click()
        With AdoZonaAct.Recordset
         If .RecordCount > 0 Then
             Do While Not .EOF
-               Codigo1 = .Fields("Cta_CxP")
-               Codigo2 = .Fields("Cuenta")
+               Codigo1 = .fields("Cta_CxP")
+               Codigo2 = .fields("Cuenta")
                I = InStr(Codigo2, "ZONA")
                If I > 0 Then
                   Codigo3 = TrimStrg(MidStrg(Codigo2, I, 10))
@@ -632,7 +632,7 @@ Private Sub DCEjecActual_LostFocus()
          & "WHERE Codigo = '" & CodigoEjecutivo & "' "
     Select_Adodc AdoAux, sSQL
     With AdoAux.Recordset
-     If .RecordCount > 0 Then TxtCuota = Format(.Fields("Cuota_Venta"), "#,##0.00") Else TxtCuota = "0.00"
+     If .RecordCount > 0 Then TxtCuota = Format(.fields("Cuota_Venta"), "#,##0.00") Else TxtCuota = "0.00"
     End With
     Listar_Zonas_Ejecutivo CodigoEjecutivo
 End Sub
@@ -718,8 +718,8 @@ Dim CodEjec As String
         .MoveFirst
         .Find ("Cliente = '" & Ejecutivo & "' ")
          If Not .EOF Then
-            CodEjec = .Fields("Codigo")
-            Cta_Aux = .Fields("Cta_CxP")
+            CodEjec = .fields("Codigo")
+            Cta_Aux = .fields("Cta_CxP")
          End If
      End If
     End With
@@ -737,8 +737,8 @@ Dim GZona As String
         .MoveFirst
         .Find ("Cuenta = '" & Zona & "' ")
          If Not .EOF Then
-            Cta_Zona = .Fields("Cta_CxP")
-            SubCad = .Fields("Cuenta")
+            Cta_Zona = .fields("Cta_CxP")
+            SubCad = .fields("Cuenta")
             I = InStr(SubCad, "ZONA")
             If I > 0 Then GZona = TrimStrg(MidStrg(SubCad, I, 10))
          End If
@@ -776,7 +776,7 @@ Public Sub Clientes_x_Ejecutivo(CodEjec As String, CtaZona As String)
          LstClientes.AddItem Cadena & String(80 - Len(Cadena), " ") & "CODIGO (" & .RecordCount & ")"
          LstClientes.AddItem String(95, "-")
          Do While Not .EOF
-            LstClientes.AddItem .Fields("Cliente") & String(80 - Len(.Fields("Cliente")), " ") & .Fields("Codigo")
+            LstClientes.AddItem .fields("Cliente") & String(80 - Len(.fields("Cliente")), " ") & .fields("Codigo")
            .MoveNext
          Loop
      End If

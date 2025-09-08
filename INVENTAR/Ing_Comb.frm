@@ -1416,7 +1416,7 @@ Private Sub Command1_Click()
        Cadena = DCBenef.Text
       .MoveFirst
       .Find ("Cliente Like '" & Cadena & "' ")
-       If Not .EOF Then CodigoBenef = .Fields("Codigo")
+       If Not .EOF Then CodigoBenef = .fields("Codigo")
    End If
   End With
   Valor = 0
@@ -1429,16 +1429,16 @@ Private Sub Command1_Click()
        TipoDoc = Day(FechaSistema) & "-" & Month(FechaSistema) & "-" & Cod_Bodega & "-" & Cod_Bodega1
       .MoveFirst
        Total = 0: ValorDH = 0
-       Cta_Inventario = .Fields("CTA_INVENTARIO")
+       Cta_Inventario = .fields("CTA_INVENTARIO")
        Do While Not .EOF
-          ValorDH = .Fields("VALOR_TOTAL")
-          Cta_Inventario = .Fields("CTA_INVENTARIO")
-          If .Fields("DH") = 1 Then
+          ValorDH = .fields("VALOR_TOTAL")
+          Cta_Inventario = .fields("CTA_INVENTARIO")
+          If .fields("DH") = 1 Then
               InsertarAsientos AdoAsientos, Cta_Inventario, 0, ValorDH, 0
           Else
               InsertarAsientos AdoAsientos, Cta_Inventario, 0, 0, ValorDH
           End If
-          Total = Total + .Fields("VALOR_TOTAL")
+          Total = Total + .fields("VALOR_TOTAL")
          .MoveNext
        Loop
        Total = Round(Total, 2)
@@ -1455,8 +1455,8 @@ Private Sub Command1_Click()
    If .RecordCount > 0 Then
        Debe = 0: Haber = 0
        Do While Not .EOF
-          Debe = Debe + .Fields("DEBE")
-          Haber = Haber + .Fields("HABER")
+          Debe = Debe + .fields("DEBE")
+          Haber = Haber + .fields("HABER")
          .MoveNext
        Loop
        If (Debe - Haber) <> 0 Then MsgBox "Verifique el comprobante, no cuadra por: " & Round(Debe - Haber, 2)
@@ -1476,7 +1476,7 @@ Private Sub Command1_Click()
           Co.Usuario = CodigoUsuario
           Co.T_No = Trans_No
           Co.Item = NumEmpresa
-          GrabarComprobante Co
+          Grabar_Comprobante Co
           ImprimirComprobantesDe False, Co
           Imprimir_Nota_Inventario AdoBenef, AdoKardex, NumComp, TipoDoc, "CD", FechaTexto, FechaTexto, Total
           Mensajes = "Imprimir Copia de Nota de Entrada/Salida"
@@ -1504,9 +1504,9 @@ Private Sub DCBenef_LostFocus()
       .MoveFirst
       .Find ("Cliente Like '" & Cadena & "' ")
        If Not .EOF Then
-          CodigoBenef = .Fields("Codigo")
-          CodigoCliente = .Fields("Codigo")
-          TipoDoc = .Fields("TD")
+          CodigoBenef = .fields("Codigo")
+          CodigoCliente = .fields("Codigo")
+          TipoDoc = .fields("TD")
           Si_No = True
           If TipoDoc = "R" Then Si_No = False
        Else
@@ -1527,7 +1527,7 @@ Private Sub DCBodega_LostFocus()
    If .RecordCount > 0 Then
       .MoveFirst
       .Find ("Bodega Like '" & DCBodega & "' ")
-       If Not .EOF Then Cod_Bodega = .Fields("CodBod")
+       If Not .EOF Then Cod_Bodega = .fields("CodBod")
    End If
   End With
 End Sub
@@ -1542,7 +1542,7 @@ Private Sub DCBodega1_LostFocus()
    If .RecordCount > 0 Then
       .MoveFirst
       .Find ("Bodega Like '" & DCBodega1 & "' ")
-       If Not .EOF Then Cod_Bodega1 = .Fields("CodBod")
+       If Not .EOF Then Cod_Bodega1 = .fields("CodBod")
    End If
   End With
 End Sub
@@ -1566,12 +1566,12 @@ Private Sub DCInv_LostFocus()
       .MoveFirst
       .Find ("Producto Like '" & CodigoInv & "' ")
        If Not .EOF Then
-          Si_No = .Fields("IVA")
-          Unidad = .Fields("Unidad")
-          CodigoInv = .Fields("Codigo_Inv")
-          Producto_S = .Fields("Producto")
-          Cta_Inv_S = .Fields("Cta_Inventario")
-          TxtRegSanitario = .Fields("Reg_Sanitario")
+          Si_No = .fields("IVA")
+          Unidad = .fields("Unidad")
+          CodigoInv = .fields("Codigo_Inv")
+          Producto_S = .fields("Producto")
+          Cta_Inv_S = .fields("Cta_Inventario")
+          TxtRegSanitario = .fields("Reg_Sanitario")
          ' TextEntrada.SetFocus
           TxtLoteNo.SetFocus
        Else
@@ -1704,10 +1704,10 @@ Dim Cant_Rec As Currency
               Do While Not .EOF
                  Salida = Val(CCur(TextEntrada))
                  Cantidad = Salida
-                 Cod_Inv_Rec = .Fields("Codigo_Receta")
-                 Cant_Rec = .Fields("Cant_Salida")
-                 Contra_Cta = .Fields("Cta_Inventario")
-                 Producto = .Fields("Producto")
+                 Cod_Inv_Rec = .fields("Codigo_Receta")
+                 Cant_Rec = .fields("Cant_Salida")
+                 Contra_Cta = .fields("Cta_Inventario")
+                 Producto = .fields("Producto")
                  Codigo = Leer_Cta_Catalogo(Contra_Cta)  ' Codigo = Cta Contable , Cuenta = Detalle Cuenta
                  
                 'MsgBox "Insumos del " & Producto_S & ": " & CodigoInv & " No. " & .RecordCount
@@ -1733,7 +1733,7 @@ Dim Cant_Rec As Currency
                  If AdoTInvS.Recordset.RecordCount > 0 Then
                     Salida = 1
                     Do While Not AdoTInvS.Recordset.EOF And Salida > 0
-                       Salida = AdoTInvS.Recordset.Fields("Tot_Stock")
+                       Salida = AdoTInvS.Recordset.fields("Tot_Stock")
                       'MsgBox Cod_Inv_Rec & vbCrLf & Cant_Rec & vbCrLf & Salida
                        If Cant_Rec <= Salida Then Salida = Cant_Rec
                        If Salida > 0 And ValorUnit > 0 Then
@@ -1759,13 +1759,13 @@ Dim Cant_Rec As Currency
                           SetFields AdoKardex, "TC", Normal 'SubCta
                           SetFields AdoKardex, "COD_BAR", TxtCodBar
                           SetFields AdoKardex, "Codigo_B", CodigoCliente
-                          SetFields AdoKardex, "Lote_No", AdoTInvS.Recordset.Fields("Lote_No")
-                          SetFields AdoKardex, "Fecha_Fab", AdoTInvS.Recordset.Fields("Fecha_Fab")
-                          SetFields AdoKardex, "Fecha_Exp", AdoTInvS.Recordset.Fields("Fecha_Exp")
+                          SetFields AdoKardex, "Lote_No", AdoTInvS.Recordset.fields("Lote_No")
+                          SetFields AdoKardex, "Fecha_Fab", AdoTInvS.Recordset.fields("Fecha_Fab")
+                          SetFields AdoKardex, "Fecha_Exp", AdoTInvS.Recordset.fields("Fecha_Exp")
                           SetFields AdoKardex, "Reg_Sanitario", TxtRegSanitario
-                          SetFields AdoKardex, "Modelo", AdoTInvS.Recordset.Fields("Modelo")
-                          SetFields AdoKardex, "Procedencia", AdoTInvS.Recordset.Fields("Procedencia")
-                          SetFields AdoKardex, "Serie_No", AdoTInvS.Recordset.Fields("Serie_No")
+                          SetFields AdoKardex, "Modelo", AdoTInvS.Recordset.fields("Modelo")
+                          SetFields AdoKardex, "Procedencia", AdoTInvS.Recordset.fields("Procedencia")
+                          SetFields AdoKardex, "Serie_No", AdoTInvS.Recordset.fields("Serie_No")
                           SetFields AdoKardex, "A_No", A_No
                           SetUpdate AdoKardex
                           Cant_Rec = Cant_Rec - Salida
@@ -1919,8 +1919,8 @@ Dim TotalInvs As Currency
     If .RecordCount > 0 Then
        .MoveFirst
         Do While Not .EOF
-           If .Fields("DH") = "2" Then Total = Total + .Fields("VALOR_TOTAL")
-           If .Fields("CODIGO_INV") = CodigoInv Then NoExiste = False
+           If .fields("DH") = "2" Then Total = Total + .fields("VALOR_TOTAL")
+           If .fields("CODIGO_INV") = CodigoInv Then NoExiste = False
           .MoveNext
         Loop
        .MoveFirst

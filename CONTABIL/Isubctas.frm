@@ -1,8 +1,8 @@
 VERSION 5.00
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "COMCTL32.OCX"
 Begin VB.Form ISubCtas 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Ingreso/Modificacion de SubCuentas"
@@ -920,10 +920,8 @@ Private Sub OpcCC_Click()
   ListarSubCtas "CC"
   Label1.Visible = False
   TextPresupuesto.Visible = False
-  TxtCodigo.MaxLength = 5
   TxtCodigo.Enabled = True
-  TxtNivel.Enabled = False
-'  CheqNivel.Enabled = False
+  TxtNivel.Enabled = True 'False
   CheqCaja.Visible = False
 End Sub
 
@@ -931,10 +929,8 @@ Private Sub OpcPM_Click()
   ListarSubCtas "PM"
   Label1.Visible = False
   TextPresupuesto.Visible = False
-  TxtCodigo.MaxLength = 10
   TxtCodigo.Enabled = False
   TxtNivel.Enabled = True
-  CheqNivel.Enabled = True
   CheqCaja.Visible = False
 End Sub
 
@@ -942,10 +938,8 @@ Private Sub OpcG_Click()
   ListarSubCtas "G"
   Label1.Visible = True
   TextPresupuesto.Visible = True
-  TxtCodigo.MaxLength = 10
   TxtCodigo.Enabled = False
   TxtNivel.Enabled = True
-  CheqNivel.Enabled = True
   CheqCaja.Visible = True
 End Sub
 
@@ -953,10 +947,8 @@ Private Sub OpcI_Click()
   ListarSubCtas "I"
   Label1.Visible = True
   TextPresupuesto.Visible = True
-  TxtCodigo.MaxLength = 10
   TxtCodigo.Enabled = False
   TxtNivel.Enabled = True
-  CheqNivel.Enabled = True
   CheqCaja.Visible = False
 End Sub
 
@@ -1149,7 +1141,7 @@ Public Sub ListarSubCtas(TipoCta As String)
   TextSubCta.Text = ""
   sSQL = "SELECT * " _
        & "FROM Catalogo_Cuentas " _
-       & "WHERE MidStrg(Codigo,1,1) IN ('4','5')  " _
+       & "WHERE MidStrg(Codigo,1,1) IN ('4', '5')  " _
        & "AND Item = '" & NumEmpresa & "' " _
        & "AND Periodo = '" & Periodo_Contable & "' " _
        & "ORDER BY Codigo "
@@ -1196,7 +1188,16 @@ Private Sub TxtCodigo_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub TxtCodigo_LostFocus()
-  TextoValido TxtCodigo
+  TextoValido TxtCodigo, , True
+  If Len(TxtCodigo) > 1 And DLCtas.Enabled = False Then
+     sSQL = "SELECT Codigo " _
+          & "FROM Catalogo_SubCtas " _
+          & "WHERE Codigo = '" & TxtCodigo & "' " _
+          & "AND Item = '" & NumEmpresa & "' " _
+          & "AND Periodo = '" & Periodo_Contable & "' "
+     Select_Adodc AdoSubCta1, sSQL
+     If AdoSubCta1.Recordset.RecordCount > 0 Then MsgBox "Este codigo ya existe, seleccione otro"
+  End If
 End Sub
 
 Private Sub TxtNivel_GotFocus()
@@ -1208,7 +1209,7 @@ Private Sub TxtNivel_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub TxtNivel_LostFocus()
-  TxtNivel = Format(CByte(TxtNivel), "00")
+  'TxtNivel = Format(CByte(TxtNivel), "00")
 End Sub
 
 Private Sub TxtReembolso_GotFocus()

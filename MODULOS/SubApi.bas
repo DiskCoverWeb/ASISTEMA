@@ -602,7 +602,7 @@ Declare Function SetWindowRgn Lib "user32" (ByVal hwnd As Long, _
 '-----------------------------------------------------------------------------------------------------------------------------------------------------------
 Declare Function GetDeviceCaps Lib "gdi32" (ByVal hdc As Long, ByVal nIndex As Long) As Long
 Declare Function BitBlt Lib "gdi32" (ByVal hDestDC As Long, ByVal X As Long, ByVal y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hSrcDC As Long, ByVal XSrc As Long, ByVal YSrc As Long, ByVal dwRop As Long) As Long
-Declare Function CreateFont Lib "gdi32" Alias "CreateFontA" (ByVal H As Long, ByVal W As Long, ByVal E As Long, ByVal O As Long, ByVal W As Long, ByVal I As Long, ByVal U As Long, ByVal S As Long, ByVal C As Long, ByVal OP As Long, ByVal cp As Long, ByVal Q As Long, ByVal PAF As Long, ByVal F As String) As Long
+Declare Function CreateFont Lib "gdi32" Alias "CreateFontA" (ByVal H As Long, ByVal W As Long, ByVal E As Long, ByVal O As Long, ByVal W As Long, ByVal i As Long, ByVal U As Long, ByVal S As Long, ByVal C As Long, ByVal OP As Long, ByVal cp As Long, ByVal Q As Long, ByVal PAF As Long, ByVal F As String) As Long
 Declare Function SelectObject Lib "gdi32" (ByVal hdc As Long, ByVal hObject As Long) As Long
 Declare Function DeleteObject Lib "gdi32" (ByVal hObject As Long) As Long
 ' Crea la región
@@ -621,7 +621,11 @@ Declare Function CreateRoundRectRgn Lib "gdi32" (ByVal x1 As Long, _
                                                  ByVal Y2 As Long, _
                                                  ByVal X3 As Long, _
                                                  ByVal Y3 As Long) As Long
-                                                                                                  
+                                                 
+Declare Function CreateEllipticRgn Lib "gdi32" (ByVal x1 As Long, _
+                                                ByVal y1 As Long, _
+                                                ByVal X2 As Long, _
+                                                ByVal Y2 As Long) As Long
 '-----------------------------------------------------------------------------------------------------------------------------------------------------------
 'Funciones API: SHELL32
 '-----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -868,54 +872,54 @@ Public Function WritePrinterText(lhPrinter As Long, lpcWritten As Long, PrinterB
    WritePrinterText = WritePrinter(lhPrinter, ByVal PrinterBuffers, Len(PrinterBuffers), lpcWritten)
 End Function
 
-'Muestra el cuadro de dialogo para abrir archivos:
-Public Function Abrir_Archivo(hwnd As Long, Dialogo As Directorio_Dialogo, TipoOperacion As Integer) As String
-    On Local Error Resume Next
-    Dim ofn As OPENFILENAME
-    Dim A As Long
-    Dim PosDir As Long
-    ofn.lStructSize = Len(ofn)
-    ofn.hwndOwner = hwnd
-    ofn.hInstance = App.hInstance
-    If RightStrg(Dialogo.Filter, 1) <> "|" Then Dialogo.Filter = Dialogo.Filter + "|"
-'''    For A = 1 To Len(Dialogo.Filter)
-'''        If MidStrg(Dialogo.Filter, A, 1) = "|" Then MidStrg(Dialogo.Filter, A, 1) = Chr(0)
-'''    Next
-        Dialogo.Title = "Abrir documento"
-        Dialogo.FilterIndex = 0
-        Dialogo.FinDir = Dialogo.InitDir
-        ofn.lpstrFilter = Dialogo.Filter
-        ofn.lpstrFile = Space$(254)
-        ofn.nMaxFile = 255
-        ofn.lpstrFileTitle = Space$(254)
-        ofn.nMaxFileTitle = 255
-        ofn.lpstrInitialDir = Dialogo.InitDir
-        If Not Dialogo.Filename = vbNullString Then ofn.lpstrFile = Dialogo.Filename & Space$(254 - Len(Dialogo.Filename))
-        ofn.nFilterIndex = Dialogo.FilterIndex
-        ofn.lpstrTitle = Dialogo.Title
-        ofn.Flags = OFN_HIDEREADONLY Or OFN_FILEMUSTEXIST
-        If TipoOperacion = OpenFile Then A = GetOpenFileName(ofn) Else A = GetSaveFileName(ofn)
-        If A Then
-             Abrir_Archivo = TrimStrg(ofn.lpstrFile)
-'''             If Asc(MidStrg(Abrir_Archivo, Len(Abrir_Archivo), 1)) = 0 Then
-'''                Abrir_Archivo = MidStrg(Abrir_Archivo, 1, Len(Abrir_Archivo) - 1)
-'''             End If
-             Dialogo.File = Abrir_Archivo
-             'If VBA.RightStrg(VBA.TrimStrg(Abrir_Archivo), 1) = Chr(0) Then Abrir_Archivo = VBA.LeftStrg(VBA.TrimStrg(ofn.lpstrFile), Len(VBA.TrimStrg(ofn.lpstrFile)) - 1)
-             PosDir = Len(Dialogo.File)
-             While PosDir > 1
-                If MidStrg(Dialogo.File, PosDir, 1) = "\" Then
-                   Dialogo.FinDir = MidStrg(Dialogo.File, 1, PosDir)
-                   Dialogo.File = MidStrg(Dialogo.File, PosDir + 1, TrimStrg(Len(Dialogo.File)))
-                   PosDir = 1
-                End If
-                PosDir = PosDir - 1
-             Wend
-        Else
-             Abrir_Archivo = ""
-             Dialogo.File = Abrir_Archivo
-        End If
-End Function
+''''Muestra el cuadro de dialogo para abrir archivos:
+'''Public Function SelectDialogFile(hwnd As Long, Dialogo As Directorio_Dialogo, TipoOperacion As Integer) As String
+'''    On Local Error Resume Next
+'''    Dim ofn As OPENFILENAME
+'''    Dim A As Long
+'''    Dim PosDir As Long
+'''    ofn.lStructSize = Len(ofn)
+'''    ofn.hwndOwner = hwnd
+'''    ofn.hInstance = App.hInstance
+'''    If RightStrg(Dialogo.Filter, 1) <> "|" Then Dialogo.Filter = Dialogo.Filter + "|"
+''''''    For A = 1 To Len(Dialogo.Filter)
+''''''        If MidStrg(Dialogo.Filter, A, 1) = "|" Then MidStrg(Dialogo.Filter, A, 1) = Chr(0)
+''''''    Next
+'''        Dialogo.Title = "Abrir documento"
+'''        Dialogo.FilterIndex = 0
+'''        Dialogo.FinDir = Dialogo.InitDir
+'''        ofn.lpstrFilter = Dialogo.Filter
+'''        ofn.lpstrFile = Space$(254)
+'''        ofn.nMaxFile = 255
+'''        ofn.lpstrFileTitle = Space$(254)
+'''        ofn.nMaxFileTitle = 255
+'''        ofn.lpstrInitialDir = Dialogo.InitDir
+'''        If Not Dialogo.Filename = vbNullString Then ofn.lpstrFile = Dialogo.Filename & Space$(254 - Len(Dialogo.Filename))
+'''        ofn.nFilterIndex = Dialogo.FilterIndex
+'''        ofn.lpstrTitle = Dialogo.Title
+'''        ofn.Flags = OFN_HIDEREADONLY Or OFN_FILEMUSTEXIST
+'''        If TipoOperacion = OpenFile Then A = GetOpenFileName(ofn) Else A = GetSaveFileName(ofn)
+'''        If A Then
+'''             SelectDialogFile = TrimStrg(ofn.lpstrFile)
+''''''             If Asc(MidStrg(SelectDialogFile, Len(SelectDialogFile), 1)) = 0 Then
+''''''                SelectDialogFile = MidStrg(SelectDialogFile, 1, Len(SelectDialogFile) - 1)
+''''''             End If
+'''             Dialogo.File = SelectDialogFile
+'''             'If VBA.RightStrg(VBA.TrimStrg(SelectDialogFile), 1) = Chr(0) Then SelectDialogFile = VBA.LeftStrg(VBA.TrimStrg(ofn.lpstrFile), Len(VBA.TrimStrg(ofn.lpstrFile)) - 1)
+'''             PosDir = Len(Dialogo.File)
+'''             While PosDir > 1
+'''                If MidStrg(Dialogo.File, PosDir, 1) = "\" Then
+'''                   Dialogo.FinDir = MidStrg(Dialogo.File, 1, PosDir)
+'''                   Dialogo.File = MidStrg(Dialogo.File, PosDir + 1, TrimStrg(Len(Dialogo.File)))
+'''                   PosDir = 1
+'''                End If
+'''                PosDir = PosDir - 1
+'''             Wend
+'''        Else
+'''             SelectDialogFile = ""
+'''             Dialogo.File = SelectDialogFile
+'''        End If
+'''End Function
 
 'Muestra si existe la carpeta
 Public Function DirectoryFileExists(sSource As String) As Boolean
@@ -1008,7 +1012,7 @@ Dim Handle As Long
 End Function
 
 Public Function Unidades_De_Red() As String
-Dim I As Long
+Dim i As Long
 Dim ret As Long
 Dim Unidad_Disp As String
 Dim Unidad_No_Disp As String
@@ -1018,15 +1022,15 @@ Unidad_No_Disp = ""
 
 ret = GetLogicalDrives()
 If ret Then
-    For I = 0 To 25
+    For i = 0 To 25
         ' Si el bit es cero, es que no existe la unidad o no está mapeada
-        If (ret And 2 ^ I) = 0 Then
+        If (ret And 2 ^ i) = 0 Then
             ' Mostrar el nombre de la unidad disponible
-            Unidad_Disp = Unidad_Disp & Chr$(I + 65) & ":" & vbCrLf
+            Unidad_Disp = Unidad_Disp & Chr$(i + 65) & ":" & vbCrLf
             'Combo2.AddItem Chr$(i + 65) & ":"
         Else
             ' Mostrar el nombre de la unidad ocupada
-            Unidad_No_Disp = Unidad_No_Disp & Chr$(I + 65) & ":" & vbCrLf
+            Unidad_No_Disp = Unidad_No_Disp & Chr$(i + 65) & ":" & vbCrLf
             'Combo1.AddItem Chr$(i + 65) & ":"
         End If
     Next
@@ -1043,33 +1047,33 @@ Unidades_De_Red = Unidad_Disp & vbCrLf & Unidad_No_Disp
 End Function
 
 Public Function Unidades_De_Red_Disponibles() As String
-Dim I As Long
+Dim i As Long
 Dim ret As Long
 Dim S As String
 Dim Unidades_Disponibles As String
 '
 Unidades_Disponibles = ""
-I = 260
-S = String$(I, Chr$(0))
-ret = GetLogicalDriveStrings(I, S)
+i = 260
+S = String$(i, Chr$(0))
+ret = GetLogicalDriveStrings(i, S)
 ' Si el valor devuelto es mayor que el tamaño del buffer, es que el buffer debe ser mayor
-If ret > I Then
-    I = ret + 2
-    S = String$(I, Chr$(0))
-    ret = GetLogicalDriveStrings(I, S)
+If ret > i Then
+    i = ret + 2
+    S = String$(i, Chr$(0))
+    ret = GetLogicalDriveStrings(i, S)
 End If
 '
 If ret Then
     ' Quitar los caracteres extras
     S = LeftStrg(S, ret)
     Do
-        I = InStr(S, Chr$(0))
-        If I Then
-            Unidades_Disponibles = Unidades_Disponibles & LeftStrg(S, I - 1) & vbCrLf
+        i = InStr(S, Chr$(0))
+        If i Then
+            Unidades_Disponibles = Unidades_Disponibles & LeftStrg(S, i - 1) & vbCrLf
             'Combo1.AddItem LeftStrg(S, I - 1)
-            S = MidStrg(S, I + 1)
+            S = MidStrg(S, i + 1)
         End If
-    Loop While I
+    Loop While i
     ' Mostrar la primera letra disponible
 '    If Combo1.ListCount > 0 Then
 '        Combo1.ListIndex = 0
@@ -1112,6 +1116,14 @@ Region = CreateRoundRectRgn(0, 0, Ancho, alto, Radio, Radio)
 
 ' Aplica la región al formulario
 ret = SetWindowRgn(El_Form.hwnd, Region, True)
+
+End Sub
+
+Public Sub Redondear_Control(elControl As Control)
+Dim ReghWnd As Long
+
+    ReghWnd = CreateEllipticRgn(0, 0, elControl.width, elControl.Height)
+    SetWindowRgn elControl.hwnd, ReghWnd, True
 
 End Sub
 
@@ -1310,20 +1322,20 @@ End Function
 Function AddressStringToLong(ByVal tmp As String) As Long
 
 
-   Dim I As Integer
+   Dim i As Integer
    Dim parts(1 To 4) As String
    
-   I = 0
+   i = 0
    While InStr(tmp, ".") > 0
-      I = I + 1
-      parts(I) = Mid(tmp, 1, InStr(tmp, ".") - 1)
+      i = i + 1
+      parts(i) = Mid(tmp, 1, InStr(tmp, ".") - 1)
       tmp = Mid(tmp, InStr(tmp, ".") + 1)
    Wend
    
-   I = I + 1
-   parts(I) = tmp
+   i = i + 1
+   parts(i) = tmp
    
-   If I <> 4 Then
+   If i <> 4 Then
       AddressStringToLong = 0
       Exit Function
    End If
@@ -1357,7 +1369,7 @@ Public Function SocketsCleanup() As Boolean
     Dim X As Long
     X = WSACleanup()
     If X <> 0 Then
-        MsgBox "Windows Sockets error " & TrimStrg(Str$(X)) & _
+        MsgBox "Windows Sockets error " & TrimStrg(str$(X)) & _
                " occurred in Cleanup.", vbExclamation
         SocketsCleanup = False
     Else
@@ -1382,8 +1394,8 @@ Public Function SocketsInitialize() As Boolean
        (LoByte(WSAD.wVersion) = WS_VERSION_MAJOR And _
         HiByte(WSAD.wVersion) < WS_VERSION_MINOR) Then
         
-        szHiByte = TrimStrg(Str$(HiByte(WSAD.wVersion)))
-        szLoByte = TrimStrg(Str$(LoByte(WSAD.wVersion)))
+        szHiByte = TrimStrg(str$(HiByte(WSAD.wVersion)))
+        szLoByte = TrimStrg(str$(LoByte(WSAD.wVersion)))
         szBuf = "Windows Sockets Version " & szLoByte & "." & szHiByte
         szBuf = szBuf & " is not supported by Windows " & _
                           "Sockets for 32 bit Windows environments."
@@ -1393,7 +1405,7 @@ Public Function SocketsInitialize() As Boolean
     End If
     If WSAD.wMaxSockets < MIN_SOCKETS_REQD Then
         szBuf = "This application requires a minimum of " & _
-                 TrimStrg(Str$(MIN_SOCKETS_REQD)) & " supported sockets."
+                 TrimStrg(str$(MIN_SOCKETS_REQD)) & " supported sockets."
         MsgBox szBuf, vbExclamation
         SocketsInitialize = False
         Exit Function
@@ -1575,6 +1587,23 @@ Private Function BytesLength(abBytes() As Byte) As Long
     ' Trap error if array is uninitialized
     On Error Resume Next
     BytesLength = UBound(abBytes) - LBound(abBytes) + 1
+End Function
+
+Function StringToUTF8(ByVal str As String) As String
+    Dim utf8Bytes() As Byte
+    Dim i As Integer
+    Dim result As String
+
+    ' Convertir la cadena a bytes usando la codificación Unicode (UTF-16)
+    utf8Bytes = StrConv(str, vbFromUnicode)
+
+    ' Construir la cadena UTF-8
+    result = ""
+    For i = 0 To UBound(utf8Bytes)
+        result = result & Chr(utf8Bytes(i))
+    Next i
+
+    StringToUTF8 = result
 End Function
 
 ''' Return VBA "Unicode" string from byte array encoded in UTF-8
@@ -1762,7 +1791,7 @@ Dim hInternet As Long, hSession As Long, lReturn As Long
    'close the URL
     iResult = InternetCloseHandle(hInternet)
     'sData = Trim(Replace(sData, Chr(0), ""))
-   'MsgBox iResult & vbCrLf & sData
+    'MsgBox iResult & vbCrLf & sData
     If MidStrg(sData, 1, 4) = "true" Then
        GetUrlSource = "true"
     Else
@@ -1786,7 +1815,7 @@ Dim DomDoc As MSXML2.xmlhttp
    'La respuesta, en caso de existir, está en responseBody.
    'También puedes especificar responseXml si tu aplicación devolviese XML
    'PostUrlSource = StrConv(DomDoc.responseBody, vbUnicode)
-    'MsgBox DomDoc.responseBody
+   'MsgBox Val(DomDoc.responseBody) & vbCrLf & vURLParams
     PostUrlSource = Val(DomDoc.responseBody)
 End Function
 
@@ -1795,7 +1824,7 @@ Dim DomDoc As MSXML2.xmlhttp
 Dim RespuestaURL As String
 
     Set DomDoc = New xmlhttp
-    
+   'MsgBox vURLHTTP & vbCrLf & vURLParams
    'Parámetros en formato URLEncode
    'Metodo a usar, url, y true en caso de manejar la respuesta en modo asíncrono
     DomDoc.open "POST", vURLHTTP, False
@@ -1807,8 +1836,10 @@ Dim RespuestaURL As String
    'La respuesta, en caso de existir, está en responseBody.
    'También puedes especificar responseXml si tu aplicación devolviese XML
    'PostUrlSource = StrConv(DomDoc.responseBody, vbUnicode)
-    'MsgBox DomDoc.responseBody
-    RespuestaURL = StrConv(DomDoc.responseBody, vbUnicode)
+   ' Clipboard.Clear
+   ' Clipboard.SetText vURLHTTP & vbCrLf & vbCrLf & vURLParams & vbCrLf & vbCrLf & DomDoc.responseBody
+   'MsgBox Len(DomDoc.responseBody) & " [" & DomDoc.responseBody & "]"
+    If Len(DomDoc.responseBody) > 0 Then RespuestaURL = StrConv(DomDoc.responseBody, vbUnicode) Else RespuestaURL = "CNASS"
     PostUrlSourceStr = Trim(Replace(RespuestaURL, """", ""))
 End Function
 

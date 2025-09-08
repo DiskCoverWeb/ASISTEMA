@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.4#0"; "comctl32.Ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form FResumenFletes 
    ClientHeight    =   7155
@@ -889,7 +889,7 @@ If OpcBusq.value Then
 TextoBusqueda = TxtCIRUC.Text
 If TextoBusqueda <> Ninguno Then
    If LstCampos.Text <> "Ninguno" Then
-      TipoDatoBusq = AdoListCtas.Recordset.Fields(LstCampos.Text).Type
+      TipoDatoBusq = AdoListCtas.Recordset.fields(LstCampos.Text).Type
       If TipoDatoBusq <> 0 Then
          Select Case TipoDatoBusq
            Case TadByte, TadInteger, TadLong, TadSingle, TadDouble, TadBoolean
@@ -919,16 +919,16 @@ With AdoQuery.Recordset
  If .RecordCount > 0 Then
     .MoveFirst
     
-  If Tipo = "C" Then Codigo4 = .Fields("Direccion") Else Codigo4 = TxtCIRUC.Text
+  If Tipo = "C" Then Codigo4 = .fields("Direccion") Else Codigo4 = TxtCIRUC.Text
   Do While Not .EOF
      Contador = Contador + 1
      FCarteraCli.Caption = "Recalculando " & Format$(Contador / .RecordCount, "00%")
      If Tipo = "C" Then
-        Total = Total + .Fields("Total_MN")
+        Total = Total + .fields("Total_MN")
      Else
-        Total = Total + .Fields("Abono_MN")
+        Total = Total + .fields("Abono_MN")
      End If
-     Saldo = Saldo + .Fields("Saldo_MN")
+     Saldo = Saldo + .fields("Saldo_MN")
     .MoveNext
   Loop
   .MoveFirst
@@ -956,7 +956,7 @@ Public Sub ListarCuenta(TextoBusqueda As String)
       .MoveFirst
       .Find ("Cliente = '" & TextoBusqueda & "'")
        If Not .EOF Then
-          CodigoCli = .Fields("Codigo")
+          CodigoCli = .fields("Codigo")
           Mifecha = PrimerDiaMes(FechaSistema)
           Dia = Day(Mifecha)
           Mes = Month(Mifecha)
@@ -1132,7 +1132,7 @@ Private Sub TxtCIRUC_LostFocus()
        If TextoBusqueda <> Ninguno Then
           RatonReloj
           If LstCampos.Text <> "Ninguno" Then
-             TipoDatoBusq = .Fields(LstCampos.Text).Type
+             TipoDatoBusq = .fields(LstCampos.Text).Type
              If TipoDatoBusq <> 0 Then
                 Select Case TipoDatoBusq
                   Case TadDate, TadDate1
@@ -1148,8 +1148,8 @@ Private Sub TxtCIRUC_LostFocus()
                .MoveFirst
                .Find (TextoBusqueda)
                 If Not .EOF Then
-                   DCCliente.Text = .Fields("Cliente")
-                   CodigoCli = .Fields("Codigo")
+                   DCCliente.Text = .fields("Cliente")
+                   CodigoCli = .fields("Codigo")
                    SiguienteControl
                 Else
                    MsgBox "No existe Datos que buscar"

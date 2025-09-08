@@ -2,18 +2,18 @@ VERSION 5.00
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "Mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.Form FacturasPension 
    BackColor       =   &H00C0C0C0&
    Caption         =   "FACTURACION DE PENSIONES"
    ClientHeight    =   9945
    ClientLeft      =   45
    ClientTop       =   345
-   ClientWidth     =   16740
+   ClientWidth     =   15960
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
    ScaleHeight     =   9945
-   ScaleWidth      =   16740
+   ScaleWidth      =   15960
    WindowState     =   1  'Minimized
    Begin VB.ListBox LstMeses 
       BeginProperty Font 
@@ -1162,8 +1162,8 @@ Begin VB.Form FacturasPension
       Left            =   0
       TabIndex        =   76
       Top             =   0
-      Width           =   16740
-      _ExtentX        =   29528
+      Width           =   28560
+      _ExtentX        =   50377
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -2516,8 +2516,6 @@ Public Sub Actualiza_Datos_Cliente()
                & "SET Grupo = '" & CGrupo.Text & "', Direccion = '" & TxtDirS.Text & "' " _
                & "WHERE Codigo = '" & FA.CodigoC & "' "
           Ejecutar_SQL_SP sSQL
-          
-          TBeneficiario = Leer_Datos_Clientes(FA.CodigoC)
        End If
 ''    Else
 ''       MsgBox "NO SE ACTUALIZARA DATOS PORQUE USTED NO HA REALIZADO CAMBIOS DEL REPRESENTANTE", , UCase(Titulo)
@@ -2544,7 +2542,14 @@ Public Sub Grabar_FA_Pensiones()
        & "ORDER BY A_No "
   Select_Adodc AdoAsientoF, sSQL
   With AdoAsientoF.Recordset
+  'MsgBox "FA Pensiones: " & .RecordCount
    If .RecordCount > 0 Then
+      'Actualizamos tipos de pago
+       Total_Bancos = Redondear(Val(CCur(TextCheque.Text)), 2)
+       Total_Anticipo = Redondear(Val(CCur(TxtSaldoFavor)), 2)
+       SubTotal_NC = Redondear(Val(CCur(TxtNC.Text)), 2)
+       TotalCajaMN = Redondear(Val(CCur(TxtEfectivo.Text)), 2)
+       
        Calculos_Totales_Factura FA
        FA.Tipo_PRN = "FM"
        FA.Nuevo_Doc = True
@@ -2577,6 +2582,7 @@ Public Sub Grabar_FA_Pensiones()
        TA.Recibi_de = FA.Cliente
        Cta = SinEspaciosIzq(DCBanco)
        Cta1 = SinEspaciosIzq(DCNC)
+      'MsgBox Total_Abonos
       .MoveFirst
        Do While Not .EOF
           Valor = .fields("TOTAL")
@@ -2635,6 +2641,7 @@ Public Sub Grabar_FA_Pensiones()
        
       'Grabamos el numero de factura
        Calculos_Totales_Factura FA
+      ' MsgBox "............."
        Grabar_Factura FA, True
       
       'Seteos de Abonos Generales para todos los tipos de abonos
@@ -2705,6 +2712,7 @@ Public Sub Grabar_FA_Pensiones()
        
        RatonNormal
        TxtEfectivo.Text = "0.00"
+      'MsgBox FA.Autorizacion
        If Len(FA.Autorizacion) >= 13 Then
           If Not No_Autorizar Then SRI_Crear_Clave_Acceso_Facturas FA, False, , True
           FA.Desde = FA.Factura
@@ -2771,12 +2779,8 @@ Private Sub CGrupo_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub CGrupo_LostFocus()
-  If CGrupo.Text <> Grupo_No Then
-     If Len(TrimStrg(CGrupo.Text)) <= 1 Then CGrupo.Text = Grupo_No
-     Grupo_No = CGrupo.Text
-  End If
-  
-  If tempGrupo <> CGrupo.Text Then
+  If Len(TrimStrg(CGrupo.Text)) <= 1 Then CGrupo.Text = tempGrupo
+  If CGrupo.Text <> tempGrupo Then
      sSQL = "SELECT Direccion " _
           & "FROM Clientes " _
           & "WHERE Grupo = '" & CGrupo.Text & "' " _
@@ -3147,7 +3151,6 @@ End Sub
 
 Private Sub DCCliente_KeyPress(KeyAscii As Integer)
 Dim Busqueda As String
-
     Busqueda = DCCliente.Text
     If Len(Busqueda) > 1 Then
        sSQL = "SELECT TOP 50 Codigo,Cliente " _
@@ -3222,47 +3225,38 @@ Dim S_SubTotal As String
       .Find ("Cliente Like '" & DCCliente & "' ")
        If Not .EOF Then
           ExisteCliente = True
-          FA.CodigoC = .fields("Codigo")
-          'MiTiempo = Time
-          TBeneficiario = Leer_Datos_Clientes(FA.CodigoC)
-          'MsgBox Format(Time - MiTiempo, "hh:mm:ss:nn")
-          DireccionCli = TBeneficiario.Direccion
+          CodigoCliente = .fields("Codigo")
+          FA.CodigoC = CodigoCliente
+          FA = Leer_Datos_Cliente_FA(FA)
+          
+          tempGrupo = FA.Grupo
+          CGrupo.Text = FA.Grupo
+          DireccionCli = FA.DireccionC
           SQLMsg1 = DireccionCli
           SQLMsg3 = "BENEFICIARIO: " & TBeneficiario.Cliente
           
-          FA.TD = TBeneficiario.TD
-          FA.Curso = TBeneficiario.Direccion
           Label10.Caption = " CLIENTE/ALUMNO (" & FA.TD & ")"
-          Label18.Caption = TBeneficiario.TD_Rep
-          TextCI = TBeneficiario.RUC_CI_Rep
+          Label18.Caption = FA.TD
+          TextCI = FA.RUC_CI
           TxtCodigoC = FA.CodigoC
           TxtDirS = FA.Curso
-          TxtDireccion = TBeneficiario.Direccion_Rep
-          CGrupo.Text = TBeneficiario.Grupo_No
-          TxtTelefono = TBeneficiario.Telefono1
+          TxtDireccion = FA.DireccionC  '  TBeneficiario.Direccion_Rep
+          TxtTelefono = FA.TelefonoC
          'MsgBox TBeneficiario.Telefono & vbCrLf & TBeneficiario.Telefono1 & vbCrLf & TBeneficiario.TelefonoT
-          TextRepresentante = TBeneficiario.Representante
+          TextRepresentante = FA.Razon_Social ' TBeneficiario.Representante
           TxtEmail = Ninguno
-          If Len(TBeneficiario.EmailR) > 1 Then
-             TxtEmail = TBeneficiario.EmailR
-          ElseIf Len(TBeneficiario.Email1) > 1 Then
-             TxtEmail = TBeneficiario.Email1
-          ElseIf Len(TBeneficiario.Email2) > 1 Then
-             TxtEmail = TBeneficiario.Email2
+          If Len(FA.EmailR) > 1 Then
+             TxtEmail = FA.EmailR
+          ElseIf Len(FA.EmailC) > 1 Then
+             TxtEmail = FA.EmailC
+          ElseIf Len(FA.EmailC2) > 1 Then
+             TxtEmail = FA.EmailC2
           End If
-          FA.Cliente = TBeneficiario.Cliente
-          FA.Razon_Social = TBeneficiario.Representante
-          FA.RUC_CI = TBeneficiario.RUC_CI_Rep
-          FA.TB = TBeneficiario.TD_Rep
-          FA.CI_RUC = TBeneficiario.CI_RUC
-          FA.DireccionC = TBeneficiario.Direccion_Rep
-          FA.TelefonoC = TBeneficiario.Telefono1
-          FA.Grupo = Grupo_No
           
-          DireccionGuia = TBeneficiario.Direccion
+          DireccionGuia = FA.DireccionC
           CodigoCliente = FA.CodigoC
           NombreCliente = FA.Cliente
-          CodigoB = TBeneficiario.RUC_CI_Rep
+          CodigoB = FA.RUC_CI
           TxtCI_RUC = FA.CI_RUC
           TelefCliente = FA.TelefonoC
 
@@ -3278,30 +3272,24 @@ Dim S_SubTotal As String
 
          'Insertamos los mails de envio
           TMail.para = ""
-          Insertar_Mail TMail.para, TBeneficiario.EmailR
-          Insertar_Mail TMail.para, TBeneficiario.Email2
+          Insertar_Mail TMail.para, FA.EmailR
+          Insertar_Mail TMail.para, FA.EmailC
+          Insertar_Mail TMail.para, FA.EmailC2
           
          'Lista de Alumnos Matriculados
-          sSQL = "SELECT * " _
-               & "FROM Clientes_Matriculas " _
-               & "WHERE Periodo = '" & Periodo_Contable & "' " _
-               & "AND Item = '" & NumEmpresa & "' " _
-               & "AND Codigo = '" & FA.CodigoC & "' "
-          Select_Adodc AdoAux, sSQL
-          If AdoAux.Recordset.RecordCount > 0 Then
-             TxtCtaNo = AdoAux.Recordset.fields("Cta_Numero")
-             CTipoCta = AdoAux.Recordset.fields("Tipo_Cta")
-             Documento = AdoAux.Recordset.fields("Cod_Banco")
-             MBFecha = Format(AdoAux.Recordset.fields("Caducidad"), "MM/yyyy")
-             If AdoAux.Recordset.fields("Por_Deposito") Then CheqPorDeposito.value = 1 Else CheqPorDeposito.value = 0
-             If AdoDebito.Recordset.RecordCount > 0 Then
-                AdoDebito.Recordset.MoveFirst
-                AdoDebito.Recordset.Find ("Codigo = " & Documento & " ")
-                If Not AdoDebito.Recordset.EOF Then
-                   DCDebito = AdoDebito.Recordset.fields("Descripcion")
-                Else
-                   DCDebito = Ninguno
-                End If
+          CTipoCta = FA.Tipo_Cta
+          Documento = FA.Cod_Banco
+          TxtCtaNo = FA.Cta_Numero
+          MBFecha = FA.Fecha_Cad
+          If FA.Por_Deposito Then CheqPorDeposito.value = 1 Else CheqPorDeposito.value = 0
+          
+          If AdoDebito.Recordset.RecordCount > 0 Then
+             AdoDebito.Recordset.MoveFirst
+             AdoDebito.Recordset.Find ("Codigo = " & Documento & " ")
+             If Not AdoDebito.Recordset.EOF Then
+                DCDebito = AdoDebito.Recordset.fields("Descripcion")
+             Else
+                DCDebito = Ninguno
              End If
           End If
           
@@ -3318,6 +3306,7 @@ Dim S_SubTotal As String
   
   Total_Anticipo = Saldo_De_Anticipos(Cta_Ant_Cli)
   Total_Saldo_Pendiente = TBeneficiario.Saldo_Pendiente
+ 'MsgBox "Desktop Test: " & ExisteCliente
   If ExisteCliente Then
      If FacturaMatricula Then
         sSQL = "SELECT CF.Mes,CF.Num_Mes,CF.Valor,CF.Descuento,CF.Descuento2,CF.Codigo,CF.Periodo As Periodos,CF.Mensaje,CF.Credito_No,CP.* " _
@@ -3566,8 +3555,11 @@ Private Sub Form_Load()
    ConectarAdodc AdoArticulo
    ConectarAdodc AdoAnticipo
    ConectarAdodc AdoHistoria
+   
+   SRI_Obtener_Datos_Comprobantes_Electronicos
+   
    FA.CodigoC = "9999999999"
-   TBeneficiario = Leer_Datos_Clientes(FA.CodigoC)
+   TBeneficiario = Leer_Datos_Cliente_SP(FA.CodigoC)
    Timer1.Interval = 120
    Si_No_local = False
 End Sub
@@ -3778,9 +3770,9 @@ Private Sub TextCI_KeyDown(KeyCode As Integer, Shift As Integer)
    PresionoEnter KeyCode
 End Sub
 
-Private Sub TextCI_KeyPress(KeyAscii As Integer)
-   KeyAscii = Solo_Letras_Numeros(KeyAscii)
-End Sub
+'Private Sub TextCI_KeyPress(KeyAscii As Integer)
+'   KeyAscii = Solo_Letras_Numeros(KeyAscii)
+'End Sub
 
 Private Sub TextCI_LostFocus()
   DigVerif = Digito_Verificador(TextCI)
@@ -4116,7 +4108,7 @@ End Sub
 Private Sub TextInteres_LostFocus()
   If MidStrg(TextInteres, Len(TextInteres), 1) = "%" Then
      Valor = MidStrg(TextInteres, 1, Len(TextInteres) - 1)
-  TextInteres = Valor * Val(LabelTotal.Caption) / 100
+     TextInteres = Valor * Val(LabelTotal.Caption) / 100
   End If
   TextoValido TextInteres, True
 End Sub
@@ -4297,7 +4289,7 @@ Dim AuxCtaAnticipo As String
        & "AND CodigoC = '" & FA.CodigoC & "' " _
        & "AND Cta = '" & AuxCtaAnticipo & "' " _
        & "AND C = " & Val(adFalse) & " "
-  Select_AdoDB AdoDBTemp, sSQL, "Abonos_Anticipados_Clientes"
+  Select_AdoDB AdoDBTemp, sSQL
   If AdoDBTemp.RecordCount > 0 And Not IsNull(AdoDBTemp.fields("Abonado")) Then TotAntipos = TotAntipos - AdoDBTemp.fields("Abonado")
   AdoDBTemp.Close
  'MsgBox TotAntipos

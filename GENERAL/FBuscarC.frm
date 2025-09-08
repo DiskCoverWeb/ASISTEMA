@@ -100,13 +100,13 @@ Option Explicit
 Private Sub DCClientes_KeyDown(KeyCode As Integer, Shift As Integer)
    If KeyCode = vbKeyEscape Then
       TBeneficiario.Patron_Busqueda = Ninguno
-      TBeneficiario = Leer_Datos_Clientes(TBeneficiario.Patron_Busqueda)
+      TBeneficiario = Leer_Datos_Cliente_SP(TBeneficiario.Patron_Busqueda)
       Unload FBuscarClientes
    End If
    If KeyCode = vbKeyReturn Then
       TBeneficiario.Patron_Busqueda = DCClientes.Text
       If Len(TBeneficiario.Patron_Busqueda) <= 0 Then TBeneficiario.Patron_Busqueda = Ninguno
-      TBeneficiario = Leer_Datos_Clientes(TBeneficiario.Patron_Busqueda)
+      TBeneficiario = Leer_Datos_Cliente_SP(TBeneficiario.Patron_Busqueda)
       Unload FBuscarClientes
    End If
 End Sub

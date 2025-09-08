@@ -1,13 +1,13 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
 Begin VB.Form FRolPago 
    BackColor       =   &H00C0FFFF&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "ROL DE PAGOS"
-   ClientHeight    =   7065
+   ClientHeight    =   7515
    ClientLeft      =   45
    ClientTop       =   435
    ClientWidth     =   11355
@@ -15,10 +15,29 @@ Begin VB.Form FRolPago
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   7065
+   ScaleHeight     =   7515
    ScaleWidth      =   11355
    ShowInTaskbar   =   0   'False
    StartUpPosition =   3  'Windows Default
+   Begin VB.CheckBox CheqGuardian 
+      BackColor       =   &H00C0FFFF&
+      Caption         =   "Tipo de Empleado Guardiania"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00C00000&
+      Height          =   330
+      Left            =   3780
+      TabIndex        =   150
+      Top             =   2835
+      Width           =   2850
+   End
    Begin MSDataListLib.DataCombo DCGrupos 
       Bindings        =   "FRolPag.frx":014A
       DataSource      =   "AdoGrupos"
@@ -188,10 +207,10 @@ Begin VB.Form FRolPago
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H00C00000&
-      Height          =   225
-      Left            =   105
+      Height          =   330
+      Left            =   210
       TabIndex        =   29
-      Top             =   2730
+      Top             =   2835
       Width           =   2430
    End
    Begin VB.CheckBox CheqB 
@@ -291,13 +310,13 @@ Begin VB.Form FRolPago
       Width           =   1065
    End
    Begin TabDlg.SSTab SSTab1 
-      Height          =   3900
+      Height          =   4110
       Left            =   105
       TabIndex        =   40
-      Top             =   3045
+      Top             =   3255
       Width           =   11145
       _ExtentX        =   19659
-      _ExtentY        =   6879
+      _ExtentY        =   7250
       _Version        =   393216
       Tabs            =   4
       TabsPerRow      =   4
@@ -344,171 +363,146 @@ Begin VB.Form FRolPago
       Tab(0).Control(17).Enabled=   0   'False
       Tab(0).Control(18)=   "Label12"
       Tab(0).Control(18).Enabled=   0   'False
-      Tab(0).Control(19)=   "DCSubModulo"
+      Tab(0).Control(19)=   "Label14"
       Tab(0).Control(19).Enabled=   0   'False
-      Tab(0).Control(20)=   "MBCta_ExtConyugue"
+      Tab(0).Control(20)=   "Label15"
       Tab(0).Control(20).Enabled=   0   'False
-      Tab(0).Control(21)=   "MBCta_Sueldo"
+      Tab(0).Control(21)=   "MBCta_PerEnfermedad"
       Tab(0).Control(21).Enabled=   0   'False
-      Tab(0).Control(22)=   "MBCta_IESS_Patronal"
+      Tab(0).Control(22)=   "DCSubModulo"
       Tab(0).Control(22).Enabled=   0   'False
-      Tab(0).Control(23)=   "MBCta_Horas_Ext"
+      Tab(0).Control(23)=   "MBCta_ExtConyugue"
       Tab(0).Control(23).Enabled=   0   'False
-      Tab(0).Control(24)=   "MBCta_Decimo_Tercer_G"
+      Tab(0).Control(24)=   "MBCta_Sueldo"
       Tab(0).Control(24).Enabled=   0   'False
-      Tab(0).Control(25)=   "MBCta_Decimo_Tercer_P"
+      Tab(0).Control(25)=   "MBCta_IESS_Patronal"
       Tab(0).Control(25).Enabled=   0   'False
-      Tab(0).Control(26)=   "MBCta_Vacacion"
+      Tab(0).Control(26)=   "MBCta_Horas_Ext"
       Tab(0).Control(26).Enabled=   0   'False
-      Tab(0).Control(27)=   "MBCta_IESS_Personal"
+      Tab(0).Control(27)=   "MBCta_Decimo_Tercer_G"
       Tab(0).Control(27).Enabled=   0   'False
-      Tab(0).Control(28)=   "MBCta_Antig"
+      Tab(0).Control(28)=   "MBCta_Decimo_Tercer_P"
       Tab(0).Control(28).Enabled=   0   'False
-      Tab(0).Control(29)=   "MBCta_Decimo_Cuarto_G"
+      Tab(0).Control(29)=   "MBCta_Vacacion"
       Tab(0).Control(29).Enabled=   0   'False
-      Tab(0).Control(30)=   "MBCta_Decimo_Cuarto_P"
+      Tab(0).Control(30)=   "MBCta_IESS_Personal"
       Tab(0).Control(30).Enabled=   0   'False
-      Tab(0).Control(31)=   "MBCta_Quincena"
+      Tab(0).Control(31)=   "MBCta_Antig"
       Tab(0).Control(31).Enabled=   0   'False
-      Tab(0).Control(32)=   "MBCta_Aporte_Patronal_G"
+      Tab(0).Control(32)=   "MBCta_Decimo_Cuarto_G"
       Tab(0).Control(32).Enabled=   0   'False
-      Tab(0).Control(33)=   "MBCta_Vacaciones_G"
+      Tab(0).Control(33)=   "MBCta_Decimo_Cuarto_P"
       Tab(0).Control(33).Enabled=   0   'False
-      Tab(0).Control(34)=   "MBCta_Vacaciones_P"
+      Tab(0).Control(34)=   "MBCta_Quincena"
       Tab(0).Control(34).Enabled=   0   'False
-      Tab(0).Control(35)=   "CheqRFR"
+      Tab(0).Control(35)=   "MBCta_Aporte_Patronal_G"
       Tab(0).Control(35).Enabled=   0   'False
-      Tab(0).Control(36)=   "CheqFondoReserva"
+      Tab(0).Control(36)=   "MBCta_Vacaciones_G"
       Tab(0).Control(36).Enabled=   0   'False
-      Tab(0).Control(37)=   "MBCta_Fondo_Reserva_P"
+      Tab(0).Control(37)=   "MBCta_Vacaciones_P"
       Tab(0).Control(37).Enabled=   0   'False
-      Tab(0).Control(38)=   "MBCta_Fondo_Reserva_G"
+      Tab(0).Control(38)=   "CheqRFR"
       Tab(0).Control(38).Enabled=   0   'False
-      Tab(0).Control(39)=   "MBCta_Diferencia"
+      Tab(0).Control(39)=   "CheqFondoReserva"
       Tab(0).Control(39).Enabled=   0   'False
-      Tab(0).Control(40)=   "CheqDecimos"
+      Tab(0).Control(40)=   "MBCta_Fondo_Reserva_P"
       Tab(0).Control(40).Enabled=   0   'False
-      Tab(0).ControlCount=   41
+      Tab(0).Control(41)=   "MBCta_Fondo_Reserva_G"
+      Tab(0).Control(41).Enabled=   0   'False
+      Tab(0).Control(42)=   "MBCta_Diferencia"
+      Tab(0).Control(42).Enabled=   0   'False
+      Tab(0).Control(43)=   "CheqDecimos"
+      Tab(0).Control(43).Enabled=   0   'False
+      Tab(0).Control(44)=   "MBCta_PerMaternidad"
+      Tab(0).Control(44).Enabled=   0   'False
+      Tab(0).ControlCount=   45
       TabCaption(1)   =   "Seguro Social y Decimos"
       TabPicture(1)   =   "FRolPag.frx":0186
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "Label24"
-      Tab(1).Control(0).Enabled=   0   'False
-      Tab(1).Control(1)=   "Label45"
-      Tab(1).Control(1).Enabled=   0   'False
-      Tab(1).Control(2)=   "Label44"
-      Tab(1).Control(2).Enabled=   0   'False
-      Tab(1).Control(3)=   "Label47"
-      Tab(1).Control(3).Enabled=   0   'False
-      Tab(1).Control(4)=   "Label54"
-      Tab(1).Control(4).Enabled=   0   'False
-      Tab(1).Control(5)=   "Label55"
-      Tab(1).Control(5).Enabled=   0   'False
-      Tab(1).Control(6)=   "Label56"
-      Tab(1).Control(6).Enabled=   0   'False
-      Tab(1).Control(7)=   "Label57"
-      Tab(1).Control(7).Enabled=   0   'False
-      Tab(1).Control(8)=   "LblTDsustituye"
-      Tab(1).Control(8).Enabled=   0   'False
-      Tab(1).Control(9)=   "Label49"
-      Tab(1).Control(9).Enabled=   0   'False
-      Tab(1).Control(10)=   "Label48"
-      Tab(1).Control(10).Enabled=   0   'False
-      Tab(1).Control(11)=   "Label46"
-      Tab(1).Control(11).Enabled=   0   'False
-      Tab(1).Control(12)=   "DCCondiciones"
-      Tab(1).Control(12).Enabled=   0   'False
-      Tab(1).Control(13)=   "DCAplicaConvenio"
-      Tab(1).Control(13).Enabled=   0   'False
-      Tab(1).Control(14)=   "MBFechaVI"
-      Tab(1).Control(14).Enabled=   0   'False
-      Tab(1).Control(15)=   "MBFechaVF"
-      Tab(1).Control(15).Enabled=   0   'False
-      Tab(1).Control(16)=   "TxtFPDec"
-      Tab(1).Control(16).Enabled=   0   'False
-      Tab(1).Control(17)=   "TxtCodProfesion"
-      Tab(1).Control(17).Enabled=   0   'False
-      Tab(1).Control(18)=   "TxtValorDec4to"
-      Tab(1).Control(18).Enabled=   0   'False
-      Tab(1).Control(19)=   "TxtValorDec3ro"
-      Tab(1).Control(19).Enabled=   0   'False
-      Tab(1).Control(20)=   "TxtDiasDec3ro"
-      Tab(1).Control(20).Enabled=   0   'False
-      Tab(1).Control(21)=   "TxtPorcDiscap"
-      Tab(1).Control(21).Enabled=   0   'False
-      Tab(1).Control(22)=   "TxtCISustituye"
-      Tab(1).Control(22).Enabled=   0   'False
-      Tab(1).Control(23)=   "TxtDiasDec4to"
-      Tab(1).Control(23).Enabled=   0   'False
+      Tab(1).Control(0)=   "TxtDiasDec4to"
+      Tab(1).Control(1)=   "TxtCISustituye"
+      Tab(1).Control(2)=   "TxtPorcDiscap"
+      Tab(1).Control(3)=   "TxtDiasDec3ro"
+      Tab(1).Control(4)=   "TxtValorDec3ro"
+      Tab(1).Control(5)=   "TxtValorDec4to"
+      Tab(1).Control(6)=   "TxtCodProfesion"
+      Tab(1).Control(7)=   "TxtFPDec"
+      Tab(1).Control(8)=   "MBFechaVF"
+      Tab(1).Control(9)=   "MBFechaVI"
+      Tab(1).Control(10)=   "DCAplicaConvenio"
+      Tab(1).Control(11)=   "DCCondiciones"
+      Tab(1).Control(12)=   "Label46"
+      Tab(1).Control(13)=   "Label48"
+      Tab(1).Control(14)=   "Label49"
+      Tab(1).Control(15)=   "LblTDsustituye"
+      Tab(1).Control(16)=   "Label57"
+      Tab(1).Control(17)=   "Label56"
+      Tab(1).Control(18)=   "Label55"
+      Tab(1).Control(19)=   "Label54"
+      Tab(1).Control(20)=   "Label47"
+      Tab(1).Control(21)=   "Label44"
+      Tab(1).Control(22)=   "Label45"
+      Tab(1).Control(23)=   "Label24"
       Tab(1).ControlCount=   24
       TabCaption(2)   =   "Forma de Pago"
       TabPicture(2)   =   "FRolPag.frx":01A2
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "Label51"
-      Tab(2).Control(0).Enabled=   0   'False
-      Tab(2).Control(1)=   "Label18"
-      Tab(2).Control(1).Enabled=   0   'False
-      Tab(2).Control(2)=   "Label50"
-      Tab(2).Control(2).Enabled=   0   'False
-      Tab(2).Control(3)=   "DCTipoBanco"
-      Tab(2).Control(3).Enabled=   0   'False
-      Tab(2).Control(4)=   "DCFormaPago"
-      Tab(2).Control(4).Enabled=   0   'False
+      Tab(2).Control(0)=   "OpcEfectivo"
+      Tab(2).Control(1)=   "OpcCheque"
+      Tab(2).Control(2)=   "OpcTransferencia"
+      Tab(2).Control(3)=   "OpcOtro"
+      Tab(2).Control(4)=   "TxtCI"
       Tab(2).Control(5)=   "TxtCtaAbono"
-      Tab(2).Control(5).Enabled=   0   'False
-      Tab(2).Control(6)=   "TxtCI"
-      Tab(2).Control(6).Enabled=   0   'False
-      Tab(2).Control(7)=   "OpcOtro"
-      Tab(2).Control(7).Enabled=   0   'False
-      Tab(2).Control(8)=   "OpcTransferencia"
-      Tab(2).Control(8).Enabled=   0   'False
-      Tab(2).Control(9)=   "OpcCheque"
-      Tab(2).Control(9).Enabled=   0   'False
-      Tab(2).Control(10)=   "OpcEfectivo"
-      Tab(2).Control(10).Enabled=   0   'False
+      Tab(2).Control(6)=   "DCFormaPago"
+      Tab(2).Control(7)=   "DCTipoBanco"
+      Tab(2).Control(8)=   "Label50"
+      Tab(2).Control(9)=   "Label18"
+      Tab(2).Control(10)=   "Label51"
       Tab(2).ControlCount=   11
       TabCaption(3)   =   "Gastos Personales"
       TabPicture(3)   =   "FRolPag.frx":01BE
       Tab(3).ControlEnabled=   0   'False
       Tab(3).Control(0)=   "TxtCargas"
-      Tab(3).Control(0).Enabled=   0   'False
       Tab(3).Control(1)=   "TxtTurismo"
-      Tab(3).Control(1).Enabled=   0   'False
       Tab(3).Control(2)=   "Frame2"
-      Tab(3).Control(2).Enabled=   0   'False
       Tab(3).Control(3)=   "Txt3Edad"
-      Tab(3).Control(3).Enabled=   0   'False
       Tab(3).Control(4)=   "TxtDiscap"
-      Tab(3).Control(4).Enabled=   0   'False
       Tab(3).Control(5)=   "TxtVestimenta"
-      Tab(3).Control(5).Enabled=   0   'False
       Tab(3).Control(6)=   "TxtAlimentacion"
-      Tab(3).Control(6).Enabled=   0   'False
       Tab(3).Control(7)=   "TxtEducacion"
-      Tab(3).Control(7).Enabled=   0   'False
       Tab(3).Control(8)=   "TxtSalud"
-      Tab(3).Control(8).Enabled=   0   'False
       Tab(3).Control(9)=   "TxtVivienda"
-      Tab(3).Control(9).Enabled=   0   'False
       Tab(3).Control(10)=   "Label13"
-      Tab(3).Control(10).Enabled=   0   'False
       Tab(3).Control(11)=   "Label11"
-      Tab(3).Control(11).Enabled=   0   'False
       Tab(3).Control(12)=   "Label58"
-      Tab(3).Control(12).Enabled=   0   'False
       Tab(3).Control(13)=   "Label60"
-      Tab(3).Control(13).Enabled=   0   'False
       Tab(3).Control(14)=   "Label61"
-      Tab(3).Control(14).Enabled=   0   'False
       Tab(3).Control(15)=   "Label62"
-      Tab(3).Control(15).Enabled=   0   'False
       Tab(3).Control(16)=   "Label63"
-      Tab(3).Control(16).Enabled=   0   'False
       Tab(3).Control(17)=   "Label64"
-      Tab(3).Control(17).Enabled=   0   'False
       Tab(3).Control(18)=   "Label59"
-      Tab(3).Control(18).Enabled=   0   'False
       Tab(3).ControlCount=   19
+      Begin MSMask.MaskEdBox MBCta_PerMaternidad 
+         Height          =   330
+         Left            =   2100
+         TabIndex        =   146
+         Top             =   2415
+         Width           =   1590
+         _ExtentX        =   2805
+         _ExtentY        =   582
+         _Version        =   393216
+         Enabled         =   0   'False
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         PromptChar      =   "_"
+      End
       Begin VB.TextBox TxtCargas 
          Alignment       =   1  'Right Justify
          BackColor       =   &H00FFFFFF&
@@ -563,7 +557,7 @@ Begin VB.Form FRolPago
          Height          =   435
          Left            =   7245
          TabIndex        =   142
-         Top             =   3255
+         Top             =   3570
          Width           =   2955
       End
       Begin MSMask.MaskEdBox MBCta_Diferencia 
@@ -643,7 +637,7 @@ Begin VB.Form FRolPago
          Height          =   435
          Left            =   3675
          TabIndex        =   77
-         Top             =   3255
+         Top             =   3570
          Width           =   2955
       End
       Begin VB.CheckBox CheqRFR 
@@ -660,7 +654,7 @@ Begin VB.Form FRolPago
          Height          =   435
          Left            =   105
          TabIndex        =   75
-         Top             =   3255
+         Top             =   3570
          Width           =   2640
       End
       Begin VB.Frame Frame2 
@@ -1687,7 +1681,7 @@ Begin VB.Form FRolPago
          Height          =   315
          Left            =   3780
          TabIndex        =   145
-         Top             =   2625
+         Top             =   2940
          Width           =   7260
          _ExtentX        =   12806
          _ExtentY        =   556
@@ -1702,6 +1696,63 @@ Begin VB.Form FRolPago
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
+      End
+      Begin MSMask.MaskEdBox MBCta_PerEnfermedad 
+         Height          =   330
+         Left            =   5775
+         TabIndex        =   148
+         Top             =   2415
+         Width           =   1590
+         _ExtentX        =   2805
+         _ExtentY        =   582
+         _Version        =   393216
+         Enabled         =   0   'False
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         PromptChar      =   "_"
+      End
+      Begin VB.Label Label15 
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " Per. de Enfermedad"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   3780
+         TabIndex        =   149
+         Top             =   2415
+         Width           =   2010
+      End
+      Begin VB.Label Label14 
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " Per. de Maternidad"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   105
+         TabIndex        =   147
+         Top             =   2415
+         Width           =   2010
       End
       Begin VB.Label Label13 
          BackColor       =   &H00C0FFFF&
@@ -2210,7 +2261,7 @@ Begin VB.Form FRolPago
          Height          =   330
          Left            =   105
          TabIndex        =   76
-         Top             =   2625
+         Top             =   2940
          Width           =   3690
       End
       Begin VB.Label Label34 
@@ -2744,8 +2795,8 @@ Begin VB.Form FRolPago
    End
    Begin MSAdodcLib.Adodc AdoCxCxP 
       Height          =   330
-      Left            =   210
-      Top             =   3150
+      Left            =   525
+      Top             =   3675
       Visible         =   0   'False
       Width           =   1905
       _ExtentX        =   3360
@@ -2791,8 +2842,8 @@ Begin VB.Form FRolPago
    End
    Begin MSAdodcLib.Adodc AdoMes 
       Height          =   330
-      Left            =   3990
-      Top             =   3465
+      Left            =   4305
+      Top             =   3990
       Visible         =   0   'False
       Width           =   1905
       _ExtentX        =   3360
@@ -2838,8 +2889,8 @@ Begin VB.Form FRolPago
    End
    Begin MSAdodcLib.Adodc AdoDetalle 
       Height          =   330
-      Left            =   210
-      Top             =   3465
+      Left            =   525
+      Top             =   3990
       Visible         =   0   'False
       Width           =   1905
       _ExtentX        =   3360
@@ -2885,8 +2936,8 @@ Begin VB.Form FRolPago
    End
    Begin MSAdodcLib.Adodc AdoRubros 
       Height          =   330
-      Left            =   3990
-      Top             =   3150
+      Left            =   4305
+      Top             =   3675
       Visible         =   0   'False
       Width           =   1905
       _ExtentX        =   3360
@@ -2932,8 +2983,8 @@ Begin VB.Form FRolPago
    End
    Begin MSAdodcLib.Adodc AdoGrupos 
       Height          =   330
-      Left            =   2100
-      Top             =   3150
+      Left            =   2415
+      Top             =   3675
       Visible         =   0   'False
       Width           =   1905
       _ExtentX        =   3360
@@ -2979,8 +3030,8 @@ Begin VB.Form FRolPago
    End
    Begin MSAdodcLib.Adodc AdoSubCtas 
       Height          =   330
-      Left            =   2100
-      Top             =   3465
+      Left            =   2415
+      Top             =   3990
       Visible         =   0   'False
       Width           =   1905
       _ExtentX        =   3360
@@ -3026,8 +3077,8 @@ Begin VB.Form FRolPago
    End
    Begin MSAdodcLib.Adodc AdoFormaPago 
       Height          =   330
-      Left            =   5880
-      Top             =   3150
+      Left            =   6195
+      Top             =   3675
       Visible         =   0   'False
       Width           =   1905
       _ExtentX        =   3360
@@ -3073,8 +3124,8 @@ Begin VB.Form FRolPago
    End
    Begin MSAdodcLib.Adodc AdoTipoBanco 
       Height          =   330
-      Left            =   5880
-      Top             =   3465
+      Left            =   6195
+      Top             =   3990
       Visible         =   0   'False
       Width           =   1905
       _ExtentX        =   3360
@@ -3120,8 +3171,8 @@ Begin VB.Form FRolPago
    End
    Begin MSAdodcLib.Adodc AdoAplicaConvenio 
       Height          =   330
-      Left            =   7770
-      Top             =   3150
+      Left            =   4305
+      Top             =   4305
       Visible         =   0   'False
       Width           =   1905
       _ExtentX        =   3360
@@ -3167,8 +3218,8 @@ Begin VB.Form FRolPago
    End
    Begin MSAdodcLib.Adodc AdoCondiciones 
       Height          =   330
-      Left            =   7770
-      Top             =   3465
+      Left            =   2415
+      Top             =   4305
       Visible         =   0   'False
       Width           =   1905
       _ExtentX        =   3360
@@ -3214,8 +3265,8 @@ Begin VB.Form FRolPago
    End
    Begin MSAdodcLib.Adodc AdoAux 
       Height          =   330
-      Left            =   210
-      Top             =   3780
+      Left            =   525
+      Top             =   4305
       Visible         =   0   'False
       Width           =   1905
       _ExtentX        =   3360
@@ -3699,6 +3750,8 @@ Private Sub Command1_Click()
   SetFields AdoCxCxP, "TiempoParcial", CBool(CheqTiempoParcial.value)
   SetFields AdoCxCxP, "Reingreso_FR", CBool(CheqRFR.value)
   SetFields AdoCxCxP, "ExtC", CBool(CheqExtC.value)
+  SetFields AdoCxCxP, "Opc_Guardian", CBool(CheqGuardian.value)
+  
   SetFields AdoCxCxP, "Identificacion", TxtCISustituye
   SetFields AdoCxCxP, "TIdentificacion", LblTDsustituye.Caption
   SetFields AdoCxCxP, "Aplica", OpcAplica
@@ -3856,10 +3909,9 @@ Private Sub Form_Activate()
 Dim IdRol As Integer
   Datos_IESS FechaSistema
   
-  sSQL = "SELECT Grupo_Rol, Cta_Diferencia, Cta_Vacacion, Cta_Sueldo, Cta_Horas_Ext, Cta_Aporte_Patronal_G, " _
-       & "Cta_Decimo_Cuarto_G, Cta_Decimo_Cuarto_P, Cta_Decimo_Tercer_P, Cta_Fondo_Reserva_G, Cta_Fondo_Reserva_P, " _
-       & "Cta_IESS_Personal, Cta_Quincena, Cta_Decimo_Tercer_G,Cta_IESS_Patronal, Cta_Antiguedad, " _
-       & "Cta_Vacaciones_G, Cta_Vacaciones_P, Cta_Ext_Conyugue_P " _
+  sSQL = "SELECT Grupo_Rol, Cta_Diferencia, Cta_Vacacion, Cta_Sueldo, Cta_Horas_Ext, Cta_Aporte_Patronal_G, Cta_Decimo_Cuarto_G, Cta_Decimo_Cuarto_P, " _
+       & "Cta_Decimo_Tercer_P, Cta_Fondo_Reserva_G, Cta_Fondo_Reserva_P, Cta_IESS_Personal, Cta_Quincena, Cta_Decimo_Tercer_G,Cta_IESS_Patronal, Cta_Antiguedad, " _
+       & "Cta_Vacaciones_G, Cta_Vacaciones_P, Cta_Ext_Conyugue_P, Cta_Per_Maternidad, Cta_Per_Efermedad " _
        & "FROM Catalogo_Rol_Cuentas " _
        & "WHERE Item = '" & NumEmpresa & "' " _
        & "AND Periodo = '" & Periodo_Contable & "' " _
@@ -3943,7 +3995,9 @@ Dim IdRol As Integer
   FormatoMaskCta MBCta_Vacaciones_P
   FormatoMaskCta MBCta_Quincena
   FormatoMaskCta MBCta_ExtConyugue
-  
+  FormatoMaskCta MBCta_PerMaternidad
+  FormatoMaskCta MBCta_PerEnfermedad
+
  'Colocamos los abreviados de los rubros del Rol
   MBFecha.Text = FechaSistema
   MBFechaM.Visible = False
@@ -3958,7 +4012,8 @@ Dim IdRol As Integer
   CheqRFR.value = 0
   CheqFondoReserva.value = 0
   CheqDecimos.value = 0
-
+  CheqGuardian.value = 0
+  
 '  TxtApPer.Text = "0.00"
 '  TxtPorcAp.Text = "0.00"
   TxtExtC.Text = "0.00"
@@ -4071,6 +4126,8 @@ Dim IdRol As Integer
         If .fields("Pagar_Decimos") Then CheqDecimos.value = 1
         If .fields("Reingreso_FR") Then CheqRFR.value = 1
         If .fields("TiempoParcial") Then CheqTiempoParcial.value = 1
+        If .fields("Opc_Guardian") Then CheqGuardian.value = 1
+        
         If .fields("ExtC") Then
             TxtExtC = Format(IESS_Ext * 100, "#,##0.00")
             CheqExtC.value = 1
@@ -4079,6 +4136,7 @@ Dim IdRol As Integer
             MBFechaM.Visible = True
             CheqMaternidad.value = 1
         End If
+        
         If .fields("T") = "R" Then
             MBFechaC.Visible = True
             CheqSalida.value = 1
@@ -4775,6 +4833,7 @@ Public Sub Leer_Catalogo_Rol_Pagos(GrupoRol As String)
     MBCta_IESS_Personal = FormatoCodigoCta("0")
     MBCta_Quincena = FormatoCodigoCta("0")
     MBCta_ExtConyugue = FormatoCodigoCta("0")
+    MBCta_PerMaternidad = FormatoCodigoCta("0")
     
     If Len(GrupoRol) > 1 Then
        With AdoGrupos.Recordset
@@ -4800,6 +4859,7 @@ Public Sub Leer_Catalogo_Rol_Pagos(GrupoRol As String)
                MBCta_IESS_Personal = FormatoCodigoCta(.fields("Cta_IESS_Personal"))
                MBCta_Quincena = FormatoCodigoCta(.fields("Cta_Quincena"))
                MBCta_ExtConyugue = FormatoCodigoCta(.fields("Cta_Ext_Conyugue_P"))
+               MBCta_PerMaternidad = FormatoCodigoCta(.fields("Cta_Per_Maternidad"))
             End If
         End If
        End With

@@ -1,6 +1,7 @@
 VERSION 5.00
-Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDATGRD.OCX"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
 Begin VB.Form FCentroCostos 
    BackColor       =   &H00C0C000&
    BorderStyle     =   3  'Fixed Dialog
@@ -8,13 +9,13 @@ Begin VB.Form FCentroCostos
    ClientHeight    =   8115
    ClientLeft      =   45
    ClientTop       =   330
-   ClientWidth     =   6735
+   ClientWidth     =   7590
    ControlBox      =   0   'False
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   8115
-   ScaleWidth      =   6735
+   ScaleWidth      =   7590
    ShowInTaskbar   =   0   'False
    Begin VB.CommandButton Command2 
       BackColor       =   &H00C0C000&
@@ -29,7 +30,7 @@ Begin VB.Form FCentroCostos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   960
-      Left            =   5460
+      Left            =   6300
       Picture         =   "CentroCosto.frx":0000
       Style           =   1  'Graphical
       TabIndex        =   4
@@ -49,7 +50,7 @@ Begin VB.Form FCentroCostos
          Strikethrough   =   0   'False
       EndProperty
       Height          =   960
-      Left            =   5460
+      Left            =   6300
       Picture         =   "CentroCosto.frx":08CA
       Style           =   1  'Graphical
       TabIndex        =   3
@@ -58,13 +59,13 @@ Begin VB.Form FCentroCostos
    End
    Begin MSDataGridLib.DataGrid DGSubCta 
       Bindings        =   "CentroCosto.frx":0D0C
-      Height          =   7470
+      Height          =   6525
       Left            =   105
       TabIndex        =   0
-      Top             =   105
-      Width           =   5265
-      _ExtentX        =   9287
-      _ExtentY        =   13176
+      Top             =   945
+      Width           =   6105
+      _ExtentX        =   10769
+      _ExtentY        =   11509
       _Version        =   393216
       AllowUpdate     =   -1  'True
       BackColor       =   16777152
@@ -173,24 +174,28 @@ Begin VB.Form FCentroCostos
       EndProperty
       _Version        =   393216
    End
-   Begin VB.Label Label1 
-      BackStyle       =   0  'Transparent
-      BorderStyle     =   1  'Fixed Single
-      Caption         =   " TOTAL"
-      BeginProperty Font 
+   Begin MSDataListLib.DataCombo DCSubModulos 
+      Bindings        =   "CentroCosto.frx":0D28
+      DataSource      =   "AdoSubModulo"
+      Height          =   315
+      Left            =   105
+      TabIndex        =   5
+      Top             =   525
+      Width           =   6105
+      _ExtentX        =   10769
+      _ExtentY        =   556
+      _Version        =   393216
+      BackColor       =   12648384
+      Text            =   "Ctas"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "MS Sans Serif"
-         Size            =   12
+         Size            =   8.25
          Charset         =   0
          Weight          =   700
          Underline       =   0   'False
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   330
-      Left            =   2520
-      TabIndex        =   1
-      Top             =   7665
-      Width           =   1065
    End
    Begin VB.Label LabelTotalSCMN 
       Alignment       =   1  'Right Justify
@@ -208,10 +213,46 @@ Begin VB.Form FCentroCostos
       EndProperty
       ForeColor       =   &H00C00000&
       Height          =   330
-      Left            =   3570
+      Left            =   4095
       TabIndex        =   2
       Top             =   7665
       Width           =   1800
+   End
+   Begin VB.Label Label3 
+      Caption         =   "SubModulo del Proyecto"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   105
+      TabIndex        =   6
+      Top             =   105
+      Width           =   6105
+   End
+   Begin VB.Label Label1 
+      BackStyle       =   0  'Transparent
+      BorderStyle     =   1  'Fixed Single
+      Caption         =   " TOTAL"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   12
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   3045
+      TabIndex        =   1
+      Top             =   7665
+      Width           =   1065
    End
 End
 Attribute VB_Name = "FCentroCostos"
@@ -347,7 +388,7 @@ Private Sub Form_Activate()
     SumatoriaSC = Sumatoria_CC
     
     RatonNormal
-    End Sub
+End Sub
 
 Private Sub Form_Load()
   CentrarForm FCentroCostos

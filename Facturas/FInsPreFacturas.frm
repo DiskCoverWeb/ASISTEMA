@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form FInsPreFacturas 
    BackColor       =   &H00808000&
@@ -1122,91 +1122,91 @@ Private Sub Command2_Click()
     Unload FInsPreFacturas
 End Sub
 
-Private Sub CheqProducto_Click(Index As Integer)
-  If CheqProducto(Index).value Then
-     DCProducto(Index).Visible = True
-     LblFecha(Index).Visible = True
-     MBFechaP(Index).Visible = True
-     LblCantidad(Index).Visible = True
-     TxtCantidad(Index).Visible = True
-     LblValor(Index).Visible = True
-     TxtValor(Index).Visible = True
-     LblDescuento(Index).Visible = True
-     TxtDescuento(Index).Visible = True
-     LblDescuento2(Index).Visible = True
-     TxtDescuento2(Index).Visible = True
+Private Sub CheqProducto_Click(index As Integer)
+  If CheqProducto(index).value Then
+     DCProducto(index).Visible = True
+     LblFecha(index).Visible = True
+     MBFechaP(index).Visible = True
+     LblCantidad(index).Visible = True
+     TxtCantidad(index).Visible = True
+     LblValor(index).Visible = True
+     TxtValor(index).Visible = True
+     LblDescuento(index).Visible = True
+     TxtDescuento(index).Visible = True
+     LblDescuento2(index).Visible = True
+     TxtDescuento2(index).Visible = True
   Else
-     DCProducto(Index).Visible = False
-     LblFecha(Index).Visible = False
-     MBFechaP(Index).Visible = False
-     LblCantidad(Index).Visible = False
-     TxtCantidad(Index).Visible = False
-     LblValor(Index).Visible = False
-     TxtValor(Index).Visible = False
-     LblDescuento(Index).Visible = False
-     TxtDescuento(Index).Visible = False
-     LblDescuento2(Index).Visible = False
-     TxtDescuento2(Index).Visible = False
+     DCProducto(index).Visible = False
+     LblFecha(index).Visible = False
+     MBFechaP(index).Visible = False
+     LblCantidad(index).Visible = False
+     TxtCantidad(index).Visible = False
+     LblValor(index).Visible = False
+     TxtValor(index).Visible = False
+     LblDescuento(index).Visible = False
+     TxtDescuento(index).Visible = False
+     LblDescuento2(index).Visible = False
+     TxtDescuento2(index).Visible = False
   End If
 End Sub
 
-Private Sub MBFechaP_GotFocus(Index As Integer)
-   MarcarTexto MBFechaP(Index)
+Private Sub MBFechaP_GotFocus(index As Integer)
+   MarcarTexto MBFechaP(index)
 End Sub
 
-Private Sub MBFechaP_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
+Private Sub MBFechaP_KeyDown(index As Integer, KeyCode As Integer, Shift As Integer)
    PresionoEnter KeyCode
 End Sub
 
-Private Sub MBFechaP_LostFocus(Index As Integer)
-   FechaValida MBFechaP(Index)
+Private Sub MBFechaP_LostFocus(index As Integer)
+   FechaValida MBFechaP(index)
 End Sub
 
-Private Sub TxtCantidad_GotFocus(Index As Integer)
-   MarcarTexto TxtCantidad(Index)
+Private Sub TxtCantidad_GotFocus(index As Integer)
+   MarcarTexto TxtCantidad(index)
 End Sub
 
-Private Sub TxtCantidad_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
+Private Sub TxtCantidad_KeyDown(index As Integer, KeyCode As Integer, Shift As Integer)
    PresionoEnter KeyCode
 End Sub
 
-Private Sub TxtCantidad_LostFocus(Index As Integer)
-   TextoValido TxtCantidad(Index), True, , 0
+Private Sub TxtCantidad_LostFocus(index As Integer)
+   TextoValido TxtCantidad(index), True, , 0
 End Sub
 
-Private Sub TxtValor_GotFocus(Index As Integer)
-   MarcarTexto TxtValor(Index)
+Private Sub TxtValor_GotFocus(index As Integer)
+   MarcarTexto TxtValor(index)
 End Sub
 
-Private Sub TxtValor_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
+Private Sub TxtValor_KeyDown(index As Integer, KeyCode As Integer, Shift As Integer)
    PresionoEnter KeyCode
 End Sub
 
-Private Sub TxtValor_LostFocus(Index As Integer)
-   TextoValido TxtValor(Index), True
+Private Sub TxtValor_LostFocus(index As Integer)
+   TextoValido TxtValor(index), True
 End Sub
 
-Private Sub TxtDescuento_GotFocus(Index As Integer)
-   MarcarTexto TxtDescuento(Index)
+Private Sub TxtDescuento_GotFocus(index As Integer)
+   MarcarTexto TxtDescuento(index)
 End Sub
 
-Private Sub TxtDescuento_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
+Private Sub TxtDescuento_KeyDown(index As Integer, KeyCode As Integer, Shift As Integer)
    PresionoEnter KeyCode
 End Sub
 
-Private Sub TxtDescuento_LostFocus(Index As Integer)
-   TextoValido TxtDescuento(Index), True
+Private Sub TxtDescuento_LostFocus(index As Integer)
+   TextoValido TxtDescuento(index), True
 End Sub
 
-Private Sub TxtDescuento2_GotFocus(Index As Integer)
-   MarcarTexto TxtDescuento2(Index)
+Private Sub TxtDescuento2_GotFocus(index As Integer)
+   MarcarTexto TxtDescuento2(index)
 End Sub
 
-Private Sub TxtDescuento2_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
+Private Sub TxtDescuento2_KeyDown(index As Integer, KeyCode As Integer, Shift As Integer)
    PresionoEnter KeyCode
 End Sub
 
-Private Sub TxtDescuento2_LostFocus(Index As Integer)
-   TextoValido TxtDescuento2(Index), True
+Private Sub TxtDescuento2_LostFocus(index As Integer)
+   TextoValido TxtDescuento2(index), True
 End Sub
 

@@ -1,8 +1,8 @@
 VERSION 5.00
-Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form FSuscripcion 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "FORMULARIO DE SUSCRIPCION"
@@ -998,7 +998,7 @@ Private Sub Command1_Click()
        SetFields AdoAux2, "Numero", CLng(TextFact.Text)
        SetFields AdoAux2, "Atencion", TxtAtencion.Text
        SetFields AdoAux2, "Cta", Cta_Aux
-       SetFields AdoAux2, "Pagos", Redondear(.Fields("Capital"), 2)
+       SetFields AdoAux2, "Pagos", Redondear(.fields("Capital"), 2)
        SetFields AdoAux2, "Item", NumEmpresa
        SetFields AdoAux2, "CodigoE", CodigoEjecutivo
        SetFields AdoAux2, "CodigoU", CodigoUsuario
@@ -1012,15 +1012,15 @@ Private Sub Command1_Click()
       .MoveFirst
        RatonReloj
        Do While Not .EOF
-          FSuscripcion.Caption = .Fields("Ejemplar")
+          FSuscripcion.Caption = .fields("Ejemplar")
           SetAddNew AdoAux1
           SetFields AdoAux1, "T", TipoProc
           SetFields AdoAux1, "AC", adFalse
           SetFields AdoAux1, "TP", TipoDoc
           SetFields AdoAux1, "Contrato_No", Credito_No
-          SetFields AdoAux1, "Ent_No", .Fields("Ejemplar")
-          SetFields AdoAux1, "Fecha", .Fields("Fecha")
-          SetFields AdoAux1, "E", .Fields("Entregado")
+          SetFields AdoAux1, "Ent_No", .fields("Ejemplar")
+          SetFields AdoAux1, "Fecha", .fields("Fecha")
+          SetFields AdoAux1, "E", .fields("Entregado")
           SetFields AdoAux1, "Item", NumEmpresa
           SetUpdate AdoAux1
          .MoveNext
@@ -1041,9 +1041,9 @@ Private Sub DCCtaVenta_LostFocus()
   With AdoCtaVenta.Recordset
    If .RecordCount > 0 Then
       .MoveFirst
-       Cta_Aux = .Fields("Cta_Ventas")
+       Cta_Aux = .fields("Cta_Ventas")
       .Find ("Cuenta = '" & DCCtaVenta.Text & "' ")
-       If Not .EOF Then Cta_Aux = .Fields("Cta_Ventas") Else MsgBox "Cliente no Asignado"
+       If Not .EOF Then Cta_Aux = .fields("Cta_Ventas") Else MsgBox "Cliente no Asignado"
    Else
        MsgBox "No existen datos"
    End If
@@ -1057,7 +1057,7 @@ Private Sub DCEjecutivo_LostFocus()
    If .RecordCount > 0 Then
       .MoveFirst
       .Find ("Cliente = '" & DCEjecutivo.Text & "' ")
-       If Not .EOF Then CodigoEjecutivo = .Fields("Codigo")
+       If Not .EOF Then CodigoEjecutivo = .fields("Codigo")
    End If
   End With
   RatonNormal

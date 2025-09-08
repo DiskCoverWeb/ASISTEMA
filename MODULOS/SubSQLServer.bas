@@ -1,27 +1,46 @@
 Attribute VB_Name = "SubSQLServer"
 Option Explicit
 
+Public Function JSON_Insert(JSONDato, Campo As String, Valor As Variant) As String
+    Select Case VarType(Valor)
+      Case vbObject, vbString, vbDate
+           Valor = Replace(Valor, """", "`")
+           Valor = Replace(Valor, "&", "Y")
+           Valor = Replace(Valor, "\", "/")
+           Valor = Replace(Valor, vbTab, " ")
+           If Len(Valor) > 0 Then JSONDato = JSONDato & "'" & Campo & "': '" & TrimStrg(Valor) & "'," & vbCrLf
+      Case vbByte, vbInteger, vbLong, vbSingle, vbDouble, vbCurrency, vbBoolean
+           JSONDato = JSONDato & "'" & Campo & "': " & Valor & "," & vbCrLf
+    End Select
+   'MsgBox "->" & Campo & " :" & vbCrLf & JSONDato
+   'Retornamos el resultado
+    JSON_Insert = JSONDato
+End Function
+
 Public Sub Iniciar_Stored_Procedure(cMensajeProceso As String, _
                                     cMiSQL As ADODB.Connection, _
                                     cMiCmd As ADODB.Command, _
                                     cMiReg As ADODB.Recordset)
-    RatonReloj
-''  Progreso_Barra.Mensaje_Box = cMensajeProceso
-''  Progreso_Iniciar
-    
-   'Seteamos la conexion
-    Set cMiSQL = New ADODB.Connection
-    Set cMiCmd = New ADODB.Command
-    Set cMiReg = New ADODB.Recordset
-    
-    cMiSQL.CursorLocation = adUseClient
-    If SQL_Server Then cMiSQL.ConnectionString = AdoStrCnn Else cMiSQL.ConnectionString = AdoStrCnnMySQL
-    cMiSQL.open
-    cMiSQL.CommandTimeout = 0
-    
-   'Ejecutar Procedimiento Almacenado y guarda resultados en recordset
-    cMiCmd.ActiveConnection = cMiSQL
-    cMiCmd.CommandType = adCmdStoredProc
+'    If Ping_IP("db.diskcoversystem.com") Then
+        RatonReloj
+    ''  Progreso_Barra.Mensaje_Box = cMensajeProceso
+    ''  Progreso_Iniciar
+        
+       'Seteamos la conexion
+        Set cMiSQL = New ADODB.Connection
+        Set cMiCmd = New ADODB.Command
+        Set cMiReg = New ADODB.Recordset
+        
+        cMiSQL.CursorLocation = adUseClient
+        
+        If SQL_Server Then cMiSQL.ConnectionString = AdoStrCnn Else cMiSQL.ConnectionString = AdoStrCnnMySQL
+        cMiSQL.open
+        cMiSQL.CommandTimeout = 0
+        
+       'Ejecutar Procedimiento Almacenado y guarda resultados en recordset
+        cMiCmd.ActiveConnection = cMiSQL
+        cMiCmd.CommandType = adCmdStoredProc
+'    End If
 End Sub
 
 Public Sub Procesar_Stored_Procedure(cMiCmd As ADODB.Command, _
@@ -34,6 +53,9 @@ On Error GoTo Errorhandler
     For IdP = 0 To cMiCmd.Parameters.Count - 1
         ListP = ListP & cMiCmd.Parameters.Item(IdP).Name & " = '" & cMiCmd.Parameters.Item(IdP) & "'" & vbCrLf
     Next IdP
+    
+'   Clipboard.Clear
+'   Clipboard.SetText ListP
    'MsgBox Len(ListP) & vbCrLf & vbCrLf & ListP
    'Generar_File_SQL "Store_Procedure", ListP
     
@@ -61,51 +83,51 @@ Public Sub Finalizar_Stored_Procedure(cMiSQL As ADODB.Connection, _
     RatonNormal
 End Sub
 
-Public Sub Lista_Mensaje_SP_MySQL(MensajeAyuda As String)
-Dim cnMySQL As ADODB.Connection
-Dim rsMySQL As ADODB.Recordset
-Dim cmdMySQL As ADODB.Command
-
-    RatonReloj
-    If Ping_IP("db.diskcoversystem.com") Then
-       'Conexion a MySQL del servidor en las nubes
-        Set cmdMySQL = New ADODB.Command
-        Set cnMySQL = New ADODB.Connection
-        cnMySQL.ConnectionString = AdoStrCnnMySQL
-        cnMySQL.open
-        Set cmdMySQL.ActiveConnection = cnMySQL
-        cmdMySQL.CommandType = adCmdText
-    
-       'Parametros de entrada y de salida
-        cmdMySQL.CommandText = "Call sp_lista_mensaje(@MensajeAyuda);"
-    
-       'Enviamos los parametro de solo entrada al SP
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("MensajeAyuda", adVarChar, adParamInput, 1024, MensajeAyuda)
-    
-       'Ejecucion del SP en MySQL
-        Set rsMySQL = cmdMySQL.Execute
-    
-       'Recolectamos los resultados de los parametros de salida
-        Set rsMySQL = cnMySQL.Execute("SELECT @MensajeAyuda;")
-    
-       'Pasamos a variables globales lso resultados del SP
-        If Not rsMySQL.EOF Then MensajeAyuda = rsMySQL.fields(0)
-    
-       'Cerramos la conexion con MySQL
-        rsMySQL.Close
-        cnMySQL.Close
-        
-       'Liberando de la memoria es control de conexion
-        Set cmdMySQL.ActiveConnection = Nothing
-        Set rsMySQL = Nothing
-        Set cnMySQL = Nothing
-        Set cmdMySQL = Nothing
-    Else
-        MensajeAyuda = "AHORA YA ESTAMOS EN LAS NUBES, VISITANOS:" & vbCrLf _
-                     & "https://www.diskcoversystem.com"
-    End If
-    RatonNormal
-End Sub
+'''Public Sub Lista_Mensaje_SP_MySQL(MensajeAyuda As String)
+'''Dim cnMySQL As ADODB.Connection
+'''Dim rsMySQL As ADODB.Recordset
+'''Dim cmdMySQL As ADODB.Command
+'''
+'''    RatonReloj
+'''    If Ping_IP(strServidorERP) Then
+'''       'Conexion a MySQL del servidor en las nubes
+'''        Set cmdMySQL = New ADODB.Command
+'''        Set cnMySQL = New ADODB.Connection
+'''        cnMySQL.ConnectionString = AdoStrCnnMySQL
+'''        cnMySQL.open
+'''        Set cmdMySQL.ActiveConnection = cnMySQL
+'''        cmdMySQL.CommandType = adCmdText
+'''
+'''       'Parametros de entrada y de salida
+'''        cmdMySQL.CommandText = "Call sp_lista_mensaje(@MensajeAyuda);"
+'''
+'''       'Enviamos los parametro de solo entrada al SP
+'''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("MensajeAyuda", adVarChar, adParamInput, 1024, MensajeAyuda)
+'''
+'''       'Ejecucion del SP en MySQL
+'''        Set rsMySQL = cmdMySQL.Execute
+'''
+'''       'Recolectamos los resultados de los parametros de salida
+'''        Set rsMySQL = cnMySQL.Execute("SELECT @MensajeAyuda;")
+'''
+'''       'Pasamos a variables globales lso resultados del SP
+'''        If Not rsMySQL.EOF Then MensajeAyuda = rsMySQL.fields(0)
+'''
+'''       'Cerramos la conexion con MySQL
+'''        rsMySQL.Close
+'''        cnMySQL.Close
+'''
+'''       'Liberando de la memoria es control de conexion
+'''        Set cmdMySQL.ActiveConnection = Nothing
+'''        Set rsMySQL = Nothing
+'''        Set cnMySQL = Nothing
+'''        Set cmdMySQL = Nothing
+''' '   Else
+''' '       MensajeAyuda = "AHORA YA ESTAMOS EN LAS NUBES, VISITANOS:" & vbCrLf _
+''' '                    & "https://www.diskcoversystem.com"
+'''    End If
+'''    RatonNormal
+'''End Sub
 
 Public Sub Acceso_IP_PCs_SP_MySQL(vActivo As Boolean)
 Dim cnMySQL As ADODB.Connection
@@ -115,9 +137,9 @@ Dim Mifecha1 As String
 Dim MiHora1 As String
 
    'Conexion a MySQL del servidor en las nubes
-    If Ping_IP("db.diskcoversystem.com") Then
+    If Ping_IP(strServidorERP) Then
          RatonReloj
-         Mifecha1 = CStr(Format(date, "yyyymmdd"))
+         Mifecha1 = CStr(Format(Date, "yyyymmdd"))
          MiHora1 = CStr(Format(Time, "hh:mm:ss"))
          
          Set cmdMySQL = New ADODB.Command
@@ -186,10 +208,12 @@ Dim ParametrosDeSalida As String
     Cartera = 0
     Cant_FA = 0
     TipoPlan = 0
-    If Ping_IP("db.diskcoversystem.com") Then
+    If Ping_IP(strServidorERP) Then
         RatonReloj
+       'MsgBox AdoStrCnnMySQL
        'Set cnMySQL = CreateObject("ADODB.Connection")
        'Conexion a MySQL del servidor en las nubes
+       
         Set cmdMySQL = New ADODB.Command
         Set cnMySQL = New ADODB.Connection
         cnMySQL.ConnectionString = AdoStrCnnMySQL
@@ -273,7 +297,7 @@ Dim ParametrosDeSalida As String
         Set cnMySQL = Nothing
         Set cmdMySQL = Nothing
         RatonNormal
-       'MsgBox ParametrosDeSalida & ".-.-.-.-.-.-.-.-"
+       'MsgBox "DeskTop Test: " & ParametrosDeSalida & ".-.-.-.-.-.-.-.-"
     End If
 End Sub
 
@@ -303,7 +327,7 @@ Dim ParametrosDeSalida As String
     Cartera = 0
     Cant_FA = 0
     TipoPlan = 0
-     If Ping_IP("db.diskcoversystem.com") Then
+    If Ping_IP(strServidorERP) Then
        'Conexion a MySQL del servidor en las nubes
         Set cmdMySQL = New ADODB.Command
         Set cnMySQL = New ADODB.Connection
@@ -361,12 +385,12 @@ Dim ParametrosDeSalida As String
        'Cerramos la conexion con MySQL
         rsMySQL.Close
         cnMySQL.Close
-     End If
+    End If
      
-    'Set cmdMySQL.ActiveConnection = Nothing
-     Set rsMySQL = Nothing
-     Set cnMySQL = Nothing
-     Set cmdMySQL = Nothing
+   'Set cmdMySQL.ActiveConnection = Nothing
+    Set rsMySQL = Nothing
+    Set cnMySQL = Nothing
+    Set cmdMySQL = Nothing
     If Len(AgenteRetencion) > 1 Then AgenteRetencion = " Resolución: " & AgenteRetencion
     RatonNormal
 End Sub
@@ -378,7 +402,7 @@ Dim cmdMySQL As ADODB.Command
 
   vMicroEmpresa = Ninguno
   vAgenteRetencion = Ninguno
-  If Ping_IP("db.diskcoversystem.com") Then
+  If Ping_IP(strServidorERP) Then
     If Len(RUCContribuyente) = 13 Then
       'Conexion a MySQL del servidor en las nubes
       'Control_Procesos Normal, "Conexion MySQL Tipo Contribuyente"
@@ -426,10 +450,10 @@ Public Sub Leer_URL_Token_SP_MySQL(RUCEmpresa As String, vURL As String, vToken 
 Dim cnMySQL As ADODB.Connection
 Dim rsMySQL As ADODB.Recordset
 Dim cmdMySQL As ADODB.Command
-
+'Ping_IP(strServidorERP) And
   vToken = Ninguno
   vURL = Ninguno
-  If Ping_IP("db.diskcoversystem.com") And Len(RUCEmpresa) = 13 Then
+  If Len(RUCEmpresa) = 13 Then
     'Conexion a MySQL del servidor en las nubes
     'Control_Procesos Normal, "Conexion MySQL Tipo Contribuyente"
      RatonReloj
@@ -514,16 +538,22 @@ Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
 Dim MiReg As ADODB.Recordset
 Dim TByte As Long
-    'MsgBox SQL
-    If Not NoCompilar Then SQL = CompilarSQL(SQL)
-    Generar_File_SQL NombreFile, SQL
-    Iniciar_Stored_Procedure "Ejecucion SP con parametros", MiSQL, MiCmd, MiReg
-   'MsgBox Len(SQL) & vbCrLf & SQL
-    TByte = Len(SQL) + 10
-    MiCmd.CommandText = "sp_Ejecutar_SQL"
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@sSQL", adVarChar, adParamInput, TByte, SQL)
-    Procesar_Stored_Procedure MiCmd, MiReg
-    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+   'MsgBox SQL
+    If Len(SQL) > 1 Then
+       If Not NoCompilar Then SQL = CompilarSQL(SQL)
+       Generar_File_SQL NombreFile, SQL
+        
+    '  Clipboard.Clear
+    '  Clipboard.SetText SQL
+       If Ping_IP("db.diskcoversystem.com") Then
+          Iniciar_Stored_Procedure "Ejecucion SP con parametros", MiSQL, MiCmd, MiReg
+         'MsgBox Len(SQL) & vbCrLf & SQL
+          MiCmd.CommandText = "sp_Ejecutar_SQL"
+          MiCmd.Parameters.Append MiCmd.CreateParameter("@sSQL", adVarChar, adParamInput, Len(SQL) + 10, SQL)
+          Procesar_Stored_Procedure MiCmd, MiReg
+          Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+       End If
+    End If
 End Sub
 
 Public Sub Ejecutar_SQL_AdoDB(SQLQuery As String, Optional NoCompilar As Boolean, Optional NombreFile As String)
@@ -613,7 +643,7 @@ Dim MiReg As ADODB.Recordset
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
 
-Public Sub Mayorizar_Cuentas_SP()
+Public Sub Mayorizar_Cuentas_SP(Optional ReIndexar As Boolean)
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
 Dim MiReg As ADODB.Recordset
@@ -622,6 +652,7 @@ Dim MiReg As ADODB.Recordset
     MiCmd.CommandText = "sp_Mayorizar_Cuentas"
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@ReIndexar", adBoolean, adParamInput, 1, ReIndexar)
     Procesar_Stored_Procedure MiCmd, MiReg
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
@@ -655,21 +686,17 @@ Dim BuscarCodigo1 As String
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
 
-Public Sub Actualiza_Transacciones_Kardex_SP()
+Public Sub Actualizar_Transacciones_Kardex_SP()
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
 Dim MiReg As ADODB.Recordset
     
     Iniciar_Stored_Procedure "Actualiza Transacciones Kardex", MiSQL, MiCmd, MiReg
-    MiCmd.CommandText = "sp_Actualiza_Transacciones_Kardex"
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@EsCoop", adBoolean, adParamInput, 1, OpcCoop)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@ConSucursal", adBoolean, adParamInput, 1, ConSucursal)
+    MiCmd.CommandText = "sp_Actualizar_Transacciones_Kardex"
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@CodigoUsuario", adVarChar, adParamInput, 10, CodigoUsuario)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Modulo", adVarChar, adParamInput, 2, NumModulo)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@Dec_PVP", adInteger, adParamInput, 14, Dec_PVP)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@Dec_Costo", adInteger, adParamInput, 14, Dec_Costo)
     
     Procesar_Stored_Procedure MiCmd, MiReg
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
@@ -768,6 +795,268 @@ Dim FechaFacSP As String
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
 
+Public Sub Grabar_Comprobante_SP(Comp As Comprobantes, CtaConciliada As String)
+Dim MiSQL As ADODB.Connection
+Dim MiCmd As ADODB.Command
+Dim MiReg As ADODB.Recordset
+Dim pJSON As Object
+Dim JSONComprobante As String
+Dim JSONResult As String
+
+    JSONComprobante = "{"
+    With Comp
+        'Datos por default
+        .Ctas_Modificar = ""
+        .CodigoInvModificar = "0"
+        .Cotizacion = Dolar
+        .GrabadoExitoso = False
+        .T_No = Trans_No
+         If .T = "" Then .T = Normal
+         If .Item = "" Then .Item = NumEmpresa
+         If .Periodo = "" Then .Periodo = Periodo_Contable
+         If .Usuario = "" Then .Usuario = CodigoUsuario
+         If .Fecha = LimpiarFechas Then .Fecha = FechaSistema
+         If .CodigoDr = "" Then .CodigoDr = Ninguno
+         If .Concepto = "" Then .Concepto = Ninguno
+         If .CodigoB = "" Then .CodigoB = Ninguno
+         If .RUC_CI = "" Then .RUC_CI = "0000000000000"
+         If .TP = "" Then .TP = "CD"
+         If InStr("CRP", .TD) = 0 Then .CodigoB = Ninguno
+
+        'Formacion del JSON para enviar el SP de grabado
+         JSONComprobante = JSON_Insert(JSONComprobante, "NumModulo", NumModulo)
+         JSONComprobante = JSON_Insert(JSONComprobante, "T", .T)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Item", .Item)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Periodo", .Periodo)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Usuario", .Usuario)
+         JSONComprobante = JSON_Insert(JSONComprobante, "TP", .TP)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Fecha", .Fecha)
+         JSONComprobante = JSON_Insert(JSONComprobante, "CodigoB", .CodigoB)
+         JSONComprobante = JSON_Insert(JSONComprobante, "CodigoDr", .CodigoDr)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Beneficiario", .Beneficiario)
+         JSONComprobante = JSON_Insert(JSONComprobante, "RUC_CI", .RUC_CI)
+         JSONComprobante = JSON_Insert(JSONComprobante, "TD", .TD)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Telefono", .Telefono)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Direccion", .Direccion)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Email", .Email)
+         JSONComprobante = JSON_Insert(JSONComprobante, "AgenteRetencion", .AgenteRetencion)
+         JSONComprobante = JSON_Insert(JSONComprobante, "MicroEmpresa", .MicroEmpresa)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Estado", .Estado)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Concepto", .Concepto)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Autorizado", .Autorizado)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Ctas_Modificar", .Ctas_Modificar)
+         JSONComprobante = JSON_Insert(JSONComprobante, "CodigoInvModificar", .CodigoInvModificar)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Grupo", .Grupo)
+         JSONComprobante = JSON_Insert(JSONComprobante, "TipoContribuyente", .TipoContribuyente)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Cheque", .Cheque)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Cta_Banco", .Cta_Banco)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Serie_R", .Serie_R)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Autorizacion_R", .Autorizacion_R)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Serie_LC", .Serie_LC)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Autorizacion_LC", .Autorizacion_LC)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Cotizacion", .Cotizacion)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Efectivo", .Efectivo)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Total_Banco", .Total_Banco)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Monto_Total", .Monto_Total)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Numero", .Numero)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Retencion", .Retencion)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Liquidacion", .Liquidacion)
+         JSONComprobante = JSON_Insert(JSONComprobante, "T_No", .T_No)
+         JSONComprobante = JSON_Insert(JSONComprobante, "RetNueva", .RetNueva)
+         JSONComprobante = JSON_Insert(JSONComprobante, "RetSecuencial", .RetSecuencial)
+         JSONComprobante = JSON_Insert(JSONComprobante, "LCNueva", .LCNueva)
+         JSONComprobante = JSON_Insert(JSONComprobante, "LCSecuencial", .LCSecuencial)
+    End With
+   'Transformacion de Comillas simples a comillas dobles y de tipos booleanos
+    JSONComprobante = MidStrg(JSONComprobante, 1, Len(JSONComprobante) - 3) & "}"
+    JSONComprobante = Replace(JSONComprobante, "'", """")
+    JSONComprobante = Replace(JSONComprobante, "True", "1")
+    JSONComprobante = Replace(JSONComprobante, "False", "0")
+    JSONComprobante = Replace(JSONComprobante, "Verdadero", "1")
+    JSONComprobante = Replace(JSONComprobante, "Falso", "0")
+   'MsgBox JSONComprobante
+    Iniciar_Stored_Procedure "SP Grabar Comprobante", MiSQL, MiCmd, MiReg
+    MiCmd.CommandText = "sp_Grabar_Comprobante"
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@JSON_InPut", adVarChar, adParamInput, Len(JSONComprobante) + 10, JSONComprobante)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@JSON_OutPut", adVarChar, adParamOutput, 2048, JSONResult)
+    Procesar_Stored_Procedure MiCmd, MiReg
+    
+   'Recolectamos los resultados del Store Procedure
+    JSONResult = MiCmd.Parameters("@JSON_OutPut").value
+    Set pJSON = JSON.parse(MiCmd.Parameters("@JSON_OutPut").value)
+    CtaConciliada = pJSON.Item("CtaConciliada")
+    Comp.TP = pJSON.Item("TP")
+    Comp.Numero = pJSON.Item("Numero")
+    Comp.GrabadoExitoso = CBool(pJSON.Item("Ok_Save"))
+    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+    If Not Comp.GrabadoExitoso Then
+       Clipboard.Clear
+       Clipboard.SetText JSONComprobante & vbCrLf & String(80, "-") & vbCrLf & JSONResult
+    End If
+End Sub
+
+Public Sub Grabar_Factura_SP(TFA As Tipo_Facturas)
+Dim MiSQL As ADODB.Connection
+Dim MiCmd As ADODB.Command
+Dim MiReg As ADODB.Recordset
+
+Dim pJSON As Object
+
+Dim JSONFactura As String
+Dim JSONResult As String
+
+    JSONFactura = "{"
+    With TFA
+        'Formacion del JSON para enviar al SP de grabado
+         JSONFactura = JSON_Insert(JSONFactura, "TC", .TC)
+         JSONFactura = JSON_Insert(JSONFactura, "Tipo_PRN", .Tipo_PRN)
+         JSONFactura = JSON_Insert(JSONFactura, "CodigoC", .CodigoC)
+         JSONFactura = JSON_Insert(JSONFactura, "CodigoB", .CodigoB)
+         JSONFactura = JSON_Insert(JSONFactura, "CodigoA", .CodigoA)
+         JSONFactura = JSON_Insert(JSONFactura, "CodigoDr", .CodigoDr)
+         JSONFactura = JSON_Insert(JSONFactura, "Curso", .Curso)
+         JSONFactura = JSON_Insert(JSONFactura, "Contacto", .Contacto)
+         JSONFactura = JSON_Insert(JSONFactura, "Forma_Pago", .Forma_Pago)
+         JSONFactura = JSON_Insert(JSONFactura, "Cta_CxP", .Cta_CxP)
+         JSONFactura = JSON_Insert(JSONFactura, "Cta_CxP_Anterior", .Cta_CxP_Anterior)
+         JSONFactura = JSON_Insert(JSONFactura, "Cta_Venta", .Cta_Venta)
+         JSONFactura = JSON_Insert(JSONFactura, "Cod_Ejec", .Cod_Ejec)
+         JSONFactura = JSON_Insert(JSONFactura, "Vendedor", .Vendedor)
+         JSONFactura = JSON_Insert(JSONFactura, "Afiliado", .Afiliado)
+         JSONFactura = JSON_Insert(JSONFactura, "Digitador", .Digitador)
+         JSONFactura = JSON_Insert(JSONFactura, "Nivel", .Nivel)
+         JSONFactura = JSON_Insert(JSONFactura, "Nota", .Nota)
+         JSONFactura = JSON_Insert(JSONFactura, "Observacion", .Observacion)
+         JSONFactura = JSON_Insert(JSONFactura, "Definitivo", .Definitivo)
+         JSONFactura = JSON_Insert(JSONFactura, "Codigo_T", .Codigo_T)
+         JSONFactura = JSON_Insert(JSONFactura, "Declaracion", .Declaracion)
+         JSONFactura = JSON_Insert(JSONFactura, "SubCta", .SubCta)
+         JSONFactura = JSON_Insert(JSONFactura, "Serie", .Serie)
+         JSONFactura = JSON_Insert(JSONFactura, "Serie_GR", .Serie_GR)
+         JSONFactura = JSON_Insert(JSONFactura, "Autorizacion", .Autorizacion)
+         JSONFactura = JSON_Insert(JSONFactura, "Autorizacion_GR", .Autorizacion_GR)
+         JSONFactura = JSON_Insert(JSONFactura, "Fecha_Tours", .Fecha_Tours)
+         JSONFactura = JSON_Insert(JSONFactura, "Fecha", .Fecha)
+         JSONFactura = JSON_Insert(JSONFactura, "Vencimiento", .Vencimiento)
+         JSONFactura = JSON_Insert(JSONFactura, "FechaGRE", .FechaGRE)
+         JSONFactura = JSON_Insert(JSONFactura, "FechaGRI", .FechaGRI)
+         JSONFactura = JSON_Insert(JSONFactura, "FechaGRF", .FechaGRF)
+         JSONFactura = JSON_Insert(JSONFactura, "CiudadGRI", .CiudadGRI)
+         JSONFactura = JSON_Insert(JSONFactura, "CiudadGRF", .CiudadGRF)
+         JSONFactura = JSON_Insert(JSONFactura, "Comercial", .Comercial)
+         JSONFactura = JSON_Insert(JSONFactura, "CIRUCComercial", .CIRUCComercial)
+         JSONFactura = JSON_Insert(JSONFactura, "Entrega", .Entrega)
+         JSONFactura = JSON_Insert(JSONFactura, "CIRUCEntrega", .CIRUCEntrega)
+         JSONFactura = JSON_Insert(JSONFactura, "Dir_PartidaGR", .Dir_PartidaGR)
+         JSONFactura = JSON_Insert(JSONFactura, "Dir_EntregaGR", .Dir_EntregaGR)
+         JSONFactura = JSON_Insert(JSONFactura, "Pedido", .Pedido)
+         JSONFactura = JSON_Insert(JSONFactura, "Zona", .Zona)
+         JSONFactura = JSON_Insert(JSONFactura, "Placa_Vehiculo", .Placa_Vehiculo)
+         JSONFactura = JSON_Insert(JSONFactura, "Lugar_Entrega", .Lugar_Entrega)
+         JSONFactura = JSON_Insert(JSONFactura, "DireccionEstab", .DireccionEstab)
+         JSONFactura = JSON_Insert(JSONFactura, "NombreEstab", .NombreEstab)
+         JSONFactura = JSON_Insert(JSONFactura, "TelefonoEstab", .TelefonoEstab)
+         JSONFactura = JSON_Insert(JSONFactura, "LogoTipoEstab", .LogoTipoEstab)
+         JSONFactura = JSON_Insert(JSONFactura, "TP", .TP)
+         JSONFactura = JSON_Insert(JSONFactura, "Tipo_Pago", .Tipo_Pago)
+         JSONFactura = JSON_Insert(JSONFactura, "Tipo_Comp", .Tipo_Comp)
+         JSONFactura = JSON_Insert(JSONFactura, "Cod_CxC", .Cod_CxC)
+         JSONFactura = JSON_Insert(JSONFactura, "CxC_Clientes", .CxC_Clientes)
+         JSONFactura = JSON_Insert(JSONFactura, "Orden_Compra", .Orden_Compra)
+         JSONFactura = JSON_Insert(JSONFactura, "Recibo_No", .Recibo_No)
+         JSONFactura = JSON_Insert(JSONFactura, "SP", .SP)
+         JSONFactura = JSON_Insert(JSONFactura, "ME_", .ME_)
+         JSONFactura = JSON_Insert(JSONFactura, "Com_Pag", .Com_Pag)
+         JSONFactura = JSON_Insert(JSONFactura, "Educativo", .Educativo)
+         JSONFactura = JSON_Insert(JSONFactura, "Imp_Mes", .Imp_Mes)
+         JSONFactura = JSON_Insert(JSONFactura, "Si_Existe_Doc", .Si_Existe_Doc)
+         JSONFactura = JSON_Insert(JSONFactura, "Nuevo_Doc", .Nuevo_Doc)
+         JSONFactura = JSON_Insert(JSONFactura, "EsPorReembolso", .EsPorReembolso)
+         
+         JSONFactura = JSON_Insert(JSONFactura, "Gavetas", .Gavetas)
+         
+         JSONFactura = JSON_Insert(JSONFactura, "CantFact", .CantFact)
+         JSONFactura = JSON_Insert(JSONFactura, "TDT", .TDT)
+         
+         JSONFactura = JSON_Insert(JSONFactura, "Factura", .Factura)
+         JSONFactura = JSON_Insert(JSONFactura, "Desde", .Desde)
+         JSONFactura = JSON_Insert(JSONFactura, "Hasta", .Hasta)
+         JSONFactura = JSON_Insert(JSONFactura, "DAU", .DAU)
+         JSONFactura = JSON_Insert(JSONFactura, "FUE", .FUE)
+         JSONFactura = JSON_Insert(JSONFactura, "Remision", .Remision)
+         JSONFactura = JSON_Insert(JSONFactura, "Solicitud", .Solicitud)
+         JSONFactura = JSON_Insert(JSONFactura, "Retencion", .Retencion)
+         JSONFactura = JSON_Insert(JSONFactura, "Nota_Credito", .Nota_Credito)
+         JSONFactura = JSON_Insert(JSONFactura, "Numero", .Numero)
+         
+         JSONFactura = JSON_Insert(JSONFactura, "Porc_C", .Porc_C)
+         JSONFactura = JSON_Insert(JSONFactura, "Cotizacion", .Cotizacion)
+         JSONFactura = JSON_Insert(JSONFactura, "Porc_NC", .Porc_NC)
+         JSONFactura = JSON_Insert(JSONFactura, "Porc_IVA", .Porc_IVA)
+         JSONFactura = JSON_Insert(JSONFactura, "AltoFactura", .AltoFactura)
+         JSONFactura = JSON_Insert(JSONFactura, "AnchoFactura", .AnchoFactura)
+         JSONFactura = JSON_Insert(JSONFactura, "EspacioFactura", .EspacioFactura)
+         JSONFactura = JSON_Insert(JSONFactura, "Pos_Factura", .Pos_Factura)
+         JSONFactura = JSON_Insert(JSONFactura, "Pos_Copia", .Pos_Copia)
+         
+         JSONFactura = JSON_Insert(JSONFactura, "SubTotal_NC", .SubTotal_NC)
+         JSONFactura = JSON_Insert(JSONFactura, "SubTotal_NCX", .SubTotal_NCX)
+         JSONFactura = JSON_Insert(JSONFactura, "Total_Sin_No_IVA", .Total_Sin_No_IVA)
+         JSONFactura = JSON_Insert(JSONFactura, "Total_Descuento", .Total_Descuento)
+         JSONFactura = JSON_Insert(JSONFactura, "Total_IVA_NC", .Total_IVA_NC)
+         JSONFactura = JSON_Insert(JSONFactura, "Total_Abonos", .Total_Abonos)
+         JSONFactura = JSON_Insert(JSONFactura, "Descuento_NC", .Descuento_NC)
+         JSONFactura = JSON_Insert(JSONFactura, "Comision", .Comision)
+         JSONFactura = JSON_Insert(JSONFactura, "Propina", .Propina)
+         JSONFactura = JSON_Insert(JSONFactura, "Cantidad", .Cantidad)
+         JSONFactura = JSON_Insert(JSONFactura, "Kilos", .Kilos)
+         JSONFactura = JSON_Insert(JSONFactura, "Saldo_Actual", .Saldo_Actual)
+         JSONFactura = JSON_Insert(JSONFactura, "Efectivo", .Efectivo)
+         JSONFactura = JSON_Insert(JSONFactura, "Saldo_Pend", .Saldo_Pend)
+         JSONFactura = JSON_Insert(JSONFactura, "Saldo_Pend_MN", .Saldo_Pend_MN)
+         JSONFactura = JSON_Insert(JSONFactura, "Saldo_Pend_ME", .Saldo_Pend_ME)
+         JSONFactura = JSON_Insert(JSONFactura, "Ret_Fuente", .Ret_Fuente)
+         JSONFactura = JSON_Insert(JSONFactura, "Ret_IVA", .Ret_IVA)
+    
+        'Datos por default
+         JSONFactura = JSON_Insert(JSONFactura, "Item", NumEmpresa)
+         JSONFactura = JSON_Insert(JSONFactura, "Periodo", Periodo_Contable)
+         JSONFactura = JSON_Insert(JSONFactura, "CodigoU", CodigoUsuario)
+         JSONFactura = JSON_Insert(JSONFactura, "T_No", Trans_No)
+    End With
+   'Transformacion de Comillas simples a comillas dobles y de tipos booleanos
+    JSONFactura = MidStrg(JSONFactura, 1, Len(JSONFactura) - 3) & "}"
+    JSONFactura = Replace(JSONFactura, "'", """")
+    JSONFactura = Replace(JSONFactura, "True", "1")
+    JSONFactura = Replace(JSONFactura, "False", "0")
+    JSONFactura = Replace(JSONFactura, "Verdadero", "1")
+    JSONFactura = Replace(JSONFactura, "Falso", "0")
+    
+'    Clipboard.Clear
+'    Clipboard.SetText JSONFactura
+'    MsgBox "Desktop Test: " & Len(JSONFactura) & vbCrLf & JSONFactura
+    
+    Iniciar_Stored_Procedure "SP Grabar Factura", MiSQL, MiCmd, MiReg
+    MiCmd.CommandText = "sp_Grabar_Factura"
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@JSON_InPut", adVarChar, adParamInput, Len(JSONFactura) + 10, JSONFactura)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@JSON_OutPut", adVarChar, adParamOutput, 2048, JSONResult)
+    Procesar_Stored_Procedure MiCmd, MiReg
+    
+   'Recolectamos los resultados del Store Procedure
+'''    JSONResult = MiCmd.Parameters("@JSON_OutPut").value
+'''    Set pJSON = JSON.parse(MiCmd.Parameters("@JSON_OutPut").value)
+'''    CtaConciliada = pJSON.Item("CtaConciliada")
+'''    Comp.TP = pJSON.Item("TP")
+'''    Comp.Numero = pJSON.Item("Numero")
+'''    Comp.GrabadoExitoso = pJSON.Item("Ok_Save")
+    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+   'MsgBox Comp.GrabadoExitoso
+'''    If Not Comp.GrabadoExitoso Then
+'       Clipboard.Clear
+'       Clipboard.SetText JSONFactura
+'''    End If
+End Sub
+
 Public Sub Digito_Verificador_SP(NumeroRUC As String)
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
@@ -831,7 +1120,7 @@ Dim MiReg As ADODB.Recordset
     
    'MsgBox "==> " & TFA.Fecha_Corte & vbCrLf & TFA.Fecha_Desde & vbCrLf & TFA.Fecha_Hasta & vbCrLf & SaldoReal & vbCrLf & PorFecha
     
-    Iniciar_Stored_Procedure "Actualizar Abonos Facturas", MiSQL, MiCmd, MiReg
+    Iniciar_Stored_Procedure "Actualiza Abonos Facturas", MiSQL, MiCmd, MiReg
     MiCmd.CommandText = "sp_Actualizar_Abonos_Facturas"
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
@@ -851,7 +1140,23 @@ Dim MiReg As ADODB.Recordset
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
 
-Public Sub Actualizar_Saldos_Facturas_SP(dTC As String, dSerie As String, dFactura As Long)
+Public Sub Procesar_Saldos_CxC_Meses_SP(GrupoDireccion As String, FechaDesde As String, FechaHasta As String)
+Dim MiSQL As ADODB.Connection
+Dim MiCmd As ADODB.Command
+Dim MiReg As ADODB.Recordset
+        
+    Iniciar_Stored_Procedure "Procesar Saldos CxC Meses", MiSQL, MiCmd, MiReg
+    MiCmd.CommandText = "sp_Procesar_Saldos_CxC_Meses"
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@GrupoDireccion", adVarChar, adParamInput, 80, GrupoDireccion)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaDesde", adVarChar, adParamInput, 10, BuscarFecha(FechaDesde))
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaHasta", adVarChar, adParamInput, 10, BuscarFecha(FechaHasta))
+    Procesar_Stored_Procedure MiCmd, MiReg
+    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+End Sub
+
+Public Sub Actualizar_Saldos_Facturas_SP(Optional dTC As String, Optional dSerie As String, Optional dFactura As Long)
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
 Dim MiReg As ADODB.Recordset
@@ -860,9 +1165,27 @@ Dim MiReg As ADODB.Recordset
     MiCmd.CommandText = "sp_Actualizar_Saldos_Facturas"
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@TC", adVarChar, adParamInput, 2, dTC)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@TC", adVarChar, adParamInput, 3, dTC)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Serie", adVarChar, adParamInput, 6, dSerie)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Factura", adInteger, adParamInput, 14, dFactura)
+    Procesar_Stored_Procedure MiCmd, MiReg
+    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+End Sub
+
+Public Sub Actualizar_Saldo_De_Facturas_SP(dTC As String, dSerie As String, dFacturaDesde As Long, dFacturaHasta As Long, dFechaCorte As String)
+Dim MiSQL As ADODB.Connection
+Dim MiCmd As ADODB.Command
+Dim MiReg As ADODB.Recordset
+    
+    Iniciar_Stored_Procedure "Actualiza Saldo De Facturas", MiSQL, MiCmd, MiReg
+    MiCmd.CommandText = "sp_Actualizar_Saldo_De_Facturas"
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@TC", adVarChar, adParamInput, 3, dTC)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Serie", adVarChar, adParamInput, 6, dSerie)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@FacturaDesde", adInteger, adParamInput, 14, dFacturaDesde)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@FacturaHasta", adInteger, adParamInput, 14, dFacturaHasta)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaCorte", adVarChar, adParamInput, 10, dFechaCorte)
     Procesar_Stored_Procedure MiCmd, MiReg
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
@@ -966,6 +1289,29 @@ Dim FechaFinSP As String
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
 
+Public Sub Procesar_Diario_Caja_SP(FechaDesde As MaskEdBox, FechaHasta As MaskEdBox, PorCajero As Boolean, UsuarioCajero As String)
+Dim MiSQL As ADODB.Connection
+Dim MiCmd As ADODB.Command
+Dim MiReg As ADODB.Recordset
+Dim FechaIniSP As String
+Dim FechaFinSP As String
+
+    FechaIniSP = BuscarFecha(FechaDesde.Text)
+    FechaFinSP = BuscarFecha(FechaHasta.Text)
+    Iniciar_Stored_Procedure "Procesar Diario Caja", MiSQL, MiCmd, MiReg
+    MiCmd.CommandText = "sp_Procesar_Diario_Caja"
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Modulo", adVarChar, adParamInput, 2, NumModulo)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Usuario", adVarChar, adParamInput, 10, CodigoUsuario)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaDesde", adVarChar, adParamInput, 10, FechaIniSP)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaHasta", adVarChar, adParamInput, 10, FechaFinSP)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@PorCajero", adBoolean, adParamInput, 1, PorCajero)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@UsuarioCajero", adVarChar, adParamInput, 10, UsuarioCajero)
+    Procesar_Stored_Procedure MiCmd, MiReg
+    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+End Sub
+
 Public Sub Reporte_CxC_Cuotas_SP(GrupoINo As String, _
                                  GrupoFNo As String, _
                                  MBFechaInicial As String, _
@@ -992,12 +1338,12 @@ Dim EjercicioFiscal As String
     MiCmd.CommandText = "sp_Reporte_CxC_Cuotas"
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@CodigoUsuario", adVarChar, adParamInput, 10, CodigoUsuario)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Usuario", adVarChar, adParamInput, 10, CodigoUsuario)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@EjercicioFiscal", adVarChar, adParamInput, 4, EjercicioFiscal)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaInicio", adVarChar, adParamInput, 10, FechaIni)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaCorte", adVarChar, adParamInput, 10, FechaFin)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@GrupoNo", adVarChar, adParamInput, 10, GrupoINo)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@GrupoNo", adVarChar, adParamInput, 10, GrupoFNo)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@GrupoINo", adVarChar, adParamInput, 10, GrupoINo)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@GrupoFNo", adVarChar, adParamInput, 10, GrupoFNo)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Resumido", adBoolean, adParamInput, 1, Resumido)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@SubTotal", adCurrency, adParamOutput, 16, SubTotal)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@TotalAnticipo", adCurrency, adParamOutput, 16, TotalAnticipo)
@@ -1009,6 +1355,41 @@ Dim EjercicioFiscal As String
     TotalAnticipo = MiCmd.Parameters("@TotalAnticipo").value
     TotalCxC = MiCmd.Parameters("@TotalCxC").value
     ListaDeCampos = MiCmd.Parameters("@ListaCampos").value
+    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+End Sub
+
+Public Sub Reporte_CxC_FA_NV_SP(GrupoINo As String, _
+                                GrupoFNo As String, _
+                                MBFechaCorte As String, _
+                                ListaDeCampos As String, _
+                                Resumido As Boolean, _
+                                TotalCxC As Currency)
+Dim MiSQL As ADODB.Connection
+Dim MiCmd As ADODB.Command
+Dim MiReg As ADODB.Recordset
+Dim EjercicioFiscal As String
+    
+    FechaFin = BuscarFecha(MBFechaCorte)
+    EjercicioFiscal = Year(MBFechaCorte)
+    GrupoINo = TrimStrg(MidStrg(GrupoINo, 1, 10))
+    GrupoFNo = TrimStrg(MidStrg(GrupoFNo, 1, 10))
+    
+    Iniciar_Stored_Procedure "Reporte CxC Facturacion", MiSQL, MiCmd, MiReg
+    MiCmd.CommandText = "sp_Reporte_CxC_FA_NV"
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@CodigoUsuario", adVarChar, adParamInput, 10, CodigoUsuario)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaCorte", adVarChar, adParamInput, 10, FechaFin)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@GrupoINo", adVarChar, adParamInput, 10, GrupoINo)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@GrupoFNo", adVarChar, adParamInput, 10, GrupoFNo)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Resumido", adBoolean, adParamInput, 1, Resumido)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@ListaCampos", adVarChar, adParamOutput, 2048, ListaDeCampos)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@TotalCxC", adCurrency, adParamOutput, 16, TotalCxC)
+    Procesar_Stored_Procedure MiCmd, MiReg
+    
+   'Recojemos los datos salientes de los campos que retorna valor el store procedure del SQL Server
+    ListaDeCampos = MiCmd.Parameters("@ListaCampos").value
+    TotalCxC = MiCmd.Parameters("@TotalCxC").value
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
 
@@ -1028,7 +1409,7 @@ Dim MiReg As ADODB.Recordset
        MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
        MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaInicial", adVarChar, adParamInput, 10, FechaIni)
        MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaFinal", adVarChar, adParamInput, 10, FechaFin)
-       MiCmd.Parameters.Append MiCmd.CreateParameter("@CodBod", adVarChar, adParamInput, 2, CodigoBodega)
+       MiCmd.Parameters.Append MiCmd.CreateParameter("@CodBod", adVarChar, adParamInput, 30, CodigoBodega)
        Procesar_Stored_Procedure MiCmd, MiReg
        Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
     End If
@@ -1196,6 +1577,24 @@ Dim MiReg As ADODB.Recordset
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
 
+Public Sub Procesar_Balance_Consolidado_SP(MBFechaF As String, TipoBalanceCC As String, ListaSucursales As String)
+Dim MiSQL As ADODB.Connection
+Dim MiCmd As ADODB.Command
+Dim MiReg As ADODB.Recordset
+    
+    FechaFin = BuscarFecha(MBFechaF)
+    Iniciar_Stored_Procedure "Procesar Balance Consolidado " & TipoBalanceCC, MiSQL, MiCmd, MiReg
+    MiCmd.CommandText = "sp_Procesar_Balance_Consolidado"
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@TipoBalance", adVarChar, adParamInput, 2, TipoBalanceCC)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaHasta", adVarChar, adParamInput, 10, FechaFin)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@ListaSucursales", adVarChar, adParamOutput, 2048, ListaSucursales)
+    Procesar_Stored_Procedure MiCmd, MiReg
+    ListaSucursales = MiCmd.Parameters("@ListaSucursales").value
+    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+End Sub
+
 Public Sub Procesar_Cierre_Fiscal_SP(CtaResultadoEjercicio As String, SinConciliacion As Boolean)
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
@@ -1285,32 +1684,33 @@ Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
 Dim MiReg As ADODB.Recordset
     
-    Iniciar_Stored_Procedure "Procesando Iniciar Datos Default", MiSQL, MiCmd, MiReg
-    MiCmd.CommandText = "sp_Iniciar_Datos_Default"
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@RUCEmpresa", adVarChar, adParamInput, 13, RUC)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@CodigoUsuario", adVarChar, adParamInput, 10, CodigoUsuario)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaC", adVarChar, adParamInput, 10, BuscarFecha(Fecha_CE))
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@NumModulo", adVarChar, adParamInput, 2, NumModulo)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@Cotizacion", adCurrency, adParamInput, 6, Dolar)
-   'Parametros de Salida
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@No_ATS", adVarChar, adParamOutput, 2048, No_ATS)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@ListSucursales", adVarChar, adParamOutput, 2048, ListSucursales)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@NombreProvincia", adVarChar, adParamOutput, 35, NombreProvincia)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@ConSucursal", adBoolean, adParamOutput, 1, ConSucursal)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@SiUnidadEducativa", adBoolean, adParamOutput, 1, SiUnidadEducativa)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@PorcIVA", adSingle, adParamOutput, 2, Porc_IVA)
-   'Recibimos datos del resultado del SP
-    Procesar_Stored_Procedure MiCmd, MiReg
-    No_ATS = MiCmd.Parameters("@No_ATS").value
-    ListSucursales = MiCmd.Parameters("@ListSucursales").value
-    NombreProvincia = MiCmd.Parameters("@NombreProvincia").value
-    ConSucursal = MiCmd.Parameters("@ConSucursal").value
-    SiUnidadEducativa = MiCmd.Parameters("@SiUnidadEducativa").value
-    Porc_IVA = MiCmd.Parameters("@PorcIVA").value
-    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
-    
+    If Ping_IP(strServidorERP) Then
+         Iniciar_Stored_Procedure "Procesando Iniciar Datos Default", MiSQL, MiCmd, MiReg
+         MiCmd.CommandText = "sp_Iniciar_Datos_Default"
+         MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
+         MiCmd.Parameters.Append MiCmd.CreateParameter("@RUCEmpresa", adVarChar, adParamInput, 13, RUC)
+         MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
+         MiCmd.Parameters.Append MiCmd.CreateParameter("@CodigoUsuario", adVarChar, adParamInput, 10, CodigoUsuario)
+         MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaC", adVarChar, adParamInput, 10, BuscarFecha(Fecha_CE))
+         MiCmd.Parameters.Append MiCmd.CreateParameter("@NumModulo", adVarChar, adParamInput, 2, NumModulo)
+         MiCmd.Parameters.Append MiCmd.CreateParameter("@Cotizacion", adCurrency, adParamInput, 6, Dolar)
+        'Parametros de Salida
+         MiCmd.Parameters.Append MiCmd.CreateParameter("@No_ATS", adVarChar, adParamOutput, 2048, No_ATS)
+         MiCmd.Parameters.Append MiCmd.CreateParameter("@ListSucursales", adVarChar, adParamOutput, 2048, ListSucursales)
+         MiCmd.Parameters.Append MiCmd.CreateParameter("@NombreProvincia", adVarChar, adParamOutput, 35, NombreProvincia)
+         MiCmd.Parameters.Append MiCmd.CreateParameter("@ConSucursal", adBoolean, adParamOutput, 1, ConSucursal)
+         MiCmd.Parameters.Append MiCmd.CreateParameter("@SiUnidadEducativa", adBoolean, adParamOutput, 1, SiUnidadEducativa)
+         MiCmd.Parameters.Append MiCmd.CreateParameter("@PorcIVA", adSingle, adParamOutput, 2, Porc_IVA)
+        'Recibimos datos del resultado del SP
+         Procesar_Stored_Procedure MiCmd, MiReg
+         No_ATS = MiCmd.Parameters("@No_ATS").value
+         ListSucursales = MiCmd.Parameters("@ListSucursales").value
+         NombreProvincia = MiCmd.Parameters("@NombreProvincia").value
+         ConSucursal = MiCmd.Parameters("@ConSucursal").value
+         SiUnidadEducativa = MiCmd.Parameters("@SiUnidadEducativa").value
+         Porc_IVA = MiCmd.Parameters("@PorcIVA").value
+         Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+    End If
 '''    MsgBox No_ATS & vbCrLf _
 '''         & ListSucursales & vbCrLf _
 '''         & ConSucursal & vbCrLf _
@@ -1408,24 +1808,189 @@ Dim FechaKardex As String
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
 
-Public Sub Leer_Datos_Cliente_SP(BuscarCodigo As String)
+Public Sub Leer_Variables_Sesion_Empresa(Empresa As String)
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
 Dim MiReg As ADODB.Recordset
-Dim BuscarCodigo1 As String
-
+Dim pJSON As Object
+Dim TBenef As Tipo_Beneficiarios
+Dim JSONResult As String
+   
    'MsgBox BuscarCodigo
+    Iniciar_Stored_Procedure "", MiSQL, MiCmd, MiReg
+    MiCmd.CommandText = "sp_Leer_Variables_Sesion_Empresa"
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@@Empresa", adVarChar, adParamInput, 150, NumEmpresa)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@JSON_OutPut", adVarChar, adParamOutput, 4096, JSONResult)
+    Procesar_Stored_Procedure MiCmd, MiReg
+    
+   'Recojemos los datos salientes de los campos que retorna valor el store procedure del SQL Server
+    JSONResult = MiCmd.Parameters("@JSON_OutPut").value
+    Set pJSON = JSON.parse(JSONResult)
+    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+    
+''    With TBenef
+''        .Codigo = pJSON.Item("Codigo_Encontrado")
+''        .FA = pJSON.Item("FA")
+''        .Asignar_Dr = pJSON.Item("Asignar_Dr")
+''        .Cliente = pJSON.Item("Cliente")
+''        .Descuento = pJSON.Item("Descuento")
+''        .T = pJSON.Item("T")
+''        .CI_RUC = pJSON.Item("CI_RUC")
+''        .TD = pJSON.Item("TD")
+''        .Fecha = pJSON.Item("Fecha")
+''        .Fecha_N = pJSON.Item("Fecha_N")
+''        .Sexo = pJSON.Item("Sexo")
+''        .Email1 = pJSON.Item("Email")
+''        .Email2 = pJSON.Item("Email2")
+''        .EmailR = pJSON.Item("EmailR")
+''        .Direccion = pJSON.Item("Direccion")
+''        .DirNumero = pJSON.Item("DirNumero")
+''        .Telefono = pJSON.Item("Telefono")
+''        .Telefono1 = pJSON.Item("Telefono_R")
+''        .TelefonoT = pJSON.Item("TelefonoT")
+''        .Ciudad = pJSON.Item("Ciudad")
+''        .Prov = pJSON.Item("Prov")
+''        .Pais = pJSON.Item("Pais")
+''        .Profesion = pJSON.Item("Profesion")
+''        .Grupo_No = pJSON.Item("Grupo")
+''        .Contacto = pJSON.Item("Contacto")
+''        .Calificacion = pJSON.Item("Calificacion")
+''        .Plan_Afiliado = pJSON.Item("Plan_Afiliado")
+''        .Actividad = pJSON.Item("Actividad")
+''        .Credito = pJSON.Item("Credito")
+''
+''        .Representante = Replace(pJSON.Item("Representante"), "  ", " ")
+''        .RUC_CI_Rep = pJSON.Item("CI_RUC_R")
+''        .TD_Rep = pJSON.Item("TD_R")
+''        .Tipo_Cta = pJSON.Item("Tipo_Cta")
+''        .Cod_Banco = pJSON.Item("Cod_Banco")
+''        .Cta_Numero = pJSON.Item("Cta_Numero")
+''        .Direccion_Rep = pJSON.Item("DireccionT")
+''        .Fecha_Cad = pJSON.Item("Fecha_Cad")
+''        .Saldo_Pendiente = pJSON.Item("Saldo_Pendiente")
+''        .Archivo_Foto = pJSON.Item("Archivo_Foto")
+''    End With
+End Sub
+
+Public Function Leer_Datos_Cliente_SP(BuscarCodigo As String) As Tipo_Beneficiarios
+Dim MiSQL As ADODB.Connection
+Dim MiCmd As ADODB.Command
+Dim MiReg As ADODB.Recordset
+Dim pJSON As Object
+Dim TBenef As Tipo_Beneficiarios
+Dim JSONResult As String
+
+    With TBenef
+        .FA = False
+        .Asignar_Dr = False
+        .Codigo = Ninguno
+        .Cliente = Ninguno
+        .Tipo_Cta = Ninguno
+        .Cta_Numero = Ninguno
+        .Descuento = False
+        .T = ""
+        .TP = ""
+        .CI_RUC = ""
+        .TD = ""
+        .Fecha = ""
+        .Fecha_A = ""
+        .Fecha_N = ""
+        .Sexo = ""
+        .Email1 = ""
+        .Email2 = ""
+        .Direccion = ""
+        .DirNumero = ""
+        .Telefono = ""
+        .Telefono1 = ""
+        .TelefonoT = ""
+        .Celular = ""
+        .Ciudad = ""
+        .Prov = ""
+        .Pais = ""
+        .Profesion = ""
+        .Archivo_Foto = ""
+        .Representante = Ninguno
+        .RUC_CI_Rep = ""
+        .TD_Rep = ""
+        .Direccion_Rep = "SD"
+        .Grupo_No = ""
+        .Contacto = ""
+        .Calificacion = ""
+        .Plan_Afiliado = ""
+        .Cte_Ahr_Otro = ""
+        .Cta_Transf = ""
+        .Cod_Banco = 0
+        .Salario = 0
+        .Saldo_Pendiente = 0
+        .Total_Anticipo = 0
+    End With
+   
+   
+   'MsgBox BuscarCodigo
+    JSONResult = ""
     Iniciar_Stored_Procedure "", MiSQL, MiCmd, MiReg
     MiCmd.CommandText = "sp_Leer_Datos_Cliente"
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@BuscarCodigo", adVarChar, adParamInput, 180, BuscarCodigo)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@Codigo_Encontrado", adVarChar, adParamOutput, 10, BuscarCodigo1)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@JSON_OutPut", adVarChar, adParamOutput, 5120, JSONResult)
     Procesar_Stored_Procedure MiCmd, MiReg
+    
+'    Clipboard.Clear
+'    Clipboard.SetText JSONResult
+'    MsgBox "Desktop Test: " & BuscarCodigo & vbCrLf & JSONResult
+
    'Recojemos los datos salientes de los campos que retorna valor el store procedure del SQL Server
-    BuscarCodigo = MiCmd.Parameters("@Codigo_Encontrado").value
+    JSONResult = MiCmd.Parameters("@JSON_OutPut").value
+    Set pJSON = JSON.parse(JSONResult)
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
-End Sub
+    
+    With TBenef
+        .Codigo = pJSON.Item("Codigo_Encontrado")
+        .FA = pJSON.Item("FA")
+        .Asignar_Dr = pJSON.Item("Asignar_Dr")
+        .Cliente = pJSON.Item("Cliente")
+        .Descuento = pJSON.Item("Descuento")
+        .T = pJSON.Item("T")
+        .CI_RUC = pJSON.Item("CI_RUC")
+        .TD = pJSON.Item("TD")
+        .Fecha = pJSON.Item("Fecha")
+        .Fecha_N = pJSON.Item("Fecha_N")
+        .Sexo = pJSON.Item("Sexo")
+        .Email1 = pJSON.Item("Email")
+        .Email2 = pJSON.Item("Email2")
+        .EmailR = pJSON.Item("EmailR")
+        .Direccion = pJSON.Item("Direccion")
+        .DirNumero = pJSON.Item("DirNumero")
+        .Telefono = pJSON.Item("Telefono")
+        .Telefono1 = pJSON.Item("Telefono_R")
+        .TelefonoT = pJSON.Item("TelefonoT")
+        .Ciudad = pJSON.Item("Ciudad")
+        .Prov = pJSON.Item("Prov")
+        .Pais = pJSON.Item("Pais")
+        .Profesion = pJSON.Item("Profesion")
+        .Grupo_No = pJSON.Item("Grupo")
+        .Contacto = pJSON.Item("Contacto")
+        .Calificacion = pJSON.Item("Calificacion")
+        .Plan_Afiliado = pJSON.Item("Plan_Afiliado")
+        .Actividad = pJSON.Item("Actividad")
+        .Credito = pJSON.Item("Credito")
+
+        .Representante = Replace(pJSON.Item("Representante"), "  ", " ")
+        .RUC_CI_Rep = pJSON.Item("CI_RUC_R")
+        .TD_Rep = pJSON.Item("TD_R")
+        .Direccion_Rep = pJSON.Item("DireccionT")
+        
+        .Por_Deposito = pJSON.Item("Por_Deposito")
+        .Tipo_Cta = pJSON.Item("Tipo_Cta")
+        .Cod_Banco = pJSON.Item("Cod_Banco")
+        .Cta_Numero = pJSON.Item("Cta_Numero")
+        .Fecha_Cad = MidStrg(BuscarFecha(pJSON.Item("Fecha_Cad")), 1, 7)
+        .Saldo_Pendiente = pJSON.Item("Saldo_Pendiente")
+        .Archivo_Foto = pJSON.Item("Archivo_Foto")
+    End With
+    Leer_Datos_Cliente_SP = TBenef
+End Function
 
 Public Sub Reporte_CxCxP_x_Meses_SP(CtaSubMod As String, MBFechaF As String)
 Dim MiSQL As ADODB.Connection
@@ -1450,10 +2015,11 @@ Public Sub Listar_Comprobante_SP(C1 As Comprobantes)
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
 Dim MiReg As ADODB.Recordset
-
 Dim AdoRegistros As ADODB.Recordset
+Dim pJSON As Object
 Dim ExisteComp As Boolean
 Dim sSQLAux As String
+Dim JSONResult As String
 
    'Determinamos espacios de memoria para grabar
     RatonReloj
@@ -1465,7 +2031,7 @@ Dim sSQLAux As String
     ExisteComp = False
 
  'Encabezado del Comprobante
-  sSQL = "SELECT C.Fecha, C.Codigo_B, C.Concepto, C.Cotizacion, C.Monto_Total, C.Efectivo, Cl.CI_RUC, Cl.Cliente, Cl.Email, Cl.TD, " _
+  sSQL = "SELECT C.Fecha, C.Codigo_B, C.Cotizacion, C.Monto_Total, C.Efectivo, Cl.CI_RUC, Cl.Cliente, Cl.Email, Cl.TD, " _
        & "Cl.Direccion, Cl.Telefono, Cl.Grupo, Cl.RISE, Cl.Especial " _
        & "FROM Comprobantes As C, Clientes As Cl " _
        & "WHERE C.Item = '" & C1.Item & "' " _
@@ -1476,10 +2042,9 @@ Dim sSQLAux As String
   Select_AdoDB AdoRegistros, sSQL
   With AdoRegistros
    If .RecordCount > 0 Then
-       C1.CodigoB = .fields("Codigo_B")
+       C1.Fecha = .fields("Fecha")
        C1.Beneficiario = .fields("Cliente")
        C1.Email = .fields("Email")
-       C1.Concepto = .fields("Concepto")
        C1.Cotizacion = .fields("Cotizacion")
        C1.Monto_Total = .fields("Monto_Total")
        C1.Efectivo = .fields("Efectivo")
@@ -1492,7 +2057,6 @@ Dim sSQLAux As String
        If .fields("RISE") Then C1.TipoContribuyente = C1.TipoContribuyente & " RISE"
        If .fields("Especial") Then C1.TipoContribuyente = C1.TipoContribuyente & " Contribuyente especial"
       'TipoSRI = consulta_RUC_SRI( C1.RUC_CI)
-
        If Len(C1.RUC_CI) = 13 Then Tipo_Contribuyente_SP_MySQL C1.RUC_CI, TipoSRI.MicroEmpresa, TipoSRI.AgenteRetencion
        Select Case C1.TD
          Case "C": TipoSRI.Estado = "CEDULA"
@@ -1517,35 +2081,33 @@ Dim sSQLAux As String
      MiCmd.Parameters.Append MiCmd.CreateParameter("@TransNo", adInteger, adParamInput, 14, Trans_No)
      MiCmd.Parameters.Append MiCmd.CreateParameter("@TP", adVarChar, adParamInput, 2, C1.TP)
      MiCmd.Parameters.Append MiCmd.CreateParameter("@Numero", adInteger, adParamInput, 14, C1.Numero)
-     MiCmd.Parameters.Append MiCmd.CreateParameter("@RetNueva", adBoolean, adParamOutput, 1, C1.RetNueva)
-     MiCmd.Parameters.Append MiCmd.CreateParameter("@SerieR", adVarChar, adParamOutput, 6, C1.Serie_R)
-     MiCmd.Parameters.Append MiCmd.CreateParameter("@Retencion", adInteger, adParamOutput, 14, C1.Retencion)
-     MiCmd.Parameters.Append MiCmd.CreateParameter("@AutorizacionR", adVarChar, adParamOutput, 49, C1.Autorizacion_R)
-     MiCmd.Parameters.Append MiCmd.CreateParameter("@CtasModificar", adVarChar, adParamOutput, 5120, C1.Ctas_Modificar)
-     MiCmd.Parameters.Append MiCmd.CreateParameter("@CodigoInvModificar", adVarChar, adParamOutput, 5120, C1.CodigoInvModificar)
-     MiCmd.Parameters.Append MiCmd.CreateParameter("@LnNo", adSmallInt, adParamOutput, 2, Ln_No)
-     MiCmd.Parameters.Append MiCmd.CreateParameter("@LnSCNo", adSmallInt, adParamOutput, 2, LnSC_No)
+     MiCmd.Parameters.Append MiCmd.CreateParameter("@JSON_OutPut", adVarChar, adParamOutput, 5120, JSONResult)
      Procesar_Stored_Procedure MiCmd, MiReg
     'Recojemos los datos salientes de los campos que retorna valor el store procedure del SQL Server
-     C1.RetNueva = MiCmd.Parameters("@RetNueva").value
-     C1.Serie_R = MiCmd.Parameters("@SerieR").value
-     C1.Retencion = MiCmd.Parameters("@Retencion").value
-     C1.Autorizacion_R = MiCmd.Parameters("@AutorizacionR").value
-     C1.Ctas_Modificar = MiCmd.Parameters("@CtasModificar").value
-     C1.CodigoInvModificar = MiCmd.Parameters("@CodigoInvModificar").value
-     Ln_No = MiCmd.Parameters("@LnNo").value
-     LnSC_No = MiCmd.Parameters("@LnSCNo").value
+     Set pJSON = JSON.parse(MiCmd.Parameters("@JSON_OutPut").value)
+     C1.CodigoB = pJSON.Item("Codigo_B")
+     C1.CodigoDr = pJSON.Item("Codigo_B")
+     C1.Concepto = pJSON.Item("Concepto")
+     C1.RetNueva = pJSON.Item("RetNueva")
+     C1.Serie_R = pJSON.Item("Serie_R")
+     C1.Serie_LC = pJSON.Item("Serie_LC")
+     C1.Autorizacion_R = pJSON.Item("Autorizacion_R")
+     C1.Autorizacion_LC = pJSON.Item("Autorizacion_LC")
+     C1.Retencion = pJSON.Item("Retencion")
+     C1.Liquidacion = pJSON.Item("Liquidacion")
+     Ln_No = pJSON.Item("LnNo")
+     LnSC_No = pJSON.Item("LnSCNo")
      Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
   End If
   RatonNormal
-'''  MsgBox C1.RetNueva & vbCrLf _
-'''       & C1.Serie_R & vbCrLf _
-'''       & C1.Retencion & vbCrLf _
-'''       & C1.Autorizacion_R & vbCrLf _
-'''       & C1.Ctas_Modificar & vbCrLf _
-'''       & C1.CodigoInvModificar & vbCrLf _
-'''       & Ln_No & vbCrLf _
-'''       & LnSC_No
+'  MsgBox C1.RetNueva & vbCrLf _
+'       & C1.Serie_R & vbCrLf _
+'       & C1.Retencion & vbCrLf _
+'       & C1.Autorizacion_R & vbCrLf _
+'       & C1.Ctas_Modificar & vbCrLf _
+'       & C1.CodigoInvModificar & vbCrLf _
+'       & Ln_No & vbCrLf _
+'       & LnSC_No
 End Sub
 
 Public Sub Subir_Archivo_CSV_SP(PathCSV As String)

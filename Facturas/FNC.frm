@@ -1492,8 +1492,6 @@ Dim Ok_Inv    As Boolean
 Dim Idx  As Long
 Dim NCNo As Long
 
-
-
 Dim AdoAuxDB As ADODB.Recordset
 
 Private Sub Command2_Click()
@@ -1552,6 +1550,7 @@ Dim Grupo As String
                 SetAdoFields "Total_IVA", .fields("TOTAL_IVA")
                 SetAdoFields "Precio", .fields("PVP")
                 SetAdoFields "Total", .fields("SUBTOTAL")
+                SetAdoFields "Descuento", .fields("DESCUENTO")
                 SetAdoFields "CodMar", .fields("CodMar")
                 SetAdoFields "Cod_Ejec", .fields("Cod_Ejec")
                 SetAdoFields "Porc_C", .fields("Porc_C")
@@ -1697,7 +1696,7 @@ Dim Grupo As String
 
         Listar_Articulos_Malla
         RatonNormal
-        MsgBox "Proceso Terminado con éxito"
+       'MsgBox "Proceso Terminado con éxito"
         MBoxFecha.SetFocus
     Else
         RatonNormal
@@ -1993,6 +1992,8 @@ Private Sub Form_Load()
   FA.Serie = Ninguno
   FA.Factura = 0
   Actualizar_Saldos_Facturas_SP FA.TC, FA.Serie, FA.Factura
+  
+  SRI_Obtener_Datos_Comprobantes_Electronicos
 End Sub
 
 Private Sub TextCant_GotFocus()

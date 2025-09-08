@@ -1,10 +1,10 @@
 VERSION 5.00
-Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.Form IngProdInv 
    Caption         =   "Ingreso/Modificacion de Productos de Inventario"
    ClientHeight    =   8760
@@ -337,16 +337,16 @@ Begin VB.Form IngProdInv
       TabCaption(1)   =   "Validación de Texto"
       TabPicture(1)   =   "IngInven.frx":40A0
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "Command4"
-      Tab(1).Control(1)=   "Command5"
-      Tab(1).Control(2)=   "TxtDetalle"
-      Tab(1).Control(3)=   "Label5"
+      Tab(1).Control(0)=   "Label5"
+      Tab(1).Control(1)=   "TxtDetalle"
+      Tab(1).Control(2)=   "Command5"
+      Tab(1).Control(3)=   "Command4"
       Tab(1).ControlCount=   4
       TabCaption(2)   =   "Salidas Automáticas"
       TabPicture(2)   =   "IngInven.frx":497A
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "AdoReceta"
-      Tab(2).Control(1)=   "DGReceta"
+      Tab(2).Control(0)=   "DGReceta"
+      Tab(2).Control(1)=   "AdoReceta"
       Tab(2).ControlCount=   2
       Begin VB.Frame Frame2 
          Caption         =   "Tipo de Producto"
@@ -2534,20 +2534,20 @@ Public Sub LlenarInv()
            MBoxCta_IngAnt.Text = FormatoCodigoCta(.fields("Cta_Ventas_Ant"))
            If Len(.fields("Cta_Inventario")) > 1 Then Label18.Caption = " UTILIDAD %" Else Label18.Caption = " COMISION %"
            If .fields("TC") = "P" Then
-               Option1.Value = False
-               Option2.Value = True
+               Option1.value = False
+               Option2.value = True
            Else
-               Option1.Value = True
-               Option2.Value = False
+               Option1.value = True
+               Option2.value = False
                TextPVP.Text = "0"
                TextBarra.Text = "0000000000"
            End If
            'ColocarCodigoBarra TextBarra.Text, .Fields("PVP")
-           If .fields("IVA") Then CheqIVA.Value = 1 Else CheqIVA.Value = 0
-           If .fields("INV") Then CheqInv.Value = 1 Else CheqInv.Value = 0
-           If .fields("Agrupacion") Then CheqAgrupacion.Value = 1 Else CheqAgrupacion.Value = 0
-           If .fields("Por_Reservas") Then CheqReservas.Value = 1 Else CheqReservas.Value = 0
-           If .fields("Div") Then OpcDiv.Value = 1 Else OpcMul.Value = 1
+           If .fields("IVA") Then CheqIVA.value = 1 Else CheqIVA.value = 0
+           If .fields("INV") Then CheqInv.value = 1 Else CheqInv.value = 0
+           If .fields("Agrupacion") Then CheqAgrupacion.value = 1 Else CheqAgrupacion.value = 0
+           If .fields("Por_Reservas") Then CheqReservas.value = 1 Else CheqReservas.value = 0
+           If .fields("Div") Then OpcDiv.value = 1 Else OpcMul.value = 1
            
            sSQL = "SELECT * " _
                 & "FROM Catalogo_Recetas " _
@@ -2587,7 +2587,7 @@ Public Sub GrabarInv()
   If Len(TxtDetalle.Text) <= 1 Then TxtDetalle.Text = Ninguno
   'CampoBusqueda = DGBusq.Columns(DGBusq.Col).Caption
   Codigo = UCaseStrg(CambioCodigoCta(MBoxCodigo))
-  If Option1.Value Then TextSubCta.Text = UCaseStrg(TextSubCta.Text)
+  If Option1.value Then TextSubCta.Text = UCaseStrg(TextSubCta.Text)
   Codigo1 = "C" & Codigo
   Cta_Sup = "C" & CodigoCuentaSup(Codigo)
   Cuenta = Codigo & " - " & TextSubCta.Text
@@ -2614,7 +2614,7 @@ Public Sub GrabarInv()
    'MsgBox Nuevo & vbCrLf & Codigo
    SetFields AdoInv, "Codigo_Inv", Codigo
    SetFields AdoInv, "Producto", TextSubCta.Text
-   If Option1.Value Then Cadena = "I" Else Cadena = "P"
+   If Option1.value Then Cadena = "I" Else Cadena = "P"
    TipoCta = Cadena
    SetFields AdoInv, "TC", Cadena
    SetFields AdoInv, "Unidad", TextUnidad.Text
@@ -2646,11 +2646,11 @@ Public Sub GrabarInv()
    SetFields AdoInv, "Utilidad", CCur(TxtCorte.Text) / 100
    SetFields AdoInv, "Ayuda", TxtAyuda.Text
    SetFields AdoInv, "Ubicacion", TxTUbicacion.Text
-   If CheqIVA.Value = 1 Then SetFields AdoInv, "IVA", True Else SetFields AdoInv, "IVA", False
-   If CheqInv.Value = 1 Then SetFields AdoInv, "INV", True Else SetFields AdoInv, "INV", False
-   If OpcDiv.Value = 1 Then SetFields AdoInv, "Div", True Else SetFields AdoInv, "Div", False
-   If CheqAgrupacion.Value = 1 Then SetFields AdoInv, "Agrupacion", True Else SetFields AdoInv, "Agrupacion", False
-   If CheqReservas.Value = 1 Then SetFields AdoInv, "Por_Reservas", True Else SetFields AdoInv, "Por_Reservas", False
+   If CheqIVA.value = 1 Then SetFields AdoInv, "IVA", True Else SetFields AdoInv, "IVA", False
+   If CheqInv.value = 1 Then SetFields AdoInv, "INV", True Else SetFields AdoInv, "INV", False
+   If OpcDiv.value = 1 Then SetFields AdoInv, "Div", True Else SetFields AdoInv, "Div", False
+   If CheqAgrupacion.value = 1 Then SetFields AdoInv, "Agrupacion", True Else SetFields AdoInv, "Agrupacion", False
+   If CheqReservas.value = 1 Then SetFields AdoInv, "Por_Reservas", True Else SetFields AdoInv, "Por_Reservas", False
    'If Cadena <> "I" Then
       SetFields AdoInv, "Cta_Inventario", CambioCodigoCta(MBoxCta_Inv.Text)
       SetFields AdoInv, "Cta_Costo_Venta", CambioCodigoCta(MBoxCta1.Text)
@@ -2667,7 +2667,7 @@ Public Sub GrabarInv()
       AddNewCtaInv TipoCta
       Codigo = Codigo2
    Else
-      IE = TVCatalogo.SelectedItem.Index
+      IE = TVCatalogo.SelectedItem.index
       TVCatalogo.Nodes(IE).Text = Codigo & " - " & TextSubCta.Text
       TVCatalogo.Refresh
    End If
@@ -2706,7 +2706,7 @@ Private Sub TVCatalogo_KeyDown(KeyCode As Integer, Shift As Integer)
                 & "AND Periodo = '" & Periodo_Contable & "' " _
                 & "AND Codigo_Inv = '" & Codigo & "' "
            Ejecutar_SQL_SP sSQL
-           TVCatalogo.Nodes.Remove TVCatalogo.SelectedItem.Index
+           TVCatalogo.Nodes.Remove TVCatalogo.SelectedItem.index
         End If
      End If
   End If

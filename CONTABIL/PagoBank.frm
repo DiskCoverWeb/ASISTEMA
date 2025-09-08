@@ -1,8 +1,8 @@
 VERSION 5.00
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDATGRD.OCX"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
 Begin VB.Form FPagosBancos 
    Caption         =   "CONCILIACION DE BANCOS"
    ClientHeight    =   7200
@@ -11,8 +11,8 @@ Begin VB.Form FPagosBancos
    ClientWidth     =   11490
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   13035
-   ScaleWidth      =   23880
+   ScaleHeight     =   7200
+   ScaleWidth      =   11490
    WindowState     =   2  'Maximized
    Begin VB.Frame Banco 
       BackColor       =   &H00C0FFFF&
@@ -544,18 +544,18 @@ Dim Estab As Boolean
       .MoveFirst
        Do While Not .EOF
           Contador = Contador + 1
-          CodigoCli = .Fields("Codigo_B")
-          CodigoDelBanco = Format(Val(.Fields("Codigo_Banco")), "0000")
-          NombreCliente = TrimStrg(MidStrg(Sin_Signos_Especiales(.Fields("BENEFICIARIO")), 1, 40))
+          CodigoCli = .fields("Codigo_B")
+          CodigoDelBanco = Format(Val(.fields("Codigo_Banco")), "0000")
+          NombreCliente = TrimStrg(MidStrg(Sin_Signos_Especiales(.fields("BENEFICIARIO")), 1, 40))
          'MsgBox NombreCliente
           Factura_No = Factura_No + 1
-          Total = .Fields("MONTO")
-          Saldo = .Fields("MONTO") * 100
+          Total = .fields("MONTO")
+          Saldo = .fields("MONTO") * 100
           ValorStr = CStr(Saldo)
           ValorStr = String(13 - Len(ValorStr), "0") & ValorStr
          'MsgBox ValorStr
-          CodigoP = .Fields("CI_RUC")
-          CodigoC = CStr(Val(.Fields("CI_RUC")))
+          CodigoP = .fields("CI_RUC")
+          CodigoC = CStr(Val(.fields("CI_RUC")))
           CodigoC = CodigoC & String(Abs(4 - Len(CodigoC)), " ")
           
           DireccionCli = Ninguno
@@ -569,22 +569,22 @@ Dim Estab As Boolean
           Print #NumFileFacturas, Cta_Bancaria & vbTab;         '02
           Print #NumFileFacturas, Contador & vbTab;             '03
           Print #NumFileFacturas, vbTab;                        '04
-          Print #NumFileFacturas, .Fields("CI_RUC") & vbTab;    '05
+          Print #NumFileFacturas, .fields("CI_RUC") & vbTab;    '05
           Print #NumFileFacturas, "USD" & vbTab;                '06
           Print #NumFileFacturas, ValorStr & vbTab;             '07
           Print #NumFileFacturas, "CTA" & vbTab;                '08
           Print #NumFileFacturas, CodigoDelBanco & vbTab;       '09
-          Print #NumFileFacturas, .Fields("TIPO_CTA") & vbTab;  '10
-          Print #NumFileFacturas, .Fields("CTA_TRANS") & vbTab; '11
-          Print #NumFileFacturas, .Fields("TD") & vbTab;        '12
-          Print #NumFileFacturas, .Fields("CI_RUC") & vbTab;    '13
+          Print #NumFileFacturas, .fields("TIPO_CTA") & vbTab;  '10
+          Print #NumFileFacturas, .fields("CTA_TRANS") & vbTab; '11
+          Print #NumFileFacturas, .fields("TD") & vbTab;        '12
+          Print #NumFileFacturas, .fields("CI_RUC") & vbTab;    '13
           Print #NumFileFacturas, NombreCliente & vbTab;        '14
-          Print #NumFileFacturas, .Fields("Direccion") & vbTab; '15
-          Print #NumFileFacturas, .Fields("Ciudad") & vbTab;    '16
-          Print #NumFileFacturas, .Fields("Telefono") & vbTab;  '17
+          Print #NumFileFacturas, .fields("Direccion") & vbTab; '15
+          Print #NumFileFacturas, .fields("Ciudad") & vbTab;    '16
+          Print #NumFileFacturas, .fields("Telefono") & vbTab;  '17
           Print #NumFileFacturas, "SN" & vbTab;                 '18
-          Print #NumFileFacturas, "PAGO CE No. " & .Fields("NUMERO") & vbTab;          '19
-          Print #NumFileFacturas, .Fields("Email") & vbTab      '20
+          Print #NumFileFacturas, "PAGO CE No. " & .fields("NUMERO") & vbTab;          '19
+          Print #NumFileFacturas, .fields("Email") & vbTab      '20
          .MoveNext
        Loop
    End If
@@ -795,8 +795,8 @@ Public Sub Llenar_Pagos(Optional Pagar As Boolean)
    If .RecordCount > 0 Then
        Do While Not .EOF
          Contador = Contador + 1
-         FPagosBancos.Caption = "Conciliando la fecha: " & .Fields("Fecha")
-         Codigos = .Fields("Actividad")
+         FPagosBancos.Caption = "Conciliando la fecha: " & .fields("Fecha")
+         Codigos = .fields("Actividad")
          NombreBanco = Ninguno
          CodigoB = Ninguno
          TipoCta = Ninguno
@@ -811,22 +811,22 @@ Public Sub Llenar_Pagos(Optional Pagar As Boolean)
          If AdoListBanco.Recordset.RecordCount > 0 Then
             AdoListBanco.Recordset.MoveFirst
             AdoListBanco.Recordset.Find ("Codigo = '" & CodigoB & "' ")
-            If Not AdoListBanco.Recordset.EOF Then NombreBanco = AdoListBanco.Recordset.Fields("Descripcion")
+            If Not AdoListBanco.Recordset.EOF Then NombreBanco = AdoListBanco.Recordset.fields("Descripcion")
          End If
          SetAddNew AdoAsientos
-         SetFields AdoAsientos, "Pagar", .Fields("Pagar")
-         SetFields AdoAsientos, "FECHA", .Fields("Fecha")
-         SetFields AdoAsientos, "BENEFICIARIO", .Fields("Cliente")
-         SetFields AdoAsientos, "TP", .Fields("TP")
+         SetFields AdoAsientos, "Pagar", .fields("Pagar")
+         SetFields AdoAsientos, "FECHA", .fields("Fecha")
+         SetFields AdoAsientos, "BENEFICIARIO", .fields("Cliente")
+         SetFields AdoAsientos, "TP", .fields("TP")
         'SetFields AdoAsientos, "FACTURA", .Fields("Factura")
-         SetFields AdoAsientos, "NUMERO", .Fields("Numero")
+         SetFields AdoAsientos, "NUMERO", .fields("Numero")
          SetFields AdoAsientos, "CTA_TRANS", Cta
-         SetFields AdoAsientos, "MONTO", .Fields("Haber")
-         SetFields AdoAsientos, "Codigo_B", .Fields("Codigo")
+         SetFields AdoAsientos, "MONTO", .fields("Haber")
+         SetFields AdoAsientos, "Codigo_B", .fields("Codigo")
          SetFields AdoAsientos, "TIPO_CTA", TipoCta
          SetFields AdoAsientos, "BANCO", NombreBanco
          SetFields AdoAsientos, "Codigo_Banco", CodigoB
-         SetFields AdoAsientos, "Item", .Fields("Item")
+         SetFields AdoAsientos, "Item", .fields("Item")
          SetFields AdoAsientos, "CodigoU", CodigoUsuario
          SetFields AdoAsientos, "T_No", Trans_No
          SetFields AdoAsientos, "IdTrans", Format(Contador, "0000")

@@ -1063,21 +1063,21 @@ With AdoFletes.Recordset
 ''        If Not AdoClientes.Recordset.EOF Then Codigo2 = AdoClientes.Recordset.Fields("Cliente")
 ''     End If
      Printer.FontSize = SetD(2).Tamaño
-     PrinterTexto SetD(2).PosX, SetD(2).PosY, .Fields("Fecha_I")
+     PrinterTexto SetD(2).PosX, SetD(2).PosY, .fields("Fecha_I")
      Printer.FontSize = SetD(3).Tamaño
-     PrinterTexto SetD(3).PosX, SetD(3).PosY, .Fields("Fecha_F")
+     PrinterTexto SetD(3).PosX, SetD(3).PosY, .fields("Fecha_F")
      Printer.FontSize = SetD(4).Tamaño
-     PrinterTexto SetD(4).PosX, SetD(4).PosY, .Fields("Cliente")
+     PrinterTexto SetD(4).PosX, SetD(4).PosY, .fields("Cliente")
      Printer.FontSize = SetD(5).Tamaño
-     PrinterTexto SetD(5).PosX, SetD(5).PosY, .Fields("Nombre_Conductor")   'Codigo2
+     PrinterTexto SetD(5).PosX, SetD(5).PosY, .fields("Nombre_Conductor")   'Codigo2
      Printer.FontSize = SetD(6).Tamaño
-     PrinterTexto SetD(6).PosX, SetD(6).PosY, .Fields("Placa")
+     PrinterTexto SetD(6).PosX, SetD(6).PosY, .fields("Placa")
      Printer.FontSize = SetD(7).Tamaño
-     PrinterTexto SetD(7).PosX, SetD(7).PosY, .Fields("Nombre_Ayudante")  ' Codigo1
+     PrinterTexto SetD(7).PosX, SetD(7).PosY, .fields("Nombre_Ayudante")  ' Codigo1
      Printer.FontSize = SetD(8).Tamaño
-     PrinterTexto SetD(8).PosX, SetD(8).PosY, .Fields("Carga")
+     PrinterTexto SetD(8).PosX, SetD(8).PosY, .fields("Carga")
      Printer.FontSize = SetD(9).Tamaño
-     PrinterTexto SetD(9).PosX, SetD(9).PosY, .Fields("Ruta")
+     PrinterTexto SetD(9).PosX, SetD(9).PosY, .fields("Ruta")
  End If
 End With
 RatonNormal
@@ -1103,7 +1103,7 @@ Private Sub DCAyudante_LostFocus()
    If .RecordCount > 0 Then
       .MoveFirst
       .Find ("Cliente Like '" & DCAyudante & "' ")
-       If Not .EOF Then CodigoA = .Fields("Codigo")
+       If Not .EOF Then CodigoA = .fields("Codigo")
    Else
        MsgBox "No existen datos"
    End If
@@ -1117,7 +1117,7 @@ Private Sub DCCliente_KeyDown(KeyCode As Integer, Shift As Integer)
       If .RecordCount > 0 Then
          .MoveFirst
          .Find ("Cliente Like '" & DCCliente & "' ")
-          If Not .EOF Then Codigos = .Fields("Codigo")
+          If Not .EOF Then Codigos = .fields("Codigo")
       End If
      End With
      Listar_Fletes 0, Codigos
@@ -1130,7 +1130,7 @@ Private Sub DCCliente_LostFocus()
       .MoveFirst
       .Find ("Cliente Like '" & DCCliente & "' ")
        If Not .EOF Then
-          CodigoCliente = .Fields("Codigo")
+          CodigoCliente = .fields("Codigo")
           NombreCliente = DCCliente
        Else
           MsgBox "No existen datos"
@@ -1148,7 +1148,7 @@ Private Sub DCConductor_LostFocus()
    If .RecordCount > 0 Then
       .MoveFirst
       .Find ("Cliente Like '" & DCConductor & "' ")
-       If Not .EOF Then CodigoL = .Fields("Codigo")
+       If Not .EOF Then CodigoL = .fields("Codigo")
    Else
        MsgBox "No existen datos"
    End If
@@ -1161,7 +1161,7 @@ Private Sub DCDestino_LostFocus()
       .MoveFirst
       .Find ("Producto Like '" & DCDestino & "' ")
        If Not .EOF Then
-          CodigoInv = .Fields("Codigo_Inv")
+          CodigoInv = .fields("Codigo_Inv")
        Else
           MsgBox "No existen datos"
        End If
@@ -1275,34 +1275,34 @@ Public Sub Listar_Fletes(NumeroFlete As Long, Optional CodigoC As String)
   Select_Adodc_Grid DGFletes, AdoFletes, sSQL
   With AdoFletes.Recordset
    If .RecordCount > 0 Then
-       MBFechaI = .Fields("Fecha_I")
-       MBFechaF = .Fields("Fecha_F")
-       CodigoInv = .Fields("Codigo_Inv")
-       DCFacturaNo = .Fields("Numero")
-       TxtCarga = .Fields("Carga")
-       TxtCond = .Fields("Referencia")
-       TxtFlete = .Fields("Flete")
-       TxtPlaca = .Fields("Ruta")
-       TxtKmI = .Fields("Km_Inicial")
-       TxtKmF = .Fields("Km_Final")
-       CodigoCliente = .Fields("CodigoC")
-       DCCliente = .Fields("Cliente")
-       DCDestino = .Fields("Producto")
+       MBFechaI = .fields("Fecha_I")
+       MBFechaF = .fields("Fecha_F")
+       CodigoInv = .fields("Codigo_Inv")
+       DCFacturaNo = .fields("Numero")
+       TxtCarga = .fields("Carga")
+       TxtCond = .fields("Referencia")
+       TxtFlete = .fields("Flete")
+       TxtPlaca = .fields("Ruta")
+       TxtKmI = .fields("Km_Inicial")
+       TxtKmF = .fields("Km_Final")
+       CodigoCliente = .fields("CodigoC")
+       DCCliente = .fields("Cliente")
+       DCDestino = .fields("Producto")
        
-       Codigo1 = .Fields("Ayudante")
-       Codigo2 = .Fields("Conductor")
+       Codigo1 = .fields("Ayudante")
+       Codigo2 = .fields("Conductor")
        DCAyudante = Ninguno
        DCConductor = Ninguno
        If AdoClientes.Recordset.RecordCount Then
           AdoClientes.Recordset.MoveFirst
           AdoClientes.Recordset.Find ("Codigo = '" & Codigo1 & "' ")
-          If Not AdoClientes.Recordset.EOF Then DCAyudante = AdoClientes.Recordset.Fields("Cliente")
+          If Not AdoClientes.Recordset.EOF Then DCAyudante = AdoClientes.Recordset.fields("Cliente")
         
           AdoClientes.Recordset.MoveFirst
           AdoClientes.Recordset.Find ("Codigo = '" & Codigo2 & "' ")
-          If Not AdoClientes.Recordset.EOF Then DCConductor = AdoClientes.Recordset.Fields("Cliente")
+          If Not AdoClientes.Recordset.EOF Then DCConductor = AdoClientes.Recordset.fields("Cliente")
        End If
-       Label7.Caption = Format$(.Fields("Factura"), "0000000")
+       Label7.Caption = Format$(.fields("Factura"), "0000000")
        If Val(Label7.Caption) > 0 Then CommandButton1.Enabled = False Else CommandButton1.Enabled = True
    End If
   End With

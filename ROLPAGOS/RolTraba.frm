@@ -1125,7 +1125,7 @@ Private Sub Command5_Click()
      Co.Numero = ReadSetDataNum("Diario", True, True)
      Co.Concepto = LblConcepto.Caption
      Co.T_No = Trans_No
-     GrabarComprobante Co
+     Grabar_Comprobante Co
      ImprimirComprobantesDe False, Co
   Else
      MsgBox "No se puede grabar, descuadre en el asiento"

@@ -10,22 +10,21 @@ Dim AdoCliDB As ADODB.Recordset
 ''    Select_AdoDB AdoCliDB, sSQL
    
     SRI_Autorizacion.Autorizacion = TA.Autorizacion
+    SRI_Autorizacion.Tipo_Doc_SRI = "AB"
          FA.Nota = "Abono Recibido en la Institucion:" & vbCrLf _
                  & "Hora" & vbTab & vbTab & ": " & Format(Time, "HH:MM:SS") & vbCrLf _
                  & "Documento" & vbTab & ": " & TA.Recibo_No & vbCrLf _
                  & "Valor Recibdo USD " & Format(TotalAbonos, "#,##0.00") & vbCrLf
-         SRI_Enviar_Mails FA, SRI_Autorizacion, "AB"
+         SRI_Enviar_Mails FA, SRI_Autorizacion
 
 End Sub
 
 'Facturas            : RUC_CI, TB, Razon_Social
 'Clientes_Matriculas : Cedula_R, TD, Representante
-Public Function Leer_Datos_Cliente_FA(Codigo_CIRUC_Cliente As String, AuxFA As Tipo_Facturas) As Tipo_Facturas
-Dim AdoCliDB As ADODB.Recordset
-    If Len(Codigo_CIRUC_Cliente) <= 0 Then Codigo_CIRUC_Cliente = Ninguno
-    With AuxFA
-      If Codigo_CIRUC_Cliente = Ninguno Then
-        .CodigoC = Ninguno
+Public Function Leer_Datos_Cliente_FA(TFA As Tipo_Facturas) As Tipo_Facturas
+'    If Len(Codigo_CIRUC_Cliente) <= 0 Then Codigo_CIRUC_Cliente = Ninguno
+    With TFA
+     If .CodigoC = Ninguno Then
         .Cliente = Ninguno
         .CI_RUC = "000000000"
         .TD = "O"
@@ -41,49 +40,34 @@ Dim AdoCliDB As ADODB.Recordset
         .TB = "O"
       Else
         'Verificamos la informacion del Clienete
-         Leer_Datos_Cliente_SP Codigo_CIRUC_Cliente
-        .CodigoC = Codigo_CIRUC_Cliente
-         sSQL = "SELECT Cliente,CI_RUC,TD,Email,EmailR,Direccion,DireccionT,Ciudad,Telefono,Telefono_R,Grupo,Representante,CI_RUC_R,TD_R " _
-              & "FROM Clientes " _
-              & "WHERE Codigo = '" & .CodigoC & "' "
-         Select_AdoDB AdoCliDB, sSQL
-         If AdoCliDB.RecordCount > 0 Then
-           .Cliente = AdoCliDB.fields("Cliente")
-           .CI_RUC = AdoCliDB.fields("CI_RUC")
-           .TD = AdoCliDB.fields("TD")
-           .EmailC = AdoCliDB.fields("Email")
-           .EmailR = AdoCliDB.fields("EmailR")
-           .TelefonoC = AdoCliDB.fields("Telefono")
-           .DireccionC = AdoCliDB.fields("Direccion")
-           .Curso = AdoCliDB.fields("Direccion")
-           .CiudadC = AdoCliDB.fields("Ciudad")
-           .Grupo = AdoCliDB.fields("Grupo")
-           .Razon_Social = "CONSUMIDOR FINAL"
-           .RUC_CI = "9999999999999"
-           .TB = "R"
-            If Len(AdoCliDB.fields("Representante")) > 1 And Len(AdoCliDB.fields("CI_RUC_R")) > 1 Then
-              .TB = AdoCliDB.fields("TD_R")
-               Select Case .TB
-                 Case "C", "R", "P"
-                     .Razon_Social = AdoCliDB.fields("Representante")
-                     .RUC_CI = AdoCliDB.fields("CI_RUC_R")
-                     .TelefonoC = AdoCliDB.fields("Telefono_R")
-                     .DireccionC = AdoCliDB.fields("DireccionT")
-               End Select
-            Else
-               Select Case .TD
-                 Case "C", "R", "P"
-                     .Razon_Social = AdoCliDB.fields("Cliente")
-                     .RUC_CI = AdoCliDB.fields("CI_RUC")
-                     .TB = AdoCliDB.fields("TD")
-               End Select
-            End If
-            If Len(.TelefonoC) <= 1 Then .TelefonoC = Telefono1
+         TBeneficiario = Leer_Datos_Cliente_SP(TFA.CodigoC)
+        .Cliente = TBeneficiario.Cliente
+        .Razon_Social = TBeneficiario.Representante
+        .TD = TBeneficiario.TD
+        .TB = TBeneficiario.TD_Rep
+       '.TD = TBeneficiario.TD_Rep
+        .RUC_CI = TBeneficiario.RUC_CI_Rep
+        .CI_RUC = TBeneficiario.CI_RUC
+        .TelefonoC = TBeneficiario.Telefono1
+         If Len(TBeneficiario.Direccion_Rep) > 1 Then
+           .DireccionC = TBeneficiario.Direccion_Rep
+         Else
+           .DireccionC = TBeneficiario.Direccion
          End If
-         AdoCliDB.Close
+        .Curso = TBeneficiario.Direccion
+        .Grupo = TBeneficiario.Grupo_No
+        .EmailC = TBeneficiario.Email1
+        .EmailR = TBeneficiario.EmailR
+        
+        .Tipo_Cta = TBeneficiario.Tipo_Cta
+        .Cod_Banco = TBeneficiario.Cod_Banco
+        .Cta_Numero = TBeneficiario.Cta_Numero
+        .Fecha_Cad = Format(Month(TBeneficiario.Fecha_Cad), "00") & "/" & Format(Year(TBeneficiario.Fecha_Cad), "0000")
+        .Por_Deposito = TBeneficiario.Por_Deposito
      End If
     End With
-    Leer_Datos_Cliente_FA = AuxFA
+   'MsgBox ".... " & TFA.DireccionC
+    Leer_Datos_Cliente_FA = TFA
 End Function
 
 '''Public Sub Generar_XML_Facturas(TFA As Tipo_Facturas)
@@ -105,7 +89,7 @@ End Function
 '''    Autorizar_XML = False
 '''    TextoXML = ""
 '''   'Averiguamos si la Factura esta a nombre del Representante
-'''    TBeneficiario = Leer_Datos_Clientes(TFA.CodigoC)
+'''    TBeneficiario = Leer_Datos_Cliente_SP(TFA.CodigoC)
 '''   'MsgBox TBeneficiario.RUC_CI_Rep & vbCrLf & TBeneficiario.Representante & vbCrLf & TBeneficiario.TD_Rep
 '''
 '''    TFA.Cliente = TBeneficiario.Representante
@@ -804,7 +788,7 @@ Dim RUC_Rec As String
     RatonNormal
     
    'Averiguamos si la Factura esta a nombre del Representante
-    TBeneficiario = Leer_Datos_Clientes(TFA.CodigoC)
+    TBeneficiario = Leer_Datos_Cliente_SP(TFA.CodigoC)
     If TBeneficiario.RUC_CI_Rep <> RUC_Rec Then
        Titulo = "ACTUALIZACION DE DATOS"
        Mensajes = "El RUC asignado originalmente no es el mismo, desea actualizar el nuevo"
@@ -825,661 +809,6 @@ Dim RUC_Rec As String
        End If
     End If
     RatonNormal
-End Sub
-
-'Reprocesa los Saldo de las Facturas Pendiente por medio de bancos
-Public Sub Procesar_Saldo_De_Facturas(MiFormulario As Form, Optional PorX As Boolean, Optional FechaReproceso As String)
-Dim VFA As Tipo_Abono
-Dim IDMes As Integer
-Dim MiForm_Caption  As String
-Dim FechaRep As String
-Dim FacturaDB As ADODB.Recordset
-  MiForm_Caption = MiFormulario.Caption
-  'If ClaveAuxiliar Then
-   If Len(FechaReproceso) < 10 Then FechaReproceso = FechaSistema
-   If IsDate(FechaReproceso) Then FechaRep = FechaReproceso Else FechaRep = "01/01/" & Year(FechaReproceso)
-   FechaRep = BuscarFecha(FechaRep)
-   Contador = 0
-   MiFormulario.Caption = "Actualizando Clientes de Facturas en Detalles y Abonos "
-  
-  'MsgBox PorX
-  'Actualizamos todos los saldo de las facturas o parcial
-   If PorX Then
-        sSQL = "UPDATE Detalle_Factura " _
-             & "SET Total = ROUND(Cantidad * Precio," & Dec_PVP & ",0) " _
-             & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND Periodo = '" & Periodo_Contable & "' " _
-             & "AND Fecha >= #" & FechaRep & "# "
-        Ejecutar_SQL_SP sSQL
-           
-        sSQL = "UPDATE Detalle_Factura " _
-             & "SET Total_IVA = ROUND((Total-(Total_Desc+Total_Desc2)) * ROUND(Total_IVA/(Total-(Total_Desc+Total_Desc2)),2,0),4,0) " _
-             & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND Periodo = '" & Periodo_Contable & "' " _
-             & "AND T <> '" & Anulado & "' " _
-             & "AND Fecha >= #" & FechaRep & "# " _
-             & "AND Total_IVA <> 0 "
-        Ejecutar_SQL_SP sSQL
-                           
-        If SQL_Server Then
-           sSQL = "UPDATE Detalle_Factura " _
-                & "SET CodigoC = F.CodigoC " _
-                & "FROM Detalle_Factura As DF, Facturas As F "
-        Else
-           sSQL = "UPDATE Detalle_Factura As DF, Facturas As F " _
-                & "SET DF.CodigoC = F.CodigoC "
-        End If
-        sSQL = sSQL _
-             & "WHERE F.Item = '" & NumEmpresa & "' " _
-             & "AND F.Periodo = '" & Periodo_Contable & "' " _
-             & "AND F.Fecha >= #" & FechaRep & "# " _
-             & "AND F.Autorizacion = DF.Autorizacion " _
-             & "AND F.Fecha = DF.Fecha " _
-             & "AND F.Serie = DF.Serie " _
-             & "AND F.Factura = DF.Factura " _
-             & "AND F.Item = DF.Item " _
-             & "AND F.Periodo = DF.Periodo " _
-             & "AND F.TC = DF.TC " _
-             & "AND F.CodigoC <> DF.CodigoC "
-        Ejecutar_SQL_SP sSQL
-        
-        If SQL_Server Then
-           sSQL = "UPDATE Detalle_Factura " _
-                & "SET Fecha = F.Fecha " _
-                & "FROM Detalle_Factura As DF, Facturas As F "
-        Else
-           sSQL = "UPDATE Detalle_Factura As DF, Facturas As F " _
-                & "SET DF.Fecha = F.Fecha "
-        End If
-        sSQL = sSQL _
-             & "WHERE F.Item = '" & NumEmpresa & "' " _
-             & "AND F.Periodo = '" & Periodo_Contable & "' " _
-             & "AND F.Fecha >= #" & FechaRep & "# " _
-             & "AND F.Autorizacion = DF.Autorizacion " _
-             & "AND F.Serie = DF.Serie " _
-             & "AND F.Factura = DF.Factura " _
-             & "AND F.Item = DF.Item " _
-             & "AND F.Periodo = DF.Periodo " _
-             & "AND F.TC = DF.TC " _
-             & "AND F.Fecha <> DF.Fecha "
-        Ejecutar_SQL_SP sSQL
-        
-        If SQL_Server Then
-           sSQL = "UPDATE Trans_Abonos " _
-                & "SET CodigoC = F.CodigoC " _
-                & "FROM Trans_Abonos As DF,Facturas As F "
-        Else
-           sSQL = "UPDATE Trans_Abonos As DF,Facturas As F " _
-                & "SET DF.CodigoC = F.CodigoC "
-        End If
-        sSQL = sSQL _
-             & "WHERE F.Item = '" & NumEmpresa & "' " _
-             & "AND F.Periodo = '" & Periodo_Contable & "' " _
-             & "AND F.Fecha >= #" & FechaRep & "# " _
-             & "AND F.Autorizacion = DF.Autorizacion " _
-             & "AND F.Serie = DF.Serie " _
-             & "AND F.Factura = DF.Factura " _
-             & "AND F.Item = DF.Item " _
-             & "AND F.Periodo = DF.Periodo " _
-             & "AND F.TC = DF.TP " _
-             & "AND F.CodigoC <> DF.CodigoC "
-        Ejecutar_SQL_SP sSQL
-     
-        MiFormulario.Caption = "Redondeando SubTotales "
-                 
-        sSQL = "UPDATE Facturas " _
-             & "SET Total_MN = 0,SubTotal = 0 " _
-             & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND Periodo = '" & Periodo_Contable & "' " _
-             & "AND Fecha >= #" & FechaRep & "# "
-        Ejecutar_SQL_SP sSQL
-  
-        If Periodo_Contable = Ninguno Then
-           For IDMes = 1 To 12
-                MiFormulario.Caption = "(" & IDMes & ") Actualizando I.V.A. "
-                sSQL = "UPDATE Facturas " _
-                     & "SET IVA = (SELECT ROUND(SUM(Total_IVA),2,0) " _
-                     & "           FROM Detalle_Factura " _
-                     & "           WHERE Detalle_Factura.Total_IVA > 0 " _
-                     & "           AND Detalle_Factura.TC = Facturas.TC " _
-                     & "           AND Detalle_Factura.Item = Facturas.Item " _
-                     & "           AND Detalle_Factura.Periodo = Facturas.Periodo " _
-                     & "           AND Detalle_Factura.Factura = Facturas.Factura " _
-                     & "           AND Detalle_Factura.CodigoC = Facturas.CodigoC " _
-                     & "           AND Detalle_Factura.Serie = Facturas.Serie " _
-                     & "           AND Detalle_Factura.Autorizacion = Facturas.Autorizacion) " _
-                     & "WHERE Item = '" & NumEmpresa & "' " _
-                     & "AND Periodo = '" & Periodo_Contable & "' " _
-                     & "AND Fecha >= #" & FechaRep & "# " _
-                     & "AND MONTH(Fecha) = " & IDMes & " "
-                Ejecutar_SQL_SP sSQL
-                              
-                MiFormulario.Caption = "(" & IDMes & ") Actualizando Con I.V.A. "
-                sSQL = "UPDATE Facturas " _
-                     & "SET Con_IVA = (SELECT ROUND(SUM(Total),2,0) " _
-                     & "               FROM Detalle_Factura " _
-                     & "               WHERE Detalle_Factura.Total_IVA > 0 " _
-                     & "               AND Detalle_Factura.TC = Facturas.TC " _
-                     & "               AND Detalle_Factura.Item = Facturas.Item " _
-                     & "               AND Detalle_Factura.Periodo = Facturas.Periodo " _
-                     & "               AND Detalle_Factura.Factura = Facturas.Factura " _
-                     & "               AND Detalle_Factura.CodigoC = Facturas.CodigoC " _
-                     & "               AND Detalle_Factura.Serie = Facturas.Serie " _
-                     & "               AND Detalle_Factura.Autorizacion = Facturas.Autorizacion) " _
-                     & "WHERE Item = '" & NumEmpresa & "' " _
-                     & "AND Periodo = '" & Periodo_Contable & "' " _
-                     & "AND Fecha >= #" & FechaRep & "# " _
-                     & "AND MONTH(Fecha) = " & IDMes & " "
-                Ejecutar_SQL_SP sSQL
-                
-                MiFormulario.Caption = "(" & IDMes & ") Actualizando Sin I.V.A. "
-                sSQL = "UPDATE Facturas " _
-                     & "SET Sin_IVA = (SELECT ROUND(SUM(Total),2,0) " _
-                     & "               FROM Detalle_Factura " _
-                     & "               WHERE Detalle_Factura.Total_IVA <= 0 " _
-                     & "               AND Detalle_Factura.TC = Facturas.TC " _
-                     & "               AND Detalle_Factura.Item = Facturas.Item " _
-                     & "               AND Detalle_Factura.Periodo = Facturas.Periodo " _
-                     & "               AND Detalle_Factura.Factura = Facturas.Factura " _
-                     & "               AND Detalle_Factura.CodigoC = Facturas.CodigoC " _
-                     & "               AND Detalle_Factura.Serie = Facturas.Serie " _
-                     & "               AND Detalle_Factura.Autorizacion = Facturas.Autorizacion) " _
-                     & "WHERE Item = '" & NumEmpresa & "' " _
-                     & "AND Periodo = '" & Periodo_Contable & "' " _
-                     & "AND Fecha >= #" & FechaRep & "# " _
-                     & "AND MONTH(Fecha) = " & IDMes & " "
-                Ejecutar_SQL_SP sSQL
-            
-                MiFormulario.Caption = "(" & IDMes & ") Actualizando Descuento"
-                sSQL = "UPDATE Facturas " _
-                     & "SET Descuento = (SELECT ROUND(SUM(Total_Desc),2,0) " _
-                     & "                 FROM Detalle_Factura " _
-                     & "                 WHERE Detalle_Factura.Total_Desc > 0 " _
-                     & "                 AND Detalle_Factura.TC = Facturas.TC " _
-                     & "                 AND Detalle_Factura.Item = Facturas.Item " _
-                     & "                 AND Detalle_Factura.Periodo = Facturas.Periodo " _
-                     & "                 AND Detalle_Factura.Factura = Facturas.Factura " _
-                     & "                 AND Detalle_Factura.CodigoC = Facturas.CodigoC " _
-                     & "                 AND Detalle_Factura.Serie = Facturas.Serie " _
-                     & "                 AND Detalle_Factura.Autorizacion = Facturas.Autorizacion) " _
-                     & "WHERE Item = '" & NumEmpresa & "' " _
-                     & "AND Periodo = '" & Periodo_Contable & "' " _
-                     & "AND Fecha >= #" & FechaRep & "# " _
-                     & "AND MONTH(Fecha) = " & IDMes & " "
-                Ejecutar_SQL_SP sSQL
-            
-                MiFormulario.Caption = "(" & IDMes & ") Actualizando Descuento2 "
-                sSQL = "UPDATE Facturas " _
-                     & "SET Descuento2 = (SELECT ROUND(SUM(Total_Desc2),2,0) " _
-                     & "                  FROM Detalle_Factura " _
-                     & "                  WHERE Detalle_Factura.Total_Desc2 > 0 " _
-                     & "                  AND Detalle_Factura.TC = Facturas.TC " _
-                     & "                  AND Detalle_Factura.Item = Facturas.Item " _
-                     & "                  AND Detalle_Factura.Periodo = Facturas.Periodo " _
-                     & "                  AND Detalle_Factura.Factura = Facturas.Factura " _
-                     & "                  AND Detalle_Factura.CodigoC = Facturas.CodigoC " _
-                     & "                  AND Detalle_Factura.Serie = Facturas.Serie " _
-                     & "                  AND Detalle_Factura.Autorizacion = Facturas.Autorizacion) " _
-                     & "WHERE Item = '" & NumEmpresa & "' " _
-                     & "AND Periodo = '" & Periodo_Contable & "' " _
-                     & "AND Fecha >= #" & FechaRep & "# " _
-                     & "AND MONTH(Fecha) = " & IDMes & " "
-                Ejecutar_SQL_SP sSQL
-                                
-                 sSQL = "UPDATE Facturas " _
-                      & "SET Desc_0 = (SELECT SUM(Total_Desc+Total_Desc2) " _
-                      & "              FROM Detalle_Factura " _
-                      & "              WHERE Detalle_Factura.Total_IVA = 0 " _
-                      & "              AND MONTH(Detalle_Factura.Fecha) = " & IDMes & " " _
-                      & "              AND Detalle_Factura.TC = Facturas.TC " _
-                      & "              AND Detalle_Factura.Item = Facturas.Item " _
-                      & "              AND Detalle_Factura.Periodo = Facturas.Periodo " _
-                      & "              AND Detalle_Factura.Fecha = Facturas.Fecha " _
-                      & "              AND Detalle_Factura.Factura = Facturas.Factura " _
-                      & "              AND Detalle_Factura.CodigoC = Facturas.CodigoC " _
-                      & "              AND Detalle_Factura.Serie = Facturas.Serie " _
-                      & "              AND Detalle_Factura.Autorizacion = Facturas.Autorizacion) " _
-                      & "WHERE Item = '" & NumEmpresa & "' " _
-                      & "AND Periodo = '" & Periodo_Contable & "' " _
-                      & "AND TC IN ('FA','NV','LC') " _
-                      & "AND Desc_0 = 0 " _
-                      & "AND Fecha >= #" & FechaRep & "# " _
-                      & "AND MONTH(Fecha) = " & IDMes & " "
-                 Ejecutar_SQL_SP sSQL
-                       
-                 sSQL = "UPDATE Facturas " _
-                      & "SET Desc_X = (SELECT SUM(Total_Desc+Total_Desc2) " _
-                      & "              FROM Detalle_Factura " _
-                      & "              WHERE Detalle_Factura.Total_IVA > 0 " _
-                      & "              AND MONTH(Detalle_Factura.Fecha) = " & IDMes & " " _
-                      & "              AND Detalle_Factura.TC = Facturas.TC " _
-                      & "              AND Detalle_Factura.Item = Facturas.Item " _
-                      & "              AND Detalle_Factura.Periodo = Facturas.Periodo " _
-                      & "              AND Detalle_Factura.Fecha = Facturas.Fecha " _
-                      & "              AND Detalle_Factura.Factura = Facturas.Factura " _
-                      & "              AND Detalle_Factura.CodigoC = Facturas.CodigoC " _
-                      & "              AND Detalle_Factura.Serie = Facturas.Serie " _
-                      & "              AND Detalle_Factura.Autorizacion = Facturas.Autorizacion) " _
-                      & "WHERE Item = '" & NumEmpresa & "' " _
-                      & "AND Periodo = '" & Periodo_Contable & "' " _
-                      & "AND TC IN ('FA','NV','LC') " _
-                      & "AND Desc_X = 0 " _
-                      & "AND Fecha >= #" & FechaRep & "# " _
-                      & "AND MONTH(Fecha) = " & IDMes & " "
-                 Ejecutar_SQL_SP sSQL
-            
-'''                sSQL = "UPDATE Facturas " _
-'''                     & "SET IVA = ROUND(IVA,2,0), Con_IVA = ROUND(Con_IVA,2,0) " _
-'''                     & "WHERE Item = '" & NumEmpresa & "' " _
-'''                     & "AND Periodo = '" & Periodo_Contable & "' " _
-'''                     & "AND MONTH(Fecha) = " & IdMes & " " _
-'''                     & "AND IVA > 0 "
-'''                Ejecutar_SQL_SP sSQL
-'''
-'''                sSQL = "UPDATE Facturas " _
-'''                     & "SET Sin_IVA = ROUND(Sin_IVA,2,0) " _
-'''                     & "WHERE Item = '" & NumEmpresa & "' " _
-'''                     & "AND Periodo = '" & Periodo_Contable & "' " _
-'''                     & "AND MONTH(Fecha) = " & IdMes & " " _
-'''                     & "AND IVA <= 0 "
-'''                Ejecutar_SQL_SP sSQL
-            
-            Next IDMes
-        End If
-        Contador = 0
-        MiFormulario.Caption = "Encerando IVA "
-        sSQL = "UPDATE Facturas " _
-             & "SET IVA = 0 " _
-             & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND Periodo = '" & Periodo_Contable & "' " _
-             & "AND IVA IS NULL "
-        Ejecutar_SQL_SP sSQL
-        
-        MiFormulario.Caption = "Encerando Con IVA "
-        sSQL = "UPDATE Facturas " _
-             & "SET Con_IVA = 0 " _
-             & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND Periodo = '" & Periodo_Contable & "' " _
-             & "AND Con_IVA IS NULL "
-        Ejecutar_SQL_SP sSQL
-        
-        MiFormulario.Caption = "Encerando Sin IVA "
-        sSQL = "UPDATE Facturas " _
-             & "SET Sin_IVA = 0 " _
-             & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND Periodo = '" & Periodo_Contable & "' " _
-             & "AND Sin_IVA IS NULL "
-        Ejecutar_SQL_SP sSQL
-      
-        MiFormulario.Caption = "Encerando Descuento "
-        sSQL = "UPDATE Facturas " _
-             & "SET Descuento = 0 " _
-             & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND Periodo = '" & Periodo_Contable & "' " _
-             & "AND Descuento IS NULL "
-        Ejecutar_SQL_SP sSQL
-      
-        MiFormulario.Caption = "Encerando Descuento 2"
-        sSQL = "UPDATE Facturas " _
-             & "SET Descuento2 = 0 " _
-             & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND Periodo = '" & Periodo_Contable & "' " _
-             & "AND Descuento2 IS NULL "
-        Ejecutar_SQL_SP sSQL
-      
-        MiFormulario.Caption = "Encerando Descuento Tarifa cero"
-        sSQL = "UPDATE Facturas " _
-             & "SET Desc_0 = 0 " _
-             & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND Periodo = '" & Periodo_Contable & "' " _
-             & "AND Desc_0 IS NULL "
-        Ejecutar_SQL_SP sSQL
-      
-        MiFormulario.Caption = "Encerando Descuento Tarifa diferente de cero"
-        sSQL = "UPDATE Facturas " _
-             & "SET Desc_X = 0 " _
-             & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND Periodo = '" & Periodo_Contable & "' " _
-             & "AND Desc_X IS NULL "
-        Ejecutar_SQL_SP sSQL
-      
-        MiFormulario.Caption = "Redondeando SubTotales con Total Factura "
-        sSQL = "UPDATE Facturas " _
-             & "SET Total_MN = ROUND(Con_IVA + Sin_IVA + IVA + Servicio - Descuento - Descuento2,2,0)," _
-             & "SubTotal = ROUND(Con_IVA + Sin_IVA + Servicio,2,0) " _
-             & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND Periodo = '" & Periodo_Contable & "' " _
-             & "AND Fecha >= #" & FechaRep & "# "
-        Ejecutar_SQL_SP sSQL
-        
-        sSQL = "UPDATE Facturas " _
-             & "SET Saldo_MN = Total_MN " _
-             & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND Periodo = '" & Periodo_Contable & "' " _
-             & "AND T <> 'A' " _
-             & "AND Fecha >= #" & FechaRep & "# "
-        Ejecutar_SQL_SP sSQL
-   Else
-        sSQL = "UPDATE Facturas " _
-             & "SET Saldo_Actual = Total_MN " _
-             & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND Periodo = '" & Periodo_Contable & "' " _
-             & "AND T <> 'A' " _
-             & "AND Fecha >= #" & FechaRep & "# "
-        Ejecutar_SQL_SP sSQL
-   End If
-   
-   sSQL = "UPDATE Facturas " _
-        & "SET X = '_' " _
-        & "WHERE Item = '" & NumEmpresa & "' " _
-        & "AND Periodo = '" & Periodo_Contable & "' "
-   Ejecutar_SQL_SP sSQL
-   
-   sSQL = "UPDATE Detalle_Factura " _
-        & "SET X = '_' " _
-        & "WHERE Item = '" & NumEmpresa & "' " _
-        & "AND Periodo = '" & Periodo_Contable & "' "
-   Ejecutar_SQL_SP sSQL
-   
-   sSQL = "UPDATE Trans_Abonos " _
-        & "SET X = '_' " _
-        & "WHERE Item = '" & NumEmpresa & "' " _
-        & "AND Periodo = '" & Periodo_Contable & "' "
-   Ejecutar_SQL_SP sSQL
-   
-   If SQL_Server Then
-      sSQL = "UPDATE Facturas " _
-           & "SET X = '=' " _
-           & "FROM Facturas As DF,Clientes As C "
-   Else
-      sSQL = "UPDATE Facturas As DF,Clientes As C " _
-           & "SET X = '=' "
-   End If
-   sSQL = sSQL & "WHERE DF.CodigoC = C.Codigo "
-   Ejecutar_SQL_SP sSQL
-    
-    If SQL_Server Then
-       sSQL = "UPDATE Detalle_Factura " _
-            & "SET X = '=' " _
-            & "FROM Detalle_Factura As DF, Clientes As C "
-    Else
-       sSQL = "UPDATE Detalle_Factura As DF, Clientes As C " _
-            & "SET X = '=' "
-    End If
-    sSQL = sSQL & "WHERE DF.CodigoC = C.Codigo "
-    Ejecutar_SQL_SP sSQL
-    
-    If SQL_Server Then
-       sSQL = "UPDATE Trans_Abonos " _
-            & "SET X = '=' " _
-            & "FROM Trans_Abonos As DF,Clientes As C "
-    Else
-       sSQL = "UPDATE Trans_Abonos As DF,Clientes As C " _
-            & "SET X = '=' "
-    End If
-    sSQL = sSQL & "WHERE DF.CodigoC = C.Codigo "
-    Ejecutar_SQL_SP sSQL
-   
-    For IDMes = 1 To 12
-        'Colocamos la CxC de las facturas segun el tipo de facturacion
-         MiFormulario.Caption = "Actualizando CxC de Factura y Abonos " & IDMes
-         If SQL_Server Then
-            sSQL = "UPDATE Facturas " _
-                 & "SET Cta_CxP = CL.CxC " _
-                 & "FROM Facturas As F, Catalogo_Lineas As CL "
-         Else
-            sSQL = "UPDATE Facturas As F, Catalogo_Lineas As CL " _
-                 & "SET F.Cta_CxP = CL.CxC "
-         End If
-         sSQL = sSQL & "WHERE F.Item = '" & NumEmpresa & "' " _
-              & "AND F.Periodo = '" & Periodo_Contable & "' " _
-              & "AND F.Cta_CxP = '.' " _
-              & "AND MONTH(F.Fecha) = " & IDMes & " " _
-              & "AND CL.TL <> " & Val(adFalse) & " " _
-              & "AND F.Fecha >= #" & FechaRep & "# " _
-              & "AND F.Cod_CxC = CL.Codigo " _
-              & "AND F.Item = CL.Item " _
-              & "AND F.Periodo = CL.Periodo " _
-              & "AND F.TC = CL.Fact "
-         Ejecutar_SQL_SP sSQL
-        'Actualizamos Detalle de Fctura
-         If SQL_Server Then
-            sSQL = "UPDATE Detalle_Factura " _
-                 & "SET CodigoL = CL.Cod_CxC " _
-                 & "FROM Detalle_Factura As F, Facturas As CL "
-         Else
-            sSQL = "UPDATE Detalle_Factura As F,Facturas As CL " _
-                 & "SET F.CodigoL = CL.Cod_CxC "
-         End If
-         sSQL = sSQL & "WHERE F.Item = '" & NumEmpresa & "' " _
-              & "AND F.Periodo = '" & Periodo_Contable & "' " _
-              & "AND F.CodigoL = '.' " _
-              & "AND MONTH(F.Fecha) = " & IDMes & " " _
-              & "AND F.Fecha >= #" & FechaRep & "# " _
-              & "AND F.Factura = CL.Factura " _
-              & "AND F.Autorizacion = CL.Autorizacion " _
-              & "AND F.Serie = CL.Serie " _
-              & "AND F.TC = CL.TC " _
-              & "AND F.Item = CL.Item " _
-              & "AND F.Periodo = CL.Periodo "
-
-         Ejecutar_SQL_SP sSQL
-        'Actualizacmos los Abonos
-         If SQL_Server Then
-            sSQL = "UPDATE Trans_Abonos " _
-                 & "SET Cta_CxP = CL.Cta_CxP " _
-                 & "FROM Trans_Abonos As F, Facturas As CL "
-         Else
-            sSQL = "UPDATE Trans_Abonos As F,Facturas As CL " _
-                 & "SET F.Cta_CxP = CL.Cta_CxP "
-         End If
-         sSQL = sSQL & "WHERE F.Item = '" & NumEmpresa & "' " _
-              & "AND F.Periodo = '" & Periodo_Contable & "' " _
-              & "AND F.Cta_CxP = '.' " _
-              & "AND MONTH(F.Fecha) = " & IDMes & " " _
-              & "AND F.Fecha >= #" & FechaRep & "# " _
-              & "AND F.Factura = CL.Factura " _
-              & "AND F.Autorizacion = CL.Autorizacion " _
-              & "AND F.Serie = CL.Serie " _
-              & "AND F.TP = CL.TC " _
-              & "AND F.Item = CL.Item " _
-              & "AND F.Periodo = CL.Periodo "
-         Ejecutar_SQL_SP sSQL
-    Next IDMes
-   
-     MiFormulario.Caption = "Actualizando Facturas "
-     If PorX Then
-        sSQL = "UPDATE Facturas " _
-             & "SET X = 'F' " _
-             & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND Periodo = '" & Periodo_Contable & "' "
-        Ejecutar_SQL_SP sSQL
-     Else
-        sSQL = "UPDATE Facturas " _
-             & "SET X = Nivel " _
-             & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND Periodo = '" & Periodo_Contable & "' " _
-             & "AND Nivel = 'F' "
-        Ejecutar_SQL_SP sSQL
-     End If
-   
-     MiFormulario.Caption = "Determinando Facturas Correctas "
-     If SQL_Server Then
-        sSQL = "UPDATE Detalle_Factura " _
-             & "SET X = F.X " _
-             & "FROM Detalle_Factura As DF,Facturas As F "
-     Else
-        sSQL = "UPDATE Detalle_Factura As DF,Facturas As F " _
-             & "SET DF.X = F.X "
-     End If
-     sSQL = sSQL & "WHERE F.Item = '" & NumEmpresa & "' " _
-          & "AND F.Periodo = '" & Periodo_Contable & "' " _
-          & "AND F.Fecha >= #" & FechaRep & "# " _
-          & "AND F.CodigoC = DF.CodigoC " _
-          & "AND F.Autorizacion = DF.Autorizacion " _
-          & "AND F.Serie = DF.Serie " _
-          & "AND F.Factura = DF.Factura " _
-          & "AND F.Fecha = DF.Fecha " _
-          & "AND F.Item = DF.Item " _
-          & "AND F.Periodo = DF.Periodo " _
-          & "AND F.TC = DF.TC "
-     Ejecutar_SQL_SP sSQL
-     
-    'Actualizamos Facturas con Abonos reales
-     If SQL_Server Then
-        sSQL = "UPDATE Facturas " _
-             & "SET X = 'A' " _
-             & "FROM Facturas As F, Trans_Abonos As TA "
-     Else
-        sSQL = "UPDATE Facturas As F, Trans_Abonos As TA " _
-             & "SET X = 'A' "
-     End If
-     sSQL = sSQL _
-          & "WHERE F.Item = '" & NumEmpresa & "' " _
-          & "AND F.Periodo = '" & Periodo_Contable & "' " _
-          & "AND F.Fecha >= #" & FechaRep & "# " _
-          & "AND F.CodigoC = TA.CodigoC " _
-          & "AND F.Factura = TA.Factura " _
-          & "AND F.Autorizacion = TA.Autorizacion " _
-          & "AND F.Serie = TA.Serie " _
-          & "AND F.TC = TA.TP " _
-          & "AND F.Item = TA.Item " _
-          & "AND F.Periodo = TA.Periodo "
-     Ejecutar_SQL_SP sSQL
-     
-   SubSQL = "SELECT SUM(Abono) " _
-          & "FROM Trans_Abonos " _
-          & "WHERE Trans_Abonos.TP = Facturas.TC " _
-          & "AND Trans_Abonos.Item = Facturas.Item " _
-          & "AND Trans_Abonos.Periodo = Facturas.Periodo " _
-          & "AND Trans_Abonos.Factura = Facturas.Factura " _
-          & "AND Trans_Abonos.CodigoC = Facturas.CodigoC " _
-          & "AND Trans_Abonos.Serie = Facturas.Serie " _
-          & "AND Trans_Abonos.Autorizacion = Facturas.Autorizacion "
-    
-     For IDMes = 1 To 12
-        If PorX Then
-           sSQL = "UPDATE Facturas " _
-                & "SET Saldo_MN = Total_MN - (" & SubSQL & ") " _
-                & "WHERE Item = '" & NumEmpresa & "' " _
-                & "AND Periodo = '" & Periodo_Contable & "' " _
-                & "AND X = 'A' " _
-                & "AND Fecha >= #" & FechaRep & "# " _
-                & "AND MONTH(Fecha) = " & IDMes & " "
-           Ejecutar_SQL_SP sSQL
-        Else
-           sSQL = "UPDATE Facturas " _
-                & "SET Saldo_Actual = Total_MN - (" & SubSQL & ") " _
-                & "WHERE Item = '" & NumEmpresa & "' " _
-                & "AND Periodo = '" & Periodo_Contable & "' " _
-                & "AND X = 'A' " _
-                & "AND Fecha >= #" & FechaRep & "# " _
-                & "AND MONTH(Fecha) = " & IDMes & " "
-           Ejecutar_SQL_SP sSQL
-        End If
-     Next IDMes
-
-    'Verificacion del estado de la factura
-     sSQL = "UPDATE Facturas " _
-          & "SET Saldo_MN = 0 " _
-          & "WHERE T = 'A' " _
-          & "AND Periodo = '" & Periodo_Contable & "' " _
-          & "AND Item = '" & NumEmpresa & "' "
-     Ejecutar_SQL_SP sSQL
-     
-     sSQL = "UPDATE Facturas " _
-          & "SET T = 'C' " _
-          & "WHERE Saldo_MN <= 0 " _
-          & "AND Item = '" & NumEmpresa & "' " _
-          & "AND Periodo = '" & Periodo_Contable & "' " _
-          & "AND T <> 'A' "
-     Ejecutar_SQL_SP sSQL
-     
-     sSQL = "UPDATE Facturas " _
-          & "SET T = 'P' " _
-          & "WHERE Saldo_MN > 0 " _
-          & "AND T <> 'A' " _
-          & "AND Periodo = '" & Periodo_Contable & "' " _
-          & "AND Item = '" & NumEmpresa & "' "
-     Ejecutar_SQL_SP sSQL
-     
-     sSQL = "UPDATE Facturas " _
-          & "SET Saldo_MN = -1 " _
-          & "WHERE Item = '" & NumEmpresa & "' " _
-          & "AND Periodo = '" & Periodo_Contable & "' " _
-          & "AND Saldo_MN IS NULL "
-     Ejecutar_SQL_SP sSQL
-     
-     If SQL_Server Then
-        sSQL = "UPDATE Detalle_Factura " _
-             & "SET T = F.T " _
-             & "FROM Detalle_Factura As DF, Facturas As F "
-     Else
-        sSQL = "UPDATE Detalle_Factura As DF, Facturas As F " _
-             & "SET DF.T = F.T "
-     End If
-     sSQL = sSQL & "WHERE F.Item = '" & NumEmpresa & "' " _
-          & "AND F.Periodo = '" & Periodo_Contable & "' " _
-          & "AND F.Fecha >= #" & FechaRep & "# " _
-          & "AND F.Item = DF.Item " _
-          & "AND F.Periodo = DF.Periodo " _
-          & "AND F.Factura = DF.Factura " _
-          & "AND F.CodigoC = DF.CodigoC " _
-          & "AND F.Autorizacion = DF.Autorizacion " _
-          & "AND F.Serie = DF.Serie " _
-          & "AND F.TC = DF.TC " _
-          & "AND F.T <> DF.T "
-     Ejecutar_SQL_SP sSQL
-     If SQL_Server Then
-        sSQL = "UPDATE Trans_Abonos " _
-             & "SET T = F.T " _
-             & "FROM Trans_Abonos As DF, Facturas As F "
-     Else
-        sSQL = "UPDATE Trans_Abonos As DF, Facturas As F " _
-             & "SET DF.T = F.T "
-     End If
-     sSQL = sSQL & "WHERE F.Item = '" & NumEmpresa & "' " _
-          & "AND F.Periodo = '" & Periodo_Contable & "' " _
-          & "AND F.Fecha >= #" & FechaRep & "# " _
-          & "AND F.Item = DF.Item " _
-          & "AND F.Periodo = DF.Periodo " _
-          & "AND F.Factura = DF.Factura " _
-          & "AND F.CodigoC = DF.CodigoC " _
-          & "AND F.Autorizacion = DF.Autorizacion " _
-          & "AND F.Serie = DF.Serie " _
-          & "AND F.TC = DF.TP " _
-          & "AND F.T <> DF.T "
-     Ejecutar_SQL_SP sSQL
-   
-   If PorX Then
-     Contador = 0
-     TextoImprimio = ""
-     sSQL = "SELECT * " _
-          & "FROM Facturas " _
-          & "WHERE Item = '" & NumEmpresa & "' " _
-          & "AND Periodo = '" & Periodo_Contable & "' " _
-          & "AND Fecha >= #" & FechaRep & "# " _
-          & "AND Saldo_MN < 0 " _
-          & "ORDER BY TC,Fecha,Factura "
-     Select_AdoDB FacturaDB, sSQL
-     RatonReloj
-     With FacturaDB
-      If .RecordCount > 0 Then
-          TextoImprimio = "REVISE ESTAS FACTURAS TIENEN SALDO NEGATIVO:" & vbCrLf
-          Do While Not .EOF
-             Contador = Contador + 1
-             TextoImprimio = TextoImprimio & Contador & ".- " & .fields("Autorizacion") & " - " & .fields("T") & " - " & .fields("Fecha") & " - Comprobante No. (" & .fields("TC") & "): " & .fields("Serie") & "-" & Format$(.fields("Factura"), "0000000") & vbCrLf
-            .MoveNext
-          Loop
-      End If
-     End With
-     FacturaDB.Close
-     RatonNormal
-     If TextoImprimio <> "" Then FInfoError.Show
-   End If
-   Contador = 0
-  'End If
-  MiFormulario.Caption = MiForm_Caption
 End Sub
 
 Public Sub ImprimirAdo_SRI(Datas As Adodc, _
@@ -2172,7 +1501,8 @@ Dim No_Ano As String
 
   RatonReloj
  'Averiguamos si la Factura esta a nombre del Representante
-  TFA = Leer_Datos_Cliente_FA(TFA.CodigoC, TFA)
+ 'TFA.CodigoC = Parameto de entrada
+  TFA = Leer_Datos_Cliente_FA(TFA)
   Orden_No = 0
   Total_Desc_ME = 0
   If Len(TFA.Tipo_Pago) <= 1 Then TFA.Tipo_Pago = "01"
@@ -2190,64 +1520,7 @@ Dim No_Ano As String
   TFA.Servicio = 0
   If TFA.TC = "FR" Then TFA.TC = "FA"
   If Len(TFA.Autorizacion) >= 13 Then TMail.TipoDeEnvio = "CE"
-  If TFA.DireccionC <> FA.DireccionS And Len(FA.DireccionS) > 1 Then TFA.DireccionC = FA.DireccionS
-  If TFA.TC = "PV" Then
-     sSQL = "DELETE * " _
-          & "FROM Trans_Ticket " _
-          & "WHERE Ticket = " & TFA.Factura & " " _
-          & "AND TC = '" & TFA.TC & "' " _
-          & "AND Item = '" & NumEmpresa & "' " _
-          & "AND Periodo = '" & Periodo_Contable & "' "
-     Ejecutar_SQL_SP sSQL
-  Else
-     sSQL = "DELETE * " _
-          & "FROM Detalle_Factura " _
-          & "WHERE Factura = " & TFA.Factura & " " _
-          & "AND TC = '" & TFA.TC & "' " _
-          & "AND Serie = '" & TFA.Serie & "' " _
-          & "AND Autorizacion = '" & TFA.Autorizacion & "' " _
-          & "AND Item = '" & NumEmpresa & "' " _
-          & "AND Periodo = '" & Periodo_Contable & "' "
-     Ejecutar_SQL_SP sSQL
-     sSQL = "DELETE * " _
-          & "FROM Facturas " _
-          & "WHERE Factura = " & TFA.Factura & " " _
-          & "AND TC = '" & TFA.TC & "' " _
-          & "AND Serie = '" & TFA.Serie & "' " _
-          & "AND Autorizacion = '" & TFA.Autorizacion & "' " _
-          & "AND Item = '" & NumEmpresa & "' " _
-          & "AND Periodo = '" & Periodo_Contable & "' "
-     Ejecutar_SQL_SP sSQL
-     sSQL = "DELETE * " _
-          & "FROM Trans_Abonos " _
-          & "WHERE Factura = " & TFA.Factura & " " _
-          & "AND TP = '" & TFA.TC & "' " _
-          & "AND Serie = '" & TFA.Serie & "' " _
-          & "AND Autorizacion = '" & TFA.Autorizacion & "' " _
-          & "AND Item = '" & NumEmpresa & "' " _
-          & "AND Periodo = '" & Periodo_Contable & "' "
-     Ejecutar_SQL_SP sSQL
-    
-     sSQL = "DELETE * " _
-          & "FROM Facturas_Auxiliares " _
-          & "WHERE Factura = " & TFA.Factura & " " _
-          & "AND TC = '" & TFA.TC & "' " _
-          & "AND Serie = '" & TFA.Serie & "' " _
-          & "AND Autorizacion = '" & TFA.Autorizacion & "' " _
-          & "AND Item = '" & NumEmpresa & "' " _
-          & "AND Periodo = '" & Periodo_Contable & "' "
-     Ejecutar_SQL_SP sSQL
-    
-     sSQL = "DELETE * " _
-          & "FROM Trans_Kardex " _
-          & "WHERE Item = '" & NumEmpresa & "' " _
-          & "AND Periodo = '" & Periodo_Contable & "' " _
-          & "AND TC = '" & TFA.TC & "' " _
-          & "AND Serie = '" & TFA.Serie & "' " _
-          & "AND Factura = " & TFA.Factura & " " _
-          & "AND SUBSTRING(Detalle, 1, 3) = 'FA:' "
-     Ejecutar_SQL_SP sSQL
-  End If
+  Grabar_Factura_SP TFA
   
   sSQL = "SELECT " & Full_Fields("Asiento_F") & " " _
        & "FROM Asiento_F " _
@@ -2330,7 +1603,7 @@ Dim No_Ano As String
              SetAdoFields "Precio", .fields("PRECIO")
              SetAdoFields "Total", .fields("TOTAL")
              SetAdoFields "Descuento", .fields("Total_Desc") + .fields("Total_Desc2")
-             SetAdoFields "Producto", MidStrg(.fields("PRODUCTO"), 1, 40)
+             SetAdoFields "Producto", MidStrg(.fields("PRODUCTO"), 1, 130)
              SetAdoFields "CodigoU", CodigoUsuario
              SetAdoFields "Periodo", Periodo_Contable
              SetAdoFields "Hora", TFA.Hora
@@ -2403,7 +1676,13 @@ Dim No_Ano As String
           SetAdoFields "Telefono_RS", TFA.TelefonoC
           SetAdoFields "Direccion_RS", TFA.DireccionC
           SetAdoUpdate
-         'MsgBox TFA.Fecha & "-" & TFA.TC & "-" & TFA.Serie & "-" & TFA.Factura
+          
+          
+'''          Cadena = TFA.CodigoC & vbCrLf & TFA.Razon_Social & vbCrLf & TFA.TB & vbCrLf & TFA.RUC_CI & vbCrLf & TFA.Fecha & "-" & TFA.TC & "-" & TFA.Serie & "-" & TFA.Factura
+'''          Clipboard.Clear
+'''          Clipboard.SetText Cadena
+'''          MsgBox Cadena
+          
          'Datos de la Guia de Remision
           If TFA.Remision > 0 Then
              SetAdoAddNew "Facturas_Auxiliares"
@@ -2469,9 +1748,9 @@ Dim No_Ano As String
              SetAdoFields "Porc_C", .fields("Porc_C")
              SetAdoFields "Ruta", .fields("RUTA")
              SetAdoFields "Corte", .fields("CORTE")
+             SetAdoFields "Ticket", .fields("TICKET")
              SetAdoFields "Mes", MesesLetras(No_Mes)
              SetAdoFields "Mes_No", No_Mes
-             SetAdoFields "Ticket", .fields("TICKET")
              SetAdoFields "CodBodega", .fields("CodBod")
              SetAdoFields "CodMarca", .fields("CodMar")
              SetAdoFields "Codigo_Barra", .fields("COD_BAR")
@@ -2550,6 +1829,7 @@ Dim No_Ano As String
                  SetAdoUpdate
              End If
              
+            'Desde Aqui Falta
             'Salida si es por recetas y ademas el producto es por servicios
             'caso contrario hay que acondicionar desde el Modulo de Inventario
              If Len(.fields("Cta_Inv")) = 1 And Len(.fields("Cta_Costo")) = 1 Then
@@ -2662,6 +1942,7 @@ Dim No_Ano As String
              End If
             .MoveNext
           Loop
+          
           sSQL = "UPDATE Facturas " _
                & "SET T = 'A' " _
                & "WHERE Item = '" & NumEmpresa & "' " _
@@ -2702,6 +1983,7 @@ Dim No_Ano As String
    End If
   End With
   AdoDBFA.Close
+ 'MsgBox TFA.Autorizacion
   RatonNormal
 End Sub
 
@@ -6511,12 +5793,13 @@ Public Sub Imprimir_Punto_Venta(TFA As Tipo_Facturas)
 Dim AdoDBFactura As ADODB.Recordset
 Dim AdoDBDetalle As ADODB.Recordset
 Dim AdoDBDAbonos As ADODB.Recordset
+Dim CantGuion As Byte
+Dim TotalRecibo As Currency
+Dim Si_Copia As Boolean
 Dim TipoAporte  As String
 Dim CadenaMoneda As String
 Dim Numero_Letras As String
-Dim CantGuion As Byte
 Dim CantBlancos As String
-Dim Si_Copia As Boolean
 
 On Error GoTo Errorhandler
 
@@ -6576,7 +5859,7 @@ If PonImpresoraDefecto(SetNombrePRN) Then
   End If
   Select_AdoDB AdoDBDetalle, sSQL
   
-  
+  TotalRecibo = 0
   TipoAporte = ""
   sSQL = "SELECT " & Full_Fields("Trans_Abonos") & " " _
        & "FROM Trans_Abonos " _
@@ -6591,18 +5874,19 @@ If PonImpresoraDefecto(SetNombrePRN) Then
   With AdoDBDAbonos
    If .RecordCount > 0 Then
        Do While Not .EOF
+          If Val(.fields("Recibo_No")) > 0 Then TFA.Recibo_No = .fields("Recibo_No") Else TFA.Recibo_No = Format(.fields("Factura"), "000000000")
           If .fields("Banco") = "EFECTIVO MN" Then
               TipoAporte = TipoAporte & "CONTADO/"
           Else
               TipoAporte = TipoAporte & .fields("Banco") & "-" & .fields("Cheque") & "/"
           End If
+          TotalRecibo = TotalRecibo + .fields("Abono")
          .MoveNext
        Loop
    Else
          TipoAporte = "CREDITO"
    End If
   End With
-  
   
 Copia_Doc:
   Escala_Centimetro 1, TipoCourierNew, 8
@@ -6700,12 +5984,12 @@ Copia_Doc:
              Producto = Producto & .fields("Producto")
              If .fields("Tipo_Hab") <> Ninguno Then Producto = Producto & "(" & .fields("Tipo_Hab") & ")"
              Producto = Producto & vbCrLf
-             Producto = Producto & CodigoC & String(25 - Len(CodigoC), " ") & " " & String(10 - Len(CodigoN), " ") & CodigoN & vbCrLf
+             Producto = Producto & CodigoC & String(25 - Len(CodigoC), " ") & " " & String(10 - Len(CodigoN), " ") & CodigoN & " " & vbCrLf
              Total = Total + .fields("Cantidad")
           Else
              Producto = Producto & .fields("Producto") & vbCrLf _
                       & SetearBlancos(CStr(.fields("Cantidad")) & "x" & Format$(.fields("Precio"), "#,##0.00"), 12, 0, False) & " " _
-                      & SetearBlancos(CStr(.fields("Total")), CantGuion - 13, 0, True, , True) & vbCrLf
+                      & SetearBlancos(CStr(.fields("Total")), CantGuion - 13, 0, True, , True) & " " & vbCrLf
              Total = Total + .fields("Total")
              If TFA.TC <> "PV" Then Total_IVA = Total_IVA + .fields("Total_IVA")
           End If
@@ -6791,8 +6075,8 @@ Copia_Doc:
   Printer.FontName = TipoCourierNew
   Printer.FontSize = 8
   
-  'Generar_File_SQL "Nota_Donacion", Producto
-  
+  Escribir_Archivo RutaSysBases & "\TEMP\Impresora_PV.txt", Producto
+
   PosLinea = PrinterLineasTextoPV(0.01, PosLinea, Producto, CantGuion)
   
   If TFA.TC = "DO" Then
@@ -6835,12 +6119,72 @@ Copia_Doc:
      End If
      PosLinea = PrinterLineasTextoPV(0.01, PosLinea, Producto, CantGuion)
   End If
+
+ 'Imprimimos el Recibo de Pagos
+  With AdoDBDAbonos
+   If .RecordCount > 0 Then
+      .MoveFirst
+       Printer.NewPage
+       PosLinea = 0.5
+      'Si imprimimos el LogoTipo
+       If Grafico_PV Then
+          PrinterPaint LogoTipo, 0.01, PosLinea, 5, 1.9
+          PosLinea = PosLinea + 2.1
+       End If
+       
+       TFA.CodigoU = .fields("CodigoU")
+      'Encabezado_PV
+       Producto = RazonSocial & vbCrLf _
+                & NombreComercial & vbCrLf _
+                & "R.U.C. " & RUC & vbCrLf _
+                & "Telefono: " & Telefono1 & vbCrLf _
+                & "Direccion: " & Direccion & vbCrLf _
+                & UCaseStrg(NombreCiudad) & " - ECUADOR " & vbCrLf _
+                & String(CantGuion, "-") & vbCrLf _
+                & "RECIBO DE INGRESO No. " & Year(.fields("Fecha")) & "-" & TFA.Recibo_No & vbCrLf _
+                & "Fecha de Abono: " & TFA.Fecha & vbCrLf _
+                & "Por USD " & Format(TotalRecibo, "#,##0.00") & vbCrLf _
+                & "La suma de: " & Cambio_Letras(TotalRecibo, 2) & vbCrLf _
+                & String(CantGuion, "-") & vbCrLf _
+                & "Cliente: " & TFA.Cliente & vbCrLf
+
+       If TFA.TC = "PV" Then
+          Producto = Producto & "T I C K E T   No. 000-000-" & Format$(TFA.Factura, "000000000")
+       ElseIf TFA.TC = "NV" Then
+          Producto = Producto & "NOTA DE VENTA No. "
+       ElseIf TFA.TC = "DO" Then
+          Producto = Producto & "NOTA DE DONACION No. "
+       Else
+          Producto = Producto & "FACTURA No. "
+       End If
+       Producto = Producto & TFA.Serie & "-" & Format$(TFA.Factura, "000000000") & vbCrLf _
+                & String(CantGuion, "-") & vbCrLf _
+                & "POR CONCEPTO DE: " & vbCrLf _
+                & String(CantGuion, "-") & vbCrLf
+       Do While Not .EOF
+          Producto = Producto & .fields("Fecha") & " - "
+          If Len(.fields("Banco")) > 1 Then Producto = Producto & .fields("Banco") & " - "
+          If Len(.fields("Cheque")) > 1 Then Producto = Producto & .fields("Cheque") & " - "
+          If .fields("Abono") <> 0 Then Producto = Producto & "Por USD " & Format(.fields("Abono"), "#,##0.00")
+          Producto = Producto & vbCrLf
+         .MoveNext
+       Loop
+       Producto = Producto & String(CantGuion, "-") & vbCrLf _
+                & " " & vbCrLf & " " & vbCrLf & " " & vbCrLf & " " & vbCrLf _
+                & "______________      _______________ " & vbCrLf _
+                & "CONFORME            PROCESADO " & vbCrLf _
+                & "C.I./R.U.C.         POR " & vbCrLf _
+                & TFA.RUC_CI & String(20 - Len(TFA.RUC_CI), " ") & TFA.CodigoU & vbCrLf
+       PosLinea = PrinterLineasTextoPV(0.01, PosLinea, Producto, CantGuion)
+   End If
+  End With
   Printer.EndDoc
   
   If Copia_PV And Si_Copia Then
      Si_Copia = False
      GoTo Copia_Doc
   End If
+  AdoDBDAbonos.Close
   AdoDBDetalle.Close
   AdoDBFactura.Close
 End If
@@ -9419,10 +8763,10 @@ With AdoInv.Recordset
     
         Printer.FontBold = False
         Printer.FontSize = Porte_Letra
-        PrinterFields Ancho(0) + Pos_X_Mid, PosLinea, .fields("CODIGO_INV")
-        PrinterFields Ancho(1) + Pos_X_Mid, PosLinea, .fields("PRODUCTO")
-        PrinterFields Ancho(5) + Pos_X_Mid, PosLinea, .fields("ENTRADA")
-        PrinterFields Ancho(6) + Pos_X_Mid, PosLinea, .fields("SALIDA")
+        PrinterFields Ancho(0) + Pos_X_Mid, PosLinea, .fields("Codigo_Inv")
+        PrinterFields Ancho(1) + Pos_X_Mid, PosLinea, .fields("Producto")
+        PrinterFields Ancho(5) + Pos_X_Mid, PosLinea, .fields("Entradas")
+        PrinterFields Ancho(6) + Pos_X_Mid, PosLinea, .fields("Salidas")
         PosLinea = PosLinea + 0.35
         If (PosLinea >= LimiteAlto) And (Derecho = False) Then
            PosLinea = Pos_Y_Mid
@@ -12237,7 +11581,7 @@ Dim FechaCxC As String
        & "AND Fecha <= #" & BuscarFecha(FechaCxC) & "# " _
        & "AND Vencimiento >= #" & BuscarFecha(FechaCxC) & "# " _
        & "ORDER BY Codigo "
-  Select_AdoDB AdoLineaDB, sSQL, "Linea_CxC"
+  Select_AdoDB AdoLineaDB, sSQL
  'MsgBox sSQL
   With AdoLineaDB
    If .RecordCount > 0 Then
@@ -13639,7 +12983,7 @@ Public Sub Actualizar_Razon_Social(Optional FechaIniAut As String)
 Dim AdoFA As ADODB.Recordset
 Dim Idx As Integer
 Dim FechaDeAut As String
-Dim RutaXMLRechazado As String
+
     FechaDeAut = FechaIniAut
     RutaXMLRechazado = RutaDocumentos & "\Comprobantes no Autorizados\*.xml"
     If Existe_File(RutaXMLRechazado) Then Kill RutaXMLRechazado
@@ -14449,7 +13793,7 @@ Cuadricula = False
          RutaDestino = RutaSysBases & "\TEMP\MSChartB" & CodigoUsuario & ".gif"
          SavePicture Clipboard.GetData(3), RutaDestino
          Printer.PaintPicture LoadPicture(RutaDestino), 1, PosLinea
-         Clipboard.Clear
+        ' Clipboard.Clear
          Kill RutaDestino
     
        ' Hacemos el pastel
@@ -14461,7 +13805,7 @@ Cuadricula = False
          RutaDestino = RutaSysBases & "\TEMP\MSChartP" & CodigoUsuario & ".gif"
          SavePicture Clipboard.GetData(3), RutaDestino
          Printer.PaintPicture LoadPicture(RutaDestino), 10, PosLinea
-         Clipboard.Clear
+         'Clipboard.Clear
          Kill RutaDestino
     End With
  End If
@@ -14652,7 +13996,7 @@ Dim SiExisteDatos As Boolean
         & "AND RCC.T <> 'A' " _
         & "AND RCC.CodigoC = C.Codigo " _
         & "ORDER BY C.Cliente, RCC.TC, RCC.Serie, RCC.Factura, RCC.Anio, RCC.Mes, RCC.ID "
-   Select_AdoDB AdoCarteraDB, sSQL, "Historio_Cartera"
+   Select_AdoDB AdoCarteraDB, sSQL
    With AdoCarteraDB
     If .RecordCount > 0 Then
         EmailCli = ""

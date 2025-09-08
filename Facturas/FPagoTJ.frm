@@ -3,7 +3,7 @@ Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.Form FPagoTJ 
    Caption         =   "PAGO DE TARJETAS DE CREIDTO/DEBITO"
    ClientHeight    =   7410
@@ -798,8 +798,8 @@ Private Sub DCProvTJ_LostFocus()
       .MoveFirst
       .Find ("Cliente = '" & DCProvTJ.Text & "' ")
        If Not .EOF Then
-          CodigoProv = .Fields("Codigo")
-          TBeneficiario = Leer_Datos_Clientes(CodigoProv)
+          CodigoProv = .fields("Codigo")
+          TBeneficiario = Leer_Datos_Cliente_SP(CodigoProv)
           NombreCliente = TBeneficiario.Cliente
        End If
    End If

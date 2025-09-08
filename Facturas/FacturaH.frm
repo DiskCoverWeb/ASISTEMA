@@ -2488,6 +2488,9 @@ Private Sub Form_Load()
   ConectarAdodc AdoArticulo
   ConectarAdodc AdoAsientoF
   ConectarAdodc AdoDireccion
+  
+  SRI_Obtener_Datos_Comprobantes_Electronicos
+  
   Encerar_Factura FA
 End Sub
 

@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.4#0"; "comctl32.Ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Begin VB.Form FEnviarMails 
    BackColor       =   &H00FFC0C0&
    BorderStyle     =   3  'Fixed Dialog
@@ -588,8 +588,7 @@ Option Explicit
 
 Private Sub Command1_Click()
   TxtArchivoAdjunto = ""
-  CDialogDir.InitDir = RutaSysBases 'LeftStrg(CurDir$, 3)
-  RutaOrigen = SelectZipFile(CDialogDir, SelectAll)
+  RutaOrigen = SelectDialogFile(CDialogDir)
   If RutaOrigen <> "" Then TxtArchivoAdjunto = RutaOrigen
 End Sub
 

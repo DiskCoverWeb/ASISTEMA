@@ -1,29 +1,100 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Begin VB.Form FComprobantes 
    Caption         =   "COMPROBANTE DE EGRESO"
-   ClientHeight    =   9030
+   ClientHeight    =   11025
    ClientLeft      =   45
    ClientTop       =   345
-   ClientWidth     =   11595
+   ClientWidth     =   14160
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   9030
-   ScaleWidth      =   11595
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    WindowState     =   1  'Minimized
+   Begin VB.CommandButton Command1 
+      BackColor       =   &H008080FF&
+      Caption         =   "+"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   12
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   12180
+      Style           =   1  'Graphical
+      TabIndex        =   77
+      Top             =   525
+      Width           =   330
+   End
+   Begin VB.OptionButton OpcMult 
+      Caption         =   "(x)"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   13335
+      TabIndex        =   25
+      Top             =   1680
+      Width           =   645
+   End
+   Begin VB.OptionButton OpcDiv 
+      Caption         =   "(/)"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   12495
+      TabIndex        =   24
+      Top             =   1680
+      Value           =   -1  'True
+      Width           =   645
+   End
+   Begin VB.TextBox TxtDireccion 
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   1470
+      MaxLength       =   80
+      TabIndex        =   18
+      Top             =   1260
+      Width           =   8940
+   End
    Begin MSDataListLib.DataCombo DCCliente 
       Bindings        =   "Comproba.frx":0000
       DataSource      =   "AdoBenef"
       Height          =   345
       Left            =   1470
-      TabIndex        =   10
+      TabIndex        =   12
       Top             =   840
-      Width           =   10200
-      _ExtentX        =   17992
+      Width           =   8940
+      _ExtentX        =   15769
       _ExtentY        =   609
       _Version        =   393216
       Text            =   "Beneficiario"
@@ -31,7 +102,7 @@ Begin VB.Form FComprobantes
          Name            =   "Arial"
          Size            =   9
          Charset         =   0
-         Weight          =   400
+         Weight          =   700
          Underline       =   0   'False
          Italic          =   0   'False
          Strikethrough   =   0   'False
@@ -51,8 +122,8 @@ Begin VB.Form FComprobantes
       Height          =   330
       Left            =   105
       Picture         =   "Comproba.frx":0017
-      TabIndex        =   56
-      Top             =   8400
+      TabIndex        =   61
+      Top             =   9135
       Width           =   1380
    End
    Begin VB.TextBox TxtEmail 
@@ -66,12 +137,11 @@ Begin VB.Form FComprobantes
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   105
+      Left            =   1470
       MaxLength       =   60
-      TabIndex        =   14
-      ToolTipText     =   "Escriba el Nombre o C.I./RUC del Beneficiario o las primeras letras del Apellido"
-      Top             =   1575
-      Width           =   8625
+      TabIndex        =   22
+      Top             =   1680
+      Width           =   8940
    End
    Begin VB.CheckBox CheqCopia 
       Caption         =   "Imprimir con copia"
@@ -84,9 +154,9 @@ Begin VB.Form FComprobantes
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   225
+      Height          =   330
       Left            =   11970
-      TabIndex        =   71
+      TabIndex        =   7
       Top             =   105
       Width           =   2010
    End
@@ -183,7 +253,6 @@ Begin VB.Form FComprobantes
       Style           =   1  'Graphical
       TabIndex        =   0
       Top             =   105
-      Value           =   -1  'True
       Width           =   1170
    End
    Begin MSDataListLib.DataList DLCuentas 
@@ -191,11 +260,11 @@ Begin VB.Form FComprobantes
       DataSource      =   "AdoCuentas"
       Height          =   2700
       Left            =   1890
-      TabIndex        =   42
-      Top             =   5250
+      TabIndex        =   47
+      Top             =   5670
       Visible         =   0   'False
-      Width           =   9570
-      _ExtentX        =   16880
+      Width           =   9675
+      _ExtentX        =   17066
       _ExtentY        =   4763
       _Version        =   393216
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -210,9 +279,9 @@ Begin VB.Form FComprobantes
    End
    Begin VB.Frame FrameAsigna 
       Height          =   1905
-      Left            =   11550
-      TabIndex        =   45
-      Top             =   5250
+      Left            =   11655
+      TabIndex        =   50
+      Top             =   5670
       Visible         =   0   'False
       Width           =   2325
       Begin VB.TextBox TxtCheqDep 
@@ -228,7 +297,7 @@ Begin VB.Form FComprobantes
          Height          =   330
          Left            =   945
          MaxLength       =   16
-         TabIndex        =   49
+         TabIndex        =   54
          Text            =   "0"
          Top             =   525
          Width           =   1275
@@ -248,7 +317,7 @@ Begin VB.Form FComprobantes
          Left            =   1785
          MaxLength       =   1
          MultiLine       =   -1  'True
-         TabIndex        =   52
+         TabIndex        =   57
          Text            =   "Comproba.frx":0132
          Top             =   945
          Width           =   435
@@ -268,7 +337,7 @@ Begin VB.Form FComprobantes
          Left            =   1785
          MaxLength       =   1
          MultiLine       =   -1  'True
-         TabIndex        =   55
+         TabIndex        =   60
          Text            =   "Comproba.frx":0134
          Top             =   1365
          Width           =   435
@@ -276,7 +345,7 @@ Begin VB.Form FComprobantes
       Begin MSMask.MaskEdBox MBEfectivizar 
          Height          =   330
          Left            =   945
-         TabIndex        =   47
+         TabIndex        =   52
          Top             =   210
          Width           =   1275
          _ExtentX        =   2249
@@ -311,7 +380,7 @@ Begin VB.Form FComprobantes
          EndProperty
          Height          =   225
          Left            =   105
-         TabIndex        =   48
+         TabIndex        =   53
          Top             =   630
          Width           =   855
       End
@@ -328,7 +397,7 @@ Begin VB.Form FComprobantes
          EndProperty
          Height          =   225
          Left            =   105
-         TabIndex        =   46
+         TabIndex        =   51
          Top             =   315
          Width           =   855
       End
@@ -345,7 +414,7 @@ Begin VB.Form FComprobantes
          EndProperty
          Height          =   225
          Left            =   105
-         TabIndex        =   54
+         TabIndex        =   59
          Top             =   1575
          Width           =   1065
       End
@@ -363,7 +432,7 @@ Begin VB.Form FComprobantes
          EndProperty
          Height          =   225
          Left            =   735
-         TabIndex        =   51
+         TabIndex        =   56
          Top             =   1155
          Width           =   855
       End
@@ -380,7 +449,7 @@ Begin VB.Form FComprobantes
          EndProperty
          Height          =   225
          Left            =   105
-         TabIndex        =   53
+         TabIndex        =   58
          Top             =   1365
          Width           =   1065
       End
@@ -398,61 +467,9 @@ Begin VB.Form FComprobantes
          EndProperty
          Height          =   225
          Left            =   105
-         TabIndex        =   50
+         TabIndex        =   55
          Top             =   945
          Width           =   1485
-      End
-   End
-   Begin VB.Frame Frame1 
-      Caption         =   "Tipo de Co&nversión"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   750
-      Left            =   10290
-      TabIndex        =   17
-      Top             =   1155
-      Width           =   1905
-      Begin VB.OptionButton OpcDiv 
-         Caption         =   "(/)"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   210
-         TabIndex        =   18
-         Top             =   315
-         Value           =   -1  'True
-         Width           =   645
-      End
-      Begin VB.OptionButton OpcMult 
-         Caption         =   "(x)"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   1050
-         TabIndex        =   19
-         Top             =   315
-         Width           =   645
       End
    End
    Begin VB.TextBox TextCotiza 
@@ -467,17 +484,17 @@ Begin VB.Form FComprobantes
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   8820
+      Left            =   12600
       MaxLength       =   11
       MultiLine       =   -1  'True
       TabIndex        =   16
-      Top             =   1575
+      Top             =   840
       Width           =   1380
    End
    Begin MSMask.MaskEdBox MBoxFecha 
       Height          =   330
       Left            =   105
-      TabIndex        =   8
+      TabIndex        =   9
       Top             =   840
       Width           =   1275
       _ExtentX        =   2249
@@ -502,10 +519,10 @@ Begin VB.Form FComprobantes
    Begin TabDlg.SSTab SSTab1 
       Height          =   2745
       Left            =   105
-      TabIndex        =   61
-      Top             =   5355
-      Width           =   11460
-      _ExtentX        =   20214
+      TabIndex        =   66
+      Top             =   5775
+      Width           =   11670
+      _ExtentX        =   20585
       _ExtentY        =   4842
       _Version        =   393216
       Tabs            =   5
@@ -525,15 +542,20 @@ Begin VB.Form FComprobantes
       TabCaption(2)   =   "&6.- RETENCIONES"
       TabPicture(2)   =   "Comproba.frx":016E
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "DGAC"
-      Tab(2).Control(1)=   "DGAsientosR"
+      Tab(2).Control(0)=   "DGAsientosR"
+      Tab(2).Control(0).Enabled=   0   'False
+      Tab(2).Control(1)=   "DGAC"
+      Tab(2).Control(1).Enabled=   0   'False
       Tab(2).ControlCount=   2
       TabCaption(3)   =   "&7.- AV - AI - AE"
       TabPicture(3)   =   "Comproba.frx":018A
       Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "DGAE"
+      Tab(3).Control(0)=   "DGAV"
+      Tab(3).Control(0).Enabled=   0   'False
       Tab(3).Control(1)=   "DGAI"
-      Tab(3).Control(2)=   "DGAV"
+      Tab(3).Control(1).Enabled=   0   'False
+      Tab(3).Control(2)=   "DGAE"
+      Tab(3).Control(2).Enabled=   0   'False
       Tab(3).ControlCount=   3
       TabCaption(4)   =   "&8.- INVENTARIO"
       TabPicture(4)   =   "Comproba.frx":01A6
@@ -544,7 +566,7 @@ Begin VB.Form FComprobantes
          Bindings        =   "Comproba.frx":01C2
          Height          =   750
          Left            =   -74895
-         TabIndex        =   69
+         TabIndex        =   74
          Top             =   420
          Width           =   11145
          _ExtentX        =   19659
@@ -611,7 +633,7 @@ Begin VB.Form FComprobantes
          Bindings        =   "Comproba.frx":01D6
          Height          =   750
          Left            =   -74895
-         TabIndex        =   68
+         TabIndex        =   73
          Top             =   1890
          Width           =   11145
          _ExtentX        =   19659
@@ -678,7 +700,7 @@ Begin VB.Form FComprobantes
          Bindings        =   "Comproba.frx":01EA
          Height          =   750
          Left            =   -74895
-         TabIndex        =   67
+         TabIndex        =   72
          Top             =   1155
          Width           =   11145
          _ExtentX        =   19659
@@ -745,7 +767,7 @@ Begin VB.Form FComprobantes
          Bindings        =   "Comproba.frx":01FE
          Height          =   750
          Left            =   -74895
-         TabIndex        =   70
+         TabIndex        =   75
          Top             =   420
          Width           =   11145
          _ExtentX        =   19659
@@ -812,7 +834,7 @@ Begin VB.Form FComprobantes
          Bindings        =   "Comproba.frx":0212
          Height          =   1380
          Left            =   -74895
-         TabIndex        =   66
+         TabIndex        =   71
          Top             =   1155
          Width           =   11145
          _ExtentX        =   19659
@@ -879,7 +901,7 @@ Begin VB.Form FComprobantes
          Bindings        =   "Comproba.frx":022D
          Height          =   2220
          Left            =   -74895
-         TabIndex        =   65
+         TabIndex        =   70
          Top             =   420
          Width           =   11145
          _ExtentX        =   19659
@@ -947,7 +969,7 @@ Begin VB.Form FComprobantes
          Bindings        =   "Comproba.frx":0249
          Height          =   2220
          Left            =   105
-         TabIndex        =   64
+         TabIndex        =   69
          Top             =   315
          Width           =   11145
          _ExtentX        =   19659
@@ -1014,7 +1036,7 @@ Begin VB.Form FComprobantes
          Bindings        =   "Comproba.frx":0263
          Height          =   750
          Left            =   -74895
-         TabIndex        =   73
+         TabIndex        =   76
          Top             =   420
          Width           =   11145
          _ExtentX        =   19659
@@ -1081,7 +1103,7 @@ Begin VB.Form FComprobantes
    Begin MSAdodcLib.Adodc AdoSQL 
       Height          =   330
       Left            =   210
-      Top             =   5670
+      Top             =   6090
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -1139,8 +1161,8 @@ Begin VB.Form FComprobantes
       Left            =   1785
       MaxLength       =   120
       MultiLine       =   -1  'True
-      TabIndex        =   37
-      Top             =   4095
+      TabIndex        =   42
+      Top             =   4515
       Width           =   12195
    End
    Begin VB.CommandButton CmdCancelar 
@@ -1157,8 +1179,8 @@ Begin VB.Form FComprobantes
       Height          =   330
       Left            =   1575
       Picture         =   "Comproba.frx":027F
-      TabIndex        =   57
-      Top             =   8400
+      TabIndex        =   62
+      Top             =   9135
       Width           =   1275
    End
    Begin VB.TextBox TextValor 
@@ -1173,11 +1195,11 @@ Begin VB.Form FComprobantes
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   11550
+      Left            =   11655
       MaxLength       =   11
       MultiLine       =   -1  'True
-      TabIndex        =   44
-      Top             =   4935
+      TabIndex        =   49
+      Top             =   5355
       Width           =   2325
    End
    Begin VB.TextBox TextCuenta 
@@ -1192,9 +1214,9 @@ Begin VB.Form FComprobantes
       EndProperty
       Height          =   330
       Left            =   1890
-      TabIndex        =   41
-      Top             =   4935
-      Width           =   9570
+      TabIndex        =   46
+      Top             =   5355
+      Width           =   9675
    End
    Begin VB.TextBox TextCodigo 
       BeginProperty Font 
@@ -1208,10 +1230,10 @@ Begin VB.Form FComprobantes
       EndProperty
       Height          =   330
       Left            =   105
-      TabIndex        =   39
+      TabIndex        =   44
       Text            =   "0"
       ToolTipText     =   "<Ctrl+B> Por Patrón de Búsqueda"
-      Top             =   4935
+      Top             =   5355
       Width           =   1695
    End
    Begin VB.Frame Frame2 
@@ -1226,8 +1248,8 @@ Begin VB.Form FComprobantes
       EndProperty
       Height          =   2010
       Left            =   105
-      TabIndex        =   22
-      Top             =   1995
+      TabIndex        =   27
+      Top             =   2415
       Visible         =   0   'False
       Width           =   13875
       Begin VB.TextBox TextDeposito 
@@ -1243,7 +1265,7 @@ Begin VB.Form FComprobantes
          Height          =   330
          Left            =   12285
          MaxLength       =   16
-         TabIndex        =   34
+         TabIndex        =   39
          Text            =   "0"
          Top             =   1260
          Visible         =   0   'False
@@ -1253,7 +1275,7 @@ Begin VB.Form FComprobantes
          Bindings        =   "Comproba.frx":06C1
          Height          =   960
          Left            =   105
-         TabIndex        =   35
+         TabIndex        =   40
          Top             =   945
          Visible         =   0   'False
          Width           =   10830
@@ -1323,7 +1345,7 @@ Begin VB.Form FComprobantes
          DataSource      =   "AdoBanco"
          Height          =   345
          Left            =   1260
-         TabIndex        =   28
+         TabIndex        =   33
          Top             =   525
          Visible         =   0   'False
          Width           =   9675
@@ -1346,7 +1368,7 @@ Begin VB.Form FComprobantes
          DataSource      =   "AdoCaja"
          Height          =   345
          Left            =   1260
-         TabIndex        =   24
+         TabIndex        =   29
          Top             =   210
          Visible         =   0   'False
          Width           =   9675
@@ -1379,7 +1401,7 @@ Begin VB.Form FComprobantes
          Left            =   12075
          MaxLength       =   14
          MultiLine       =   -1  'True
-         TabIndex        =   30
+         TabIndex        =   35
          Text            =   "Comproba.frx":0709
          Top             =   525
          Visible         =   0   'False
@@ -1400,7 +1422,7 @@ Begin VB.Form FComprobantes
          Left            =   12075
          MaxLength       =   14
          MultiLine       =   -1  'True
-         TabIndex        =   26
+         TabIndex        =   31
          Text            =   "Comproba.frx":070B
          Top             =   210
          Visible         =   0   'False
@@ -1419,7 +1441,7 @@ Begin VB.Form FComprobantes
          EndProperty
          Height          =   330
          Left            =   105
-         TabIndex        =   23
+         TabIndex        =   28
          Top             =   210
          Width           =   1065
       End
@@ -1436,14 +1458,14 @@ Begin VB.Form FComprobantes
          EndProperty
          Height          =   330
          Left            =   105
-         TabIndex        =   27
+         TabIndex        =   32
          Top             =   525
          Width           =   960
       End
       Begin MSMask.MaskEdBox MBFechaEfec 
          Height          =   330
          Left            =   11025
-         TabIndex        =   32
+         TabIndex        =   37
          Top             =   1260
          Visible         =   0   'False
          Width           =   1275
@@ -1481,7 +1503,7 @@ Begin VB.Form FComprobantes
          EndProperty
          Height          =   330
          Left            =   11025
-         TabIndex        =   31
+         TabIndex        =   36
          Top             =   945
          Visible         =   0   'False
          Width           =   1275
@@ -1501,7 +1523,7 @@ Begin VB.Form FComprobantes
          EndProperty
          Height          =   330
          Left            =   12285
-         TabIndex        =   33
+         TabIndex        =   38
          Top             =   945
          Visible         =   0   'False
          Width           =   1485
@@ -1521,7 +1543,7 @@ Begin VB.Form FComprobantes
          EndProperty
          Height          =   330
          Left            =   11025
-         TabIndex        =   29
+         TabIndex        =   34
          Top             =   525
          Visible         =   0   'False
          Width           =   1065
@@ -1541,7 +1563,7 @@ Begin VB.Form FComprobantes
          EndProperty
          Height          =   330
          Left            =   11025
-         TabIndex        =   25
+         TabIndex        =   30
          Top             =   210
          Visible         =   0   'False
          Width           =   1065
@@ -1550,7 +1572,7 @@ Begin VB.Form FComprobantes
    Begin MSAdodcLib.Adodc AdoCaja 
       Height          =   330
       Left            =   210
-      Top             =   5985
+      Top             =   6405
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -1597,7 +1619,7 @@ Begin VB.Form FComprobantes
    Begin MSAdodcLib.Adodc AdoBanco 
       Height          =   330
       Left            =   210
-      Top             =   6300
+      Top             =   6720
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -1644,7 +1666,7 @@ Begin VB.Form FComprobantes
    Begin MSAdodcLib.Adodc AdoCtas 
       Height          =   330
       Left            =   210
-      Top             =   6615
+      Top             =   7035
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -1691,7 +1713,7 @@ Begin VB.Form FComprobantes
    Begin MSAdodcLib.Adodc AdoCuentas 
       Height          =   330
       Left            =   210
-      Top             =   6930
+      Top             =   7350
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -1738,7 +1760,7 @@ Begin VB.Form FComprobantes
    Begin MSAdodcLib.Adodc AdoAsientosSC 
       Height          =   330
       Left            =   2205
-      Top             =   5670
+      Top             =   6090
       Visible         =   0   'False
       Width           =   2220
       _ExtentX        =   3916
@@ -1785,7 +1807,7 @@ Begin VB.Form FComprobantes
    Begin MSAdodcLib.Adodc AdoAsientosB 
       Height          =   330
       Left            =   2205
-      Top             =   5985
+      Top             =   6405
       Visible         =   0   'False
       Width           =   2220
       _ExtentX        =   3916
@@ -1832,7 +1854,7 @@ Begin VB.Form FComprobantes
    Begin MSAdodcLib.Adodc AdoAsientos 
       Height          =   330
       Left            =   2205
-      Top             =   6300
+      Top             =   6720
       Visible         =   0   'False
       Width           =   2220
       _ExtentX        =   3916
@@ -1879,7 +1901,7 @@ Begin VB.Form FComprobantes
    Begin MSAdodcLib.Adodc AdoAsientosR 
       Height          =   330
       Left            =   2205
-      Top             =   6615
+      Top             =   7035
       Visible         =   0   'False
       Width           =   2220
       _ExtentX        =   3916
@@ -1926,7 +1948,7 @@ Begin VB.Form FComprobantes
    Begin MSAdodcLib.Adodc AdoBenef 
       Height          =   330
       Left            =   4410
-      Top             =   6930
+      Top             =   7350
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -1973,7 +1995,7 @@ Begin VB.Form FComprobantes
    Begin MSAdodcLib.Adodc AdoRolPago 
       Height          =   330
       Left            =   2205
-      Top             =   6930
+      Top             =   7350
       Visible         =   0   'False
       Width           =   2220
       _ExtentX        =   3916
@@ -2020,7 +2042,7 @@ Begin VB.Form FComprobantes
    Begin MSAdodcLib.Adodc AdoAC 
       Height          =   330
       Left            =   4410
-      Top             =   5670
+      Top             =   6090
       Visible         =   0   'False
       Width           =   2220
       _ExtentX        =   3916
@@ -2067,7 +2089,7 @@ Begin VB.Form FComprobantes
    Begin MSAdodcLib.Adodc AdoAV 
       Height          =   330
       Left            =   4410
-      Top             =   5985
+      Top             =   6405
       Visible         =   0   'False
       Width           =   2220
       _ExtentX        =   3916
@@ -2114,7 +2136,7 @@ Begin VB.Form FComprobantes
    Begin MSAdodcLib.Adodc AdoAI 
       Height          =   330
       Left            =   4410
-      Top             =   6300
+      Top             =   6720
       Visible         =   0   'False
       Width           =   2220
       _ExtentX        =   3916
@@ -2161,7 +2183,7 @@ Begin VB.Form FComprobantes
    Begin MSAdodcLib.Adodc AdoAE 
       Height          =   330
       Left            =   4410
-      Top             =   6615
+      Top             =   7035
       Visible         =   0   'False
       Width           =   2220
       _ExtentX        =   3916
@@ -2208,7 +2230,7 @@ Begin VB.Form FComprobantes
    Begin MSAdodcLib.Adodc AdoCentroCostos 
       Height          =   330
       Left            =   210
-      Top             =   7245
+      Top             =   7665
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -2255,7 +2277,7 @@ Begin VB.Form FComprobantes
    Begin MSAdodcLib.Adodc AdoInventario 
       Height          =   330
       Left            =   2205
-      Top             =   7245
+      Top             =   7665
       Visible         =   0   'False
       Width           =   2220
       _ExtentX        =   3916
@@ -2299,6 +2321,62 @@ Begin VB.Form FComprobantes
       EndProperty
       _Version        =   393216
    End
+   Begin VB.Label Label25 
+      BackColor       =   &H00FF8080&
+      BorderStyle     =   1  'Fixed Single
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   330
+      Left            =   105
+      TabIndex        =   26
+      Top             =   2100
+      Width           =   13875
+   End
+   Begin VB.Label Label27 
+      Caption         =   "Tipo de Co&nversión"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   10500
+      TabIndex        =   23
+      Top             =   1680
+      Width           =   1695
+   End
+   Begin VB.Label Label26 
+      BackColor       =   &H00808080&
+      BorderStyle     =   1  'Fixed Single
+      Caption         =   " DIRECCION:"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   330
+      Left            =   105
+      TabIndex        =   17
+      Top             =   1260
+      Width           =   1380
+   End
    Begin VB.Label Label23 
       Alignment       =   1  'Right Justify
       BackColor       =   &H00808080&
@@ -2315,10 +2393,10 @@ Begin VB.Form FComprobantes
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   330
-      Left            =   7350
-      TabIndex        =   72
+      Left            =   7455
+      TabIndex        =   11
       Top             =   525
-      Width           =   4320
+      Width           =   2955
    End
    Begin VB.Label LblRUC 
       Alignment       =   2  'Center
@@ -2334,10 +2412,10 @@ Begin VB.Form FComprobantes
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   11760
-      TabIndex        =   12
+      Left            =   10500
+      TabIndex        =   14
       Top             =   840
-      Width           =   2220
+      Width           =   2010
    End
    Begin VB.Label Label22 
       BackColor       =   &H00808080&
@@ -2355,9 +2433,9 @@ Begin VB.Form FComprobantes
       ForeColor       =   &H00FFFFFF&
       Height          =   330
       Left            =   105
-      TabIndex        =   13
-      Top             =   1260
-      Width           =   8625
+      TabIndex        =   21
+      Top             =   1680
+      Width           =   1380
    End
    Begin VB.Label LabelTotal 
       Alignment       =   1  'Right Justify
@@ -2374,10 +2452,10 @@ Begin VB.Form FComprobantes
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   12285
-      TabIndex        =   21
-      Top             =   1575
-      Width           =   1695
+      Left            =   12075
+      TabIndex        =   20
+      Top             =   1260
+      Width           =   1905
    End
    Begin VB.Label Label9 
       BackColor       =   &H00808080&
@@ -2394,9 +2472,9 @@ Begin VB.Form FComprobantes
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   330
-      Left            =   8820
+      Left            =   12600
       TabIndex        =   15
-      Top             =   1260
+      Top             =   525
       Width           =   1380
    End
    Begin VB.Label Label20 
@@ -2414,10 +2492,10 @@ Begin VB.Form FComprobantes
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   330
-      Left            =   11760
-      TabIndex        =   11
+      Left            =   10500
+      TabIndex        =   13
       Top             =   525
-      Width           =   2220
+      Width           =   1695
    End
    Begin VB.Label Label3 
       BackColor       =   &H00808080&
@@ -2435,12 +2513,13 @@ Begin VB.Form FComprobantes
       ForeColor       =   &H00FFFFFF&
       Height          =   330
       Left            =   1470
-      TabIndex        =   9
+      TabIndex        =   10
       Top             =   525
-      Width           =   5895
+      Width           =   6000
    End
    Begin VB.Label LabelComp 
       BackColor       =   &H00FFFFFF&
+      BorderStyle     =   1  'Fixed Single
       Caption         =   "000000000"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -2453,7 +2532,7 @@ Begin VB.Form FComprobantes
       EndProperty
       ForeColor       =   &H000000FF&
       Height          =   330
-      Left            =   10290
+      Left            =   10395
       TabIndex        =   6
       Top             =   105
       Width           =   1485
@@ -2461,6 +2540,7 @@ Begin VB.Form FComprobantes
    Begin VB.Label Label2 
       Alignment       =   1  'Right Justify
       BackColor       =   &H00FFFFFF&
+      BorderStyle     =   1  'Fixed Single
       Caption         =   " Ingreso No."
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -2476,7 +2556,7 @@ Begin VB.Form FComprobantes
       Left            =   7455
       TabIndex        =   5
       Top             =   105
-      Width           =   2850
+      Width           =   2955
    End
    Begin VB.Label LabelHaber 
       Alignment       =   1  'Right Justify
@@ -2495,8 +2575,8 @@ Begin VB.Form FComprobantes
       ForeColor       =   &H000000FF&
       Height          =   330
       Left            =   12075
-      TabIndex        =   58
-      Top             =   8190
+      TabIndex        =   63
+      Top             =   8925
       Width           =   1800
    End
    Begin VB.Label LabelDebe 
@@ -2516,8 +2596,8 @@ Begin VB.Form FComprobantes
       ForeColor       =   &H000000FF&
       Height          =   330
       Left            =   10290
-      TabIndex        =   59
-      Top             =   8190
+      TabIndex        =   64
+      Top             =   8925
       Width           =   1800
    End
    Begin VB.Label LabelDiferencia 
@@ -2537,8 +2617,8 @@ Begin VB.Form FComprobantes
       ForeColor       =   &H000000FF&
       Height          =   330
       Left            =   7140
-      TabIndex        =   62
-      Top             =   8190
+      TabIndex        =   67
+      Top             =   8925
       Width           =   1695
    End
    Begin VB.Label Label17 
@@ -2555,9 +2635,9 @@ Begin VB.Form FComprobantes
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   225
-      Left            =   11550
-      TabIndex        =   43
-      Top             =   4725
+      Left            =   11655
+      TabIndex        =   48
+      Top             =   5145
       Width           =   2325
    End
    Begin VB.Label Label14 
@@ -2575,9 +2655,9 @@ Begin VB.Form FComprobantes
       ForeColor       =   &H00FFFFFF&
       Height          =   225
       Left            =   1890
-      TabIndex        =   40
-      Top             =   4725
-      Width           =   9570
+      TabIndex        =   45
+      Top             =   5145
+      Width           =   9675
    End
    Begin VB.Label Label4 
       BackColor       =   &H00808080&
@@ -2594,10 +2674,10 @@ Begin VB.Form FComprobantes
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   330
-      Left            =   12285
-      TabIndex        =   20
+      Left            =   10500
+      TabIndex        =   19
       Top             =   1260
-      Width           =   1695
+      Width           =   1590
    End
    Begin VB.Label Label1 
       BackColor       =   &H00808080&
@@ -2615,7 +2695,7 @@ Begin VB.Form FComprobantes
       ForeColor       =   &H00FFFFFF&
       Height          =   330
       Left            =   105
-      TabIndex        =   7
+      TabIndex        =   8
       Top             =   525
       Width           =   1275
    End
@@ -2633,8 +2713,8 @@ Begin VB.Form FComprobantes
       EndProperty
       Height          =   330
       Left            =   5985
-      TabIndex        =   63
-      Top             =   8190
+      TabIndex        =   68
+      Top             =   8925
       Width           =   1170
    End
    Begin VB.Label Label13 
@@ -2652,8 +2732,8 @@ Begin VB.Form FComprobantes
       ForeColor       =   &H00FFFFFF&
       Height          =   225
       Left            =   105
-      TabIndex        =   38
-      Top             =   4725
+      TabIndex        =   43
+      Top             =   5145
       Width           =   1695
    End
    Begin VB.Label Label19 
@@ -2670,8 +2750,8 @@ Begin VB.Form FComprobantes
       EndProperty
       Height          =   330
       Left            =   9240
-      TabIndex        =   60
-      Top             =   8190
+      TabIndex        =   65
+      Top             =   8925
       Width           =   1065
    End
    Begin VB.Label Label7 
@@ -2687,8 +2767,8 @@ Begin VB.Form FComprobantes
       EndProperty
       Height          =   540
       Left            =   105
-      TabIndex        =   36
-      Top             =   4095
+      TabIndex        =   41
+      Top             =   4515
       Width           =   1590
    End
 End
@@ -2704,20 +2784,36 @@ Option Explicit
 Dim TipoBusqueda As String
 
 Public Sub Asientos_Grabados()
-  sSQL = "SELECT " & Full_Fields("Asiento") & " " _
+  SQL2 = "SELECT " & Full_Fields("Asiento") & " " _
        & "FROM Asiento " _
        & "WHERE Item = '" & NumEmpresa & "' " _
        & "AND CodigoU = '" & CodigoUsuario & "' " _
        & "AND T_No = " & Trans_No & " " _
        & "ORDER BY A_No "
-  Select_Adodc_Grid DGAsientos, AdoAsientos, sSQL
+  Select_Adodc_Grid DGAsientos, AdoAsientos, SQL2
   
   SQL2 = "SELECT " & Full_Fields("Asiento_SC") & " " _
        & "FROM Asiento_SC " _
        & "WHERE Item = '" & NumEmpresa & "' " _
        & "AND CodigoU = '" & CodigoUsuario & "' " _
+       & "AND T_No = " & Trans_No & " " _
+       & "ORDER BY SC_No "
+  Select_Adodc_Grid DGAsientosSC, AdoAsientosSC, SQL2
+
+  SQL2 = "SELECT " & Full_Fields("Asiento_Air") & " " _
+       & "FROM Asiento_Air " _
+       & "WHERE Item = '" & NumEmpresa & "' " _
+       & "AND CodigoU = '" & CodigoUsuario & "' " _
        & "AND T_No = " & Trans_No & " "
-  Select_Adodc AdoAsientosSC, SQL2
+  Select_Adodc_Grid DGAsientosR, AdoAsientosR, SQL2
+    
+  SQL2 = "SELECT " & Full_Fields("Asiento_Compras") & " " _
+       & "FROM Asiento_Compras " _
+       & "WHERE Item = '" & NumEmpresa & "' " _
+       & "AND CodigoU = '" & CodigoUsuario & "' " _
+       & "AND T_No = " & Trans_No & " "
+  Select_Adodc_Grid DGAC, AdoAC, SQL2
+  
 End Sub
 
 Private Sub Tipo_De_Comprobante_No(C1 As Comprobantes)
@@ -2839,7 +2935,6 @@ Private Sub Tipo_De_Comprobante_No(C1 As Comprobantes)
        & "AND T_No = " & Trans_No & " "
   Select_Adodc_Grid DGInventario, AdoInventario, SQL2
   LabelComp.Caption = Format(NumComp, "00000000")
-  MBoxFecha.SetFocus
 End Sub
 
 Private Sub CheckBco_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -2848,6 +2943,15 @@ End Sub
 
 Private Sub CheckEfect_KeyDown(KeyCode As Integer, Shift As Integer)
   PresionoEnter KeyCode
+End Sub
+
+Private Sub Command1_Click()
+    NombreCliente = DCCliente
+    FClientesFlash.Show 1
+    TipoBusqueda = "%"
+    DCCliente.Height = 0
+    DCCliente = NombreCliente
+    DCCliente.SetFocus
 End Sub
 
 Private Sub DCCliente_DblClick(Area As Integer)
@@ -2866,51 +2970,85 @@ End Sub
 Private Sub DCCliente_KeyPress(KeyAscii As Integer)
 Dim Busqueda As String
     Busqueda = DCCliente.Text
+    sSQL = "SELECT TOP 50 TD, CI_RUC, Codigo, Cliente, Email, Grupo, RISE, Especial, Direccion, Telefono " _
+         & "FROM Clientes "
     If Len(Busqueda) >= 1 Then
-       sSQL = "SELECT TOP 50 Cliente,CI_RUC,Codigo " _
-            & "FROM Clientes "
        If IsNumeric(Busqueda) Then sSQL = sSQL & "WHERE CI_RUC LIKE '" & Busqueda & "%' " Else sSQL = sSQL & "WHERE Cliente LIKE '%" & Busqueda & "%' "
-       sSQL = sSQL & "ORDER BY Cliente "
-       Select_Adodc AdoBenef, sSQL
     End If
+    sSQL = sSQL & "ORDER BY Cliente "
+    Select_Adodc AdoBenef, sSQL
 End Sub
 
 Private Sub DCCliente_LostFocus()
+    Nuevo = False
+    If DCCliente.Text = "" Then DCCliente.Text = Ninguno
+    TipoSRI.Estado = Ninguno
+    Co.TipoContribuyente = ""
+    Co.RUC_CI = Ninguno
+    Co.Beneficiario = Ninguno
+    Co.Email = Ninguno
+    Co.TD = Ninguno
+    Co.Direccion = Ninguno
+    Co.Telefono = Ninguno
+    Co.Grupo = Ninguno
+    Co.AgenteRetencion = Ninguno
+    Co.MicroEmpresa = Ninguno
+    Co.Estado = Ninguno
+    Co.CodigoB = Ninguno
+    
     With AdoBenef.Recordset
-      If Len(DCCliente) <= 1 Then
-         Co.CodigoB = Ninguno
-         Co.Beneficiario = Ninguno
-         Co.RUC_CI = Ninguno
-         Co.Email = Ninguno
-         TipoSRI.Estado = Ninguno
-      Else
-         If .RecordCount >= 1 Then
-             Co.CodigoB = Ninguno
-             RatonReloj
-            .MoveFirst
-             If IsNumeric(DCCliente.Text) Then DCCliente.Text = .fields("Cliente")
-            .Find ("Cliente = '" & DCCliente & "' ")
-             If Not .EOF Then Co.CodigoB = .fields("Codigo")
-             DCCliente.Height = 0
-             Datos_del_Cliente Co
-             Llenar_Encabezado_Comprobante
-             MarcarTexto TxtEmail
-             RatonNormal
-             TxtEmail.SetFocus
+     If .RecordCount > 0 Then
+         If IsNumeric(DCCliente.Text) Then DCCliente.Text = .Fields("Cliente")
+         If Len(DCCliente.Text) >= 1 Then
+            RatonReloj
+           .MoveFirst
+           .Find ("Cliente = '" & DCCliente.Text & "' ")
+            If Not .EOF Then
+               Co.CodigoB = .Fields("Codigo")
+               Co.RUC_CI = .Fields("CI_RUC")
+               Co.Beneficiario = .Fields("Cliente")
+               Co.Email = .Fields("Email")
+               Co.TD = .Fields("TD")
+               Co.Direccion = .Fields("Direccion")
+               Co.Telefono = .Fields("Telefono")
+               Co.Grupo = .Fields("Grupo")
+               If .Fields("RISE") Then Co.TipoContribuyente = Co.TipoContribuyente & " RISE"
+               If .Fields("Especial") Then Co.TipoContribuyente = Co.TipoContribuyente & " Contribuyente especial"
+              'TipoSRI = consulta_RUC_SRI( C1.RUC_CI)
+               Select Case Co.TD
+                 Case "C": TipoSRI.Estado = "CEDULA"
+                 Case "P": TipoSRI.Estado = "PASAPORTE"
+                 Case "R": TipoSRI.Estado = "RUC ACTIVO"
+               End Select
+               If Len(Co.RUC_CI) = 13 Then Tipo_Contribuyente_SP_MySQL Co.RUC_CI, TipoSRI.MicroEmpresa, TipoSRI.AgenteRetencion
+               Co.AgenteRetencion = TipoSRI.AgenteRetencion
+               Co.MicroEmpresa = TipoSRI.MicroEmpresa
+               Co.Estado = TipoSRI.Estado
+               If IsNull(Co.CodigoB) Or Co.CodigoB = "" Then Co.CodigoB = Ninguno
+            Else
+               Nuevo = True
+            End If
+            DCCliente.Height = 0
+           ' Datos_del_Cliente Co
+            Llenar_Encabezado_Comprobante
+            RatonNormal
+            TxtDireccion.SetFocus
          Else
-            'FrmBenef.Visible = False
-             NombreCliente = DCCliente
-             Nuevo = True
-             FClientesFlash.Show 1
-             TipoBusqueda = "%"
-             DCCliente.Height = 0
-             DCCliente = NombreCliente
-             DCCliente.SetFocus
+            Nuevo = True
          End If
-      End If
+     Else
+        Nuevo = True
+     End If
     End With
-    If UCase(TipoSRI.Estado) = "ACTIVO" Then Label23.ForeColor = &HC0FFC0 Else Label23.ForeColor = &HFFFFFF
-    Label23.Caption = TipoSRI.Estado
+    If Nuevo Then
+       MsgBox "Este Beneficiario no existe, se procedera a crearlo"
+       NombreCliente = DCCliente
+       FClientesFlash.Show 1
+       TipoBusqueda = "%"
+       DCCliente.Height = 0
+       DCCliente = NombreCliente
+       DCCliente.SetFocus
+    End If
 End Sub
 
 Private Sub DGAsientos_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -2923,7 +3061,7 @@ Private Sub DGAsientos_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub DGAsientosR_BeforeDelete(Cancel As Integer)
-  Codigo = AdoAsientosR.Recordset.fields("Cta")
+  Codigo = AdoAsientosR.Recordset.Fields("Cta")
   Cancel = DeleteSiNo(AdoAsientosR)
 End Sub
 
@@ -2991,14 +3129,14 @@ Private Sub DCBanco_KeyDown(KeyCode As Integer, Shift As Integer)
                 If .RecordCount > 0 Then
                    .MoveFirst
                     Do While Not .EOF
-                       Cadena = .fields("CTA_BANCO")
-                       Valor = .fields("VALOR")
+                       Cadena = .Fields("CTA_BANCO")
+                       Valor = .Fields("VALOR")
                        Codigo = Leer_Cta_Catalogo(Cadena)
                        OpcDH = 1: ValorDH = Valor
                        FechaValida MBFechaEfec
                        TextoValido TextDeposito, , True
-                       Fecha_Vence = .fields("EFECTIVIZAR")
-                       NoCheque = .fields("CHEQ_DEP")
+                       Fecha_Vence = .Fields("EFECTIVIZAR")
+                       NoCheque = .Fields("CHEQ_DEP")
                        InsertarAsientosC AdoAsientos
                       .MoveNext
                     Loop
@@ -3043,8 +3181,8 @@ Dim AdoCheq As ADODB.Recordset
      AdoCheq.open sSQL, AdoStrCnn, , , adCmdText
     'Seteamos los encabezados para las facturas
      If AdoCheq.RecordCount > 0 Then
-        If Not IsNull(AdoCheq.fields("Ultimo_Chep")) Then
-           TextCheque = Format(Val(AdoCheq.fields("Ultimo_Chep")) + 1, "00000000")
+        If Not IsNull(AdoCheq.Fields("Ultimo_Chep")) Then
+           TextCheque = Format(Val(AdoCheq.Fields("Ultimo_Chep")) + 1, "00000000")
         End If
      End If
      AdoCheq.Close
@@ -3115,11 +3253,16 @@ Private Sub OpcTP_Click(index As Integer)
     Case 4: Co.TP = CompNotaCredito
   End Select
   Tipo_De_Comprobante_No Co
+  'MBoxFecha.SetFocus
 End Sub
 
 Private Sub OpcTP_KeyDown(index As Integer, KeyCode As Integer, Shift As Integer)
    If KeyCode = vbKeyReturn Then MBoxFecha.SetFocus
 End Sub
+
+''Private Sub TextConcepto_KeyPress(KeyAscii As Integer)
+''   KeyAscii = Solo_Letras_Numeros(KeyAscii)
+''End Sub
 
 Private Sub TextCotiza_GotFocus()
   MarcarTexto TextCotiza
@@ -3155,6 +3298,9 @@ Dim EsRetencion As Boolean
   End If
   If IsNumeric(TextOpcDH) Then OpcDH = Val(TextOpcDH)
   If OpcTM >= 1 And OpcDH >= 1 Then
+     Co.Beneficiario = NombreCliente
+     Co.Fecha = MBoxFecha
+     FechaComp = MBoxFecha
      FrameAsigna.Visible = False
      Select Case SubCta
        Case "C", "P", "G", "I", "PM"
@@ -3249,6 +3395,7 @@ Private Sub MBoxFecha_LostFocus()
   Co.Beneficiario = NombreCliente
   Co.Fecha = MBoxFecha
   FechaComp = MBoxFecha
+  Tipo_De_Comprobante_No Co
 End Sub
 
 Private Sub TextCantidad_GotFocus()
@@ -3394,10 +3541,10 @@ End Sub
 Private Sub DGAsientos_BeforeDelete(Cancel As Integer)
 Dim OpcDH_A As Byte
   OpcDH_A = 0
-  Codigo = AdoAsientos.Recordset.fields("CODIGO")
+  Codigo = AdoAsientos.Recordset.Fields("CODIGO")
  ' Ln_No_A = AdoAsientos.Recordset.Fields("SC_No")
-  If AdoAsientos.Recordset.fields("DEBE") > 0 Then OpcDH_A = 1
-  If AdoAsientos.Recordset.fields("HABER") > 0 Then OpcDH_A = 2
+  If AdoAsientos.Recordset.Fields("DEBE") > 0 Then OpcDH_A = 1
+  If AdoAsientos.Recordset.Fields("HABER") > 0 Then OpcDH_A = 2
   Cancel = DeleteSiNo(AdoAsientos)
   If Cancel = False Then
      EliminarSubCta Codigo, OpcDH_A
@@ -3460,62 +3607,56 @@ Private Sub CmdGrabar_Click()
         'If Len(TxtEmail) > 1 And EmailOld <> TxtEmail Then Co.Email = TrimStrg(TxtEmail)
         DGAsientos.Visible = False
         If AdoAsientos.Recordset.RecordCount > 0 Then
-          RatonReloj
-          If NuevoComp Then
-             If OpcTP(0).value Then NumComp = ReadSetDataNum("Diario", True, True)
-             If OpcTP(1).value Then NumComp = ReadSetDataNum("Ingresos", True, True)
-             If OpcTP(2).value Then NumComp = ReadSetDataNum("Egresos", True, True)
-             If OpcTP(3).value Then NumComp = ReadSetDataNum("NotaDebito", True, True)
-             If OpcTP(4).value Then NumComp = ReadSetDataNum("NotaCredito", True, True)
-          End If
-          FechaTexto = MBoxFecha
-          Co.T = Normal
-          Co.Fecha = FechaTexto
-          Co.Numero = NumComp
-          Co.Monto_Total = Monto_Total
-          Co.Concepto = TextConcepto
-         'Co.CodigoB = CodigoBenef
-          Co.Efectivo = Abono
-          Co.Cotizacion = TextCotiza
-          Co.Item = NumEmpresa
-          Co.Usuario = CodigoUsuario
-          Co.T_No = Trans_No
-          
-         'Grabamos el Comprobante
-          GrabarComprobante Co
-          
-        ' Seteamos para el siguiente comprobante
-          DGAsientosB.Visible = False
-          RatonNormal
-          ImprimirComprobantesDe False, Co
-          If CheqCopia.value Then ImprimirComprobantesDe False, Co
-          Eliminar_Asientos_SP True
-          NumComp = NumComp + 1
-          Co.Numero = NumComp
-          LabelComp.Caption = Format(NumComp, "00000000")
-          LabelTotal.Caption = "0.00"
-          Label6.Visible = False
-          DGAsientos.Visible = True
-          If Len(CtaConciliada) Then MsgBox "ADVERTENCIA:" & vbCrLf & vbCrLf & "Revise la Conciliacion Bancaria de la(s) siguiente(s) Cuenta(s):" & vbCrLf & vbCrLf _
-                                          & CtaConciliada
-          If ModificarComp Then
-             ModificarComp = False
-             CopiarComp = False
-             NuevoComp = True
-             Unload FComprobantes
-             Exit Sub
-          Else
-             ModificarComp = False
-             CopiarComp = False
-             NuevoComp = True
-             Tipo_De_Comprobante_No Co
-             MBoxFecha.SetFocus
-          End If
-       Else
+           RatonReloj
+           FechaTexto = MBoxFecha
+           Co.T = Normal
+           Co.Fecha = FechaTexto
+           'Co.Numero = NumComp
+           Co.Monto_Total = Monto_Total
+           Co.Concepto = TextConcepto
+           Co.Efectivo = Abono
+           Co.Cotizacion = TextCotiza
+           Co.Item = NumEmpresa
+           Co.Usuario = CodigoUsuario
+           Co.T_No = Trans_No
+
+          'Grabamos el Comprobante
+           Grabar_Comprobante Co
+         ' Seteamos para el siguiente comprobante su se grabo correctamente
+           If Co.GrabadoExitoso Then
+              DGAsientosB.Visible = False
+              RatonNormal
+              ImprimirComprobantesDe False, Co
+              If CheqCopia.value Then ImprimirComprobantesDe False, Co
+              NumComp = Co.Numero + 1
+              LabelComp.Caption = Format(Co.Numero + 1, "00000000")
+              Co.Numero = 0
+              LabelTotal.Caption = "0.00"
+              Label6.Visible = False
+              DGAsientos.Visible = True
+              If Len(CtaConciliada) > 1 Then MsgBox "ADVERTENCIA:" & vbCrLf & vbCrLf & "Revise la Conciliacion Bancaria de la(s) siguiente(s) Cuenta(s):" & vbCrLf & vbCrLf _
+                                             & CtaConciliada
+              If ModificarComp Then
+                 ModificarComp = False
+                 CopiarComp = False
+                 NuevoComp = True
+                 Unload FComprobantes
+                 Exit Sub
+              Else
+                 ModificarComp = False
+                 CopiarComp = False
+                 NuevoComp = True
+                 Tipo_De_Comprobante_No Co
+                 MBoxFecha.SetFocus
+              End If
+           Else
+              MsgBox "Error: En la Extructura del Comprobante, contiene caracteres no permitidos"
+           End If
+        Else
           MsgBox "Warning: Falta de Ingresar datos."
           DGAsientos.Visible = True
           TextCodigo.SetFocus
-       End If
+        End If
      Else
        TextCodigo.SetFocus
      End If
@@ -3579,9 +3720,9 @@ Dim DetCtaBusqueda As String
                   With AdoAsientosB.Recordset
                    If .RecordCount > 0 Then
                       .MoveFirst
-                       Fecha_Vence = .fields("EFECTIVIZAR")
-                       NoCheque = .fields("CHEQ_DEP")
-                      .fields("VALOR") = SumaBancos
+                       Fecha_Vence = .Fields("EFECTIVIZAR")
+                       NoCheque = .Fields("CHEQ_DEP")
+                      .Fields("VALOR") = SumaBancos
                       .Update
                    End If
                   End With
@@ -3650,6 +3791,9 @@ Private Sub Form_Activate()
     
     Co.Item = NumEmpresa
     Co.RetNueva = True
+    Co.RetSecuencial = True
+    Co.LCNueva = True
+    Co.LCSecuencial = True
     Co.Ctas_Modificar = ""
     Co.CodigoInvModificar = ""
     Co.TipoContribuyente = ""
@@ -3669,7 +3813,13 @@ Private Sub Form_Activate()
     Co.Efectivo = 0
     Co.Total_Banco = 0
     Co.Monto_Total = 0
-          
+    Co.Autorizacion_LC = Ninguno
+    Co.Autorizacion_R = Ninguno
+    Co.Serie_LC = Ninguno
+    Co.Serie_R = Ninguno
+    Co.Retencion = 0
+    Co.Liquidacion = 0
+    
   If Len(Co.TP) < 2 Then Co.TP = CompDiario
   If Len(Co.Fecha) = 10 And IsDate(Co.Fecha) Then MBoxFecha = Co.Fecha Else MBoxFecha = FechaSistema
  'Leer los datos del comprobante a modificar o copiar
@@ -3696,7 +3846,7 @@ Private Sub Form_Activate()
      End If
   End If
   
-  sSQL = "SELECT TOP 50 Cliente, CI_RUC, Codigo " _
+  sSQL = "SELECT TOP 50 TD, CI_RUC, Codigo, Cliente, Email, Grupo, RISE, Especial, Direccion, Telefono " _
        & "FROM Clientes " _
        & "WHERE Cliente LIKE '%" & Co.Beneficiario & "%' " _
        & "ORDER BY Cliente "
@@ -3705,6 +3855,7 @@ Private Sub Form_Activate()
   Tipo_De_Comprobante_No Co
 '  Datos_del_Cliente Co    'Solo con el CodigoB = Codigo del Cliente se busca
   'Select_Cuentas DLCuentas, AdoCuentas
+  
   Llenar_Encabezado_Comprobante
 
   CalculosTotalAsientos AdoAsientos, LabelDebe, LabelHaber, LabelDiferencia
@@ -3721,8 +3872,7 @@ Private Sub Form_Activate()
   If Bloquear_Control Then CmdGrabar.Enabled = False
   RatonNormal
   FComprobantes.WindowState = vbMaximized
-
-  MBoxFecha.SetFocus
+  If NuevoComp Then OpcTP(0).SetFocus Else MBoxFecha.SetFocus
 End Sub
 
 Private Sub Form_Load()
@@ -3859,6 +4009,19 @@ Private Sub CheckEfect_Click()
   End If
 End Sub
 
+Private Sub TxtDireccion_GotFocus()
+  MarcarTexto TxtDireccion
+End Sub
+
+Private Sub TxtDireccion_KeyDown(KeyCode As Integer, Shift As Integer)
+  PresionoEnter KeyCode
+End Sub
+
+Private Sub TxtDireccion_LostFocus()
+  TextoValido TxtDireccion, False, True
+  If Len(TxtDireccion) > 1 Then Co.Direccion = TxtDireccion
+End Sub
+
 Private Sub TxtEmail_GotFocus()
   MarcarTexto TxtEmail
 End Sub
@@ -3870,7 +4033,7 @@ End Sub
 Private Sub TxtEmail_LostFocus()
   TextoValido TxtEmail
   TxtEmail = TrimStrg(LCase(TxtEmail))
-  Co.Email = TxtEmail
+  If Len(TxtEmail) > 1 Then Co.Email = TxtEmail
 End Sub
 
 '''Public Sub Lista_de_Clientes()
@@ -3887,20 +4050,26 @@ End Sub
 '''End Sub
 
 Public Sub Llenar_Encabezado_Comprobante()
-  DCCliente = Co.Beneficiario
-  LblRUC.Caption = Co.RUC_CI
-  TxtEmail = Co.Email
-  TextConcepto = Co.Concepto
-  TextCotiza = Co.Cotizacion
-  LabelTotal.Caption = Monto_Total
-  Monto_Total = Co.Monto_Total
-  Abono = Co.Efectivo
-  TextCantidad = Abono
-'  EmailOld = TxtEmail
-  TipoDoc = Co.TD
-  TipoBenef = Co.TD
-  CICliente = Co.RUC_CI
-  CodigoBenef = Co.CodigoB
-  CodigoCliente = Co.CodigoB
-  NombreCliente = Co.Beneficiario
+    DCCliente = Co.Beneficiario
+    LblRUC.Caption = Co.RUC_CI
+    TxtEmail = Co.Email
+    TxtDireccion = Co.Direccion
+    TextConcepto = Co.Concepto
+    TextCotiza = Co.Cotizacion
+    LabelTotal.Caption = Monto_Total
+    Monto_Total = Co.Monto_Total
+    Abono = Co.Efectivo
+    TextCantidad = Abono
+ '  EmailOld = TxtEmail
+    TipoDoc = Co.TD
+    TipoBenef = Co.TD
+    CICliente = Co.RUC_CI
+    CodigoBenef = Co.CodigoB
+    CodigoCliente = Co.CodigoB
+    NombreCliente = Co.Beneficiario
+    If UCase(TipoSRI.Estado) = "ACTIVO" Then Label23.ForeColor = &HC0FFC0 Else Label23.ForeColor = &HFFFFFF
+    Label23.Caption = TipoSRI.Estado
+    Label25.Caption = "ESTADO CONTRIBUYENTE:"
+    If Len(Co.MicroEmpresa) > 1 Then Label25.Caption = Label25.Caption & " - " & Co.MicroEmpresa
+    If Len(Co.AgenteRetencion) > 1 Then Label25.Caption = Label25.Caption & " - Agente de Retencion: " & Co.AgenteRetencion
 End Sub

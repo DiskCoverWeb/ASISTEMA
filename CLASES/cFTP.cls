@@ -11,24 +11,13 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
+Option Explicit
+
 'Path mas largo
 Private Const MAX_PATH = 260
 
 'Constante para el atributo de directorio
 Private Const FILE_ATTRIBUTE_DIRECTORY = &H10
-
-Private Declare Function FileTimeToSystemTime Lib "kernel32" (lpFileTime As FILETIME, lpSystemTime As SYSTEMTIME) As Long
-
-Private Type SYSTEMTIME
-        intYear         As Integer
-        intMonth        As Integer
-        intDayOfWeek    As Integer
-        intDay          As Integer
-        intHour         As Integer
-        intMinute       As Integer
-        intSecond       As Integer
-        intMilliSeconds As Integer
-End Type
 
 '--- tipos de archivos --- para el Upload y Download
 Private Const FTP_TRANSFER_TYPE_UNKNOWN = &H0
@@ -61,6 +50,17 @@ Private Type FILETIME
 End Type
 
 'Otros atributos de archivo tamaño, nombre, fecha etc..
+Private Type SYSTEMTIME
+        intYear         As Integer
+        intMonth        As Integer
+        intDayOfWeek    As Integer
+        intDay          As Integer
+        intHour         As Integer
+        intMinute       As Integer
+        intSecond       As Integer
+        intMilliSeconds As Integer
+End Type
+
 Private Type WIN32_FIND_DATA
     dwFileAttributes As Long
     ftCreationTime As FILETIME
@@ -75,9 +75,12 @@ Private Type WIN32_FIND_DATA
 End Type
 
 Public ConStatus As Boolean
+Private ret As Long
 
 ' Declaraciones Apis
 '***************************************************************
+Private Declare Function FileTimeToSystemTime Lib "kernel32" (lpFileTime As FILETIME, lpSystemTime As SYSTEMTIME) As Long
+
 Private Declare Function InternetCloseHandle Lib "wininet.dll" (ByVal hInet As Long) As Integer
 'Establece una conexión a internet para poder iniciar seción Ftp
 Private Declare Function InternetConnect Lib "wininet.dll" Alias "InternetConnectA" _
@@ -162,14 +165,15 @@ End Enum
     
 'Variables locales
 Private INTERNET_DEFAULT_FTP_PORT As Integer
+Private m_Puerto As Integer
+Private m_TipoTransferencia As Long
 Private m_DirectorioActual As String
 Private m_Usuario As String
 Private m_PassWord As String
 Private m_Servidor As String
 Private m_DirAnterior As String
 Private m_listView As ListView
-Private m_Puerto As Integer
-Private m_TipoTransferencia As Long
+Private m_listBox As ListBox
 Private m_form As Form
 Private ctrl As Object
 
@@ -178,7 +182,6 @@ Private ctrl As Object
 
 'Rutina que conecta al Servidor Ftp
 Public Function ConectarFtp(Optional ControlStatus As Object = Nothing) As Boolean
-    
     
 'Conectamos al servidor FTP, con un puerto determinado
  If m_Puerto = 0 Then INTERNET_DEFAULT_FTP_PORT = 21 Else INTERNET_DEFAULT_FTP_PORT = m_Puerto
@@ -193,7 +196,8 @@ If m_Usuario = "" Or m_Servidor = "" Or m_PassWord = "" Then
 End If
     
    Set ctrl = ControlStatus
-   If Not SinStatus Then Status "...Intentando conectar a: " & m_Servidor
+   'If Not SinStatus Then
+   Status "...Intentando conectar a: " & m_Servidor
    m_form.MousePointer = vbHourglass
 'Abrimos una conección a Internet
 '
@@ -252,6 +256,7 @@ Public Sub CambiarDirectorio(PathDirectorio As String)
     Dim hFind As Long  'handle usado para buscar fichs en FTP
     Dim ret As Long
     Dim strDir As String
+    Dim pos As String
     
     strDir = Replace(m_DirectorioActual, Chr(0), "")
     
@@ -507,12 +512,9 @@ End Sub
 
 Private Function getFecha(pData As WIN32_FIND_DATA) As Date
 Dim stSystemTime As SYSTEMTIME
-
+Dim VBATime As String
     If FileTimeToSystemTime(pData.ftLastWriteTime, stSystemTime) > 0 Then
-        VBATime = DateSerial(stSystemTime.intYear, _
-         stSystemTime.intMonth, _
-        stSystemTime.intDay) + TimeSerial(stSystemTime.intHour, _
-        stSystemTime.intMinute, stSystemTime.intSecond)
+        VBATime = DateSerial(stSystemTime.intYear, stSystemTime.intMonth, stSystemTime.intDay) + TimeSerial(stSystemTime.intHour, stSystemTime.intMinute, stSystemTime.intSecond)
     End If
     getFecha = VBATime
 End Function

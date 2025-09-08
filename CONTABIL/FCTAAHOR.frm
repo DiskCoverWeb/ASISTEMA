@@ -501,7 +501,7 @@ Private Sub Command1_Click()
       .MoveFirst
       .Find ("Cliente = '" & DCClientes & "' ")
        If Not .EOF Then
-          CodigoB = .Fields("Codigo")
+          CodigoB = .fields("Codigo")
        End If
    End If
   End With
@@ -566,9 +566,9 @@ Private Sub DCTipoLibreta_LostFocus()
       .MoveFirst
       .Find ("Tipo = '" & DCTipoLibreta.Text & "' ")
        If Not .EOF Then
-          TipoCta = .Fields("Tipo")
-          TipoDoc = .Fields("Acreditacion")
-          Tipo_Cuenta .Fields("Tipo_Cta")
+          TipoCta = .fields("Tipo")
+          TipoDoc = .fields("Acreditacion")
+          Tipo_Cuenta .fields("Tipo_Cta")
        End If
    End If
   End With
@@ -647,7 +647,7 @@ Public Sub Tipo_Cuenta(Tipo_Cta As String)
   Select_Adodc AdoCxCxP, sSQL
   If AdoCxCxP.Recordset.RecordCount > 0 Then
      AdoCxCxP.Recordset.MoveLast
-     Cuenta_No = MidStrg(AdoCxCxP.Recordset.Fields("Cuenta_No"), 1, 8)
+     Cuenta_No = MidStrg(AdoCxCxP.Recordset.fields("Cuenta_No"), 1, 8)
   Else
      Cuenta_No = NumEmpresa & "00000"
   End If

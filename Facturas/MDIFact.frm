@@ -1,4 +1,5 @@
 VERSION 5.00
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.MDIForm MDIFact 
    BackColor       =   &H00FFFFFF&
@@ -12,6 +13,13 @@ Begin VB.MDIForm MDIFact
    Picture         =   "MDIFact.frx":164A
    StartUpPosition =   3  'Windows Default
    WindowState     =   2  'Maximized
+   Begin MSComDlg.CommonDialog Dir_Dialog 
+      Left            =   420
+      Top             =   105
+      _ExtentX        =   847
+      _ExtentY        =   847
+      _Version        =   393216
+   End
    Begin VB.PictureBox PictMDI 
       Align           =   1  'Align Top
       AutoRedraw      =   -1  'True
@@ -357,7 +365,7 @@ Begin VB.MDIForm MDIFact
       End
    End
    Begin VB.Menu MOtrosProc 
-      Caption         =   "&Otros Procesos"
+      Caption         =   "&Herramientas"
       Begin VB.Menu MCobProg 
          Caption         =   "Cobros programados"
       End
@@ -393,6 +401,10 @@ Begin VB.MDIForm MDIFact
       End
       Begin VB.Menu MWebServices 
          Caption         =   "Web Services"
+      End
+      Begin VB.Menu EnvioEmail 
+         Caption         =   "Prueba de Envio Correo Electronico"
+         Shortcut        =   ^W
       End
    End
    Begin VB.Menu Mwwwdiskcover 
@@ -443,6 +455,66 @@ Private Sub CtasCobrar_Click()
        .Factura = 0
    End With
    Abonos.Show
+End Sub
+
+Private Sub EnvioEmail_Click()
+''' Cadena = " HOLA AMIGOS MIOS, ESTA ES UNA PRUENA DE CADENA "
+''' MsgBox "         1         2         3         4         5" & vbCrLf _
+'''      & "12345678901234567890123456789012345678901234567890" & vbCrLf _
+'''      & Cadena & vbCrLf _
+'''      & "Left: '" & LeftStrg(Cadena, 10) & "'" & vbCrLf _
+'''      & "Right: '" & RightStrg(Cadena, 10) & "'" & vbCrLf _
+'''      & "Mid 10,10: '" & MidStrg(Cadena, 10, 10) & "'" & vbCrLf _
+'''      & "InStr 'MIOS': '" & InStr(Cadena, "MIOS") & "'"
+'''
+'''  FEnviarMails.Show
+''  FGeneraPDF.Show
+''  Exportar_Datagrid_Execel "d:\Nomina1.xls"
+''  Exportar_Datagrid_Execel "d:\Nomina2.xls"
+''  TMail.ListaError = ""
+''  For I = 1 To 10
+''    TMail.Adjunto = ""
+''    TMail.Asunto = "Prueba de mail"
+''    TMail.Mensaje = "Este es un mensaje de prueba de correo enviado por medio del programa DiskCover System"
+''    TMail.para = "diskcover@msn.com"
+''    FEnviarCorreos.Show 1
+''  Next I
+    TMail.de = "informacion@diskcoversystem.com"
+    TMail.ListaMail = 255
+    TMail.TipoDeEnvio = "NN"
+    TMail.Asunto = "Prueba de Mails por imap.diskcoversystem.com desde " & Modulo & " [" & Right(CodigoUsuario, 5) & "], Hora (" & Time & ")"
+    TMail.MensajeHTML = Leer_Archivo_Texto(RutaSistema & "\JAVASCRIPT\f_cartera.html")
+    
+    html_Informacion_adicional = "<strong>INFORMACION ADICIONAL:</strong><br><br>" _
+                               & "<strong>Importe total: USD </strong>150,00<br>" _
+                               & "<strong>Importe total: USD </strong>150,00<br>" _
+                               & "<strong>Importe total: USD </strong>150,00<br>"
+                               
+    html_Detalle_adicional = "<tr>" _
+                           & "<td>13/12/2024</td>" _
+                           & "<td>Prueba de Envio</td>" _
+                           & "<td class='row text-right'>150,00</td>" _
+                           & "</tr>" _
+                           & "<tr>" _
+                           & "<td>13/12/2024</td>" _
+                           & "<td>Por IMAP</td>" _
+                           & "<td class='row text-right'>180,00</td>" _
+                           & "</tr>"
+    FA.Fecha = FechaSistema
+    FA.Recibo_No = Format(FA.Fecha, "yyyymmdd") & Format(FA.Factura, "000000000")
+    TMail.Adjunto = "C:\SYSBASES\TEMP\archivo.xml"
+    TMail.para = ""
+    Insertar_Mail TMail.para, "actualizar@diskcoversystem.com"
+    Insertar_Mail TMail.para, "diskcoversystem@msn.com"
+    Insertar_Mail TMail.para, "diskcover.system@yahoo.com"
+    Insertar_Mail TMail.para, "diskcover.system@gmail.com"
+    FEnviarCorreos.Show 1
+    MsgBox "Correos Enviados a (" & Si_No & "):" & vbCrLf & Replace(TMail.para, ";", ";" & vbCrLf) & vbCrLf _
+         & String(70, "_") & vbCrLf & vbCrLf _
+         & "De: " & TMail.de & vbCrLf & vbCrLf _
+         & "Asunto: " & TMail.Asunto & vbCrLf
+    TMail.para = ""
+    TMail.ListaMail = 0
 End Sub
 
 Private Sub IngFact_Click()
@@ -660,8 +732,7 @@ Private Sub Timer1_Timer()
 End Sub
 
 Private Sub MDIForm_Activate()
-    MDI_X_Max = Screen.width - 150
-    MDI_Y_Max = Screen.Height - 1850
+    screen_size
 End Sub
 
 Private Sub MDIForm_Load()

@@ -9,6 +9,9 @@ Global PorcBarraPrint As Long
 Global TotalProceso As Long
 Global TotalBarra As Long
 Global Contador As Long
+Global ContAsiento As Long
+Global ContAsientoSC As Long
+Global ContAsientoInv As Long
 Global ContadorRUCCI As Long
 Global FondoActual As Long
 Global Produccion As Long
@@ -31,11 +34,11 @@ Global Litros As Long
 Global NumPagos As Long
 Global NumDias As Long
 Global PosItem As Long
-Global i As Long
-Global j As Long
+Global I As Long
+Global J As Long
 Global K As Long
 Global F As Long
-Global c As Long
+Global C As Long
 Global FechaEntI As Long
 Global FechaEntF As Long
 Global Nota_No As Long

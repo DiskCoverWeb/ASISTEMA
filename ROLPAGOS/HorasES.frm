@@ -7,17 +7,17 @@ Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
 Begin VB.Form HorasEntSal 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "REGISTRO DE HORAS TRABAJADAS"
-   ClientHeight    =   6120
+   ClientHeight    =   6135
    ClientLeft      =   45
    ClientTop       =   435
-   ClientWidth     =   11670
+   ClientWidth     =   14730
    Icon            =   "HorasES.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MDIChild        =   -1  'True
    MinButton       =   0   'False
-   ScaleHeight     =   6120
-   ScaleWidth      =   11670
+   ScaleHeight     =   6135
+   ScaleWidth      =   14730
    ShowInTaskbar   =   0   'False
    Begin VB.Frame Frame4 
       Caption         =   "Movimientos de: "
@@ -30,11 +30,11 @@ Begin VB.Form HorasEntSal
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   2535
-      Left            =   8295
+      Height          =   750
+      Left            =   105
       TabIndex        =   22
-      Top             =   0
-      Width           =   1800
+      Top             =   1785
+      Width           =   13035
       Begin VB.OptionButton Opc120 
          Caption         =   "Cuatro meses"
          BeginProperty Font 
@@ -47,9 +47,9 @@ Begin VB.Form HorasEntSal
             Strikethrough   =   0   'False
          EndProperty
          Height          =   225
-         Left            =   105
+         Left            =   7665
          TabIndex        =   26
-         Top             =   1575
+         Top             =   315
          Width           =   1485
       End
       Begin VB.OptionButton Opc90 
@@ -64,9 +64,9 @@ Begin VB.Form HorasEntSal
             Strikethrough   =   0   'False
          EndProperty
          Height          =   225
-         Left            =   105
+         Left            =   1995
          TabIndex        =   25
-         Top             =   1155
+         Top             =   315
          Width           =   1380
       End
       Begin VB.OptionButton Opc31 
@@ -81,7 +81,7 @@ Begin VB.Form HorasEntSal
             Strikethrough   =   0   'False
          EndProperty
          Height          =   225
-         Left            =   105
+         Left            =   210
          TabIndex        =   23
          Top             =   315
          Value           =   -1  'True
@@ -99,9 +99,9 @@ Begin VB.Form HorasEntSal
             Strikethrough   =   0   'False
          EndProperty
          Height          =   225
-         Left            =   105
+         Left            =   5880
          TabIndex        =   24
-         Top             =   735
+         Top             =   315
          Width           =   1275
       End
       Begin VB.OptionButton OpcTodos 
@@ -116,9 +116,9 @@ Begin VB.Form HorasEntSal
             Strikethrough   =   0   'False
          EndProperty
          Height          =   225
-         Left            =   105
+         Left            =   3885
          TabIndex        =   27
-         Top             =   1995
+         Top             =   315
          Width           =   1485
       End
    End
@@ -127,8 +127,8 @@ Begin VB.Form HorasEntSal
       Left            =   105
       TabIndex        =   31
       Top             =   2625
-      Width           =   11460
-      _ExtentX        =   20214
+      Width           =   14505
+      _ExtentX        =   25585
       _ExtentY        =   5953
       _Version        =   393216
       Tabs            =   2
@@ -159,8 +159,8 @@ Begin VB.Form HorasEntSal
          Left            =   105
          TabIndex        =   32
          Top             =   420
-         Width           =   11250
-         _ExtentX        =   19844
+         Width           =   14295
+         _ExtentX        =   25215
          _ExtentY        =   4286
          _Version        =   393216
          AllowUpdate     =   0   'False
@@ -226,8 +226,8 @@ Begin VB.Form HorasEntSal
          TabIndex        =   37
          ToolTipText     =   "<Insert> Novedades, <Supri> Elimina Novedades"
          Top             =   420
-         Width           =   11250
-         _ExtentX        =   19844
+         Width           =   14295
+         _ExtentX        =   25215
          _ExtentY        =   5027
          _Version        =   393216
          AllowUpdate     =   0   'False
@@ -377,7 +377,7 @@ Begin VB.Form HorasEntSal
          Strikethrough   =   0   'False
       EndProperty
       Height          =   750
-      Left            =   10185
+      Left            =   13230
       Picture         =   "HorasES.frx":070A
       Style           =   1  'Graphical
       TabIndex        =   30
@@ -399,7 +399,7 @@ Begin VB.Form HorasEntSal
       Left            =   1470
       TabIndex        =   2
       Top             =   0
-      Width           =   6735
+      Width           =   5055
       Begin VB.OptionButton OpcQuincena 
          Caption         =   "Quincenal"
          BeginProperty Font 
@@ -412,7 +412,7 @@ Begin VB.Form HorasEntSal
             Strikethrough   =   0   'False
          EndProperty
          Height          =   435
-         Left            =   3360
+         Left            =   2415
          TabIndex        =   5
          Top             =   210
          Width           =   1275
@@ -429,7 +429,7 @@ Begin VB.Form HorasEntSal
             Strikethrough   =   0   'False
          EndProperty
          Height          =   435
-         Left            =   1575
+         Left            =   1155
          TabIndex        =   4
          Top             =   210
          Width           =   1170
@@ -464,7 +464,7 @@ Begin VB.Form HorasEntSal
             Strikethrough   =   0   'False
          EndProperty
          Height          =   435
-         Left            =   5355
+         Left            =   3780
          TabIndex        =   6
          Top             =   210
          Width           =   1170
@@ -482,7 +482,7 @@ Begin VB.Form HorasEntSal
          Strikethrough   =   0   'False
       EndProperty
       Height          =   750
-      Left            =   10185
+      Left            =   13230
       Picture         =   "HorasES.frx":0B4C
       Style           =   1  'Graphical
       TabIndex        =   29
@@ -500,10 +500,10 @@ Begin VB.Form HorasEntSal
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   6930
+      Left            =   8925
       MaxLength       =   10
       TabIndex        =   21
-      Top             =   2100
+      Top             =   1155
       Width           =   1275
    End
    Begin VB.TextBox TxtDias 
@@ -517,11 +517,11 @@ Begin VB.Form HorasEntSal
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   6930
+      Left            =   3885
       MaxLength       =   10
       TabIndex        =   14
-      Top             =   1680
-      Width           =   1275
+      Top             =   1155
+      Width           =   1065
    End
    Begin VB.TextBox TxtPorcHExt 
       BeginProperty Font 
@@ -534,11 +534,11 @@ Begin VB.Form HorasEntSal
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   4620
+      Left            =   7455
       MaxLength       =   10
       TabIndex        =   19
-      Top             =   2100
-      Width           =   1275
+      Top             =   1155
+      Width           =   1380
    End
    Begin VB.TextBox TxtHorasExt 
       BeginProperty Font 
@@ -551,11 +551,11 @@ Begin VB.Form HorasEntSal
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   1680
+      Left            =   5040
       MaxLength       =   10
       TabIndex        =   16
-      Top             =   2100
-      Width           =   855
+      Top             =   1155
+      Width           =   1590
    End
    Begin VB.CommandButton Command2 
       Caption         =   "&Salir"
@@ -569,7 +569,7 @@ Begin VB.Form HorasEntSal
          Strikethrough   =   0   'False
       EndProperty
       Height          =   750
-      Left            =   10185
+      Left            =   13230
       Picture         =   "HorasES.frx":0E56
       Style           =   1  'Graphical
       TabIndex        =   28
@@ -587,13 +587,13 @@ Begin VB.Form HorasEntSal
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   1575
+      Left            =   105
       MaxLength       =   12
       MultiLine       =   -1  'True
       TabIndex        =   10
       Text            =   "HorasES.frx":1720
-      Top             =   1680
-      Width           =   960
+      Top             =   1155
+      Width           =   1485
    End
    Begin VB.TextBox TxtHorasTrab 
       BeginProperty Font 
@@ -606,21 +606,21 @@ Begin VB.Form HorasEntSal
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   4620
+      Left            =   1680
       MaxLength       =   10
       TabIndex        =   12
-      Top             =   1680
-      Width           =   1275
+      Top             =   1155
+      Width           =   2115
    End
    Begin MSDataListLib.DataCombo DCEmpleado 
       Bindings        =   "HorasES.frx":1728
       DataSource      =   "AdoEmpleado"
       Height          =   315
-      Left            =   105
+      Left            =   6615
       TabIndex        =   8
-      Top             =   1155
-      Width           =   8100
-      _ExtentX        =   14288
+      Top             =   420
+      Width           =   6525
+      _ExtentX        =   11509
       _ExtentY        =   556
       _Version        =   393216
       Text            =   ""
@@ -811,11 +811,11 @@ Begin VB.Form HorasEntSal
          Strikethrough   =   0   'False
       EndProperty
       Height          =   315
-      Left            =   3990
+      Left            =   6720
       TabIndex        =   18
       Text            =   "%"
-      Top             =   2100
-      Width           =   645
+      Top             =   1155
+      Width           =   750
    End
    Begin MSAdodcLib.Adodc AdoNovedades 
       Height          =   330
@@ -877,10 +877,10 @@ Begin VB.Form HorasEntSal
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   5880
+      Left            =   8925
       TabIndex        =   20
-      Top             =   2100
-      Width           =   1065
+      Top             =   840
+      Width           =   1275
    End
    Begin VB.Label Label1 
       BorderStyle     =   1  'Fixed Single
@@ -895,9 +895,9 @@ Begin VB.Form HorasEntSal
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   5880
+      Left            =   3885
       TabIndex        =   13
-      Top             =   1680
+      Top             =   840
       Width           =   1065
    End
    Begin VB.Label Label15 
@@ -913,10 +913,10 @@ Begin VB.Form HorasEntSal
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   2520
+      Left            =   6720
       TabIndex        =   17
-      Top             =   2100
-      Width           =   1485
+      Top             =   840
+      Width           =   2115
    End
    Begin VB.Label Label9 
       BorderStyle     =   1  'Fixed Single
@@ -931,9 +931,9 @@ Begin VB.Form HorasEntSal
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   105
+      Left            =   5040
       TabIndex        =   15
-      Top             =   2100
+      Top             =   840
       Width           =   1590
    End
    Begin VB.Label Label3 
@@ -951,7 +951,7 @@ Begin VB.Form HorasEntSal
       Height          =   330
       Left            =   105
       TabIndex        =   9
-      Top             =   1680
+      Top             =   840
       Width           =   1485
    End
    Begin VB.Label Label8 
@@ -985,9 +985,9 @@ Begin VB.Form HorasEntSal
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   2520
+      Left            =   1680
       TabIndex        =   11
-      Top             =   1680
+      Top             =   840
       Width           =   2115
    End
    Begin VB.Label Label4 
@@ -1003,10 +1003,10 @@ Begin VB.Form HorasEntSal
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   105
+      Left            =   6615
       TabIndex        =   7
-      Top             =   840
-      Width           =   8100
+      Top             =   105
+      Width           =   6525
    End
 End
 Attribute VB_Name = "HorasEntSal"
@@ -1024,90 +1024,184 @@ Dim Fecha_Empleado As String
 Dim Fecha_Salida As String
 Dim Fecha_IESS As String
 
-  RatonReloj
-  TextoValido TxtHorasTrab, True
-  TextoValido TxtValorHora, True, True, 4
-  TextoValido TxtOrden, , True      ' Orden
-  FechaValida MBFechaI
-  Datos_IESS MBFechaI
-  FechaInicial = PrimerDiaMes(MBFechaI)
-  FechaFinal = UltimoDiaMes(MBFechaI)
-  UltimodDiaMes = Day(FechaFinal)
-  Fecha_IESS = FechaFinal
-  If Val(TxtDias) = "0" Then TxtDias = CStr(Day(FechaFinal))
-  
-  sSQL = "DELETE * " _
-       & "FROM Trans_Rol_Horas " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND Periodo = '" & Periodo_Contable & "' " _
-       & "AND Fecha BETWEEN #" & BuscarFecha(FechaInicial) & "# AND #" & BuscarFecha(FechaFinal) & "# "
-  Ejecutar_SQL_SP sSQL
-  With AdoEmpleado.Recordset
-   If .RecordCount > 0 Then
-       Do While Not .EOF
-          NombreCliente = .fields("Cliente")
-          CodigoCliente = .fields("Codigo")
-          DCEmpleado.Text = .fields("Cliente")
-          Evaluar = .fields("Horas_Ext")
-          Grupo_No = .fields("Grupo")
-          TxtValorHora = .fields("Valor_Hora")
-          Fecha_Empleado = .fields("Fecha")
-          Fecha_Salida = .fields("FechaC")
-          
-          If .fields("T") = "R" Then
-              If (CFechaLong(.fields("FechaC")) - CFechaLong(.fields("Fecha"))) > 30 Then Fecha_Empleado = PrimerDiaMes(MBFechaI) Else Fecha_Empleado = .fields("Fecha")
-              DiasTrabajados = CFechaLong(Fecha_Salida) - CFechaLong(Fecha_Empleado) + 1
-          Else
-              DiasTrabajados = CFechaLong(FechaFinal) - CFechaLong(Fecha_Empleado) + 1
-          End If
-          
-          'If DiasTrabajados <= UltimodDiaMes Then DiasTrabajados = DiasTrabajados + 1
-          
-          If OpcSemana.value Then
-             MiTiempo1 = .fields("Horas_Sem")
-             ValorTotal = .fields("Salario") / 4
-          End If
-          If OpcQuincena.value Then
-             MiTiempo1 = .fields("Horas_Sem") * 2
-             ValorTotal = .fields("Salario") / 2
-          End If
-          If OpcMensual.value Then
-             MiTiempo1 = .fields("Horas_Sem") * 4
-             ValorTotal = .fields("Salario")
-             
-             If DiasTrabajados < Day(FechaFinal) Then
-                ValorTotal = Redondear((ValorTotal / 30) * DiasTrabajados, 2)
-                Dias_Laborados = DiasTrabajados
-             Else
-                Dias_Laborados = Day(FechaFinal)
-             End If
-          End If
-          
-         'MsgBox NombreCliente & vbCrLf & vbCrLf & .fields("Salario") & vbCrLf & ValorTotal & vbCrLf & "Dias: " & DiasTrabajados
-          
-          MiTiempo = Time
-         'If CodigoCliente = "0020000046" Then MsgBox ".."
-          If ValorTotal > 0 Then
-             SetAdoAddNew "Trans_Rol_Horas"
-             SetAdoFields "T", Val(adFalse)
-             SetAdoFields "Dias", Dias_Laborados 'UltimodDiaMes
-             SetAdoFields "Codigo", CodigoCliente
-             SetAdoFields "Fecha", MBFechaI
-             SetAdoFields "Horas", MiTiempo1
-             SetAdoFields "Horas_Exts", 0
-             SetAdoFields "Porc_Hr_Ext", 0
-             SetAdoFields "Ing_Horas_Ext", 0
-             SetAdoFields "Valor_Hora", .fields("Valor_Hora")
-             SetAdoFields "Ing_Liquido", Redondear(ValorTotal, 2)
-             SetAdoFields "Orden", TxtOrden
-             SetAdoFields "CodigoU", CodigoUsuario
-             SetAdoFields "Item", NumEmpresa
-             SetAdoUpdate
-          End If
-         .MoveNext
-       Loop
-   End If
-  End With
+    RatonReloj
+    TextoValido TxtHorasTrab, True
+    TextoValido TxtValorHora, True, True, 4
+    TextoValido TxtOrden, , True      ' Orden
+    FechaValida MBFechaI
+    
+    If OpcMensual.value Then MBFechaI = UltimoDiaMes(MBFechaI)
+    MBFechaI.Refresh
+    Datos_IESS MBFechaI
+    FechaInicial = PrimerDiaMes(MBFechaI)
+    FechaFinal = UltimoDiaMes(MBFechaI)
+    FechaIni = BuscarFecha(FechaInicial)
+    FechaFin = BuscarFecha(FechaFinal)
+    UltimodDiaMes = Day(FechaFinal)
+    Fecha_IESS = FechaFinal
+    If Val(TxtDias) = "0" Then TxtDias = CStr(Day(FechaFinal))
+    
+    sSQL = "DELETE * " _
+         & "FROM Trans_Rol_Horas " _
+         & "WHERE Item = '" & NumEmpresa & "' " _
+         & "AND Periodo = '" & Periodo_Contable & "' " _
+         & "AND Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# "
+    Ejecutar_SQL_SP sSQL
+    
+    sSQL = "INSERT INTO Trans_Rol_Horas (Periodo, Item, T, Dias, Codigo, Fecha, Horas, Horas_Exts, Porc_Hr_Ext, Valor_Hora, Ing_Liquido, Ing_Horas_Ext, Orden, X) "
+    
+    If OpcSemana.value Then sSQL = sSQL & "SELECT Periodo, Item, T, 30, Codigo, #" & FechaFin & "#, Horas_Sem, 0 ,0, Valor_Hora, ROUND(Salario/4,2,0), 0, '" & TxtOrden.Text & "' ,'.' "
+    If OpcQuincena.value Then sSQL = sSQL & "SELECT Periodo, Item, T, 30, Codigo, #" & FechaFin & "#, Horas_Sem*2, 0 ,0, Valor_Hora, ROUND(Salario/2,2,0), 0, '" & TxtOrden.Text & "' ,'.' "
+    If OpcMensual.value Then sSQL = sSQL & "SELECT Periodo, Item, T, 30, Codigo, #" & FechaFin & "#, Horas_Sem*4, 0 ,0, Valor_Hora, Salario, 0, '" & TxtOrden.Text & "' ,'.' "
+       
+    sSQL = sSQL & "FROM Catalogo_Rol_Pagos " _
+         & "WHERE Item = '" & NumEmpresa & "' " _
+         & "AND Periodo = '" & Periodo_Contable & "' " _
+         & "AND Fecha <= #" & FechaFin & "# " _
+         & "AND Salario > 0 " _
+         & "AND T = 'N' " _
+         & "ORDER BY Ejecutivo "
+    Ejecutar_SQL_SP sSQL
+       
+    sSQL = "INSERT INTO Trans_Rol_Horas (Periodo, Item, T, Dias, Dias_Enfermedad, Codigo, Fecha, Horas, Horas_Exts, Porc_Hr_Ext, Valor_Hora, Ing_Liquido, Ing_Horas_Ext, Orden, X) "
+       
+    If OpcSemana.value Then sSQL = sSQL & "SELECT Periodo, Item, T, 30, 0, Codigo, #" & FechaFin & "#, Horas_Sem, 0 ,0, Valor_Hora, ROUND(Salario/4,2,0), 0, '" & TxtOrden.Text & "' ,'.' "
+    If OpcQuincena.value Then sSQL = sSQL & "SELECT Periodo, Item, T, 30, 0, Codigo, #" & FechaFin & "#, Horas_Sem*2, 0 ,0, Valor_Hora, ROUND(Salario/2,2,0), 0, '" & TxtOrden.Text & "' ,'.' "
+    If OpcMensual.value Then sSQL = sSQL & "SELECT Periodo, Item, T, 30, 0, Codigo, #" & FechaFin & "#, Horas_Sem*4, 0 ,0, Valor_Hora, Salario, 0, '" & TxtOrden.Text & "' ,'.' "
+       
+    sSQL = sSQL & "FROM Catalogo_Rol_Pagos " _
+         & "WHERE Item = '" & NumEmpresa & "' " _
+         & "AND Periodo = '" & Periodo_Contable & "' " _
+         & "AND FechaC BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
+         & "AND Salario > 0 " _
+         & "AND T = 'R' " _
+         & "ORDER BY Ejecutivo "
+    Ejecutar_SQL_SP sSQL
+    
+    sSQL = "UPDATE Trans_Rol_Horas " _
+         & "SET Dias = DATEDIFF(DAY,CRP.Fecha,TRH.Fecha)+1 " _
+         & "FROM Trans_Rol_Horas As TRH, Catalogo_Rol_Pagos As CRP " _
+         & "WHERE TRH.Item = '" & NumEmpresa & "' " _
+         & "AND TRH.Periodo = '" & Periodo_Contable & "' " _
+         & "AND TRH.Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
+         & "AND DATEDIFF(DAY,CRP.Fecha,TRH.Fecha) < 30 " _
+         & "AND TRH.Item = CRP.Item " _
+         & "AND TRH.Periodo = CRP.Periodo " _
+         & "AND TRH.Codigo = CRP.Codigo "
+    Ejecutar_SQL_SP sSQL
+    
+    sSQL = "UPDATE Trans_Rol_Horas " _
+         & "SET Dias = DATEDIFF(DAY,'" & FechaIni & "',CRP.FechaC) + 1 " _
+         & "FROM Trans_Rol_Horas As TRH, Catalogo_Rol_Pagos As CRP " _
+         & "WHERE TRH.Item = '" & NumEmpresa & "' " _
+         & "AND TRH.Periodo = '" & Periodo_Contable & "' " _
+         & "AND TRH.Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
+         & "AND CRP.T = 'R' " _
+         & "AND DATEDIFF(DAY,'" & FechaIni & "',CRP.FechaC) < 30 " _
+         & "AND TRH.Item = CRP.Item " _
+         & "AND TRH.Periodo = CRP.Periodo " _
+         & "AND TRH.Codigo = CRP.Codigo "
+    Ejecutar_SQL_SP sSQL
+    
+    sSQL = "UPDATE Trans_Rol_Horas " _
+         & "SET Dias = Dias - 1 " _
+         & "FROM Trans_Rol_Horas As TRH, Catalogo_Rol_Pagos As CRP " _
+         & "WHERE TRH.Item = '" & NumEmpresa & "' " _
+         & "AND TRH.Periodo = '" & Periodo_Contable & "' " _
+         & "AND TRH.Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
+         & "AND DAY(CRP.Fecha) > 1 " _
+         & "AND CRP.Fecha >= #" & FechaIni & "# " _
+         & "AND " & UltimodDiaMes & " > 30 " _
+         & "AND TRH.Item = CRP.Item " _
+         & "AND TRH.Periodo = CRP.Periodo " _
+         & "AND TRH.Codigo = CRP.Codigo "
+    Ejecutar_SQL_SP sSQL
+    
+    sSQL = "UPDATE Trans_Rol_Horas " _
+         & "SET Ing_Liquido = ROUND((Ing_Liquido/30)*Dias,2,0), Horas = ROUND((Horas_Sem*4/30)*Dias,0,0) " _
+         & "FROM Trans_Rol_Horas As TRH, Catalogo_Rol_Pagos As CRP " _
+         & "WHERE TRH.Item = '" & NumEmpresa & "' " _
+         & "AND TRH.Periodo = '" & Periodo_Contable & "' " _
+         & "AND TRH.Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
+         & "AND Dias < 30 " _
+         & "AND TRH.Item = CRP.Item " _
+         & "AND TRH.Periodo = CRP.Periodo " _
+         & "AND TRH.Codigo = CRP.Codigo "
+    Ejecutar_SQL_SP sSQL
+    
+''  With AdoEmpleado.Recordset
+''   If .RecordCount > 0 Then
+''       Do While Not .EOF
+''          NombreCliente = .fields("Cliente")
+''          CodigoCliente = .fields("Codigo")
+''          DCEmpleado.Text = .fields("Cliente")
+''          Evaluar = .fields("Horas_Ext")
+''          Grupo_No = .fields("Grupo")
+''          TxtValorHora = .fields("Valor_Hora")
+''          Fecha_Empleado = .fields("Fecha")
+''          Fecha_Salida = .fields("FechaC")
+''
+''          If .fields("T") = "R" Then
+''              If (CFechaLong(.fields("FechaC")) - CFechaLong(.fields("Fecha"))) > 30 Then Fecha_Empleado = PrimerDiaMes(MBFechaI) Else Fecha_Empleado = .fields("Fecha")
+''              DiasTrabajados = CFechaLong(Fecha_Salida) - CFechaLong(Fecha_Empleado) + 1
+''          Else
+''              DiasTrabajados = CFechaLong(FechaFinal) - CFechaLong(Fecha_Empleado) + 1
+''              If Day(UltimoDiaMes(FechaFinal)) = 28 Then DiasTrabajados = DiasTrabajados + 2
+''              If Day(UltimoDiaMes(FechaFinal)) = 29 Then DiasTrabajados = DiasTrabajados + 1
+''              If Day(UltimoDiaMes(FechaFinal)) = 31 Then DiasTrabajados = DiasTrabajados - 1
+''          End If
+''
+''         'If DiasTrabajados <= UltimodDiaMes Then DiasTrabajados = DiasTrabajados + 1
+''
+''          'MsgBox NombreCliente & vbCrLf & vbCrLf & .fields("Salario") & vbCrLf & ValorTotal & vbCrLf & "Dias: " & DiasTrabajados
+''
+''          If OpcSemana.value Then
+''             MiTiempo1 = .fields("Horas_Sem")
+''             ValorTotal = .fields("Salario") / 4
+''          End If
+''          If OpcQuincena.value Then
+''             MiTiempo1 = .fields("Horas_Sem") * 2
+''             ValorTotal = .fields("Salario") / 2
+''          End If
+''          If OpcMensual.value Then
+''             MiTiempo1 = .fields("Horas_Sem") * 4
+''             ValorTotal = .fields("Salario")
+''
+''             If DiasTrabajados < Day(FechaFinal) Then
+''                ValorTotal = Redondear((ValorTotal / 30) * DiasTrabajados, 2)
+''                Dias_Laborados = DiasTrabajados
+''             Else
+''                Dias_Laborados = 30 'Day(FechaFinal)
+''             End If
+''          End If
+''
+''          MiTiempo = Time
+''         'If CodigoCliente = "0020000046" Then MsgBox ".."
+''          If ValorTotal > 0 Then
+''             SetAdoAddNew "Trans_Rol_Horas"
+''             SetAdoFields "T", Val(adFalse)
+''             SetAdoFields "Dias", Dias_Laborados 'UltimodDiaMes
+''             SetAdoFields "Codigo", CodigoCliente
+''             SetAdoFields "Fecha", MBFechaI
+''             SetAdoFields "Horas", MiTiempo1
+''             SetAdoFields "Horas_Exts", 0
+''             SetAdoFields "Porc_Hr_Ext", 0
+''             SetAdoFields "Ing_Horas_Ext", 0
+''             SetAdoFields "Valor_Hora", .fields("Valor_Hora")
+''             If Dias_Laborados = 30 Then
+''                SetAdoFields "Ing_Liquido", Redondear(.fields("Salario"), 2)
+''             Else
+''                SetAdoFields "Ing_Liquido", Redondear(ValorTotal, 2)
+''             End If
+''             SetAdoFields "Orden", TxtOrden
+''             SetAdoFields "CodigoU", CodigoUsuario
+''             SetAdoFields "Item", NumEmpresa
+''             SetAdoUpdate
+''          End If
+''         .MoveNext
+''       Loop
+''   End If
+''  End With
   RatonNormal
   MsgBox "PROCESO TERMINADO"
 End Sub
@@ -1172,7 +1266,7 @@ Private Sub DCEmpleado_LostFocus()
    End If
   End With
   
-  sSQL = "SELECT TOP 1 Codigo,Valor_Hora " _
+  sSQL = "SELECT TOP 1 Codigo, Valor_Hora " _
        & "FROM Trans_Rol_Horas " _
        & "WHERE Fecha <= #" & BuscarFecha(MBFechaI.Text) & "# " _
        & "AND Codigo = '" & CodigoCliente & "' " _
@@ -1183,7 +1277,9 @@ Private Sub DCEmpleado_LostFocus()
   If AdoAux.Recordset.RecordCount > 0 Then
      'TxtValorHora.Text = AdoAux.Recordset.Fields("Valor_Hora")
   End If
+  
   ListarHorasTrabajadas CodigoCliente
+  
   sSQL = "SELECT Fecha,Hora,Proceso,Tarea as Novedades,Codigo " _
        & "FROM Trans_Entrada_Salida " _
        & "WHERE Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
@@ -1198,25 +1294,50 @@ Private Sub DCEmpleado_LostFocus()
 End Sub
       
 Private Sub DGHorasTrabajadas_KeyDown(KeyCode As Integer, Shift As Integer)
-  If KeyCode = vbKeyDelete Then
-     CodigoCliente = DGHorasTrabajadas.Columns(0)
-     Mifecha = DGHorasTrabajadas.Columns(2)
-     Double1 = Round(Val(DGHorasTrabajadas.Columns(3)), 4)
-     Codigo1 = DGHorasTrabajadas.Columns(6)
-     Mensajes = "Esta seguro de Eliminar el registro del " & Mifecha & ", Codigo: " & CodigoCliente & vbCrLf
-     Titulo = "Pregunta de Eliminacion"
-     If BoxMensaje = vbYes Then
-        sSQL = "DELETE * " _
-             & "FROM Trans_Rol_Horas " _
-             & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND Periodo = '" & Periodo_Contable & "' " _
-             & "AND Fecha = #" & BuscarFecha(Mifecha) & "# " _
-             & "AND Codigo = '" & CodigoCliente & "' " _
-             & "AND Horas = " & Double1 & " "
-        Ejecutar_SQL_SP sSQL
-        ListarHorasTrabajadas CodigoCliente
-     End If
-  End If
+    Keys_Especiales Shift
+    
+    If AdoHorasTrabajadas.Recordset.RecordCount > 0 Then
+     ' CodigoCliente = DGHorasTrabajadas.Columns(0)
+       Mifecha = DGHorasTrabajadas.Columns(3)
+       Double1 = Round(Val(DGHorasTrabajadas.Columns(4)), 4)
+       Codigo1 = DGHorasTrabajadas.Columns(7)
+    End If
+    
+'    MsgBox Mifecha
+    If KeyCode = vbKeyDelete Then
+       Mensajes = "Esta seguro de Eliminar el registro del " & Mifecha & ", Codigo: " & CodigoCliente & vbCrLf
+       Titulo = "Pregunta de Eliminacion"
+       If BoxMensaje = vbYes Then
+          sSQL = "DELETE * " _
+               & "FROM Trans_Rol_Horas " _
+               & "WHERE Item = '" & NumEmpresa & "' " _
+               & "AND Periodo = '" & Periodo_Contable & "' " _
+               & "AND Fecha = #" & BuscarFecha(Mifecha) & "# " _
+               & "AND Codigo = '" & CodigoCliente & "' " _
+               & "AND Horas = " & Double1 & " "
+          Ejecutar_SQL_SP sSQL
+          ListarHorasTrabajadas CodigoCliente
+       End If
+    End If
+    If CtrlDown And KeyCode = vbKeyE Then
+       FechaIni = BuscarFecha(MBFechaI)
+       
+       NoDias = InputBox("El Sr(a). " & NombreCliente & ", Cuantos dias de Permiso de enfermedad tiene?", "PERMISO DE ENFERMEDAD", "0")
+       If NoDias < 0 Then NoDias = 0
+       If NoDias > 30 Then NoDias = 30
+       If NoDias > 4 Then
+          sSQL = "UPDATE Trans_Rol_Horas " _
+               & "SET Dias_Enfermedad = " & NoDias & " " _
+               & "FROM Trans_Rol_Horas " _
+               & "WHERE Item = '" & NumEmpresa & "' " _
+               & "AND Periodo = '" & Periodo_Contable & "' " _
+               & "AND Codigo = '" & CodigoCliente & "' " _
+               & "AND Fecha = #" & FechaFin & "# "
+          Ejecutar_SQL_SP sSQL
+       Else
+          MsgBox "Advertencia: No se pudo hacer el proceso, ingrese mas de 3 dias de enfermedad"
+       End If
+    End If
 End Sub
 
 Private Sub DGNovedades_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -1336,10 +1457,6 @@ End Sub
 
 Private Sub Opc90_Click()
   ListarHorasTrabajadas CodigoCliente
-End Sub
-
-Private Sub OpcMensual_Click()
-  MBFechaI = UltimoDiaMes(MBFechaI)
 End Sub
 
 Private Sub OpcTodos_Click()
@@ -1478,7 +1595,7 @@ Public Sub ListarHorasTrabajadas(TipoCodigo As String)
   FechaIni = BuscarFecha(FechaTexto)
   FechaFin = BuscarFecha(MBFechaI.Text)
   Total = 0: Saldo = 0
-  sSQL = "SELECT Codigo,Dias,Fecha,Horas,Horas_Exts,Porc_Hr_Ext,Valor_Hora,Ing_Liquido,Ing_Horas_Ext,Orden " _
+  sSQL = "SELECT Codigo, Dias, Dias_Enfermedad, Fecha, Horas, Horas_Exts, Porc_Hr_Ext, Valor_Hora, Ing_Liquido, Ing_Horas_Ext, Orden " _
        & "FROM Trans_Rol_Horas " _
        & "WHERE Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
        & "AND Codigo = '" & TipoCodigo & "' " _

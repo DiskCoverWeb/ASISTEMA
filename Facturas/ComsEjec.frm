@@ -877,8 +877,8 @@ With AdoQuery.Recordset
  If .RecordCount > 0 Then
   .MoveFirst
   Do While Not .EOF
-    Total = Total + .Fields("Total")
-     Saldo = Saldo + .Fields("Comision")
+    Total = Total + .fields("Total")
+     Saldo = Saldo + .fields("Comision")
     .MoveNext
   Loop
   .MoveFirst
@@ -907,7 +907,7 @@ Public Sub ListarCuenta(TextoBusqueda As String)
       .Find ("Cliente = '" & TextoBusqueda & "'")
        If Not .EOF Then
           'MsgBox .Fields("Cliente")
-          CodigoCli = .Fields("Codigo")
+          CodigoCli = .fields("Codigo")
           Mifecha = PrimerDiaMes(FechaSistema)
           Dia = Day(Mifecha)
           Mes = Month(Mifecha)
@@ -969,7 +969,7 @@ Private Sub DCCliente_KeyDown(KeyCode As Integer, Shift As Integer)
      With AdoListCtas.Recordset
       If .RecordCount > 0 Then
           Do While Not .EOF
-            .Fields("Cliente") = UCaseStrg(CompilarString(.Fields("Cliente")))
+            .fields("Cliente") = UCaseStrg(CompilarString(.fields("Cliente")))
             .Update
             .MoveNext
           Loop

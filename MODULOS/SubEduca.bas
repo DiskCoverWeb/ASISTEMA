@@ -330,8 +330,8 @@ Dim AdoRegs As ADODB.Recordset
     AdoRegs.open Strgs, AdoStrCnn, , , adCmdText
     With AdoRegs
      If .RecordCount > 0 Then
-         Cod_Prof = AdoRegs.Fields("Profesor")
-         CodMatP = AdoRegs.Fields("CodMatP")
+         Cod_Prof = AdoRegs.fields("Profesor")
+         CodMatP = AdoRegs.fields("CodMatP")
      End If
     End With
     AdoRegs.Close
@@ -357,8 +357,8 @@ Dim AdoRegs As ADODB.Recordset
             End Select
             SetAdoFields "Id_No", CByte(Contador)
             SetAdoFields "CodMat", CodMat
-            SetAdoFields "Codigo", .Fields("Codigo")
-            SetAdoFields "Alumno", .Fields("Cliente")
+            SetAdoFields "Codigo", .fields("Codigo")
+            SetAdoFields "Alumno", .fields("Cliente")
             SetAdoFields "Profesor", Cod_Prof
             SetAdoFields "Item", NumEmpresa
             SetAdoFields "CodigoU", CodigoUsuario
@@ -686,11 +686,11 @@ If .RecordCount > 0 Then
      Printer.FontName = TipoArialNarrow
      Do While Not .EOF
         'MsgBox Printer.FontName
-        For IdCampo = 0 To .Fields.Count - 1
-            Select Case .Fields(IdCampo).Name
+        For IdCampo = 0 To .fields.Count - 1
+            Select Case .fields(IdCampo).Name
               Case "CodMat", "Item", "CodigoU", "Codigo": ' no hacer nada
               Case Else
-                   PrinterFields Ancho(IdCampo), PosLinea, .Fields(IdCampo)
+                   PrinterFields Ancho(IdCampo), PosLinea, .fields(IdCampo)
             End Select
         Next IdCampo
         'PrinterAllFields CantCampos, PosLinea, Datas, True, False
@@ -758,9 +758,9 @@ If .RecordCount > 0 Then
      Do While Not .EOF
         Contador = Contador + 1
         PrinterVariables Ancho(0), PosLinea, Format$(Contador, "00") & ".-"
-        PrinterFields Ancho(0) + 0.6, PosLinea, .Fields("Estudiante")
-        PrinterFields Ancho(1), PosLinea, .Fields("Curso")
-        PrinterFields Ancho(2), PosLinea, .Fields("Promedio")
+        PrinterFields Ancho(0) + 0.6, PosLinea, .fields("Estudiante")
+        PrinterFields Ancho(1), PosLinea, .fields("Curso")
+        PrinterFields Ancho(2), PosLinea, .fields("Promedio")
         PosLinea = PosLinea + 0.4
         Imprimir_Linea_H PosLinea, Ancho(0), Ancho(CantCampos)
         PosLinea = PosLinea + 0.05
@@ -830,30 +830,30 @@ On Error GoTo Errorhandler
  DataReg.open sSQL, AdoStrCnn, , , adCmdText
  With DataReg
   If .RecordCount > 0 Then
-      CodigoCliente = .Fields("Codigo")
-      Codigo = .Fields("Representante_Alumno")
-      Codigo1 = .Fields("Nombre_Padre")
-      Codigo2 = .Fields("Nombre_Madre")
-      Codigo3 = .Fields("Profesion_P")
-      Codigo4 = .Fields("Profesion_M")
-      NivelNo = .Fields("Grupo")
+      CodigoCliente = .fields("Codigo")
+      Codigo = .fields("Representante_Alumno")
+      Codigo1 = .fields("Nombre_Padre")
+      Codigo2 = .fields("Nombre_Madre")
+      Codigo3 = .fields("Profesion_P")
+      Codigo4 = .fields("Profesion_M")
+      NivelNo = .fields("Grupo")
       Cta_Sup = CodigoCuentaSup(NivelNo)
-      Matricula = Format$(.Fields("Matricula_No"), "000000000")
-      Folio = Format$(.Fields("Folio_No"), "000000000")
-      CICliente = .Fields("Matricula_No")
-      DireccionCli = .Fields("Direccion")
+      Matricula = Format$(.fields("Matricula_No"), "000000000")
+      Folio = Format$(.fields("Folio_No"), "000000000")
+      CICliente = .fields("Matricula_No")
+      DireccionCli = .fields("Direccion")
       DirCliente = ""
-      If Len(.Fields("Domicilio")) > 1 Then DirCliente = DirCliente & .Fields("Domicilio")
-      If Len(.Fields("Lugar_Trabajo_P")) > 1 Then DirCliente = DirCliente & " - " & .Fields("Lugar_Trabajo_P")
-      If Val(.Fields("Celular")) > 0 Then DirCliente = DirCliente & " - " & .Fields("Celular")
+      If Len(.fields("Domicilio")) > 1 Then DirCliente = DirCliente & .fields("Domicilio")
+      If Len(.fields("Lugar_Trabajo_P")) > 1 Then DirCliente = DirCliente & " - " & .fields("Lugar_Trabajo_P")
+      If Val(.fields("Celular")) > 0 Then DirCliente = DirCliente & " - " & .fields("Celular")
       If DirCliente = "" Then DirCliente = Ninguno
-      Codigos = .Fields("Telefono")
-      CodigoL = .Fields("Ciudad")
-      TextoProc = .Fields("Actividad")
-      CodigoA = .Fields("Actividad")
-      CodigoL = .Fields("Actividad")
+      Codigos = .fields("Telefono")
+      CodigoL = .fields("Ciudad")
+      TextoProc = .fields("Actividad")
+      CodigoA = .fields("Actividad")
+      CodigoL = .fields("Actividad")
       'MsgBox TextoProc
-      Mifecha = FechaStrg(.Fields("Fecha_N"))
+      Mifecha = FechaStrg(.fields("Fecha_N"))
   End If
  End With
  DataReg.Close
@@ -867,10 +867,10 @@ On Error GoTo Errorhandler
   If .RecordCount > 0 Then
      .MoveFirst
      .Find ("CodigoE = '" & NivelNo & "' ")
-      If Not .EOF Then CodigoB = .Fields("Detalle")
+      If Not .EOF Then CodigoB = .fields("Detalle")
      .MoveFirst
      .Find ("CodigoE = '" & Cta_Sup & "' ")
-      If Not .EOF Then CodigoP = .Fields("Detalle")
+      If Not .EOF Then CodigoP = .fields("Detalle")
   End If
  End With
  DataReg.Close
@@ -1035,7 +1035,7 @@ On Error GoTo Errorhandler
          Do While Not .EOF
          
          MensajeEncabData = "AÑO LECTIVO " & Anio_Lectivo
-         SQLMsg1 = "A C T A   D E   M A T R I C U L A    No. " & .Fields("Matricula_No")
+         SQLMsg1 = "A C T A   D E   M A T R I C U L A    No. " & .fields("Matricula_No")
          SQLMsg2 = ""
          SQLMsg3 = ""
          SQLMsg4 = ""
@@ -1069,13 +1069,13 @@ On Error GoTo Errorhandler
          PosLinea = PosLinea_Aux + 0.6
          Printer.FontSize = 14
          Printer.FontBold = True
-         PrinterCentrarTexto 20, PosLinea, UCaseStrg(.Fields("Cliente"))
+         PrinterCentrarTexto 20, PosLinea, UCaseStrg(.fields("Cliente"))
          Printer.FontBold = False
          PosLinea = PosLinea + 1
          Printer.FontSize = 11
          Printer.FontUnderline = True
          Printer.FontBold = True
-         Cadena = Leer_Datos_del_Curso(.Fields("Grupo"))
+         Cadena = Leer_Datos_del_Curso(.fields("Grupo"))
          NumeroLineas = PrinterLineasMayor(2, PosLinea, TrimStrg(Cadena), 17.5, 0.5)
          PosLinea = PosLinea_Aux + 0.6
          Printer.FontUnderline = False
@@ -1085,25 +1085,25 @@ On Error GoTo Errorhandler
          PrinterTexto 2, PosLinea, "Lugar de Nacimiento:"
          PrinterTexto 15, PosLinea, "Fecha:"
          Printer.FontBold = False
-         PrinterTexto 6.5, PosLinea, .Fields("Lugar_Nac")
-         PrinterTexto 16.5, PosLinea, .Fields("Fecha_N")
+         PrinterTexto 6.5, PosLinea, .fields("Lugar_Nac")
+         PrinterTexto 16.5, PosLinea, .fields("Fecha_N")
          PosLinea = PosLinea + 0.5
          Printer.FontBold = True
          PrinterTexto 2, PosLinea, "Dirección Domicilio:"
          Printer.FontBold = False
-         PrinterTexto 6.5, PosLinea, .Fields("Domicilio")
+         PrinterTexto 6.5, PosLinea, .fields("Domicilio")
          PosLinea = PosLinea + 0.5
          Printer.FontBold = True
          PrinterTexto 2, PosLinea, "Teléfonos:"
          PrinterTexto 13, PosLinea, "Nacionalidad:"
          Printer.FontBold = False
-         PrinterTexto 6.5, PosLinea, .Fields("Telefono")
-         PrinterTexto 16, PosLinea, .Fields("Nacionalidad")
+         PrinterTexto 6.5, PosLinea, .fields("Telefono")
+         PrinterTexto 16, PosLinea, .fields("Nacionalidad")
          PosLinea = PosLinea + 0.5
          Printer.FontBold = True
          PrinterTexto 2, PosLinea, "Plantel que Proviene:"
          Printer.FontBold = False
-         PrinterTexto 6.5, PosLinea, .Fields("Procedencia")
+         PrinterTexto 6.5, PosLinea, .fields("Procedencia")
          PosLinea = PosLinea + 0.8
          Printer.FontSize = 13
          Printer.FontBold = True
@@ -1115,15 +1115,15 @@ On Error GoTo Errorhandler
          PrinterTexto 2, PosLinea, "Nombre:"
          PrinterTexto 15, PosLinea, "Teléfono:"
          Printer.FontBold = False
-         PrinterTexto 4.2, PosLinea, .Fields("Nombre_Padre")
-         PrinterTexto 17, PosLinea, .Fields("Telefono_Trabajo_P")
+         PrinterTexto 4.2, PosLinea, .fields("Nombre_Padre")
+         PrinterTexto 17, PosLinea, .fields("Telefono_Trabajo_P")
          PosLinea = PosLinea + 0.5
          Printer.FontBold = True
          PrinterTexto 2, PosLinea, "Nacionalidad:"
          PrinterTexto 10, PosLinea, "Ocupación:"
          Printer.FontBold = False
-         PrinterTexto 4.7, PosLinea, .Fields("Nacionalidad_P")
-         PrinterTexto 12.5, PosLinea, .Fields("Profesion_P")
+         PrinterTexto 4.7, PosLinea, .fields("Nacionalidad_P")
+         PrinterTexto 12.5, PosLinea, .fields("Profesion_P")
          PosLinea = PosLinea + 0.8
          Printer.FontSize = 13
          Printer.FontBold = True
@@ -1135,15 +1135,15 @@ On Error GoTo Errorhandler
          PrinterTexto 2, PosLinea, "Nombre:"
          PrinterTexto 15, PosLinea, "Teléfono:"
          Printer.FontBold = False
-         PrinterTexto 4.2, PosLinea, .Fields("Nombre_Madre")
-         PrinterTexto 17, PosLinea, .Fields("Telefono_Trabajo_M")
+         PrinterTexto 4.2, PosLinea, .fields("Nombre_Madre")
+         PrinterTexto 17, PosLinea, .fields("Telefono_Trabajo_M")
          PosLinea = PosLinea + 0.5
          Printer.FontBold = True
          PrinterTexto 2, PosLinea, "Nacionalidad:"
          PrinterTexto 10, PosLinea, "Ocupación:"
          Printer.FontBold = False
-         PrinterTexto 4.7, PosLinea, .Fields("Nacionalidad_M")
-         PrinterTexto 12.5, PosLinea, .Fields("Profesion_M")
+         PrinterTexto 4.7, PosLinea, .fields("Nacionalidad_M")
+         PrinterTexto 12.5, PosLinea, .fields("Profesion_M")
          PosLinea = PosLinea + 0.8
          Printer.FontSize = 13
          Printer.FontBold = True
@@ -1155,15 +1155,15 @@ On Error GoTo Errorhandler
          PrinterTexto 2, PosLinea, "Nombre:"
          PrinterTexto 15, PosLinea, "Teléfono:"
          Printer.FontBold = False
-         PrinterTexto 4.2, PosLinea, .Fields("Representante_Alumno")
-         PrinterTexto 17, PosLinea, .Fields("Telefono_R")
+         PrinterTexto 4.2, PosLinea, .fields("Representante_Alumno")
+         PrinterTexto 17, PosLinea, .fields("Telefono_R")
          PosLinea = PosLinea + 0.5
          Printer.FontBold = True
          PrinterTexto 2, PosLinea, "Telefono:"
          PrinterTexto 10, PosLinea, "Ocupación:"
          Printer.FontBold = False
-         PrinterTexto 4.2, PosLinea, .Fields("Celular")
-         PrinterTexto 12.5, PosLinea, .Fields("Profesion_R")
+         PrinterTexto 4.2, PosLinea, .fields("Celular")
+         PrinterTexto 12.5, PosLinea, .fields("Profesion_R")
          PosLinea = PosLinea + 1
          Cadena = "El infrascrito, representante de la estudiante matriculada, declara que se encuentra conforme " _
                 & "con los datos que anteceden y firma sometiéndose a las disposiciones del citado reglamento."
@@ -1230,8 +1230,8 @@ If PonImpresoraDefecto(SetNombrePRN) Then
    DataReg.open sSQL, AdoStrCnn, , , adCmdText
    With DataReg
     If .RecordCount > 0 Then
-        Cadena = Leer_Datos_del_Curso(.Fields("Grupo_No"))
-        Codigo4 = MidStrg(.Fields("Grupo_No"), 1, 4)
+        Cadena = Leer_Datos_del_Curso(.fields("Grupo_No"))
+        Codigo4 = MidStrg(.fields("Grupo_No"), 1, 4)
    InicioX = 0.5: InicioY = 1
    Ancho(0) = 1.5: AnchoPapel = 18
    Pagina = 1: Documento = 1
@@ -1311,7 +1311,7 @@ If PonImpresoraDefecto(SetNombrePRN) Then
         PosLinea = NumeroLineas
         Printer.FontSize = 14
         PosLinea = PosLinea - 0.2
-        PrinterTexto 6, PosLinea, .Fields("Cliente")
+        PrinterTexto 6, PosLinea, .fields("Cliente")
         Printer.FontSize = 12
         PosLinea = PosLinea + 2
         'MsgBox .Fields("Nivel")
@@ -1330,11 +1330,11 @@ If PonImpresoraDefecto(SetNombrePRN) Then
                PrinterTexto 6, PosLinea, Dato_Curso.Especialidad
                PosLinea = PosLinea + 2
         End Select
-        PrinterTexto 6, PosLinea, Format$(.Fields("Matricula_No"), "000000000")
+        PrinterTexto 6, PosLinea, Format$(.fields("Matricula_No"), "000000000")
         PosLinea = PosLinea + 2
-        PrinterTexto 6, PosLinea, Format$(.Fields("Folio_No"), "000000000")
+        PrinterTexto 6, PosLinea, Format$(.fields("Folio_No"), "000000000")
         PosLinea = PosLinea + 2
-        PrinterTexto 2, 17, UCaseStrg(NombreCiudad) & ", " & FechaStrg(.Fields("Fecha_M"))
+        PrinterTexto 2, 17, UCaseStrg(NombreCiudad) & ", " & FechaStrg(.fields("Fecha_M"))
   End If
  End With
  DataReg.Close
@@ -1381,7 +1381,7 @@ If PonImpresoraDefecto(SetNombrePRN) Then
    DataReg.open sSQL, AdoStrCnn, , , adCmdText
    With DataReg
     If .RecordCount > 0 Then
-        Codigo4 = MidStrg(.Fields("Grupo_No"), 1, 4)
+        Codigo4 = MidStrg(.fields("Grupo_No"), 1, 4)
    InicioX = 0.5: InicioY = 1
    Ancho(0) = 1.5: AnchoPapel = 18
    Pagina = 0: Documento = 1
@@ -1446,24 +1446,24 @@ If PonImpresoraDefecto(SetNombrePRN) Then
         PosLinea = NumeroLineas
         Printer.FontSize = 14
         PosLinea = PosLinea - 0.2
-        PrinterTexto 5, PosLinea, .Fields("Cliente")
+        PrinterTexto 5, PosLinea, .fields("Cliente")
         Printer.FontSize = 12
         PosLinea = PosLinea + 2
         'MsgBox .Fields("Nivel")
-        PrinterTexto 5, PosLinea, .Fields("Nivel")
+        PrinterTexto 5, PosLinea, .fields("Nivel")
         PosLinea = PosLinea + 2
         Select Case Codigo4
           Case "2.00" To "3.99"
 ''               Cadena = SinEspaciosDer(.Fields("Especialidad"))
 ''               Cadena = MidStrg(.Fields("Nivel"), 1, Len(.Fields("Nivel")) - Len(Cadena))
-               PrinterTexto 5, PosLinea, .Fields("Especialidad")
+               PrinterTexto 5, PosLinea, .fields("Especialidad")
                PosLinea = PosLinea + 2
         End Select
-        PrinterTexto 5, PosLinea, Format$(.Fields("Matricula_No"), "000000000")
+        PrinterTexto 5, PosLinea, Format$(.fields("Matricula_No"), "000000000")
         PosLinea = PosLinea + 2
-        PrinterTexto 5, PosLinea, Format$(.Fields("Folio_No"), "000000000")
+        PrinterTexto 5, PosLinea, Format$(.fields("Folio_No"), "000000000")
         PosLinea = PosLinea + 2
-        PrinterTexto 1, 17, UCaseStrg(NombreCiudad) & ", " & FechaStrg(.Fields("Fecha_M"))
+        PrinterTexto 1, 17, UCaseStrg(NombreCiudad) & ", " & FechaStrg(.fields("Fecha_M"))
   End If
  End With
  DataReg.Close
@@ -1509,8 +1509,8 @@ If PonImpresoraDefecto(SetNombrePRN) Then
    DataReg.open sSQL, AdoStrCnn, , , adCmdText
    With DataReg
     If .RecordCount > 0 Then
-        Cadena = Leer_Datos_del_Curso(.Fields("Grupo_No"))
-        NivelNo = .Fields("Grupo_No")
+        Cadena = Leer_Datos_del_Curso(.fields("Grupo_No"))
+        NivelNo = .fields("Grupo_No")
     End If
    End With
    
@@ -1631,37 +1631,37 @@ If PonImpresoraDefecto(SetNombrePRN) Then
    
    With DataReg
     If .RecordCount > 0 Then
-        PrinterTexto 7, PosLinea + 1, Format$(.Fields("Matricula_No"), "0000")
-        PrinterTexto 7, PosLinea + 1.5, Format$(.Fields("Folio_No"), "0000")
-        PrinterTexto 7, PosLinea + 2, FechaStrg(.Fields("Fecha_M"))
+        PrinterTexto 7, PosLinea + 1, Format$(.fields("Matricula_No"), "0000")
+        PrinterTexto 7, PosLinea + 1.5, Format$(.fields("Folio_No"), "0000")
+        PrinterTexto 7, PosLinea + 2, FechaStrg(.fields("Fecha_M"))
         PrinterTexto 7, PosLinea + 2.5, Dato_Curso.Especialidad
         PrinterTexto 7, PosLinea + 3, Dato_Curso.Descripcion  ' .Fields("Direccion")
         PrinterTexto 7, PosLinea + 3.5, Dato_Curso.Seccion
-        PrinterTexto 7, PosLinea + 4, .Fields("Grupo_No")
+        PrinterTexto 7, PosLinea + 4, .fields("Grupo_No")
     
-        PrinterTexto 7, PosLinea + 6, .Fields("Cliente")
-        PrinterTexto 7, PosLinea + 6.5, .Fields("CI")
-        PrinterTexto 7, PosLinea + 7, .Fields("Lugar_Nac")
-        PrinterTexto 7, PosLinea + 7.5, FechaStrg(.Fields("Fecha_N"))
-        PrinterTexto 7, PosLinea + 8, .Fields("Domicilio")
-        PrinterTexto 7, PosLinea + 8.5, .Fields("Telefono")
+        PrinterTexto 7, PosLinea + 6, .fields("Cliente")
+        PrinterTexto 7, PosLinea + 6.5, .fields("CI")
+        PrinterTexto 7, PosLinea + 7, .fields("Lugar_Nac")
+        PrinterTexto 7, PosLinea + 7.5, FechaStrg(.fields("Fecha_N"))
+        PrinterTexto 7, PosLinea + 8, .fields("Domicilio")
+        PrinterTexto 7, PosLinea + 8.5, .fields("Telefono")
     
-        PrinterTexto 7, PosLinea + 10.5, .Fields("Nombre_Padre")
-        PrinterTexto 7, PosLinea + 11, .Fields("Nacionalidad_P")
-        PrinterTexto 7, PosLinea + 11.5, .Fields("Profesion_P")
-        PrinterTexto 7, PosLinea + 12, .Fields("Lugar_Trabajo_P")
-        PrinterTexto 7, PosLinea + 12.5, .Fields("Telefono_Trabajo_P")
+        PrinterTexto 7, PosLinea + 10.5, .fields("Nombre_Padre")
+        PrinterTexto 7, PosLinea + 11, .fields("Nacionalidad_P")
+        PrinterTexto 7, PosLinea + 11.5, .fields("Profesion_P")
+        PrinterTexto 7, PosLinea + 12, .fields("Lugar_Trabajo_P")
+        PrinterTexto 7, PosLinea + 12.5, .fields("Telefono_Trabajo_P")
         
-        PrinterTexto 7, PosLinea + 13.5, .Fields("Nombre_Madre")
-        PrinterTexto 7, PosLinea + 14, .Fields("Nacionalidad_M")
-        PrinterTexto 7, PosLinea + 14.5, .Fields("Profesion_M")
-        PrinterTexto 7, PosLinea + 15, .Fields("Lugar_Trabajo_M")
-        PrinterTexto 7, PosLinea + 15.5, .Fields("Telefono_Trabajo_M")
+        PrinterTexto 7, PosLinea + 13.5, .fields("Nombre_Madre")
+        PrinterTexto 7, PosLinea + 14, .fields("Nacionalidad_M")
+        PrinterTexto 7, PosLinea + 14.5, .fields("Profesion_M")
+        PrinterTexto 7, PosLinea + 15, .fields("Lugar_Trabajo_M")
+        PrinterTexto 7, PosLinea + 15.5, .fields("Telefono_Trabajo_M")
         
-        PrinterTexto 7, PosLinea + 16.5, .Fields("Representante_Alumno")
-        PrinterTexto 7, PosLinea + 17, .Fields("Cedula_R")
-        PrinterTexto 7, PosLinea + 17.5, .Fields("Telefono_R")
-        PrinterTexto 7, PosLinea + 18, .Fields("Observaciones")
+        PrinterTexto 7, PosLinea + 16.5, .fields("Representante_Alumno")
+        PrinterTexto 7, PosLinea + 17, .fields("Cedula_R")
+        PrinterTexto 7, PosLinea + 17.5, .fields("Telefono_R")
+        PrinterTexto 7, PosLinea + 18, .fields("Observaciones")
         Cta_Sup = CodigoCuentaSup(NivelNo)
   End If
  End With
@@ -1720,10 +1720,10 @@ If PonImpresoraDefecto(SetNombrePRN) Then
     If .RecordCount > 0 Then
        .MoveFirst
        .Find ("Curso = '" & NivelNo & "' ")
-        If Not .EOF Then CodigoB = .Fields("Descripcion")
+        If Not .EOF Then CodigoB = .fields("Descripcion")
        .MoveFirst
        .Find ("Curso = '" & Cta_Sup & "' ")
-        If Not .EOF Then CodigoP = .Fields("Descripcion")
+        If Not .EOF Then CodigoP = .fields("Descripcion")
     End If
    End With
    DataReg.Close
@@ -1747,7 +1747,7 @@ If PonImpresoraDefecto(SetNombrePRN) Then
    With DataReg
     If .RecordCount > 0 Then
         Do While Not .EOF
-             NivelNo = .Fields("Grupo_No")
+             NivelNo = .fields("Grupo_No")
              PosLinea = 1
              AnchoDib = 20
              LogoMinisterio = RutaSistema & "\LOGOS\MINISEDU.JPG"
@@ -1781,7 +1781,7 @@ If PonImpresoraDefecto(SetNombrePRN) Then
              Printer.FontSize = 12
              PosLinea = PosLinea + 1
              MensajeEncabData = ""
-             SQLMsg3 = "M A T R I C U L A  No. " & .Fields("Matricula_No")
+             SQLMsg3 = "M A T R I C U L A  No. " & .fields("Matricula_No")
              PrinterCentrarTexto AnchoDib, PosLinea, SQLMsg3
              PosLinea = PosLinea + 1
              Printer.FontSize = 18
@@ -1795,9 +1795,9 @@ If PonImpresoraDefecto(SetNombrePRN) Then
              Printer.FontName = TipoTimes
             'Datos del Alumno(a)
              Printer.FontBold = False
-             Mifecha = .Fields("Fecha_M")
+             Mifecha = .fields("Fecha_M")
              Cadena = ""
-             If .Fields("Sexo") = "M" Then
+             If .fields("Sexo") = "M" Then
                  Cadena = Cadena & "Ha sido matriculado "
              Else
                  Cadena = Cadena & "Ha sido matriculada "
@@ -1805,19 +1805,19 @@ If PonImpresoraDefecto(SetNombrePRN) Then
              Cadena = Cadena & Leer_Datos_del_Curso(NivelNo) _
                     & " de esta Unidad Educativa, con fecha " & FechaStrg(FechaComp) _
                     & " para el período lectivo " & Anio_Lectivo & " previo el cumplimiento de los requisitos" _
-                    & " legales y reglamentarios. Dicha matrícula consta en el Folio " & .Fields("Folio_No") _
+                    & " legales y reglamentarios. Dicha matrícula consta en el Folio " & .fields("Folio_No") _
                     & " del libro No. "
-             If .Fields("Grupo_No") < "3" Then Cadena = Cadena & "1" Else Cadena = Cadena & "2"
+             If .fields("Grupo_No") < "3" Then Cadena = Cadena & "1" Else Cadena = Cadena & "2"
              Printer.FontSize = 12
              Printer.FontBold = False
-             If .Fields("Sexo") = "M" Then
+             If .fields("Sexo") = "M" Then
                  PrinterTexto 2, PosLinea, "Que el Señor "
              Else
                  PrinterTexto 2, PosLinea, "Que la Señorita "
              End If
              Printer.FontBold = True
              Printer.FontSize = 15
-             PrinterTexto 5.5, PosLinea, .Fields("Cliente")
+             PrinterTexto 5.5, PosLinea, .fields("Cliente")
              Printer.FontSize = 14
              PosLinea = PosLinea + 1
              Printer.FontBold = False
@@ -1897,7 +1897,7 @@ Dim Num_Matric As Integer
   sSQL = CompilarSQL(sSQL)
   DataReg.open sSQL, AdoStrCnn, , , adCmdText
   With DataReg
-   If .RecordCount > 0 Then Num_Matric = Val(.Fields("DirNumero")) + 1
+   If .RecordCount > 0 Then Num_Matric = Val(.fields("DirNumero")) + 1
   End With
   DataReg.Close
   Numero_De_Matricula = Num_Matric
@@ -1943,8 +1943,8 @@ With AdoMaterias.Recordset
     For I = 1 To CantCampos - 1
         Cadena = ""
         Contador = 1
-        For J = 1 To Len(.Fields(I).Name)
-            Cadena = Cadena & MidStrg(.Fields(I).Name, J, 1)
+        For J = 1 To Len(.fields(I).Name)
+            Cadena = Cadena & MidStrg(.fields(I).Name, J, 1)
             If Printer.TextWidth(Cadena) > 2.5 Then
                Do While MidStrg(Cadena, J, 1) <> " " And J > 1
                   J = J - 1
@@ -2086,24 +2086,24 @@ With Datas.Recordset
         Printer.FontItalic = False
         Printer.FontUnderline = False
         PrinterTexto Ancho(0) + 0.05, PosLinea, Format$(Contador, "00") & ".-"
-        PrinterTexto Ancho(0) + 0.55, PosLinea, .Fields(0)
+        PrinterTexto Ancho(0) + 0.55, PosLinea, .fields(0)
         For I = 1 To CantCampos - 1
             Printer.FontBold = False
             Printer.FontItalic = False
             Printer.FontUnderline = False
-            If .Fields(I) < 15 Then
+            If .fields(I) < 15 Then
                 Printer.FontBold = True
                 Printer.FontItalic = True
                 Printer.FontUnderline = True
             End If
-            If .Fields(I) <> 0 Then
+            If .fields(I) <> 0 Then
                'MsgBox .Fields(I).Name
-                CodigoA = .Fields(I).Name
+                CodigoA = .fields(I).Name
                 Si_No = False
                 If MidStrg(CodigoA, Len(CodigoA), 1) = "_" Then Si_No = True
                 If MidStrg(CodigoA, Len(CodigoA) - 1, 1) = "_" Then Si_No = True
                 If Si_No Then
-                   Select Case .Fields(I)
+                   Select Case .fields(I)
                      Case 1 To 11: CodigoP = " I"
                      Case 12 To 13: CodigoP = " R"
                      Case 14 To 15: CodigoP = " B"
@@ -2113,11 +2113,11 @@ With Datas.Recordset
                    PrinterTexto Ancho(I) + 0.05, PosLinea, CodigoP
                 Else
                    If I = CantCampos - 1 Then
-                      PrinterTexto Ancho(I) + 0.1, PosLinea, Format$(.Fields(I), "00.00")
+                      PrinterTexto Ancho(I) + 0.1, PosLinea, Format$(.fields(I), "00.00")
                    Else
-                      PrinterTexto Ancho(I) + 0.1, PosLinea, Format$(.Fields(I), "00")
+                      PrinterTexto Ancho(I) + 0.1, PosLinea, Format$(.fields(I), "00")
                    End If
-                   VectProm(I) = VectProm(I) + .Fields(I)
+                   VectProm(I) = VectProm(I) + .fields(I)
                    ContVert(I) = ContVert(I) + 1
                 End If
             End If
@@ -2245,18 +2245,18 @@ With Datas.Recordset
         Printer.FontItalic = False
         Printer.FontUnderline = False
         PrinterTexto Ancho(0) + 0.05, PosLinea, Format$(Contador, "00") & ".-"
-        PrinterTexto Ancho(0) + 0.55, PosLinea, .Fields(0)
+        PrinterTexto Ancho(0) + 0.55, PosLinea, .fields(0)
         For I = 1 To CantCampos - 1
             Printer.FontBold = False
             Printer.FontItalic = False
             Printer.FontUnderline = False
-            If .Fields(I) <> 0 Then
+            If .fields(I) <> 0 Then
                 If I = (CantCampos - 1) Then
-                   PrinterTexto Ancho(I) + 0.05, PosLinea, Format$(.Fields(I), "00.00")
+                   PrinterTexto Ancho(I) + 0.05, PosLinea, Format$(.fields(I), "00.00")
                 Else
-                   PrinterTexto Ancho(I) + 0.05, PosLinea, Format$(.Fields(I), "00")
+                   PrinterTexto Ancho(I) + 0.05, PosLinea, Format$(.fields(I), "00")
                 End If
-                VectProm(I) = VectProm(I) + .Fields(I)
+                VectProm(I) = VectProm(I) + .fields(I)
                 ContVert(I) = ContVert(I) + 1
             End If
         Next I
@@ -2356,9 +2356,9 @@ With Datas.Recordset
      Printer.FontSize = SizeLetra
      Do While Not .EOF
         'MsgBox CantCampos
-        PrinterTexto Ancho(0) + 0.2, PosLinea, .Fields(0)
+        PrinterTexto Ancho(0) + 0.2, PosLinea, .fields(0)
         For I = 0 To CantCampos - 1
-            PrinterTexto Ancho(I) + 0.1, PosLinea, Format$(.Fields(I), "00")
+            PrinterTexto Ancho(I) + 0.1, PosLinea, Format$(.fields(I), "00")
         Next I
         For I = 0 To CantCampos
             Printer.Line (Ancho(I), PosLinea - 0.01)-(Ancho(I), PosLinea + 0.35), Negro
@@ -2412,8 +2412,8 @@ Dim AdoRegs As ADODB.Recordset
     AdoRegs.open Strgs, AdoStrCnn, , , adCmdText
     With AdoRegs
      If .RecordCount > 0 Then
-         Cod_Prof = AdoRegs.Fields("Profesor")
-         CodMatP = AdoRegs.Fields("CodMatP")
+         Cod_Prof = AdoRegs.fields("Profesor")
+         CodMatP = AdoRegs.fields("CodMatP")
      End If
     End With
     AdoRegs.Close
@@ -2681,9 +2681,9 @@ If .RecordCount > 0 Then
            If EsActaGrado Then
               PrinterTexto PosColumna, PosLinea, "Examen Grado"
            Else
-               Select Case .Fields("CodMat")
+               Select Case .fields("CodMat")
                  Case "998", "999"
-                      If AdoAut.Recordset.Fields("NPQP1") Then
+                      If AdoAut.Recordset.fields("NPQP1") Then
                          PrinterTexto PosColumna, PosLinea, "ConductaPQ1"
                          PosColumna = PosColumna + AnchoCol
                          PrinterTexto PosColumna, PosLinea, "PQBFJ1"
@@ -2693,7 +2693,7 @@ If .RecordCount > 0 Then
                          PrinterTexto PosColumna, PosLinea, "PQBA1"
                          PosColumna = PosColumna + AnchoCol
                       End If
-                      If AdoAut.Recordset.Fields("NPQP2") Then
+                      If AdoAut.Recordset.fields("NPQP2") Then
                          PrinterTexto PosColumna, PosLinea, "ConductaPQ2"
                          PosColumna = PosColumna + AnchoCol
                          PrinterTexto PosColumna, PosLinea, "PQBFJ2"
@@ -2703,7 +2703,7 @@ If .RecordCount > 0 Then
                          PrinterTexto PosColumna, PosLinea, "PQBA2"
                          PosColumna = PosColumna + AnchoCol
                       End If
-                      If AdoAut.Recordset.Fields("NSQP1") Then
+                      If AdoAut.Recordset.fields("NSQP1") Then
                          PrinterTexto PosColumna, PosLinea, "ConductaSQ1"
                          PosColumna = PosColumna + AnchoCol
                          PrinterTexto PosColumna, PosLinea, "SQBFJ1"
@@ -2713,7 +2713,7 @@ If .RecordCount > 0 Then
                          PrinterTexto PosColumna, PosLinea, "SQBA1"
                          PosColumna = PosColumna + AnchoCol
                       End If
-                      If AdoAut.Recordset.Fields("NSQP2") Then
+                      If AdoAut.Recordset.fields("NSQP2") Then
                          PrinterTexto PosColumna, PosLinea, "ConductaSQ2"
                          PosColumna = PosColumna + AnchoCol
                          PrinterTexto PosColumna, PosLinea, "SQBFJ2"
@@ -2724,43 +2724,43 @@ If .RecordCount > 0 Then
                          PosColumna = PosColumna + AnchoCol
                       End If
                  Case Else
-                      If AdoAut.Recordset.Fields("NPQP1") Then
+                      If AdoAut.Recordset.fields("NPQP1") Then
                          PrinterTexto PosColumna, PosLinea, "PQBim1"
                          PosColumna = PosColumna + AnchoCol
                          PrinterTexto PosColumna, PosLinea, "ConductaPQ1"
                          PosColumna = PosColumna + AnchoCol
                       End If
-                      If AdoAut.Recordset.Fields("NPQP2") Then
+                      If AdoAut.Recordset.fields("NPQP2") Then
                          PrinterTexto PosColumna, PosLinea, "PQBim2"
                          PosColumna = PosColumna + AnchoCol
                          PrinterTexto PosColumna, PosLinea, "ConductaPQ2"
                          PosColumna = PosColumna + AnchoCol
                       End If
-                      If AdoAut.Recordset.Fields("NPQEX") Then
+                      If AdoAut.Recordset.fields("NPQEX") Then
                          PrinterTexto PosColumna, PosLinea, "ExamenPQ"
                          PosColumna = PosColumna + AnchoCol
                       End If
-                      If AdoAut.Recordset.Fields("NSQP1") Then
+                      If AdoAut.Recordset.fields("NSQP1") Then
                          PrinterTexto PosColumna, PosLinea, "SQBim1"
                          PosColumna = PosColumna + AnchoCol
                          PrinterTexto PosColumna, PosLinea, "ConductaSQ1"
                          PosColumna = PosColumna + AnchoCol
                       End If
-                      If AdoAut.Recordset.Fields("NSQP2") Then
+                      If AdoAut.Recordset.fields("NSQP2") Then
                          PrinterTexto PosColumna, PosLinea, "SQBim2"
                          PosColumna = PosColumna + AnchoCol
                          PrinterTexto PosColumna, PosLinea, "ConductaSQ2"
                          PosColumna = PosColumna + AnchoCol
                       End If
-                      If AdoAut.Recordset.Fields("NSQEX") Then
+                      If AdoAut.Recordset.fields("NSQEX") Then
                          PrinterTexto PosColumna, PosLinea, "ExamenSQ"
                          PosColumna = PosColumna + AnchoCol
                       End If
-                      If AdoAut.Recordset.Fields("NSUPL") Then
+                      If AdoAut.Recordset.fields("NSUPL") Then
                          PrinterTexto PosColumna, PosLinea, "Supletorio"
                          PosColumna = PosColumna + AnchoCol
                       End If
-                      If AdoAut.Recordset.Fields("NGRADO") Then
+                      If AdoAut.Recordset.fields("NGRADO") Then
                          PrinterTexto PosColumna, PosLinea, "Nota_Grado"
                          PosColumna = PosColumna + AnchoCol
                       End If
@@ -2776,95 +2776,95 @@ If .RecordCount > 0 Then
      Printer.FontName = TipoCourierNew
      Do While Not .EOF
         PrinterTexto 1.4, PosLinea, Format$(Contador, "00") & ".-"
-        PrinterFields 2.3, PosLinea, .Fields("Alumno")
+        PrinterFields 2.3, PosLinea, .fields("Alumno")
         PosColumna = 10.5
         If AdoAut.Recordset.RecordCount > 0 Then
            AdoAut.Recordset.MoveFirst
            'AdoAut.Recordset.Fields ("NGRADO")
            If EsActaGrado Then
-              PrinterFields PosColumna, PosLinea, .Fields("Examen"), True
+              PrinterFields PosColumna, PosLinea, .fields("Examen"), True
            Else
-               Select Case .Fields("CodMat")
+               Select Case .fields("CodMat")
                  Case "998", "999"
-                      If AdoAut.Recordset.Fields("NPQP1") Then
-                         PrinterFields PosColumna, PosLinea, .Fields("ConductaPQ1"), True
+                      If AdoAut.Recordset.fields("NPQP1") Then
+                         PrinterFields PosColumna, PosLinea, .fields("ConductaPQ1"), True
                          PosColumna = PosColumna + AnchoCol
-                         PrinterFields PosColumna, PosLinea, .Fields("PQBFJ1"), True
+                         PrinterFields PosColumna, PosLinea, .fields("PQBFJ1"), True
                          PosColumna = PosColumna + AnchoCol
-                         PrinterFields PosColumna, PosLinea, .Fields("PQBFI1"), True
+                         PrinterFields PosColumna, PosLinea, .fields("PQBFI1"), True
                          PosColumna = PosColumna + AnchoCol
-                         PrinterFields PosColumna, PosLinea, .Fields("PQBA1"), True
-                         PosColumna = PosColumna + AnchoCol
-                      End If
-                      If AdoAut.Recordset.Fields("NPQP2") Then
-                         PrinterFields PosColumna, PosLinea, .Fields("ConductaPQ2"), True
-                         PosColumna = PosColumna + AnchoCol
-                         PrinterFields PosColumna, PosLinea, .Fields("PQBFJ2"), True
-                         PosColumna = PosColumna + AnchoCol
-                         PrinterFields PosColumna, PosLinea, .Fields("PQBFI2"), True
-                         PosColumna = PosColumna + AnchoCol
-                         PrinterFields PosColumna, PosLinea, .Fields("PQBA2"), True
+                         PrinterFields PosColumna, PosLinea, .fields("PQBA1"), True
                          PosColumna = PosColumna + AnchoCol
                       End If
-                      If AdoAut.Recordset.Fields("NSQP1") Then
-                         PrinterFields PosColumna, PosLinea, .Fields("ConductaSQ1"), True
+                      If AdoAut.Recordset.fields("NPQP2") Then
+                         PrinterFields PosColumna, PosLinea, .fields("ConductaPQ2"), True
                          PosColumna = PosColumna + AnchoCol
-                         PrinterFields PosColumna, PosLinea, .Fields("SQBFJ1"), True
+                         PrinterFields PosColumna, PosLinea, .fields("PQBFJ2"), True
                          PosColumna = PosColumna + AnchoCol
-                         PrinterFields PosColumna, PosLinea, .Fields("SQBFI1"), True
+                         PrinterFields PosColumna, PosLinea, .fields("PQBFI2"), True
                          PosColumna = PosColumna + AnchoCol
-                         PrinterFields PosColumna, PosLinea, .Fields("SQBA1"), True
+                         PrinterFields PosColumna, PosLinea, .fields("PQBA2"), True
                          PosColumna = PosColumna + AnchoCol
                       End If
-                      If AdoAut.Recordset.Fields("NSQP2") Then
-                         PrinterFields PosColumna, PosLinea, .Fields("ConductaSQ2"), True
+                      If AdoAut.Recordset.fields("NSQP1") Then
+                         PrinterFields PosColumna, PosLinea, .fields("ConductaSQ1"), True
                          PosColumna = PosColumna + AnchoCol
-                         PrinterFields PosColumna, PosLinea, .Fields("SQBFJ2"), True
+                         PrinterFields PosColumna, PosLinea, .fields("SQBFJ1"), True
                          PosColumna = PosColumna + AnchoCol
-                         PrinterFields PosColumna, PosLinea, .Fields("SQBFI2"), True
+                         PrinterFields PosColumna, PosLinea, .fields("SQBFI1"), True
                          PosColumna = PosColumna + AnchoCol
-                         PrinterFields PosColumna, PosLinea, .Fields("SQBA2"), True
+                         PrinterFields PosColumna, PosLinea, .fields("SQBA1"), True
+                         PosColumna = PosColumna + AnchoCol
+                      End If
+                      If AdoAut.Recordset.fields("NSQP2") Then
+                         PrinterFields PosColumna, PosLinea, .fields("ConductaSQ2"), True
+                         PosColumna = PosColumna + AnchoCol
+                         PrinterFields PosColumna, PosLinea, .fields("SQBFJ2"), True
+                         PosColumna = PosColumna + AnchoCol
+                         PrinterFields PosColumna, PosLinea, .fields("SQBFI2"), True
+                         PosColumna = PosColumna + AnchoCol
+                         PrinterFields PosColumna, PosLinea, .fields("SQBA2"), True
                          PosColumna = PosColumna + AnchoCol
                       End If
                  Case Else
-                      If AdoAut.Recordset.Fields("NPQP1") Then
-                         PrinterFields PosColumna, PosLinea, .Fields("PQBim1"), True
+                      If AdoAut.Recordset.fields("NPQP1") Then
+                         PrinterFields PosColumna, PosLinea, .fields("PQBim1"), True
                          PosColumna = PosColumna + AnchoCol
-                         PrinterFields PosColumna, PosLinea, .Fields("ConductaPQ1"), True
-                         PosColumna = PosColumna + AnchoCol
-                      End If
-                      If AdoAut.Recordset.Fields("NPQP2") Then
-                         PrinterFields PosColumna, PosLinea, .Fields("PQBim2"), True
-                         PosColumna = PosColumna + AnchoCol
-                         PrinterFields PosColumna, PosLinea, .Fields("ConductaPQ2"), True
+                         PrinterFields PosColumna, PosLinea, .fields("ConductaPQ1"), True
                          PosColumna = PosColumna + AnchoCol
                       End If
-                      If AdoAut.Recordset.Fields("NPQEX") Then
-                         PrinterFields PosColumna, PosLinea, .Fields("ExamenPQ"), True
+                      If AdoAut.Recordset.fields("NPQP2") Then
+                         PrinterFields PosColumna, PosLinea, .fields("PQBim2"), True
+                         PosColumna = PosColumna + AnchoCol
+                         PrinterFields PosColumna, PosLinea, .fields("ConductaPQ2"), True
                          PosColumna = PosColumna + AnchoCol
                       End If
-                      If AdoAut.Recordset.Fields("NSQP1") Then
-                         PrinterFields PosColumna, PosLinea, .Fields("SQBim1"), True
-                         PosColumna = PosColumna + AnchoCol
-                         PrinterFields PosColumna, PosLinea, .Fields("ConductaSQ1"), True
+                      If AdoAut.Recordset.fields("NPQEX") Then
+                         PrinterFields PosColumna, PosLinea, .fields("ExamenPQ"), True
                          PosColumna = PosColumna + AnchoCol
                       End If
-                      If AdoAut.Recordset.Fields("NSQP2") Then
-                         PrinterFields PosColumna, PosLinea, .Fields("SQBim2"), True
+                      If AdoAut.Recordset.fields("NSQP1") Then
+                         PrinterFields PosColumna, PosLinea, .fields("SQBim1"), True
                          PosColumna = PosColumna + AnchoCol
-                         PrinterFields PosColumna, PosLinea, .Fields("ConductaSQ2"), True
-                         PosColumna = PosColumna + AnchoCol
-                      End If
-                      If AdoAut.Recordset.Fields("NSQEX") Then
-                         PrinterFields PosColumna, PosLinea, .Fields("ExamenSQ"), True
+                         PrinterFields PosColumna, PosLinea, .fields("ConductaSQ1"), True
                          PosColumna = PosColumna + AnchoCol
                       End If
-                      If AdoAut.Recordset.Fields("NSUPL") Then
-                         PrinterFields PosColumna, PosLinea, .Fields("Supletorio"), True
+                      If AdoAut.Recordset.fields("NSQP2") Then
+                         PrinterFields PosColumna, PosLinea, .fields("SQBim2"), True
+                         PosColumna = PosColumna + AnchoCol
+                         PrinterFields PosColumna, PosLinea, .fields("ConductaSQ2"), True
                          PosColumna = PosColumna + AnchoCol
                       End If
-                      If AdoAut.Recordset.Fields("NGRADO") Then
-                         PrinterFields PosColumna, PosLinea, .Fields("Nota_Grado"), True
+                      If AdoAut.Recordset.fields("NSQEX") Then
+                         PrinterFields PosColumna, PosLinea, .fields("ExamenSQ"), True
+                         PosColumna = PosColumna + AnchoCol
+                      End If
+                      If AdoAut.Recordset.fields("NSUPL") Then
+                         PrinterFields PosColumna, PosLinea, .fields("Supletorio"), True
+                         PosColumna = PosColumna + AnchoCol
+                      End If
+                      If AdoAut.Recordset.fields("NGRADO") Then
+                         PrinterFields PosColumna, PosLinea, .fields("Nota_Grado"), True
                          PosColumna = PosColumna + AnchoCol
                       End If
                End Select
@@ -3037,32 +3037,32 @@ With Datas.Recordset
 If .RecordCount > 0 Then
     .MoveFirst
      Contador = 0
-     Codigo = .Fields("Grupo")
-     Codigo3 = .Fields("Materia")
+     Codigo = .fields("Grupo")
+     Codigo3 = .fields("Materia")
      Codigo1 = ""
      Codigo2 = ""
      Cadena = ""
-     Select Case MidStrg(.Fields("Grupo"), 1, 1)
-       Case "1": Codigo1 = UCaseStrg(.Fields("Curso"))
-       Case "2": Codigo1 = UCaseStrg(.Fields("Curso"))
+     Select Case MidStrg(.fields("Grupo"), 1, 1)
+       Case "1": Codigo1 = UCaseStrg(.fields("Curso"))
+       Case "2": Codigo1 = UCaseStrg(.fields("Curso"))
        Case "3":
                 'MsgBox MidStrg(.Fields("Grupo_No"), 3, 2)
-                Select Case MidStrg(.Fields("Grupo"), 3, 2)
-                  Case "01": Codigo1 = "PRIMER CURSO CICLO DIVERSIFICADO DEL " & UCaseStrg(.Fields("Bachiller"))
-                  Case "02": Codigo1 = "SEGUNDO CURSO CICLO DIVERSIFICADO DEL " & UCaseStrg(.Fields("Bachiller"))
-                  Case "03": Codigo1 = "TERCER CURSO CICLO DIVERSIFICADO DEL " & UCaseStrg(.Fields("Bachiller"))
+                Select Case MidStrg(.fields("Grupo"), 3, 2)
+                  Case "01": Codigo1 = "PRIMER CURSO CICLO DIVERSIFICADO DEL " & UCaseStrg(.fields("Bachiller"))
+                  Case "02": Codigo1 = "SEGUNDO CURSO CICLO DIVERSIFICADO DEL " & UCaseStrg(.fields("Bachiller"))
+                  Case "03": Codigo1 = "TERCER CURSO CICLO DIVERSIFICADO DEL " & UCaseStrg(.fields("Bachiller"))
                 End Select
      End Select
-     If .Fields("Especialidad") <> Ninguno Then Codigo2 = "ESPECIALIZACIÓN " & UCaseStrg(.Fields("Especialidad"))
+     If .fields("Especialidad") <> Ninguno Then Codigo2 = "ESPECIALIZACIÓN " & UCaseStrg(.fields("Especialidad"))
      'MensajeEncabData = Cadena
-     Codigo3 = .Fields("Materia")
-     Codigo4 = .Fields("Profesor")
+     Codigo3 = .fields("Materia")
+     Codigo4 = .fields("Profesor")
      Encabezado_Lista_Alumnos SizeLetra, FechaInicial, Codigo, Codigo1, Codigo2, TipoNomina
      Do While Not .EOF
         Printer.FontItalic = False
         Printer.FontSize = SizeLetra
         Printer.FontName = TipoArialNarrow
-        If Codigo3 <> .Fields("Materia") Then
+        If Codigo3 <> .fields("Materia") Then
           'PosLinea = PosLinea - 0.1
            Imprimir_Linea_H PosLinea, 2, 19.5
            If TipoNomina = 2 Or TipoNomina = 3 Then
@@ -3082,29 +3082,29 @@ If .RecordCount > 0 Then
               Next I
            End If
            Printer.NewPage
-           Codigo = .Fields("Grupo")
+           Codigo = .fields("Grupo")
            Codigo1 = ""
            Codigo2 = ""
            Cadena = ""
-           Select Case MidStrg(.Fields("Grupo"), 1, 1)
-             Case "1": Codigo1 = UCaseStrg(.Fields("Curso"))
-             Case "2": Codigo1 = UCaseStrg(.Fields("Curso"))
+           Select Case MidStrg(.fields("Grupo"), 1, 1)
+             Case "1": Codigo1 = UCaseStrg(.fields("Curso"))
+             Case "2": Codigo1 = UCaseStrg(.fields("Curso"))
              Case "3":
                      'MsgBox MidStrg(.Fields("Grupo_No"), 3, 2)
-                      Select Case MidStrg(.Fields("Grupo"), 3, 2)
-                        Case "01": Codigo1 = "PRIMER CURSO CICLO DIVERSIFICADO DEL " & UCaseStrg(.Fields("Bachiller"))
-                        Case "02": Codigo1 = "SEGUNDO CURSO CICLO DIVERSIFICADO DEL " & UCaseStrg(.Fields("Bachiller"))
-                        Case "03": Codigo1 = "TERCER CURSO CICLO DIVERSIFICADO DEL " & UCaseStrg(.Fields("Bachiller"))
+                      Select Case MidStrg(.fields("Grupo"), 3, 2)
+                        Case "01": Codigo1 = "PRIMER CURSO CICLO DIVERSIFICADO DEL " & UCaseStrg(.fields("Bachiller"))
+                        Case "02": Codigo1 = "SEGUNDO CURSO CICLO DIVERSIFICADO DEL " & UCaseStrg(.fields("Bachiller"))
+                        Case "03": Codigo1 = "TERCER CURSO CICLO DIVERSIFICADO DEL " & UCaseStrg(.fields("Bachiller"))
                       End Select
            End Select
-           If .Fields("Especialidad") <> Ninguno Then Codigo2 = "ESPECIALIZACIÓN " & UCaseStrg(.Fields("Especialidad"))
-           Codigo3 = .Fields("Materia")
-           Codigo4 = .Fields("Profesor")
+           If .fields("Especialidad") <> Ninguno Then Codigo2 = "ESPECIALIZACIÓN " & UCaseStrg(.fields("Especialidad"))
+           Codigo3 = .fields("Materia")
+           Codigo4 = .fields("Profesor")
            Encabezado_Lista_Alumnos SizeLetra, FechaInicial, Codigo, Codigo1, Codigo2, TipoNomina
            Contador = 0
         End If
         
-        If Codigo <> .Fields("Grupo") Then
+        If Codigo <> .fields("Grupo") Then
            Imprimir_Linea_H PosLinea, 2, 19.5
            If TipoNomina = 2 Or TipoNomina = 3 Then
               InicioY = InicioY + 0.05
@@ -3124,32 +3124,32 @@ If .RecordCount > 0 Then
            End If
            Printer.NewPage
            Contador = 0
-           Codigo = .Fields("Grupo")
+           Codigo = .fields("Grupo")
            Codigo1 = ""
            Codigo2 = ""
            Cadena = ""
-           Select Case MidStrg(.Fields("Grupo"), 1, 1)
-             Case "1": Codigo1 = UCaseStrg(.Fields("Curso"))
-             Case "2": Codigo1 = UCaseStrg(.Fields("Curso"))
+           Select Case MidStrg(.fields("Grupo"), 1, 1)
+             Case "1": Codigo1 = UCaseStrg(.fields("Curso"))
+             Case "2": Codigo1 = UCaseStrg(.fields("Curso"))
              Case "3":
-                      Select Case MidStrg(.Fields("Grupo"), 3, 2)
-                        Case "01": Codigo1 = "PRIMER CURSO CICLO DIVERSIFICADO DEL " & UCaseStrg(.Fields("Bachiller"))
-                        Case "02": Codigo1 = "SEGUNDO CURSO CICLO DIVERSIFICADO DEL " & UCaseStrg(.Fields("Bachiller"))
-                        Case "03": Codigo1 = "TERCER CURSO CICLO DIVERSIFICADO DEL " & UCaseStrg(.Fields("Bachiller"))
+                      Select Case MidStrg(.fields("Grupo"), 3, 2)
+                        Case "01": Codigo1 = "PRIMER CURSO CICLO DIVERSIFICADO DEL " & UCaseStrg(.fields("Bachiller"))
+                        Case "02": Codigo1 = "SEGUNDO CURSO CICLO DIVERSIFICADO DEL " & UCaseStrg(.fields("Bachiller"))
+                        Case "03": Codigo1 = "TERCER CURSO CICLO DIVERSIFICADO DEL " & UCaseStrg(.fields("Bachiller"))
                       End Select
            End Select
-           If .Fields("Especialidad") <> Ninguno Then Codigo2 = "ESPECIALIZACIÓN " & UCaseStrg(.Fields("Especialidad"))
+           If .fields("Especialidad") <> Ninguno Then Codigo2 = "ESPECIALIZACIÓN " & UCaseStrg(.fields("Especialidad"))
            'MensajeEncabData = Cadena
            Encabezado_Lista_Alumnos SizeLetra, FechaInicial, Codigo, Codigo1, Codigo2, TipoNomina
         End If
         'PosLinea = PosLinea + 0.05
         Contador = Contador + 1
         PrinterTexto 2, PosLinea, Format$(Contador, "00")
-        PrinterTexto 2.6, PosLinea, .Fields("Cliente")
+        PrinterTexto 2.6, PosLinea, .fields("Cliente")
         PosLinea = PosLinea + 0.4
         If TipoNomina = 2 Or TipoNomina = 3 Then Imprimir_Linea_H PosLinea, 2, 19.5
         PosLinea = PosLinea + 0.1
-        K = .Fields("No_") + 1
+        K = .fields("No_") + 1
         If PosLinea >= LimiteAlto Then
            'PosLinea = PosLinea - 0.1
            Imprimir_Linea_H PosLinea, 2, 19.5
@@ -3170,24 +3170,24 @@ If .RecordCount > 0 Then
               Next I
            End If
            Printer.NewPage
-           Codigo = .Fields("Grupo")
+           Codigo = .fields("Grupo")
            Codigo1 = ""
            Codigo2 = ""
            Cadena = ""
-           Select Case MidStrg(.Fields("Grupo"), 1, 1)
-             Case "1": Codigo1 = UCaseStrg(.Fields("Curso"))
-             Case "2": Codigo1 = UCaseStrg(.Fields("Curso"))
+           Select Case MidStrg(.fields("Grupo"), 1, 1)
+             Case "1": Codigo1 = UCaseStrg(.fields("Curso"))
+             Case "2": Codigo1 = UCaseStrg(.fields("Curso"))
              Case "3":
                      'MsgBox MidStrg(.Fields("Grupo_No"), 3, 2)
-                      Select Case MidStrg(.Fields("Grupo"), 3, 2)
-                        Case "01": Codigo1 = "PRIMER CURSO CICLO DIVERSIFICADO DEL " & UCaseStrg(.Fields("Bachiller"))
-                        Case "02": Codigo1 = "SEGUNDO CURSO CICLO DIVERSIFICADO DEL " & UCaseStrg(.Fields("Bachiller"))
-                        Case "03": Codigo1 = "TERCER CURSO CICLO DIVERSIFICADO DEL " & UCaseStrg(.Fields("Bachiller"))
+                      Select Case MidStrg(.fields("Grupo"), 3, 2)
+                        Case "01": Codigo1 = "PRIMER CURSO CICLO DIVERSIFICADO DEL " & UCaseStrg(.fields("Bachiller"))
+                        Case "02": Codigo1 = "SEGUNDO CURSO CICLO DIVERSIFICADO DEL " & UCaseStrg(.fields("Bachiller"))
+                        Case "03": Codigo1 = "TERCER CURSO CICLO DIVERSIFICADO DEL " & UCaseStrg(.fields("Bachiller"))
                       End Select
            End Select
-           If .Fields("Especialidad") <> Ninguno Then Codigo2 = "ESPECIALIZACIÓN " & UCaseStrg(.Fields("Especialidad"))
-           Codigo3 = .Fields("Materia")
-           Codigo4 = .Fields("Profesor")
+           If .fields("Especialidad") <> Ninguno Then Codigo2 = "ESPECIALIZACIÓN " & UCaseStrg(.fields("Especialidad"))
+           Codigo3 = .fields("Materia")
+           Codigo4 = .fields("Profesor")
            Encabezado_Lista_Alumnos SizeLetra, FechaInicial, Codigo, Codigo1, Codigo2, TipoNomina
         End If
        .MoveNext
@@ -3270,19 +3270,19 @@ Dim sSQLCurso As String
      AdoDBCurso.open sSQLCurso, AdoStrCnn, , , adCmdText
      With AdoDBCurso
       If .RecordCount > 0 Then
-          Dato_Curso.Curso_Anio = .Fields("Descripcion")
-          Dato_Curso.Bachiller = .Fields("Bachiller")
-          Dato_Curso.Ciclo = .Fields("Ciclo")
-          Dato_Curso.Codigo_Titulo = .Fields("Codigo_Titulo")
-          Dato_Curso.Curso = .Fields("Curso")
-          Dato_Curso.Paralelo = .Fields("Paralelo")
-          Dato_Curso.Descripcion = .Fields("Descripcion")
-          Dato_Curso.Especialidad = .Fields("Especialidad")
-          Dato_Curso.Figura_Profesional = .Fields("Figura_Profesional")
-          Dato_Curso.Seccion = .Fields("Seccion")
-          Dato_Curso.Tipo_Titulo = .Fields("Tipo_Titulo")
-          Dato_Curso.Titulo = .Fields("Titulo")
-          Dato_Curso.Curso_Superior = .Fields("Curso_Superior")
+          Dato_Curso.Curso_Anio = .fields("Descripcion")
+          Dato_Curso.Bachiller = .fields("Bachiller")
+          Dato_Curso.Ciclo = .fields("Ciclo")
+          Dato_Curso.Codigo_Titulo = .fields("Codigo_Titulo")
+          Dato_Curso.Curso = .fields("Curso")
+          Dato_Curso.Paralelo = .fields("Paralelo")
+          Dato_Curso.Descripcion = .fields("Descripcion")
+          Dato_Curso.Especialidad = .fields("Especialidad")
+          Dato_Curso.Figura_Profesional = .fields("Figura_Profesional")
+          Dato_Curso.Seccion = .fields("Seccion")
+          Dato_Curso.Tipo_Titulo = .fields("Tipo_Titulo")
+          Dato_Curso.Titulo = .fields("Titulo")
+          Dato_Curso.Curso_Superior = .fields("Curso_Superior")
           Dato_Curso.Nombre_Largo = ""
           If Tipo_Texto = 2 Then Dato_Curso.Nombre_Largo = "EN EL "
           Dato_Curso.Nombre_Largo = Dato_Curso.Nombre_Largo & Dato_Curso.Bachiller
@@ -3305,7 +3305,7 @@ Dim sSQLCurso As String
      AdoDBCurso.open sSQLCurso, AdoStrCnn, , , adCmdText
      With AdoDBCurso
       If .RecordCount > 0 Then
-          Dato_Curso.Curso_Texto = .Fields("Descripcion")
+          Dato_Curso.Curso_Texto = .fields("Descripcion")
       End If
      End With
      AdoDBCurso.Close
@@ -3338,10 +3338,10 @@ Dim sSQLCurso As String
              Dato_Curso.NotaSQ(Idx) = 0
              Dato_Curso.NotaTQ(Idx) = 0
              Dato_Curso.NotaFinal(Idx) = 0
-             Dato_Curso.CodigoC(Idx) = .Fields("Codigo")
-             Dato_Curso.CI_RUC(Idx) = .Fields("CI_RUC")
-             Dato_Curso.Alumno(Idx) = .Fields("Cliente")
-             Dato_Curso.Sexo(Idx) = .Fields("Sexo")
+             Dato_Curso.CodigoC(Idx) = .fields("Codigo")
+             Dato_Curso.CI_RUC(Idx) = .fields("CI_RUC")
+             Dato_Curso.Alumno(Idx) = .fields("Cliente")
+             Dato_Curso.Sexo(Idx) = .fields("Sexo")
              Idx = Idx + 1
             .MoveNext
           Loop
@@ -3376,8 +3376,8 @@ Dim sSQLCurso As String
           ReDim Dato_Curso.PosXMat(1 To Dato_Curso.ContMat) As Single
           Do While Not .EOF
              Dato_Curso.PosXMat(Idx) = 0
-             Dato_Curso.Materia(Idx) = .Fields("Materia")
-             Dato_Curso.CodMat(Idx) = .Fields("CodMat")
+             Dato_Curso.Materia(Idx) = .fields("Materia")
+             Dato_Curso.CodMat(Idx) = .fields("CodMat")
              Idx = Idx + 1
             .MoveNext
           Loop
@@ -3404,8 +3404,8 @@ Dim sSQLCurso As String
           ReDim Dato_Curso.MateriaT(1 To Dato_Curso.ContMatT) As String
           ReDim Dato_Curso.CodMatPT(1 To Dato_Curso.ContMatT) As String
           Do While Not .EOF
-             Dato_Curso.MateriaT(Idx) = .Fields("Materia")
-             Dato_Curso.CodMatPT(Idx) = .Fields("CodMat")
+             Dato_Curso.MateriaT(Idx) = .fields("Materia")
+             Dato_Curso.CodMatPT(Idx) = .fields("CodMat")
              Idx = Idx + 1
             .MoveNext
           Loop
@@ -3459,12 +3459,12 @@ Printer.FontBold = False
 
 With Datas.Recordset
 If .RecordCount > 0 Then
-    CantCampos = .Fields.Count
+    CantCampos = .fields.Count
     'Array para almacenar el ancho de cada columna
      ReDim Vect_Dec(CantCampos) As Campos_Decimal
     'Enceramos la impresion
      For Idx = 0 To CantCampos - 1
-         Vect_Dec(Idx).Campo = .Fields(Idx).Name
+         Vect_Dec(Idx).Campo = .fields(Idx).Name
          Vect_Dec(Idx).CantDec = 2
          Vect_Dec(Idx).AnchoCampo = 0
      Next Idx
@@ -3472,9 +3472,9 @@ If .RecordCount > 0 Then
      For Idx = 0 To CantCampos - 1
         'MsgBox Decimales & vbCrLf & Vect_Dec(Col).Campo & vbCrLf & Vect_Dec(Col).CantDec & vbCrLf & Vect_Dec(Col).AnchoCampo
          If Decimales <> "" Then
-            LenCamposDec = Len(.Fields(Idx).Name)
+            LenCamposDec = Len(.fields(Idx).Name)
             For Jdx = 1 To Len(Decimales)
-                If .Fields(Idx).Name = MidStrg(Decimales, Jdx, LenCamposDec) Then
+                If .fields(Idx).Name = MidStrg(Decimales, Jdx, LenCamposDec) Then
                    CantDecCampo = ""
                    For CantDec = Jdx + LenCamposDec To Len(Decimales)
                        If MidStrg(Decimales, CantDec, 1) = "|" Then CantDec = Len(Decimales) + 1
@@ -3489,7 +3489,7 @@ If .RecordCount > 0 Then
      Encabezado_Institucion Ancho(0), AnchoPapel
      Printer.FontSize = SizeLetra
      Printer.FontName = TipoArialNarrow
-     Codigo = .Fields("Grupo")
+     Codigo = .fields("Grupo")
      Printer.FontItalic = False
      Printer.FontBold = True
      Printer.FontUnderline = True
@@ -3511,24 +3511,24 @@ If .RecordCount > 0 Then
      PosLinea = PosLinea + 0.5
      'PrinterFields Ancho(0), PosLinea, .Fields("Curso")
      Do While Not .EOF
-        If Codigo <> .Fields("Grupo") Then Codigo = .Fields("Grupo")
-        PrinterFields 1, PosLinea, .Fields("Alumno")
+        If Codigo <> .fields("Grupo") Then Codigo = .fields("Grupo")
+        PrinterFields 1, PosLinea, .fields("Alumno")
         Select Case OpcBimestre
           Case 1, 2
-               PrinterFields 8, PosLinea, .Fields("Curso")
+               PrinterFields 8, PosLinea, .fields("Curso")
           Case Else
-               PrinterFields 8, PosLinea, .Fields("Grupo")
+               PrinterFields 8, PosLinea, .fields("Grupo")
         End Select
         Select Case OpcBimestre
           Case 1
-               PrinterFields 15.5, PosLinea, .Fields("Promedio_PQ")
+               PrinterFields 15.5, PosLinea, .fields("Promedio_PQ")
           Case 2
-               PrinterFields 15.5, PosLinea, .Fields("Promedio_SQ")
+               PrinterFields 15.5, PosLinea, .fields("Promedio_SQ")
           Case 3
-               PrinterFields 11.7, PosLinea, .Fields("Tot_PQBim1")
-               PrinterFields 13.7, PosLinea, .Fields("Tot_PQBim2")
-               PrinterFields 15.7, PosLinea, .Fields("Tot_PQBim3")
-               PrinterFields 17.5, PosLinea, .Fields("Tot_PrompQ")
+               PrinterFields 11.7, PosLinea, .fields("Tot_PQBim1")
+               PrinterFields 13.7, PosLinea, .fields("Tot_PQBim2")
+               PrinterFields 15.7, PosLinea, .fields("Tot_PQBim3")
+               PrinterFields 17.5, PosLinea, .fields("Tot_PrompQ")
 ''               PrinterFields 11.7, PosLinea, .Fields("Promedio_PQ")
 ''               PrinterFields 13.7, PosLinea, .Fields("Promedio_SQ")
 ''               PrinterFields 15.7, PosLinea, .Fields("Promedio_TQ")
@@ -3546,7 +3546,7 @@ If .RecordCount > 0 Then
            Encabezado_Institucion Ancho(0), AnchoPapel
            Printer.FontSize = SizeLetra
            Printer.FontName = TipoArialNarrow
-           Codigo = .Fields("Grupo")
+           Codigo = .fields("Grupo")
            Printer.FontItalic = False
            Printer.FontBold = True
            Printer.FontUnderline = True
@@ -3840,12 +3840,12 @@ Dim AdoEstudiante As ADODB.Recordset
    'Determinamos que tipo de informacion necesitamos presentar
     With AdoEstudiante
         If .RecordCount > 0 Then
-            Real1 = .Fields("ConductaPQ1")
-            Real2 = .Fields("ConductaPQ2")
-            Real5 = .Fields("ConductaPQ3")
-            Real3 = .Fields("ConductaSQ1")
-            Real4 = .Fields("ConductaSQ2")
-            Real6 = .Fields("ConductaSQ3")
+            Real1 = .fields("ConductaPQ1")
+            Real2 = .fields("ConductaPQ2")
+            Real5 = .fields("ConductaPQ3")
+            Real3 = .fields("ConductaSQ1")
+            Real4 = .fields("ConductaSQ2")
+            Real6 = .fields("ConductaSQ3")
         End If
         Select Case CadenaParcial
           Case "Primer Quimestre Primer Parcial", _
@@ -3867,11 +3867,11 @@ Dim AdoEstudiante As ADODB.Recordset
                SQLConductaQ = "ConductaPQ1"
                SQLInforme = "Informe_PQ1"
                If .RecordCount > 0 Then
-                   Valor = .Fields("ConductaPQ1")
-                   Dias_Laborados1 = .Fields("PQDias1")
-                   Faltas_Just1 = .Fields("PQBFJ1")
-                   Faltas_Injust1 = .Fields("PQBFI1")
-                   Atrasos1 = .Fields("PQBA1")
+                   Valor = .fields("ConductaPQ1")
+                   Dias_Laborados1 = .fields("PQDias1")
+                   Faltas_Just1 = .fields("PQBFJ1")
+                   Faltas_Injust1 = .fields("PQBFI1")
+                   Atrasos1 = .fields("PQBA1")
                End If
                OpcionNotas = 1
           Case "Primer Quimestre Segundo Parcial", _
@@ -3893,11 +3893,11 @@ Dim AdoEstudiante As ADODB.Recordset
                SQLConductaQ = "ConductaPQ2"
                SQLInforme = "Informe_PQ2"
                If .RecordCount > 0 Then
-                   Valor = .Fields("ConductaPQ2")
-                   Dias_Laborados2 = .Fields("PQDias2")
-                   Faltas_Just2 = .Fields("PQBFJ2")
-                   Faltas_Injust2 = .Fields("PQBFI2")
-                   Atrasos2 = .Fields("PQBA2")
+                   Valor = .fields("ConductaPQ2")
+                   Dias_Laborados2 = .fields("PQDias2")
+                   Faltas_Just2 = .fields("PQBFJ2")
+                   Faltas_Injust2 = .fields("PQBFI2")
+                   Atrasos2 = .fields("PQBA2")
                End If
                OpcionNotas = 2
           Case "Primer Quimestre Tercer Parcial"
@@ -3917,11 +3917,11 @@ Dim AdoEstudiante As ADODB.Recordset
                SQLConductaQ = "ConductaPQ3"
                SQLInforme = "Informe_PQ3"
                If .RecordCount > 0 Then
-                   Valor = .Fields("ConductaPQ3")
-                   Dias_Laborados3 = .Fields("PQDias3")
-                   Faltas_Just3 = .Fields("PQBFJ3")
-                   Faltas_Injust3 = .Fields("PQBFI3")
-                   Atrasos3 = .Fields("PQBA3")
+                   Valor = .fields("ConductaPQ3")
+                   Dias_Laborados3 = .fields("PQDias3")
+                   Faltas_Just3 = .fields("PQBFJ3")
+                   Faltas_Injust3 = .fields("PQBFI3")
+                   Atrasos3 = .fields("PQBA3")
                End If
                OpcionNotas = 3
           Case "Promedio Primer Quimestre", _
@@ -3936,26 +3936,26 @@ Dim AdoEstudiante As ADODB.Recordset
                SQLQEX = "PQ_PE"
                SQLInforme = "Informe_PQ"
                If .RecordCount > 0 Then
-                   Valor = .Fields("ConductaPQ3")
-                   Dias_Laborados1 = .Fields("PQDias1")
-                   Faltas_Just1 = .Fields("PQBFJ1")
-                   Faltas_Injust1 = .Fields("PQBFI1")
-                   Atrasos1 = .Fields("PQBA1")
+                   Valor = .fields("ConductaPQ3")
+                   Dias_Laborados1 = .fields("PQDias1")
+                   Faltas_Just1 = .fields("PQBFJ1")
+                   Faltas_Injust1 = .fields("PQBFI1")
+                   Atrasos1 = .fields("PQBA1")
                    
-                   Dias_Laborados2 = .Fields("PQDias2")
-                   Faltas_Just2 = .Fields("PQBFJ2")
-                   Faltas_Injust2 = .Fields("PQBFI2")
-                   Atrasos2 = .Fields("PQBA2")
+                   Dias_Laborados2 = .fields("PQDias2")
+                   Faltas_Just2 = .fields("PQBFJ2")
+                   Faltas_Injust2 = .fields("PQBFI2")
+                   Atrasos2 = .fields("PQBA2")
                    
-                   Dias_Laborados3 = .Fields("PQDias3")
-                   Faltas_Just3 = .Fields("PQBFJ3")
-                   Faltas_Injust3 = .Fields("PQBFI3")
-                   Atrasos3 = .Fields("PQBA3")
+                   Dias_Laborados3 = .fields("PQDias3")
+                   Faltas_Just3 = .fields("PQBFJ3")
+                   Faltas_Injust3 = .fields("PQBFI3")
+                   Atrasos3 = .fields("PQBA3")
                    
-                   Dias_Laborados = .Fields("PQDias1") + .Fields("PQDias2") + .Fields("PQDias3")
-                   Faltas_Just = .Fields("PQBFJ1") + .Fields("PQBFJ2") + .Fields("PQBFJ3")
-                   Faltas_Injust = .Fields("PQBFI1") + .Fields("PQBFI2") + .Fields("PQBFI3")
-                   Atrasos = .Fields("PQBA1") + .Fields("PQBA2") + .Fields("PQBA3")
+                   Dias_Laborados = .fields("PQDias1") + .fields("PQDias2") + .fields("PQDias3")
+                   Faltas_Just = .fields("PQBFJ1") + .fields("PQBFJ2") + .fields("PQBFJ3")
+                   Faltas_Injust = .fields("PQBFI1") + .fields("PQBFI2") + .fields("PQBFI3")
+                   Atrasos = .fields("PQBA1") + .fields("PQBA2") + .fields("PQBA3")
                End If
                OpcionNotas = 4
           Case "Segundo Quimestre Primer Parcial", _
@@ -3977,11 +3977,11 @@ Dim AdoEstudiante As ADODB.Recordset
                SQLConductaQ = "ConductaSQ1"
                SQLInforme = "Informe_SQ1"
                If .RecordCount > 0 Then
-                   Valor = .Fields("ConductaSQ1")
-                   Dias_Laborados1 = .Fields("SQDias1")
-                   Faltas_Just1 = .Fields("SQBFJ1")
-                   Faltas_Injust1 = .Fields("SQBFI1")
-                   Atrasos1 = .Fields("SQBA1")
+                   Valor = .fields("ConductaSQ1")
+                   Dias_Laborados1 = .fields("SQDias1")
+                   Faltas_Just1 = .fields("SQBFJ1")
+                   Faltas_Injust1 = .fields("SQBFI1")
+                   Atrasos1 = .fields("SQBA1")
                End If
                OpcionNotas = 1
           Case "Segundo Quimestre Segundo Parcial", _
@@ -4003,11 +4003,11 @@ Dim AdoEstudiante As ADODB.Recordset
                SQLConductaQ = "ConductaSQ2"
                SQLInforme = "Informe_SQ2"
                If .RecordCount > 0 Then
-                   Valor = .Fields("ConductaSQ2")
-                   Dias_Laborados2 = .Fields("SQDias2")
-                   Faltas_Just2 = .Fields("SQBFJ2")
-                   Faltas_Injust2 = .Fields("SQBFI2")
-                   Atrasos2 = .Fields("SQBA2")
+                   Valor = .fields("ConductaSQ2")
+                   Dias_Laborados2 = .fields("SQDias2")
+                   Faltas_Just2 = .fields("SQBFJ2")
+                   Faltas_Injust2 = .fields("SQBFI2")
+                   Atrasos2 = .fields("SQBA2")
                End If
                OpcionNotas = 2
           Case "Segundo Quimestre Tercer Parcial"
@@ -4027,11 +4027,11 @@ Dim AdoEstudiante As ADODB.Recordset
                SQLConductaQ = "ConductaSQ3"
                SQLInforme = "Informe_SQ3"
                If .RecordCount > 0 Then
-                   Valor = .Fields("ConductaSQ3")
-                   Dias_Laborados3 = .Fields("SQDias3")
-                   Faltas_Just3 = .Fields("SQBFJ3")
-                   Faltas_Injust3 = .Fields("SQBFI3")
-                   Atrasos3 = .Fields("SQBA3")
+                   Valor = .fields("ConductaSQ3")
+                   Dias_Laborados3 = .fields("SQDias3")
+                   Faltas_Just3 = .fields("SQBFJ3")
+                   Faltas_Injust3 = .fields("SQBFI3")
+                   Atrasos3 = .fields("SQBA3")
                End If
                OpcionNotas = 3
           Case "Promedio Segundo Quimestre", _
@@ -4046,27 +4046,27 @@ Dim AdoEstudiante As ADODB.Recordset
                SQLQEX = "SQ_PE"
                SQLInforme = "Informe_SQ"
                If .RecordCount > 0 Then
-                   Valor = .Fields("ConductaSQ3")
+                   Valor = .fields("ConductaSQ3")
                   
-                   Dias_Laborados1 = .Fields("SQDias1")
-                   Faltas_Just1 = .Fields("SQBFJ1")
-                   Faltas_Injust1 = .Fields("SQBFI1")
-                   Atrasos1 = .Fields("SQBA1")
+                   Dias_Laborados1 = .fields("SQDias1")
+                   Faltas_Just1 = .fields("SQBFJ1")
+                   Faltas_Injust1 = .fields("SQBFI1")
+                   Atrasos1 = .fields("SQBA1")
                    
-                   Dias_Laborados2 = .Fields("SQDias2")
-                   Faltas_Just2 = .Fields("SQBFJ2")
-                   Faltas_Injust2 = .Fields("SQBFI2")
-                   Atrasos2 = .Fields("SQBA2")
+                   Dias_Laborados2 = .fields("SQDias2")
+                   Faltas_Just2 = .fields("SQBFJ2")
+                   Faltas_Injust2 = .fields("SQBFI2")
+                   Atrasos2 = .fields("SQBA2")
                    
-                   Dias_Laborados3 = .Fields("SQDias3")
-                   Faltas_Just3 = .Fields("SQBFJ3")
-                   Faltas_Injust3 = .Fields("SQBFI3")
-                   Atrasos3 = .Fields("SQBA3")
+                   Dias_Laborados3 = .fields("SQDias3")
+                   Faltas_Just3 = .fields("SQBFJ3")
+                   Faltas_Injust3 = .fields("SQBFI3")
+                   Atrasos3 = .fields("SQBA3")
                    
-                   Dias_Laborados = .Fields("SQDias3") + .Fields("SQDias3") + .Fields("SQDias3")
-                   Faltas_Just = .Fields("SQBFJ1") + .Fields("SQBFJ2") + .Fields("SQBFJ3")
-                   Faltas_Injust = .Fields("SQBFI1") + .Fields("SQBFI2") + .Fields("SQBFI3")
-                   Atrasos = .Fields("SQBA1") + .Fields("SQBA2") + .Fields("SQBA3")
+                   Dias_Laborados = .fields("SQDias3") + .fields("SQDias3") + .fields("SQDias3")
+                   Faltas_Just = .fields("SQBFJ1") + .fields("SQBFJ2") + .fields("SQBFJ3")
+                   Faltas_Injust = .fields("SQBFI1") + .fields("SQBFI2") + .fields("SQBFI3")
+                   Atrasos = .fields("SQBA1") + .fields("SQBA2") + .fields("SQBA3")
                End If
                OpcionNotas = 4
           Case "Tercer Trimestre Primer Periodo"
@@ -4077,9 +4077,9 @@ Dim AdoEstudiante As ADODB.Recordset
                SQLPromQ = "PromTQ"
                SQLConductaQ = "ConductaTQ1"
                If .RecordCount > 0 Then
-                   Faltas_Just = .Fields("PQBFJ1") + .Fields("PQBFJ2") + .Fields("PQBFJ3") + .Fields("SQBFJ1") + .Fields("SQBFJ2") + .Fields("SQBFJ3")
-                   Faltas_Injust = .Fields("PQBFI1") + .Fields("PQBFI2") + .Fields("PQBFI3") + .Fields("SQBFI1") + .Fields("SQBFI2") + .Fields("SQBFI3")
-                   Atrasos = .Fields("PQBA1") + .Fields("PQBA2") + .Fields("PQBA3") + .Fields("SQBA1") + .Fields("SQBA2") + .Fields("SQBA3")
+                   Faltas_Just = .fields("PQBFJ1") + .fields("PQBFJ2") + .fields("PQBFJ3") + .fields("SQBFJ1") + .fields("SQBFJ2") + .fields("SQBFJ3")
+                   Faltas_Injust = .fields("PQBFI1") + .fields("PQBFI2") + .fields("PQBFI3") + .fields("SQBFI1") + .fields("SQBFI2") + .fields("SQBFI3")
+                   Atrasos = .fields("PQBA1") + .fields("PQBA2") + .fields("PQBA3") + .fields("SQBA1") + .fields("SQBA2") + .fields("SQBA3")
                End If
                OpcionNotas = 1
           Case "Tercer Trimestre Segundo Periodo"
@@ -4090,9 +4090,9 @@ Dim AdoEstudiante As ADODB.Recordset
                SQLPromQ = "PromTQ"
                SQLConductaQ = "ConductaTQ2"
                If .RecordCount > 0 Then
-                   Faltas_Just = .Fields("PQBFJ1") + .Fields("PQBFJ2") + .Fields("PQBFJ3") + .Fields("SQBFJ1") + .Fields("SQBFJ2") + .Fields("SQBFJ3")
-                   Faltas_Injust = .Fields("PQBFI1") + .Fields("PQBFI2") + .Fields("PQBFI3") + .Fields("SQBFI1") + .Fields("SQBFI2") + .Fields("SQBFI3")
-                   Atrasos = .Fields("PQBA1") + .Fields("PQBA2") + .Fields("PQBA3") + .Fields("SQBA1") + .Fields("SQBA2") + .Fields("SQBA3")
+                   Faltas_Just = .fields("PQBFJ1") + .fields("PQBFJ2") + .fields("PQBFJ3") + .fields("SQBFJ1") + .fields("SQBFJ2") + .fields("SQBFJ3")
+                   Faltas_Injust = .fields("PQBFI1") + .fields("PQBFI2") + .fields("PQBFI3") + .fields("SQBFI1") + .fields("SQBFI2") + .fields("SQBFI3")
+                   Atrasos = .fields("PQBA1") + .fields("PQBA2") + .fields("PQBA3") + .fields("SQBA1") + .fields("SQBA2") + .fields("SQBA3")
                End If
                OpcionNotas = 2
           Case "Tercer Trimestre Tercer Periodo"
@@ -4103,9 +4103,9 @@ Dim AdoEstudiante As ADODB.Recordset
                SQLPromQ = "PromTQ"
                SQLConductaQ = "ConductaTQ3"
                If .RecordCount > 0 Then
-                   Faltas_Just = .Fields("PQBFJ1") + .Fields("PQBFJ2") + .Fields("PQBFJ3") + .Fields("SQBFJ1") + .Fields("SQBFJ2") + .Fields("SQBFJ3")
-                   Faltas_Injust = .Fields("PQBFI1") + .Fields("PQBFI2") + .Fields("PQBFI3") + .Fields("SQBFI1") + .Fields("SQBFI2") + .Fields("SQBFI3")
-                   Atrasos = .Fields("PQBA1") + .Fields("PQBA2") + .Fields("PQBA3") + .Fields("SQBA1") + .Fields("SQBA2") + .Fields("SQBA3")
+                   Faltas_Just = .fields("PQBFJ1") + .fields("PQBFJ2") + .fields("PQBFJ3") + .fields("SQBFJ1") + .fields("SQBFJ2") + .fields("SQBFJ3")
+                   Faltas_Injust = .fields("PQBFI1") + .fields("PQBFI2") + .fields("PQBFI3") + .fields("SQBFI1") + .fields("SQBFI2") + .fields("SQBFI3")
+                   Atrasos = .fields("PQBA1") + .fields("PQBA2") + .fields("PQBA3") + .fields("SQBA1") + .fields("SQBA2") + .fields("SQBA3")
                End If
                OpcionNotas = 3
           Case "Promedio Tercer Trimestre"
@@ -4115,9 +4115,9 @@ Dim AdoEstudiante As ADODB.Recordset
                SQLExamen = "ExamenTQ"
                SQLPromQ = "PromTQ"
                If .RecordCount > 0 Then
-                   Faltas_Just = .Fields("PQBFJ1") + .Fields("PQBFJ2") + .Fields("PQBFJ3") + .Fields("SQBFJ1") + .Fields("SQBFJ2") + .Fields("SQBFJ3")
-                   Faltas_Injust = .Fields("PQBFI1") + .Fields("PQBFI2") + .Fields("PQBFI3") + .Fields("SQBFI1") + .Fields("SQBFI2") + .Fields("SQBFI3")
-                   Atrasos = .Fields("PQBA1") + .Fields("PQBA2") + .Fields("PQBA3") + .Fields("SQBA1") + .Fields("SQBA2") + .Fields("SQBA3")
+                   Faltas_Just = .fields("PQBFJ1") + .fields("PQBFJ2") + .fields("PQBFJ3") + .fields("SQBFJ1") + .fields("SQBFJ2") + .fields("SQBFJ3")
+                   Faltas_Injust = .fields("PQBFI1") + .fields("PQBFI2") + .fields("PQBFI3") + .fields("SQBFI1") + .fields("SQBFI2") + .fields("SQBFI3")
+                   Atrasos = .fields("PQBA1") + .fields("PQBA2") + .fields("PQBA3") + .fields("SQBA1") + .fields("SQBA2") + .fields("SQBA3")
                End If
                OpcionNotas = 4
           Case "Todos los Periodos", _
@@ -4125,9 +4125,9 @@ Dim AdoEstudiante As ADODB.Recordset
                "Todos los Quimestres"
                'Presenta todos los promedios finales
                If .RecordCount > 0 Then
-                   Faltas_Just = .Fields("PQBFJ1") + .Fields("PQBFJ2") + .Fields("PQBFJ3") + .Fields("SQBFJ1") + .Fields("SQBFJ2") + .Fields("SQBFJ3")
-                   Faltas_Injust = .Fields("PQBFI1") + .Fields("PQBFI2") + .Fields("PQBFI3") + .Fields("SQBFI1") + .Fields("SQBFI2") + .Fields("SQBFI3")
-                   Atrasos = .Fields("PQBA1") + .Fields("PQBA2") + .Fields("PQBA3") + .Fields("SQBA1") + .Fields("SQBA2") + .Fields("SQBA3")
+                   Faltas_Just = .fields("PQBFJ1") + .fields("PQBFJ2") + .fields("PQBFJ3") + .fields("SQBFJ1") + .fields("SQBFJ2") + .fields("SQBFJ3")
+                   Faltas_Injust = .fields("PQBFI1") + .fields("PQBFI2") + .fields("PQBFI3") + .fields("SQBFI1") + .fields("SQBFI2") + .fields("SQBFI3")
+                   Atrasos = .fields("PQBA1") + .fields("PQBA2") + .fields("PQBA3") + .fields("SQBA1") + .fields("SQBA2") + .fields("SQBA3")
                End If
                OpcionNotas = 5
         End Select

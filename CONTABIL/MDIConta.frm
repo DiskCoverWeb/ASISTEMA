@@ -1,4 +1,5 @@
 VERSION 5.00
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.MDIForm MDIConta 
    BackColor       =   &H00FFFFFF&
@@ -88,6 +89,13 @@ Begin VB.MDIForm MDIConta
       _ExtentY        =   212
       _Version        =   393216
       Appearance      =   0
+   End
+   Begin MSComDlg.CommonDialog Dir_Dialog 
+      Left            =   630
+      Top             =   105
+      _ExtentX        =   847
+      _ExtentY        =   847
+      _Version        =   393216
    End
    Begin VB.Menu DatosRel 
       Caption         =   "&Archivos"
@@ -379,7 +387,8 @@ Begin VB.MDIForm MDIConta
          Caption         =   "www.diskcoversystem.com"
       End
       Begin VB.Menu MEmails 
-         Caption         =   "Enviar Correo Electronico"
+         Caption         =   "Prueba de Envio Correo Electronico"
+         Shortcut        =   ^W
       End
    End
    Begin VB.Menu MAmbiente 
@@ -618,8 +627,9 @@ Private Sub MCostoDelProyecto_Click()
 End Sub
 
 Private Sub MDIForm_Activate()
-    MDI_X_Max = Screen.width - 150
-    MDI_Y_Max = Screen.Height - 1900
+'    MDI_X_Max = Screen.width - 150
+'    MDI_Y_Max = Screen.Height - 1900
+    screen_size
 End Sub
 
 Private Sub MDIForm_Load()
@@ -673,7 +683,7 @@ Private Sub MEmails_Click()
 '''      & "Mid 10,10: '" & MidStrg(Cadena, 10, 10) & "'" & vbCrLf _
 '''      & "InStr 'MIOS': '" & InStr(Cadena, "MIOS") & "'"
 '''
-  FEnviarMails.Show
+'''  FEnviarMails.Show
 ''  FGeneraPDF.Show
 ''  Exportar_Datagrid_Execel "d:\Nomina1.xls"
 ''  Exportar_Datagrid_Execel "d:\Nomina2.xls"
@@ -685,6 +695,43 @@ Private Sub MEmails_Click()
 ''    TMail.para = "diskcover@msn.com"
 ''    FEnviarCorreos.Show 1
 ''  Next I
+    TMail.de = "informacion@diskcoversystem.com"
+    TMail.ListaMail = 255
+    TMail.TipoDeEnvio = "NN"
+    TMail.Asunto = "Prueba de Mails por imap.diskcoversystem.com desde " & Modulo & " [" & Right(CodigoUsuario, 6) & "], Hora (" & Time & ")"
+    TMail.MensajeHTML = Leer_Archivo_Texto(RutaSistema & "\JAVASCRIPT\f_cartera.html")
+    
+    html_Informacion_adicional = "<strong>INFORMACION ADICIONAL:</strong><br><br>" _
+                               & "<strong>Importe total: USD </strong>150,00<br>" _
+                               & "<strong>Importe total: USD </strong>150,00<br>" _
+                               & "<strong>Importe total: USD </strong>150,00<br>"
+                               
+    html_Detalle_adicional = "<tr>" _
+                           & "<td>13/12/2024</td>" _
+                           & "<td>Prueba de Envio</td>" _
+                           & "<td class='row text-right'>60,00</td>" _
+                           & "</tr>" _
+                           & "<tr>" _
+                           & "<td>" & FechaSistema & "</td>" _
+                           & "<td>Por IMAP</td>" _
+                           & "<td class='row text-right'>60,00</td>" _
+                           & "</tr>"
+    FA.Fecha = FechaSistema
+    FA.Recibo_No = Format(FA.Fecha, "yyyymmdd") & Format(FA.Factura, "000000000")
+    TMail.Adjunto = "C:\SYSBASES\TEMP\archivo.xml"
+    TMail.para = ""
+    Insertar_Mail TMail.para, "actualizar@diskcoversystem.com"
+    Insertar_Mail TMail.para, "diskcoversystem@msn.com"
+    Insertar_Mail TMail.para, "diskcover.system@yahoo.com"
+    Insertar_Mail TMail.para, "diskcover.system@gmail.com"
+    Insertar_Mail TMail.para, EmailProcesos
+    FEnviarCorreos.Show 1
+    MsgBox "Correos Enviados a (" & Si_No & "):" & vbCrLf & Replace(TMail.para, ";", ";" & vbCrLf) & vbCrLf _
+         & String(70, "_") & vbCrLf & vbCrLf _
+         & "De: " & TMail.de & vbCrLf & vbCrLf _
+         & "Asunto: " & TMail.Asunto & vbCrLf
+    TMail.para = ""
+    TMail.ListaMail = 0
 End Sub
 
 Private Sub MEstResul12M_Click()
@@ -768,10 +815,7 @@ End Sub
 
 Private Sub MReindexa_Cuentas_Click()
     RatonReloj
-    Parametros = "'" & NumEmpresa & "','" & Periodo_Contable & "' "
-    Ejecutar_SP "sp_Reindexar_Periodo", Parametros
-    
-    Mayorizar_Cuentas_SP
+    Mayorizar_Cuentas_SP True
     Presenta_Errores_Contabilidad_SP
     RatonNormal
 End Sub

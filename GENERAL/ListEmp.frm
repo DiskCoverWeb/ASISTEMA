@@ -1,14 +1,14 @@
 VERSION 5.00
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "COMCTL32.OCX"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Begin VB.Form ListEmp 
    BackColor       =   &H00FF8080&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "EMPRESA A TRABAJAR"
    ClientHeight    =   11235
    ClientLeft      =   30
-   ClientTop       =   330
+   ClientTop       =   390
    ClientWidth     =   20550
    ClipControls    =   0   'False
    ControlBox      =   0   'False
@@ -35,14 +35,14 @@ Begin VB.Form ListEmp
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   570
-      Left            =   105
-      TabIndex        =   16
-      Top             =   5880
+      Left            =   210
+      TabIndex        =   17
+      Top             =   4305
       Visible         =   0   'False
-      Width           =   5685
+      Width           =   3060
    End
    Begin VB.Frame FrmEntidad 
-      BackColor       =   &H0000C0C0&
+      BackColor       =   &H00FFFFC0&
       Caption         =   "SELECCIONE LA ENTIDAD A CONECTAR:"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -54,13 +54,14 @@ Begin VB.Form ListEmp
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H000000C0&
-      Height          =   5370
-      Left            =   7350
-      TabIndex        =   5
-      Top             =   5250
+      Height          =   6945
+      Left            =   12495
+      TabIndex        =   11
+      Top             =   420
       Visible         =   0   'False
-      Width           =   8625
+      Width           =   7785
       Begin VB.CommandButton Command2 
+         BackColor       =   &H00FFFF00&
          Caption         =   "&Cancelar"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
@@ -72,14 +73,15 @@ Begin VB.Form ListEmp
             Strikethrough   =   0   'False
          EndProperty
          Height          =   855
-         Left            =   7245
+         Left            =   6405
          Picture         =   "ListEmp.frx":08CA
          Style           =   1  'Graphical
-         TabIndex        =   8
-         Top             =   4410
+         TabIndex        =   14
+         Top             =   5880
          Width           =   1275
       End
       Begin VB.CommandButton Command1 
+         BackColor       =   &H00FFFF00&
          Caption         =   "&Aceptar"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
@@ -91,15 +93,15 @@ Begin VB.Form ListEmp
             Strikethrough   =   0   'False
          EndProperty
          Height          =   855
-         Left            =   5880
+         Left            =   5040
          Picture         =   "ListEmp.frx":1194
          Style           =   1  'Graphical
-         TabIndex        =   7
-         Top             =   4410
+         TabIndex        =   13
+         Top             =   5880
          Width           =   1275
       End
       Begin VB.TextBox TxtReferencia 
-         BackColor       =   &H0080FFFF&
+         BackColor       =   &H00C0FFC0&
          BeginProperty Font 
             Name            =   "Courier New"
             Size            =   8.25
@@ -113,26 +115,26 @@ Begin VB.Form ListEmp
          Height          =   1380
          Left            =   105
          MultiLine       =   -1  'True
-         TabIndex        =   9
-         Top             =   2940
-         Width           =   8415
+         TabIndex        =   15
+         Top             =   4305
+         Width           =   7575
       End
       Begin MSDataListLib.DataList DLEntidad 
          Bindings        =   "ListEmp.frx":1A5E
          DataSource      =   "AdoEntidad"
-         Height          =   2535
+         Height          =   3840
          Left            =   105
-         TabIndex        =   6
+         TabIndex        =   12
          Top             =   315
-         Width           =   8415
-         _ExtentX        =   14843
-         _ExtentY        =   4471
+         Width           =   7575
+         _ExtentX        =   13361
+         _ExtentY        =   6773
          _Version        =   393216
-         BackColor       =   16777152
+         BackColor       =   16777088
          ForeColor       =   12582912
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "Arial"
-            Size            =   9
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -144,10 +146,10 @@ Begin VB.Form ListEmp
    Begin VB.FileListBox File1 
       Height          =   870
       Left            =   210
-      TabIndex        =   3
+      TabIndex        =   9
       Top             =   2625
       Visible         =   0   'False
-      Width           =   2010
+      Width           =   3060
    End
    Begin MSAdodcLib.Adodc AdoEmp 
       Height          =   330
@@ -214,13 +216,13 @@ Begin VB.Form ListEmp
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   5370
-      Left            =   3150
+      Height          =   6945
+      Left            =   4620
       TabIndex        =   0
       Top             =   420
-      Width           =   13455
+      Width           =   7785
       Begin VB.CommandButton CmdBCrearEmp 
-         BackColor       =   &H00C0E0FF&
+         BackColor       =   &H00FF8080&
          Caption         =   "&Crear/Modificar Empresa"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
@@ -232,15 +234,15 @@ Begin VB.Form ListEmp
             Strikethrough   =   0   'False
          EndProperty
          Height          =   855
-         Left            =   10080
+         Left            =   2520
          Picture         =   "ListEmp.frx":1A77
          Style           =   1  'Graphical
-         TabIndex        =   15
-         Top             =   3990
-         Width           =   2535
+         TabIndex        =   6
+         Top             =   5355
+         Width           =   2850
       End
       Begin VB.CommandButton CmdBSalir 
-         BackColor       =   &H00C0E0FF&
+         BackColor       =   &H00FF8080&
          Caption         =   "&Salir"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
@@ -252,15 +254,15 @@ Begin VB.Form ListEmp
             Strikethrough   =   0   'False
          EndProperty
          Height          =   855
-         Left            =   5880
+         Left            =   5460
          Picture         =   "ListEmp.frx":2341
          Style           =   1  'Graphical
-         TabIndex        =   14
-         Top             =   3990
-         Width           =   2535
+         TabIndex        =   7
+         Top             =   5355
+         Width           =   1905
       End
       Begin VB.CommandButton CmdBAceptar 
-         BackColor       =   &H00C0E0FF&
+         BackColor       =   &H00FF8080&
          Caption         =   "&Ingresar "
          BeginProperty Font 
             Name            =   "MS Sans Serif"
@@ -271,83 +273,90 @@ Begin VB.Form ListEmp
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Height          =   750
-         Left            =   1155
+         Height          =   855
+         Left            =   525
          Picture         =   "ListEmp.frx":2C0B
          Style           =   1  'Graphical
-         TabIndex        =   13
-         Top             =   3780
-         Width           =   3375
+         TabIndex        =   5
+         Top             =   5355
+         Width           =   1905
       End
       Begin VB.TextBox TextClave 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
          BeginProperty Font 
             Name            =   "Verdana"
             Size            =   12
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   435
-         IMEMode         =   3  'DISABLE
-         Left            =   945
-         MaxLength       =   10
-         PasswordChar    =   "*"
-         TabIndex        =   2
-         Top             =   2415
-         Width           =   3690
-      End
-      Begin VB.TextBox TextUsuario 
-         BeginProperty Font 
-            Name            =   "Verdana"
-            Size            =   12
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   435
-         Left            =   945
-         MaxLength       =   15
-         TabIndex        =   1
-         ToolTipText     =   "<Ctrl+U> Selecciona otra unidad de conexion, <Ctrl+E> Selecciona  Entidad de Conexion"
-         Top             =   1365
-         Width           =   3690
-      End
-      Begin VB.TextBox TextDolar 
-         Alignment       =   1  'Right Justify
-         BeginProperty Font 
-            Name            =   "Verdana"
-            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Height          =   375
-         Left            =   2730
+         Height          =   390
+         IMEMode         =   3  'DISABLE
+         Left            =   3255
+         MaxLength       =   10
+         PasswordChar    =   "*"
+         TabIndex        =   2
+         Top             =   3255
+         Width           =   2115
+      End
+      Begin VB.TextBox TextUsuario 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   12
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   345
+         Left            =   525
+         MaxLength       =   15
+         TabIndex        =   1
+         ToolTipText     =   "<Ctrl+U> Selecciona otra unidad de conexion, <Ctrl+E> Selecciona  Entidad de Conexion"
+         Top             =   3255
+         Width           =   2220
+      End
+      Begin VB.TextBox TextDolar 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   12
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   360
+         Left            =   5775
          MaxLength       =   10
          MultiLine       =   -1  'True
-         TabIndex        =   10
+         TabIndex        =   3
          Text            =   "ListEmp.frx":3285
-         Top             =   3150
-         Width           =   1905
+         Top             =   3255
+         Width           =   1590
       End
       Begin MSDataListLib.DataCombo DCEmpresa 
          Bindings        =   "ListEmp.frx":328C
          DataSource      =   "AdoEmpresa"
          Height          =   345
-         Left            =   5985
-         TabIndex        =   11
-         Top             =   1470
+         Left            =   525
+         TabIndex        =   4
+         Top             =   4515
          Visible         =   0   'False
-         Width           =   6630
-         _ExtentX        =   11695
+         Width           =   6840
+         _ExtentX        =   12065
          _ExtentY        =   609
          _Version        =   393216
+         BackColor       =   16777215
          ForeColor       =   128
          Text            =   "Empresa"
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -363,17 +372,36 @@ Begin VB.Form ListEmp
       Begin VB.PictureBox Pict_Version 
          AutoRedraw      =   -1  'True
          AutoSize        =   -1  'True
-         BackColor       =   &H00E0E0E0&
+         BackColor       =   &H00FFFFFF&
          BorderStyle     =   0  'None
          DrawStyle       =   5  'Transparent
-         Height          =   5145
+         Height          =   6750
          Left            =   105
          Picture         =   "ListEmp.frx":32A5
-         ScaleHeight     =   5145
-         ScaleWidth      =   13200
-         TabIndex        =   12
+         ScaleHeight     =   6750
+         ScaleWidth      =   7605
+         TabIndex        =   16
          Top             =   105
-         Width           =   13200
+         Width           =   7605
+         Begin VB.Label LblOlvidoClave 
+            BackColor       =   &H00FFFFFF&
+            Caption         =   "Olvido su contraseña?"
+            BeginProperty Font 
+               Name            =   "Verdana"
+               Size            =   9.75
+               Charset         =   0
+               Weight          =   400
+               Underline       =   -1  'True
+               Italic          =   -1  'True
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H00C00000&
+            Height          =   330
+            Left            =   5040
+            TabIndex        =   8
+            Top             =   3780
+            Width           =   2325
+         End
       End
    End
    Begin MSAdodcLib.Adodc AdoEmpresa 
@@ -613,12 +641,12 @@ Begin VB.Form ListEmp
    End
    Begin ComctlLib.ListView LstVwFTP 
       Height          =   645
-      Left            =   105
-      TabIndex        =   17
-      Top             =   4410
+      Left            =   210
+      TabIndex        =   18
+      Top             =   3570
       Visible         =   0   'False
-      Width           =   1905
-      _ExtentX        =   3360
+      Width           =   3060
+      _ExtentX        =   5398
       _ExtentY        =   1138
       View            =   3
       LabelWrap       =   -1  'True
@@ -674,47 +702,47 @@ Begin VB.Form ListEmp
       BeginProperty Images {0713E8C2-850A-101B-AFC0-4210102A8DA7} 
          NumListImages   =   11
          BeginProperty ListImage1 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "ListEmp.frx":A9EE
+            Picture         =   "ListEmp.frx":713C
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "ListEmp.frx":AD08
+            Picture         =   "ListEmp.frx":7456
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "ListEmp.frx":B022
+            Picture         =   "ListEmp.frx":7770
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "ListEmp.frx":B328
+            Picture         =   "ListEmp.frx":7A76
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "ListEmp.frx":B642
+            Picture         =   "ListEmp.frx":7D90
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "ListEmp.frx":B95C
+            Picture         =   "ListEmp.frx":80AA
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "ListEmp.frx":BC4E
+            Picture         =   "ListEmp.frx":839C
             Key             =   ""
          EndProperty
          BeginProperty ListImage8 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "ListEmp.frx":C468
+            Picture         =   "ListEmp.frx":8BB6
             Key             =   "archivo"
          EndProperty
          BeginProperty ListImage9 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "ListEmp.frx":C782
+            Picture         =   "ListEmp.frx":8ED0
             Key             =   "carpeta"
          EndProperty
          BeginProperty ListImage10 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "ListEmp.frx":CA9C
+            Picture         =   "ListEmp.frx":91EA
             Key             =   ""
          EndProperty
          BeginProperty ListImage11 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "ListEmp.frx":CCDA
+            Picture         =   "ListEmp.frx":9428
             Key             =   ""
          EndProperty
       EndProperty
@@ -725,7 +753,7 @@ Begin VB.Form ListEmp
       Caption         =   "www.diskcoversystem.com"
       BeginProperty Font 
          Name            =   "Courier New"
-         Size            =   24
+         Size            =   20.25
          Charset         =   0
          Weight          =   700
          Underline       =   -1  'True
@@ -734,11 +762,11 @@ Begin VB.Form ListEmp
       EndProperty
       ForeColor       =   &H000000FF&
       Height          =   645
-      Left            =   4725
+      Left            =   5565
       MousePointer    =   14  'Arrow and Question
-      TabIndex        =   4
+      TabIndex        =   10
       Top             =   7560
-      Width           =   8580
+      Width           =   5955
    End
 End
 Attribute VB_Name = "ListEmp"
@@ -757,6 +785,12 @@ Dim Claves As String
 Dim AltoL As Single
 Dim AnchoL As Single
 Dim PosPicX As Single
+Dim EmpresaTemp As String
+Dim IPDelOrdenador As String
+
+Dim EsReadOnly As Boolean
+
+Dim ping As cPing
 
 Public Sub LlenarEmpresa()
 Dim FechaIniN As Integer
@@ -832,104 +866,113 @@ Dim SiActualizar As Boolean
     With AdoAux.Recordset
      If .RecordCount > 0 Then
          Do While Not .EOF
-            CadenaParcial = CadenaParcial & .fields("Modulo") & "^" & .fields("Item") & "^" & .fields("Codigo") & "^~"
+            CadenaParcial = CadenaParcial & .Fields("Modulo") & "^" & .Fields("Item") & "^" & .Fields("Codigo") & "^~"
            .MoveNext
          Loop
      End If
     End With
     If Len(CadenaParcial) > 32768 Then MsgBox "Falta ampliar los niveles de seguridad."
-
+    Minutos = Time
     sSQL = "SELECT " & Full_Fields("Empresas") & " " _
          & "FROM Empresas " _
          & "WHERE Empresa = '" & DCEmpresa & "' "
     Select_Adodc AdoEmp, sSQL
+    Cadena = Format(Time - Minutos, "hh:mm:ss") & vbCrLf
+    Minutos = Time
+    'Leer_Variables_Sesion_Empresa DCEmpresa
+    Cadena = Cadena & Format(Time - Minutos, "hh:mm:ss") & vbCrLf
+    'MsgBox Cadena
     With AdoEmp.Recordset
      If .RecordCount > 0 Then
-         NumEmpresa = .fields("Item")
-         GrupoEmpresa = .fields("Grupo")
-         Empresa = .fields("Empresa")
-         EstadoEmpresa = .fields("Estado")
-         Fecha_CE = .fields("Fecha_CE")
-         Fecha_P12 = .fields("Fecha_P12")
-         EmailEmpresa = .fields("Email")
-         EmailContador = .fields("Email_Contabilidad")
-         EmailProcesos = .fields("Email_Procesos")
-         EmailRespaldos = .fields("Email_Respaldos")
-         RazonSocial = .fields("Razon_Social")
-         NombreComercial = .fields("Nombre_Comercial")
-         RUC = .fields("RUC")
-         NLogoTipo = .fields("Logo_Tipo")
-         NMarcaAgua = .fields("Marca_Agua")
-         NombreContador = .fields("Contador")
-         NombreCiudad = .fields("Ciudad")
-         RUC_Contador = .fields("RUC_Contador")
-         NombreGerente = .fields("Gerente")
-         
-         TipoPlan = .fields("Tipo_Plan")
-         NFirmaDigital = .fields("Firma_Digital")
-         NombrePais = .fields("Pais")
-         CodigoPais = .fields("CPais")
-         CodigoProv = .fields("CProv")
-         ReferenciaEmpresa = .fields("Referencia")
-         CI_Representante = .fields("CI_Representante")
-         TID_Repres = .fields("TD")
-         FAX = .fields("FAX")
-         Moneda = .fields("S_M")
-         Telefono1 = .fields("Telefono1")
-         Telefono2 = .fields("Telefono2")
-         Direccion = .fields("Direccion")
-         DireccionEstab = .fields("Direccion")
-         CodigoDelBanco = .fields("CodBanco")
-         NombreBanco = .fields("Nombre_Banco")
-         Dec_PVP = .fields("Dec_PVP")
-         Dec_Costo = .fields("Dec_Costo")
-         Dec_IVA = .fields("Dec_IVA")
-         Dec_Cant = .fields("Dec_Cant")
-         Cant_Item_PV = .fields("Cant_Item_PV")
-         Cant_Ancho_PV = .fields("Cant_Ancho_PV")
+         NumEmpresa = .Fields("Item")
+         GrupoEmpresa = .Fields("Grupo")
+         Empresa = .Fields("Empresa")
+         EmailEmpresa = .Fields("Email")
+         EmailContador = .Fields("Email_Contabilidad")
+         EmailProcesos = .Fields("Email_Procesos")
+         EmailRespaldos = .Fields("Email_Respaldos")
+         RazonSocial = .Fields("Razon_Social")
+         NombreComercial = .Fields("Nombre_Comercial")
+         RUC = .Fields("RUC")
+         NLogoTipo = .Fields("Logo_Tipo")
+         NMarcaAgua = .Fields("Marca_Agua")
+         NombreContador = .Fields("Contador")
+         NombreCiudad = .Fields("Ciudad")
+         RUC_Contador = .Fields("RUC_Contador")
+         NombreGerente = .Fields("Gerente")
+         NFirmaDigital = .Fields("Firma_Digital")
+         NombrePais = .Fields("Pais")
+         CodigoPais = .Fields("CPais")
+         CodigoProv = .Fields("CProv")
+         ReferenciaEmpresa = .Fields("Referencia")
+         CI_Representante = .Fields("CI_Representante")
+         TID_Repres = .Fields("TD")
+         FAX = .Fields("FAX")
+         Moneda = .Fields("S_M")
+         Telefono1 = .Fields("Telefono1")
+         Telefono2 = .Fields("Telefono2")
+         Direccion = .Fields("Direccion")
+         DireccionEstab = .Fields("Direccion")
+         CodigoDelBanco = .Fields("CodBanco")
+         NombreBanco = .Fields("Nombre_Banco")
+         Dec_PVP = .Fields("Dec_PVP")
+         Dec_Costo = .Fields("Dec_Costo")
+         Dec_IVA = .Fields("Dec_IVA")
+         Dec_Cant = .Fields("Dec_Cant")
+         Cant_Item_PV = .Fields("Cant_Item_PV")
+         Cant_Ancho_PV = .Fields("Cant_Ancho_PV")
         
         'Documentos Electronicos
-         Ambiente = .fields("Ambiente")
-         Obligado_Conta = .fields("Obligado_Conta")
-         ContEspec = .fields("Codigo_Contribuyente_Especial")
-         Informativo_FA = .fields("LeyendaFA")
-         Informativo_FAT = .fields("LeyendaFAT")
-         MascaraCodigoK = .fields("Formato_Inventario")
-         MascaraCodigoA = .fields("Formato_Activo")
-         MascaraCtas = Replace(.fields("Formato_Cuentas"), "C", "#")
+         Ambiente = .Fields("Ambiente")
+         Obligado_Conta = .Fields("Obligado_Conta")
+         ContEspec = .Fields("Codigo_Contribuyente_Especial")
+         Informativo_FA = .Fields("LeyendaFA")
+         Informativo_FAT = .Fields("LeyendaFAT")
+         MascaraCodigoK = .Fields("Formato_Inventario")
+         MascaraCodigoA = .Fields("Formato_Activo")
+         MascaraCtas = Replace(.Fields("Formato_Cuentas"), "C", "#")
          FormatoCtas = MascaraCtas
          LimpiarCtas = Replace(MascaraCtas, "#", " ")
-         Fecha_Igualar = .fields("Fecha_Igualar")
-         Porc_Serv = Redondear(.fields("Servicio") / 100, 2)
-         SerieFactura = .fields("Serie_FA")
-         RutaCertificado = .fields("Ruta_Certificado")
-         
-         OpcCoop = CBool(.fields("Opc"))
-         CentroDeCosto = CBool(.fields("Centro_Costos"))
-         Copia_PV = CBool(.fields("Copia_PV"))
-         Mod_Fact = CBool(.fields("Mod_Fact"))
-         Mod_Fecha = CBool(.fields("Mod_Fecha"))
-         Num_Meses_CD = CBool(.fields("Num_CD"))
-         Num_Meses_CE = CBool(.fields("Num_CE"))
-         Num_Meses_CI = CBool(.fields("Num_CI"))
-         Num_Meses_ND = CBool(.fields("Num_ND"))
-         Num_Meses_NC = CBool(.fields("Num_NC"))
-         Plazo_Fijo = CBool(.fields("Plazo_Fijo"))
-         No_Autorizar = CBool(.fields("No_Autorizar"))
-         Mas_Grupos = CBool(.fields("Separar_Grupos"))
-         Medio_Rol = CBool(.fields("Medio_Rol"))
-         Encabezado_PV = CBool(.fields("Encabezado_PV"))
-         CalcComision = CBool(.fields("Calcular_Comision"))
-         Grafico_PV = CBool(.fields("Grafico_PV"))
-         ComisionEjec = CBool(.fields("Comision_Ejecutivo"))
-         ImpCeros = CBool(.fields("Imp_Ceros"))
-         Email_CE_Copia = CBool(.fields("Email_CE_Copia"))
-         Ret_Aut = CBool(.fields("Ret_Aut"))
-         'ConciliacionAut = CBool(.fields("Conciliacion_Aut"))
+         Fecha_Igualar = .Fields("Fecha_Igualar")
+         Porc_Serv = Redondear(.Fields("Servicio") / 100, 2)
+         RutaCertificado = RutaSistema & "\CERTIFIC\" & .Fields("Ruta_Certificado")
+
+         OpcCoop = CBool(.Fields("Opc"))
+         CentroDeCosto = CBool(.Fields("Centro_Costos"))
+         Copia_PV = CBool(.Fields("Copia_PV"))
+         Mod_PVP = CBool(.Fields("Mod_PVP"))
+         Mod_Fact = CBool(.Fields("Mod_Fact"))
+         Mod_Fecha = CBool(.Fields("Mod_Fecha"))
+         Num_Meses_CD = CBool(.Fields("Num_CD"))
+         Num_Meses_CE = CBool(.Fields("Num_CE"))
+         Num_Meses_CI = CBool(.Fields("Num_CI"))
+         Num_Meses_ND = CBool(.Fields("Num_ND"))
+         Num_Meses_NC = CBool(.Fields("Num_NC"))
+         Plazo_Fijo = CBool(.Fields("Plazo_Fijo"))
+         No_Autorizar = CBool(.Fields("No_Autorizar"))
+         Mas_Grupos = CBool(.Fields("Separar_Grupos"))
+         Medio_Rol = CBool(.Fields("Medio_Rol"))
+         Encabezado_PV = CBool(.Fields("Encabezado_PV"))
+         CalcComision = CBool(.Fields("Calcular_Comision"))
+         Grafico_PV = CBool(.Fields("Grafico_PV"))
+         ComisionEjec = CBool(.Fields("Comision_Ejecutivo"))
+         ImpCeros = CBool(.Fields("Imp_Ceros"))
+         Email_CE_Copia = CBool(.Fields("Email_CE_Copia"))
+         Ret_Aut = CBool(.Fields("Ret_Aut"))
+         ConciliacionAut = CBool(.Fields("Conciliacion_Aut"))
+         NumeroFASubModulo = CBool(.Fields("Abonos_FA"))
 
          Debo_Pagare = MensajeDeboPagare
          If Len(RazonSocial) > 1 Then CodigoA = RazonSocial Else CodigoA = Empresa
-         If .fields("Debo_Pagare") = "SI" Then Debo_Pagare = Replace(Debo_Pagare, "Razon_Social", CodigoA) Else Debo_Pagare = Ninguno
+         If .Fields("Debo_Pagare") = "SI" Then Debo_Pagare = Replace(Debo_Pagare, "vRazon_Social", CodigoA) Else Debo_Pagare = Ninguno
+         
+        'Datos de iniciacion desde MySQL
+         Fecha_CE = .Fields("Fecha_CE")
+         Fecha_P12 = .Fields("Fecha_P12")
+         TipoPlan = .Fields("Tipo_Plan")
+         EstadoEmpresa = .Fields("Estado")
+         SerieFactura = .Fields("Serie_FA")
+         
          CodigoA = Ninguno
          If MascaraCodigoK = Ninguno Then
             MascaraCodigoK = "CC.CC.CCC.CCCCCC"
@@ -949,35 +992,38 @@ Dim SiActualizar As Boolean
              Lista_De_Correos(I).Contraseña = ContrasenaDiskCover
          Next I
         
-         If Len(.fields("Email_Conexion")) > 1 And Len(.fields("Email_Contraseña")) > 1 Then
-            Lista_De_Correos(0).Correo_Electronico = .fields("Email_Conexion")
-            Lista_De_Correos(0).Contraseña = .fields("Email_Contraseña")
+         If Len(.Fields("Email_Conexion")) > 1 And Len(.Fields("Email_Contraseña")) > 1 Then
+            Lista_De_Correos(0).Correo_Electronico = .Fields("Email_Conexion")
+            Lista_De_Correos(0).Contraseña = .Fields("Email_Contraseña")
          End If
          
-         If Len(.fields("Email_Conexion_CE")) > 1 And Len(.fields("Email_Contraseña_CE")) > 1 Then
-            Lista_De_Correos(4).Correo_Electronico = .fields("Email_Conexion_CE")
-            Lista_De_Correos(4).Contraseña = .fields("Email_Contraseña_CE")
+         If Len(.Fields("Email_Conexion_CE")) > 1 And Len(.Fields("Email_Contraseña_CE")) > 1 Then
+            Lista_De_Correos(4).Correo_Electronico = .Fields("Email_Conexion_CE")
+            Lista_De_Correos(4).Contraseña = .Fields("Email_Contraseña_CE")
          End If
          Lista_De_Correos(6).Correo_Electronico = "credenciales@diskcoversystem.com"
          Lista_De_Correos(6).Contraseña = "Dlcjvl1210@Credenciales"
         '|--=:******* CONECCON A MYSQL *******:=--|
+          Minutos = Time
           Datos_Iniciales_Entidad_SP_MySQL
+          'MsgBox "Desktop Test: MySQL - " & Format(Time - Minutos, "hh:mm:ss")
         '|--=:******* --------.------- *******:=--|
+        'MsgBox "Desktop Test: " & ServidorMySQL
          If ServidorMySQL Then
-            If .fields("Estado") <> EstadoEmpresa Or .fields("Cartera") <> Cartera Or .fields("Cant_FA") <> Cant_FA Or _
-               .fields("Fecha_CE") <> Fecha_CE Or .fields("Fecha_P12") <> Fecha_P12 Or .fields("Tipo_Plan") <> TipoPlan Or _
-               .fields("Serie_FA") <> SerieFE Then
-               .fields("Cartera") = Cartera
-               .fields("Cant_FA") = Cant_FA
-               .fields("Fecha_CE") = Fecha_CE
-               .fields("Fecha_P12") = Fecha_P12
-               .fields("Tipo_Plan") = TipoPlan
-               .fields("Estado") = EstadoEmpresa
-               .fields("Serie_FA") = SerieFE
-               .Update
+            If .Fields("Estado") <> EstadoEmpresa Or .Fields("Cartera") <> Cartera Or .Fields("Cant_FA") <> Cant_FA Or .Fields("Serie_FA") <> SerieFE Or _
+               .Fields("Fecha_CE") <> Fecha_CE Or .Fields("Fecha_P12") <> Fecha_P12 Or .Fields("Tipo_Plan") <> Fecha_CO Or .Fields("Tipo_Plan") <> TipoPlan Then
+                sSQL = "UPDATE Empresas " _
+                     & "SET Cartera = " & Cartera & ", " _
+                     & "Cant_FA = " & Cant_FA & ",  " _
+                     & "Fecha_CE = '" & BuscarFecha(Fecha_CE) & "', " _
+                     & "Fecha_P12 = '" & BuscarFecha(Fecha_P12) & "', " _
+                     & "Tipo_Plan = '" & TipoPlan & "', " _
+                     & "Estado = '" & EstadoEmpresa & "', " _
+                     & "Serie_FA = '" & SerieFE & "' " _
+                     & "WHERE Item = '" & NumEmpresa & "' "
+                Ejecutar_SQL_SP sSQL
             End If
          End If
-         
          Contador = 0
          ContadorRUCCI = 0
          NumItemTemp = NumEmpresa
@@ -995,7 +1041,7 @@ Dim SiActualizar As Boolean
         'SavePicture Me.Picture, RutaDestino
          NombreRUC = "R.U.C."
         'MsgBox LogoTipo
-         Carpeta = .fields("SubDir")
+         Carpeta = .Fields("SubDir")
          EmpresaActual = "[" & RutaEmpresa & "]."
                   
          If Not PCActivo Then
@@ -1020,16 +1066,29 @@ Dim SiActualizar As Boolean
             & "AND Periodo = '" & Periodo_Contable & "' " _
             & "AND CodBod = '" & Cod_Bodega & "' "
        Select_Adodc AdoAux, sSQL
-       If AdoAux.Recordset.RecordCount > 0 Then Nom_Bodega = AdoAux.Recordset.fields("Bodega")
+       If AdoAux.Recordset.RecordCount > 0 Then Nom_Bodega = AdoAux.Recordset.Fields("Bodega")
     End If
-   'MsgBox Fecha_CE & vbCrLf & Fecha_P12
+    
+    sSQL = "SELECT MIN(Fecha) As FechaCierreFiscal " _
+          & "FROM Comprobantes " _
+          & "WHERE Periodo = '" & Periodo_Contable & "' " _
+          & "AND Item = '" & NumEmpresa & "' "
+    Select_Adodc AdoAux, sSQL
+    If AdoAux.Recordset.RecordCount > 0 Then
+       'MsgBox AdoAux.Recordset.fields("FechaCierreFiscal")
+       If IsNull(AdoAux.Recordset.Fields("FechaCierreFiscal")) Then FechaCierreFiscal = "01/01/2000" Else FechaCierreFiscal = AdoAux.Recordset.Fields("FechaCierreFiscal")
+    Else
+       FechaCierreFiscal = "01/01/" & Year(FechaSistema)
+    End If
+    
+   'MsgBox "Desktop Test: " & Fecha_CE & vbCrLf & Fecha_P12
    'Actualiza Datos iniciales de la Empresa
    '+++++++++++++++++++++++++++++++++++++++
     Iniciar_Datos_Default_SP
-    
+   'MsgBox "Desktop Test: MySQL - " & Format(Time - Minutos, "hh:mm:ss")
    '+++++++++++++++++++++++++++++++++++++++
    'MsgBox URLToken & vbCrLf & Token
-    
+   'MsgBox "Desktop Test: " & Fecha_CE & vbCrLf & Fecha_P12
    'Resultado del SP del MySQL
     ListaFacturas = ""
     TMail.Asunto = "CARTERA VENCIDA"
@@ -1058,7 +1117,7 @@ Dim SiActualizar As Boolean
            TMail.Asunto = "BLOQUEO DEFINITIVO, COMUNIQUESE A DISKCOVER SYSTEM"
            Evaluar = True
     End Select
-    
+   'MsgBox "Desktop Test: Estado = " & EstadoEmpresa
     RatonNormal
     Cadena1 = ""
     If Len(NombreGerente) <= 1 Then Cadena1 = Cadena1 & "Representante Legal," & vbCrLf
@@ -1166,14 +1225,15 @@ Dim SiActualizar As Boolean
 '''       End Select
 '''    End If
    '-----------------------------------------------------------------------
+   'MsgBox "Desktop Test: " & Modulo
     Cantidad_Cyber_Tiempo = 0
     Select Case UCaseStrg(Modulo)
       Case "EDUCATIVO"
-           Leer_Periodo_Lectivo             'Datos del Periodo Lectivo
-      Case "SETEOS"
-           Descargar_FTP_Certificados_Logos 'Descargar Logos y Certificados electronicos
+           Leer_Periodo_Lectivo                 'Datos del Periodo Lectivo
+      Case "CONTABILIDAD", "FACTURACION"
+           Descargar_Certificados_Logos_Empresa 'Descargar Logos y Certificados electronicos
       Case "CAJACREDITO"
-           Cambio_Tipo_Cuentas              'Si estamos en el modulo de Caja Credito
+           Cambio_Tipo_Cuentas                  'Si estamos en el modulo de Caja Credito
       Case "CYBER PCs"
            sSQL = "SELECT * " _
                 & "FROM Catalogo_Cyber_Tiempo " _
@@ -1186,20 +1246,22 @@ Dim SiActualizar As Boolean
                 ReDim VCyber_Tiempo(Cantidad_Cyber_Tiempo)
                 I = 0
                 Do While Not .EOF
-                   VCyber_Tiempo(I).Desde = .fields("Desde")
-                   VCyber_Tiempo(I).Hasta = .fields("Hasta")
-                   VCyber_Tiempo(I).Valor = .fields("Valor")
+                   VCyber_Tiempo(I).Desde = .Fields("Desde")
+                   VCyber_Tiempo(I).Hasta = .Fields("Hasta")
+                   VCyber_Tiempo(I).Valor = .Fields("Valor")
                    I = I + 1
                   .MoveNext
                 Loop
             End If
            End With
     End Select
-   '-----------------------------------------------------------------------
+   '---------------------------------------------------------------------------------
    'Rutas generales de las bases
     PathEmpresa = UCaseStrg(RutaEmpresa & "\DISKCOVE.MDB")
     FechaCierre = FechaSistema
    'Label5.Caption = "Actualizando Tablas Temporales"
+    'MsgBox "Desktop Test: "
+    
     SeteosCtas
    'Fin del seteo de impresoras
     Periodo = Ninguno
@@ -1216,7 +1278,7 @@ Dim SiActualizar As Boolean
       Case Else: Cadena = ""
     End Select
     Control_Procesos Normal, "Ingreso a " & Empresa, "R.U.C. " & RUC & ", Item: " & NumEmpresa
-    
+    'MsgBox "Desktop Test: " & ListaFacturas
    'If Cadena <> "" Then MsgBox UCaseStrg(Cadena)
     If Len(ListaFacturas) > 1 Then
        ListaFacturas = ListaFacturas _
@@ -1284,22 +1346,22 @@ Dim Respuesta As Boolean
     Select_Adodc AdoEmp, sSQL
     With AdoEmp.Recordset
      If .RecordCount > 0 Then
-         NombreUsuario = .fields("Nombre_Completo")
-         CodigoUsuario = .fields("Codigo")
-         IDEUsuario = .fields("Usuario")
-         PWRUsuario = .fields("Clave")
-         Todas_Las_Empresas = .fields("TODOS")
-         Supervisor = .fields("TODOS")
-         Cod_Bodega = .fields("CodBod")
+         NombreUsuario = .Fields("Nombre_Completo")
+         CodigoUsuario = .Fields("Codigo")
+         IDEUsuario = .Fields("Usuario")
+         PWRUsuario = .Fields("Clave")
+         Todas_Las_Empresas = .Fields("TODOS")
+         Supervisor = .Fields("TODOS")
+         Cod_Bodega = .Fields("CodBod")
          If Todas_Las_Empresas = False Then
-            CNivel(1) = .fields("Nivel_1")
-            CNivel(2) = .fields("Nivel_2")
-            CNivel(3) = .fields("Nivel_3")
-            CNivel(4) = .fields("Nivel_4")
-            CNivel(5) = .fields("Nivel_5")
-            CNivel(6) = .fields("Nivel_6")
-            CNivel(7) = .fields("Nivel_7")
-            Supervisor = .fields("Supervisor")
+            CNivel(1) = .Fields("Nivel_1")
+            CNivel(2) = .Fields("Nivel_2")
+            CNivel(3) = .Fields("Nivel_3")
+            CNivel(4) = .Fields("Nivel_4")
+            CNivel(5) = .Fields("Nivel_5")
+            CNivel(6) = .Fields("Nivel_6")
+            CNivel(7) = .Fields("Nivel_7")
+            Supervisor = .Fields("Supervisor")
          End If
          Respuesta = True
      Else
@@ -1361,14 +1423,14 @@ Private Sub Command1_Click()
           Modo_Educativo = False
           SQL_Server = False
           
-          strIPServidor = .fields("IP_VPN_RUTA")
-          strNombreBaseDatos = .fields("Base_Datos")
-          strWebServices = .fields("WebServices")
-          strPassword = .fields("Clave_DB")
-          strUsuario = .fields("Usuario_DB")
-          strPuerto = .fields("Puerto")
+          strIPServidor = .Fields("IP_VPN_RUTA")
+          strNombreBaseDatos = .Fields("Base_Datos")
+          strWebServices = .Fields("WebServices")
+          strPassword = .Fields("Clave_DB")
+          strUsuario = .Fields("Usuario_DB")
+          strPuerto = .Fields("Puerto")
           
-          Select Case .fields("Tipo_Base")
+          Select Case .Fields("Tipo_Base")
             Case "SQL SERVER"
                  If strPuerto <> 1433 Then
                      AdoStrCnn = "Data Source=tcp:" & strIPServidor & "," & CStr(strPuerto) & ";"
@@ -1387,7 +1449,7 @@ Private Sub Command1_Click()
                            & "DATABASE=" & strNombreBaseDatos & ";" _
                            & "USER=" & strUsuario & ";" _
                            & "PASSWORD=" & strPassword & ";" _
-                           & "PORT=" & .fields("Puerto") & ";" _
+                           & "PORT=" & .Fields("Puerto") & ";" _
                            & "OPTION=3;"
             Case "ACCESS"
                  AdoStrCnn = "Data Source=" & strIPServidor & "\" & strNombreBaseDatos & ".MDB;" _
@@ -1466,7 +1528,7 @@ Private Sub DCEmpresa_KeyDown(KeyCode As Integer, Shift As Integer)
          .MoveFirst
          .Find ("Item = '" & NumItem & "'")
           If Not .EOF Then
-             DCEmpresa.Text = .fields("Empresa")
+             DCEmpresa.Text = .Fields("Empresa")
              Dolar = Val(CCur(TextDolar.Text))
              'FrameClave.Visible = False
              LlenarEmpresa
@@ -1488,6 +1550,7 @@ End Sub
 
 Private Sub DCEmpresa_LostFocus()
    Empresa = DCEmpresa
+   If Len(Empresa) > 2 Then CmdBAceptar.Enabled = True
 End Sub
 
 Private Sub DLEntidad_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -1523,10 +1586,10 @@ Private Sub DLEntidad_KeyUp(KeyCode As Integer, Shift As Integer)
       .MoveFirst
       .Find ("Entidad_Comercial = '" & DLEntidad & "' ")
        If Not .EOF Then
-          TxtReferencia = "IP VPN    : " & .fields("IP_VPN_RUTA") & vbCrLf _
-                        & "BASE DATOS: " & .fields("Base_Datos") & vbCrLf _
-                        & "CLAVE DB  : " & .fields("Clave_DB") & vbCrLf _
-                        & "PUERTO    : " & .fields("Puerto")
+          TxtReferencia = "IP VPN    : " & .Fields("IP_VPN_RUTA") & vbCrLf _
+                        & "BASE DATOS: " & .Fields("Base_Datos") & vbCrLf _
+                        & "CLAVE DB  : " & .Fields("Clave_DB") & vbCrLf _
+                        & "PUERTO    : " & .Fields("Puerto")
        End If
    End If
   End With
@@ -1536,6 +1599,9 @@ Private Sub Form_Activate()
 Dim RetVal
     
     TMail.Volver_Envial = False
+    Set ping = New cPing
+    EsReadOnly = True
+    IPDelOrdenador = ping.IP_Del_PC()
    'Seteos de Impresion
     PrintDraft = Chr(27) & Chr(120) & Chr(0) 'Draft
     Print12CPI = Chr(27) & Chr(77)           '12 CPI
@@ -1565,7 +1631,7 @@ Dim RetVal
          & "WHERE Modulo = 'VS' "
     Select_Adodc AdoAux, sSQL
     If AdoAux.Recordset.RecordCount > 0 Then
-       Version_Sistema = "Actualización de: " & AdoAux.Recordset.fields("Aplicacion") & " - Ver. 5.20 "
+       Version_Sistema = "Actualización de: " & AdoAux.Recordset.Fields("Aplicacion") & " - Ver. 5.20 "
     Else
        Version_Sistema = "Teléfono del proveedor: " & vbCrLf & "(+593) 09-9965-4196/09-8652-4396. "
     End If
@@ -1625,8 +1691,10 @@ Dim MiArchivo, MiRuta, MiNombre
 Dim Txt_SMTP_Mails As String
    
     RatonReloj
+    EmpresaTemp = Ninguno
+   'Redondear_Control CmdBAceptar
    'Obtenemos la fecha del Sistema
-    FechaSistema = Format$(date, FormatoFechas)
+    FechaSistema = Format$(Date, FormatoFechas)
     
    'Contador de Fondos y Verificacion de Fondos de Pantalla
     Mes = Format$(Month(FechaSistema), "00")
@@ -1690,24 +1758,44 @@ Dim Txt_SMTP_Mails As String
    CodigoUsuario = Ninguno
    NombreImagenEsperar = ""
    Procesando = 0
-   Dia = Format$(Day(date), "00")
-   Mes = Format$(Month(date), "00")
-   Anio = Format$(Year(date), "0000")
+   Dia = Format$(Day(Date), "00")
+   Mes = Format$(Month(Date), "00")
+   Anio = Format$(Year(Date), "0000")
    H_INCH = 1440 / Screen.TwipsPerPixelX
    V_INCH = 1440 / Screen.TwipsPerPixelY
    
    FrameClave.Left = (Screen.width - FrameClave.width) / 2
-   FrameClave.Top = (Screen.Height - FrameClave.Height) / 2
+   FrameClave.Top = (Screen.Height - FrameClave.Height - 2000) / 2
 
    Lblwww.Top = FrameClave.Top + FrameClave.Height + 100
    Lblwww.Left = (Screen.width - Lblwww.width) / 2
    
    Ver_Grafico_Form ListEmp, RutaSistema & "\FORMATOS\INICIO.jpg"
    Pict_Version.Cls
-   Pict_Version.Picture = LoadPicture(RutaSistema & "\LOGIN.jpg")
+   Pict_Version.Picture = LoadPicture(RutaSistema & "\LogIn.jpg")
    Pict_Version.AutoRedraw = True
-   Pict_Version.ForeColor = Amarillo_Claro
-   Pict_Version.FontName = TipoArial
+   Pict_Version.ForeColor = Gris
+   Pict_Version.FontName = TipoVerdana
+   
+   Pict_Version.PaintPicture LoadPicture(RutaSistema & "\LOGOS\DiskCove.jpg"), 2500, 800, 2000, 800
+
+   Pict_Version.FontBold = True
+   Pict_Version.FontSize = 12
+   Pict_Version.CurrentX = 350
+   Pict_Version.CurrentY = 2600
+   Pict_Version.Print "Usuario"
+
+   Pict_Version.CurrentX = 3040
+   Pict_Version.CurrentY = 2600
+   Pict_Version.Print "Contraseña"
+  
+   Pict_Version.CurrentX = 5700
+   Pict_Version.CurrentY = 2600
+   Pict_Version.Print "Cotización"
+  
+   Pict_Version.CurrentX = 350
+   Pict_Version.CurrentY = 3900
+   Pict_Version.Print "Entidad/Empresa"
 
    RatonReloj
   'Averiguamos si el MySQL esta en linea
@@ -1742,6 +1830,9 @@ Dim Txt_SMTP_Mails As String
       End
    End If
    
+   If UCaseStrg(Modulo) <> "SETEOS" Then CmdBCrearEmp.Caption = "Funciona con Seteos"
+   Set ftp = New cFTP
+   
    sSQL = "SELECT " & Full_Fields("Empresas") & " " _
         & "FROM Empresas " _
         & "WHERE Item <> '--' "
@@ -1750,13 +1841,96 @@ Dim Txt_SMTP_Mails As String
       Unload ListEmp
       CrearEmp.Show
    Else
+      EmpresaTemp = AdoEmpresa.Recordset.Fields("Empresa")
+      DCEmpresa.Text = EmpresaTemp
       CmdBAceptar.Enabled = False
       CmdBCrearEmp.Enabled = False
    End If
       
   'NumEmpresa = "001"
-   If UCaseStrg(Modulo) <> "SETEOS" Then CmdBCrearEmp.Caption = "Funciona con Seteos"
-   Set ftp = New cFTP
+  
+End Sub
+
+Private Sub LblOlvidoClave_Click()
+Dim AdoDBTemp As ADODB.Recordset
+Dim cedula As String
+Dim ContadorUsuario As Integer
+    cedula = ""
+    ContadorUsuario = 0
+    Cadena = "ESTIMADO USUARIO, Ingrese el Email asignado, " _
+           & "sus credenciales seran enviada a este Email." & vbCrLf & vbCrLf _
+           & "MAIL PERSONAL DEL USUARIO:"
+    EmailUsuario = InputBox(Cadena, "EMAIL PERSONAL DEL USUARIO", "")
+    If EmailUsuario = "" Then EmailUsuario = Ninguno
+    If Len(EmailUsuario) > 3 And InStr(EmailUsuario, "@") Then
+       sSQL = "SELECT CI_NIC, Usuario " _
+            & "FROM acceso_usuarios " _
+            & "WHERE Email = '" & EmailUsuario & "' "
+       Select_AdoDB_MySQL AdoDBTemp, sSQL
+       If AdoDBTemp.RecordCount > 0 Then
+          ContadorUsuario = AdoDBTemp.RecordCount
+          cedula = MidStrg(InputBox("Existe " & ContadorUsuario & " coincidencia(s) para este mail," & vbCrLf & "DIGITE LOS ULTIMOS 4 DIGITOS " & vbCrLf & "DE SU CEDULA/NIC:", "EMAIL PERSONAL DEL USUARIO", ""), 1, 4)
+       Else
+          MsgBox "Este correo no existe en la base de datos, vuelva a ingresar"
+       End If
+       AdoDBTemp.Close
+       
+       If cedula <> "" Then
+          sSQL = "SELECT CI_NIC, Usuario, Clave, Nombre_Usuario, Email " _
+               & "FROM acceso_usuarios " _
+               & "WHERE Email = '" & EmailUsuario & "' " _
+               & "AND CI_NIC LIKE '%" & cedula & "' " _
+               & "LIMIT 1 "
+          Select_AdoDB_MySQL AdoDBTemp, sSQL
+          With AdoDBTemp
+           If .RecordCount > 0 Then
+               TMail.servidor = "imap.diskcoversystem.com"
+               EmailEmpresa = EmailUsuario
+               Obligado_Conta = "NN"
+               RUC = "1792164710001"
+               Direccion = "Atacames N23-226 y Av. La Gasca"
+               Mifecha = FechaSistema
+               NombreCiudad = "QUITO"
+               NombrePais = "ECUADOR"
+               NombreUsuario = "El Usuaro Electronico"
+               RazonSocial = "SISTEMA FINANCIERO CONTABLE Y PARA COOPERATIVAS"
+               NombreComercial = "DISKCOVER SYSTEM"
+               NLogoTipo = "DiskCover"
+               Telefono1 = "09-9965-4196"
+               Telefono2 = "09-8910-5300"
+               EmailProcesos = "soporte@diskcoversystem.com"
+               TMail.MensajeHTML = Leer_Archivo_Texto(RutaSistema & "\JAVASCRIPT\f_mail_basico.html")
+          
+               html_Informacion_adicional = "<strong>INFORMACION DEL USUARIO:</strong><br>" _
+                                          & "<strong>Usuario: </strong>" & .Fields("Usuario") & "<br>" _
+                                          & "<strong>Clave: </strong>" & .Fields("Clave") & "<br><br>"
+                                      
+               html_Detalle_adicional = ""
+          
+               TMail.Usuario = CorreoDiskCover
+               TMail.Password = ContrasenaDiskCover
+               TMail.de = CorreoDiskCover
+               TMail.Mensaje = ""
+               TMail.Adjunto = ""
+               TMail.Credito_No = ""
+               TMail.Asunto = "Credenciales de: " & .Fields("Nombre_Usuario")
+               TMail.para = ""
+               Insertar_Mail TMail.para, EmailUsuario
+               Insertar_Mail TMail.para, CorreoDiskCover
+              'Enviamos lista de mails
+               FEnviarCorreos.Show 1
+               End
+           Else
+               MsgBox "Este Email: " & EmailUsuario & ", no esa asociado con el codigo de seguridad: " & cedula & ", en la base de datos, vuelva a ingresar"
+           End If
+          End With
+          AdoDBTemp.Close
+       Else
+          MsgBox "Codigo de seguridad incompleto"
+       End If
+    Else
+       MsgBox "Datos Incompletos"
+    End If
 End Sub
 
 Private Sub Lblwww_DblClick()
@@ -1780,7 +1954,7 @@ Private Sub TextClave_GotFocus()
  With AdoEmp.Recordset
   If .RecordCount > 0 Then
      .MoveFirst
-      Dolar = .fields("Cotizacion")
+      Dolar = .Fields("Cotizacion")
       TextDolar = Dolar
   End If
  End With
@@ -1793,7 +1967,7 @@ Private Sub TextClave_GotFocus()
  With AdoAcceso.Recordset
   If .RecordCount > 0 Then
      .Find ("Codigo = '" & CodigoCliente & "' ")
-    If Not .EOF Then NumItem = .fields("Item")
+    If Not .EOF Then NumItem = .Fields("Item")
   End If
  End With
 End Sub
@@ -1845,7 +2019,7 @@ If Claves <> "" And TextUsuario.Text <> "" Then
            & "FROM Modulos " _
            & "WHERE Aplicacion = '" & Modulo & "' "
       Select_Adodc AdoAux, sSQL
-      If AdoAux.Recordset.RecordCount > 0 Then NumModulo = Format(AdoAux.Recordset.fields("Modulo"), "00")
+      If AdoAux.Recordset.RecordCount > 0 Then NumModulo = Format(AdoAux.Recordset.Fields("Modulo"), "00")
 
       Select Case CodigoUsuario
         Case "0702164179", "ACCESO01" To "ACCESO11"
@@ -1858,7 +2032,7 @@ If Claves <> "" And TextUsuario.Text <> "" Then
                   & "WHERE Codigo = '" & CodigoUsuario & "' "
              Select_Adodc AdoEmp, sSQL
              If AdoEmp.Recordset.RecordCount > 0 Then
-                EmailUsuario = AdoEmp.Recordset.fields("EmailUsuario")
+                EmailUsuario = AdoEmp.Recordset.Fields("EmailUsuario")
                 If Len(EmailUsuario) <= 1 Then
                    Cadena = "ESTIMADO USUARIO, con el cambio del sistema al metodo de procesamiento bajo las nubes (cloud), " _
                           & "es necesario registrar un correo personal donde se enviará las credenciales para el respectivo " _
@@ -1869,7 +2043,7 @@ If Claves <> "" And TextUsuario.Text <> "" Then
                    EmailUsuario = InputBox(Cadena, "EMAIL PERSONAL DEL USUARIO", "")
                    If EmailUsuario = "" Then EmailUsuario = Ninguno
                    If Len(EmailUsuario) > 3 And InStr(EmailUsuario, "@") Then
-                      AdoEmp.Recordset.fields("EmailUsuario") = LCase(EmailUsuario)
+                      AdoEmp.Recordset.Fields("EmailUsuario") = LCase(EmailUsuario)
                       AdoEmp.Recordset.Update
                    End If
                    Cadena = ""
@@ -1903,6 +2077,7 @@ If Claves <> "" And TextUsuario.Text <> "" Then
                  & "WHERE Item IN (" & SQL1 & ") "
             If ConSucursal Then sSQL = sSQL & "ORDER BY Item, Empresa " Else sSQL = sSQL & "ORDER BY Empresa, Item "
             SelectDB_Combo DCEmpresa, AdoEmpresa, sSQL, "Empresa"
+           ' MsgBox sSQL
             CmdBAceptar.Enabled = True
          Else
             CmdBAceptar.Enabled = False
@@ -1936,7 +2111,7 @@ If Claves <> "" And TextUsuario.Text <> "" Then
                 .MoveFirst
                 .Find ("Item = '" & NumItem & "' ")
                  If Not .EOF Then
-                    DCEmpresa.Text = .fields("Empresa")
+                    DCEmpresa.Text = .Fields("Empresa")
                     Dolar = Val(CCur(TextDolar.Text))
                     'FrameClave.Visible = False
                     LlenarEmpresa
@@ -1993,7 +2168,7 @@ Dim UnidadActual As String
      SelectDB_List DLEntidad, AdoEntidad, sSQL, "Entidad_Comercial"
      If AdoEntidad.Recordset.RecordCount > 0 Then
         FrmEntidad.Left = ((Screen.width - FrmEntidad.width) / 2)
-        FrmEntidad.Top = ((Screen.Height - FrmEntidad.Height) / 2)
+        FrmEntidad.Top = ((Screen.Height - FrmEntidad.Height - 2000) / 2)
         FrmEntidad.Refresh
         FrmEntidad.Visible = True
         DLEntidad.SetFocus
@@ -2059,14 +2234,14 @@ Private Sub TextUsuario_LostFocus()
      Select_Adodc AdoEmp, sSQL
      With AdoEmp.Recordset
       If .RecordCount > 0 Then
-          CodigoCliente = .fields("Codigo")
-          Opc_Primaria = CBool(.fields("Primaria"))
-          Opc_Secundaria = CBool(.fields("Secundaria"))
-          Opc_Bachillerato = CBool(.fields("Bachillerato"))
-          SetPRN_2 = .fields("Impresora_Defecto_2")
-          SetPapelPRN_2 = .fields("Papel_Impresora_2")
-          If Len(.fields("Clave")) <= 1 Then
-             NombreCliente = .fields("Nombre_Completo")
+          CodigoCliente = .Fields("Codigo")
+          Opc_Primaria = CBool(.Fields("Primaria"))
+          Opc_Secundaria = CBool(.Fields("Secundaria"))
+          Opc_Bachillerato = CBool(.Fields("Bachillerato"))
+          SetPRN_2 = .Fields("Impresora_Defecto_2")
+          SetPapelPRN_2 = .Fields("Papel_Impresora_2")
+          If Len(.Fields("Clave")) <= 1 Then
+             NombreCliente = .Fields("Nombre_Completo")
              Cadena = "ESTE USUARIO NO HA SIDO REGISTRADA" & vbCrLf _
                     & "SU CLAVE, DEBE INGRESAR UNA CON UN" & vbCrLf _
                     & "MAXIMO DE 10 CARACTERES Y/O NUMEROS." & vbCrLf & vbCrLf _
@@ -2106,56 +2281,104 @@ End Sub
 
 Private Sub TimerAct_Timer()
 Dim Logo_Tipo1 As String
-
   If Progreso_Tiempo < 0 Then Progreso_Tiempo = 0
  'Label5.Visible = Si_No
    
  'Empieza a imprimir los datos de la empresa
   With AdoEmpresa.Recordset
+  If EmpresaTemp <> Empresa And DCEmpresa.Visible Then
+  Pict_Version.Cls
+  Pict_Version.Picture = LoadPicture(RutaSistema & "\LogIn.jpg")
+  Pict_Version.FontBold = True
+  Pict_Version.ForeColor = Gris
+  Pict_Version.FontSize = 12
+  Pict_Version.CurrentX = 350
+  Pict_Version.CurrentY = 2600
+  Pict_Version.Print "Usuario"
+
+  Pict_Version.CurrentX = 3040
+  Pict_Version.CurrentY = 2600
+  Pict_Version.Print "Contraseña"
+  
+  Pict_Version.CurrentX = 5700
+  Pict_Version.CurrentY = 2600
+  Pict_Version.Print "Cotización"
+  
+  Pict_Version.CurrentX = 350
+  Pict_Version.CurrentY = 3900
+  Pict_Version.Print "Entidad/Empresa"
+
+  Pict_Version.FontSize = 8
+  Pict_Version.Refresh
+  AltoL = Pict_Version.TextHeight("H") + 20
+  
+  
    If .RecordCount > 0 And Len(Empresa) > 1 Then
       .MoveFirst
       .Find ("Empresa = '" & Empresa & "' ")
        If Not .EOF Then
-          Pict_Version.Cls
+          EmpresaTemp = Empresa
          'MsgBox Empresa & vbCrLf & .Fields("Logo_Tipo")
-          PosPicX = 10600
-          PosLinea = 2000
+          PosPicX = 300
+          PosLinea = 300
           LogoTipo1 = Ninguno
-          If .fields("Logo_Tipo") <> Ninguno Then
+          If .Fields("Logo_Tipo") <> Ninguno Then
               RutaOrigen = RutaSistema & "\LOGOS\"
-              If Existe_File(RutaOrigen & .fields("Logo_Tipo") & ".gif") Then
-                 LogoTipo1 = RutaSistema & "\LOGOS\" & .fields("Logo_Tipo") & ".gif"
+              If Existe_File(RutaOrigen & .Fields("Logo_Tipo") & ".gif") Then
+                 LogoTipo1 = RutaSistema & "\LOGOS\" & .Fields("Logo_Tipo") & ".gif"
+              ElseIf Existe_File(RutaOrigen & .Fields("Logo_Tipo") & ".jpg") Then
+                 LogoTipo1 = RutaSistema & "\LOGOS\" & .Fields("Logo_Tipo") & ".jpg"
               Else
-                 If Existe_File(RutaOrigen & .fields("Logo_Tipo") & ".jpg") Then LogoTipo1 = RutaSistema & "\LOGOS\" & .fields("Logo_Tipo") & ".jpg"
+                 LogoTipo1 = RutaSistema & "\LOGOS\DEFAULT.jpg"
               End If
           End If
-          Pict_Version.Line (PosPicX, PosLinea)-(PosPicX + 2040, PosLinea + 760), Azul, BF
-          If LogoTipo1 <> Ninguno Then Pict_Version.PaintPicture LoadPicture(LogoTipo1), PosPicX + 30, PosLinea + 30, 2000, 700
+          'Pict_Version.Line (PosPicX, PosLinea)-(PosPicX + 2040, PosLinea + 760), Azul, BF
+          If LogoTipo1 <> Ninguno Then Pict_Version.PaintPicture LoadPicture(LogoTipo1), PosPicX, PosLinea, 2000, 800
          
-         PosPicX = 2100
-         PosLinea = 920
+         'PosLinea = 2000
+         PosPicX = 2400
          Pict_Version.FontBold = True
          Pict_Version.ForeColor = Azul_Claro
-         Pict_Version.FontSize = 9
+                  
          Pict_Version.CurrentX = PosPicX
          Pict_Version.CurrentY = PosLinea
-         Pict_Version.Print ": " & ULCase(NombreUsuario)
-         
-         PosLinea = 2000
-         PosPicX = 5700
-         Pict_Version.FontBold = True
-         Pict_Version.ForeColor = Turquesa
-         Pict_Version.FontSize = 8
-         AltoL = Pict_Version.TextHeight("H")
+         Pict_Version.Print .Fields("Razon_Social")
+         PosLinea = PosLinea + AltoL
          
          Pict_Version.CurrentX = PosPicX
          Pict_Version.CurrentY = PosLinea
-         Pict_Version.Print "Nombre Comercial"
+         Pict_Version.Print .Fields("Nombre_Comercial")
          PosLinea = PosLinea + AltoL
          
          Pict_Version.CurrentX = PosPicX
          Pict_Version.CurrentY = PosLinea
          Pict_Version.Print "R.U.C."
+         PosLinea = PosLinea + AltoL
+                  
+         Pict_Version.CurrentX = PosPicX
+         Pict_Version.CurrentY = PosLinea
+         Pict_Version.Print "Ciudad"
+         PosLinea = PosLinea + AltoL
+         
+         Pict_Version.CurrentX = PosPicX
+         Pict_Version.CurrentY = PosLinea
+         Pict_Version.Print "Teléfono(s)"
+         PosLinea = PosLinea + AltoL
+         
+         PosPicX = 300
+         Pict_Version.CurrentX = PosPicX
+         Pict_Version.CurrentY = PosLinea
+         Pict_Version.Print "Dirección"
+         PosLinea = PosLinea + AltoL
+         
+         Pict_Version.CurrentX = PosPicX
+         Pict_Version.CurrentY = PosLinea
+         Pict_Version.Print "Representante"
+         PosLinea = PosLinea + AltoL
+         
+         Pict_Version.CurrentX = PosPicX
+         Pict_Version.CurrentY = PosLinea
+         Pict_Version.Print "Contador(a)"
          PosLinea = PosLinea + AltoL
          
          Pict_Version.CurrentX = PosPicX
@@ -2165,99 +2388,89 @@ Dim Logo_Tipo1 As String
          
          Pict_Version.CurrentX = PosPicX
          Pict_Version.CurrentY = PosLinea
-         Pict_Version.Print "Ciudad"
+         Pict_Version.Print "Usuario Loguedado"
+         PosLinea = PosLinea + AltoL
+         
+         PosLinea = 300
+         PosPicX = 3600
+         Pict_Version.FontBold = False
+         Pict_Version.ForeColor = Azul
+        
+         PosLinea = PosLinea + AltoL
          PosLinea = PosLinea + AltoL
          
          Pict_Version.CurrentX = PosPicX
          Pict_Version.CurrentY = PosLinea
-         Pict_Version.Print "Dirección"
-         PosLinea = PosLinea + AltoL
-         
-         Pict_Version.CurrentX = PosPicX
-         Pict_Version.CurrentY = PosLinea
-         Pict_Version.Print "Teléfono(s)/FAX"
+         Pict_Version.Print .Fields("RUC")
          PosLinea = PosLinea + AltoL
                   
          Pict_Version.CurrentX = PosPicX
          Pict_Version.CurrentY = PosLinea
-         Pict_Version.Print "Representante Legal"
+         Pict_Version.Print ULCase(.Fields("Ciudad"))
          PosLinea = PosLinea + AltoL
          
          Pict_Version.CurrentX = PosPicX
          Pict_Version.CurrentY = PosLinea
-         Pict_Version.Print "Contador(a)"
+         Pict_Version.Print .Fields("Telefono1") & "-" & .Fields("Telefono2")
+         PosLinea = PosLinea + AltoL
          
-         PosLinea = 2000
-         PosPicX = 7550
-         Pict_Version.FontBold = False
-         Pict_Version.ForeColor = Azul
-        
+         PosPicX = 2400
          Pict_Version.CurrentX = PosPicX
          Pict_Version.CurrentY = PosLinea
-         Pict_Version.Print .fields("Nombre_Comercial")
+         Pict_Version.Print .Fields("Direccion")
+         PosLinea = PosLinea + AltoL
+         
+         
+         Pict_Version.CurrentX = PosPicX
+         Pict_Version.CurrentY = PosLinea
+         Pict_Version.Print .Fields("Gerente")
          PosLinea = PosLinea + AltoL
          
          Pict_Version.CurrentX = PosPicX
          Pict_Version.CurrentY = PosLinea
-         Pict_Version.Print .fields("RUC")
+         Pict_Version.Print .Fields("Contador")
          PosLinea = PosLinea + AltoL
-         
-         Pict_Version.CurrentX = PosPicX
-         Pict_Version.CurrentY = PosLinea
-         Pict_Version.Print .fields("Item")
-         PosLinea = PosLinea + AltoL
-         
-         Pict_Version.CurrentX = PosPicX
-         Pict_Version.CurrentY = PosLinea
-         Pict_Version.Print ULCase(.fields("Ciudad"))
-         PosLinea = PosLinea + AltoL
-         
-         Pict_Version.CurrentX = PosPicX
-         Pict_Version.CurrentY = PosLinea
-         Pict_Version.Print .fields("Direccion")
-         PosLinea = PosLinea + AltoL
-         
-         Pict_Version.CurrentX = PosPicX
-         Pict_Version.CurrentY = PosLinea
-         Pict_Version.Print .fields("Telefono1") & "-" & .fields("Telefono2") & " / " & .fields("FAX")
-         PosLinea = PosLinea + AltoL
-         
-         Pict_Version.CurrentX = PosPicX
-         Pict_Version.CurrentY = PosLinea
-         Pict_Version.Print .fields("Gerente")
-         PosLinea = PosLinea + AltoL
-         
-         Pict_Version.CurrentX = PosPicX
-         Pict_Version.CurrentY = PosLinea
-         Pict_Version.Print .fields("Contador")
 
-         Dolar = .fields("Cotizacion")
-         TextDolar = Format$(Dolar, "#,##0.00")
-       End If
-   Else
-       PosPicX = 6900
-       PosLinea = Pict_Version.Top + 2500
-       Pict_Version.Cls
-       Pict_Version.Picture = LoadPicture(RutaSistema & "\LOGIN.jpg")
-       Pict_Version.FontBold = True
-       Pict_Version.ForeColor = Verde
-       Pict_Version.FontSize = 14
-       Pict_Version.CurrentX = PosPicX
-       Pict_Version.CurrentY = PosLinea
-       AltoL = Pict_Version.TextHeight("H")
-       Cadena = "INGRESE SUS CREDENCIALES"
-       If Si_No Then Pict_Version.Print Cadena
-   End If
-  End With
+         Pict_Version.CurrentX = PosPicX
+         Pict_Version.CurrentY = PosLinea
+         Pict_Version.Print .Fields("Item")
+         PosLinea = PosLinea + AltoL
   
+         Pict_Version.CurrentX = PosPicX
+         Pict_Version.CurrentY = PosLinea
+         Pict_Version.Print ULCase(NombreUsuario)
+                  
+         Dolar = .Fields("Cotizacion")
+         TextDolar = Format$(Dolar, "#,##0.00")
+         'MsgBox "."
+       End If
+   End If
+'''
+'''  Else
+'''    If .RecordCount = 0 Then
+'''
+'''       PosPicX = 2000
+'''       PosLinea = Pict_Version.Top + 1500
+'''       Pict_Version.Cls
+'''       Pict_Version.FontBold = True
+'''       Pict_Version.ForeColor = Verde
+'''       Pict_Version.FontSize = 14
+'''       Pict_Version.CurrentX = PosPicX
+'''       Pict_Version.CurrentY = PosLinea
+'''       AltoL = Pict_Version.TextHeight("H")
+'''       Cadena = "INGRESE SUS CREDENCIALES"
+'''       Pict_Version.Print Cadena
+'''    End If
+  End If
+  End With
  'Version_Sistema
   Si_No = Not (Si_No)
   Pict_Version.FontBold = True
   Pict_Version.FontSize = 10
   AnchoL = Pict_Version.TextWidth(Version_Sistema)
-  Pict_Version.CurrentY = Pict_Version.Top + 4700
+  Pict_Version.CurrentY = Pict_Version.Top + 6250
   Pict_Version.CurrentX = (Pict_Version.width - AnchoL) / 2
-  Pict_Version.ForeColor = Amarillo_Claro
+  Pict_Version.ForeColor = Azul_Claro
   If Si_No Then
      Pict_Version.Print Version_Sistema
      Lblwww.Caption = ""
@@ -2380,126 +2593,108 @@ End Sub
 '''   Ejecutar_SQL_SP SQLEmp
 '''End Sub
 
-Private Sub Descargar_FTP_Certificados_Logos()
+Private Sub Descargar_Certificados_Logos_Empresa()
 Dim AdoDBTemp As ADODB.Recordset
-Dim ListaDeArchivos As String
-Dim rutaFTP As String
-Dim Certificados() As String
-Dim LogoTipos() As String
-
-Dim sLogoTipos As String
-Dim IdC As Byte
-Dim iDL As Byte
+Dim Certificado As String
+Dim LogoTipoGIF As String
+Dim LogoTipoJPG As String
+Dim LogoTipoPNG As String
+Dim ActualizoFile As Boolean
 
 On Error GoTo error_Handler
 
-  IdC = 0
-  sLogoTipos = ""
-  
-  sSQL = "SELECT Empresa, Ruta_Certificado " _
-       & "FROM Empresas " _
-       & "WHERE Ruta_Certificado LIKE '%P12' " _
-       & "ORDER BY Empresa "
-  Select_AdoDB AdoDBTemp, sSQL
-  If AdoDBTemp.RecordCount > 0 Then
-     Do While Not AdoDBTemp.EOF
-        RutaDocumentos = RutaSistema & "\CERTIFIC\" & AdoDBTemp.fields("Ruta_Certificado")
-        If Len(Dir$(RutaDocumentos)) = 0 Then
-           ReDim Preserve Certificados(IdC) As String
-           Certificados(IdC) = AdoDBTemp.fields("Ruta_Certificado")
-           IdC = IdC + 1
-        End If
-        AdoDBTemp.MoveNext
-    Loop
+ If Len(NumEmpresa) = 3 Then
+    Certificado = Ninguno
+    LogoTipoGIF = Ninguno
+    LogoTipoJPG = Ninguno
+    LogoTipoPNG = Ninguno
+    
+    sSQL = "SELECT Empresa, Ruta_Certificado, Logo_Tipo " _
+         & "FROM Empresas " _
+         & "WHERE Item = '" & NumEmpresa & "' "
+    Select_AdoDB AdoDBTemp, sSQL
+    If AdoDBTemp.RecordCount > 0 Then
+      'MsgBox "Destop Test: Certificado = " & AdoDBTemp.Fields("Ruta_Certificado")
+       If InStr(UCase(AdoDBTemp.Fields("Ruta_Certificado")), "P12") > 1 Then
+          RutaDocumentos = RutaSistema & "\CERTIFIC\" & AdoDBTemp.Fields("Ruta_Certificado")
+         'MsgBox "Desktop Test: " & Dir$(RutaDocumentos)
+          If Len(Dir$(RutaDocumentos)) = 0 Then Certificado = AdoDBTemp.Fields("Ruta_Certificado")
+       End If
+      'MsgBox "Desktop Test: " & Certificado & vbCrLf & RutaDocumentos
+       If Len(AdoDBTemp.Fields("Logo_Tipo")) > 1 Then
+          RutaDocumentos = RutaSistema & "\LOGOS\" & AdoDBTemp.Fields("Logo_Tipo") & ".jpg"
+          If Len(Dir$(RutaDocumentos)) = 0 Then LogoTipoJPG = AdoDBTemp.Fields("Logo_Tipo") & ".jpg"
+        
+          RutaDocumentos = RutaSistema & "\LOGOS\" & AdoDBTemp.Fields("Logo_Tipo") & ".gif"
+          If Len(Dir$(RutaDocumentos)) = 0 Then LogoTipoGIF = AdoDBTemp.Fields("Logo_Tipo") & ".gif"
+        
+          RutaDocumentos = RutaSistema & "\LOGOS\" & AdoDBTemp.Fields("Logo_Tipo") & ".png"
+          If Len(Dir$(RutaDocumentos)) = 0 Then LogoTipoPNG = AdoDBTemp.Fields("Logo_Tipo") & ".png"
+       End If
+    End If
+    AdoDBTemp.Close
+    
+    With ftp
+        .Inicializar ListEmp
+        'Le indicamos el ListView donde se listarán los archivos
+         Set .ListView = LstVwFTP
+       ' MsgBox EsReadOnly
+         If EsReadOnly Then
+            If InStr(IPDelOrdenador, "192.168.27") Then
+              .servidor = "192.168.27.3"    'Establecesmo el nombre del Servidor FTP
+              .Puerto = 21
+            Else
+              .servidor = ftpUpSvr          'Establecesmo el nombre del Servidor FTP
+              .Puerto = ftpUpPuerto
+            End If
+           .Usuario = ftpUpUse              'Le establecemos el nombre de usuario de la cuenta
+           .Password = ftpUpPwr             'Le establecemos la contraseña de la cuenta Ftp
+         Else
+           .servidor = ftpSvr               'Establecesmo el nombre del Servidor FTP
+           .Usuario = ftpUse                'Le establecemos el nombre de usuario de la cuenta
+           .Password = ftpPwr               'Le establecemos la contraseña de la cuenta Ftp
+           .Puerto = ftpPuerto
+         End If
+        'MsgBox "Destop Test: " & IP_PC.IP_PC & vbCrLf & "Certificado = " & Certificado
+         If Len(Certificado) > 1 Then
+           'conectamos al servidor FTP. EL label es el control donde mostrar los errores y el estado de la conexión
+            If .ConectarFtp(LstStatud) Then
+                LstStatud.Text = LstStatud.Text & .GetDirectorioActual & vbCrLf
+               'Conectamos la nueva Base de Datos para sacar los Certificados del servidor que no los obtenga el cliente
+                ActualizoFile = False
+               .CambiarDirectorio "/SISTEMA/CERTIFIC/"
+               .ListarArchivos
+                For I = 1 To LstVwFTP.ListItems.Count
+                 If Certificado = LstVwFTP.ListItems(I) Then
+                   .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\CERTIFIC\" & LstVwFTP.ListItems(I), True
+                    ActualizoFile = True
+                    Exit For
+                 End If
+                Next I
+                If ActualizoFile Then MsgBox "Certificado nuevo actualizado"
+                .Desconectar
+            Else
+                Err.Description = Err.Description & " No se pudo conectar al servidor de Certificados"
+                GoTo error_Handler 'Exit Sub
+            End If
+         End If
+         If .ConectarFtp(LstStatud) Then
+            .CambiarDirectorio "/SISTEMA/LOGOS/"
+            .ListarArchivos
+             For I = 1 To LstVwFTP.ListItems.Count
+                 RutaDocumentos = RutaSistema & "\LOGOS\" & LstVwFTP.ListItems(I)
+                 If LogoTipoGIF = LstVwFTP.ListItems(I) Then .ObtenerArchivo LstVwFTP.ListItems(I), RutaDocumentos, True
+                 If LogoTipoJPG = LstVwFTP.ListItems(I) Then .ObtenerArchivo LstVwFTP.ListItems(I), RutaDocumentos, True
+                 If LogoTipoPNG = LstVwFTP.ListItems(I) Then .ObtenerArchivo LstVwFTP.ListItems(I), RutaDocumentos, True
+             Next I
+            .Desconectar
+         Else
+             Err.Description = Err.Description & " No se pudo conectar al servidor de Logotipos"
+             GoTo error_Handler 'Exit Sub
+         End If
+     End With
   End If
-  AdoDBTemp.Close
-  
-  iDL = 0
-  sSQL = "SELECT Logo_Tipo " _
-       & "FROM Empresas " _
-       & "WHERE Logo_Tipo <> '.' " _
-       & "GROUP BY Logo_Tipo " _
-       & "ORDER BY Logo_Tipo; "
-  Select_AdoDB AdoDBTemp, sSQL
-  If AdoDBTemp.RecordCount > 0 Then
-     Do While Not AdoDBTemp.EOF
-        RutaDocumentos = RutaSistema & "\LOGOS\" & AdoDBTemp.fields("Logo_Tipo") & ".jpg"
-        If Len(Dir$(RutaDocumentos)) = 0 Then
-           ReDim Preserve LogoTipos(iDL) As String
-           LogoTipos(iDL) = AdoDBTemp.fields("Logo_Tipo") & ".jpg"
-           iDL = iDL + 1
-        End If
-        RutaDocumentos = RutaSistema & "\LOGOS\" & AdoDBTemp.fields("Logo_Tipo") & ".gif"
-        If Len(Dir$(RutaDocumentos)) = 0 Then
-           ReDim Preserve LogoTipos(iDL) As String
-           LogoTipos(iDL) = AdoDBTemp.fields("Logo_Tipo") & ".gif"
-           iDL = iDL + 1
-        End If
-        RutaDocumentos = RutaSistema & "\LOGOS\" & AdoDBTemp.fields("Logo_Tipo") & ".png"
-        If Len(Dir$(RutaDocumentos)) = 0 Then
-           ReDim Preserve LogoTipos(iDL) As String
-           LogoTipos(iDL) = AdoDBTemp.fields("Logo_Tipo") & ".gif"
-           iDL = iDL + 1
-        End If
-        AdoDBTemp.MoveNext
-    Loop
-  End If
-  AdoDBTemp.Close
-  
-  With ftp
-      .Inicializar ListEmp
-      'Le establecemos la contraseña de la cuenta Ftp
-      .Password = ftpPwr
-      'Le establecemos el nombre de usuario de la cuenta
-      .Usuario = ftpUse
-      'Colocamos el puerto de conexion
-      .Puerto = 21
-      'Establecesmo el nombre del Servidor FTP
-      'If InStr(IP_PC.IP_PC, "192.168.27") > 0 Or InStr(IP_PC.IP_PC, "192.168.21") > 0 Then .servidor = "192.168.27.2" Else
-      .servidor = ftpSvr
-      'conectamos al servidor FTP. EL label es el control donde mostrar los errores y el estado de la conexión
-      'MsgBox .servidor
-       If .ConectarFtp(LstStatud) = False Then
-           MsgBox "No se pudo conectar al servidor de Certificados"
-           Exit Sub
-       End If
-       
-       LstStatud.Text = LstStatud.Text & .GetDirectorioActual & vbCrLf
-       rutaFTP = ""
-      'Mostramos en el label el path del directorio actual donde estamos ubicados en el servidor
-       rutaFTP = ""
-      'Le indicamos el ListView donde se listarán los archivos
-       Set .ListView = LstVwFTP
-         
-       If IdC > 0 Then
-         'Conectamos la nueva Base de Datos para sacar los Certificados del servidor que no los obtenga el cliente
-         .CambiarDirectorio "/SISTEMA/CERTIFIC/"
-         .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              For J = 0 To UBound(Certificados)
-                  If Certificados(J) = LstVwFTP.ListItems(I) Then
-                    .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\CERTIFIC\" & LstVwFTP.ListItems(I), True
-                     'Exit For
-                  End If
-              Next J
-          Next I
-       End If
-       If iDL > 0 Then
-         'Conectamos la nueva Base de Datos para sacar los Certificados del servidor que no los obtenga el cliente
-         .CambiarDirectorio "/SISTEMA/LOGOS/"
-         .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              For J = 0 To UBound(LogoTipos)
-                  If UCaseStrg(LogoTipos(J)) = UCaseStrg(LstVwFTP.ListItems(I)) Then
-                    .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\LOGOS\" & LstVwFTP.ListItems(I), True
-                     'Exit For
-                  End If
-              Next J
-          Next I
-       End If
-      .Desconectar
-   End With
-   RatonNormal
+  RatonNormal
 Exit Sub
 error_Handler:
      MsgBox Err.Description, vbCritical

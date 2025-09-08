@@ -3059,7 +3059,7 @@ PrinterPaint LogoTipo, 0.5, 0, 3, 2
 Printer.FontSize = 10
 Cadena = "Página No. " & Pagina & "."
 PrinterTexto TextoDerecha(Cadena), InicY, Cadena
-Cadena = "Fecha: " & date$ & "."
+Cadena = "Fecha: " & Date$ & "."
 PrinterTexto TextoDerecha(Cadena), InicY + 1, Cadena
 PosLinea = InicY
 Printer.FontBold = True
@@ -3206,7 +3206,7 @@ Public Sub CalculosTotalAsientos(DataAsiento As Adodc, _
    LabelDi.Caption = Format$(SumaDebe - SumaHaber, "#,##0.00")
 End Sub
 
-Public Sub GrabarComprobante(C1 As Comprobantes)
+Public Sub Grabar_Comprobante(C1 As Comprobantes)
 Dim ConBodegas As Boolean
 Dim NumTrans As Long
 Dim CodSustento As String
@@ -3214,627 +3214,34 @@ Dim AdoTemp As ADODB.Recordset
 Dim AdoRetAut As ADODB.Recordset
 
   RatonReloj
-' Encabezado del Comprobante
-  With C1
-      .Cotizacion = Dolar
-       If .T = "" Then .T = Normal
-       If .Fecha = LimpiarFechas Then .Fecha = FechaSistema
-       If .CodigoDr = "" Then .CodigoDr = Ninguno
-       If .Concepto = "" Then .Concepto = Ninguno
-       If .CodigoB = "" Then .CodigoB = Ninguno
-       If .RUC_CI = "" Then .RUC_CI = "0000000000000"
-       FechaComp = .Fecha
-       If .Numero = 0 Then
-           Select Case .TP
-             Case CompDiario: .Numero = ReadSetDataNum("Diario", True, True)
-             Case CompIngreso: .Numero = ReadSetDataNum("Ingresos", True, True)
-             Case CompEgreso: .Numero = ReadSetDataNum("Egresos", True, True)
-             Case CompNotaDebito: .Numero = ReadSetDataNum("NotaDebito", True, True)
-             Case CompNotaCredito: .Numero = ReadSetDataNum("NotaCredito", True, True)
-           End Select
-       End If
-  End With
  'Grabamos los datos de la transaccion en la tabla definitiva de almacenamiento
   TMail.TipoDeEnvio = Ninguno
-  If Len(C1.Autorizacion_LC) >= 13 Then
-     C1.Autorizacion_LC = ReadSetDataNum("LC_SERIE_" & C1.Serie_LC, True, True)
-     TMail.TipoDeEnvio = "CE"
-  End If
-  If Len(C1.Autorizacion_R) > 1 Then
-     sSQL = "SELECT Tipo_Trans, A_No " _
-          & "FROM Asiento_Air " _
-          & "WHERE Item = '" & NumEmpresa & "' " _
-          & "AND CodigoU = '" & CodigoUsuario & "' " _
-          & "AND T_No = " & C1.T_No & " " _
-          & "ORDER BY Tipo_Trans, A_No "
-     Select_AdoDB AdoTemp, sSQL
-     With AdoTemp
-      If .RecordCount > 0 And C1.RetNueva And C1.RetSecuencial Then
-          C1.Retencion = ReadSetDataNum("RE_SERIE_" & C1.Serie_R, True, True)
-      End If
-     End With
-     AdoTemp.Close
-     TMail.TipoDeEnvio = "CE"
-  End If
+  If Len(C1.Autorizacion_LC) >= 13 Then TMail.TipoDeEnvio = "CE"
+  If Len(C1.Autorizacion_R) > 13 Then TMail.TipoDeEnvio = "CE"
   FA.TP = C1.TP
   FA.Fecha = C1.Fecha
   FA.Numero = C1.Numero
   FA.ClaveAcceso = Ninguno
-  CtaConciliada = ""
- 'Actualizar las Ctas a mayoriazar
- 'Actualiza_Procesado_Kardex .fields("Codigo_Inv")
-
-' Borramos la informacion del comprobante si lo hubiera
-  EliminarComprobantes C1
-' Por Bodegas
-  ConBodegas = False
-  SQL1 = "SELECT CodBod " _
-       & "FROM Catalogo_Bodegas " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND Periodo = '" & Periodo_Contable & "' "
-  Select_AdoDB AdoTemp, SQL1
-  If AdoTemp.RecordCount > 1 Then ConBodegas = True
-  AdoTemp.Close
-  
-' Grabamos SubCtas
-  sSQL = "SELECT * " _
-       & "FROM Asiento_SC " _
-       & "WHERE Item = '" & C1.Item & "' " _
-       & "AND T_No = " & C1.T_No & " " _
-       & "AND CodigoU = '" & CodigoUsuario & "' " _
-       & "ORDER BY TC,Cta,Codigo "
-  Select_AdoDB AdoTemp, sSQL
-  With AdoTemp
-   If .RecordCount > 0 Then
-       Do While Not .EOF
-          Valor = .fields("Valor")
-          Valor_ME = .fields("Valor_ME")
-          TipoCta = .fields("TC")
-          OpcDH = Val(.fields("DH"))
-          SerieFactura = .fields("Serie")
-          Factura_No = .fields("Factura")
-          Fecha_Vence = .fields("FECHA_V")
-          Cta_Cobrar = TrimStrg(.fields("Cta"))
-          If Len(SerieFactura) < 6 Then SerieFactura = "001001"
-          If IsNull(.fields("Codigo")) Then
-             Select Case TipoCta
-               Case "C", "P": Codigo = C1.CodigoB
-               Case Else: Codigo = Ninguno
-             End Select
-          Else
-             Codigo = .fields("Codigo")
-          End If
-          If Valor <> 0 Or Valor_ME <> 0 Then
-             SetAdoAddNew "Trans_SubCtas"
-             SetAdoFields "T", C1.T
-             SetAdoFields "TP", C1.TP
-             SetAdoFields "Numero", C1.Numero
-             SetAdoFields "Fecha", C1.Fecha
-             SetAdoFields "Item", C1.Item
-             SetAdoFields "TC", TipoCta
-             SetAdoFields "Cta", Cta_Cobrar
-             SetAdoFields "Codigo", Codigo
-             SetAdoFields "Fecha_V", Fecha_Vence
-             SetAdoFields "Serie", SerieFactura
-             SetAdoFields "Factura", Factura_No
-             SetAdoFields "Fecha_E", .fields("FECHA_E")
-             SetAdoFields "Detalle_SubCta", .fields("Detalle_SubCta")
-             SetAdoFields "Prima", .fields("Prima")
-             If OpcDH = 1 Then
-                SetAdoFields "Debitos", Valor
-                SetAdoFields "Parcial_ME", Valor_ME
-             Else
-                SetAdoFields "Creditos", Valor
-                SetAdoFields "Parcial_ME", -Valor_ME
-             End If
-             SetAdoUpdate
-             NumTrans = NumTrans + 1
-          End If
-         .MoveNext
-       Loop
-   End If
-  End With
-  AdoTemp.Close
-    
- 'RETENCIONES COMPRAS
-  sSQL = "SELECT * " _
-       & "FROM Asiento_Compras " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND CodigoU = '" & CodigoUsuario & "' " _
-       & "AND T_No = " & C1.T_No & " " _
-       & "ORDER BY T_No "
-  Select_AdoDB AdoTemp, sSQL
-  With AdoTemp
-   If .RecordCount > 0 Then
-      'Generacion de la Retencion si es Electronica
-       FechaTexto = .fields("FechaRegistro")
-       CodSustento = Format$(.fields("CodSustento"), "00")
-       SetAdoAddNew "Trans_Compras"
-       SetAdoFields "IdProv", C1.CodigoB
-       SetAdoFields "DevIva", .fields("DevIva")
-       SetAdoFields "CodSustento", .fields("CodSustento")
-       SetAdoFields "TipoComprobante", .fields("TipoComprobante")
-       SetAdoFields "Establecimiento", .fields("Establecimiento")
-       SetAdoFields "PuntoEmision", .fields("PuntoEmision")
-       SetAdoFields "Secuencial", .fields("Secuencial")
-       SetAdoFields "Autorizacion", .fields("Autorizacion")
-       SetAdoFields "FechaEmision", .fields("FechaEmision")
-       SetAdoFields "FechaRegistro", .fields("FechaRegistro")
-       SetAdoFields "FechaCaducidad", .fields("FechaCaducidad")
-       SetAdoFields "BaseNoObjIVA", .fields("BaseNoObjIVA")
-       SetAdoFields "BaseImponible", .fields("BaseImponible")
-       SetAdoFields "BaseImpGrav", .fields("BaseImpGrav")
-       SetAdoFields "PorcentajeIva", .fields("PorcentajeIva")
-       SetAdoFields "MontoIva", .fields("MontoIva")
-       SetAdoFields "BaseImpIce", .fields("BaseImpIce")
-       SetAdoFields "PorcentajeIce", .fields("PorcentajeIce")
-       SetAdoFields "MontoIce", .fields("MontoIce")
-       SetAdoFields "MontoIvaBienes", .fields("MontoIvaBienes")
-       SetAdoFields "PorRetBienes", .fields("PorRetBienes")
-       SetAdoFields "ValorRetBienes", .fields("ValorRetBienes")
-       SetAdoFields "MontoIvaServicios", .fields("MontoIvaServicios")
-       SetAdoFields "PorRetServicios", .fields("PorRetServicios")
-       SetAdoFields "ValorRetServicios", .fields("ValorRetServicios")
-       SetAdoFields "Porc_Bienes", .fields("Porc_Bienes")
-       SetAdoFields "Porc_Servicios", .fields("Porc_Servicios")
-       SetAdoFields "Cta_Servicio", .fields("Cta_Servicio")
-       SetAdoFields "Cta_Bienes", .fields("Cta_Bienes")
-       SetAdoFields "Linea_SRI", 0
-       SetAdoFields "DocModificado", .fields("DocModificado")
-       SetAdoFields "FechaEmiModificado", .fields("FechaEmiModificado")
-       SetAdoFields "EstabModificado", .fields("EstabModificado")
-       SetAdoFields "PtoEmiModificado", .fields("PtoEmiModificado")
-       SetAdoFields "SecModificado", .fields("SecModificado")
-       SetAdoFields "AutModificado", .fields("AutModificado")
-       SetAdoFields "ContratoPartidoPolitico", .fields("ContratoPartidoPolitico")
-       SetAdoFields "MontoTituloOneroso", .fields("MontoTituloOneroso")
-       SetAdoFields "MontoTituloGratuito", .fields("MontoTituloGratuito")
-       SetAdoFields "PagoLocExt", .fields("PagoLocExt")
-       SetAdoFields "PaisEfecPago", .fields("PaisEfecPago")
-       SetAdoFields "AplicConvDobTrib", .fields("AplicConvDobTrib")
-       SetAdoFields "PagExtSujRetNorLeg", .fields("PagExtSujRetNorLeg")
-       SetAdoFields "FormaPago", .fields("FormaPago")
-       SetAdoFields "Serie_Retencion", C1.Serie_R
-       SetAdoFields "SecRetencion", C1.Retencion
-       SetAdoFields "AutRetencion", C1.Autorizacion_R
-       SetAdoFields "Clave_Acceso", Ninguno
-       SetAdoFields "T", Normal
-       SetAdoFields "TP", C1.TP
-       SetAdoFields "Numero", C1.Numero
-       SetAdoFields "Fecha", C1.Fecha
-       SetAdoUpdate
-   End If
-  End With
-  AdoTemp.Close
-' RETENCIONES VENTAS
-  sSQL = "SELECT * " _
-       & "FROM Asiento_Ventas " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND CodigoU = '" & CodigoUsuario & "' " _
-       & "AND T_No = " & C1.T_No & " " _
-       & "ORDER BY T_No DESC "
-  Select_AdoDB AdoTemp, sSQL
-  With AdoTemp
-   If .RecordCount > 0 Then
-       FechaTexto = .fields("FechaRegistro")
-       SetAdoAddNew "Trans_Ventas"
-       SetAdoFields "IdProv", C1.CodigoB
-       SetAdoFields "TipoComprobante", .fields("TipoComprobante")
-       SetAdoFields "FechaRegistro", .fields("FechaRegistro")
-       SetAdoFields "FechaEmision", .fields("FechaEmision")
-       SetAdoFields "Establecimiento", .fields("Establecimiento")
-       SetAdoFields "PuntoEmision", .fields("PuntoEmision")
-       SetAdoFields "Secuencial", .fields("Secuencial")
-       SetAdoFields "NumeroComprobantes", .fields("NumeroComprobantes")
-       SetAdoFields "BaseImponible", .fields("BaseImponible")
-       SetAdoFields "IvaPresuntivo", .fields("IvaPresuntivo")
-       SetAdoFields "BaseImpGrav", .fields("BaseImpGrav")
-       SetAdoFields "PorcentajeIva", .fields("PorcentajeIva")
-       SetAdoFields "MontoIva", .fields("MontoIva")
-       SetAdoFields "BaseImpIce", .fields("BaseImpIce")
-       SetAdoFields "PorcentajeIce", .fields("PorcentajeIce")
-       SetAdoFields "MontoIce", .fields("MontoIce")
-       SetAdoFields "MontoIvaBienes", .fields("MontoIvaBienes")
-       SetAdoFields "PorRetBienes", .fields("PorRetBienes")
-       SetAdoFields "ValorRetBienes", .fields("ValorRetBienes")
-       SetAdoFields "MontoIvaServicios", .fields("MontoIvaServicios")
-       SetAdoFields "PorRetServicios", .fields("PorRetServicios")
-       SetAdoFields "ValorRetServicios", .fields("ValorRetServicios")
-       SetAdoFields "RetPresuntiva", .fields("RetPresuntiva")
-       SetAdoFields "Porc_Bienes", .fields("Porc_Bienes")
-       SetAdoFields "Porc_Servicios", .fields("Porc_Servicios")
-       SetAdoFields "Cta_Servicio", .fields("Cta_Servicio")
-       SetAdoFields "Cta_Bienes", .fields("Cta_Bienes")
-       SetAdoFields "Tipo_Pago", .fields("Tipo_Pago")
-       SetAdoFields "Linea_SRI", 0
-       SetAdoFields "T", Normal
-       SetAdoFields "TP", C1.TP
-       SetAdoFields "Numero", C1.Numero
-       SetAdoFields "Fecha", C1.Fecha
-      'Razon Social
-      'MsgBox C1.Beneficiario
-       SetAdoFields "RUC_CI", C1.RUC_CI
-       SetAdoFields "IB", C1.TD
-       SetAdoFields "Razon_Social", C1.Beneficiario
-       SetAdoUpdate
-   End If
-  End With
-  AdoTemp.Close
-' RETENCIONES EXPORTACION
-  sSQL = "SELECT * " _
-       & "FROM Asiento_Exportaciones " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND CodigoU = '" & CodigoUsuario & "' " _
-       & "AND T_No = " & C1.T_No & " " _
-       & "ORDER BY T_No DESC "
-  Select_AdoDB AdoTemp, sSQL
-  With AdoTemp
-   If .RecordCount > 0 Then
-       SetAdoAddNew "Trans_Exportaciones"
-       SetAdoFields "Codigo", .fields("Codigo")
-       SetAdoFields "CtasxCobrar", .fields("CtasxCobrar")
-       SetAdoFields "ExportacionDe", .fields("ExportacionDe")
-       SetAdoFields "TipoComprobante", .fields("TipoComprobante")
-       SetAdoFields "FechaEmbarque", .fields("FechaEmbarque")
-       SetAdoFields "NumeroDctoTransporte", .fields("NumeroDctoTransporte")
-       SetAdoFields "IdFiscalProv", C1.CodigoB
-       SetAdoFields "ValorFOB", .fields("ValorFOB")
-       SetAdoFields "DevIva", .fields("DevIva")
-       SetAdoFields "FacturaExportacion", .fields("FacturaExportacion")
-       SetAdoFields "ValorFOBComprobante", .fields("ValorFOBComprobante")
-       SetAdoFields "DistAduanero", .fields("DistAduanero")
-       SetAdoFields "Anio", .fields("Anio")
-       SetAdoFields "Regimen", .fields("Regimen")
-       SetAdoFields "Correlativo", .fields("Correlativo")
-       SetAdoFields "Verificador", .fields("Verificador")
-       SetAdoFields "Establecimiento", .fields("Establecimiento")
-       SetAdoFields "PuntoEmision", .fields("PuntoEmision")
-       SetAdoFields "Secuencial", .fields("Secuencial")
-       SetAdoFields "Autorizacion", .fields("Autorizacion")
-       SetAdoFields "FechaEmision", .fields("FechaEmision")
-       SetAdoFields "FechaRegistro", .fields("FechaRegistro")
-       SetAdoFields "Linea_SRI", 0
-       SetAdoFields "T", Normal
-       SetAdoFields "TP", C1.TP
-       SetAdoFields "Numero", C1.Numero
-       SetAdoFields "Fecha", C1.Fecha
-       SetAdoUpdate
-   End If
-  End With
-  AdoTemp.Close
-' RETENCIONES IMPORTACIONES
-  sSQL = "SELECT * " _
-       & "FROM Asiento_Importaciones " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND CodigoU = '" & CodigoUsuario & "' " _
-       & "AND T_No = " & C1.T_No & " " _
-       & "ORDER BY T_No DESC "
-  Select_AdoDB AdoTemp, sSQL
-  With AdoTemp
-   If .RecordCount > 0 Then
-       FechaTexto = .fields("FechaLiquidacion")
-       SetAdoAddNew "Trans_Importaciones"
-       SetAdoFields "CodSustento", .fields("CodSustento")
-       SetAdoFields "ImportacionDe", .fields("ImportacionDe")
-       SetAdoFields "FechaLiquidacion", .fields("FechaLiquidacion")
-       SetAdoFields "TipoComprobante", .fields("TipoComprobante")
-       SetAdoFields "DistAduanero", .fields("DistAduanero")
-       SetAdoFields "Anio", .fields("Anio")
-       SetAdoFields "Regimen", .fields("Regimen")
-       SetAdoFields "Correlativo", .fields("Correlativo")
-       SetAdoFields "Verificador", .fields("Verificador")
-       SetAdoFields "IdFiscalProv", C1.CodigoB
-       SetAdoFields "ValorCIF", .fields("ValorCIF")
-       SetAdoFields "BaseImponible", .fields("BaseImponible")
-       SetAdoFields "BaseImpGrav", .fields("BaseImpGrav")
-       SetAdoFields "PorcentajeIva", .fields("PorcentajeIva")
-       SetAdoFields "MontoIva", .fields("MontoIva")
-       SetAdoFields "BaseImpIce", .fields("BaseImpIce")
-       SetAdoFields "PorcentajeIce", .fields("PorcentajeIce")
-       SetAdoFields "MontoIce", .fields("MontoIce")
-       SetAdoFields "Linea_SRI", 0
-       SetAdoFields "T", Normal
-       SetAdoFields "TP", C1.TP
-       SetAdoFields "Numero", C1.Numero
-       SetAdoFields "Fecha", C1.Fecha
-       SetAdoUpdate
-   End If
-  End With
-  AdoTemp.Close
-
-' RETENCIONES AIR
-  sSQL = "SELECT * " _
-       & "FROM Asiento_Air " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND CodigoU = '" & CodigoUsuario & "' " _
-       & "AND T_No = " & C1.T_No & " " _
-       & "ORDER BY Tipo_Trans,A_No "
-  Select_AdoDB AdoTemp, sSQL
-  With AdoTemp
-   If .RecordCount > 0 Then
-       Do While Not .EOF
-          SetAdoAddNew "Trans_Air"
-          SetAdoFields "CodRet", .fields("CodRet")
-          SetAdoFields "BaseImp", .fields("BaseImp")
-          SetAdoFields "Porcentaje", .fields("Porcentaje")
-          SetAdoFields "ValRet", .fields("ValRet")
-          SetAdoFields "EstabRetencion", .fields("EstabRetencion")
-          SetAdoFields "PtoEmiRetencion", .fields("PtoEmiRetencion")
-          SetAdoFields "Tipo_Trans", .fields("Tipo_Trans")
-          SetAdoFields "IdProv", C1.CodigoB
-          SetAdoFields "Cta_Retencion", .fields("Cta_Retencion")
-          SetAdoFields "EstabFactura", .fields("EstabFactura")
-          SetAdoFields "PuntoEmiFactura", .fields("PuntoEmiFactura")
-          SetAdoFields "Factura_No", .fields("Factura_No")
-          SetAdoFields "Linea_SRI", 0
-          SetAdoFields "T", Normal
-          SetAdoFields "TP", C1.TP
-          SetAdoFields "Numero", C1.Numero
-          SetAdoFields "Fecha", C1.Fecha
-          SetAdoFields "SecRetencion", C1.Retencion
-          SetAdoFields "AutRetencion", C1.Autorizacion_R
-          SetAdoUpdate
-          NumTrans = NumTrans + 1
-         .MoveNext
-       Loop
-   End If
-  End With
-  AdoTemp.Close
-  
-' Grabamos Retencion de Rol de Pagos
-  sSQL = "SELECT * " _
-       & "FROM Asiento_RP " _
-       & "WHERE Item = '" & C1.Item & "' " _
-       & "AND CodigoU = '" & CodigoUsuario & "' " _
-       & "AND T_No = " & C1.T_No & " " _
-       & "ORDER BY Codigo "
-  Select_AdoDB AdoTemp, sSQL
-  With AdoTemp
-   If .RecordCount > 0 Then
-       Do While Not .EOF
-          SetAdoAddNew "Trans_Rol_Pagos"
-          For J = 0 To .fields.Count - 1
-              SetAdoFields .fields(J).Name, .fields(J)
-          Next J
-          SetAdoFields "CodigoU", CodigoUsuario
-          SetAdoFields "Item", C1.Item
-          SetAdoFields "Fecha", C1.Fecha
-          SetAdoFields "T", Normal
-          SetAdoFields "TP", C1.TP
-          SetAdoFields "Numero", C1.Numero
-          SetAdoFields "Codigo", C1.CodigoB
-          SetAdoUpdate
-         .MoveNext
-       Loop
-   End If
-  End With
-  AdoTemp.Close
-  
-' Grabamos Inventarios
-  sSQL = "SELECT * " _
-       & "FROM Asiento_K " _
-       & "WHERE Item = '" & C1.Item & "' " _
-       & "AND T_No = " & C1.T_No & " " _
-       & "AND CodigoU = '" & CodigoUsuario & "' "
-  Select_AdoDB AdoTemp, sSQL
-  If AdoTemp.RecordCount > 0 Then
-     Do While Not AdoTemp.EOF
-      ' Asiento de Inventario
-        CodigoInv = AdoTemp.fields("CODIGO_INV")
-        If InStr(C1.CodigoInvModificar, CodigoInv) = 0 Then C1.CodigoInvModificar = C1.CodigoInvModificar & "'" & CodigoInv & "',"
-        SetAdoAddNew "Trans_Kardex"
-        SetAdoFields "T", Normal
-        SetAdoFields "TP", C1.TP
-        SetAdoFields "Numero", C1.Numero
-        SetAdoFields "Fecha", C1.Fecha
-        SetAdoFields "Codigo_Dr", AdoTemp.fields("Codigo_Dr") ' C1.CodigoDr
-        SetAdoFields "Codigo_Tra", AdoTemp.fields("Codigo_Tra") ' C1.CodigoDr
-        SetAdoFields "Codigo_Inv", AdoTemp.fields("CODIGO_INV")
-        SetAdoFields "Codigo_P", AdoTemp.fields("Codigo_B")
-        SetAdoFields "Descuento", AdoTemp.fields("P_DESC")
-        SetAdoFields "Descuento1", AdoTemp.fields("P_DESC1")
-        SetAdoFields "Valor_Total", AdoTemp.fields("VALOR_TOTAL")
-        SetAdoFields "Existencia", AdoTemp.fields("CANTIDAD")
-        SetAdoFields "Valor_Unitario", AdoTemp.fields("VALOR_UNIT")
-        SetAdoFields "Total", AdoTemp.fields("SALDO")
-        SetAdoFields "Cta_Inv", AdoTemp.fields("CTA_INVENTARIO")
-        SetAdoFields "Contra_Cta", AdoTemp.fields("CONTRA_CTA")
-        SetAdoFields "Orden_No", AdoTemp.fields("ORDEN")
-        SetAdoFields "CodBodega", AdoTemp.fields("CodBod")
-        SetAdoFields "CodMarca", AdoTemp.fields("CodMar")
-        SetAdoFields "Codigo_Barra", AdoTemp.fields("COD_BAR")
-        SetAdoFields "Costo", AdoTemp.fields("VALOR_UNIT")
-        SetAdoFields "PVP", AdoTemp.fields("PVP")
-        SetAdoFields "No_Refrendo", AdoTemp.fields("No_Refrendo")
-        SetAdoFields "Lote_No", AdoTemp.fields("Lote_No")
-        SetAdoFields "Fecha_Fab", AdoTemp.fields("Fecha_Fab")
-        SetAdoFields "Fecha_Exp", AdoTemp.fields("Fecha_Exp")
-        SetAdoFields "Modelo", AdoTemp.fields("Modelo")
-        SetAdoFields "Serie_No", AdoTemp.fields("Serie_No")
-        SetAdoFields "Procedencia", AdoTemp.fields("Procedencia")
-        SetAdoFields "CodigoL", AdoTemp.fields("SUBCTA")
-        If Inv_Promedio Then
-           Cantidad = AdoTemp.fields("CANTIDAD")
-           Saldo = AdoTemp.fields("SALDO")
-           If Cantidad <= 0 Then Cantidad = 1
-           SetAdoFields "Costo", Saldo / Cantidad
-        End If
-        If AdoTemp.fields("DH") = 1 Then
-           SetAdoFields "Entrada", AdoTemp.fields("CANT_ES")
-        Else
-           SetAdoFields "Salida", AdoTemp.fields("CANT_ES")
-           Si_No = False
-        End If
-        SetAdoFields "CodigoU", CodigoUsuario
-        SetAdoFields "Item", NumEmpresa
-        SetAdoUpdate
-        AdoTemp.MoveNext
-        NumTrans = NumTrans + 1
-     Loop
-  End If
-  AdoTemp.Close
-' Grabamos Prestamos
-  sSQL = "SELECT * " _
-       & "FROM Asiento_P " _
-       & "WHERE Item = '" & C1.Item & "' " _
-       & "AND T_No = " & C1.T_No & " " _
-       & "AND CodigoU = '" & CodigoUsuario & "' "
-  Select_AdoDB AdoTemp, sSQL
-  If AdoTemp.RecordCount > 0 Then
-     TotalCapital = 0
-     TotalInteres = 0
-     Do While Not AdoTemp.EOF
-        If AdoTemp.fields("Cuotas") > 0 Then
-           SetAdoAddNew "Trans_Prestamos"
-           SetAdoFields "T", "P"
-           SetAdoFields "Fecha", AdoTemp.fields("Fecha")
-           SetAdoFields "TP", C1.TP
-           SetAdoFields "Credito_No", NumEmpresa & Format$(C1.Numero, "0000000")
-           SetAdoFields "Cta", Cta
-           SetAdoFields "Cuenta_No", C1.CodigoB
-           SetAdoFields "Cuota_No", AdoTemp.fields("Cuotas")
-           SetAdoFields "Interes", AdoTemp.fields("Interes")
-           SetAdoFields "Capital", AdoTemp.fields("Capital")
-           SetAdoFields "Pagos", AdoTemp.fields("Pagos")
-           SetAdoFields "Saldo", AdoTemp.fields("Saldo")
-           SetAdoFields "CodigoU", AdoTemp.fields("CodigoU")
-           SetAdoFields "Item", C1.Item
-           SetAdoUpdate
-        End If
-        TotalCapital = TotalCapital + AdoTemp.fields("Capital")
-        TotalInteres = TotalInteres + AdoTemp.fields("Interes")
-        TotalAbonos = AdoTemp.fields("Pagos")
-        Cta = AdoTemp.fields("Cta")
-        NumMeses = AdoTemp.fields("Cuotas")
-        AdoTemp.MoveNext
-     Loop
-     SetAdoAddNew "Prestamos"
-     SetAdoFields "T", "P"
-     SetAdoFields "Fecha", C1.Fecha
-     SetAdoFields "TP", C1.TP
-     SetAdoFields "Credito_No", NumEmpresa & Format$(C1.Numero, "0000000")
-     SetAdoFields "Cta", Cta
-     SetAdoFields "Cuenta_No", C1.CodigoB
-     SetAdoFields "Meses", NumMeses
-     SetAdoFields "Tasa", Redondear((TotalInteres * 12) / (TotalCapital * NumMeses), 4)
-     SetAdoFields "Interes", TotalInteres
-     SetAdoFields "Capital", TotalCapital
-     SetAdoFields "Pagos", TotalAbonos
-     SetAdoFields "Saldo_Pendiente", TotalCapital
-     SetAdoFields "Item", C1.Item
-     SetAdoUpdate
-  End If
-  AdoTemp.Close
-' Grabamos Comprobantes
-  SetAdoAddNew "Comprobantes"
-  SetAdoFields "Item", C1.Item
-  SetAdoFields "T", C1.T
-  SetAdoFields "Fecha", C1.Fecha
-  SetAdoFields "TP", C1.TP
-  SetAdoFields "Numero", C1.Numero
-  SetAdoFields "Codigo_B", C1.CodigoB
-  SetAdoFields "Monto_Total", Redondear(C1.Monto_Total, 2)
-  SetAdoFields "Concepto", C1.Concepto
-  SetAdoFields "Efectivo", C1.Efectivo
-  SetAdoFields "Cotizacion", C1.Cotizacion
-  SetAdoFields "CodigoU", C1.Usuario
-  SetAdoFields "Autorizado", C1.Autorizado
-  SetAdoUpdate
-' Grabamos Transacciones
-  sSQL = "SELECT * " _
-       & "FROM Asiento " _
-       & "WHERE Item = '" & C1.Item & "' " _
-       & "AND T_No = " & C1.T_No & " " _
-       & "AND CodigoU = '" & CodigoUsuario & "' " _
-       & "ORDER BY A_No,DEBE DESC,CODIGO "
-  Select_AdoDB AdoTemp, sSQL
-  If AdoTemp.RecordCount > 0 Then
-    Do While Not AdoTemp.EOF
-      Moneda_US = AdoTemp.fields("ME")
-      Cta = TrimStrg(AdoTemp.fields("CODIGO"))
-      Cuenta = TrimStrg(AdoTemp.fields("CUENTA"))
-      Debe = Redondear(AdoTemp.fields("DEBE"), 2)
-      Haber = Redondear(AdoTemp.fields("HABER"), 2)
-      Parcial = Redondear(AdoTemp.fields("PARCIAL_ME"), 2)
-      NoCheque = AdoTemp.fields("CHEQ_DEP")
-      CodigoCC = AdoTemp.fields("CODIGO_CC")
-      Fecha_Vence = AdoTemp.fields("EFECTIVIZAR")
-      DetalleComp = AdoTemp.fields("DETALLE")
-      CodigoP = AdoTemp.fields("CODIGO_C")
-      TipoCta = AdoTemp.fields("TC")
-      If CodigoP = Ninguno Then CodigoP = C1.CodigoB
-      'MsgBox C1.T_No & vbCrLf & C1.Concepto & vbCrLf & Debe & vbCrLf & Haber
-      If InStr(C1.Ctas_Modificar, Cta) = 0 Then C1.Ctas_Modificar = C1.Ctas_Modificar & "'" & Cta & "',"
-      If InStr(CtaConciliada, Cta) = 0 And TipoCta = "BA" Then CtaConciliada = CtaConciliada & Cta & " -> " & Cuenta & vbCrLf
-      If (Debe + Haber) > 0 Then
-         SetAdoAddNew "Transacciones"
-         SetAdoFields "T", C1.T
-         SetAdoFields "Fecha", C1.Fecha
-         SetAdoFields "TP", C1.TP
-         SetAdoFields "Numero", C1.Numero
-         SetAdoFields "Cta", Cta
-         SetAdoFields "Parcial_ME", Parcial
-         SetAdoFields "Debe", Debe
-         SetAdoFields "Haber", Haber
-         SetAdoFields "Parcial_ME", Parcial
-         SetAdoFields "Cheq_Dep", NoCheque
-         SetAdoFields "Fecha_Efec", Fecha_Vence
-         SetAdoFields "Detalle", DetalleComp
-         SetAdoFields "Codigo_C", CodigoP
-         SetAdoFields "C_Costo", CodigoCC
-         SetAdoFields "Item", C1.Item
-         If TipoCta = "BA" Then SetAdoFields "C", ConciliacionAut
-         SetAdoFields "Procesado", False
-         SetAdoUpdate
-         NumTrans = NumTrans + 1
-      End If
-      AdoTemp.MoveNext
-    Loop
-  End If
-  AdoTemp.Close
- 'Pasamos a colocar las cuentas que se tienen que mayorizar despuesde grabar el comprobante
-  C1.Ctas_Modificar = TrimStrg(C1.Ctas_Modificar)
-  C1.CodigoInvModificar = TrimStrg(C1.CodigoInvModificar)
-  If Len(C1.Ctas_Modificar) > 1 Then
-     If MidStrg(C1.Ctas_Modificar, Len(C1.Ctas_Modificar), 1) = "," Then C1.Ctas_Modificar = MidStrg(C1.Ctas_Modificar, 1, Len(C1.Ctas_Modificar) - 1)
-     
-     sSQL = "UPDATE Transacciones " _
-          & "SET Procesado = 0 " _
-          & "WHERE Item = '" & C1.Item & "' " _
-          & "AND Periodo = '" & Periodo_Contable & "' " _
-          & "AND Cta IN (" & C1.Ctas_Modificar & ") "
-     Ejecutar_SQL_SP sSQL
-  End If
-  If Len(C1.CodigoInvModificar) > 1 Then
-     'C1.CodigoInvModificar = MidStrg(C1.CodigoInvModificar, 1, Len(C1.CodigoInvModificar) - 1)
-     sSQL = "UPDATE Trans_Kardex " _
-          & "SET Procesado = 0 " _
-          & "WHERE Item = '" & C1.Item & "' " _
-          & "AND Periodo = '" & Periodo_Contable & "' " _
-          & "AND Codigo_Inv IN (" & C1.CodigoInvModificar & ") "
-     Ejecutar_SQL_SP sSQL
-  End If
-  C1.Ctas_Modificar = ""
-  C1.CodigoInvModificar = ""
-
- 'Actualiza el Email del beneficiario
-  If Len(C1.Email) > 3 Then
-     sSQL = "UPDATE Clientes " _
-          & "SET Email = '" & C1.Email & "' " _
-          & "WHERE Codigo = '" & C1.CodigoB & "' "
-     Ejecutar_SQL_SP sSQL
-  End If
- 'Pasamos a Autorizar la retencion si es electronica
-  RatonReloj
   FA.Autorizacion_R = C1.Autorizacion_R
+  FA.Autorizacion_LC = C1.Autorizacion_LC
   FA.Retencion = C1.Retencion
   FA.Serie_R = C1.Serie_R
-  If Len(FA.Autorizacion_R) >= 13 Then SRI_Crear_Clave_Acceso_Retenciones FA, True
+  FA.Serie_LC = C1.Serie_LC
   
- 'Eliminamos Asientos contables
-  Trans_No = C1.T_No
-  Eliminar_Asientos_SP True
-  Control_Procesos Normal, "Grabar Comprobante de: " & C1.TP & " No. " & C1.Numero
+  Grabar_Comprobante_SP C1, CtaConciliada
+  FA.TP = C1.TP
+  FA.Numero = C1.Numero
+ 'MsgBox C1.Autorizacion_R & vbCrLf & C1.Autorizacion_LC & vbCrLf & C1.TP & "-" & C1.Numero & vbCrLf & C1.GrabadoExitoso
+  If C1.GrabadoExitoso Then
+     Control_Procesos Normal, "Grabar Comprobante de: " & C1.TP & " No. " & C1.Numero
+    'Actualizar las Ctas a mayoriazar
+    'Actualiza_Procesado_Kardex .fields("Codigo_Inv")
+    'Pasamos a Autorizar la retencion si es electronica
+     RatonReloj
+     'MsgBox FA.Autorizacion_R & vbCrLf & FA.Autorizacion_LC
+     If Len(C1.Autorizacion_R) >= 13 Then SRI_Crear_Clave_Acceso_Retenciones FA, True
+     If Len(C1.Autorizacion_LC) >= 13 Then SRI_Crear_Clave_Acceso_Liquidacion FA, True
+  End If
   RatonNormal
 End Sub
 
@@ -9642,6 +9049,7 @@ Dim Codigo_Catalogo As String
   RatonReloj
   Cuenta = Ninguno
   Codigo_Catalogo = Ninguno
+  CodRolPago = Ninguno
   TipoCta = "G"
   SubCta = "N"
   TipoPago = "01"
@@ -9651,7 +9059,7 @@ Dim Codigo_Catalogo As String
      Set DataReg = New ADODB.Recordset
      DataReg.CursorType = adOpenStatic
      DataReg.CursorLocation = adUseClient
-     sSQL = "SELECT Codigo, Cuenta, TC, ME, DG, Tipo_Pago " _
+     sSQL = "SELECT Codigo, Cuenta, TC, ME, DG, Tipo_Pago, Cod_Rol_Pago " _
           & "FROM Catalogo_Cuentas " _
           & "WHERE '" & CodigoCta & "' IN (Codigo, Codigo_Ext) " _
           & "AND Item = '" & NumEmpresa & "' " _
@@ -9665,6 +9073,7 @@ Dim Codigo_Catalogo As String
           Moneda_US = .fields("ME")
           TipoCta = .fields("DG")
           TipoPago = .fields("Tipo_Pago")
+          CodRolPago = .fields("Cod_Rol_Pago")
           If Val(TipoPago) <= 0 Then TipoPago = "01"
       End If
      End With

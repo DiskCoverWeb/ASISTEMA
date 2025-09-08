@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{65E121D4-0C60-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSChrt20.ocx"
+Object = "{65E121D4-0C60-11D2-A9FC-0000F8754DA1}#2.0#0"; "mschrt20.ocx"
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.Ocx"
@@ -695,8 +695,7 @@ Dim SQL_Server1 As Boolean
 Dim AdoStrCnn1 As String
 Dim RutaPDF As String
 Dim ClaveAccesoSRI As String
-Dim RutaXMLAutorizado As String
-Dim RutaXMLRechazado As String
+
 
 Dim v1 As Byte
 Dim v2 As Byte
@@ -717,7 +716,7 @@ Dim v10 As Date
 '''      {"July", 10, 5}, _
 '''      {"August", 30, 15}, _
 '''      {"September", 14, 7}}
-'MsgBox Button.key
+ MsgBox "Boton Presionado de la Barra: [" & Button.key & "]"
  RatonReloj
  Select Case Button.key
    Case "Salir"
@@ -1004,20 +1003,23 @@ Dim v10 As Date
                       & "mensaje enviado desde el PC: " & IP_PC.Nombre_PC & ", a las: " & Time & ", " _
                       & "de la empresa: " & Empresa & "."
 
-        TMail.Adjunto = "C:\SYSBASES\TEMP\archivo.xml;C:\SYSBASES\TEMP\archivo.pdf;C:\TEMP\walter.png;C:\TEMP\Master Planes de Cuentasx.xls"
+        'TMail.Adjunto = "C:\SYSBASES\TEMP\archivo.xml;C:\SYSBASES\TEMP\archivo.pdf;C:\TEMP\walter.png;C:\TEMP\Master Planes de Cuentasx.xls"
         TMail.Adjunto = "C:\SYSBASES\TEMP\archivo.xml"
+        'TMail.Adjunto = ""
         TMail.para = ""
         Insertar_Mail TMail.para, "diskcoversystem@msn.com"
         Insertar_Mail TMail.para, "diskcover.system@yahoo.com"
         Insertar_Mail TMail.para, "diskcover.system@gmail.com"
         Insertar_Mail TMail.para, "actualizar@diskcoversystem.com"
         FEnviarCorreos.Show 1
+        MsgBox "Correo Enviados a:" & vbCrLf & Replace(TMail.para, ";", ";" & vbCrLf)
         TMail.para = ""
         TMail.ListaMail = 255
    Case "SRI"
+        SRI_Obtener_Datos_Comprobantes_Electronicos
         SRI_Autorizacion.Clave_De_Acceso = "1411202401070216417900110010030000025421234567811"
         FAutorizaXmlSRI.Show 1
-        MsgBox SRI_Autorizacion.Estado_SRI
+        'MsgBox SRI_Autorizacion.Estado_SRI & vbCrLf & SRI_Autorizacion.Error_SRI
 '''        URLHTTP = "https://erp.diskcoversystem.com/~diskcover/php/comprobantes/SRI/autorizar_sri_visual.php?AutorizarXMLOnline=true"
 '''        URLParams = "XML=1311202401070216417900110010030000025301234567811.xml"
 '''        Cadena = PostUrlSourceStr(URLHTTP, URLParams)
@@ -1070,14 +1072,62 @@ Dim v10 As Date
         Codigo = InputBox("INGRESE LA CLAVE DE ACCESO", "LEER ARCHIVO FIRMADO", "1234567890")
         Recepcion_SRI_XML Codigo
    Case "Enviar_Json"
-        MsgBox "1752765675 = " & post_URL_JSon("1752765675", 0, 0)
+
+   Dim sInputJson As String
+   Dim p As Object
+
+   sInputJson = "{'Item': '999','Periodo': '.','Usuario': '0702164179','TP': 'CD','T': 'N','Fecha': '02/04/2025','CodigoB': '0702164179','CodigoDr': '.'," _
+              & "'Beneficiario': 'VACA PRIETO WALTER JALIL', 'RUC_CI': '0000000000000','Concepto': 'Hola','Cotizacion': 0,'Efectivo': 0,'Total_Banco': 0," _
+              & "'Monto_Total': 0,'Numero': 0,'Retencion': 0,'T_No': 1,'RetNueva': 1,'RetSecuencial': 1,'Autorizacion_R': '0702164179001','Serie_R': '001003'," _
+              & "'Email': 'informacion@diskcoversystem.com'}"
+
+
+   Set p = JSON.parse(sInputJson)
+
+   'MsgBox "Parsed object output: " & p.toString(p)
+
+   MsgBox "Get Usuario: " & p.Item("Usuario") & vbCrLf _
+        & "Get Autorizacion_R: " & p.Item("Autorizacion_R") & vbCrLf _
+        & "Email: " & p.Item("Email")
+   
+   'p.Item("items").Item(1).Add "ExtraItem", "Extra Data Value"
+   
+   'MsgBox "Parsed object output with added item: " & JSON.toString(p)
+
+''    Cadena = ""
+''    For Each p In JSON("data")
+''        Cadena = Cadena & p
+''    Next p
+''    MsgBox Cadena
+         
+'         Trans_No = 1: Ln_No = 1: Ret_No = 1: LnSC_No = 1
+'          Co.T = Normal
+'          Co.Fecha = FechaTexto
+'          Co.Numero = NumComp
+'          Co.Monto_Total = Monto_Total
+'          Co.Concepto = "Hola"
+'          Co.CodigoB = "0702164179"
+'          Co.Beneficiario = "VACA PRIETO WALTER JALIL"
+'          Co.Efectivo = Abono
+'          Co.Cotizacion = 0
+'          Co.RetNueva = True
+'          Co.Autorizacion_R = "0702164179001"
+'          Co.Serie_R = "001003"
+'          Co.RetSecuencial = True
+'          Co.Item = NumEmpresa
+'          Co.Usuario = CodigoUsuario
+'          Co.T_No = Trans_No
+'
+'          Grabar_Comprobante_SP Co, CtaConciliada
+          
+        'MsgBox "1752765675 = " & post_URL_JSon("1752765675", 0, 0)
    Case "Descarga_CE_SRI"
         ClaveAccesoSRI = InputBox("Ingrese la Clave de Acceso del Documento Electronico:", "OBTENER DOCUMENTO ELECTRONICO", "3110202307179219679500120010010000105740005173518")
         If Len(ClaveAccesoSRI) >= 39 Then
             RutaXMLAutorizado = RutaSysBases & "\TEMP\Comprobantes Recibidos\" & ClaveAccesoSRI & ".xml"
             RutaXMLRechazado = RutaSysBases & "\TEMP\Comprobantes no Autorizados\" & ClaveAccesoSRI & ".xml"
             MsgBox RutaXMLAutorizado
-            SRI_Autorizacion = SRI_Leer_XML_Autorizado(RutaXMLAutorizado, RutaXMLRechazado)
+            'SRI_Autorizacion = SRI_Leer_XML_Autorizado(RutaXMLAutorizado, RutaXMLRechazado)
             If Existe_File(RutaXMLAutorizado) Then
                 TextoFileEmp = SRI_Autorizacion.Documento_XML
                 I = InStr(TextoFileEmp, "<![CDATA[")
@@ -1194,7 +1244,7 @@ On Error GoTo Mal
         .ActiveConnection = cn
         .ActiveConnection.CursorLocation = adUseClient
         .CommandType = adCmdStoredProc
-        .CommandText = "sp_Actualiza_Clientes"
+        .CommandText = "sp_Actualizar_Clientes"
         .Parameters.Append COMR.CreateParameter("Item", adVarChar, adParamInput, 3)
         .Parameters("Item").value = NumEmpresa
         .Parameters.Append COMR.CreateParameter("TD", adVarChar, adParamInput, 2)
@@ -1373,8 +1423,7 @@ Dim A_No As Long
    Progreso_Barra.Mensaje_Box = "Determinando que comprobantes se va ha procesar"
    Progreso_Esperar True
    'MsgBox "..."
-   Actualiza_Transacciones_Kardex_SP
-   MsgBox "."
+   Actualizar_Transacciones_Kardex_SP
    sSQL = "SELECT Fecha,TP, Numero, Codigo_P, Cta_Inv, Contra_Cta, Valor_Total, Cta_Inv, Valor_Total " _
         & "FROM Trans_Kardex " _
         & "WHERE Periodo = '" & Periodo_Contable & "' " _
@@ -1713,63 +1762,6 @@ Dim A_No As Long
         End If
     End If
    End With
-
-'''   Cont = 0
-'''   sSQL = "SELECT C.Cliente, DF.TC, DF.Serie, DF.Factura, TK.Codigo_Inv, DF.Producto, MAX(TK.ID) AS Borrar " _
-'''        & "FROM Detalle_Factura As DF, Trans_Kardex As TK, Clientes As C " _
-'''        & "WHERE DF.Periodo = '" & Periodo_Contable & "' " _
-'''        & "AND DF.Item  = '" & NumEmpresa & "' " _
-'''        & "AND (DF.Corte - DF.Cantidad) <> 0.0 " _
-'''        & "AND DF.Corte <> 0 " _
-'''        & "AND DF.T <> 'A' " _
-'''        & "AND DF.Item = TK.Item " _
-'''        & "AND DF.Periodo = TK.Periodo " _
-'''        & "AND DF.Codigo = TK.Codigo_Inv " _
-'''        & "AND DF.TC = TK.TC " _
-'''        & "AND DF.Serie = TK.Serie " _
-'''        & "AND DF.Factura = TK.Factura " _
-'''        & "AND DF.CodigoC = C.Codigo " _
-'''        & "GROUP BY C.Cliente, DF.TC, DF.Serie, DF.Factura, TK.Codigo_Inv, DF.Producto " _
-'''        & "ORDER BY C.Cliente, DF.TC, DF.Serie, DF.Factura, TK.Codigo_Inv, DF.Producto "
-'''   Select_Adodc_Grid DataGrid, AdoDataGrid, sSQL
-'''   With AdoDataGrid.Recordset
-'''    If .RecordCount > 0 Then
-'''        Mensajes = "Quiere eliminar el detalle duplicado del Kardex"
-'''        Titulo = "PREGUNTA DE ELIMINACION"
-'''        If BoxMensaje = vbYes Then
-'''           RatonReloj
-'''           Progreso_Barra.Valor_Maximo = Progreso_Barra.Valor_Maximo + .RecordCount
-'''           Do While Not .EOF
-'''              TipoDoc = .Fields("TC")
-'''              Factura_No = .Fields("Factura")
-'''              CodigoInv = .Fields("Codigo_Inv")
-'''              Progreso_Barra.Mensaje_Box = "[" & ContIDX & "] Ins. Cta. Trans." & TipoDoc & " = " & Factura_No & ", " & CodigoInv
-'''              Progreso_Esperar
-'''
-'''             'Grabamos en el Kardex la factura
-'''              sSQL = "DELETE * " _
-'''                   & "FROM Trans_Kardex " _
-'''                   & "WHERE Periodo = '" & Periodo_Contable & "' " _
-'''                   & "AND Item = '" & NumEmpresa & "' " _
-'''                   & "AND ID = " & .Fields("Borrar") & " "
-'''              Ejecutar_SQL_SP sSQL
-'''              Cont = Cont + 1
-'''              If Cont > 100 Then
-'''                 Mensajes = "Quiere seguir actualizando el detalle con el Kardex"
-'''                 Titulo = "PREGUNTA DE ACTUALIZACION"
-'''                 If BoxMensaje = vbNo Then GoTo Termino
-'''                 Cont = 0
-'''              End If
-'''             .MoveNext
-'''           Loop
-'''        End If
-'''    End If
-'''   End With
-
-'''   Parametros = "'" & NumEmpresa & "','" & Periodo_Contable & "' "
-'''   Ejecutar_SP "sp_Reindexar_Periodo", Parametros
-'''   Mayorizar_Cuentas_SP
-'''   Mayorizar_Inventario_SP
 Termino:
    RatonNormal
    Progreso_Final
@@ -1909,7 +1901,7 @@ Dim A_No As Long
                  
                  If Len(CodigoC) > 1 Then Co.Concepto = Co.Concepto & ", Ficha Clinica: " & CodigoC
                  If Len(Codigo1) > 1 Then Co.Concepto = Co.Concepto & ", Categoria: " & Codigo1
-                 GrabarComprobante Co
+                 Grabar_Comprobante Co
                  Mayorizar_Inventario_SP
               
                  sSQL = "UPDATE A_Salida_Centro_Costos " _
@@ -2031,7 +2023,7 @@ Dim A_No As Long
            
            If Len(CodigoC) > 1 Then Co.Concepto = Co.Concepto & ", Ficha Clinica: " & CodigoC
            If Len(Codigo1) > 1 Then Co.Concepto = Co.Concepto & ", Categoria: " & Codigo1
-           GrabarComprobante Co
+           Grabar_Comprobante Co
            Mayorizar_Inventario_SP
         
            sSQL = "UPDATE A_Salida_Centro_Costos " _
@@ -2138,27 +2130,7 @@ Public Sub LeerXML()
    End If
 End Sub
 
-'''Sub xyz()
-'''
-'''Dim Browser As SHDocVw.InternetExplorer 'Microsoft Internet Controls
-'''Dim HTMLdoc As MSHTML.HTMLDocument 'Microsoft HTML Object Library
-'''Dim URL As String
-'''
-'''  URL = "http://www.bbc.co.uk/news"
-'''  Set Browser = New InternetExplorer
-'''    Browser.Silent = True
-'''    Browser.Navigate URL
-'''    Browser.Visible = True
-'''  Do
-'''    Loop Until Browser.readyState = READYSTATE_COMPLETE
-'''
-'''    Set HTMLdoc = Browser.Document
-'''
-'''End Sub
-
 Public Sub Recepcion_SRI_XML(ClaveAcceso As String)
-Dim RutaXMLAutorizado As String
-Dim RutaXMLRechazado As String
 Dim Documento As String
     MsgBox Len(ClaveAcceso) & "-" & ClaveAcceso
     If Len(ClaveAcceso) = 49 Then
@@ -2166,7 +2138,7 @@ Dim Documento As String
       'RutaXMLFirmado = RutaDocumentos & "\Comprobantes Firmados\" & ClaveDeAcceso & ".xml"
        RutaXMLAutorizado = RutaDocumentos & "\Comprobantes Autorizados\" & ClaveAcceso & ".xml"
        RutaXMLRechazado = RutaDocumentos & "\Comprobantes no Autorizados\" & ClaveAcceso & ".xml"
-       SRI_Autorizacion = SRI_Leer_XML_Autorizado(RutaXMLAutorizado, RutaXMLRechazado)
+       'SRI_Autorizacion = SRI_Leer_XML_Autorizado(RutaXMLAutorizado, RutaXMLRechazado)
        TextoFileEmp = SRI_Autorizacion.Documento_XML
        MsgBox SRI_Autorizacion.Documento_XML
        I = InStr(TextoFileEmp, "<![CDATA[")

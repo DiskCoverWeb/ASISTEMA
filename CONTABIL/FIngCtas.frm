@@ -3,7 +3,7 @@ Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "Mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.Form FCatalogo_Cuentas 
    Caption         =   "Ingreso de Cuentas Contables"
    ClientHeight    =   10215
@@ -1873,17 +1873,17 @@ Dim CodigoCtas() As String
           With AdoCtas.Recordset
            If .RecordCount > 0 Then
                Do While Not .EOF
-                  Codigo = .fields("Codigo")
+                  Codigo = .Fields("Codigo")
                   AdoCta.Recordset.MoveFirst
                   AdoCta.Recordset.Find ("Codigo = '" & Codigo & "' ")
                   If AdoCta.Recordset.EOF Then
                      SetAdoAddNew "Catalogo_Cuentas"
                      SetAdoFields "Item", NumEmpresa
                      SetAdoFields "Periodo", Periodo_Contable
-                     SetAdoFields "Codigo", .fields("Codigo")
-                     SetAdoFields "Cuenta", .fields("Cuenta")
-                     SetAdoFields "DG", .fields("DG")
-                     SetAdoFields "TC", .fields("TC")
+                     SetAdoFields "Codigo", .Fields("Codigo")
+                     SetAdoFields "Cuenta", .Fields("Cuenta")
+                     SetAdoFields "DG", .Fields("DG")
+                     SetAdoFields "TC", .Fields("TC")
                      SetAdoUpdate
                      sSQL = "SELECT * " _
                           & "FROM Catalogo_Cuentas " _
@@ -1891,7 +1891,7 @@ Dim CodigoCtas() As String
                           & "AND Periodo = '" & Periodo_Contable & "' " _
                           & "ORDER BY Codigo "
                      Select_Adodc AdoCta, sSQL
-                     Cadena = Cadena & "Empresa: " & NumEmpresa & ", Cta = " & .fields("Codigo") & ", Detalle = " & .fields("Cuenta") & vbCrLf
+                     Cadena = Cadena & "Empresa: " & NumEmpresa & ", Cta = " & .Fields("Codigo") & ", Detalle = " & .Fields("Cuenta") & vbCrLf
                   End If
                  .MoveNext
                Loop
@@ -1951,7 +1951,7 @@ Dim CodigoCtas() As String
      End If
      Contador = 0
      Do While Not AdoPresupuestos.Recordset.EOF
-        Codigo = AdoPresupuestos.Recordset.fields("Codigo")
+        Codigo = AdoPresupuestos.Recordset.Fields("Codigo")
         Cta_Sup = CodigoCuentaSup(Codigo)
         With AdoCta.Recordset
          If .RecordCount > 0 Then
@@ -2030,19 +2030,19 @@ Dim CodigoCtas() As String
        .MoveFirst
         Do While Not .EOF
             
-           If Len(.fields("Codigo")) = 1 Then
-              Codigo = "C" & .fields("Codigo")
-              Cta_Sup = .fields("Codigo")
-              Cuenta = .fields("Codigo") & " - " & .fields("Cuenta")
-              AddNewCta .fields("TC")
+           If Len(.Fields("Codigo")) = 1 Then
+              Codigo = "C" & .Fields("Codigo")
+              Cta_Sup = .Fields("Codigo")
+              Cuenta = .Fields("Codigo") & " - " & .Fields("Cuenta")
+              AddNewCta .Fields("TC")
            Else
-              Codigo = "C" & .fields("Codigo")
-              Cta_Sup = "C" & CodigoCuentaSup(.fields("Codigo"))
-              Cuenta = .fields("Codigo") & " - " & .fields("Cuenta")
-              If .fields("DG") = "G" Then
+              Codigo = "C" & .Fields("Codigo")
+              Cta_Sup = "C" & CodigoCuentaSup(.Fields("Codigo"))
+              Cuenta = .Fields("Codigo") & " - " & .Fields("Cuenta")
+              If .Fields("DG") = "G" Then
                   AddNewCta "DG"
               Else
-                  AddNewCta .fields("TC")
+                  AddNewCta .Fields("TC")
               End If
            End If
           .MoveNext
@@ -2199,39 +2199,39 @@ Public Sub LlenarCta()
   FrmPresupuesto.Visible = False
   With AdoCta.Recordset
    If .RecordCount > 0 Then
-       TipoSubCta = .fields("TC")
-       If .fields("ME") Then CheqUS.value = 1 Else CheqUS.value = 0
-       If .fields("Listar") Then CheqFE.value = 1 Else CheqFE.value = 0
-       If .fields("Mod_Gastos") Then CheqModGastos.value = 1 Else CheqModGastos.value = 0
+       TipoSubCta = .Fields("TC")
+       If .Fields("ME") Then CheqUS.value = 1 Else CheqUS.value = 0
+       If .Fields("Listar") Then CheqFE.value = 1 Else CheqFE.value = 0
+       If .Fields("Mod_Gastos") Then CheqModGastos.value = 1 Else CheqModGastos.value = 0
        For I = 0 To UBound(SumModulos) - 1
-          If SumModulos(I).Codigo_Aux = .fields("TC") Then LstSubMod.Text = SumModulos(I).Item_Nodo
+          If SumModulos(I).Codigo_Aux = .Fields("TC") Then LstSubMod.Text = SumModulos(I).Item_Nodo
        Next I
-       Cadena = .fields("DG")
+       Cadena = .Fields("DG")
        If Cadena = "D" Then OpcD.value = True Else OpcG.value = True
-       MBoxCta.Text = FormatoCodigoCta(.fields("Codigo"))
-       MBoxCtaAcreditar = FormatoCodigoCta(.fields("Cta_Acreditar"))
-       LabelCtaSup.Caption = CodigoCuentaSup(.fields("Codigo"))
-       LabelNumero.Caption = .fields("Clave")
-       TextConcepto.Text = .fields("Cuenta")
-       LabelTipoCta.Caption = TiposCtaStrg(.fields("Codigo"))
-       TextPresupuesto.Text = .fields("Presupuesto")
-       TxtCodExt.Text = .fields("Codigo_Ext")
-       If Val(.fields("Tipo_Pago")) >= 1 Then
+       MBoxCta.Text = FormatoCodigoCta(.Fields("Codigo"))
+       MBoxCtaAcreditar = FormatoCodigoCta(.Fields("Cta_Acreditar"))
+       LabelCtaSup.Caption = CodigoCuentaSup(.Fields("Codigo"))
+       LabelNumero.Caption = .Fields("Clave")
+       TextConcepto.Text = .Fields("Cuenta")
+       LabelTipoCta.Caption = TiposCtaStrg(.Fields("Codigo"))
+       TextPresupuesto.Text = .Fields("Presupuesto")
+       TxtCodExt.Text = .Fields("Codigo_Ext")
+       If Val(.Fields("Tipo_Pago")) >= 1 Then
           AdoTipoPago.Recordset.MoveFirst
-          AdoTipoPago.Recordset.Find ("Codigo = '" & .fields("Tipo_Pago") & "' ")
-          If Not AdoTipoPago.Recordset.EOF Then DCTipoPago = AdoTipoPago.Recordset.fields("CTipoPago")
+          AdoTipoPago.Recordset.Find ("Codigo = '" & .Fields("Tipo_Pago") & "' ")
+          If Not AdoTipoPago.Recordset.EOF Then DCTipoPago = AdoTipoPago.Recordset.Fields("CTipoPago")
           CheqTipoPago.value = 1
           DCTipoPago.Visible = True
        Else
           CheqTipoPago.value = 0
           DCTipoPago.Visible = False
        End If
-       If .fields("I_E_Emp") = Ninguno Then
+       If .Fields("I_E_Emp") = Ninguno Then
            OpcNoAplica.value = True
            CheqConIESS.value = 0
-       ElseIf .fields("I_E_Emp") = "I" Then
+       ElseIf .Fields("I_E_Emp") = "I" Then
            OpcIEmp.value = True
-           If .fields("Con_IESS") Then CheqConIESS.value = 1 Else CheqConIESS.value = 0
+           If .Fields("Con_IESS") Then CheqConIESS.value = 1 Else CheqConIESS.value = 0
        Else
           OpcEEmp.value = True
           CheqConIESS.value = 0
@@ -2309,9 +2309,9 @@ Public Sub LlenarCta()
    With AdoPresupuesto.Recordset
     If .RecordCount > 0 Then
         Do While Not .EOF
-           If .fields("MesNo") > 0 Then
-               TxtPresMes(.fields("MesNo") - 1) = Format$(.fields("Presupuesto"), "#,##0.00")
-               Total = Total + .fields("Presupuesto")
+           If .Fields("MesNo") > 0 Then
+               TxtPresMes(.Fields("MesNo") - 1) = Format$(.Fields("Presupuesto"), "#,##0.00")
+               Total = Total + .Fields("Presupuesto")
            End If
           .MoveNext
         Loop
@@ -2359,13 +2359,13 @@ Public Sub GrabarCta(NuevaCta As Boolean)
          .MoveFirst
          .Find ("Codigo like '" & Codigo1 & "' ")
           If Not .EOF Then
-             Numero = .fields("Clave")
+             Numero = .Fields("Clave")
              If OpcD.value And Numero = 0 Then
                 Numero = ReadSetDataNum("Numero Cuenta", True, True)
              End If
           Else
             .AddNew
-            .fields("Codigo") = Codigo1
+            .Fields("Codigo") = Codigo1
              If OpcD.value Then
                 Numero = ReadSetDataNum("Numero Cuenta", True, True)
              End If
@@ -2374,38 +2374,38 @@ Public Sub GrabarCta(NuevaCta As Boolean)
           End If
       Else
          .AddNew
-         .fields("Codigo") = Codigo1
+         .Fields("Codigo") = Codigo1
           If OpcD.value Then
              Numero = ReadSetDataNum("Numero Cuenta", True, True)
           End If
           If OpcG.value Then AddNewCta "DG" Else AddNewCta TipoCta
       End If
      ' MsgBox TipoCta
-     .fields("Clave") = Numero
-     .fields("DG") = TipoDoc
-     .fields("TC") = TipoCta
-     .fields("ME") = CheqUS.value
-     .fields("Listar") = CheqFE.value
-     .fields("Mod_Gastos") = CheqModGastos.value
-     .fields("Cuenta") = TextConcepto.Text
-     .fields("Presupuesto") = CCur(TextPresupuesto.Text)
-     .fields("Procesado") = vbTrue
-     .fields("Periodo") = Periodo_Contable
-     .fields("Item") = NumEmpresa
-     .fields("Codigo_Ext") = TxtCodExt
-     .fields("Cta_Acreditar") = CambioCodigoCta(MBoxCtaAcreditar)
-     .fields("Tipo_Pago") = FA.Tipo_Pago
+     .Fields("Clave") = Numero
+     .Fields("DG") = TipoDoc
+     .Fields("TC") = TipoCta
+     .Fields("ME") = CheqUS.value
+     .Fields("Listar") = CheqFE.value
+     .Fields("Mod_Gastos") = CheqModGastos.value
+     .Fields("Cuenta") = TextConcepto.Text
+     .Fields("Presupuesto") = CCur(TextPresupuesto.Text)
+     .Fields("Procesado") = vbTrue
+     .Fields("Periodo") = Periodo_Contable
+     .Fields("Item") = NumEmpresa
+     .Fields("Codigo_Ext") = TxtCodExt
+     .Fields("Cta_Acreditar") = CambioCodigoCta(MBoxCtaAcreditar)
+     .Fields("Tipo_Pago") = FA.Tipo_Pago
       If OpcNoAplica.value Then
-        .fields("I_E_Emp") = Ninguno
-        .fields("Con_IESS") = False
-        .fields("Cod_Rol_Pago") = Ninguno
+        .Fields("I_E_Emp") = Ninguno
+        .Fields("Con_IESS") = False
+        .Fields("Cod_Rol_Pago") = Ninguno
       Else
-        .fields("Cod_Rol_Pago") = Rubro_Rol_Pago(TextConcepto)
+        .Fields("Cod_Rol_Pago") = Rubro_Rol_Pago(TextConcepto)
          If OpcIEmp.value Then
-           .fields("I_E_Emp") = "I"
-            If CheqConIESS.value <> 0 Then .fields("Con_IESS") = True Else .fields("Con_IESS") = False
+           .Fields("I_E_Emp") = "I"
+            If CheqConIESS.value <> 0 Then .Fields("Con_IESS") = True Else .Fields("Con_IESS") = False
          Else
-           .fields("I_E_Emp") = "E"
+           .Fields("I_E_Emp") = "E"
          End If
       End If
      .Update
@@ -2467,8 +2467,8 @@ Public Sub GrabarCta(NuevaCta As Boolean)
             Do While Not AdoGastos.Recordset.EOF
                SetAdoAddNew "Trans_Presupuestos"
                SetAdoFields "Cta", Codigo1
-               SetAdoFields "Codigo", AdoGastos.Recordset.fields("Codigo")
-               SetAdoFields "Presupuesto", CCur(AdoGastos.Recordset.fields("Presupuesto"))
+               SetAdoFields "Codigo", AdoGastos.Recordset.Fields("Codigo")
+               SetAdoFields "Presupuesto", CCur(AdoGastos.Recordset.Fields("Presupuesto"))
                SetAdoUpdate
                AdoGastos.Recordset.MoveNext
             Loop
@@ -2484,7 +2484,7 @@ Public Sub GrabarCta(NuevaCta As Boolean)
          Next I
     End Select
   If NuevaCta Then
-     Control_Procesos Normal, "Nuva Cuenta: " & Codigo1 & " - " & TextConcepto.Text
+     Control_Procesos Normal, "Nueva Cuenta: " & Codigo1 & " - " & TextConcepto.Text
   Else
      Control_Procesos Normal, "Modificacion de Cuenta: " & Codigo1 & " - " & TextConcepto.Text
   End If
@@ -2642,7 +2642,7 @@ Public Sub EliminarCta()
              Mensajes = "ADVERTENCIA:" & vbCrLf & vbCrLf _
                       & "No se puede eliminar esta(s) Cuenta(s): " & vbCrLf
              Do While Not AdoCtas.Recordset.EOF
-                Mensajes = Mensajes & AdoCtas.Recordset.fields("Cta") & " Cantidad de Movimientos: " & AdoCtas.Recordset.fields("Cant_Cta") & vbCrLf
+                Mensajes = Mensajes & AdoCtas.Recordset.Fields("Cta") & " Cantidad de Movimientos: " & AdoCtas.Recordset.Fields("Cant_Cta") & vbCrLf
                 AdoCtas.Recordset.MoveNext
              Loop
              Mensajes = Mensajes & vbCrLf & "porque tiene(n) novimiento(s)."
@@ -2654,6 +2654,7 @@ Public Sub EliminarCta()
              Titulo = "Pregunta de Eliminacion"
              If BoxMensaje = vbYes Then
                 Cadena1 = SinEspaciosIzq(TVCatalogo.SelectedItem)
+                Cadena2 = TVCatalogo.SelectedItem
                 For I = TVCatalogo.Nodes.Count To 1 Step -1
                     CodigoC = MidStrg(TVCatalogo.Nodes(I).key, 2, Len(TVCatalogo.Nodes(I).key))
                     If Cadena1 = MidStrg(CodigoC, 1, Len(Cadena1)) Then
@@ -2672,6 +2673,8 @@ Public Sub EliminarCta()
                        End If
                     End If
                 Next I
+               'MsgBox "Desktop Test:  " & Cadena2
+                Control_Procesos "E", "Elimino Cuenta: " & Cadena2
              End If
           End If
        End If
@@ -2694,7 +2697,7 @@ Public Sub EliminarCtaGrupo()
            Mensajes = "ADVERTENCIA:" & vbCrLf & vbCrLf _
                     & "No se puede eliminar esta(s) Cuenta(s): " & vbCrLf
            Do While Not AdoCtas.Recordset.EOF
-              Mensajes = Mensajes & AdoCtas.Recordset.fields("Cta") & " Cantidad de Movimientos: " & AdoCtas.Recordset.fields("Cant_Cta") & vbCrLf
+              Mensajes = Mensajes & AdoCtas.Recordset.Fields("Cta") & " Cantidad de Movimientos: " & AdoCtas.Recordset.Fields("Cant_Cta") & vbCrLf
               AdoCtas.Recordset.MoveNext
            Loop
            Mensajes = Mensajes & vbCrLf & "porque tiene(n) novimiento(s)."
@@ -2721,6 +2724,7 @@ Public Sub EliminarCtaGrupo()
                      End If
                   End If
               Next I
+              Control_Procesos "E", "Elimino Grupo de Cuentas: " & Codigo_Ini & " - " & Codigo_Fin
            End If
         End If
    End If

@@ -191,8 +191,8 @@ Dim IMes As Integer
   With AdoCierre.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
-          LstMeses.AddItem .fields("Detalle"), IMes
-          LstMeses.Selected(IMes) = CBool(.fields("Cerrado"))
+          LstMeses.AddItem .Fields("Detalle"), IMes
+          LstMeses.Selected(IMes) = CBool(.Fields("Cerrado"))
           IMes = IMes + 1
          .MoveNext
        Loop
@@ -210,12 +210,45 @@ End Sub
 
 Private Sub LstMeses_KeyDown(KeyCode As Integer, Shift As Integer)
 Dim Nuevo_Anio As String
+
   Keys_Especiales Shift
   PresionoEnter KeyCode
   If KeyCode = vbKeyEscape Then Unload Me
   If CtrlDown And KeyCode = vbKeyA Then
      Nuevo_Anio = InputBox("INGRESE EL AÑO A PROCESAR:", "AÑO DE PROCESO", Year(FechaSistema))
      Crear_Cierre_Mes Nuevo_Anio
+     Unload Me
+  End If
+  If CtrlDown And KeyCode = vbKeyDelete Then
+     For NoMeses = 0 To LstMeses.ListCount - 1
+         NoAnio = Val(SinEspaciosIzq(LstMeses.List(NoMeses)))
+         Mes = SinEspaciosDer(LstMeses.List(NoMeses))
+         NoMes = LetrasMeses(Mes)
+         sSQL = "SELECT Fecha " _
+              & "FROM Comprobantes " _
+              & "WHERE Item = '" & NumEmpresa & "' " _
+              & "AND Periodo = '" & Periodo_Contable & "' " _
+              & "AND YEAR(Fecha) = " & NoAnio & " " _
+              & "AND MONTH(Fecha) = " & NoMes & " "
+         Select_Adodc AdoCierre, sSQL
+         If AdoCierre.Recordset.RecordCount <= 0 Then
+            sSQL = "DELETE * " _
+                 & "FROM Fechas_Balance " _
+                 & "WHERE Periodo = '" & Periodo_Contable & "' " _
+                 & "AND Item = '" & NumEmpresa & "' " _
+                 & "AND Detalle = '" & LstMeses.List(NoMeses) & "' " _
+                 & "AND YEAR(Fecha_Inicial) < " & Year(FechaSistema) & " "
+            Ejecutar_SQL_SP sSQL
+            sSQL = "DELETE * " _
+                 & "FROM Fechas_Balance " _
+                 & "WHERE Periodo = '" & Periodo_Contable & "' " _
+                 & "AND Item = '" & NumEmpresa & "' " _
+                 & "AND Detalle = '" & LstMeses.List(NoMeses) & "' " _
+                 & "AND YEAR(Fecha_Inicial) > " & Year(FechaSistema) & " "
+            Ejecutar_SQL_SP sSQL
+         End If
+     Next NoMeses
+     Control_Procesos Normal, "Eliminacion periodos Erroneos"
      Unload Me
   End If
 End Sub

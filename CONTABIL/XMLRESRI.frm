@@ -1,20 +1,20 @@
 VERSION 5.00
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
-Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDATGRD.OCX"
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "COMCTL32.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
+Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Begin VB.Form FXMLRecibidosSRI 
    BackColor       =   &H80000002&
    Caption         =   "ftpLinode"
    ClientHeight    =   9450
    ClientLeft      =   60
    ClientTop       =   345
-   ClientWidth     =   17460
+   ClientWidth     =   15960
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
    ScaleHeight     =   9450
-   ScaleWidth      =   17460
+   ScaleWidth      =   15960
    WindowState     =   2  'Maximized
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
@@ -22,8 +22,8 @@ Begin VB.Form FXMLRecibidosSRI
       Left            =   0
       TabIndex        =   13
       Top             =   0
-      Width           =   17460
-      _ExtentX        =   30798
+      Width           =   15960
+      _ExtentX        =   28152
       _ExtentY        =   1402
       ButtonWidth     =   1455
       ButtonHeight    =   1244
@@ -1028,19 +1028,110 @@ Dim SecRetencion As Long
 
 Dim Porcentaje As Single
 
+Private Function SRI_Leer_XML_Autorizado(RutaAutorizado As String, RutaRechazado As String) As Tipo_Estado_SRI
+Dim obj As New Cls_FirmarXML
+Dim ObjEnviar As New WS_Recepcion
+Dim ObjAutori As New WS_Autorizacion
+Dim Resultado As Boolean
+Dim MensajeError As String
+Dim ArrayRecepcion() As String
+Dim ArrayAutorizacion() As String
+Dim Tiempo_Espera As Integer
+Dim Tiempo_SRI As Integer
+Dim EsperaEspera As Integer
+Dim SRI_Aut As Tipo_Estado_SRI
+Dim Intento_Enviar As Byte
+Dim Intento_Autorizar As Byte
+Dim IDo As Long
+Dim IDn As Long
+
+    RatonReloj
+    Progreso_Barra.Mensaje_Box = "CONECTANDOSE AL S.R.I. ..."
+    Progreso_Iniciar
+    Progreso_Barra.Incremento = 0
+    Progreso_Barra.Valor_Maximo = 100
+    Progreso_Esperar True
+
+    Intento_Enviar = 0
+    Intento_Autorizar = 0
+
+   'Pagina de Conexion con el SRI
+   'ClaveDeAcceso = "0909202101179186152300120010040000056111234567815"
+
+    'MsgBox URLAutorizacion & vbCrLf & ClaveDeAcceso & vbCrLf & MidStrg(ClaveDeAcceso, 24, 1)
+
+    RatonReloj
+    With SRI_Aut
+         Progreso_Barra.Mensaje_Box = "Determinando Carpetas de Conexion"
+         Progreso_Esperar True
+         IDo = Len(RutaAutorizado)
+         Do While MidStrg(RutaAutorizado, IDo, 1) <> "\"
+            IDo = IDo - 1
+         Loop
+         IDn = InStr(RutaAutorizado, ".xml")
+        .Clave_De_Acceso = MidStrg(RutaAutorizado, IDo + 1, IDn - IDo - 1)
+        '.Clave_De_Acceso = "0103202407179130545000120030370000231671791305419"
+         Select Case MidStrg(.Clave_De_Acceso, 24, 1)
+           Case "1": URLAutorizacion = "https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl"
+           Case "2": URLAutorizacion = "https://cel.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl"
+         End Select
+        .Estado_SRI = "CG"
+        .Documento_XML = ""
+        .Error_SRI = ""
+         EsperaEspera = 3000
+         RatonReloj
+        'Tiempo de Espera antes de averiguar al SRI de la autorizacion
+         For Tiempo_Espera = 0 To 3
+             RatonReloj
+            'Sleep EsperaEspera
+             ArrayAutorizacion = ObjAutori.FF_ObtieneNumAutorizado(URLAutorizacion, .Clave_De_Acceso, RutaAutorizado, RutaRechazado)
+             Progreso_Barra.Mensaje_Box = ArrayAutorizacion(0)
+             Progreso_Esperar True
+             If ArrayAutorizacion(0) = "AUTORIZADO" Then Tiempo_Espera = 3
+         Next Tiempo_Espera
+         If ArrayAutorizacion(0) = "AUTORIZADO" Then
+            Progreso_Barra.Mensaje_Box = "Extrayendo Documentos Autorizado: " & MidStrg(.Clave_De_Acceso, 25, 15)
+            Progreso_Esperar True
+            RatonReloj
+           .Estado_SRI = "OK"
+           .Error_SRI = "OK"
+           .Autorizacion = ArrayAutorizacion(1)
+           .Fecha_Autorizacion = Format$(MidStrg(ArrayAutorizacion(2), 1, 10), "dd/MM/yyyy")
+           .Hora_Autorizacion = MidStrg(ArrayAutorizacion(2), 12, 8)
+           .Documento_XML = Leer_Archivo_Texto(RutaAutorizado)
+
+            'SRI_Actualizar_Documento_XML .Clave_De_Acceso
+            'Progreso_Barra.Mensaje_Box = "Grabando en la base el Documento: " & MidStrg(ClaveDeAcceso, 25, 15)
+            Cadena = ""
+            For ContadorEstados = 0 To 3
+                If Len(ArrayAutorizacion(ContadorEstados)) > 1 Then Cadena = Cadena & ArrayAutorizacion(ContadorEstados) & ", "
+            Next ContadorEstados
+           'MsgBox Cadena
+            Progreso_Esperar True
+         Else
+           .Error_SRI = "Error al Autorizar: "
+            For ContadorEstados = 0 To 4
+                If Len(ArrayAutorizacion(ContadorEstados)) > 1 Then .Error_SRI = .Error_SRI & ArrayAutorizacion(ContadorEstados) & ", "
+            Next ContadorEstados
+           .Error_SRI = TrimStrg(.Error_SRI)
+            'MsgBox .Error_SRI & "....."
+         End If
+         Progreso_Barra.Mensaje_Box = ArrayAutorizacion(0) & " " & .Estado_SRI & " -> " & ArrayAutorizacion(2)
+         Progreso_Esperar True
+         Progreso_Final
+         RatonNormal
+
+    End With
+    Progreso_Final
+    SRI_Leer_XML_Autorizado = SRI_Aut
+End Function
+
 Private Sub Leer_Porc_Retenciones(TipoRetencion As String)
 Dim AdoDBTemp As ADODB.Recordset
     
-    If Len(AXML.Cod_Ret) > 1 Then
-       sSQL = "SELECT TOP 1 Porcentaje " _
-            & "FROM Tipo_Concepto_Retencion " _
-            & "WHERE Codigo = '" & AXML.Cod_Ret & "' " _
-            & "AND Fecha_Inicio <= #" & BuscarFecha(AXML.Fecha_Emision) & "# " _
-            & "AND Fecha_Final >= #" & BuscarFecha(AXML.Fecha_Emision) & "# "
-       Select_AdoDB AdoDBTemp, sSQL
-       If AdoDBTemp.RecordCount > 0 Then AXML.Porc_Ret = AdoDBTemp.fields("Porcentaje")
-       AdoDBTemp.Close
-    End If
+    AXML.Cta_Ret_Fuente = ""
+    AXML.Cta_Ret_IVA_B = ""
+    AXML.Cta_Ret_IVA_S = ""
     
     sSQL = "SELECT TC, Codigo, Cuenta " _
          & "FROM Catalogo_Cuentas " _
@@ -1057,16 +1148,18 @@ Dim AdoDBTemp As ADODB.Recordset
     With AdoDBTemp
      If .RecordCount > 0 Then
          Do While Not .EOF
-            Cuenta = .fields("Cuenta")
-            If InStr(Cuenta, CStr(AXML.Porc_Ret)) And AXML.Porc_Ret > 0 Then AXML.Cta_Ret_Fuente = .fields("Codigo")
-            If InStr(Cuenta, CStr(AXML.Porc_Ret_IVA_B)) And AXML.Porc_Ret_IVA_B > 0 Then AXML.Cta_Ret_IVA_B = .fields("Codigo")
-            If InStr(Cuenta, CStr(AXML.Porc_Ret_IVA_S)) And AXML.Porc_Ret_IVA_S > 0 Then AXML.Cta_Ret_IVA_S = .fields("Codigo")
+            Cuenta = .Fields("Cuenta")
+            If InStr(Cuenta, CStr(AXML.Porc_Ret & "%")) And AXML.Porc_Ret > 0 Then AXML.Cta_Ret_Fuente = .Fields("Codigo")
+            If InStr(Cuenta, CStr(AXML.Porc_Ret_IVA_B & "%")) And AXML.Porc_Ret_IVA_B > 0 Then AXML.Cta_Ret_IVA_B = .Fields("Codigo")
+            If InStr(Cuenta, CStr(AXML.Porc_Ret_IVA_S & "%")) And AXML.Porc_Ret_IVA_S > 0 Then AXML.Cta_Ret_IVA_S = .Fields("Codigo")
            .MoveNext
          Loop
      End If
     End With
     AdoDBTemp.Close
     
+''    If AXML.Autorizacion = "0701202507179219452000120010020000003391234567811" Then MsgBox AXML.Porc_Ret
+
     If TipoRetencion = "1" Then
         If AXML.Porc_Ret > 0 And AXML.Cta_Ret_Fuente = "" And Len(AXML.Cod_Ret) > 1 Then AXML.Cta_Ret_Fuente = Cta_Ret
         If AXML.Porc_Ret_IVA_B > 0 And AXML.Cta_Ret_IVA_B = "" Then AXML.Cta_Ret_IVA_B = Cta_Ret_IVA
@@ -1094,8 +1187,9 @@ Dim ArchivoValido As Boolean
 Dim ReceptorValido As Boolean
 
 Dim ClaveAcceso As String
-Dim RutaXMLAutorizado As String
-Dim RutaXMLRechazado As String
+
+
+Dim LineFile As String
    
    Progreso_Barra.Valor_Maximo = 100
    Progreso_Barra.Incremento = 0
@@ -1132,6 +1226,25 @@ Dim RutaXMLRechazado As String
   If CodigoP <> CDialogDir.Filename Then NombreArchivo = CDialogDir.Filename Else NombreArchivo = ""
   If NombreArchivo <> "" Then
      RatonReloj
+     
+    'Determinamos cuantos registro vamos a actualizar y
+    'cuantos campos tiene el archivo del Banco
+    '--------------------------------------------------
+     Cadena = ""
+     NumFile = FreeFile
+     Open NombreArchivo For Input As #NumFile
+          Cadena = StrConv(InputB(LOF(NumFile), NumFile), vbUnicode)
+     Close #NumFile
+     
+     If InStr(Cadena, vbCrLf) = 0 Then
+        Cadena = Replace(Cadena, vbLf, vbCrLf)
+        NumFile = FreeFile
+        Open NombreArchivo For Output As #NumFile
+        Print #NumFile, MidStrg(Cadena, 1, Len(Cadena) - 2)
+        Close #NumFile
+     End If
+     Cadena = ""
+     
      Toolbar1.buttons("Salir").Enabled = False
      Progreso_Barra.Mensaje_Box = "Subiendo archivo Base: " & NombreArchivo
      Progreso_Esperar
@@ -1152,9 +1265,9 @@ Dim RutaXMLRechazado As String
           & "GROUP BY IDENTIFICACION_RECEPTOR "
      Select_Adodc AdoTxt, sSQL
      If AdoTxt.Recordset.RecordCount > 0 Then
-        Progreso_Barra.Valor_Maximo = Progreso_Barra.Valor_Maximo + (AdoTxt.Recordset.fields("ContXML") * 2)
+        Progreso_Barra.Valor_Maximo = Progreso_Barra.Valor_Maximo + (AdoTxt.Recordset.Fields("ContXML") * 2)
         Do While Not AdoTxt.Recordset.EOF
-           If RUC = AdoTxt.Recordset.fields("IDENTIFICACION_RECEPTOR") Then ReceptorValido = True
+           If RUC = AdoTxt.Recordset.Fields("IDENTIFICACION_RECEPTOR") Then ReceptorValido = True
            AdoTxt.Recordset.MoveNext
         Loop
      End If
@@ -1174,16 +1287,16 @@ Dim RutaXMLRechazado As String
              FechaTexto = FechaSistema
              Do While Not .EOF
                 RatonReloj
-                ClaveAcceso = .fields("CLAVE_ACCESO")
-                AXML.Razon_Social_Emisor = .fields("RAZON_SOCIAL_EMISOR")
-                AXML.RUC_Emisor = .fields("RUC_EMISOR")
-                AXML.Codigo_B = .fields("Codigo_B")
-                CodigoCli = .fields("Codigo_B")
+                ClaveAcceso = .Fields("CLAVE_ACCESO")
+                AXML.Razon_Social_Emisor = .Fields("RAZON_SOCIAL_EMISOR")
+                AXML.RUC_Emisor = .Fields("RUC_EMISOR")
+                AXML.Codigo_B = .Fields("Codigo_B")
+                CodigoCli = .Fields("Codigo_B")
                 
                 Progreso_Barra.Mensaje_Box = Format(Progreso_Barra.Incremento / Progreso_Barra.Valor_Maximo, "00.00%") & " - Subiendo archivo: " & ClaveAcceso
                 Progreso_Esperar
                 
-                ID_Reg = .fields("ID")
+                ID_Reg = .Fields("ID")
                 If Len(ClaveAcceso) = 49 Then
                    RutaXMLAutorizado = RutaSysBases & "\SRI\Comprobantes Recibidos\" & ClaveAcceso & ".xml"
                    RutaXMLRechazado = RutaSysBases & "\SRI\Comprobantes no Autorizados\" & ClaveAcceso & ".xml"
@@ -1254,7 +1367,7 @@ Dim RutaXMLRechazado As String
                               & "AND Serie = '" & FA.Serie & "' " _
                               & "AND Factura = " & FA.Factura & " "
                          Select_Adodc AdoAux, sSQL
-                         If AdoAux.Recordset.RecordCount > 0 Then AXML.Cta_Credito = AdoAux.Recordset.fields("Cta_CxP")
+                         If AdoAux.Recordset.RecordCount > 0 Then AXML.Cta_Credito = AdoAux.Recordset.Fields("Cta_CxP")
                       Else
                         '-----------------------------------------
                         'Facturas de Proveedores/Facturas al Gasto
@@ -1271,12 +1384,12 @@ Dim RutaXMLRechazado As String
                               & "ORDER BY Cta "
                          Select_Adodc AdoAux, sSQL
                          If AdoAux.Recordset.RecordCount > 0 Then
-                            AXML.Cta_Debito = AdoAux.Recordset.fields("Cta_Gasto")
-                            AXML.SubModulo = AdoAux.Recordset.fields("SubModulo")
-                            AXML.Cod_Ret = AdoAux.Recordset.fields("Cod_Ret")
-                            AXML.Porc_Ret_IVA_B = AdoAux.Recordset.fields("Porc_IVAB")
-                            AXML.Porc_Ret_IVA_S = AdoAux.Recordset.fields("Porc_IVAS")
-                            AXML.Cta_IVA_Gasto = AdoAux.Recordset.fields("Cta_IVA_Gasto")
+                            AXML.Cta_Debito = AdoAux.Recordset.Fields("Cta_Gasto")
+                            AXML.SubModulo = AdoAux.Recordset.Fields("SubModulo")
+                            AXML.Cod_Ret = AdoAux.Recordset.Fields("Cod_Ret")
+                            AXML.Porc_Ret_IVA_B = AdoAux.Recordset.Fields("Porc_IVAB")
+                            AXML.Porc_Ret_IVA_S = AdoAux.Recordset.Fields("Porc_IVAS")
+                            AXML.Cta_IVA_Gasto = AdoAux.Recordset.Fields("Cta_IVA_Gasto")
                          Else
                             If Len(AXML.RUC_Receptor) = 13 Then
                                AXML.Cta_Debito = Cta_Gastos
@@ -1299,31 +1412,31 @@ Dim RutaXMLRechazado As String
                      'If AXML.Autorizacion = "0510202107139172193500120010030000004531234567818" Then MsgBox AXML.Porc_Ret_IVA_S
                      
                      'Actualizamos los datos del cliente/proveedor
-                      If AXML.Documento = "Factura" Then .fields("CodSustento") = SinEspaciosIzq(DCSustento)
+                      If AXML.Documento = "Factura" Then .Fields("CodSustento") = SinEspaciosIzq(DCSustento)
                       '.fields("PROCESAR") = 1
-                      .fields("IMPORTE_TOTAL") = AXML.Total
-                      .fields("Cod_Ret") = AXML.Cod_Ret
-                      .fields("Serie_Receptor") = AXML.Serie_Receptor
-                      .fields("Comprobante") = AXML.Comprobante
-                      .fields("Subtotal") = AXML.SubTotal
-                      .fields("Total_IVA") = AXML.Total_IVA
-                      .fields("Ret_IVA_B") = AXML.Ret_IVA_B
-                      .fields("Ret_IVA_S") = AXML.Ret_IVA_S
-                      .fields("Ret_Fuente") = AXML.Ret_Fuente
-                      .fields("Porc_Ret") = AXML.Porc_Ret
-                      .fields("Porc_Ret_IVA_B") = AXML.Porc_Ret_IVA_B
-                      .fields("Porc_Ret_IVA_S") = AXML.Porc_Ret_IVA_S
-                      .fields("Cod_Ret_Bien") = AXML.Cod_Ret_IVA_B
-                      .fields("Cod_Ret_Servicio") = AXML.Cod_Ret_IVA_S
-                      .fields("Cta_Debito") = AXML.Cta_Debito
-                      .fields("Cta_Credito") = AXML.Cta_Credito
-                      .fields("Cta_IVA_Gasto") = AXML.Cta_IVA_Gasto
-                      .fields("Cta_Ret_Fuente") = AXML.Cta_Ret_Fuente
-                      .fields("Cta_Ret_IVA_B") = AXML.Cta_Ret_IVA_B
-                      .fields("Cta_Ret_IVA_S") = AXML.Cta_Ret_IVA_S
-                      .fields("CodPorIva") = AXML.CodPorIva
-                      .fields("CodSustento") = AXML.Cod_Sustento
-                      .fields("Procesar") = adTrue
+                      .Fields("IMPORTE_TOTAL") = AXML.Total
+                      .Fields("Cod_Ret") = AXML.Cod_Ret
+                      .Fields("Serie_Receptor") = AXML.Serie_Receptor
+                      .Fields("Comprobante") = AXML.Comprobante
+                      .Fields("Subtotal") = AXML.SubTotal
+                      .Fields("Total_IVA") = AXML.Total_IVA
+                      .Fields("Ret_IVA_B") = AXML.Ret_IVA_B
+                      .Fields("Ret_IVA_S") = AXML.Ret_IVA_S
+                      .Fields("Ret_Fuente") = AXML.Ret_Fuente
+                      .Fields("Porc_Ret") = AXML.Porc_Ret
+                      .Fields("Porc_Ret_IVA_B") = AXML.Porc_Ret_IVA_B
+                      .Fields("Porc_Ret_IVA_S") = AXML.Porc_Ret_IVA_S
+                      .Fields("Cod_Ret_Bien") = AXML.Cod_Ret_IVA_B
+                      .Fields("Cod_Ret_Servicio") = AXML.Cod_Ret_IVA_S
+                      .Fields("Cta_Debito") = AXML.Cta_Debito
+                      .Fields("Cta_Credito") = AXML.Cta_Credito
+                      .Fields("Cta_IVA_Gasto") = AXML.Cta_IVA_Gasto
+                      .Fields("Cta_Ret_Fuente") = AXML.Cta_Ret_Fuente
+                      .Fields("Cta_Ret_IVA_B") = AXML.Cta_Ret_IVA_B
+                      .Fields("Cta_Ret_IVA_S") = AXML.Cta_Ret_IVA_S
+                      .Fields("CodPorIva") = AXML.CodPorIva
+                      .Fields("CodSustento") = AXML.Cod_Sustento
+                      .Fields("Procesar") = adTrue
                       .Update
                        Contador = Contador + 1
                    Else
@@ -1397,8 +1510,8 @@ Dim AdoDBTemp As ADODB.Recordset
          & "GROUP BY Item "
     Select_AdoDB AdoDBTemp, sSQL
     If AdoDBTemp.RecordCount > 0 Then
-       FechaIni = BuscarFecha(AdoDBTemp.fields("Fecha_Min"))
-       FechaFin = BuscarFecha(AdoDBTemp.fields("Fecha_Max"))
+       FechaIni = BuscarFecha(AdoDBTemp.Fields("Fecha_Min"))
+       FechaFin = BuscarFecha(AdoDBTemp.Fields("Fecha_Max"))
     End If
     AdoDBTemp.Close
 
@@ -1523,21 +1636,21 @@ Dim AdoDBTemp As ADODB.Recordset
      If .RecordCount > 0 Then
          Progreso_Barra.Valor_Maximo = .RecordCount
          Do While Not .EOF
-            Progreso_Barra.Mensaje_Box = .fields("SERIE_COMPROBANTE") & "-" & .fields("Comprobante") & ", " & .fields("RAZON_SOCIAL_EMISOR")
+            Progreso_Barra.Mensaje_Box = .Fields("SERIE_COMPROBANTE") & "-" & .Fields("Comprobante") & ", " & .Fields("RAZON_SOCIAL_EMISOR")
             Progreso_Esperar
             
             SecRetencion = Val(Label3.Caption)
 
-            CodRetBien = AdoAux.Recordset.fields("Cod_Ret_Bien")
-            CodRetServ = AdoAux.Recordset.fields("Cod_Ret_Servicio")
+            CodRetBien = AdoAux.Recordset.Fields("Cod_Ret_Bien")
+            CodRetServ = AdoAux.Recordset.Fields("Cod_Ret_Servicio")
 
           'Generamos el Asiento
            Trans_No = 79
            FechaComp = Co.Fecha
            
-           Co.Fecha = .fields("Fecha_Emision")
-           Co.CodigoB = AdoAbono.Recordset.fields("Codigo_B")
-           NombreCliente = AdoAbono.Recordset.fields("Razon_Social_Emisor")
+           Co.Fecha = .Fields("Fecha_Emision")
+           Co.CodigoB = AdoAbono.Recordset.Fields("Codigo_B")
+           NombreCliente = AdoAbono.Recordset.Fields("Razon_Social_Emisor")
 
           'Insertamos las transacciones
            Eliminar_Asientos_SP True
@@ -1548,29 +1661,29 @@ Dim AdoDBTemp As ADODB.Recordset
                 & "AND CodigoU = '" & CodigoUsuario & "' " _
                 & "AND T_No = " & Trans_No & " "
            Select_Adodc AdoAsiento, sSQL
-           InsertarAsientos AdoAsiento, .fields("Cta_Debito"), 0, .fields("Subtotal"), 0
-           If .fields("Total_IVA") > 0 Then
-               If Len(.fields("Cta_IVA_Gasto")) > 1 Then
-                  InsertarAsientos AdoAsiento, .fields("Cta_IVA_Gasto"), 0, .fields("Total_IVA"), 0
+           InsertarAsientos AdoAsiento, .Fields("Cta_Debito"), 0, .Fields("Subtotal"), 0
+           If .Fields("Total_IVA") > 0 Then
+               If Len(.Fields("Cta_IVA_Gasto")) > 1 Then
+                  InsertarAsientos AdoAsiento, .Fields("Cta_IVA_Gasto"), 0, .Fields("Total_IVA"), 0
                Else
-                  InsertarAsientos AdoAsiento, Cta_IVA_Inventario, 0, .fields("Total_IVA"), 0
+                  InsertarAsientos AdoAsiento, Cta_IVA_Inventario, 0, .Fields("Total_IVA"), 0
                End If
            End If
-           InsertarAsientos AdoAsiento, .fields("Cta_Credito"), 0, 0, .fields("Total")
+           InsertarAsientos AdoAsiento, .Fields("Cta_Credito"), 0, 0, .Fields("Total")
             
           'Insertamos el submodulo
            SetAdoAddNew "Asiento_SC"
            SetAdoFields "FECHA_V", Co.Fecha
            SetAdoFields "Codigo", Co.CodigoB
            SetAdoFields "TC", "P"
-           SetAdoFields "Cta", .fields("Cta_Credito")
+           SetAdoFields "Cta", .Fields("Cta_Credito")
            SetAdoFields "Beneficiario", NombreCliente
            SetAdoFields "TM", "1"
            SetAdoFields "DH", "2"
-           SetAdoFields "Valor", .fields("Total")
-           SetAdoFields "Serie", .fields("Serie")
-           SetAdoFields "Factura", .fields("Comprobante")
-           SetAdoFields "Detalle_SubCta", "Aut. No. " & .fields("Autorizacion")
+           SetAdoFields "Valor", .Fields("Total")
+           SetAdoFields "Serie", .Fields("Serie")
+           SetAdoFields "Factura", .Fields("Comprobante")
+           SetAdoFields "Detalle_SubCta", "Aut. No. " & .Fields("Autorizacion")
            SetAdoFields "T_No", Trans_No
            SetAdoFields "SC_No", 1
            SetAdoFields "Item", NumEmpresa
@@ -1579,39 +1692,39 @@ Dim AdoDBTemp As ADODB.Recordset
            
           'Grabo en el Asiento_Compras e implicito Asiento_Air
            Total = 0
-           If .fields("Documento") = "Factura" And Len(.fields("Cod_Ret")) > 1 Then
+           If .Fields("Documento") = "Factura" And Len(.Fields("Cod_Ret")) > 1 Then
               'If ChRetB = 1 Then SetAdoFields "Cta_Bienes", SinEspaciosIzq(DCRetIBienes)
               'If ChRetS = 1 Then SetAdoFields "Cta_Servicio", SinEspaciosIzq(DCRetISer)
               SetAdoAddNew "Asiento_Compras"
               SetAdoFields "IdProv", Co.CodigoB
               SetAdoFields "DevIva", "N"
-              SetAdoFields "CodSustento", .fields("CodSustento")
+              SetAdoFields "CodSustento", .Fields("CodSustento")
               SetAdoFields "TipoComprobante", 1
-              SetAdoFields "Establecimiento", MidStrg(.fields("Serie"), 1, 3)
-              SetAdoFields "PuntoEmision", MidStrg(.fields("Serie"), 4, 3)
-              SetAdoFields "Secuencial", .fields("Comprobante")
-              SetAdoFields "Autorizacion", .fields("Autorizacion")
-              SetAdoFields "FechaEmision", .fields("Fecha_Emision")
-              SetAdoFields "FechaRegistro", .fields("Fecha_Emision")
-              SetAdoFields "FechaCaducidad", .fields("Fecha_Emision")
+              SetAdoFields "Establecimiento", MidStrg(.Fields("Serie"), 1, 3)
+              SetAdoFields "PuntoEmision", MidStrg(.Fields("Serie"), 4, 3)
+              SetAdoFields "Secuencial", .Fields("Comprobante")
+              SetAdoFields "Autorizacion", .Fields("Autorizacion")
+              SetAdoFields "FechaEmision", .Fields("Fecha_Emision")
+              SetAdoFields "FechaRegistro", .Fields("Fecha_Emision")
+              SetAdoFields "FechaCaducidad", .Fields("Fecha_Emision")
               SetAdoFields "BaseNoObjIVA", "0"
-              SetAdoFields "MontoIva", .fields("Total_IVA")
+              SetAdoFields "MontoIva", .Fields("Total_IVA")
               'Subtotal, Total_IVA, Total
-              If .fields("Total_IVA") = 0 Then
-                  SetAdoFields "BaseImponible", .fields("Subtotal")
+              If .Fields("Total_IVA") = 0 Then
+                  SetAdoFields "BaseImponible", .Fields("Subtotal")
               Else
-                  SetAdoFields "BaseImpGrav", .fields("Subtotal")
+                  SetAdoFields "BaseImpGrav", .Fields("Subtotal")
               End If
               SetAdoFields "PorcentajeIva", AXML.CodPorIva
-              If .fields("Total_IVA") > 0 Then
-                  SetAdoFields "Porc_Bienes", .fields("Porc_Ret_IVA_B")
-                  SetAdoFields "MontoIvaBienes", .fields("Total_IVA")
+              If .Fields("Total_IVA") > 0 Then
+                  SetAdoFields "Porc_Bienes", .Fields("Porc_Ret_IVA_B")
+                  SetAdoFields "MontoIvaBienes", .Fields("Total_IVA")
                   SetAdoFields "PorRetBienes", CodRetBien
-                  SetAdoFields "ValorRetBienes", .fields("Ret_IVA_B")
-                  SetAdoFields "Porc_Servicios", .fields("Porc_Ret_IVA_S")
-                  SetAdoFields "MontoIvaServicios", .fields("Total_IVA")
+                  SetAdoFields "ValorRetBienes", .Fields("Ret_IVA_B")
+                  SetAdoFields "Porc_Servicios", .Fields("Porc_Ret_IVA_S")
+                  SetAdoFields "MontoIvaServicios", .Fields("Total_IVA")
                   SetAdoFields "PorRetServicios", CodRetServ
-                  SetAdoFields "ValorRetServicios", .fields("Ret_IVA_S")
+                  SetAdoFields "ValorRetServicios", .Fields("Ret_IVA_S")
               End If
               SetAdoFields "PagoLocExt", "01"
               SetAdoFields "PaisEfecPago", "NA"
@@ -1636,25 +1749,25 @@ Dim AdoDBTemp As ADODB.Recordset
               SetAdoFields "CodigoU", CodigoUsuario
               SetAdoUpdate
 
-              If Len(.fields("Cod_Ret")) > 1 Then
+              If Len(.Fields("Cod_Ret")) > 1 Then
                  RatonReloj
 '''                         Espizq = SinEspaciosIzq(DCConceptoRet)
 '''                         Espder = TrimStrg(MidStrg(DCConceptoRet, Len(Espizq) + 3, Len(DCConceptoRet)))
                  SetAdoAddNew "Asiento_Air"
-                 SetAdoFields "CodRet", .fields("Cod_Ret")
+                 SetAdoFields "CodRet", .Fields("Cod_Ret")
                  SetAdoFields "Detalle", "Retencion Fuente"
-                 SetAdoFields "BaseImp", .fields("Subtotal")
-                 SetAdoFields "Porcentaje", .fields("Porc_Ret") / 100
-                 SetAdoFields "ValRet", .fields("Ret_Fuente")
+                 SetAdoFields "BaseImp", .Fields("Subtotal")
+                 SetAdoFields "Porcentaje", .Fields("Porc_Ret") / 100
+                 SetAdoFields "ValRet", .Fields("Ret_Fuente")
                  SetAdoFields "EstabRetencion", MidStrg(DCSerieRetencion, 1, 3)
                  SetAdoFields "PtoEmiRetencion", MidStrg(DCSerieRetencion, 4, 3)
                  SetAdoFields "SecRetencion", SecRetencion
                  SetAdoFields "AutRetencion", RUC
-                 SetAdoFields "FechaEmiRet", .fields("Fecha_Emision")
+                 SetAdoFields "FechaEmiRet", .Fields("Fecha_Emision")
                  SetAdoFields "EstabFactura", "001"
                  SetAdoFields "PuntoEmiFactura", "001"
-                 SetAdoFields "Factura_No", .fields("Comprobante")
-                 SetAdoFields "Cta_Retencion", .fields("Cta_Ret_Fuente")
+                 SetAdoFields "Factura_No", .Fields("Comprobante")
+                 SetAdoFields "Cta_Retencion", .Fields("Cta_Ret_Fuente")
                  SetAdoFields "IdProv", Co.CodigoB
                  SetAdoFields "A_No", 1
                  SetAdoFields "T_No", Trans_No
@@ -1672,18 +1785,18 @@ Dim AdoDBTemp As ADODB.Recordset
               With AdoAux.Recordset
                If .RecordCount > 0 Then
                 'Porcentaje por Servicio: 0,30,100
-                 Cta = .fields("Cta_Servicio")
-                 DetalleComp = "Retencion del " & .fields("Porc_Servicios") & "%, Factura No. " & .fields("Secuencial") & ", de " & NombreCliente
+                 Cta = .Fields("Cta_Servicio")
+                 DetalleComp = "Retencion del " & .Fields("Porc_Servicios") & "%, Factura No. " & .Fields("Secuencial") & ", de " & NombreCliente
                  Codigo = Leer_Cta_Catalogo(Cta)
-                 ValorDH = .fields("ValorRetServicios")
-                 Total_RetIVA = Total_RetIVA + .fields("ValorRetServicios")
+                 ValorDH = .Fields("ValorRetServicios")
+                 Total_RetIVA = Total_RetIVA + .Fields("ValorRetServicios")
         '''         If ValorDH > 0 Then InsertarAsiento AdoAsientos
                 'Porcentaje por Bienes: 0,70,100
-                 Cta = .fields("Cta_Bienes")
-                 DetalleComp = "Retencion del " & .fields("Porc_Bienes") & "%, Factura No. " & .fields("Secuencial") & ", de " & NombreCliente
+                 Cta = .Fields("Cta_Bienes")
+                 DetalleComp = "Retencion del " & .Fields("Porc_Bienes") & "%, Factura No. " & .Fields("Secuencial") & ", de " & NombreCliente
                  Codigo = Leer_Cta_Catalogo(Cta)
-                 ValorDH = .fields("ValorRetBienes")
-                 Total_RetIVA = Total_RetIVA + .fields("ValorRetBienes")
+                 ValorDH = .Fields("ValorRetBienes")
+                 Total_RetIVA = Total_RetIVA + .Fields("ValorRetBienes")
         '''         If ValorDH > 0 Then InsertarAsiento AdoAsientos
                End If
               End With
@@ -1699,11 +1812,11 @@ Dim AdoDBTemp As ADODB.Recordset
               With AdoAux.Recordset
                If .RecordCount > 0 Then
                    Do While Not .EOF
-                      Cta = .fields("Cta_Retencion")
-                      DetalleComp = "Retencion (" & .fields("CodRet") & ") No. " & .fields("SecRetencion") & " del " & (.fields("Porcentaje") * 100) & "%, de " & NombreCliente
+                      Cta = .Fields("Cta_Retencion")
+                      DetalleComp = "Retencion (" & .Fields("CodRet") & ") No. " & .Fields("SecRetencion") & " del " & (.Fields("Porcentaje") * 100) & "%, de " & NombreCliente
                       Codigo = Leer_Cta_Catalogo(Cta)
-                      ValorDH = .fields("ValRet")
-                      Total_Ret = Total_Ret + .fields("ValRet")
+                      ValorDH = .Fields("ValRet")
+                      Total_Ret = Total_Ret + .Fields("ValRet")
         '''            If ValorDH > 0 Then InsertarAsiento AdoAsientos
                      .MoveNext
                    Loop
@@ -1715,9 +1828,9 @@ Dim AdoDBTemp As ADODB.Recordset
             
            DiarioCaja = NumComp
           'Grabacion del Comprobante
-           Co.Concepto = "Doc. No. " & .fields("Serie") & "-" & Format(.fields("Comprobante"), "000000000") & ", Aut. " & .fields("Autorizacion") _
-                       & "; R.U.C. " & .fields("RUC_Emisor") & ", " & NombreCliente
-           If .fields("Documento") = "Factura" Then Co.Concepto = "Compra, " & Co.Concepto Else Co.Concepto = "Gastos Personales, " & Co.Concepto
+           Co.Concepto = "Doc. No. " & .Fields("Serie") & "-" & Format(.Fields("Comprobante"), "000000000") & ", Aut. " & .Fields("Autorizacion") _
+                       & "; R.U.C. " & .Fields("RUC_Emisor") & ", " & NombreCliente
+           If .Fields("Documento") = "Factura" Then Co.Concepto = "Compra, " & Co.Concepto Else Co.Concepto = "Gastos Personales, " & Co.Concepto
            Co.T = Normal
            Co.TP = CompDiario
            Co.Numero = NumComp
@@ -1731,7 +1844,7 @@ Dim AdoDBTemp As ADODB.Recordset
            Co.RetNueva = True
            Co.RetSecuencial = True
            Co.Serie_R = DCSerieRetencion.Text
-           GrabarComprobante Co
+           Grabar_Comprobante Co
            Control_Procesos Normal, Co.Concepto
            .MoveNext
          Loop
@@ -1859,6 +1972,7 @@ Dim VerXMLTemp As String
                     AXML.Comprobante = CLng(MidStrg(node.selectSingleNode("numDocSustento").Text, 7, 9))
                 Next node
              End If
+             
              If VersionXML = "2.0.0" Then
                 Set nodeList = doc.selectNodes("/comprobanteRetencion/docsSustento/docSustento/retenciones/retencion")
              Else
@@ -1868,7 +1982,6 @@ Dim VerXMLTemp As String
              If Not nodeList Is Nothing Then
                 For Each node In nodeList
                     If node.selectSingleNode("codigo").Text = "1" Then
-                       AXML.Ret_Fuente = Val(node.selectSingleNode("valorRetenido").Text)
                        AXML.Cod_Ret = node.selectSingleNode("codigoRetencion").Text
                        AXML.SubTotal = AXML.SubTotal + Val(node.selectSingleNode("baseImponible").Text)
                        AXML.Porc_Ret = Val(node.selectSingleNode("porcentajeRetener").Text)
@@ -1876,6 +1989,7 @@ Dim VerXMLTemp As String
                     End If
                 Next node
              End If
+            'If AXML.Autorizacion = "0701202507179142811000120010050000035131234567814" Then MsgBox AXML.Porc_Ret
              If VersionXML = "2.0.0" Then
                 Set nodeList = doc.selectNodes("/comprobanteRetencion/docsSustento/docSustento/retenciones/retencion")
              Else
@@ -1947,7 +2061,7 @@ Private Sub DCSerieRetencion_Change()
   If AdoSerieRetencion.Recordset.RecordCount > 0 Then
      AdoSerieRetencion.Recordset.MoveFirst
      AdoSerieRetencion.Recordset.Find ("Concepto = '" & DCSerieRetencion & "' ")
-     If Not AdoSerieRetencion.Recordset.EOF Then Label3.Caption = Format$(AdoSerieRetencion.Recordset.fields("Numero"), "000000000")
+     If Not AdoSerieRetencion.Recordset.EOF Then Label3.Caption = Format$(AdoSerieRetencion.Recordset.Fields("Numero"), "000000000")
   End If
 End Sub
 
@@ -1967,9 +2081,9 @@ Private Sub DGDocSRI_BeforeColUpdate(ByVal ColIndex As Integer, OldValue As Vari
                  & "AND Fecha_Final >= #" & Mifecha & "# "
             Select_Adodc AdoAux, sSQL
             If AdoAux.Recordset.RecordCount > 0 Then
-               AXML.Porc_Ret = AdoAux.Recordset.fields("Porcentaje")
+               AXML.Porc_Ret = AdoAux.Recordset.Fields("Porcentaje")
                Porcentaje = AXML.Porc_Ret / 100
-               DGDocSRI.Columns("Porc_Ret").value = AdoAux.Recordset.fields("Porcentaje")
+               DGDocSRI.Columns("Porc_Ret").value = AdoAux.Recordset.Fields("Porcentaje")
                DGDocSRI.Columns("Ret_Fuente").value = Redondear(DGDocSRI.Columns("Subtotal").value * Porcentaje, 2)
                If AXML.Porc_Ret > 0 Then
                   sSQL = "SELECT Codigo " _
@@ -1980,7 +2094,7 @@ Private Sub DGDocSRI_BeforeColUpdate(ByVal ColIndex As Integer, OldValue As Vari
                        & "AND DG = 'D' " _
                        & "AND Cuenta LIKE '%" & CStr(AXML.Porc_Ret) & "%%' "
                   Select_Adodc AdoAux, sSQL
-                  If AdoAux.Recordset.RecordCount > 0 Then DGDocSRI.Columns("Cta_Ret_Fuente").value = AdoAux.Recordset.fields("Codigo")
+                  If AdoAux.Recordset.RecordCount > 0 Then DGDocSRI.Columns("Cta_Ret_Fuente").value = AdoAux.Recordset.Fields("Codigo")
                End If
                Cancel = False
             Else
@@ -2071,11 +2185,11 @@ Private Sub DGDocSRI_KeyDown(KeyCode As Integer, Shift As Integer)
              & "ORDER BY Cta "
         Select_Adodc AdoAux, sSQL
         If AdoAux.Recordset.RecordCount > 0 Then
-           AXML.Cta_Debito = AdoAux.Recordset.fields("Cta_Gasto")
-           AXML.SubModulo = AdoAux.Recordset.fields("SubModulo")
-           AXML.Cod_Ret = AdoAux.Recordset.fields("Cod_Ret")
-           AXML.Porc_Ret_IVA_B = AdoAux.Recordset.fields("Porc_IVAB")
-           AXML.Porc_Ret_IVA_S = AdoAux.Recordset.fields("Porc_IVAS")
+           AXML.Cta_Debito = AdoAux.Recordset.Fields("Cta_Gasto")
+           AXML.SubModulo = AdoAux.Recordset.Fields("SubModulo")
+           AXML.Cod_Ret = AdoAux.Recordset.Fields("Cod_Ret")
+           AXML.Porc_Ret_IVA_B = AdoAux.Recordset.Fields("Porc_IVAB")
+           AXML.Porc_Ret_IVA_S = AdoAux.Recordset.Fields("Porc_IVAS")
            
            Leer_Porc_Retenciones "2"
            

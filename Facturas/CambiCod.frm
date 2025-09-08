@@ -482,7 +482,7 @@ Private Sub Command1_Click()
             .MoveFirst
             .Find ("Cliente Like '" & DCCliente.Text & "' ")
              If Not .EOF Then
-                CodigoCliente = .Fields("Codigo")
+                CodigoCliente = .fields("Codigo")
                 NombreCliente = DCCliente.Text
                 Mensajes = "Cambiar: " & LblObs.Caption & " (" & CodigoP & ")" & vbCrLf & vbCrLf _
                          & "Por: " & NombreCliente & " (" & CodigoCliente & ")" & vbCrLf & vbCrLf _
@@ -561,7 +561,7 @@ Private Sub Command1_Click()
                  & "Del Documento No. " & SerieFactura & "-" & Factura_No & vbCrLf
         Titulo = "Formulario de Grabación."
         If BoxMensaje = vbYes Then
-           TBeneficiario = Leer_Datos_Clientes(CodigoP)
+           TBeneficiario = Leer_Datos_Cliente_SP(CodigoP)
            sSQL = "UPDATE Facturas " _
                 & "SET Factura = " & Numero & ", " _
                 & "Clave_Acceso = '.', "
@@ -651,19 +651,19 @@ Private Sub DCFactura_LostFocus()
       .MoveFirst
       .Find ("Factura = " & Val(DCFactura.Text) & " ")
        If Not .EOF Then
-          Factura_No = .Fields("Factura")
-          LblObs.Caption = .Fields("Cliente")
+          Factura_No = .fields("Factura")
+          LblObs.Caption = .fields("Cliente")
           Select Case Opciones
-            Case 1, 3: CodigoP = .Fields("CodigoC")
-            Case 2: CodigoP = .Fields("Cod_Ejec")
+            Case 1, 3: CodigoP = .fields("CodigoC")
+            Case 2: CodigoP = .fields("Cod_Ejec")
           End Select
-          TipoDoc = .Fields("Cod_CxC")
-          Cta_Cobrar = .Fields("Cta_CxP")
-          Saldo = Redondear(.Fields("Saldo_MN"), 2)
-          Saldo_ME = Redondear(.Fields("Saldo_ME"), 2)
-          TipoDoc = .Fields("TC")
-          TotalDolar = .Fields("Total_ME")
-          Cotizacion = .Fields("Cotizacion")
+          TipoDoc = .fields("Cod_CxC")
+          Cta_Cobrar = .fields("Cta_CxP")
+          Saldo = Redondear(.fields("Saldo_MN"), 2)
+          Saldo_ME = Redondear(.fields("Saldo_ME"), 2)
+          TipoDoc = .fields("TC")
+          TotalDolar = .fields("Total_ME")
+          Cotizacion = .fields("Cotizacion")
           Efectivo = 0: Cheque = 0: Retencion = 0
           LabelSaldo.Caption = Format$(Saldo, "#,##0.00")
        End If

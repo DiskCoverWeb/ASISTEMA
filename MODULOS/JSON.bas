@@ -23,7 +23,6 @@ Public Function ClearParserErrors() As String
    psErrors = ""
 End Function
 
-
 '
 '   parse string and create JSON object
 '
@@ -228,7 +227,10 @@ Private Function parseNumber(ByRef Str As String, ByRef index As Long)
 
    Dim value   As String
    Dim Char    As String
-
+   
+''       Clipboard.Clear
+''       Clipboard.SetText Str
+   
    Call skipChar(Str, index)
    Do While index > 0 And index <= Len(Str)
       Char = Mid(Str, index, 1)
@@ -556,7 +558,7 @@ Public Function RStoJSON(rs As ADODB.Recordset) As String
          Do While Not rs.EOF And Not rs.BOF
             lRecCnt = lRecCnt + 1
             sFlds = ""
-            For Each fld In rs.fields
+            For Each fld In rs.Fields
                sFlds = (sFlds & IIf(sFlds <> "", ",", "") & """" & fld.Name & """:""" & toUnicode(fld.value & "") & """")
             Next 'fld
             sRecs.Append IIf((Trim(sRecs.toString) <> ""), "," & vbCrLf, "") & "{" & sFlds & "}"

@@ -169,7 +169,7 @@ strSoap = TxtsOAP.Text
 strSOAPAction = TxtAction.Text
 strWsdl = TxtWsdl.Text
 If InvokeWebService(strSoap, strSOAPAction, strWsdl, xmlResponse) Then
-   TxtResultado.Text = xmlResponse.xml
+   TxtResultado.Text = xmlResponse.XML
 Else
    TxtResultado.Text = "Error"
 End If
@@ -235,7 +235,7 @@ Private Function PostWebservice(ByVal AsmxUrl As String, ByVal SoapActionUrl As 
     objXmlHttp.setRequestHeader "SOAPAction", SoapActionUrl
     
     ' Send XML command
-    objXmlHttp.send objDom.xml
+    objXmlHttp.send objDom.XML
 
     ' Get all response text from webservice
     strRet = objXmlHttp.responseText
@@ -263,15 +263,15 @@ End Function
 '''Dim Obj As New Cls_FirmarXML
 '''Dim ObjEnviar As New WS_Recepcion
 '''Dim ObjAutori As New WS_Autorizacion
-'''Dim URLRecepcion As String
-'''Dim URLAutorizacion As String
+'''
+'''
 '''Dim Resultado As Boolean
 '''Dim RutaCertificado As String
-'''Dim ClaveCertificado As String
+'''
 '''Dim RutaXML As String
 '''Dim RutaXMLFirmado As String
-'''Dim RutaXMLAutorizado As String
-'''Dim RutaXMLRechazado As String
+'''
+'''
 '''Dim MensajeError As String
 '''Dim ArrayRecepcion() As String
 '''Dim ArrayAutorizacion() As String

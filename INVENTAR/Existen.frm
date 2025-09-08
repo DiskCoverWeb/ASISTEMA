@@ -1,9 +1,9 @@
 VERSION 5.00
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "COMCTL32.OCX"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
-Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDATGRD.OCX"
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Begin VB.Form Existen 
    Caption         =   "Existencias de Inventario"
    ClientHeight    =   7800
@@ -13,17 +13,34 @@ Begin VB.Form Existen
    Icon            =   "Existen.frx":0000
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   12375
-   ScaleWidth      =   22800
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    WindowState     =   2  'Maximized
+   Begin VB.OptionButton Option1 
+      Caption         =   "Ninguno"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   10920
+      TabIndex        =   30
+      Top             =   735
+      Width           =   1170
+   End
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
       Height          =   660
       Left            =   0
-      TabIndex        =   28
+      TabIndex        =   27
       Top             =   0
-      Width           =   22800
-      _ExtentX        =   40217
+      Width           =   28560
+      _ExtentX        =   50377
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -70,14 +87,49 @@ Begin VB.Form Existen
          EndProperty
       EndProperty
    End
+   Begin VB.OptionButton OpcCodigoBarra 
+      Caption         =   "Codigo Barra"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   9240
+      TabIndex        =   29
+      Top             =   735
+      Width           =   1485
+   End
+   Begin VB.OptionButton OpcBodega 
+      Caption         =   "Bodega"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   7980
+      TabIndex        =   28
+      Top             =   735
+      Value           =   -1  'True
+      Width           =   1065
+   End
    Begin VB.Frame FrmProductos 
       BackColor       =   &H00404080&
       Caption         =   "| CAMBIO DE PRODUCTOS |"
       ForeColor       =   &H0000FFFF&
       Height          =   5370
-      Left            =   12810
-      TabIndex        =   23
-      Top             =   735
+      Left            =   13125
+      TabIndex        =   22
+      Top             =   2940
       Visible         =   0   'False
       Width           =   8520
       Begin VB.CommandButton Command3 
@@ -87,7 +139,7 @@ Begin VB.Form Existen
          Left            =   6510
          Picture         =   "Existen.frx":0442
          Style           =   1  'Graphical
-         TabIndex        =   25
+         TabIndex        =   24
          Top             =   4305
          Width           =   1800
       End
@@ -98,7 +150,7 @@ Begin VB.Form Existen
          Left            =   4620
          Picture         =   "Existen.frx":0D0C
          Style           =   1  'Graphical
-         TabIndex        =   24
+         TabIndex        =   23
          Top             =   4305
          Width           =   1800
       End
@@ -107,7 +159,7 @@ Begin VB.Form Existen
          DataSource      =   "AdoArt"
          Height          =   3495
          Left            =   210
-         TabIndex        =   26
+         TabIndex        =   25
          Top             =   630
          Width           =   8100
          _ExtentX        =   14288
@@ -131,7 +183,7 @@ Begin VB.Form Existen
          EndProperty
          Height          =   330
          Left            =   210
-         TabIndex        =   27
+         TabIndex        =   26
          Top             =   315
          Width           =   8100
       End
@@ -140,11 +192,11 @@ Begin VB.Form Existen
       BackColor       =   &H00FFFFFF&
       BorderStyle     =   0  'None
       Height          =   855
-      Left            =   12810
+      Left            =   12915
       ScaleHeight     =   855
       ScaleWidth      =   1695
-      TabIndex        =   22
-      Top             =   840
+      TabIndex        =   21
+      Top             =   1260
       Visible         =   0   'False
       Width           =   1695
    End
@@ -162,15 +214,16 @@ Begin VB.Form Existen
       Height          =   330
       Left            =   12390
       Picture         =   "Existen.frx":1163
-      TabIndex        =   21
-      Top             =   735
+      TabIndex        =   20
+      Top             =   1155
       Width           =   330
    End
    Begin MSDataGridLib.DataGrid DGKardex 
       Bindings        =   "Existen.frx":1A2D
       Height          =   4530
       Left            =   105
-      TabIndex        =   8
+      TabIndex        =   7
+      ToolTipText     =   "<Ctrl+F12> Cambiar Codigo, <Ctrl+B> Cambia Codigo Barra, <Ctrl+S> Cambia Serie"
       Top             =   2835
       Visible         =   0   'False
       Width           =   12195
@@ -236,7 +289,7 @@ Begin VB.Form Existen
    Begin MSMask.MaskEdBox MBoxFechaF 
       Height          =   330
       Left            =   10920
-      TabIndex        =   7
+      TabIndex        =   6
       Top             =   1155
       Width           =   1380
       _ExtentX        =   2434
@@ -261,7 +314,7 @@ Begin VB.Form Existen
    Begin MSMask.MaskEdBox MBoxFechaI 
       Height          =   330
       Left            =   8715
-      TabIndex        =   5
+      TabIndex        =   4
       Top             =   1155
       Width           =   1380
       _ExtentX        =   2434
@@ -282,23 +335,6 @@ Begin VB.Form Existen
       Format          =   "dd/mm/yyyy"
       Mask            =   "##/##/####"
       PromptChar      =   "0"
-   End
-   Begin VB.CheckBox CheqBod 
-      Caption         =   "BODEGA:"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   225
-      Left            =   7980
-      TabIndex        =   2
-      Top             =   735
-      Width           =   1170
    End
    Begin MSAdodcLib.Adodc AdoKardex 
       Height          =   330
@@ -586,11 +622,11 @@ Begin VB.Form Existen
       Bindings        =   "Existen.frx":1A70
       DataSource      =   "AdoBodega"
       Height          =   315
-      Left            =   9240
-      TabIndex        =   3
+      Left            =   13125
+      TabIndex        =   2
       Top             =   735
-      Width           =   3060
-      _ExtentX        =   5398
+      Width           =   5055
+      _ExtentX        =   8916
       _ExtentY        =   556
       _Version        =   393216
       BackColor       =   16777215
@@ -710,7 +746,7 @@ Begin VB.Form Existen
       EndProperty
       Height          =   330
       Left            =   11340
-      TabIndex        =   9
+      TabIndex        =   8
       Top             =   2415
       Width           =   1380
    End
@@ -728,7 +764,7 @@ Begin VB.Form Existen
       EndProperty
       Height          =   330
       Left            =   10500
-      TabIndex        =   15
+      TabIndex        =   14
       Top             =   2415
       Width           =   855
    End
@@ -747,7 +783,7 @@ Begin VB.Form Existen
       EndProperty
       Height          =   330
       Left            =   8715
-      TabIndex        =   12
+      TabIndex        =   11
       Top             =   2415
       Width           =   1695
    End
@@ -768,7 +804,7 @@ Begin VB.Form Existen
       ForeColor       =   &H000000FF&
       Height          =   330
       Left            =   11340
-      TabIndex        =   10
+      TabIndex        =   9
       Top             =   1995
       Width           =   1380
    End
@@ -786,7 +822,7 @@ Begin VB.Form Existen
       EndProperty
       Height          =   330
       Left            =   10500
-      TabIndex        =   16
+      TabIndex        =   15
       Top             =   1995
       Width           =   855
    End
@@ -805,7 +841,7 @@ Begin VB.Form Existen
       EndProperty
       Height          =   330
       Left            =   8715
-      TabIndex        =   13
+      TabIndex        =   12
       Top             =   1995
       Width           =   1695
    End
@@ -825,7 +861,7 @@ Begin VB.Form Existen
       EndProperty
       Height          =   330
       Left            =   11340
-      TabIndex        =   11
+      TabIndex        =   10
       Top             =   1575
       Width           =   1380
    End
@@ -843,7 +879,7 @@ Begin VB.Form Existen
       EndProperty
       Height          =   330
       Left            =   10500
-      TabIndex        =   17
+      TabIndex        =   16
       Top             =   1575
       Width           =   855
    End
@@ -862,8 +898,8 @@ Begin VB.Form Existen
       EndProperty
       Height          =   330
       Left            =   8715
-      TabIndex        =   14
-      Top             =   1575
+      TabIndex        =   13
+      Top             =   1680
       Width           =   1695
    End
    Begin VB.Label Label4 
@@ -880,7 +916,7 @@ Begin VB.Form Existen
       EndProperty
       Height          =   330
       Left            =   7875
-      TabIndex        =   20
+      TabIndex        =   19
       Top             =   1575
       Width           =   855
    End
@@ -898,7 +934,7 @@ Begin VB.Form Existen
       EndProperty
       Height          =   330
       Left            =   10080
-      TabIndex        =   6
+      TabIndex        =   5
       Top             =   1155
       Width           =   855
    End
@@ -916,7 +952,7 @@ Begin VB.Form Existen
       EndProperty
       Height          =   330
       Left            =   7875
-      TabIndex        =   4
+      TabIndex        =   3
       Top             =   1155
       Width           =   855
    End
@@ -934,7 +970,7 @@ Begin VB.Form Existen
       EndProperty
       Height          =   330
       Left            =   7875
-      TabIndex        =   19
+      TabIndex        =   18
       Top             =   1995
       Width           =   855
    End
@@ -952,7 +988,7 @@ Begin VB.Form Existen
       EndProperty
       Height          =   330
       Left            =   7875
-      TabIndex        =   18
+      TabIndex        =   17
       Top             =   2415
       Width           =   855
    End
@@ -963,6 +999,9 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
+Dim OpcBodega       As Boolean
+Dim OpcCodigoBarra  As Boolean
+Dim OpcTodos        As Boolean
 
 Public Sub ListarProductos(OpcVista As String)
  Select Case OpcVista
@@ -972,10 +1011,10 @@ Public Sub ListarProductos(OpcVista As String)
             & "WHERE Item = '" & NumEmpresa & "' " _
             & "AND Periodo = '" & Periodo_Contable & "' " _
             & "AND TC = 'I' " _
-            & "AND X = 'M' " _
             & "ORDER BY Codigo_Inv "
        SelectDB_Combo DCTInv, AdoTInv, sSQL, "NomProd"
   Case "P"
+      '& "AND X = 'M' "
        Codigo = SinEspaciosIzq(DCTInv.Text)
        sSQL = "SELECT Producto,Codigo_Inv,Unidad,Minimo,Maximo " _
             & "FROM Catalogo_Productos " _
@@ -983,12 +1022,30 @@ Public Sub ListarProductos(OpcVista As String)
             & "AND Periodo = '" & Periodo_Contable & "' " _
             & "AND MidStrg(Codigo_Inv,1," & CStr(Len(Codigo)) & ") = '" & Codigo & "' " _
             & "AND TC = 'P' " _
-            & "AND X = 'M' " _
             & "AND Cta_Inventario <> '.' " _
             & "AND Cta_Inventario <> '0' " _
             & "ORDER BY Producto,Codigo_Inv "
        SelectDB_Combo DCInv, AdoInv, sSQL, "Producto"
  End Select
+End Sub
+
+Public Sub Listar_Bodega_CodigoBarra()
+  If OpcBodega Then
+     sSQL = "SELECT Bodega & ' - ' & CodBod As TipoDeConsulta " _
+          & "FROM Catalogo_Bodegas " _
+          & "WHERE Item = '" & NumEmpresa & "' " _
+          & "AND Periodo = '" & Periodo_Contable & "' " _
+          & "ORDER BY CodBod "
+  Else
+     sSQL = "SELECT Codigo_Barra As TipoDeConsulta " _
+          & "FROM Trans_Kardex " _
+          & "WHERE Item = '" & NumEmpresa & "' " _
+          & "AND Periodo = '" & Periodo_Contable & "' " _
+          & "AND Entrada > 0 " _
+          & "GROUP BY Codigo_Barra " _
+          & "ORDER BY Codigo_Barra "
+  End If
+  SelectDB_Combo DCBodega, AdoBodega, sSQL, "TipoDeConsulta"
 End Sub
 
 Public Sub Consultar_Kardex()
@@ -1008,7 +1065,7 @@ Public Sub Consultar_Kardex()
        & "AND K.T = '" & Normal & "' " _
        & "AND K.Item = '" & NumEmpresa & "' " _
        & "AND K.Periodo = '" & Periodo_Contable & "' "
-  If CheqBod.value = 1 Then sSQL = sSQL & "AND K.CodBodega = '" & Codigo1 & "' "
+  If OpcBodega.value = 1 Then sSQL = sSQL & "AND K.CodBodega = '" & Codigo1 & "' "
   sSQL = sSQL & "AND K.TP = C.TP " _
        & "AND K.Fecha = C.Fecha " _
        & "AND K.Numero = C.Numero " _
@@ -1060,7 +1117,7 @@ Dim GrupoInv As String
   Else
      If GrupoInv <> "*" Then sSQL = sSQL & "AND TK.Codigo_Inv LIKE '" & GrupoInv & "%' "
   End If
-  If CheqBod.value = 1 Then sSQL = sSQL & "AND TK.CodBodega = '" & Codigo1 & "' "
+  If OpcBodega.value = 1 Then sSQL = sSQL & "AND TK.CodBodega = '" & Codigo1 & "' "
   sSQL = sSQL _
        & "AND TK.Item = CP.Item " _
        & "AND TK.Item = CM.Item " _
@@ -1202,6 +1259,9 @@ Private Sub DGKardex_KeyDown(KeyCode As Integer, Shift As Integer)
     Codigos = DGKardex.Columns(20)
     Existencia = Val(DGKardex.Columns(9).Text)
     ID_Reg = Val(DGKardex.Columns(CantCampos - 1).Text)
+    FechaIni = BuscarFecha(MBoxFechaI.Text)
+    FechaFin = BuscarFecha(MBoxFechaF.Text)
+
     If CtrlDown And KeyCode = vbKeyF11 Then
        If Leer_Codigo_Inv(CodigoInv, FechaSistema) Then
           DatInv.Codigo_Barra = Codigos
@@ -1266,6 +1326,23 @@ Private Sub DGKardex_KeyDown(KeyCode As Integer, Shift As Integer)
           MsgBox "Proceso Terminado, vuelva a listar el documento"
        End If
     End If
+    
+    If CtrlDown And KeyCode = vbKey0 Then
+       Titulo = "PREGUNTA DE ELIMINACION"
+       Mensajes = "Esta seguro de Eliminar el Kardex de comprobantes en cero de " & MBoxFechaI.Text & " - " & MBoxFechaF.Text & "?"
+       If BoxMensaje = vbYes Then
+          RatonReloj
+          sSQL = "DELETE * " _
+               & "FROM Trans_Kardex " _
+               & "WHERE Item = '" & NumEmpresa & "' " _
+               & "AND Periodo = '" & Periodo_Contable & "' " _
+               & "AND Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
+               & "AND Numero = 0 "
+          Ejecutar_SQL_SP sSQL
+          RatonNormal
+          MsgBox "Proceso Terminado, vuelva a listar el Kardex"
+       End If
+    End If
  Else
     MsgBox "No hay regstros que procesar"
  End If
@@ -1274,77 +1351,74 @@ End Sub
 Private Sub Form_Activate()
   MBoxFechaI = FechaSistema
   MBoxFechaF = FechaSistema
+  OpcBodega = False
+  OpcCodigoBarra = False
+  OpcTodos = False
   
-'''  sSQL = "UPDATE Catalogo_Productos " _
-'''       & "SET X = '.' " _
-'''       & "WHERE Item = '" & NumEmpresa & "' " _
-'''       & "AND Periodo = '" & Periodo_Contable & "' "
-'''  Ejecutar_SQL_SP sSQL
-'''
-'''  sSQL = "UPDATE Catalogo_Productos " _
-'''       & "SET X = 'M' " _
-'''       & "FROM Catalogo_Productos As CP, Trans_Kardex As TK " _
-'''       & "WHERE CP.Item = '" & NumEmpresa & "' " _
-'''       & "AND CP.Periodo = '" & Periodo_Contable & "' " _
-'''       & "AND CP.Item = TK.Item " _
-'''       & "AND CP.Periodo = TK.Periodo " _
-'''       & "AND CP.Codigo_Inv = TK.Codigo_Inv "
-'''  Ejecutar_SQL_SP sSQL
-'''
-'''  sSQL = "SELECT Codigo_Inv " _
-'''       & "FROM Catalogo_Productos " _
-'''       & "WHERE Item = '" & NumEmpresa & "' " _
-'''       & "AND Periodo = '" & Periodo_Contable & "' " _
-'''       & "AND TC = 'P' " _
-'''       & "AND X = 'M' " _
-'''       & "GROUP BY Codigo_Inv " _
-'''       & "ORDER BY Codigo_Inv "
-'''  Select_Adodc AdoKardex, sSQL
-'''  With AdoKardex.Recordset
-'''   If .RecordCount > 0 Then
-'''       Codigo = CodigoCuentaSup(.Fields("Codigo_Inv"))
-'''       Do While Not .EOF
-'''          If Codigo <> CodigoCuentaSup(.Fields("Codigo_Inv")) Then
-'''             Do While Len(Codigo) > 1
-'''                sSQL = "UPDATE Catalogo_Productos " _
-'''                     & "SET X = 'M' " _
-'''                     & "WHERE Item = '" & NumEmpresa & "' " _
-'''                     & "AND Periodo = '" & Periodo_Contable & "' " _
-'''                     & "AND X <> 'M' " _
-'''                     & "AND Codigo_Inv = '" & Codigo & "' "
-'''                Ejecutar_SQL_SP sSQL
-'''               ' MsgBox sSQL
-'''                Codigo = CodigoCuentaSup(Codigo)
-'''             Loop
-'''             Codigo = CodigoCuentaSup(.Fields("Codigo_Inv"))
-'''          End If
-'''         .MoveNext
-'''       Loop
-'''       Do While Len(Codigo) > 1
-'''          sSQL = "UPDATE Catalogo_Productos " _
-'''               & "SET X = 'M' " _
-'''               & "WHERE Item = '" & NumEmpresa & "' " _
-'''               & "AND Periodo = '" & Periodo_Contable & "' " _
-'''               & "AND X <> 'M' " _
-'''               & "AND Codigo_Inv = '" & Codigo & "' "
-'''          Ejecutar_SQL_SP sSQL
-'''         ' MsgBox sSQL
-'''          Codigo = CodigoCuentaSup(Codigo)
-'''       Loop
-'''   End If
-'''  End With
+''  sSQL = "UPDATE Catalogo_Productos " _
+''       & "SET X = '.' " _
+''       & "WHERE Item = '" & NumEmpresa & "' " _
+''       & "AND Periodo = '" & Periodo_Contable & "' "
+''  Ejecutar_SQL_SP sSQL
+''
+''  sSQL = "UPDATE Catalogo_Productos " _
+''       & "SET X = 'M' " _
+''       & "FROM Catalogo_Productos As CP, Trans_Kardex As TK " _
+''       & "WHERE CP.Item = '" & NumEmpresa & "' " _
+''       & "AND CP.Periodo = '" & Periodo_Contable & "' " _
+''       & "AND CP.Item = TK.Item " _
+''       & "AND CP.Periodo = TK.Periodo " _
+''       & "AND CP.Codigo_Inv = TK.Codigo_Inv "
+''  Ejecutar_SQL_SP sSQL
+''
+''  sSQL = "SELECT Codigo_Inv " _
+''       & "FROM Catalogo_Productos " _
+''       & "WHERE Item = '" & NumEmpresa & "' " _
+''       & "AND Periodo = '" & Periodo_Contable & "' " _
+''       & "AND TC = 'P' " _
+''       & "AND X = 'M' " _
+''       & "GROUP BY Codigo_Inv " _
+''       & "ORDER BY Codigo_Inv "
+''  Select_Adodc AdoKardex, sSQL
+''  With AdoKardex.Recordset
+''   If .RecordCount > 0 Then
+''       Codigo = CodigoCuentaSup(.Fields("Codigo_Inv"))
+''       Do While Not .EOF
+''          If Codigo <> CodigoCuentaSup(.Fields("Codigo_Inv")) Then
+''             Do While Len(Codigo) > 1
+''                sSQL = "UPDATE Catalogo_Productos " _
+''                     & "SET X = 'M' " _
+''                     & "WHERE Item = '" & NumEmpresa & "' " _
+''                     & "AND Periodo = '" & Periodo_Contable & "' " _
+''                     & "AND X <> 'M' " _
+''                     & "AND Codigo_Inv = '" & Codigo & "' "
+''                Ejecutar_SQL_SP sSQL
+''               ' MsgBox sSQL
+''                Codigo = CodigoCuentaSup(Codigo)
+''             Loop
+''             Codigo = CodigoCuentaSup(.Fields("Codigo_Inv"))
+''          End If
+''         .MoveNext
+''       Loop
+''       Do While Len(Codigo) > 1
+''          sSQL = "UPDATE Catalogo_Productos " _
+''               & "SET X = 'M' " _
+''               & "WHERE Item = '" & NumEmpresa & "' " _
+''               & "AND Periodo = '" & Periodo_Contable & "' " _
+''               & "AND X <> 'M' " _
+''               & "AND Codigo_Inv = '" & Codigo & "' "
+''          Ejecutar_SQL_SP sSQL
+''         ' MsgBox sSQL
+''          Codigo = CodigoCuentaSup(Codigo)
+''       Loop
+''   End If
+''  End With
 
   ListarProductos "I"
   ListarProductos "P"
   Listar_Articulos
-  
-  sSQL = "SELECT Bodega & ' - ' & CodBod As NomBodega " _
-      & "FROM Catalogo_Bodegas " _
-      & "WHERE Item = '" & NumEmpresa & "' " _
-      & "AND Periodo = '" & Periodo_Contable & "' " _
-      & "ORDER BY CodBod "
-  SelectDB_Combo DCBodega, AdoBodega, sSQL, "NomBodega"
-  
+  Listar_Bodega_CodigoBarra True
+    
   DGKardex.width = MDI_X_Max - 100
   DGKardex.Height = (MDI_Y_Max - DGKardex.Top - 500)
   AdoKardex.Top = DGKardex.Top + DGKardex.Height + 10
@@ -1389,6 +1463,29 @@ End Sub
 
 Private Sub MBoxFechaI_LostFocus()
   FechaValida MBoxFechaI
+End Sub
+
+Private Sub OpcBodega_Click()
+    OpcBodega = True
+    OpcCodigoBarra = False
+    OpcTodos = False
+    Listar_Bodega_CodigoBarra
+    DCBodega.Visible = True
+End Sub
+
+Private Sub OpcCodigoBarra_Click()
+    OpcBodega = False
+    OpcCodigoBarra = True
+    OpcTodos = False
+    Listar_Bodega_CodigoBarra
+    DCBodega.Visible = True
+End Sub
+
+Private Sub Option1_Click()
+    OpcBodega = False
+    OpcCodigoBarra = False
+    OpcTodos = True
+    DCBodega.Visible = False
 End Sub
 
 Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)

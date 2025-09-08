@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
+Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDATGRD.OCX"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
 Begin VB.Form MayorAux1 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "LISTADO DEL CATALOGO DE SUBCUENTAS"
@@ -320,12 +320,14 @@ Public Sub ListarSubCta(TipoSubCta As String)
      DGMayor.Caption = "Catálogo - GASTOS"
   ElseIf OpcC.value Then
      DGMayor.Caption = "Catálogo - CUENTAS POR COBRAR"
+  ElseIf OpcP.value Then
+     DGMayor.Caption = "Catálogo - CUENTAS POR PAGAR"
   ElseIf OpcI.value Then
      DGMayor.Caption = "Catálogo - INGRESOS"
   ElseIf OpcPM.value Then
      DGMayor.Caption = "Catálogo - PRIMAS"
   Else
-     DGMayor.Caption = "Catálogo - CUENTAS POR PAGAR"
+     DGMayor.Caption = "Catálogo - CENTRO DE COSTO"
   End If
   Select Case TipoSubCta
     Case "C", "P"
@@ -339,7 +341,7 @@ Public Sub ListarSubCta(TipoSubCta As String)
               & "AND CP.Cta = CC.Codigo " _
               & "AND CP.Codigo = C.Codigo " _
               & "ORDER BY CP.Cta,C.Cliente "
-    Case "I", "G", "PM"
+    Case "CC", "I", "G", "PM"
          sSQL = "SELECT Detalle,Presupuesto,Codigo,TC " _
               & "FROM Catalogo_SubCtas " _
               & "WHERE TC = '" & TipoSubCta & "' " _
@@ -356,12 +358,14 @@ Dim TipoSubCta As String
      TipoSubCta = "G"
   ElseIf OpcC.value Then
      TipoSubCta = "C"
+  ElseIf OpcP.value Then
+     TipoSubCta = "P"
   ElseIf OpcI.value Then
      TipoSubCta = "I"
   ElseIf OpcPM.value Then
      TipoSubCta = "PM"
   Else
-     TipoSubCta = "P"
+     TipoSubCta = "CC"
   End If
   Select Case TipoSubCta
     Case "C", "P"
@@ -371,7 +375,7 @@ Dim TipoSubCta As String
               & "AND Codigo = '" & Codigo & "' " _
               & "AND Item = '" & NumEmpresa & "' " _
               & "AND Periodo = '" & Periodo_Contable & "' "
-    Case "I", "G", "PM"
+    Case "CC", "I", "G", "PM"
          sSQL = "DELETE * " _
               & "FROM Catalogo_SubCtas " _
               & "WHERE Codigo = '" & Codigo & "' " _
@@ -403,12 +407,14 @@ Private Sub DGMayor_KeyDown(KeyCode As Integer, Shift As Integer)
         ListarSubCta "G"
      ElseIf OpcC.value Then
         ListarSubCta "C"
+     ElseIf OpcP.value Then
+        ListarSubCta "P"
      ElseIf OpcI.value Then
         ListarSubCta "I"
      ElseIf OpcPM.value Then
         ListarSubCta "PM"
      Else
-        ListarSubCta "P"
+        ListarSubCta "CC"
      End If
   End If
 End Sub
@@ -426,6 +432,10 @@ End Sub
 
 Private Sub OpcC_Click()
   ListarSubCta "C"
+End Sub
+
+Private Sub OpcCC_Click()
+  ListarSubCta "CC"
 End Sub
 
 Private Sub OpcG_Click()

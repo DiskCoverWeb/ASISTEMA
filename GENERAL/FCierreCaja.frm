@@ -1,10 +1,10 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
-Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDATGRD.OCX"
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "COMCTL32.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
+Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form FCierreCaja 
    Caption         =   "CIERRE DE CAJA"
@@ -21,7 +21,7 @@ Begin VB.Form FCierreCaja
       Align           =   1  'Align Top
       Height          =   660
       Left            =   0
-      TabIndex        =   41
+      TabIndex        =   4
       Top             =   0
       Width           =   11880
       _ExtentX        =   20955
@@ -110,15 +110,15 @@ Begin VB.Form FCierreCaja
          BorderStyle     =   0  'None
          Height          =   645
          Left            =   7140
-         TabIndex        =   42
+         TabIndex        =   5
          Top             =   0
-         Width           =   10515
+         Width           =   10620
          Begin MSDataListLib.DataCombo DCBenef 
             Bindings        =   "FCierreCaja.frx":0000
             DataSource      =   "AdoClientes"
             Height          =   360
             Left            =   2625
-            TabIndex        =   46
+            TabIndex        =   9
             Top             =   315
             Visible         =   0   'False
             Width           =   6315
@@ -149,8 +149,8 @@ Begin VB.Form FCierreCaja
             EndProperty
             Height          =   540
             Left            =   9030
-            TabIndex        =   48
-            Top             =   0
+            TabIndex        =   11
+            Top             =   105
             Width           =   1380
          End
          Begin VB.CheckBox CheqCajero 
@@ -166,14 +166,14 @@ Begin VB.Form FCierreCaja
             EndProperty
             Height          =   330
             Left            =   2625
-            TabIndex        =   47
+            TabIndex        =   10
             Top             =   0
             Width           =   1275
          End
          Begin MSMask.MaskEdBox MBFechaI 
             Height          =   330
             Left            =   0
-            TabIndex        =   43
+            TabIndex        =   6
             ToolTipText     =   "Formato de Fecha: DD/MM/AA"
             Top             =   315
             Width           =   1275
@@ -199,7 +199,7 @@ Begin VB.Form FCierreCaja
          Begin MSMask.MaskEdBox MBFechaF 
             Height          =   330
             Left            =   1260
-            TabIndex        =   45
+            TabIndex        =   8
             ToolTipText     =   "Formato de Fecha: DD/MM/AA"
             Top             =   315
             Width           =   1275
@@ -236,7 +236,7 @@ Begin VB.Form FCierreCaja
             EndProperty
             Height          =   330
             Left            =   0
-            TabIndex        =   44
+            TabIndex        =   7
             Top             =   0
             Width           =   2535
          End
@@ -246,239 +246,107 @@ Begin VB.Form FCierreCaja
       Caption         =   "&S"
       Height          =   225
       Left            =   210
-      TabIndex        =   49
-      Top             =   840
+      TabIndex        =   12
+      Top             =   12705
       Width           =   225
    End
    Begin TabDlg.SSTab SSTab1 
-      Height          =   6525
+      Height          =   11880
       Left            =   105
       TabIndex        =   0
       Top             =   735
-      Width           =   19470
-      _ExtentX        =   34343
-      _ExtentY        =   11509
+      Width           =   21675
+      _ExtentX        =   38232
+      _ExtentY        =   20955
       _Version        =   393216
-      Tabs            =   7
-      TabsPerRow      =   7
+      Tabs            =   6
+      Tab             =   5
+      TabsPerRow      =   6
       TabHeight       =   520
-      TabCaption(0)   =   "&1.- VENTAS"
+      BackColor       =   12632319
+      TabCaption(0)   =   "&1.- VENTAS/ABONOS/ANTICIPOS"
       TabPicture(0)   =   "FCierreCaja.frx":001A
-      Tab(0).ControlEnabled=   -1  'True
+      Tab(0).ControlEnabled=   0   'False
       Tab(0).Control(0)=   "Label2"
-      Tab(0).Control(0).Enabled=   0   'False
       Tab(0).Control(1)=   "LabelAbonos"
-      Tab(0).Control(1).Enabled=   0   'False
-      Tab(0).Control(2)=   "AdoVentas"
-      Tab(0).Control(2).Enabled=   0   'False
-      Tab(0).Control(3)=   "DGVentas"
-      Tab(0).Control(3).Enabled=   0   'False
-      Tab(0).ControlCount=   4
-      TabCaption(1)   =   "&2.- ABONOS"
+      Tab(0).Control(2)=   "LabelCheque"
+      Tab(0).Control(3)=   "Label4"
+      Tab(0).Control(4)=   "AdoCxC"
+      Tab(0).Control(5)=   "AdoVentas"
+      Tab(0).Control(6)=   "DGVentas"
+      Tab(0).Control(7)=   "DGCxC"
+      Tab(0).ControlCount=   8
+      TabCaption(1)   =   "&2.- INVENTARIO"
       TabPicture(1)   =   "FCierreCaja.frx":0036
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "DGCxC"
-      Tab(1).Control(1)=   "AdoCxC"
-      Tab(1).Control(2)=   "DGAnticipos"
-      Tab(1).Control(3)=   "LabelCheque"
-      Tab(1).Control(4)=   "Label4"
-      Tab(1).ControlCount=   5
-      TabCaption(2)   =   "&3.- INVENTARIO"
+      Tab(1).Control(0)=   "AdoInv"
+      Tab(1).Control(1)=   "DGInv"
+      Tab(1).Control(2)=   "DGProductos"
+      Tab(1).Control(3)=   "DGCierres"
+      Tab(1).ControlCount=   4
+      TabCaption(2)   =   "&3.- CONTABILIDAD"
       TabPicture(2)   =   "FCierreCaja.frx":0052
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "DGInv"
-      Tab(2).Control(1)=   "DGProductos"
-      Tab(2).Control(2)=   "DGCierres"
-      Tab(2).ControlCount=   3
-      TabCaption(3)   =   "&4.- CONTABILIDAD"
+      Tab(2).Control(0)=   "DGAsiento1"
+      Tab(2).Control(1)=   "DGAsiento"
+      Tab(2).Control(2)=   "DGAnticipos"
+      Tab(2).Control(3)=   "LabelHaber1"
+      Tab(2).Control(4)=   "LabelDebe1"
+      Tab(2).Control(5)=   "Label15"
+      Tab(2).Control(6)=   "LabelHaber"
+      Tab(2).Control(7)=   "LabelDebe"
+      Tab(2).Control(8)=   "Label11"
+      Tab(2).Control(9)=   "Label1"
+      Tab(2).Control(10)=   "LblDiferencia"
+      Tab(2).Control(11)=   "LblConcepto"
+      Tab(2).Control(12)=   "LblConcepto1"
+      Tab(2).Control(13)=   "LblDiferencia1"
+      Tab(2).Control(14)=   "Label13"
+      Tab(2).ControlCount=   15
+      TabCaption(3)   =   "&4.- ANULADAS"
       TabPicture(3)   =   "FCierreCaja.frx":006E
       Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "DGAsiento"
-      Tab(3).Control(1)=   "DGAsiento1"
-      Tab(3).Control(2)=   "Label15"
-      Tab(3).Control(3)=   "Label13"
-      Tab(3).Control(4)=   "LblDiferencia1"
-      Tab(3).Control(5)=   "LabelDebe1"
-      Tab(3).Control(6)=   "LabelHaber1"
-      Tab(3).Control(7)=   "LblConcepto1"
-      Tab(3).Control(8)=   "LblConcepto"
-      Tab(3).Control(9)=   "LabelHaber"
-      Tab(3).Control(10)=   "LabelDebe"
-      Tab(3).Control(11)=   "LblDiferencia"
-      Tab(3).Control(12)=   "Label1"
-      Tab(3).Control(13)=   "Label11"
-      Tab(3).ControlCount=   14
-      TabCaption(4)   =   "&5.- ANULADAS"
+      Tab(3).Control(0)=   "DGFactAnul"
+      Tab(3).ControlCount=   1
+      TabCaption(4)   =   "&5.- REPORTE DE AUDITORIA"
       TabPicture(4)   =   "FCierreCaja.frx":008A
       Tab(4).ControlEnabled=   0   'False
-      Tab(4).Control(0)=   "DGFactAnul"
-      Tab(4).ControlCount=   1
-      TabCaption(5)   =   "&6.- REPORTE DE AUDITORIA"
+      Tab(4).Control(0)=   "Label9"
+      Tab(4).Control(1)=   "Label12"
+      Tab(4).Control(2)=   "Label14"
+      Tab(4).Control(3)=   "Label18"
+      Tab(4).Control(4)=   "LblConIVA"
+      Tab(4).Control(5)=   "LblSinIVA"
+      Tab(4).Control(6)=   "LblDescuento"
+      Tab(4).Control(7)=   "LblIVA"
+      Tab(4).Control(8)=   "Label7"
+      Tab(4).Control(9)=   "LblServicio"
+      Tab(4).Control(10)=   "Label16"
+      Tab(4).Control(11)=   "LblTotalFacturado"
+      Tab(4).Control(12)=   "AdoSRI"
+      Tab(4).Control(13)=   "DGSRI"
+      Tab(4).ControlCount=   14
+      TabCaption(5)   =   "&6.- REPORTE DEL BANCO"
       TabPicture(5)   =   "FCierreCaja.frx":00A6
-      Tab(5).ControlEnabled=   0   'False
-      Tab(5).Control(0)=   "DGSRI"
-      Tab(5).Control(1)=   "AdoSRI"
-      Tab(5).Control(2)=   "Label9"
-      Tab(5).Control(3)=   "Label12"
-      Tab(5).Control(4)=   "Label14"
-      Tab(5).Control(5)=   "Label18"
-      Tab(5).Control(6)=   "LblConIVA"
-      Tab(5).Control(7)=   "LblSinIVA"
-      Tab(5).Control(8)=   "LblDescuento"
-      Tab(5).Control(9)=   "LblIVA"
-      Tab(5).Control(10)=   "Label7"
-      Tab(5).Control(11)=   "LblServicio"
-      Tab(5).Control(12)=   "Label16"
-      Tab(5).Control(13)=   "LblTotalFacturado"
-      Tab(5).ControlCount=   14
-      TabCaption(6)   =   "&7.- REPORTE DEL BANCO"
-      TabPicture(6)   =   "FCierreCaja.frx":00C2
-      Tab(6).ControlEnabled=   0   'False
-      Tab(6).Control(0)=   "DCBanco"
-      Tab(6).Control(1)=   "DGBanco"
-      Tab(6).ControlCount=   2
-      Begin MSDataGridLib.DataGrid DGInv 
-         Bindings        =   "FCierreCaja.frx":00DE
-         Height          =   2325
-         Left            =   -73005
-         TabIndex        =   1
-         Top             =   420
-         Width           =   9150
-         _ExtentX        =   16140
-         _ExtentY        =   4101
-         _Version        =   393216
-         HeadLines       =   1
-         RowHeight       =   15
-         BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ColumnCount     =   2
-         BeginProperty Column00 
-            DataField       =   ""
-            Caption         =   ""
-            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
-               Type            =   0
-               Format          =   ""
-               HaveTrueFalseNull=   0
-               FirstDayOfWeek  =   0
-               FirstWeekOfYear =   0
-               LCID            =   2058
-               SubFormatType   =   0
-            EndProperty
-         EndProperty
-         BeginProperty Column01 
-            DataField       =   ""
-            Caption         =   ""
-            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
-               Type            =   0
-               Format          =   ""
-               HaveTrueFalseNull=   0
-               FirstDayOfWeek  =   0
-               FirstWeekOfYear =   0
-               LCID            =   2058
-               SubFormatType   =   0
-            EndProperty
-         EndProperty
-         SplitCount      =   1
-         BeginProperty Split0 
-            BeginProperty Column00 
-            EndProperty
-            BeginProperty Column01 
-            EndProperty
-         EndProperty
-      End
-      Begin MSDataGridLib.DataGrid DGAsiento 
-         Bindings        =   "FCierreCaja.frx":00F3
-         Height          =   1380
-         Left            =   -74895
-         TabIndex        =   2
-         Top             =   735
-         Width           =   11040
-         _ExtentX        =   19473
-         _ExtentY        =   2434
-         _Version        =   393216
-         HeadLines       =   1
-         RowHeight       =   15
-         BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ColumnCount     =   2
-         BeginProperty Column00 
-            DataField       =   ""
-            Caption         =   ""
-            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
-               Type            =   0
-               Format          =   ""
-               HaveTrueFalseNull=   0
-               FirstDayOfWeek  =   0
-               FirstWeekOfYear =   0
-               LCID            =   2058
-               SubFormatType   =   0
-            EndProperty
-         EndProperty
-         BeginProperty Column01 
-            DataField       =   ""
-            Caption         =   ""
-            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
-               Type            =   0
-               Format          =   ""
-               HaveTrueFalseNull=   0
-               FirstDayOfWeek  =   0
-               FirstWeekOfYear =   0
-               LCID            =   2058
-               SubFormatType   =   0
-            EndProperty
-         EndProperty
-         SplitCount      =   1
-         BeginProperty Split0 
-            BeginProperty Column00 
-            EndProperty
-            BeginProperty Column01 
-            EndProperty
-         EndProperty
-      End
+      Tab(5).ControlEnabled=   -1  'True
+      Tab(5).Control(0)=   "DCBanco"
+      Tab(5).Control(0).Enabled=   0   'False
+      Tab(5).Control(1)=   "DGBanco"
+      Tab(5).Control(1).Enabled=   0   'False
+      Tab(5).ControlCount=   2
       Begin MSDataGridLib.DataGrid DGCxC 
-         Bindings        =   "FCierreCaja.frx":010C
+         Bindings        =   "FCierreCaja.frx":00C2
          Height          =   1800
          Left            =   -74895
-         TabIndex        =   3
+         TabIndex        =   15
          ToolTipText     =   "<Ctrl+P> Protestar Cheques"
-         Top             =   840
-         Width           =   11040
-         _ExtentX        =   19473
+         Top             =   5880
+         Width           =   14190
+         _ExtentX        =   25030
          _ExtentY        =   3175
          _Version        =   393216
          AllowUpdate     =   0   'False
+         BorderStyle     =   0
          HeadLines       =   1
          RowHeight       =   15
          BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -535,15 +403,351 @@ Begin VB.Form FCierreCaja
          EndProperty
       End
       Begin MSDataGridLib.DataGrid DGVentas 
-         Bindings        =   "FCierreCaja.frx":0121
-         Height          =   4455
-         Left            =   105
-         TabIndex        =   4
-         Top             =   840
+         Bindings        =   "FCierreCaja.frx":00D7
+         Height          =   3090
+         Left            =   -74895
+         TabIndex        =   1
+         Top             =   420
          Width           =   14160
          _ExtentX        =   24977
-         _ExtentY        =   7858
+         _ExtentY        =   5450
          _Version        =   393216
+         BorderStyle     =   0
+         HeadLines       =   1
+         RowHeight       =   15
+         BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ColumnCount     =   2
+         BeginProperty Column00 
+            DataField       =   ""
+            Caption         =   ""
+            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
+               Type            =   0
+               Format          =   ""
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   2058
+               SubFormatType   =   0
+            EndProperty
+         EndProperty
+         BeginProperty Column01 
+            DataField       =   ""
+            Caption         =   ""
+            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
+               Type            =   0
+               Format          =   ""
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   2058
+               SubFormatType   =   0
+            EndProperty
+         EndProperty
+         SplitCount      =   1
+         BeginProperty Split0 
+            BeginProperty Column00 
+            EndProperty
+            BeginProperty Column01 
+            EndProperty
+         EndProperty
+      End
+      Begin MSDataGridLib.DataGrid DGCierres 
+         Bindings        =   "FCierreCaja.frx":00EF
+         Height          =   4320
+         Left            =   -74895
+         TabIndex        =   18
+         Top             =   420
+         Width           =   1905
+         _ExtentX        =   3360
+         _ExtentY        =   7620
+         _Version        =   393216
+         BackColor       =   12648447
+         BorderStyle     =   0
+         HeadLines       =   1
+         RowHeight       =   15
+         BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ColumnCount     =   2
+         BeginProperty Column00 
+            DataField       =   ""
+            Caption         =   ""
+            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
+               Type            =   0
+               Format          =   ""
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   2058
+               SubFormatType   =   0
+            EndProperty
+         EndProperty
+         BeginProperty Column01 
+            DataField       =   ""
+            Caption         =   ""
+            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
+               Type            =   0
+               Format          =   ""
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   2058
+               SubFormatType   =   0
+            EndProperty
+         EndProperty
+         SplitCount      =   1
+         BeginProperty Split0 
+            BeginProperty Column00 
+            EndProperty
+            BeginProperty Column01 
+            EndProperty
+         EndProperty
+      End
+      Begin MSDataGridLib.DataGrid DGProductos 
+         Bindings        =   "FCierreCaja.frx":0108
+         Height          =   2115
+         Left            =   -72795
+         TabIndex        =   17
+         Top             =   3675
+         Width           =   9150
+         _ExtentX        =   16140
+         _ExtentY        =   3731
+         _Version        =   393216
+         BackColor       =   12648447
+         BorderStyle     =   0
+         HeadLines       =   1
+         RowHeight       =   15
+         BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ColumnCount     =   2
+         BeginProperty Column00 
+            DataField       =   ""
+            Caption         =   ""
+            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
+               Type            =   0
+               Format          =   ""
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   2058
+               SubFormatType   =   0
+            EndProperty
+         EndProperty
+         BeginProperty Column01 
+            DataField       =   ""
+            Caption         =   ""
+            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
+               Type            =   0
+               Format          =   ""
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   2058
+               SubFormatType   =   0
+            EndProperty
+         EndProperty
+         SplitCount      =   1
+         BeginProperty Split0 
+            BeginProperty Column00 
+            EndProperty
+            BeginProperty Column01 
+            EndProperty
+         EndProperty
+      End
+      Begin MSDataGridLib.DataGrid DGInv 
+         Bindings        =   "FCierreCaja.frx":0123
+         Height          =   2325
+         Left            =   -72795
+         TabIndex        =   16
+         Top             =   420
+         Width           =   9150
+         _ExtentX        =   16140
+         _ExtentY        =   4101
+         _Version        =   393216
+         BackColor       =   12648447
+         BorderStyle     =   0
+         HeadLines       =   1
+         RowHeight       =   15
+         BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ColumnCount     =   2
+         BeginProperty Column00 
+            DataField       =   ""
+            Caption         =   ""
+            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
+               Type            =   0
+               Format          =   ""
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   2058
+               SubFormatType   =   0
+            EndProperty
+         EndProperty
+         BeginProperty Column01 
+            DataField       =   ""
+            Caption         =   ""
+            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
+               Type            =   0
+               Format          =   ""
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   2058
+               SubFormatType   =   0
+            EndProperty
+         EndProperty
+         SplitCount      =   1
+         BeginProperty Split0 
+            BeginProperty Column00 
+            EndProperty
+            BeginProperty Column01 
+            EndProperty
+         EndProperty
+      End
+      Begin MSDataGridLib.DataGrid DGAsiento1 
+         Bindings        =   "FCierreCaja.frx":0138
+         Height          =   1695
+         Left            =   -74895
+         TabIndex        =   20
+         Top             =   3975
+         Width           =   11040
+         _ExtentX        =   19473
+         _ExtentY        =   2990
+         _Version        =   393216
+         BackColor       =   12640511
+         BorderStyle     =   0
+         HeadLines       =   1
+         RowHeight       =   15
+         BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ColumnCount     =   2
+         BeginProperty Column00 
+            DataField       =   ""
+            Caption         =   ""
+            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
+               Type            =   0
+               Format          =   ""
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   2058
+               SubFormatType   =   0
+            EndProperty
+         EndProperty
+         BeginProperty Column01 
+            DataField       =   ""
+            Caption         =   ""
+            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
+               Type            =   0
+               Format          =   ""
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   2058
+               SubFormatType   =   0
+            EndProperty
+         EndProperty
+         SplitCount      =   1
+         BeginProperty Split0 
+            BeginProperty Column00 
+            EndProperty
+            BeginProperty Column01 
+            EndProperty
+         EndProperty
+      End
+      Begin MSDataGridLib.DataGrid DGAsiento 
+         Bindings        =   "FCierreCaja.frx":0152
+         Height          =   1380
+         Left            =   -74895
+         TabIndex        =   19
+         Top             =   840
+         Width           =   11040
+         _ExtentX        =   19473
+         _ExtentY        =   2434
+         _Version        =   393216
+         BackColor       =   12640511
+         BorderStyle     =   0
          HeadLines       =   1
          RowHeight       =   15
          BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -600,15 +804,17 @@ Begin VB.Form FCierreCaja
          EndProperty
       End
       Begin MSDataGridLib.DataGrid DGFactAnul 
-         Bindings        =   "FCierreCaja.frx":0139
+         Bindings        =   "FCierreCaja.frx":016B
          Height          =   4110
          Left            =   -74895
-         TabIndex        =   5
+         TabIndex        =   33
          Top             =   420
          Width           =   11040
          _ExtentX        =   19473
          _ExtentY        =   7250
          _Version        =   393216
+         BackColor       =   12632319
+         BorderStyle     =   0
          HeadLines       =   1
          RowHeight       =   15
          BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -665,15 +871,84 @@ Begin VB.Form FCierreCaja
          EndProperty
       End
       Begin MSDataGridLib.DataGrid DGSRI 
-         Bindings        =   "FCierreCaja.frx":0153
+         Bindings        =   "FCierreCaja.frx":0185
          Height          =   3375
          Left            =   -74895
-         TabIndex        =   6
-         Top             =   735
+         TabIndex        =   34
+         Top             =   420
          Width           =   11040
          _ExtentX        =   19473
          _ExtentY        =   5953
          _Version        =   393216
+         BackColor       =   16777152
+         BorderStyle     =   0
+         HeadLines       =   1
+         RowHeight       =   15
+         BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ColumnCount     =   2
+         BeginProperty Column00 
+            DataField       =   ""
+            Caption         =   ""
+            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
+               Type            =   0
+               Format          =   ""
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   2058
+               SubFormatType   =   0
+            EndProperty
+         EndProperty
+         BeginProperty Column01 
+            DataField       =   ""
+            Caption         =   ""
+            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
+               Type            =   0
+               Format          =   ""
+               HaveTrueFalseNull=   0
+               FirstDayOfWeek  =   0
+               FirstWeekOfYear =   0
+               LCID            =   2058
+               SubFormatType   =   0
+            EndProperty
+         EndProperty
+         SplitCount      =   1
+         BeginProperty Split0 
+            BeginProperty Column00 
+            EndProperty
+            BeginProperty Column01 
+            EndProperty
+         EndProperty
+      End
+      Begin MSDataGridLib.DataGrid DGBanco 
+         Bindings        =   "FCierreCaja.frx":019A
+         Height          =   4950
+         Left            =   105
+         TabIndex        =   47
+         Top             =   840
+         Width           =   19230
+         _ExtentX        =   33920
+         _ExtentY        =   8731
+         _Version        =   393216
+         BackColor       =   16761024
+         BorderStyle     =   0
          HeadLines       =   1
          RowHeight       =   15
          BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -731,10 +1006,10 @@ Begin VB.Form FCierreCaja
       End
       Begin MSAdodcLib.Adodc AdoVentas 
          Height          =   330
-         Left            =   2730
-         Top             =   420
-         Width           =   2850
-         _ExtentX        =   5027
+         Left            =   -74895
+         Top             =   3990
+         Width           =   3375
+         _ExtentX        =   5953
          _ExtentY        =   582
          ConnectMode     =   0
          CursorLocation  =   3
@@ -775,123 +1050,12 @@ Begin VB.Form FCierreCaja
          EndProperty
          _Version        =   393216
       End
-      Begin MSAdodcLib.Adodc AdoSRI 
-         Height          =   330
-         Left            =   -74895
-         Top             =   420
-         Width           =   2430
-         _ExtentX        =   4286
-         _ExtentY        =   582
-         ConnectMode     =   0
-         CursorLocation  =   3
-         IsolationLevel  =   -1
-         ConnectionTimeout=   15
-         CommandTimeout  =   30
-         CursorType      =   3
-         LockType        =   3
-         CommandType     =   8
-         CursorOptions   =   0
-         CacheSize       =   50
-         MaxRecords      =   0
-         BOFAction       =   0
-         EOFAction       =   0
-         ConnectStringType=   1
-         Appearance      =   1
-         BackColor       =   -2147483643
-         ForeColor       =   -2147483640
-         Orientation     =   0
-         Enabled         =   -1
-         Connect         =   ""
-         OLEDBString     =   ""
-         OLEDBFile       =   ""
-         DataSourceName  =   ""
-         OtherAttributes =   ""
-         UserName        =   ""
-         Password        =   ""
-         RecordSource    =   ""
-         Caption         =   "SRI"
-         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         _Version        =   393216
-      End
-      Begin MSDataGridLib.DataGrid DGProductos 
-         Bindings        =   "FCierreCaja.frx":0168
-         Height          =   2115
-         Left            =   -73005
-         TabIndex        =   7
-         Top             =   2730
-         Width           =   9150
-         _ExtentX        =   16140
-         _ExtentY        =   3731
-         _Version        =   393216
-         HeadLines       =   1
-         RowHeight       =   15
-         BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ColumnCount     =   2
-         BeginProperty Column00 
-            DataField       =   ""
-            Caption         =   ""
-            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
-               Type            =   0
-               Format          =   ""
-               HaveTrueFalseNull=   0
-               FirstDayOfWeek  =   0
-               FirstWeekOfYear =   0
-               LCID            =   2058
-               SubFormatType   =   0
-            EndProperty
-         EndProperty
-         BeginProperty Column01 
-            DataField       =   ""
-            Caption         =   ""
-            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
-               Type            =   0
-               Format          =   ""
-               HaveTrueFalseNull=   0
-               FirstDayOfWeek  =   0
-               FirstWeekOfYear =   0
-               LCID            =   2058
-               SubFormatType   =   0
-            EndProperty
-         EndProperty
-         SplitCount      =   1
-         BeginProperty Split0 
-            BeginProperty Column00 
-            EndProperty
-            BeginProperty Column01 
-            EndProperty
-         EndProperty
-      End
       Begin MSAdodcLib.Adodc AdoCxC 
          Height          =   330
-         Left            =   -72270
-         Top             =   420
-         Width           =   2640
-         _ExtentX        =   4657
+         Left            =   -74895
+         Top             =   7770
+         Width           =   3480
+         _ExtentX        =   6138
          _ExtentY        =   582
          ConnectMode     =   0
          CursorLocation  =   3
@@ -932,207 +1096,58 @@ Begin VB.Form FCierreCaja
          EndProperty
          _Version        =   393216
       End
-      Begin MSDataGridLib.DataGrid DGAsiento1 
-         Bindings        =   "FCierreCaja.frx":0183
-         Height          =   1695
+      Begin MSAdodcLib.Adodc AdoSRI 
+         Height          =   330
          Left            =   -74895
-         TabIndex        =   30
-         Top             =   3975
-         Width           =   11040
-         _ExtentX        =   19473
-         _ExtentY        =   2990
-         _Version        =   393216
-         HeadLines       =   1
-         RowHeight       =   15
-         BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
+         Top             =   5250
+         Width           =   2640
+         _ExtentX        =   4657
+         _ExtentY        =   582
+         ConnectMode     =   0
+         CursorLocation  =   3
+         IsolationLevel  =   -1
+         ConnectionTimeout=   15
+         CommandTimeout  =   30
+         CursorType      =   3
+         LockType        =   3
+         CommandType     =   8
+         CursorOptions   =   0
+         CacheSize       =   50
+         MaxRecords      =   0
+         BOFAction       =   0
+         EOFAction       =   0
+         ConnectStringType=   1
+         Appearance      =   1
+         BackColor       =   -2147483643
+         ForeColor       =   -2147483640
+         Orientation     =   0
+         Enabled         =   -1
+         Connect         =   ""
+         OLEDBString     =   ""
+         OLEDBFile       =   ""
+         DataSourceName  =   ""
+         OtherAttributes =   ""
+         UserName        =   ""
+         Password        =   ""
+         RecordSource    =   ""
+         Caption         =   "SRI"
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "MS Sans Serif"
             Size            =   8.25
             Charset         =   0
-            Weight          =   700
+            Weight          =   400
             Underline       =   0   'False
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         ColumnCount     =   2
-         BeginProperty Column00 
-            DataField       =   ""
-            Caption         =   ""
-            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
-               Type            =   0
-               Format          =   ""
-               HaveTrueFalseNull=   0
-               FirstDayOfWeek  =   0
-               FirstWeekOfYear =   0
-               LCID            =   2058
-               SubFormatType   =   0
-            EndProperty
-         EndProperty
-         BeginProperty Column01 
-            DataField       =   ""
-            Caption         =   ""
-            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
-               Type            =   0
-               Format          =   ""
-               HaveTrueFalseNull=   0
-               FirstDayOfWeek  =   0
-               FirstWeekOfYear =   0
-               LCID            =   2058
-               SubFormatType   =   0
-            EndProperty
-         EndProperty
-         SplitCount      =   1
-         BeginProperty Split0 
-            BeginProperty Column00 
-            EndProperty
-            BeginProperty Column01 
-            EndProperty
-         EndProperty
-      End
-      Begin MSDataGridLib.DataGrid DGCierres 
-         Bindings        =   "FCierreCaja.frx":019D
-         Height          =   4320
-         Left            =   -74895
-         TabIndex        =   37
-         Top             =   420
-         Width           =   1905
-         _ExtentX        =   3360
-         _ExtentY        =   7620
          _Version        =   393216
-         HeadLines       =   1
-         RowHeight       =   15
-         BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ColumnCount     =   2
-         BeginProperty Column00 
-            DataField       =   ""
-            Caption         =   ""
-            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
-               Type            =   0
-               Format          =   ""
-               HaveTrueFalseNull=   0
-               FirstDayOfWeek  =   0
-               FirstWeekOfYear =   0
-               LCID            =   2058
-               SubFormatType   =   0
-            EndProperty
-         EndProperty
-         BeginProperty Column01 
-            DataField       =   ""
-            Caption         =   ""
-            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
-               Type            =   0
-               Format          =   ""
-               HaveTrueFalseNull=   0
-               FirstDayOfWeek  =   0
-               FirstWeekOfYear =   0
-               LCID            =   2058
-               SubFormatType   =   0
-            EndProperty
-         EndProperty
-         SplitCount      =   1
-         BeginProperty Split0 
-            BeginProperty Column00 
-            EndProperty
-            BeginProperty Column01 
-            EndProperty
-         EndProperty
-      End
-      Begin MSDataGridLib.DataGrid DGBanco 
-         Bindings        =   "FCierreCaja.frx":01B6
-         Height          =   4950
-         Left            =   -74895
-         TabIndex        =   38
-         Top             =   840
-         Width           =   19230
-         _ExtentX        =   33920
-         _ExtentY        =   8731
-         _Version        =   393216
-         HeadLines       =   1
-         RowHeight       =   15
-         BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ColumnCount     =   2
-         BeginProperty Column00 
-            DataField       =   ""
-            Caption         =   ""
-            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
-               Type            =   0
-               Format          =   ""
-               HaveTrueFalseNull=   0
-               FirstDayOfWeek  =   0
-               FirstWeekOfYear =   0
-               LCID            =   2058
-               SubFormatType   =   0
-            EndProperty
-         EndProperty
-         BeginProperty Column01 
-            DataField       =   ""
-            Caption         =   ""
-            BeginProperty DataFormat {6D835690-900B-11D0-9484-00A0C91110ED} 
-               Type            =   0
-               Format          =   ""
-               HaveTrueFalseNull=   0
-               FirstDayOfWeek  =   0
-               FirstWeekOfYear =   0
-               LCID            =   2058
-               SubFormatType   =   0
-            EndProperty
-         EndProperty
-         SplitCount      =   1
-         BeginProperty Split0 
-            BeginProperty Column00 
-            EndProperty
-            BeginProperty Column01 
-            EndProperty
-         EndProperty
       End
       Begin MSDataListLib.DataCombo DCBanco 
-         Bindings        =   "FCierreCaja.frx":01CD
+         Bindings        =   "FCierreCaja.frx":01B1
          DataSource      =   "AdoCtaBanco"
          Height          =   315
-         Left            =   -74895
-         TabIndex        =   39
+         Left            =   105
+         TabIndex        =   48
          Top             =   420
          Width           =   6525
          _ExtentX        =   11509
@@ -1152,16 +1167,18 @@ Begin VB.Form FCierreCaja
          EndProperty
       End
       Begin MSDataGridLib.DataGrid DGAnticipos 
-         Bindings        =   "FCierreCaja.frx":01E7
+         Bindings        =   "FCierreCaja.frx":01CB
          Height          =   1800
          Left            =   -74895
-         TabIndex        =   40
-         Top             =   4410
-         Width           =   11040
-         _ExtentX        =   19473
+         TabIndex        =   49
+         Top             =   7350
+         Width           =   14190
+         _ExtentX        =   25030
          _ExtentY        =   3175
          _Version        =   393216
          AllowUpdate     =   0   'False
+         BackColor       =   12648447
+         BorderStyle     =   0
          HeadLines       =   1
          RowHeight       =   15
          BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -1217,7 +1234,53 @@ Begin VB.Form FCierreCaja
             EndProperty
          EndProperty
       End
-      Begin VB.Label LabelCheque 
+      Begin MSAdodcLib.Adodc AdoInv 
+         Height          =   330
+         Left            =   -72795
+         Top             =   3045
+         Width           =   3900
+         _ExtentX        =   6879
+         _ExtentY        =   582
+         ConnectMode     =   0
+         CursorLocation  =   3
+         IsolationLevel  =   -1
+         ConnectionTimeout=   15
+         CommandTimeout  =   30
+         CursorType      =   3
+         LockType        =   3
+         CommandType     =   8
+         CursorOptions   =   0
+         CacheSize       =   50
+         MaxRecords      =   0
+         BOFAction       =   0
+         EOFAction       =   0
+         ConnectStringType=   1
+         Appearance      =   1
+         BackColor       =   -2147483643
+         ForeColor       =   -2147483640
+         Orientation     =   0
+         Enabled         =   -1
+         Connect         =   ""
+         OLEDBString     =   ""
+         OLEDBFile       =   ""
+         DataSourceName  =   ""
+         OtherAttributes =   ""
+         UserName        =   ""
+         Password        =   ""
+         RecordSource    =   ""
+         Caption         =   "Inv"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         _Version        =   393216
+      End
+      Begin VB.Label LabelHaber1 
          Alignment       =   1  'Right Justify
          BackColor       =   &H00FFFFFF&
          BorderStyle     =   1  'Fixed Single
@@ -1232,67 +1295,9 @@ Begin VB.Form FCierreCaja
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   -74055
-         TabIndex        =   28
-         Top             =   420
-         Width           =   1695
-      End
-      Begin VB.Label Label15 
-         Alignment       =   1  'Right Justify
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   "TOTALES "
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   -67965
-         TabIndex        =   36
-         Top             =   5655
-         Width           =   1065
-      End
-      Begin VB.Label Label13 
-         Alignment       =   1  'Right Justify
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   "Diferencia "
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   -70800
-         TabIndex        =   35
-         Top             =   5655
-         Width           =   1065
-      End
-      Begin VB.Label LblDiferencia1 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   "0"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   -69750
-         TabIndex        =   34
-         Top             =   5655
+         Left            =   -62085
+         TabIndex        =   25
+         Top             =   5760
          Width           =   1800
       End
       Begin VB.Label LabelDebe1 
@@ -1310,166 +1315,15 @@ Begin VB.Form FCierreCaja
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   -66915
-         TabIndex        =   33
-         Top             =   5655
-         Width           =   1800
-      End
-      Begin VB.Label LabelHaber1 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   "0"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   -65130
-         TabIndex        =   32
-         Top             =   5655
-         Width           =   1800
-      End
-      Begin VB.Label LblConcepto1 
-         BackColor       =   &H00FFFFFF&
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   "."
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   -74895
-         TabIndex        =   31
-         Top             =   3660
-         Width           =   11040
-      End
-      Begin VB.Label Label4 
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   " TOTAL"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   -74895
-         TabIndex        =   29
-         Top             =   420
-         Width           =   855
-      End
-      Begin VB.Label Label9 
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   " CON I.V.A."
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   -74895
-         TabIndex        =   27
-         Top             =   5445
-         Width           =   1800
-      End
-      Begin VB.Label Label12 
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   " SIN I.V.A."
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   -73110
-         TabIndex        =   26
-         Top             =   5445
-         Width           =   1800
-      End
-      Begin VB.Label Label14 
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   " DESCUENTO"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   -71325
-         TabIndex        =   25
-         Top             =   5445
-         Width           =   1800
-      End
-      Begin VB.Label Label18 
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   " TOTAL  I.V.A."
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   -69540
+         Left            =   -63870
          TabIndex        =   24
-         Top             =   5445
-         Width           =   1800
-      End
-      Begin VB.Label LblConIVA 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   "0.00"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00000000&
-         Height          =   330
-         Left            =   -74895
-         TabIndex        =   23
          Top             =   5760
          Width           =   1800
       End
-      Begin VB.Label LblSinIVA 
+      Begin VB.Label Label15 
          Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
          BorderStyle     =   1  'Fixed Single
-         Caption         =   "0.00"
+         Caption         =   "TOTALES "
          BeginProperty Font 
             Name            =   "MS Sans Serif"
             Size            =   8.25
@@ -1479,112 +1333,11 @@ Begin VB.Form FCierreCaja
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         ForeColor       =   &H00000000&
          Height          =   330
-         Left            =   -73110
-         TabIndex        =   22
-         Top             =   5760
-         Width           =   1800
-      End
-      Begin VB.Label LblDescuento 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   "0.00"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00000000&
-         Height          =   330
-         Left            =   -71325
+         Left            =   -64920
          TabIndex        =   21
          Top             =   5760
-         Width           =   1800
-      End
-      Begin VB.Label LblIVA 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   "0.00"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00000000&
-         Height          =   330
-         Left            =   -69540
-         TabIndex        =   20
-         Top             =   5760
-         Width           =   1800
-      End
-      Begin VB.Label LabelAbonos 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   "0.00"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00000000&
-         Height          =   330
-         Left            =   945
-         TabIndex        =   19
-         Top             =   420
-         Width           =   1695
-      End
-      Begin VB.Label Label2 
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   " TOTAL"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   105
-         TabIndex        =   18
-         Top             =   420
-         Width           =   855
-      End
-      Begin VB.Label LblConcepto 
-         BackColor       =   &H00FFFFFF&
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   "."
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   -74895
-         TabIndex        =   17
-         Top             =   420
-         Width           =   11040
+         Width           =   1065
       End
       Begin VB.Label LabelHaber 
          Alignment       =   1  'Right Justify
@@ -1601,9 +1354,9 @@ Begin VB.Form FCierreCaja
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   -65130
-         TabIndex        =   16
-         Top             =   3345
+         Left            =   -62085
+         TabIndex        =   28
+         Top             =   3045
          Width           =   1800
       End
       Begin VB.Label LabelDebe 
@@ -1621,124 +1374,9 @@ Begin VB.Form FCierreCaja
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   -66915
-         TabIndex        =   15
-         Top             =   3345
-         Width           =   1800
-      End
-      Begin VB.Label LblDiferencia 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   "0"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   -69750
-         TabIndex        =   14
-         Top             =   3345
-         Width           =   1800
-      End
-      Begin VB.Label Label1 
-         Alignment       =   1  'Right Justify
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   "Diferencia "
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   -70800
-         TabIndex        =   13
-         Top             =   3345
-         Width           =   1065
-      End
-      Begin VB.Label Label11 
-         Alignment       =   1  'Right Justify
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   "TOTALES "
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   -67965
-         TabIndex        =   12
-         Top             =   3345
-         Width           =   1065
-      End
-      Begin VB.Label Label7 
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   " TOTAL  SERVICIO"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   -67755
-         TabIndex        =   11
-         Top             =   5445
-         Width           =   1800
-      End
-      Begin VB.Label LblServicio 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   "0.00"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00000000&
-         Height          =   330
-         Left            =   -67755
-         TabIndex        =   10
-         Top             =   5760
-         Width           =   1800
-      End
-      Begin VB.Label Label16 
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   " T O T A L"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   -65970
-         TabIndex        =   9
-         Top             =   5445
+         Left            =   -63870
+         TabIndex        =   29
+         Top             =   3045
          Width           =   1800
       End
       Begin VB.Label LblTotalFacturado 
@@ -1757,10 +1395,435 @@ Begin VB.Form FCierreCaja
          EndProperty
          ForeColor       =   &H00000000&
          Height          =   330
-         Left            =   -65970
-         TabIndex        =   8
+         Left            =   -63240
+         TabIndex        =   46
+         Top             =   5550
+         Width           =   1800
+      End
+      Begin VB.Label Label16 
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " T O T A L"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -63240
+         TabIndex        =   45
+         Top             =   5235
+         Width           =   1800
+      End
+      Begin VB.Label LblServicio 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   "0.00"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00000000&
+         Height          =   330
+         Left            =   -65025
+         TabIndex        =   44
+         Top             =   5550
+         Width           =   1800
+      End
+      Begin VB.Label Label7 
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " TOTAL  SERVICIO"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -65025
+         TabIndex        =   43
+         Top             =   5235
+         Width           =   1800
+      End
+      Begin VB.Label LblIVA 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   "0.00"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00000000&
+         Height          =   330
+         Left            =   -66810
+         TabIndex        =   42
+         Top             =   5550
+         Width           =   1800
+      End
+      Begin VB.Label LblDescuento 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   "0.00"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00000000&
+         Height          =   330
+         Left            =   -68595
+         TabIndex        =   41
+         Top             =   5550
+         Width           =   1800
+      End
+      Begin VB.Label LblSinIVA 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   "0.00"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00000000&
+         Height          =   330
+         Left            =   -70380
+         TabIndex        =   40
+         Top             =   5550
+         Width           =   1800
+      End
+      Begin VB.Label LblConIVA 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   "0.00"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00000000&
+         Height          =   330
+         Left            =   -72165
+         TabIndex        =   39
+         Top             =   5550
+         Width           =   1800
+      End
+      Begin VB.Label Label18 
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " TOTAL  I.V.A."
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -66810
+         TabIndex        =   38
+         Top             =   5235
+         Width           =   1800
+      End
+      Begin VB.Label Label14 
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " DESCUENTO"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -68595
+         TabIndex        =   37
+         Top             =   5235
+         Width           =   1800
+      End
+      Begin VB.Label Label12 
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " SIN I.V.A."
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -70380
+         TabIndex        =   36
+         Top             =   5235
+         Width           =   1800
+      End
+      Begin VB.Label Label9 
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " CON I.V.A."
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -72165
+         TabIndex        =   35
+         Top             =   5235
+         Width           =   1800
+      End
+      Begin VB.Label Label11 
+         Alignment       =   1  'Right Justify
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   "TOTALES "
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -64920
+         TabIndex        =   32
+         Top             =   3030
+         Width           =   1065
+      End
+      Begin VB.Label Label1 
+         Alignment       =   1  'Right Justify
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   "Diferencia "
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -67755
+         TabIndex        =   31
+         Top             =   3030
+         Width           =   1065
+      End
+      Begin VB.Label LblDiferencia 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   "0"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -66705
+         TabIndex        =   30
+         Top             =   3030
+         Width           =   1800
+      End
+      Begin VB.Label LblConcepto 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   "."
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -74895
+         TabIndex        =   27
+         Top             =   420
+         Width           =   11040
+      End
+      Begin VB.Label LblConcepto1 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   "."
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -74895
+         TabIndex        =   26
+         Top             =   3465
+         Width           =   11040
+      End
+      Begin VB.Label LblDiferencia1 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   "0"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -66705
+         TabIndex        =   23
          Top             =   5760
          Width           =   1800
+      End
+      Begin VB.Label Label13 
+         Alignment       =   1  'Right Justify
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   "Diferencia "
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -67755
+         TabIndex        =   22
+         Top             =   5760
+         Width           =   1065
+      End
+      Begin VB.Label Label4 
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " TOTAL ABONOS"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -71325
+         TabIndex        =   14
+         Top             =   7770
+         Width           =   1590
+      End
+      Begin VB.Label LabelCheque 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   "0"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -69750
+         TabIndex        =   13
+         Top             =   7770
+         Width           =   1695
+      End
+      Begin VB.Label LabelAbonos 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   "0.00"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00000000&
+         Height          =   330
+         Left            =   -69855
+         TabIndex        =   3
+         Top             =   3990
+         Width           =   1695
+      End
+      Begin VB.Label Label2 
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " TOTAL VENTAS"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   -71430
+         TabIndex        =   2
+         Top             =   3990
+         Width           =   1590
       End
    End
    Begin MSAdodcLib.Adodc AdoAsiento 
@@ -1799,53 +1862,6 @@ Begin VB.Form FCierreCaja
       Password        =   ""
       RecordSource    =   ""
       Caption         =   "Asiento"
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      _Version        =   393216
-   End
-   Begin MSAdodcLib.Adodc AdoInv 
-      Height          =   330
-      Left            =   210
-      Top             =   3675
-      Visible         =   0   'False
-      Width           =   2010
-      _ExtentX        =   3545
-      _ExtentY        =   582
-      ConnectMode     =   0
-      CursorLocation  =   3
-      IsolationLevel  =   -1
-      ConnectionTimeout=   15
-      CommandTimeout  =   30
-      CursorType      =   3
-      LockType        =   3
-      CommandType     =   8
-      CursorOptions   =   0
-      CacheSize       =   50
-      MaxRecords      =   0
-      BOFAction       =   0
-      EOFAction       =   0
-      ConnectStringType=   1
-      Appearance      =   1
-      BackColor       =   -2147483643
-      ForeColor       =   -2147483640
-      Orientation     =   0
-      Enabled         =   -1
-      Connect         =   ""
-      OLEDBString     =   ""
-      OLEDBFile       =   ""
-      DataSourceName  =   ""
-      OtherAttributes =   ""
-      UserName        =   ""
-      Password        =   ""
-      RecordSource    =   ""
-      Caption         =   "Inv"
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "MS Sans Serif"
          Size            =   8.25
@@ -2487,57 +2503,61 @@ Begin VB.Form FCierreCaja
       MaskColor       =   12632256
       _Version        =   327682
       BeginProperty Images {0713E8C2-850A-101B-AFC0-4210102A8DA7} 
-         NumListImages   =   13
+         NumListImages   =   14
          BeginProperty ListImage1 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FCierreCaja.frx":0202
+            Picture         =   "FCierreCaja.frx":01E6
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FCierreCaja.frx":051C
+            Picture         =   "FCierreCaja.frx":0500
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FCierreCaja.frx":0836
+            Picture         =   "FCierreCaja.frx":081A
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FCierreCaja.frx":0B50
+            Picture         =   "FCierreCaja.frx":0B34
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FCierreCaja.frx":0E6A
+            Picture         =   "FCierreCaja.frx":0E4E
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FCierreCaja.frx":1184
+            Picture         =   "FCierreCaja.frx":1168
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FCierreCaja.frx":149E
+            Picture         =   "FCierreCaja.frx":1482
             Key             =   ""
          EndProperty
          BeginProperty ListImage8 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FCierreCaja.frx":1790
+            Picture         =   "FCierreCaja.frx":1774
             Key             =   ""
          EndProperty
          BeginProperty ListImage9 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FCierreCaja.frx":1AAA
+            Picture         =   "FCierreCaja.frx":1A8E
             Key             =   ""
          EndProperty
          BeginProperty ListImage10 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FCierreCaja.frx":22C4
+            Picture         =   "FCierreCaja.frx":22A8
             Key             =   ""
          EndProperty
          BeginProperty ListImage11 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FCierreCaja.frx":25DE
+            Picture         =   "FCierreCaja.frx":25C2
             Key             =   ""
          EndProperty
          BeginProperty ListImage12 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FCierreCaja.frx":28F8
+            Picture         =   "FCierreCaja.frx":28DC
             Key             =   ""
          EndProperty
          BeginProperty ListImage13 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FCierreCaja.frx":2C12
+            Picture         =   "FCierreCaja.frx":2BF6
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage14 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "FCierreCaja.frx":3848
             Key             =   ""
          EndProperty
       EndProperty
@@ -2552,7 +2572,6 @@ Option Explicit
 
 Dim FormaCierre As Boolean
 Dim Por_Combos As Boolean
-Dim NumeroFASubModulo As Boolean
 Dim ContSC As Integer
 Dim ContCtas As Integer
 Dim NumTrans As Long
@@ -2561,6 +2580,7 @@ Dim ErrorInventario As String
 Dim ErrorFacturas As String
 Dim CtaDeAnticipos As String
 Dim Combos As String
+Dim FechaDelCierre As String
 
 '''Private Sub Leer_Excel_AdoDB(sPath As String)
 '''On Error GoTo error_sub
@@ -2766,7 +2786,7 @@ Private Sub CheqCajero_Click()
 End Sub
 
 'Cierre diario de Caja y asientos contables
-Private Sub Diario_Caja()
+Private Sub Procesar_Diario_Caja()
 Dim MesA As Integer
 Dim FechaA As Long
 
@@ -2790,37 +2810,25 @@ Dim FechaA As Long
  '---------------------------------------------------------------------------------------
  'Enceramos para realizar la primer parte del cierre de Abonos, NC, Cruce de Cuentas, etc
  '---------------------------------------------------------------------------------------
- 
-'''    RatonNormal
-'''    FInfoError.Show
-'''-- Actualizammos Saldos de facturas
-'''    EXEC sp_Actualizar_Saldos_Facturas @Item, @Periodo, '.', '.', 0
-    
- 
   Progreso_Barra.Mensaje_Box = "Enceramos los asientos temporales"
   Progreso_Esperar
   ContSC = 0
   Trans_No = 97
-  IniciarAsientosDe DGAsiento1, AdoAsiento1     ' CxC
+  IniciarAsientosDe DGAsiento1, AdoAsiento1     ' Abonos
   Trans_No = 96
-  IniciarAsientosDe DGAsiento, AdoAsiento       ' Abonos
-  
+  IniciarAsientosDe DGAsiento, AdoAsiento       ' CxC
   Progreso_Barra.Mensaje_Box = "Actualizando Productos"
   Progreso_Esperar
   Insertar_Productos_Cierre_Caja_SP MBFechaI, MBFechaF
-  
   Progreso_Barra.Mensaje_Box = "Mayorizando Inventarios"
   Progreso_Esperar
   Mayorizar_Inventario_SP
-  
   Progreso_Barra.Mensaje_Box = "Actualizando Abonos"
   Progreso_Esperar
   Actualizar_Abonos_Facturas_SP FA, True, True
-  
   Progreso_Barra.Mensaje_Box = "Actualizando Clientes"
   Progreso_Esperar
   Actualizar_Datos_Representantes_SP Mas_Grupos
-    
  'PROCESAR ASIENTOS DE FACTURACION
  '---------------------------------
   Progreso_Barra.Mensaje_Box = "Procesando Asientos Contables..."
@@ -2830,76 +2838,18 @@ Dim FechaA As Long
   Progreso_Barra.Mensaje_Box = "Verificando Errores"
   Progreso_Esperar
   Presenta_Errores_Facturacion_SP MBFechaI, MBFechaF
-  
-  'If Len(TextoImprimio) > 1 Then FInfoError.Show
-  Trans_No = 96
-  SQL2 = "SELECT * " _
-       & "FROM Asiento " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND T_No = " & Trans_No & " " _
-       & "AND CodigoU = '" & CodigoUsuario & "' " _
-       & "ORDER BY A_No "
-  Select_Adodc_Grid DGAsiento, AdoAsiento, SQL2
-  Trans_No = 97
-  SQL2 = "SELECT * " _
-       & "FROM Asiento " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND T_No = " & Trans_No & " " _
-       & "AND CodigoU = '" & CodigoUsuario & "' " _
-       & "ORDER BY A_No "
-  Select_Adodc_Grid DGAsiento1, AdoAsiento1, SQL2
-  
-  RatonReloj
-  Progreso_Barra.Mensaje_Box = "Fechas de Cierre..."
-  Progreso_Esperar
-  sSQL = "SELECT Fecha " _
-       & "FROM Facturas " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND Periodo = '" & Periodo_Contable & "' " _
-       & "AND TC <> 'OP' " _
-       & "AND Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-       & "UNION " _
-       & "SELECT Fecha " _
-       & "FROM Trans_Abonos " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND Periodo = '" & Periodo_Contable & "' " _
-       & "AND TP <> 'OP' " _
-       & "AND Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-       & "GROUP BY Fecha " _
-       & "ORDER BY Fecha "
-  Select_Adodc_Grid DGCierres, AdoCierres, sSQL
-  DGCierres.Caption = "Dias Cierres"
-  
- 'Resumen de abonos anticipados de Clientes
-    sSQL = "SELECT CC.Cuenta, C.Cliente, TS.Fecha, TS.TP, TS.Numero, TS.Creditos, T.Cta AS Contra_Cta, TS.Cta " _
-         & "FROM Trans_SubCtas AS TS, Transacciones AS T, Catalogo_Cuentas AS CC, Clientes AS C " _
-         & "WHERE TS.Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
-         & "AND TS.Item = '" & NumEmpresa & "' " _
-         & "AND TS.Periodo = '" & Periodo_Contable & "' " _
-         & "AND TS.T <> 'A' " _
-         & "AND TS.Cta = '" & CtaDeAnticipos & "' " _
-         & "AND TS.Creditos > 0 " _
-         & "AND TS.Periodo = T.Periodo " _
-         & "AND TS.Periodo = CC.Periodo " _
-         & "AND TS.Item = T.Item " _
-         & "AND TS.Item = CC.Item " _
-         & "AND TS.TP = T.TP " _
-         & "AND TS.Numero = T.Numero " _
-         & "AND T.Cta = CC.Codigo " _
-         & "AND TS.Codigo = C.Codigo " _
-         & "AND TS.Cta <> T.Cta " _
-         & "ORDER BY T.Cta, C.Cliente, TS.Fecha, TS.TP, TS.Numero "
-    Select_Adodc_Grid DGAnticipos, AdoAnticipos, sSQL, , , True
+    
   RatonNormal
-  If Redondear(Debe - Haber, 2) <> 0 Then MsgBox "Las Transacciones no cuadran, verifique las facturas emitidas o los abonos del día."
+
 ''     Command1.SetFocus
 ''  Else
 ''     If Command2.Enabled Then Command2.SetFocus Else Command5.SetFocus
 ''  End If
-  Progreso_Final
+   Progreso_Barra.Mensaje_Box = "OK"
+   Progreso_Final
+
   FInfoError.Show
 End Sub
-
 
 'Grabacion de los comprobantes contables
 Private Sub Grabar_Cierre_Diario()
@@ -2915,11 +2865,7 @@ Private Sub Grabar_Cierre_Diario()
    If CheqCajero.value = 1 Then
       Nombre_Cajero = MidStrg(DCBenef.Text, 1, Len(DCBenef.Text) - Len(SinEspaciosDer(DCBenef.Text)) - 1)
    End If
-   If MBFechaI = MBFechaF Then
-      Cadena = "Cierre de Caja del " & MBFechaI
-   Else
-      Cadena = "Cierre de Caja del " & MBFechaI & " al " & MBFechaF
-   End If
+  
   'Verificamos partida doble de los dos asientos
    Debe = 0: Haber = 0
    With AdoAsiento.Recordset
@@ -2959,12 +2905,13 @@ Private Sub Grabar_Cierre_Diario()
           FechaTexto = MBFechaF
           FechaIni = BuscarFecha(MBFechaI)
           FechaFin = BuscarFecha(MBFechaF)
+
           If FormaCierre Then
              Imprimir_Diario_Caja AdoVentas, AdoCxC, AdoInv, AdoProductos, AdoAnticipos, MBFechaI, MBFechaF
           Else
              Imprimir_Diario_Caja_Resumen AdoVentas, AdoCxC, AdoInv, AdoProductos, AdoAnticipos, MBFechaI, MBFechaF
           End If
-         'Grabacion del Comprobante de CxC
+         'Grabacion del Comprobante de Abonos
           If AdoAsiento1.Recordset.RecordCount > 0 Then
              Trans_No = 97
              NumComp = ReadSetDataNum("Diario", True, True)
@@ -2972,11 +2919,6 @@ Private Sub Grabar_Cierre_Diario()
              Co.TP = CompDiario
              Co.Fecha = FechaTexto
              Co.Numero = NumComp
-             If MBFechaI.Text = MBFechaF.Text Then
-                Co.Concepto = "Cierre de Caja de Cuentas por Cobrar del " & MBFechaI & ", Diario No. " & NumComp
-             Else
-                Co.Concepto = "Cierre de Caja de Cuentas por Cobrar del " & MBFechaI & " al " & MBFechaF & ", Diario No. " & NumComp
-             End If
              Co.CodigoB = Ninguno
              Co.Beneficiario = Ninguno
              Co.Efectivo = 0
@@ -2984,43 +2926,8 @@ Private Sub Grabar_Cierre_Diario()
              Co.T_No = Trans_No
              Co.Usuario = CodigoUsuario
              Co.Item = NumEmpresa
-             GrabarComprobante Co
-            'CxC
-             sSQL = "UPDATE Trans_Kardex " _
-                  & "SET TP = '" & Co.TP & "', Numero = " & Co.Numero & " " _
-                  & "WHERE Item = '" & NumEmpresa & "' " _
-                  & "AND Periodo = '" & Periodo_Contable & "' " _
-                  & "AND LEN(TC) = 2 " _
-                  & "AND LEN(Serie) = 6 " _
-                  & "AND Factura <> 0 " _
-                  & "AND Salida <> 0 " _
-                  & "AND Detalle LIKE 'FA%' " _
-                  & "AND Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# "
-             Ejecutar_SQL_SP sSQL, , "Cierre Diario Caja"
-             Control_Procesos Normal, Co.Concepto
-             ImprimirComprobantesDe False, Co
-             IniciarAsientosDe DGAsiento1, AdoAsiento1
-          End If
-         'Grabacion del Comprobante de Abonos
-          If AdoAsiento.Recordset.RecordCount > 0 Then
-             Trans_No = 96
-             NumComp = ReadSetDataNum("Diario", True, True)
-             Co.T = Normal
-             Co.TP = CompDiario
-             Co.Fecha = FechaTexto
-             Co.Numero = NumComp
-             If MBFechaI.Text = MBFechaF.Text Then
-                Co.Concepto = "Cierre de Caja de Abonos del " & MBFechaI & ", Diario No. " & NumComp
-             Else
-                Co.Concepto = "Cierre de Caja de Abonos del " & MBFechaI & " al " & MBFechaF & ", Diario No. " & NumComp
-             End If
-             Co.CodigoB = Ninguno
-             Co.Efectivo = 0
-             Co.Monto_Total = Debe
-             Co.T_No = Trans_No
-             Co.Usuario = CodigoUsuario
-             Co.Item = NumEmpresa
-             GrabarComprobante Co
+             Co.Concepto = "Cierre de Caja de Abonos del " & FechaDelCierre
+             Grabar_Comprobante Co
             'Los Asientos de SubModulos
              sSQL = "UPDATE Trans_SubCtas " _
                   & "SET TP = '" & Co.TP & "', Numero = " & Co.Numero & " " _
@@ -3043,16 +2950,45 @@ Private Sub Grabar_Cierre_Diario()
                   & "AND SUBSTRING(Detalle,1,3) ='NC:' "
              Ejecutar_SQL_SP sSQL
              
+             Control_Procesos Normal, Co.Concepto
+             ImprimirComprobantesDe False, Co
+             IniciarAsientosDe DGAsiento1, AdoAsiento1
+          End If
+         'Grabacion del Comprobante de CxC
+          If AdoAsiento.Recordset.RecordCount > 0 Then
+             Trans_No = 96
+             NumComp = ReadSetDataNum("Diario", True, True)
+             Co.T = Normal
+             Co.TP = CompDiario
+             Co.Fecha = FechaTexto
+             Co.Numero = NumComp
+             Co.CodigoB = Ninguno
+             Co.Efectivo = 0
+             Co.Monto_Total = Debe
+             Co.T_No = Trans_No
+             Co.Usuario = CodigoUsuario
+             Co.Item = NumEmpresa
+             Co.Concepto = "Cierre de Caja de Cuentas por Cobrar del " & FechaDelCierre
+             Grabar_Comprobante Co
+            'CxC
+             sSQL = "UPDATE Trans_Kardex " _
+                  & "SET TP = '" & Co.TP & "', Numero = " & Co.Numero & " " _
+                  & "WHERE Item = '" & NumEmpresa & "' " _
+                  & "AND Periodo = '" & Periodo_Contable & "' " _
+                  & "AND TC IN ('FA','NV','DO','NDU','NDO') " _
+                  & "AND LEN(Serie) = 6 " _
+                  & "AND Factura <> 0 " _
+                  & "AND Salida <> 0 " _
+                  & "AND Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# "
+             Ejecutar_SQL_SP sSQL
              FechaFin = BuscarFecha(FechaSistema)
              Parametros = "'" & NumEmpresa & "','" & Periodo_Contable & "','" & FechaIni & "','" & FechaFin & "' "
              Ejecutar_SP "sp_Productos_Cierre_Caja", Parametros
              
              Control_Procesos Normal, Co.Concepto
              ImprimirComprobantesDe False, Co
-             
              IniciarAsientosDe DGAsiento, AdoAsiento
           End If
-          
           LabelDebe.Caption = Format$(0, "#,##0.00")
           LabelHaber.Caption = Format$(0, "#,##0.00")
           RatonNormal
@@ -3234,39 +3170,102 @@ Private Sub DGCxC_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub Form_Activate()
-   FCierreCaja.WindowState = vbMaximized
-   CtaDeAnticipos = Leer_Seteos_Ctas("Cta_Anticipos_Clientes")
-   FormaCierre = Leer_Campo_Empresa("Cierre_Vertical")
-   NumeroFASubModulo = Leer_Campo_Empresa("Abonos_FA")
-'''   Ing_Combo = Leer_Campo_Empresa("Combo")
+Dim AltoMalla As Single
 
-   SSTab1.Tab = 0
-   SSTab1.Height = MDI_Y_Max - 650
-   SSTab1.width = MDI_X_Max - 100
-   DGVentas.width = SSTab1.width - 200
-   DGVentas.Height = SSTab1.Height - DGVentas.Top - 100
-      
-   Trans_No = 97
-   IniciarAsientosDe DGAsiento1, AdoAsiento1     ' CxC
-   Trans_No = 96
-   IniciarAsientosDe DGAsiento, AdoAsiento       ' Abonos
+    FCierreCaja.WindowState = vbMaximized
+    CtaDeAnticipos = Leer_Seteos_Ctas("Cta_Anticipos_Clientes")
+    FormaCierre = Leer_Campo_Empresa("Cierre_Vertical")
+'''   Ing_Combo = Leer_Campo_Empresa("Combo")
+    SSTab1.width = MDI_X_Max - 100
+    SSTab1.Height = MDI_Y_Max - 750
+    AltoMalla = (SSTab1.Height - DGVentas.Top) / 3
+    Command1.Top = SSTab1.Top + SSTab1.Height + 100
+    
+    SSTab1.Tab = 5
+    DGBanco.width = SSTab1.width - 250
+    DGBanco.Height = SSTab1.Height - DGBanco.Top - 100
+    
+    SSTab1.Tab = 4
+    DGSRI.width = SSTab1.width - 250
+    DGSRI.Height = SSTab1.Height - DGSRI.Top - 800
+    AdoSRI.Top = DGSRI.Top + DGSRI.Height + 10
+    Label7.Top = DGSRI.Top + DGSRI.Height + 10
+    Label9.Top = DGSRI.Top + DGSRI.Height + 10
+    Label12.Top = DGSRI.Top + DGSRI.Height + 10
+    Label14.Top = DGSRI.Top + DGSRI.Height + 10
+    Label16.Top = DGSRI.Top + DGSRI.Height + 10
+    Label18.Top = DGSRI.Top + DGSRI.Height + 10
+    LblConIVA.Top = DGSRI.Top + DGSRI.Height + 350
+    LblSinIVA.Top = DGSRI.Top + DGSRI.Height + 350
+    LblDescuento.Top = DGSRI.Top + DGSRI.Height + 350
+    LblIVA.Top = DGSRI.Top + DGSRI.Height + 350
+    LblServicio.Top = DGSRI.Top + DGSRI.Height + 350
+    LblTotalFacturado.Top = DGSRI.Top + DGSRI.Height + 350
+
+    SSTab1.Tab = 3
+    DGFactAnul.width = SSTab1.width - 250
+    DGFactAnul.Height = SSTab1.Height - DGFactAnul.Top - 100
+
+    SSTab1.Tab = 2
+    DGAsiento.width = SSTab1.width - 250
+    DGAsiento1.width = SSTab1.width - 250
+    DGAnticipos.width = SSTab1.width - 250
+    LblConcepto.width = SSTab1.width - 250
+    LblConcepto1.width = SSTab1.width - 250
+    
+    DGAsiento.Height = (SSTab1.Height / 3) - DGAsiento.Top
+    DGAsiento1.Height = DGAsiento.Height
+    DGAnticipos.Height = DGAsiento.Height - 30
+    
+    Label1.Top = DGAsiento.Top + DGAsiento.Height + 10
+    Label11.Top = DGAsiento.Top + DGAsiento.Height + 10
+    LblDiferencia.Top = DGAsiento.Top + DGAsiento.Height + 10
+    LabelDebe.Top = DGAsiento.Top + DGAsiento.Height + 10
+    LabelHaber.Top = DGAsiento.Top + DGAsiento.Height + 10
+
+    LblConcepto1.Top = LblDiferencia.Top + LblDiferencia.Height + 200
+    DGAsiento1.Top = LblConcepto1.Top + LblConcepto1.Height + 60
+    Label13.Top = DGAsiento1.Top + DGAsiento1.Height + 10
+    Label15.Top = DGAsiento1.Top + DGAsiento1.Height + 10
+    LblDiferencia1.Top = DGAsiento1.Top + DGAsiento1.Height + 10
+    LabelDebe1.Top = DGAsiento1.Top + DGAsiento1.Height + 10
+    LabelHaber1.Top = DGAsiento1.Top + DGAsiento1.Height + 10
+    
+    DGAnticipos.Top = LblDiferencia1.Top + LblDiferencia1.Height + 100
+    
+    SSTab1.Tab = 1
+    DGInv.width = SSTab1.width - DGInv.Left - 250
+    AdoInv.width = SSTab1.width - DGInv.Left - 250
+    DGInv.Height = (SSTab1.Height / 2) - DGInv.Top
+    AdoInv.Top = DGInv.Top + DGInv.Height
+    DGProductos.Top = AdoInv.Top + AdoInv.Height + 100
+    DGProductos.width = SSTab1.width - DGProductos.Left - 200
+    DGProductos.Height = SSTab1.Height - DGProductos.Top - 200
+    DGCierres.Height = SSTab1.Height - DGCierres.Top - 200
+
+    SSTab1.Tab = 0
+    DGVentas.width = SSTab1.width - 250
+    DGCxC.width = SSTab1.width - 250
+    DGVentas.Height = (SSTab1.Height / 2) - DGAsiento.Top + 100
+    DGCxC.Height = DGVentas.Height
+    AdoVentas.Top = DGVentas.Height + DGVentas.Top + 15
+    Label2.Top = DGVentas.Height + DGVentas.Top + 15
+    LabelAbonos.Top = DGVentas.Height + DGVentas.Top + 15
+
+    DGCxC.Top = Label2.Top + Label2.Height + 200
+    AdoCxC.Top = DGCxC.Height + DGCxC.Top + 15
+    Label4.Top = DGCxC.Height + DGCxC.Top + 15
+    LabelCheque.Top = DGCxC.Height + DGCxC.Top + 15
+
+   'Inicializamos los submodulos
+    Trans_No = 97
+    IniciarAsientosDe DGAsiento1, AdoAsiento1     ' CxC
+    Trans_No = 96
+    IniciarAsientosDe DGAsiento, AdoAsiento       ' Abonos
 
 '''   AdoSRI.Width = SSTab1.Width - AdoSRI.Left - 200
 '''   AdoCxC.Width = SSTab1.Width - AdoCxC.Left - 200
 '''   AdoVentas.Width = SSTab1.Width - AdoVentas.Left - 200
-   Label7.Top = SSTab1.Height - SSTab1.Top - 340
-   Label9.Top = SSTab1.Height - SSTab1.Top - 340
-   Label12.Top = SSTab1.Height - SSTab1.Top - 340
-   Label14.Top = SSTab1.Height - SSTab1.Top - 340
-   Label16.Top = SSTab1.Height - SSTab1.Top - 340
-   Label18.Top = SSTab1.Height - SSTab1.Top - 340
-   
-   LblConIVA.Top = SSTab1.Height - SSTab1.Top
-   LblSinIVA.Top = SSTab1.Height - SSTab1.Top
-   LblDescuento.Top = SSTab1.Height - SSTab1.Top
-   LblIVA.Top = SSTab1.Height - SSTab1.Top
-   LblServicio.Top = SSTab1.Height - SSTab1.Top
-   LblTotalFacturado.Top = SSTab1.Height - SSTab1.Top
    
    Co.TP = CompDiario
    Co.Numero = 0
@@ -3281,16 +3280,7 @@ Private Sub Form_Activate()
    ModificarComp = False
    CopiarComp = False
    NuevoComp = True
-   
-   sSQL = "SELECT (Codigo & Space(5) & Cuenta) As NomCuenta " _
-        & "FROM Catalogo_Cuentas " _
-        & "WHERE TC = 'BA' " _
-        & "AND DG = 'D' " _
-        & "AND Item = '" & NumEmpresa & "' " _
-        & "AND Periodo = '" & Periodo_Contable & "' " _
-        & "ORDER BY Codigo "
-   SelectDB_Combo DCBanco, AdoCtaBanco, sSQL, "NomCuenta"
-   
+      
 '''   sSQL = "UPDATE Accesos " _
 '''        & "SET Ok = " & Val(adFalse) & " "
 '''   Ejecutar_SQL_SP sSQL
@@ -3343,6 +3333,8 @@ Private Sub Form_Activate()
    End If
    RatonNormal
    CierreDelDia
+   MBFechaF.Text = FechaSistema
+   MBFechaI.Text = PrimerDiaMes(FechaSistema)
    MBFechaI.SetFocus
 End Sub
 
@@ -3380,7 +3372,7 @@ Private Sub MBFechaI_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub MBFechaI_LostFocus()
-  FechaValida MBFechaI
+  FechaValida MBFechaI, True
   MBFechaF = MBFechaI
   'LblFechas.Caption = "Cierre de Caja desde el " & FechaStrgDias(MBFechaI) & " al " & FechaStrgDias(MBFechaF)
 End Sub
@@ -3398,49 +3390,113 @@ Keys_Especiales Shift
 End Sub
 
 Private Sub MBFechaF_LostFocus()
-  FechaValida MBFechaF
+  FechaValida MBFechaF, True
  'LblFechas.Caption = "Cierre de Caja desde el " & FechaStrgDias(MBFechaI.Text) & " al " & FechaStrgDias(MBFechaF.Text)
 End Sub
+
+Public Function Insertar_Cta_Cierre(SQLInsert As String, Cta As String, Valor As Currency) As String
+Dim tSQLInsert As String
+    tSQLInsert = SQLInsert
+    If tSQLInsert = "" Then tSQLInsert = "INSERT INTO Asiento (CODIGO, DEBE, HABER, Item, CodigoU, T_No, A_No) VALUES " & vbCrLf
+    If Valor > 0 Then tSQLInsert = tSQLInsert & "('" & Cta & "', " & Valor & ", 0, '" & NumEmpresa & "', '" & CodigoUsuario & "', " & Trans_No & ", " & ContAsiento & ")," & vbCrLf
+    If Valor < 0 Then tSQLInsert = tSQLInsert & "('" & Cta & "', 0, " & -Valor & ", '" & NumEmpresa & "', '" & CodigoUsuario & "', " & Trans_No & ", " & ContAsiento & ")," & vbCrLf
+    If Valor <> 0 Then ContAsiento = ContAsiento + 1
+    Insertar_Cta_Cierre = tSQLInsert
+End Function
+
+Public Function Insertar_Cta_Cierre_SC(SQLInsert As String, Cta As String, Beneficiario As String, Detalle As String, Serie As String, Factura As Long, Valor As Currency) As String
+Dim tSQLInsert As String
+
+    tSQLInsert = SQLInsert
+    If tSQLInsert = "" Then
+       tSQLInsert = "INSERT INTO Asiento_SC (Codigo, Beneficiario, TC, Serie, Factura, Cta, Fecha_V, Detalle_SubCta, TM, DH, Valor, Item, CodigoU, T_No, SC_No "
+       ContAsiento = 0
+    End If
+
+    If Valor > 0 Then tSQLInsert = tSQLInsert & "('" & Cta & "', " & Valor & ", 0, '" & NumEmpresa & "', '" & CodigoUsuario & "', " & Trans_No & ", " & ContAsiento & ")," & vbCrLf
+    If Valor < 0 Then tSQLInsert = tSQLInsert & "('" & Cta & "', 0, " & -Valor & ", '" & NumEmpresa & "', '" & CodigoUsuario & "', " & Trans_No & ", " & ContAsiento & ")," & vbCrLf
+    If Valor <> 0 Then ContAsiento = ContAsiento + 1
+    Insertar_Cta_Cierre_SC = tSQLInsert
+
+''                  SetAdoAddNew "Asiento_SC"
+''                  SetAdoFields "Codigo", .fields("SubCta")
+''                  SetAdoFields "Beneficiario", .fields("Detalle")
+''                  SetAdoFields "TM", "1"
+''                  SetAdoFields "DH", "2"
+''                  SetAdoFields "Valor", Redondear(.fields("TSubTotal"), 2)
+''                  SetAdoFields "TC", .fields("TC")
+''                  SetAdoFields "Cta", .fields("Cta_Venta")
+''                  SetAdoFields "T_No", Trans_No
+''                  SetAdoFields "SC_No", ContSC
+''
+''                  SetAdoAddNew "Asiento_SC"
+''                  SetAdoFields "FECHA_V", .fields("Fecha")
+''                  SetAdoFields "TC", .fields("Tipo_Cta")
+''                  SetAdoFields "Cta", .fields("Cta")
+''                  SetAdoFields "Detalle_SubCta", "Abono de " & .fields("TP") & ": " & .fields("Serie") & "-" & Format(.fields("Factura"), "000000000")
+''                  SetAdoFields "T_No", Trans_No
+''                  SetAdoFields "SC_No", ContSC
+''                  If NumeroFASubModulo Then
+''                     SetAdoFields "Serie", .fields("Serie")
+''                     SetAdoFields "Factura", .fields("Factura")
+''                  Else
+''                     SetAdoFields "Serie", "001001"
+''                     SetAdoFields "Factura", 0
+''                  End If
+
+
+End Function
 
 Public Sub Grabar_Asientos_Facturacion(TipoConsulta As String)
 Dim AdoDBAux As ADODB.Recordset
 Dim VentasDia As Boolean
 Dim Ctas_Catalogo As String
 Dim ErrorTemp As String
+Dim sSQLIns As String
+Dim sSQLInsSC As String
+Dim sSQLInsInv As String
+
 Dim Total_Vaucher As Currency
 Dim T_No As Byte
 Dim NoMes As Byte
 
-   Trans_No = 96
-   Ctas_Catalogo = ""
-   Beneficiario = Ninguno
+   RatonReloj
+   Progreso_Barra.Mensaje_Box = ""
+   Progreso_Iniciar
+   
+   If MBFechaI.Text = MBFechaF.Text Then FechaDelCierre = MBFechaI.Text Else FechaDelCierre = "desde el " & MBFechaI.Text & " al " & MBFechaF.Text
+
    DGCxC.Visible = False
    DGInv.Visible = False
    DGVentas.Visible = False
    DGAsiento.Visible = False
+   
    FechaValida MBFechaI
    FechaValida MBFechaF
+   FechaIni = BuscarFecha(MBFechaI)
+   FechaFin = BuscarFecha(MBFechaF)
+   Fecha_Vence = MBFechaF
    
    ErrorInventario = ""
    Total_Vaucher = 0
    Total_Propinas = 0
+   Total = 0
    VentasDia = False
-   RatonReloj
-   FechaIni = BuscarFecha(MBFechaI)
-   FechaFin = BuscarFecha(MBFechaF)
-   Fecha_Vence = MBFechaF
+   
   'MsgBox sSQL
-    
    Progreso_Barra.Mensaje_Box = "Verificando Cuentas involucradas"
-   Progreso_Esperar True
+   Progreso_Esperar
+     
+  'Asientos de Abonos y CxC segun la fecha de proceso:
+   RatonReloj
+   Procesar_Diario_Caja_SP MBFechaI, MBFechaF, CheqCajero.value, SinEspaciosDer(DCBenef.Text)
    
   'Listado de los tipos de abonos
-   sSQL = "SELECT TA.TP,TA.Fecha,C.CI_RUC As COD_BANCO,C.Cliente,TA.Serie,TA.Autorizacion,TA.Factura,TA.Banco,TA.Cheque,TA.Abono," _
-        & "TA.Comprobante,TA.Cta,TA.Cta_CxP,TA.CodigoC,C.Ciudad,C.Plan_Afiliado As Sectorizacion," _
-        & "A.Nombre_Completo As Ejecutivo, Recibo_No As Orden_No " _
+   sSQL = "SELECT TA.Fecha, C.Cliente, TA.TP, TA.Serie, TA.Autorizacion, TA.Factura, TA.Banco, TA.Cheque, TA.Abono, C.CI_RUC As COD_BANCO, TA.Comprobante, TA.Tipo_Cta, " _
+        & "TA.Cta, TA.Cta_CxP, TA.CodigoC, C.Ciudad, C.Plan_Afiliado As Sectorizacion, A.Nombre_Completo As Ejecutivo, Recibo_No As Orden_No " _
         & "FROM Trans_Abonos As TA, Clientes C, Accesos As A " _
         & "WHERE TA.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-        & "AND TA.TP NOT IN ('OP') " _
+        & "AND TA.TP <> 'OP' " _
         & "AND TA.T <> 'A' " _
         & "AND TA.Item = '" & NumEmpresa & "' " _
         & "AND TA.Periodo = '" & Periodo_Contable & "' " _
@@ -3453,15 +3509,30 @@ Dim NoMes As Byte
       sSQL = sSQL & "ORDER BY TA.Fecha,TA.TP,TA.Cta,C.Cliente,TA.Banco,TA.Factura "
    End If
    Select_Adodc_Grid DGCxC, AdoCxC, sSQL
-   If AdoCxC.Recordset.RecordCount > 0 Then Progreso_Barra.Valor_Maximo = Progreso_Barra.Valor_Maximo + (AdoCxC.Recordset.RecordCount * 2)
-   
-  'Listado de las CxC Clientes
-   sSQL = "SELECT F.TC,F.Fecha,C.Cliente,F.Serie,F.Autorizacion,F.Factura,F.IVA As Total_IVA,F.Descuento," _
+   DGCxC.Caption = UCase("Abonos del dia " & FechaDelCierre)
+   RatonReloj
+   With AdoCxC.Recordset
+    If .RecordCount > 0 Then
+        Progreso_Barra.Valor_Maximo = Progreso_Barra.Valor_Maximo + (.RecordCount * 2)
+       'sSQLIns = Insertar_Cta_Cierre(sSQLIns, Cta, Sumatoria)
+        Do While Not .EOF
+''           Progreso_Barra.Mensaje_Box = "Totalizando Abonos: " & .fields("TP") & " - " & .fields("Cta") & " - " & .fields("Cta_CxP") & " -> " & .fields("Cliente")
+''           Progreso_Esperar
+           Total = Total + Redondear(.fields("Abono"), 2)
+          .MoveNext
+        Loop
+    End If
+   End With
+   LabelCheque.Caption = Format$(Total, "#,##0.00")
+
+  'Listado de las CxC y Ventas Clientes
+   Total = 0
+   sSQL = "SELECT F.Fecha,C.Cliente,F.TC,F.Serie,F.Autorizacion,F.Factura,F.IVA As Total_IVA,F.Descuento," _
         & "F.Descuento2,F.Servicio,F.Propina,F.Total_MN,F.Saldo_MN,F.Cta_CxP,C.Ciudad,C.Plan_Afiliado As Sectorizacion," _
         & "A.Nombre_Completo As Ejecutivo, F.Nota, F.Observacion, CSC.Detalle As Centro_Costo " _
         & "FROM Facturas F, Clientes C, Accesos As A, Catalogo_SubCtas As CSC " _
         & "WHERE F.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-        & "AND F.TC NOT IN ('OP') " _
+        & "AND F.TC <> 'OP' " _
         & "AND F.T <> 'A' " _
         & "AND F.Item = '" & NumEmpresa & "' " _
         & "AND F.Periodo = '" & Periodo_Contable & "' "
@@ -3474,712 +3545,284 @@ Dim NoMes As Byte
         & "AND F.SubCta = CSC.Codigo " _
         & "ORDER BY F.TC,F.Fecha,F.Cta_CxP,F.Factura,C.Cliente "
    Select_Adodc_Grid DGVentas, AdoVentas, sSQL
-   If AdoVentas.Recordset.RecordCount > 0 Then Progreso_Barra.Valor_Maximo = Progreso_Barra.Valor_Maximo + (AdoVentas.Recordset.RecordCount * 2)
+   DGVentas.Caption = UCase("Ventas del dia " & FechaDelCierre)
    RatonReloj
+   With AdoVentas.Recordset
+    If .RecordCount > 0 Then
+        Progreso_Barra.Valor_Maximo = Progreso_Barra.Valor_Maximo + (.RecordCount * 2)
+        Do While Not .EOF
+''           Progreso_Barra.Mensaje_Box = "Totalizando Ventas: " & .fields("TC") & " - " & .fields("Cta_CxP") & " -> " & .fields("Cliente")
+''           Progreso_Esperar
+           Select Case .fields("TC")
+             Case "FA", "NV": Total = Total + Redondear(.fields("Total_MN"), 2)
+           End Select
+          .MoveNext
+        Loop
+    End If
+   End With
+   LabelAbonos.Caption = Format$(Total, "#,##0.00")
+   
+  'Resumen de abonos anticipados de Clientes
+   sSQL = "SELECT CC.Cuenta, C.Cliente, TS.Fecha, TS.TP, TS.Numero, TS.Creditos, T.Cta AS Contra_Cta, TS.Cta " _
+        & "FROM Trans_SubCtas AS TS, Transacciones AS T, Catalogo_Cuentas AS CC, Clientes AS C " _
+        & "WHERE TS.Item = '" & NumEmpresa & "' " _
+        & "AND TS.Periodo = '" & Periodo_Contable & "' " _
+        & "AND TS.Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
+        & "AND TS.T <> 'A' " _
+        & "AND TS.Cta = '" & CtaDeAnticipos & "' " _
+        & "AND TS.Creditos > 0 " _
+        & "AND TS.Periodo = T.Periodo " _
+        & "AND TS.Periodo = CC.Periodo " _
+        & "AND TS.Item = T.Item " _
+        & "AND TS.Item = CC.Item " _
+        & "AND TS.TP = T.TP " _
+        & "AND TS.Numero = T.Numero " _
+        & "AND T.Cta = CC.Codigo " _
+        & "AND TS.Codigo = C.Codigo " _
+        & "AND TS.Cta <> T.Cta " _
+        & "ORDER BY T.Cta, C.Cliente, TS.Fecha, TS.TP, TS.Numero "
+        
+   sSQL = "SELECT * " _
+        & "FROM Asiento_SC " _
+        & "WHERE Item = '" & NumEmpresa & "' " _
+        & "AND T_No IN (96,97) " _
+        & "AND CodigoU = '" & CodigoUsuario & "' " _
+        & "ORDER BY T_No, Cta, SC_No, Codigo "
+   Select_Adodc_Grid DGAnticipos, AdoAnticipos, sSQL
+   
+  'Listado de Facturas anuladas
+   Total = 0
+   sSQL = "SELECT F.T,F.TC,F.Fecha,C.Cliente,F.Factura,F.IVA As Total_IVA,F.Total_MN,F.Cta_CxP " _
+        & "FROM Facturas F, Clientes C " _
+        & "WHERE F.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
+        & "AND F.T = 'A' " _
+        & "AND F.Item = '" & NumEmpresa & "' " _
+        & "AND F.Periodo = '" & Periodo_Contable & "' " _
+        & "AND F.TC <> 'OP' "
+   If CheqCajero.value = 1 Then sSQL = sSQL & "AND F.CodigoU = '" & SinEspaciosDer(DCBenef.Text) & "' "
+   sSQL = sSQL _
+        & "AND F.CodigoC = C.Codigo " _
+        & "ORDER BY F.TC,F.Fecha,F.Cta_CxP,C.Cliente,F.Factura "
+   Select_Adodc_Grid DGFactAnul, AdoFactAnul, sSQL
+    
+  'REPORTES DE AUDITORIA TRANSACCIONALES (S.R.I.)
+   DGSRI.Caption = "Autorización No. " & Autorizacion & ", Listado de Facturas del " & FechaDelCierre
+   Codigo = CStr(Porc_IVA * 100)
+   Total_Con_IVA = 0
+   Total_Sin_IVA = 0
+   Total_Desc = 0
+   Total_Desc2 = 0
+   Total_IVA = 0
+   Total = 0
+   sSQL = "SELECT F.TC,F.T,F.RUC_CI,F.TB,F.Razon_Social,F.Fecha,F.Hora,A.Nombre_Completo As Usuario," _
+        & "F.Autorizacion,F.Serie,F.Factura As Secuencial,F.Con_IVA As Base_" & Codigo & ",F.Sin_IVA As Base_0," _
+        & "F.Descuento,F.Descuento2,(F.SubTotal - F.Descuento - F.Descuento2) As Sub_Total, F.IVA As IVA_" & Codigo & ",F.Servicio,F.Total_MN As TOTAL,Serie_R," _
+        & "Secuencial_R,F.Autorizacion_R,Total_Ret_Fuente,Total_Ret_IVA_B,Total_Ret_IVA_S,C.Contacto AS Referencia,C.CI_RUC As COD_BANCO " _
+        & "FROM Facturas F, Clientes C, Accesos As A " _
+        & "WHERE F.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
+        & "AND F.TC NOT IN ('C','P','OP','LC','DO') " _
+        & "AND F.Item = '" & NumEmpresa & "' " _
+        & "AND F.Periodo = '" & Periodo_Contable & "' " _
+        & "AND F.CodigoC = C.Codigo " _
+        & "AND F.CodigoU = A.Codigo "
+   If CheqCajero.value = 1 Then sSQL = sSQL & "AND F.CodigoU = '" & SinEspaciosDer(DCBenef.Text) & "' "
+   sSQL = sSQL & "ORDER BY F.Factura,F.TC,F.Fecha,F.Cta_CxP,C.Cliente "
+   DGSRI.Caption = "Resumen de Comprobantes Generados " & FechaDelCierre
+   Select_Adodc_Grid DGSRI, AdoSRI, sSQL
+   With AdoSRI.Recordset
+    If .RecordCount > 0 Then
+        Do While Not .EOF
+           If .fields("T") <> Anulado Then
+               Total_Con_IVA = Total_Con_IVA + .fields("Base_" & Codigo)
+               Total_Sin_IVA = Total_Sin_IVA + .fields("Base_0")
+               Total_Desc = Total_Desc + .fields("Descuento")
+               Total_Desc2 = Total_Desc2 + .fields("Descuento2")
+               Total_IVA = Total_IVA + .fields("IVA_" & Codigo)
+               Total_Servicio = Total_Servicio + .fields("Servicio")
+               Total = Total + .fields("TOTAL")
+           End If
+          .MoveNext
+        Loop
+    End If
+   End With
+   LblConIVA.Caption = Format$(Total_Con_IVA, "#,##0.00")
+   LblSinIVA.Caption = Format$(Total_Sin_IVA, "#,##0.00")
+   LblDescuento.Caption = Format$(Total_Desc + Total_Desc2, "#,##0.00")
+   LblIVA.Caption = Format$(Total_IVA, "#,##0.00")
+   LblServicio.Caption = Format$(Total_Servicio, "#,##0.00")
+   LblTotalFacturado.Caption = Format$(Total, "#,##0.00")
+   
+   sSQL = "SELECT TC,Codigo,Producto,SUM(Cantidad) As CANTIDADES,SUM(Total) As SUBTOTALES,SUM(Total_IVA) As SUBTOTAL_IVA, Cta_Venta " _
+        & "FROM Detalle_Factura " _
+        & "WHERE Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
+        & "AND Item = '" & NumEmpresa & "' " _
+        & "AND Periodo = '" & Periodo_Contable & "' " _
+        & "AND T <> '" & Anulado & "' " _
+        & "AND TC IN ('FA','NV') " _
+        & "AND Salida_Inv = 0 " _
+        & "GROUP BY TC,Codigo,Producto,Cta_Venta " _
+        & "UNION " _
+        & "SELECT TC,'-x-' As Codigo,'TOTAL DE VENTAS' As Producto,SUM(Cantidad) As CANTIDADES,SUM(Total) As SUBTOTALES,SUM(Total_IVA) As SUBTOTAL_IVA,'' As Cta_Venta " _
+        & "FROM Detalle_Factura " _
+        & "WHERE Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
+        & "AND Item = '" & NumEmpresa & "' " _
+        & "AND Periodo = '" & Periodo_Contable & "' " _
+        & "AND T <> '" & Anulado & "' " _
+        & "AND TC IN ('FA','NV') " _
+        & "AND Salida_Inv = 0 " _
+        & "GROUP BY TC " _
+        & "ORDER BY TC,Codigo,Producto "
+   Select_Adodc_Grid DGProductos, AdoProductos, sSQL
+   DGProductos.Caption = "Resumen de Productos Facturados de Ventas " & FechaDelCierre
+  
+  'Asiento de Entrada y Salida de Inventario por NC
+   sSQL = "SELECT TK.TC As Doc, TK.Codigo_Inv, CP.Producto, 0 As Entradas, SUM(TK.Salida) As Salidas, AVG(TK.Costo) As Costos, " _
+        & "(SUM(TK.Salida) * AVG(TK.Costo)) As Totales, TK.Cta_Inv, TK.Contra_Cta, TK.Codigo_Barra, TK.CodBodega, CP.Unidad, TK.Cmds, COUNT(TK.TC) As Cant_Doc " _
+        & "FROM Trans_Kardex As TK, Catalogo_Productos As CP " _
+        & "WHERE TK.Item = '" & NumEmpresa & "' " _
+        & "AND TK.Periodo = '" & Periodo_Contable & "' " _
+        & "AND TK.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
+        & "AND TK.TP = '.' " _
+        & "AND LEN(TK.TC) >= 2 " _
+        & "AND LEN(TK.Serie) = 6 " _
+        & "AND TK.Factura > 0 " _
+        & "AND TK.Salida > 0 "
+   If CheqCajero.value = 1 Then sSQL = sSQL & "AND TK.CodigoU = '" & SinEspaciosDer(DCBenef.Text) & "' "
+   sSQL = sSQL _
+        & "AND TK.Item = CP.Item " _
+        & "AND TK.Periodo = CP.Periodo " _
+        & "AND TK.Codigo_Inv = CP.Codigo_Inv " _
+        & "GROUP BY TK.TC, TK.Codigo_Inv, CP.Producto, TK.Cta_Inv, TK.Contra_Cta, TK.Codigo_Barra, TK.CodBodega, CP.Unidad, TK.Cmds "
+   sSQL = sSQL & "UNION " _
+        & "SELECT 'NC' As Doc, TK.Codigo_Inv, CP.Producto, SUM(TK.Entrada) As Entradas, 0 As Salidas, AVG(TK.Costo) As Costos, " _
+        & "(SUM(TK.Entrada) * AVG(TK.Costo)) As Totales, TK.Cta_Inv, TK.Contra_Cta, TK.Codigo_Barra, TK.CodBodega, CP.Unidad, TK.Cmds, COUNT(TK.TC) As Cant_Doc " _
+        & "FROM Trans_Kardex As TK, Catalogo_Productos As CP " _
+        & "WHERE TK.Item = '" & NumEmpresa & "' " _
+        & "AND TK.Periodo = '" & Periodo_Contable & "' " _
+        & "AND TK.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
+        & "AND TK.TP = '.' " _
+        & "AND LEN(TK.TC) >= 2 " _
+        & "AND LEN(TK.Serie) = 6 " _
+        & "AND TK.Factura > 0 " _
+        & "AND TK.Entrada > 0 "
+   If CheqCajero.value = 1 Then sSQL = sSQL & "AND TK.CodigoU = '" & SinEspaciosDer(DCBenef.Text) & "' "
+   sSQL = sSQL _
+        & "AND TK.Item = CP.Item " _
+        & "AND TK.Periodo = CP.Periodo " _
+        & "AND TK.Codigo_Inv = CP.Codigo_Inv " _
+        & "GROUP BY TK.Codigo_Inv, CP.Producto, TK.Cta_Inv, TK.Contra_Cta, TK.Codigo_Barra, TK.CodBodega, CP.Unidad, TK.Cmds " _
+        & "ORDER BY Doc, TK.Codigo_Inv, CP.Producto, TK.Cta_Inv, TK.Contra_Cta, TK.Codigo_Barra, TK.CodBodega, CP.Unidad, TK.Cmds "
+   SQLDec = "Costos " & CStr(Dec_Costo) & "|."
+   Select_Adodc_Grid DGInv, AdoInv, sSQL, SQLDec
+   DGInv.Caption = "Resumen de Inventario de Salida " & FechaDelCierre
+     
    Combos = Ninguno
    FechaFinal = BuscarFecha("31/12/" & FechaAnio(MBFechaF))
-   
-   ContCtas = 0
-      
-  'Presentamos las Ventas si manejamos una sola cuenta
-'''   sSQL = "SELECT Codigo, Cta_Venta " _
-'''        & "FROM Catalogo_Lineas " _
-'''        & "WHERE Item = '" & NumEmpresa & "' " _
-'''        & "AND Periodo = '" & Periodo_Contable & "' " _
-'''        & "AND LEN(Cta_Venta) > 1 " _
-'''        & "AND TL <> " & Val(adFalse) & " " _
-'''        & "ORDER BY TL DESC,Codigo "
-'''   Select_Adodc AdoCxC1, sSQL
-'''   If AdoCxC1.Recordset.RecordCount > 0 Then UnaSolaCtaVenta = True
-                   
-'''   Contra_Cta = ReadAdoCta("Cta_Devolucion_Ventas_NC")
-'   If Len(Contra_Cta) > 1 Then SetearCtasCierre Contra_Cta
-   
-'''   Cta = Leer_Seteos_Ctas("Cta_CxP_NC")
-'''   Cta = Leer_Seteos_Ctas("Cta_Gasto_Bancario")
-   Total = 0
+
    Select Case TipoConsulta
      Case Procesado: NuevoDiario = False
      Case Normal:    NuevoDiario = True
    End Select
-  'TextoImprimio
-  'Leer_Cta_Catalogo( Cta
- ' ================================
- ' Iniciamos los asientos contables
- ' ================================
    RatonReloj
-   Total = 0
-
-  'Asientos de Abonos de todas las cuentas con sus CxC
-   Progreso_Barra.Mensaje_Box = "Totalizando Abonos"
-   Progreso_Esperar True
-   sSQL = "SELECT TA.TP, TA.Cta, TA.Cta_CxP, SUM(TA.Abono) As TAbono " _
-        & "FROM Trans_Abonos As TA, Clientes C, Accesos As A " _
-        & "WHERE TA.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-        & "AND TA.TP NOT IN ('OP') " _
-        & "AND TA.T <> 'A' " _
-        & "AND TA.Item = '" & NumEmpresa & "' " _
-        & "AND TA.Periodo = '" & Periodo_Contable & "' " _
-        & "AND TA.CodigoC = C.Codigo " _
-        & "AND TA.Cod_Ejec = A.Codigo "
-   If CheqCajero.value = 1 Then sSQL = sSQL & "AND TA.CodigoU = '" & SinEspaciosDer(DCBenef.Text) & "' "
-   sSQL = sSQL & "GROUP BY TA.TP, TA.Cta, TA.Cta_CxP "
-   Select_AdoDB AdoDBAux, sSQL
-   With AdoDBAux
-    If .RecordCount > 0 Then
-        Do While Not .EOF
-           Progreso_Barra.Mensaje_Box = "Totalizando Abonos: " & .fields("TP") & " - " & .fields("Cta") & " - " & .fields("Cta_CxP")
-           Progreso_Esperar
-           Insertar_Ctas_Cierre_SP .fields("Cta"), .fields("TAbono")
-           Insertar_Ctas_Cierre_SP .fields("Cta_CxP"), -.fields("TAbono")
-           Total = Total + Redondear(.fields("TAbono"), 2)
-          .MoveNext
-        Loop
-    End If
-   End With
-   AdoDBAux.Close
-   LabelCheque.Caption = Format$(Total, "#,##0.00")
-   
-   ContSC = 1
-   sSQL = "SELECT TA.Cta,TA.Tipo_Cta,C.Cliente,TA.CodigoC,TA.Fecha,TA.TP,TA.Serie,TA.Factura,TA.Abono " _
-        & "FROM Trans_Abonos As TA, Clientes C, Accesos As A " _
-        & "WHERE TA.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-        & "AND TA.TP NOT IN ('OP') " _
-        & "AND TA.Tipo_Cta IN ('C','P') " _
-        & "AND TA.T <> 'A' " _
-        & "AND TA.Item = '" & NumEmpresa & "' " _
-        & "AND TA.Periodo = '" & Periodo_Contable & "' " _
-        & "AND TA.CodigoC = C.Codigo " _
-        & "AND TA.Cod_Ejec = A.Codigo "
-   If CheqCajero.value = 1 Then sSQL = sSQL & "AND TA.CodigoU = '" & SinEspaciosDer(DCBenef.Text) & "' "
-   sSQL = sSQL & "ORDER BY TA.Cta,TA.Tipo_Cta,C.Cliente,TA.CodigoC,TA.Fecha,TA.TP,TA.Serie,TA.Factura "
-   Select_AdoDB AdoDBAux, sSQL
-   With AdoDBAux
-    If .RecordCount > 0 Then
-        Do While Not .EOF
-           Progreso_Barra.Mensaje_Box = "Totalizando Abonos de Cx" & .fields("Tipo_Cta") & ": " & .fields("Fecha") & "- " & .fields("Cliente")
-           Progreso_Esperar True
-          'Verificamos si es cta de submodulos
-           Select Case .fields("Tipo_Cta")
-             Case "C", "P"
-                  SetAdoAddNew "Asiento_SC"
-                  SetAdoFields "Codigo", .fields("CodigoC")
-                  SetAdoFields "Beneficiario", .fields("Cliente")
-                  SetAdoFields "TM", "1"
-                  SetAdoFields "DH", "1"
-                  SetAdoFields "Valor", Redondear(.fields("Abono"), 2)
-                  SetAdoFields "FECHA_V", .fields("Fecha")
-                  SetAdoFields "TC", .fields("Tipo_Cta")
-                  SetAdoFields "Cta", .fields("Cta")
-                  SetAdoFields "Detalle_SubCta", "Abono de " & .fields("TP") & ": " & .fields("Serie") & "-" & Format(.fields("Factura"), "000000000")
-                  SetAdoFields "T_No", Trans_No
-                  SetAdoFields "SC_No", ContSC
-                  If NumeroFASubModulo Then
-                     SetAdoFields "Serie", .fields("Serie")
-                     SetAdoFields "Factura", .fields("Factura")
-                  Else
-                     SetAdoFields "Serie", "001001"
-                     SetAdoFields "Factura", 0
-                  End If
-                  SetAdoUpdate
-                  ContSC = ContSC + 1
-           End Select
-          .MoveNext
-        Loop
-    End If
-   End With
-   AdoDBAux.Close
-   
-  'Totalizamos las Propinas
-   Progreso_Barra.Mensaje_Box = "Totalizamos las Propinas"
-   Progreso_Esperar True
-   sSQL = "SELECT F.TC, SUM(F.Propina) As Total_Propina " _
-        & "FROM Facturas F, Clientes C " _
-        & "WHERE F.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-        & "AND F.TC NOT IN ('OP') " _
-        & "AND F.T <> 'A' " _
-        & "AND F.Item = '" & NumEmpresa & "' " _
-        & "AND F.Periodo = '" & Periodo_Contable & "' " _
-        & "AND F.CodigoC = C.Codigo "
-   If CheqCajero.value = 1 Then sSQL = sSQL & "AND F.CodigoU = '" & SinEspaciosDer(DCBenef) & "' "
-   sSQL = sSQL & "GROUP BY F.TC "
-   Select_AdoDB AdoDBAux, sSQL
-   With AdoDBAux
-    If .RecordCount > 0 Then
-        Do While Not .EOF
-           Total_Propinas = Total_Propinas + .fields("Total_Propina")
-           Insertar_Ctas_Cierre_SP Cta_Propinas, -.fields("Total_Propina")
-          .MoveNext
-        Loop
-    End If
-   End With
-   AdoDBAux.Close
-   Insertar_Ctas_Cierre_SP Cta_CajaG, Total_Propinas
-   
-  'Totalizamos las Liquidacion de Compras Debe
-   Progreso_Barra.Mensaje_Box = "Totalizamos las Liquidacion de Compras"
-   Progreso_Esperar True
-   sSQL = "SELECT F.Cta_CxP, C.T, SUM(F.Total_MN) As Total_LC " _
-        & "FROM Facturas F, Clientes C " _
-        & "WHERE F.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-        & "AND F.TC = 'LC' " _
-        & "AND F.T <> 'A' " _
-        & "AND F.Item = '" & NumEmpresa & "' " _
-        & "AND F.Periodo = '" & Periodo_Contable & "' " _
-        & "AND F.CodigoC = C.Codigo "
-   If CheqCajero.value = 1 Then sSQL = sSQL & "AND F.CodigoU = '" & SinEspaciosDer(DCBenef) & "' "
-   sSQL = sSQL _
-        & "GROUP BY F.Cta_CxP, C.T "
-   Select_AdoDB AdoDBAux, sSQL, "LC Debe"
-   With AdoDBAux
-    If .RecordCount > 0 Then
-        Do While Not .EOF
-           Insertar_Ctas_Cierre_SP .fields("Cta_CxP"), .fields("Total_LC")
-          .MoveNext
-        Loop
-    End If
-   End With
-   AdoDBAux.Close
-   
-  'Totalizamos las Liquidacion de Compras Haber
-   'Total = 0
-   sSQL = "SELECT Cta_Venta, SUM(Total+Total_IVA) As Total_D_LC " _
-        & "FROM Detalle_Factura " _
-        & "WHERE Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-        & "AND Periodo = '" & Periodo_Contable & "' " _
-        & "AND Item = '" & NumEmpresa & "' " _
-        & "AND T <> '" & Anulado & "' " _
-        & "AND TC = 'LC' "
-   If CheqCajero.value = 1 Then sSQL = sSQL & "AND CodigoU = '" & SinEspaciosDer(DCBenef) & "' "
-   sSQL = sSQL _
-        & "GROUP BY Cta_Venta " _
-        & "ORDER BY Cta_Venta "
-   Select_AdoDB AdoDBAux, sSQL, "LC Haber"
-   With AdoDBAux
-    If .RecordCount > 0 Then
-        Do While Not .EOF
-           Insertar_Ctas_Cierre_SP .fields("Cta_Venta"), -.fields("Total_D_LC")
-          .MoveNext
-        Loop
-    End If
-   End With
-   AdoDBAux.Close
-   
-  'Entrada de Inventario solo lo contable
-   Progreso_Barra.Mensaje_Box = "Procesamos Entrada de Inventarios por NC"
-   Progreso_Esperar True
-   
-  'Asiento de Entrada y Salida de Inventario por NC
-   sSQL = "SELECT Cta_Inv, Contra_Cta, SUM(Valor_Total) As dValor_Total " _
-        & "FROM Trans_Kardex " _
-        & "WHERE Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-        & "AND Item = '" & NumEmpresa & "' " _
-        & "AND Entrada > 0 " _
-        & "AND SUBSTRING(Detalle,1,3) = 'NC:' " _
-        & "GROUP BY Cta_Inv, Contra_Cta " _
-        & "ORDER BY Cta_Inv, Contra_Cta "
-   Select_AdoDB AdoDBAux, sSQL
-   With AdoDBAux
+  '==============================================================================================================================
+  ' Totalizamos los dos asientos para ver descuadres
+  '==============================================================================================================================
+   Trans_No = 96
+   Debe = 0
+   Haber = 0
+   SumaDebe = 0
+   SumaHaber = 0
+   Ln_No = 0
+   SQL2 = "SELECT * " _
+        & "FROM Asiento " _
+        & "WHERE Item = '" & NumEmpresa & "' " _
+        & "AND T_No = " & Trans_No & " " _
+        & "AND CodigoU = '" & CodigoUsuario & "' " _
+        & "ORDER BY CODIGO,DEBE DESC,HABER "
+   Select_Adodc_Grid DGAsiento, AdoAsiento, SQL2
+  'Verificacion SubTotal
+   With AdoAsiento.Recordset
     If .RecordCount > 0 Then
        .MoveFirst
         Do While Not .EOF
-           Insertar_Ctas_Cierre_SP .fields("Cta_Inv"), .fields("dValor_Total")
-           Insertar_Ctas_Cierre_SP .fields("Contra_Cta"), -.fields("dValor_Total")
+           Debe = Debe + .fields("DEBE")
+           Haber = Haber + .fields("HABER")
+           SumaDebe = SumaDebe + .fields("DEBE")
+           SumaHaber = SumaHaber + .fields("HABER")
+          
+          .fields("A_No") = Ln_No
+           Ln_No = Ln_No + 1
           .MoveNext
         Loop
+       .UpdateBatch
     End If
    End With
-   AdoDBAux.Close
-     
- 'Asiento de Voucher por cobrar contra el banco para tarjeta de Credito
-   Progreso_Barra.Mensaje_Box = "Procesando Asientos Tarjetas Crédito"
-   Progreso_Esperar True
-   Total_Vaucher = 0
-  '& "AND TA.TP = 'TJ' "
-   sSQL = "SELECT CP.Detalle, SUM(TA.Abono) As Total_TJ " _
-        & "FROM Trans_Abonos As TA, Catalogo_Cuentas As CC, Ctas_Proceso As CP " _
-        & "WHERE TA.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-        & "AND TA.Periodo = '" & Periodo_Contable & "' " _
-        & "AND TA.Item = '" & NumEmpresa & "' " _
-        & "AND TA.Tipo_Cta = 'TJ' " _
-        & "AND MidStrg(CP.Detalle,1,7) = 'Voucher' " _
-        & "AND TA.Cta = CC.Codigo " _
-        & "AND TA.Cta = CP.Codigo " _
-        & "AND TA.Periodo = CC.Periodo " _
-        & "AND TA.Periodo = CP.Periodo " _
-        & "AND TA.Item = CC.Item " _
-        & "AND TA.Item = CP.Item " _
-        & "GROUP BY CP.Detalle " _
-        & "ORDER BY CP.Detalle "
-   Select_AdoDB AdoDBAux, sSQL
-   With AdoDBAux
-   If .RecordCount > 0 Then
-       Codigo = .fields("Detalle")
-       Do While Not .EOF
-          If Codigo <> .fields("Detalle") Then
-             Codigo2 = SinEspaciosDer(Codigo)
-             Codigo = TrimStrg(MidStrg(Codigo, 1, Len(Codigo) - Len(Codigo2)))
-             Codigo1 = SinEspaciosDer(Codigo)
-             'MsgBox "..."
-             If Total_Vaucher > 0 Then
-                Insertar_Ctas_Cierre_SP Codigo1, Total_Vaucher
-                Insertar_Ctas_Cierre_SP Codigo2, -Total_Vaucher
-             End If
-             Codigo = .fields("Detalle")
-             Total_Vaucher = 0
-          End If
-          Total_Vaucher = Total_Vaucher + .fields("Total_TJ")
-         .MoveNext
-       Loop
-       Codigo2 = SinEspaciosDer(Codigo)
-       Codigo = TrimStrg(MidStrg(Codigo, 1, Len(Codigo) - Len(Codigo2)))
-       Codigo1 = SinEspaciosDer(Codigo)
-       'MsgBox "..."
-       If Total_Vaucher > 0 Then
-          Insertar_Ctas_Cierre_SP Codigo1, Total_Vaucher
-          Insertar_Ctas_Cierre_SP Codigo2, -Total_Vaucher
-       End If
-   End If
-  End With
-  AdoDBAux.Close
-  
-  '=================================================================================
-  'Enceramos para realizar la segunda parte del cierre de las CxC el segundo asiento
-  '=================================================================================
+   LabelDebe.Caption = Format$(Debe, "#,##0.00")
+   LabelHaber.Caption = Format$(Haber, "#,##0.00")
+   LblDiferencia.Caption = Format$(Debe - Haber, "#,##0.00")
+   LblConcepto.Caption = "Cierre Diario de Caja de CxC " & FechaDelCierre & ", Diario No. ?"
+   
    Trans_No = 97
-   sSQL = "SELECT DF.Cta_Venta, F.SubCta, CS.TC, CS.Detalle, SUM(F.SubTotal) As TSubTotal " _
-        & "FROM Facturas As F, Detalle_Factura As DF, Catalogo_SubCtas As CS " _
-        & "WHERE F.Item = '" & NumEmpresa & "' " _
-        & "AND F.Periodo = '" & Periodo_Contable & "' " _
-        & "AND F.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-        & "AND F.SubCta <> '.' " _
-        & "AND F.T <> 'A' " _
-        & "AND F.Item = DF.Item " _
-        & "AND F.Item = CS.Item " _
-        & "AND F.Periodo = DF.Periodo " _
-        & "AND F.Periodo = CS.Periodo " _
-        & "AND F.TC = DF.TC " _
-        & "AND F.Factura = DF.Factura " _
-        & "AND F.SubCta = CS.Codigo "
-   If CheqCajero.value = 1 Then sSQL = sSQL & "AND F.CodigoU = '" & SinEspaciosDer(DCBenef.Text) & "' "
-   sSQL = sSQL _
-        & "GROUP BY DF.Cta_Venta, F.SubCta, CS.TC, CS.Detalle "
-   Select_AdoDB AdoDBAux, sSQL
-   With AdoDBAux
+   Debe = 0: Haber = 0: Ln_No = 0
+   SQL2 = "SELECT * " _
+        & "FROM Asiento " _
+        & "WHERE Item = '" & NumEmpresa & "' " _
+        & "AND T_No = " & Trans_No & " " _
+        & "AND CodigoU = '" & CodigoUsuario & "' " _
+        & "ORDER BY CODIGO,DEBE DESC,HABER "
+   Select_Adodc_Grid DGAsiento1, AdoAsiento1, SQL2
+   With AdoAsiento1.Recordset
     If .RecordCount > 0 Then
+       .MoveFirst
         Do While Not .EOF
-           Progreso_Barra.Mensaje_Box = "Totalizando SubCtas de Ingreso: " & .fields("Detalle")
-           Progreso_Esperar True
-          'Verificamos si es cta de submodulos
-           Select Case .fields("TC")
-             Case "I", "CC"
-                  SetAdoAddNew "Asiento_SC"
-                  SetAdoFields "Codigo", .fields("SubCta")
-                  SetAdoFields "Beneficiario", .fields("Detalle")
-                  SetAdoFields "TM", "1"
-                  SetAdoFields "DH", "2"
-                  SetAdoFields "Valor", Redondear(.fields("TSubTotal"), 2)
-                  SetAdoFields "TC", .fields("TC")
-                  SetAdoFields "Cta", .fields("Cta_Venta")
-                  SetAdoFields "T_No", Trans_No
-                  SetAdoFields "SC_No", ContSC
-                  SetAdoUpdate
-                  ContSC = ContSC + 1
-           End Select
+           Debe = Debe + .fields("DEBE")
+           Haber = Haber + .fields("HABER")
+           SumaDebe = SumaDebe + .fields("DEBE")
+           SumaHaber = SumaHaber + .fields("HABER")
+          .fields("A_No") = Ln_No
+           Ln_No = Ln_No + 1
           .MoveNext
         Loop
+       .UpdateBatch
     End If
    End With
-   AdoDBAux.Close
-
-  'Asientos de CxC Efectivo
-   Total = 0
-   Progreso_Barra.Mensaje_Box = "Totalizando Ventas"
-   Progreso_Esperar True
-   sSQL = "SELECT TC, Cta_CxP, SUM(IVA) As T_IVA, SUM(Descuento) As T_Descuento, SUM(Descuento2) As T_Descuento2, SUM(Servicio) As T_Servicio, SUM(Total_MN) As T_Total_MN " _
-        & "FROM Facturas " _
-        & "WHERE Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-        & "AND TC NOT IN ('OP','LC') " _
-        & "AND T <> 'A' " _
-        & "AND Item = '" & NumEmpresa & "' " _
-        & "AND Periodo = '" & Periodo_Contable & "' "
-   If CheqCajero.value = 1 Then sSQL = sSQL & "AND CodigoU = '" & SinEspaciosDer(DCBenef.Text) & "' "
-   sSQL = sSQL _
-        & "GROUP BY TC, Cta_CxP " _
-        & "ORDER BY TC, Cta_CxP "
-   Select_AdoDB AdoDBAux, sSQL
-   With AdoDBAux
-    If .RecordCount > 0 Then
-        Do While Not .EOF
-           Progreso_Barra.Mensaje_Box = "Totalizando Ventas: " & .fields("Cta_CxP")
-           Progreso_Esperar True
-           Insertar_Ctas_Cierre_SP .fields("Cta_CxP"), .fields("T_Total_MN")
-           Insertar_Ctas_Cierre_SP Cta_Desc, .fields("T_Descuento")
-           Insertar_Ctas_Cierre_SP Cta_Desc2, .fields("T_Descuento2")
-           Insertar_Ctas_Cierre_SP Cta_IVA, -.fields("T_IVA")
-           Insertar_Ctas_Cierre_SP Cta_Servicio, -.fields("T_Servicio")
-           Total = Total + Redondear(.fields("T_Total_MN"), 2)
-          .MoveNext
-        Loop
-    End If
-   End With
-   AdoDBAux.Close
-   
-   LabelAbonos.Caption = Format$(Total, "#,##0.00")
-  'Abrimos espacios para el asiento
-   Progreso_Barra.Mensaje_Box = "Totalizando Salidas y Costeos de Inventario"
-   Progreso_Esperar True
-   
-     Total = 0
-     TotalIngreso = 0
-    'Asiento Ventas del dia de una sola cuenta
-     sSQL = "SELECT TC, Cta_Venta, SUM(Total) AS T_Total " _
-          & "FROM Detalle_Factura " _
-          & "WHERE Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-          & "AND Periodo = '" & Periodo_Contable & "' " _
-          & "AND Item = '" & NumEmpresa & "' " _
-          & "AND T <> '" & Anulado & "' " _
-          & "AND TC NOT IN ('OP','LC') "
-     If CheqCajero.value = 1 Then sSQL = sSQL & "AND CodigoU = '" & SinEspaciosDer(DCBenef.Text) & "' "
-     sSQL = sSQL _
-          & "GROUP BY TC, Cta_Venta " _
-          & "ORDER BY TC, Cta_Venta "
-     Select_AdoDB AdoDBAux, sSQL
-     With AdoDBAux
-      If .RecordCount > 0 Then
-          Do While Not .EOF
-             Progreso_Barra.Mensaje_Box = "Totalizando Ventas: " & .fields("Cta_Venta")
-             Progreso_Esperar True
-             Insertar_Ctas_Cierre_SP .fields("Cta_Venta"), -.fields("T_Total")
-             Total = Total + .fields("T_Total")
-            .MoveNext
-          Loop
-      End If
-    End With
-    AdoDBAux.Close
-    
-   'Asiento de Entrada y Salida de Inventario por NC
-    sSQL = "SELECT Cta_Inv, Contra_Cta, SUM(Valor_Total) As dValor_Total " _
-         & "FROM Trans_Kardex " _
-         & "WHERE Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-         & "AND Item = '" & NumEmpresa & "' " _
-         & "AND Salida > 0 " _
-         & "AND LEN(TC) = 2 " _
-         & "AND LEN(Serie) = 6 " _
-         & "AND Factura > 0 " _
-         & "GROUP BY Cta_Inv, Contra_Cta " _
-         & "ORDER BY Cta_Inv, Contra_Cta "
-    Select_AdoDB AdoDBAux, sSQL
-    With AdoDBAux
-     If .RecordCount > 0 Then
-        .MoveFirst
-         Do While Not .EOF
-            Progreso_Barra.Mensaje_Box = "Totalizando Salidas y Costeos de Inventario: " & .fields("Cta_Inv")
-            Progreso_Esperar True
-            Insertar_Ctas_Cierre_SP .fields("Contra_Cta"), .fields("dValor_Total")
-            Insertar_Ctas_Cierre_SP .fields("Cta_Inv"), -.fields("dValor_Total")
-           .MoveNext
-         Loop
-     End If
-    End With
-    AdoDBAux.Close
-
-'''   'Asiento de Salida por Recetas o Combos
-'''    If Por_Combos Then
-'''       sSQL = "SELECT CP.TC, CR.Codigo_Receta, DF.CodBodega, DF.Fecha, CP.Cta_Inventario, CP.Cta_Costo_Venta, " _
-'''            & "CP.Producto, SUM(DF.Cantidad * CR.Cantidad) As Cant_Salida " _
-'''            & "FROM Detalle_Factura As DF, Catalogo_Recetas As CR, Catalogo_Productos As CP " _
-'''            & "WHERE DF.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-'''            & "AND DF.Periodo = '" & Periodo_Contable & "' " _
-'''            & "AND DF.Item = '" & NumEmpresa & "' " _
-'''            & "AND DF.T <> '" & Anulado & "' " _
-'''            & "AND DF.TC IN ('FA','NV') "
-'''       If CheqCajero.value = 1 Then sSQL = sSQL & "AND DF.CodigoU = '" & SinEspaciosDer(DCBenef.Text) & "' "
-'''       sSQL = sSQL _
-'''            & "AND DF.Codigo = CR.Codigo_PP " _
-'''            & "AND CR.Codigo_Receta = CP.Codigo_Inv " _
-'''            & "AND DF.Item = CP.Item " _
-'''            & "AND DF.Item = CR.Item " _
-'''            & "AND DF.Periodo = CP.Periodo " _
-'''            & "AND DF.Periodo = CR.Periodo " _
-'''            & "GROUP BY CP.TC, CR.Codigo_Receta, DF.CodBodega, DF.Fecha, CP.Cta_Inventario, CP.Cta_Costo_Venta, CP.Producto " _
-'''            & "ORDER BY CP.TC, CR.Codigo_Receta, DF.CodBodega, DF.Fecha, CP.Cta_Inventario, CP.Cta_Costo_Venta, CP.Producto "
-'''       Select_Adodc AdoAux, sSQL
-'''       Total = 0
-'''       TotalIngreso = 0
-'''       With AdoAux.Recordset
-'''        If .RecordCount > 0 Then
-'''            Do While Not .EOF
-'''               Entrada = .Fields("Cant_Salida")
-'''               CodigoInv = .Fields("Codigo_Receta")
-'''               Producto = .Fields("Producto")
-'''               Cta_Inventario = .Fields("Cta_Inventario")
-'''               Cta_Costo_Ventas = .Fields("Cta_Costo_Venta")
-'''               TipoProc = .Fields("TC")
-'''               Cod_Bodega = .Fields("CodBodega")
-'''               If Cod_Bodega = "" Then Cod_Bodega = Ninguno
-'''               If CodigoInv = "" Then CodigoInv = Ninguno
-'''               EgresosArtInv
-'''               Insertar_Ctas_Cierre_SP    Cta_Costo_Ventas, ValorTotal
-'''               Insertar_Ctas_Cierre_SP    Cta_Inventario, -ValorTotal
-'''              .MoveNext
-'''            Loop
-'''        End If
-'''       End With
-'''    End If
-   Progreso_Barra.Mensaje_Box = "Procesando Asientos Contables"
-   Progreso_Esperar True
-   'TextoImprimio
-    If ErrorInventario <> "" Then
-       TextoImprimio = TextoImprimio _
-                     & "Warning: Falta de Ingresar Entrada Inicial de los siguientes producto(s):" & vbCrLf _
-                     & ErrorInventario & vbCrLf
-    End If
-'==============================================================================================================================
-' Totalizamos los dos asientos para ver descuadres
-'==============================================================================================================================
-  Trans_No = 96
-  Debe = 0: Haber = 0: Ln_No = 0
-  SQL2 = "SELECT CODIGO, CUENTA, PARCIAL_ME, DEBE, HABER, CHEQ_DEP, DETALLE, EFECTIVIZAR, CODIGO_C, CODIGO_CC, T_No, A_No, TC, ID " _
-       & "FROM Asiento " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND T_No = " & Trans_No & " " _
-       & "AND CodigoU = '" & CodigoUsuario & "' " _
-       & "ORDER BY CODIGO,DEBE DESC,HABER "
-  Select_Adodc_Grid DGAsiento, AdoAsiento, SQL2
- 'Verificacion SubTotal
-  With AdoAsiento.Recordset
-   If .RecordCount > 0 Then
-      .MoveFirst
-       Do While Not .EOF
-          Debe = Debe + .fields("DEBE")
-          Haber = Haber + .fields("HABER")
-         .fields("A_No") = Ln_No
-          Ln_No = Ln_No + 1
-         .MoveNext
-       Loop
-      .UpdateBatch
-   End If
-  End With
-  LabelDebe.Caption = Format$(Debe, "#,##0.00")
-  LabelHaber.Caption = Format$(Haber, "#,##0.00")
-  LblDiferencia.Caption = Format$(Debe - Haber, "#,##0.00")
-  
-  Trans_No = 97
-  Debe = 0: Haber = 0: Ln_No = 0
-  SQL2 = "SELECT CODIGO, CUENTA, PARCIAL_ME, DEBE, HABER, CHEQ_DEP, DETALLE, EFECTIVIZAR, CODIGO_C, CODIGO_CC, T_No, A_No, TC " _
-       & "FROM Asiento " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND T_No = " & Trans_No & " " _
-       & "AND CodigoU = '" & CodigoUsuario & "' " _
-       & "ORDER BY CODIGO,DEBE DESC,HABER "
-  Select_Adodc_Grid DGAsiento1, AdoAsiento1, SQL2
-  With AdoAsiento1.Recordset
-   If .RecordCount > 0 Then
-      .MoveFirst
-       Do While Not .EOF
-          Debe = Debe + .fields("DEBE")
-          Haber = Haber + .fields("HABER")
-          Ln_No = Ln_No + 1
-         .MoveNext
-       Loop
-      .UpdateBatch
-   End If
-  End With
 '  LabelVentas.Caption = Format$(TotalIngreso, "#,##0.00")
-  LabelDebe1.Caption = Format$(Debe, "#,##0.00")
-  LabelHaber1.Caption = Format$(Haber, "#,##0.00")
-  LblDiferencia1.Caption = Format$(Debe - Haber, "#,##0.00")
-  If MBFechaI.Text = MBFechaF.Text Then
-     LblConcepto.Caption = "Cierre Diario de Caja de Abonos del " & MBFechaI.Text & ", Diario No. ?"
-     LblConcepto1.Caption = "Cierre Diario de Caja de CxC del " & MBFechaI.Text & ", Diario No. ?"
-  Else
-     LblConcepto.Caption = "Cierre Diario de Caja de Abonos del " & MBFechaI.Text & " al " & MBFechaF.Text & ", Diario No. ?"
-     LblConcepto1.Caption = "Cierre Diario de Caja de CxC del " & MBFechaI.Text & " al " & MBFechaF.Text & ", Diario No. ?"
-  End If
-  
- 'Listado de Facturas anuladas
-  Total = 0
-  sSQL = "SELECT F.T,F.TC,F.Fecha,C.Cliente,F.Factura,F.IVA As Total_IVA,F.Total_MN,F.Cta_CxP " _
-       & "FROM Facturas F, Clientes C " _
-       & "WHERE F.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-       & "AND F.T = 'A' " _
-       & "AND F.Item = '" & NumEmpresa & "' " _
-       & "AND F.Periodo = '" & Periodo_Contable & "' " _
-       & "AND F.TC <> 'OP' "
-  If CheqCajero.value = 1 Then sSQL = sSQL & "AND F.CodigoU = '" & SinEspaciosDer(DCBenef.Text) & "' "
-  sSQL = sSQL _
-       & "AND F.CodigoC = C.Codigo " _
-       & "ORDER BY F.TC,F.Fecha,F.Cta_CxP,C.Cliente,F.Factura "
-  Select_Adodc_Grid DGFactAnul, AdoFactAnul, sSQL
-  
- 'REPORTES DE AUDITORIA TRANSACCIONALES (S.R.I.)
-  If MBFechaI = MBFechaF Then
-     DGSRI.Caption = "Autorización No. " & Autorizacion & ", Listado de Facturas del " & MBFechaI
-  Else
-     DGSRI.Caption = "Autorización No. " & Autorizacion & ", Listado de Facturas del " & MBFechaI & " al " & MBFechaF
-  End If
-'  sSQL = "SELECT F.T,F.Factura,F.Fecha,C.Cliente,C.CI_RUC,F.Con_IVA,F.Sin_IVA,F.Descuento,F.IVA As Total_IVA," _
-'       & "F.Total_MN As TOTAL,Serie_R,Retencion,Ret_Fuente,Ret_IVA "
-  Codigo = CStr(Porc_IVA * 100)
-  sSQL = "SELECT F.TC,F.T,F.RUC_CI,F.TB,F.Razon_Social,F.Fecha,F.Hora,A.Nombre_Completo As Usuario," _
-       & "F.Autorizacion,F.Serie,F.Factura As Secuencial,F.Con_IVA As Base_" & Codigo & ",F.Sin_IVA As Base_0," _
-       & "F.Descuento,F.Descuento2,(F.SubTotal - F.Descuento - F.Descuento2) As Sub_Total, F.IVA As IVA_" & Codigo & ",F.Servicio,F.Total_MN As TOTAL,Serie_R," _
-       & "Secuencial_R,F.Autorizacion_R,Total_Ret_Fuente,Total_Ret_IVA_B,Total_Ret_IVA_S,C.Contacto AS Referencia,C.CI_RUC As COD_BANCO " _
-       & "FROM Facturas F, Clientes C, Accesos As A " _
-       & "WHERE F.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-       & "AND F.TC NOT IN ('C','P','OP','LC','DO') " _
-       & "AND F.Item = '" & NumEmpresa & "' " _
-       & "AND F.Periodo = '" & Periodo_Contable & "' " _
-       & "AND F.CodigoC = C.Codigo " _
-       & "AND F.CodigoU = A.Codigo "
-  If CheqCajero.value = 1 Then sSQL = sSQL & "AND F.CodigoU = '" & SinEspaciosDer(DCBenef.Text) & "' "
-  sSQL = sSQL & "ORDER BY F.Factura,F.TC,F.Fecha,F.Cta_CxP,C.Cliente "
-  Select_Adodc_Grid DGSRI, AdoSRI, sSQL
-  Total_Con_IVA = 0
-  Total_Sin_IVA = 0
-  Total_Desc = 0
-  Total_Desc2 = 0
-  Total_IVA = 0
-  Total = 0
-  With AdoSRI.Recordset
-   If .RecordCount > 0 Then
-       Do While Not .EOF
-          If .fields("T") <> Anulado Then
-              Total_Con_IVA = Total_Con_IVA + .fields("Base_" & Codigo)
-              Total_Sin_IVA = Total_Sin_IVA + .fields("Base_0")
-              Total_Desc = Total_Desc + .fields("Descuento")
-              Total_Desc2 = Total_Desc2 + .fields("Descuento2")
-              Total_IVA = Total_IVA + .fields("IVA_" & Codigo)
-              Total_Servicio = Total_Servicio + .fields("Servicio")
-              Total = Total + .fields("TOTAL")
-          End If
-         .MoveNext
-       Loop
-   End If
-  End With
-  LblConIVA.Caption = Format$(Total_Con_IVA, "#,##0.00")
-  LblSinIVA.Caption = Format$(Total_Sin_IVA, "#,##0.00")
-  LblDescuento.Caption = Format$(Total_Desc + Total_Desc2, "#,##0.00")
-  LblIVA.Caption = Format$(Total_IVA, "#,##0.00")
-  LblServicio.Caption = Format$(Total_Servicio, "#,##0.00")
-  LblTotalFacturado.Caption = Format$(Total, "#,##0.00")
-  'Fecha_Vence
-  'SerieFactura
-    
-'''  sSQL = "SELECT CP.Codigo_Inv,CP.Producto,SUM(DF.Cantidad) As CANTIDADES,SUM(DF.Total) As SUBTOTALES,SUM(DF.Total_IVA) As SUBTOTAL_IVA,Cta_Ventas,Cta_Ventas_0  " _
-'''       & "FROM Detalle_Factura DF,Catalogo_Productos CP " _
-'''       & "WHERE DF.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-'''       & "AND DF.Item = '" & NumEmpresa & "' " _
-'''       & "AND DF.Periodo = '" & Periodo_Contable & "' " _
-'''       & "AND DF.T <> '" & Anulado & "' " _
-'''       & "AND DF.Item = CP.Item " _
-'''       & "AND DF.Periodo = CP.Periodo " _
-'''       & "AND DF.Codigo = CP.Codigo_Inv " _
-'''       & "GROUP BY CP.Codigo_Inv,CP.Producto,Cta_Ventas,Cta_Ventas_0 " _
-'''       & "UNION " _
-'''       & "SELECT '-x-' As Codigo_Inv,'TOTAL DE VENTAS' As Producto,SUM(DF.Cantidad) As CANTIDADES,SUM(DF.Total) As SUBTOTALES,SUM(DF.Total_IVA) As SUBTOTAL_IVA,'' As 'V12','' As 'V0' " _
-'''       & "FROM Detalle_Factura DF,Catalogo_Productos CP " _
-'''       & "WHERE DF.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-'''       & "AND DF.Item = '" & NumEmpresa & "' " _
-'''       & "AND DF.Periodo = '" & Periodo_Contable & "' " _
-'''       & "AND DF.T <> '" & Anulado & "' " _
-'''       & "AND DF.Item = CP.Item " _
-'''       & "AND DF.Periodo = CP.Periodo " _
-'''       & "AND DF.Codigo = CP.Codigo_Inv " _
-'''       & "ORDER BY CP.Codigo_Inv,CP.Producto "
-'''  Select_Adodc_Grid DGProductos, AdoProductos, sSQL
-  
-  
-  sSQL = "SELECT Codigo,Producto,SUM(Cantidad) As CANTIDADES,SUM(Total) As SUBTOTALES,SUM(Total_IVA) As SUBTOTAL_IVA, Cta_Venta " _
-       & "FROM Detalle_Factura " _
-       & "WHERE Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-       & "AND Item = '" & NumEmpresa & "' " _
-       & "AND Periodo = '" & Periodo_Contable & "' " _
-       & "AND T <> '" & Anulado & "' " _
-       & "GROUP BY Codigo,Producto,Cta_Venta " _
-       & "UNION " _
-       & "SELECT '-x-' As Codigo,'TOTAL DE VENTAS' As Producto,SUM(Cantidad) As CANTIDADES,SUM(Total) As SUBTOTALES,SUM(Total_IVA) As SUBTOTAL_IVA,'' As Cta_Venta " _
-       & "FROM Detalle_Factura " _
-       & "WHERE Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-       & "AND Item = '" & NumEmpresa & "' " _
-       & "AND Periodo = '" & Periodo_Contable & "' " _
-       & "AND T <> '" & Anulado & "' " _
-       & "ORDER BY Codigo,Producto "
-  Select_Adodc_Grid DGProductos, AdoProductos, sSQL
-'    & "GROUP BY DF.Fecha "
-  
-  'Asiento de Entrada y Salida de Inventario por NC
-  
-'''   sSQL = "SELECT * " _
-'''        & "FROM Trans_Kardex " _
-'''        & "WHERE Item = '" & NumEmpresa & "' " _
-'''        & "AND Periodo = '" & Periodo_Contable & "' " _
-'''        & "AND Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-'''        & "WHERE CodigoU = '" & CodigoUsuario & "' " _
-'''        & "AND Item = '" & NumEmpresa & "' " _
-'''        & "AND T_No IN (96,97) " _
-'''        & "ORDER BY T_No, CTA_INVENTARIO, CONTRA_CTA, CODIGO_INV "
-'''   SQLDec = "COSTO " & CStr(Dec_Costo) & "|."
-  
-  'TOTAL_IVA, UNIDAD
-   
-  sSQL = "SELECT TK.TC As Doc, TK.Codigo_Inv, CP.Producto, 0 As Entradas, SUM(TK.Salida) As Salidas, AVG(TK.Costo) As Costos, " _
-       & "(SUM(TK.Salida) * AVG(TK.Costo)) As Totales, TK.Cta_Inv, TK.Contra_Cta, TK.CodBodega, CP.Unidad, COUNT(TK.TC) As Cant_Doc " _
-       & "FROM Trans_Kardex As TK, Catalogo_Productos As CP " _
-       & "WHERE TK.Item = '" & NumEmpresa & "' " _
-       & "AND TK.Periodo = '" & Periodo_Contable & "' " _
-       & "AND TK.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-       & "AND LEN(TK.TC) = 2 " _
-       & "AND LEN(TK.Serie) = 6 " _
-       & "AND TK.Factura > 0 " _
-       & "AND TK.Salida > 0 "
-  If CheqCajero.value = 1 Then sSQL = sSQL & "AND TK.CodigoU = '" & SinEspaciosDer(DCBenef.Text) & "' "
-  sSQL = sSQL _
-       & "AND TK.Item = CP.Item " _
-       & "AND TK.Periodo = CP.Periodo " _
-       & "AND TK.Codigo_Inv = CP.Codigo_Inv " _
-       & "GROUP BY TK.TC, TK.Codigo_Inv, CP.Producto, TK.Cta_Inv, TK.Contra_Cta, TK.CodBodega, CP.Unidad "
-  sSQL = sSQL & "UNION " _
-       & "SELECT 'NC' As Doc, TK.Codigo_Inv, CP.Producto, SUM(TK.Entrada) As Entradas, 0 As Salidas, AVG(TK.Costo) As Costos, " _
-       & "(SUM(TK.Entrada) * AVG(TK.Costo)) As Totales, TK.Cta_Inv, TK.Contra_Cta, TK.CodBodega, CP.Unidad, COUNT(TK.TC) As Cant_Doc " _
-       & "FROM Trans_Kardex As TK, Catalogo_Productos As CP " _
-       & "WHERE TK.Item = '" & NumEmpresa & "' " _
-       & "AND TK.Periodo = '" & Periodo_Contable & "' " _
-       & "AND TK.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-       & "AND LEN(TK.TC) = 2 " _
-       & "AND LEN(TK.Serie) = 6 " _
-       & "AND TK.Factura > 0 " _
-       & "AND TK.Entrada > 0 "
-  If CheqCajero.value = 1 Then sSQL = sSQL & "AND TK.CodigoU = '" & SinEspaciosDer(DCBenef.Text) & "' "
-  sSQL = sSQL _
-       & "AND TK.Item = CP.Item " _
-       & "AND TK.Periodo = CP.Periodo " _
-       & "AND TK.Codigo_Inv = CP.Codigo_Inv " _
-       & "GROUP BY TK.Codigo_Inv, CP.Producto, TK.Cta_Inv, TK.Contra_Cta, TK.CodBodega, CP.Unidad " _
-       & "ORDER BY Doc, TK.Codigo_Inv, CP.Producto, TK.Cta_Inv, TK.Contra_Cta, TK.CodBodega, CP.Unidad "
-  SQLDec = "Costos " & CStr(Dec_Costo) & "|."
-  Select_Adodc_Grid DGInv, AdoInv, sSQL, SQLDec
-   
-  DGVentas.Visible = True
-  DGCxC.Visible = True
-  DGInv.Visible = True
-  DGAsiento.Visible = True
-  FCierreCaja.Caption = "CIERRE DEL DIARIO DE CAJA"
- 'MsgBox TextoImprimio
+   LabelDebe1.Caption = Format$(Debe, "#,##0.00")
+   LabelHaber1.Caption = Format$(Haber, "#,##0.00")
+   LblDiferencia1.Caption = Format$(Debe - Haber, "#,##0.00")
+   LblConcepto1.Caption = "Cierre Diario de Caja de Abonos " & FechaDelCierre & ", Diario No. ?"
+     
+   DGVentas.Visible = True
+   DGCxC.Visible = True
+   DGInv.Visible = True
+   DGAsiento.Visible = True
+   FCierreCaja.Caption = "CIERRE DEL DIARIO DE CAJA"
+  'TextoImprimio
+   If Redondear(SumaDebe - SumaHaber, 2) <> 0 Then MsgBox "Las Transacciones no cuadran, verifique las facturas emitidas o los abonos del día."
+   Progreso_Barra.Mensaje_Box = "OK"
+   Progreso_Final
+  'MsgBox TextoImprimio
 End Sub
 
 Public Sub CierreDelDia()
-  sSQL = "SELECT Fecha,Factura " _
+Dim ErrorCierre As String
+  ErrorCierre = ""
+  sSQL = "SELECT TOP 1 TP, Serie, Factura, MIN(Fecha) As FechaCierre " _
        & "FROM Trans_Abonos " _
        & "WHERE C = " & Val(adFalse) & " " _
        & "AND Item = '" & NumEmpresa & "' " _
+       & "AND Periodo = '" & Periodo_Contable & "' " _
        & "AND T <> 'A' " _
        & "AND Fecha <= #" & BuscarFecha(FechaSistema) & "# " _
-       & "AND Periodo = '" & Periodo_Contable & "' " _
-       & "GROUP BY Fecha,Factura " _
-       & "UNION " _
-       & "SELECT Fecha,Factura " _
+       & "GROUP BY TP, Serie, Factura " _
+       & "ORDER BY TP, Serie, Factura "
+  Select_Adodc AdoAux, sSQL
+  With AdoAux.Recordset
+   If .RecordCount > 0 Then
+       ErrorCierre = ErrorCierre & "Cierre del día Abonos: " & .fields("FechaCierre") & " (" & .fields("TP") & "-" & .fields("Serie") & "-" & .fields("Factura") & ")" & vbCrLf & vbCrLf
+   End If
+  End With
+  sSQL = "SELECT TOP 1 TC, Serie, Factura, MIN(Fecha) As FechaCierre " _
        & "FROM Facturas " _
        & "WHERE C = " & Val(adFalse) & " " _
        & "AND Item = '" & NumEmpresa & "' " _
@@ -4187,66 +3830,61 @@ Public Sub CierreDelDia()
        & "AND TC NOT IN ('C','P') " _
        & "AND T <> 'A' " _
        & "AND Fecha <= #" & BuscarFecha(FechaSistema) & "# " _
-       & "GROUP BY Fecha,Factura " _
-       & "ORDER BY Fecha "
+       & "GROUP BY TC, Serie, Factura " _
+       & "ORDER BY TC, Serie, Factura "
   Select_Adodc AdoAux, sSQL
   With AdoAux.Recordset
    If .RecordCount > 0 Then
-       MsgBox "Cierre del día: " & .fields("Fecha") & "(" & .fields("Factura") & ")" & vbCrLf
-       MBFechaI = .fields("Fecha")
-       MBFechaF = .fields("Fecha")
-       MarcarTexto MBFechaI
-       MBFechaI.SetFocus
+       ErrorCierre = ErrorCierre & "Cierre del día Facturas: " & .fields("FechaCierre") & " (" & .fields("TC") & "-" & .fields("Serie") & "-" & .fields("Factura") & ")" & vbCrLf & vbCrLf
    End If
   End With
+  
+  If ErrorCierre <> "" Then
+     MarcarTexto MBFechaI
+     MsgBox ErrorCierre
+     MBFechaI.SetFocus
+  End If
 End Sub
 
 Private Sub SSTab1_Click(PreviousTab As Integer)
     Select Case SSTab1.Tab
-      Case 0
-            DGVentas.width = SSTab1.width - 200
-            DGVentas.Height = SSTab1.Height - DGVentas.Top - 100
       Case 1
-            DGCxC.width = SSTab1.width - 200
-            DGCxC.Height = (SSTab1.Height - DGCxC.Top) / 2 - 100
-            DGAnticipos.Top = DGCxC.Top + DGCxC.Height + 10
-            DGAnticipos.width = SSTab1.width - 200
-            DGAnticipos.Height = DGCxC.Height
-      Case 2
-            DGInv.width = SSTab1.width - DGInv.Left - 200
-            DGInv.Height = (SSTab1.Height / 2) - DGInv.Top
-            DGProductos.Top = DGInv.Top + DGInv.Height
-            DGProductos.width = SSTab1.width - DGProductos.Left - 200
-            DGProductos.Height = SSTab1.Height - DGProductos.Top - 200
-            DGCierres.Height = SSTab1.Height - DGCierres.Top - 200
-      Case 3 'Asientos Contables
-            DGAsiento.width = SSTab1.width - 200
-            DGAsiento.Height = (SSTab1.Height / 2) - DGAsiento.Top
-            Label1.Top = DGAsiento.Top + DGAsiento.Height + 10
-            Label11.Top = DGAsiento.Top + DGAsiento.Height + 10
-            LblDiferencia.Top = DGAsiento.Top + DGAsiento.Height + 10
-            LabelDebe.Top = DGAsiento.Top + DGAsiento.Height + 10
-            LabelHaber.Top = DGAsiento.Top + DGAsiento.Height + 10
-            LblConcepto1.width = SSTab1.width - 200
-            LblConcepto1.Top = Label1.Top + Label1.Height + 10
-            DGAsiento1.width = SSTab1.width - 200
-            DGAsiento1.Top = LblConcepto1.Top + LblConcepto1.Height + 10
-            DGAsiento1.Height = SSTab1.Height - LblConcepto1.Top - LblConcepto1.Height - Label13.Height - Label13.Height
-            LblConcepto.width = SSTab1.width - 200
-            Label13.Top = DGAsiento1.Top + DGAsiento1.Height + 10
-            Label15.Top = DGAsiento1.Top + DGAsiento1.Height + 10
-            LblDiferencia1.Top = DGAsiento1.Top + DGAsiento1.Height + 10
-            LabelDebe1.Top = DGAsiento1.Top + DGAsiento1.Height + 10
-            LabelHaber1.Top = DGAsiento1.Top + DGAsiento1.Height + 10
+            RatonReloj
+            Progreso_Barra.Mensaje_Box = "Fechas de Cierre..."
+            Progreso_Esperar
+            sSQL = "SELECT Fecha " _
+                 & "FROM Facturas " _
+                 & "WHERE Item = '" & NumEmpresa & "' " _
+                 & "AND Periodo = '" & Periodo_Contable & "' " _
+                 & "AND TC <> 'OP' " _
+                 & "AND Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
+                 & "UNION " _
+                 & "SELECT Fecha " _
+                 & "FROM Trans_Abonos " _
+                 & "WHERE Item = '" & NumEmpresa & "' " _
+                 & "AND Periodo = '" & Periodo_Contable & "' " _
+                 & "AND TP <> 'OP' " _
+                 & "AND Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
+                 & "GROUP BY Fecha " _
+                 & "ORDER BY Fecha "
+            Select_Adodc_Grid DGCierres, AdoCierres, sSQL
+            DGCierres.Caption = "Dias Cierres"
+            RatonNormal
+      Case 2 'Asientos Contables
+      
+      Case 3
+      
       Case 4
-            DGFactAnul.width = SSTab1.width - 200
-            DGFactAnul.Height = SSTab1.Height - DGFactAnul.Top - 550
+      
       Case 5
-            DGSRI.width = SSTab1.width - 200
-            DGSRI.Height = SSTab1.Height - DGSRI.Top - 1000
-      Case 6
-            DGBanco.width = SSTab1.width - 200
-            DGBanco.Height = SSTab1.Height - DGBanco.Top - 1000
+            sSQL = "SELECT (Codigo & Space(5) & Cuenta) As NomCuenta " _
+                 & "FROM Catalogo_Cuentas " _
+                 & "WHERE TC = 'BA' " _
+                 & "AND DG = 'D' " _
+                 & "AND Item = '" & NumEmpresa & "' " _
+                 & "AND Periodo = '" & Periodo_Contable & "' " _
+                 & "ORDER BY Codigo "
+            SelectDB_Combo DCBanco, AdoCtaBanco, sSQL, "NomCuenta"
     End Select
 End Sub
 
@@ -4256,7 +3894,7 @@ Private Sub TbarCierre_ButtonClick(ByVal Button As ComctlLib.Button)
       Case "Salir"
            Unload FCierreCaja
       Case "Diario_Caja"
-           Diario_Caja
+           Procesar_Diario_Caja
       Case "Grabar"
            Grabar_Cierre_Diario
       Case "Cuadre_Caja"
@@ -4362,45 +4000,48 @@ Private Sub TbarCierre_ButtonClick(ByVal Button As ComctlLib.Button)
       Case "Excel"
            Select Case SSTab1.Tab
              Case 0
+                  DGVentas.Visible = False
                   DGCxC.Visible = False
                   GenerarDataTexto FCierreCaja, AdoVentas
+                  GenerarDataTexto FCierreCaja, AdoCxC
+                  DGVentas.Visible = True
                   DGCxC.Visible = True
              Case 1
-                  DGCxC.Visible = False
-                  DGAnticipos.Visible = False
-                  GenerarDataTexto FCierreCaja, AdoCxC
-                  GenerarDataTexto FCierreCaja, AdoAnticipos
-                  DGCxC.Visible = True
-                  DGAnticipos.Visible = True
-             Case 2
-                  'DGCierres.Visible = False
+                 'DGCierres.Visible = False
                   DGInv.Visible = False
-                  DGSRI.Visible = False
-                  'GenerarDataTexto FCierreCaja, AdoCierres
+                  DGProductos.Visible = False
                   GenerarDataTexto FCierreCaja, AdoInv
                   GenerarDataTexto FCierreCaja, AdoProductos
-                  'DGCierres.Visible = True
+                 'DGCierres.Visible = True
                   DGInv.Visible = True
-                  DGSRI.Visible = True
-             Case 3
+                  DGProductos.Visible = True
+             Case 2
                   DGAsiento.Visible = False
                   DGAsiento1.Visible = False
+                  DGAnticipos.Visible = False
                   GenerarDataTexto FCierreCaja, AdoAsiento
                   GenerarDataTexto FCierreCaja, AdoAsiento1
+                  GenerarDataTexto FCierreCaja, AdoAnticipos
                   DGAsiento.Visible = True
                   DGAsiento1.Visible = True
-             Case 4
+                  DGAnticipos.Visible = True
+             Case 3
                   DGFactAnul.Visible = False
                   GenerarDataTexto FCierreCaja, AdoFactAnul
                   DGFactAnul.Visible = True
-             Case 5
+             Case 4
                   DGSRI.Visible = False
                   GenerarDataTexto FCierreCaja, AdoSRI
                   DGSRI.Visible = True
-             Case 6
+             Case 5
                   DGBanco.Visible = False
                   GenerarDataTexto FCierreCaja, AdoBanco
                   DGBanco.Visible = True
            End Select
+'''      Case "Kardex"
+'''           Progreso_Barra.Mensaje_Box = "Actualizando Productos"
+'''           Progreso_Esperar
+'''           Insertar_Productos_Cierre_Caja_SP MBFechaI, MBFechaF
+'''           Progreso_Final
     End Select
 End Sub

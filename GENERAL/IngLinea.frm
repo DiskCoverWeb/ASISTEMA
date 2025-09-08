@@ -123,19 +123,19 @@ Begin VB.Form IngLinea
       TabCaption(1)   =   "DATOS DEL S.R.I."
       TabPicture(1)   =   "IngLinea.frx":045E
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "FrmEstablecimiento"
-      Tab(1).Control(1)=   "TxtNumSerieDos"
-      Tab(1).Control(2)=   "TxtNumSerieUno"
-      Tab(1).Control(3)=   "TxtNumSerietres1"
-      Tab(1).Control(4)=   "TxtNumAutor"
-      Tab(1).Control(5)=   "MBFechaVenc"
+      Tab(1).Control(0)=   "Label18"
+      Tab(1).Control(1)=   "Label15"
+      Tab(1).Control(2)=   "Label14"
+      Tab(1).Control(3)=   "Label17"
+      Tab(1).Control(4)=   "Label16"
+      Tab(1).Control(5)=   "Label13"
       Tab(1).Control(6)=   "MBFechaIni"
-      Tab(1).Control(7)=   "Label13"
-      Tab(1).Control(8)=   "Label16"
-      Tab(1).Control(9)=   "Label17"
-      Tab(1).Control(10)=   "Label14"
-      Tab(1).Control(11)=   "Label15"
-      Tab(1).Control(12)=   "Label18"
+      Tab(1).Control(7)=   "MBFechaVenc"
+      Tab(1).Control(8)=   "TxtNumAutor"
+      Tab(1).Control(9)=   "TxtNumSerietres1"
+      Tab(1).Control(10)=   "TxtNumSerieUno"
+      Tab(1).Control(11)=   "TxtNumSerieDos"
+      Tab(1).Control(12)=   "FrmEstablecimiento"
       Tab(1).ControlCount=   13
       Begin VB.Frame FrmEstablecimiento 
          Caption         =   "DATOS DEL ESTABLECIMIENTO:"
@@ -1380,7 +1380,7 @@ Dim Cta_Ini As String
 Dim Cta_Fin As String
 
 Private Sub CheqCtaVenta_Click()
-  If CheqCtaVenta.Value <> 0 Then MBoxCta_Venta.Visible = True Else MBoxCta_Venta.Visible = False
+  If CheqCtaVenta.value <> 0 Then MBoxCta_Venta.Visible = True Else MBoxCta_Venta.Visible = False
 End Sub
 
 Private Sub Command1_Click()
@@ -1579,8 +1579,8 @@ Public Sub LlenarArticulos(CodigoArt As String)
   VTxtNumAutor = Ninguno
   VTxtNumSerieUno = Ninguno
   VTxtNumSerieDos = Ninguno
-  CheqMes.Value = 0
-  CheqCtaVenta.Value = 0
+  CheqMes.value = 0
+  CheqCtaVenta.value = 0
   sSQL = "SELECT * " _
        & "FROM Catalogo_Lineas " _
        & "WHERE Codigo ='" & CodigoArt & "' " _
@@ -1628,13 +1628,13 @@ Public Sub LlenarArticulos(CodigoArt As String)
        VTxtNumSerieDos = MidStrg(.fields("Serie"), 4, 3)
        If .fields("Imp_Mes") Then
           MBoxCta_Venta.Visible = True
-          CheqMes.Value = 1
+          CheqMes.value = 1
        Else
           MBoxCta_Venta.Visible = False
        End If
        If Len(.fields("Cta_Venta")) > 1 Then
           MBoxCta_Venta.Visible = True
-          CheqCtaVenta.Value = 1
+          CheqCtaVenta.value = 1
        Else
           MBoxCta_Venta.Visible = False
        End If
@@ -1730,7 +1730,7 @@ Public Sub GrabarArticulos()
           SetFields AdoLinea, "CxC", CambioCodigoCta(MBoxCta)
           SetFields AdoLinea, "CxC_Anterior", CambioCodigoCta(MBoxCta_Anio_Anterior)
           SetFields AdoLinea, "Cta_Venta", CambioCodigoCta(MBoxCta_Venta)
-          If CheqMes.Value <> 0 Then SetFields AdoLinea, "Imp_Mes", True
+          If CheqMes.value <> 0 Then SetFields AdoLinea, "Imp_Mes", True
           SetFields AdoLinea, "Logo_Factura", TxtLogoFact
           SetFields AdoLinea, "Largo", TxtLargo
           SetFields AdoLinea, "Ancho", TxtAncho

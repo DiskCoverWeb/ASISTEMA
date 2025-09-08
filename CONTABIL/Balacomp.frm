@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.Form BalanceComp 
    Caption         =   "BALANCE DE COMPROBACION"
    ClientHeight    =   7575
@@ -15,11 +15,69 @@ Begin VB.Form BalanceComp
    ScaleHeight     =   7575
    ScaleWidth      =   11280
    WindowState     =   2  'Maximized
-   Begin ComctlLib.Toolbar Toolbar1 
+   Begin MSComctlLib.ImageList ImageList1 
+      Left            =   210
+      Top             =   6195
+      _ExtentX        =   1005
+      _ExtentY        =   1005
+      BackColor       =   -2147483643
+      ImageWidth      =   32
+      ImageHeight     =   32
+      MaskColor       =   12632256
+      _Version        =   393216
+      BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
+         NumListImages   =   11
+         BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "Balacomp.frx":0442
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "Balacomp.frx":0D1C
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "Balacomp.frx":1036
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "Balacomp.frx":1350
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "Balacomp.frx":166A
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "Balacomp.frx":1984
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "Balacomp.frx":2216
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "Balacomp.frx":2530
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "Balacomp.frx":2EDE
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "Balacomp.frx":37B8
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage11 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "Balacomp.frx":3AD2
+            Key             =   ""
+         EndProperty
+      EndProperty
+   End
+   Begin MSComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
       Height          =   660
       Left            =   0
-      TabIndex        =   0
+      TabIndex        =   10
       Top             =   0
       Width           =   11280
       _ExtentX        =   19897
@@ -28,80 +86,154 @@ Begin VB.Form BalanceComp
       ButtonHeight    =   1005
       Appearance      =   1
       ImageList       =   "ImageList1"
-      _Version        =   327682
-      BeginProperty Buttons {0713E452-850A-101B-AFC0-4210102A8DA7} 
+      _Version        =   393216
+      BeginProperty Buttons {66833FE8-8583-11D1-B16A-00C0F0283628} 
          NumButtons      =   11
-         BeginProperty Button1 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   "Procesar_Balance"
-            Object.ToolTipText     =   "Procesar Balance de Comprobación"
-            Object.Tag             =   ""
-            ImageIndex      =   1
-         EndProperty
-         BeginProperty Button2 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   "Procesar_Balance_Mensual"
-            Object.ToolTipText     =   "Procesa Balance Mensual"
-            Object.Tag             =   ""
-            ImageIndex      =   2
-         EndProperty
-         BeginProperty Button3 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   "Procesar_Balance_Consolidado"
-            Object.ToolTipText     =   "Procesa Balance Consolidado de Varias Sucursales/Agencias"
-            Object.Tag             =   ""
-            ImageIndex      =   3
-         EndProperty
-         BeginProperty Button4 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   "Presentar_Balance_Comprobacion"
-            Object.ToolTipText     =   "Presenta Balance de Comprobación"
-            Object.Tag             =   ""
-            ImageIndex      =   4
-         EndProperty
-         BeginProperty Button5 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   "Presenta_Estado_Situacion"
-            Object.ToolTipText     =   "Presenta Estado de Situación (General)"
-            Object.Tag             =   ""
-            ImageIndex      =   5
-         EndProperty
-         BeginProperty Button6 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   "Presenta_Estado_Resultado"
-            Object.ToolTipText     =   "Presenta Estado de Resultado"
-            Object.Tag             =   ""
-            ImageIndex      =   6
-         EndProperty
-         BeginProperty Button7 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   "Presenta_Balance_Semanal"
-            Object.ToolTipText     =   "Presenta Balance Mensual por semanas"
-            Object.Tag             =   ""
-            ImageIndex      =   8
-         EndProperty
-         BeginProperty Button8 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   "Imprimir"
-            Object.ToolTipText     =   "Imprimir Resultados"
-            Object.Tag             =   ""
-            ImageIndex      =   9
-         EndProperty
-         BeginProperty Button9 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+         BeginProperty Button1 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Salir"
             Object.ToolTipText     =   "Salir del Modulo"
-            Object.Tag             =   ""
-            ImageIndex      =   10
+            ImageIndex      =   1
          EndProperty
-         BeginProperty Button10 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+         BeginProperty Button2 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "Procesar_Balance"
+            Object.ToolTipText     =   "Procesar Balance de Comprobación"
+            ImageIndex      =   2
+         EndProperty
+         BeginProperty Button3 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "Procesar_Balance_Mensual"
+            Object.ToolTipText     =   "Procesa Balance Mensual"
+            ImageIndex      =   3
+         EndProperty
+         BeginProperty Button4 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "Procesar_Balance_Consolidado"
+            Object.ToolTipText     =   "Procesa Balance Consolidado de Varias Sucursales/Agencias"
+            ImageIndex      =   4
+            Style           =   5
+            BeginProperty ButtonMenus {66833FEC-8583-11D1-B16A-00C0F0283628} 
+               NumButtonMenus  =   3
+               BeginProperty ButtonMenu1 {66833FEE-8583-11D1-B16A-00C0F0283628} 
+                  Key             =   "BC_BC"
+                  Text            =   "Balance de Comprobacion"
+               EndProperty
+               BeginProperty ButtonMenu2 {66833FEE-8583-11D1-B16A-00C0F0283628} 
+                  Key             =   "BC_ES"
+                  Text            =   "Estado de Situacion"
+               EndProperty
+               BeginProperty ButtonMenu3 {66833FEE-8583-11D1-B16A-00C0F0283628} 
+                  Key             =   "BC_ER"
+                  Text            =   "Estado de Resultado"
+               EndProperty
+            EndProperty
+         EndProperty
+         BeginProperty Button5 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "Presentar_Balance_Comprobacion"
+            Object.ToolTipText     =   "Presenta Balance de Comprobación"
+            ImageIndex      =   5
+         EndProperty
+         BeginProperty Button6 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "Presenta_Estado_Situacion"
+            Object.ToolTipText     =   "Presenta Estado de Situación (General)"
+            ImageIndex      =   6
+         EndProperty
+         BeginProperty Button7 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "Presenta_Estado_Resultado"
+            Object.ToolTipText     =   "Presenta Estado de Resultado"
+            ImageIndex      =   7
+         EndProperty
+         BeginProperty Button8 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "Presenta_Balance_Semanal"
+            Object.ToolTipText     =   "Presenta Balance Mensual por semanas"
+            ImageIndex      =   8
+         EndProperty
+         BeginProperty Button9 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "Imprimir"
+            Object.ToolTipText     =   "Imprimir Resultados"
+            ImageIndex      =   9
+         EndProperty
+         BeginProperty Button10 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "SBSB11"
             Object.ToolTipText     =   "SBS B11"
-            Object.Tag             =   ""
-            ImageIndex      =   11
+            ImageIndex      =   10
          EndProperty
-         BeginProperty Button11 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+         BeginProperty Button11 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Excel"
             Object.ToolTipText     =   "Exportar a Excel"
-            Object.Tag             =   ""
-            ImageIndex      =   12
+            ImageIndex      =   11
          EndProperty
       EndProperty
+      Begin VB.Frame Frame1 
+         Caption         =   "Tipo de Presentacion de Cuentas"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   645
+         Left            =   13545
+         TabIndex        =   18
+         Top             =   0
+         Width           =   3270
+         Begin VB.OptionButton OpcD 
+            Caption         =   "Detalle"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Left            =   2205
+            TabIndex        =   21
+            Top             =   315
+            Width           =   960
+         End
+         Begin VB.OptionButton OpcG 
+            Caption         =   "Grupo"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Left            =   1155
+            TabIndex        =   20
+            Top             =   315
+            Width           =   855
+         End
+         Begin VB.OptionButton OpcDG 
+            Caption         =   "Todas"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Left            =   105
+            TabIndex        =   19
+            Top             =   315
+            Value           =   -1  'True
+            Width           =   855
+         End
+      End
       Begin VB.Frame Frame2 
          Height          =   645
-         Left            =   6510
-         TabIndex        =   1
+         Left            =   6720
+         TabIndex        =   11
          Top             =   0
          Width           =   6735
          Begin VB.TextBox TextCotiza 
@@ -119,14 +251,14 @@ Begin VB.Form BalanceComp
             Left            =   5460
             MaxLength       =   11
             MultiLine       =   -1  'True
-            TabIndex        =   7
+            TabIndex        =   12
             Top             =   210
             Width           =   1170
          End
          Begin MSMask.MaskEdBox MBFechaI 
             Height          =   330
             Left            =   840
-            TabIndex        =   3
+            TabIndex        =   13
             Top             =   210
             Width           =   1275
             _ExtentX        =   2249
@@ -155,7 +287,7 @@ Begin VB.Form BalanceComp
          Begin MSMask.MaskEdBox MBFechaF 
             Height          =   330
             Left            =   2940
-            TabIndex        =   5
+            TabIndex        =   14
             Top             =   210
             Width           =   1275
             _ExtentX        =   2249
@@ -181,9 +313,9 @@ Begin VB.Form BalanceComp
             OLEDragMode     =   1
             OLEDropMode     =   2
          End
-         Begin VB.Label Label5 
+         Begin VB.Label Label1 
             BorderStyle     =   1  'Fixed Single
-            Caption         =   " Cotizacion:"
+            Caption         =   " Desde:"
             BeginProperty Font 
                Name            =   "MS Sans Serif"
                Size            =   8.25
@@ -194,10 +326,11 @@ Begin VB.Form BalanceComp
                Strikethrough   =   0   'False
             EndProperty
             Height          =   330
-            Left            =   4305
-            TabIndex        =   6
+            Index           =   0
+            Left            =   105
+            TabIndex        =   17
             Top             =   210
-            Width           =   1170
+            Width           =   750
          End
          Begin VB.Label Label2 
             BorderStyle     =   1  'Fixed Single
@@ -212,14 +345,15 @@ Begin VB.Form BalanceComp
                Strikethrough   =   0   'False
             EndProperty
             Height          =   330
+            Index           =   0
             Left            =   2205
-            TabIndex        =   4
+            TabIndex        =   16
             Top             =   210
             Width           =   750
          End
-         Begin VB.Label Label1 
+         Begin VB.Label Label5 
             BorderStyle     =   1  'Fixed Single
-            Caption         =   " Desde:"
+            Caption         =   " Cotizacion:"
             BeginProperty Font 
                Name            =   "MS Sans Serif"
                Size            =   8.25
@@ -230,87 +364,19 @@ Begin VB.Form BalanceComp
                Strikethrough   =   0   'False
             EndProperty
             Height          =   330
-            Left            =   105
-            TabIndex        =   2
+            Index           =   0
+            Left            =   4305
+            TabIndex        =   15
             Top             =   210
-            Width           =   750
-         End
-      End
-      Begin VB.Frame Frame1 
-         Caption         =   "Tipo de Presentacion de Cuentas"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   645
-         Left            =   13335
-         TabIndex        =   8
-         Top             =   0
-         Width           =   3270
-         Begin VB.OptionButton OpcDG 
-            Caption         =   "Todas"
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   225
-            Left            =   105
-            TabIndex        =   9
-            Top             =   315
-            Value           =   -1  'True
-            Width           =   855
-         End
-         Begin VB.OptionButton OpcG 
-            Caption         =   "Grupo"
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   225
-            Left            =   1155
-            TabIndex        =   10
-            Top             =   315
-            Width           =   855
-         End
-         Begin VB.OptionButton OpcD 
-            Caption         =   "Detalle"
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   225
-            Left            =   2205
-            TabIndex        =   11
-            Top             =   315
-            Width           =   960
+            Width           =   1170
          End
       End
    End
    Begin MSDataGridLib.DataGrid DGBalance 
-      Bindings        =   "Balacomp.frx":0442
+      Bindings        =   "Balacomp.frx":4724
       Height          =   4635
       Left            =   105
-      TabIndex        =   20
+      TabIndex        =   8
       Top             =   1470
       Width           =   14190
       _ExtentX        =   25030
@@ -377,7 +443,7 @@ Begin VB.Form BalanceComp
       Caption         =   "&S"
       Height          =   330
       Left            =   210
-      TabIndex        =   19
+      TabIndex        =   7
       Top             =   7665
       Width           =   225
    End
@@ -676,71 +742,9 @@ Begin VB.Form BalanceComp
       ForeColor       =   &H00FF0000&
       Height          =   645
       Left            =   105
-      TabIndex        =   21
+      TabIndex        =   9
       Top             =   735
-      Width           =   13560
-   End
-   Begin ComctlLib.ImageList ImageList1 
-      Left            =   210
-      Top             =   6405
-      _ExtentX        =   1005
-      _ExtentY        =   1005
-      BackColor       =   -2147483643
-      ImageWidth      =   32
-      ImageHeight     =   32
-      MaskColor       =   12632256
-      _Version        =   327682
-      BeginProperty Images {0713E8C2-850A-101B-AFC0-4210102A8DA7} 
-         NumListImages   =   12
-         BeginProperty ListImage1 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "Balacomp.frx":045B
-            Key             =   ""
-         EndProperty
-         BeginProperty ListImage2 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "Balacomp.frx":0775
-            Key             =   ""
-         EndProperty
-         BeginProperty ListImage3 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "Balacomp.frx":0A8F
-            Key             =   ""
-         EndProperty
-         BeginProperty ListImage4 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "Balacomp.frx":0DA9
-            Key             =   ""
-         EndProperty
-         BeginProperty ListImage5 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "Balacomp.frx":10C3
-            Key             =   ""
-         EndProperty
-         BeginProperty ListImage6 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "Balacomp.frx":13B5
-            Key             =   ""
-         EndProperty
-         BeginProperty ListImage7 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "Balacomp.frx":16CF
-            Key             =   ""
-         EndProperty
-         BeginProperty ListImage8 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "Balacomp.frx":18A9
-            Key             =   ""
-         EndProperty
-         BeginProperty ListImage9 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "Balacomp.frx":1E1B
-            Key             =   ""
-         EndProperty
-         BeginProperty ListImage10 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "Balacomp.frx":2135
-            Key             =   ""
-         EndProperty
-         BeginProperty ListImage11 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "Balacomp.frx":244F
-            Key             =   ""
-         EndProperty
-         BeginProperty ListImage12 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "Balacomp.frx":4AE1
-            Key             =   ""
-         EndProperty
-      EndProperty
+      Width           =   14085
    End
    Begin VB.Label LabelTotHaber 
       Alignment       =   1  'Right Justify
@@ -758,7 +762,7 @@ Begin VB.Form BalanceComp
       EndProperty
       Height          =   330
       Left            =   9555
-      TabIndex        =   13
+      TabIndex        =   1
       Top             =   7140
       Width           =   1905
    End
@@ -776,7 +780,7 @@ Begin VB.Form BalanceComp
       EndProperty
       Height          =   330
       Left            =   8820
-      TabIndex        =   16
+      TabIndex        =   4
       Top             =   7140
       Width           =   750
    End
@@ -796,7 +800,7 @@ Begin VB.Form BalanceComp
       EndProperty
       Height          =   330
       Left            =   6930
-      TabIndex        =   14
+      TabIndex        =   2
       Top             =   7140
       Width           =   1905
    End
@@ -814,7 +818,7 @@ Begin VB.Form BalanceComp
       EndProperty
       Height          =   330
       Left            =   6195
-      TabIndex        =   15
+      TabIndex        =   3
       Top             =   7140
       Width           =   750
    End
@@ -832,7 +836,7 @@ Begin VB.Form BalanceComp
       EndProperty
       Height          =   330
       Left            =   5355
-      TabIndex        =   18
+      TabIndex        =   6
       Top             =   7140
       Width           =   855
    End
@@ -852,7 +856,7 @@ Begin VB.Form BalanceComp
       EndProperty
       Height          =   330
       Left            =   3675
-      TabIndex        =   12
+      TabIndex        =   0
       Top             =   7140
       Width           =   1695
    End
@@ -870,7 +874,7 @@ Begin VB.Form BalanceComp
       EndProperty
       Height          =   330
       Left            =   2625
-      TabIndex        =   17
+      TabIndex        =   5
       Top             =   7140
       Width           =   1065
    End
@@ -905,8 +909,8 @@ Public Sub ListarTipoDeBalance(EsBalanceMes As Boolean)
   End If
   Select_Adodc AdoCtas, sSQL
   If AdoCtas.Recordset.RecordCount > 0 Then
-     MBFechaI = AdoCtas.Recordset.fields("Fecha_Inicial")
-     MBFechaF = AdoCtas.Recordset.fields("Fecha_Final")
+     MBFechaI = AdoCtas.Recordset.Fields("Fecha_Inicial")
+     MBFechaF = AdoCtas.Recordset.Fields("Fecha_Final")
   Else
      MBFechaI = FechaSistema
      MBFechaF = FechaSistema
@@ -981,8 +985,8 @@ Public Sub ListarTipoDeBalance(EsBalanceMes As Boolean)
   With AdoTotales.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
-          SumaDebe = SumaDebe + .fields("TDebitos")
-          SumaHaber = SumaHaber + .fields("TCreditos")
+          SumaDebe = SumaDebe + .Fields("TDebitos")
+          SumaHaber = SumaHaber + .Fields("TCreditos")
          .MoveNext
        Loop
    End If
@@ -996,89 +1000,6 @@ Public Sub ListarTipoDeBalance(EsBalanceMes As Boolean)
   RatonNormal
   Unload FEsperar
 End Sub
-
-'''Public Sub ListarTipoDeBalance_Exterior(EsBalanceMes As Boolean, _
-'''                                        TipoBalance As String)
-'''  RatonReloj
-'''  Progreso_Barra.Incremento = 0
-'''  Progreso_Barra.Valor_Maximo = 100
-'''  Progreso_Barra.Mensaje_Box = "Consultando el Balance"
-'''  Progreso_Esperar
-'''  DGBalance.Visible = False
-'''  TextCotiza = Format(Dolar, "#,##0.00")
-'''  sSQL = "SELECT * " _
-'''       & "FROM Fechas_Balance " _
-'''       & "WHERE Item = '" & NumEmpresa & "' " _
-'''       & "AND Periodo = '" & Periodo_Contable & "' "
-'''  If EsBalanceMes Then
-'''     sSQL = sSQL & "AND Detalle = 'Balance Mes' "
-'''  Else
-'''     sSQL = sSQL & "AND Detalle = 'Balance' "
-'''  End If
-'''  Select_Adodc AdoCtas, sSQL
-'''  If AdoCtas.Recordset.RecordCount > 0 Then
-'''     MBFechaI = AdoCtas.Recordset.Fields("Fecha_Inicial")
-'''     MBFechaF = AdoCtas.Recordset.Fields("Fecha_Final")
-'''  Else
-'''     MBFechaI = FechaSistema
-'''     MBFechaF = FechaSistema
-'''  End If
-'''  FechaValida MBFechaI
-'''  FechaValida MBFechaF
-'''  Progreso_Esperar
-'''
-'''  sSQL = "SELECT DG,Codigo_Ext, Cuenta, Saldo_Anterior, Debitos, Creditos, Saldo_Mes, Saldo_Total, TC " _
-'''       & "FROM Catalogo_Cuentas " _
-'''       & "WHERE Item = '" & NumEmpresa & "' " _
-'''       & "AND Periodo = '" & Periodo_Contable & "' "
-'''  Select Case TipoBalance
-'''    Case "BS"
-'''         sSQL = sSQL & "AND CC BETWEEN '1' and '3' "
-'''         MensajeEncabData = "B A L A N C E   G E N E R A L"
-'''    Case "BR"
-'''         sSQL = sSQL & "AND CC BETWEEN '4' and '9' "
-'''         MensajeEncabData = "B A L A N C E   D E   R E S U L T A D O"
-'''    Case Else
-'''         sSQL = sSQL & "AND (Debitos<>0 OR Creditos<>0 OR Saldo_Total<>0) "
-'''         MensajeEncabData = "B A L A N C E   D E   C O M P R O B A C I O N"
-'''  End Select
-'''  sSQL = sSQL & "AND (Total_N6+Total_N5+Total_N4+Total_N3+Total_N2+Total_N1)<>0 "
-'''  If OpcG.value Then sSQL = sSQL & "AND DG = 'G' "
-'''  If OpcD.value Then sSQL = sSQL & "AND DG = 'D' "
-'''  sSQL = sSQL & "AND Codigo <> '" & Ninguno & "' " _
-'''       & "ORDER BY Codigo "
-'''  Select_Adodc_Grid DGBalance, AdoBalance, sSQL
-''' 'Recojemos la consulta que se realizo para el tipo de balance
-'''  sSQL_Ext = sSQL
-'''  Progreso_Esperar
-'''  RatonReloj
-'''  If EsBalanceMes Then SQLMsg1 = SQLMsg1 & "MENSUAL "
-'''  SumaDebe = 0: SumaHaber = 0
-'''  If OpcionBalance = 1 Or OpcionBalance = 4 Then
-'''     With AdoBalance.Recordset
-'''      If .RecordCount > 0 Then
-'''          Progreso_Barra.Valor_Maximo = Progreso_Barra.Valor_Maximo + .RecordCount
-'''          Progreso_Barra.Mensaje_Box = "Consultando " & ULCase(SQLMsg1)
-'''          Progreso_Esperar
-'''          Do While Not .EOF
-'''             SumaDebe = SumaDebe + .Fields("Debitos")
-'''             SumaHaber = SumaHaber + .Fields("Creditos")
-'''            ' Progreso_Esperar
-'''            .MoveNext
-'''          Loop
-'''         .MoveFirst
-'''      End If
-'''     End With
-'''  End If
-'''  LabelTotDebe.Caption = Format(SumaDebe, "#,##0.00")
-'''  LabelTotHaber.Caption = Format(SumaHaber, "#,##0.00")
-'''  LabelTotSaldo.Caption = Format(SumaDebe - SumaHaber, "#,##0.00")
-'''  BalanceComp.Caption = "ESTADOS FINANCIEROS"
-'''  LblTipoBalance.Caption = MensajeEncabData & vbCrLf & "DEL  " & FechaStrgCorta(MBFechaI) & "  AL  " & FechaStrgCorta(MBFechaF)
-'''  DGBalance.Visible = True
-'''  Progreso_Final
-'''  RatonNormal
-'''End Sub
 
 Public Sub ListarTipoDeBalance_Ext(EsBalanceMes As Boolean, _
                                    TipoBalance As String, _
@@ -1099,8 +1020,8 @@ Public Sub ListarTipoDeBalance_Ext(EsBalanceMes As Boolean, _
     End If
     Select_Adodc AdoCtas, sSQL
     If AdoCtas.Recordset.RecordCount > 0 Then
-       MBFechaI = AdoCtas.Recordset.fields("Fecha_Inicial")
-       MBFechaF = AdoCtas.Recordset.fields("Fecha_Final")
+       MBFechaI = AdoCtas.Recordset.Fields("Fecha_Inicial")
+       MBFechaF = AdoCtas.Recordset.Fields("Fecha_Final")
     Else
        MBFechaI = FechaSistema
        MBFechaF = FechaSistema
@@ -1138,8 +1059,8 @@ Public Sub ListarTipoDeBalance_Ext(EsBalanceMes As Boolean, _
   With AdoTotales.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
-          SumaDebe = SumaDebe + .fields("TDebitos")
-          SumaHaber = SumaHaber + .fields("TCreditos")
+          SumaDebe = SumaDebe + .Fields("TDebitos")
+          SumaHaber = SumaHaber + .Fields("TCreditos")
          .MoveNext
        Loop
    End If
@@ -1214,9 +1135,9 @@ Dim Saldos_Prom_ME(31) As Currency
            Saldos_Prom_MN(I) = 0
            Saldos_Prom_ME(I) = 0
        Next
-       Codigo = .fields("Cta")
+       Codigo = .Fields("Cta")
        Do While Not .EOF
-          If Codigo <> .fields("Cta") Then
+          If Codigo <> .Fields("Cta") Then
              Cadena = "Codigo: " & Codigo & vbCrLf
              Saldo = Saldos_Prom_MN(1)
              Saldo_ME = Saldos_Prom_ME(1)
@@ -1249,11 +1170,11 @@ Dim Saldos_Prom_ME(31) As Currency
                  Saldos_Prom_MN(I) = 0
                  Saldos_Prom_ME(I) = 0
              Next
-             Codigo = .fields("Cta")
+             Codigo = .Fields("Cta")
           End If
-          Dia = Day(.fields("Fecha"))
-          Saldos_Prom_MN(Dia) = .fields("Saldo")
-          Saldos_Prom_ME(Dia) = .fields("Saldo_ME")
+          Dia = Day(.Fields("Fecha"))
+          Saldos_Prom_MN(Dia) = .Fields("Saldo")
+          Saldos_Prom_ME(Dia) = .Fields("Saldo_ME")
          .MoveNext
        Loop
    End If
@@ -1379,10 +1300,10 @@ Private Sub TextCotiza_KeyDown(KeyCode As Integer, Shift As Integer)
      With AdoBalance.Recordset
       If .RecordCount > 0 Then
           Do While Not .EOF
-             BalanceComp.Caption = .fields("Fecha")
-            .fields("Debe") = Redondear(.fields("Debe"), 2)
-            .fields("Haber") = Redondear(.fields("Haber"), 2)
-            .fields("Parcial_ME") = Redondear(.fields("Parcial_ME"), 2)
+             BalanceComp.Caption = .Fields("Fecha")
+            .Fields("Debe") = Redondear(.Fields("Debe"), 2)
+            .Fields("Haber") = Redondear(.Fields("Haber"), 2)
+            .Fields("Parcial_ME") = Redondear(.Fields("Parcial_ME"), 2)
             .Update
             .MoveNext
           Loop
@@ -1393,221 +1314,55 @@ Private Sub TextCotiza_KeyDown(KeyCode As Integer, Shift As Integer)
   End If
 End Sub
 
-Public Sub Procesar_Balance_Consolidado()
-Dim ID_Campo As Integer
-Dim ID_Max As Integer
-Dim CamposEmp() As Nodo_Arbol
-Dim CampoEmpresa As String
-Dim CampoTotal As String
+Public Sub Generar_SBS_B11()
+'cas408902
+'milcambios4089
+Dim NumFile As Long
+Dim NombreArchivo As String
+Dim TextoLinea As String
   RatonReloj
- 'Borramos la Tabla temporar del Balance
-  SQL1 = "DROP TABLE [Balance_Consolidado] "
-  Ejecutar_SQL_SP SQL1
-  SQL1 = "CREATE TABLE [Balance_Consolidado] ("
-  If SQL_Server Then
-     SQL1 = SQL1 _
-          & "[Item] NVARCHAR (3) NULL, " _
-          & "[Periodo] NVARCHAR (10) NULL, " _
-          & "[TC] NVARCHAR (2) NULL, " _
-          & "[DG] NVARCHAR (1) NULL, " _
-          & "[Codigo] NVARCHAR (16) NULL, " _
-          & "[Cuenta] NVARCHAR (80) NULL, " _
-          & "[TB] NVARCHAR (3) NULL, " _
-          & "[Ln] INT NULL "
-  Else
-     SQL1 = SQL1 _
-          & "[Item] TEXT(3) NULL, " _
-          & "[Periodo] TEXT(10) NULL, " _
-          & "[TC] TEXT(2) NULL, " _
-          & "[DG] TEXT(1) NULL, " _
-          & "[Codigo] TEXT(16) NULL, " _
-          & "[Cuenta] TEXT(80) NULL, " _
-          & "[TB] TEXT(3) NULL, " _
-          & "[Ln] LONG NULL "
-  End If
-  SQL1 = SQL1 & ");"
-  Ejecutar_SQL_SP SQL1
-  
-  sSQL = "SELECT * " _
-       & "FROM Catalogo_Cuentas " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND Periodo = '" & Periodo_Contable & "' " _
-       & "ORDER BY Codigo "
-  Select_Adodc AdoCtas, sSQL
-       
-  sSQL = "SELECT * " _
-       & "FROM Empresas " _
-       & "WHERE Item <> '000' " _
-       & "ORDER BY Sucursal,Item "
-  Select_Adodc AdoCtas1, sSQL
-  ID_Max = AdoCtas1.Recordset.RecordCount
-  ReDim CamposEmp(ID_Max) As Nodo_Arbol
-  ID_Campo = 0
-  With AdoCtas1.Recordset
+  DGBalance.Visible = False
+  With AdoBalance.Recordset
    If .RecordCount > 0 Then
+       CodigoDelBanco = "4089"
+       Total = 0
+       TotalActivo = 0
+       TotalPasivo = 0
+       TotalCapital = 0
+       TotalIngreso = 0
+       TotalEgreso = 0
        Do While Not .EOF
-          If CBool(.fields("Sucursal")) Then
-             CampoEmpresa = "E_TOTAL"
-             CampoTotal = "E_" & .fields("Item")
-          Else
-             CampoEmpresa = .fields("Abreviatura")
-          End If
-          If CampoEmpresa = Ninguno Then CampoEmpresa = "EMP_" & .fields("Item")
-          CamposEmp(ID_Campo).Codigo_Aux = CampoEmpresa
-          CamposEmp(ID_Campo).Item_Nodo = "E_" & .fields("Item")
-          CamposEmp(ID_Campo).Valor = 0
-    
-         'Creamos los campos numericos para los totales del balance
-          SQL1 = "ALTER TABLE Balance_Consolidado "
-          If SQL_Server Then
-             SQL1 = SQL1 & "ADD [" & CamposEmp(ID_Campo).Item_Nodo & "] MONEY NULL;"
-          Else
-             SQL1 = SQL1 & "ADD [" & CamposEmp(ID_Campo).Item_Nodo & "] CURRENCY NULL;"
-          End If
-          Ejecutar_SQL_SP SQL1
-          ID_Campo = ID_Campo + 1
-         .MoveNext
-       Loop
-   End If
-  End With
-  
-  sSQL = "SELECT * " _
-       & "FROM Balance_Consolidado " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND Periodo = '" & Periodo_Contable & "' " _
-       & "ORDER BY Codigo "
-  Select_Adodc AdoTrans, sSQL
-  RatonReloj
- 'Creamos Todo el Catalogo que necesitenos
-  With AdoCtas.Recordset
-   If .RecordCount > 0 Then
-       Do While Not .EOF
-          If AdoTrans.Recordset.RecordCount > 0 Then
-             AdoTrans.Recordset.MoveFirst
-             AdoTrans.Recordset.Find ("Codigo = '" & .fields("Codigo") & "' ")
-             If AdoTrans.Recordset.EOF Then
-                SetAdoAddNew "Balance_Consolidado"
-                SetAdoFields "Codigo", .fields("Codigo")
-                SetAdoFields "Cuenta", .fields("Cuenta")
-                SetAdoFields "TB", .fields("TB")
-                SetAdoFields "DG", .fields("DG")
-                SetAdoFields "TC", .fields("TC")
-                SetAdoFields "Item", NumEmpresa
-                SetAdoFields "Periodo", Periodo_Contable
-                SetAdoUpdate
-             End If
-          Else
-             SetAdoAddNew "Balance_Consolidado"
-             SetAdoFields "Codigo", .fields("Codigo")
-             SetAdoFields "Cuenta", TrimStrg(MidStrg(.fields("Cuenta"), 1, 60))
-             SetAdoFields "TB", .fields("TB")
-             SetAdoFields "DG", .fields("DG")
-             SetAdoFields "TC", .fields("TC")
-             SetAdoFields "Item", NumEmpresa
-             SetAdoFields "Periodo", Periodo_Contable
-             SetAdoUpdate
-          End If
-         .MoveNext
-       Loop
-   End If
-  End With
-  sSQL = "UPDATE Balance_Consolidado SET "
-  For ID_Campo = 0 To ID_Max - 1
-      sSQL = sSQL & CamposEmp(ID_Campo).Item_Nodo & " = 0, "
-      CamposEmp(ID_Campo).Valor = 0
-  Next ID_Campo
-  sSQL = sSQL & "Ln = 0 " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND Periodo = '" & Periodo_Contable & "' "
-  Ejecutar_SQL_SP sSQL
-  
-  sSQL = "SELECT Item,Cta,SUM(Debe) As TDebe,SUM(Haber) As THaber " _
-       & "FROM Transacciones " _
-       & "WHERE T <> '" & Anulado & "' " _
-       & "AND TP IN ('CD','CE','CI','ND','NC') " _
-       & "AND Periodo = '" & Periodo_Contable & "' " _
-       & "GROUP BY Item,Cta " _
-       & "ORDER BY Item,Cta "
-  Select_Adodc AdoTrans, sSQL
-  With AdoTrans.Recordset
-   If .RecordCount > 0 Then
-       Do While Not .EOF
-          Cta = .fields("Cta")
-          Codigo = "E_" & .fields("Item")
-          If OpcCoop Then
-             Select Case MidStrg(Cta, 1, 1)
-               Case "4"
-                    Total_MN = .fields("TDebe") - .fields("THaber")
-               Case "5"
-                    Total_MN = .fields("THaber") - .fields("TDebe")
-             End Select
-          Else
-             Select Case MidStrg(Cta, 1, 1)
-               Case "5"
-                    Total_MN = .fields("TDebe") - .fields("THaber")
-               Case "4"
-                    Total_MN = .fields("THaber") - .fields("TDebe")
-             End Select
-          End If
-          Select Case MidStrg(Cta, 1, 1)
-            Case "1", "6", "8"
-                 Total_MN = .fields("TDebe") - .fields("THaber")
-            Case "2", "3", "7", "9"
-                 Total_MN = .fields("THaber") - .fields("TDebe")
+          Select Case MidStrg(.Fields("Codigo"), 1, 1)
+            Case "1": TotalActivo = TotalActivo + .Fields("Saldo_Total")
+            Case "2": TotalPasivo = TotalPasivo + .Fields("Saldo_Total")
+            Case "3": TotalCapital = TotalCapital + .Fields("Saldo_Total")
+            Case "4": TotalIngreso = TotalIngreso + .Fields("Saldo_Total")
+            Case "5", "6": TotalEgreso = TotalEgreso + .Fields("Saldo_Total")
+            Case Else: TotalAbonos = TotalAbonos + .Fields("Saldo_Total")
           End Select
-          Total_MN = Redondear(Total_MN, 2)
-          For ID_Campo = 0 To ID_Max - 1
-              If Codigo = CamposEmp(ID_Campo).Item_Nodo Then
-                 CamposEmp(ID_Campo).Valor = CamposEmp(ID_Campo).Valor + Total_MN
-                 ID_Campo = ID_Max
-              End If
-          Next ID_Campo
-          CamposEmp(ID_Max - 1).Valor = CamposEmp(ID_Max - 1).Valor + Total_MN
-          If Total_MN <> 0 Then
-            'Actualizamos las cuentas generales
-             Cta_Sup = Cta
-             Do While (Cta_Sup <> "0")
-                sSQL = "UPDATE Balance_Consolidado " _
-                     & "SET " & Codigo & " = " & Codigo & " + " & Total_MN & " " _
-                     & "WHERE Codigo = '" & Cta_Sup & "' " _
-                     & "AND Item = '" & NumEmpresa & "' " _
-                     & "AND Periodo = '" & Periodo_Contable & "' "
-                Ejecutar_SQL_SP sSQL
-                
-                sSQL = "UPDATE Balance_Consolidado " _
-                     & "SET " & CampoTotal & " = " & CampoTotal & " + " & Total_MN & " " _
-                     & "WHERE Codigo = '" & Cta_Sup & "' " _
-                     & "AND Item = '" & NumEmpresa & "' " _
-                     & "AND Periodo = '" & Periodo_Contable & "' "
-                Ejecutar_SQL_SP sSQL
-                Cta_Sup = CodigoCuentaSup(Cta_Sup)
-             Loop
-          End If
          .MoveNext
        Loop
+       Total = TotalActivo + TotalPasivo + TotalCapital + TotalIngreso + TotalEgreso + TotalAbonos
+      .MoveFirst
+       NombreArchivo = RutaSysBases & "\SBS\B11M" & CodigoDelBanco & Replace(MBFechaF, "/", "") & ".txt"
+       NumFile = FreeFile
+       Open NombreArchivo For Output As #NumFile
+       TextoLinea = "B11" & vbTab & CodigoDelBanco & vbTab & MBFechaF & vbTab & .RecordCount + 1 & vbTab & Format(Total, "#0.00")
+       Print #NumFile, TextoLinea
+       Do While Not .EOF
+          TextoLinea = Replace(.Fields("Codigo"), ".", "") & vbTab & Format(.Fields("Saldo_Total"), "#0.00")
+          Print #NumFile, TextoLinea
+         .MoveNext
+       Loop
+       Close #NumFile
    End If
   End With
-  sSQL = "SELECT DG,Codigo,Cuenta,"
-  For ID_Campo = 0 To ID_Max - 1
-      If CamposEmp(ID_Campo).Valor <> 0 Then
-         sSQL = sSQL & CamposEmp(ID_Campo).Item_Nodo & " As " & CamposEmp(ID_Campo).Codigo_Aux & ","
-      End If
-  Next ID_Campo
-  sSQL = sSQL & "TC " _
-       & "FROM Balance_Consolidado " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND Periodo = '" & Periodo_Contable & "' " _
-       & "ORDER BY Codigo "
-  Select_Adodc_Grid DGBalance, AdoBalance, sSQL
-  RatonReloj
-  BalanceComp.Caption = "ESTADOS FINANCIEROS CONSOLIDADOS"
- 'DGBalance.Caption = SQLMsg1 & "DEL  " & FechaStrgCorta(MBFechaI) & "  AL  " & FechaStrgCorta(MBFechaF)
-  DGBalance.Visible = True
   RatonNormal
-  MsgBox "Proceso Terminado"
+  DGBalance.Visible = True
+  MsgBox "El Archivo: " & NombreArchivo & "," & vbCrLf & "Fue Generado exitosamente"
 End Sub
 
-Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
+Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
     BalanceCC = ""
 ''    If CheqBalExt.Value <> 0 Then
 ''       BalanceCC = SinEspaciosIzq(DCCC)
@@ -1641,9 +1396,6 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
            'Procesar_Balance OpcEsMensual
             Procesar_Balance_SP OpcEsMensual, MBFechaI, MBFechaF, BalanceCC
             ListarTipoDeBalance OpcEsMensual
-      Case "Procesar_Balance_Consolidado"
-            OpcionBalance = 3
-            Procesar_Balance_Consolidado
       Case "Presentar_Balance_Comprobacion"
             OpcionBalance = 4
 ''            If CheqBalExt.Value <> 0 Then
@@ -1712,116 +1464,26 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
     RatonNormal
 End Sub
 
-'''Public Sub Procesar_Balance(EsBalanceMes As Boolean)
-'''  RatonReloj
-'''  DGBalance.Visible = False
-'''  FechaValida MBFechaI
-'''  FechaValida MBFechaF
-'''  Ln_No = 0
-'''  For I = 1 To 9
-'''      Select Case I
-'''        Case 1, 2, 3: sSQL = "UPDATE Catalogo_Cuentas SET TB = 'ES' "
-'''        Case 4, 5, 6: sSQL = "UPDATE Catalogo_Cuentas SET TB = 'ER' "
-'''        Case Else:    sSQL = "UPDATE Catalogo_Cuentas SET TB = 'EO' "
-'''      End Select
-'''      sSQL = sSQL _
-'''           & "WHERE Item = '" & NumEmpresa & "' " _
-'''           & "AND Periodo = '" & Periodo_Contable & "' " _
-'''           & "AND MidStrg(Codigo,1,1)= '" & CStr(I) & "' "
-'''      Ejecutar_SQL_SP sSQL
-'''  Next I
-'''  sSQL = "DELETE * " _
-'''       & "FROM Catalogo_Cuentas " _
-'''       & "WHERE Item = '" & NumEmpresa & "' " _
-'''       & "AND Periodo = '" & Periodo_Contable & "' " _
-'''       & "AND MidStrg(Codigo,1,1) = 'x' "
-'''  Ejecutar_SQL_SP sSQL
-'''
-'''  SetAdoAddNew "Catalogo_Cuentas"
-'''  SetAdoFields "Codigo", "x"
-'''  SetAdoFields "Codigo_Ext", "x"
-'''  SetAdoFields "Cuenta", " - TOTAL PASIVO Y PATRIMONIO"
-'''  SetAdoFields "TB", "ES"
-'''  SetAdoFields "DG", "G"
-'''  SetAdoFields "TC", "N"
-'''  SetAdoFields "Periodo", Periodo_Contable
-'''  SetAdoUpdate
-'''
-'''  SetAdoAddNew "Catalogo_Cuentas"
-'''  SetAdoFields "Codigo", "xx"
-'''  SetAdoFields "Codigo_Ext", "xx"
-'''  SetAdoFields "Cuenta", " - UTILIDAD/EXCEDENTE(Pérdida) DEL PERIODO"
-'''  SetAdoFields "TB", "ES"
-'''  SetAdoFields "DG", "G"
-'''  SetAdoFields "TC", "N"
-'''  SetAdoFields "Periodo", Periodo_Contable
-'''  SetAdoUpdate
-'''
-'''  SetAdoAddNew "Catalogo_Cuentas"
-'''  SetAdoFields "Codigo", "x"
-'''  SetAdoFields "Codigo_Ext", "x"
-'''  SetAdoFields "Cuenta", " - UTILIDAD/EXCEDENTE(Pérdida) DEL PERIODO"
-'''  SetAdoFields "TB", "ER"
-'''  SetAdoFields "DG", "G"
-'''  SetAdoFields "TC", "N"
-'''  SetAdoFields "Periodo", Periodo_Contable
-'''  SetAdoUpdate
-'''  Procesar_Balance_Comprobacion BalanceComp, MBFechaI, MBFechaF, AdoCtas, AdoTrans, EsBalanceMes
-'''  If EsBalanceMes Then
-'''     Fecha_Procesos "Balance Mes", MBFechaI, MBFechaF
-'''  Else
-'''     Fecha_Procesos "Balance", MBFechaI, MBFechaF
-'''  End If
-'''' Listar Balance de Comprobacion
-'''  ListarTipoDeBalance EsBalanceMes
-'''  RatonNormal
-'''End Sub
-
-Public Sub Generar_SBS_B11()
-'cas408902
-'milcambios4089
-Dim NumFile As Long
-Dim NombreArchivo As String
-Dim TextoLinea As String
-  RatonReloj
-  DGBalance.Visible = False
-  With AdoBalance.Recordset
-   If .RecordCount > 0 Then
-       CodigoDelBanco = "4089"
-       Total = 0
-       TotalActivo = 0
-       TotalPasivo = 0
-       TotalCapital = 0
-       TotalIngreso = 0
-       TotalEgreso = 0
-       Do While Not .EOF
-          Select Case MidStrg(.fields("Codigo"), 1, 1)
-            Case "1": TotalActivo = TotalActivo + .fields("Saldo_Total")
-            Case "2": TotalPasivo = TotalPasivo + .fields("Saldo_Total")
-            Case "3": TotalCapital = TotalCapital + .fields("Saldo_Total")
-            Case "4": TotalIngreso = TotalIngreso + .fields("Saldo_Total")
-            Case "5", "6": TotalEgreso = TotalEgreso + .fields("Saldo_Total")
-            Case Else: TotalAbonos = TotalAbonos + .fields("Saldo_Total")
-          End Select
-         .MoveNext
-       Loop
-       Total = TotalActivo + TotalPasivo + TotalCapital + TotalIngreso + TotalEgreso + TotalAbonos
-      .MoveFirst
-       NombreArchivo = RutaSysBases & "\SBS\B11M" & CodigoDelBanco & Replace(MBFechaF, "/", "") & ".txt"
-       NumFile = FreeFile
-       Open NombreArchivo For Output As #NumFile
-       TextoLinea = "B11" & vbTab & CodigoDelBanco & vbTab & MBFechaF & vbTab & .RecordCount + 1 & vbTab & Format(Total, "#0.00")
-       Print #NumFile, TextoLinea
-       Do While Not .EOF
-          TextoLinea = Replace(.fields("Codigo"), ".", "") & vbTab & Format(.fields("Saldo_Total"), "#0.00")
-          Print #NumFile, TextoLinea
-         .MoveNext
-       Loop
-       Close #NumFile
-   End If
-  End With
-  RatonNormal
-  DGBalance.Visible = True
-  MsgBox "El Archivo: " & NombreArchivo & "," & vbCrLf & "Fue Generado exitosamente"
+Private Sub Toolbar1_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMenu)
+Dim ListaSucursales As String
+    OpcionBalance = 3
+    sSQL = "SELECT TC, DG, Codigo, Cuenta, "
+    FechaValida MBFechaF  ' 31/01/2025
+    FechaFin = BuscarFecha(MBFechaF) ' 20250131
+    LblTipoBalance.Caption = SQLMsg1 & vbCrLf & "AL  " & FechaStrgCorta(MBFechaF)
+    Select Case ButtonMenu.key
+      Case "BC_BC": SQLMsg1 = "BALANCE DE COMPROBACION CONSOLIDADO"
+                    Procesar_Balance_Consolidado_SP FechaFin, "BC", ListaSucursales
+      Case "BC_ES": SQLMsg1 = "BALANCE DE SITUACION CONSOLIDADO"
+                    Procesar_Balance_Consolidado_SP FechaFin, "ES", ListaSucursales
+      Case "BC_ER": SQLMsg1 = "BALANCE DE RESULTADO CONSOLIDADO"
+                    Procesar_Balance_Consolidado_SP FechaFin, "ER", ListaSucursales
+    End Select
+    sSQL = sSQL & ListaSucursales & " " _
+         & "FROM Balance_Consolidado " _
+         & "WHERE Item = '" & NumEmpresa & "' " _
+         & "AND Periodo = '" & Periodo_Contable & "' " _
+         & "ORDER BY Codigo "
+    Select_Adodc_Grid DGBalance, AdoBalance, sSQL
+    MsgBox "Proceso Terminado con exito"
 End Sub
-

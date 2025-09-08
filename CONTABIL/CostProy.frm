@@ -1067,8 +1067,8 @@ Public Sub SumatoriaAsiento()
     With AdoAsiento.Recordset
      If .RecordCount > 0 Then
          Do While Not .EOF
-            Debe = Debe + .fields("DEBE")
-            Haber = Haber + .fields("HABER")
+            Debe = Debe + .Fields("DEBE")
+            Haber = Haber + .Fields("HABER")
            .MoveNext
          Loop
         .MoveFirst
@@ -1108,7 +1108,7 @@ Public Sub Grabar_Comprobante_Costos()
           Co.Usuario = CodigoUsuario
           Co.Item = NumEmpresa
             
-          GrabarComprobante Co
+          Grabar_Comprobante Co
           Control_Procesos Normal, Co.Concepto
           ImprimirComprobantesDe False, Co
                
@@ -1187,7 +1187,7 @@ Dim SubModuloGasto As String
      If .RecordCount > 0 Then
         .MoveFirst
         .Find ("Cliente = '" & DCCtas.Text & "' ")
-         If Not .EOF Then CodigoCli = .fields("Codigo")
+         If Not .EOF Then CodigoCli = .Fields("Codigo")
      End If
     End With
     If Beneficiario = "" Then Beneficiario = Ninguno
@@ -1225,17 +1225,17 @@ Dim SubModuloGasto As String
     With AdoAux.Recordset
      If .RecordCount > 0 Then
          ValorDH = 0
-         Cta = .fields("Cta")
+         Cta = .Fields("Cta")
          Do While Not .EOF
-            If Cta <> .fields("Cta") Then
+            If Cta <> .Fields("Cta") Then
                InsertarAsientos AdoAsiento, Cta, 0, 0, ValorDH
                ValorDH = 0
-               Cta = .fields("Cta")
+               Cta = .Fields("Cta")
             End If
-            Total = Total + .fields("Total")
-            ValorDH = ValorDH + .fields("Total")
-            SubTotal = .fields("Total")
-            SubModuloGasto = .fields("Codigo")
+            Total = Total + .Fields("Total")
+            ValorDH = ValorDH + .Fields("Total")
+            SubTotal = .Fields("Total")
+            SubModuloGasto = .Fields("Codigo")
             sSQL = "SELECT TC,Detalle " _
                  & "FROM Catalogo_SubCtas " _
                  & "WHERE Periodo = '" & Periodo_Contable & "' " _
@@ -1246,9 +1246,9 @@ Dim SubModuloGasto As String
             If AdoAux1.Recordset.RecordCount > 0 Then
                SetAdoAddNew "Asiento_SC"
                SetAdoFields "Codigo", SubModuloGasto
-               SetAdoFields "TC", AdoAux1.Recordset.fields("TC")
-               SetAdoFields "Cta", .fields("Cta")
-               SetAdoFields "Beneficiario", AdoAux1.Recordset.fields("Detalle")
+               SetAdoFields "TC", AdoAux1.Recordset.Fields("TC")
+               SetAdoFields "Cta", .Fields("Cta")
+               SetAdoFields "Beneficiario", AdoAux1.Recordset.Fields("Detalle")
                SetAdoFields "TM", "1"
                SetAdoFields "DH", "2"
                SetAdoFields "Valor", SubTotal
@@ -1342,15 +1342,15 @@ Dim ContCtaCosto As Integer
     With AdoAux.Recordset
      If .RecordCount > 0 Then
          ValorDH = 0
-         Cta = .fields("Cta")
+         Cta = .Fields("Cta")
          Do While Not .EOF
-            If Cta <> .fields("Cta") Then
+            If Cta <> .Fields("Cta") Then
                InsertarAsientos AdoAsiento, Cta, 0, 0, ValorDH
                ValorDH = 0
-               Cta = .fields("Cta")
+               Cta = .Fields("Cta")
             End If
-            Total = Total + .fields("Valor")
-            ValorDH = ValorDH + .fields("Valor")
+            Total = Total + .Fields("Valor")
+            ValorDH = ValorDH + .Fields("Valor")
            .MoveNext
          Loop
          InsertarAsientos AdoAsiento, Cta, 0, 0, ValorDH
@@ -1406,7 +1406,7 @@ Private Sub DCCtaProyecto_LostFocus()
     With AdoAux.Recordset
      If .RecordCount > 0 Then
          Do While Not .EOF
-            LstCtaProy.AddItem .fields("Codigo") & Space(19 - Len(.fields("Codigo"))) & .fields("Cuenta")
+            LstCtaProy.AddItem .Fields("Codigo") & Space(19 - Len(.Fields("Codigo"))) & .Fields("Cuenta")
            .MoveNext
          Loop
      End If
@@ -1433,12 +1433,12 @@ Private Sub DGAsientoSC_KeyDown(KeyCode As Integer, Shift As Integer)
      ID_Reg = -1
      With AdoAsientoSC.Recordset
       If .RecordCount > 0 Then
-          ID_Reg = .fields("SC_No")
+          ID_Reg = .Fields("SC_No")
           Titulo = "PREGUNTA DE ELIMINACION"
           Mensajes = "Esta seguro de Eliminar" & vbCrLf _
-                   & .fields("Beneficiario") & vbCrLf _
-                   & "Por USD " & .fields("Valor") & vbCrLf _
-                   & "Linea No. " & .fields("SC_No") & vbCrLf
+                   & .Fields("Beneficiario") & vbCrLf _
+                   & "Por USD " & .Fields("Valor") & vbCrLf _
+                   & "Linea No. " & .Fields("SC_No") & vbCrLf
           If BoxMensaje = vbYes Then
              sSQL = "DELETE * " _
                   & "FROM Asiento_SC " _
@@ -1575,7 +1575,7 @@ Public Sub Listar_SubModulos_Proyecto()
   With AdoCtas.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
-          LstCta.AddItem .fields("Cta") & Space(19 - Len(.fields("Cta"))) & .fields("Cuenta")
+          LstCta.AddItem .Fields("Cta") & Space(19 - Len(.Fields("Cta"))) & .Fields("Cuenta")
          .MoveNext
        Loop
    End If

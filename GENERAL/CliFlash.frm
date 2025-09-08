@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Begin VB.Form FClientesFlash 
    BackColor       =   &H00C0FFC0&
    BorderStyle     =   3  'Fixed Dialog
@@ -830,9 +830,9 @@ Private Sub CNacion_LostFocus()
        & "ORDER BY CProvincia "
   Select_Adodc AdoAux, sSQL
   If AdoAux.Recordset.RecordCount > 0 Then
-     CProvincia.Text = AdoAux.Recordset.fields("CProvincia") & " " & AdoAux.Recordset.fields("Descripcion_Rubro")
+     CProvincia.Text = AdoAux.Recordset.Fields("CProvincia") & " " & AdoAux.Recordset.Fields("Descripcion_Rubro")
      Do While Not AdoAux.Recordset.EOF
-        CProvincia.AddItem AdoAux.Recordset.fields("CProvincia") & " " & AdoAux.Recordset.fields("Descripcion_Rubro")
+        CProvincia.AddItem AdoAux.Recordset.Fields("CProvincia") & " " & AdoAux.Recordset.Fields("Descripcion_Rubro")
         AdoAux.Recordset.MoveNext
      Loop
   Else
@@ -860,9 +860,9 @@ Private Sub CProvincia_LostFocus()
        & "ORDER BY CCiudad "
   Select_Adodc AdoAux, sSQL
   If AdoAux.Recordset.RecordCount > 0 Then
-     CCiudadS.Text = AdoAux.Recordset.fields("Descripcion_Rubro")
+     CCiudadS.Text = AdoAux.Recordset.Fields("Descripcion_Rubro")
      Do While Not AdoAux.Recordset.EOF
-        CCiudadS.AddItem AdoAux.Recordset.fields("Descripcion_Rubro")
+        CCiudadS.AddItem AdoAux.Recordset.Fields("Descripcion_Rubro")
         AdoAux.Recordset.MoveNext
      Loop
   Else
@@ -896,7 +896,7 @@ Private Sub Form_Activate()
   If AdoAux.Recordset.RecordCount > 0 Then
      CNacion.Text = "593 ECUADOR"
      Do While Not AdoAux.Recordset.EOF
-        CNacion.AddItem AdoAux.Recordset.fields("CPais") & " " & AdoAux.Recordset.fields("Descripcion_Rubro")
+        CNacion.AddItem AdoAux.Recordset.Fields("CPais") & " " & AdoAux.Recordset.Fields("Descripcion_Rubro")
         AdoAux.Recordset.MoveNext
      Loop
   End If
@@ -910,9 +910,9 @@ Private Sub Form_Activate()
        & "ORDER BY CProvincia "
   Select_Adodc AdoAux, sSQL
   If AdoAux.Recordset.RecordCount > 0 Then
-     CProvincia.Text = AdoAux.Recordset.fields("CProvincia") & " " & AdoAux.Recordset.fields("Descripcion_Rubro")
+     CProvincia.Text = AdoAux.Recordset.Fields("CProvincia") & " " & AdoAux.Recordset.Fields("Descripcion_Rubro")
      Do While Not AdoAux.Recordset.EOF
-        CProvincia.AddItem AdoAux.Recordset.fields("CProvincia") & " " & AdoAux.Recordset.fields("Descripcion_Rubro")
+        CProvincia.AddItem AdoAux.Recordset.Fields("CProvincia") & " " & AdoAux.Recordset.Fields("Descripcion_Rubro")
         AdoAux.Recordset.MoveNext
      Loop
   Else
@@ -1062,9 +1062,9 @@ Private Sub TxtCI_RUC_KeyDown(KeyCode As Integer, Shift As Integer)
   If CtrlDown And KeyCode = vbKeyV Then TxtCI_RUC.Text = Clipboard.GetText()
 End Sub
 
-Private Sub TxtCI_RUC_KeyPress(KeyAscii As Integer)
-   KeyAscii = Solo_Letras_Numeros(KeyAscii)
-End Sub
+''Private Sub TxtCI_RUC_KeyPress(KeyAscii As Integer)
+''   KeyAscii = Solo_Letras_Numeros(KeyAscii)
+''End Sub
 
 Private Sub TxtCI_RUC_LostFocus()
   TextoValido TxtCI_RUC, , True
@@ -1150,9 +1150,9 @@ Private Sub TxtEmail_KeyDown(KeyCode As Integer, Shift As Integer)
   PresionoEnter KeyCode
 End Sub
 
-Private Sub TxtEmail_KeyPress(KeyAscii As Integer)
-  KeyAscii = Solo_Letras_Numeros(KeyAscii)
-End Sub
+'Private Sub TxtEmail_KeyPress(KeyAscii As Integer)
+'  KeyAscii = Solo_Letras_Numeros(KeyAscii)
+'End Sub
 
 Private Sub TxtEmail_LostFocus()
   TxtEmail = LCase(TxtEmail)
@@ -1175,7 +1175,7 @@ Private Sub TxtGrupo_LostFocus()
     If Mas_Grupos Then sSQL = sSQL & "AND DirNumero = '" & NumEmpresa & "' "
     Select_Adodc AdoAux, sSQL
     If AdoAux.Recordset.RecordCount > 0 Then
-       If Len(AdoAux.Recordset.fields("Direccion")) > 1 Then TxtDirS.Text = AdoAux.Recordset.fields("Direccion") Else TxtDirS.Text = "SD"
+       If Len(AdoAux.Recordset.Fields("Direccion")) > 1 Then TxtDirS.Text = AdoAux.Recordset.Fields("Direccion") Else TxtDirS.Text = "SD"
     Else
        TxtDirS.Text = "SD"
     End If

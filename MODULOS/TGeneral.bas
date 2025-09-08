@@ -55,6 +55,7 @@ End Type
 '-------------------------------------
  Type Campos_Decimal
       Campo      As String
+      TipoCampo  As String
       CantDec    As Byte
       AnchoCampo As Single
       SumaTotal  As Variant
@@ -99,9 +100,7 @@ End Type
       MicroEmpresa       As String
       Estado             As String
       Concepto           As String
-      Usuario            As String
       Autorizado         As String
-      Item               As String
       Ctas_Modificar     As String
       CodigoInvModificar As String
       Grupo              As String
@@ -112,15 +111,22 @@ End Type
       Autorizacion_R     As String
       Serie_LC           As String
       Autorizacion_LC    As String
+      Item               As String
+      Periodo            As String
+      Usuario            As String
       Cotizacion         As Single
       Efectivo           As Currency
       Total_Banco        As Currency
       Monto_Total        As Currency
       Numero             As Long
       Retencion          As Long
+      Liquidacion        As Long
       T_No               As Byte
       RetNueva           As Boolean
       RetSecuencial      As Boolean
+      LCNueva            As Boolean
+      LCSecuencial       As Boolean
+      GrabadoExitoso     As Boolean
  End Type
 '-------------------------------------
  Type Bancos
@@ -334,7 +340,13 @@ Type CtasAsiento
       PDF_ClaveAcceso  As String
       Orden_Compra     As String
       Recibo_No        As String
-      
+      Representante    As String
+      CI_RUC_R         As String
+      TD_R             As String
+      Tipo_Cta         As String
+      Cta_Numero       As String
+      Fecha_Cad        As String
+
       C                As Boolean
       p                As Boolean
       SP               As Boolean
@@ -345,11 +357,13 @@ Type CtasAsiento
       Si_Existe_Doc    As Boolean
       Nuevo_Doc        As Boolean
       EsPorReembolso   As Boolean
+      Por_Deposito     As Boolean
       
       Gavetas          As Byte
       
       CantFact         As Integer
       TDT              As Integer
+      Cod_Banco        As Integer
       
       Factura          As Long
       Desde            As Long
@@ -758,6 +772,7 @@ Type Tipo_Beneficiarios
      FA              As Boolean
      Asignar_Dr      As Boolean
      Descuento       As Boolean
+     Por_Deposito    As Boolean
 End Type
 '-------------------------------------
 Type Tipo_Cta_Descuadre
@@ -822,6 +837,7 @@ Type Tipo_Espe_DBF
 End Type
 '-------------------------------------
 Type Tipo_Estado_SRI
+     Tipo_Doc_SRI       As String
      Clave_De_Acceso    As String
      Autorizacion       As String
      Fecha_Autorizacion As String

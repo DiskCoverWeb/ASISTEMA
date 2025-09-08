@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDATGRD.OCX"
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
+Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form FacturaReembolso 
    BackColor       =   &H00C0C0C0&
@@ -1763,6 +1763,9 @@ Private Sub Form_Load()
   ConectarAdodc AdoAsientoF
   ConectarAdodc AdoTipoPago
   ConectarAdodc AdoTipoComprobante
+  
+  SRI_Obtener_Datos_Comprobantes_Electronicos
+  
   Encerar_Factura FA
 End Sub
 

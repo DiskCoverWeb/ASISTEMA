@@ -68,14 +68,14 @@ Begin VB.Form SaldoCtasEspeciales
       TabCaption(1)   =   "&REPORTE DE &FLUJO DE CAJA"
       TabPicture(1)   =   "SaSubCta.frx":001C
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "DGFlujoCaja"
-      Tab(1).Control(1)=   "Command5"
-      Tab(1).Control(2)=   "Command10"
-      Tab(1).Control(3)=   "AdoFlujoCaja"
-      Tab(1).Control(4)=   "Label11"
-      Tab(1).Control(5)=   "LabelIng"
-      Tab(1).Control(6)=   "Label10"
-      Tab(1).Control(7)=   "LabelEgr"
+      Tab(1).Control(0)=   "LabelEgr"
+      Tab(1).Control(1)=   "Label10"
+      Tab(1).Control(2)=   "LabelIng"
+      Tab(1).Control(3)=   "Label11"
+      Tab(1).Control(4)=   "AdoFlujoCaja"
+      Tab(1).Control(5)=   "Command10"
+      Tab(1).Control(6)=   "Command5"
+      Tab(1).Control(7)=   "DGFlujoCaja"
       Tab(1).ControlCount=   8
       Begin VB.ListBox LstCtaCajaBancos 
          Height          =   735
@@ -1252,7 +1252,7 @@ Private Sub Command5_Click()
         AdoSubCta.Recordset.MoveFirst
         AdoSubCta.Recordset.Find ("Cliente = '" & DCCtas.Text & "' ")
         If Not AdoSubCta.Recordset.EOF Then
-           SubCtaGen = AdoSubCta.Recordset.fields("Codigo")
+           SubCtaGen = AdoSubCta.Recordset.Fields("Codigo")
         End If
      End If
     'Mayorizar Cajas Indivuduales
@@ -1269,16 +1269,16 @@ Private Sub Command5_Click()
      With AdoCtas.Recordset
       If .RecordCount > 0 Then
           RatonReloj
-          Codigo = .fields("Codigo")
+          Codigo = .Fields("Codigo")
           Saldo = 0: Contador = 1
           Do While Not .EOF
 '''             If Codigo <> .Fields("Codigo") Then
 '''                Codigo = .Fields("Codigo")
 '''                Saldo = 0
 '''             End If
-             Saldo = Saldo + .fields("Ingreso") - .fields("Egreso")
-             If .fields("Saldo") <> Saldo Then
-                .fields("Saldo") = Saldo
+             Saldo = Saldo + .Fields("Ingreso") - .Fields("Egreso")
+             If .Fields("Saldo") <> Saldo Then
+                .Fields("Saldo") = Saldo
                 .Update
              End If
              Contador = Contador + 1
@@ -1305,8 +1305,8 @@ Private Sub Command5_Click()
   With AdoFlujoCaja.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
-          SumaDebe = SumaDebe + .fields("Ingreso")
-          SumaHaber = SumaHaber + .fields("Egreso")
+          SumaDebe = SumaDebe + .Fields("Ingreso")
+          SumaHaber = SumaHaber + .Fields("Egreso")
          .MoveNext
        Loop
       .MoveFirst
@@ -1347,7 +1347,7 @@ Dim TotalCaja() As Currency
             AdoCaja.Recordset.MoveFirst
             AdoCaja.Recordset.Find ("Cuenta = '" & LstCtaCajaBancos.List(I) & "'")
             If Not AdoCaja.Recordset.EOF Then
-               Lista_Ctas = Lista_Ctas & "'" & AdoCaja.Recordset.fields("Contra_Cta") & "',"
+               Lista_Ctas = Lista_Ctas & "'" & AdoCaja.Recordset.Fields("Contra_Cta") & "',"
             End If
          End If
      Next I
@@ -1370,7 +1370,7 @@ Dim TotalCaja() As Currency
        AdoSubCta.Recordset.MoveFirst
        AdoSubCta.Recordset.Find ("Cliente = '" & DCCtas.Text & "' ")
        If Not AdoSubCta.Recordset.EOF Then
-          SubCtaGen = AdoSubCta.Recordset.fields("Codigo")
+          SubCtaGen = AdoSubCta.Recordset.Fields("Codigo")
        End If
     End If
     
@@ -1409,8 +1409,8 @@ Dim TotalCaja() As Currency
        
        IE = 0
        Do While Not .EOF
-          Contra_Ctas(IE) = .fields("Contra_Cta")
-          TotalCaja(IE) = .fields("TEgreso")
+          Contra_Ctas(IE) = .Fields("Contra_Cta")
+          TotalCaja(IE) = .Fields("TEgreso")
           IE = IE + 1
          .MoveNext
        Loop
@@ -1433,9 +1433,9 @@ Dim TotalCaja() As Currency
   With AdoCtas.Recordset
    If .RecordCount > 0 Then
       .MoveFirst
-       Codigo = .fields("Codigo")
-       Cta = .fields("Cta")
-       Cta1 = .fields("Contra_Cta")
+       Codigo = .Fields("Codigo")
+       Cta = .Fields("Cta")
+       Cta1 = .Fields("Contra_Cta")
        Saldo = 0: Saldo_ME = 0
        Total_ME = 0
        Debe = 0: Haber = 0
@@ -1443,21 +1443,21 @@ Dim TotalCaja() As Currency
            TotalDia(I) = 0
        Next I
        Do While Not .EOF
-          If Codigo <> .fields("Codigo") Or Cta <> .fields("Cta") Then
+          If Codigo <> .Fields("Codigo") Or Cta <> .Fields("Cta") Then
              Insertar_Totales_Gastos
-             Codigo = .fields("Codigo")
-             Cta = .fields("Cta")
+             Codigo = .Fields("Codigo")
+             Cta = .Fields("Cta")
              For I = 1 To 7
                  TotalDia(I) = 0
              Next I
           End If
-          I = Weekday(.fields("Fecha"))
+          I = Weekday(.Fields("Fecha"))
           If OpcI.value Then
-             TotalDia(I) = TotalDia(I) + .fields("Ingreso")
+             TotalDia(I) = TotalDia(I) + .Fields("Ingreso")
           ElseIf OpcE.value Then
-             TotalDia(I) = TotalDia(I) + .fields("Egreso")
+             TotalDia(I) = TotalDia(I) + .Fields("Egreso")
           End If
-          Total_IVA = Total_IVA + .fields("IVA")
+          Total_IVA = Total_IVA + .Fields("IVA")
          .MoveNext
        Loop
        Insertar_Totales_Gastos
@@ -1475,21 +1475,21 @@ Dim TotalCaja() As Currency
   Select_Adodc AdoCtas, sSQL
   With AdoCtas.Recordset
    If .RecordCount > 0 Then
-       Cta = .fields("Cta")
-       Codigo = .fields("CodigoC")
+       Cta = .Fields("Cta")
+       Codigo = .Fields("CodigoC")
        Total = 0: Saldo = 0
        Do While Not .EOF
-          If Cta <> .fields("Cta") Then
+          If Cta <> .Fields("Cta") Then
              If OpcI.value Then
                 InsertarAsientos AdoAsiento, Cta, 0, 0, Total
              ElseIf OpcE.value Then
                 InsertarAsientos AdoAsiento, Cta, 0, Total, 0
              End If
-             Cta = .fields("Cta")
+             Cta = .Fields("Cta")
              Total = 0
           End If
-          Total = Total + .fields("Total")
-          Saldo = Saldo + .fields("Total")
+          Total = Total + .Fields("Total")
+          Saldo = Saldo + .Fields("Total")
          .MoveNext
        Loop
        If OpcI.value Then
@@ -1537,9 +1537,9 @@ Dim TotalCaja() As Currency
       .MoveFirst
        NumTrans = 0
        Do While Not .EOF
-          SumaDebe = SumaDebe + .fields("DEBE")
-          SumaHaber = SumaHaber + .fields("HABER")
-         .fields("A_No") = NumTrans
+          SumaDebe = SumaDebe + .Fields("DEBE")
+          SumaHaber = SumaHaber + .Fields("HABER")
+         .Fields("A_No") = NumTrans
           NumTrans = NumTrans + 1
          .MoveNext
        Loop
@@ -1583,8 +1583,8 @@ If ClaveSupervisor Then
     If .RecordCount > 0 Then
        .MoveFirst
         Do While Not .EOF
-           SumaDebe = SumaDebe + .fields("DEBE")
-           SumaHaber = SumaHaber + .fields("HABER")
+           SumaDebe = SumaDebe + .Fields("DEBE")
+           SumaHaber = SumaHaber + .Fields("HABER")
           .MoveNext
         Loop
        .MoveFirst
@@ -1623,7 +1623,7 @@ If ClaveSupervisor Then
       Co.T_No = Trans_No
       Co.Usuario = CodigoUsuario
       Co.Item = NumEmpresa
-      GrabarComprobante Co
+      Grabar_Comprobante Co
       If OpcE.value Then
          sSQL = "SELECT Cta,Contra_Cta,CodRet,Serie,Autorizacion,Secuencial,Codigo,CodigoC,Fecha,Egreso,IVA " _
               & "FROM Trans_Gastos_Caja " _
@@ -1644,22 +1644,22 @@ If ClaveSupervisor Then
                  Total_Con_IVA = 0
                  Total_Sin_IVA = 0
                  Total_Sin_No_IVA = 0
-                 Total_IVA = .fields("IVA")
+                 Total_IVA = .Fields("IVA")
                  If Total_IVA > 0 Then
-                    Total_Con_IVA = .fields("Egreso")
+                    Total_Con_IVA = .Fields("Egreso")
                  Else
-                    Total_Sin_IVA = .fields("Egreso")
+                    Total_Sin_IVA = .Fields("Egreso")
                  End If
                  SubTotal = Total_Con_IVA + Total_Sin_IVA
                  
-                 Mifecha = .fields("Fecha")
-                 CodigoCli = .fields("CodigoC")
-                 CodigoP = .fields("CodRet")
-                 SerieFactura = .fields("Serie")
-                 Autorizacion = .fields("Autorizacion")
-                 Factura_No = .fields("Secuencial")
-                 Cta_CajaG = .fields("Contra_Cta")
-                 Cta_Gasto = .fields("Cta")
+                 Mifecha = .Fields("Fecha")
+                 CodigoCli = .Fields("CodigoC")
+                 CodigoP = .Fields("CodRet")
+                 SerieFactura = .Fields("Serie")
+                 Autorizacion = .Fields("Autorizacion")
+                 Factura_No = .Fields("Secuencial")
+                 Cta_CajaG = .Fields("Contra_Cta")
+                 Cta_Gasto = .Fields("Cta")
                  
                  sSQL = "DELETE * " _
                       & "FROM Trans_Compras " _
@@ -1829,7 +1829,7 @@ Private Sub Form_Activate()
   With AdoCaja.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
-          LstCtaCajaBancos.AddItem .fields("Cuenta")
+          LstCtaCajaBancos.AddItem .Fields("Cuenta")
          .MoveNext
        Loop
    End If

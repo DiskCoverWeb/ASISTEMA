@@ -72,6 +72,11 @@ Option Explicit
 '        Next I
 '       .Desconectar
 
+Public Sub screen_size()
+    MDI_X_Max = MDIFormulario.ProgressBarEstado.width - 100
+    MDI_Y_Max = Screen.Height - 1940
+End Sub
+
 Public Function Color_Dias_Restantes(vDiasRestantes As Long) As Long
 Dim vColor As Long
     Select Case vDiasRestantes
@@ -86,13 +91,14 @@ Dim vColor As Long
     Color_Dias_Restantes = vColor
 End Function
 
-Public Function Solo_Letras_Numeros(ByVal KeyAscii) As Integer
-   If InStr(CadenaValida & Chr(8) & Chr(11) & Chr(13), Chr(KeyAscii)) = 0 Then
-      Solo_Letras_Numeros = 0
-   Else
-      Solo_Letras_Numeros = KeyAscii
-   End If
-End Function
+'''Public Function Solo_Letras_Numeros(ByVal KeyAscii) As Integer
+'''   If KeyAscii = 8 Or KeyAscii = 9 Or KeyAscii = 11 Or KeyAscii >= 32 Then
+'''      Solo_Letras_Numeros = KeyAscii
+'''   Else
+'''      Solo_Letras_Numeros = 0
+'''   End If
+'''   '
+'''End Function
 
 Public Function TrimStrg(Cadena As Variant) As String
 Dim Resultado As String
@@ -285,7 +291,7 @@ Public Sub Grabar_Consulta_Archivo(Archivo As String, _
 Dim NumFile As Integer
 Dim RutaGeneraFile As String
 RatonReloj
-RutaGeneraFile = RutaSysBases & "\" & Archivo & ".sql"
+RutaGeneraFile = RutaSysBases & "\TEMP\" & Archivo & ".sql"
 'MsgBox RutaGeneraFile
 NumFile = FreeFile
 Open RutaGeneraFile For Output As #NumFile ' Abre el archivo.
@@ -414,8 +420,8 @@ Public Sub Control_Procesos(TipoTrans As String, Proceso As String, Optional Tar
 Dim BD1MySQL As ADODB.Connection
 Dim AdoSMTP As ADODB.Recordset
 Dim Modulos As String
-Dim Mifecha1 As String
-Dim MiHora1 As String
+'Dim Mifecha1 As String
+'Dim MiHora1 As String
 Dim NombreUsuario1 As String
 Dim PausaMails As Long
 Dim TimeIni As Single
@@ -431,8 +437,8 @@ Dim TimeIni As Single
            Modulos = Modulo
            NombreUsuario1 = TrimStrg(MidStrg(NombreUsuario, 1, 60))
            TipoTrans = UCaseStrg(TipoTrans)
-           Mifecha1 = Format(date, "yyyy-mm-dd")
-           MiHora1 = Format(Time, "hh:mm:ss")
+'           Mifecha1 = Format(Date, "yyyy-mm-dd")
+ '          MiHora1 = Format(Time, "hh:mm:ss")
            If Credito_No = "" Then Credito_No = Ninguno
            
            Cadena = IP_PC.Nombre_PC & vbCrLf _
@@ -444,9 +450,9 @@ Dim TimeIni As Single
 '''           For I = 0 To UBound(IP_PC.Lista_IPs)
 '''               Cadena = Cadena & IP_PC.Lista_IPs(I) & vbCrLf
 '''           Next I
-           sSQL = "INSERT INTO acceso_pcs (IP_Acceso,CodigoU,Item,Aplicacion,RUC,Fecha,Hora,ES,Tarea,Proceso,Credito_No,Periodo) " _
-                & "VALUES ('" & IP_PC.IP_PC & "','" & CodigoUsuario & "','" & NumEmpresa & "'," & "'" & Modulo & "','" & RUC & "','" & Mifecha1 _
-                & "','" & MiHora1 & "','" & TipoTrans & "','" & Tarea & "','" & Proceso & "','" & Credito_No & "','" & Periodo_Contable & "');"
+           sSQL = "INSERT INTO acceso_pcs (IP_Acceso,CodigoU,Item,Aplicacion,RUC,ES,Tarea,Proceso,Credito_No,Periodo) " _
+                & "VALUES ('" & IP_PC.IP_PC & "','" & CodigoUsuario & "','" & NumEmpresa & "'," & "'" & Modulo & "','" & RUC _
+                & "','" & TipoTrans & "','" & Tarea & "','" & Proceso & "','" & Credito_No & "','" & Periodo_Contable & "');"
           'MsgBox Cadena & vbCrLf & vbCrLf & "CONSULTA A REALIZAR:" & vbCrLf & sSQL
            Conectar_Ado_Execute_MySQL sSQL
            
@@ -454,7 +460,7 @@ Dim TimeIni As Single
               PausaMails = 0
               sSQL = "SELECT RUC, (COUNT(RUC) % 10) As PausaMails " _
                    & "FROM acceso_pcs " _
-                   & "WHERE Fecha = '" & BuscarFecha(FechaSistema) & "' " _
+                   & "WHERE Fecha_Hora = '" & BuscarFecha(FechaSistema) & "' " _
                    & "AND RUC = '" & RUC & "' " _
                    & "AND ES IN ('EM') "
               Select_AdoDB_MySQL AdoSMTP, sSQL
@@ -1494,54 +1500,55 @@ Dim AdoCierre As ADODB.Recordset
 Dim ErrorFecha As Boolean
 Dim sSQL1 As String
 Dim FechaFin1 As String
+Dim TipoError As String
+Dim AnioFecha As String
 
  'Empezamos a verificar la fecha ingresada
   RatonReloj
-  Cadena = ""
+  TipoError = ""
   ErrorFecha = False
   If NomBox.Text = LimpiarFechas Then NomBox.Text = FechaSistema
   NomBox.Text = Format$(NomBox.Text, FormatoFechas)
   If IsDate(NomBox.Text) Then
     'Averiguamos si esta cerrado el mes de procesamiento
      FechaCierre = "01/" & Month(FechaSistema) & "/" & Year(FechaSistema)
-     FechaFin1 = BuscarFecha(NomBox.Text)
-'''     Porc_IVA = 0
-'''    'Carga la Tabla de Porcentaje Iva
-'''     sSQL1 = "SELECT * " _
-'''           & "FROM Tabla_Por_ICE_IVA " _
-'''           & "WHERE IVA <> " & Val(adFalse) & " " _
-'''           & "AND Fecha_Inicio <= #" & FechaFin1 & "# " _
-'''           & "AND Fecha_Final >= #" & FechaFin1 & "# " _
-'''           & "ORDER BY Porc DESC "
-'''     Select_AdoDB AdoCierre, sSQL1
-'''     If AdoCierre.RecordCount > 0 Then Porc_IVA = Redondear(AdoCierre.fields("Porc") / 100, 2)
-'''     AdoCierre.Close
-     
-     sSQL1 = "SELECT Fecha_Inicial " _
-           & "FROM Fechas_Balance " _
-           & "WHERE Periodo = '" & Periodo_Contable & "' " _
-           & "AND Item = '" & NumEmpresa & "' " _
-           & "AND Cerrado = " & Val(adFalse) & " " _
-           & "AND Fecha_Inicial <= #" & FechaFin1 & "# " _
-           & "AND Fecha_Final >= #" & FechaFin1 & "# "
-     Select_AdoDB AdoCierre, sSQL1
-     If AdoCierre.RecordCount > 0 Then FechaCierre = AdoCierre.fields("Fecha_Inicial")
-     AdoCierre.Close
-    'MsgBox ChequearCierreMes & vbCrLf & ErrorFecha
-     If ChequearCierreMes Then
-        If CFechaLong(NomBox.Text) < CFechaLong(FechaCierre) Then
-           ErrorFecha = True
-           Cadena = Cadena & "ES INFERIOR A LA DEL CIERRE DEL MES" & vbCrLf
+     AnioFecha = Format(Year(NomBox.Text), "0000")
+     If Val(AnioFecha) >= 1900 Then
+        FechaFin1 = BuscarFecha(NomBox.Text)
+        sSQL1 = "SELECT Fecha_Inicial " _
+              & "FROM Fechas_Balance " _
+              & "WHERE Periodo = '" & Periodo_Contable & "' " _
+              & "AND Item = '" & NumEmpresa & "' " _
+              & "AND Cerrado = " & Val(adFalse) & " " _
+              & "AND #" & FechaFin1 & "# BETWEEN Fecha_Inicial AND Fecha_Final " _
+              & "AND Detalle LIKE '" & AnioFecha & "%' "
+        Select_AdoDB AdoCierre, sSQL1
+        If AdoCierre.RecordCount > 0 Then FechaCierre = AdoCierre.fields("Fecha_Inicial")
+        AdoCierre.Close
+       'MsgBox ChequearCierreMes & vbCrLf & ErrorFecha
+        If ChequearCierreMes Then
+           If CFechaLong(NomBox.Text) >= CFechaLong(FechaCierreFiscal) Then
+              If CFechaLong(NomBox.Text) < CFechaLong(FechaCierre) Then
+                 ErrorFecha = True
+                 TipoError = TipoError & "ESTA BLOQUEADA POR EL CIERRE DEL MES, SOLICITE A CONTABILIDAD QUE LE ACTIVE"
+              End If
+           Else
+              ErrorFecha = True
+              TipoError = TipoError & "ES INFERIOR AL CIERRE FISCAL: " & FechaCierreFiscal
+           End If
         End If
+     Else
+        ErrorFecha = True
+        TipoError = TipoError & "ES MENOR A 1900"
      End If
   Else
      ErrorFecha = True
-     Cadena = Cadena & "ES INCORRECTA, VUELVA A INGRESAR"
+     TipoError = TipoError & "ES INCORRECTA, VUELVA A INGRESAR"
   End If
  'Resultado Final de la verificacion de la Fecha ingresada
   RatonNormal
   If ErrorFecha Then
-     MsgBox "LA FECHA QUE ESTA INTENTANDO INGRESAR" & vbCrLf & Cadena
+     MsgBox "LA FECHA QUE ESTA INTENTANDO INGRESAR " & TipoError
      NomBox.Text = LimpiarFechas
      NomBox.SetFocus
   End If
@@ -1560,7 +1567,10 @@ Dim sSQL1 As String
           & "AND Fecha_Final >= #" & BuscarFecha(FechaIVA) & "# " _
           & "ORDER BY Porc DESC "
     Select_AdoDB AdoCierre, sSQL1
-    If AdoCierre.RecordCount > 0 Then Porc_IVA = Redondear(AdoCierre.fields("Porc") / 100, 2)
+    If AdoCierre.RecordCount > 0 Then
+       Porc_IVA = Redondear(AdoCierre.fields("Porc") / 100, 2)
+       Cod_Porc_IVA = AdoCierre.fields("Codigo")
+    End If
     AdoCierre.Close
    'MsgBox "===--->> " & Porc_IVA
     RatonNormal
@@ -1579,7 +1589,7 @@ Dim sSQL1 As String
           & "AND Fecha_Final >= #" & BuscarFecha(FechaIVA) & "# " _
           & "AND Codigo = " & CodPorcIva & " " _
           & "ORDER BY Porc DESC "
-    Select_AdoDB AdoCierre, sSQL1, "Tabla_Por_ICE_IVA"
+    Select_AdoDB AdoCierre, sSQL1
     If AdoCierre.RecordCount > 0 Then Porc_IVA = Redondear(AdoCierre.fields("Porc") / 100, 2)
     AdoCierre.Close
     RatonNormal
@@ -1744,9 +1754,9 @@ Dim Result As Long
   If Val(NumEmpresa) > 0 Then
      RatonReloj
      
-     Ambiente = Leer_Campo_Empresa("Ambiente")
-     Obligado_Conta = Leer_Campo_Empresa("Obligado_Conta")
-     ContEspec = Leer_Campo_Empresa("Codigo_Contribuyente_Especial")
+'''     Ambiente = Leer_Campo_Empresa("Ambiente")
+'''     Obligado_Conta = Leer_Campo_Empresa("Obligado_Conta")
+'''     ContEspec = Leer_Campo_Empresa("Codigo_Contribuyente_Especial")
     
     'Informar Modo de Ambiente para comprobantes electronicos
      Select Case Ambiente
@@ -1765,26 +1775,26 @@ Dim Result As Long
      MDIFormulario.StaBarEmp.Font.bold = True
      MDIFormulario.StaBarEmp.Font.Size = 9
      MDIFormulario.StaBarEmp.Font.Name = TipoArialNarrow
-     Codigo = NumEmpresa & ".- " & Modulo
-    
-    
-    'MsgBox Screen.TwipsPerPixelX & vbCrLf & Screen.width & vbCrLf & vbCrLf & MDIFormulario.PictMDI.TextWidth(Codigo) * 2
      
-     MDIFormulario.StaBarEmp.Panels.Item(1).MinWidth = MDIFormulario.PictMDI.TextWidth(Codigo) * 2 '2300
+     Codigo = NumEmpresa & ".- " & Modulo
+     MDIFormulario.StaBarEmp.Panels.Item(1).MinWidth = 3300 'MDIFormulario.TextWidth(Codigo) * 2 '2300
      MDIFormulario.StaBarEmp.Panels.Item(1).Text = Codigo
      Codigo = ULCase(NombreUsuario)
-     MDIFormulario.StaBarEmp.Panels.Item(2).MinWidth = MDIFormulario.PictMDI.TextWidth(Codigo) * 2 '2900
+     MDIFormulario.StaBarEmp.Panels.Item(2).MinWidth = 3200 'MDIFormulario.PictMDI.TextWidth(Codigo) * 2 '2900
      MDIFormulario.StaBarEmp.Panels.Item(2).Text = Codigo
      If Periodo_Contable <> Ninguno Then Codigo = "PERIODO: " & Periodo_Contable Else Codigo = "PERIODO ACTUAL"
-     MDIFormulario.StaBarEmp.Panels.Item(3).MinWidth = MDIFormulario.PictMDI.TextWidth(Codigo) * 2 '2100
+     MDIFormulario.StaBarEmp.Panels.Item(3).MinWidth = 2400 'MDIFormulario.PictMDI.TextWidth(Codigo) * 2 '2100
      MDIFormulario.StaBarEmp.Panels.Item(3).Text = Codigo
      If SQL_Server Then Codigo = "SQL Server" Else Codigo = "My SQL"
-     MDIFormulario.StaBarEmp.Panels.Item(4).MinWidth = MDIFormulario.PictMDI.TextWidth(Codigo) * 2 '1500
+     MDIFormulario.StaBarEmp.Panels.Item(4).MinWidth = 1700 'MDIFormulario.PictMDI.TextWidth(Codigo) * 2 '1500
      MDIFormulario.StaBarEmp.Panels.Item(4).Text = Codigo
      AnchoTemp = 0
+     Cadena = ""
      For I = 1 To 4
+         Cadena = Cadena & MDIFormulario.StaBarEmp.Panels.Item(I).Text & vbTab & vbTab & vbTab & " = " & MDIFormulario.StaBarEmp.Panels.Item(I).MinWidth & vbCrLf
          AnchoTemp = AnchoTemp + MDIFormulario.StaBarEmp.Panels.Item(I).MinWidth
      Next I
+    'MsgBox Cadena
      AnchoPantalla = Screen.width - 50 '
     'MDIFormulario.StaBarEmp.Panels.Item(6).AutoSize = sbrSpring
      If AnchoPantalla > AnchoTemp Then MDIFormulario.StaBarEmp.Panels.Item(5).MinWidth = Redondear(AnchoPantalla - AnchoTemp)
@@ -1805,7 +1815,6 @@ Dim Result As Long
      If Modulo <> "UPDATE" Then
         RatonReloj
         Progreso_Barra.Mensaje_Box = "Extrayendo Certificado"
-        RutaCertificado = Leer_Campo_Empresa("Ruta_Certificado")
         
        'Creamos carpetas si no existen
         If Not Existe_Carpeta(WindowsDirectory & "\LIBRERIA") Then MkDir (WindowsDirectory & "\LIBRERIA")
@@ -1990,8 +1999,10 @@ Dim Color1 As Long
 Dim Color2 As Long
 Dim Color3 As Long
 Dim ColorC As Long
+Dim CantEstadoDescripcion As Long
 Dim Dias_Restantes As Long
 Dim FinEjecucion As Boolean
+
 
   FinEjecucion = False
   
@@ -2139,7 +2150,7 @@ Dim FinEjecucion As Boolean
       & "Teléfono   : 098-910-5300 " & vbCrLf _
       & " " & vbCrLf _
       & "Prisma Net : informacion@diskcoversystem.com " & vbCrLf _
-      & "Teléfonos  : 098-652-4396 " & vbCrLf
+      & "Teléfonos  : 099-467-8317 " & vbCrLf
   AnchoWeb = Escribir_Texto_Picture_Ancho(NPicture, msg)
   PCol = MDI_X_Max - AnchoWeb - 120
   'PFil = 4000
@@ -2160,7 +2171,7 @@ Dim FinEjecucion As Boolean
   NPicture.FontName = TipoConsola
   AnchoWeb = NPicture.TextWidth(Web)
   PFil = MDI_Y_Max - 1600
-  PCol = (Screen.width - AnchoWeb) / 2
+  PCol = (MDI_X_Max - AnchoWeb) / 2
   NPicture.CurrentY = PFil
   NPicture.CurrentX = PCol  '150
   Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Color1, Color2, Web
@@ -2193,26 +2204,67 @@ Dim FinEjecucion As Boolean
      NPicture.FontName = TipoVerdana
      NPicture.FontItalic = False
      NPicture.FontSize = 32
-     AnchoWeb = NPicture.TextWidth(DescripcionEstado)
-     PCol = (MDI_X_Max - AnchoWeb) / 2
-     AnchoWeb = NPicture.TextHeight("H")
-     PFil = (MDI_Y_Max - AnchoWeb) / 3
-     NPicture.ForeColor = Blanco
-     AltoWeb = PFil
-     NPicture.CurrentY = PFil
-     NPicture.CurrentX = PCol
-     NPicture.Print DescripcionEstado
-     PFil = PFil + 25
-     PCol = PCol + 25
-     NPicture.ForeColor = Rojo
-     NPicture.CurrentY = PFil
-     NPicture.CurrentX = PCol
-     NPicture.Print DescripcionEstado
+     CantEstadoDescripcion = InStr(DescripcionEstado, vbCrLf)
+     If CantEstadoDescripcion > 0 Then
+        Cadena = MidStrg(DescripcionEstado, 1, CantEstadoDescripcion)
+        
+        AnchoWeb = NPicture.TextWidth(Cadena)
+        PCol = (MDI_X_Max - AnchoWeb) / 2
+        AnchoWeb = NPicture.TextHeight("H")
+        PFil = (MDI_Y_Max - AnchoWeb) / 2
+        NPicture.ForeColor = Blanco
+        AltoWeb = PFil
+        NPicture.CurrentY = PFil
+        NPicture.CurrentX = PCol
+        NPicture.Print Cadena
+        
+        PFil = PFil + 25
+        PCol = PCol + 25
+        NPicture.ForeColor = Rojo
+        NPicture.CurrentY = PFil
+        NPicture.CurrentX = PCol
+        NPicture.Print Cadena
+        
+        Cadena = MidStrg(DescripcionEstado, CantEstadoDescripcion + 2, Len(DescripcionEstado))
+        PFil = PFil + 650
      
+        AnchoWeb = NPicture.TextWidth(Cadena)
+        PCol = (MDI_X_Max - AnchoWeb) / 2
+        AnchoWeb = NPicture.TextHeight("H")
+        NPicture.ForeColor = Blanco
+        AltoWeb = PFil
+        NPicture.CurrentY = PFil
+        NPicture.CurrentX = PCol
+        NPicture.Print Cadena
+        
+        PFil = PFil + 25
+        PCol = PCol + 25
+        NPicture.ForeColor = Rojo
+        NPicture.CurrentY = PFil
+        NPicture.CurrentX = PCol
+        NPicture.Print Cadena
+     Else
+        AnchoWeb = NPicture.TextWidth(DescripcionEstado)
+        PCol = (MDI_X_Max - AnchoWeb) / 2
+        AnchoWeb = NPicture.TextHeight("H")
+        PFil = (MDI_Y_Max - AnchoWeb) / 2
+        NPicture.ForeColor = Blanco
+        AltoWeb = PFil
+        NPicture.CurrentY = PFil
+        NPicture.CurrentX = PCol
+        NPicture.Print DescripcionEstado
+        
+        PFil = PFil + 25
+        PCol = PCol + 25
+        NPicture.ForeColor = Rojo
+        NPicture.CurrentY = PFil
+        NPicture.CurrentX = PCol
+        NPicture.Print DescripcionEstado
+     End If
      NPicture.FontSize = 12
      AnchoWeb = NPicture.TextWidth("ANCHO DE ALERTA")
      PCol = (MDI_X_Max - AnchoWeb) / 2
-     PFil = PFil - 2100
+     PFil = PFil - 2800
      NPicture.Line (PCol - 40, PFil - 50)-(PCol + 2540, PFil + 2040), Azul, BF
      Select Case EstadoEmpresa
        Case "BLOQ", "MAS360": RutaDestino = RutaSistema & "\FORMATOS\BLOQUEO.jpg"
@@ -2312,8 +2364,10 @@ Dim HalfWidth As Single
 Dim HalfHeight As Single
 
    'MsgBox ContadorAyuda & vbCrLf & ContadorFondos
+    If Not IP_PC.InterNet Then DescripcionEstado = "Su Ordenador no tiene conexion a internet, " & vbCrLf & "no podra autorizar Comprobantes Electronicos" Else DescripcionEstado = "No definido"
+    
    'Obtenemos la fecha del Sistema
-    FechaSistema = Format$(date, FormatoFechas)
+    FechaSistema = Format$(Date, FormatoFechas)
     
     If TiempoSistema = 0 Then TiempoSistema = Time
     If TiempoTarea = 0 Then TiempoTarea = Time
@@ -2336,7 +2390,6 @@ Dim HalfHeight As Single
           EstadoEmpresa = ""
           ComunicadoEntidad = ""
           MensajeEmpresa = ""
-          DescripcionEstado = "No definido"
           IDEntidad = 0
           Fecha_CE = FechaSistema
           Result = 0
@@ -2370,20 +2423,22 @@ Dim HalfHeight As Single
                    TMail.Credito_No = ""
                     
                   'Enviamos lista de mails
-                   Emails = ""
-                   Insertar_Mail Emails, CorreoDiskCover
-                   Insertar_Mail Emails, EmailContador
-                   Insertar_Mail Emails, EmailProcesos
+                   TMail.para = ""
+                   Insertar_Mail TMail.para, CorreoDiskCover
+                   Insertar_Mail TMail.para, EmailContador
+                   Insertar_Mail TMail.para, EmailProcesos
                   'MsgBox "Lista: " & emails
-                   Do While Len(Emails) > 3
-                      posPuntoComa = InStr(Emails, ";")
-                      Email = MidStrg(Emails, 1, posPuntoComa - 1)
-                      TMail.para = Email
-                     'MsgBox "Email: " & Email & vbCrLf & RutaXML
-                      If EsUnEmail(TMail.para) Then FEnviarCorreos.Show 1
-                      Emails = MidStrg(Emails, posPuntoComa + 1, Len(Emails))
-                   Loop
-                    
+'''                   Do While Len(Emails) > 3
+'''                      posPuntoComa = InStr(Emails, ";")
+'''                      Email = MidStrg(Emails, 1, posPuntoComa - 1)
+'''                      TMail.para = Email
+'''                     'MsgBox "Email: " & Email & vbCrLf & RutaXML
+'''                      If EsUnEmail(TMail.para) Then FEnviarCorreos.Show 1
+'''                      Emails = MidStrg(Emails, posPuntoComa + 1, Len(Emails))
+'''                   Loop
+'''
+                   FEnviarCorreos.Show 1
+                   
                    sSQL = "UPDATE entidad " _
                         & "SET Comunicado = '.' " _
                         & "WHERE ID_Empresa = " & IDEntidad & " "
@@ -2411,19 +2466,10 @@ Dim HalfHeight As Single
                    & "AND Fecha_CE <> '" & BuscarFecha(Fecha_CE) & "' "
               Ejecutar_SQL_SP sSQL
               
-              Lista_Mensaje_SP_MySQL TextoFile
-              If Len(TextoFile) <= 3 Then
-''                 TextoFile = ""
-''                 For I = 1 To 10
-''                     TextoFile = TextoFile & " " & vbCrLf
-''                 Next I
-                 TextoFile = "DISKCOVER SYSTEM AHORA EN LAS NUBLES (CLOUD) "
-              End If
+             'Lista_Mensaje_SP_MySQL TextoFile
+             '--------------------------------
+              TextoFile = "DISKCOVER SYSTEM AHORA EN LAS NUBLES (CLOUD) "
           Else
-''              TextoFile = ""
-''              For I = 1 To 10
-''                  TextoFile = TextoFile & " " & vbCrLf
-''              Next I
               TextoFile = "DISKCOVER SYSTEM AHORA EN LAS NUBLES (CLOUD) " & vbCrLf & " " & vbCrLf & "COMUNIQUESE CON SU ADMINISTRADOR DE LA RED "
           End If
            
@@ -2447,6 +2493,8 @@ Dim HalfHeight As Single
          MDIFormulario.PictMDI.Height = MDI_Y_Max
          MDIFormulario.PictMDI.Visible = True
          MDIFormulario.PictMDI.AutoRedraw = True
+        'MsgBox MDI_X_Max & "x" & MDI_Y_Max & vbCrLf & Screen.width & "x" & Screen.Height
+         
          MDIFormulario.PictMDI.PaintPicture LoadPicture(RutaOrigen1), 5, 1400, MDI_X_Max, MDI_Y_Max - 1000
          
         'Escribe el texto de los logos y los datos de la empresa
@@ -2563,6 +2611,7 @@ Dim NuevoNumero As Boolean
        MesComp = ""
        If Len(FechaComp) >= 10 Then MesComp = Format$(Month(FechaComp), "00")
        If MesComp = "" Then MesComp = "01"
+       
        If Num_Meses_CD And SQLs = "Diario" Then
           SQLs = MesComp & SQLs
           Si_MesComp = True
@@ -3508,7 +3557,8 @@ Public Function FechaMes(FechaStr As String) As Integer
 End Function
 
 Public Function PrimerDiaMes(FechaStr As String) As String
-  FechaStr = Format$(FechaStr, "dd/mm/yyyy")
+  If FechaStr = "00/00/0000" Then FechaStr = FechaSistema Else FechaStr = Format$(FechaStr, "dd/mm/yyyy")
+  
   Mes = Month(FechaStr): Anio = Year(FechaStr)
   PrimerDiaMes = "01/" & Format$(Mes, "00") & "/" & Format$(Anio, "0000")
 End Function
@@ -4673,11 +4723,13 @@ Dim Final As Long
 Yf = Yo
 If Strg <> Ninguno And Yo > 0 And Xo > 0 Then
    RatonReloj
+   If CantCaracter < 36 Then CantCaracter = 36
    CStrg = Replace(Strg, vbCrLf, "^")
    IdCar = 1
    Inicio = 1: Final = Len(Strg)
    cTemp = ""
    Carac = ""
+
    Do While Len(CStrg) > 1
       Carac = MidStrg(CStrg, IdCar, 1)
       cTemp = cTemp & Carac
@@ -4694,15 +4746,15 @@ If Strg <> Ninguno And Yo > 0 And Xo > 0 Then
             CStrg = MidStrg(CStrg, Len(cTemp) + 1, Len(CStrg))
          Else
             'MsgBox Asc(Carac) & "Imprimiendo:" & vbCrLf & "|" & cTemp & "|"
-            If Len(cTemp) <> CantCaracter Then
-               CantBlanco = 0
-               IdBlanco = Len(cTemp)
-               Do While IdBlanco > 0 And MidStrg(cTemp, IdBlanco, 1) <> " "
-                  CantBlanco = CantBlanco + 1
-                  IdBlanco = IdBlanco - 1
-               Loop
-               If CantBlanco > 0 Then cTemp = MidStrg(cTemp, 1, IdBlanco)
-            End If
+''            If Len(cTemp) <> CantCaracter Then
+''               CantBlanco = 0
+''               IdBlanco = Len(cTemp)
+''               Do While IdBlanco > 0 And MidStrg(cTemp, IdBlanco, 1) <> " "
+''                  CantBlanco = CantBlanco + 1
+''                  IdBlanco = IdBlanco - 1
+''               Loop
+''               If CantBlanco > 0 Then cTemp = MidStrg(cTemp, 1, IdBlanco)
+''            End If
             'MsgBox Asc(Carac) & "Imprimiendo:" & vbCrLf & "|" & cTemp & "|" & vbCrLf & "[" & MidStrg(cTemp, 1, IdBlanco) & "]" & vbCrLf & CantBlanco
             
             Printer.Print TrimStrg(MidStrg(cTemp, 1, Len(cTemp) - 1))
@@ -4736,6 +4788,17 @@ Dim PosSup, PosIzq As Single
    If Forms.BorderStyle = 0 Then PosSup = PosSup - 200
    Forms.Left = PosIzq
    Forms.Top = PosSup
+End Sub
+
+Public Sub CentrarFrame(Frames As Frame)
+Dim PosSup, PosIzq As Single
+  'Centrar el Frame
+   PosIzq = ((Screen.width - Frames.width) / 2) - 150
+   PosSup = ((Screen.Height - Frames.Height) / 2) - 2000
+   If PosIzq < 0 Then PosIzq = 0.1
+   If PosSup < 0 Then PosSup = 0.1
+   Frames.Left = PosIzq
+   Frames.Top = PosSup
 End Sub
 
 Public Sub CentrarArribaForm(Forms As Form)
@@ -5397,22 +5460,22 @@ Public Sub FormatoMaskCta5(FormatMaskCta As MaskEdBox)
 End Sub
 
 Function CodigoMaskCta(CodigoCta As String) As String
-Dim cad As String
-cad = ""
+Dim Cad As String
+Cad = ""
 If Len(CodigoCta) > 0 Then
    If Len(CodigoCta) < Len(FormatoCtas) Then
       For I = Len(CodigoCta) + 1 To Len(FormatoCtas)
-          If MidStrg(FormatoCtas, I, 1) = "." Then cad = cad & "."
-          If MidStrg(FormatoCtas, I, 1) = "#" Then cad = cad & " "
+          If MidStrg(FormatoCtas, I, 1) = "." Then Cad = Cad & "."
+          If MidStrg(FormatoCtas, I, 1) = "#" Then Cad = Cad & " "
       Next I
    End If
-   CodigoMaskCta = CodigoCta & cad
+   CodigoMaskCta = CodigoCta & Cad
 Else
    For I = 1 To Len(FormatoCtas)
-       If MidStrg(FormatoCtas, I, 1) = "." Then cad = cad & "."
-       If MidStrg(FormatoCtas, I, 1) = "#" Then cad = cad & " "
+       If MidStrg(FormatoCtas, I, 1) = "." Then Cad = Cad & "."
+       If MidStrg(FormatoCtas, I, 1) = "#" Then Cad = Cad & " "
    Next I
-   CodigoMaskCta = cad
+   CodigoMaskCta = Cad
 End If
 End Function
 
@@ -5494,22 +5557,22 @@ Public Sub FormatoMaskCurso(FormatMaskCta As MaskEdBox)
 End Sub
 
 Function CodigoMaskKardex(CodigoCta As String) As String
-Dim cad As String
-cad = ""
+Dim Cad As String
+Cad = ""
 If Len(CodigoCta) > 0 Then
    If Len(CodigoCta) < Len(MascaraCodigoK) Then
       For I = Len(CodigoCta) + 1 To Len(MascaraCodigoK)
-          If MidStrg(MascaraCodigoK, I, 1) = "." Then cad = cad & "."
-          If MidStrg(MascaraCodigoK, I, 1) = "#" Then cad = cad & " "
+          If MidStrg(MascaraCodigoK, I, 1) = "." Then Cad = Cad & "."
+          If MidStrg(MascaraCodigoK, I, 1) = "#" Then Cad = Cad & " "
       Next I
    End If
-   CodigoMaskKardex = CodigoCta & cad
+   CodigoMaskKardex = CodigoCta & Cad
 Else
    For I = 1 To Len(FormatoCtas)
-       If MidStrg(MascaraCodigoK, I, 1) = "." Then cad = cad & "."
-       If MidStrg(MascaraCodigoK, I, 1) = "#" Then cad = cad & " "
+       If MidStrg(MascaraCodigoK, I, 1) = "." Then Cad = Cad & "."
+       If MidStrg(MascaraCodigoK, I, 1) = "#" Then Cad = Cad & " "
    Next I
-   CodigoMaskKardex = cad
+   CodigoMaskKardex = Cad
 End If
 End Function
 
@@ -5690,8 +5753,8 @@ Public Function Validar_Texto(TextoValidar As Variant) As String
    If IsNull(TextoValidar) Or IsEmpty(TextoValidar) Then Validar_Texto = "" Else Validar_Texto = TrimStrg(TextoValidar)
 End Function
 
-Public Sub ControlEsNumerico(ElControl As TextBox)
-  ElControl.RightToLeft = True
+Public Sub ControlEsNumerico(elControl As TextBox)
+  elControl.RightToLeft = True
 End Sub
 
 Public Sub EncabezadoEmpresa(InicX As Single)
@@ -5870,7 +5933,7 @@ Dim Son_Iguales  As Boolean
    Printer.CurrentX = x1 - 2.2: Printer.CurrentY = Y0 + 0.5
    Printer.Print Format$(Pagina, "0000")
    Printer.CurrentX = x1 - 2.7: Printer.CurrentY = Y0 + 0.8
-   Printer.Print FechaStrgDias(date)
+   Printer.Print FechaStrgDias(Date)
    Printer.CurrentX = x1 - 2.5: Printer.CurrentY = Y0 + 1.1
    Printer.Print ULCase(NombreUsuario)
    Printer.ForeColor = Negro
@@ -8206,89 +8269,107 @@ Dim ContEquiv As Byte
 End Function
 
 Public Function Sin_Signos_Especiales(Cadena As String) As String
-Dim cad As String
-'ParaAux = Replace(ParaAux, "|", "")
-    cad = TrimStrg(Cadena)
-    cad = Replace(cad, "á", "a")
-    cad = Replace(cad, "é", "e")
-    cad = Replace(cad, "í", "i")
-    cad = Replace(cad, "ó", "o")
-    cad = Replace(cad, "ú", "u")
-'    cad = Replace(cad, "Á", "A")
-'    cad = Replace(cad, "É", "E")
-'    cad = Replace(cad, "Í", "I")
-'    cad = Replace(cad, "Ó", "O")
-'    cad = Replace(cad, "Ú", "U")
-    cad = Replace(cad, "à", "a")
-    cad = Replace(cad, "è", "e")
-    cad = Replace(cad, "ì", "i")
-    cad = Replace(cad, "ò", "o")
-    cad = Replace(cad, "ù", "u")
-    cad = Replace(cad, "À", "A")
-    cad = Replace(cad, "È", "E")
-    cad = Replace(cad, "Ì", "I")
-    cad = Replace(cad, "Ò", "O")
-    cad = Replace(cad, "Ù", "U")
-    cad = Replace(cad, "ñ", "n")
-    cad = Replace(cad, "Ñ", "N")
-    cad = Replace(cad, "ü", "u")
-    cad = Replace(cad, "Ü", "U")
-    cad = Replace(cad, "&", "Y")
-    cad = Replace(cad, vbCr, "|")
-    cad = Replace(cad, vbLf, "|")
-    cad = Replace(cad, "Nº", "No.")
-    'cad = Replace(cad, "#", "No.")
-    cad = Replace(cad, "ª", "a. ")
-    cad = Replace(cad, "°", "o. ")
-    cad = Replace(cad, "½", "1/2")
-    cad = Replace(cad, "½", "1/4")
-    cad = Replace(cad, Chr(255), " ")
-    cad = Replace(cad, Chr(254), " ")
-    cad = Replace(cad, "^", "")
-   'cad = Replace(cad, ":", " ")
-   'cad = Replace(cad, """", " ")
-    cad = Replace(cad, "´", " ")
-    Sin_Signos_Especiales = cad
+Dim CadResult As String
+Dim CadTemp As String
+Dim utf8Bytes() As Byte
+Dim Idc As Long
+    CadResult = ""
+    
+    If Len(Cadena) > 0 Then
+      'MsgBox "Destktop Test>: " & Cadena
+       CadTemp = Cadena
+       CadTemp = Replace(CadTemp, "á", "a")
+       CadTemp = Replace(CadTemp, "é", "e")
+       CadTemp = Replace(CadTemp, "í", "i")
+       CadTemp = Replace(CadTemp, "ó", "o")
+       CadTemp = Replace(CadTemp, "ú", "u")
+       CadTemp = Replace(CadTemp, "ñ", "n")
+       CadTemp = Replace(CadTemp, "Ñ", "N")
+       CadTemp = Replace(CadTemp, "Á", "A")
+       CadTemp = Replace(CadTemp, "Í", "I")
+       CadTemp = Replace(CadTemp, "Ó", "O")
+       CadTemp = Replace(CadTemp, "Ú", "U")
+
+       CadTemp = Replace(CadTemp, "Nº", "No.")
+       CadTemp = Replace(CadTemp, "ª", "a. ")
+       CadTemp = Replace(CadTemp, "°", "o. ")
+       CadTemp = Replace(CadTemp, "½", "1/2")
+       CadTemp = Replace(CadTemp, "½", "1/4")
+       CadTemp = Replace(CadTemp, "´", "`")
+       CadTemp = Replace(CadTemp, "&", " Y ")
+    
+       CadTemp = TrimStrg(CadTemp)
+       CadTemp = Replace(CadTemp, "  ", " ")
+       CadTemp = Replace(CadTemp, "   ", " ")
+       CadTemp = Replace(CadTemp, vbCr, "|")
+       CadTemp = Replace(CadTemp, vbLf, "|")
+
+''      'Convertir la cadena a bytes usando la codificación Unicode (UTF-16)
+''       utf8Bytes = StrConv(CadTemp, vbFromUnicode)
+''       For Idc = 0 To UBound(utf8Bytes)
+''           MsgBox Cadena & " => " & utf8Bytes(Idc) & "=" & Chr(utf8Bytes(Idc))
+''           Select Case utf8Bytes(Idc)
+''             Case 9, 10, 11, 13: CadResult = CadResult & Chr(utf8Bytes(Idc))
+''             Case 32 To 126: CadResult = CadResult & Chr(utf8Bytes(Idc))
+''             Case 181: CadResult = CadResult & Chr(utf8Bytes(Idc)) ' Á
+''             Case 144: CadResult = CadResult & Chr(utf8Bytes(Idc)) ' É
+''             Case 214: CadResult = CadResult & Chr(utf8Bytes(Idc)) ' Í
+''             Case 224: CadResult = CadResult & Chr(utf8Bytes(Idc)) ' Ó
+''             Case 233: CadResult = CadResult & Chr(utf8Bytes(Idc)) ' Ú
+''             Case Else: CadResult = CadResult & " "
+''           End Select
+''       Next Idc
+''    CadResult = TrimStrg(CadResult)
+''    CadResult = Replace(CadResult, "  ", " ")
+''    CadResult = Replace(CadResult, "   ", " ")
+''    CadResult = Replace(CadResult, vbCr, "|")
+''    CadResult = Replace(CadResult, vbLf, "|")
+    End If
+    CadResult = CadTemp
+'    Clipboard.Clear
+'    Clipboard.SetText CadResult
+    ' MsgBox "Destktop Test<: " & CadResult
+    Sin_Signos_Especiales = CadResult
 End Function
 
 Public Function Sin_Signos_XML(Cadena As String) As String
-Dim cad As String
+Dim Cad As String
 'ParaAux = Replace(ParaAux, "|", "")
-    cad = TrimStrg(Cadena)
-    cad = Replace(cad, "á", "a")
-    cad = Replace(cad, "é", "e")
-    cad = Replace(cad, "í", "i")
-    cad = Replace(cad, "ó", "o")
-    cad = Replace(cad, "ú", "u")
-    cad = Replace(cad, "Á", "A")
-    cad = Replace(cad, "É", "E")
-    cad = Replace(cad, "Í", "I")
-    cad = Replace(cad, "Ó", "O")
-    cad = Replace(cad, "Ú", "U")
-    cad = Replace(cad, "à", "a")
-    cad = Replace(cad, "è", "e")
-    cad = Replace(cad, "ì", "i")
-    cad = Replace(cad, "ò", "o")
-    cad = Replace(cad, "ù", "u")
-    cad = Replace(cad, "À", "A")
-    cad = Replace(cad, "È", "E")
-    cad = Replace(cad, "Ì", "I")
-    cad = Replace(cad, "Ò", "O")
-    cad = Replace(cad, "Ù", "U")
-    cad = Replace(cad, "ñ", "n")
-    cad = Replace(cad, "Ñ", "N")
-    cad = Replace(cad, "ü", "u")
-    cad = Replace(cad, "Ü", "U")
-    cad = Replace(cad, "&", "Y")
-    cad = Replace(cad, "Nº", "No.")
-    cad = Replace(cad, "ª", "a. ")
-    cad = Replace(cad, "°", "o. ")
-    cad = Replace(cad, "½", "1/2")
-    cad = Replace(cad, "½", "1/4")
-    cad = Replace(cad, Chr(255), " ")
-    cad = Replace(cad, Chr(254), " ")
-    cad = Replace(cad, "^", "")
-    Sin_Signos_XML = cad
+    Cad = TrimStrg(Cadena)
+    Cad = Replace(Cad, "á", "a")
+    Cad = Replace(Cad, "é", "e")
+    Cad = Replace(Cad, "í", "i")
+    Cad = Replace(Cad, "ó", "o")
+    Cad = Replace(Cad, "ú", "u")
+    Cad = Replace(Cad, "Á", "A")
+    Cad = Replace(Cad, "É", "E")
+    Cad = Replace(Cad, "Í", "I")
+    Cad = Replace(Cad, "Ó", "O")
+    Cad = Replace(Cad, "Ú", "U")
+    Cad = Replace(Cad, "à", "a")
+    Cad = Replace(Cad, "è", "e")
+    Cad = Replace(Cad, "ì", "i")
+    Cad = Replace(Cad, "ò", "o")
+    Cad = Replace(Cad, "ù", "u")
+    Cad = Replace(Cad, "À", "A")
+    Cad = Replace(Cad, "È", "E")
+    Cad = Replace(Cad, "Ì", "I")
+    Cad = Replace(Cad, "Ò", "O")
+    Cad = Replace(Cad, "Ù", "U")
+    Cad = Replace(Cad, "ñ", "n")
+    Cad = Replace(Cad, "Ñ", "N")
+    Cad = Replace(Cad, "ü", "u")
+    Cad = Replace(Cad, "Ü", "U")
+    Cad = Replace(Cad, "&", "Y")
+    Cad = Replace(Cad, "Nº", "No.")
+    Cad = Replace(Cad, "ª", "a. ")
+    Cad = Replace(Cad, "°", "o. ")
+    Cad = Replace(Cad, "½", "1/2")
+    Cad = Replace(Cad, "½", "1/4")
+    Cad = Replace(Cad, Chr(255), " ")
+    Cad = Replace(Cad, Chr(254), " ")
+    Cad = Replace(Cad, "^", "")
+    Sin_Signos_XML = Cad
 End Function
 
 'FoxitCtl
@@ -8723,4 +8804,19 @@ End Function
 '''    End If
 '''    Estado_Servidor = Resultado
 '''End Function
+
+Public Function SelectDialogFile(Optional RutaCarpeta As String, Optional FiltroFile As String) As String
+   With MDIFormulario.Dir_Dialog
+       .Filename = ""
+       .Flags = cdlOFNFileMustExist + cdlOFNNoChangeDir + cdlOFNHideReadOnly
+       .CancelError = False
+       .PrinterDefault = False
+        If Len(RutaCarpeta) > 1 Then .InitDir = RutaCarpeta Else .InitDir = RutaSysBases
+       .DialogTitle = "Seleccione un Archivo"
+        If Len(FiltroFile) > 1 Then .Filter = FiltroFile Else .Filter = "Archivos de texto|*.txt|Archivos Excel|*.xls|Archivos CSV|*.csv"
+       .ShowOpen
+       If .Filename = "" Then MsgBox "No se ha seleccionado ningún archivo", vbInformation '.Filename = "Seleccione un Archivo"
+       SelectDialogFile = .Filename
+   End With
+End Function
 

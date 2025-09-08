@@ -1,8 +1,8 @@
 VERSION 5.00
-Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form FAuditoria 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "MODULO DE AUDITORIA"
@@ -632,19 +632,19 @@ Private Sub Command4_Click()
           Select_Adodc AdoAuditoria, sSQL
           If AdoAuditoria.Recordset.RecordCount > 0 Then
              Contador = 0
-             I = AdoAuditoria.Recordset.Fields("Factura")
-             J = AdoAuditoria.Recordset.Fields("Factura")
-             TipoDoc = AdoAuditoria.Recordset.Fields("TC")
+             I = AdoAuditoria.Recordset.fields("Factura")
+             J = AdoAuditoria.Recordset.fields("Factura")
+             TipoDoc = AdoAuditoria.Recordset.fields("TC")
              Do While Not AdoAuditoria.Recordset.EOF
-                If TipoDoc <> AdoAuditoria.Recordset.Fields("TC") Then
+                If TipoDoc <> AdoAuditoria.Recordset.fields("TC") Then
                    Cadena = Cadena & "(" & TipoDoc & ") Factura Desde: " & I & vbCrLf _
                           & "(" & TipoDoc & ") Factura Hasta: " & J & vbCrLf _
                           & "        Cantidad de Transacciones: " & Contador & vbCrLf & vbCrLf
                    Contador = 0
-                   TipoDoc = AdoAuditoria.Recordset.Fields("TC")
-                   I = AdoAuditoria.Recordset.Fields("Factura")
+                   TipoDoc = AdoAuditoria.Recordset.fields("TC")
+                   I = AdoAuditoria.Recordset.fields("Factura")
                 End If
-                J = AdoAuditoria.Recordset.Fields("Factura")
+                J = AdoAuditoria.Recordset.fields("Factura")
                 Contador = Contador + 1
                 AdoAuditoria.Recordset.MoveNext
              Loop
@@ -692,20 +692,20 @@ Private Sub Command4_Click()
            Select_Adodc AdoAuditoria, sSQL
            If AdoAuditoria.Recordset.RecordCount > 0 Then
               Contador = 1
-              I = AdoAuditoria.Recordset.Fields("Factura")
-              J = AdoAuditoria.Recordset.Fields("Factura")
-              TipoDoc = AdoAuditoria.Recordset.Fields("TC")
+              I = AdoAuditoria.Recordset.fields("Factura")
+              J = AdoAuditoria.Recordset.fields("Factura")
+              TipoDoc = AdoAuditoria.Recordset.fields("TC")
               Do While Not AdoAuditoria.Recordset.EOF
-                 If TipoDoc <> AdoAuditoria.Recordset.Fields("TC") Then
+                 If TipoDoc <> AdoAuditoria.Recordset.fields("TC") Then
                     Contador = J - I + 1
                     Cadena = Cadena & "(" & TipoDoc & ") Factura Desde: " _
                            & Format$(I, "0000000") & " Hasta: " & Format$(J, "0000000") & vbCrLf _
                            & "   - Cantidad de Transacciones: " & Contador & vbCrLf & vbCrLf
-                    TipoDoc = AdoAuditoria.Recordset.Fields("TC")
-                    I = AdoAuditoria.Recordset.Fields("Factura")
-                    J = AdoAuditoria.Recordset.Fields("Factura")
+                    TipoDoc = AdoAuditoria.Recordset.fields("TC")
+                    I = AdoAuditoria.Recordset.fields("Factura")
+                    J = AdoAuditoria.Recordset.fields("Factura")
                  End If
-                 J = AdoAuditoria.Recordset.Fields("Factura")
+                 J = AdoAuditoria.Recordset.fields("Factura")
                  AdoAuditoria.Recordset.MoveNext
               Loop
               Contador = J - I + 1
@@ -722,20 +722,20 @@ Private Sub Command4_Click()
                & "ORDER BY TP DESC,Numero "
            Select_Adodc AdoAuditoria, sSQL
            If AdoAuditoria.Recordset.RecordCount > 0 Then
-              I = AdoAuditoria.Recordset.Fields("Numero")
-              J = AdoAuditoria.Recordset.Fields("Numero")
-              TipoDoc = AdoAuditoria.Recordset.Fields("TP")
+              I = AdoAuditoria.Recordset.fields("Numero")
+              J = AdoAuditoria.Recordset.fields("Numero")
+              TipoDoc = AdoAuditoria.Recordset.fields("TP")
               Do While Not AdoAuditoria.Recordset.EOF
-                 If TipoDoc <> AdoAuditoria.Recordset.Fields("TP") Then
+                 If TipoDoc <> AdoAuditoria.Recordset.fields("TP") Then
                     Contador = J - I + 1
                     Cadena = Cadena & "(" & TipoDoc & ") Comprobante Desde: " _
                            & Format$(I, "0000000") & " Hasta: " & Format$(J, "0000000") & vbCrLf _
                            & "   - Cantidad de Transacciones: " & Contador & vbCrLf & vbCrLf
-                    TipoDoc = AdoAuditoria.Recordset.Fields("TP")
-                    I = AdoAuditoria.Recordset.Fields("Numero")
-                    J = AdoAuditoria.Recordset.Fields("Numero")
+                    TipoDoc = AdoAuditoria.Recordset.fields("TP")
+                    I = AdoAuditoria.Recordset.fields("Numero")
+                    J = AdoAuditoria.Recordset.fields("Numero")
                  End If
-                 J = AdoAuditoria.Recordset.Fields("Numero")
+                 J = AdoAuditoria.Recordset.fields("Numero")
                  AdoAuditoria.Recordset.MoveNext
               Loop
               Contador = J - I + 1

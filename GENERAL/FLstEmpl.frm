@@ -3,7 +3,7 @@ Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
 Begin VB.Form FListarEmpleados 
    Caption         =   "LISTA DE EMPLEADOS"
    ClientHeight    =   7485
@@ -12,8 +12,8 @@ Begin VB.Form FListarEmpleados
    ClientWidth     =   11280
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   15615
-   ScaleWidth      =   28560
+   ScaleHeight     =   7485
+   ScaleWidth      =   11280
    WindowState     =   2  'Maximized
    Begin ComctlLib.Toolbar TBarCliente 
       Align           =   1  'Align Top
@@ -21,8 +21,8 @@ Begin VB.Form FListarEmpleados
       Left            =   0
       TabIndex        =   3
       Top             =   0
-      Width           =   28560
-      _ExtentX        =   50377
+      Width           =   11280
+      _ExtentX        =   19897
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -86,6 +86,7 @@ Begin VB.Form FListarEmpleados
             ImageIndex      =   8
          EndProperty
          BeginProperty Button10 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
             Object.Tag             =   ""
             Style           =   3
             MixedState      =   -1  'True
@@ -112,7 +113,7 @@ Begin VB.Form FListarEmpleados
       BorderStyle     =   1
       Begin VB.Frame Frame1 
          Height          =   645
-         Left            =   7665
+         Left            =   7140
          TabIndex        =   4
          Top             =   0
          Width           =   4110
@@ -659,7 +660,13 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
+
+Dim Anio As Integer
+Dim MesRP As Integer
+Dim AnioRP As Integer
 Dim FechaRep As String
+Dim CamposRubro As String
+Dim Rubros_I_E As String
    
 Private Sub CAnio_KeyDown(KeyCode As Integer, Shift As Integer)
   PresionoEnter KeyCode
@@ -690,8 +697,6 @@ End Sub
 Private Sub DGIEEmpleados_KeyDown(KeyCode As Integer, Shift As Integer)
 Dim FechaI As String
 Dim FechaF As String
-Dim MesRP As Integer
-Dim AnioRP As Integer
     
     Codigo1 = Ninguno
     Codigo2 = Ninguno
@@ -734,14 +739,14 @@ Dim AnioRP As Integer
      If AdoIEEmpleados.Recordset.RecordCount > 0 Then
         Codigo3 = "I"
         If DGIEEmpleados.Col >= 1 Then
-           sSQL = "UPDATE Asiento_RP_IE " _
+           sSQL = "UPDATE Asiento_RP_IE_" & CodigoUsuario & " " _
                 & "SET " & Codigo1 & " = 0 " _
                 & "WHERE Item = '" & NumEmpresa & "' "
            Ejecutar_SQL_SP sSQL
         End If
        'Ingresos_Egresos_Empleados Codigo2
         sSQL = "SELECT * " _
-             & "FROM Asiento_RP_IE " _
+             & "FROM Asiento_RP_IE_" & CodigoUsuario & " " _
              & "ORDER BY Empleado "
         Select_Adodc_Grid DGIEEmpleados, AdoIEEmpleados, sSQL
         MsgBox "Proceso terminado"
@@ -753,11 +758,11 @@ Dim AnioRP As Integer
         
         If DGIEEmpleados.Col >= 1 Then
            If SQL_Server Then
-              sSQL = "UPDATE Asiento_RP_IE " _
+              sSQL = "UPDATE Asiento_RP_IE_" & CodigoUsuario & " " _
                    & "SET " & Codigo1 & " = TB." & Codigo3 & " " _
-                   & "FROM Asiento_RP_IE As T, Trans_Rol_de_Pagos As TB "
+                   & "FROM Asiento_RP_IE_" & CodigoUsuario & " As T, Trans_Rol_de_Pagos As TB "
            Else
-              sSQL = "UPDATE Asiento_RP_IE As T, Trans_Rol_de_Pagos As TB " _
+              sSQL = "UPDATE Asiento_RP_IE_" & CodigoUsuario & " As T, Trans_Rol_de_Pagos As TB " _
                    & "SET T." & Codigo1 & " = TB." & Codigo3 & " "
            End If
            sSQL = sSQL _
@@ -772,7 +777,7 @@ Dim AnioRP As Integer
         End If
        'Ingresos_Egresos_Empleados Codigo2
         sSQL = "SELECT * " _
-             & "FROM Asiento_RP_IE " _
+             & "FROM Asiento_RP_IE_" & CodigoUsuario & " " _
              & "ORDER BY Empleado "
         Select_Adodc_Grid DGIEEmpleados, AdoIEEmpleados, sSQL
         MsgBox "Proceso terminado"
@@ -822,12 +827,31 @@ Private Sub Form_Activate()
   SelectDB_Combo DCMes, AdoMes, sSQL, "Dia_Mes"
   DCMes.Text = MesesLetras(Month(FechaSistema))
   
+  sSQL = "SELECT YEAR(Fecha) Anio " _
+       & "FROM Comprobantes " _
+       & "WHERE Item = '" & NumEmpresa & "' " _
+       & "AND Periodo = '" & Periodo_Contable & "' " _
+       & "GROUP BY YEAR(Fecha) " _
+       & "ORDER BY YEAR(Fecha) DESC "
+  Select_Adodc AdoAux, sSQL
+  
   CAnio.Clear
-  For I = 2000 To Year(FechaSistema)
-      CAnio.AddItem CStr(I)
-  Next I
+  With AdoAux.Recordset
+   If .RecordCount > 0 Then
+       Do While Not .EOF
+  'For I = 2000 To Year(FechaSistema)
+          CAnio.AddItem .fields("Anio")
+         .MoveNext
+       Loop
+  'Next I
+   Else
+      CAnio.AddItem Year(FechaSistema)
+   End If
+  End With
   CAnio.Text = Year(FechaSistema)
   ListaEmpleadosRolPagos
+  CamposRubro = ""
+  Rubros_I_E = ""
   RatonNormal
   CAnio.SetFocus
 End Sub
@@ -872,6 +896,12 @@ End Sub
 
 Private Sub TBarCliente_ButtonClick(ByVal Button As ComctlLib.Button)
  'MsgBox Button.key
+  If NoMes > 12 Then NoMes = 12
+  If NoMes <= 0 Then NoMes = 1
+  FechaRep = "01/" & Format$(NoMes, "00") & "/" & CAnio.Text
+  Anio = Year(FechaRep)
+  FechaIni = BuscarFecha(FechaRep)
+  FechaFin = BuscarFecha(UltimoDiaMes(FechaRep))
   Select Case Button.key
     Case "Todos": ListaEmpleadosRolPagos
     Case "SinCta": ListaEmpleadosRolPagos 1
@@ -889,15 +919,10 @@ Private Sub TBarCliente_ButtonClick(ByVal Button As ComctlLib.Button)
 End Sub
 
 Public Sub Ingresar_RDEP()
-Dim Anio As Integer
+
   Mensajes = "Desea Grabar los Empleados S/N? "
   Titulo = "Pregunta de grabación"
   If BoxMensaje = vbYes Then
-      
-     Anio = Year(FechaRep)
-     FechaIni = BuscarFecha("01/01/" & Anio)
-     FechaFin = BuscarFecha(FechaRep)
-     
      NumRet = Maximo_De("Trans_Dependencia", "IDT")
      SQL2 = "DELETE * " _
           & "FROM Trans_Dependencia " _
@@ -963,7 +988,8 @@ Dim Tabla_ya_Existe As Boolean
     End If
     FechaRep = "01/" & Format$(NoMes, "00") & "/" & CAnio.Text
     FechaRep = UltimoDiaMes(FechaRep)
-
+    CamposRubro = ""
+    Rubros_I_E = I_E_Emp
    'Consultamos las cuentas de la tabla
     sSQL = "SELECT Codigo,Cuenta,I_E_Emp,Con_IESS,Cod_Rol_Pago " _
          & "FROM Catalogo_Cuentas " _
@@ -976,59 +1002,62 @@ Dim Tabla_ya_Existe As Boolean
     Select_Adodc AdoSRI, sSQL
    
     RatonReloj
-    Tabla_ya_Existe = False
-    Set AdoCon1 = New ADODB.Connection
-    AdoCon1.open AdoStrCnn
-    Set RstSchema = AdoCon1.OpenSchema(adSchemaTables)
-    Do Until RstSchema.EOF
-       If RstSchema!TABLE_TYPE = "TABLE" And MidStrg(RstSchema!TABLE_NAME, 1, 1) <> "~" Then
-          If RstSchema!TABLE_NAME = "Asiento_RP_IE" Then Tabla_ya_Existe = True
-       End If
-       RstSchema.MoveNext
-    Loop
-    AdoCon1.Close
-    If Tabla_ya_Existe Then
-       sSQL = "DROP TABLE Asiento_RP_IE "
-       Ejecutar_SQL_SP sSQL
-    End If
+    sSQL = "DROP TABLE IF EXISTS Asiento_RP_IE_" & CodigoUsuario & " "
+    Ejecutar_SQL_SP sSQL
 
-    sSQL = "CREATE TABLE Asiento_RP_IE (" _
+    sSQL = "CREATE TABLE Asiento_RP_IE_" & CodigoUsuario & " (" _
          & "Codigo NVARCHAR(10) NULL," _
-         & "Empleado NVARCHAR(60) NULL," _
-         & "SUELDO FLOAT NULL," _
-         & "HORAS_EXT FLOAT NULL,"
+         & "Empleado NVARCHAR(60) NULL,"
+    If I_E_Emp = "I" Then
+       sSQL = sSQL & "SUELDO FLOAT NULL," _
+            & "HORAS_EXT FLOAT NULL,"
+    End If
     With AdoSRI.Recordset
      If .RecordCount > 0 Then
         .MoveFirst
          Do While Not .EOF
+            CamposRubro = CamposRubro & .fields("Cod_Rol_Pago") & ","
             sSQL = sSQL & CStr(.fields("Cod_Rol_Pago")) & " FLOAT NULL,"
            .MoveNext
          Loop
      End If
     End With
+    CamposRubro = MidStrg(CamposRubro, 1, Len(CamposRubro) - 1)
     sSQL = sSQL _
          & "I_E_Emp NVARCHAR(1) NULL," _
          & "Item NVARCHAR(3) NULL); "
     Ejecutar_SQL_SP sSQL
-
-    sSQL = "INSERT INTO Asiento_RP_IE(Codigo,Empleado,SUELDO,I_E_Emp,Item) " _
-         & "SELECT C.Codigo,C.Cliente,CRP.Salario,'" & I_E_Emp & "' As IE,'" & NumEmpresa & "' As Item " _
+    
+    sSQL = "INSERT INTO Asiento_RP_IE_" & CodigoUsuario & " (Codigo,Empleado,I_E_Emp,Item) " _
+         & "SELECT C.Codigo,TRIM(SUBSTRING(C.Cliente,1,60)),'" & I_E_Emp & "' As IE,'" & NumEmpresa & "' As Item " _
          & "FROM Clientes As C,Catalogo_Rol_Pagos AS CRP " _
          & "WHERE CRP.Item = '" & NumEmpresa & "' " _
          & "AND CRP.Periodo = '" & Periodo_Contable & "' " _
-         & "AND CRP.T = '" & Normal & "' " _
+         & "AND CRP.T = 'N' " _
          & "AND C.Codigo = CRP.Codigo "
     Ejecutar_SQL_SP sSQL
+    
+    sSQL = "INSERT INTO Asiento_RP_IE_" & CodigoUsuario & " (Codigo,Empleado,I_E_Emp,Item) " _
+         & "SELECT C.Codigo,TRIM(SUBSTRING(C.Cliente,1,60)),'" & I_E_Emp & "' As IE,'" & NumEmpresa & "' As Item " _
+         & "FROM Clientes As C,Catalogo_Rol_Pagos AS CRP " _
+         & "WHERE CRP.Item = '" & NumEmpresa & "' " _
+         & "AND CRP.Periodo = '" & Periodo_Contable & "' " _
+         & "AND CRP.FechaC BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
+         & "AND CRP.T = 'R' " _
+         & "AND C.Codigo = CRP.Codigo "
+    Ejecutar_SQL_SP sSQL
+    
     With AdoSRI.Recordset
      If .RecordCount > 0 Then
         .MoveFirst
          Do While Not .EOF
+            RatonReloj
             If SQL_Server Then
-               sSQL = "UPDATE Asiento_RP_IE " _
+               sSQL = "UPDATE Asiento_RP_IE_" & CodigoUsuario & " " _
                     & "SET " & CStr(.fields("Cod_Rol_Pago")) & " = CRR.Valor " _
-                    & "FROM Asiento_RP_IE As ARP,Catalogo_Rol_Rubros As CRR "
+                    & "FROM Asiento_RP_IE_" & CodigoUsuario & " As ARP, Catalogo_Rol_Rubros As CRR "
             Else
-               sSQL = "UPDATE Asiento_RP_IE As ARP,Catalogo_Rol_Rubros As CRR " _
+               sSQL = "UPDATE Asiento_RP_IE_" & CodigoUsuario & " As ARP, Catalogo_Rol_Rubros As CRR " _
                     & "SET ARP." & CStr(.fields("Cod_Rol_Pago")) & " = CRR.Valor "
             End If
             sSQL = sSQL _
@@ -1042,44 +1071,39 @@ Dim Tabla_ya_Existe As Boolean
          Loop
      End If
     End With
-    
-    If SQL_Server Then
-       sSQL = "UPDATE Asiento_RP_IE " _
-            & "SET SUELDO = CRR.Ing_Liquido " _
-            & "FROM Asiento_RP_IE As ARP,Trans_Rol_Horas As CRR "
-    Else
-       sSQL = "UPDATE Asiento_RP_IE As ARP,Trans_Rol_Horas As CRR " _
-            & "SET ARP.SUELDO = CRR.Ing_Liquido "
+    If I_E_Emp = "I" Then
+        If SQL_Server Then
+           sSQL = "UPDATE Asiento_RP_IE_" & CodigoUsuario & " " _
+                & "SET SUELDO = CRR.Ing_Liquido, HORAS_EXT = CRR.Ing_Horas_Ext " _
+                & "FROM Asiento_RP_IE_" & CodigoUsuario & " As ARP,Trans_Rol_Horas As CRR "
+        Else
+           sSQL = "UPDATE Asiento_RP_IE_" & CodigoUsuario & " As ARP,Trans_Rol_Horas As CRR " _
+                & "SET ARP.SUELDO = CRR.Ing_Liquido, ARP.HORAS_EXT = CRR.Ing_Horas_Ext "
+        End If
+        sSQL = sSQL _
+             & "WHERE CRR.Item = '" & NumEmpresa & "' " _
+             & "AND CRR.Periodo = '" & Periodo_Contable & "' " _
+             & "AND CRR.Fecha = #" & BuscarFecha(FechaRep) & "# " _
+             & "AND CRR.Ing_Liquido > 0 " _
+             & "AND ARP.Codigo = CRR.Codigo "
+        Ejecutar_SQL_SP sSQL
+        
+        sSQL = "UPDATE Asiento_RP_IE_" & CodigoUsuario & " " _
+             & "SET SUELDO = 0 " _
+             & "WHERE SUELDO IS NULL "
+        Ejecutar_SQL_SP sSQL
+            
+        sSQL = "UPDATE Asiento_RP_IE_" & CodigoUsuario & " " _
+             & "SET HORAS_EXT = 0 " _
+             & "WHERE HORAS_EXT IS NULL "
+        Ejecutar_SQL_SP sSQL
     End If
-    sSQL = sSQL _
-         & "WHERE CRR.Item = '" & NumEmpresa & "' " _
-         & "AND CRR.Periodo = '" & Periodo_Contable & "' " _
-         & "AND CRR.Fecha = #" & BuscarFecha(FechaRep) & "# " _
-         & "AND CRR.Ing_Liquido > 0 " _
-         & "AND ARP.Codigo = CRR.Codigo "
-    Ejecutar_SQL_SP sSQL
-    
-    If SQL_Server Then
-       sSQL = "UPDATE Asiento_RP_IE " _
-            & "SET HORAS_EXT = CRR.Ing_Horas_Ext " _
-            & "FROM Asiento_RP_IE As ARP,Trans_Rol_Horas As CRR "
-    Else
-       sSQL = "UPDATE Asiento_RP_IE As ARP,Trans_Rol_Horas As CRR " _
-            & "SET ARP.HORAS_EXT = CRR.Ing_Horas_Ext "
-    End If
-    sSQL = sSQL _
-         & "WHERE CRR.Item = '" & NumEmpresa & "' " _
-         & "AND CRR.Periodo = '" & Periodo_Contable & "' " _
-         & "AND CRR.Fecha = #" & BuscarFecha(FechaRep) & "# " _
-         & "AND CRR.Horas_Exts > 0 " _
-         & "AND ARP.Codigo = CRR.Codigo "
-    Ejecutar_SQL_SP sSQL
     
     With AdoSRI.Recordset
      If .RecordCount > 0 Then
         .MoveFirst
          Do While Not .EOF
-            sSQL = "UPDATE Asiento_RP_IE " _
+            sSQL = "UPDATE Asiento_RP_IE_" & CodigoUsuario & " " _
                  & "SET " & CStr(.fields("Cod_Rol_Pago")) & " = 0 " _
                  & "WHERE " & CStr(.fields("Cod_Rol_Pago")) & " IS NULL "
             Ejecutar_SQL_SP sSQL
@@ -1087,18 +1111,9 @@ Dim Tabla_ya_Existe As Boolean
          Loop
      End If
     End With
-    sSQL = "UPDATE Asiento_RP_IE " _
-         & "SET SUELDO = 0 " _
-         & "WHERE SUELDO IS NULL "
-    Ejecutar_SQL_SP sSQL
-        
-    sSQL = "UPDATE Asiento_RP_IE " _
-         & "SET HORAS_EXT = 0 " _
-         & "WHERE HORAS_EXT IS NULL "
-    Ejecutar_SQL_SP sSQL
     
     sSQL = "SELECT * " _
-         & "FROM Asiento_RP_IE " _
+         & "FROM Asiento_RP_IE_" & CodigoUsuario & " " _
          & "ORDER BY Empleado "
     Select_Adodc_Grid DGIEEmpleados, AdoIEEmpleados, sSQL
 End Sub
@@ -1106,85 +1121,87 @@ End Sub
 Public Sub Grabar_Ingresos_Egresos_Empleados()
 Dim Sueldo As Currency
 Dim Horas_Ext As Currency
+Dim Insertar As Boolean
     RatonReloj
+    Insertar = False
     MiTiempo = Time
     DGIEEmpleados.Visible = False
-    With AdoIEEmpleados.Recordset
-     If .RecordCount > 0 Then
-        .MoveLast
-         CodigoB = .fields("I_E_Emp")
-         sSQL = "DELETE * " _
-              & "FROM Trans_Rol_Horas " _
-              & "WHERE Item = '" & NumEmpresa & "' " _
-              & "AND Periodo = '" & Periodo_Contable & "' " _
-              & "AND Fecha = #" & BuscarFecha(FechaRep) & "# "
-         Ejecutar_SQL_SP sSQL
-         
-         sSQL = "DELETE * " _
-              & "FROM Catalogo_Rol_Rubros " _
-              & "WHERE Item = '" & NumEmpresa & "' " _
-              & "AND Periodo = '" & Periodo_Contable & "' " _
-              & "AND Mes = " & NoMes & " " _
-              & "AND I_E = '" & CodigoB & "' "
-         Ejecutar_SQL_SP sSQL
-         
-        .MoveFirst
-         Do While Not .EOF
-            Codigo = .fields("Codigo")
-            Sueldo = .fields("SUELDO")
-            Horas_Ext = .fields("HORAS_EXT")
-            If AdoSRI.Recordset.RecordCount > 0 Then
-               AdoSRI.Recordset.MoveFirst
-               Do While Not AdoSRI.Recordset.EOF
-                  Cta = AdoSRI.Recordset.fields("Codigo")
-                  Codigo1 = AdoSRI.Recordset.fields("Cod_Rol_Pago")
-                  If IsNull(AdoSRI.Recordset.fields("Con_IESS")) Then
-                     Bandera = False
-                  Else
-                     Bandera = AdoSRI.Recordset.fields("Con_IESS")
-                  End If
-                  Cuenta = AdoSRI.Recordset.fields("Cuenta")
-                  Valor = .fields(Codigo1)
-                  If Valor > 0 Then
-                     SetAdoAddNew "Catalogo_Rol_Rubros"
-                     SetAdoFields "I_E", CodigoB
-                     SetAdoFields "Detalle", ULCase(Cuenta)
-                     SetAdoFields "Mes", NoMes
-                     SetAdoFields "Cta", Cta
-                     SetAdoFields "TV", "V"
-                     SetAdoFields "Valor", Valor
-                     SetAdoFields "Codigo", Codigo
-                     SetAdoFields "CPais", CodigoPais
-                     SetAdoFields "Calc_IESS", Bandera
-                     SetAdoFields "Cod_Rol_Pago", Codigo1
-                     SetAdoFields "Periodo", Periodo_Contable
-                     SetAdoFields "Item", NumEmpresa
-                     SetAdoUpdate
-                  End If
-                  AdoSRI.Recordset.MoveNext
-               Loop
-            End If
-            
-            If (Sueldo + Horas_Ext) > 0 Then
-               'MsgBox Sueldo & vbCrLf & Horas_Ext
-               SetAdoAddNew "Trans_Rol_Horas"
-               SetAdoFields "T", Val(adFalse)
-               SetAdoFields "Dias", Day(FechaRep)
-               SetAdoFields "Codigo", Codigo
-               SetAdoFields "Fecha", FechaRep
-               SetAdoFields "Horas", MiTiempo
-               SetAdoFields "Valor_Hora", Redondear((Sueldo / Day(FechaRep)) / 8, 4)
-               SetAdoFields "Horas_Exts", 1
-               SetAdoFields "Ing_Liquido", Sueldo
-               SetAdoFields "Ing_Horas_Ext", Horas_Ext
-               SetAdoFields "CodigoU", CodigoUsuario
-               SetAdoFields "Item", NumEmpresa
-               SetAdoUpdate
-            End If
-           .MoveNext
-         Loop
-     End If
-    End With
+    If Len(CamposRubro) > 1 Then
+       sSQL = "DELETE * " _
+            & "FROM Catalogo_Rol_Rubros " _
+            & "WHERE Item = '" & NumEmpresa & "' " _
+            & "AND Periodo = '" & Periodo_Contable & "' " _
+            & "AND Mes = " & NoMes & " " _
+            & "AND I_E = '" & Rubros_I_E & "' "
+       Ejecutar_SQL_SP sSQL
+       If Rubros_I_E = "I" Then
+          sSQL = "UPDATE Trans_Rol_Horas " _
+               & "SET Ing_Horas_Ext = 0 " _
+               & "WHERE Item = '" & NumEmpresa & "' " _
+               & "AND Periodo = '" & Periodo_Contable & "' " _
+               & "AND Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
+               & "AND Ing_Horas_Ext > 0 "
+          Ejecutar_SQL_SP sSQL
+       End If
+       
+       Eliminar_Nulos_SP "Asiento_RP_IE_" & CodigoUsuario
+       SubSQL = "INSERT INTO Catalogo_Rol_Rubros (Item, Periodo, Num, I_E, Detalle, Mes, Cta, TV, Valor, Codigo, CPais, Calc_IESS, Cod_Rol_Pago, X) VALUES "
+       
+       sSQL = "SELECT " & CamposRubro & ",I_E_Emp,Codigo " _
+            & "FROM Asiento_RP_IE_" & CodigoUsuario & " " _
+            & "WHERE Item = '" & NumEmpresa & "' " _
+            & "ORDER BY Empleado "
+       Select_Adodc AdoAux, sSQL
+       With AdoAux.Recordset
+        If .RecordCount > 0 Then
+            Do While Not .EOF
+               For I = 0 To .fields.Count - 1
+                   Cadena = .fields(I).Name
+                   Select Case .fields(I).Name
+                     Case "I_E_Emp", "Codigo":
+                     Case Else
+                          If .fields(I) > 0 Then
+                              Insertar = True
+                              SubSQL = SubSQL & "('" & NumEmpresa & "','" & Periodo_Contable & "',0,'" & Rubros_I_E & "','.'," & NoMes & ",'0','V'," & .fields(I) & "," _
+                                              & "'" & .fields("Codigo") & "','" & CodigoPais & "',0,'" & .fields(I).Name & "','.'),"
+                          End If
+                   End Select
+               Next I
+              .MoveNext
+            Loop
+        End If
+       End With
+       If Insertar Then
+          SubSQL = MidStrg(SubSQL, 1, Len(SubSQL) - 1)
+          Ejecutar_SQL_SP SubSQL
+       End If
+    '   Clipboard.Clear
+    '   Clipboard.SetText SubSQL
+       If Insertar Then
+          sSQL = "UPDATE Catalogo_Rol_Rubros " _
+               & "SET Cta = CC.Codigo, Calc_IESS = CC.Con_IESS, Detalle = TRIM(SUBSTRING(CC.Cuenta,1,50)) " _
+               & "FROM Catalogo_Rol_Rubros As CRR, Catalogo_Cuentas As CC " _
+               & "WHERE CRR.Item = '" & NumEmpresa & "' " _
+               & "AND CRR.Periodo = '" & Periodo_Contable & "' " _
+               & "AND CRR.Cta = '0' " _
+               & "AND CRR.Cod_Rol_Pago = CC.Cod_Rol_Pago " _
+               & "AND CRR.Item = CC.Item " _
+               & "AND CRR.Periodo = CC.Periodo "
+          Ejecutar_SQL_SP sSQL
+       End If
+       If Rubros_I_E = "I" Then
+          sSQL = "UPDATE Trans_Rol_Horas " _
+               & "SET Ing_Horas_Ext = ARP.HORAS_EXT " _
+               & "FROM Trans_Rol_Horas As CRR, Asiento_RP_IE_" & CodigoUsuario & " As ARP " _
+               & "WHERE CRR.Item = '" & NumEmpresa & "' " _
+               & "AND CRR.Periodo = '" & Periodo_Contable & "' " _
+               & "AND CRR.Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
+               & "AND ARP.HORAS_EXT > 0 " _
+               & "AND CRR.Codigo = ARP.Codigo " _
+               & "AND CRR.Item = ARP.Item "
+          Ejecutar_SQL_SP sSQL
+       End If
+    End If
     RatonNormal
     DGIEEmpleados.Visible = True
     MsgBox "Proceso grabado exitosamente"

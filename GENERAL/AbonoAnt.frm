@@ -783,7 +783,7 @@ Private Sub Command1_Click()
      Co.Item = NumEmpresa
      Co.Usuario = CodigoUsuario
      Co.T_No = Trans_No
-     GrabarComprobante Co
+     Grabar_Comprobante Co
 
    ' Seteamos para el siguiente comprobante
      RatonNormal

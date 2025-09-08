@@ -1,10 +1,10 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
-Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDATGRD.OCX"
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
+Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.Ocx"
 Begin VB.Form ListFact 
    BackColor       =   &H80000002&
@@ -32,9 +32,9 @@ Begin VB.Form ListFact
       Caption         =   "| SELECCIONE EL EJECUTIVO DE VENTA |"
       ForeColor       =   &H0000FFFF&
       Height          =   3690
-      Left            =   9555
+      Left            =   8505
       TabIndex        =   57
-      Top             =   9030
+      Top             =   3045
       Visible         =   0   'False
       Width           =   8520
       Begin VB.CommandButton Command1 
@@ -110,9 +110,9 @@ Begin VB.Form ListFact
       Bindings        =   "ListFact.frx":0D27
       DataSource      =   "AdoArticulo"
       Height          =   3540
-      Left            =   4095
+      Left            =   2205
       TabIndex        =   66
-      Top             =   4620
+      Top             =   5040
       Visible         =   0   'False
       Width           =   11670
       _ExtentX        =   20585
@@ -322,8 +322,8 @@ Begin VB.Form ListFact
       Width           =   12375
    End
    Begin InetCtlsObjects.Inet URLinet 
-      Left            =   14700
-      Top             =   4725
+      Left            =   14910
+      Top             =   2520
       _ExtentX        =   1005
       _ExtentY        =   1005
       _Version        =   393216
@@ -2468,9 +2468,6 @@ End Sub
 
 Public Sub Volver_Autorizar()
 Dim ObjAutori As New WS_Autorizacion
-Dim URLAutorizacion As String
-Dim RutaXMLAutorizado As String
-Dim RutaXMLRechazado As String
 Dim ArrayAutorizacion() As String
 Dim Tiempo_Espera As Integer
 Dim Tiempo_SRI As Integer
@@ -2483,7 +2480,8 @@ Dim Tiempo_SRI As Integer
        SRI_Crear_Clave_Acceso_Facturas FA, False, CBool(CheqClaveAcceso.value)
        If SRI_Autorizacion.Estado_SRI = "OK" Then
           FA.Autorizacion = SRI_Autorizacion.Autorizacion
-          SRI_Enviar_Mails FA, SRI_Autorizacion, FA.TC
+          SRI_Autorizacion.Tipo_Doc_SRI = FA.TC
+          SRI_Enviar_Mails FA, SRI_Autorizacion
           Imprimir_Punto_Venta_SRI AdoFactura, AdoDetalle, FA
        Else
           TxtXML = "(" & SRI_Autorizacion.Estado_SRI & ") " & SRI_Autorizacion.Error_SRI
@@ -2492,7 +2490,6 @@ Dim Tiempo_SRI As Integer
       'Pagina de Conexion con el SRI
        Progreso_Barra.Mensaje_Box = "Actualizando XML"
        Progreso_Iniciar
-       URLAutorizacion = Leer_Campo_Empresa("Web_SRI_Autorizado")
        SRI_Autorizacion.Clave_De_Acceso = FA.ClaveAcceso
        SRI_Autorizacion.Estado_SRI = "CF"
        SRI_Autorizacion.Error_SRI = ""
@@ -2517,7 +2514,7 @@ Dim Tiempo_SRI As Integer
           SRI_Autorizacion.Fecha_Autorizacion = Format$(MidStrg(ArrayAutorizacion(2), 1, 10), "dd/MM/yyyy")
           SRI_Autorizacion.Hora_Autorizacion = MidStrg(ArrayAutorizacion(2), 12, 8)
           SRI_Autorizacion.Documento_XML = Leer_Archivo_Texto(RutaXMLAutorizado)
-          SRI_Actualizar_Autorizacion_Factura FA, SRI_Autorizacion
+          SRI_Actualizar_Autorizacion_Comprobante FA.TC, SRI_Autorizacion, FA
        Else
           SRI_Autorizacion.Error_SRI = ArrayAutorizacion(0) & " " & ArrayAutorizacion(1)
        End If
@@ -2656,7 +2653,7 @@ Dim FAPend() As Tipo_Facturas
             FA.Factura = FAPend(Contador).Factura
             FA.Autorizacion = FAPend(Contador).Autorizacion
             Factura_Hasta = FA.Factura
-            SRI_Crear_Clave_Acceso_Facturas FA, False, CBool(CheqClaveAcceso.value)
+            SRI_Crear_Clave_Acceso_Facturas FA, False, CBool(CheqClaveAcceso.value), True, True
             'MsgBox FA.TC & ": " & FA.Serie & "-" & FA.Factura & vbCrLf & TextoImprimio
             'If SRI_Autorizacion.Estado_SRI <> "OK" Then MsgBox FA.TC & ": " & FA.Serie & "-" & FA.Factura
             Progreso_Barra.Mensaje_Box = Contador & "/" & LongFA & " Autorizando Documento No. " & FA.TC & " " & Format(FA.Fecha, "MM/yyyy") & " - " & FA.Serie & "-" & Format(FA.Factura, "000000000")
@@ -3169,6 +3166,10 @@ Private Sub DGDetalle_KeyDown(KeyCode As Integer, Shift As Integer)
                     Imprimir_FA_NV_TJ TA
                 End If
                 
+                If CtrlDown And KeyCode = vbKeyA Then Volver_Autorizar_NC True
+                
+                If AltDown And KeyCode = vbKeyN Then Actualizar_NC_Kardex
+                
                 If KeyCode = vbKeyReturn Then
                    AdoDetalle.Recordset.MoveNext
                    If AdoDetalle.Recordset.EOF Then AdoDetalle.Recordset.MoveFirst
@@ -3287,6 +3288,8 @@ Private Sub Form_Load()
    ConectarAdodc AdoArticulo
    ConectarAdodc AdoEjecutivo
    ConectarAdodc AdoAutorizacion
+   
+   SRI_Obtener_Datos_Comprobantes_Electronicos
 End Sub
 
 Public Sub BuscarFactura()
@@ -3373,6 +3376,14 @@ Public Sub BuscarFactura()
     'Consultamos los pagos Interes de Tarjetas y Abonos de Bancos con efectivo
     'Procesamos el Saldo de la Factura
   SSTabDetalle.Tab = 0
+End Sub
+
+Private Sub MBFecha_GotFocus()
+  MarcarTexto MBFecha
+End Sub
+
+Private Sub MBFecha_KeyDown(KeyCode As Integer, Shift As Integer)
+  PresionoEnter KeyCode
 End Sub
 
 Private Sub SSTabDetalle_Click(PreviousTab As Integer)
@@ -3553,19 +3564,22 @@ Dim AdoAuxDB As ADODB.Recordset
           'Listamos el error en la autorizacion del documento si tuvier error
            If Len(FA.Autorizacion) >= 13 Then
               CheqClaveAcceso.Caption = "Clave de Accceso: " & FA.TC & " "
-              Cadena = SRI_Mensaje_Error(FA.ClaveAcceso)
-              If Len(Cadena) > 1 Then
-                 TxtXML = "Clave de Accceso: " & FA.ClaveAcceso & vbCrLf _
-                        & String(100, "-") & vbCrLf _
-                        & Cadena _
-                        & String(100, "-")
-              Else
-                 TxtXML = "Clave de Accceso: " & FA.ClaveAcceso & vbCrLf _
-                        & String(100, "-") & vbCrLf _
-                        & "OK: No existe ningun error en su aprobacion" & vbCrLf _
-                        & String(100, "-")
-              End If
+''              Cadena = SRI_Mensaje_Error(FA.ClaveAcceso)
+''              If Len(Cadena) > 1 Then
+''                 TxtXML = "Clave de Accceso: " & FA.ClaveAcceso & vbCrLf _
+''                        & String(100, "-") & vbCrLf _
+''                        & Cadena _
+''                        & String(100, "-")
+''              Else
+''                 TxtXML = "Clave de Accceso: " & FA.ClaveAcceso & vbCrLf _
+''                        & String(100, "-") & vbCrLf _
+''                        & "OK: No existe ningun error en su aprobacion" & vbCrLf _
+''                        & String(100, "-")
+''              End If
            End If
+           TxtXML = SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion.Clave_De_Acceso)
+           TxtXML.Refresh
+
            TxtXML.Visible = True
     End Select
     RatonNormal
@@ -3604,11 +3618,14 @@ Private Sub TBarFactura_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMe
     'Envio de Emails de Comprobantes Electronicos
     '=================================================================================
      Case "Mail_FA"
-          SRI_Enviar_Mails FA, SRI_Autorizacion, "FA"
+          SRI_Autorizacion.Tipo_Doc_SRI = "FA"
+          SRI_Enviar_Mails FA, SRI_Autorizacion
      Case "Mail_NC"
-          SRI_Enviar_Mails FA, SRI_Autorizacion, "NC"
+          SRI_Autorizacion.Tipo_Doc_SRI = "NC"
+          SRI_Enviar_Mails FA, SRI_Autorizacion
      Case "Mail_GR"
-          SRI_Enviar_Mails FA, SRI_Autorizacion, "GR"
+          SRI_Autorizacion.Tipo_Doc_SRI = "GR"
+          SRI_Enviar_Mails FA, SRI_Autorizacion
     '=================================================================================
     'Envio de PDF de Comprobantes Electronicos
     '=================================================================================
@@ -3683,8 +3700,9 @@ Dim TempStrg As String
    Case "Reprocesar_Saldos_Facturas"
         If ClaveAuxiliar Then
            DGDetalle.Visible = False
-           Procesar_Saldo_De_Facturas ListFact, True, MBFecha
+           Actualizar_Saldo_De_Facturas_SP FA.TC, FA.Serie, TextFDesde, TextFHasta, MBFecha
            DGDetalle.Visible = True
+           FInfoError.Show
         End If
    Case "Eliminar_Facturas"
         Eliminar_Facturas
@@ -3837,46 +3855,65 @@ Dim Secuencial As String
 End Sub
 
 Private Sub TxtClaveAcceso_KeyDown(KeyCode As Integer, Shift As Integer)
-Dim RutaXMLFirmado As String
 Keys_Especiales Shift
 ''''  If CtrlDown And KeyCode = vbKeyS Then
 ''''     SRI_Crear_Clave_Acceso_Facturas FA, True
 ''''     RatonNormal
 ''''  End If
+  
   If CtrlDown And KeyCode = vbKeyR Then ReCalcular_Totales_Factura FA
   If CtrlDown And KeyCode = vbKeyS And Len(FA.Autorizacion) >= 13 Then
      If CFechaLong(LabelFechaPe) <= CFechaLong(Fecha_CE) Then
-        Mensajes = "ESTA SEGURO QUE DESEA LIBERAR ESTE" & vbCrLf & vbCrLf _
-                 & "DOCUMENTO Y AUTORIZAR AL SRI"
-        Titulo = "Formulario de Confirmación"
-        If BoxMensaje = vbYes Then
-           SQL2 = "UPDATE Facturas " _
-                & "SET Autorizacion = '" & RUC & "', Clave_Acceso = '" & Ninguno & "', Estado_SRI = '" & Ninguno & "' " _
-                & "WHERE Item = '" & NumEmpresa & "' " _
-                & "AND Periodo = '" & Periodo_Contable & "' " _
-                & "AND TC = '" & FA.TC & "' " _
-                & "AND Serie = '" & FA.Serie & "' " _
-                & "AND Factura = " & FA.Factura & " "
-           Ejecutar_SQL_SP SQL2
-           SQL2 = "UPDATE Detalle_Factura " _
-                & "SET Autorizacion = '" & RUC & "' " _
-                & "WHERE Item = '" & NumEmpresa & "' " _
-                & "AND Periodo = '" & Periodo_Contable & "' " _
-                & "AND TC = '" & FA.TC & "' " _
-                & "AND Serie = '" & FA.Serie & "' " _
-                & "AND Factura = " & FA.Factura & " "
-           Ejecutar_SQL_SP SQL2
-           SQL2 = "UPDATE Trans_Abonos " _
-                & "SET Autorizacion = '" & RUC & "' " _
-                & "WHERE Item = '" & NumEmpresa & "' " _
-                & "AND Periodo = '" & Periodo_Contable & "' " _
-                & "AND TP = '" & FA.TC & "' " _
-                & "AND Serie = '" & FA.Serie & "' " _
-                & "AND Factura = " & FA.Factura & " "
-           Ejecutar_SQL_SP SQL2
-           FA.Autorizacion = RUC
-           SRI_Crear_Clave_Acceso_Facturas FA, True, CBool(CheqClaveAcceso.value), True
-           RatonNormal
+        If FA.T <> "A" Then
+            Mensajes = "ESTA SEGURO QUE DESEA LIBERAR ESTE" & vbCrLf & vbCrLf _
+                     & "DOCUMENTO Y AUTORIZAR AL SRI"
+            Titulo = "Formulario de Confirmación"
+            If BoxMensaje = vbYes Then
+               SQL2 = "UPDATE Facturas " _
+                    & "SET Autorizacion = '" & RUC & "', Clave_Acceso = '" & Ninguno & "', Estado_SRI = '" & Ninguno & "' " _
+                    & "WHERE Item = '" & NumEmpresa & "' " _
+                    & "AND Periodo = '" & Periodo_Contable & "' " _
+                    & "AND TC = '" & FA.TC & "' " _
+                    & "AND Serie = '" & FA.Serie & "' " _
+                    & "AND Factura = " & FA.Factura & " "
+               Ejecutar_SQL_SP SQL2
+               
+               SQL2 = "UPDATE Facturas " _
+                    & "SET RUC_CI = C.CI_RUC , TB = C.TD, Razon_Social = C.Cliente, Direccion_RS = C.Direccion, Telefono_RS = C.Telefono " _
+                    & "FROM Facturas As F, Clientes As C " _
+                    & "WHERE F.Item = '" & NumEmpresa & "' " _
+                    & "AND F.Periodo = '" & Periodo_Contable & "' " _
+                    & "AND F.TC = '" & FA.TC & "' " _
+                    & "AND F.Serie = '" & FA.Serie & "' " _
+                    & "AND F.Factura = " & FA.Factura & " " _
+                    & "AND LEN(F.Razon_Social) = 1 " _
+                    & "AND F.CodigoC = C.Codigo "
+               Ejecutar_SQL_SP SQL2
+               
+               SQL2 = "UPDATE Detalle_Factura " _
+                    & "SET Autorizacion = '" & RUC & "' " _
+                    & "WHERE Item = '" & NumEmpresa & "' " _
+                    & "AND Periodo = '" & Periodo_Contable & "' " _
+                    & "AND TC = '" & FA.TC & "' " _
+                    & "AND Serie = '" & FA.Serie & "' " _
+                    & "AND Factura = " & FA.Factura & " "
+               Ejecutar_SQL_SP SQL2
+               
+               SQL2 = "UPDATE Trans_Abonos " _
+                    & "SET Autorizacion = '" & RUC & "' " _
+                    & "WHERE Item = '" & NumEmpresa & "' " _
+                    & "AND Periodo = '" & Periodo_Contable & "' " _
+                    & "AND TP = '" & FA.TC & "' " _
+                    & "AND Serie = '" & FA.Serie & "' " _
+                    & "AND Factura = " & FA.Factura & " "
+               Ejecutar_SQL_SP SQL2
+               
+               FA.Autorizacion = RUC
+               SRI_Crear_Clave_Acceso_Facturas FA, True, CBool(CheqClaveAcceso.value), True
+               RatonNormal
+            End If
+        Else
+           MsgBox "No se puede enviar al SRI autorizar documentos que estan anulados"
         End If
      Else
         RatonNormal
@@ -3995,9 +4032,14 @@ Public Sub Impresion_Bloque()
   End If
 End Sub
 
-Public Sub Volver_Autorizar_NC()
+Public Sub Volver_Autorizar_NC(Optional VolverAutorizar As Boolean)
+Dim VuelveAutorizar As Boolean
   If CFechaLong(FechaSistema) <= CFechaLong(Fecha_CE) Then
-    If FA.Factura > 0 And Len(FA.Autorizacion_NC) = 13 Then
+     VuelveAutorizar = False
+     If Len(FA.Autorizacion_NC) = 13 Then VuelveAutorizar = True
+     If Len(FA.Autorizacion_NC) > 13 And VolverAutorizar Then VuelveAutorizar = True
+     
+    If FA.Factura > 0 And VuelveAutorizar Then
        Mensajes = "Esta seguro que desea volver autorizar la" & vbCrLf & vbCrLf _
                 & "Nota de Crédito No. " & FA.Serie_NC & "-" & Format(FA.Nota_Credito, String(9, "0")) & vbCrLf & vbCrLf _
                 & "de la Factura No. " & FA.Serie & "-" & Format(FA.Factura, String(9, "0"))
@@ -4025,6 +4067,7 @@ Public Sub Volver_Autorizar_NC()
 
           SRI_Crear_Clave_Acceso_Nota_Credito FA, True, CBool(CheqClaveAcceso.value)
           TxtXML = "(" & SRI_Autorizacion.Estado_SRI & ") " & SRI_Autorizacion.Error_SRI
+          
           'MsgBox FA.Autorizacion_NC
           If Len(FA.Autorizacion_NC) > 13 Then
              sSQL = "UPDATE Trans_Abonos " _
@@ -4057,7 +4100,7 @@ End Sub
 
 Public Sub Volver_Autorizar_GR()
   If CFechaLong(FechaSistema) <= CFechaLong(Fecha_CE) Then
-    If FA.Factura > 0 And Len(FA.Autorizacion_GR) = 13 Then
+    If FA.Factura > 0 And Len(FA.Autorizacion_GR) >= 13 Then
        Mensajes = "Esta seguro que desea volver autorizar la" & vbCrLf & vbCrLf _
                 & "Guia de Remision No. " & FA.Serie_GR & "-" & Format(FA.Remision, String(9, "0")) & vbCrLf & vbCrLf _
                 & "de la Factura No. " & FA.Serie & "-" & Format(FA.Factura, String(9, "0"))
@@ -4366,7 +4409,93 @@ Dim Motivo As String
   End If
 End Sub
 
-
+Public Sub Actualizar_NC_Kardex()
+Dim AdoAuxDB As ADODB.Recordset
+    With AdoDetalle.Recordset
+     If .RecordCount > 0 Then
+         FA.Serie_NC = .fields("Serie_NC")
+         FA.Nota_Credito = .fields("Secuencial_NC")
+         FA.Autorizacion_NC = .fields("Autorizacion_NC")
+         CodigoB = .fields("Banco")
+         CodigoA = .fields("Cheque")
+         If .fields("Banco") = "NOTA DE CREDITO" Then
+             Titulo = "CONFIRMACION DE ELIMINACION"
+             Mensajes = "¿Realmente desea Reactivar la Nota de Credito en el Kardex:" & vbCrLf _
+                      & "Fecha: " & .fields("Fecha") & vbCrLf _
+                      & "Factura No. " & FA.Serie & "-" & Format(FA.Factura, "000000000") & vbCrLf _
+                      & " " _
+                      & " "
+             If Len(FA.Serie_NC) = 6 And FA.Nota_Credito > 0 And Len(FA.Autorizacion_NC) >= 8 Then
+                Mensajes = Mensajes & "y ademas contiene la siguiente: " & vbCrLf _
+                         & "NOTA DE CREDITO: " & FA.Serie_NC & "-" & Format(FA.Nota_Credito, "000000000") & vbCrLf
+             End If
+             If BoxMensaje = vbYes Then
+                sSQL = "DELETE * " _
+                     & "FROM Trans_Kardex " _
+                     & "WHERE Item = '" & NumEmpresa & "' " _
+                     & "AND Periodo = '" & Periodo_Contable & "' " _
+                     & "AND TC = '" & FA.TC & "' " _
+                     & "AND Serie = '" & FA.Serie & "' " _
+                     & "AND Factura = " & FA.Factura & " " _
+                     & "AND SUBSTRING(Detalle,1,3) = 'NC:' "
+                Ejecutar_SQL_SP sSQL
+                
+                sSQL = "SELECT " & Full_Fields("Detalle_Nota_Credito") & "  " _
+                     & "FROM Detalle_Nota_Credito " _
+                     & "WHERE TC = '" & FA.TC & "' " _
+                     & "AND Factura = " & FA.Factura & " " _
+                     & "AND Serie_FA = '" & FA.Serie & "' " _
+                     & "AND Item = '" & NumEmpresa & "' " _
+                     & "AND Periodo = '" & Periodo_Contable & "' " _
+                     & "AND Serie = '" & FA.Serie_NC & "' " _
+                     & "AND Secuencial = " & FA.Nota_Credito & " "
+                Select_AdoDB AdoAuxDB, sSQL
+                If AdoAuxDB.RecordCount > 0 Then
+                    Do While Not AdoAuxDB.EOF
+                       Stock_Actual_Inventario FA.Fecha_NC, AdoAuxDB.fields("Codigo_Inv"), AdoAuxDB.fields("CodBodega")
+                       ValorTotal = Redondear(ValorUnit * AdoAuxDB.fields("Cantidad"), 2)
+                       SetAdoAddNew "Trans_Kardex"
+                       SetAdoFields "T", Normal
+                       SetAdoFields "TP", Ninguno
+                       SetAdoFields "Numero", 0
+                       SetAdoFields "TC", FA.TC
+                       SetAdoFields "Serie", FA.Serie
+                       SetAdoFields "Fecha", FA.Fecha_NC
+                       SetAdoFields "Factura", FA.Factura
+                       SetAdoFields "Codigo_P", FA.CodigoC
+                       SetAdoFields "CodigoL", FA.Cod_CxC
+                       SetAdoFields "Codigo_Barra", Cod_Barra
+                       SetAdoFields "CodBodega", AdoAuxDB.fields("CodBodega")
+                       'SetAdoFields "CodMarca", AdoAuxDB.fields("CodMar")
+                       SetAdoFields "Codigo_Inv", AdoAuxDB.fields("Codigo_Inv")
+                       SetAdoFields "Total_IVA", AdoAuxDB.fields("Total_IVA")
+                       SetAdoFields "Entrada", AdoAuxDB.fields("Cantidad")
+                       SetAdoFields "PVP", AdoAuxDB.fields("Precio") 'SubTotalCosto
+                       SetAdoFields "Valor_Unitario", ValorUnit 'SubTotalCosto
+                       SetAdoFields "Costo", ValorUnit
+                       SetAdoFields "Valor_Total", ValorTotal
+                       SetAdoFields "Total", ValorTotal
+                       SetAdoFields "Descuento", AdoAuxDB.fields("Descuento")
+                       SetAdoFields "Detalle", "NC: " + FA.Serie_NC + "-" + Format(FA.Nota_Credito, "000000000") + " -" + MidStrg(FA.Cliente, 1, 79)
+                       SetAdoFields "Cta_Inv", Cta_Aux_Inv
+                       SetAdoFields "Contra_Cta", AdoAuxDB.fields("Cta_Devolucion")
+                       SetAdoFields "Item", NumEmpresa
+                       SetAdoFields "Periodo", Periodo_Contable
+                       SetAdoFields "CodigoU", CodigoUsuario
+                       SetAdoUpdate
+                       AdoAuxDB.MoveNext
+                    Loop
+                End If
+                AdoAuxDB.Close
+             End If
+         Else
+             MsgBox "No existe Nota de Credito que actualizar al Kardex"
+         End If
+     Else
+         MsgBox "No existe datos que procesar"
+     End If
+   End With
+End Sub
 
 ''''    SubSQL = "SELECT SUM(Abono) " _
 ''''           & "FROM Trans_Abonos " _

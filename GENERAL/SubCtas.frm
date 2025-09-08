@@ -1330,8 +1330,8 @@ Public Function SumarSubCtas() As Currency
       .MoveFirst
        Do While Not .EOF
          'If OpcDH = .Fields("DH") Then
-          SumaSubCta = SumaSubCta + .fields("Valor")
-          SumaSubCta_ME = SumaSubCta_ME + .fields("Valor_ME")
+          SumaSubCta = SumaSubCta + .Fields("Valor")
+          SumaSubCta_ME = SumaSubCta_ME + .Fields("Valor_ME")
          'End If
          .MoveNext
      Loop
@@ -1376,9 +1376,9 @@ Private Sub CNacion_LostFocus()
        & "ORDER BY CProvincia "
   Select_Adodc AdoAux, sSQL
   If AdoAux.Recordset.RecordCount > 0 Then
-     CProvincia.Text = AdoAux.Recordset.fields("CProvincia") & " " & AdoAux.Recordset.fields("Descripcion_Rubro")
+     CProvincia.Text = AdoAux.Recordset.Fields("CProvincia") & " " & AdoAux.Recordset.Fields("Descripcion_Rubro")
      Do While Not AdoAux.Recordset.EOF
-        CProvincia.AddItem AdoAux.Recordset.fields("CProvincia") & " " & AdoAux.Recordset.fields("Descripcion_Rubro")
+        CProvincia.AddItem AdoAux.Recordset.Fields("CProvincia") & " " & AdoAux.Recordset.Fields("Descripcion_Rubro")
         AdoAux.Recordset.MoveNext
      Loop
   Else
@@ -1487,9 +1487,9 @@ Private Sub CProvincia_LostFocus()
        & "ORDER BY CCiudad "
   Select_Adodc AdoAux, sSQL
   If AdoAux.Recordset.RecordCount > 0 Then
-     CCiudadS.Text = AdoAux.Recordset.fields("Descripcion_Rubro")
+     CCiudadS.Text = AdoAux.Recordset.Fields("Descripcion_Rubro")
      Do While Not AdoAux.Recordset.EOF
-        CCiudadS.AddItem AdoAux.Recordset.fields("Descripcion_Rubro")
+        CCiudadS.AddItem AdoAux.Recordset.Fields("Descripcion_Rubro")
         AdoAux.Recordset.MoveNext
      Loop
   Else
@@ -1523,7 +1523,7 @@ Dim SCCantidad As Currency
   Fecha_V_Prest = MBoxFechaV
   If CFechaLong(Fecha_V_Prest) = CFechaLong(UltimoDiaMes(Fecha_V_Prest)) Then Es_Fecha_Fin_Mes = True
  'MsgBox Fecha_V_Prest & vbCrLf & Es_Fecha_Fin_Mes & vbCrLf & UltimoDiaMes(Fecha_V_Prest)
-  If MBoxFechaE.Visible = True Then FechaEmi = MBoxFechaE.Text Else FechaEmi = Co.Fecha
+  If MBoxFechaE.Visible Then FechaEmi = MBoxFechaE.Text Else FechaEmi = Co.Fecha
 
   If ValorDH > 0 Then
      If OpcTM = 2 Then
@@ -1547,43 +1547,43 @@ Dim SCCantidad As Currency
      With AdoSubCtaDet1.Recordset
       For I = 1 To NoMeses
          .AddNew
-         .fields("Prima") = 0
+         .Fields("Prima") = 0
           If SubCta = "G" Then
-            .fields("Fecha_V") = FechaTexto
+            .Fields("Fecha_V") = FechaTexto
           ElseIf SubCta = "PM" Then
-            .fields("Fecha_V") = FechaTexto
+            .Fields("Fecha_V") = FechaTexto
           Else
-            .fields("Fecha_V") = Fecha_V_Prest
+            .Fields("Fecha_V") = Fecha_V_Prest
           End If
-         .fields("TC") = SubCta
-         .fields("Serie") = TxtSerie.Text
-         .fields("FECHA_E") = FechaEmi
+         .Fields("TC") = SubCta
+         .Fields("Serie") = TxtSerie.Text
+         .Fields("FECHA_E") = FechaEmi
           If SubCta = "PM" Then
-            .fields("Prima") = CLng(Val(DCFactura.Text))
-            .fields("Factura") = CLng(Val(TxtPrima))
+            .Fields("Prima") = CLng(Val(DCFactura.Text))
+            .Fields("Factura") = CLng(Val(TxtPrima))
           ElseIf SubCta = "G" Then
-            .fields("Factura") = CLng(Val(DCFactura.Text))
-            .fields("Prima") = CCur(Val(SCCantidad))
+            .Fields("Factura") = CLng(Val(DCFactura.Text))
+            .Fields("Prima") = CCur(Val(SCCantidad))
           Else
              If NoMeses > 1 Then
-               .fields("Factura") = Val(Format(FechaTexto, "YYMMDD") & Format(I, "00"))
+               .Fields("Factura") = Val(Format(FechaTexto, "YYMMDD") & Format(I, "00"))
              Else
-               .fields("Factura") = CLng(Val(DCFactura.Text))
+               .Fields("Factura") = CLng(Val(DCFactura.Text))
              End If
           End If
-         .fields("Codigo") = Codigo
-         .fields("Beneficiario") = TrimStrg(MidStrg(DLSubCta.Text, 1, 60))
-         .fields("Detalle_SubCta") = TrimStrg(MidStrg(DCDetalle.Text, 1, 60))
-         .fields("Cta") = SubCtaGen
-         .fields("DH") = OpcDH
-         .fields("Valor") = ValorDH
-         .fields("Valor_ME") = 0
-         .fields("TM") = OpcTM
-         .fields("Item") = NumEmpresa
-         .fields("T_No") = Trans_No
-         .fields("SC_No") = LnSC_No
-         .fields("CodigoU") = CodigoUsuario
-          If OpcTM = 2 Then .fields("Valor_ME") = ValorDHAux
+         .Fields("Codigo") = Codigo
+         .Fields("Beneficiario") = TrimStrg(MidStrg(DLSubCta.Text, 1, 60))
+         .Fields("Detalle_SubCta") = TrimStrg(MidStrg(DCDetalle.Text, 1, 60))
+         .Fields("Cta") = SubCtaGen
+         .Fields("DH") = OpcDH
+         .Fields("Valor") = ValorDH
+         .Fields("Valor_ME") = 0
+         .Fields("TM") = OpcTM
+         .Fields("Item") = NumEmpresa
+         .Fields("T_No") = Trans_No
+         .Fields("SC_No") = LnSC_No
+         .Fields("CodigoU") = CodigoUsuario
+          If OpcTM = 2 Then .Fields("Valor_ME") = ValorDHAux
          .Update
           Fecha_V_Prest = SiguienteMes(Fecha_V_Prest, Es_Fecha_Fin_Mes)
       Next I
@@ -1609,11 +1609,11 @@ Private Sub DCFactura_LostFocus()
             .Find ("Factura = " & Factura_No & " ")
              If Not .EOF Then
                 If OpcTM = 1 Then
-                   TextValor = .fields("Saldos_MN")
+                   TextValor = .Fields("Saldos_MN")
                 Else
-                   TextValor = .fields("Saldos_ME")
+                   TextValor = .Fields("Saldos_ME")
                 End If
-                If AgruparSubMod Then TxtDetalle = .fields("Detalle_SubCta") Else TxtDetalle = Ninguno
+                If AgruparSubMod Then TxtDetalle = .Fields("Detalle_SubCta") Else TxtDetalle = Ninguno
              End If
          End If
         End With
@@ -1652,7 +1652,7 @@ Dim Nivel_No As String
             If .RecordCount > 0 Then
                .MoveFirst
                .Find ("Detalle = '" & DCSubCta & "' ")
-                If Not .EOF Then Nivel_No = .fields("Nivel")
+                If Not .EOF Then Nivel_No = .Fields("Nivel")
             End If
            End With
            sSQL = "SELECT Detalle As NomCuenta,Codigo, 0 As Credito " _
@@ -1696,7 +1696,7 @@ Private Sub DCCliente_LostFocus()
      If .RecordCount > 0 And InsSubMod Then
         .MoveFirst
         .Find ("Cliente = '" & DCCliente.Text & "' ")
-         If Not .EOF Then CodigoCliente = .fields("Codigo")
+         If Not .EOF Then CodigoCliente = .Fields("Codigo")
          Insertar_CxP
          Listar_SubCta_Modulo
      End If
@@ -1734,9 +1734,9 @@ Private Sub DLSubCta_LostFocus()
       .MoveFirst
       .Find ("NomCuenta = '" & DLSubCta.Text & "' ")
        If Not .EOF Then
-          Codigo = .fields("Codigo")
+          Codigo = .Fields("Codigo")
          'MsgBox .Fields("Credito") & " - " & Co.Fecha
-          If MBoxFechaV.Visible Then MBoxFechaV = CLongFecha(CFechaLong(Co.Fecha) + .fields("Credito"))
+          If MBoxFechaV.Visible Then MBoxFechaV = CLongFecha(CFechaLong(Co.Fecha) + .Fields("Credito"))
           If Codigo = "" Then Codigo = Ninguno
        End If
     End If
@@ -1800,7 +1800,7 @@ Private Sub Form_Activate()
    If AdoAux.Recordset.RecordCount > 0 Then
       CNacion.Text = "593 ECUADOR"
       Do While Not AdoAux.Recordset.EOF
-         CNacion.AddItem AdoAux.Recordset.fields("CPais") & " " & AdoAux.Recordset.fields("Descripcion_Rubro")
+         CNacion.AddItem AdoAux.Recordset.Fields("CPais") & " " & AdoAux.Recordset.Fields("Descripcion_Rubro")
          AdoAux.Recordset.MoveNext
       Loop
    End If
@@ -1813,9 +1813,9 @@ Private Sub Form_Activate()
         & "ORDER BY CProvincia "
    Select_Adodc AdoAux, sSQL
    If AdoAux.Recordset.RecordCount > 0 Then
-      CProvincia.Text = AdoAux.Recordset.fields("CProvincia") & " " & AdoAux.Recordset.fields("Descripcion_Rubro")
+      CProvincia.Text = AdoAux.Recordset.Fields("CProvincia") & " " & AdoAux.Recordset.Fields("Descripcion_Rubro")
       Do While Not AdoAux.Recordset.EOF
-         CProvincia.AddItem AdoAux.Recordset.fields("CProvincia") & " " & AdoAux.Recordset.fields("Descripcion_Rubro")
+         CProvincia.AddItem AdoAux.Recordset.Fields("CProvincia") & " " & AdoAux.Recordset.Fields("Descripcion_Rubro")
          AdoAux.Recordset.MoveNext
       Loop
    End If
@@ -1858,7 +1858,7 @@ Private Sub Form_Activate()
            & "AND Codigo <> '.' " _
            & "ORDER BY Nivel,Detalle "
    End If
-   SelectDB_Combo DCSubCta, AdoNivel, sSQL, "Detalle", , "Catalogo_SubCtas_G"
+   SelectDB_Combo DCSubCta, AdoNivel, sSQL, "Detalle"
    If AdoNivel.Recordset.RecordCount > 0 Then DCSubCta.Visible = True
    sSQL = "SELECT Detalle_SubCta " _
         & "FROM Trans_SubCtas " _
@@ -2029,7 +2029,7 @@ Dim CodigoRUC As String
      Select_Adodc AdoAux, sSQL
      With AdoAux.Recordset
       If .RecordCount > 0 Then
-          ContadorRUCCI = Val(MidStrg(.fields("CI_RUC"), 4, Len(.fields("CI_RUC")))) + 1
+          ContadorRUCCI = Val(MidStrg(.Fields("CI_RUC"), 4, Len(.Fields("CI_RUC")))) + 1
           CodigoRUC = NumEmpresa & Format(ContadorRUCCI, "00000")
       End If
      End With
@@ -2054,15 +2054,15 @@ Private Sub TxtCI_RUC_LostFocus()
       Select_Adodc AdoCliente, sSQL
       With AdoCliente.Recordset
        If .RecordCount > 0 Then
-           If .fields("Cliente") <> TxtApellidosS Then
-               MsgBox "Este R.U.C./C.I., está asignado a " & vbCrLf & vbCrLf & .fields("Cliente")
+           If .Fields("Cliente") <> TxtApellidosS Then
+               MsgBox "Este R.U.C./C.I., está asignado a " & vbCrLf & vbCrLf & .Fields("Cliente")
                FSubCtas.Height = Command1.Top + Command1.Height + 600
                ToggleButton1.value = False
                Frame1.Visible = False
                DLSubCta.SetFocus
                'TxtCI_RUC.SetFocus
            Else
-               TipoBenef = .fields("TD")
+               TipoBenef = .Fields("TD")
            End If
        End If
       End With
@@ -2179,7 +2179,7 @@ End Sub
 Public Sub Listar_SubCta_Modulo()
   'MsgBox PorCtasCostos
    Select Case SubCta
-     Case "G", "I", "PM"
+     Case "G", "I", "PM", "CC"
           If PorCtasCostos Then
              sSQL = "SELECT CS.Detalle As NomCuenta,CS.Codigo, 0 As Credito " _
                   & "FROM Catalogo_SubCtas As CS, Trans_Presupuestos As TP " _
@@ -2215,7 +2215,7 @@ Public Sub Listar_SubCta_Modulo()
                & "AND CP.Codigo = Cl.Codigo " _
                & "ORDER BY Cl.Cliente "
    End Select
-   SelectDB_List DLSubCta, AdoBenef, sSQL, "NomCuenta", , "Detalle SubCtas"
+   SelectDB_List DLSubCta, AdoBenef, sSQL, "NomCuenta"
 End Sub
 
 Private Sub TxtSerie_GotFocus()

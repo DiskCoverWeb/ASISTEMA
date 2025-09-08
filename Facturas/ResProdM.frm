@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{65E121D4-0C60-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSChrt20.ocx"
+Object = "{65E121D4-0C60-11D2-A9FC-0000F8754DA1}#2.0#0"; "mschrt20.ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form ResumenProduccion 
    Caption         =   "RESUMEN DE PRODUCCION MENSUAL Y DIARIA"
@@ -46,8 +46,8 @@ Begin VB.Form ResumenProduccion
       TabCaption(1)   =   "GRAFICO DEL RESULTADO"
       TabPicture(1)   =   "ResProdM.frx":001C
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "MSChart1"
-      Tab(1).Control(1)=   "MSChart2"
+      Tab(1).Control(0)=   "MSChart2"
+      Tab(1).Control(1)=   "MSChart1"
       Tab(1).ControlCount=   2
       Begin MSChart20Lib.MSChart MSChart1 
          Height          =   2850
@@ -627,10 +627,10 @@ Dim TValorProd(32) As Double
   DGQuery1.Visible = False
   Limpiar_Reporte_Produccion
   RatonReloj
-  For i = 1 To 31
-      TValorDia(i) = 0
-      TValorProd(i) = 0
-  Next i
+  For I = 1 To 31
+      TValorDia(I) = 0
+      TValorProd(I) = 0
+  Next I
  'Resumen de Produccion del mes
   sSQL = "SELECT TC,Codigo,Fecha,SUM(Total) As V_Total " _
        & "FROM Detalle_Factura " _
@@ -643,26 +643,26 @@ Dim TValorProd(32) As Double
   Select_Adodc AdoAux1, sSQL
   With AdoAux1.Recordset
    If .RecordCount > 0 Then
-       CodigoP = .Fields("Codigo")
-       TipoProc = .Fields("TC")
-       NoMeses = Month(.Fields("Fecha"))
-       Mifecha = .Fields("Fecha")
-       NoAnio = Year(.Fields("Fecha"))
-       For i = 1 To 31
-           TValorDia(i) = 0
-       Next i
+       CodigoP = .fields("Codigo")
+       TipoProc = .fields("TC")
+       NoMeses = Month(.fields("Fecha"))
+       Mifecha = .fields("Fecha")
+       NoAnio = Year(.fields("Fecha"))
+       For I = 1 To 31
+           TValorDia(I) = 0
+       Next I
        Contador = 0
        Do While Not .EOF
           Contador = Contador + 1
           ResumenProduccion.Caption = Format$(Contador / .RecordCount, "00%")
-          If TipoProc <> .Fields("TC") Or Codigo <> .Fields("Codigo") Or NoMeses <> Month(.Fields("Fecha")) Then
+          If TipoProc <> .fields("TC") Or Codigo <> .fields("Codigo") Or NoMeses <> Month(.fields("Fecha")) Then
              Total = 0: J = 0
              SQL2 = "UPDATE Saldo_Diarios " _
                   & "SET "
-             For i = 1 To 31
-                 SQL2 = SQL2 & "D_" & Format$(i, "00") & " = " & TValorDia(i) & ","
-                 Total = Total + TValorDia(i)
-             Next i
+             For I = 1 To 31
+                 SQL2 = SQL2 & "D_" & Format$(I, "00") & " = " & TValorDia(I) & ","
+                 Total = Total + TValorDia(I)
+             Next I
              SQL2 = SQL2 & "Total = " & Total & " " _
                   & "WHERE Item = '" & NumEmpresa & "' " _
                   & "AND CodigoU = '" & CodigoUsuario & "' " _
@@ -672,28 +672,28 @@ Dim TValorProd(32) As Double
                   & "AND TP = 'RPM' "
              'MsgBox SQL2
              Ejecutar_SQL_SP SQL2
-             For i = 1 To 31
-                 TValorDia(i) = 0
-             Next i
-             CodigoP = .Fields("Codigo")
-             TipoProc = .Fields("TC")
-             NoMeses = Month(.Fields("Fecha"))
-             Mifecha = .Fields("Fecha")
-             NoAnio = Year(.Fields("Fecha"))
+             For I = 1 To 31
+                 TValorDia(I) = 0
+             Next I
+             CodigoP = .fields("Codigo")
+             TipoProc = .fields("TC")
+             NoMeses = Month(.fields("Fecha"))
+             Mifecha = .fields("Fecha")
+             NoAnio = Year(.fields("Fecha"))
           End If
-          i = Day(.Fields("Fecha"))
-          TValorDia(i) = TValorDia(i) + .Fields("V_Total")
-          TValorProd(i) = TValorProd(i) + .Fields("V_Total")
+          I = Day(.fields("Fecha"))
+          TValorDia(I) = TValorDia(I) + .fields("V_Total")
+          TValorProd(I) = TValorProd(I) + .fields("V_Total")
           
          .MoveNext
        Loop
        Total = 0: J = 0
        SQL2 = "UPDATE Saldo_Diarios " _
             & "SET "
-       For i = 1 To 31
-           SQL2 = SQL2 & "D_" & Format$(i, "00") & " = " & TValorDia(i) & ","
-           Total = Total + TValorDia(i)
-       Next i
+       For I = 1 To 31
+           SQL2 = SQL2 & "D_" & Format$(I, "00") & " = " & TValorDia(I) & ","
+           Total = Total + TValorDia(I)
+       Next I
        SQL2 = SQL2 & "Total = " & Total & " " _
             & "WHERE Item = '" & NumEmpresa & "' " _
             & "AND CodigoU = '" & CodigoUsuario & "' " _
@@ -707,10 +707,10 @@ Dim TValorProd(32) As Double
   Total = 0: J = 0
   SQL2 = "UPDATE Saldo_Diarios " _
        & "SET "
-  For i = 1 To 31
-      SQL2 = SQL2 & "D_" & Format$(i, "00") & " = " & TValorProd(i) & ","
-      Total = Total + TValorProd(i)
-  Next i
+  For I = 1 To 31
+      SQL2 = SQL2 & "D_" & Format$(I, "00") & " = " & TValorProd(I) & ","
+      Total = Total + TValorProd(I)
+  Next I
   SQL2 = SQL2 & "Total = " & Total & " " _
        & "WHERE Item = '" & NumEmpresa & "' " _
        & "AND CodigoU = '" & CodigoUsuario & "' " _
@@ -721,9 +721,9 @@ Dim TValorProd(32) As Double
   Ejecutar_SQL_SP SQL2
   
  'Resumen de Produccion del año
-  For i = 1 To 31
-      TValorProd(i) = 0
-  Next i
+  For I = 1 To 31
+      TValorProd(I) = 0
+  Next I
   NoAnio = Year(MBFechaI)
   FechaIni = BuscarFecha("01/01/" & Format$(NoAnio, "0000"))
   FechaFin = BuscarFecha("31/12/" & Format$(NoAnio, "0000"))
@@ -738,27 +738,27 @@ Dim TValorProd(32) As Double
   Select_Adodc AdoAux1, sSQL
   With AdoAux1.Recordset
    If .RecordCount > 0 Then
-       CodigoP = .Fields("Codigo")
-       TipoProc = .Fields("TC")
-       NoMeses = Month(.Fields("Fecha"))
-       Mifecha = .Fields("Fecha")
-       NoAnio = Year(.Fields("Fecha"))
-       For i = 1 To 31
-           TValorDia(i) = 0
-       Next i
+       CodigoP = .fields("Codigo")
+       TipoProc = .fields("TC")
+       NoMeses = Month(.fields("Fecha"))
+       Mifecha = .fields("Fecha")
+       NoAnio = Year(.fields("Fecha"))
+       For I = 1 To 31
+           TValorDia(I) = 0
+       Next I
        Contador = 0
        Do While Not .EOF
           Contador = Contador + 1
           ResumenProduccion.Caption = Format$(Contador / .RecordCount, "00%")
-          If TipoProc <> .Fields("TC") Or Codigo <> .Fields("Codigo") Then
+          If TipoProc <> .fields("TC") Or Codigo <> .fields("Codigo") Then
              Total = 0: J = 0
              SQL2 = "UPDATE Saldo_Diarios " _
                   & "SET "
-             For i = 1 To 12
-                 Mes1 = MesesLetras(CInt(i))
-                 SQL2 = SQL2 & Mes1 & " = " & TValorDia(i) & ","
-                 Total = Total + TValorDia(i)
-             Next i
+             For I = 1 To 12
+                 Mes1 = MesesLetras(CInt(I))
+                 SQL2 = SQL2 & Mes1 & " = " & TValorDia(I) & ","
+                 Total = Total + TValorDia(I)
+             Next I
              SQL2 = SQL2 & "Total = " & Total & " " _
                   & "WHERE Item = '" & NumEmpresa & "' " _
                   & "AND CodigoU = '" & CodigoUsuario & "' " _
@@ -767,28 +767,28 @@ Dim TValorProd(32) As Double
                   & "AND TP = 'RPM' "
              'MsgBox SQL2
              Ejecutar_SQL_SP SQL2
-             For i = 1 To 31
-                 TValorDia(i) = 0
-             Next i
-             CodigoP = .Fields("Codigo")
-             TipoProc = .Fields("TC")
-             NoMeses = Month(.Fields("Fecha"))
-             Mifecha = .Fields("Fecha")
-             NoAnio = Year(.Fields("Fecha"))
+             For I = 1 To 31
+                 TValorDia(I) = 0
+             Next I
+             CodigoP = .fields("Codigo")
+             TipoProc = .fields("TC")
+             NoMeses = Month(.fields("Fecha"))
+             Mifecha = .fields("Fecha")
+             NoAnio = Year(.fields("Fecha"))
           End If
-          i = Month(.Fields("Fecha"))
-          TValorDia(i) = TValorDia(i) + .Fields("V_Total")
-          TValorProd(i) = TValorProd(i) + .Fields("V_Total")
+          I = Month(.fields("Fecha"))
+          TValorDia(I) = TValorDia(I) + .fields("V_Total")
+          TValorProd(I) = TValorProd(I) + .fields("V_Total")
          .MoveNext
        Loop
        Total = 0: J = 0
        SQL2 = "UPDATE Saldo_Diarios " _
             & "SET "
-       For i = 1 To 12
-           Mes1 = MesesLetras(CInt(i))
-           SQL2 = SQL2 & Mes1 & " = " & TValorDia(i) & ","
-           Total = Total + TValorDia(i)
-       Next i
+       For I = 1 To 12
+           Mes1 = MesesLetras(CInt(I))
+           SQL2 = SQL2 & Mes1 & " = " & TValorDia(I) & ","
+           Total = Total + TValorDia(I)
+       Next I
        SQL2 = SQL2 & "Total = " & Total & " " _
             & "WHERE Item = '" & NumEmpresa & "' " _
             & "AND CodigoU = '" & CodigoUsuario & "' " _
@@ -801,11 +801,11 @@ Dim TValorProd(32) As Double
   Total = 0: J = 0
   SQL2 = "UPDATE Saldo_Diarios " _
        & "SET "
-  For i = 1 To 12
-      Mes1 = MesesLetras(CInt(i))
-      SQL2 = SQL2 & Mes1 & " = " & TValorProd(i) & ","
-      Total = Total + TValorProd(i)
-  Next i
+  For I = 1 To 12
+      Mes1 = MesesLetras(CInt(I))
+      SQL2 = SQL2 & Mes1 & " = " & TValorProd(I) & ","
+      Total = Total + TValorProd(I)
+  Next I
   SQL2 = SQL2 & "Total = " & Total & " " _
        & "WHERE Item = '" & NumEmpresa & "' " _
        & "AND CodigoU = '" & CodigoUsuario & "' " _
@@ -826,9 +826,9 @@ Dim TValorProd(32) As Double
   DGQuery1.Caption = "RESUMEN DE PRODUCCION DEL AÑO " & Year(MBFechaI)
   'If SQL_Server = False Then MsgBox "Proceso Terminado, Puede Consultar"
   sSQL = "SELECT BDM.Cuenta As Producto,TM.Dia_Mes As Mes,"
-  For i = 1 To 31
-      sSQL = sSQL & "BDM.D_" & Format$(i, "00") & ","
-  Next i
+  For I = 1 To 31
+      sSQL = sSQL & "BDM.D_" & Format$(I, "00") & ","
+  Next I
   sSQL = sSQL & "Total " _
        & "FROM Balances_Mes As BDM,Tabla_Dias_Meses AS TM " _
        & "WHERE BDM.TP = 'RPM' " _
@@ -840,10 +840,10 @@ Dim TValorProd(32) As Double
   Select_Adodc_Grid DGQuery, AdoQuery, sSQL
   
   sSQL = "SELECT Comprobante As Producto,"
-  For i = 1 To 12
-      Mes1 = MesesLetras(CInt(i))
+  For I = 1 To 12
+      Mes1 = MesesLetras(CInt(I))
       sSQL = sSQL & Mes1 & ","
-  Next i
+  Next I
   sSQL = sSQL & "Total " _
        & "FROM Saldo_Diarios " _
        & "WHERE TP = 'RPM' " _
@@ -855,7 +855,7 @@ Dim TValorProd(32) As Double
   With AdoQuery1.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
-          Total = Total + .Fields("Total")
+          Total = Total + .fields("Total")
          .MoveNext
        Loop
       .MoveFirst
@@ -943,18 +943,18 @@ Public Sub Limpiar_Reporte_Produccion()
   Select_Adodc AdoAux, sSQL
   With AdoAux.Recordset
    If .RecordCount Then
-       i = Month(MBFechaI)
+       I = Month(MBFechaI)
        J = Month(MBFechaF)
        Contador = 0
        Do While Not .EOF
           NoMeses = Month(MBFechaI)
           Contador = Contador + 1
-          ResumenProduccion.Caption = Format$(Contador / .RecordCount, "00%") & " - " & .Fields("Producto")
-          For K = 1 To J - i + 1
+          ResumenProduccion.Caption = Format$(Contador / .RecordCount, "00%") & " - " & .fields("Producto")
+          For K = 1 To J - I + 1
              'FA
               SetAdoAddNew "Saldo_Diarios"
-              SetAdoFields "Codigo_Aux", .Fields("Codigo_Inv")
-              SetAdoFields "Comprobante", .Fields("Producto")
+              SetAdoFields "Codigo_Aux", .fields("Codigo_Inv")
+              SetAdoFields "Comprobante", .fields("Producto")
               SetAdoFields "TC", "FA"
               SetAdoFields "TP", "RPM"
               SetAdoFields "No_Mes", CByte(NoMeses)
@@ -963,8 +963,8 @@ Public Sub Limpiar_Reporte_Produccion()
               SetAdoUpdate
              'NV
               SetAdoAddNew "Saldo_Diarios"
-              SetAdoFields "Codigo_Aux", .Fields("Codigo_Inv")
-              SetAdoFields "Comprobante", .Fields("Producto")
+              SetAdoFields "Codigo_Aux", .fields("Codigo_Inv")
+              SetAdoFields "Comprobante", .fields("Producto")
               SetAdoFields "TC", "NV"
               SetAdoFields "TP", "RPM"
               SetAdoFields "No_Mes", CByte(NoMeses)
@@ -973,8 +973,8 @@ Public Sub Limpiar_Reporte_Produccion()
               SetAdoUpdate
              'PV
               SetAdoAddNew "Saldo_Diarios"
-              SetAdoFields "Codigo_Aux", .Fields("Codigo_Inv")
-              SetAdoFields "Comprobante", .Fields("Producto")
+              SetAdoFields "Codigo_Aux", .fields("Codigo_Inv")
+              SetAdoFields "Comprobante", .fields("Producto")
               SetAdoFields "TC", "PV"
               SetAdoFields "TP", "RPM"
               SetAdoFields "No_Mes", CByte(NoMeses)
@@ -986,8 +986,8 @@ Public Sub Limpiar_Reporte_Produccion()
           Next K
           
           SetAdoAddNew "Saldo_Diarios"
-          SetAdoFields "Cta", .Fields("Codigo_Inv")
-          SetAdoFields "Comprobante", .Fields("Producto")
+          SetAdoFields "Cta", .fields("Codigo_Inv")
+          SetAdoFields "Comprobante", .fields("Producto")
           SetAdoFields "TC", "FA"
           SetAdoFields "TP", "RPM"
           SetAdoFields "Item", NumEmpresa
@@ -995,8 +995,8 @@ Public Sub Limpiar_Reporte_Produccion()
           SetAdoUpdate
           
           SetAdoAddNew "Saldo_Diarios"
-          SetAdoFields "Cta", .Fields("Codigo_Inv")
-          SetAdoFields "Comprobante", .Fields("Producto")
+          SetAdoFields "Cta", .fields("Codigo_Inv")
+          SetAdoFields "Comprobante", .fields("Producto")
           SetAdoFields "TC", "NV"
           SetAdoFields "TP", "RPM"
           SetAdoFields "Item", NumEmpresa
@@ -1004,8 +1004,8 @@ Public Sub Limpiar_Reporte_Produccion()
           SetAdoUpdate
           
           SetAdoAddNew "Saldo_Diarios"
-          SetAdoFields "Cta", .Fields("Codigo_Inv")
-          SetAdoFields "Comprobante", .Fields("Producto")
+          SetAdoFields "Cta", .fields("Codigo_Inv")
+          SetAdoFields "Comprobante", .fields("Producto")
           SetAdoFields "TC", "PV"
           SetAdoFields "TP", "RPM"
           SetAdoFields "Item", NumEmpresa

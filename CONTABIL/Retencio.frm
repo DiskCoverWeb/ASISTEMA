@@ -1,29 +1,29 @@
 VERSION 5.00
+Object = "{05BFD3F1-6319-4F30-B752-C7A22889BCC4}#1.0#0"; "AcroPDF.dll"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
-Object = "{05BFD3F1-6319-4F30-B752-C7A22889BCC4}#1.0#0"; "AcroPDF.dll"
 Begin VB.Form Retenciones 
    BackColor       =   &H00C0FFC0&
    Caption         =   "LISTAR COMPROBANTE DE RETENCION DE EGRESOS"
    ClientHeight    =   9435
    ClientLeft      =   180
    ClientTop       =   465
-   ClientWidth     =   17370
+   ClientWidth     =   15960
    DrawMode        =   1  'Blackness
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
    ScaleHeight     =   9435
-   ScaleWidth      =   17370
+   ScaleWidth      =   15960
    WindowState     =   2  'Maximized
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
       Height          =   660
       Left            =   0
-      TabIndex        =   17
+      TabIndex        =   16
       Top             =   0
-      Width           =   17370
-      _ExtentX        =   30639
+      Width           =   15960
+      _ExtentX        =   28152
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -97,7 +97,7 @@ Begin VB.Form Retenciones
       Begin VB.Frame Frame1 
          Height          =   750
          Left            =   5880
-         TabIndex        =   18
+         TabIndex        =   17
          Top             =   -105
          Width           =   7260
          Begin VB.TextBox TxtDocHasta 
@@ -113,7 +113,7 @@ Begin VB.Form Retenciones
             EndProperty
             Height          =   330
             Left            =   5460
-            TabIndex        =   20
+            TabIndex        =   19
             Text            =   "0"
             Top             =   210
             Width           =   1695
@@ -131,7 +131,7 @@ Begin VB.Form Retenciones
             EndProperty
             Height          =   330
             Left            =   1890
-            TabIndex        =   19
+            TabIndex        =   18
             Text            =   "0"
             Top             =   210
             Width           =   1800
@@ -150,7 +150,7 @@ Begin VB.Form Retenciones
             EndProperty
             Height          =   330
             Left            =   3780
-            TabIndex        =   22
+            TabIndex        =   21
             Top             =   210
             Width           =   1695
          End
@@ -168,18 +168,18 @@ Begin VB.Form Retenciones
             EndProperty
             Height          =   330
             Left            =   105
-            TabIndex        =   21
+            TabIndex        =   20
             Top             =   210
             Width           =   1800
          End
       End
    End
    Begin AcroPDFLibCtl.AcroPDF APDFRetencion 
-      Height          =   2640
+      Height          =   4635
       Left            =   105
-      TabIndex        =   24
+      TabIndex        =   23
       Top             =   2625
-      Width           =   6630
+      Width           =   6840
       _cx             =   5080
       _cy             =   5080
    End
@@ -198,11 +198,11 @@ Begin VB.Form Retenciones
       EndProperty
       ForeColor       =   &H00000000&
       Height          =   330
-      Left            =   105
+      Left            =   420
       Style           =   1  'Graphical
-      TabIndex        =   23
+      TabIndex        =   22
       Top             =   1260
-      Width           =   2220
+      Width           =   3060
    End
    Begin VB.OptionButton OpcManuales 
       BackColor       =   &H00C0FFC0&
@@ -222,24 +222,6 @@ Begin VB.Form Retenciones
       TabIndex        =   2
       Top             =   735
       Width           =   1170
-   End
-   Begin VB.ListBox LstResultado 
-      BackColor       =   &H00008000&
-      BeginProperty Font 
-         Name            =   "Courier New"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H00FFFFFF&
-      Height          =   900
-      Left            =   105
-      TabIndex        =   16
-      Top             =   1680
-      Width           =   14190
    End
    Begin VB.OptionButton OpcAut 
       BackColor       =   &H00C0FFC0&
@@ -300,19 +282,21 @@ Begin VB.Form Retenciones
    End
    Begin VB.TextBox TxtAutorizacion 
       Height          =   330
-      Left            =   8715
+      Left            =   9555
+      MaxLength       =   50
       TabIndex        =   15
       ToolTipText     =   "<Ctrl+A> Autorizar manualmente desde el SRI"
       Top             =   1260
-      Width           =   5580
+      Width           =   4740
    End
    Begin VB.TextBox TxtClave 
       Height          =   330
-      Left            =   2310
+      Left            =   3465
+      MaxLength       =   50
       TabIndex        =   13
       ToolTipText     =   "<Ctrl+A> Volver a Generar y Firmar el Documento Electronico"
       Top             =   1260
-      Width           =   5055
+      Width           =   4740
    End
    Begin MSDataListLib.DataCombo DCComp 
       Bindings        =   "Retencio.frx":0000
@@ -337,6 +321,7 @@ Begin VB.Form Retenciones
       EndProperty
    End
    Begin VB.CommandButton Command1 
+      BackColor       =   &H00C0FFC0&
       Caption         =   "&S"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -348,9 +333,10 @@ Begin VB.Form Retenciones
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   315
+      Left            =   105
+      Style           =   1  'Graphical
       TabIndex        =   12
-      Top             =   1680
+      Top             =   1260
       Width           =   330
    End
    Begin MSAdodcLib.Adodc AdoComp1 
@@ -679,6 +665,24 @@ Begin VB.Form Retenciones
          Strikethrough   =   0   'False
       EndProperty
    End
+   Begin VB.Label LblResultado 
+      BackColor       =   &H0000FF00&
+      BorderStyle     =   1  'Fixed Single
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   855
+      Left            =   105
+      TabIndex        =   24
+      Top             =   1680
+      Width           =   14190
+   End
    Begin VB.Label Label6 
       BackColor       =   &H00C0FFC0&
       BorderStyle     =   1  'Fixed Single
@@ -752,7 +756,7 @@ Begin VB.Form Retenciones
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   7455
+      Left            =   8295
       TabIndex        =   14
       Top             =   1260
       Width           =   1275
@@ -866,12 +870,7 @@ Dim Retencion_No As Long
 Dim Serie_R As String
  
 Dim ObjAutori As New WS_Autorizacion
-Dim URLRecepcion  As String
-Dim URLAutorizacion As String
 
-Dim RutaXMLAutorizado As String
-Dim RutaXMLRechazado As String
-Dim RutaXMLFirmado As String
 Dim ArrayAutorizacion() As String
 Dim DocDesde As Long
 Dim DocHasta As Long
@@ -942,7 +941,7 @@ Private Sub Form_Activate()
         & "AND Estado_SRI <> 'OK' "
    Ejecutar_SQL_SP sSQL
    
-   LstResultado.width = Retenciones.width - 400
+   LblResultado.width = Retenciones.width - 400
    APDFRetencion.width = Retenciones.width - 400
    APDFRetencion.Height = MDI_Y_Max - APDFRetencion.Top - 100
    
@@ -951,9 +950,7 @@ Private Sub Form_Activate()
 End Sub
 
 Private Sub Form_Load()
-
-   'LstResultado.width = MDI_X_Max - 250
-   
+  'LstResultado.width = MDI_X_Max - 250
    ConectarAdodc AdoComp
    ConectarAdodc AdoDetRet
    ConectarAdodc AdoDetCom
@@ -978,11 +975,8 @@ Private Sub Form_Load()
    CMeses.Text = "Todos"
    
   'Pagina de Conexion con el SRI
-   URLRecepcion = Leer_Campo_Empresa("Web_SRI_Recepcion")
-   URLAutorizacion = Leer_Campo_Empresa("Web_SRI_Autorizado")
-   
-   
-   'CentrarForm Retenciones
+   SRI_Obtener_Datos_Comprobantes_Electronicos
+  'CentrarForm Retenciones
 End Sub
 
 Public Sub Listar_Retencion(Serie_R As String, Comp_No As Long, TP As String, TP_No As Long)
@@ -1006,30 +1000,30 @@ Dim TipoProc As String
     If .RecordCount > 0 Then
        'MsgBox .RecordCount
         Co.Item = NumEmpresa
-        Co.Fecha = .fields("Fecha")
-        Co.Beneficiario = .fields("Cliente")
-        Co.RUC_CI = .fields("CI_RUC")
-        Co.Direccion = .fields("Direccion")
-        Co.TD = .fields("TD")
-        Co.Email = .fields("Email")
-        Co.TP = .fields("TP")
-        Co.Numero = .fields("Numero")
+        Co.Fecha = .Fields("Fecha")
+        Co.Beneficiario = .Fields("Cliente")
+        Co.RUC_CI = .Fields("CI_RUC")
+        Co.Direccion = .Fields("Direccion")
+        Co.TD = .Fields("TD")
+        Co.Email = .Fields("Email")
+        Co.TP = .Fields("TP")
+        Co.Numero = .Fields("Numero")
         
-        FA.EmailC = .fields("Email")
-        FA.EmailR = .fields("Email2")
+        FA.EmailC = .Fields("Email")
+        FA.EmailR = .Fields("Email2")
         FA.TP = Co.TP
         FA.Numero = Co.Numero
         FA.TR = "RE"
         FA.TC = "FA"
-        FA.Fecha = .fields("FechaEmision")
-        FA.Fecha_R = .fields("FechaEmision")
-        FA.Serie_R = .fields("Serie_Retencion")
-        FA.Retencion = .fields("SecRetencion")
-        FA.ClaveAcceso = .fields("Clave_Acceso")
-        FA.Estado_SRI = .fields("Estado_SRI")
-        FA.Autorizacion_R = .fields("AutRetencion")
-        FA.Serie = .fields("Establecimiento") & .fields("PuntoEmision")
-        FA.Factura = .fields("Secuencial")
+        FA.Fecha = .Fields("FechaEmision")
+        FA.Fecha_R = .Fields("FechaEmision")
+        FA.Serie_R = .Fields("Serie_Retencion")
+        FA.Retencion = .Fields("SecRetencion")
+        FA.ClaveAcceso = .Fields("Clave_Acceso")
+        FA.Estado_SRI = .Fields("Estado_SRI")
+        FA.Autorizacion_R = .Fields("AutRetencion")
+        FA.Serie = .Fields("Establecimiento") & .Fields("PuntoEmision")
+        FA.Factura = .Fields("Secuencial")
         
         FechaTexto = Co.Fecha
         TxtAutorizacion = FA.Autorizacion_R
@@ -1038,25 +1032,16 @@ Dim TipoProc As String
         SetNombrePRN = ""
         SRI_Generar_PDF_RE FA, False
         APDFRetencion.Object.src = RutaDocumentoPDF
-       ' Presentar_PDF ATSPDF, RutaDocumentoPDF
+      ' Presentar_PDF ATSPDF, RutaDocumentoPDF
         RatonNormal
-'''        If Existe_File(RutaDocumentoPDF) Then
-'''
-'''        Else
-'''           RatonNormal
-'''           MsgBox "No existe archivo que presentar, revise que de verdad existe."
-'''        End If
-    Else
-      RatonNormal
-     'MsgBox "Este Comprobante no Existe."
-      'Presentar_PDF ATSPDF, ""
     End If
    End With
+   LblResultado.Caption = SRI_Leer_Comprobantes_no_Autorizados(FA.Autorizacion_R)
+  'LblResultado.Caption = SRI_Leer_Comprobantes_no_Autorizados("2604202507070216417900110010030000000421234567814")   ' FA.Autorizacion_R
 End Sub
 
 Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
   TextoImprimio = ""
-  LstResultado.Clear
   DocDesde = Val(TxtDocDesde.Text)
   DocHasta = Val(TxtDocHasta.Text)
   Select Case Button.key
@@ -1069,24 +1054,24 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
          DCComp.SetFocus
     Case "Primero"
          AdoComp.Recordset.MoveFirst
-         DCComp = AdoComp.Recordset.fields("SecRetencion")
+         DCComp = AdoComp.Recordset.Fields("SecRetencion")
          Listar_Tipo_Comp_Retencion
          Listar_Retencion DCSerie, Val(DCComp), SinEspaciosIzq(DCTP_Num), SinEspaciosDer(DCTP_Num)
     Case "Anterior"
          AdoComp.Recordset.MovePrevious
          If AdoComp.Recordset.BOF Then AdoComp.Recordset.MoveFirst
-         DCComp = AdoComp.Recordset.fields("SecRetencion")
+         DCComp = AdoComp.Recordset.Fields("SecRetencion")
          Listar_Tipo_Comp_Retencion
          Listar_Retencion DCSerie, Val(DCComp), SinEspaciosIzq(DCTP_Num), SinEspaciosDer(DCTP_Num)
     Case "Siguiente"
          AdoComp.Recordset.MoveNext
          If AdoComp.Recordset.EOF Then AdoComp.Recordset.MoveLast
-         DCComp = AdoComp.Recordset.fields("SecRetencion")
+         DCComp = AdoComp.Recordset.Fields("SecRetencion")
          Listar_Tipo_Comp_Retencion
          Listar_Retencion DCSerie, Val(DCComp), SinEspaciosIzq(DCTP_Num), SinEspaciosDer(DCTP_Num)
     Case "Ultimo"
          AdoComp.Recordset.MoveLast
-         DCComp = AdoComp.Recordset.fields("SecRetencion")
+         DCComp = AdoComp.Recordset.Fields("SecRetencion")
          Listar_Tipo_Comp_Retencion
          Listar_Retencion DCSerie, Val(DCComp), SinEspaciosIzq(DCTP_Num), SinEspaciosDer(DCTP_Num)
     Case "Cambio_Retencion"
@@ -1098,24 +1083,7 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
          FA.Serie_R = DCSerie.Text
          FA.Retencion = Val(DCComp.Text)
          SRI_Crear_Clave_Acceso_Retenciones FA, False
-
-''         SRI_Autorizacion = SRI_Generar_XML(FA.ClaveAcceso, FA.Estado_SRI)
-''         SRI_Actualizar_XML_Retencion SRI_Autorizacion, FA
-''         RatonReloj
-         If SRI_Autorizacion.Estado_SRI = "OK" Then
-''            FA.Numero = Co.Numero
-''            FA.TP = Co.TP
-''
-''            SRI_Actualizar_Autorizacion_Retencion SRI_Autorizacion, FA
-''            SRI_Generar_PDF_RE FA, True
-''            SRI_Enviar_Mails FA, SRI_Autorizacion, "RE"
-            LstResultado.AddItem SRI_Autorizacion.Estado_SRI
-            RatonNormal
-         Else
-            LstResultado.AddItem SRI_Autorizacion.Estado_SRI & " - " & Replace(SRI_Autorizacion.Error_SRI, vbCrLf, " ")
-            LstResultado.Refresh
-            RatonNormal
-         End If
+         LblResultado.Caption = SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion.Clave_De_Acceso)
     Case "Autorizar_Grupo"
          If Len(DCSerie) < 6 Then DCSerie = "001001"
          sSQL = "SELECT C.Cliente,C.CI_RUC,C.TD,C.Direccion,C.Email,C.Ciudad,C.DirNumero,C.Telefono,TC.* " _
@@ -1135,44 +1103,28 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
              'MsgBox .RecordCount
               Do While Not .EOF
                  RatonReloj
-                 Co.TP = .fields("TP")
-                 Co.Numero = .fields("Numero")
-                 Co.Fecha = .fields("Fecha")
+                 Co.TP = .Fields("TP")
+                 Co.Numero = .Fields("Numero")
+                 Co.Fecha = .Fields("Fecha")
                  
                  FA.TP = Co.TP
                  FA.Numero = Co.Numero
-                 FA.Fecha = .fields("Fecha")
-                 FA.Serie_R = .fields("Serie_Retencion")
-                 FA.Retencion = .fields("SecRetencion")
+                 FA.Fecha = .Fields("Fecha")
+                 FA.Serie_R = .Fields("Serie_Retencion")
+                 FA.Retencion = .Fields("SecRetencion")
                  
                  SRI_Crear_Clave_Acceso_Retenciones FA, False
-                 If SRI_Autorizacion.Estado_SRI <> "OK" Then
-                    SRI_Autorizacion.Clave_De_Acceso = FA.ClaveAcceso
-                    SRI_Autorizacion.Estado_SRI = "CF"
-                    SRI_Autorizacion.Error_SRI = ""
-                    RutaXMLAutorizado = RutaDocumentos & "\Comprobantes Autorizados\" & FA.ClaveAcceso & ".xml"
-                    RutaXMLRechazado = RutaDocumentos & "\Comprobantes no Autorizados\" & FA.ClaveAcceso & ".xml"
-                    ArrayAutorizacion = ObjAutori.FF_ObtieneNumAutorizado(URLAutorizacion, FA.ClaveAcceso, RutaXMLAutorizado, RutaXMLRechazado)
-                    If ArrayAutorizacion(0) = "AUTORIZADO" Then
-                       SRI_Autorizacion.Estado_SRI = "OK"
-                       SRI_Autorizacion.Error_SRI = "OK"
-                       SRI_Autorizacion.Autorizacion = ArrayAutorizacion(1)
-                       SRI_Autorizacion.Fecha_Autorizacion = Format$(MidStrg(ArrayAutorizacion(2), 1, 10), "dd/MM/yyyy")
-                       SRI_Autorizacion.Hora_Autorizacion = MidStrg(ArrayAutorizacion(2), 12, 8)
-                       SRI_Autorizacion.Documento_XML = Leer_Archivo_Texto(RutaXMLAutorizado)
-                       SRI_Actualizar_Documento_XML SRI_Autorizacion.Clave_De_Acceso
-                       SRI_Actualizar_Autorizacion_Retencion SRI_Autorizacion, FA
-                    Else
-                       LstResultado.AddItem Co.Fecha & ": " & Co.TP & "-" & Format(Co.Numero, "000000000") & " - " _
-                                          & SRI_Autorizacion.Estado_SRI & " - " & SRI_Autorizacion.Error_SRI
-                    End If
-                 End If
+                 
+                'Leemos el Error si lo tubiera
+                 LblResultado.Caption = SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion.Clave_De_Acceso)
+                 If Len(LblResultado.Caption) > 1 Then TextoImprimio = TextoImprimio & LblResultado.Caption & vbCrLf & String(80, "-") & vbCrLf
                  RatonNormal
                 .MoveNext
               Loop
           End If
          End With
          
+         Generar_Informe_Errores
          Retenciones.Caption = "LISTAR COMPROBANTES DE RETENCION"
     Case "Enviar_Mails"
 '         WBPDF.Navigate "file:///C:/SISTEMA/FONDOS/index_pdf.html"
@@ -1190,8 +1142,8 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
             FA.TP = Co.TP
             SRI_Autorizacion.Fecha_Autorizacion = Co.Fecha
             SRI_Autorizacion.Autorizacion = FA.Autorizacion_R
-            SRI_Enviar_Mails FA, SRI_Autorizacion, "RE"
-            DCComp = AdoComp.Recordset.fields("SecRetencion")
+            SRI_Enviar_Mails FA, SRI_Autorizacion
+            DCComp = AdoComp.Recordset.Fields("SecRetencion")
          End If
   End Select
 End Sub
@@ -1349,8 +1301,6 @@ Dim Secuencial As String
 End Sub
 
 Private Sub TxtClave_KeyDown(KeyCode As Integer, Shift As Integer)
-Dim RutaXMLFirmado As String
-
     Keys_Especiales Shift
     If CtrlDown And KeyCode = vbKeyA Then
        If CFechaLong(FechaSistema) <= CFechaLong(Fecha_CE) Then
@@ -1379,21 +1329,8 @@ Dim RutaXMLFirmado As String
           FA.Retencion = Val(DCComp.Text)
           SRI_Crear_Clave_Acceso_Retenciones FA, False, CBool(CheqClaveAcceso.value)
           RatonNormal
-         'MsgBox SRI_Autorizacion.Estado_SRI & "...."
-         If SRI_Autorizacion.Estado_SRI <> "OK" Then
-            LstResultado.AddItem SRI_Autorizacion.Estado_SRI & " - " & Replace(SRI_Autorizacion.Error_SRI, vbCrLf, ", ")
-            LstResultado.Refresh
-            RatonNormal
-         End If
-         If TextoImprimio <> "" Then
-            RutaGeneraFile = RutaSysBases & "\TEMP\Informe de Errores de Retenciones " & Replace(FechaSistema, "/", "-") & ".txt"
-            NumFile = FreeFile
-            Open RutaGeneraFile For Output As #NumFile ' Abre el archivo.
-                 Print #NumFile, TextoImprimio;
-            Close #NumFile
-            MsgBox "ARCHIVO DE INFORME DE ERRORES:" & vbCrLf & vbCrLf & RutaGeneraFile
-         End If
-        'MsgBox "Proceso Exitoso, Vuelva a Intentar conectarce con el S.R.I."
+          LblResultado.Caption = SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion.Clave_De_Acceso)
+          Generar_Informe_Errores
        Else
           RatonNormal
           MsgBox MensajeNoAutorizarCE

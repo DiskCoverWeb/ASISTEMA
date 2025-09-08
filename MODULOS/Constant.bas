@@ -1,23 +1,51 @@
 Attribute VB_Name = "Constantes"
 Option Explicit
-
+'-------------------------------------------------------
+'+573103673819-- Cristhian Orozco Whatsapp
+'corozcoic@ foodbanking.org
+'jsuarezic@ foodbanking.org
+'-------------------------------------------------------
+'Store Procedure:
+'C:\SISTEMA\BASES\UPDATE_DB
+'-------------------------------------------------------
+'    Clipboard.Clear
+'    Clipboard.SetText SQL2
 '-------------------------------------------------------
 'CORREOS PERSONALES DE DISKCOVER SYSTEM:
 '======================================
 'actualizar@diskcoversystem.com         Dlcjvl031210@
-'comprobantes@diskcoversystem.com       Dlcjvl1210@CompElec
-'desarrollo@diskcoversystem.com         Dlcjvl031210@
-'electronicos@diskcoversystem.com       Electronicos2022@
-'informacion@diskcoversystem.com        infoDlcjvl1210DiskCover
+'gerencia@diskcoversystem.com           Dlcjvl031210@
 'soporte@diskcoversystem.com            Dlcjvl031210@
 'soporteweb@diskcoversystem.com         Dlcjvl031210@
+'desarrollo@diskcoversystem.com         Dlcjvl031210@
+'carteraclientes@diskcoversystem.com    cartera2025Clientes
+'comprobantes@diskcoversystem.com       Dlcjvl1210@CompElec
+'electronicos@diskcoversystem.com       Electronicos2022@
+'informacion@diskcoversystem.com        infoDlcjvl1210DiskCover
+'webmaster@diskcoversystem.com          web031210Master
 '-------------------------------------------------------
 'SERVIRLES ES NUESTRO COMPROMISO, DISFRUTARLO ES EL SUYO.
 '-------------------------------------------------------
 ' Prueba:     celcer.sri.gob.ec
 ' Produccion: cel.sri.gob.ec
-
 '-------------------------------------------------------
+'https://www.youtube.com/watch?v=EVh36sDppcs
+' MySQL     Puerto: 13306
+' SQLServer Puerto: 11433
+' https://api.diskcoversystem.com:8010/docs
+'------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+'SELECT  Ciudad, Empresa, RUC, Email, Email_Conexion, Email_ContraseÒa, Email_Respaldos, Email_Conexion_CE, Email_ContraseÒa_CE, Email_Procesos, Email_CE_Copia, smtp_Servidor, ID From Empresas
+'------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+'     194.195.222.54     db.diskcoversystem.com
+'      69.164.192.53     erp.diskcoversystem.com
+'     104.237.138.52     imap.diskcoversystem.com
+'     194.195.222.54     ftp.diskcoversystem.com
+'      69.164.192.53     ftpds.diskcoversystem.com
+'      186.4.206.112     cloud.diskcoversystem.com
+'       186.4.206.95     vpn.diskcoversystem.com
+'       186.4.206.95     ftpupdate.diskcoversystem.com
+'       186.4.206.95
+'-----------------------------------------------------
 'Tipo_Concepto_Retencion
 'BINARY       1 byte por car·cter Se puede almacenar cualquier tipo de datos en un campo de
 '               este tipo. Los datos no se traducen (por ejemplo, a texto). La forma en que se
@@ -49,7 +77,7 @@ Option Explicit
 '=================================================================
 'Funciones de SQL
 'Constantes para acceso a Datos por ADO/ADODB/OLE DB
-'Constante          Valor
+'Constante                Valor
 '-----------------------------------------------------------------
 'Nuevo Comprobantes     : 1
 'Modificar Comprobantes : 1
@@ -73,8 +101,8 @@ Option Explicit
 '''                 & "asistencia@diskcoversystem.com / prisma_net@hotmail.es" & vbCrLf _
 '''                 & "PARA SU LEGALIZACION"
 '--------------------------------------------------------------------------------------------------------------------------------------------
-'https://srienlinea.sri.gob.ec/sri-catastro-sujeto-servicio-internet/rest/ConsolidadoContribuyente/existePorNumeroRuc?numeroRuc=0702164179001
-'https://srienlinea.sri.gob.ec/facturacion-internet/consultas/publico/ruc-datos2.jspa?accion=siguiente&ruc=0702164179001
+'https://srienlinea.sri.gob.ec/sri-catastro-sujeto-servicio-internet/rest/ConsolidadoContribuyente/existePorNumeroRuc?numeroRuc=1793042813001
+'https://srienlinea.sri.gob.ec/facturacion-internet/consultas/publico/ruc-datos2.jspa?accion=siguiente&ruc=1793192001001
 '-----------------------------------------------------------------------------------------------------------------------
 'Recepcion/Autorizacion
 'Produccion:
@@ -126,9 +154,9 @@ Global Const MensajeDeAdvertencia = "DISKCOVER SYSTEM representado por PrismaNet
 Global Const ServidorEnLineaSRI = "En estos momentos el servidor de Aprobacion de Documentos Electronicos en Ambiente de XXXX no esta en linea, " _
                                 & "no se podra aprobar sus documentos, podra generar los comprobantes y despues enviar autorizar al SRI."
 
-Global Const Resolucion_Retencion = "RESOLUCION DEL SRI: El Articulo 97 del Reglamento para la Aplicacion de la Ley de Regimen Tributario Interno manifiesta " _
-                                  & "que los agentes de retencion de impuestos deberan extender un comprobante de retencion dentro del plazo maximo de CINCO " _
-                                  & "dias de recibido el comprobante†de†venta."
+Global Const Resolucion_Retencion = "RESOLUCION: El Articulo 97 del Reglamento para la Aplicacion de la Ley de Regimen Tributario Interno manifiesta " _
+                                  & "que los agentes de retencion de impuestos deberan extender un comprobante de retencion dentro del plazo maximo " _
+                                  & "de CINCO dias de recibido el comprobante de venta."
 
 '-------------------------------------------------------------------------------
 'Datos de Conexion a la Base de Datos en las nubes db.diskcoversystem.com:13306
@@ -138,17 +166,13 @@ Global Const Resolucion_Retencion = "RESOLUCION DEL SRI: El Articulo 97 del Regl
 'Global Const AdoStrCnnMySQL = "DRIVER={MySQL ODBC 8.2 ANSI Driver};"
 'Global Const AdoStrCnnMySQL = "DRIVER={MySQL ODBC 8.2 Unicode Driver};"
 '-------------------------------------------------------------------------------
-Global Const AdoStrCnnMySQL = "DRIVER={MySQL ODBC 5.1 Driver};" _
-                            & "SERVER=db.diskcoversystem.com;" _
-                            & "PORT=13306;" _
-                            & "DATABASE=diskcover_empresas;" _
-                            & "USER=diskcover;" _
-                            & "PASSWORD=disk2017@Cover;" _
-                            & "OPTION=3;"
-                                                           
-'Global Const AdoStrCnnMySQL = "Driver={MySQL ODBC 8.2 Unicode Driver};SERVER=db.diskcoversystem.com;DATABASE=diskcover_empresas;USER=diskcover;PASSWORD=disk2017@Cover;PORT=13306; OPTION=3"
+'MySQL: root / disk2023@Cover
+'SERVER=db.diskcoversystem.com;
+'-------------------------------------------------------------------------------
 Global Const strServidor = "db.diskcoversystem.com"
-Global Const ServidorCorreos = "imap.diskcoversystem.com"
+Global Const strServidorERP = "erp.diskcoversystem.com"
+
+Global Const AdoStrCnnMySQL = "DRIVER={MySQL ODBC 5.1 Driver};SERVER=" & strServidorERP & ";PORT=13306;DATABASE=diskcover_empresas;USER=diskcover;PASSWORD=disk2017@Cover;OPTION=3"
 
 Global Const urlIdukay = "https://erp.diskcoversystem.com/php/vista/consultarEstudiante.php?id="
 Global Const urlEsUnRUC = "https://srienlinea.sri.gob.ec/sri-catastro-sujeto-servicio-internet/rest/ConsolidadoContribuyente/existePorNumeroRuc?numeroRuc="
@@ -157,16 +181,30 @@ Global Const urlDatosDelRUC = "https://srienlinea.sri.gob.ec/facturacion-interne
 Global Const CorreoDiskCover = "informacion@diskcoversystem.com"
 Global Const ContrasenaDiskCover = "infoDlcjvl1210DiskCover"
 Global Const CorreoUpdate = "actualizar@diskcoversystem.com"
-'LINODE
-Global Const ftpSvrLinode = "ftp.diskcoversystem.com" 'Es el servidor del db.diskcoversystem.com
+'LINODE DB
+Global Const ftpSvrLinode = "ftp.diskcoversystem.com"   'Es el servidor del db.diskcoversystem.com
 Global Const ftpUseLinode = "ftpuser"
 Global Const ftpPwrLinode = "ftp2023User"
 Global Const ftpPuerto = 21
-'NAS publico
-Global Const ftpSvr = "ftpds.diskcoversystem.com" 'Es el servidor del erp.diskcoversystem.com
+'LINODE ERP
+Global Const ftpSvr = "ftpds.diskcoversystem.com"       'Es el servidor del erp.diskcoversystem.com
 Global Const ftpUse = "ftpuser"
 Global Const ftpPwr = "ftp2023User"
 Global Const ftpDir = "/files"
+'READONLY FTP
+Global Const ftpUpSvr = "only.diskcoversystem.com"      'Es el servidor del only.diskcoversystem.com
+Global Const ftpUpUse = "userftp"
+Global Const ftpUpPwr = "user2025Ftp"
+Global Const ftpUpDir = "/files"
+Global Const ftpUpPuerto = 10021
+'DNSEXIT IMAP
+Global Const imapHost = "imap.diskcoversystem.com"       'Es el servidor del imap.diskcoversystem.com
+Global Const imaphelo = "imap.diskcoversystem.com"
+Global Const imapUse = "admin"
+Global Const imapPwr = "Admin@2023"
+Global Const imapSMTPAuth = "True"
+Global Const imapSMTPSecure = "tls"
+Global Const imapPort = 587
 '-----------------------------------------------------------------
 Global Const Car_Visto = 251
 '-----------------------------------------------------------------
@@ -176,7 +214,6 @@ Global Const adFalse = 0
 Global Const Es_Printer = 1
 Global Const Es_Picture = 2
 Global Const Es_PDF = 3
-
 '-----------------------------------------------------------------
 'Conversion de Datos
 Global Const TadDate = adDate             ' SmallDateTime
@@ -323,6 +360,5 @@ Global Const MascaraTelefC = "##-###-###"
 Global Const LimpiarTelefC = "00-000-000"
 Global Const MascaraTelef = "###-###"
 Global Const LimpiarTelef = "000-000"
-Global Const CadenaValida = "0123456789;@.-_·ÈÌÛ˙¸Òqwertyuiopasdfghjklzxcvbnm ¡…Õ”⁄‹—QWERTYUIOPASDFGHJKLZXCVBNM"
 '-----------------------------------------
 Global Const MaxVect = 80

@@ -1,5 +1,6 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.MDIForm MDICosto 
    BackColor       =   &H00FFFFFF&
    Caption         =   "MDI"
@@ -27,7 +28,7 @@ Begin VB.MDIForm MDICosto
    End
    Begin VB.Timer Timer1 
       Left            =   105
-      Top             =   525
+      Top             =   105
    End
    Begin MSComctlLib.StatusBar StaBarEmp 
       Align           =   2  'Align Bottom
@@ -88,6 +89,13 @@ Begin VB.MDIForm MDICosto
       _ExtentY        =   212
       _Version        =   393216
       Appearance      =   0
+   End
+   Begin MSComDlg.CommonDialog Dir_Dialog 
+      Left            =   525
+      Top             =   105
+      _ExtentX        =   847
+      _ExtentY        =   847
+      _Version        =   393216
    End
    Begin VB.Menu Archivo 
       Caption         =   "Archivo"
@@ -192,6 +200,12 @@ Begin VB.MDIForm MDICosto
          Caption         =   "Resumen de Compras/Ventas Promediadas"
       End
    End
+   Begin VB.Menu Herramientas 
+      Caption         =   "Herramientas"
+      Begin VB.Menu MReindexar_Kardex 
+         Caption         =   "Reindexar Kardex"
+      End
+   End
    Begin VB.Menu MAmbiente 
       Caption         =   "Ambiente"
       Enabled         =   0   'False
@@ -259,8 +273,7 @@ Private Sub MCambioSalida_Click()
 End Sub
 
 Private Sub MDIForm_Activate()
-    MDI_X_Max = Screen.width - 150
-    MDI_Y_Max = Screen.Height - 1850
+    screen_size
 End Sub
 
 Private Sub MDIForm_Load()
@@ -351,6 +364,19 @@ End Sub
 Private Sub MMercaderiaPP_Click()
   RatonReloj
   Costos_Recetas.Show
+End Sub
+
+Private Sub MReindexar_Kardex_Click()
+  Control_Procesos Normal, "Reindexar Inventario"
+  RatonReloj
+  sSQL = "UPDATE Trans_Kardex " _
+       & "SET Procesado = 0 " _
+       & "WHERE Item = '" & NumEmpresa & "' " _
+       & "AND Periodo = '" & Periodo_Contable & "' "
+  Ejecutar_SQL_SP sSQL
+  RatonReloj
+  Mayorizar_Inventario_SP
+  RatonNormal
 End Sub
 
 Private Sub MResumenTotales_Click()

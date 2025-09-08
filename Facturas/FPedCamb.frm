@@ -436,9 +436,9 @@ End Sub
 Private Sub Command2_Click()
   With AdoProducto.Recordset
    If .RecordCount > 0 Then
-       Codigo = .Fields("No_Hab")
-       CodigoInv = .Fields("Codigo")
-       Producto = .Fields("Producto")
+       Codigo = .fields("No_Hab")
+       CodigoInv = .fields("Codigo")
+       Producto = .fields("Producto")
        Cadena = "ORDEN No. [" & Habitacion_No & "] - " _
               & CodigoInv & vbCrLf & vbCrLf _
               & Space(20) & Producto
@@ -464,9 +464,9 @@ Private Sub Command3_Click()
        RatonReloj
        Do While Not .EOF
           Total_IVA = 0
-          If .Fields("Total_IVA") > 0 Then Total_IVA = .Fields("Precio") * .Fields("Cantidad") * Porc_IVA
-         .Fields("Total_IVA") = Total_IVA
-         .Fields("Total") = .Fields("Precio") * .Fields("Cantidad")
+          If .fields("Total_IVA") > 0 Then Total_IVA = .fields("Precio") * .fields("Cantidad") * Porc_IVA
+         .fields("Total_IVA") = Total_IVA
+         .fields("Total") = .fields("Precio") * .fields("Cantidad")
          .Update
          .MoveNext
        Loop
@@ -479,11 +479,11 @@ End Sub
 Private Sub Command4_Click()
   With AdoProducto.Recordset
    If .RecordCount > 0 Then
-       CodigoInv = .Fields("Codigo")
-       Producto = .Fields("Producto")
+       CodigoInv = .fields("Codigo")
+       Producto = .fields("Producto")
        If IsNumeric(TxtOrden) Then
           Cadena = "ORDEN No. " & Orden_No & vbCrLf
-          Nota_No = .Fields("Orden_No")
+          Nota_No = .fields("Orden_No")
           Orden_No = Val(InputBox(Cadena, "CAMBIAR POR", ""))
           sSQL = "UPDATE Trans_Pedidos " _
                & "SET Orden_No = " & Orden_No & " " _
@@ -492,7 +492,7 @@ Private Sub Command4_Click()
           Orden_No = Nota_No
        Else
           Cadena = "ORDEN No. " & Habitacion_No & vbCrLf
-          Codigo = .Fields("No_Hab")
+          Codigo = .fields("No_Hab")
           Habitacion_No = UCaseStrg(InputBox(Cadena, "CAMBIAR POR", ""))
           If Habitacion_No = "" Then Habitacion_No = Ninguno
           sSQL = "UPDATE Trans_Pedidos " _

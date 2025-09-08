@@ -513,18 +513,18 @@ Private Sub Command1_Click()
   With AdoSubCta.Recordset
    If .RecordCount > 0 Then
        Total = 0
-       Cta = .Fields("Cta")
-       Contra_Cta = .Fields("Cta_Venta_Anticipada")
+       Cta = .fields("Cta")
+       Contra_Cta = .fields("Cta_Venta_Anticipada")
        Do While Not .EOF
-          If Cta <> .Fields("Cta") Then
+          If Cta <> .fields("Cta") Then
              Total = Redondear(Total, 2)
              InsertarAsientos AdoAsiento, Contra_Cta, 0, Total, 0
              InsertarAsientos AdoAsiento, Cta, 0, 0, Total
              Total = 0
-             Cta = .Fields("Cta")
-             Contra_Cta = .Fields("Cta_Venta_Anticipada")
+             Cta = .fields("Cta")
+             Contra_Cta = .fields("Cta_Venta_Anticipada")
           End If
-          Total = Total + .Fields("VentaAnt")
+          Total = Total + .fields("VentaAnt")
          .MoveNext
        Loop
        Total = Redondear(Total, 2)
@@ -537,8 +537,8 @@ Private Sub Command1_Click()
    If .RecordCount > 0 Then
       .MoveFirst
        Do While Not .EOF
-          SumaDebe = SumaDebe + .Fields("DEBE")
-          SumaHaber = SumaHaber + .Fields("HABER")
+          SumaDebe = SumaDebe + .fields("DEBE")
+          SumaHaber = SumaHaber + .fields("HABER")
          .MoveNext
        Loop
    End If
@@ -563,8 +563,8 @@ Private Sub Command7_Click()
    If .RecordCount > 0 Then
       .MoveFirst
        Do While Not .EOF
-          SumaDebe = SumaDebe + .Fields("DEBE")
-          SumaHaber = SumaHaber + .Fields("HABER")
+          SumaDebe = SumaDebe + .fields("DEBE")
+          SumaHaber = SumaHaber + .fields("HABER")
          .MoveNext
        Loop
       .MoveFirst
@@ -581,7 +581,7 @@ Private Sub Command7_Click()
           Co.Usuario = CodigoUsuario
           Co.Concepto = LblConcepto.Caption
           Co.T_No = Trans_No
-          GrabarComprobante Co
+          Grabar_Comprobante Co
           SQL2 = "UPDATE Trans_Suscripciones " _
                & "SET AC = -1 " _
                & "WHERE Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _

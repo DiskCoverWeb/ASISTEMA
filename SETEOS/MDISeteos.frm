@@ -1,5 +1,6 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.MDIForm MDISeteos 
    BackColor       =   &H00FFFFFF&
    Caption         =   " "
@@ -39,8 +40,8 @@ Begin VB.MDIForm MDISeteos
       Width           =   11880
    End
    Begin VB.Timer Timer1 
-      Left            =   105
-      Top             =   105
+      Left            =   420
+      Top             =   0
    End
    Begin MSComctlLib.StatusBar StaBarEmp 
       Align           =   2  'Align Bottom
@@ -101,6 +102,13 @@ Begin VB.MDIForm MDISeteos
       _ExtentY        =   212
       _Version        =   393216
       Appearance      =   0
+   End
+   Begin MSComDlg.CommonDialog Dir_Dialog 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   847
+      _ExtentY        =   847
+      _Version        =   393216
    End
    Begin VB.Menu DatosRel 
       Caption         =   "&Archivos"
@@ -242,8 +250,7 @@ End If
 End Sub
 
 Private Sub MDIForm_Activate()
-    MDI_X_Max = Screen.width - 150
-    MDI_Y_Max = Screen.Height - 1850
+    screen_size
 End Sub
 
 Private Sub MDIForm_Load()

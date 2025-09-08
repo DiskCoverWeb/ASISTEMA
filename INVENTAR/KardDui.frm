@@ -967,7 +967,7 @@ Private Sub Command1_Click()
        Cadena = DCBenef.Text
       .MoveFirst
       .Find ("Cliente Like '" & Cadena & "' ")
-       If Not .EOF Then CodigoBenef = .Fields("Codigo")
+       If Not .EOF Then CodigoBenef = .fields("Codigo")
    End If
   End With
   Valor = 0
@@ -982,47 +982,47 @@ Private Sub Command1_Click()
        RatonReloj
        NumComp = ReadSetDataNum("Diario", True, True)
       .MoveFirst
-       CodigoInv = .Fields("Codigo_Inv")
-       Cta_Inventario = .Fields("CTA_INVENTARIO")
-       Contra_Cta = .Fields("CONTRA_CTA")
+       CodigoInv = .fields("Codigo_Inv")
+       Cta_Inventario = .fields("CTA_INVENTARIO")
+       Contra_Cta = .fields("CONTRA_CTA")
        Total = 0: ValorDH = 0
       'Llenamos los datos ingresados al Kardex
        Do While Not .EOF
           SetAdoAddNew "Trans_Kardex"
           SetAdoFields "T", Normal
-          SetAdoFields "Codigo_Inv", .Fields("Codigo_Inv")
+          SetAdoFields "Codigo_Inv", .fields("Codigo_Inv")
           SetAdoFields "Codigo_P", CodigoBenef
           SetAdoFields "Fecha", FechaTexto
           SetAdoFields "TP", CompDiario
           SetAdoFields "Numero", NumComp
-          SetAdoFields "Descuento", .Fields("P_DESC")
-          SetAdoFields "Descuento1", .Fields("P_DESC1")
-          If .Fields("DH") = 1 Then
-              SetAdoFields "Entrada", .Fields("CANT_ES")
+          SetAdoFields "Descuento", .fields("P_DESC")
+          SetAdoFields "Descuento1", .fields("P_DESC1")
+          If .fields("DH") = 1 Then
+              SetAdoFields "Entrada", .fields("CANT_ES")
           Else
-              SetAdoFields "Salida", .Fields("CANT_ES")
+              SetAdoFields "Salida", .fields("CANT_ES")
               Si_No = False
           End If
-          SetAdoFields "Valor_Total", .Fields("VALOR_TOTAL")
-          SetAdoFields "Producto", .Fields("PRODUCTO")
-          SetAdoFields "Existencia", .Fields("CANTIDAD")
-          SetAdoFields "Valor_Unitario", .Fields("VALOR_UNIT")
-          SetAdoFields "Total", .Fields("SALDO")
-          SetAdoFields "Cta_Inv", .Fields("CTA_INVENTARIO")
-          SetAdoFields "Contra_Cta", .Fields("CONTRA_CTA")
+          SetAdoFields "Valor_Total", .fields("VALOR_TOTAL")
+          SetAdoFields "Producto", .fields("PRODUCTO")
+          SetAdoFields "Existencia", .fields("CANTIDAD")
+          SetAdoFields "Valor_Unitario", .fields("VALOR_UNIT")
+          SetAdoFields "Total", .fields("SALDO")
+          SetAdoFields "Cta_Inv", .fields("CTA_INVENTARIO")
+          SetAdoFields "Contra_Cta", .fields("CONTRA_CTA")
           SetAdoFields "Orden_No", TextOrden.Text
-          SetAdoFields "CodBodega", .Fields("CodBod")
-          SetAdoFields "Codigo_Barra", .Fields("COD_BAR")
+          SetAdoFields "CodBodega", .fields("CodBod")
+          SetAdoFields "Codigo_Barra", .fields("COD_BAR")
           If Inv_Promedio Then
-             Cantidad = .Fields("CANTIDAD")
-             Saldo = .Fields("SALDO")
+             Cantidad = .fields("CANTIDAD")
+             Saldo = .fields("SALDO")
              If Cantidad <= 0 Then Cantidad = 1
              SetAdoFields "Costo", Saldo / Cantidad
           End If
           SetAdoFields "Item", NumEmpresa
           SetAdoUpdate
-          Total = Total + .Fields("VALOR_TOTAL")
-          ValorDH = ValorDH + .Fields("VALOR_TOTAL")
+          Total = Total + .fields("VALOR_TOTAL")
+          ValorDH = ValorDH + .fields("VALOR_TOTAL")
          .MoveNext
        Loop
       'Procesar Diario
@@ -1064,8 +1064,8 @@ Private Sub Command1_Click()
    If .RecordCount > 0 Then
        Debe = 0: Haber = 0
        Do While Not .EOF
-          Debe = Debe + .Fields("DEBE")
-          Haber = Haber + .Fields("HABER")
+          Debe = Debe + .fields("DEBE")
+          Haber = Haber + .fields("HABER")
          .MoveNext
        Loop
        If (Debe - Haber) <> 0 Then MsgBox "Verifique el comprobante, no cuadra por: " & Round(Debe - Haber, 2)
@@ -1083,7 +1083,7 @@ Private Sub Command1_Click()
           Co.T_No = Trans_No
           Co.Item = NumEmpresa
           If TextOrden.Text <> Ninguno Then Co.Concepto = Co.Concepto & ", Orden No. " & TextOrden.Text
-          GrabarComprobante Co
+          Grabar_Comprobante Co
           Ln_No = 1
           'ImprimirComprobantesDe False, Co
           
@@ -1127,8 +1127,8 @@ Private Sub DCBenef_LostFocus()
       .MoveFirst
       .Find ("Beneficiario Like '" & Cadena & "' ")
        If Not .EOF Then
-          CodigoBenef = .Fields("Codigo")
-          CodigoCliente = .Fields("Codigo")
+          CodigoBenef = .fields("Codigo")
+          CodigoCliente = .fields("Codigo")
        End If
    End If
   End With
@@ -1145,7 +1145,7 @@ Private Sub DCBodega_LostFocus()
    If .RecordCount > 0 Then
       .MoveFirst
       .Find ("Bodega = '" & DCBodega.Text & "' ")
-       If Not .EOF Then Cod_Bodega = .Fields("CodBod")
+       If Not .EOF Then Cod_Bodega = .fields("CodBod")
    End If
   End With
 End Sub
@@ -1334,8 +1334,8 @@ Dim TotalInvs As Currency
        .MoveFirst
        .MoveFirst
         Do While Not .EOF
-           Total = Total + .Fields("VALOR_TOTAL")
-           Total_IVA = Total_IVA + .Fields("IVA")
+           Total = Total + .fields("VALOR_TOTAL")
+           Total_IVA = Total_IVA + .fields("IVA")
           .MoveNext
         Loop
        .MoveFirst

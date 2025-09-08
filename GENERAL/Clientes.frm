@@ -1,9 +1,9 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
-Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDATGRD.OCX"
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "COMCTL32.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
+Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form FClientes 
    BackColor       =   &H00FFFFC0&
@@ -82,7 +82,6 @@ Begin VB.Form FClientes
             ImageIndex      =   8
          EndProperty
          BeginProperty Button9 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   ""
             Object.Tag             =   ""
             ImageIndex      =   9
             Style           =   3
@@ -101,7 +100,6 @@ Begin VB.Form FClientes
             ImageIndex      =   10
          EndProperty
          BeginProperty Button12 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   ""
             Object.Tag             =   ""
             ImageIndex      =   11
             Style           =   3
@@ -3585,9 +3583,9 @@ Dim Busqueda As String
     If Len(Busqueda) > 1 Then
        sSQL = "SELECT TOP 50 CI_RUC, Cliente " _
             & "FROM Clientes "
-       If IsNumeric(Busqueda) Then sSQL = sSQL & "WHERE CI_RUC LIKE '" & Busqueda & "%' " Else sSQL = sSQL & "WHERE Cliente LIKE '" & Busqueda & "%' "
-       If Modulo = "FACTURACION" Then
-          If Mas_Grupos Then sSQL = sSQL & "AND DirNumero = '" & NumEmpresa & "' "
+       If IsNumeric(Busqueda) Then sSQL = sSQL & "WHERE CI_RUC LIKE '" & Busqueda & "%' " Else sSQL = sSQL & "WHERE Cliente LIKE '%" & Busqueda & "%' "
+       If Modulo = "FACTURACION" And Mas_Grupos Then
+          sSQL = sSQL & "AND DirNumero = '" & NumEmpresa & "' "
        ElseIf Modulo = "ROL PAGOS" Then
           sSQL = sSQL & "AND TD IN ('C','P') "
        Else
@@ -3696,7 +3694,6 @@ End Sub
 
 Private Sub Form_Activate()
   If Modulo = "FACTURACION" Then Actualizar_Datos_Representantes_SP
-  
   Actualiza_Buses = Leer_Campo_Empresa("Actualizar_Buses")
 
   sSQL = "SELECT Codigo, Ejecutivo, Porc_Com " _
@@ -4368,9 +4365,9 @@ Private Sub TxtActividad_LostFocus()
   TextoValido TxtActividad
 End Sub
 
-Private Sub TxtCI_RUC_KeyPress(KeyAscii As Integer)
-   KeyAscii = Solo_Letras_Numeros(KeyAscii)
-End Sub
+'Private Sub TxtCI_RUC_KeyPress(KeyAscii As Integer)
+'   KeyAscii = Solo_Letras_Numeros(KeyAscii)
+'End Sub
 
 Private Sub TxtCIRUC_GotFocus()
   MarcarTexto TxtCIRUC
@@ -4534,13 +4531,13 @@ Private Sub TxtDirT_GotFocus()
   MarcarTexto TxtDirT
 End Sub
 
-Private Sub TxtEmail_KeyPress(KeyAscii As Integer)
-  KeyAscii = Solo_Letras_Numeros(KeyAscii)
-End Sub
+'Private Sub TxtEmail_KeyPress(KeyAscii As Integer)
+'  KeyAscii = Solo_Letras_Numeros(KeyAscii)
+'End Sub
 
-Private Sub TxtEmail2_KeyPress(KeyAscii As Integer)
-  KeyAscii = Solo_Letras_Numeros(KeyAscii)
-End Sub
+'Private Sub TxtEmail2_KeyPress(KeyAscii As Integer)
+'  KeyAscii = Solo_Letras_Numeros(KeyAscii)
+'End Sub
 
 Private Sub TxtFAX_GotFocus()
   MarcarTexto TxtFAX

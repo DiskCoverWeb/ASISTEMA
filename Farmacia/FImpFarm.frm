@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.Ocx"
 Begin VB.Form FImpFarm 
    Caption         =   "IMPORTACION DE CLIENTES DE FARMACIA"
@@ -108,8 +108,7 @@ Private Sub Command1_Click()
 Dim NumFile As Long
 Dim IdAfi As Integer
 Dim InsAfi As Boolean
-  CDialogDir.InitDir = RutaSysBases 'Left(CurDir$, 3)
-  RutaOrigen = UCase(SelectZipFile(CDialogDir, SelectAll))
+  RutaOrigen = SelectDialogFile(RutaSysBases)
   If RutaOrigen <> "" Then
      RatonReloj
      Contador = 0

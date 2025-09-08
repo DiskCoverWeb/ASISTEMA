@@ -27,7 +27,6 @@ Global AdoStrCnnBackup As String
 '-----------------------------------------
 Global PathEmpresa As String
 Global PathDataBase As String
-Global EmpresaActual As String
 Global RutaSistema As String
 Global RutaEmpresa As String
 Global RutaOrigen As String
@@ -40,8 +39,19 @@ Global RutaCierreEjercicio As String
 Global RutaBackup As String
 Global RutaUpdate As String
 Global RutaSubDirTemp As String
+Global NombreCertificado As String
+Global RutaCertificado As String
+Global RutaXML As String
+Global RutaXMLFirmado As String
+Global RutaXMLAutorizado As String
+Global RutaXMLRechazado As String
+'-----------------------------------------
+Global URLRecepcion As String
+Global URLAutorizacion As String
+Global ClaveCertificado As String
 Global HoraSistema As String
 Global FechaSistema As String
+Global FechaCierreFiscal As String
 '-----------------------------------------
 Global Fecha_CE As String
 Global Fecha_CO As String
@@ -62,6 +72,7 @@ Global Fecha_Igualar As String
 '-----------------------------------
 Global CiudadBenef As String
 '-----------------------------------------
+Global EmpresaActual As String
 Global NombreUsuario As String
 Global CodigoUsuario As String
 Global IDEUsuario As String
@@ -183,7 +194,6 @@ Global LimpiarCodigoC As String
 Global NLogoTipo As String
 Global NFirmaDigital As String
 Global NMarcaAgua As String
-Global RutaCertificado As String
 '-----------------------------------------
 Global Nombre_Cta_Ret As String
 Global Nombres As String
@@ -255,6 +265,7 @@ Global Cta_SubTotal As String
 Global Cta_Comision As String
 Global Cta_ComisionB As String
 Global Cta_Aux As String
+Global Cta_Aux_Inv As String
 Global Cta_CajaG As String
 Global Cta_CajaGE As String
 Global Cta_CajaBA As String
@@ -414,6 +425,7 @@ Global Codigo_Ministerio As String
 '=====================================
 Global Cod_CxC As String
 Global Cod_Benef As String
+Global Cod_Barra As String
 Global Cod_Bodega As String
 Global Cod_Bodega1 As String
 Global Cod_Marca As String
@@ -448,6 +460,7 @@ Global SQLMsg1 As String
 Global SQLMsg2 As String
 Global SQLMsg3 As String
 Global SQLMsg4 As String
+Global SQLPatron As String
 Global Parametros As String
 Global CtaCteNo As String
 Global CuentaBanco As String
@@ -479,6 +492,7 @@ Global Dibujo As String
 Global msg As String
 Global Moneda As String
 Global Estado As String
+Global CodRolPago As String
 '-----------------------------------
 Global SubCta As String
 Global Unidad As String
@@ -582,5 +596,6 @@ Global TipoKardex As String
 '-----------------------------------------
 Global html_Informacion_adicional As String
 Global html_Detalle_adicional As String
+Global html_Titulo_Mensaje As String
 '-----------------------------------------
 Global ListaDeImpresoras() As String

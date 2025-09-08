@@ -676,8 +676,8 @@ End If
 Select_Adodc_Grid DGQuery, AdoQuery, sSQL
 Total = 0: Saldo = 0
 Do While Not AdoQuery.Recordset.EOF
-   Total = Total + AdoQuery.Recordset.Fields("Monto")
-   Saldo = Saldo + AdoQuery.Recordset.Fields("Total_Comision")
+   Total = Total + AdoQuery.Recordset.fields("Monto")
+   Saldo = Saldo + AdoQuery.Recordset.fields("Total_Comision")
    AdoQuery.Recordset.MoveNext
 Loop
 LabelFacturado.Caption = Format$(Total, "#,##0.00")
