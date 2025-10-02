@@ -865,8 +865,8 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub ListaEmpleadosRolPagos(Optional TipoList As Byte)
-  sSQL = "SELECT CR.T,C.Sexo,C.Cliente As Empleado,C.Fecha_N,C.CI_RUC As Cedula,C.TD,CR.Fecha,CR.Grupo_Rol,CR.FechaVI,CR.FechaVF,C.Email," _
-       & "C.Email2,CR.Salario,CR.SN,C.Profesion,C.Actividad,CR.Cta_Transferencia,CR.TC,CR.FP,CR.SubModulo,CR.Pagar_Fondo_Reserva," _
+  sSQL = "SELECT CR.T,C.Sexo,C.Cliente As Empleado,C.Fecha_N,C.TD,C.CI_RUC As Cedula,CR.Fecha,CR.Grupo_Rol,C.Direccion, C.Telefono, C.TelefonoT, C.Celular, CR.FechaVI,CR.FechaVF," _
+       & "C.Email,C.Email2,CR.Salario,CR.SN,C.Profesion,C.Actividad,CR.Cta_Transferencia,CR.TC,CR.FP,CR.SubModulo,CR.Pagar_Fondo_Reserva," _
        & "CRC.Cta_Sueldo,CRC.Cta_Vacacion,CRC.Cta_Horas_Ext,CR.CodProfesion,CRC.Cta_IESS_Patronal,CRC.Cta_IESS_Personal,CRC.Cta_Aporte_Patronal_G," _
        & "CRC.Cta_Decimo_Cuarto_G,CRC.Cta_Decimo_Tercer_G,CRC.Cta_Fondo_Reserva_G,CRC.Cta_Vacaciones_G," _
        & "CRC.Cta_Decimo_Cuarto_P,CRC.Cta_Decimo_Tercer_P,CRC.Cta_Fondo_Reserva_P,CRC.Cta_Vacaciones_P," _

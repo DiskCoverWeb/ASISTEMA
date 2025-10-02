@@ -207,7 +207,7 @@ Dim AdoStrCnnTemp As String
           Else
              Dolar = 0
              ConSucursal = False
-             FUpDateExec.Caption = Modulo & ": " & strIPServidor & " - " & strNombreBaseDatos
+             FActualizar.Caption = Modulo & ": " & strIPServidor & " - " & strNombreBaseDatos
              RatonNormal
           End If
 ''          MsgBox strIPServidor & vbCrLf _

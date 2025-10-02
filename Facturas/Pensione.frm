@@ -1160,7 +1160,7 @@ Begin VB.Form FacturasPension
       Align           =   1  'Align Top
       Height          =   660
       Left            =   0
-      TabIndex        =   76
+      TabIndex        =   72
       Top             =   0
       Width           =   28560
       _ExtentX        =   50377
@@ -1247,7 +1247,7 @@ Begin VB.Form FacturasPension
       Begin VB.Frame Frame1 
          Height          =   750
          Left            =   4935
-         TabIndex        =   77
+         TabIndex        =   73
          Top             =   -105
          Width           =   11670
          Begin VB.TextBox TextFacturaNo 
@@ -1263,7 +1263,7 @@ Begin VB.Form FacturasPension
             EndProperty
             Height          =   405
             Left            =   9975
-            TabIndex        =   78
+            TabIndex        =   74
             Text            =   "0000000000"
             Top             =   210
             Width           =   1590
@@ -1271,7 +1271,7 @@ Begin VB.Form FacturasPension
          Begin MSMask.MaskEdBox MBHistorico 
             Height          =   330
             Left            =   1575
-            TabIndex        =   83
+            TabIndex        =   79
             Top             =   210
             Width           =   1275
             _ExtentX        =   2249
@@ -1307,7 +1307,7 @@ Begin VB.Form FacturasPension
             EndProperty
             Height          =   330
             Left            =   105
-            TabIndex        =   82
+            TabIndex        =   78
             Top             =   210
             Width           =   1485
          End
@@ -1326,7 +1326,7 @@ Begin VB.Form FacturasPension
             ForeColor       =   &H000000FF&
             Height          =   435
             Left            =   2940
-            TabIndex        =   79
+            TabIndex        =   75
             Top             =   210
             Width           =   6945
          End
@@ -1337,7 +1337,7 @@ Begin VB.Form FacturasPension
       BackColor       =   &H00C0C0C0&
       BorderStyle     =   0  'None
       ForeColor       =   &H80000008&
-      Height          =   3060
+      Height          =   2745
       Left            =   105
       TabIndex        =   49
       Top             =   6825
@@ -1414,8 +1414,8 @@ Begin VB.Form FacturasPension
          Left            =   10290
          Picture         =   "Pensione.frx":625D
          Style           =   1  'Graphical
-         TabIndex        =   75
-         Top             =   1890
+         TabIndex        =   71
+         Top             =   1575
          Width           =   1275
       End
       Begin VB.CommandButton Command2 
@@ -1433,8 +1433,8 @@ Begin VB.Form FacturasPension
          Left            =   8925
          Picture         =   "Pensione.frx":6B27
          Style           =   1  'Graphical
-         TabIndex        =   74
-         Top             =   1890
+         TabIndex        =   70
+         Top             =   1575
          Width           =   1275
       End
       Begin VB.TextBox TextInteres 
@@ -1451,9 +1451,9 @@ Begin VB.Form FacturasPension
          Height          =   405
          Left            =   14280
          MaxLength       =   10
-         TabIndex        =   71
+         TabIndex        =   67
          Text            =   "0.00"
-         Top             =   2100
+         Top             =   1785
          Visible         =   0   'False
          Width           =   2220
       End
@@ -1470,31 +1470,9 @@ Begin VB.Form FacturasPension
          Height          =   330
          Left            =   2310
          MaxLength       =   10
-         TabIndex        =   80
-         Top             =   1785
+         TabIndex        =   76
+         Top             =   1470
          Width           =   1590
-      End
-      Begin VB.TextBox TxtNC 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   13.5
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00400000&
-         Height          =   420
-         Left            =   14280
-         MaxLength       =   12
-         MultiLine       =   -1  'True
-         TabIndex        =   67
-         Text            =   "Pensione.frx":6F69
-         Top             =   1260
-         Width           =   2220
       End
       Begin VB.TextBox TxtEfectivo 
          Alignment       =   1  'Right Justify
@@ -1513,9 +1491,9 @@ Begin VB.Form FacturasPension
          Left            =   14280
          MaxLength       =   12
          MultiLine       =   -1  'True
-         TabIndex        =   69
-         Text            =   "Pensione.frx":6F70
-         Top             =   1680
+         TabIndex        =   65
+         Text            =   "Pensione.frx":6F69
+         Top             =   1365
          Width           =   2220
       End
       Begin VB.TextBox TxtSaldoFavor 
@@ -1559,7 +1537,7 @@ Begin VB.Form FacturasPension
          Width           =   2220
       End
       Begin MSDataListLib.DataCombo DCAnticipo 
-         Bindings        =   "Pensione.frx":6F77
+         Bindings        =   "Pensione.frx":6F70
          DataSource      =   "AdoAnticipo"
          Height          =   420
          Left            =   2310
@@ -1570,28 +1548,6 @@ Begin VB.Form FacturasPension
          _ExtentY        =   741
          _Version        =   393216
          Text            =   "Anticipo"
-         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "MS Sans Serif"
-            Size            =   12
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-      End
-      Begin MSDataListLib.DataCombo DCNC 
-         Bindings        =   "Pensione.frx":6F91
-         DataSource      =   "AdoNC"
-         Height          =   420
-         Left            =   2310
-         TabIndex        =   65
-         Top             =   1260
-         Width           =   11250
-         _ExtentX        =   19844
-         _ExtentY        =   741
-         _Version        =   393216
-         Text            =   "Nota de Credito"
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "MS Sans Serif"
             Size            =   12
@@ -1637,8 +1593,8 @@ Begin VB.Form FacturasPension
          EndProperty
          Height          =   435
          Left            =   11655
-         TabIndex        =   70
-         Top             =   2100
+         TabIndex        =   66
+         Top             =   1785
          Visible         =   0   'False
          Width           =   2640
       End
@@ -1658,8 +1614,8 @@ Begin VB.Form FacturasPension
          EndProperty
          Height          =   435
          Left            =   11655
-         TabIndex        =   72
-         Top             =   2520
+         TabIndex        =   68
+         Top             =   2205
          Width           =   2640
       End
       Begin VB.Label LblCambio 
@@ -1679,8 +1635,8 @@ Begin VB.Form FacturasPension
          ForeColor       =   &H000000FF&
          Height          =   435
          Left            =   14280
-         TabIndex        =   73
-         Top             =   2520
+         TabIndex        =   69
+         Top             =   2205
          Width           =   2220
       End
       Begin VB.Label Label29 
@@ -1698,49 +1654,9 @@ Begin VB.Form FacturasPension
          EndProperty
          Height          =   330
          Left            =   0
-         TabIndex        =   81
-         Top             =   1785
+         TabIndex        =   77
+         Top             =   1470
          Width           =   2325
-      End
-      Begin VB.Label Label28 
-         BackStyle       =   0  'Transparent
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   " Notas Credito"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   12
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   435
-         Left            =   0
-         TabIndex        =   64
-         Top             =   1260
-         Width           =   2325
-      End
-      Begin VB.Label Label25 
-         Alignment       =   1  'Right Justify
-         BackStyle       =   0  'Transparent
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   "USD "
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   12
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00000000&
-         Height          =   435
-         Left            =   13545
-         TabIndex        =   66
-         Top             =   1260
-         Width           =   750
       End
       Begin VB.Label Label8 
          Alignment       =   1  'Right Justify
@@ -1759,8 +1675,8 @@ Begin VB.Form FacturasPension
          ForeColor       =   &H00000000&
          Height          =   435
          Left            =   11655
-         TabIndex        =   68
-         Top             =   1680
+         TabIndex        =   64
+         Top             =   1365
          Width           =   2640
       End
       Begin VB.Label Label27 
@@ -1952,7 +1868,7 @@ Begin VB.Form FacturasPension
    Begin VB.Image ImgFoto 
       Height          =   1725
       Left            =   10395
-      Picture         =   "Pensione.frx":6FA5
+      Picture         =   "Pensione.frx":6F8A
       Stretch         =   -1  'True
       Top             =   1575
       Width           =   1665
@@ -2547,7 +2463,7 @@ Public Sub Grabar_FA_Pensiones()
       'Actualizamos tipos de pago
        Total_Bancos = Redondear(Val(CCur(TextCheque.Text)), 2)
        Total_Anticipo = Redondear(Val(CCur(TxtSaldoFavor)), 2)
-       SubTotal_NC = Redondear(Val(CCur(TxtNC.Text)), 2)
+'       SubTotal_NC = Redondear(Val(CCur(TxtNC.Text)), 2)
        TotalCajaMN = Redondear(Val(CCur(TxtEfectivo.Text)), 2)
        
        Calculos_Totales_Factura FA
@@ -2572,7 +2488,7 @@ Public Sub Grabar_FA_Pensiones()
    
        SaldoPendiente = 0
        DiarioCaja = ReadSetDataNum("Recibo_No", True, True)
-       If FA.Nuevo_Doc Then FA.Factura = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, True)
+      'If FA.Nuevo_Doc Then FA.Factura = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, True)
        TextoFormaPago = "CONTADO"
        Total_Abonos = TotalCajaMN + Total_Bancos + SubTotal_NC + Total_Anticipo
        FA.T = Pendiente
@@ -2581,7 +2497,7 @@ Public Sub Grabar_FA_Pensiones()
        FA.Cliente = NombreCliente
        TA.Recibi_de = FA.Cliente
        Cta = SinEspaciosIzq(DCBanco)
-       Cta1 = SinEspaciosIzq(DCNC)
+'       Cta1 = SinEspaciosIzq(DCNC)
       'MsgBox Total_Abonos
       .MoveFirst
        Do While Not .EOF
@@ -2673,15 +2589,15 @@ Public Sub Grabar_FA_Pensiones()
        TA.Abono = TotalCajaMN
        Grabar_Abonos TA
      
-      'Forma del Abono SubTotal NC
-       If SubTotal_NC > 0 Then
-          SubTotal_NC = SubTotal_NC - SubTotal_IVA
-          TA.Cta = Cta1
-          TA.Banco = "NOTA DE CREDITO"
-          TA.Cheque = "VENTAS"
-          TA.Abono = SubTotal_NC
-          Grabar_Abonos TA
-       End If
+''      'Forma del Abono SubTotal NC
+''       If SubTotal_NC > 0 Then
+''          SubTotal_NC = SubTotal_NC - SubTotal_IVA
+''          TA.Cta = Cta1
+''          TA.Banco = "NOTA DE CREDITO"
+''          TA.Cheque = "VENTAS"
+''          TA.Abono = SubTotal_NC
+''          Grabar_Abonos TA
+''       End If
       
       'Abonos Anticipados Cta_Ant_Cli
        TA.Cta = SinEspaciosIzq(DCAnticipo)
@@ -2748,7 +2664,7 @@ Public Sub Grabar_FA_Pensiones()
        TextInteres = "0.00"
        TextCheque = "0.00"
        TxtEfectivo = "0.00"
-       TxtNC = "0.00"
+'       TxtNC = "0.00"
        TxtSaldoFavor = "0.00"
        LblSaldo.Caption = "0.00"
        
@@ -2836,10 +2752,10 @@ Dim SiGrabarFactura As Boolean
           ValPagoMax = Val(TxtEfectivo)
           CtaPagoMax = Cta_CajaG
        End If
-       If ValPagoMax <= Val(TxtNC) Then
-          ValPagoMax = Val(TxtNC)
-          CtaPagoMax = SinEspaciosIzq(DCNC)
-       End If
+''       If ValPagoMax <= Val(TxtNC) Then
+''          ValPagoMax = Val(TxtNC)
+''          CtaPagoMax = SinEspaciosIzq(DCNC)
+''       End If
        Cta_Aux = Leer_Cta_Catalogo(CtaPagoMax)
        FA.Tipo_Pago = TipoPago
        
@@ -2847,6 +2763,7 @@ Dim SiGrabarFactura As Boolean
        
        Grabar_FA_Pensiones
        FA.Nuevo_Doc = True
+       FA.Autorizacion = Ninguno
        TextFacturaNo = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, False)
        
        DCLinea.SetFocus
@@ -3202,7 +3119,7 @@ Dim S_SubTotal As String
   TxtSaldoFavor = "0.00"
   TxtEfectivo = "0.00"
   TextCheque = "0.00"
-  TxtNC = "0.00"
+'  TxtNC = "0.00"
   CodigoCliente = Ninguno
   NombreCliente = Ninguno
   DireccionCli = Ninguno
@@ -3236,7 +3153,8 @@ Dim S_SubTotal As String
           SQLMsg3 = "BENEFICIARIO: " & TBeneficiario.Cliente
           
           Label10.Caption = " CLIENTE/ALUMNO (" & FA.TD & ")"
-          Label18.Caption = FA.TD
+          Label20.Caption = " NIC(" & FA.TD & ")"
+          Label18.Caption = FA.TD_R
           TextCI = FA.RUC_CI
           TxtCodigoC = FA.CodigoC
           TxtDirS = FA.Curso
@@ -3378,7 +3296,7 @@ Dim S_SubTotal As String
      FA.TD = "R"
      FA.Cliente = "CONSUMIDOR FINAL"
   End If
-  Label20.Caption = " NIC(" & FA.TD & ")"
+  
   TxtSaldoFavor = Format$(Total_Anticipo, "#,##0.00")
   LblSaldo.Caption = Format$(Total_Saldo_Pendiente, "#,##0.00")
   tempRepresentante = TextRepresentante
@@ -3507,14 +3425,14 @@ Private Sub Form_Activate()
    End If
   End With
   
-  sSQL = "SELECT (Codigo & Space(5) & Cuenta) As NomCuenta, TC " _
-       & "FROM Catalogo_Cuentas " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND Periodo = '" & Periodo_Contable & "' " _
-       & "AND MidStrg(Codigo,1,1) = '4' " _
-       & "AND DG = 'D' " _
-       & "ORDER BY TC,Codigo "
-  SelectDB_Combo DCNC, AdoNC, sSQL, "NomCuenta"
+''  sSQL = "SELECT (Codigo & Space(5) & Cuenta) As NomCuenta, TC " _
+''       & "FROM Catalogo_Cuentas " _
+''       & "WHERE Item = '" & NumEmpresa & "' " _
+''       & "AND Periodo = '" & Periodo_Contable & "' " _
+''       & "AND MidStrg(Codigo,1,1) = '4' " _
+''       & "AND DG = 'D' " _
+''       & "ORDER BY TC,Codigo "
+''  SelectDB_Combo DCNC, AdoNC, sSQL, "NomCuenta"
   
   sSQL = "DELETE * " _
        & "FROM Asiento_F " _
@@ -3617,6 +3535,8 @@ Dim S_SubTotal As String
 End Sub
 
 Private Sub LstMeses_LostFocus()
+Dim TCta_Ventas As String
+
    Factura_No = Val(TextFacturaNo.Text)
    sSQL = "DELETE * " _
         & "FROM Asiento_F " _
@@ -3645,7 +3565,7 @@ Private Sub LstMeses_LostFocus()
                     If Len(.fields("Mensaje")) > 1 Then Producto = Producto & ", " & .fields("Mensaje")
                     Si_No = .fields("IVA")
                     If TipoFactura <> "FA" Then Si_No = False
-                    Cta_Ventas = .fields("Cta_Ventas")
+                    If Len(Cta_Ventas) <= 1 Then TCta_Ventas = .fields("Cta_Ventas") Else TCta_Ventas = Cta_Ventas
                     Real1 = CCur(TrimStrg(MidStrg(Rubros_Facturar(I), 76, 13)))   ' Valor
                    'MsgBox TrimStrg(MidStrg(Rubros_Facturar(I), 89, 13))
                     Real2 = CCur(TrimStrg(MidStrg(Rubros_Facturar(I), 89, 13)))   ' Descuento
@@ -3665,12 +3585,13 @@ Private Sub LstMeses_LostFocus()
                     SetAdoFields "Total_Desc2", Real5
                     SetAdoFields "TOTAL", Real1
                     SetAdoFields "Total_IVA", Real4
-                    SetAdoFields "Cta", Cta_Ventas
+                    SetAdoFields "Cta", TCta_Ventas
                     SetAdoFields "Item", NumEmpresa
                     SetAdoFields "Codigo_Cliente", CodigoCliente
                    'SetAdoFields "RUTA", MidStrg("(" & Grupo_No & ") " & NombreCliente, 1, 50)
                     SetAdoFields "HABIT", Codigo2
                     SetAdoFields "Mes", MiMes
+                    SetAdoFields "NoMes", LetrasMeses(MiMes)
                     SetAdoFields "TICKET", Codigo1
                     SetAdoFields "CodigoU", CodigoUsuario
                     SetAdoFields "A_No", Contador
@@ -4023,23 +3944,23 @@ Private Sub TxtEfectivo_LostFocus()
   LblCambio.Caption = Format$(SaldoDisp, "#,##0.00")
 End Sub
 
-Private Sub TxtNC_GotFocus()
-  MarcarTexto TxtNC
-End Sub
+''Private Sub TxtNC_GotFocus()
+''  MarcarTexto TxtNC
+''End Sub
 
-Private Sub TxtNC_KeyDown(KeyCode As Integer, Shift As Integer)
-  PresionoEnter KeyCode
-End Sub
+''Private Sub TxtNC_KeyDown(KeyCode As Integer, Shift As Integer)
+''  PresionoEnter KeyCode
+''End Sub
 
-Private Sub TxtNC_LostFocus()
-  TextoValido TxtNC, True
-  SubTotal_NC = Redondear(Val(CCur(TxtNC.Text)), 2)
-  TotalCajaMN = FA.Total_MN - Total_Bancos - SubTotal_NC - Total_Anticipo
-  SaldoDisp = FA.Total_MN - TotalCajaMN - Total_Bancos - Total_Anticipo - SubTotal_NC
-  TxtEfectivo = Format$(TotalCajaMN, "#,##0.00")
-  TxtNC.Text = Format$(SubTotal_NC, "#,##0.00")
-  LblCambio.Caption = Format$(SaldoDisp, "#,##0.00")
-End Sub
+''Private Sub TxtNC_LostFocus()
+''  TextoValido TxtNC, True
+''  SubTotal_NC = Redondear(Val(CCur(TxtNC.Text)), 2)
+''  TotalCajaMN = FA.Total_MN - Total_Bancos - SubTotal_NC - Total_Anticipo
+''  SaldoDisp = FA.Total_MN - TotalCajaMN - Total_Bancos - Total_Anticipo - SubTotal_NC
+''  TxtEfectivo = Format$(TotalCajaMN, "#,##0.00")
+''  TxtNC.Text = Format$(SubTotal_NC, "#,##0.00")
+''  LblCambio.Caption = Format$(SaldoDisp, "#,##0.00")
+''End Sub
 
 Private Sub TxtEmail_GotFocus()
   MarcarTexto TxtEmail

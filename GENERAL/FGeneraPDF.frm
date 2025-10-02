@@ -695,7 +695,7 @@ Dim SQL_Server1 As Boolean
 Dim AdoStrCnn1 As String
 Dim RutaPDF As String
 Dim ClaveAccesoSRI As String
-
+Dim AClaveAcceso(6) As String
 
 Dim v1 As Byte
 Dim v2 As Byte
@@ -1016,9 +1016,39 @@ Dim v10 As Date
         TMail.para = ""
         TMail.ListaMail = 255
    Case "SRI"
-        SRI_Obtener_Datos_Comprobantes_Electronicos
-        SRI_Autorizacion.Clave_De_Acceso = "1411202401070216417900110010030000025421234567811"
-        FAutorizaXmlSRI.Show 1
+       '-------------------------------------------------------------------------------------------------------------------
+        'Progreso_Barra.Mensaje_Box = "Enviando el Comprobante al S.R.I."
+        'LblConexion.Caption = LblConexion.Caption & Progreso_Barra.Mensaje_Box & vbCrLf
+        'Progreso_Esperar True
+        'LblConexion.Refresh
+        URLHTTP = "https://erp.diskcoversystem.com/php/comprobantes/SRI/autorizar_sri_visual.php?CERecibidos=true"
+        AClaveAcceso(0) = "0809202501179321263100120010010000001111234567811"
+        AClaveAcceso(1) = "0809202501179321263100120010010000001151234567811"
+        AClaveAcceso(2) = "1908202501179321263100120010010000001001234567811"
+       Cadena = ""
+        For I = 0 To 2
+            URLParams = "XML=" & AClaveAcceso(I)
+            Progreso_Barra.Mensaje_Box = URLParams
+            Progreso_Esperar True
+            TextoError = PostUrlSourceStr(URLHTTP, URLParams)
+            
+            Progreso_Barra.Mensaje_Box = AClaveAcceso(I) & " -> " & TextoError
+            Progreso_Esperar True
+            Cadena = Cadena & Progreso_Barra.Mensaje_Box & vbCrLf
+            '-------------------------------------------------------------------------------------------------------------------
+            'Le indicamos el ListView donde se listarán los archivos
+            ' Clipboard.Clear
+            ' Clipboard.SetText URLHTTP & vbCrLf & URLParams & vbCrLf & String(80, "-") & vbCrLf & "Resultado: " & MensajeError
+        Next I
+        MsgBox "Desktop Test: " & URLHTTP & vbCrLf & "Respuesta: " & vbCrLf & Cadena
+        
+        MsgBox "Desktop Test:"
+''           .Estado_SRI = MensajeError
+''            If MensajeError = "Autorizado" Then
+       
+'''        SRI_Obtener_Datos_Comprobantes_Electronicos
+'''        SRI_Autorizacion.Clave_De_Acceso = "1411202401070216417900110010030000025421234567811"
+'''        FAutorizaXmlSRI.Show 1
         'MsgBox SRI_Autorizacion.Estado_SRI & vbCrLf & SRI_Autorizacion.Error_SRI
 '''        URLHTTP = "https://erp.diskcoversystem.com/~diskcover/php/comprobantes/SRI/autorizar_sri_visual.php?AutorizarXMLOnline=true"
 '''        URLParams = "XML=1311202401070216417900110010030000025301234567811.xml"

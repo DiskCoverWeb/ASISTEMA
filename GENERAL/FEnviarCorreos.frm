@@ -426,7 +426,7 @@ Dim RutaGeneraFile As String
        
        TMail.Adjunto = ""
        If ContFile >= 0 Then
-         'MsgBox UBound(DirFiles)
+         'MsgBox "Desktop Test: " & UBound(DirFiles)
           For I = 0 To UBound(DirFiles)
               Cursor_Img
               TMail.Adjunto = TMail.Adjunto & DirFilesFTP(I) & ";"
@@ -462,7 +462,7 @@ Dim RutaGeneraFile As String
        
        If InStrRev(TMail.para, ";") > 0 Then TMail.para = MidStrg(TMail.para, 1, Len(TMail.para) - 1)
       ' If ContFile = 0 Then TMail.Adjunto = TMail.Adjunto & ";"
-      'MsgBox ContFile & vbCrLf & "Archivos Subidos"
+      'MsgBox "Desktop Test: " & ContFile & vbCrLf & "Archivos Subidos"
       '----------------------------------------------------------------------------------------------
       'Enviar el mail al servidor IMAP
        'TMail.Adjunto = ""
@@ -482,28 +482,31 @@ Dim RutaGeneraFile As String
       'Clipboard.Clear
       'Clipboard.SetText Si_No & vbCrLf & URLParams & vbCrLf & TMail.MensajeHTML
       'MsgBox Si_No & vbCrLf & URLParams & vbCrLf & TMail.MensajeHTML
-      'MsgBox Si_No & vbCrLf & TMail.Adjunto
+      'MsgBox "Desktop Test: " & Si_No & vbCrLf & TMail.Adjunto
       '----------------------------------------------------------------------------------------------
        If Si_No Then
           Cursor_Img
-          EMailPara = TMail.para
-          CaracPiloto = InStr(EMailPara, ";")
-          If CaracPiloto > 0 Then
-             Do While Len(EMailPara) > 1 And CaracPiloto > 0
-                File = MidStrg(EMailPara, 1, CaracPiloto - 1)
-                Control_Procesos "EM", "Email: " & TMail.de & " => " & File, "Asunto: " & TMail.Asunto
-                EMailPara = MidStrg(EMailPara, CaracPiloto + 1, Len(EMailPara))
-                CaracPiloto = InStr(EMailPara, ";")
-                Cursor_Img
-             Loop
-             Control_Procesos "EM", "Email: " & TMail.de & " => " & EMailPara, "Asunto: " & TMail.Asunto
-          Else
-             Control_Procesos "EM", "Email: " & TMail.de & " => " & EMailPara, "Asunto: " & TMail.Asunto
-          End If
+'''          EMailPara = TMail.para
+'''          CaracPiloto = InStr(EMailPara, ";")
+'''          If CaracPiloto > 0 Then
+'''             Do While Len(EMailPara) > 1 And CaracPiloto > 0
+'''                File = MidStrg(EMailPara, 1, CaracPiloto - 1)
+'''               'MsgBox "Desktop Test: " & "Email: " & TMail.de & " => " & File & ", Asunto: " & TMail.Asunto
+'''                Control_Procesos "EM", "Email: " & TMail.de & " => " & File, "Asunto: " & TMail.Asunto
+'''                EMailPara = MidStrg(EMailPara, CaracPiloto + 1, Len(EMailPara))
+'''                CaracPiloto = InStr(EMailPara, ";")
+'''                Cursor_Img
+'''             Loop
+'''             Control_Procesos "EM", "Email: " & TMail.de & " => " & EMailPara, "Asunto: " & TMail.Asunto
+'''          Else
+'''             Control_Procesos "EM", "Email: " & TMail.de & " => " & EMailPara, "Asunto: " & TMail.Asunto
+'''          End If
+          Control_Procesos "EM", "Email de: " & TMail.de & " => " & TMail.para, "Asunto: " & TMail.Asunto
        Else
           Control_Procesos "Err", "Email: " & TMail.de & " => " & TMail.para, "Asunto(Error): " & TMail.Asunto
        End If
        Cursor_Img
+      'MsgBox "Desktop Test: Eliminando..."
       'Eliminando archivos que se fueron con los correos
        If ContFile >= 0 Then
          'Le indicamos el ListView donde se listarán los archivos

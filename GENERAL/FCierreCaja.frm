@@ -14,8 +14,8 @@ Begin VB.Form FCierreCaja
    ClientWidth     =   11880
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   8505
-   ScaleWidth      =   11880
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    WindowState     =   2  'Maximized
    Begin ComctlLib.Toolbar TbarCierre 
       Align           =   1  'Align Top
@@ -23,8 +23,8 @@ Begin VB.Form FCierreCaja
       Left            =   0
       TabIndex        =   4
       Top             =   0
-      Width           =   11880
-      _ExtentX        =   20955
+      Width           =   28560
+      _ExtentX        =   50377
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -260,48 +260,59 @@ Begin VB.Form FCierreCaja
       _ExtentY        =   20955
       _Version        =   393216
       Tabs            =   6
-      Tab             =   5
       TabsPerRow      =   6
       TabHeight       =   520
       BackColor       =   12632319
       TabCaption(0)   =   "&1.- VENTAS/ABONOS/ANTICIPOS"
       TabPicture(0)   =   "FCierreCaja.frx":001A
-      Tab(0).ControlEnabled=   0   'False
+      Tab(0).ControlEnabled=   -1  'True
       Tab(0).Control(0)=   "Label2"
+      Tab(0).Control(0).Enabled=   0   'False
       Tab(0).Control(1)=   "LabelAbonos"
+      Tab(0).Control(1).Enabled=   0   'False
       Tab(0).Control(2)=   "LabelCheque"
+      Tab(0).Control(2).Enabled=   0   'False
       Tab(0).Control(3)=   "Label4"
+      Tab(0).Control(3).Enabled=   0   'False
       Tab(0).Control(4)=   "AdoCxC"
+      Tab(0).Control(4).Enabled=   0   'False
       Tab(0).Control(5)=   "AdoVentas"
+      Tab(0).Control(5).Enabled=   0   'False
       Tab(0).Control(6)=   "DGVentas"
+      Tab(0).Control(6).Enabled=   0   'False
       Tab(0).Control(7)=   "DGCxC"
+      Tab(0).Control(7).Enabled=   0   'False
       Tab(0).ControlCount=   8
       TabCaption(1)   =   "&2.- INVENTARIO"
       TabPicture(1)   =   "FCierreCaja.frx":0036
       Tab(1).ControlEnabled=   0   'False
       Tab(1).Control(0)=   "AdoInv"
+      Tab(1).Control(0).Enabled=   0   'False
       Tab(1).Control(1)=   "DGInv"
+      Tab(1).Control(1).Enabled=   0   'False
       Tab(1).Control(2)=   "DGProductos"
+      Tab(1).Control(2).Enabled=   0   'False
       Tab(1).Control(3)=   "DGCierres"
+      Tab(1).Control(3).Enabled=   0   'False
       Tab(1).ControlCount=   4
       TabCaption(2)   =   "&3.- CONTABILIDAD"
       TabPicture(2)   =   "FCierreCaja.frx":0052
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "DGAsiento1"
-      Tab(2).Control(1)=   "DGAsiento"
-      Tab(2).Control(2)=   "DGAnticipos"
-      Tab(2).Control(3)=   "LabelHaber1"
-      Tab(2).Control(4)=   "LabelDebe1"
-      Tab(2).Control(5)=   "Label15"
-      Tab(2).Control(6)=   "LabelHaber"
+      Tab(2).Control(0)=   "Label13"
+      Tab(2).Control(1)=   "LblDiferencia1"
+      Tab(2).Control(2)=   "LblConcepto1"
+      Tab(2).Control(3)=   "LblConcepto"
+      Tab(2).Control(4)=   "LblDiferencia"
+      Tab(2).Control(5)=   "Label1"
+      Tab(2).Control(6)=   "Label11"
       Tab(2).Control(7)=   "LabelDebe"
-      Tab(2).Control(8)=   "Label11"
-      Tab(2).Control(9)=   "Label1"
-      Tab(2).Control(10)=   "LblDiferencia"
-      Tab(2).Control(11)=   "LblConcepto"
-      Tab(2).Control(12)=   "LblConcepto1"
-      Tab(2).Control(13)=   "LblDiferencia1"
-      Tab(2).Control(14)=   "Label13"
+      Tab(2).Control(8)=   "LabelHaber"
+      Tab(2).Control(9)=   "Label15"
+      Tab(2).Control(10)=   "LabelDebe1"
+      Tab(2).Control(11)=   "LabelHaber1"
+      Tab(2).Control(12)=   "DGAnticipos"
+      Tab(2).Control(13)=   "DGAsiento"
+      Tab(2).Control(14)=   "DGAsiento1"
       Tab(2).ControlCount=   15
       TabCaption(3)   =   "&4.- ANULADAS"
       TabPicture(3)   =   "FCierreCaja.frx":006E
@@ -311,24 +322,24 @@ Begin VB.Form FCierreCaja
       TabCaption(4)   =   "&5.- REPORTE DE AUDITORIA"
       TabPicture(4)   =   "FCierreCaja.frx":008A
       Tab(4).ControlEnabled=   0   'False
-      Tab(4).Control(0)=   "Label9"
-      Tab(4).Control(1)=   "Label12"
-      Tab(4).Control(2)=   "Label14"
-      Tab(4).Control(3)=   "Label18"
-      Tab(4).Control(4)=   "LblConIVA"
-      Tab(4).Control(5)=   "LblSinIVA"
-      Tab(4).Control(6)=   "LblDescuento"
-      Tab(4).Control(7)=   "LblIVA"
-      Tab(4).Control(8)=   "Label7"
-      Tab(4).Control(9)=   "LblServicio"
-      Tab(4).Control(10)=   "Label16"
-      Tab(4).Control(11)=   "LblTotalFacturado"
-      Tab(4).Control(12)=   "AdoSRI"
-      Tab(4).Control(13)=   "DGSRI"
+      Tab(4).Control(0)=   "DGSRI"
+      Tab(4).Control(1)=   "AdoSRI"
+      Tab(4).Control(2)=   "LblTotalFacturado"
+      Tab(4).Control(3)=   "Label16"
+      Tab(4).Control(4)=   "LblServicio"
+      Tab(4).Control(5)=   "Label7"
+      Tab(4).Control(6)=   "LblIVA"
+      Tab(4).Control(7)=   "LblDescuento"
+      Tab(4).Control(8)=   "LblSinIVA"
+      Tab(4).Control(9)=   "LblConIVA"
+      Tab(4).Control(10)=   "Label18"
+      Tab(4).Control(11)=   "Label14"
+      Tab(4).Control(12)=   "Label12"
+      Tab(4).Control(13)=   "Label9"
       Tab(4).ControlCount=   14
       TabCaption(5)   =   "&6.- REPORTE DEL BANCO"
       TabPicture(5)   =   "FCierreCaja.frx":00A6
-      Tab(5).ControlEnabled=   -1  'True
+      Tab(5).ControlEnabled=   0   'False
       Tab(5).Control(0)=   "DCBanco"
       Tab(5).Control(0).Enabled=   0   'False
       Tab(5).Control(1)=   "DGBanco"
@@ -337,7 +348,7 @@ Begin VB.Form FCierreCaja
       Begin MSDataGridLib.DataGrid DGCxC 
          Bindings        =   "FCierreCaja.frx":00C2
          Height          =   1800
-         Left            =   -74895
+         Left            =   105
          TabIndex        =   15
          ToolTipText     =   "<Ctrl+P> Protestar Cheques"
          Top             =   5880
@@ -405,7 +416,7 @@ Begin VB.Form FCierreCaja
       Begin MSDataGridLib.DataGrid DGVentas 
          Bindings        =   "FCierreCaja.frx":00D7
          Height          =   3090
-         Left            =   -74895
+         Left            =   105
          TabIndex        =   1
          Top             =   420
          Width           =   14160
@@ -940,7 +951,7 @@ Begin VB.Form FCierreCaja
       Begin MSDataGridLib.DataGrid DGBanco 
          Bindings        =   "FCierreCaja.frx":019A
          Height          =   4950
-         Left            =   105
+         Left            =   -74895
          TabIndex        =   47
          Top             =   840
          Width           =   19230
@@ -1006,7 +1017,7 @@ Begin VB.Form FCierreCaja
       End
       Begin MSAdodcLib.Adodc AdoVentas 
          Height          =   330
-         Left            =   -74895
+         Left            =   105
          Top             =   3990
          Width           =   3375
          _ExtentX        =   5953
@@ -1052,7 +1063,7 @@ Begin VB.Form FCierreCaja
       End
       Begin MSAdodcLib.Adodc AdoCxC 
          Height          =   330
-         Left            =   -74895
+         Left            =   105
          Top             =   7770
          Width           =   3480
          _ExtentX        =   6138
@@ -1146,7 +1157,7 @@ Begin VB.Form FCierreCaja
          Bindings        =   "FCierreCaja.frx":01B1
          DataSource      =   "AdoCtaBanco"
          Height          =   315
-         Left            =   105
+         Left            =   -74895
          TabIndex        =   48
          Top             =   420
          Width           =   6525
@@ -1761,7 +1772,7 @@ Begin VB.Form FCierreCaja
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   -71325
+         Left            =   3675
          TabIndex        =   14
          Top             =   7770
          Width           =   1590
@@ -1781,7 +1792,7 @@ Begin VB.Form FCierreCaja
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   -69750
+         Left            =   5250
          TabIndex        =   13
          Top             =   7770
          Width           =   1695
@@ -1802,7 +1813,7 @@ Begin VB.Form FCierreCaja
          EndProperty
          ForeColor       =   &H00000000&
          Height          =   330
-         Left            =   -69855
+         Left            =   5145
          TabIndex        =   3
          Top             =   3990
          Width           =   1695
@@ -1820,7 +1831,7 @@ Begin VB.Form FCierreCaja
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   -71430
+         Left            =   3570
          TabIndex        =   2
          Top             =   3990
          Width           =   1590

@@ -9,11 +9,11 @@ Begin VB.Form FImporta
    ClientHeight    =   9180
    ClientLeft      =   60
    ClientTop       =   345
-   ClientWidth     =   18645
+   ClientWidth     =   15960
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
    ScaleHeight     =   9180
-   ScaleWidth      =   18645
+   ScaleWidth      =   15960
    WindowState     =   2  'Maximized
    Begin VB.ListBox LstStatud 
       Appearance      =   0  'Flat
@@ -2796,6 +2796,9 @@ Dim Tot_Propinas As Currency
                   Case 4: TA.AutorizacionR = Dato_Campo(.fields(IdField))
                   Case 5: TA.Abono = Redondear(Val(Dato_Campo(.fields(IdField))), 2)
                   Case 6: Codigo = Dato_Campo(.fields(IdField))
+                          TA.Serie_R = MidStrg(Codigo, 1, 3) & MidStrg(Codigo, 4, 3)
+                          TA.Secuencial_R = Val(MidStrg(Codigo, 7, Len(Codigo)))
+                          
                           TA.Establecimiento = MidStrg(Codigo, 1, 3)
                           TA.Emision = MidStrg(Codigo, 4, 3)
                           CompRet = Val(MidStrg(Codigo, 7, Len(Codigo)))
@@ -2805,7 +2808,6 @@ Dim Tot_Propinas As Currency
                   Case 9: TA.Cta = Dato_Campo(.fields(IdField))
                 End Select
             Next IdField
-           'MsgBox TA.TP & vbCrLf & TA.Serie & vbCrLf & TA.Factura
             If Len(TA.Fecha) >= 10 And Len(Dato_Campo(.fields(9))) >= 2 Then
                sSQL = "DELETE * " _
                     & "FROM Trans_Abonos " _
@@ -2817,7 +2819,18 @@ Dim Tot_Propinas As Currency
                     & "AND Abono = " & TA.Abono & " "
                If Len(TA.Autorizacion) > 1 Then sSQL = sSQL & "AND Autorizacion = '" & TA.Autorizacion & "' "
                Ejecutar_SQL_SP sSQL
-              
+               
+               TA.Porcentaje = 0
+               If Len(CodRet) > 1 And Len(TA.Serie_R) = 6 Then
+                  sSQL = "SELECT Porcentaje " _
+                       & "FROM Tipo_Concepto_Retencion " _
+                       & "WHERE Codigo = '" & CodRet & "' " _
+                       & "AND Fecha_Inicio <= #" & BuscarFecha(TA.Fecha) & "# " _
+                       & "AND Fecha_Final >= #" & BuscarFecha(TA.Fecha) & "# "
+                  Select_Adodc AdoAux, sSQL
+                  If AdoAux.Recordset.RecordCount > 0 Then TA.Porcentaje = AdoAux.Recordset.fields("Porcentaje")
+               End If
+               
                If TA.Banco = "" Then TA.Banco = Ninguno
                TA.CodigoC = Ninguno
                sSQL = "SELECT * " _
@@ -2830,6 +2843,9 @@ Dim Tot_Propinas As Currency
                If Len(TA.Autorizacion) > 1 Then sSQL = sSQL & "AND Autorizacion = '" & TA.Autorizacion & "' "
                sSQL = sSQL & "ORDER BY Autorizacion "
                Select_Adodc AdoAux, sSQL
+               
+'            MsgBox TA.TP & vbCrLf & TA.Serie & vbCrLf & TA.Factura & vbCrLf & vbCrLf & TA.Serie_R & vbCrLf & TA.AutorizacionR & vbCrLf & TA.Secuencial_R & vbCrLf & CodRet & vbCrLf & TA.Porcentaje
+               
                If AdoAux.Recordset.RecordCount > 0 Then
                   TA.CodigoC = AdoAux.Recordset.fields("CodigoC")
                   TA.Autorizacion = AdoAux.Recordset.fields("Autorizacion")
@@ -2838,18 +2854,15 @@ Dim Tot_Propinas As Currency
                     Case "RIB"
                          TA.Banco = "RETENCION IVA BIENES"
                          TA.Cheque = CompRet
-                         TA.Porcentaje = 0
-                         Grabar_Abonos_Retenciones TA
+                         Grabar_Abonos TA
                     Case "RIS"
                          TA.Banco = "RETENCION IVA SERVICIO"
                          TA.Cheque = CompRet
-                         TA.Porcentaje = 0
-                         Grabar_Abonos_Retenciones TA
+                         Grabar_Abonos TA
                     Case "RF"
                          TA.Banco = "RETENCION FUENTE - " & CodRet
                          TA.Cheque = CompRet
-                         TA.Porcentaje = 0
-                         Grabar_Abonos_Retenciones TA
+                         Grabar_Abonos TA
                     Case "EFE"
                          TA.Banco = "EFECTIVO MN"
                          Grabar_Abonos TA

@@ -45,7 +45,7 @@ Public Function Leer_Datos_Cliente_FA(TFA As Tipo_Facturas) As Tipo_Facturas
         .Razon_Social = TBeneficiario.Representante
         .TD = TBeneficiario.TD
         .TB = TBeneficiario.TD_Rep
-       '.TD = TBeneficiario.TD_Rep
+        .TD_R = TBeneficiario.TD_Rep
         .RUC_CI = TBeneficiario.RUC_CI_Rep
         .CI_RUC = TBeneficiario.CI_RUC
         .TelefonoC = TBeneficiario.Telefono1
@@ -1493,545 +1493,74 @@ Dim Total_Mod_11 As Long
 End Function
 
 Public Sub Grabar_Factura(TFA As Tipo_Facturas, VerFactura As Boolean, Optional NoRegTrans As Boolean)
-Dim AdoDBFA As ADODB.Recordset
-Dim AdoDBReceta As ADODB.Recordset
-Dim sSQLHab As String
-Dim No_Mes As Integer
-Dim No_Ano As String
-
   RatonReloj
- 'Averiguamos si la Factura esta a nombre del Representante
  'TFA.CodigoC = Parameto de entrada
-  TFA = Leer_Datos_Cliente_FA(TFA)
-  Orden_No = 0
-  Total_Desc_ME = 0
-  If Len(TFA.Tipo_Pago) <= 1 Then TFA.Tipo_Pago = "01"
+ 
+  'TFA = Leer_Datos_Cliente_FA(TFA)
+  
   TFA.T = Pendiente
-  TFA.SubTotal = 0
-  TFA.Con_IVA = 0
-  TFA.Sin_IVA = 0
-  TFA.Total_IVA = 0
-  TFA.Total_MN = 0
-  TFA.Total_ME = 0
-  TFA.Descuento = 0
-  TFA.Descuento2 = 0
-  TFA.Descuento_0 = 0
-  TFA.Descuento_X = 0
-  TFA.Servicio = 0
   If TFA.TC = "FR" Then TFA.TC = "FA"
   If Len(TFA.Autorizacion) >= 13 Then TMail.TipoDeEnvio = "CE"
   Grabar_Factura_SP TFA
-  
-  sSQL = "SELECT " & Full_Fields("Asiento_F") & " " _
-       & "FROM Asiento_F " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND CodigoU = '" & CodigoUsuario & "' " _
-       & "ORDER BY A_No "
-  Select_AdoDB AdoDBFA, sSQL
-  With AdoDBFA
-   If .RecordCount > 0 Then
-       Do While Not .EOF
-          If .fields("Total_IVA") > 0 Then
-             TFA.Descuento_X = TFA.Descuento_X + .fields("Total_Desc") + .fields("Total_Desc2")
-             TFA.Con_IVA = TFA.Con_IVA + .fields("TOTAL")
-          Else
-             TFA.Descuento_0 = TFA.Descuento_0 + .fields("Total_Desc") + .fields("Total_Desc2")
-             TFA.Sin_IVA = TFA.Sin_IVA + .fields("TOTAL")
-          End If
-          TFA.Total_IVA = TFA.Total_IVA + .fields("Total_IVA")
-          TFA.Descuento = TFA.Descuento + .fields("Total_Desc")
-          TFA.Descuento2 = TFA.Descuento2 + .fields("Total_Desc2")
-          TFA.Servicio = TFA.Servicio + .fields("SERVICIO")
-          
-          If .fields("HABIT") <> Ninguno Then
-              sSQLHab = "DELETE * " _
-                      & "FROM Trans_Pedidos " _
-                      & "WHERE Item = '" & NumEmpresa & "' " _
-                      & "AND Periodo = '" & Periodo_Contable & "' " _
-                      & "AND No_Hab = '" & .fields("HABIT") & "' "
-              Ejecutar_SQL_SP sSQLHab
-          End If
-            
-          If .fields("Numero") <> 0 Then
-              sSQLHab = "DELETE * " _
-                      & "FROM Trans_Kardex " _
-                      & "WHERE Item = '" & NumEmpresa & "' " _
-                      & "AND Periodo = '" & Periodo_Contable & "' " _
-                      & "AND TC = 'OP' " _
-                      & "AND Factura = " & .fields("Numero") & " "
-              Ejecutar_SQL_SP sSQLHab
-              Orden_No = .fields("Numero")
-          End If
-         .MoveNext
-       Loop
-          
-      'If Total_Desc_ME > 0 Then Total_Desc = Total_Desc_ME
-       TFA.Total_IVA = Redondear(TFA.Total_IVA, 2)
-       TFA.Con_IVA = Redondear(TFA.Con_IVA, 2)
-       TFA.Sin_IVA = Redondear(TFA.Sin_IVA, 2)
-       TFA.Servicio = Redondear(TFA.Servicio, 2)
-       TFA.SubTotal = TFA.Sin_IVA + TFA.Con_IVA - TFA.Descuento - TFA.Descuento2
-       TFA.Total_MN = TFA.Sin_IVA + TFA.Con_IVA - TFA.Descuento - TFA.Descuento2 + TFA.Total_IVA + TFA.Servicio
-       TFA.Saldo_MN = TFA.Total_MN
-      .MoveFirst
-      'Averiguamos si tenemos facturas de años anteriores
-       If TFA.Cta_CxP <> TFA.Cta_CxP_Anterior Then
-          Do While Not .EOF
-             If IsNumeric(.fields("TICKET")) Then
-                If Val(.fields("TICKET")) <> Year(TFA.Fecha) Then TFA.Cta_CxP = TFA.Cta_CxP_Anterior
-               .MoveLast
-             End If
-            .MoveNext
-          Loop
-         .MoveFirst
-       End If
-       Cta_Cobrar = TFA.Cta_CxP
-       TFA.Hora = Format$(Time, FormatoTimes)
-       
-      'Totales de la Factura/Nota de Venta
-       If TFA.TC = "PV" Then
-          Ln_No = 1
-          Do While Not .EOF
-             SetAdoAddNew "Trans_Ticket"
-             SetAdoFields "TC", TFA.TC
-             SetAdoFields "Ticket", TFA.Factura
-             SetAdoFields "CodigoC", TFA.CodigoC
-             SetAdoFields "Fecha", TFA.Fecha
-             SetAdoFields "Efectivo", TFA.Efectivo
-             SetAdoFields "Codigo_Inv", .fields("CODIGO")
-             SetAdoFields "Cantidad", .fields("CANT")
-             SetAdoFields "Precio", .fields("PRECIO")
-             SetAdoFields "Total", .fields("TOTAL")
-             SetAdoFields "Descuento", .fields("Total_Desc") + .fields("Total_Desc2")
-             SetAdoFields "Producto", MidStrg(.fields("PRODUCTO"), 1, 130)
-             SetAdoFields "CodigoU", CodigoUsuario
-             SetAdoFields "Periodo", Periodo_Contable
-             SetAdoFields "Hora", TFA.Hora
-             SetAdoFields "Item", NumEmpresa
-             SetAdoUpdate
-            .MoveNext
-          Loop
+  With TFA
+       Cadena = ""
+      .Hora = Format$(Time, FormatoTimes)
+       If Not .Existe_Cliente Then Cadena = Cadena & "No se puedo grabar porque no existe Beneficiario" & vbCrLf
+       If .Cantidad_Rubros = 0 Then Cadena = Cadena & "No se puedo grabar porque no existe rubros para facturar" & vbCrLf
+       If .GrabadoExitoso Then
+           Control_Procesos "G", "Grabar " & TFA.TC & " No. " & TFA.Serie & "-" & Format$(TFA.Factura, "000000000") & " [" & TFA.Hora & "]"
        Else
-         'Grabamos el numero de factura
-          RatonReloj
-          SetAdoAddNew "Facturas"
-          SetAdoFields "T", TFA.T
-          SetAdoFields "TC", TFA.TC
-          SetAdoFields "TDT", FA.TDT
-          SetAdoFields "Serie", TFA.Serie
-          SetAdoFields "Factura", TFA.Factura
-          SetAdoFields "Autorizacion", TFA.Autorizacion
-          
-          SetAdoFields "ME", TFA.ME_
-          SetAdoFields "SP", TFA.SP
-          SetAdoFields "Porc_IVA", TFA.Porc_IVA
-          SetAdoFields "CodigoC", TFA.CodigoC
-          SetAdoFields "CodigoB", TFA.CodigoB
-          SetAdoFields "CodigoA", TFA.CodigoA
-          SetAdoFields "CodigoDr", TFA.CodigoDr
-          SetAdoFields "Cod_Ejec", TFA.Cod_Ejec
-          SetAdoFields "Fecha", TFA.Fecha
-          SetAdoFields "Fecha_C", TFA.Fecha_C
-          SetAdoFields "Fecha_V", TFA.Fecha_V
-          SetAdoFields "Cod_CxC", TFA.Cod_CxC
-          SetAdoFields "Forma_Pago", TFA.Forma_Pago
-          SetAdoFields "Servicio", TFA.Servicio
-          SetAdoFields "Sin_IVA", TFA.Sin_IVA
-          SetAdoFields "Con_IVA", TFA.Con_IVA
-          SetAdoFields "SubTotal", TFA.Sin_IVA + TFA.Con_IVA
-          SetAdoFields "Descuento", TFA.Descuento
-          SetAdoFields "Descuento2", TFA.Descuento2
-          SetAdoFields "Desc_0", TFA.Descuento_0    ' Descuentos por el detalle de la factura
-          SetAdoFields "Desc_X", TFA.Descuento_X
-          SetAdoFields "IVA", TFA.Total_IVA
-          SetAdoFields "Total_MN", TFA.Total_MN
-          SetAdoFields "Total_ME", TFA.Total_ME
-          SetAdoFields "Saldo_MN", TFA.Saldo_MN
-          SetAdoFields "Saldo_ME", TFA.Saldo_ME
-          SetAdoFields "Porc_C", TFA.Porc_C
-          SetAdoFields "Comision", TFA.Comision
-          SetAdoFields "SubCta", TFA.SubCta
-          SetAdoFields "Tipo_Pago", TFA.Tipo_Pago
-          SetAdoFields "Propina", TFA.Propina
-          SetAdoFields "Efectivo", TFA.Efectivo
-          SetAdoFields "Cotizacion", TFA.Cotizacion
-          SetAdoFields "Observacion", TFA.Observacion
-          SetAdoFields "Nota", TFA.Nota
-          SetAdoFields "Clave_Acceso", TFA.ClaveAcceso
-          SetAdoFields "Cta_CxP", TFA.Cta_CxP
-          SetAdoFields "Cta_Venta", TFA.Cta_Venta
-          SetAdoFields "Hora", TFA.Hora
-          SetAdoFields "Vencimiento", TFA.Vencimiento
-          SetAdoFields "Imp_Mes", TFA.Imp_Mes
-          SetAdoFields "Orden_Compra", TFA.Orden_Compra
-          SetAdoFields "Gavetas", TFA.Gavetas
-          SetAdoFields "CodigoU", CodigoUsuario
-          SetAdoFields "Periodo", Periodo_Contable
-          SetAdoFields "Item", NumEmpresa
-          
-         'MsgBox TFA.Razon_Social
-          SetAdoFields "Razon_Social", TFA.Razon_Social
-          SetAdoFields "RUC_CI", TFA.RUC_CI
-          SetAdoFields "TB", TFA.TB
-          SetAdoFields "Telefono_RS", TFA.TelefonoC
-          SetAdoFields "Direccion_RS", TFA.DireccionC
-          SetAdoUpdate
-          
-          
-'''          Cadena = TFA.CodigoC & vbCrLf & TFA.Razon_Social & vbCrLf & TFA.TB & vbCrLf & TFA.RUC_CI & vbCrLf & TFA.Fecha & "-" & TFA.TC & "-" & TFA.Serie & "-" & TFA.Factura
-'''          Clipboard.Clear
-'''          Clipboard.SetText Cadena
-'''          MsgBox Cadena
-          
-         'Datos de la Guia de Remision
-          If TFA.Remision > 0 Then
-             SetAdoAddNew "Facturas_Auxiliares"
-             SetAdoFields "TC", TFA.TC
-             SetAdoFields "Serie", TFA.Serie
-             SetAdoFields "Factura", TFA.Factura
-             SetAdoFields "Autorizacion", TFA.Autorizacion
-             SetAdoFields "Fecha", TFA.Fecha
-             SetAdoFields "CodigoC", TFA.CodigoC
-             SetAdoFields "Remision", TFA.Remision
-             SetAdoFields "Comercial", TFA.Comercial
-             SetAdoFields "CIRUC_Comercial", TFA.CIRUCComercial
-             SetAdoFields "Entrega", TFA.Entrega
-             SetAdoFields "CIRUC_Entrega", TFA.CIRUCEntrega
-             SetAdoFields "CiudadGRI", TFA.CiudadGRI
-             SetAdoFields "CiudadGRF", TFA.CiudadGRF
-             SetAdoFields "Placa_Vehiculo", TFA.Placa_Vehiculo
-             SetAdoFields "FechaGRE", TFA.FechaGRE
-             SetAdoFields "FechaGRI", TFA.FechaGRI
-             SetAdoFields "FechaGRF", TFA.FechaGRF
-             SetAdoFields "Pedido", TFA.Pedido
-             SetAdoFields "Zona", TFA.Zona
-             SetAdoFields "Orden_Compra", TFA.Orden_Compra
-             SetAdoFields "Serie_GR", TFA.Serie_GR
-             SetAdoFields "Autorizacion_GR", TFA.Autorizacion_GR
-             SetAdoFields "Lugar_Entrega", TFA.Lugar_Entrega
-             SetAdoFields "CodigoU", CodigoUsuario
-             SetAdoFields "Periodo", Periodo_Contable
-             SetAdoFields "Item", NumEmpresa
-             SetAdoUpdate
-          End If
-         'Detalle de la Factura/Nota de Venta
-         .MoveFirst
-          Habitacion_No = Ninguno
-          Do While Not .EOF
-             No_Mes = 0
-             If .fields("Mes") = Ninguno Then No_Mes = Month(TFA.Fecha) Else No_Mes = LetrasMeses(.fields("Mes"))
-             SetAdoAddNew "Detalle_Factura"
-             SetAdoFields "T", TFA.T
-             SetAdoFields "TC", TFA.TC
-             SetAdoFields "SP", TFA.SP
-             SetAdoFields "Porc_IVA", TFA.Porc_IVA
-             SetAdoFields "Factura", TFA.Factura
-             SetAdoFields "CodigoC", TFA.CodigoC
-             SetAdoFields "CodigoB", TFA.CodigoB
-             SetAdoFields "CodigoA", TFA.CodigoA
-             SetAdoFields "Fecha", TFA.Fecha
-             SetAdoFields "CodigoL", TFA.Cod_CxC
-             SetAdoFields "Serie", TFA.Serie
-             SetAdoFields "Autorizacion", TFA.Autorizacion
-             SetAdoFields "No_Hab", .fields("HABIT")
-             SetAdoFields "Codigo", .fields("CODIGO")
-             SetAdoFields "Cantidad", .fields("CANT")
-             SetAdoFields "Reposicion", .fields("REP")
-             SetAdoFields "Precio", .fields("PRECIO")
-             SetAdoFields "Precio2", .fields("PRECIO2")
-             SetAdoFields "Total", .fields("TOTAL")
-             SetAdoFields "Total_Desc", .fields("Total_Desc")
-             SetAdoFields "Total_Desc2", .fields("Total_Desc2")
-             SetAdoFields "Total_IVA", .fields("Total_IVA")
-             SetAdoFields "Producto", .fields("PRODUCTO")
-             SetAdoFields "Cod_Ejec", .fields("Cod_Ejec")
-             SetAdoFields "Porc_C", .fields("Porc_C")
-             SetAdoFields "Ruta", .fields("RUTA")
-             SetAdoFields "Corte", .fields("CORTE")
-             SetAdoFields "Ticket", .fields("TICKET")
-             SetAdoFields "Mes", MesesLetras(No_Mes)
-             SetAdoFields "Mes_No", No_Mes
-             SetAdoFields "CodBodega", .fields("CodBod")
-             SetAdoFields "CodMarca", .fields("CodMar")
-             SetAdoFields "Codigo_Barra", .fields("COD_BAR")
-             SetAdoFields "Orden_No", .fields("Numero")
-             SetAdoFields "CodigoU", CodigoUsuario
-             SetAdoFields "Periodo", Periodo_Contable
-             SetAdoFields "Item", NumEmpresa
-             SetAdoFields "Fecha_IN", .fields("Fecha_IN")
-             SetAdoFields "Fecha_OUT", .fields("Fecha_OUT")
-             SetAdoFields "Cant_Hab", .fields("Cant_Hab")
-             SetAdoFields "Tipo_Hab", .fields("Tipo_Hab")
-             SetAdoFields "Fecha_V", .fields("Fecha_V")
-             SetAdoFields "Lote_No", .fields("Lote_No")
-             SetAdoFields "Fecha_Fab", .fields("Fecha_Fab")
-             SetAdoFields "Fecha_Exp", .fields("Fecha_Exp")
-            'SetAdoFields "Reg_Sanitario", .Fields("Reg_Sanitario")
-             SetAdoFields "Procedencia", .fields("Procedencia")
-             SetAdoFields "Modelo", .fields("Modelo")
-             SetAdoFields "Serie_No", .fields("Serie_No")
-             SetAdoFields "Costo", .fields("COSTO")
-             SetAdoUpdate
-                
-            'Grabamos el submodulo de ingreso
-             If .fields("TOTAL") > 0 And .fields("Cta_SubMod") <> Ninguno Then
-                 SetAdoAddNew "Trans_SubCtas"
-                 SetAdoFields "T", Normal
-                 SetAdoFields "TP", Ninguno
-                 SetAdoFields "Numero", 0
-                 SetAdoFields "Fecha", TFA.Fecha
-                 SetAdoFields "Item", NumEmpresa
-                 SetAdoFields "CodigoU", CodigoUsuario
-                 SetAdoFields "TC", "I"
-                 SetAdoFields "Cta", .fields("Cta")
-                 SetAdoFields "Codigo", .fields("Cta_SubMod")
-                 SetAdoFields "Fecha_V", TFA.Fecha_V
-                 SetAdoFields "Factura", TFA.Factura
-                 SetAdoFields "Creditos", .fields("TOTAL")
-                 SetAdoUpdate
-             End If
-
-            'Grabamos en el Kardex la factura
-             If .fields("COSTO") > 0 Then
-                 SetAdoAddNew "Trans_Kardex"
-                 SetAdoFields "T", Normal
-                 SetAdoFields "TC", TFA.TC
-                 SetAdoFields "Serie", TFA.Serie
-                 SetAdoFields "Fecha", TFA.Fecha
-                 SetAdoFields "Factura", TFA.Factura
-                 SetAdoFields "Codigo_P", TFA.CodigoC
-                 SetAdoFields "CodBodega", .fields("CodBod")
-                 SetAdoFields "CodMarca", .fields("CodMar")
-                 SetAdoFields "Codigo_Inv", .fields("CODIGO")
-                 SetAdoFields "CodigoL", TFA.Cod_CxC
-                 SetAdoFields "Lote_No", .fields("Lote_No")
-                 SetAdoFields "Fecha_Fab", .fields("Fecha_Fab")
-                 SetAdoFields "Fecha_Exp", .fields("Fecha_Exp")
-                 SetAdoFields "Procedencia", .fields("Procedencia")
-                 SetAdoFields "Modelo", .fields("Modelo")
-                 SetAdoFields "Serie_No", .fields("Serie_No")
-                 SetAdoFields "Total_IVA", .fields("Total_IVA")
-                 SetAdoFields "Porc_C", .fields("Porc_C")
-                 SetAdoFields "Salida", .fields("CANT")
-                 SetAdoFields "PVP", .fields("PRECIO")
-                 SetAdoFields "Valor_Unitario", .fields("PRECIO")
-                 SetAdoFields "Costo", .fields("COSTO")
-                 SetAdoFields "Valor_Total", Redondear(.fields("CANT") * .fields("PRECIO"), 2)
-                 SetAdoFields "Total", Redondear(.fields("CANT") * .fields("COSTO"), 2)
-                 SetAdoFields "Detalle", MidStrg("FA: " & TFA.Cliente, 1, 100)
-                 SetAdoFields "Codigo_Barra", .fields("COD_BAR")
-                 SetAdoFields "Orden_No", .fields("Numero")
-                 SetAdoFields "Cta_Inv", .fields("Cta_Inv")
-                 SetAdoFields "Contra_Cta", .fields("Cta_Costo")
-                 SetAdoFields "Item", NumEmpresa
-                 SetAdoFields "Periodo", Periodo_Contable
-                 SetAdoFields "CodigoU", CodigoUsuario
-                 SetAdoUpdate
-             End If
-             
-            'Desde Aqui Falta
-            'Salida si es por recetas y ademas el producto es por servicios
-            'caso contrario hay que acondicionar desde el Modulo de Inventario
-             If Len(.fields("Cta_Inv")) = 1 And Len(.fields("Cta_Costo")) = 1 Then
-                sSQL = "SELECT Codigo_Receta, Cantidad, Costo, ID " _
-                     & "FROM Catalogo_Recetas " _
-                     & "WHERE Item = '" & NumEmpresa & "' " _
-                     & "AND Periodo = '" & Periodo_Contable & "' " _
-                     & "AND Codigo_PP = '" & .fields("CODIGO") & "' " _
-                     & "AND TC = 'P' " _
-                     & "ORDER BY Codigo_Receta "
-                Select_AdoDB AdoDBReceta, sSQL
-                If AdoDBReceta.RecordCount > 0 Then
-                   Do While Not AdoDBReceta.EOF
-                      If Leer_Codigo_Inv(AdoDBReceta.fields("Codigo_Receta"), FechaSistema, .fields("CodBod"), .fields("CodMar")) Then
-                         If DatInv.Costo > 0 Then
-                            CantidadAnt = .fields("CANT") * AdoDBReceta.fields("Cantidad")
-                            ValorTotal = Redondear(CantidadAnt * DatInv.Costo, 2)
-                            SetAdoAddNew "Trans_Kardex"
-                            SetAdoFields "T", Normal
-                            SetAdoFields "TC", TFA.TC
-                            SetAdoFields "Serie", TFA.Serie
-                            SetAdoFields "Fecha", TFA.Fecha
-                            SetAdoFields "Factura", TFA.Factura
-                            SetAdoFields "Codigo_P", TFA.CodigoC
-                            SetAdoFields "CodBodega", .fields("CodBod")
-                            SetAdoFields "CodMarca", .fields("CodMar")
-                            SetAdoFields "Codigo_Inv", AdoDBReceta.fields("Codigo_Receta")
-                            SetAdoFields "CodigoL", TFA.Cod_CxC
-                            SetAdoFields "Lote_No", .fields("Lote_No")
-                            SetAdoFields "Fecha_Fab", .fields("Fecha_Fab")
-                            SetAdoFields "Fecha_Exp", .fields("Fecha_Exp")
-                            SetAdoFields "Procedencia", .fields("Procedencia")
-                            SetAdoFields "Modelo", .fields("Modelo")
-                            SetAdoFields "Serie_No", .fields("Serie_No")
-                            SetAdoFields "Porc_C", .fields("Porc_C")
-                            SetAdoFields "PVP", DatInv.Costo
-                            SetAdoFields "Valor_Unitario", DatInv.Costo
-                            SetAdoFields "Salida", CantidadAnt
-                            SetAdoFields "Valor_Total", ValorTotal
-                            SetAdoFields "Costo", DatInv.Costo
-                            SetAdoFields "Total", ValorTotal
-                            SetAdoFields "Detalle", MidStrg("FA: RE-" & TFA.Cliente, 1, 100)
-                            SetAdoFields "Codigo_Barra", .fields("COD_BAR")
-                            SetAdoFields "Orden_No", .fields("Numero")
-                            SetAdoFields "Cta_Inv", DatInv.Cta_Inventario
-                            SetAdoFields "Contra_Cta", DatInv.Cta_Costo_Venta
-                            SetAdoFields "Item", NumEmpresa
-                            SetAdoFields "Periodo", Periodo_Contable
-                            SetAdoFields "CodigoU", CodigoUsuario
-                            SetAdoUpdate
-                         End If
-                      End If
-                      AdoDBReceta.MoveNext
-                   Loop
-                End If
-                AdoDBReceta.Close
-             End If
-            .MoveNext
-          Loop
+           Control_Procesos "E", "No se pudo grabar " & TFA.TC & " No. " & TFA.Serie & "-" & Format$(TFA.Factura, "000000000") & " [" & TFA.Hora & "]"
        End If
-       sSQL = "UPDATE Trans_Fletes " _
-            & "SET T = 'P' " _
-            & "WHERE Item = '" & NumEmpresa & "' " _
-            & "AND Periodo = '" & Periodo_Contable & "' " _
-            & "AND Ok <> " & Val(adFalse) & " " _
-            & "AND CodigoC = '" & TFA.CodigoC & "' "
-       Ejecutar_SQL_SP sSQL
-'''       sSQL = "UPDATE Trans_Comision " _
-'''            & "SET Factura = " & TFA.Factura & " " _
-'''            & "WHERE Factura = 0 " _
-'''            & "AND Item = '" & NumEmpresa & "' " _
-'''            & "AND Periodo = '" & Periodo_Contable & "' " _
-'''            & "AND CodigoU = '" & CodigoUsuario & "' "
-'''       Ejecutar_SQL_SP sSQL
-       sSQL = "DELETE * " _
-            & "FROM Clientes_Facturacion " _
-            & "WHERE Item = '" & NumEmpresa & "' " _
-            & "AND Valor <= 0 " _
-            & "AND Num_Mes >= 0 "
-       Ejecutar_SQL_SP sSQL
-      
-       If Orden_No > 0 Then
-         .MoveFirst
-          Orden_No = .fields("Numero")
-          Do While Not .EOF
-             If Orden_No <> .fields("Numero") Then
-                sSQL = "UPDATE Facturas " _
-                     & "SET T = 'A' " _
-                     & "WHERE Item = '" & NumEmpresa & "' " _
-                     & "AND Periodo = '" & Periodo_Contable & "' " _
-                     & "AND Factura = " & Orden_No & " " _
-                     & "AND TC = 'OP' "
-                Ejecutar_SQL_SP sSQL
-                
-                sSQL = "UPDATE Detalle_Factura " _
-                     & "SET T = 'A' " _
-                     & "WHERE Item = '" & NumEmpresa & "' " _
-                     & "AND Periodo = '" & Periodo_Contable & "' " _
-                     & "AND Factura = " & Orden_No & " " _
-                     & "AND TC = 'OP' "
-                Ejecutar_SQL_SP sSQL
-                
-                sSQL = "UPDATE Trans_Pedidos " _
-                     & "SET Factura = " & TFA.Factura & ",Serie = '" & TFA.Serie & "',Autorizacion = '" & TFA.Autorizacion & "' " _
-                     & "WHERE Item = '" & NumEmpresa & "' " _
-                     & "AND Orden_No = " & Orden_No & " " _
-                     & "AND TC = 'OP' "
-                Ejecutar_SQL_SP sSQL
-                Orden_No = .fields("Numero")
-             End If
-            .MoveNext
-          Loop
-          
-          sSQL = "UPDATE Facturas " _
-               & "SET T = 'A' " _
-               & "WHERE Item = '" & NumEmpresa & "' " _
-               & "AND Periodo = '" & Periodo_Contable & "' " _
-               & "AND Factura = " & Orden_No & " " _
-               & "AND TC = 'OP' "
-          Ejecutar_SQL_SP sSQL
-        
-          sSQL = "UPDATE Detalle_Factura " _
-               & "SET T = 'A' " _
-               & "WHERE Item = '" & NumEmpresa & "' " _
-               & "AND Periodo = '" & Periodo_Contable & "' " _
-               & "AND Factura = " & Orden_No & " " _
-               & "AND TC = 'OP' "
-          Ejecutar_SQL_SP sSQL
-            
-          sSQL = "UPDATE Trans_Pedidos " _
-               & "SET Factura = " & TFA.Factura & ",Serie = '" & TFA.Serie & "',Autorizacion = '" & TFA.Autorizacion & "' " _
-               & "WHERE Item = '" & NumEmpresa & "' " _
-               & "AND Orden_No = " & Orden_No & " " _
-               & "AND TC = 'OP' "
-          Ejecutar_SQL_SP sSQL
-       End If
-       
-       sSQL = "DELETE * " _
-            & "FROM Asiento_F " _
-            & "WHERE Item = '" & NumEmpresa & "' " _
-            & "AND CodigoU = '" & CodigoUsuario & "' "
-       Ejecutar_SQL_SP sSQL
-                   
-       If Not NoRegTrans Then
-          Actualiza_Procesado_Kardex_Factura TFA
-          Control_Procesos "G", "Grabar " & TFA.TC & " No. " & TFA.Serie & "-" & Format$(TFA.Factura, "000000000") & " [" & TFA.Hora & "]"
-       End If
-       RatonNormal
-   Else
-       MsgBox "No se puede grabar el documento, falta datos."
-   End If
   End With
-  AdoDBFA.Close
- 'MsgBox TFA.Autorizacion
   RatonNormal
 End Sub
 
-Public Sub Grabar_Abonos_Retenciones(FTA As Tipo_Abono)
-  Control_Procesos "P", FTA.Banco & " " & FTA.TP & " No. " & FTA.Serie & "-" & Format$(FTA.Factura, "0000000") & ", Por: " & Format$(FTA.Abono, "#,##0.00")
-  With FTA
-   If .Abono > 0 Then
-       If .T = "" Or .T = Ninguno Then .T = Normal
-       If .Cta_CxP = "" Or .Cta_CxP = Ninguno Then .Cta_CxP = Cta_Cobrar
-       If .CodigoC = "" Or .CodigoC = Ninguno Then .CodigoC = CodigoCliente
-       If .Comprobante = "" Then .Comprobante = Ninguno
-       If .Codigo_Inv = "" Then .Codigo_Inv = Ninguno
-       If .Fecha = Ninguno Then .Fecha = FechaSistema
-       If .Serie = Ninguno Then .Serie = "001001"
-       If .Autorizacion = Ninguno Then .Autorizacion = "1234567890"
-       If .Cheque = Ninguno And DiarioCaja > 0 Then .Cheque = Format$(DiarioCaja, "00000000")
-       If DiarioCaja > 0 Then .Recibo_No = Format$(DiarioCaja, "0000000000") Else .Recibo_No = "0000000000"
-       FTA.Tipo_Cta = Leer_Cta_Catalogo(.Cta)
-       FTA.Tipo_Cta = SubCta
-       SetAdoAddNew "Trans_Abonos"
-       SetAdoFields "T", .T
-       SetAdoFields "TP", .TP
-       SetAdoFields "Fecha", .Fecha
-       SetAdoFields "Recibo_No", .Recibo_No
-       SetAdoFields "Tipo_Cta", .Tipo_Cta
-       SetAdoFields "Cta", .Cta
-       SetAdoFields "Cta_CxP", .Cta_CxP
-       SetAdoFields "Factura", .Factura
-       SetAdoFields "CodigoC", .CodigoC
-       SetAdoFields "Abono", .Abono
-       SetAdoFields "Banco", .Banco
-       SetAdoFields "Cheque", .Cheque
-       SetAdoFields "Codigo_Inv", .Codigo_Inv
-       SetAdoFields "Comprobante", .AutorizacionR
-       SetAdoFields "EstabRetencion", .Establecimiento
-       SetAdoFields "PtoEmiRetencion", .Emision
-       SetAdoFields "Porc", .Porcentaje
-       SetAdoFields "Serie", .Serie
-       SetAdoFields "Autorizacion", .Autorizacion
-       SetAdoFields "Autorizacion_R", .AutorizacionR
-       SetAdoFields "CodigoU", CodigoUsuario
-       SetAdoFields "Item", NumEmpresa
-       SetAdoUpdate
-   End If
-  End With
-  Actualizar_Saldos_Facturas_SP FTA.TP, FTA.Serie, FTA.Factura
- 'Grabar_Abonos_Periodo_Superior FTA
-End Sub
+'''Public Sub Grabar_Abonos_Retenciones(FTA As Tipo_Abono)
+'''  Control_Procesos "P", FTA.Banco & " " & FTA.TP & " No. " & FTA.Serie & "-" & Format$(FTA.Factura, "0000000") & ", Por: " & Format$(FTA.Abono, "#,##0.00")
+'''  With FTA
+'''   If .Abono > 0 Then
+'''       If .T = "" Or .T = Ninguno Then .T = Normal
+'''       If .Cta_CxP = "" Or .Cta_CxP = Ninguno Then .Cta_CxP = Cta_Cobrar
+'''       If .CodigoC = "" Or .CodigoC = Ninguno Then .CodigoC = CodigoCliente
+'''       If .Comprobante = "" Then .Comprobante = Ninguno
+'''       If .Codigo_Inv = "" Then .Codigo_Inv = Ninguno
+'''       If .Fecha = Ninguno Then .Fecha = FechaSistema
+'''       If .Serie = Ninguno Then .Serie = "001001"
+'''       If .Autorizacion = Ninguno Then .Autorizacion = "1234567890"
+'''       If .Cheque = Ninguno And DiarioCaja > 0 Then .Cheque = Format$(DiarioCaja, "00000000")
+'''       If DiarioCaja > 0 Then .Recibo_No = Format$(DiarioCaja, "0000000000") Else .Recibo_No = "0000000000"
+'''       FTA.Tipo_Cta = Leer_Cta_Catalogo(.Cta)
+'''       FTA.Tipo_Cta = SubCta
+'''       SetAdoAddNew "Trans_Abonos"
+'''       SetAdoFields "T", .T
+'''       SetAdoFields "TP", .TP
+'''       SetAdoFields "Fecha", .Fecha
+'''       SetAdoFields "Recibo_No", .Recibo_No
+'''       SetAdoFields "Tipo_Cta", .Tipo_Cta
+'''       SetAdoFields "Cta", .Cta
+'''       SetAdoFields "Cta_CxP", .Cta_CxP
+'''       SetAdoFields "Factura", .Factura
+'''       SetAdoFields "CodigoC", .CodigoC
+'''       SetAdoFields "Abono", .Abono
+'''       SetAdoFields "Banco", .Banco
+'''       SetAdoFields "Cheque", .Cheque
+'''       SetAdoFields "Codigo_Inv", .Codigo_Inv
+'''       SetAdoFields "Comprobante", .AutorizacionR
+'''       SetAdoFields "EstabRetencion", .Establecimiento
+'''       SetAdoFields "PtoEmiRetencion", .Emision
+'''       SetAdoFields "Porc", .Porcentaje
+'''       SetAdoFields "Serie", .Serie
+'''       SetAdoFields "Autorizacion", .Autorizacion
+'''       SetAdoFields "Autorizacion_R", .AutorizacionR
+'''       SetAdoFields "CodigoU", CodigoUsuario
+'''       SetAdoFields "Item", NumEmpresa
+'''       SetAdoUpdate
+'''   End If
+'''  End With
+'''  Actualizar_Saldos_Facturas_SP FTA.TP, FTA.Serie, FTA.Factura
+''' 'Grabar_Abonos_Periodo_Superior FTA
+'''End Sub
 
 'Parametros de entrada: CodigoCliente
 Public Sub Grabar_Abonos(FTA As Tipo_Abono, Optional NoRegTrans As Boolean)
@@ -2039,227 +1568,71 @@ Dim CodigoCta As String
   
   With FTA
    CodigoCta = Leer_Cta_Catalogo(.Cta_CxP)
-   If Len(CodigoCta) <= 1 Then Control_Procesos "P", "El importe a la Cta (" & .Cta_CxP & ") " & .TP & " No. " & .Serie & "-" & Format$(.Factura, "000000000") & ", Por: " & Format$(.Abono, "#,##0.00"), "No se realizo con exito " & .Banco & " " & .Cheque
-   CodigoCta = Leer_Cta_Catalogo(.Cta)
-    'MsgBox "Abono: " & .Banco & " - " & .Cheque & " - " & .Abono
-   If .Abono > 0 And Len(CodigoCta) > 1 And TipoCta = "D" Then
-       If .T = "" Or .T = Ninguno Or .T = "A" Then .T = Normal
-       If .Cta_CxP = "" Or .Cta_CxP = Ninguno Then .Cta_CxP = Cta_Cobrar
-       If .CodigoC = "" Or .CodigoC = Ninguno Then .CodigoC = CodigoCliente
-       If .Comprobante = "" Then .Comprobante = Ninguno
-       If .Codigo_Inv = "" Then .Codigo_Inv = Ninguno
-       If .Fecha = Ninguno Then .Fecha = FechaSistema
-       If .Serie = Ninguno Then .Serie = "001001"
-       If .Autorizacion = Ninguno Then .Autorizacion = "1234567890"
-       If .Cheque = Ninguno And DiarioCaja > 0 Then .Cheque = Format$(DiarioCaja, "00000000")
-       If DiarioCaja > 0 Then .Recibo_No = Format$(DiarioCaja, "0000000000") Else .Recibo_No = "0000000000"
-      .Tipo_Cta = SubCta
-       
-       SetAdoAddNew "Trans_Abonos"
-       SetAdoFields "T", .T
-       SetAdoFields "TP", .TP
-       SetAdoFields "Fecha", .Fecha
-       SetAdoFields "Recibo_No", .Recibo_No
-       SetAdoFields "Tipo_Cta", .Tipo_Cta
-       SetAdoFields "Cta", .Cta
-       SetAdoFields "Cta_CxP", .Cta_CxP
-       SetAdoFields "Factura", .Factura
-       SetAdoFields "CodigoC", .CodigoC
-       SetAdoFields "Abono", .Abono
-       SetAdoFields "Banco", .Banco
-       SetAdoFields "Cheque", .Cheque
-       SetAdoFields "Codigo_Inv", .Codigo_Inv
-       SetAdoFields "Comprobante", .Comprobante
-       SetAdoFields "Serie", .Serie
-       SetAdoFields "Autorizacion", .Autorizacion
-       SetAdoFields "Item", NumEmpresa
-       SetAdoFields "CodigoU", CodigoUsuario
-       SetAdoFields "Cod_Ejec", CodigoVen
-       If .Banco = "NOTA DE CREDITO" Then
-           SetAdoFields "Serie_NC", .Serie_NC
-           SetAdoFields "Autorizacion_NC", .Autorizacion_NC
-           SetAdoFields "Secuencial_NC", .Nota_Credito
-       End If
-       If Len(.Serie_R) = 6 Then
-           SetAdoFields "Serie_R", .Serie_R
-           SetAdoFields "Autorizacion_R", .AutorizacionR
-           SetAdoFields "Secuencial_R", .Secuencial_R
-           SetAdoFields "Porc", .Porcentaje
-       End If
-       SetAdoUpdate
-       If Not NoRegTrans Then
+   If Len(CodigoCta) > 1 Then
+      CodigoCta = Leer_Cta_Catalogo(.Cta)
+     'MsgBox "Abono: " & .Banco & " - " & .Cheque & " - " & .Abono
+      If .Abono > 0 And Len(CodigoCta) > 1 And TipoCta = "D" Then
+          If .T = "" Or .T = Ninguno Or .T = "A" Then .T = Normal
+          If .Cta_CxP = "" Or .Cta_CxP = Ninguno Then .Cta_CxP = Cta_Cobrar
+          If .CodigoC = "" Or .CodigoC = Ninguno Then .CodigoC = CodigoCliente
+          If .Comprobante = "" Then .Comprobante = Ninguno
+          If .Codigo_Inv = "" Then .Codigo_Inv = Ninguno
+          If .Fecha = Ninguno Then .Fecha = FechaSistema
+          If .Serie = Ninguno Then .Serie = "001001"
+          If .Autorizacion = Ninguno Then .Autorizacion = "1234567890"
+          If .Cheque = Ninguno And DiarioCaja > 0 Then .Cheque = Format$(DiarioCaja, "00000000")
+          If DiarioCaja > 0 Then .Recibo_No = Format$(DiarioCaja, "0000000000") Else .Recibo_No = "0000000000"
+         .Tipo_Cta = SubCta
+        
+          SetAdoAddNew "Trans_Abonos"
+          SetAdoFields "T", .T
+          SetAdoFields "TP", .TP
+          SetAdoFields "Fecha", .Fecha
+          SetAdoFields "Recibo_No", .Recibo_No
+          SetAdoFields "Tipo_Cta", .Tipo_Cta
+          SetAdoFields "Cta", .Cta
+          SetAdoFields "Cta_CxP", .Cta_CxP
+          SetAdoFields "Factura", .Factura
+          SetAdoFields "CodigoC", .CodigoC
+          SetAdoFields "Abono", .Abono
+          SetAdoFields "Banco", .Banco
+          SetAdoFields "Cheque", .Cheque
+          SetAdoFields "Codigo_Inv", .Codigo_Inv
+          SetAdoFields "Comprobante", .Comprobante
+          SetAdoFields "Serie", .Serie
+          SetAdoFields "Autorizacion", .Autorizacion
+          SetAdoFields "Item", NumEmpresa
+          SetAdoFields "CodigoU", CodigoUsuario
+          SetAdoFields "Cod_Ejec", CodigoVen
           If .Banco = "NOTA DE CREDITO" Then
-              Control_Procesos "A", "Anulación por " & .Banco & " de " & .TP & " No. " & .Serie & "-" & Format$(.Factura, "000000000")
-          Else
-              Control_Procesos "P", "Abono de " & .TP & " No. " & .Serie & "-" & Format$(.Factura, "000000000") & ", Por: " & Format$(.Abono, "#,##0.00")
+              SetAdoFields "Serie_NC", .Serie_NC
+              SetAdoFields "Autorizacion_NC", .Autorizacion_NC
+              SetAdoFields "Secuencial_NC", .Nota_Credito
           End If
-       End If
-      'Grabar_Abonos_Periodo_Superior FTA
-       If FTA.TP = "TJ" Then Imprimir_FA_NV_TJ FTA
+          If Len(.Serie_R) = 6 Then
+             SetAdoFields "Serie_R", .Serie_R
+             SetAdoFields "Autorizacion_R", .AutorizacionR
+             SetAdoFields "Secuencial_R", .Secuencial_R
+             SetAdoFields "Porc", .Porcentaje
+          End If
+          SetAdoUpdate
+          If Not NoRegTrans Then
+             If .Banco = "NOTA DE CREDITO" Then
+                 Control_Procesos "A", "Anulación por " & .Banco & " de " & .TP & " No. " & .Serie & "-" & Format$(.Factura, "000000000")
+             Else
+                 Control_Procesos "P", "Abono de " & .TP & " No. " & .Serie & "-" & Format$(.Factura, "000000000") & ", Por: " & Format$(.Abono, "#,##0.00")
+             End If
+          End If
+         'Grabar_Abonos_Periodo_Superior FTA
+          If FTA.TP = "TJ" Then Imprimir_FA_NV_TJ FTA
+      Else
+        Control_Procesos "P", "El importe a la Cta (" & .Cta & ") " & .TP & " No. " & .Serie & "-" & Format$(.Factura, "000000000") & ", Por: " & Format$(.Abono, "#,##0.00"), "No se realizo con exito " & .Banco & " " & .Cheque
+      End If
    Else
-       Control_Procesos "P", "El importe a la Cta (" & .Cta & ") " & .TP & " No. " & .Serie & "-" & Format$(.Factura, "000000000") & ", Por: " & Format$(.Abono, "#,##0.00"), "No se realizo con exito " & .Banco & " " & .Cheque
+      Control_Procesos "P", "El importe a la Cta (" & .Cta_CxP & ") " & .TP & " No. " & .Serie & "-" & Format$(.Factura, "000000000") & ", Por: " & Format$(.Abono, "#,##0.00"), "No se realizo con exito " & .Banco & " " & .Cheque
    End If
   End With
 End Sub
-
-'''Public Sub Grabar_Abonos_Periodo_Superior(FTA As Tipo_Abono)
-'''Dim AdoAbonos As ADODB.Recordset
-'''Dim sSQLAbono As String
-''' 'Grababos si estamos en otro periodo
-'''  With FTA
-'''   If .Abono > 0 And (Periodo_Superior <> Periodo_Contable) Then
-'''       sSQLAbono = "SELECT TC, Serie, Factura " _
-'''                 & "FROM Facturas " _
-'''                 & "WHERE TC = '" & .TP & "' " _
-'''                 & "AND Serie = '" & .Serie & "' " _
-'''                 & "AND Factura = " & .Factura & " " _
-'''                 & "AND Autorizacion = '" & .Autorizacion & "' " _
-'''                 & "AND CodigoC = '" & .CodigoC & "' " _
-'''                 & "AND Periodo = '" & Periodo_Superior & "' " _
-'''                 & "AND Item = '" & NumEmpresa & "' "
-'''       Select_AdoDB AdoAbonos, sSQLAbono
-'''       If AdoAbonos.RecordCount > 0 Then
-'''          sSQLAbono = "DELETE * " _
-'''                    & "FROM Trans_Abonos " _
-'''                    & "WHERE TP = '" & .TP & "' " _
-'''                    & "AND Serie = '" & .Serie & "' " _
-'''                    & "AND Factura = " & .Factura & " " _
-'''                    & "AND Autorizacion = '" & .Autorizacion & "' " _
-'''                    & "AND CodigoC = '" & .CodigoC & "' " _
-'''                    & "AND Cta = '" & .Cta & "' " _
-'''                    & "AND Abono = " & .Abono & " " _
-'''                    & "AND Fecha = #" & BuscarFecha(.Fecha) & "# " _
-'''                    & "AND Periodo = '" & Periodo_Superior & "' " _
-'''                    & "AND Item = '" & NumEmpresa & "' "
-'''          Ejecutar_SQL_SP sSQLAbono
-'''
-'''          SetAdoAddNew "Trans_Abonos"
-'''          SetAdoFields "T", .T
-'''          SetAdoFields "TP", .TP
-'''          SetAdoFields "Fecha", .Fecha
-'''          SetAdoFields "Recibo_No", .Recibo_No
-'''          SetAdoFields "Tipo_Cta", .Tipo_Cta
-'''          SetAdoFields "Cta", .Cta
-'''          SetAdoFields "Cta_CxP", .Cta_CxP
-'''          SetAdoFields "Factura", .Factura
-'''          SetAdoFields "CodigoC", .CodigoC
-'''          SetAdoFields "Abono", .Abono
-'''          SetAdoFields "Banco", .Banco
-'''          SetAdoFields "Cheque", .Cheque
-'''          SetAdoFields "Codigo_Inv", .Codigo_Inv
-'''          SetAdoFields "Comprobante", .Comprobante
-'''          SetAdoFields "Serie", .Serie
-'''          SetAdoFields "Autorizacion", .Autorizacion
-'''          SetAdoFields "Item", NumEmpresa
-'''          SetAdoFields "Periodo", Periodo_Superior
-'''          SetAdoFields "CodigoU", CodigoUsuario
-'''          SetAdoFields "Cod_Ejec", CodigoVen
-'''          SetAdoUpdate
-'''          Actualiza_Estado_Factura FTA, Periodo_Superior
-'''       End If
-'''   End If
-'''  End With
-'''End Sub
-
-''''Parametros de entrada: FA
-'''Public Sub Actualiza_Estado_Factura(FTA As Tipo_Abono)
-'''Dim AdoAbonos As ADODB.Recordset
-'''Dim AbonoTP As Currency
-'''Dim sSQLAbono As String
-'''
-''' 'MsgBox FTA.Factura & vbCrLf & FTA.Serie & vbCrLf & FTA.Autorizacion & vbCrLf & FTA.TP
-'''  With FTA
-'''       AbonoTP = 0
-'''       sSQLAbono = "SELECT Factura, SUM(Abono) As Total_Abonos " _
-'''                 & "FROM Trans_Abonos " _
-'''                 & "WHERE TP = '" & .TP & "' " _
-'''                 & "AND Serie = '" & .Serie & "' " _
-'''                 & "AND Factura = " & .Factura & " " _
-'''                 & "AND Autorizacion = '" & .Autorizacion & "' " _
-'''                 & "AND CodigoC = '" & .CodigoC & "' " _
-'''                 & "AND Periodo = '" & Periodo_Contable & "' " _
-'''                 & "AND Item = '" & NumEmpresa & "' " _
-'''                 & "GROUP BY Factura "
-'''       Select_AdoDB AdoAbonos, sSQLAbono
-'''       If AdoAbonos.RecordCount > 0 Then AbonoTP = Redondear(AdoAbonos.Fields("Total_Abonos"), 2)
-'''       AdoAbonos.Close
-'''       If AbonoTP > 0 Then
-'''          sSQLAbono = "UPDATE Facturas " _
-'''                    & "SET Saldo_MN = Total_MN - " & AbonoTP & " " _
-'''                    & "WHERE Factura = " & .Factura & " " _
-'''                    & "AND Serie = '" & .Serie & "' " _
-'''                    & "AND Autorizacion = '" & .Autorizacion & "' " _
-'''                    & "AND TC = '" & .TP & "' " _
-'''                    & "AND CodigoC = '" & .CodigoC & "' " _
-'''                    & "AND Periodo = '" & Periodo_Contable & "' " _
-'''                    & "AND Item = '" & NumEmpresa & "' "
-'''          Ejecutar_SQL_SP sSQLAbono
-'''
-'''          sSQLAbono = "UPDATE Facturas " _
-'''                    & "SET T = 'C' " _
-'''                    & "WHERE Factura = " & .Factura & " " _
-'''                    & "AND Serie = '" & .Serie & "' " _
-'''                    & "AND Autorizacion = '" & .Autorizacion & "' " _
-'''                    & "AND TC = '" & .TP & "' " _
-'''                    & "AND CodigoC = '" & .CodigoC & "' " _
-'''                    & "AND Periodo = '" & Periodo_Contable & "' " _
-'''                    & "AND Item = '" & NumEmpresa & "' " _
-'''                    & "AND Saldo_MN <= 0 " _
-'''                    & "AND T <> 'A' "
-'''          Ejecutar_SQL_SP sSQLAbono
-'''
-'''          If SQL_Server Then
-'''             sSQLAbono = "UPDATE Detalle_Factura " _
-'''                       & "SET T = F.T " _
-'''                       & "FROM Detalle_Factura As DF, Facturas As F "
-'''          Else
-'''             sSQLAbono = "UPDATE Detalle_Factura As DF, Facturas As F " _
-'''                       & "SET DF.T = F.T "
-'''          End If
-'''          sSQLAbono = sSQLAbono _
-'''                    & "WHERE F.Factura = " & .Factura & " " _
-'''                    & "AND F.Serie = '" & .Serie & "' " _
-'''                    & "AND F.Autorizacion = '" & .Autorizacion & "' " _
-'''                    & "AND F.TC = '" & .TP & "' " _
-'''                    & "AND F.CodigoC = '" & .CodigoC & "' " _
-'''                    & "AND F.Item = '" & NumEmpresa & "' " _
-'''                    & "AND F.Periodo = '" & Periodo_Contable & "' " _
-'''                    & "AND F.Item = DF.Item " _
-'''                    & "AND F.Periodo = DF.Periodo " _
-'''                    & "AND F.Factura = DF.Factura " _
-'''                    & "AND F.CodigoC = DF.CodigoC " _
-'''                    & "AND F.Autorizacion = DF.Autorizacion " _
-'''                    & "AND F.Serie = DF.Serie " _
-'''                    & "AND F.TC = DF.TC "
-'''          Ejecutar_SQL_SP sSQLAbono
-'''
-'''          If SQL_Server Then
-'''             sSQLAbono = "UPDATE Trans_Abonos " _
-'''                       & "SET T = F.T " _
-'''                       & "FROM Trans_Abonos As DF, Facturas As F "
-'''          Else
-'''             sSQLAbono = "UPDATE Trans_Abonos As DF, Facturas As F " _
-'''                       & "SET DF.T = F.T "
-'''          End If
-'''          sSQLAbono = sSQLAbono _
-'''                    & "WHERE F.Factura = " & .Factura & " " _
-'''                    & "AND F.Serie = '" & .Serie & "' " _
-'''                    & "AND F.Autorizacion = '" & .Autorizacion & "' " _
-'''                    & "AND F.TC = '" & .TP & "' " _
-'''                    & "AND F.CodigoC = '" & .CodigoC & "' " _
-'''                    & "AND F.Item = '" & NumEmpresa & "' " _
-'''                    & "AND F.Periodo = '" & Periodo_Contable & "' " _
-'''                    & "AND F.Item = DF.Item " _
-'''                    & "AND F.Periodo = DF.Periodo " _
-'''                    & "AND F.Factura = DF.Factura " _
-'''                    & "AND F.CodigoC = DF.CodigoC " _
-'''                    & "AND F.Autorizacion = DF.Autorizacion " _
-'''                    & "AND F.Serie = DF.Serie " _
-'''                    & "AND F.TC = DF.TP "
-'''          Ejecutar_SQL_SP sSQLAbono
-'''       End If
-'''  End With
-'''End Sub
 
 Public Sub Grabar_Anticipos(FTA As Tipo_Abono)
   Control_Procesos "P", "Abono de " & FTA.TP & " No. " & FTA.Serie & "-" & Format$(FTA.Factura, "0000000") & ", Por: " & Format$(FTA.Abono, "#,##0.00")
@@ -11568,19 +10941,15 @@ Dim FechaCxC As String
        & "ItemsxFA, Codigo, Fact, CxC, Cta_Venta, CxC_Anterior, Imp_Mes, Nombre_Establecimiento, Direccion_Establecimiento, Telefono_Estab, Logo_Tipo_Estab " _
        & "FROM Catalogo_Lineas " _
        & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND Periodo = '" & Periodo_Contable & "' "
-  If Len(TFA.TC) = 2 Then sSQL = sSQL & "AND Fact = '" & TFA.TC & "' "
-  If Len(TFA.Cod_CxC) > 1 Then
-     sSQL = sSQL & "AND '" & TFA.Cod_CxC & "' IN (Concepto, Codigo, CxC) "
-  ElseIf Len(TFA.Serie) = 6 Then
-     sSQL = sSQL & "AND Serie = '" & TFA.Serie & "' "
-  ElseIf Len(TFA.Autorizacion) >= 6 Then
-     sSQL = sSQL & "AND Autorizacion = '" & TFA.Autorizacion & "' "
-  End If
-  sSQL = sSQL _
+       & "AND Periodo = '" & Periodo_Contable & "' " _
+       & "AND TL <> " & Val(adFalse) & " " _
        & "AND Fecha <= #" & BuscarFecha(FechaCxC) & "# " _
-       & "AND Vencimiento >= #" & BuscarFecha(FechaCxC) & "# " _
-       & "ORDER BY Codigo "
+       & "AND Vencimiento >= #" & BuscarFecha(FechaCxC) & "# "
+  If Len(TFA.TC) >= 2 Then sSQL = sSQL & "AND Fact = '" & TFA.TC & "' "
+  If Len(TFA.Serie) = 6 Then sSQL = sSQL & "AND Serie = '" & TFA.Serie & "' "
+  If Len(TFA.Autorizacion) >= 6 Then sSQL = sSQL & "AND Autorizacion = '" & TFA.Autorizacion & "' "
+  If Len(TFA.Cod_CxC) > 1 Then sSQL = sSQL & "AND '" & TFA.Cod_CxC & "' IN (Concepto, Codigo, CxC) "
+  sSQL = sSQL & "ORDER BY Codigo "
   Select_AdoDB AdoLineaDB, sSQL
  'MsgBox sSQL
   With AdoLineaDB

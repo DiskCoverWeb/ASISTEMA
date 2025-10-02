@@ -35,7 +35,7 @@ Begin VB.Form FActualizar
       ImageList       =   "ImgLstFTP"
       _Version        =   327682
       BeginProperty Buttons {0713E452-850A-101B-AFC0-4210102A8DA7} 
-         NumButtons      =   10
+         NumButtons      =   9
          BeginProperty Button1 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "Salir"
             Object.ToolTipText     =   "Salir de la actualizacion"
@@ -43,7 +43,6 @@ Begin VB.Form FActualizar
             ImageIndex      =   1
          EndProperty
          BeginProperty Button2 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Enabled         =   0   'False
             Caption         =   ""
             Key             =   "Completa"
             Description     =   ""
@@ -93,15 +92,6 @@ Begin VB.Form FActualizar
             Object.Tag             =   ""
             ImageIndex      =   11
          EndProperty
-         BeginProperty Button10 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Enabled         =   0   'False
-            Caption         =   ""
-            Key             =   "Copiar_Certificados_Logos"
-            Description     =   ""
-            Object.ToolTipText     =   "Copiar Certificados y Logos de las Empresas"
-            Object.Tag             =   ""
-            ImageIndex      =   12
-         EndProperty
       EndProperty
       BorderStyle     =   1
       Begin VB.TextBox TxtID 
@@ -117,7 +107,7 @@ Begin VB.Form FActualizar
             Strikethrough   =   0   'False
          EndProperty
          Height          =   495
-         Left            =   5880
+         Left            =   5355
          TabIndex        =   11
          Text            =   "00"
          Top             =   105
@@ -625,28 +615,31 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
 Dim hInst As Long
 Dim Thread As Long
             
-    RatonReloj
-    FActualizar.Height = Toolbar1.Top + LstStatud.Top + LstStatud.Height + 850
-    LstStatud.Clear
+    If Button.key <> "Salir" Then
+       RatonReloj
+       FActualizar.Height = Toolbar1.Top + LstStatud.Top + LstStatud.Height + 850
+       LstStatud.Clear
+     
+       LblAdvertencia.ForeColor = &H80FFFF
+       LblAdvertencia.FontBold = False
+       LblAdvertencia.FontSize = 8
+       LblAdvertencia.Caption = "ADVERTENCIA:" & vbCrLf & MensajeDeAdvertencia
+     
+       TMail.Mensaje = "Estimado(a) Cliente, le informamos que el sistema ha sido actualizado con exito." & vbCrLf
+       Progreso_Barra.Mensaje_Box = Button.Description
+      'Progreso_Iniciar
+       Procesando = 0
+       Progreso_Barra.Incremento = 0
+       Progreso_Barra.Puntos = 0
+       Progreso_Barra.color = 0
+    End If
     
-    LblAdvertencia.ForeColor = &H80FFFF
-    LblAdvertencia.FontBold = False
-    LblAdvertencia.FontSize = 8
-    LblAdvertencia.Caption = "ADVERTENCIA:" & vbCrLf & MensajeDeAdvertencia
-    
-    TMail.Mensaje = "Estimado(a) Cliente, le informamos que el sistema ha sido actualizado con exito." & vbCrLf
-    Progreso_Barra.Mensaje_Box = Button.Description
-   'Progreso_Iniciar
-    Procesando = 0
-    Progreso_Barra.Incremento = 0
-    Progreso_Barra.Puntos = 0
-    Progreso_Barra.color = 0
    'MsgBox Button.key
     Select Case Button.key
       Case "Salir"                          'Salir de la actualizacion
             Progreso_Barra.Valor_Maximo = 100
             RatonNormal
-            Unload FActualizar
+            End
       Case "Completa"                       'Actualizar toda la base de datos con los ejecutable
             Progreso_Barra.Valor_Maximo = 3500
             TMail.Mensaje = TMail.Mensaje
@@ -693,8 +686,6 @@ Dim Thread As Long
             Progreso_Barra.Valor_Maximo = 500
             Actualizar_Servidor True
             Proceso_Terminado_Exitosamente
-      Case "Copiar_Certificados_Logos"      'Copia Certificados y logotipos de la base actual
-            Descargar_FTP_Certificados_Logos
     End Select
 End Sub
 
@@ -2677,168 +2668,168 @@ Private Sub TxtID_LostFocus()
    IniIDBase = Val(TxtID.Text)
 End Sub
 
-Private Sub Descargar_FTP_Certificados_Logos()
-Dim AdoDBTemp As ADODB.Recordset
-Dim ListaDeArchivos As String
-Dim Certificados() As String
-Dim LogoTipos() As String
-Dim Idc As Byte
-Dim iDL As Byte
-
-On Error GoTo error_Handler
-
-  Idc = 0
-  iDL = 0
-  sSQL = "SELECT Empresa, Ruta_Certificado " _
-       & "FROM Empresas " _
-       & "WHERE Ruta_Certificado LIKE '%P12' " _
-       & "ORDER BY Empresa "
-  Select_AdoDB AdoDBTemp, sSQL
-  If AdoDBTemp.RecordCount > 0 Then
-     Do While Not AdoDBTemp.EOF
-        RutaDocumentos = RutaSistema & "\CERTIFIC\" & AdoDBTemp.Fields("Ruta_Certificado")
-        If Len(Dir$(RutaDocumentos)) = 0 Then
-           ReDim Preserve Certificados(Idc) As String
-           Certificados(Idc) = AdoDBTemp.Fields("Ruta_Certificado")
-           Idc = Idc + 1
-        End If
-        AdoDBTemp.MoveNext
-    Loop
-  End If
-  AdoDBTemp.Close
-  
-  sSQL = "SELECT Logo_Tipo " _
-       & "FROM Empresas " _
-       & "WHERE Logo_Tipo <> '.' " _
-       & "GROUP BY Logo_Tipo " _
-       & "ORDER BY Logo_Tipo; "
-  Select_AdoDB AdoDBTemp, sSQL
-  If AdoDBTemp.RecordCount > 0 Then
-     RatonReloj
-     Do While Not AdoDBTemp.EOF
-        RutaDocumentos = RutaSistema & "\LOGOS\" & AdoDBTemp.Fields("Logo_Tipo") & ".jpg"
-        If Len(Dir$(RutaDocumentos)) = 0 Then
-           ReDim Preserve LogoTipos(iDL) As String
-           LogoTipos(iDL) = AdoDBTemp.Fields("Logo_Tipo") & ".jpg"
-           iDL = iDL + 1
-        End If
-        RutaDocumentos = RutaSistema & "\LOGOS\" & AdoDBTemp.Fields("Logo_Tipo") & ".gif"
-        If Len(Dir$(RutaDocumentos)) = 0 Then
-           ReDim Preserve LogoTipos(iDL) As String
-           LogoTipos(iDL) = AdoDBTemp.Fields("Logo_Tipo") & ".gif"
-           iDL = iDL + 1
-        End If
-        RutaDocumentos = RutaSistema & "\LOGOS\" & AdoDBTemp.Fields("Logo_Tipo") & ".png"
-        If Len(Dir$(RutaDocumentos)) = 0 Then
-           ReDim Preserve LogoTipos(iDL) As String
-           LogoTipos(iDL) = AdoDBTemp.Fields("Logo_Tipo") & ".gif"
-           iDL = iDL + 1
-        End If
-        AdoDBTemp.MoveNext
-    Loop
-    RatonNormal
-  End If
-  AdoDBTemp.Close
-  
-  With ftp
-      .Inicializar FActualizar
-      
-       If EsReadOnly Then
-          ftpDirUpdate = "/files/" 'ftpUpDir
-          If InStr(IPDelOrdenador, "192.168.27") Then
-            .servidor = "192.168.27.3"           'Establecesmo el nombre del Servidor FTP
-            .Puerto = 21
-          Else
-            .servidor = ftpUpSvr                 'Establecesmo el nombre del Servidor FTP
-            .Puerto = ftpUpPuerto
-          End If
-         .Password = ftpUpPwr                    'Le establecemos la contraseña de la cuenta Ftp
-         .Usuario = ftpUpUse                     'Le establecemos el nombre de usuario de la cuenta
-       Else
-         .servidor = ftpSvr                    'Establecesmo el nombre del Servidor FTP
-         .Password = ftpPwr                    'Le establecemos la contraseña de la cuenta Ftp
-         .Usuario = ftpUse                     'Le establecemos el nombre de usuario de la cuenta
-         .Puerto = ftpPuerto
-          ftpDirUpdate = ""
-       End If
-       'MsgBox "..."
-'''      'Le establecemos la contraseña de la cuenta Ftp
-'''      .Password = ftpPwr
-'''      'Le establecemos el nombre de usuario de la cuenta
-'''      .Usuario = ftpUse
-'''      'Establecesmo el nombre del Servidor FTP
-'''       'Or InStr(IP_PC.IP_PC, "192.168.27.") > 0
-'''      'MsgBox IP_PC.IP_PC & vbCrLf &
-'''      'If InStr(IP_PC.IP_PC, "192.168.") > 0 Then .servidor = "192.168.27.4" Else
-'''      .servidor = ftpSvr
-'''      '...conectamos al servidor FTP. EL label es el control donde mostrar los errores y el estado de la conexión
-       If .ConectarFtp(LstStatud) = False Then
-           MsgBox "No se pudo conectar"
-           Exit Sub
-       End If
-       LstStatud.Text = LstStatud.Text & .GetDirectorioActual & vbCrLf
-      .CambiarDirectorio ftpDirUpdate
-      'Mostramos en el label el path del directorio actual donde estamos ubicados en el servidor
-      'Le indicamos el ListView donde se listarán los archivos
-       Set .ListView = LstVwFTP
-      .ListarArchivos
-       'MsgBox ftpDirUpdate & vbCrLf & .servidor
-       
-       If Idc > 0 Then
-          RatonReloj
-         'Conectamos la nueva Base de Datos para sacar los Certificados del servidor que no los obtenga el cliente
-         .CambiarDirectorio ftpDirUpdate & "/SISTEMA/CERTIFIC/"
-         .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              For J = 0 To UBound(Certificados)
-                  If Certificados(J) = LstVwFTP.ListItems(I) Then
-                     Progreso_Barra.Mensaje_Box = "Descargando: " & LstVwFTP.ListItems(I)
-                    .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                    .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\CERTIFIC\" & LstVwFTP.ListItems(I), True
-                     'Exit For
-                  End If
-              Next J
-          Next I
-          RatonNormal
-       End If
-       If iDL > 0 Then
-          RatonReloj
-         'Conectamos la nueva Base de Datos para sacar los Certificados del servidor que no los obtenga el cliente
-         .CambiarDirectorio ftpDirUpdate & "/SISTEMA/LOGOS/"
-         .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              For J = 0 To UBound(LogoTipos)
-                  If UCaseStrg(LogoTipos(J)) = UCaseStrg(LstVwFTP.ListItems(I)) Then
-                     Progreso_Barra.Mensaje_Box = "Descargando: " & LstVwFTP.ListItems(I)
-                    .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                    .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\LOGOS\" & LstVwFTP.ListItems(I), True
-                     'Exit For
-                  End If
-              Next J
-          Next I
-          RatonNormal
-       End If
-
-       RatonReloj
-      'Conectamos la nueva Base de Datos para sacar los Certificados del servidor que no los obtenga el cliente
-      .CambiarDirectorio ftpDirUpdate & "/SISTEMA/FONTSPDF/"
-      .ListarArchivos
-       For I = 1 To LstVwFTP.ListItems.Count
-           Progreso_Barra.Mensaje_Box = "Descargando: " & LstVwFTP.ListItems(I)
-          .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-          .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\FONTSPDF\" & LstVwFTP.ListItems(I), True
-       Next I
-       RatonNormal
-       
-      .Desconectar
-   End With
-   RatonNormal
-  'MsgBox "Proceso Terminado con exito"
-Exit Sub
-error_Handler:
-     RatonNormal
-     MsgBox Err.Description, vbCritical
-End Sub
+'''Private Sub Descargar_FTP_Certificados_Logos()
+'''Dim AdoDBTemp As ADODB.Recordset
+'''Dim ListaDeArchivos As String
+'''Dim Certificados() As String
+'''Dim LogoTipos() As String
+'''Dim Idc As Byte
+'''Dim iDL As Byte
+'''
+'''On Error GoTo error_Handler
+'''
+'''  Idc = 0
+'''  iDL = 0
+'''  sSQL = "SELECT Empresa, Ruta_Certificado " _
+'''       & "FROM Empresas " _
+'''       & "WHERE Ruta_Certificado LIKE '%P12' " _
+'''       & "ORDER BY Empresa "
+'''  Select_AdoDB AdoDBTemp, sSQL
+'''  If AdoDBTemp.RecordCount > 0 Then
+'''     Do While Not AdoDBTemp.EOF
+'''        RutaDocumentos = RutaSistema & "\CERTIFIC\" & AdoDBTemp.Fields("Ruta_Certificado")
+'''        If Len(Dir$(RutaDocumentos)) = 0 Then
+'''           ReDim Preserve Certificados(Idc) As String
+'''           Certificados(Idc) = AdoDBTemp.Fields("Ruta_Certificado")
+'''           Idc = Idc + 1
+'''        End If
+'''        AdoDBTemp.MoveNext
+'''    Loop
+'''  End If
+'''  AdoDBTemp.Close
+'''
+'''  sSQL = "SELECT Logo_Tipo " _
+'''       & "FROM Empresas " _
+'''       & "WHERE Logo_Tipo <> '.' " _
+'''       & "GROUP BY Logo_Tipo " _
+'''       & "ORDER BY Logo_Tipo; "
+'''  Select_AdoDB AdoDBTemp, sSQL
+'''  If AdoDBTemp.RecordCount > 0 Then
+'''     RatonReloj
+'''     Do While Not AdoDBTemp.EOF
+'''        RutaDocumentos = RutaSistema & "\LOGOS\" & AdoDBTemp.Fields("Logo_Tipo") & ".jpg"
+'''        If Len(Dir$(RutaDocumentos)) = 0 Then
+'''           ReDim Preserve LogoTipos(iDL) As String
+'''           LogoTipos(iDL) = AdoDBTemp.Fields("Logo_Tipo") & ".jpg"
+'''           iDL = iDL + 1
+'''        End If
+'''        RutaDocumentos = RutaSistema & "\LOGOS\" & AdoDBTemp.Fields("Logo_Tipo") & ".gif"
+'''        If Len(Dir$(RutaDocumentos)) = 0 Then
+'''           ReDim Preserve LogoTipos(iDL) As String
+'''           LogoTipos(iDL) = AdoDBTemp.Fields("Logo_Tipo") & ".gif"
+'''           iDL = iDL + 1
+'''        End If
+'''        RutaDocumentos = RutaSistema & "\LOGOS\" & AdoDBTemp.Fields("Logo_Tipo") & ".png"
+'''        If Len(Dir$(RutaDocumentos)) = 0 Then
+'''           ReDim Preserve LogoTipos(iDL) As String
+'''           LogoTipos(iDL) = AdoDBTemp.Fields("Logo_Tipo") & ".gif"
+'''           iDL = iDL + 1
+'''        End If
+'''        AdoDBTemp.MoveNext
+'''    Loop
+'''    RatonNormal
+'''  End If
+'''  AdoDBTemp.Close
+'''
+'''  With ftp
+'''      .Inicializar FActualizar
+'''
+'''       If EsReadOnly Then
+'''          ftpDirUpdate = "/files/" 'ftpUpDir
+'''          If InStr(IPDelOrdenador, "192.168.27") Then
+'''            .servidor = "192.168.27.3"           'Establecesmo el nombre del Servidor FTP
+'''            .Puerto = 21
+'''          Else
+'''            .servidor = ftpUpSvr                 'Establecesmo el nombre del Servidor FTP
+'''            .Puerto = ftpUpPuerto
+'''          End If
+'''         .Password = ftpUpPwr                    'Le establecemos la contraseña de la cuenta Ftp
+'''         .Usuario = ftpUpUse                     'Le establecemos el nombre de usuario de la cuenta
+'''       Else
+'''         .servidor = ftpSvr                    'Establecesmo el nombre del Servidor FTP
+'''         .Password = ftpPwr                    'Le establecemos la contraseña de la cuenta Ftp
+'''         .Usuario = ftpUse                     'Le establecemos el nombre de usuario de la cuenta
+'''         .Puerto = ftpPuerto
+'''          ftpDirUpdate = ""
+'''       End If
+'''       'MsgBox "..."
+''''''      'Le establecemos la contraseña de la cuenta Ftp
+''''''      .Password = ftpPwr
+''''''      'Le establecemos el nombre de usuario de la cuenta
+''''''      .Usuario = ftpUse
+''''''      'Establecesmo el nombre del Servidor FTP
+''''''       'Or InStr(IP_PC.IP_PC, "192.168.27.") > 0
+''''''      'MsgBox IP_PC.IP_PC & vbCrLf &
+''''''      'If InStr(IP_PC.IP_PC, "192.168.") > 0 Then .servidor = "192.168.27.4" Else
+''''''      .servidor = ftpSvr
+''''''      '...conectamos al servidor FTP. EL label es el control donde mostrar los errores y el estado de la conexión
+'''       If .ConectarFtp(LstStatud) = False Then
+'''           MsgBox "No se pudo conectar"
+'''           Exit Sub
+'''       End If
+'''       LstStatud.Text = LstStatud.Text & .GetDirectorioActual & vbCrLf
+'''      .CambiarDirectorio ftpDirUpdate
+'''      'Mostramos en el label el path del directorio actual donde estamos ubicados en el servidor
+'''      'Le indicamos el ListView donde se listarán los archivos
+'''       Set .ListView = LstVwFTP
+'''      .ListarArchivos
+'''       'MsgBox ftpDirUpdate & vbCrLf & .servidor
+'''
+'''       If Idc > 0 Then
+'''          RatonReloj
+'''         'Conectamos la nueva Base de Datos para sacar los Certificados del servidor que no los obtenga el cliente
+'''         .CambiarDirectorio ftpDirUpdate & "/SISTEMA/CERTIFIC/"
+'''         .ListarArchivos
+'''          For I = 1 To LstVwFTP.ListItems.Count
+'''              For J = 0 To UBound(Certificados)
+'''                  If Certificados(J) = LstVwFTP.ListItems(I) Then
+'''                     Progreso_Barra.Mensaje_Box = "Descargando: " & LstVwFTP.ListItems(I)
+'''                    .Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''                    .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\CERTIFIC\" & LstVwFTP.ListItems(I), True
+'''                     'Exit For
+'''                  End If
+'''              Next J
+'''          Next I
+'''          RatonNormal
+'''       End If
+'''       If iDL > 0 Then
+'''          RatonReloj
+'''         'Conectamos la nueva Base de Datos para sacar los Certificados del servidor que no los obtenga el cliente
+'''         .CambiarDirectorio ftpDirUpdate & "/SISTEMA/LOGOS/"
+'''         .ListarArchivos
+'''          For I = 1 To LstVwFTP.ListItems.Count
+'''              For J = 0 To UBound(LogoTipos)
+'''                  If UCaseStrg(LogoTipos(J)) = UCaseStrg(LstVwFTP.ListItems(I)) Then
+'''                     Progreso_Barra.Mensaje_Box = "Descargando: " & LstVwFTP.ListItems(I)
+'''                    .Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''                    .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\LOGOS\" & LstVwFTP.ListItems(I), True
+'''                     'Exit For
+'''                  End If
+'''              Next J
+'''          Next I
+'''          RatonNormal
+'''       End If
+'''
+'''       RatonReloj
+'''      'Conectamos la nueva Base de Datos para sacar los Certificados del servidor que no los obtenga el cliente
+'''      .CambiarDirectorio ftpDirUpdate & "/SISTEMA/FONTSPDF/"
+'''      .ListarArchivos
+'''       For I = 1 To LstVwFTP.ListItems.Count
+'''           Progreso_Barra.Mensaje_Box = "Descargando: " & LstVwFTP.ListItems(I)
+'''          .Mostar_Estado_FTP ProgressBarEstado, LstStatud
+'''          .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\FONTSPDF\" & LstVwFTP.ListItems(I), True
+'''       Next I
+'''       RatonNormal
+'''
+'''      .Desconectar
+'''   End With
+'''   RatonNormal
+'''  'MsgBox "Proceso Terminado con exito"
+'''Exit Sub
+'''error_Handler:
+'''     RatonNormal
+'''     MsgBox Err.Description, vbCritical
+'''End Sub
 
 
 

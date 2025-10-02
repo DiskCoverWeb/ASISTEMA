@@ -11,8 +11,8 @@ Begin VB.Form FacturaFarmacia
    ClientWidth     =   11580
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   15615
-   ScaleWidth      =   15960
+   ScaleHeight     =   7890
+   ScaleWidth      =   11580
    WindowState     =   1  'Minimized
    Begin VB.CommandButton CmdCIBenef3 
       Appearance      =   0  'Flat
@@ -1402,13 +1402,7 @@ Private Sub Command3_Click()
        FA.Nuevo_Doc = True
        FA.Factura = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, False)
        TextFacturaNo = FA.Factura
-       
-       sSQL = "DELETE * " _
-            & "FROM Asiento_F " _
-            & "WHERE Item = '" & NumEmpresa & "' " _
-            & "AND CodigoU = '" & CodigoUsuario & "' "
-       Ejecutar_SQL_SP sSQL
-       
+
        sSQL = "SELECT * " _
             & "FROM Asiento_F " _
             & "WHERE Item = '" & NumEmpresa & "' " _
@@ -1762,7 +1756,6 @@ Public Sub ProcGrabar()
      
     'Grabamos el numero de factura
      FA.Nuevo_Doc = True
-     FA.Factura = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, True)
      FA.Tipo_PRN = "FM"
      Grabar_Factura FA, True
      

@@ -3,7 +3,7 @@ Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.Ocx"
-Begin VB.Form FUpDateExec 
+Begin VB.Form FUpdSystem 
    BackColor       =   &H00808080&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "DATOS Y PROGRAMAS"
@@ -13,11 +13,11 @@ Begin VB.Form FUpDateExec
    ClientWidth     =   6540
    DrawMode        =   1  'Blackness
    DrawStyle       =   5  'Transparent
-   Icon            =   "FUpdate.frx":0000
+   Icon            =   "FUpdSystem.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   Picture         =   "FUpdate.frx":1297D
+   Picture         =   "FUpdSystem.frx":1297D
    ScaleHeight     =   3015
    ScaleWidth      =   6540
    Begin ComctlLib.Toolbar Toolbar1 
@@ -375,61 +375,57 @@ Begin VB.Form FUpDateExec
       BeginProperty Images {0713E8C2-850A-101B-AFC0-4210102A8DA7} 
          NumListImages   =   12
          BeginProperty ListImage1 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FUpdate.frx":1C1AF
+            Picture         =   "FUpdSystem.frx":1C1AF
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FUpdate.frx":1C4C9
+            Picture         =   "FUpdSystem.frx":1C4C9
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FUpdate.frx":1C7E3
+            Picture         =   "FUpdSystem.frx":1C7E3
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FUpdate.frx":1CAE9
+            Picture         =   "FUpdSystem.frx":1CAE9
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FUpdate.frx":1CE03
+            Picture         =   "FUpdSystem.frx":1CE03
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FUpdate.frx":1D11D
+            Picture         =   "FUpdSystem.frx":1D11D
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FUpdate.frx":1D40F
+            Picture         =   "FUpdSystem.frx":1D40F
             Key             =   ""
          EndProperty
          BeginProperty ListImage8 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FUpdate.frx":1DC29
+            Picture         =   "FUpdSystem.frx":1DC29
             Key             =   "archivo"
          EndProperty
          BeginProperty ListImage9 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FUpdate.frx":1DF43
+            Picture         =   "FUpdSystem.frx":1DF43
             Key             =   "carpeta"
          EndProperty
          BeginProperty ListImage10 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FUpdate.frx":1E25D
+            Picture         =   "FUpdSystem.frx":1E25D
             Key             =   ""
          EndProperty
          BeginProperty ListImage11 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FUpdate.frx":1E49B
+            Picture         =   "FUpdSystem.frx":1E49B
             Key             =   ""
          EndProperty
          BeginProperty ListImage12 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FUpdate.frx":1E7B5
+            Picture         =   "FUpdSystem.frx":1E7B5
             Key             =   ""
          EndProperty
       EndProperty
    End
    Begin VB.Menu MArchivo 
       Caption         =   "Archivo"
-      Begin VB.Menu MActOtraBase 
-         Caption         =   "Actualicar otra Base"
-         Shortcut        =   ^E
-      End
       Begin VB.Menu MSalir 
          Caption         =   "Salir"
          Shortcut        =   ^Q
@@ -440,7 +436,7 @@ Begin VB.Form FUpDateExec
       Enabled         =   0   'False
    End
 End
-Attribute VB_Name = "FUpDateExec"
+Attribute VB_Name = "FUpdSystem"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
@@ -464,28 +460,30 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
 Dim hInst As Long
 Dim Thread As Long
             
-    RatonReloj
-    FUpDateExec.Height = Toolbar1.Top + LstStatud.Top + LstStatud.Height + 850
-    LstStatud.Clear
-    
-    LblAdvertencia.ForeColor = &H80FFFF
-    LblAdvertencia.FontBold = False
-    LblAdvertencia.FontSize = 8
-    LblAdvertencia.Caption = "ADVERTENCIA:" & vbCrLf & MensajeDeAdvertencia
-    
-    TMail.Mensaje = "Estimado(a) Cliente, le informamos que el sistema ha sido actualizado con exito." & vbCrLf
-    Progreso_Barra.Mensaje_Box = Button.Description
-   'Progreso_Iniciar
-    Procesando = 0
-    Progreso_Barra.Incremento = 0
-    Progreso_Barra.Puntos = 0
-    Progreso_Barra.color = 0
+    If Button.key <> "Salir" Then
+         RatonReloj
+         FUpdSystem.Height = Toolbar1.Top + LstStatud.Top + LstStatud.Height + 850
+         LstStatud.Clear
+         
+         LblAdvertencia.ForeColor = &H80FFFF
+         LblAdvertencia.FontBold = False
+         LblAdvertencia.FontSize = 8
+         LblAdvertencia.Caption = "ADVERTENCIA:" & vbCrLf & MensajeDeAdvertencia
+         
+         TMail.Mensaje = "Estimado(a) Cliente, le informamos que el sistema ha sido actualizado con exito." & vbCrLf
+         Progreso_Barra.Mensaje_Box = Button.Description
+        'Progreso_Iniciar
+         Procesando = 0
+         Progreso_Barra.Incremento = 0
+         Progreso_Barra.Puntos = 0
+         Progreso_Barra.color = 0
+    End If
    'MsgBox Button.key
     Select Case Button.key
       Case "Salir"                          'Salir de la actualizacion
             Progreso_Barra.Valor_Maximo = 100
             RatonNormal
-            Unload FUpDateExec
+            End
       Case "Ejecutables"                    'Actualiza solo los ejecutables
             Progreso_Barra.Valor_Maximo = 30
             Bajar_Archivos_FTP "[2]"
@@ -511,8 +509,8 @@ Dim Idc As Byte
 'If InStr(IP_PC.IP_PC, "192.168.") > 0 Then .servidor = "192.168.27.4" Else
 On Error GoTo error_Handler
    
-   FUpDateExec.Caption = "ESTABLECIENDO CONEXION AL SERVIDOR..."
-   FUpDateExec.Refresh
+   FUpdSystem.Caption = "ESTABLECIENDO CONEXION AL SERVIDOR..."
+   FUpdSystem.Refresh
   'If Existe_File(RutaSysBases & "\TEMP\*.zip") Then Kill RutaSysBases & "\TEMP\*.zip"
   'EsReadOnly = True
    With ftp
@@ -542,8 +540,8 @@ On Error GoTo error_Handler
            MsgBox "No se pudo conectar"
            Exit Sub
        End If
-       FUpDateExec.Caption = "DATOS Y PROGRAMAS: " & .servidor
-       FUpDateExec.Refresh
+       FUpdSystem.Caption = "DATOS Y PROGRAMAS: " & .servidor
+       FUpdSystem.Refresh
       'Mostramos en el label el path del directorio actual donde estamos ubicados en el servidor
        Progreso_Barra.Mensaje_Box = .GetDirectorioActual
       'MsgBox Progreso_Barra.Mensaje_Box
@@ -614,41 +612,8 @@ On Error GoTo error_Handler
                 .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\" & LstVwFTP.ListItems(I), True
               End If
           Next I
-         'Conectamos la nueva Base de Datos para sacar los Certificados del servidor
-          Idc = 0
-          sSQL = "SELECT Empresa, Ruta_Certificado " _
-               & "FROM Empresas " _
-               & "WHERE Ruta_Certificado LIKE '%P12' " _
-               & "ORDER BY Empresa "
-          Select_Adodc AdoAux, sSQL
-          If AdoAux.Recordset.RecordCount > 0 Then
-             Do While Not AdoAux.Recordset.EOF
-                RutaDocumentos = RutaSistema & "\CERTIFIC\" & AdoAux.Recordset.Fields("Ruta_Certificado")
-                If Len(Dir$(RutaDocumentos)) = 0 Then
-                   ReDim Preserve Certificados(Idc) As String
-                   Certificados(Idc) = AdoAux.Recordset.Fields("Ruta_Certificado")
-                   Idc = Idc + 1
-                End If
-                AdoAux.Recordset.MoveNext
-             Loop
-          End If
-
-          If Idc > 0 Then
-             RatonReloj
-            .CambiarDirectorio "/SISTEMA/CERTIFIC/"
-            .ListarArchivos
-             For I = 1 To LstVwFTP.ListItems.Count
-                 For J = 0 To UBound(Certificados)
-                     If Certificados(J) = LstVwFTP.ListItems(I) Then
-                        Progreso_Barra.Mensaje_Box = "Actualizando: " & LstVwFTP.ListItems(I)
-                       .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                       .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\CERTIFIC\" & LstVwFTP.ListItems(I), True
-                     End If
-                 Next J
-             Next I
-          End If
          
-         'Conectamos la nueva Base de Datos para sacar los Certificados del servidor que no los obtenga el cliente
+         'Conectamos la nueva Base de Datos para sacar los fondos del Adobe Reader DC
          .CambiarDirectorio "/SISTEMA/FONTSPDF/"
          .ListarArchivos
           For I = 1 To LstVwFTP.ListItems.Count
@@ -786,19 +751,19 @@ Dim AnchoTemp As Single
 Dim HayCnn As Boolean
 
     RatonReloj
-    CentrarForm FUpDateExec
+    CentrarForm FUpdSystem
    '------------------
     Set ping = New cPing
     EsReadOnly = True
     IPDelOrdenador = ping.IP_Del_PC()
    '-----------------------------------
-    FUpDateExec.Height = Toolbar1.Top + LstStatud.Top + LstStatud.Height + 820
+    FUpdSystem.Height = Toolbar1.Top + LstStatud.Top + LstStatud.Height + 820
     
     MDI_X_Max = Screen.width - 150
     MDI_Y_Max = Screen.Height - 1850
     
     
-   'Redondear_Cuadro FUpDateExec, 25
+   'Redondear_Cuadro FUpdSystem, 25
     ConSubDir = False
     RutaDestino = UCase$(Left$(CurDir$, 2))
     RutaSubDirTemp = RutaDestino
@@ -882,7 +847,7 @@ Dim HayCnn As Boolean
     Else
        Version_Sistema = "Teléfono del proveedor: " & vbCrLf & "(+593) 09-9965-4196/09-8910-5300. "
     End If
-    FUpDateExec.Caption = Modulo & ": " & strIPServidor & " - " & strNombreBaseDatos
+    FUpdSystem.Caption = Modulo & ": " & strIPServidor & " - " & strNombreBaseDatos
     LstStatud.Clear
     LstStatud.AddItem "D I S K C O V E R   S Y S T E M"
     LstStatud.AddItem Version_Sistema
@@ -896,12 +861,12 @@ Private Sub Form_Unload(Cancel As Integer)
    End
 End Sub
 
-Private Sub MActOtraBase_Click()
-  FOtraBase.Top = FUpDateExec.Top + Toolbar1.Height + 150
-  FOtraBase.Left = FUpDateExec.Left + 150
-  FOtraBase.Show 1
-  FUpDateExec.Caption = Modulo & ": " & strIPServidor & " - " & strNombreBaseDatos
-End Sub
+'''Private Sub MActOtraBase_Click()
+'''  FOtraBase.Top = FUpdSystem.Top + Toolbar1.Height + 150
+'''  FOtraBase.Left = FUpdSystem.Left + 150
+'''  FOtraBase.Show 1
+'''  FUpdSystem.Caption = Modulo & ": " & strIPServidor & " - " & strNombreBaseDatos
+'''End Sub
 
 Private Sub MSalir_Click()
    End

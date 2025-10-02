@@ -202,6 +202,9 @@ Begin VB.MDIForm MDIFact
          Begin VB.Menu MFacFarmacia 
             Caption         =   "Facturacion de Farmacias"
          End
+         Begin VB.Menu MFactDespensa 
+            Caption         =   "Despensas"
+         End
       End
       Begin VB.Menu MBarrNV 
          Caption         =   "Ingreso de Notas de Venta"
@@ -681,6 +684,13 @@ Private Sub MFacFarmacia_Click()
   TipoFactura = "FA"
   FacturaNueva = True
   FacturaFarmacia.Show
+End Sub
+
+Private Sub MFactDespensa_Click()
+  RatonReloj
+  TipoFactura = "DES"
+  FacturaNueva = True
+  FacturaDespensa.Show
 End Sub
 
 Private Sub MFactReembolso_Click()

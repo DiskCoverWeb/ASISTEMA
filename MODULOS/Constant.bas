@@ -8,21 +8,13 @@ Option Explicit
 'Store Procedure:
 'C:\SISTEMA\BASES\UPDATE_DB
 '-------------------------------------------------------
-'    Clipboard.Clear
-'    Clipboard.SetText SQL2
+'Clipboard.Clear
+'Clipboard.SetText SQL2
+'" & Full_Fields("Asiento_F") & "
 '-------------------------------------------------------
 'CORREOS PERSONALES DE DISKCOVER SYSTEM:
 '======================================
-'actualizar@diskcoversystem.com         Dlcjvl031210@
-'gerencia@diskcoversystem.com           Dlcjvl031210@
-'soporte@diskcoversystem.com            Dlcjvl031210@
 'soporteweb@diskcoversystem.com         Dlcjvl031210@
-'desarrollo@diskcoversystem.com         Dlcjvl031210@
-'carteraclientes@diskcoversystem.com    cartera2025Clientes
-'comprobantes@diskcoversystem.com       Dlcjvl1210@CompElec
-'electronicos@diskcoversystem.com       Electronicos2022@
-'informacion@diskcoversystem.com        infoDlcjvl1210DiskCover
-'webmaster@diskcoversystem.com          web031210Master
 '-------------------------------------------------------
 'SERVIRLES ES NUESTRO COMPROMISO, DISFRUTARLO ES EL SUYO.
 '-------------------------------------------------------
@@ -79,16 +71,19 @@ Option Explicit
 'Constantes para acceso a Datos por ADO/ADODB/OLE DB
 'Constante                Valor
 '-----------------------------------------------------------------
-'Nuevo Comprobantes     : 1
-'Modificar Comprobantes : 1
-'Copiar Comprobantes    : 1
-'Saldos Ctas. Especiales: 15
-'Conciliacion           : 30
-'Pago a Bancos Cash     : 35
-'Anexos Transaccionales : 96
-'Cierre de Caja         : 96,97,255
-'Importar Excele        : 100,180,190,199
-'Suscripciones          : 250
+'Nuevo Comprobantes             : 1
+'Modificar Comprobantes         : 1
+'Copiar Comprobantes            : 1
+'Saldos Ctas. Especiales        : 15
+'Conciliacion                   : 30
+'Pago a Bancos Cash             : 35
+'Transferencia Bodegas Recetas  : 81
+'Transferencia Bodegas productos: 82
+'Anexos Transaccionales         : 96
+'Cierre de Caja                 : 96,97,255
+'Importar Excele                : 100,180,190,199
+'Salidas de Kardex WEB          : 109
+'Suscripciones                  : 250
 '-----------------------------------------------------------------
 ' Trans_No = 36-78, 201-249
 '-----------------------------------------------------------------
@@ -111,9 +106,6 @@ Option Explicit
 'Prueba:
 'https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl
 'https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl
-'--------------------------------------------------------------------------------------------
-    '    Clipboard.Clear
-    '    Clipboard.SetText URLParams
 '--------------------------------------------------------------------------------------------
 Global Const TextoLeyendaFA = "Para consultas, requerimientos o reclamos puede contactarse a nuestro Centro de Atención al Cliente Teléfono: 02-6052430, " _
                             & "o escriba al correo prisma_net@hotmail.es; para Transferencia o Depósitos hacer en El Banco Pichincha: Cta. Ahr. 4245946100 a " _

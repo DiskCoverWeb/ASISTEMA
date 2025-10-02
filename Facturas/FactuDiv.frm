@@ -39,9 +39,9 @@ Begin VB.Form FacturasDiv
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   4740
-      Left            =   6615
+      Left            =   1785
       TabIndex        =   35
-      Top             =   3885
+      Top             =   210
       Visible         =   0   'False
       Width           =   7365
       Begin MSDataListLib.DataCombo DCCliente 
@@ -1469,11 +1469,7 @@ Private Sub Command3_Click()
         Moneda_US = False
         TextoFormaPago = PagoCont
         ProcGrabar
-        sSQL = "DELETE * " _
-             & "FROM Asiento_F " _
-             & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND CodigoU = '" & CodigoUsuario & "' "
-        Ejecutar_SQL_SP sSQL
+        
         sSQL = "SELECT * " _
              & "FROM Asiento_F " _
              & "WHERE Item = '" & NumEmpresa & "' " _
@@ -1643,6 +1639,8 @@ Public Sub ProcGrabar()
  DGAsientoF.Visible = False
  TipoFactura = FA.TC
  FA.Porc_IVA = Porc_IVA
+ FA.T = Pendiente
+ FA.Forma_Pago = PagoCred
  'Seteamos los encabezados para las facturas
   Calculos_Totales_Factura FA
   If AdoAsientoF.Recordset.RecordCount > 0 Then
@@ -1651,17 +1649,6 @@ Public Sub ProcGrabar()
      HoraTexto = Format$(Time, FormatoTimes)
      Total_FacturaME = 0
      Moneda_US = False
-'    If Moneda_US Then
-'       Total_Factura = Redondear((Total_Sin_IVA + Total_Con_IVA - Total_Desc + Total_IVA + Total_Servicio) * Dolar, 2)
-'       Total_FacturaME = Redondear(Total_Sin_IVA + Total_Con_IVA - Total_Desc + Total_IVA + Total_Servicio, 2)
-'    Else
-'       Total_Factura = Redondear(Total_Sin_IVA + Total_Con_IVA - Total_Desc + Total_IVA + Total_Servicio, 2)
-'       Total_FacturaME = 0
-'    End If
-'     Saldo = Total_Factura
-'     Saldo_ME = Total_FacturaME
-'     If Saldo < 0 Then Saldo = 0
-'     Factura_No = Numero_Factura(FA)
      If FA.Nuevo_Doc Then FA.Factura = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, True)
      If TipoFactura = "PV" Then
         Control_Procesos "F", "Grabar Ticket No. " & FA.Factura
@@ -1674,117 +1661,20 @@ Public Sub ProcGrabar()
      Else
         Control_Procesos "F", "Grabar Factura No. " & FA.Factura
      End If
-     sSQL = "DELETE * " _
-          & "FROM Detalle_Factura " _
-          & "WHERE Factura = " & Factura_No & " " _
-          & "AND Item = '" & NumEmpresa & "' " _
-          & "AND Periodo = '" & Periodo_Contable & "' " _
-          & "AND TC = '" & TipoFactura & "' "
-     Ejecutar_SQL_SP sSQL
-     sSQL = "DELETE * " _
-          & "FROM Facturas " _
-          & "WHERE Factura = " & Factura_No & " " _
-          & "AND Item = '" & NumEmpresa & "' " _
-          & "AND Periodo = '" & Periodo_Contable & "' " _
-          & "AND TC = '" & TipoFactura & "' "
-     Ejecutar_SQL_SP sSQL
-     TextoFormaPago = PagoCred
-     T = Pendiente
-    'Grabamos el numero de factura
-     TextoProc = Ninguno
-     SetAdoAddNew "Facturas"
-     SetAdoFields "T", Pendiente
-     SetAdoFields "ME", Moneda_US
-     SetAdoFields "TC", FA.TC
-     SetAdoFields "Factura", FA.Factura
-     SetAdoFields "Fecha", MBFecha
-     SetAdoFields "Fecha_C", MBFecha
-     SetAdoFields "Fecha_V", MBFecha
-     SetAdoFields "CodigoC", FA.CodigoC
-     SetAdoFields "Forma_Pago", TextoFormaPago
-     SetAdoFields "Sin_IVA", FA.Sin_IVA
-     SetAdoFields "Con_IVA", FA.Con_IVA
-     SetAdoFields "SubTotal", FA.Sin_IVA + FA.Con_IVA
-     SetAdoFields "Descuento", FA.Descuento
-     SetAdoFields "IVA", FA.Total_IVA
-     SetAdoFields "Servicio", FA.Servicio
-     If Moneda_US Then
-        SetAdoFields "Total_ME", FA.Total_ME
-        Total = FA.Total_ME
-     Else
-        SetAdoFields "Total_MN", FA.Total_MN
-        Total = FA.Total_MN
-     End If
-     SetAdoFields "Saldo_MN", FA.Total_MN
-     SetAdoFields "Saldo_ME", FA.Total_ME
-     SetAdoFields "Cod_Ejec", Ninguno
-     Efectivo = Val(CCur(TxtEfectivo))
+     If Moneda_US Then Total = FA.Total_ME Else Total = FA.Total_MN
+     FA.Efectivo = Val(CCur(TxtEfectivo))
      Dolar = CCur(Val(TextCotiza))
-''     If Dolar > 0 Then
-''        TotalDolar = Dolar
-''        If OpcDiv.value Then
-''           Efectivo = Redondear(Efectivo * TotalDolar, 2)
-''        Else
-''           Efectivo = Redondear(Efectivo / TotalDolar, 2)
-''        End If
-''     End If
-     SetAdoFields "Efectivo", Efectivo
-     SetAdoFields "Porc_C", 0
-     SetAdoFields "Cotizacion", Dolar
-     SetAdoFields "Cta_CxP", Cta_Cobrar
-     SetAdoFields "Cta_Venta", Cta_Ventas
-     SetAdoFields "Serie", FA.Serie
-     SetAdoFields "Autorizacion", FA.Autorizacion
-     SetAdoFields "CodigoU", CodigoUsuario
-     SetAdoFields "Cod_CxC", CodigoL
-     SetAdoFields "Periodo", Periodo_Contable
-     SetAdoFields "Hora", Format$(Time, FormatoTimes)
-     SetAdoFields "Item", NumEmpresa
-     SetAdoUpdate
-     With AdoAsientoF.Recordset
-      If .RecordCount > 0 Then
-         .MoveFirst
-          Do While Not .EOF
-            SetAdoAddNew "Detalle_Factura"
-            SetAdoFields "T", Pendiente
-            SetAdoFields "TC", FA.TC
-            SetAdoFields "Serie", FA.Serie
-            SetAdoFields "Autorizacion", FA.Autorizacion
-            SetAdoFields "Factura", FA.Factura
-            SetAdoFields "CodigoC", FA.CodigoC
-            SetAdoFields "Fecha", MBFecha
-            SetAdoFields "Codigo", .fields("CODIGO")
-            SetAdoFields "Cantidad", .fields("CANT")
-            SetAdoFields "CodigoL", .fields("CODIGO_L")
-            SetAdoFields "Reposicion", .fields("REP")
-            SetAdoFields "Precio", .fields("PRECIO")
-            SetAdoFields "Total", .fields("TOTAL")
-            SetAdoFields "Total_Desc", .fields("Total_Desc")
-            SetAdoFields "Total_IVA", .fields("Total_IVA")
-            SetAdoFields "Producto", .fields("PRODUCTO")
-            SetAdoFields "Cod_Ejec", .fields("Cod_Ejec")
-            SetAdoFields "Porc_C", .fields("Porc_C")
-            SetAdoFields "CodigoU", CodigoUsuario
-            SetAdoFields "Periodo", Periodo_Contable
-            SetAdoFields "Item", NumEmpresa
-            SetAdoUpdate
-           .MoveNext
-          Loop
-      End If
-     End With
-     sSQL = "DELETE * " _
-          & "FROM Asiento_F " _
-          & "WHERE Item = '" & NumEmpresa & "' " _
-          & "AND CodigoU = '" & CodigoUsuario & "' "
-     Ejecutar_SQL_SP sSQL
+     FA.Cotizacion = Dolar
+    
+    'Grabamos el numero de factura
+     Grabar_Factura FA, True
+     
      sSQL = "SELECT * " _
           & "FROM Asiento_F " _
           & "WHERE Item = '" & NumEmpresa & "' " _
           & "AND CodigoU = '" & CodigoUsuario & "' "
      Select_Adodc_Grid DGAsientoF, AdoAsientoF, sSQL
-    'Grabamos el numero de factura
      RatonNormal
-     
      If TipoFactura <> "CP" Then
         Evaluar = True
         FechaTexto = MBFecha.Text

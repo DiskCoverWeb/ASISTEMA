@@ -123,19 +123,19 @@ Begin VB.Form IngLinea
       TabCaption(1)   =   "DATOS DEL S.R.I."
       TabPicture(1)   =   "IngLinea.frx":045E
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "Label18"
-      Tab(1).Control(1)=   "Label15"
-      Tab(1).Control(2)=   "Label14"
-      Tab(1).Control(3)=   "Label17"
-      Tab(1).Control(4)=   "Label16"
-      Tab(1).Control(5)=   "Label13"
+      Tab(1).Control(0)=   "FrmEstablecimiento"
+      Tab(1).Control(1)=   "TxtNumSerieDos"
+      Tab(1).Control(2)=   "TxtNumSerieUno"
+      Tab(1).Control(3)=   "TxtNumSerietres1"
+      Tab(1).Control(4)=   "TxtNumAutor"
+      Tab(1).Control(5)=   "MBFechaVenc"
       Tab(1).Control(6)=   "MBFechaIni"
-      Tab(1).Control(7)=   "MBFechaVenc"
-      Tab(1).Control(8)=   "TxtNumAutor"
-      Tab(1).Control(9)=   "TxtNumSerietres1"
-      Tab(1).Control(10)=   "TxtNumSerieUno"
-      Tab(1).Control(11)=   "TxtNumSerieDos"
-      Tab(1).Control(12)=   "FrmEstablecimiento"
+      Tab(1).Control(7)=   "Label13"
+      Tab(1).Control(8)=   "Label16"
+      Tab(1).Control(9)=   "Label17"
+      Tab(1).Control(10)=   "Label14"
+      Tab(1).Control(11)=   "Label15"
+      Tab(1).Control(12)=   "Label18"
       Tab(1).ControlCount=   13
       Begin VB.Frame FrmEstablecimiento 
          Caption         =   "DATOS DEL ESTABLECIMIENTO:"
@@ -1439,6 +1439,12 @@ Private Sub Form_Activate()
     CTipo.AddItem "LC"
     CTipo.AddItem "GR"
     CTipo.AddItem "CP"
+    CTipo.AddItem "OP"
+    CTipo.AddItem "NDU"
+    CTipo.AddItem "NDO"
+    CTipo.AddItem "NPA"
+    CTipo.AddItem "DES"
+    
     CTipo.Text = "FA"
     Codigo = Ninguno
     FormatoMaskCta MBoxCta

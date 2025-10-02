@@ -58,7 +58,6 @@ Begin VB.Form FSeteos
       _ExtentY        =   14102
       _Version        =   393216
       Tabs            =   4
-      Tab             =   2
       TabsPerRow      =   4
       TabHeight       =   520
       BackColor       =   16761024
@@ -74,7 +73,7 @@ Begin VB.Form FSeteos
       EndProperty
       TabCaption(0)   =   "Se&teos Generales"
       TabPicture(0)   =   "FSeteos.frx":030A
-      Tab(0).ControlEnabled=   0   'False
+      Tab(0).ControlEnabled=   -1  'True
       Tab(0).Control(0)=   "DGEducativo"
       Tab(0).Control(0).Enabled=   0   'False
       Tab(0).Control(1)=   "DGTipoPrest"
@@ -88,89 +87,57 @@ Begin VB.Form FSeteos
       TabPicture(1)   =   "FSeteos.frx":0326
       Tab(1).ControlEnabled=   0   'False
       Tab(1).Control(0)=   "LstTablas"
+      Tab(1).Control(0).Enabled=   0   'False
       Tab(1).Control(1)=   "CheqSCAlum"
+      Tab(1).Control(1).Enabled=   0   'False
       Tab(1).Control(2)=   "LstDuplicados"
+      Tab(1).Control(2).Enabled=   0   'False
       Tab(1).Control(3)=   "Command15"
+      Tab(1).Control(3).Enabled=   0   'False
       Tab(1).ControlCount=   4
       TabCaption(2)   =   "&Niveles de Seguridad"
       TabPicture(2)   =   "FSeteos.frx":0342
-      Tab(2).ControlEnabled=   -1  'True
+      Tab(2).ControlEnabled=   0   'False
       Tab(2).Control(0)=   "Label4"
-      Tab(2).Control(0).Enabled=   0   'False
       Tab(2).Control(1)=   "Label10"
-      Tab(2).Control(1).Enabled=   0   'False
       Tab(2).Control(2)=   "Label1"
-      Tab(2).Control(2).Enabled=   0   'False
       Tab(2).Control(3)=   "Label2"
-      Tab(2).Control(3).Enabled=   0   'False
       Tab(2).Control(4)=   "Label5"
-      Tab(2).Control(4).Enabled=   0   'False
       Tab(2).Control(5)=   "Label3"
-      Tab(2).Control(5).Enabled=   0   'False
       Tab(2).Control(6)=   "DCBodega"
-      Tab(2).Control(6).Enabled=   0   'False
       Tab(2).Control(7)=   "MBPeriodo"
-      Tab(2).Control(7).Enabled=   0   'False
       Tab(2).Control(8)=   "TextClave"
-      Tab(2).Control(8).Enabled=   0   'False
       Tab(2).Control(9)=   "Frame2"
-      Tab(2).Control(9).Enabled=   0   'False
       Tab(2).Control(10)=   "TxtItem"
-      Tab(2).Control(10).Enabled=   0   'False
       Tab(2).Control(11)=   "Command2"
-      Tab(2).Control(11).Enabled=   0   'False
       Tab(2).Control(12)=   "Command3"
-      Tab(2).Control(12).Enabled=   0   'False
       Tab(2).Control(13)=   "TxtUsuario"
-      Tab(2).Control(13).Enabled=   0   'False
       Tab(2).Control(14)=   "Command7"
-      Tab(2).Control(14).Enabled=   0   'False
       Tab(2).Control(15)=   "DCUsuario"
-      Tab(2).Control(15).Enabled=   0   'False
       Tab(2).Control(16)=   "Command13"
-      Tab(2).Control(16).Enabled=   0   'False
       Tab(2).Control(17)=   "Command5"
-      Tab(2).Control(17).Enabled=   0   'False
       Tab(2).Control(18)=   "Command11"
-      Tab(2).Control(18).Enabled=   0   'False
       Tab(2).Control(19)=   "DGEmp1"
-      Tab(2).Control(19).Enabled=   0   'False
       Tab(2).Control(20)=   "Command10"
-      Tab(2).Control(20).Enabled=   0   'False
       Tab(2).Control(21)=   "LstModulos"
-      Tab(2).Control(21).Enabled=   0   'False
       Tab(2).Control(22)=   "Command6"
-      Tab(2).Control(22).Enabled=   0   'False
       Tab(2).Control(23)=   "LstEmpresas"
-      Tab(2).Control(23).Enabled=   0   'False
       Tab(2).Control(24)=   "Command1"
-      Tab(2).Control(24).Enabled=   0   'False
       Tab(2).Control(25)=   "Command4"
-      Tab(2).Control(25).Enabled=   0   'False
       Tab(2).ControlCount=   26
       TabCaption(3)   =   "&Impresiones"
       TabPicture(3)   =   "FSeteos.frx":035E
       Tab(3).ControlEnabled=   0   'False
       Tab(3).Control(0)=   "DGFormato"
-      Tab(3).Control(0).Enabled=   0   'False
       Tab(3).Control(1)=   "Command17(0)"
-      Tab(3).Control(1).Enabled=   0   'False
       Tab(3).Control(2)=   "Command16"
-      Tab(3).Control(2).Enabled=   0   'False
       Tab(3).Control(3)=   "PictFormatos"
-      Tab(3).Control(3).Enabled=   0   'False
       Tab(3).Control(4)=   "DGSeteosPRN"
-      Tab(3).Control(4).Enabled=   0   'False
       Tab(3).Control(5)=   "Command21"
-      Tab(3).Control(5).Enabled=   0   'False
       Tab(3).Control(6)=   "Command17(1)"
-      Tab(3).Control(6).Enabled=   0   'False
       Tab(3).Control(7)=   "Command17(2)"
-      Tab(3).Control(7).Enabled=   0   'False
       Tab(3).Control(8)=   "Command17(3)"
-      Tab(3).Control(8).Enabled=   0   'False
       Tab(3).Control(9)=   "Command8"
-      Tab(3).Control(9).Enabled=   0   'False
       Tab(3).ControlCount=   10
       Begin VB.CommandButton Command4 
          Caption         =   "Migracion a MySQL"
@@ -184,7 +151,7 @@ Begin VB.Form FSeteos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   750
-         Left            =   12075
+         Left            =   -62925
          Picture         =   "FSeteos.frx":037A
          Style           =   1  'Graphical
          TabIndex        =   53
@@ -203,7 +170,7 @@ Begin VB.Form FSeteos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   750
-         Left            =   10080
+         Left            =   -64920
          Picture         =   "FSeteos.frx":0A10
          Style           =   1  'Graphical
          TabIndex        =   52
@@ -221,7 +188,7 @@ Begin VB.Form FSeteos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   4140
-         Left            =   2205
+         Left            =   -72795
          Style           =   1  'Checkbox
          TabIndex        =   49
          Top             =   3570
@@ -239,7 +206,7 @@ Begin VB.Form FSeteos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   750
-         Left            =   11760
+         Left            =   -63240
          Picture         =   "FSeteos.frx":10A6
          Style           =   1  'Graphical
          TabIndex        =   24
@@ -257,7 +224,7 @@ Begin VB.Form FSeteos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   4140
-         Left            =   105
+         Left            =   -74895
          Style           =   1  'Checkbox
          TabIndex        =   48
          Top             =   3570
@@ -275,7 +242,7 @@ Begin VB.Form FSeteos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   750
-         Left            =   10080
+         Left            =   -64920
          Style           =   1  'Graphical
          TabIndex        =   47
          Top             =   3465
@@ -285,7 +252,7 @@ Begin VB.Form FSeteos
       Begin MSDataGridLib.DataGrid DGEmp1 
          Bindings        =   "FSeteos.frx":1970
          Height          =   2325
-         Left            =   3570
+         Left            =   -71430
          TabIndex        =   17
          Top             =   1155
          Width           =   6315
@@ -446,7 +413,7 @@ Begin VB.Form FSeteos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   750
-         Left            =   10395
+         Left            =   -64605
          Picture         =   "FSeteos.frx":1C90
          Style           =   1  'Graphical
          TabIndex        =   7
@@ -523,7 +490,7 @@ Begin VB.Form FSeteos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   750
-         Left            =   12075
+         Left            =   -62925
          Style           =   1  'Graphical
          TabIndex        =   35
          Top             =   3465
@@ -560,7 +527,7 @@ Begin VB.Form FSeteos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   750
-         Left            =   12075
+         Left            =   -62925
          Style           =   1  'Graphical
          TabIndex        =   32
          Top             =   2625
@@ -571,7 +538,7 @@ Begin VB.Form FSeteos
          Bindings        =   "FSeteos.frx":30A2
          DataSource      =   "AdoUsuario"
          Height          =   345
-         Left            =   105
+         Left            =   -74895
          TabIndex        =   5
          ToolTipText     =   "<Ctrl+Supr> Reactiva Usuario Todos los Privilejios"
          Top             =   735
@@ -717,7 +684,7 @@ Begin VB.Form FSeteos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   750
-         Left            =   10080
+         Left            =   -64920
          Picture         =   "FSeteos.frx":3822
          Style           =   1  'Graphical
          TabIndex        =   27
@@ -735,7 +702,7 @@ Begin VB.Form FSeteos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   1470
+         Left            =   -73530
          MaxLength       =   15
          TabIndex        =   25
          Top             =   1155
@@ -754,7 +721,7 @@ Begin VB.Form FSeteos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   750
-         Left            =   10080
+         Left            =   -64920
          Picture         =   "FSeteos.frx":40EC
          Style           =   1  'Graphical
          TabIndex        =   23
@@ -773,7 +740,7 @@ Begin VB.Form FSeteos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   750
-         Left            =   12075
+         Left            =   -62925
          Picture         =   "FSeteos.frx":49B6
          Style           =   1  'Graphical
          TabIndex        =   22
@@ -791,7 +758,7 @@ Begin VB.Form FSeteos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   12915
+         Left            =   -62085
          TabIndex        =   21
          Text            =   "000"
          Top             =   1260
@@ -809,7 +776,7 @@ Begin VB.Form FSeteos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   1590
-         Left            =   105
+         Left            =   -74895
          TabIndex        =   9
          Top             =   1890
          Width           =   3375
@@ -985,7 +952,7 @@ Begin VB.Form FSeteos
       Begin MSDataGridLib.DataGrid DGCodigos 
          Bindings        =   "FSeteos.frx":5280
          Height          =   5265
-         Left            =   -65655
+         Left            =   9345
          TabIndex        =   0
          Top             =   2520
          Width           =   4740
@@ -1059,7 +1026,7 @@ Begin VB.Form FSeteos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   1470
+         Left            =   -73530
          MaxLength       =   10
          TabIndex        =   6
          Top             =   1470
@@ -1069,7 +1036,7 @@ Begin VB.Form FSeteos
       Begin MSDataGridLib.DataGrid DGCuentas 
          Bindings        =   "FSeteos.frx":5299
          Height          =   5265
-         Left            =   -74895
+         Left            =   105
          TabIndex        =   1
          Top             =   2520
          Width           =   9255
@@ -1135,7 +1102,7 @@ Begin VB.Form FSeteos
       End
       Begin MSMask.MaskEdBox MBPeriodo 
          Height          =   330
-         Left            =   10920
+         Left            =   -64080
          TabIndex        =   19
          Top             =   1260
          Width           =   1275
@@ -1227,7 +1194,7 @@ Begin VB.Form FSeteos
       Begin MSDataGridLib.DataGrid DGTipoPrest 
          Bindings        =   "FSeteos.frx":52CB
          Height          =   975
-         Left            =   -74895
+         Left            =   105
          TabIndex        =   43
          Top             =   420
          Width           =   12720
@@ -1294,7 +1261,7 @@ Begin VB.Form FSeteos
       Begin MSDataGridLib.DataGrid DGEducativo 
          Bindings        =   "FSeteos.frx":52E6
          Height          =   1065
-         Left            =   -74895
+         Left            =   105
          TabIndex        =   44
          Top             =   1470
          Width           =   13980
@@ -1361,7 +1328,7 @@ Begin VB.Form FSeteos
          Bindings        =   "FSeteos.frx":5301
          DataSource      =   "AdoBodega"
          Height          =   345
-         Left            =   10080
+         Left            =   -64920
          TabIndex        =   50
          ToolTipText     =   "<Ctrl+Supr> Reactiva Usuario Todos los Privilejios"
          Top             =   5565
@@ -1394,7 +1361,7 @@ Begin VB.Form FSeteos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   10080
+         Left            =   -64920
          TabIndex        =   51
          Top             =   5145
          Width           =   3900
@@ -1412,7 +1379,7 @@ Begin VB.Form FSeteos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   105
+         Left            =   -74895
          TabIndex        =   26
          Top             =   1155
          Visible         =   0   'False
@@ -1431,7 +1398,7 @@ Begin VB.Form FSeteos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   12285
+         Left            =   -62715
          TabIndex        =   20
          Top             =   1260
          Width           =   645
@@ -1449,7 +1416,7 @@ Begin VB.Form FSeteos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   10080
+         Left            =   -64920
          TabIndex        =   18
          Top             =   1260
          Width           =   855
@@ -1467,7 +1434,7 @@ Begin VB.Form FSeteos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   105
+         Left            =   -74895
          TabIndex        =   8
          Top             =   1470
          Visible         =   0   'False
@@ -1487,7 +1454,7 @@ Begin VB.Form FSeteos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   105
+         Left            =   -74895
          TabIndex        =   4
          Top             =   420
          Width           =   9780
@@ -7472,19 +7439,24 @@ If Existe_File(RutaSistema & "\BASES\UPDATE_DB\*.upd") Then Kill RutaSistema & "
  
  ' Crea variables de objeto para los objetos de acceso a datos.
 '    Dim itmX As ListItem
+    LstTablas.Clear
+    Contador = 0
     Set AdoCon1 = New ADODB.Connection
     AdoCon1.open AdoStrCnn
     Set RstSchema = AdoCon1.OpenSchema(adSchemaTables)
     Do Until RstSchema.EOF
        If RstSchema!TABLE_TYPE = "TABLE" And MidStrg(RstSchema!TABLE_NAME, 1, 1) <> "~" Then
          'Llenamos la lista de Tablas
-          LstTablas.AddItem RstSchema!TABLE_NAME
-          Contador = Contador + 1
+          
+          If RstSchema!TABLE_NAME <> "Actualizacion" Then
+             LstTablas.AddItem RstSchema!TABLE_NAME
+             Contador = Contador + 1
+          End If
        End If
        RstSchema.MoveNext
     Loop
 
- 
+ 'MsgBox "Desktop Test: " & Contador
  
  Progreso_Barra.Incremento = 0
  Progreso_Barra.Valor_Maximo = LstTablas.ListCount - 1
@@ -7520,7 +7492,8 @@ If Existe_File(RutaSistema & "\BASES\UPDATE_DB\*.upd") Then Kill RutaSistema & "
     NumFile = FreeFile
     Open RutaGeneraFile For Output As #NumFile
     With AdoComp.Recordset
-     Print #NumFile, Format(.fields.Count, "000")
+     Print #NumFile, "INSERT INTO Estructura_Tabla (Campo, Tipo_SQL, X) VALUES "
+     Cadena = ""
      For JCamp = 0 To .fields.Count - 1
          Cadena1 = FieldTypeSQL(.fields(JCamp).Type)
          Cadena2 = FieldTypeAccess(.fields(JCamp).Type)
@@ -7535,16 +7508,21 @@ If Existe_File(RutaSistema & "\BASES\UPDATE_DB\*.upd") Then Kill RutaSistema & "
                 Cadena2 = Cadena2 & "(" & CStr(KCamp) & ")"
            Case adNumeric: Cadena1 = Cadena1 & "(18,0)"
          End Select
-         Cadena1 = Cadena1 & " NULL"
-         Cadena2 = Cadena2 & " NULL"
-         'MsgBox Cadena1 & vbCrLf & Cadena2
-         Print #NumFile, .fields(JCamp).Name;
-         Print #NumFile, "|";
-         Print #NumFile, Cadena1;
-         Print #NumFile, "|";
-         Print #NumFile, Cadena2;
-         Print #NumFile, "|"
+         Cadena = Cadena & "('" & .fields(JCamp).Name & "','" & Cadena1 & "','.')," & vbCrLf
+         
+''         Cadena1 = Cadena1 & " NULL"
+''         Cadena2 = Cadena2 & " NULL"
+''
+''         Print #NumFile, .fields(JCamp).Name;
+''         Print #NumFile, "|";
+''         Print #NumFile, Cadena1;
+''         Print #NumFile, "|";
+''         Print #NumFile, Cadena2;
+''         Print #NumFile, "|"
+        'MsgBox "Desktop Test: " & Cadena1 & " - " & Cadena2
      Next JCamp
+     Cadena = MidStrg(Cadena, 1, Len(Cadena) - 3) & ";"
+     Print #NumFile, Cadena
     End With
     Close #NumFile
     RatonNormal
@@ -7676,10 +7654,13 @@ For I = 0 To LstTablas.ListCount - 1
          Cadena2 = FieldTypeAccess(.fields(J).Type)
          K = .fields(J).DefinedSize
          If K > 65535 Then K = 0
-         If .fields(J).Type = adVarWChar Then
-             Cadena2 = Cadena2 & " (" & CStr(K) & ")"
-             Cadena1 = Cadena1 & " (" & CStr(K) & ")"
-         End If
+         Select Case .fields(J).Type
+           Case adLongVarWChar
+                Cadena1 = Cadena1 & "(MAX)"
+           Case adVarWChar
+                Cadena2 = Cadena2 & "(" & CStr(K) & ")"
+                Cadena1 = Cadena1 & "(" & CStr(K) & ")"
+         End Select
          If .fields(J).Type = adNumeric Then Cadena1 = Cadena1 & "(18,0)"
          Cadena2 = Cadena2 & " NULL"
          Cadena1 = Cadena1 & " NULL"

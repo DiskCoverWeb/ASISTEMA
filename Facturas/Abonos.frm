@@ -1969,6 +1969,7 @@ Private Sub Command1_Click()
          Cta1 = SinEspaciosIzq(DCTarjeta.Text)
          NombreBanco1 = TrimStrg(MidStrg(DCTarjeta.Text, Len(Cta1) + 1, 60))
          NombreBanco1 = MidStrg(NombreBanco1, 1, 25)
+         
          TA.Cta_CxP = Cta_Cobrar
          TA.CodigoC = CodigoCliente
          TA.T = Normal
@@ -1976,6 +1977,9 @@ Private Sub Command1_Click()
          TA.Serie = FA.Serie
          TA.Factura = FA.Factura
          TA.Fecha = MBFecha
+         TA.Serie_R = Ninguno
+         TA.AutorizacionR = Ninguno
+         TA.Secuencial_R = 0
          
         'Abono de Factura Caja MN
          TA.Cta = Cta_CajaG
@@ -2009,44 +2013,37 @@ Private Sub Command1_Click()
          If TA.Abono > 0 Then TotalAbonos = TotalAbonos + TA.Abono
          Grabar_Abonos TA
          
-        'Abono de Factura Rete. IVA Bienes
-         Codigo1 = Format$(Val(TrimStrg(MidStrg(TxtSerieRet, 1, 3))), "000")
-         Codigo2 = Format$(Val(TrimStrg(MidStrg(TxtSerieRet, 4, 3))), "000")
+        'Abonos por Retenciones
+         TA.Serie_R = TxtSerieRet
+         TA.AutorizacionR = TxtAutoRet
+         TA.Secuencial_R = TextCompRet
          
+        'Abono de Factura Rete. IVA Bienes
          TA.Cta = TrimStrg(SinEspaciosIzq(DCRetIBienes))
          TA.Banco = "RETENCION IVA BIENES"
          TA.Cheque = TextCompRet
          TA.Abono = Total_RetIVAB
-         TA.AutorizacionR = TxtAutoRet
-         TA.Establecimiento = Codigo1
-         TA.Emision = Codigo2
          TA.Porcentaje = Val(CBienes)
          If TA.Abono > 0 Then TotalAbonos = TotalAbonos + TA.Abono
-         Grabar_Abonos_Retenciones TA
+         Grabar_Abonos TA
          
         'Abono de Factura Ret IVA Servicio
          TA.Cta = TrimStrg(SinEspaciosIzq(DCRetISer))
          TA.Banco = "RETENCION IVA SERVICIO"
          TA.Cheque = TextCompRet
          TA.Abono = Total_RetIVAS
-         TA.AutorizacionR = TxtAutoRet
-         TA.Establecimiento = Codigo1
-         TA.Emision = Codigo2
          TA.Porcentaje = Val(CServicio)
          If TA.Abono > 0 Then TotalAbonos = TotalAbonos + TA.Abono
-         Grabar_Abonos_Retenciones TA
+         Grabar_Abonos TA
          
         'Abono de Factura Ret. Fuente
          TA.Cta = TrimStrg(SinEspaciosIzq(DCRetFuente))
          TA.Banco = "RETENCION FUENTE - " & DCCodRet
          TA.Cheque = TextCompRet
          TA.Abono = Total_Ret
-         TA.AutorizacionR = TxtAutoRet
-         TA.Establecimiento = Codigo1
-         TA.Emision = Codigo2
          TA.Porcentaje = Val(TextPorc)
          If TA.Abono > 0 Then TotalAbonos = TotalAbonos + TA.Abono
-         Grabar_Abonos_Retenciones TA
+         Grabar_Abonos TA
          
         'Abono de Factura Interes Tarjeta
          TA.TP = "TJ"
@@ -2055,27 +2052,14 @@ Private Sub Command1_Click()
          TA.Banco = "INTERES POR TARJETA"
          TA.Cheque = TextBaucher
          TA.Abono = Val(TextInteres)
+         TA.Serie_R = Ninguno
+         TA.AutorizacionR = Ninguno
+         TA.Secuencial_R = 0
          If TA.Abono > 0 Then TotalAbonos = TotalAbonos + TA.Abono
          Grabar_Abonos TA
          
          Actualizar_Saldos_Facturas_SP FA.TC, FA.Serie, FA.Factura
-         
-    '''     T = "P"
-    '''     If SaldoDisp <= 0 Then
-    '''        T = "C"
-    '''        SaldoDisp = 0
-    '''     End If
-    '''     sSQL = "UPDATE Facturas " _
-    '''          & "SET Saldo_MN = " & SaldoDisp & ",T = '" & T & "' " _
-    '''          & "WHERE Item = '" & NumEmpresa & "' " _
-    '''          & "AND Periodo = '" & Periodo_Contable & "' " _
-    '''          & "AND TC = '" & TA.TP & "' " _
-    '''          & "AND Serie = '" & TA.Serie & "' " _
-    '''          & "AND Autorizacion = '" & TA.Autorizacion & "' " _
-    '''          & "AND Factura = " & TA.Factura & " " _
-    '''          & "AND CodigoC = '" & TA.CodigoC & "' "
-    '''     Ejecutar_SQL_SP sSQL
-         
+
          LabelCambio.Caption = "0.00"
          TextCajaMN = "0.00"
          TextCajaME = "0.00"

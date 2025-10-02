@@ -428,7 +428,7 @@ Dim NumFile As Integer
                Progreso_Esperar True
                LblConexion.Refresh
                
-              'ftp.EliminarArchivo "/files/ComprobantesElectronicos/" & .Clave_De_Acceso & ".xml"
+               ftp.EliminarArchivo "/files/ComprobantesElectronicos/" & .Clave_De_Acceso & ".xml"
                ftp.EliminarArchivo "/files/ComprobantesElectronicos/No_Autorizados/" & .Clave_De_Acceso & ".xml"
                ftp.Desconectar
                

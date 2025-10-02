@@ -9,11 +9,11 @@ Begin VB.Form ResumenKardex
    ClientHeight    =   10620
    ClientLeft      =   60
    ClientTop       =   345
-   ClientWidth     =   20250
+   ClientWidth     =   15960
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
    ScaleHeight     =   10620
-   ScaleWidth      =   20250
+   ScaleWidth      =   15960
    WindowState     =   1  'Minimized
    Begin ComctlLib.Toolbar TBKardex 
       Align           =   1  'Align Top
@@ -21,8 +21,8 @@ Begin VB.Form ResumenKardex
       Left            =   0
       TabIndex        =   18
       Top             =   0
-      Width           =   20250
-      _ExtentX        =   35719
+      Width           =   20595
+      _ExtentX        =   36327
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -30,7 +30,7 @@ Begin VB.Form ResumenKardex
       ImageList       =   "ImageList1"
       _Version        =   327682
       BeginProperty Buttons {0713E452-850A-101B-AFC0-4210102A8DA7} 
-         NumButtons      =   7
+         NumButtons      =   8
          BeginProperty Button1 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "Salir"
             Object.ToolTipText     =   "Salir del Modulo"
@@ -62,14 +62,18 @@ Begin VB.Form ResumenKardex
             ImageIndex      =   6
          EndProperty
          BeginProperty Button6 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   ""
             Key             =   "Imprimir"
-            Description     =   ""
             Object.ToolTipText     =   "Imprimir Resultado"
             Object.Tag             =   ""
             ImageIndex      =   2
          EndProperty
          BeginProperty Button7 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   "Codigo_QR"
+            Object.ToolTipText     =   "Resumen en Codigos de QR"
+            Object.Tag             =   ""
+            ImageIndex      =   8
+         EndProperty
+         BeginProperty Button8 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "Excel"
             Object.ToolTipText     =   "Enviar a Excel el resultado"
             Object.Tag             =   ""
@@ -78,7 +82,7 @@ Begin VB.Form ResumenKardex
       EndProperty
       Begin VB.Frame Frame1 
          Height          =   645
-         Left            =   4200
+         Left            =   4620
          TabIndex        =   0
          Top             =   0
          Width           =   11145
@@ -1082,7 +1086,7 @@ Begin VB.Form ResumenKardex
       MaskColor       =   12632256
       _Version        =   327682
       BeginProperty Images {0713E8C2-850A-101B-AFC0-4210102A8DA7} 
-         NumListImages   =   7
+         NumListImages   =   8
          BeginProperty ListImage1 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
             Picture         =   "ResumenK.frx":0967
             Key             =   ""
@@ -1109,6 +1113,10 @@ Begin VB.Form ResumenKardex
          EndProperty
          BeginProperty ListImage7 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
             Picture         =   "ResumenK.frx":1C03
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage8 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "ResumenK.frx":2855
             Key             =   ""
          EndProperty
       EndProperty
@@ -1283,30 +1291,34 @@ Private Sub Stock(StockSuperior As Boolean)
   DGQuery.Visible = False
   QTipoInv = False
   Control_Procesos "I", "Proceso Stock de Inventario, del " & MBoxFechaI & " al " & MBoxFechaF
-''  If CheqProducto.value Then
-''     Opcion = 2
-''    'Cta As Codigo_No
-'''''     StockInventBarra
-''
-''     sSQL = "SELECT Recibo As Serie_No,Comprobante As Detalle," _
-''          & "Total As Promedio,Saldo_Anterior As Saldo_Ant,Ingresos As Entradas," _
-''          & "Egresos As Salidas,Saldo_Actual As Stock_Act " _
-''          & "FROM Saldo_Diarios " _
-''          & "WHERE Item = '" & NumEmpresa & "' " _
-''          & "AND CodigoU = '" & CodigoUsuario & "' " _
-''          & "AND TP = 'INVE' "
-''     If CheqMonto.value = 1 Then
-''        sSQL = sSQL & "AND Saldo_Actual = " & Val(TxtMonto.Text) & " "
-''     Else
-''        sSQL = sSQL & "AND Saldo_Actual <> 0 "
-''     End If
+  Reporte_Resumen_Existencias_SP MBoxFechaI, MBoxFechaF, Cod_Bodega
+  If CheqProducto.value Then
+     Opcion = 2
+     RatonReloj
+     MiTiempo = Time
+     DGQuery.Visible = False
+     Progreso_Barra.Mensaje_Box = "Procesando Resumen de Existencia"
+     Progreso_Iniciar
+     If CheqBod.value = 0 Then Cod_Bodega = Ninguno Else Cod_Bodega = SinEspaciosIzq(DCBodega)
+
+    'SQLDec = "Promedio " & CStr(Dec_Costo) & "|Valor_Total 2|."
+                                               
+     sSQL = "SELECT TC,Codigo_Inv,Stock_Anterior,Entradas,Salidas,Stock_Actual,Promedio,Valor_Total " _
+          & "FROM Catalogo_Productos " _
+          & "WHERE Item = '" & NumEmpresa & "' " _
+          & "AND Periodo = '" & Periodo_Contable & "' "
+     If CheqMonto.value = 1 Then
+        sSQL = sSQL & "AND Stock_Actual = " & Val(TxtMonto.Text) & " "
+     Else
+        sSQL = sSQL & "AND Stock_Actual <> 0 "
+     End If
+     sSQL = sSQL & "AND TC = 'P' " _
+          & "ORDER BY Codigo_Inv "
 ''     If (OpcProducto.value = 1) And (Codigo3 <> "Todos") Then sSQL = sSQL & "AND Recibo = '" & Codigo3 & "' "
 ''     If CheqExist.value = 1 Then sSQL = sSQL & "AND Saldo_Actual <> 0 "
 ''     sSQL = sSQL & "ORDER BY Numero "
-''  Else
+  Else
      Opcion = 1
-     Reporte_Resumen_Existencias_SP MBoxFechaI, MBoxFechaF, Cod_Bodega
-     
      Progreso_Barra.Mensaje_Box = "Procesando Resumen de Existencia"
      Progreso_Iniciar
     
@@ -1318,7 +1330,7 @@ Private Sub Stock(StockSuperior As Boolean)
           & SQL_Tipo_Busqueda
      If CheqGrupo.value <> 0 Then sSQL = sSQL & "AND Codigo_Inv LIKE '" & Buscar_Grupo_Inventario & "%' "
      sSQL = sSQL & "ORDER BY Codigo_Inv "
-''  End If
+  End If
   SQLDec = "Costo_Unit " & CStr(Dec_Costo) & "|Total 2|."
   Select_Adodc_Grid DGQuery, AdoDetKardex, sSQL, SQLDec
   'MsgBox Opcion & vbCrLf & SQLDec & vbCrLf & Cod_Bodega
@@ -1333,7 +1345,7 @@ Private Sub Stock(StockSuperior As Boolean)
              If .fields("TC") <> "I" Then
                  Debitos = Debitos + Redondear(.fields("Entradas") * .fields("Costo_Unit"), 2)
                  Creditos = Creditos + Redondear(.fields("Salidas") * .fields("Costo_Unit"), 2)
-                 Total = Total + Redondear(.fields("Total"), 2)
+                 Total = Total + Redondear(.fields("Valor_Total"), 2)
              End If
           End If
          .MoveNext
@@ -1368,7 +1380,7 @@ Private Sub Form_Activate()
        & "AND INV <> 0 " _
        & "ORDER BY Codigo_Inv "
   SelectDB_Combo DCTInv, AdoTInv, sSQL, "Producto"
-
+  Listar_Por_Producto
 '''  sSQL = "UPDATE Catalogo_Productos " _
 '''       & "SET INV = " & Val(adTrue) & " " _
 '''       & "WHERE TC = 'I' " _
@@ -1502,6 +1514,8 @@ Private Sub TBKardex_ButtonClick(ByVal Button As ComctlLib.Button)
            Resumen_Lote
       Case "Barras"
            Resumen_Barras
+      Case "Codigo_QR"
+           Resumen_QR
       Case "Excel"
            DGQuery.Visible = False
            Exportar_AdoDB_Excel AdoDetKardex.Recordset, "Existencia " & BuscarFecha(MBoxFechaI) & " al " & BuscarFecha(MBoxFechaF)
@@ -1699,6 +1713,41 @@ Public Sub Resumen_Barras()
   LabelStock.Caption = Format(Stock_Inv, "#,##0.00")
   DGQuery.Visible = True
 End Sub
+
+Public Sub Resumen_QR()
+  DGQuery.Visible = False
+  Debitos = 0
+  Creditos = 0
+  Stock_Inv = 0
+  sSQL = "SELECT Codigo_Barra, " _
+       & "SUM(Entrada) As Entradas, SUM(Salida) As Salidas, " _
+       & "SUM(Entrada-Salida) As Stock_QR, AVG(Valor_Unitario) As Valor_Unit, " _
+       & "((SUM(Entrada)-SUM(Salida)) * AVG(Valor_Unitario)) As Total_Inventario " _
+       & "FROM Trans_Kardex " _
+       & "WHERE Item = '" & NumEmpresa & "' " _
+       & "AND Periodo = '" & Periodo_Contable & "' " _
+       & "AND Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
+       & "GROUP BY Codigo_Barra " _
+       & "HAVING SUM(Entrada-Salida) <> 0 " _
+       & "ORDER BY Codigo_Barra "
+ 'MsgBox sSQL
+  SQLDec = "Valor_Unit " & CStr(Dec_Costo) & "|Total_Inventario 2|."
+  Select_Adodc_Grid DGQuery, AdoDetKardex, sSQL, SQLDec
+  DGQuery.Visible = False
+  With AdoDetKardex.Recordset
+   If .RecordCount > 0 Then
+       Do While Not .EOF
+          Debitos = Debitos + .fields("Entradas")
+          Creditos = Creditos + .fields("Salidas")
+          Stock_Inv = Stock_Inv + .fields("Stock_QR")
+         .MoveNext
+       Loop
+   End If
+  End With
+  LabelStock.Caption = Format(Stock_Inv, "#,##0.00")
+  DGQuery.Visible = True
+End Sub
+
 
 Public Sub Listar_Por_Tipo_Cta()
   If OpcInv.value Then

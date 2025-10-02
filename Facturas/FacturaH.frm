@@ -11,8 +11,8 @@ Begin VB.Form FacturasPV
    ClientWidth     =   15645
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   9885
-   ScaleWidth      =   15645
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    WindowState     =   1  'Minimized
    Begin VB.Timer Timer1 
       Left            =   19005
@@ -2204,12 +2204,6 @@ Private Sub Command3_Click()
         NumComp = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, False)
         TextFacturaNo.Text = Format$(NumComp, "000000000")
 
-        sSQL = "DELETE * " _
-             & "FROM Asiento_F " _
-             & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND CodigoU = '" & CodigoUsuario & "' "
-        Ejecutar_SQL_SP sSQL
-        
         sSQL = "SELECT * " _
              & "FROM Asiento_F " _
              & "WHERE Item = '" & NumEmpresa & "' " _
@@ -2278,7 +2272,6 @@ Private Sub Form_Activate()
        & "WHERE Item = '" & NumEmpresa & "' " _
        & "AND Periodo = '" & Periodo_Contable & "' " _
        & "AND Fact = '" & TipoFactura & "' " _
-       & "" _
        & "AND TL <> " & Val(adFalse) & " " _
        & "ORDER BY Codigo "
   Select_Adodc AdoLinea, sSQL
@@ -2489,7 +2482,7 @@ Private Sub Form_Load()
   ConectarAdodc AdoAsientoF
   ConectarAdodc AdoDireccion
   
-  SRI_Obtener_Datos_Comprobantes_Electronicos
+  If TipoFactura = "FA" Then SRI_Obtener_Datos_Comprobantes_Electronicos
   
   Encerar_Factura FA
 End Sub
@@ -2587,8 +2580,6 @@ Public Sub ProcGrabar()
      Saldo_ME = Total_FacturaME
      If Saldo < 0 Then Saldo = 0
      FA.Nuevo_Doc = True
-     Factura_No = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, True)
-     FA.Factura = Factura_No
      TipoFactura = FA.TC
      Select Case TipoFactura
        Case "PV": Control_Procesos "F", "Grabar Ticket No. " & Factura_No
@@ -2598,23 +2589,8 @@ Public Sub ProcGrabar()
        Case "DO": Control_Procesos "F", "Grabar Nota de Donacion No. " & Factura_No
        Case Else: Control_Procesos "F", "Grabar Factura No. " & Factura_No
      End Select
-     
-     sSQL = "DELETE * " _
-          & "FROM Detalle_Factura " _
-          & "WHERE Factura = " & Factura_No & " " _
-          & "AND Item = '" & NumEmpresa & "' " _
-          & "AND Periodo = '" & Periodo_Contable & "' " _
-          & "AND TC = '" & TipoFactura & "' "
-     Ejecutar_SQL_SP sSQL
-     sSQL = "DELETE * " _
-          & "FROM Facturas " _
-          & "WHERE Factura = " & Factura_No & " " _
-          & "AND Item = '" & NumEmpresa & "' " _
-          & "AND Periodo = '" & Periodo_Contable & "' " _
-          & "AND TC = '" & TipoFactura & "' "
-     Ejecutar_SQL_SP sSQL
      TextoFormaPago = PagoCred
-     T = Pendiente
+     FA.T = Pendiente
     'Grabamos el numero de factura
      RatonNormal
      Grabar_Factura FA, True
@@ -2652,12 +2628,8 @@ Public Sub ProcGrabar()
     'Actualizamos el saldo de la factura
      Actualizar_Saldos_Facturas_SP FA.TC, FA.Serie, FA.Factura
     'Mayorizar_Inventario_SP
-     
-     sSQL = "DELETE * " _
-          & "FROM Asiento_F " _
-          & "WHERE Item = '" & NumEmpresa & "' " _
-          & "AND CodigoU = '" & CodigoUsuario & "' "
-     Ejecutar_SQL_SP sSQL
+     Factura_No = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, False)
+     FA.Factura = Factura_No
      
      sSQL = "SELECT * " _
           & "FROM Asiento_F " _

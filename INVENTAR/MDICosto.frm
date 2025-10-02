@@ -137,8 +137,12 @@ Begin VB.MDIForm MDICosto
             Caption         =   "Control de Salida de Bodega"
             Shortcut        =   ^S
          End
-         Begin VB.Menu MCambioSalida 
+         Begin VB.Menu MTransf_Bodegas 
             Caption         =   "Transferencia de Productos Bodegas"
+            Shortcut        =   ^{F7}
+         End
+         Begin VB.Menu MCambioSalida 
+            Caption         =   "Transferencia de Productos Bodegas (Recetas)"
             Shortcut        =   ^{F6}
          End
          Begin VB.Menu MMercaderiaPP 
@@ -393,6 +397,11 @@ End Sub
 Private Sub MSalidaPVP_Click()
   RatonReloj
   SalidaPVP.Show
+End Sub
+
+Private Sub MTransf_Bodegas_Click()
+  RatonReloj
+  FTransferencia_Bodegas.Show
 End Sub
 
 Private Sub ResumExist_Click()

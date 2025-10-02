@@ -9,11 +9,11 @@ Begin VB.Form FacturaReembolso
    ClientHeight    =   10335
    ClientLeft      =   45
    ClientTop       =   345
-   ClientWidth     =   16365
+   ClientWidth     =   15960
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
    ScaleHeight     =   10335
-   ScaleWidth      =   16365
+   ScaleWidth      =   15960
    WindowState     =   1  'Minimized
    Begin VB.TextBox TxtAutProvee 
       BeginProperty Font 
@@ -1611,12 +1611,6 @@ Private Sub Command3_Click()
        LblSerie.Caption = SerieFactura & "-"
        NumComp = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, False)
        TextFacturaNo.Text = Format$(NumComp, "000000000")
-    
-       sSQL = "DELETE * " _
-            & "FROM Asiento_F " _
-            & "WHERE Item = '" & NumEmpresa & "' " _
-            & "AND CodigoU = '" & CodigoUsuario & "' "
-       Ejecutar_SQL_SP sSQL
        
        sSQL = "SELECT * " _
             & "FROM Asiento_F " _
@@ -1855,15 +1849,6 @@ Public Sub ProcGrabarReembolso()
     'Grabamos el numero de factura
      RatonNormal
      Grabar_Factura FA, True
-
-    'Actualizamos el saldo de la factura
-     Actualizar_Saldos_Facturas_SP FA.TC, FA.Serie, FA.Factura
-     
-     sSQL = "DELETE * " _
-          & "FROM Asiento_F " _
-          & "WHERE Item = '" & NumEmpresa & "' " _
-          & "AND CodigoU = '" & CodigoUsuario & "' "
-     Ejecutar_SQL_SP sSQL
      
      sSQL = "SELECT * " _
           & "FROM Asiento_F " _

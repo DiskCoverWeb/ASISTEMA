@@ -52,7 +52,6 @@ Begin VB.Form Facturas
             ImageIndex      =   3
          EndProperty
          BeginProperty Button4 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   ""
             Object.Tag             =   ""
             Style           =   3
             MixedState      =   -1  'True
@@ -221,12 +220,12 @@ Begin VB.Form Facturas
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   6840
+      Height          =   3900
       Left            =   15435
       TabIndex        =   78
       Top             =   6195
       Visible         =   0   'False
-      Width           =   4740
+      Width           =   8520
       Begin VB.TextBox TxtLugarEntrega 
          BeginProperty Font 
             Name            =   "MS Sans Serif"
@@ -239,11 +238,11 @@ Begin VB.Form Facturas
          EndProperty
          ForeColor       =   &H00000000&
          Height          =   330
-         Left            =   105
+         Left            =   4200
          MaxLength       =   50
          TabIndex        =   105
-         Top             =   5985
-         Width           =   4530
+         Top             =   3045
+         Width           =   4215
       End
       Begin VB.TextBox TxtZona 
          BeginProperty Font 
@@ -257,11 +256,11 @@ Begin VB.Form Facturas
          EndProperty
          ForeColor       =   &H00000000&
          Height          =   330
-         Left            =   2730
+         Left            =   2520
          MaxLength       =   30
          TabIndex        =   103
-         Top             =   5250
-         Width           =   1905
+         Top             =   3045
+         Width           =   1695
       End
       Begin VB.TextBox TxtPedido 
          BeginProperty Font 
@@ -278,8 +277,8 @@ Begin VB.Form Facturas
          Left            =   1155
          MaxLength       =   15
          TabIndex        =   101
-         Top             =   5250
-         Width           =   1590
+         Top             =   3045
+         Width           =   1380
       End
       Begin VB.TextBox TxtPlaca 
          BeginProperty Font 
@@ -297,7 +296,7 @@ Begin VB.Form Facturas
          MaxLength       =   10
          TabIndex        =   99
          Text            =   "XXX-9999"
-         Top             =   5250
+         Top             =   3045
          Width           =   1065
       End
       Begin VB.CommandButton Command8 
@@ -313,10 +312,10 @@ Begin VB.Form Facturas
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   2415
+         Left            =   6195
          Style           =   1  'Graphical
          TabIndex        =   106
-         Top             =   6405
+         Top             =   3465
          Width           =   1065
       End
       Begin VB.CommandButton Command7 
@@ -332,15 +331,15 @@ Begin VB.Form Facturas
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   3570
+         Left            =   7350
          Style           =   1  'Graphical
          TabIndex        =   107
-         Top             =   6405
+         Top             =   3465
          Width           =   1065
       End
       Begin MSMask.MaskEdBox MBoxFechaGRE 
          Height          =   330
-         Left            =   3255
+         Left            =   3885
          TabIndex        =   80
          Top             =   210
          Width           =   1380
@@ -365,9 +364,9 @@ Begin VB.Form Facturas
       End
       Begin MSMask.MaskEdBox MBoxFechaGRI 
          Height          =   330
-         Left            =   3360
+         Left            =   2415
          TabIndex        =   87
-         Top             =   1785
+         Top             =   1050
          Width           =   1275
          _ExtentX        =   2249
          _ExtentY        =   582
@@ -390,9 +389,9 @@ Begin VB.Form Facturas
       End
       Begin MSMask.MaskEdBox MBoxFechaGRF 
          Height          =   330
-         Left            =   3360
+         Left            =   2415
          TabIndex        =   91
-         Top             =   2625
+         Top             =   1470
          Width           =   1275
          _ExtentX        =   2249
          _ExtentY        =   582
@@ -417,11 +416,11 @@ Begin VB.Form Facturas
          Bindings        =   "Facturas.frx":0019
          DataSource      =   "AdoCiudades"
          Height          =   315
-         Left            =   945
+         Left            =   4620
          TabIndex        =   89
-         Top             =   2205
-         Width           =   3690
-         _ExtentX        =   6509
+         Top             =   1050
+         Width           =   3795
+         _ExtentX        =   6694
          _ExtentY        =   556
          _Version        =   393216
          Text            =   "QUITO"
@@ -439,11 +438,11 @@ Begin VB.Form Facturas
          Bindings        =   "Facturas.frx":0033
          DataSource      =   "AdoCiudades"
          Height          =   315
-         Left            =   945
+         Left            =   4620
          TabIndex        =   93
-         Top             =   3045
-         Width           =   3690
-         _ExtentX        =   6509
+         Top             =   1470
+         Width           =   3795
+         _ExtentX        =   6694
          _ExtentY        =   556
          _Version        =   393216
          Text            =   "QUITO"
@@ -461,11 +460,11 @@ Begin VB.Form Facturas
          Bindings        =   "Facturas.frx":004D
          DataSource      =   "AdoPersonas"
          Height          =   315
-         Left            =   105
+         Left            =   3675
          TabIndex        =   95
-         Top             =   3780
-         Width           =   4530
-         _ExtentX        =   7990
+         Top             =   1890
+         Width           =   4740
+         _ExtentX        =   8361
          _ExtentY        =   556
          _Version        =   393216
          Text            =   "Grupo"
@@ -483,11 +482,11 @@ Begin VB.Form Facturas
          Bindings        =   "Facturas.frx":0067
          DataSource      =   "AdoTransporte"
          Height          =   315
-         Left            =   105
+         Left            =   3675
          TabIndex        =   97
-         Top             =   4515
-         Width           =   4530
-         _ExtentX        =   7990
+         Top             =   2310
+         Width           =   4740
+         _ExtentX        =   8361
          _ExtentY        =   556
          _Version        =   393216
          Text            =   "Grupo"
@@ -505,9 +504,9 @@ Begin VB.Form Facturas
          Bindings        =   "Facturas.frx":0083
          DataSource      =   "AdoSerieGR"
          Height          =   315
-         Left            =   2100
+         Left            =   5880
          TabIndex        =   82
-         Top             =   630
+         Top             =   210
          Width           =   1170
          _ExtentX        =   2064
          _ExtentY        =   556
@@ -537,10 +536,10 @@ Begin VB.Form Facturas
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   105
+         Left            =   4200
          TabIndex        =   104
-         Top             =   5670
-         Width           =   4530
+         Top             =   2730
+         Width           =   4215
       End
       Begin VB.Label LblAutGuiaRem 
          BackColor       =   &H00FFFFFF&
@@ -557,9 +556,9 @@ Begin VB.Form Facturas
          EndProperty
          ForeColor       =   &H000000FF&
          Height          =   330
-         Left            =   105
+         Left            =   3885
          TabIndex        =   85
-         Top             =   1365
+         Top             =   630
          Width           =   4530
       End
       Begin VB.Label Label14 
@@ -579,8 +578,8 @@ Begin VB.Form Facturas
          Height          =   330
          Left            =   105
          TabIndex        =   84
-         Top             =   1050
-         Width           =   4530
+         Top             =   630
+         Width           =   3795
       End
       Begin VB.Label LblGuiaR 
          Alignment       =   1  'Right Justify
@@ -598,9 +597,9 @@ Begin VB.Form Facturas
          EndProperty
          ForeColor       =   &H000000FF&
          Height          =   330
-         Left            =   3255
+         Left            =   7035
          TabIndex        =   83
-         Top             =   630
+         Top             =   210
          Width           =   1380
       End
       Begin VB.Label Label49 
@@ -617,10 +616,10 @@ Begin VB.Form Facturas
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   2730
+         Left            =   2520
          TabIndex        =   102
-         Top             =   4935
-         Width           =   1905
+         Top             =   2730
+         Width           =   1695
       End
       Begin VB.Label Label37 
          BackColor       =   &H00FFC0C0&
@@ -638,8 +637,8 @@ Begin VB.Form Facturas
          Height          =   330
          Left            =   1155
          TabIndex        =   100
-         Top             =   4935
-         Width           =   1590
+         Top             =   2730
+         Width           =   1380
       End
       Begin VB.Label Label46 
          BackColor       =   &H00FFC0C0&
@@ -657,13 +656,13 @@ Begin VB.Form Facturas
          Height          =   330
          Left            =   105
          TabIndex        =   98
-         Top             =   4935
+         Top             =   2730
          Width           =   1065
       End
       Begin VB.Label Label47 
          BackColor       =   &H00FFC0C0&
          BorderStyle     =   1  'Fixed Single
-         Caption         =   " Guia de Remision No."
+         Caption         =   " No."
          BeginProperty Font 
             Name            =   "MS Sans Serif"
             Size            =   8.25
@@ -675,10 +674,10 @@ Begin VB.Form Facturas
          EndProperty
          ForeColor       =   &H000000FF&
          Height          =   330
-         Left            =   105
+         Left            =   5355
          TabIndex        =   81
-         Top             =   630
-         Width           =   2010
+         Top             =   210
+         Width           =   540
       End
       Begin VB.Label Label45 
          BackColor       =   &H00FFC0C0&
@@ -696,8 +695,8 @@ Begin VB.Form Facturas
          Height          =   330
          Left            =   105
          TabIndex        =   96
-         Top             =   4200
-         Width           =   4530
+         Top             =   2310
+         Width           =   3585
       End
       Begin VB.Label Label44 
          BackColor       =   &H00FFC0C0&
@@ -715,8 +714,8 @@ Begin VB.Form Facturas
          Height          =   330
          Left            =   105
          TabIndex        =   94
-         Top             =   3465
-         Width           =   4530
+         Top             =   1890
+         Width           =   3585
       End
       Begin VB.Label Label43 
          BackColor       =   &H00FFC0C0&
@@ -732,9 +731,9 @@ Begin VB.Form Facturas
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   105
+         Left            =   3780
          TabIndex        =   92
-         Top             =   3045
+         Top             =   1470
          Width           =   855
       End
       Begin VB.Label Label42 
@@ -751,9 +750,9 @@ Begin VB.Form Facturas
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   105
+         Left            =   3780
          TabIndex        =   88
-         Top             =   2205
+         Top             =   1050
          Width           =   855
       End
       Begin VB.Label Label41 
@@ -772,8 +771,8 @@ Begin VB.Form Facturas
          Height          =   330
          Left            =   105
          TabIndex        =   90
-         Top             =   2625
-         Width           =   3270
+         Top             =   1470
+         Width           =   2325
       End
       Begin VB.Label Label40 
          BackColor       =   &H00FFC0C0&
@@ -791,13 +790,13 @@ Begin VB.Form Facturas
          Height          =   330
          Left            =   105
          TabIndex        =   86
-         Top             =   1785
-         Width           =   3270
+         Top             =   1050
+         Width           =   2325
       End
       Begin VB.Label Label39 
          BackColor       =   &H00FFC0C0&
          BorderStyle     =   1  'Fixed Single
-         Caption         =   " Fecha de Emision de la Guia"
+         Caption         =   " Fecha de Emision de la Guia de Remision"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
             Size            =   8.25
@@ -811,7 +810,7 @@ Begin VB.Form Facturas
          Left            =   105
          TabIndex        =   79
          Top             =   210
-         Width           =   3165
+         Width           =   3795
       End
    End
    Begin VB.Frame FrmReservas 
@@ -1131,7 +1130,7 @@ Begin VB.Form Facturas
             Strikethrough   =   0   'False
          EndProperty
          Height          =   2985
-         Left            =   120
+         Left            =   105
          TabIndex        =   128
          Top             =   600
          Width           =   4575
@@ -1169,9 +1168,9 @@ Begin VB.Form Facturas
          Strikethrough   =   0   'False
       EndProperty
       Height          =   2325
-      Left            =   5565
+      Left            =   5355
       TabIndex        =   108
-      Top             =   9450
+      Top             =   7035
       Visible         =   0   'False
       Width           =   4530
       Begin VB.CommandButton Command5 
@@ -1629,7 +1628,7 @@ Begin VB.Form Facturas
       MaxLength       =   10
       TabIndex        =   53
       Text            =   "0"
-      ToolTipText     =   "<Ctrl+F12>: LLenas detalles de la Orden"
+      ToolTipText     =   "<Ctrl+F11>:Detalle de Ordenes, <Ctrl+F12>: Detalles de Lotes"
       Top             =   3570
       Width           =   1170
    End
@@ -3824,14 +3823,7 @@ Dim GuiaRemision As Long
     If FA.CodigoC = Ninguno Then
        MsgBox "Error: No se puede grabar factura sin nombre de Cliente o Beneficiario"
     Else
-       Total_FacturaME = 0
-       Moneda_US = False
-       If Check1.value = 1 Then Moneda_US = True
-       If CheqSP.value = 1 Then FA.SP = True
-       
-       Calculos_Totales_Factura FA
-       FA.Fecha_V = MBoxFechaV
-       sSQL = "SELECT * " _
+       sSQL = "SELECT " & Full_Fields("Asiento_F") & " " _
             & "FROM Asiento_F " _
             & "WHERE Item = '" & NumEmpresa & "' " _
             & "AND CodigoU = '" & CodigoUsuario & "' " _
@@ -3840,35 +3832,15 @@ Dim GuiaRemision As Long
        Select_Adodc_Grid DGAsientoF, AdoAsientoF, sSQL, SQLDec
        If AdoAsientoF.Recordset.RecordCount > 0 Then
           RatonReloj
+          
+          Calculos_Totales_Factura FA
+          
           LabelSubTotal.Caption = Format$(FA.Sin_IVA, "#,##0.00")
           LabelConIVA.Caption = Format$(FA.Con_IVA, "#,##0.00")
           TextDesc.Text = Format$(FA.Descuento, "#,##0.00")
           LabelServ.Caption = Format$(FA.Servicio, "#,##0.00")
           LabelIVA.Caption = Format$(FA.Total_IVA, "#,##0.00")
           LabelTotal.Caption = Format$(FA.Total_MN, "#,##0.00")
-          TextoFormaPago = PagoCred
-          
-          FA.Tipo_Pago = SinEspaciosIzq(DCTipoPago)
-          If Val(FA.Tipo_Pago) <= 0 Then FA.Tipo_Pago = "01"
-          FA.T = Pendiente
-          FA.Orden_Compra = "0"
-          FA.SubCta = Ninguno
-          FA.Porc_IVA = Porc_IVA
-          FA.Forma_Pago = TextoFormaPago
-          FA.Observacion = TextObs
-          FA.Nota = TextNota
-          FA.Pedido = TxtPedido
-         'MsgBox Val(TxtCompra)
-          If IsNumeric(TxtCompra) Then FA.Orden_Compra = Format(Val(TxtCompra), "0000000000")
-          If AdoMod.Recordset.RecordCount > 0 Then
-             AdoMod.Recordset.MoveFirst
-             AdoMod.Recordset.Find ("Detalle = '" & DCMod.Text & "' ")
-             If Not AdoMod.Recordset.EOF Then FA.SubCta = AdoMod.Recordset.fields("Codigo")
-          End If
-    
-         'MsgBox AdoMod.Recordset.RecordCount & vbCrLf & FA.SubCta
-          FA.ME_ = Moneda_US
-          FA.Saldo_MN = FA.Total_MN
     
           RatonNormal
           Titulo = "FORMULARIO DE GRABACION"
@@ -3881,8 +3853,39 @@ Dim GuiaRemision As Long
           End If
           
           If BoxMensaje = vbYes Then
+             Moneda_US = False
              FA.Nuevo_Doc = True
              FA.Factura = Val(TextFacturaNo)
+             TextoFormaPago = PagoCred
+             FA.Tipo_Pago = SinEspaciosIzq(DCTipoPago)
+             If Val(FA.Tipo_Pago) <= 0 Then FA.Tipo_Pago = "01"
+             If Check1.value = 1 Then Moneda_US = True
+             If CheqSP.value = 1 Then FA.SP = True
+             FA.T = Pendiente
+             FA.Fecha_V = MBoxFechaV
+             FA.Orden_Compra = "0"
+             FA.SubCta = Ninguno
+             FA.Porc_IVA = Porc_IVA
+             FA.Forma_Pago = TextoFormaPago
+             FA.Observacion = TextObs
+             FA.Nota = TextNota
+             FA.Pedido = TxtPedido
+            'MsgBox Val(TxtCompra)
+             If IsNumeric(TxtCompra) Then FA.Orden_Compra = Format(Val(TxtCompra), "0000000000")
+             If AdoMod.Recordset.RecordCount > 0 Then
+                AdoMod.Recordset.MoveFirst
+                AdoMod.Recordset.Find ("Detalle = '" & DCMod.Text & "' ")
+                If Not AdoMod.Recordset.EOF Then FA.SubCta = AdoMod.Recordset.fields("Codigo")
+             End If
+             FA.ME_ = Moneda_US
+             FA.Saldo_MN = FA.Total_MN
+             Comision = Redondear(Val(TextComision) / 100, 4)
+             Total_Comision = Redondear(Total_SubTotal * Comision, 2)
+            
+            'Datos del Encabezado y totales de la factura
+             FA.Porc_C = Comision
+             FA.Comision = Total_Comision
+            '--------------------------------------------------------------------------------------------------------------------
              If Existe_Factura(FA) Then
                 Titulo = "FORMULARIO DE CONFIRMACION"
                 Mensajes = "ADVERTENCIA:" & vbCrLf & vbCrLf _
@@ -3897,21 +3900,6 @@ Dim GuiaRemision As Long
                    If BoxMensaje = vbYes Then FA.Nuevo_Doc = False Else GoTo NoGrabarFA
                 End If
              End If
-             
-             If FA.Nuevo_Doc Then FA.Factura = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, True)
-             
-             If Len(FA.Autorizacion_GR) = 13 Then
-                GuiaRemision = ReadSetDataNum("GR_SERIE_" & FA.Serie_GR, True, False)
-                If FA.Remision = GuiaRemision Then FA.Remision = ReadSetDataNum("GR_SERIE_" & FA.Serie_GR, True, True)
-             End If
-                
-             Comision = Redondear(Val(TextComision) / 100, 4)
-             Total_Comision = Redondear(Total_SubTotal * Comision, 2)
-            
-            'Datos del Encabezado y totales de la factura
-             FA.Porc_C = Comision
-             FA.Comision = Total_Comision
-            '------------------
             'MsgBox FA.CodigoC
             '------------------
             'Grabamos el numero de factura
@@ -3937,13 +3925,14 @@ Dim GuiaRemision As Long
                 Mensajes = "Pago al Contado"
                 If BoxMensaje = vbYes Then Abonos.Show 1
              End If
-            'MsgBox "Documento " & FA.TC & " No. " & FA.Serie & "-" & Format(FA.Factura, "000000000")
+            'MsgBox "Desktop Test: Documento " & FA.TC & " No. " & FA.Serie & "-" & Format(FA.Factura, "000000000") & vbCrLf & "Guia No. " & FA.Serie_GR & "-" & FA.Remision
              RatonReloj
             'Autorizamos la factura y/o Guia de Remision
              If Len(FA.Autorizacion) = 13 Then SRI_Crear_Clave_Acceso_Facturas FA, False, , True
-                 
+               'MsgBox "Desktop Test: Documento " & FA.TC & " No. " & FA.Serie & "-" & Format(FA.Factura, "000000000")
                 If Len(FA.Autorizacion_GR) = 13 Then
-                   SRI_Crear_Clave_Acceso_Guia_Remision URLinet, FA, False, True
+                   SRI_Crear_Clave_Acceso_Guia_Remision FA, False, True
+                  'MsgBox "Desktop Test: Guia No. " & FA.TC & " No. " & FA.Serie_GR & "-" & Format(FA.Remision, "000000000")
                    If Len(FA.Autorizacion_GR) > 13 Then
                       sSQL = "UPDATE Facturas_Auxiliares " _
                            & "SET Fecha_Aut_GR = #" & BuscarFecha(FA.Fecha_Aut_GR) & "#," _
@@ -3951,22 +3940,23 @@ Dim GuiaRemision As Long
                            & "Clave_Acceso_GR = '" & FA.ClaveAcceso_GR & "'," _
                            & "Estado_SRI_GR = '" & FA.Estado_SRI_GR & "'," _
                            & "Hora_Aut_GR = '" & FA.Hora_GR & "' " _
-                           & "WHERE Factura = " & FA.Factura & " " _
+                           & "WHERE Item = '" & NumEmpresa & "' " _
+                           & "AND Periodo = '" & Periodo_Contable & "' " _
                            & "AND TC = '" & FA.TC & "' " _
                            & "AND Serie = '" & FA.Serie & "' " _
-                           & "AND Autorizacion = '" & FA.Autorizacion & "' " _
-                           & "AND Item = '" & NumEmpresa & "' " _
-                           & "AND Periodo = '" & Periodo_Contable & "' "
+                           & "AND Factura = " & FA.Factura & " " _
+                           & "AND Autorizacion = '" & FA.Autorizacion & "' "
                       Ejecutar_SQL_SP sSQL
                    End If
                 End If
-               'MsgBox "Documento " & FA.TC & " No. " & FA.Serie & "-" & Format(FA.Factura, "000000000")
                 TA.TP = FA.TC
                 TA.Serie = FA.Serie
                 TA.Factura = FA.Factura
                 TA.Autorizacion = FA.Autorizacion
                 TA.CodigoC = FA.CodigoC
+                
                 Actualizar_Saldos_Facturas_SP TA.TP, TA.Serie, TA.Factura
+                
                 RatonNormal
                 'MsgBox "..."
                 If FA.TC <> "OP" Then
@@ -4067,7 +4057,7 @@ Private Sub CDesc1_LostFocus()
   No_Hab = Ninguno
   If Val(CDesc1.Text) > 0 Then
      No_Hab = InputBox("INGRESE DETALLE ADICIONAL(20)", "DETALLE ADICIONAL", "")
-     No_Hab = UCaseStrg(MidStrg(No_Hab, 1, 20))
+     No_Hab = UCaseStrg(MidStrg(No_Hab, 1, 40))
   End If
 End Sub
 
@@ -4185,6 +4175,7 @@ Private Sub Command8_Click()
             If Not .EOF Then
                FA.Comercial = .fields("Cliente")
                FA.CIRUCComercial = .fields("CI_RUC")
+               FA.Dir_PartidaGR = .fields("Direccion")
             End If
         End If
        End With
@@ -5451,7 +5442,11 @@ Private Sub TBarFactura_ButtonClick(ByVal Button As ComctlLib.Button)
 End Sub
 
 Private Sub TextCant_Change()
-  If Val(TextCant) <> 0 And Val(TextVUnit) <> 0 Then Real1 = Redondear(CCur(TextCant) * CCur(TextVUnit), 2)
+  If IsNumeric(TextCant) Then
+     If Val(TextCant) <> 0 And Val(TextVUnit) <> 0 Then Real1 = Redondear(CCur(TextCant) * CCur(TextVUnit), 2)
+  Else
+     Real1 = 0
+  End If
   LabelVTotal.Caption = Format$(Real1, "#,##0.00")
 End Sub
 
@@ -6005,7 +6000,7 @@ End Sub
 Public Sub Listar_Ordenes()
    LstOrden.Clear
    sSQL = "SELECT OP.Factura,OP.CodigoC,OP.Fecha,C.Cliente,C.Grupo,C.CI_RUC,C.TD " _
-        & "FROM Facturas As OP,Clientes As C " _
+        & "FROM Facturas As OP, Clientes As C " _
         & "WHERE OP.Item = '" & NumEmpresa & "' " _
         & "AND OP.Periodo = '" & Periodo_Contable & "' " _
         & "AND OP.TC = 'OP' " _

@@ -1324,7 +1324,7 @@ Begin VB.Form ListFact
       MaskColor       =   12632256
       _Version        =   393216
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
-         NumListImages   =   29
+         NumListImages   =   30
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
             Picture         =   "ListFact.frx":187F
             Key             =   "IMG1"
@@ -1441,6 +1441,10 @@ Begin VB.Form ListFact
             Picture         =   "ListFact.frx":15DCB1
             Key             =   ""
          EndProperty
+         BeginProperty ListImage30 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "ListFact.frx":15E903
+            Key             =   ""
+         EndProperty
       EndProperty
    End
    Begin MSAdodcLib.Adodc AdoEjecutivo 
@@ -1505,7 +1509,7 @@ Begin VB.Form ListFact
       ImageList       =   "ImageList1"
       _Version        =   393216
       BeginProperty Buttons {66833FE8-8583-11D1-B16A-00C0F0283628} 
-         NumButtons      =   23
+         NumButtons      =   24
          BeginProperty Button1 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Salir"
             Object.ToolTipText     =   "Salir de listar facturas"
@@ -1546,7 +1550,7 @@ Begin VB.Form ListFact
          EndProperty
          BeginProperty Button3 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Enviar_Mail"
-            Object.ToolTipText     =   "Reenviar Factura,NC o Guia por Email"
+            Object.ToolTipText     =   "Reenviar: Factura,NC o Guia por Email"
             ImageIndex      =   25
             Style           =   5
             BeginProperty ButtonMenus {66833FEC-8583-11D1-B16A-00C0F0283628} 
@@ -1566,6 +1570,31 @@ Begin VB.Form ListFact
             EndProperty
          EndProperty
          BeginProperty Button4 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "Bajar_XML"
+            Object.ToolTipText     =   "Descargar: Factura,NC o Guia por Email"
+            ImageIndex      =   30
+            Style           =   5
+            BeginProperty ButtonMenus {66833FEC-8583-11D1-B16A-00C0F0283628} 
+               NumButtonMenus  =   4
+               BeginProperty ButtonMenu1 {66833FEE-8583-11D1-B16A-00C0F0283628} 
+                  Key             =   "XML_FA"
+                  Text            =   "Factura"
+               EndProperty
+               BeginProperty ButtonMenu2 {66833FEE-8583-11D1-B16A-00C0F0283628} 
+                  Key             =   "XML_LC"
+                  Text            =   "Liquidacion de Compras"
+               EndProperty
+               BeginProperty ButtonMenu3 {66833FEE-8583-11D1-B16A-00C0F0283628} 
+                  Key             =   "XML_NC"
+                  Text            =   "Nota de Credito"
+               EndProperty
+               BeginProperty ButtonMenu4 {66833FEE-8583-11D1-B16A-00C0F0283628} 
+                  Key             =   "XML_GR"
+                  Text            =   "Guia de Remision"
+               EndProperty
+            EndProperty
+         EndProperty
+         BeginProperty Button5 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Generar_PDF"
             Object.ToolTipText     =   "Genera el PDF de: Factura, Nota de Credito o Guia de Remision"
             ImageIndex      =   8
@@ -1574,102 +1603,102 @@ Begin VB.Form ListFact
                NumButtonMenus  =   6
                BeginProperty ButtonMenu1 {66833FEE-8583-11D1-B16A-00C0F0283628} 
                   Key             =   "PDF_FA"
-                  Text            =   "PDF Factura"
+                  Text            =   "Factura"
                EndProperty
                BeginProperty ButtonMenu2 {66833FEE-8583-11D1-B16A-00C0F0283628} 
                   Key             =   "PDF_LC"
-                  Text            =   "PDF Liquidacion de Compras"
+                  Text            =   "Liquidacion de Compras"
                EndProperty
                BeginProperty ButtonMenu3 {66833FEE-8583-11D1-B16A-00C0F0283628} 
                   Key             =   "PDF_NC"
-                  Text            =   "PDF Nota de Credito"
+                  Text            =   "Nota de Credito"
                EndProperty
                BeginProperty ButtonMenu4 {66833FEE-8583-11D1-B16A-00C0F0283628} 
                   Key             =   "PDF_GR"
-                  Text            =   "PDF Guia de Remision"
+                  Text            =   "Guia de Remision"
                EndProperty
                BeginProperty ButtonMenu5 {66833FEE-8583-11D1-B16A-00C0F0283628} 
                   Key             =   "PDF_OP"
-                  Text            =   "PDF Orden de Produccion"
+                  Text            =   "Orden de Produccion"
                EndProperty
                BeginProperty ButtonMenu6 {66833FEE-8583-11D1-B16A-00C0F0283628} 
                   Key             =   "PDF_DO"
-                  Text            =   "PDF Donacion"
+                  Text            =   "Donacion"
                EndProperty
             EndProperty
          EndProperty
-         BeginProperty Button5 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+         BeginProperty Button6 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Style           =   3
          EndProperty
-         BeginProperty Button6 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+         BeginProperty Button7 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Cambio_Emision_Facturas"
             Object.ToolTipText     =   "Cambia la Fecha en un rango de Facturas"
             ImageIndex      =   9
          EndProperty
-         BeginProperty Button7 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+         BeginProperty Button8 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Cambio_Vencimiento_Facturas"
             Object.ToolTipText     =   "Cambia Fecha de Vencimiento de Facturas"
             ImageIndex      =   10
          EndProperty
-         BeginProperty Button8 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+         BeginProperty Button9 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Cambia_Autorizacion_Facturas"
             Object.ToolTipText     =   "Cambio de Autorizacion en un rango de facturas"
             ImageIndex      =   11
          EndProperty
-         BeginProperty Button9 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+         BeginProperty Button10 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Cambia_Numero_de_Facturas"
             Object.ToolTipText     =   "Cambia el numero de Facturas de un rango de Facturas"
             ImageIndex      =   12
          EndProperty
-         BeginProperty Button10 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+         BeginProperty Button11 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Reprocesar_Saldos_Facturas"
             Object.ToolTipText     =   "Reprocesar Saldos de Facturas"
             ImageIndex      =   13
          EndProperty
-         BeginProperty Button11 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+         BeginProperty Button12 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Eliminar_Facturas"
             Object.ToolTipText     =   "Elimina Facturas en un rango determinado"
             ImageIndex      =   14
          EndProperty
-         BeginProperty Button12 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+         BeginProperty Button13 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Revertir_Facturas"
             Object.ToolTipText     =   "Reversar Facturas procesadas"
             ImageIndex      =   17
          EndProperty
-         BeginProperty Button13 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+         BeginProperty Button14 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Actualizar_Representantes"
             Object.ToolTipText     =   "Actualiza Representantes en un rango de Facturas"
             ImageIndex      =   22
          EndProperty
-         BeginProperty Button14 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+         BeginProperty Button15 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Style           =   3
          EndProperty
-         BeginProperty Button15 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+         BeginProperty Button16 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Anular_Factura"
             Object.ToolTipText     =   "Anular Factura"
             ImageIndex      =   15
          EndProperty
-         BeginProperty Button16 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+         BeginProperty Button17 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Anular_en_masa"
             Object.ToolTipText     =   "Anular Facturas en masa"
             ImageIndex      =   27
          EndProperty
-         BeginProperty Button17 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+         BeginProperty Button18 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Object.Visible         =   0   'False
             Key             =   "Nota_Credito"
             Object.ToolTipText     =   "Nota de Crédito"
             ImageIndex      =   16
          EndProperty
-         BeginProperty Button18 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+         BeginProperty Button19 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Separador_SRI"
             Style           =   3
          EndProperty
-         BeginProperty Button19 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+         BeginProperty Button20 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Liberar_FA_SRI"
             Object.ToolTipText     =   "Libera rango de Facturas SRI"
             ImageIndex      =   19
          EndProperty
-         BeginProperty Button20 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+         BeginProperty Button21 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Volver_Autorizar_SRI"
             Object.ToolTipText     =   "Autorizar documentos pendiente"
             ImageIndex      =   18
@@ -1696,17 +1725,17 @@ Begin VB.Form ListFact
                EndProperty
             EndProperty
          EndProperty
-         BeginProperty Button21 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+         BeginProperty Button22 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Ejecutivo"
             Object.ToolTipText     =   "Actualiza Ejecutivo de Venta"
             ImageIndex      =   28
          EndProperty
-         BeginProperty Button22 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+         BeginProperty Button23 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Kardex"
             Object.ToolTipText     =   "Actualiza Salida en Kardex"
             ImageIndex      =   16
          EndProperty
-         BeginProperty Button23 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+         BeginProperty Button24 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Excel"
             Object.ToolTipText     =   "Enviar a Excel el detalle"
             ImageIndex      =   29
@@ -1716,7 +1745,7 @@ Begin VB.Form ListFact
       Begin VB.Frame Frame3 
          BorderStyle     =   0  'None
          Height          =   645
-         Left            =   12390
+         Left            =   13230
          TabIndex        =   78
          Top             =   0
          Width           =   2430
@@ -3627,6 +3656,18 @@ Private Sub TBarFactura_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMe
           SRI_Autorizacion.Tipo_Doc_SRI = "GR"
           SRI_Enviar_Mails FA, SRI_Autorizacion
     '=================================================================================
+    'Descarga de XML de Comprobantes Electronicos
+    '=================================================================================
+     Case "XML_FA"
+          SRI_Generar_XML_Firmado FA.ClaveAcceso
+          MsgBox "Documento Electronico:" & vbCrLf & FA.ClaveAcceso & ".xml" & vbCrLf & "Descargado en: " & RutaSysBases & "\TEMP\"
+     Case "XML_LC"
+          SRI_Generar_XML_Firmado FA.ClaveAcceso_LC
+          MsgBox "Documento Electronico:" & vbCrLf & FA.ClaveAcceso_LC & ".xml" & vbCrLf & "Descargado en: " & RutaSysBases & "\TEMP\"
+     Case "XML_GR"
+          SRI_Generar_XML_Firmado FA.ClaveAcceso_GR
+          MsgBox "Documento Electronico:" & vbCrLf & FA.ClaveAcceso_GR & ".xml" & vbCrLf & "Descargado en: " & RutaSysBases & "\TEMP\"
+    '=================================================================================
     'Envio de PDF de Comprobantes Electronicos
     '=================================================================================
      Case "PDF_OP"
@@ -4107,7 +4148,7 @@ Public Sub Volver_Autorizar_GR()
        Titulo = "AUTORIZACION GUIA DE REMISION"
        If BoxMensaje = vbYes Then
           RatonReloj
-          SRI_Crear_Clave_Acceso_Guia_Remision URLinet, FA, True, CBool(CheqClaveAcceso.value)
+          SRI_Crear_Clave_Acceso_Guia_Remision FA, True, CBool(CheqClaveAcceso.value)
           TxtXML = "(" & SRI_Autorizacion.Estado_SRI & ") " & SRI_Autorizacion.Error_SRI
           sSQL = "UPDATE Facturas_Auxiliares " _
                & "SET Fecha_Aut_GR = #" & BuscarFecha(FA.Fecha_Aut_GR) & "#," _

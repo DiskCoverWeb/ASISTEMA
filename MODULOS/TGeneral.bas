@@ -358,12 +358,15 @@ Type CtasAsiento
       Nuevo_Doc        As Boolean
       EsPorReembolso   As Boolean
       Por_Deposito     As Boolean
+      Existe_Cliente   As Boolean
+      GrabadoExitoso   As Boolean
       
       Gavetas          As Byte
       
       CantFact         As Integer
       TDT              As Integer
       Cod_Banco        As Integer
+      Cantidad_Rubros  As Integer
       
       Factura          As Long
       Desde            As Long

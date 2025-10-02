@@ -12,8 +12,8 @@ Begin VB.Form FComprobantes
    ClientWidth     =   14160
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   15615
-   ScaleWidth      =   28560
+   ScaleHeight     =   11025
+   ScaleWidth      =   14160
    WindowState     =   1  'Minimized
    Begin VB.CommandButton Command1 
       BackColor       =   &H008080FF&
@@ -543,19 +543,14 @@ Begin VB.Form FComprobantes
       TabPicture(2)   =   "Comproba.frx":016E
       Tab(2).ControlEnabled=   0   'False
       Tab(2).Control(0)=   "DGAsientosR"
-      Tab(2).Control(0).Enabled=   0   'False
       Tab(2).Control(1)=   "DGAC"
-      Tab(2).Control(1).Enabled=   0   'False
       Tab(2).ControlCount=   2
       TabCaption(3)   =   "&7.- AV - AI - AE"
       TabPicture(3)   =   "Comproba.frx":018A
       Tab(3).ControlEnabled=   0   'False
       Tab(3).Control(0)=   "DGAV"
-      Tab(3).Control(0).Enabled=   0   'False
       Tab(3).Control(1)=   "DGAI"
-      Tab(3).Control(1).Enabled=   0   'False
       Tab(3).Control(2)=   "DGAE"
-      Tab(3).Control(2).Enabled=   0   'False
       Tab(3).ControlCount=   3
       TabCaption(4)   =   "&8.- INVENTARIO"
       TabPicture(4)   =   "Comproba.frx":01A6
@@ -2995,7 +2990,6 @@ Private Sub DCCliente_LostFocus()
     Co.MicroEmpresa = Ninguno
     Co.Estado = Ninguno
     Co.CodigoB = Ninguno
-    
     With AdoBenef.Recordset
      If .RecordCount > 0 Then
          If IsNumeric(DCCliente.Text) Then DCCliente.Text = .Fields("Cliente")
@@ -3020,6 +3014,7 @@ Private Sub DCCliente_LostFocus()
                  Case "P": TipoSRI.Estado = "PASAPORTE"
                  Case "R": TipoSRI.Estado = "RUC ACTIVO"
                End Select
+               
                If Len(Co.RUC_CI) = 13 Then Tipo_Contribuyente_SP_MySQL Co.RUC_CI, TipoSRI.MicroEmpresa, TipoSRI.AgenteRetencion
                Co.AgenteRetencion = TipoSRI.AgenteRetencion
                Co.MicroEmpresa = TipoSRI.MicroEmpresa
@@ -3619,7 +3614,6 @@ Private Sub CmdGrabar_Click()
            Co.Item = NumEmpresa
            Co.Usuario = CodigoUsuario
            Co.T_No = Trans_No
-
           'Grabamos el Comprobante
            Grabar_Comprobante Co
          ' Seteamos para el siguiente comprobante su se grabo correctamente
