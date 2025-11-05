@@ -3501,24 +3501,24 @@ Dim SecuencialReembolo As String
              '''               Producto = Producto & ", Serie No. " & .Fields("Serie_No")
              '''            End If
                      Insertar_Campo_XML AbrirXML("detalle")
-                     If EsTransporte Then
-                        Insertar_Campo_XML CampoXML("codigoAuxiliar", "H492001")
-                     ElseIf RUCOperadora = TFA.RUC_CI Then
-                        Insertar_Campo_XML CampoXML("codigoAuxiliar", "H492002")
-                     Else
-                        If TFA.SP Then
-                           If Len(Cod_Bar) > 1 Then Insertar_Campo_XML CampoXML("codigoPrincipal", Cod_Bar)
-                           If Len(Cod_Aux) > 1 Then
-                              Insertar_Campo_XML CampoXML("codigoAuxiliar", Cod_Aux)
-                           Else
-                              Insertar_Campo_XML CampoXML("codigoAuxiliar", .fields("Codigo"))
-                           End If
+                     If TFA.SP Then
+                        If Len(Cod_Bar) > 1 Then Insertar_Campo_XML CampoXML("codigoPrincipal", Cod_Bar)
+                        If Len(Cod_Aux) > 1 Then
+                           Insertar_Campo_XML CampoXML("codigoAuxiliar", Cod_Aux)
                         Else
-                           If Len(Cod_Aux) > 1 Then
-                              Insertar_Campo_XML CampoXML("codigoPrincipal", Cod_Aux)
-                           Else
-                              Insertar_Campo_XML CampoXML("codigoPrincipal", .fields("Codigo"))
-                           End If
+                           Insertar_Campo_XML CampoXML("codigoAuxiliar", .fields("Codigo"))
+                        End If
+                     Else
+                        If Len(Cod_Aux) > 1 Then
+                           Insertar_Campo_XML CampoXML("codigoPrincipal", Cod_Aux)
+                        Else
+                           Insertar_Campo_XML CampoXML("codigoPrincipal", .fields("Codigo"))
+                        End If
+                        If EsTransporte Then
+                           Insertar_Campo_XML CampoXML("codigoAuxiliar", "H492001")
+                        ElseIf RUCOperadora = TFA.RUC_CI Then
+                           Insertar_Campo_XML CampoXML("codigoAuxiliar", "H492002")
+                        Else
                            If Len(Cod_Bar) > 1 Then Insertar_Campo_XML CampoXML("codigoAuxiliar", Cod_Bar)
                         End If
                      End If
