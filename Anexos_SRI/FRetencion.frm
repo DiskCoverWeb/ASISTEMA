@@ -217,23 +217,23 @@ Begin VB.Form FRetencion
       TabCaption(1)   =   "&2.- Consolidacion de Ingresos"
       TabPicture(1)   =   "FRetencion.frx":0EB2
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "Label15"
-      Tab(1).Control(1)=   "Label28"
-      Tab(1).Control(2)=   "Label29"
-      Tab(1).Control(3)=   "Label12"
-      Tab(1).Control(4)=   "Label7"
-      Tab(1).Control(5)=   "Label13"
-      Tab(1).Control(6)=   "Label30"
-      Tab(1).Control(7)=   "Label21"
+      Tab(1).Control(0)=   "TxtNumComp"
+      Tab(1).Control(1)=   "TxtImpAnterior"
+      Tab(1).Control(2)=   "TxtValorRet"
+      Tab(1).Control(3)=   "TxtIRCausado"
+      Tab(1).Control(4)=   "TxtBaseImpo"
+      Tab(1).Control(5)=   "TxtRebajas"
+      Tab(1).Control(6)=   "TxtDeduccion"
+      Tab(1).Control(7)=   "TxtIngOtrosEmp"
       Tab(1).Control(8)=   "DGConcepto"
-      Tab(1).Control(9)=   "TxtIngOtrosEmp"
-      Tab(1).Control(10)=   "TxtDeduccion"
-      Tab(1).Control(11)=   "TxtRebajas"
-      Tab(1).Control(12)=   "TxtBaseImpo"
-      Tab(1).Control(13)=   "TxtIRCausado"
-      Tab(1).Control(14)=   "TxtValorRet"
-      Tab(1).Control(15)=   "TxtImpAnterior"
-      Tab(1).Control(16)=   "TxtNumComp"
+      Tab(1).Control(9)=   "Label21"
+      Tab(1).Control(10)=   "Label30"
+      Tab(1).Control(11)=   "Label13"
+      Tab(1).Control(12)=   "Label7"
+      Tab(1).Control(13)=   "Label12"
+      Tab(1).Control(14)=   "Label29"
+      Tab(1).Control(15)=   "Label28"
+      Tab(1).Control(16)=   "Label15"
       Tab(1).ControlCount=   17
       TabCaption(2)   =   "&3.- Resumen del Rol de Pagos"
       TabPicture(2)   =   "FRetencion.frx":0ECE
@@ -2613,7 +2613,7 @@ Private Sub MBoxFechaI_LostFocus()
 
   SQL2 = "SELECT Desde, Hasta, Basico, Excede " _
        & "FROM Tabla_Renta " _
-       & "WHERE Año = '" & CStr(Anio) & "' " _
+       & "WHERE Anio = '" & CStr(Anio) & "' " _
        & "ORDER BY Desde,Hasta "
   Select_Adodc_Grid DGConcepto, AdoConcepto, SQL2, 2, True
   Presentar_Rol_Anual

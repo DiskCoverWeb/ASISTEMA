@@ -933,20 +933,21 @@ Begin VB.Form ListarGrupos
       Width           =   7575
    End
    Begin TabDlg.SSTab SSTab2 
-      Height          =   390
+      Height          =   405
       Left            =   105
       TabIndex        =   30
       Top             =   2310
       Width           =   21750
       _ExtentX        =   38365
-      _ExtentY        =   688
+      _ExtentY        =   714
       _Version        =   393216
-      Tabs            =   6
-      TabsPerRow      =   6
+      Tabs            =   7
+      Tab             =   6
+      TabsPerRow      =   7
       TabHeight       =   520
       TabCaption(0)   =   "LISTADO POR GRUPOS"
       TabPicture(0)   =   "LstGrupo.frx":00AA
-      Tab(0).ControlEnabled=   -1  'True
+      Tab(0).ControlEnabled=   0   'False
       Tab(0).ControlCount=   0
       TabCaption(1)   =   "PENSION MENSUAL DEL AÑO"
       TabPicture(1)   =   "LstGrupo.frx":00C6
@@ -964,10 +965,14 @@ Begin VB.Form ListarGrupos
       TabPicture(4)   =   "LstGrupo.frx":011A
       Tab(4).ControlEnabled=   0   'False
       Tab(4).ControlCount=   0
-      TabCaption(5)   =   "ENVIAR DEUDA POR API Y EMAIL"
+      TabCaption(5)   =   "CARTERA RECAUDADA"
       TabPicture(5)   =   "LstGrupo.frx":0136
       Tab(5).ControlEnabled=   0   'False
       Tab(5).ControlCount=   0
+      TabCaption(6)   =   "ENVIAR DEUDA POR API Y EMAIL"
+      TabPicture(6)   =   "LstGrupo.frx":0152
+      Tab(6).ControlEnabled=   -1  'True
+      Tab(6).ControlCount=   0
    End
    Begin MSAdodcLib.Adodc AdoCiudad 
       Height          =   330
@@ -1612,43 +1617,43 @@ Begin VB.Form ListarGrupos
       BeginProperty Images {0713E8C2-850A-101B-AFC0-4210102A8DA7} 
          NumListImages   =   10
          BeginProperty ListImage1 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "LstGrupo.frx":0152
+            Picture         =   "LstGrupo.frx":016E
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "LstGrupo.frx":046C
+            Picture         =   "LstGrupo.frx":0488
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "LstGrupo.frx":0786
+            Picture         =   "LstGrupo.frx":07A2
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "LstGrupo.frx":0AA0
+            Picture         =   "LstGrupo.frx":0ABC
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "LstGrupo.frx":0DBA
+            Picture         =   "LstGrupo.frx":0DD6
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "LstGrupo.frx":10D4
+            Picture         =   "LstGrupo.frx":10F0
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "LstGrupo.frx":13EE
+            Picture         =   "LstGrupo.frx":140A
             Key             =   ""
          EndProperty
          BeginProperty ListImage8 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "LstGrupo.frx":1708
+            Picture         =   "LstGrupo.frx":1724
             Key             =   ""
          EndProperty
          BeginProperty ListImage9 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "LstGrupo.frx":1A22
+            Picture         =   "LstGrupo.frx":1A3E
             Key             =   ""
          EndProperty
          BeginProperty ListImage10 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "LstGrupo.frx":2674
+            Picture         =   "LstGrupo.frx":2690
             Key             =   ""
          EndProperty
       EndProperty
@@ -1692,30 +1697,18 @@ Dim TutorEmail As String
 Dim MesesNominaGrupo As String
 
 Public Sub Reporte_CxC_Mes_PDF(VerDocumento As Boolean, PorValor As Boolean)
-Dim AdoCarteraDB As ADODB.Recordset
 Dim ValorCampo As String
 Dim EmailCli As String
 Dim PosCampo(1 To 15) As Single
 Dim Cont As Byte
-
+    DGQuery.Visible = False
     If CFechaLong(MBFechaI) <= CFechaLong(MBFechaF) And Len(MesesNominaGrupo) > 1 Then
+       RatonReloj
        Cont = 1
        If Len(Tutor) = 1 Then Tutor = "Ninguno"
-       sSQL = "SELECT CI_RUC, Cliente, " & MesesNominaGrupo & ", Grupo, Direccion " _
-            & "FROM Clientes " _
-            & "WHERE Cliente <> '.' "
-       If PorGrupo Then
-          sSQL = sSQL & "AND Grupo = '" & DCCliente & "' "
-       ElseIf PorDireccion Then
-          sSQL = sSQL & "AND Direccion = '" & DCCliente & "' "
-       End If
-       If OpcActivos.value Then sSQL = sSQL & "AND T = 'N' " Else sSQL = sSQL & "AND T <> 'N' "
-       sSQL = sSQL _
-            & "AND FA <> " & Val(adFalse) & " " _
-            & "ORDER BY Grupo, Cliente "
-       Select_AdoDB AdoCarteraDB, sSQL
-       With AdoCarteraDB
+       With AdoQuery.Recordset
         If .RecordCount > 0 Then
+           .MoveFirst
             DireccionCli = .fields("Direccion")
             EmailCli = ""
             Insertar_Mail EmailCli, TutorEmail
@@ -1744,8 +1737,8 @@ Dim Cont As Byte
             PosCampo(3) = 4.5    ' Apellidos y Nombres
             PosCampo(4) = 8.5    ' Enero
             PosCampo(5) = 9.5    ' Febrero
-            PosCampo(6) = 10.5    ' Marzo
-            PosCampo(7) = 11.5    ' Abril
+            PosCampo(6) = 10.5   ' Marzo
+            PosCampo(7) = 11.5   ' Abril
             PosCampo(8) = 12.5   ' Mayo
             PosCampo(9) = 13.5   ' Junio
             PosCampo(10) = 14.5  ' Julio
@@ -1821,8 +1814,8 @@ Dim Cont As Byte
             cPrint.finalizaImpresion
         End If
        End With
-       AdoCarteraDB.Close
    End If
+   DGQuery.Visible = True
 End Sub
 
 Public Sub Tipo_Rango_Grupos()
@@ -2479,8 +2472,16 @@ Private Sub DCCliente_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub DCCliente_LostFocus()
+  If CargarFrom Then
+    'MsgBox "Desktop Dest: Una Vez"
+     Actualizar_Datos_Representantes_SP Mas_Grupos
+     Insertar_Clientes_Auxiliar_SP
+     CargarFrom = False
+  End If
+
   Listar_Clientes_Grupo
   SSTab2.Tab = 0
+  
 End Sub
 
 Private Sub DCGrupoI_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -2860,8 +2861,6 @@ Private Sub Form_Activate()
    FechaValida MBFechaI
    FechaValida MBFechaF
 
-   Actualizar_Datos_Representantes_SP Mas_Grupos
-
    CTipoConsulta.Clear
    CTipoConsulta.AddItem "Listar por Grupo"
    CTipoConsulta.AddItem "Listar por Direccion"
@@ -3034,40 +3033,8 @@ End Sub
 Public Sub Listar_Clientes_Grupo()
 Dim sSaldo_Pendiente As String
   RatonReloj
-  Tutor = Ninguno
-  TutorEmail = Ninguno
-  MesesNominaGrupo = ""
-  
-  If CFechaLong(MBFechaI) <= CFechaLong(MBFechaF) Then
-     sSQL = "SELECT Tutor, Email_Tutor " _
-          & "FROM Catalogo_Cursos " _
-          & "WHERE Periodo = '" & Periodo_Contable & "' " _
-          & "AND Item = '" & NumEmpresa & "' "
-     If PorGrupo Then
-        sSQL = sSQL & "AND Curso = '" & DCCliente & "' "
-     ElseIf PorDireccion Then
-        sSQL = sSQL & "AND Descripcion = '" & DCCliente & "' "
-     End If
-     Select_Adodc AdoAux, sSQL
-     If AdoAux.Recordset.RecordCount > 0 Then
-       Tutor = AdoAux.Recordset.fields("Tutor")
-       TutorEmail = AdoAux.Recordset.fields("Email_Tutor")
-     End If
-    FechaIni = BuscarFecha(MBFechaI)
-    FechaFin = BuscarFecha(MBFechaF)
-    Mifecha = MBFechaI
-    Do While CFechaLong(Mifecha) < CFechaLong(MBFechaF)
-       Mes = MesesLetras(Month(Mifecha))
-       MesesNominaGrupo = MesesNominaGrupo & Mes & ","
-       Mifecha = CLongFecha(CFechaLong(Mifecha) + 31)
-    Loop
-    MesesNominaGrupo = MidStrg(MesesNominaGrupo, 1, Len(MesesNominaGrupo) - 1)
-    Procesar_Saldos_CxC_Meses_SP DCCliente, MBFechaI, MBFechaF
-  End If
-  sSQL = "SELECT T,Cliente,"
-  If Len(MesesNominaGrupo) > 1 Then sSQL = sSQL & MesesNominaGrupo & ", "
-  sSQL = sSQL _
-       & "Grupo,Direccion,Codigo,CI_RUC,Email,Email2,Fecha_N,Representante,TD_R, CI_RUC_R,DireccionT,Telefono_R,TelefonoT,EmailR,Saldo_Pendiente " _
+ 
+  sSQL = "SELECT T, Cliente, Grupo, Direccion, Codigo, CI_RUC, Email, Email2, Fecha_N, Representante, TD_R, CI_RUC_R, DireccionT, Telefono_R, TelefonoT, EmailR, Saldo_Pendiente " _
        & "FROM Clientes " _
        & "WHERE Cliente <> '.' "
   If Mas_Grupos Then sSQL = sSQL & "AND DirNumero = '" & NumEmpresa & "' "
@@ -3085,11 +3052,65 @@ Dim sSaldo_Pendiente As String
         DGQuery.Caption = "LISTADO DE CLIENTES"
         DCCliente.Text = "Todos"
      End If
+  End If
+  sSQL = sSQL _
+       & "AND FA <> " & Val(adFalse) & " " _
+       & "ORDER BY Grupo, Cliente "
+  Select_Adodc_Grid DGQuery, AdoQuery, sSQL, , True
+  RatonNormal
+End Sub
+
+Public Sub Listar_Clientes_CxC_Meses()
+Dim GrupoDireccion As String
+  
+  DGQuery.Visible = False
+  GrupoDireccion = DCCliente.Text
+  MesesNominaGrupo = ""
+  If CTipoConsulta.Text = "Listar Todos" Then
+     MsgBox "Este reporte se procesa solo para un Grupo determinado"
+  Else
+      RatonReloj
+      Tutor = Ninguno
+      TutorEmail = Ninguno
+      MesesNominaGrupo = ""
+     'MsgBox "Desktop Test"
+      If CFechaLong(MBFechaI) <= CFechaLong(MBFechaF) Then Procesar_Saldos_CxC_Meses_SP GrupoDireccion, MBFechaI, MBFechaF, Tutor, TutorEmail, MesesNominaGrupo
+  End If
+  
+  sSQL = "SELECT C.T, C.Cliente, "
+  If Len(MesesNominaGrupo) > 1 Then sSQL = sSQL & MesesNominaGrupo & ", "
+  sSQL = sSQL _
+       & "C.Grupo, C.Direccion, C.Codigo, C.CI_RUC, C.Email, C.Email2, C.EmailR, C.Representante, C.TD_R, C.CI_RUC_R, C.Saldo_Pendiente " _
+       & "FROM Clientes As C, Clientes_Auxiliar As CA " _
+       & "WHERE C.Cliente <> '.' "
+  If Mas_Grupos Then sSQL = sSQL & "AND C.DirNumero = '" & NumEmpresa & "' "
+  If CheqRangos.value <> 0 Then
+     sSQL = sSQL & "AND C.Grupo BETWEEN '" & Codigo1 & "' and '" & Codigo2 & "' "
+  Else
+    'Tipo de Consulta
+     If PorGrupo Then
+        DGQuery.Caption = "LISTADO DE CLIENTES (GRUPO No. " & GrupoDireccion & ")"
+        sSQL = sSQL & "AND C.Grupo = '" & GrupoDireccion & "' "
+     ElseIf PorDireccion Then
+        DGQuery.Caption = "LISTADO DE CLIENTES (DIRECCION: " & GrupoDireccion & ")"
+        sSQL = sSQL & "AND C.Direccion = '" & GrupoDireccion & "' "
+     Else
+        DGQuery.Caption = "LISTADO DE CLIENTES"
+        DCCliente.Text = "Todos"
+        sSQL = sSQL & "AND C.Grupo = 'Todos' "
+     End If
      If Len(TutorEmail) > 1 And Len(Tutor) > 1 Then DGQuery.Caption = DGQuery.Caption & ", TUTOR: " & Tutor & ", EMAIL TUTOR: " & TutorEmail
   End If
-  sSQL = sSQL & "AND FA <> " & Val(adFalse) & " " _
-       & "ORDER BY Grupo,Cliente "
+  sSQL = sSQL _
+       & "AND C.Codigo = CA.Codigo " _
+       & "AND C.FA <> " & Val(adFalse) & " " _
+       & "ORDER BY C.Grupo, C.Cliente "
+    Clipboard.Clear
+    Clipboard.SetText sSQL
+'  MsgBox "Desktop Test: " & sSQL
   Select_Adodc_Grid DGQuery, AdoQuery, sSQL, , True
+  
+  DGQuery.Visible = True
   RatonNormal
 End Sub
 
@@ -3149,7 +3170,7 @@ Private Sub SSTab2_Click(PreviousTab As Integer)
       Case 0: 'Listar Grupos
               DGQuery.Visible = True
               Listar_Clientes_Grupo
-      Case 1: 'Pensiones mensuales del año
+      Case 1: 'Pensiones mensuales del Periodo
               Reporte_CxC_Cuotas_SP Codigo1, Codigo2, MBFechaI, MBFechaF, SubTotal, Diferencia, TotalIngreso, ListaDeCampos, CheqResumen.value, CheqVenc.value
               RatonReloj
               sSQL = "SELECT " & ListaDeCampos & " " _
@@ -3224,8 +3245,13 @@ Private Sub SSTab2_Click(PreviousTab As Integer)
                    & "AND CF.Item = CP.Item " _
                    & "ORDER BY CF.Periodo,CF.GrupoNo,CP.Producto "
               Select_Adodc_Grid DGQuery, AdoQuery, sSQL, 2
+              Clipboard.Clear
+              Clipboard.SetText sSQL
+              
               DGQuery.Visible = True
-      Case 5: 'Listado Buses y Rubros
+      Case 5: 'Listado de CxC Recaudadas
+              Listar_Clientes_CxC_Meses
+      Case 6: 'Listado Buses y Rubros
               DGQuery.Visible = True
               Listar_Deuda_por_Api
     End Select
@@ -3240,7 +3266,6 @@ Dim PorValor As Boolean
   FechaIni = BuscarFecha(MBFechaI)
   FechaFin = BuscarFecha(MBFechaF)
   Tipo_Rango_Grupos
-  
   'MsgBox Button.key
    Select Case Button.key
      Case "Generar_Facturas": Generar_Facturas_Grupos
@@ -3346,109 +3371,118 @@ Public Sub Listar_Deuda_por_Api()
 Dim FechaTope As String
 Dim SiActualizo As Boolean
 Dim ExisteUno As Boolean
-
-    FechaTope = BuscarFecha(FechaSistema)
-    If CheqVenc.value <> 0 Then FechaTope = BuscarFecha(MBFechaF.Text)
-
-    sSQL = "UPDATE Clientes " _
-         & "SET Saldo_Pendiente = 0, Dias_Mora = 0 " _
-         & "WHERE Codigo <> '.' "
-    Ejecutar_SQL_SP sSQL
+    
+    If Len(URLToken) > 1 And Len(Token) > 1 Then
+        FechaTope = BuscarFecha(FechaSistema)
+        If CheqVenc.value <> 0 Then FechaTope = BuscarFecha(MBFechaF.Text)
+    
+        sSQL = "UPDATE Clientes " _
+             & "SET Saldo_Pendiente = 0, Dias_Mora = 0 " _
+             & "WHERE Codigo <> '.' "
+        Ejecutar_SQL_SP sSQL
+            
+        sSQL = "UPDATE Clientes " _
+             & "SET Saldo_Pendiente = (SELECT ROUND(SUM(CF.Valor-CF.Descuento-CF.Descuento2),2,0) " _
+             & "                       FROM Clientes_Facturacion As CF " _
+             & "                       WHERE CF.Item = '" & NumEmpresa & "' " _
+             & "                       AND CF.Fecha <= '" & FechaTope & "' " _
+             & "                       AND CF.Codigo = Clientes.Codigo) " _
+             & "WHERE Codigo <> '.' "
+        If CheqRangos.value Then sSQL = sSQL & "AND Grupo BETWEEN '" & DCGrupoI.Text & "' and '" & DCGrupoF.Text & "' "
+        Ejecutar_SQL_SP sSQL
         
-    sSQL = "UPDATE Clientes " _
-         & "SET Saldo_Pendiente = (SELECT ROUND(SUM(CF.Valor-CF.Descuento-CF.Descuento2),2,0) " _
-         & "                       FROM Clientes_Facturacion As CF " _
-         & "                       WHERE CF.Item = '" & NumEmpresa & "' " _
-         & "                       AND CF.Fecha <= '" & FechaTope & "' " _
-         & "                       AND CF.Codigo = Clientes.Codigo) " _
-         & "WHERE Codigo <> '.' "
-    If CheqRangos.value Then sSQL = sSQL & "AND Grupo BETWEEN '" & DCGrupoI.Text & "' and '" & DCGrupoF.Text & "' "
-    Ejecutar_SQL_SP sSQL
-    
-    sSQL = "UPDATE Clientes " _
-         & "SET Fecha_Cad = (SELECT MIN(CF.Fecha) " _
-         & "                 FROM Clientes_Facturacion As CF " _
-         & "                 WHERE CF.Item = '" & NumEmpresa & "' " _
-         & "                 AND CF.Fecha <= '" & FechaTope & "' " _
-         & "                 AND CF.Codigo = Clientes.Codigo) " _
-         & "WHERE Codigo <> '.' "
-    If CheqRangos.value Then sSQL = sSQL & "AND Grupo BETWEEN '" & DCGrupoI.Text & "' and '" & DCGrupoF.Text & "' "
-    Ejecutar_SQL_SP sSQL
-    
-    sSQL = "UPDATE Clientes " _
-         & "SET Saldo_Pendiente = 0 " _
-         & "WHERE Saldo_Pendiente IS NULL "
-    Ejecutar_SQL_SP sSQL
-    
-    sSQL = "UPDATE Clientes " _
-         & "SET Fecha_Cad = '" & FechaTope & "' " _
-         & "WHERE Fecha_Cad IS NULL "
-    Ejecutar_SQL_SP sSQL
-    
-    sSQL = "UPDATE Clientes " _
-         & "SET Dias_Mora = DATEDIFF(day,Fecha_Cad,'" & FechaTope & "') " _
-         & "WHERE Codigo <> '.' "
-    Ejecutar_SQL_SP sSQL
-    Total = 0
-    sSQL = "SELECT Grupo, Cliente As Estudiante, CI_RUC As Cedula, Saldo_Pendiente, Dias_Mora, EmailR, Codigo " _
-         & "FROM Clientes " _
-         & "WHERE FA <> 0 "
-    If CheqRangos.value Then sSQL = sSQL & "AND Grupo BETWEEN '" & DCGrupoI.Text & "' and '" & DCGrupoF.Text & "' "
-    sSQL = sSQL & "ORDER BY Grupo, Cliente "
-    Select_Adodc_Grid DGQuery, AdoQuery, sSQL
-    DGQuery.Visible = False
-    With AdoQuery.Recordset
-     If .RecordCount > 0 Then
-         Do While Not .EOF
-            Total = Total + .fields("Saldo_Pendiente")
-           .MoveNext
-         Loop
-     End If
-    End With
-    Label4.Caption = Format(Total, "#,##0.00")
-    DGQuery.Visible = True
-    ExisteUno = True
-    Mensajes = "Actualizar Deuda Pendiente de Clientes"
-    Titulo = "Formulario de Deuda Pendiente"
-    If BoxMensaje = vbYes Then
-       RatonReloj
-       DGQuery.Visible = False
-       TextoImprimio = ""
-       MiTiempo1 = Time
-       With AdoQuery.Recordset
-        If .RecordCount > 0 Then
-            Progreso_Barra.Mensaje_Box = "Procesando actualizacion de Deuda Pendiente..."
-            Progreso_Iniciar
-            Progreso_Iniciar_Errores
-            Progreso_Barra.Incremento = 0
-            Progreso_Barra.Valor_Maximo = .RecordCount + 10
-           .MoveFirst
-            Do While Not .EOF
-               Progreso_Barra.Mensaje_Box = "[" & Format$(Time - MiTiempo1, "HH:MM:SS") & "] Actualizando del " & .fields("Grupo") & ". Al Estudiante: " & ULCase(.fields("Estudiante"))
-               Progreso_Esperar
-               SiActualizo = post_URL_JSon(.fields("Cedula"), .fields("Saldo_Pendiente"), .fields("Dias_Mora"))
-               If Not SiActualizo Then
-                  If ExisteUno Then
-                     Cadena = "GRUPO      " & vbTab & "CEDULA        " & vbTab & "ESTUDIANTE"
-                     Insertar_Texto_Temporal_SP Cadena
-                  End If
-                  Cadena = .fields("Grupo") & String(11 - Len(.fields("Grupo")), " ") & vbTab & .fields("Cedula") & String(14 - Len(.fields("Cedula")), " ") & vbTab & .fields("Estudiante") & " no se pudo actualizar"
-                  TextoImprimio = TextoImprimio & Cadena & vbCrLf
-                  Insertar_Texto_Temporal_SP Cadena
-                  ExisteUno = False
-               End If
-              .MoveNext
-            Loop
+        sSQL = "UPDATE Clientes " _
+             & "SET Fecha_Cad = (SELECT MIN(CF.Fecha) " _
+             & "                 FROM Clientes_Facturacion As CF " _
+             & "                 WHERE CF.Item = '" & NumEmpresa & "' " _
+             & "                 AND CF.Fecha <= '" & FechaTope & "' " _
+             & "                 AND CF.Codigo = Clientes.Codigo) " _
+             & "WHERE Codigo <> '.' "
+        If CheqRangos.value Then sSQL = sSQL & "AND Grupo BETWEEN '" & DCGrupoI.Text & "' and '" & DCGrupoF.Text & "' "
+        Ejecutar_SQL_SP sSQL
+        
+        sSQL = "UPDATE Clientes " _
+             & "SET Saldo_Pendiente = 0 " _
+             & "WHERE Saldo_Pendiente IS NULL "
+        Ejecutar_SQL_SP sSQL
+        
+        sSQL = "UPDATE Clientes " _
+             & "SET Fecha_Cad = '" & FechaTope & "' " _
+             & "WHERE Fecha_Cad IS NULL "
+        Ejecutar_SQL_SP sSQL
+        
+        sSQL = "UPDATE Clientes " _
+             & "SET Dias_Mora = DATEDIFF(day,Fecha_Cad,'" & FechaTope & "') " _
+             & "WHERE Codigo <> '.' "
+        Ejecutar_SQL_SP sSQL
+        Total = 0
+        sSQL = "SELECT Grupo, Cliente As Estudiante, CI_RUC As Cedula, Saldo_Pendiente, Dias_Mora, EmailR, Codigo " _
+             & "FROM Clientes " _
+             & "WHERE FA <> 0 "
+        If CheqRangos.value Then sSQL = sSQL & "AND Grupo BETWEEN '" & DCGrupoI.Text & "' and '" & DCGrupoF.Text & "' "
+        sSQL = sSQL & "ORDER BY Grupo, Cliente "
+        Select_Adodc_Grid DGQuery, AdoQuery, sSQL
+        DGQuery.Visible = False
+        With AdoQuery.Recordset
+         If .RecordCount > 0 Then
+             Do While Not .EOF
+                Total = Total + .fields("Saldo_Pendiente")
+               .MoveNext
+             Loop
+         End If
+        End With
+        Label4.Caption = Format(Total, "#,##0.00")
+        DGQuery.Visible = True
+        ExisteUno = True
+        Mensajes = "Actualizar Deuda Pendiente de Clientes"
+        Titulo = "Formulario de Deuda Pendiente"
+        If BoxMensaje = vbYes Then
+           RatonReloj
+           DGQuery.Visible = False
+           TextoImprimio = ""
+           MiTiempo1 = Time
+           With AdoQuery.Recordset
+            If .RecordCount > 0 Then
+                Progreso_Barra.Mensaje_Box = "Procesando actualizacion de Deuda Pendiente..."
+                Progreso_Iniciar
+                Progreso_Iniciar_Errores
+                Progreso_Barra.Incremento = 0
+                Progreso_Barra.Valor_Maximo = .RecordCount + 10
+               .MoveFirst
+                Do While Not .EOF
+                   Progreso_Barra.Mensaje_Box = "[" & Format$(Time - MiTiempo1, "HH:MM:SS") & "] Actualizando del " & .fields("Grupo") & ". Al Estudiante: " & ULCase(.fields("Estudiante"))
+                   Progreso_Esperar
+                   SiActualizo = post_URL_JSon(.fields("Cedula"), .fields("Saldo_Pendiente"), .fields("Dias_Mora"))
+                   If Not SiActualizo Then
+                      If ExisteUno Then
+                         Cadena = "GRUPO      " & vbTab & "CEDULA        " & vbTab & "ESTUDIANTE"
+                         Insertar_Texto_Temporal_SP Cadena
+                      End If
+                      Cadena = .fields("Grupo") & String(11 - Len(.fields("Grupo")), " ") & vbTab & .fields("Cedula") & String(14 - Len(.fields("Cedula")), " ") & vbTab & .fields("Estudiante") & " no se pudo actualizar"
+                      TextoImprimio = TextoImprimio & Cadena & vbCrLf
+                      Insertar_Texto_Temporal_SP Cadena
+                      ExisteUno = False
+                   End If
+                  .MoveNext
+                Loop
+            End If
+           End With
+           Progreso_Final
+           Progreso_Barra.Mensaje_Box = "[" & Format$(Time - MiTiempo1, "HH:MM:SS") & "] Proceso Terminado"
+           Progreso_Esperar
+           DGQuery.Visible = True
+           SSTab2.Tab = 0
+           RatonNormal
+           MsgBox "Proceso Terminado con exito"
+           If Len(TextoImprimio) > 2 Then FInfoError.Show
         End If
-       End With
-       Progreso_Final
-       Progreso_Barra.Mensaje_Box = "[" & Format$(Time - MiTiempo1, "HH:MM:SS") & "] Proceso Terminado"
-       Progreso_Esperar
-       DGQuery.Visible = True
-       SSTab2.Tab = 0
-       RatonNormal
-       MsgBox "Proceso Terminado con exito"
-       If Len(TextoImprimio) > 2 Then FInfoError.Show
+    Else
+        sSQL = "SELECT Grupo, Cliente As Estudiante, CI_RUC As Cedula, Saldo_Pendiente, Dias_Mora, EmailR, Codigo " _
+             & "FROM Clientes " _
+             & "WHERE FA <> 0 " _
+             & "AND Grupo = 'Todos' "
+        Select_Adodc_Grid DGQuery, AdoQuery, sSQL
+        MsgBox "Esta Entidad no tiene configurado la conexion con Sistema Educativo Externo"
     End If
 End Sub
 

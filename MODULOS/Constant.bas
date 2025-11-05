@@ -15,6 +15,7 @@ Option Explicit
 'CORREOS PERSONALES DE DISKCOVER SYSTEM:
 '======================================
 'soporteweb@diskcoversystem.com         Dlcjvl031210@
+'credenciales@diskcoversystem.com       Dlcjvl1210@Credenciales
 '-------------------------------------------------------
 'SERVIRLES ES NUESTRO COMPROMISO, DISFRUTARLO ES EL SUYO.
 '-------------------------------------------------------
@@ -26,7 +27,7 @@ Option Explicit
 ' SQLServer Puerto: 11433
 ' https://api.diskcoversystem.com:8010/docs
 '------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-'SELECT  Ciudad, Empresa, RUC, Email, Email_Conexion, Email_Contraseña, Email_Respaldos, Email_Conexion_CE, Email_Contraseña_CE, Email_Procesos, Email_CE_Copia, smtp_Servidor, ID From Empresas
+'SELECT  Ciudad, Empresa, RUC, Email, Email_Conexion, Email_Clave, Email_Respaldos, Email_Conexion_CE, Email_Clave_CE, Email_Procesos, Email_CE_Copia, smtp_Servidor, ID From Empresas
 '------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 '     194.195.222.54     db.diskcoversystem.com
 '      69.164.192.53     erp.diskcoversystem.com

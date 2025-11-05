@@ -5,7 +5,6 @@ Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
-Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.Ocx"
 Begin VB.Form ListFact 
    BackColor       =   &H80000002&
    Caption         =   "FACTURACION: Listar Factura"
@@ -32,9 +31,9 @@ Begin VB.Form ListFact
       Caption         =   "| SELECCIONE EL EJECUTIVO DE VENTA |"
       ForeColor       =   &H0000FFFF&
       Height          =   3690
-      Left            =   8505
+      Left            =   14805
       TabIndex        =   57
-      Top             =   3045
+      Top             =   3465
       Visible         =   0   'False
       Width           =   8520
       Begin VB.CommandButton Command1 
@@ -110,9 +109,9 @@ Begin VB.Form ListFact
       Bindings        =   "ListFact.frx":0D27
       DataSource      =   "AdoArticulo"
       Height          =   3540
-      Left            =   2205
+      Left            =   525
       TabIndex        =   66
-      Top             =   5040
+      Top             =   5355
       Visible         =   0   'False
       Width           =   11670
       _ExtentX        =   20585
@@ -139,8 +138,8 @@ Begin VB.Form ListFact
       Left            =   105
       Style           =   1  'Graphical
       TabIndex        =   76
-      Top             =   1365
-      Width           =   2430
+      Top             =   1470
+      Width           =   2220
    End
    Begin VB.TextBox TxtDetalle 
       BackColor       =   &H00FF8080&
@@ -155,20 +154,21 @@ Begin VB.Form ListFact
       EndProperty
       ForeColor       =   &H00800000&
       Height          =   3270
-      Left            =   525
+      Left            =   420
       MultiLine       =   -1  'True
       ScrollBars      =   3  'Both
       TabIndex        =   67
       Text            =   "ListFact.frx":0D41
-      Top             =   4935
+      Top             =   5250
       Visible         =   0   'False
       Width           =   13770
    End
    Begin VB.ListBox LstBox 
       Height          =   1620
-      Left            =   14805
+      Left            =   14490
       TabIndex        =   75
       Top             =   735
+      Visible         =   0   'False
       Width           =   2220
    End
    Begin MSDataGridLib.DataGrid DGDetalle 
@@ -177,7 +177,7 @@ Begin VB.Form ListFact
       Left            =   105
       TabIndex        =   65
       ToolTipText     =   "<Alt+F9> Cambia el Producto, <Alt+F10> Cambia la Bodega, <Ctrl+S> Actualiza la Serie, "
-      Top             =   4620
+      Top             =   5145
       Width           =   14610
       _ExtentX        =   25770
       _ExtentY        =   3545
@@ -245,7 +245,7 @@ Begin VB.Form ListFact
       Height          =   540
       Left            =   105
       TabIndex        =   69
-      Top             =   9345
+      Top             =   10185
       Visible         =   0   'False
       Width           =   7890
       Begin VB.Label LabelHaber 
@@ -303,6 +303,7 @@ Begin VB.Form ListFact
       End
    End
    Begin VB.TextBox TxtXML 
+      BackColor       =   &H00C0C0FF&
       BeginProperty Font 
          Name            =   "Courier New"
          Size            =   9
@@ -312,27 +313,20 @@ Begin VB.Form ListFact
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   3180
-      Left            =   105
+      ForeColor       =   &H00800000&
+      Height          =   1080
+      Left            =   9765
       MultiLine       =   -1  'True
-      ScrollBars      =   3  'Both
+      ScrollBars      =   2  'Vertical
       TabIndex        =   64
-      Top             =   4620
-      Visible         =   0   'False
+      Top             =   2310
       Width           =   12375
-   End
-   Begin InetCtlsObjects.Inet URLinet 
-      Left            =   14910
-      Top             =   2520
-      _ExtentX        =   1005
-      _ExtentY        =   1005
-      _Version        =   393216
    End
    Begin VB.Frame FrmTotales 
       Height          =   750
       Left            =   105
       TabIndex        =   39
-      Top             =   8505
+      Top             =   9345
       Width           =   12930
       Begin VB.Label LabelSaldoAct 
          Alignment       =   1  'Right Justify
@@ -522,21 +516,21 @@ Begin VB.Form ListFact
    End
    Begin VB.TextBox TxtAutorizacion 
       Height          =   330
-      Left            =   9345
+      Left            =   9030
       MaxLength       =   50
       TabIndex        =   36
       ToolTipText     =   "<Ctrl-A> Grabar Autorizacion Electronica manualmente"
-      Top             =   1365
+      Top             =   1470
       Width           =   5370
    End
    Begin VB.TextBox TxtClaveAcceso 
       Height          =   330
-      Left            =   2520
+      Left            =   2310
       MaxLength       =   50
       TabIndex        =   35
       ToolTipText     =   "<Ctrl+S> Volver a Procesar el Documento, <Ctrl+R> Recalcular Saldo Factura"
-      Top             =   1365
-      Width           =   5475
+      Top             =   1470
+      Width           =   5370
    End
    Begin VB.Frame Frame1 
       Caption         =   "En Bloque"
@@ -550,27 +544,27 @@ Begin VB.Form ListFact
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H000000C0&
-      Height          =   645
-      Left            =   105
+      Height          =   1065
+      Left            =   14490
       TabIndex        =   20
-      Top             =   1785
-      Width           =   14610
+      Top             =   735
+      Width           =   5790
       Begin VB.CheckBox CheqSinCodigo 
          Caption         =   "Imprimir sin Codigo de Alumna"
          BeginProperty Font 
             Name            =   "MS Serif"
             Size            =   8.25
             Charset         =   0
-            Weight          =   700
+            Weight          =   400
             Underline       =   0   'False
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   9660
+         Left            =   2415
          TabIndex        =   38
-         Top             =   210
-         Width           =   1800
+         Top             =   630
+         Width           =   1590
       End
       Begin VB.CommandButton Command7 
          Caption         =   "Actualizar Alumnos"
@@ -584,11 +578,11 @@ Begin VB.Form ListFact
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   12915
+         Left            =   4095
          TabIndex        =   34
          ToolTipText     =   "Cambio de fecha de vencimiento en un rango de facturas"
-         Top             =   210
-         Width           =   1380
+         Top             =   630
+         Width           =   1590
       End
       Begin VB.CheckBox CheqSoloCopia 
          Caption         =   "Imprimir Solo Copia"
@@ -596,16 +590,16 @@ Begin VB.Form ListFact
             Name            =   "MS Serif"
             Size            =   8.25
             Charset         =   0
-            Weight          =   700
+            Weight          =   400
             Underline       =   0   'False
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   6405
+         Left            =   105
          TabIndex        =   30
-         Top             =   210
-         Width           =   1275
+         Top             =   630
+         Width           =   1170
       End
       Begin VB.CheckBox CheqMatricula 
          Caption         =   "Sin Deuda Pendiente"
@@ -613,20 +607,20 @@ Begin VB.Form ListFact
             Name            =   "MS Serif"
             Size            =   8.25
             Charset         =   0
-            Weight          =   700
+            Weight          =   400
             Underline       =   0   'False
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   7980
+         Left            =   1365
          TabIndex        =   29
-         Top             =   210
-         Width           =   1275
+         Top             =   630
+         Width           =   960
       End
       Begin VB.OptionButton OpcDes 
          Height          =   345
-         Left            =   4620
+         Left            =   3990
          Picture         =   "ListFact.frx":0D60
          Style           =   1  'Graphical
          TabIndex        =   26
@@ -635,7 +629,7 @@ Begin VB.Form ListFact
       End
       Begin VB.OptionButton OpcAsc 
          Height          =   345
-         Left            =   4305
+         Left            =   3675
          Picture         =   "ListFact.frx":1286
          Style           =   1  'Graphical
          TabIndex        =   25
@@ -645,11 +639,11 @@ Begin VB.Form ListFact
       End
       Begin VB.TextBox TextFHasta 
          Height          =   330
-         Left            =   2940
+         Left            =   2625
          TabIndex        =   10
          Text            =   "0"
          Top             =   210
-         Width           =   1275
+         Width           =   960
       End
       Begin VB.TextBox TextFDesde 
          Height          =   330
@@ -657,11 +651,11 @@ Begin VB.Form ListFact
          TabIndex        =   8
          Text            =   "0"
          Top             =   210
-         Width           =   1275
+         Width           =   960
       End
       Begin MSMask.MaskEdBox MBFecha 
          Height          =   330
-         Left            =   5040
+         Left            =   4410
          TabIndex        =   33
          Top             =   210
          Width           =   1275
@@ -687,7 +681,7 @@ Begin VB.Form ListFact
          BorderStyle     =   1  'Fixed Single
          Caption         =   " Hasta:"
          Height          =   330
-         Left            =   2205
+         Left            =   1890
          TabIndex        =   9
          Top             =   210
          Width           =   750
@@ -707,13 +701,13 @@ Begin VB.Form ListFact
       Height          =   645
       Left            =   105
       TabIndex        =   0
-      Top             =   630
-      Width           =   14610
+      Top             =   735
+      Width           =   14295
       Begin MSDataListLib.DataCombo DCFact 
          Bindings        =   "ListFact.frx":17AC
          DataSource      =   "AdoFactList"
          Height          =   360
-         Left            =   6510
+         Left            =   6195
          TabIndex        =   6
          Top             =   210
          Width           =   1695
@@ -735,11 +729,11 @@ Begin VB.Form ListFact
          Bindings        =   "ListFact.frx":17C6
          DataSource      =   "AdoTipo"
          Height          =   360
-         Left            =   1995
+         Left            =   1785
          TabIndex        =   2
          Top             =   210
-         Width           =   750
-         _ExtentX        =   1323
+         Width           =   855
+         _ExtentX        =   1508
          _ExtentY        =   635
          _Version        =   393216
          Text            =   "FA"
@@ -757,7 +751,7 @@ Begin VB.Form ListFact
          Bindings        =   "ListFact.frx":17DC
          DataSource      =   "AdoSerie"
          Height          =   360
-         Left            =   3570
+         Left            =   3465
          TabIndex        =   4
          Top             =   210
          Width           =   1170
@@ -969,17 +963,17 @@ Begin VB.Form ListFact
          BorderStyle     =   1  'Fixed Single
          Caption         =   "9999999999"
          Height          =   330
-         Left            =   11025
+         Left            =   10815
          TabIndex        =   32
          Top             =   210
-         Width           =   1590
+         Width           =   1485
       End
       Begin VB.Label Label7 
          Alignment       =   2  'Center
          BorderStyle     =   1  'Fixed Single
          Caption         =   "9999"
          Height          =   330
-         Left            =   9555
+         Left            =   9240
          TabIndex        =   54
          Top             =   210
          Width           =   1485
@@ -989,7 +983,7 @@ Begin VB.Form ListFact
          BorderStyle     =   1  'Fixed Single
          Caption         =   "31/12/2009"
          Height          =   330
-         Left            =   8295
+         Left            =   7980
          TabIndex        =   31
          Top             =   210
          Width           =   1170
@@ -1001,7 +995,7 @@ Begin VB.Form ListFact
          Caption         =   "PENDIENTE"
          ForeColor       =   &H000000C0&
          Height          =   330
-         Left            =   12705
+         Left            =   12390
          TabIndex        =   28
          Top             =   210
          Width           =   1800
@@ -1011,10 +1005,10 @@ Begin VB.Form ListFact
          Caption         =   " Secuencial No."
          ForeColor       =   &H000000C0&
          Height          =   330
-         Left            =   4830
+         Left            =   4725
          TabIndex        =   5
          Top             =   210
-         Width           =   1695
+         Width           =   1485
       End
       Begin VB.Label Label9 
          BorderStyle     =   1  'Fixed Single
@@ -1024,30 +1018,30 @@ Begin VB.Form ListFact
          Left            =   105
          TabIndex        =   1
          Top             =   210
-         Width           =   1905
+         Width           =   1695
       End
       Begin VB.Label Label4 
          BorderStyle     =   1  'Fixed Single
          Caption         =   " Serie"
          ForeColor       =   &H000000C0&
          Height          =   330
-         Left            =   2835
+         Left            =   2730
          TabIndex        =   3
          Top             =   210
          Width           =   750
       End
    End
    Begin TabDlg.SSTab SSTabDetalle 
-      Height          =   435
+      Height          =   390
       Left            =   105
       TabIndex        =   27
-      Top             =   4200
+      Top             =   4725
       Width           =   14400
       _ExtentX        =   25400
-      _ExtentY        =   767
+      _ExtentY        =   688
       _Version        =   393216
-      Tabs            =   5
-      TabsPerRow      =   5
+      Tabs            =   4
+      TabsPerRow      =   4
       TabHeight       =   520
       TabCaption(0)   =   "DETALLE DE FACTURA"
       TabPicture(0)   =   "ListFact.frx":17F3
@@ -1065,23 +1059,19 @@ Begin VB.Form ListFact
       TabPicture(3)   =   "ListFact.frx":1847
       Tab(3).ControlEnabled=   0   'False
       Tab(3).ControlCount=   0
-      TabCaption(4)   =   "RESULTADO SRI"
-      TabPicture(4)   =   "ListFact.frx":1863
-      Tab(4).ControlEnabled=   0   'False
-      Tab(4).ControlCount=   0
    End
    Begin VB.CommandButton CommandButton2 
       Caption         =   "&S"
       Height          =   330
       Left            =   105
       TabIndex        =   24
-      Top             =   8085
+      Top             =   8925
       Width           =   435
    End
    Begin MSAdodcLib.Adodc AdoDetAcomp 
       Height          =   330
       Left            =   2415
-      Top             =   5040
+      Top             =   5880
       Visible         =   0   'False
       Width           =   2325
       _ExtentX        =   4101
@@ -1128,7 +1118,7 @@ Begin VB.Form ListFact
    Begin MSAdodcLib.Adodc AdoDiarioCaja 
       Height          =   330
       Left            =   2415
-      Top             =   5670
+      Top             =   6510
       Visible         =   0   'False
       Width           =   2220
       _ExtentX        =   3916
@@ -1175,7 +1165,7 @@ Begin VB.Form ListFact
    Begin MSAdodcLib.Adodc AdoDetalle 
       Height          =   330
       Left            =   210
-      Top             =   5040
+      Top             =   5880
       Visible         =   0   'False
       Width           =   2220
       _ExtentX        =   3916
@@ -1222,7 +1212,7 @@ Begin VB.Form ListFact
    Begin MSAdodcLib.Adodc AdoFactura 
       Height          =   330
       Left            =   210
-      Top             =   5355
+      Top             =   6195
       Visible         =   0   'False
       Width           =   2220
       _ExtentX        =   3916
@@ -1269,7 +1259,7 @@ Begin VB.Form ListFact
    Begin MSAdodcLib.Adodc AdoArticulo 
       Height          =   330
       Left            =   210
-      Top             =   5670
+      Top             =   6510
       Visible         =   0   'False
       Width           =   2220
       _ExtentX        =   3916
@@ -1315,7 +1305,7 @@ Begin VB.Form ListFact
    End
    Begin MSComctlLib.ImageList ImageList1 
       Left            =   13560
-      Top             =   8520
+      Top             =   9360
       _ExtentX        =   1005
       _ExtentY        =   1005
       BackColor       =   -2147483643
@@ -1324,125 +1314,129 @@ Begin VB.Form ListFact
       MaskColor       =   12632256
       _Version        =   393216
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
-         NumListImages   =   30
+         NumListImages   =   31
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":187F
+            Picture         =   "ListFact.frx":1863
             Key             =   "IMG1"
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":2159
+            Picture         =   "ListFact.frx":213D
             Key             =   "IMG2"
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":2A33
+            Picture         =   "ListFact.frx":2A17
             Key             =   "IMG3"
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":51E5
+            Picture         =   "ListFact.frx":51C9
             Key             =   "IMG4"
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":5A77
+            Picture         =   "ListFact.frx":5A5B
             Key             =   "IMG5"
          EndProperty
          BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":5D91
+            Picture         =   "ListFact.frx":5D75
             Key             =   "IMG6"
          EndProperty
          BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":666B
+            Picture         =   "ListFact.frx":664F
             Key             =   "IMG7"
          EndProperty
          BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":6985
+            Picture         =   "ListFact.frx":6969
             Key             =   "IMG8"
          EndProperty
          BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":A1C07
+            Picture         =   "ListFact.frx":A1BEB
             Key             =   "IMG9"
          EndProperty
          BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":A1F21
+            Picture         =   "ListFact.frx":A1F05
             Key             =   "IMG10"
          EndProperty
          BeginProperty ListImage11 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":A28CF
+            Picture         =   "ListFact.frx":A28B3
             Key             =   "IMG11"
          EndProperty
          BeginProperty ListImage12 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":A31A9
+            Picture         =   "ListFact.frx":A318D
             Key             =   "IMG12"
          EndProperty
          BeginProperty ListImage13 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":A34C3
+            Picture         =   "ListFact.frx":A34A7
             Key             =   "IMG13"
          EndProperty
          BeginProperty ListImage14 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":A3D9D
+            Picture         =   "ListFact.frx":A3D81
             Key             =   "IMG14"
          EndProperty
          BeginProperty ListImage15 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":A4677
+            Picture         =   "ListFact.frx":A465B
             Key             =   "IMG15"
          EndProperty
          BeginProperty ListImage16 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":A4D1D
+            Picture         =   "ListFact.frx":A4D01
             Key             =   "IMG16"
          EndProperty
          BeginProperty ListImage17 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":A5338
+            Picture         =   "ListFact.frx":A531C
             Key             =   "IMG17"
          EndProperty
          BeginProperty ListImage18 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":A5C12
+            Picture         =   "ListFact.frx":A5BF6
             Key             =   "IMG18"
          EndProperty
          BeginProperty ListImage19 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":A70D6
+            Picture         =   "ListFact.frx":A70BA
             Key             =   ""
          EndProperty
          BeginProperty ListImage20 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":A7D31
+            Picture         =   "ListFact.frx":A7D15
             Key             =   ""
          EndProperty
          BeginProperty ListImage21 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":142FB3
+            Picture         =   "ListFact.frx":142F97
             Key             =   ""
          EndProperty
          BeginProperty ListImage22 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":1439D7
+            Picture         =   "ListFact.frx":1439BB
             Key             =   ""
          EndProperty
          BeginProperty ListImage23 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":143E29
+            Picture         =   "ListFact.frx":143E0D
             Key             =   ""
          EndProperty
          BeginProperty ListImage24 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":149163
+            Picture         =   "ListFact.frx":149147
             Key             =   ""
          EndProperty
          BeginProperty ListImage25 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":14FC70
+            Picture         =   "ListFact.frx":14FC54
             Key             =   ""
          EndProperty
          BeginProperty ListImage26 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":156712
+            Picture         =   "ListFact.frx":1566F6
             Key             =   ""
          EndProperty
          BeginProperty ListImage27 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":15D67D
+            Picture         =   "ListFact.frx":15D661
             Key             =   ""
          EndProperty
          BeginProperty ListImage28 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":15D997
+            Picture         =   "ListFact.frx":15D97B
             Key             =   ""
          EndProperty
          BeginProperty ListImage29 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":15DCB1
+            Picture         =   "ListFact.frx":15DC95
             Key             =   ""
          EndProperty
          BeginProperty ListImage30 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "ListFact.frx":15E903
+            Picture         =   "ListFact.frx":15E8E7
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage31 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "ListFact.frx":15F539
             Key             =   ""
          EndProperty
       EndProperty
@@ -1450,7 +1444,7 @@ Begin VB.Form ListFact
    Begin MSAdodcLib.Adodc AdoEjecutivo 
       Height          =   330
       Left            =   2415
-      Top             =   5355
+      Top             =   6195
       Visible         =   0   'False
       Width           =   2325
       _ExtentX        =   4101
@@ -1509,7 +1503,7 @@ Begin VB.Form ListFact
       ImageList       =   "ImageList1"
       _Version        =   393216
       BeginProperty Buttons {66833FE8-8583-11D1-B16A-00C0F0283628} 
-         NumButtons      =   24
+         NumButtons      =   25
          BeginProperty Button1 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Salir"
             Object.ToolTipText     =   "Salir de listar facturas"
@@ -1740,12 +1734,17 @@ Begin VB.Form ListFact
             Object.ToolTipText     =   "Enviar a Excel el detalle"
             ImageIndex      =   29
          EndProperty
+         BeginProperty Button25 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "Ayuda"
+            Object.ToolTipText     =   "Ayuda de Comandos Automaticos"
+            ImageIndex      =   31
+         EndProperty
       EndProperty
       OLEDropMode     =   1
       Begin VB.Frame Frame3 
          BorderStyle     =   0  'None
          Height          =   645
-         Left            =   13230
+         Left            =   13860
          TabIndex        =   78
          Top             =   0
          Width           =   2430
@@ -1773,16 +1772,23 @@ Begin VB.Form ListFact
       End
    End
    Begin VB.Label Label8 
-      Alignment       =   2  'Center
-      BackColor       =   &H00E0E0E0&
+      BackColor       =   &H00C00000&
       BorderStyle     =   1  'Fixed Single
-      Caption         =   "_"
-      ForeColor       =   &H000000C0&
-      Height          =   960
-      Left            =   9765
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00C0FFFF&
+      Height          =   1065
+      Left            =   105
       TabIndex        =   13
-      Top             =   2520
-      Width           =   4950
+      Top             =   2310
+      Width           =   9570
    End
    Begin VB.Label LabelBultos 
       Alignment       =   1  'Right Justify
@@ -1790,39 +1796,37 @@ Begin VB.Form ListFact
       BorderStyle     =   1  'Fixed Single
       Caption         =   "-"
       Height          =   330
-      Left            =   8820
+      Left            =   11235
       TabIndex        =   19
-      Top             =   3150
+      Top             =   4305
       Width           =   960
    End
    Begin VB.Label Label14 
       BorderStyle     =   1  'Fixed Single
       Caption         =   " No. de Bultos:"
       Height          =   330
-      Left            =   7350
+      Left            =   9765
       TabIndex        =   18
-      Top             =   3150
+      Top             =   4305
       Width           =   1485
    End
    Begin VB.Label LabelTransp 
       BackColor       =   &H00FFFFFF&
       BorderStyle     =   1  'Fixed Single
-      Caption         =   "Gavetas"
       Height          =   330
       Left            =   1470
       TabIndex        =   16
-      Top             =   3780
+      Top             =   3885
       Width           =   13035
    End
    Begin VB.Label LabelVendedor 
       BackColor       =   &H00FFFFFF&
       BorderStyle     =   1  'Fixed Single
-      Caption         =   "999999999"
       Height          =   330
-      Left            =   105
+      Left            =   10290
       TabIndex        =   14
-      Top             =   2835
-      Width           =   9675
+      Top             =   1890
+      Width           =   9990
    End
    Begin VB.Label Label21 
       BackColor       =   &H00E0E0E0&
@@ -1830,9 +1834,9 @@ Begin VB.Form ListFact
       Caption         =   " Autorizacion"
       ForeColor       =   &H000000C0&
       Height          =   330
-      Left            =   8085
+      Left            =   7770
       TabIndex        =   37
-      Top             =   1365
+      Top             =   1470
       Width           =   1275
    End
    Begin VB.Label Label13 
@@ -1841,7 +1845,7 @@ Begin VB.Form ListFact
       Height          =   330
       Left            =   105
       TabIndex        =   15
-      Top             =   3780
+      Top             =   3885
       Width           =   1380
    End
    Begin VB.Label Label12 
@@ -1860,18 +1864,17 @@ Begin VB.Form ListFact
       Height          =   330
       Left            =   945
       TabIndex        =   12
-      Top             =   2520
-      Width           =   8835
+      Top             =   1890
+      Width           =   9255
    End
    Begin VB.Label Label15 
       BackColor       =   &H00FFFFFF&
       BorderStyle     =   1  'Fixed Single
-      Caption         =   "Gavetas"
       Height          =   330
       Left            =   1470
       TabIndex        =   21
-      Top             =   3150
-      Width           =   5895
+      Top             =   4305
+      Width           =   8205
    End
    Begin VB.Label Label17 
       BorderStyle     =   1  'Fixed Single
@@ -1879,7 +1882,7 @@ Begin VB.Form ListFact
       Height          =   330
       Left            =   105
       TabIndex        =   22
-      Top             =   3150
+      Top             =   4305
       Width           =   1380
    End
    Begin VB.Label Label10 
@@ -1888,7 +1891,7 @@ Begin VB.Form ListFact
       Height          =   330
       Left            =   105
       TabIndex        =   11
-      Top             =   2520
+      Top             =   1890
       Width           =   855
    End
 End
@@ -2495,65 +2498,75 @@ Dim FormCaption As String
     End If
 End Sub
 
-Public Sub Volver_Autorizar()
-Dim ObjAutori As New WS_Autorizacion
-Dim ArrayAutorizacion() As String
-Dim Tiempo_Espera As Integer
-Dim Tiempo_SRI As Integer
-  If CFechaLong(FechaSistema) <= CFechaLong(Fecha_CE) Then
-     Actualizar_Razon_Social MBFecha
-    RatonReloj
-    TxtXML = ""
-    TxtXML.Refresh
-    If Len(FA.Autorizacion) = 13 And FA.Estado_SRI <> "OK" Then
-       SRI_Crear_Clave_Acceso_Facturas FA, False, CBool(CheqClaveAcceso.value)
-       If SRI_Autorizacion.Estado_SRI = "OK" Then
-          FA.Autorizacion = SRI_Autorizacion.Autorizacion
-          SRI_Autorizacion.Tipo_Doc_SRI = FA.TC
-          SRI_Enviar_Mails FA, SRI_Autorizacion
-          Imprimir_Punto_Venta_SRI AdoFactura, AdoDetalle, FA
+Public Sub Volver_Autorizar(Optional ConMensaje As Boolean)
+Dim ActualizarCliente As Boolean
+    ''       MsgBox MensajeNoAutorizarCE
+    TxtXML.Text = ""
+    If CFechaLong(LabelFechaPe) <= CFechaLong(Fecha_CE) Then
+       If FA.T <> "A" Then
+          If ConMensaje Then
+             Mensajes = "Liberar Documento: " & FA.TC & "-" & FA.Serie & " No. " & FA.Factura & " y volver a autorizar"
+             Titulo = "Formulario de Actualizacion."
+             If BoxMensaje = vbYes Then
+                SQL2 = "UPDATE Facturas " _
+                     & "SET Autorizacion = '" & RUC & "', Clave_Acceso = '" & Ninguno & "', Estado_SRI = '" & Ninguno & "' " _
+                     & "WHERE Item = '" & NumEmpresa & "' " _
+                     & "AND Periodo = '" & Periodo_Contable & "' " _
+                     & "AND TC = '" & FA.TC & "' " _
+                     & "AND Serie = '" & FA.Serie & "' " _
+                     & "AND Factura = " & FA.Factura & " "
+                Ejecutar_SQL_SP SQL2
+                
+                SQL2 = "UPDATE Detalle_Factura " _
+                     & "SET Autorizacion = '" & RUC & "' " _
+                     & "WHERE Item = '" & NumEmpresa & "' " _
+                     & "AND Periodo = '" & Periodo_Contable & "' " _
+                     & "AND TC = '" & FA.TC & "' " _
+                     & "AND Serie = '" & FA.Serie & "' " _
+                     & "AND Factura = " & FA.Factura & " "
+                Ejecutar_SQL_SP SQL2
+                 
+                SQL2 = "UPDATE Trans_Abonos " _
+                     & "SET Autorizacion = '" & RUC & "' " _
+                     & "WHERE Item = '" & NumEmpresa & "' " _
+                     & "AND Periodo = '" & Periodo_Contable & "' " _
+                     & "AND TP = '" & FA.TC & "' " _
+                     & "AND Serie = '" & FA.Serie & "' " _
+                     & "AND Factura = " & FA.Factura & " "
+                Ejecutar_SQL_SP SQL2
+                 
+                FA.Autorizacion = RUC
+             End If
+          End If
+          
+          If Len(FA.Autorizacion) >= 13 And FA.Estado_SRI <> "OK" Then
+             SQL2 = "UPDATE Facturas " _
+                  & "SET RUC_CI = C.CI_RUC, TB = C.TD, Razon_Social = C.Cliente, Direccion_RS = C.Direccion, Telefono_RS = C.Telefono " _
+                  & "FROM Facturas As F, Clientes As C " _
+                  & "WHERE F.Item = '" & NumEmpresa & "' " _
+                  & "AND F.Periodo = '" & Periodo_Contable & "' " _
+                  & "AND F.TC = '" & FA.TC & "' " _
+                  & "AND F.Serie = '" & FA.Serie & "' " _
+                  & "AND F.Factura = " & FA.Factura & " " _
+                  & "AND LEN(F.Razon_Social) = 1 " _
+                  & "AND F.CodigoC = C.Codigo "
+             Ejecutar_SQL_SP SQL2
+
+             SRI_Crear_Clave_Acceso_Facturas FA, True, CBool(CheqClaveAcceso.value), True
+             TxtXML = SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion.Clave_De_Acceso)
+             TxtXML.Refresh
+             RatonNormal
+          Else
+             Progreso_Final
+             MsgBox "Esta Factura ya esta autorizada"
+          End If
        Else
-          TxtXML = "(" & SRI_Autorizacion.Estado_SRI & ") " & SRI_Autorizacion.Error_SRI
+          MsgBox "No se puede enviar al SRI autorizar documentos que estan anulados"
        End If
     Else
-      'Pagina de Conexion con el SRI
-       Progreso_Barra.Mensaje_Box = "Actualizando XML"
-       Progreso_Iniciar
-       SRI_Autorizacion.Clave_De_Acceso = FA.ClaveAcceso
-       SRI_Autorizacion.Estado_SRI = "CF"
-       SRI_Autorizacion.Error_SRI = ""
-       RutaXMLAutorizado = RutaDocumentos & "\Comprobantes Autorizados\" & FA.ClaveAcceso & ".xml"
-       RutaXMLRechazado = RutaDocumentos & "\Comprobantes no Autorizados\" & FA.ClaveAcceso & ".xml"
-       For Tiempo_Espera = 1 To 3
-           Progreso_Esperar True
-           For Tiempo_SRI = 0 To 600
-               Progreso_Esperar True
-           Next Tiempo_SRI
-           ArrayAutorizacion = ObjAutori.FF_ObtieneNumAutorizado(URLAutorizacion, FA.ClaveAcceso, RutaXMLAutorizado, RutaXMLRechazado)
-           If ArrayAutorizacion(0) = "AUTORIZADO" Then Exit For
-       Next Tiempo_Espera
-      'Ok Documento Firmado y Autorizado
-       If ArrayAutorizacion(0) = "AUTORIZADO" Then
-          Progreso_Barra.Mensaje_Box = "[Ok] " & "Actualizando " & FA.TC _
-                                     & " No. " & FA.Serie & "-" & Format(FA.Factura, "000000000")
-          Progreso_Esperar True
-          SRI_Autorizacion.Estado_SRI = "OK"
-          SRI_Autorizacion.Error_SRI = "OK"
-          SRI_Autorizacion.Autorizacion = ArrayAutorizacion(1)
-          SRI_Autorizacion.Fecha_Autorizacion = Format$(MidStrg(ArrayAutorizacion(2), 1, 10), "dd/MM/yyyy")
-          SRI_Autorizacion.Hora_Autorizacion = MidStrg(ArrayAutorizacion(2), 12, 8)
-          SRI_Autorizacion.Documento_XML = Leer_Archivo_Texto(RutaXMLAutorizado)
-          SRI_Actualizar_Autorizacion_Comprobante FA.TC, SRI_Autorizacion, FA
-       Else
-          SRI_Autorizacion.Error_SRI = ArrayAutorizacion(0) & " " & ArrayAutorizacion(1)
-       End If
-       Progreso_Final
-       MsgBox "Esta Factura ya esta autorizada"
+       RatonNormal
+       MsgBox MensajeNoAutorizarCE
     End If
-  Else
-    RatonNormal
-    MsgBox MensajeNoAutorizarCE
-  End If
 End Sub
 
 Public Sub Volver_Autorizar_Pendientes()
@@ -2570,58 +2583,6 @@ Dim FAPend() As Tipo_Facturas
      TextoImprimio = ""
      FechaDeAut = MBFecha
      
-    sSQL = "UPDATE Facturas " _
-         & "SET Desc_0 = (SELECT SUM(Total_Desc+Total_Desc2) " _
-         & "              FROM Detalle_Factura " _
-         & "              WHERE Detalle_Factura.Total_IVA = 0 " _
-         & "              AND Detalle_Factura.TC = Facturas.TC " _
-         & "              AND Detalle_Factura.Item = Facturas.Item " _
-         & "              AND Detalle_Factura.Periodo = Facturas.Periodo " _
-         & "              AND Detalle_Factura.Fecha = Facturas.Fecha " _
-         & "              AND Detalle_Factura.Factura = Facturas.Factura " _
-         & "              AND Detalle_Factura.CodigoC = Facturas.CodigoC " _
-         & "              AND Detalle_Factura.Serie = Facturas.Serie " _
-         & "              AND Detalle_Factura.Autorizacion = Facturas.Autorizacion) " _
-         & "WHERE Item = '" & NumEmpresa & "' " _
-         & "AND Periodo = '" & Periodo_Contable & "' " _
-         & "AND Serie = '" & DCSerie & "' " _
-         & "AND LEN(Autorizacion) = 13 " _
-         & "AND Estado_SRI <> 'OK' "
-    Ejecutar_SQL_SP sSQL
-          
-    sSQL = "UPDATE Facturas " _
-         & "SET Desc_X = (SELECT SUM(Total_Desc+Total_Desc2) " _
-         & "              FROM Detalle_Factura " _
-         & "              WHERE Detalle_Factura.Total_IVA > 0 " _
-         & "              AND Detalle_Factura.TC = Facturas.TC " _
-         & "              AND Detalle_Factura.Item = Facturas.Item " _
-         & "              AND Detalle_Factura.Periodo = Facturas.Periodo " _
-         & "              AND Detalle_Factura.Fecha = Facturas.Fecha " _
-         & "              AND Detalle_Factura.Factura = Facturas.Factura " _
-         & "              AND Detalle_Factura.CodigoC = Facturas.CodigoC " _
-         & "              AND Detalle_Factura.Serie = Facturas.Serie " _
-         & "              AND Detalle_Factura.Autorizacion = Facturas.Autorizacion) " _
-         & "WHERE Item = '" & NumEmpresa & "' " _
-         & "AND Periodo = '" & Periodo_Contable & "' " _
-         & "AND Serie = '" & DCSerie & "' " _
-         & "AND LEN(Autorizacion) = 13 " _
-         & "AND Estado_SRI <> 'OK' "
-    Ejecutar_SQL_SP sSQL
-    
-    sSQL = "UPDATE Facturas " _
-         & "SET Desc_0 = 0 " _
-         & "WHERE Item = '" & NumEmpresa & "' " _
-         & "AND Periodo = '" & Periodo_Contable & "' " _
-         & "AND Desc_0 IS NULL "
-    Ejecutar_SQL_SP sSQL
-    
-    sSQL = "UPDATE Facturas " _
-         & "SET Desc_X = 0 " _
-         & "WHERE Item = '" & NumEmpresa & "' " _
-         & "AND Periodo = '" & Periodo_Contable & "' " _
-         & "AND Desc_X IS NULL "
-    Ejecutar_SQL_SP sSQL
-
      sSQL = "SELECT CodigoC, Clave_Acceso, Estado_SRI, TC, Fecha, Serie, Factura, Autorizacion " _
           & "FROM Facturas " _
           & "WHERE Item = '" & NumEmpresa & "' " _
@@ -3209,8 +3170,10 @@ Private Sub DGDetalle_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub Form_Activate()
+   
+   Una_Vez = True
    LstBox.Clear
-   LstBox.AddItem "<Alt><F9>: Cambiar Codigo de Facturacion"
+   LstBox.AddItem "<Alt><F9>: Cambiar Codigo de Articulo"
    LstBox.AddItem "<Alt><F10>: Cambiar Codigo de Bodega"
    LstBox.AddItem "<Ctrl><P>: Imprime Recibo de Pago con Tarjeta de Credito"
    LstBox.AddItem "<Ctrl><S>: Cambiar la serie del Producto"
@@ -3229,11 +3192,11 @@ Private Sub Form_Activate()
    DGDetalle.width = MDI_X_Max - 100
    DGDetalle.Height = MDI_Y_Max - DGDetalle.Top - 950
    
-   TxtXML.width = MDI_X_Max - 100
-   TxtXML.Height = MDI_Y_Max - TxtXML.Top - 950
+   TxtXML.width = (MDI_X_Max / 2) - 150
+   TxtXML.Left = (MDI_X_Max / 2) + 50
    
    LstBox.width = SSTabDetalle.width - LstBox.Left
-   Label8.width = SSTabDetalle.width - Label8.Left
+   Label8.width = (MDI_X_Max / 2) - Label8.Left
    LabelTransp.width = SSTabDetalle.width - LabelTransp.Left
    TxtObs.width = SSTabDetalle.width - TxtObs.Left
 
@@ -3375,7 +3338,7 @@ Public Sub BuscarFactura()
      FechaComp = FA.Fecha
      LabelCodigo.Caption = FA.CodigoC
      LabelCliente.Caption = FA.Cliente
-     Label8.Caption = FA.Razon_Social & ", CI/RUC: " & FA.CI_RUC & vbCrLf _
+     Label8.Caption = "Razon Social: " & FA.Razon_Social & ", CI/RUC: " & FA.CI_RUC & vbCrLf _
                     & "Dirección: " & FA.DireccionC & ", Teléfono: " & FA.TelefonoC & vbCrLf _
                     & "Emails: " & FA.EmailC & "; " & FA.EmailR & vbCrLf _
                     & "Elaborado por: " & FA.Digitador & " (" & FA.Hora & ")"
@@ -3404,7 +3367,16 @@ Public Sub BuscarFactura()
      End Select
     'Consultamos los pagos Interes de Tarjetas y Abonos de Bancos con efectivo
     'Procesamos el Saldo de la Factura
+  
+  CheqClaveAcceso.Caption = "Clave de Accceso: " & FA.TC & " "
+  TxtXML = SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion.Clave_De_Acceso)
+  TxtXML.Refresh
   SSTabDetalle.Tab = 0
+End Sub
+
+Private Sub LstBox_KeyDown(KeyCode As Integer, Shift As Integer)
+Keys_Especiales Shift
+    If KeyCode = vbKeyEscape Then LstBox.Visible = False
 End Sub
 
 Private Sub MBFecha_GotFocus()
@@ -3421,7 +3393,7 @@ Dim AdoAuxDB As ADODB.Recordset
     DGDetalle.AllowDelete = False
     DGDetalle.AllowUpdate = False
     DGDetalle.Visible = False
-    TxtXML.Visible = False
+'    TxtXML.Visible = False
     FrmTotalAsiento.Visible = False
     DGDetalle.Height = MDI_Y_Max - DGDetalle.Top - 950
     OpcionTab = SSTabDetalle.Tab
@@ -3589,27 +3561,6 @@ Dim AdoAuxDB As ADODB.Recordset
            LblDiferencia.Caption = Format$(Debe - Haber, "#,##0.00")
            FrmTotalAsiento.Visible = True
            DGDetalle.Visible = True
-      Case 4: 'RESULTADO FACTURA
-          'Listamos el error en la autorizacion del documento si tuvier error
-           If Len(FA.Autorizacion) >= 13 Then
-              CheqClaveAcceso.Caption = "Clave de Accceso: " & FA.TC & " "
-''              Cadena = SRI_Mensaje_Error(FA.ClaveAcceso)
-''              If Len(Cadena) > 1 Then
-''                 TxtXML = "Clave de Accceso: " & FA.ClaveAcceso & vbCrLf _
-''                        & String(100, "-") & vbCrLf _
-''                        & Cadena _
-''                        & String(100, "-")
-''              Else
-''                 TxtXML = "Clave de Accceso: " & FA.ClaveAcceso & vbCrLf _
-''                        & String(100, "-") & vbCrLf _
-''                        & "OK: No existe ningun error en su aprobacion" & vbCrLf _
-''                        & String(100, "-")
-''              End If
-           End If
-           TxtXML = SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion.Clave_De_Acceso)
-           TxtXML.Refresh
-
-           TxtXML.Visible = True
     End Select
     RatonNormal
 End Sub
@@ -3725,6 +3676,11 @@ Dim TempStrg As String
  Factura_No = FA.Factura
  TipoFactura = FA.TC
  CodigoCliente = FA.CodigoC
+ 
+ If Button.key <> "Salir" And Una_Vez Then
+    Actualizar_Todas_Razon_Social_SP MBFecha
+    Una_Vez = False
+ End If
 'MsgBox Button.key
  Select Case Button.key
    Case "Salir"
@@ -3839,6 +3795,9 @@ Dim TempStrg As String
         Else
            MsgBox "No existe datos para exportar"
         End If
+   Case "Ayuda"
+        LstBox.Visible = True
+        LstBox.SetFocus
  End Select
  RatonNormal
 End Sub
@@ -3897,70 +3856,8 @@ End Sub
 
 Private Sub TxtClaveAcceso_KeyDown(KeyCode As Integer, Shift As Integer)
 Keys_Especiales Shift
-''''  If CtrlDown And KeyCode = vbKeyS Then
-''''     SRI_Crear_Clave_Acceso_Facturas FA, True
-''''     RatonNormal
-''''  End If
-  
-  If CtrlDown And KeyCode = vbKeyR Then ReCalcular_Totales_Factura FA
-  If CtrlDown And KeyCode = vbKeyS And Len(FA.Autorizacion) >= 13 Then
-     If CFechaLong(LabelFechaPe) <= CFechaLong(Fecha_CE) Then
-        If FA.T <> "A" Then
-            Mensajes = "ESTA SEGURO QUE DESEA LIBERAR ESTE" & vbCrLf & vbCrLf _
-                     & "DOCUMENTO Y AUTORIZAR AL SRI"
-            Titulo = "Formulario de Confirmación"
-            If BoxMensaje = vbYes Then
-               SQL2 = "UPDATE Facturas " _
-                    & "SET Autorizacion = '" & RUC & "', Clave_Acceso = '" & Ninguno & "', Estado_SRI = '" & Ninguno & "' " _
-                    & "WHERE Item = '" & NumEmpresa & "' " _
-                    & "AND Periodo = '" & Periodo_Contable & "' " _
-                    & "AND TC = '" & FA.TC & "' " _
-                    & "AND Serie = '" & FA.Serie & "' " _
-                    & "AND Factura = " & FA.Factura & " "
-               Ejecutar_SQL_SP SQL2
-               
-               SQL2 = "UPDATE Facturas " _
-                    & "SET RUC_CI = C.CI_RUC , TB = C.TD, Razon_Social = C.Cliente, Direccion_RS = C.Direccion, Telefono_RS = C.Telefono " _
-                    & "FROM Facturas As F, Clientes As C " _
-                    & "WHERE F.Item = '" & NumEmpresa & "' " _
-                    & "AND F.Periodo = '" & Periodo_Contable & "' " _
-                    & "AND F.TC = '" & FA.TC & "' " _
-                    & "AND F.Serie = '" & FA.Serie & "' " _
-                    & "AND F.Factura = " & FA.Factura & " " _
-                    & "AND LEN(F.Razon_Social) = 1 " _
-                    & "AND F.CodigoC = C.Codigo "
-               Ejecutar_SQL_SP SQL2
-               
-               SQL2 = "UPDATE Detalle_Factura " _
-                    & "SET Autorizacion = '" & RUC & "' " _
-                    & "WHERE Item = '" & NumEmpresa & "' " _
-                    & "AND Periodo = '" & Periodo_Contable & "' " _
-                    & "AND TC = '" & FA.TC & "' " _
-                    & "AND Serie = '" & FA.Serie & "' " _
-                    & "AND Factura = " & FA.Factura & " "
-               Ejecutar_SQL_SP SQL2
-               
-               SQL2 = "UPDATE Trans_Abonos " _
-                    & "SET Autorizacion = '" & RUC & "' " _
-                    & "WHERE Item = '" & NumEmpresa & "' " _
-                    & "AND Periodo = '" & Periodo_Contable & "' " _
-                    & "AND TP = '" & FA.TC & "' " _
-                    & "AND Serie = '" & FA.Serie & "' " _
-                    & "AND Factura = " & FA.Factura & " "
-               Ejecutar_SQL_SP SQL2
-               
-               FA.Autorizacion = RUC
-               SRI_Crear_Clave_Acceso_Facturas FA, True, CBool(CheqClaveAcceso.value), True
-               RatonNormal
-            End If
-        Else
-           MsgBox "No se puede enviar al SRI autorizar documentos que estan anulados"
-        End If
-     Else
-        RatonNormal
-        MsgBox MensajeNoAutorizarCE
-     End If
-  End If
+    If CtrlDown And KeyCode = vbKeyR Then ReCalcular_Totales_Factura FA
+    If CtrlDown And KeyCode = vbKeyS And Len(FA.Autorizacion) >= 13 Then Volver_Autorizar True
 End Sub
 
 Private Sub TxtDetalle_KeyDown(KeyCode As Integer, Shift As Integer)

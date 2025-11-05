@@ -1062,21 +1062,21 @@ With AdoFletes.Recordset
 ''        AdoClientes.Recordset.Find ("Codigo = '" & .Fields("Conductor") & "' ")
 ''        If Not AdoClientes.Recordset.EOF Then Codigo2 = AdoClientes.Recordset.Fields("Cliente")
 ''     End If
-     Printer.FontSize = SetD(2).Tamaño
+     Printer.FontSize = SetD(2).Porte
      PrinterTexto SetD(2).PosX, SetD(2).PosY, .fields("Fecha_I")
-     Printer.FontSize = SetD(3).Tamaño
+     Printer.FontSize = SetD(3).Porte
      PrinterTexto SetD(3).PosX, SetD(3).PosY, .fields("Fecha_F")
-     Printer.FontSize = SetD(4).Tamaño
+     Printer.FontSize = SetD(4).Porte
      PrinterTexto SetD(4).PosX, SetD(4).PosY, .fields("Cliente")
-     Printer.FontSize = SetD(5).Tamaño
+     Printer.FontSize = SetD(5).Porte
      PrinterTexto SetD(5).PosX, SetD(5).PosY, .fields("Nombre_Conductor")   'Codigo2
-     Printer.FontSize = SetD(6).Tamaño
+     Printer.FontSize = SetD(6).Porte
      PrinterTexto SetD(6).PosX, SetD(6).PosY, .fields("Placa")
-     Printer.FontSize = SetD(7).Tamaño
+     Printer.FontSize = SetD(7).Porte
      PrinterTexto SetD(7).PosX, SetD(7).PosY, .fields("Nombre_Ayudante")  ' Codigo1
-     Printer.FontSize = SetD(8).Tamaño
+     Printer.FontSize = SetD(8).Porte
      PrinterTexto SetD(8).PosX, SetD(8).PosY, .fields("Carga")
-     Printer.FontSize = SetD(9).Tamaño
+     Printer.FontSize = SetD(9).Porte
      PrinterTexto SetD(9).PosX, SetD(9).PosY, .fields("Ruta")
  End If
 End With

@@ -192,7 +192,7 @@ Dim RutaFileError As String
 Dim Documento As String
 Dim MensajeError As String
 Dim ArrayRecepcion() As String
-Dim ArrayAutorizacion() As String
+'Dim ArrayAutorizacion() As String
 
 Dim autoday As String
 Dim autohour As String
@@ -287,7 +287,9 @@ Dim NumFile As Integer
            'Firmando documento generado para su autorizacion
             Progreso_Barra.Mensaje_Box = "Firmando el Comprobante No. " & Documento
             Progreso_Esperar True
-            SRI_Obtener_Datos_Comprobantes_Electronicos
+            
+           'SRI_Obtener_Datos_Comprobantes_Electronicos
+           'MsgBox "Desktop Test: Iniciar Autorizar"
            '-------------------------------------------------------------------------------------------------------------------
             Progreso_Barra.Mensaje_Box = "Enviando el Comprobante al S.R.I."
             LblConexion.Caption = LblConexion.Caption & Progreso_Barra.Mensaje_Box & vbCrLf
@@ -419,6 +421,7 @@ Dim NumFile As Integer
                    If .Clave_De_Acceso & ".xml" = LstVwFTP.ListItems(I) Then
                        Progreso_Barra.Mensaje_Box = "Obteniendo: " & LstVwFTP.ListItems(I)
                        Progreso_Esperar True
+                      'MsgBox RutaXMLRechazado
                        ftp.ObtenerArchivo LstVwFTP.ListItems(I), RutaXMLRechazado, True
                        Exit For
                    End If

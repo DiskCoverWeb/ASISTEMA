@@ -30,11 +30,11 @@ Begin VB.Form FRecaudacionBancosPreFa
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   225
-      Left            =   21840
+      Height          =   330
+      Left            =   105
       Style           =   1  'Graphical
       TabIndex        =   28
-      Top             =   1050
+      Top             =   9240
       Width           =   330
    End
    Begin VB.PictureBox PctBanco 
@@ -542,7 +542,7 @@ Begin VB.Form FRecaudacionBancosPreFa
    End
    Begin MSAdodcLib.Adodc AdoFactura 
       Height          =   330
-      Left            =   105
+      Left            =   420
       Top             =   9240
       Width           =   2955
       _ExtentX        =   5212
@@ -842,7 +842,7 @@ Begin VB.Form FRecaudacionBancosPreFa
       MaskColor       =   12632256
       _Version        =   393216
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
-         NumListImages   =   9
+         NumListImages   =   10
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
             Picture         =   "AutRecau.frx":0472
             Key             =   ""
@@ -877,6 +877,10 @@ Begin VB.Form FRecaudacionBancosPreFa
          EndProperty
          BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
             Picture         =   "AutRecau.frx":39DE
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "AutRecau.frx":42B8
             Key             =   ""
          EndProperty
       EndProperty
@@ -930,23 +934,22 @@ Begin VB.Form FRecaudacionBancosPreFa
    End
    Begin MSComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
-      Height          =   900
+      Height          =   660
       Left            =   0
       TabIndex        =   0
       Top             =   0
       Width           =   12915
       _ExtentX        =   22781
-      _ExtentY        =   1588
-      ButtonWidth     =   1720
-      ButtonHeight    =   1429
+      _ExtentY        =   1164
+      ButtonWidth     =   1032
+      ButtonHeight    =   1005
       AllowCustomize  =   0   'False
       Appearance      =   1
       ImageList       =   "ImageList1"
       _Version        =   393216
       BeginProperty Buttons {66833FE8-8583-11D1-B16A-00C0F0283628} 
-         NumButtons      =   7
+         NumButtons      =   8
          BeginProperty Button1 {66833FEA-8583-11D1-B16A-00C0F0283628} 
-            Caption         =   "Salir"
             Key             =   "Salir"
             Object.ToolTipText     =   "Salir del Módulo"
             ImageIndex      =   1
@@ -959,52 +962,51 @@ Begin VB.Form FRecaudacionBancosPreFa
             EndProperty
          EndProperty
          BeginProperty Button2 {66833FEA-8583-11D1-B16A-00C0F0283628} 
-            Caption         =   "Enviar"
             Key             =   "Enviar"
             Object.ToolTipText     =   "Enviar Deuda al Banco"
             ImageIndex      =   3
          EndProperty
          BeginProperty Button3 {66833FEA-8583-11D1-B16A-00C0F0283628} 
-            Caption         =   "Recibir"
             Key             =   "SubirAbonos"
             Object.ToolTipText     =   "Recibir Cobros del Banco"
             ImageIndex      =   4
          EndProperty
          BeginProperty Button4 {66833FEA-8583-11D1-B16A-00C0F0283628} 
-            Caption         =   "Facturar"
             Key             =   "GenerarFacturas"
             Object.ToolTipText     =   "Generar Facturas"
             ImageIndex      =   5
          EndProperty
          BeginProperty Button5 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Enabled         =   0   'False
-            Caption         =   "Alumnos"
             Key             =   "AlumnosContabilidad"
             Object.ToolTipText     =   "Alumnos de Contabilidad"
             ImageIndex      =   9
          EndProperty
          BeginProperty Button6 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Enabled         =   0   'False
-            Caption         =   "Renumerar"
             Key             =   "RenumerarCodigos"
             Object.ToolTipText     =   "Renumerar Estudiantes"
             ImageIndex      =   7
          EndProperty
          BeginProperty Button7 {66833FEA-8583-11D1-B16A-00C0F0283628} 
-            Caption         =   "Imprimir"
             Key             =   "ImprimirCodigos"
             Object.ToolTipText     =   "Imprimir Codigos"
             ImageIndex      =   8
          EndProperty
+         BeginProperty Button8 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "BajarExcel"
+            Object.ToolTipText     =   "Descargar a Excel"
+            ImageIndex      =   10
+         EndProperty
       EndProperty
       BorderStyle     =   1
       Begin MSDataListLib.DataCombo DCGrupoF 
-         Bindings        =   "AutRecau.frx":42B8
+         Bindings        =   "AutRecau.frx":4F0A
          DataSource      =   "AdoGrupo"
          Height          =   360
-         Left            =   12810
+         Left            =   12075
          TabIndex        =   5
-         Top             =   420
+         Top             =   315
          Visible         =   0   'False
          Width           =   1800
          _ExtentX        =   3175
@@ -1022,12 +1024,12 @@ Begin VB.Form FRecaudacionBancosPreFa
          EndProperty
       End
       Begin MSDataListLib.DataCombo DCGrupoI 
-         Bindings        =   "AutRecau.frx":42CF
+         Bindings        =   "AutRecau.frx":4F21
          DataSource      =   "AdoGrupo"
          Height          =   360
-         Left            =   11025
+         Left            =   10290
          TabIndex        =   4
-         Top             =   420
+         Top             =   315
          Visible         =   0   'False
          Width           =   1800
          _ExtentX        =   3175
@@ -1056,10 +1058,10 @@ Begin VB.Form FRecaudacionBancosPreFa
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   11025
+         Left            =   9975
          TabIndex        =   3
-         Top             =   105
-         Width           =   3690
+         Top             =   0
+         Width           =   3060
       End
       Begin VB.Frame Frame3 
          Caption         =   "ENTIDAD FINANCIERA"
@@ -1073,19 +1075,19 @@ Begin VB.Form FRecaudacionBancosPreFa
             Strikethrough   =   0   'False
          EndProperty
          Height          =   645
-         Left            =   6930
+         Left            =   4725
          TabIndex        =   1
-         Top             =   105
-         Width           =   4005
+         Top             =   0
+         Width           =   5160
          Begin MSDataListLib.DataCombo DCTablaSRI 
-            Bindings        =   "AutRecau.frx":42E6
+            Bindings        =   "AutRecau.frx":4F38
             DataSource      =   "AdoTablaSRI"
             Height          =   315
             Left            =   105
             TabIndex        =   2
             Top             =   210
-            Width           =   3795
-            _ExtentX        =   6694
+            Width           =   4950
+            _ExtentX        =   8731
             _ExtentY        =   556
             _Version        =   393216
             BackColor       =   16777215
@@ -1114,9 +1116,9 @@ Begin VB.Form FRecaudacionBancosPreFa
             Strikethrough   =   0   'False
          EndProperty
          Height          =   645
-         Left            =   14700
+         Left            =   13965
          TabIndex        =   6
-         Top             =   105
+         Top             =   0
          Width           =   1275
          Begin VB.TextBox TxtCodBanco 
             BeginProperty Font 
@@ -1148,12 +1150,12 @@ Begin VB.Form FRecaudacionBancosPreFa
             Strikethrough   =   0   'False
          EndProperty
          Height          =   645
-         Left            =   16065
+         Left            =   15330
          TabIndex        =   8
-         Top             =   105
+         Top             =   0
          Width           =   5055
          Begin MSDataListLib.DataCombo DCBanco 
-            Bindings        =   "AutRecau.frx":4300
+            Bindings        =   "AutRecau.frx":4F52
             DataSource      =   "AdoBanco"
             Height          =   315
             Left            =   105
@@ -1194,7 +1196,7 @@ Begin VB.Form FRecaudacionBancosPreFa
       EndProperty
       ForeColor       =   &H00000000&
       Height          =   330
-      Left            =   5460
+      Left            =   5775
       TabIndex        =   24
       Top             =   9240
       Width           =   2115
@@ -1251,7 +1253,7 @@ Begin VB.Form FRecaudacionBancosPreFa
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   3150
+      Left            =   3465
       TabIndex        =   23
       Top             =   9240
       Width           =   2325
@@ -1532,6 +1534,12 @@ Dim CostoTarjeta As Currency
    sSQL = "UPDATE Clientes_Facturacion " _
         & "SET X = '.' " _
         & "WHERE Item = '" & NumEmpresa & "' "
+   Ejecutar_SQL_SP sSQL
+      
+   sSQL = "UPDATE Clientes_Matriculas " _
+        & "SET X = '.' " _
+        & "WHERE Item = '" & NumEmpresa & "' " _
+        & "AND Periodo = '" & Periodo_Contable & "' "
    Ejecutar_SQL_SP sSQL
       
   Tipo_Carga = Leer_Campo_Empresa("Tipo_Carga_Banco")
@@ -1961,30 +1969,30 @@ Dim CostoTarjeta As Currency
                Cantidad = 1
                'If Not IsNumeric(NoMeses) Then MsgBox CodigoP
          Case "TARJETAS"
-              Cantidad = 1
-              CodigoCli = CamposFile(3).Valor
-              NombreCliente = Ninguno
-              NumeroTarjeta = CamposFile(4).Valor
-              CostoTarjeta = Val(CamposFile(10).Valor)
-              SubTotal = Val(CamposFile(15).Valor)
-              Total = Val(CamposFile(15).Valor)
-              FechaTexto = Format(MidStrg(CamposFile(0).Valor, 1, 10), FormatoFechas)
-              CodigoB = FechaTexto
-                                   
-              CodigoP = Leer_RUC_CI_TARJETA(NumeroTarjeta, Total, CodigoCli)
-              CodigoCli = CodigoP
-              
-              Producto = "Tarjeta: " & NumeroTarjeta & " - " & CamposFile(5).Valor
-             ' MsgBox CodigoB & vbCrLf & CodigoP & vbCrLf & NombreCliente
-              
-              CodigoB = LCase(TrimStrg(MidStrg(TrimStrg(SinEspaciosDer(CodigoB)), 6, 3)))
-               'LetrasMeses(CodigoB)
-              
-              Codigo3 = CamposFile(1).Valor
-              Codigo4 = CamposFile(2).Valor
-              Codigo2 = CamposFile(3).Valor
-'''              MsgBox CodigoCli & vbCrLf & CodigoP & vbCrLf & NombreCliente & vbCrLf & FechaTexto & vbCrLf & _
-'''                     Total & vbCrLf & Saldo & vbCrLf & NoAnio & vbCrLf & NoMeses
+              If UBound(CamposFile) >= 23 Then
+                 Cantidad = 1
+                 CodigoCli = CamposFile(8).Valor
+                 NombreCliente = Ninguno
+                 NumeroTarjeta = CamposFile(10).Valor
+                 SubTotal = Val(CamposFile(17).Valor)
+                 CostoTarjeta = Val(CamposFile(20).Valor)
+                 Total = Val(CamposFile(23).Valor)
+                 FechaTexto = Format(MidStrg(CamposFile(0).Valor, 1, 10), FormatoFechas)
+                 CodigoB = FechaTexto
+                 CodigoP = Leer_RUC_CI_TARJETA(NumeroTarjeta, Total, CodigoCli)
+                 CodigoCli = CodigoP
+                 Producto = "Tarjeta: " & NumeroTarjeta & " - " & CamposFile(5).Valor
+                 
+                'MsgBox "Desktop Test: " & CodigoB & vbCrLf & CodigoP & vbCrLf & NombreCliente & vbCrLf & SubTotal
+                 
+                 CodigoB = LCase(TrimStrg(MidStrg(TrimStrg(SinEspaciosDer(CodigoB)), 6, 3)))
+                  'LetrasMeses(CodigoB)
+                 
+                 Codigo3 = "Tarjeta No."
+                 Codigo4 = NumeroTarjeta
+                 Codigo2 = CamposFile(7).Valor
+              End If
+             'MsgBox "Desktop Test: " & CodigoCli & vbCrLf & CodigoP & vbCrLf & NombreCliente & vbCrLf & FechaTexto & vbCrLf & Total & vbCrLf & Saldo & vbCrLf & NoAnio & vbCrLf & NoMeses
          Case ".."
                CodigoCli = CamposFile(0).Valor
                FechaTexto = CStr(CamposFile(1).Valor)
@@ -2044,16 +2052,26 @@ Dim CostoTarjeta As Currency
        
        If Len(CodigoCli) > 10 Then CodigoCli = Ninguno
        
+       Cta_Ventas = "0"
        Producto = "PENSION DE: "
        If CodigoInv <> Ninguno Then
-          sSQL = "SELECT Producto " _
+          
+          sSQL = "SELECT Producto, IVA, Cta_Ventas, Cta_Ventas_0, Cta_Ventas_Ant " _
                & "FROM Catalogo_Productos " _
                & "WHERE Item = '" & NumEmpresa & "' " _
                & "AND Periodo = '" & Periodo_Contable & "' " _
                & "AND Codigo_Inv = '" & CodigoInv & "' " _
                & "AND TC = 'P' "
           Select_Adodc AdoAux, sSQL
-          If AdoAux.Recordset.RecordCount > 0 Then Producto = AdoAux.Recordset.fields("Producto")
+          If AdoAux.Recordset.RecordCount > 0 Then
+             Producto = AdoAux.Recordset.fields("Producto")
+             If Len(AdoAux.Recordset.fields("Cta_Ventas_Ant")) > 1 Then
+                Cta_Ventas = AdoAux.Recordset.fields("Cta_Ventas_Ant")
+             Else
+                If AdoAux.Recordset.fields("IVA") Then Cta_Ventas = AdoAux.Recordset.fields("Cta_Ventas") Else Cta_Ventas = AdoAux.Recordset.fields("Cta_Ventas_0")
+             End If
+             'MsgBox "Desktop Test: "
+          End If
        End If
 
       'MsgBox CodigoP & vbCrLf & CodigoCli & vbCrLf & NombreCliente & vbCrLf & FechaTexto & vbCrLf & Total & vbCrLf & NoAnio & vbCrLf & NoMeses & vbCrLf & Producto
@@ -2114,7 +2132,7 @@ Dim CostoTarjeta As Currency
                 Mes = MesesLetras(NoMeses)
                 CodigoInv = AdoAux.Recordset.fields("Codigo_Inv")
                 Total = AdoAux.Recordset.fields("Valor") - (AdoAux.Recordset.fields("Descuento") + AdoAux.Recordset.fields("Descuento2"))
-                Progreso_Barra.Mensaje_Box = "Determinando valores a facturar"
+               'Progreso_Barra.Mensaje_Box = "Determinando valores a facturar"
                 Progreso_Esperar True
                'MsgBox "Codigo: " & CodigoCli & ", De: " & NombreCliente & " Por = " & Format(Total, "#,##0.00") & vbCrLf
                 If Total <= Sumatoria Then
@@ -2126,17 +2144,19 @@ Dim CostoTarjeta As Currency
                    SetAdoFields "TOTAL", Total
                    SetAdoFields "Mes", Mes
                    SetAdoFields "A_No", NoMeses
-                   SetAdoFields "HABIT", NoAnio
+                   SetAdoFields "Serie_No", NoAnio
                    SetAdoFields "FECHA", FechaTexto
                    SetAdoFields "RUTA", NombreCliente
                    SetAdoFields "Codigo_Cliente", CodigoCli
                    SetAdoFields "Cod_Ejec", CodigoP
-                   SetAdoFields "Cta", Grupo_No
+                   SetAdoFields "Lote_No", Grupo_No
                    SetAdoFields "Numero", Factura_No
                    SetAdoFields "Serie", FA.Serie
                    SetAdoFields "Autorizacion", FA.Autorizacion
                    SetAdoFields "CODIGO_L", Codigo3
                    SetAdoFields "TICKET", Codigo4
+                   SetAdoFields "Cta", Cta_Ventas
+                   'If NumeroTarjeta <> "" Then SetAdoFields "Serie_No", NumeroTarjeta
                    If CostoTarjeta > 0 Then SetAdoFields "COSTO", CostoTarjeta
                    SetAdoUpdate
                    Factura_No = Factura_No + 1
@@ -2185,7 +2205,7 @@ Dim CostoTarjeta As Currency
                & "AND Codigo = '" & .fields("Codigo_Cliente") & "' " _
                & "AND Codigo_Inv = '" & .fields("CODIGO") & "' " _
                & "AND Num_Mes = " & .fields("A_No") & " " _
-               & "AND Periodo <= '" & .fields("HABIT") & "' " _
+               & "AND Periodo <= '" & .fields("Serie_No") & "' " _
                & "GROUP BY Codigo,Num_Mes,Periodo "
           Select_Adodc AdoAux, sSQL
           If AdoAux.Recordset.RecordCount <= 0 Then .fields("CodBod") = "X"
@@ -2228,11 +2248,9 @@ Dim CostoTarjeta As Currency
        Loop
    End If
   End With
-  DGFactura.Visible = True
   DGFactura.Caption = "PREFACTURACION DEL DIA"
-  sSQL = "SELECT FECHA,Numero As FACTURA,RUTA As BENEFICIARIO,CANT,CODIGO,PRODUCTO,TOTAL,COSTO As COMISION," _
-       & "HABIT As PERIODO,Mes,A_No As NO_MES,Codigo_Cliente,Serie,Autorizacion,Cta As Trans_No," _
-       & "CODIGO_L As Forma_P,TICKET As No_Cta,Cod_Ejec As Cod_Banco,CodigoU,Item " _
+  sSQL = "SELECT FECHA, Serie, Numero As FACTURA, RUTA As BENEFICIARIO, CANT, CODIGO, PRODUCTO, TOTAL, COSTO As COMISION, Serie_No As PERIODO, Mes, " _
+       & "A_No As NO_MES, Codigo_Cliente, Lote_No As Grupo, Autorizacion, Cta, CODIGO_L As Forma_P, TICKET As No_Cta, Cod_Ejec As Cod_Banco, CodigoU, Item " _
        & "FROM Asiento_F " _
        & "WHERE Item = '" & NumEmpresa & "' " _
        & "AND CodigoU = '" & CodigoUsuario & "' " _
@@ -2240,6 +2258,7 @@ Dim CostoTarjeta As Currency
   SQLDec = "PRECIO " & CStr(Dec_PVP) & "|TOTAL 2|."
   Select_Adodc_Grid DGFactura, AdoFactura, sSQL, SQLDec
   TotalIngreso = 0
+  DGFactura.Visible = False
   With AdoFactura.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
@@ -2252,6 +2271,7 @@ Dim CostoTarjeta As Currency
   RatonNormal
   Progreso_Final
   FRecaudacionBancosPreFa.Caption = CaptionTemp
+  DGFactura.Visible = True
   'MsgBox "(" & TextoImprimio & ")"
   If Len(TextoImprimio) > 2 Then
      FRecaudacionBancosPreFa.WindowState = vbMaximized
@@ -2615,13 +2635,13 @@ Dim Cod_Ok As Boolean
 '''                   & "ORDER BY Codigo "
 '''              Select_Adodc AdoAux, sSQL
               
-              sSQL = "SELECT CF.*,AF.Codigo_Cliente,AF.CODIGO_L,AF.TICKET,AF.PRODUCTO,AF.HABIT,AF.A_No  " _
+              sSQL = "SELECT CF.*,AF.Codigo_Cliente,AF.CODIGO_L,AF.TICKET,AF.PRODUCTO,AF.HABIT, AF.Serie_No, AF.A_No  " _
                    & "FROM Clientes_Facturacion As CF, Asiento_F As AF " _
                    & "WHERE CF.Codigo = '" & CodigoCli & "' " _
                    & "AND CF.Item = '" & NumEmpresa & "' " _
                    & "AND CF.Codigo_Inv = AF.CODIGO " _
                    & "AND CF.Num_Mes = AF.A_No " _
-                   & "AND CF.Periodo = AF.HABIT " _
+                   & "AND CF.Periodo = AF.Serie_No " _
                    & "AND CF.Item = AF.Item " _
                    & "AND CF.Codigo = AF.Codigo_Cliente " _
                    & "ORDER BY CF.Fecha, CF.Codigo_Inv, Periodo, Num_Mes, CF.ID, CF.Valor DESC "
@@ -2634,6 +2654,7 @@ Dim Cod_Ok As Boolean
                  SubCta = AdoProducto.Recordset.fields("TICKET")
                  Codigo3 = AdoProducto.Recordset.fields("CODIGO_L")
                  Codigo4 = AdoProducto.Recordset.fields("PRODUCTO")
+                 CodigoT = AdoProducto.Recordset.fields("TICKET")
                  Do While Not AdoProducto.Recordset.EOF
                     CodigoInv = AdoProducto.Recordset.fields("Codigo_Inv")
                     Cod_Ok = Leer_Codigo_Inv(CodigoInv, FechaSistema)
@@ -2663,26 +2684,35 @@ Dim Cod_Ok As Boolean
                        SetAdoFields "Ruta", AdoProducto.Recordset.fields("GrupoNo")
                        SetAdoFields "Periodo", Periodo_Contable
                        SetAdoFields "Item", NumEmpresa
-                       SubTotal_IVA = 0
-                       If FA.TC = "NV" Then
-                          Total_Sin_IVA = Total_Sin_IVA + Abono
-                          SetAdoFields "Cta_Venta", DatInv.Cta_Ventas_0
+                       If DatInv.IVA Then
+                          SubTotal_IVA = Redondear(Abono * Porc_IVA, 2)
+                          Total_Con_IVA = Total_Con_IVA + Abono
                        Else
-                          If DatInv.IVA Then
-                             SubTotal_IVA = Redondear(Abono * Porc_IVA, 2)
-                             Total_Con_IVA = Total_Con_IVA + Abono
+                          SubTotal_IVA = 0
+                          Total_Sin_IVA = Total_Sin_IVA + Abono
+                       End If
+                        
+                       If Len(DatInv.Cta_Venta_Anticipada) > 1 Then
+                          Cta_Ventas = DatInv.Cta_Venta_Anticipada
+                       Else
+                          If FA.TC = "NV" Then
+                             Cta_Ventas = DatInv.Cta_Ventas_0
                           Else
-                             Total_Sin_IVA = Total_Sin_IVA + Abono
+                             If Len(DatInv.Cta_Ventas_Ant) > 1 Then
+                                Cta_Ventas = DatInv.Cta_Ventas_Ant
+                             Else
+                                If DatInv.IVA Then Cta_Ventas = DatInv.Cta_Ventas Else Cta_Ventas = DatInv.Cta_Ventas_0
+                             End If
                           End If
-                          SetAdoFields "Cta_Venta", DatInv.Cta_Ventas
                        End If
                        Total_IVA = Total_IVA + SubTotal_IVA
                        Total_Desc = Total_Desc + Total_Desc_ME
                        SetAdoFields "Total_IVA", SubTotal_IVA
                        SetAdoFields "Autorizacion", FA.Autorizacion
                        SetAdoFields "Serie", FA.Serie
+                       SetAdoFields "Cta_Venta", Cta_Ventas
                        SetAdoUpdate
-                      'MsgBox Factura_No & vbCrLf & CodigoCli & vbCrLf & AdoProducto.Recordset.Fields("Num_Mes") & vbCrLf & AdoProducto.Recordset.Fields("Periodo") & vbCrLf & AdoProducto.Recordset.Fields("Mes")
+                      'MsgBox "Desktop Test: " & Factura_No & vbCrLf & CodigoCli & vbCrLf & AdoProducto.Recordset.fields("Num_Mes") & vbCrLf & AdoProducto.Recordset.fields("Periodo") & vbCrLf & AdoProducto.Recordset.fields("Mes")
                       'Activamos el item a borrar
                        sSQL = "UPDATE Clientes_Facturacion " _
                             & "SET D = " & Val(adTrue) & " " _
@@ -2802,6 +2832,7 @@ Dim Cod_Ok As Boolean
                         TipoDeAbono = "DEPOSITO EN EL BANCO "
                    Case "TARJETAS"
                         TipoDeAbono = "CANCELACION TARJETA "
+                        If CodigoT <> Ninguno Then TipoDeAbono = TipoDeAbono & "No. " & CodigoT
                    Case Else
                         TipoDeAbono = "DEPOSITO EN EL BANCO "
                  End Select
@@ -2847,6 +2878,7 @@ Dim Cod_Ok As Boolean
   
    RatonNormal
    Progreso_Final
+   LabelAbonos.Caption = Format$(TotalIngreso, "#,##0.00")
    MsgBox "GENERACION DE FACTURAS DEL: " & FechaTexto & vbCrLf _
         & "SE GRABARON: " & Total_Alumnos & " ALUMNOS." & vbCrLf _
         & "DESDE LA " & FA.TC & ": " & Factura_Desde & " HASTA LA " & Factura_Hasta & vbCrLf _
@@ -2914,6 +2946,7 @@ End Sub
 Private Sub DCLinea_LostFocus()
   FA.Cod_CxC = DCLinea
   FA.Fecha = FechaSistema
+  FA.Autorizacion = Ninguno
   Lineas_De_CxC FA
   Label6.Caption = " Aut. " & FA.Autorizacion & " " & FA.TC & " No. " & FA.Serie & "-"
   FA.Factura = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, False) 'Numero_Factura(FA)
@@ -2992,11 +3025,6 @@ End Sub
 
 Private Sub DGFactura_KeyDown(KeyCode As Integer, Shift As Integer)
   Keys_Especiales Shift
-  If CtrlDown And KeyCode = vbKeyF1 Then
-     DGFactura.Visible = False
-     GenerarDataTexto FRecaudacionBancosPreFa, AdoFactura
-     DGFactura.Visible = True
-  End If
 End Sub
 
 Private Sub Form_Activate()
@@ -3040,6 +3068,7 @@ Private Sub Form_Activate()
        Pos_Factura = .fields("Pos_Factura")
        Individual = .fields("Individual")
        TipoFactura = .fields("Fact")
+       Autorizacion = .fields("Autorizacion")
     End If
   End With
  'Catalogo de los Rubros ha facturar
@@ -3111,21 +3140,20 @@ Private Sub Form_Load()
   ConectarAdodc AdoClientes
   ConectarAdodc AdoClientesMatriculas
   
+  Frame1.width = MDI_X_Max - Frame1.Left - 50
+  DCBanco.width = Frame1.width - 200
   TxtFile.width = MDI_X_Max - TxtFile.Left - 100
-  AdoFactura.width = MDI_X_Max - AdoFactura.Left - LabelAbonos.width - Label4.width - 100
-  DGFactura.width = MDI_X_Max - DGFactura.Left - 100
-  
   TxtFile.Height = ((MDI_Y_Max - TxtFile.Top) / 2) - 200
+  DGFactura.width = MDI_X_Max - DGFactura.Left - 100
   DGFactura.Top = TxtFile.Top + TxtFile.Height + 10
   DGFactura.Height = DGFactura.Top - 2500
   AdoFactura.Top = DGFactura.Top + DGFactura.Height + 10
-  Frame1.width = MDI_X_Max - Frame1.Left - 50
-  DCBanco.width = Frame1.width - 200
-  LabelAbonos.Top = DGFactura.Top + DGFactura.Height + 10
+  AdoFactura.width = MDI_X_Max - (AdoFactura.Left + LabelAbonos.width + Label4.width) - 100
+  Command2.Top = DGFactura.Top + DGFactura.Height + 10
   Label4.Top = DGFactura.Top + DGFactura.Height + 10
-  LabelAbonos.Left = AdoFactura.Left + AdoFactura.width
-  'Label4.width
-  
+  Label4.Left = AdoFactura.Left + AdoFactura.width
+  LabelAbonos.Top = DGFactura.Top + DGFactura.Height + 10
+  LabelAbonos.Left = AdoFactura.Left + AdoFactura.width + Label4.width
 End Sub
 
 Private Sub MBFechaI_GotFocus()
@@ -4309,6 +4337,10 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
          Renumerar_Codigos
     Case "ImprimirCodigos"
          Imprimir_Codigos
+    Case "BajarExcel"
+         DGFactura.Visible = False
+         GenerarDataTexto FRecaudacionBancosPreFa, AdoFactura
+         DGFactura.Visible = True
     Case "Salir"
          Unload FRecaudacionBancosPreFa
   End Select

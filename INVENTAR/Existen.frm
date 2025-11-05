@@ -1298,6 +1298,24 @@ Private Sub Command3_Click()
   RatonNormal
 End Sub
 
+Private Sub DCArt_KeyPress(KeyAscii As Integer)
+Dim Busqueda As String
+    Busqueda = DCArt
+    If Len(Busqueda) > 0 Then
+        sSQL = "SELECT TOP 50 Codigo_Inv,Producto,Unidad,Bodega,Minimo,Maximo,Cta_Inventario,Cta_Costo_Venta " _
+             & "FROM Catalogo_Productos " _
+             & "WHERE Item = '" & NumEmpresa & "' " _
+             & "AND Periodo = '" & Periodo_Contable & "' " _
+             & "AND Producto LIKE '" & Busqueda & "%' " _
+             & "AND TC = 'P' " _
+             & "AND INV <> " & Val(adFalse) & " " _
+             & "AND LEN(Cta_Inventario) > 1 " _
+             & "AND LEN(Cta_Costo_Venta) > 1 " _
+             & "ORDER BY Codigo_Inv "
+       Select_Adodc AdoArt, sSQL
+    End If
+End Sub
+
 Private Sub DCTInv_KeyDown(KeyCode As Integer, Shift As Integer)
   PresionoEnter KeyCode
 End Sub
@@ -1350,6 +1368,7 @@ Private Sub DGKardex_KeyDown(KeyCode As Integer, Shift As Integer)
  Keys_Especiales Shift
  If AdoKardex.Recordset.RecordCount > 0 Then
     CodigoInv = DGKardex.Columns(0)
+    Producto = DGKardex.Columns(1)
     FA.TC = DGKardex.Columns(15)
     FA.Serie = DGKardex.Columns(16)
     FA.Factura = DGKardex.Columns(18)
@@ -1368,7 +1387,8 @@ Private Sub DGKardex_KeyDown(KeyCode As Integer, Shift As Integer)
     End If
     
     If CtrlDown And KeyCode = vbKeyF12 Then
-       LblProducto = DGKardex.Caption
+    
+       LblProducto = Producto
        Listar_Articulos True
        RatonNormal
        FrmProductos.Visible = True

@@ -875,6 +875,7 @@ End Sub
 
 Private Sub MListGrupos_Click()
   RatonReloj
+  CargarFrom = True
   Control_Procesos Normal, "Proceso de Facturacion Multiple"
   ListarGrupos.Show
 End Sub

@@ -3651,9 +3651,9 @@ Private Sub MBoxFecha_LostFocus()
    FA.Fecha_C = MBoxFecha
    FA.Fecha_V = MBoxFechaV
    FechaComp = FA.Fecha
-   FA.Serie = "000000"
+   FA.Serie = "001001"
    FA.Autorizacion = Ninguno
-   sSQL = "SELECT Codigo, Concepto, Serie, Autorizacion " _
+   sSQL = "SELECT Codigo, Concepto, Serie, Autorizacion, Fact " _
         & "FROM Catalogo_Lineas " _
         & "WHERE TL <> " & Val(adFalse) & " " _
         & "AND Item = '" & NumEmpresa & "' " _
@@ -3664,10 +3664,10 @@ Private Sub MBoxFecha_LostFocus()
         & "ORDER BY Codigo "
    SelectDB_Combo DCLinea, AdoLinea, sSQL, "Concepto"
    If AdoLinea.Recordset.RecordCount > 0 Then
+      FA.TC = AdoLinea.Recordset.fields("Fact")
       FA.Serie = AdoLinea.Recordset.fields("Serie")
       FA.Autorizacion = AdoLinea.Recordset.fields("Autorizacion")
    End If
-   
 End Sub
 
 Private Sub MBoxFechaV_GotFocus()

@@ -82,6 +82,7 @@ Begin VB.Form FClientes
             ImageIndex      =   8
          EndProperty
          BeginProperty Button9 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
             Object.Tag             =   ""
             ImageIndex      =   9
             Style           =   3
@@ -100,6 +101,7 @@ Begin VB.Form FClientes
             ImageIndex      =   10
          EndProperty
          BeginProperty Button12 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
             Object.Tag             =   ""
             ImageIndex      =   11
             Style           =   3
@@ -4467,7 +4469,7 @@ Private Sub TxtCI_RUC_KeyDown(KeyCode As Integer, Shift As Integer)
   Keys_Especiales Shift
   PresionoEnter KeyCode
   If AltDown And KeyCode = vbKeyF2 Then TxtCI_RUC.Text = Leer_Codigo_Automatico
-  If CtrlDown And KeyCode = vbKeyV Then TxtCI_RUC.Text = Clipboard.GetText()
+ ' If CtrlDown And KeyCode = vbKeyV Then TxtCI_RUC.Text = Clipboard.GetText()
 End Sub
 
 Private Sub TxtCI_RUC_LostFocus()
@@ -4502,9 +4504,11 @@ Private Sub TxtCI_RUC_LostFocus()
        Cadena = Leer_Campo_Cliente("CI_RUC", TxtCI_RUC)
        If Len(Cadena) > 1 And TxtApellidosS <> Cadena Then
           MsgBox "Este codigo ya esta asignado a:" & vbCrLf & vbCrLf & Cadena & vbCrLf & vbCrLf & "vuelva a ingresar el dato."
+          ListarCuenta Cadena
           'TxtCI_RUC.SetFocus
+       Else
+          TxtCodigo = Tipo_RUC_CI.Codigo_RUC_CI
        End If
-       
     Else
        MsgBox "Este campo no puede tener datos nulos"
        TxtCI_RUC.SetFocus

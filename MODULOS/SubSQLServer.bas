@@ -21,7 +21,7 @@ Public Sub Iniciar_Stored_Procedure(cMensajeProceso As String, _
                                     cMiSQL As ADODB.Connection, _
                                     cMiCmd As ADODB.Command, _
                                     cMiReg As ADODB.Recordset)
-'    If Ping_IP("db.diskcoversystem.com") Then
+'    If Ping_IP(strServidor) Then
         RatonReloj
     ''  Progreso_Barra.Mensaje_Box = cMensajeProceso
     ''  Progreso_Iniciar
@@ -54,9 +54,9 @@ On Error GoTo Errorhandler
         ListP = ListP & cMiCmd.Parameters.Item(IdP).Name & " = '" & cMiCmd.Parameters.Item(IdP) & "'" & vbCrLf
     Next IdP
    
-'   Clipboard.Clear
-'   Clipboard.SetText Len(ListP) & vbCrLf & vbCrLf & ListP
-'   MsgBox Len(ListP) & vbCrLf & vbCrLf & ListP
+   'Clipboard.Clear
+   'Clipboard.SetText Len(ListP) & vbCrLf & vbCrLf & ListP
+   'MsgBox Len(ListP) & vbCrLf & vbCrLf & ListP
    
    'Generar_File_SQL "Store_Procedure", ListP
     
@@ -225,7 +225,7 @@ Dim Mail_para As String
          cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("pRUC", adVarChar, adParamInput, 13, RUC)
          cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("pPeriodo", adVarChar, adParamInput, 10, Periodo_Contable)
          cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("pEmailFrom", adVarChar, adParamInput, 60, TrimStrg(MidStrg(Mail_de, 1, 60)))
-         cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("pEmailTo", adVarChar, adParamInput, 120, TrimStrg(MidStrg(Mail_para, 1, 120)))
+         cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("pEmailTo", adVarChar, adParamInput, 255, TrimStrg(MidStrg(Mail_para, 1, 255)))
 
         'Ejecucion del SP en MySQL
          Set rsMySQL = cmdMySQL.Execute
@@ -261,6 +261,7 @@ Public Sub Datos_Iniciales_Entidad_SP_MySQL()
 Dim cnMySQL As ADODB.Connection
 Dim rsMySQL As ADODB.Recordset
 Dim cmdMySQL As ADODB.Command
+Dim CantParmIN As Long
 Dim ParametrosDeSalida As String
 
     ServidorMySQL = False
@@ -280,12 +281,15 @@ Dim ParametrosDeSalida As String
     Cartera = 0
     Cant_FA = 0
     TipoPlan = 0
+    
     If Ping_IP(strServidorERP) Then
         RatonReloj
+        CantParmIN = Len(CadenaParcial)
+        If CantParmIN <= 1 Then CantParmIN = 1
        'MsgBox AdoStrCnnMySQL
        'Set cnMySQL = CreateObject("ADODB.Connection")
        'Conexion a MySQL del servidor en las nubes
-       
+        
         Set cmdMySQL = New ADODB.Command
         Set cnMySQL = New ADODB.Connection
         cnMySQL.ConnectionString = AdoStrCnnMySQL
@@ -323,7 +327,7 @@ Dim ParametrosDeSalida As String
         cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("NLogoTipo", adVarChar, adParamInput, 10, NLogoTipo)
         cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("NMarcaAgua", adVarChar, adParamInput, 10, NMarcaAgua)
         cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("EmailUsuario", adVarChar, adParamInput, 60, EmailUsuario)
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("NivelesDeAccesos", adVarChar, adParamInput, 32768, CadenaParcial)
+        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("NivelesDeAccesos", adVarChar, adParamInput, CantParmIN, CadenaParcial)
         cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("IP_Local", adVarChar, adParamInput, 15, IP_PC.IP_PC)
         cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("IP_WAN", adVarChar, adParamInput, 15, IP_PC.WAN_PC)
         cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("PC_Nombre", adVarChar, adParamInput, 15, IP_PC.Nombre_PC)
@@ -617,7 +621,7 @@ Dim TByte As Long
         
     '  Clipboard.Clear
     '  Clipboard.SetText SQL
-       If Ping_IP("db.diskcoversystem.com") Then
+      If Ping_IP(strServidor) Then
           Iniciar_Stored_Procedure "Ejecucion SP con parametros", MiSQL, MiCmd, MiReg
          'MsgBox Len(SQL) & vbCrLf & SQL
           MiCmd.CommandText = "sp_Ejecutar_SQL"
@@ -700,6 +704,17 @@ Dim MiReg As ADODB.Recordset
 
     Iniciar_Stored_Procedure "Actualizar Base Datos", MiSQL, MiCmd, MiReg
     MiCmd.CommandText = "sp_Actualizar_Base_Datos"
+    Procesar_Stored_Procedure MiCmd, MiReg
+    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+End Sub
+
+Public Sub Insertar_Clientes_Auxiliar_SP()
+Dim MiSQL As ADODB.Connection
+Dim MiCmd As ADODB.Command
+Dim MiReg As ADODB.Recordset
+
+    Iniciar_Stored_Procedure "Insertar Clientes Auxiliar", MiSQL, MiCmd, MiReg
+    MiCmd.CommandText = "sp_Insertar_Clientes_Auxiliar"
     Procesar_Stored_Procedure MiCmd, MiReg
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
@@ -1181,7 +1196,7 @@ Dim MiReg As ADODB.Recordset
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
 
-Public Sub Procesar_Saldos_CxC_Meses_SP(GrupoDireccion As String, FechaDesde As String, FechaHasta As String)
+Public Sub Procesar_Saldos_CxC_Meses_SP(GrupoDireccion As String, FechaDesde As String, FechaHasta As String, Tutor As String, Email_Tutor As String, ListaDeMeses As String)
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
 Dim MiReg As ADODB.Recordset
@@ -1193,7 +1208,14 @@ Dim MiReg As ADODB.Recordset
     MiCmd.Parameters.Append MiCmd.CreateParameter("@GrupoDireccion", adVarChar, adParamInput, 80, GrupoDireccion)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaDesde", adVarChar, adParamInput, 10, BuscarFecha(FechaDesde))
     MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaHasta", adVarChar, adParamInput, 10, BuscarFecha(FechaHasta))
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Tutor", adVarChar, adParamOutput, 60, Tutor)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Email_Tutor", adVarChar, adParamOutput, 60, Email_Tutor)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@ListaDeMeses", adVarChar, adParamOutput, 256, ListaDeMeses)
     Procesar_Stored_Procedure MiCmd, MiReg
+    Tutor = MiCmd.Parameters("@Tutor").value
+    Email_Tutor = MiCmd.Parameters("@Email_Tutor").value
+    ListaDeMeses = MiCmd.Parameters("@ListaDeMeses").value
+    
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
 
@@ -1488,6 +1510,7 @@ Public Sub Reporte_Rol_Pagos_Colectivo_SP(FechaIniRol As String, _
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
 Dim MiReg As ADODB.Recordset
+    
     Iniciar_Stored_Procedure "Generacion Reporte Rol Pagos Colectivo", MiSQL, MiCmd, MiReg
     MiCmd.CommandText = "sp_Reporte_Rol_Pagos_Colectivo"
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
@@ -1700,7 +1723,6 @@ Public Sub Actualizar_Datos_ATS_SP(Items As String, MBFechaI As String, MBFechaF
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
 Dim MiReg As ADODB.Recordset
-Dim AdoCtasDB As ADODB.Recordset
 Dim Tiempo_Espera As Byte
 Dim FechaIni As String
 Dim FechaFin As String
@@ -1716,6 +1738,25 @@ Dim FechaFin As String
     MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaHasta", adVarChar, adParamInput, 10, FechaFin)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Numero", adInteger, adParamInput, 14, Numero)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@ATFisico", adBoolean, adParamInput, 1, ATFisico)
+    Procesar_Stored_Procedure MiCmd, MiReg
+    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+End Sub
+
+Public Sub Actualizar_Todas_Razon_Social_SP(MBFechaIni As String)
+Dim MiSQL As ADODB.Connection
+Dim MiCmd As ADODB.Command
+Dim MiReg As ADODB.Recordset
+Dim FechaIni As String
+
+    FechaIni = BuscarFecha(MBFechaIni)
+    RutaXMLRechazado = RutaDocumentos & "\Comprobantes no Autorizados\*.xml"
+    If Existe_File(RutaXMLRechazado) Then Kill RutaXMLRechazado
+    
+    Iniciar_Stored_Procedure "Actualizar Todas Razon_Social", MiSQL, MiCmd, MiReg
+    MiCmd.CommandText = "sp_Actualizar_Todas_Razon_Social"
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaIniAut", adVarChar, adParamInput, 10, FechaIni)
     Procesar_Stored_Procedure MiCmd, MiReg
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
@@ -1921,52 +1962,6 @@ Dim pJSON As Object
 Dim TBenef As Tipo_Beneficiarios
 Dim JSONResult As String
 
-    With TBenef
-        .FA = False
-        .Asignar_Dr = False
-        .Codigo = Ninguno
-        .Cliente = Ninguno
-        .Tipo_Cta = Ninguno
-        .Cta_Numero = Ninguno
-        .Descuento = False
-        .T = ""
-        .TP = ""
-        .CI_RUC = ""
-        .TD = ""
-        .Fecha = ""
-        .Fecha_A = ""
-        .Fecha_N = ""
-        .Sexo = ""
-        .Email1 = ""
-        .Email2 = ""
-        .Direccion = ""
-        .DirNumero = ""
-        .Telefono = ""
-        .Telefono1 = ""
-        .TelefonoT = ""
-        .Celular = ""
-        .Ciudad = ""
-        .Prov = ""
-        .Pais = ""
-        .Profesion = ""
-        .Archivo_Foto = ""
-        .Representante = Ninguno
-        .RUC_CI_Rep = ""
-        .TD_Rep = ""
-        .Direccion_Rep = "SD"
-        .Grupo_No = ""
-        .Contacto = ""
-        .Calificacion = ""
-        .Plan_Afiliado = ""
-        .Cte_Ahr_Otro = ""
-        .Cta_Transf = ""
-        .Cod_Banco = 0
-        .Salario = 0
-        .Saldo_Pendiente = 0
-        .Total_Anticipo = 0
-    End With
-   
-   
    'MsgBox BuscarCodigo
     JSONResult = ""
     Iniciar_Stored_Procedure "", MiSQL, MiCmd, MiReg
@@ -1974,19 +1969,25 @@ Dim JSONResult As String
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@BuscarCodigo", adVarChar, adParamInput, 180, BuscarCodigo)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@JSON_OutPut", adVarChar, adParamOutput, 5120, JSONResult)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@JSON_OutPut", adVarWChar, adParamOutput, 65535, JSONResult)
     Procesar_Stored_Procedure MiCmd, MiReg
-    
-'    Clipboard.Clear
-'    Clipboard.SetText JSONResult
-'    MsgBox "Desktop Test: " & BuscarCodigo & vbCrLf & JSONResult
-
    'Recojemos los datos salientes de los campos que retorna valor el store procedure del SQL Server
     JSONResult = MiCmd.Parameters("@JSON_OutPut").value
     Set pJSON = JSON.parse(JSONResult)
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
     
+''    Clipboard.Clear
+''    Clipboard.SetText vbCrLf & JSONResult
+''    MsgBox "Desktop Test: " & Len(JSONResult) & vbCrLf & BuscarCodigo & vbCrLf & JSONResult
+    
     With TBenef
+        .TP = ""
+        .Fecha_A = ""
+        .Cte_Ahr_Otro = ""
+        .Cta_Transf = ""
+        .Salario = 0
+        .Total_Anticipo = 0
+        
         .Codigo = pJSON.Item("Codigo_Encontrado")
         .FA = pJSON.Item("FA")
         .Asignar_Dr = pJSON.Item("Asignar_Dr")
@@ -2006,6 +2007,7 @@ Dim JSONResult As String
         .Telefono = pJSON.Item("Telefono")
         .Telefono1 = pJSON.Item("Telefono_R")
         .TelefonoT = pJSON.Item("TelefonoT")
+        .Celular = pJSON.Item("Celular")
         .Ciudad = pJSON.Item("Ciudad")
         .Prov = pJSON.Item("Prov")
         .Pais = pJSON.Item("Pais")

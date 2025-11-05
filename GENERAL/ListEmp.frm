@@ -871,7 +871,8 @@ Dim SiActualizar As Boolean
          Loop
      End If
     End With
-    If Len(CadenaParcial) > 32768 Then MsgBox "Falta ampliar los niveles de seguridad."
+    'MsgBox CadenaParcial
+    If Len(CadenaParcial) > 65535 Then MsgBox "Falta ampliar los niveles de seguridad."
     Minutos = Time
     sSQL = "SELECT " & Full_Fields("Empresas") & " " _
          & "FROM Empresas " _
@@ -931,11 +932,13 @@ Dim SiActualizar As Boolean
          MascaraCodigoK = .fields("Formato_Inventario")
          MascaraCodigoA = .fields("Formato_Activo")
          MascaraCtas = Replace(.fields("Formato_Cuentas"), "C", "#")
+         RUCOperadora = .fields("RUC_Operadora")
          FormatoCtas = MascaraCtas
          LimpiarCtas = Replace(MascaraCtas, "#", " ")
          Fecha_Igualar = .fields("Fecha_Igualar")
          Porc_Serv = Redondear(.fields("Servicio") / 100, 2)
          RutaCertificado = RutaSistema & "\CERTIFIC\" & .fields("Ruta_Certificado")
+         ClaveCertificado = .fields("Clave_Certificado")
 
          OpcCoop = CBool(.fields("Opc"))
          CentroDeCosto = CBool(.fields("Centro_Costos"))
@@ -961,7 +964,8 @@ Dim SiActualizar As Boolean
          Ret_Aut = CBool(.fields("Ret_Aut"))
          ConciliacionAut = CBool(.fields("Conciliacion_Aut"))
          NumeroFASubModulo = CBool(.fields("Abonos_FA"))
-
+         EsTransporte = CBool(.fields("Es_Transporte"))
+         
          Debo_Pagare = MensajeDeboPagare
          If Len(RazonSocial) > 1 Then CodigoA = RazonSocial Else CodigoA = Empresa
          If .fields("Debo_Pagare") = "SI" Then Debo_Pagare = Replace(Debo_Pagare, "vRazon_Social", CodigoA) Else Debo_Pagare = Ninguno
@@ -989,25 +993,27 @@ Dim SiActualizar As Boolean
         '*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
          For I = 0 To 6
              Lista_De_Correos(I).Correo_Electronico = CorreoDiskCover
-             Lista_De_Correos(I).Contraseña = ContrasenaDiskCover
+             Lista_De_Correos(I).Clave = ContrasenaDiskCover
          Next I
         
-         If Len(.fields("Email_Conexion")) > 1 And Len(.fields("Email_Contraseña")) > 1 Then
+         If Len(.fields("Email_Conexion")) > 1 And Len(.fields("Email_Clave")) > 1 Then
             Lista_De_Correos(0).Correo_Electronico = .fields("Email_Conexion")
-            Lista_De_Correos(0).Contraseña = .fields("Email_Contraseña")
+            Lista_De_Correos(0).Clave = .fields("Email_Clave")
          End If
          
-         If Len(.fields("Email_Conexion_CE")) > 1 And Len(.fields("Email_Contraseña_CE")) > 1 Then
+         If Len(.fields("Email_Conexion_CE")) > 1 And Len(.fields("Email_Clave_CE")) > 1 Then
             Lista_De_Correos(4).Correo_Electronico = .fields("Email_Conexion_CE")
-            Lista_De_Correos(4).Contraseña = .fields("Email_Contraseña_CE")
+            Lista_De_Correos(4).Clave = .fields("Email_Clave_CE")
          End If
          Lista_De_Correos(6).Correo_Electronico = "credenciales@diskcoversystem.com"
-         Lista_De_Correos(6).Contraseña = "Dlcjvl1210@Credenciales"
+         Lista_De_Correos(6).Clave = "Dlcjvl1210@Credenciales"
+         Minutos = Time
+         
         '|--=:******* CONECCON A MYSQL *******:=--|
-          Minutos = Time
           Datos_Iniciales_Entidad_SP_MySQL
-          'MsgBox "Desktop Test: MySQL - " & Format(Time - Minutos, "hh:mm:ss")
         '|--=:******* --------.------- *******:=--|
+        
+        'MsgBox "Desktop Test: MySQL - " & Format(Time - Minutos, "hh:mm:ss")
         'MsgBox "Desktop Test: " & ServidorMySQL
          If ServidorMySQL Then
             If .fields("Estado") <> EstadoEmpresa Or .fields("Cartera") <> Cartera Or .fields("Cant_FA") <> Cant_FA Or .fields("Serie_FA") <> SerieFE Or _
@@ -1646,7 +1652,7 @@ Dim RetVal
    For I = 0 To MaxVect - 1
        SetD(I).PosX = 0
        SetD(I).PosY = 0
-       SetD(I).Tamaño = 9
+       SetD(I).Porte = 9
    Next I
    Me.Font = 10
   'MsgBox WindowsDirectory & vbCrLf & SystemDirectory

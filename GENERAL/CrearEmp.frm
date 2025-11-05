@@ -1,8 +1,8 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.Ocx"
 Begin VB.Form CrearEmp 
    BackColor       =   &H80000000&
@@ -3247,9 +3247,9 @@ Dim Ind As Integer
    SetFields AdoEmpresa, "Email_Respaldos", TxtEmailRespaldo
    SetFields AdoEmpresa, "Email_Procesos", TxtEmailProcesos
    SetFields AdoEmpresa, "Email_Conexion", TxtEmailConexion
-   SetFields AdoEmpresa, "Email_Contraseña", TxtPasword
+   SetFields AdoEmpresa, "Email_Clave", TxtPasword
    SetFields AdoEmpresa, "Email_Conexion_CE", TxtEmailConexionCE
-   SetFields AdoEmpresa, "Email_Contraseña_CE", TxtPaswordCE
+   SetFields AdoEmpresa, "Email_Clave_CE", TxtPaswordCE
    SetFields AdoEmpresa, "LeyendaFA", TxtLeyendaFA
    SetFields AdoEmpresa, "LeyendaFAT", TxtLeyendaFA1
    SetFields AdoEmpresa, "Web_SRI_Recepcion", TxtWebRecepcion
@@ -3930,9 +3930,9 @@ Dim LogoTipo1 As String
           TextAbreviatura = .fields("Abreviatura")
           TxtEstablecimientos = .fields("Establecimientos")
           TxtEmailConexion = .fields("Email_Conexion")
-          TxtPasword = .fields("Email_Contraseña")
+          TxtPasword = .fields("Email_Clave")
           TxtEmailConexionCE = .fields("Email_Conexion_CE")
-          TxtPaswordCE = .fields("Email_Contraseña_CE")
+          TxtPaswordCE = .fields("Email_Clave_CE")
           TxtLeyendaFA = .fields("LeyendaFA")
           TxtLeyendaFA1 = .fields("LeyendaFAT")
           TxtEmailRespaldo = .fields("Email_Respaldos")

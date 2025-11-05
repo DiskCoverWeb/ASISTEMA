@@ -144,6 +144,7 @@ Global TextoJSON As String
 Global TextoLeyenda As String
 Global FormatoLibreta As String
 Global RUC As String
+Global RUCOperadora As String
 Global NombreRUC As String
 Global Telefono1 As String
 Global Telefono2 As String

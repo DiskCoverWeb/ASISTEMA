@@ -27,7 +27,6 @@ End Function
 '   parse string and create JSON object
 '
 Public Function parse(ByRef Str As String) As Object
-
    Dim index As Long
    index = 1
    psErrors = ""
@@ -41,8 +40,6 @@ Public Function parse(ByRef Str As String) As Object
       Case Else
          psErrors = "Invalid JSON"
    End Select
-
-
 End Function
 
  '

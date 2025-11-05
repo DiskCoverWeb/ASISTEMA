@@ -623,35 +623,35 @@ Dim TipoBank As String
              PictCheques.DrawWidth = 1
              PictCheques.FontName = TipoTimes
              
-             PictCheques.FontSize = SetD(2).Tamaño
+             PictCheques.FontSize = SetD(2).Porte
              PictCheques.CurrentX = SetD(2).PosX
              PictCheques.CurrentY = SetD(2).PosY
              PictCheques.Print Beneficiario
              
-             PictCheques.FontSize = SetD(3).Tamaño
+             PictCheques.FontSize = SetD(3).Porte
              PictCheques.CurrentX = SetD(3).PosX
              PictCheques.CurrentY = SetD(3).PosY
              PictCheques.Print Format(Valor, "#,###.00")
              
              If SetD(4).PosX > 0 And SetD(4).PosY > 0 Then
-                PictCheques.FontSize = SetD(4).Tamaño
+                PictCheques.FontSize = SetD(4).Porte
                 PictCheques.CurrentX = SetD(4).PosX
                 PictCheques.CurrentY = SetD(4).PosY
                 PictCheques.Print Cambio_Letras(Valor, 2)
              End If
              If SetD(9).PosX > 0 And SetD(9).PosY > 0 Then
                 Cadena = Empresa & " " & Moneda & " " & Format(Valor, "#,##0.00")
-                PictCheques.FontSize = SetD(9).Tamaño
+                PictCheques.FontSize = SetD(9).Porte
                 PictCheques.CurrentX = SetD(9).PosX
                 PictCheques.CurrentY = SetD(9).PosY
                 PictCheques.Print Cadena
              End If
-             PictCheques.FontSize = SetD(10).Tamaño
+             PictCheques.FontSize = SetD(10).Porte
              PictCheques.CurrentX = SetD(10).PosX
              PictCheques.CurrentY = SetD(10).PosY
              PictCheques.Print ULCase(NombreCiudad)
              
-             PictCheques.FontSize = SetD(6).Tamaño
+             PictCheques.FontSize = SetD(6).Porte
              PictCheques.CurrentX = SetD(6).PosX
              PictCheques.CurrentY = SetD(6).PosY
              PictCheques.Print Format(FechaTexto, "yyyy/MM/dd")

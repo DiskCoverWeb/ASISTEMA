@@ -7,10 +7,10 @@ Begin VB.Form FActualizar
    BackColor       =   &H00808080&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "DATOS Y PROGRAMAS"
-   ClientHeight    =   5040
+   ClientHeight    =   4755
    ClientLeft      =   105
    ClientTop       =   780
-   ClientWidth     =   6570
+   ClientWidth     =   6555
    DrawMode        =   1  'Blackness
    DrawStyle       =   5  'Transparent
    Icon            =   "FActualizar.frx":0000
@@ -18,16 +18,16 @@ Begin VB.Form FActualizar
    MaxButton       =   0   'False
    MinButton       =   0   'False
    Picture         =   "FActualizar.frx":1297D
-   ScaleHeight     =   5040
-   ScaleWidth      =   6570
+   ScaleHeight     =   4755
+   ScaleWidth      =   6555
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
       Height          =   660
       Left            =   0
       TabIndex        =   5
       Top             =   0
-      Width           =   6570
-      _ExtentX        =   11589
+      Width           =   6555
+      _ExtentX        =   11562
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -43,9 +43,7 @@ Begin VB.Form FActualizar
             ImageIndex      =   1
          EndProperty
          BeginProperty Button2 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   ""
             Key             =   "Completa"
-            Description     =   ""
             Object.ToolTipText     =   "Actualiza toda la base de datos con los ejecutable"
             Object.Tag             =   ""
             ImageIndex      =   2
@@ -141,7 +139,7 @@ Begin VB.Form FActualizar
       Height          =   1905
       Left            =   105
       TabIndex        =   9
-      Top             =   3045
+      Top             =   2730
       Width           =   6315
       Begin VB.TextBox TxtBaseDatos 
          Appearance      =   0  'Flat
@@ -166,8 +164,8 @@ Begin VB.Form FActualizar
       End
    End
    Begin VB.Timer Timer1 
-      Left            =   7875
-      Top             =   630
+      Left            =   4095
+      Top             =   6195
    End
    Begin VB.ListBox LstStatud 
       Appearance      =   0  'Flat
@@ -189,8 +187,8 @@ Begin VB.Form FActualizar
       Width           =   6315
    End
    Begin InetCtlsObjects.Inet URLinet 
-      Left            =   630
-      Top             =   4620
+      Left            =   2835
+      Top             =   6090
       _ExtentX        =   1005
       _ExtentY        =   1005
       _Version        =   393216
@@ -316,8 +314,8 @@ Begin VB.Form FActualizar
       _Version        =   393216
    End
    Begin MSComDlg.CommonDialog Dir_Dialog 
-      Left            =   105
-      Top             =   4620
+      Left            =   2310
+      Top             =   6090
       _ExtentX        =   847
       _ExtentY        =   847
       _Version        =   393216
@@ -460,8 +458,8 @@ Begin VB.Form FActualizar
       Width           =   6315
    End
    Begin ComctlLib.ImageList ImgLstFTP 
-      Left            =   1260
-      Top             =   4620
+      Left            =   3465
+      Top             =   6090
       _ExtentX        =   1005
       _ExtentY        =   1005
       BackColor       =   -2147483643
@@ -540,6 +538,10 @@ Begin VB.Form FActualizar
          Caption         =   "Lista de Archivos"
          Shortcut        =   ^U
       End
+      Begin VB.Menu MEnvioMail 
+         Caption         =   "Prueba Envio Emails"
+         Shortcut        =   ^M
+      End
       Begin VB.Menu MSalir 
          Caption         =   "Salir"
          Shortcut        =   ^Q
@@ -570,7 +572,7 @@ Dim ping As cPing
 Dim EsReadOnly As Boolean
 '--------------------------------
 
-Private Sub MListFiles_Click()
+Public Function Lista_Archivo_JSON() As String
 Dim sArchivo As String
 Dim JSONFiles As String
 Dim ContFile As Integer
@@ -578,6 +580,14 @@ Dim ContFile As Integer
     RatonReloj
     ContFile = 0
     JSONFiles = "{"
+    
+    sArchivo = Dir(RutaSistema & "\BASES\UPDATE_DB\*.sql")
+    Do While sArchivo <> ""
+       ContFile = ContFile + 1
+       JSONFiles = JSONFiles & "'File_" & Format(ContFile, "000") & "' :'" & sArchivo & "'," & vbCrLf
+       sArchivo = Dir
+    Loop
+    
     sArchivo = Dir(RutaSistema & "\BASES\UPDATE_DB\*.upd")
     Do While sArchivo <> ""
        ContFile = ContFile + 1
@@ -591,20 +601,63 @@ Dim ContFile As Integer
        JSONFiles = JSONFiles & "'File_" & Format(ContFile, "000") & "' :'" & sArchivo & "'," & vbCrLf
        sArchivo = Dir
     Loop
-    
-    sArchivo = Dir(RutaSistema & "\BASES\UPDATE_DB\*.sql")
-    Do While sArchivo <> ""
-       ContFile = ContFile + 1
-       JSONFiles = JSONFiles & "'File_" & Format(ContFile, "000") & "' :'" & sArchivo & "'," & vbCrLf
-       sArchivo = Dir
-    Loop
-    
+        
     JSONFiles = MidStrg(JSONFiles, 1, Len(JSONFiles) - 3) & "}"
     JSONFiles = Replace(JSONFiles, "'", """")
     JSONFiles = Replace(JSONFiles, "True", "1")
     JSONFiles = Replace(JSONFiles, "False", "0")
     JSONFiles = Replace(JSONFiles, "Verdadero", "1")
     JSONFiles = Replace(JSONFiles, "Falso", "0")
+    
+    Lista_Archivo_JSON = JSONFiles
+End Function
+
+Private Sub MEnvioMail_Click()
+''  Exportar_Datagrid_Execel "d:\Nomina1.xls"
+    
+    TMail.de = "informacion@diskcoversystem.com"
+    TMail.ListaMail = 255
+    TMail.TipoDeEnvio = "NN"
+    TMail.Asunto = "Prueba de Mails por imap.diskcoversystem.com desde " & Modulo & " [" & Right(CodigoUsuario, 5) & "], Hora (" & Time & "), IP: " & IP_PC.IP_PC
+    TMail.MensajeHTML = Leer_Archivo_Texto(RutaSistema & "\JAVASCRIPT\f_cartera.html")
+    
+    html_Informacion_adicional = "<strong>INFORMACION ADICIONAL:</strong><br><br>" _
+                               & "<strong>Importe total: USD </strong>150,00<br>" _
+                               & "<strong>Importe total: USD </strong>150,00<br>" _
+                               & "<strong>Importe total: USD </strong>150,00<br>"
+                               
+    html_Detalle_adicional = "<tr>" _
+                           & "<td>13/12/2024</td>" _
+                           & "<td>Prueba de Envio</td>" _
+                           & "<td class='row text-right'>150,00</td>" _
+                           & "</tr>" _
+                           & "<tr>" _
+                           & "<td>13/12/2024</td>" _
+                           & "<td>Por IMAP</td>" _
+                           & "<td class='row text-right'>180,00</td>" _
+                           & "</tr>"
+    FA.Fecha = FechaSistema
+    FA.Recibo_No = Format(FA.Fecha, "yyyymmdd") & Format(FA.Factura, "000000000")
+   'MsgBox "Desktop Test: " & RutaSistema
+    TMail.Adjunto = RutaSistema & "\JAVASCRIPT\sin_mensaje.gif;" & RutaSistema & "\JAVASCRIPT\minuto.png;"
+    TMail.para = ""
+    Insertar_Mail TMail.para, "actualizar@diskcoversystem.com"
+    Insertar_Mail TMail.para, "diskcoversystem@msn.com"
+    Insertar_Mail TMail.para, "diskcover.system@yahoo.com"
+    Insertar_Mail TMail.para, "diskcover.system@gmail.com"
+    FEnviarCorreos.Show 1
+    MsgBox "Correos Enviados a (" & Si_No & "):" & vbCrLf & Replace(TMail.para, ";", ";" & vbCrLf) & vbCrLf _
+         & String(70, "_") & vbCrLf & vbCrLf _
+         & "De: " & TMail.de & vbCrLf & vbCrLf _
+         & "Asunto: " & TMail.Asunto & vbCrLf
+    TMail.para = ""
+    TMail.ListaMail = 0
+
+End Sub
+
+Private Sub MListFiles_Click()
+Dim JSONFiles As String
+    JSONFiles = Lista_Archivo_JSON
     Clipboard.Clear
     Clipboard.SetText JSONFiles
     RatonNormal
@@ -747,7 +800,6 @@ On Error GoTo error_Handler
        If InStr(TypeUpdate, "[1]") Then
           Progreso_Barra.Mensaje_Box = "Eliminando Version anterior"
          .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-          Eliminar_Si_Existe_File RutaSistema & "\FONDOS\*.*"
           Eliminar_Si_Existe_File RutaSistema & "\FONDOS\USUARIOS\*.*"
           Eliminar_Si_Existe_File RutaSistema & "\BASES\UPDATE_DB\*.*"
           
@@ -764,17 +816,6 @@ On Error GoTo error_Handler
                      Progreso_Barra.Mensaje_Box = "Actualizando: " & LstVwFTP.ListItems(I)
                     .Mostar_Estado_FTP ProgressBarEstado, LstStatud
                     .ObtenerArchivo LstVwFTP.ListItems(I), RutaSysBases & "\TEMP\" & LstVwFTP.ListItems(I), True
-              End Select
-          Next I
-         'Insertamos fondos nuevos de raiz
-         .CambiarDirectorio "/SISTEMA/FONDOS/"
-         .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              Select Case UCaseStrg(RightStrg(LstVwFTP.ListItems(I), 3))
-                Case "GIF", "JPG", "PNG"
-                     Progreso_Barra.Mensaje_Box = "Actualizando: FONDOS\"
-                    .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                    .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\FONDOS\" & LstVwFTP.ListItems(I), True
               End Select
           Next I
        End If
@@ -880,6 +921,7 @@ On Error GoTo error_Handler
       'Esta opcion solo actualiza los fondos, formatos y logos
       '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
        If InStr(TypeUpdate, "[3]") Then
+          Eliminar_Si_Existe_File RutaSistema & "\FONDOS\*.*"
          'Borrammos fondos antiguos de cada mes
           For J = 1 To 12
              .CambiarDirectorio "/SISTEMA/FONDOS/M" & Format(J, "00") & "/"
@@ -921,6 +963,18 @@ On Error GoTo error_Handler
                 .Mostar_Estado_FTP ProgressBarEstado, LstStatud
                  Eliminar_Si_Existe_File RutaSistema & "\FORMATOS\" & LstVwFTP.ListItems(I)
               End If
+          Next I
+                    
+         'Insertamos fondos nuevos de raiz
+         .CambiarDirectorio "/SISTEMA/FONDOS/"
+         .ListarArchivos
+          For I = 1 To LstVwFTP.ListItems.Count
+              Select Case UCaseStrg(RightStrg(LstVwFTP.ListItems(I), 3))
+                Case "GIF", "JPG", "PNG"
+                     Progreso_Barra.Mensaje_Box = "Actualizando: FONDOS\"
+                    .Mostar_Estado_FTP ProgressBarEstado, LstStatud
+                    .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\FONDOS\" & LstVwFTP.ListItems(I), True
+              End Select
           Next I
                     
          'Insertamos los fondos por Mes
@@ -991,69 +1045,68 @@ On Error GoTo error_Handler
           Next I
        End If
       .Desconectar
+      
+      '===============================================================
+      '== Subir al Servidor FTP, si es la actualizacion a las nubes ==
+      '===============================================================
+      If InStr(TypeUpdate, "[1]") Or InStr(TypeUpdate, "[4]") Then
+         If InStr("db.diskcoversystem.com, erp.diskcoversystem.com, only.diskcoversystem.com, 192.168.27.3", strIPServidor) Then
+           'Lista de archivos a subir
+           'MsgBox "Subir al DB"
+            Contador = 0
+            ListaDeArchivos = Dir(RutaSistema & "\BASES\UPDATE_DB\*.*", vbNormal)
+            Do While ListaDeArchivos <> ""
+               If ListaDeArchivos <> "." And ListaDeArchivos <> ".." Then
+                  ReDim Preserve Files(Contador) As String
+                  Files(Contador) = ListaDeArchivos
+                  Contador = Contador + 1
+               End If
+               ListaDeArchivos = Dir
+            Loop
+           'Empieza a subir los archivos al servidor ERP
+            With ftp
+                 Progreso_Barra.Mensaje_Box = "Conectando al servidor"
+                .Mostar_Estado_FTP ProgressBarEstado, LstStatud
+                .Inicializar Me
+                .Password = ftpPwrLinode                    'Le establecemos la contraseña de la cuenta Ftp
+                .Usuario = ftpUseLinode                     'Le establecemos el nombre de usuario de la cuenta
+                .servidor = ftpSvrLinode                    'Establecesmo el nombre del Servidor FTP
+                .Puerto = 21
+                'MsgBox .servidor
+                'Conectamos al servidor FTP. EL label es el control donde mostrar los errores y el estado de la conexión
+                 If .ConectarFtp(LstStatud) = False Then
+                     MsgBox "Error (" & Err.Number & ") " & Err.Description & vbCrLf & "No se pudo conectar"
+                     Exit Sub
+                 End If
+                 FActualizar.Caption = "DATOS Y PROGRAMAS: " & .servidor
+                 FActualizar.Refresh
+                'Mostramos en el label el path del directorio actual donde estamos ubicados en el servidor
+                 Progreso_Barra.Mensaje_Box = .GetDirectorioActual
+                'MsgBox Progreso_Barra.Mensaje_Box
+                .Mostar_Estado_FTP ProgressBarEstado, LstStatud
+                'Le indicamos el ListView donde se listarán los archivos
+                 Set .ListView = LstVwFTP
+                 Progreso_Barra.Mensaje_Box = "Buscando directorio en el servidor"
+                .Mostar_Estado_FTP ProgressBarEstado, LstStatud
+                '------------------------------------------------------------------------------------
+                'Realizamos la subida del archivo
+                '====================================================================================
+                'Eliminar_Si_Existe_File RutaSistema & "\FONDOS\*.jpg"
+                '.EliminarArchivo
+                 MsgBox "Desktop Test: Cantidad de Archivos = " & UBound(Files)
+                 For I = 0 To UBound(Files)
+                     sOrigen = RutaSistema & "\BASES\UPDATE_DB\" & Files(I)
+                     sDestino = "/files/SISTEMA/UPDATE_DB/" & Files(I)
+                    'MsgBox sOrigen & vbCrLf & sDestino
+                     Progreso_Barra.Mensaje_Box = "Subiendo a DB: " & Files(I)
+                    .Mostar_Estado_FTP ProgressBarEstado, LstStatud
+                    .SubirArchivo sOrigen, sDestino, True
+                 Next I
+                .Desconectar
+            End With
+         End If
+       End If
    End With
-   
-''''  '============================================================
-''''  '= Subir al Servidor ERP si es la actualizacion a las nubes =
-''''  '============================================================
-''''   If strIPServidor = "db.diskcoversystem.com" Then
-''''     'Lista de archivos a subir
-''''      'MsgBox "Subir al DB"
-''''      Contador = 0
-''''      ListaDeArchivos = Dir(RutaSistema & "\BASES\UPDATE_DB\*.*", vbNormal)
-''''      Do While ListaDeArchivos <> ""
-''''         If ListaDeArchivos <> "." And ListaDeArchivos <> ".." Then
-''''            ReDim Preserve Files(Contador) As String
-''''            Files(Contador) = ListaDeArchivos
-''''            Contador = Contador + 1
-''''         End If
-''''         ListaDeArchivos = Dir
-''''      Loop
-''''
-''''     'Empieza a subir los archivos al servidor ERP
-''''      With ftp
-''''           Progreso_Barra.Mensaje_Box = "Conectando al servidor"
-''''          .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-''''          .Inicializar Me
-''''          .Password = ftpPwrLinode                    'Le establecemos la contraseña de la cuenta Ftp
-''''          .Usuario = ftpUseLinode                     'Le establecemos el nombre de usuario de la cuenta
-''''          .servidor = ftpSvrLinode                    'Establecesmo el nombre del Servidor FTP
-''''          .Puerto = 21
-''''          'MsgBox .servidor
-''''          'Conectamos al servidor FTP. EL label es el control donde mostrar los errores y el estado de la conexión
-''''           If .ConectarFtp(LstStatud) = False Then
-''''               MsgBox "Error (" & Err.Number & ") " & Err.Description & vbCrLf & "No se pudo conectar"
-''''               Exit Sub
-''''           End If
-''''           FActualizar.Caption = "DATOS Y PROGRAMAS: " & .servidor
-''''           FActualizar.Refresh
-''''          'Mostramos en el label el path del directorio actual donde estamos ubicados en el servidor
-''''           Progreso_Barra.Mensaje_Box = .GetDirectorioActual
-''''          'MsgBox Progreso_Barra.Mensaje_Box
-''''          .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-''''          'Le indicamos el ListView donde se listarán los archivos
-''''           Set .ListView = LstVwFTP
-''''           Progreso_Barra.Mensaje_Box = "Buscando directorio en el servidor"
-''''          .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-''''
-''''          '------------------------------------------------------------------------------------
-''''          'Realizamos la subida del archivo
-''''          '====================================================================================
-''''           If InStr(TypeUpdate, "[1]") Or InStr(TypeUpdate, "[4]") Then
-''''             'Eliminar_Si_Existe_File RutaSistema & "\FONDOS\*.jpg"
-''''             '.EliminarArchivo
-''''              For I = 0 To UBound(Files)
-''''                  sOrigen = RutaSistema & "\BASES\UPDATE_DB\" & Files(I)
-''''                  sDestino = "/files/UPDATE_DB/" & Files(I)
-''''                  'MsgBox sOrigen & vbCrLf & sDestino
-''''                  Progreso_Barra.Mensaje_Box = "Subiendo a DB: " & Files(I)
-''''                 .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-''''                 .SubirArchivo sOrigen, sDestino, True
-''''              Next I
-''''           End If
-''''          .Desconectar
-''''      End With
-''''   End If
    RatonNormal
 Exit Sub
 error_Handler:
@@ -2395,121 +2448,126 @@ Dim AdoStrCnnTemp As String
 Dim ListaBDActualizada As String
 Dim PingServer As String
 Dim IdBase As Integer
+Dim JSONFiles As String
     
     MiTiempo = Time
    'Empezamos a bajar la actualizacion del servidor de las nubes
     Datos_Procesados_BD "Transfiriendo Datos del Servidor..."
     
     Bajar_Archivos_FTP "[1]"
-
-    ListaBDActualizada = ""
     
-   'Empezando a realizar los procesos de actualizacion
-    FActualizar.Top = 400
-    FActualizar.Height = MDI_Y_Max
-    FActualizar.Left = MDI_X_Max - FActualizar.width - 200
-    If Solo_FN_SP Then
-       FrmBaseDatos.BackColor = &H11C0C0
-       FrmBaseDatos.ForeColor = &HCC8000
-       TxtBaseDatos.BackColor = &HC00000
-    Else
-       FrmBaseDatos.BackColor = &HC0C000
-       FrmBaseDatos.ForeColor = &H800000
-       TxtBaseDatos.BackColor = &H404040
-    End If
-    FrmBaseDatos.Refresh
-    TxtBaseDatos.Refresh
-    FrmBaseDatos.Top = 2740
-    FrmBaseDatos.Height = MDI_Y_Max - 3650
-    TxtBaseDatos.Height = FrmBaseDatos.Height - TxtBaseDatos.Top - 100
-    FActualizar.Caption = Modulo & ": Actualizando las Bases de [" & strIPServidor & "] "
-
-    RatonReloj
-    IdBase = 0
-    TxtBaseDatos.Text = ""
-    
-    Datos_Procesados_BD "Transmitiendo Datos del Servidor: " & vbCrLf & strIPServidor
-    ConectarAdodc AdoAux
-    Datos_Procesados_BD "Verificando Datos a Transmitir..."
-    
-    sSQL = "SELECT sys.databases.name,(SUM(sys.master_files.size) * 8/1024) AS size_MB " _
-         & "FROM sys.databases JOIN sys.master_files " _
-         & "ON sys.databases.database_id = sys.master_files.database_id " _
-         & "WHERE sys.databases.name LIKE 'DiskCover%' " _
-         & "GROUP BY sys.databases.name " _
-         & "ORDER BY sys.databases.name, size_MB; "
-    Select_Adodc AdoAux, sSQL
-    With AdoAux.Recordset
-     If .RecordCount > 0 Then
-         FrmBaseDatos.Caption = "BASE DE DATOS, Tiempo transcurrido: " & Format(Time - MiTiempo, FormatoTimes)
-         FrmBaseDatos.Refresh
-         Progreso_Barra.Valor_Maximo = Progreso_Barra.Valor_Maximo * .RecordCount
-         Progreso_Barra.Mensaje_Box = "PROGRESO DE ACTUALIZACION"
-         Datos_Procesados_BD "BASES QUE SE VAN HA ACTUALIZAR:"
-         ReDim NombreBase(.RecordCount) As String
-         Do While Not .EOF
-            NombreBase(IdBase) = .Fields("name")
-            Datos_Procesados_BD Format(IdBase, "00") & " [" & NombreBase(IdBase) & "]"
-            ListaBDActualizada = ListaBDActualizada & NombreBase(IdBase) & vbCrLf
-            IdBase = IdBase + 1
-           .MoveNext
-         Loop
-     End If
-    End With
-    Set Conn = AdoAux.Recordset.ActiveConnection
-    AdoAux.Recordset.Close
-    Conn.Close
-    
-    Datos_Procesados_BD "Empezando la actualizacion..."
-    IniIDBase = Val(TxtID.Text)
-    FinIDBase = UBound(NombreBase) - 1
-    If IniIDBase > FinIDBase Then IniIDBase = FinIDBase
-    
-   'Empezamos la actualizacion de todo el servidor
-    For IdBase = IniIDBase To FinIDBase
-        FrmBaseDatos.Caption = "BASE DE DATOS, Tiempo transcurrido: " & Format(Time - MiTiempo, FormatoTimes)
-        FrmBaseDatos.Refresh
-       'MsgBox "-> " & NombreBase(IdBase) & vbCrLf & "   En proceso..."
-        If Ping_IP(strIPServidor) Then
-           MiTiempo = Time
-           Datos_Procesados_BD Format(IdBase, "00") & " -> " & NombreBase(IdBase) & vbCrLf & "      En proceso..."
-           If strNombreBaseDatos <> NombreBase(IdBase) Then
-              AdoStrCnn = Replace(AdoStrCnn, strNombreBaseDatos, NombreBase(IdBase))
-              strNombreBaseDatos = NombreBase(IdBase)
-           End If
-           Dolar = 0
-           ConSucursal = False
-           FActualizar.Caption = Modulo & ": " & strIPServidor
-           
-           strNombreBaseDatos = NombreBase(IdBase)
-           
-          'MsgBox AdoStrCnn
-             
-          'Conectamos la nueva Base de Datos
-           ConectarAdodc AdoAux
-           ConectarAdodc AdoBusqEmp
-           ConectarAdodc AdoEmpresa
-            
-          'Procedemos a Actualizar la base actual
-           UPD_Actualizar_SP
-           Datos_Procesados_BD "      [" & Format(Time - MiTiempo, FormatoTimes) & "] Base actualizada con exito."
-          
-          'Enviamos el mail de confirmacion
-           TMail.Mensaje = "Informacion de actualizacion del sistema " & vbCrLf _
-                             & "Fecha y Hora [" & FechaSistema & " - " & Format(Time, FormatoTimes) & "]: " & vbCrLf _
-                             & "Del Servidor " & strIPServidor & " se ha actualizado la base de Datos: " & NombreBase(IdBase)
-           TMail.Remitente = strIPServidor
-           TMail.para = CorreoUpdate
-           TMail.Asunto = "Actualizacion exitosa de la Base de Datos: " & NombreBase(IdBase) & " (" & Format(IdBase, "00") & ") Duracion: " _
-                        & Format(Time - MiTiempo, FormatoTimes)
-           FEnviarCorreos.Show 1
-        Else
-           MsgBox "LA CONEXION NO ESTA ESTABLECIDA" & vbCrLf _
-                & "POR FAVOR LLAME AL BENEFICIARIO" & vbCrLf _
-                & "PARA QUE CONECTE LA VPN"
-           AdoStrCnn = AdoStrCnnTemp
-        End If
-    Next IdBase
+''''    JSONFiles = Lista_Archivo_JSON
+''''
+''''    ListaBDActualizada = ""
+''''
+''''   'Empezando a realizar los procesos de actualizacion
+''''    FActualizar.Top = 400
+''''    FActualizar.Height = MDI_Y_Max
+''''    FActualizar.Left = MDI_X_Max - FActualizar.width - 200
+''''    If Solo_FN_SP Then
+''''       FrmBaseDatos.BackColor = &H11C0C0
+''''       FrmBaseDatos.ForeColor = &HCC8000
+''''       TxtBaseDatos.BackColor = &HC00000
+''''    Else
+''''       FrmBaseDatos.BackColor = &HC0C000
+''''       FrmBaseDatos.ForeColor = &H800000
+''''       TxtBaseDatos.BackColor = &H404040
+''''    End If
+''''    FrmBaseDatos.Refresh
+''''    TxtBaseDatos.Refresh
+''''    FrmBaseDatos.Top = 2740
+''''    FrmBaseDatos.Height = MDI_Y_Max - 3650
+''''    TxtBaseDatos.Height = FrmBaseDatos.Height - TxtBaseDatos.Top - 100
+''''    FActualizar.Caption = Modulo & ": Actualizando las Bases de [" & strIPServidor & "] "
+''''
+''''    RatonReloj
+''''    IdBase = 0
+''''    TxtBaseDatos.Text = ""
+''''
+''''    Datos_Procesados_BD "Verificando Datos a Transmitir..."
+''''    ConectarAdodc AdoAux
+''''
+''''   'Listado de las Bases que estan en el Servidor Actual
+''''    sSQL = "SELECT sys.databases.name,(SUM(sys.master_files.size) * 8/1024) AS size_MB " _
+''''         & "FROM sys.databases JOIN sys.master_files " _
+''''         & "ON sys.databases.database_id = sys.master_files.database_id " _
+''''         & "WHERE sys.databases.name LIKE 'DiskCover%' " _
+''''         & "GROUP BY sys.databases.name " _
+''''         & "ORDER BY sys.databases.name, size_MB; "
+''''    Select_Adodc AdoAux, sSQL
+''''    With AdoAux.Recordset
+''''     If .RecordCount > 0 Then
+''''         FrmBaseDatos.Caption = "BASE DE DATOS, Tiempo transcurrido: " & Format(Time - MiTiempo, FormatoTimes)
+''''         FrmBaseDatos.Refresh
+''''         Progreso_Barra.Valor_Maximo = Progreso_Barra.Valor_Maximo * .RecordCount
+''''         Progreso_Barra.Mensaje_Box = "PROGRESO DE ACTUALIZACION"
+''''         Datos_Procesados_BD "BASES QUE SE VAN HA ACTUALIZAR:"
+''''         ReDim NombreBase(.RecordCount) As String
+''''         Do While Not .EOF
+''''            If .Fields("name") <> "DiskCover_#Update" Then
+''''                NombreBase(IdBase) = .Fields("name")
+''''                Datos_Procesados_BD Format(IdBase, "00") & " [" & NombreBase(IdBase) & "]"
+''''                ListaBDActualizada = ListaBDActualizada & NombreBase(IdBase) & vbCrLf
+''''                IdBase = IdBase + 1
+''''            End If
+''''           .MoveNext
+''''         Loop
+''''     End If
+''''    End With
+''''    Set Conn = AdoAux.Recordset.ActiveConnection
+''''    AdoAux.Recordset.Close
+''''    Conn.Close
+''''
+''''    Datos_Procesados_BD "Empezando la actualizacion..."
+''''    IniIDBase = Val(TxtID.Text)
+''''    FinIDBase = UBound(NombreBase) - 1
+''''    If IniIDBase > FinIDBase Then IniIDBase = FinIDBase
+''''
+''''   'Empezamos la actualizacion de todo el servidor
+''''    For IdBase = IniIDBase To FinIDBase
+''''        FrmBaseDatos.Caption = "BASE DE DATOS, Tiempo transcurrido: " & Format(Time - MiTiempo, FormatoTimes)
+''''        FrmBaseDatos.Refresh
+''''       'MsgBox "-> " & NombreBase(IdBase) & vbCrLf & "   En proceso..."
+''''        If Ping_IP(strIPServidor) Then
+''''           MiTiempo = Time
+''''           Datos_Procesados_BD Format(IdBase, "00") & " -> " & NombreBase(IdBase) & vbCrLf & "      En proceso..."
+''''           If strNombreBaseDatos <> NombreBase(IdBase) Then
+''''              AdoStrCnn = Replace(AdoStrCnn, strNombreBaseDatos, NombreBase(IdBase))
+''''              strNombreBaseDatos = NombreBase(IdBase)
+''''           End If
+''''           Dolar = 0
+''''           ConSucursal = False
+''''           FActualizar.Caption = Modulo & ": " & strIPServidor
+''''
+''''           strNombreBaseDatos = NombreBase(IdBase)
+''''
+''''          'MsgBox AdoStrCnn
+''''
+''''          'Conectamos la nueva Base de Datos
+''''           ConectarAdodc AdoAux
+''''           ConectarAdodc AdoBusqEmp
+''''           ConectarAdodc AdoEmpresa
+''''
+''''          'Procedemos a Actualizar la base actual
+''''           UPD_Actualizar_SP
+''''           Datos_Procesados_BD "      [" & Format(Time - MiTiempo, FormatoTimes) & "] Base actualizada con exito."
+''''
+''''          'Enviamos el mail de confirmacion
+''''           TMail.Mensaje = "Informacion de actualizacion del sistema " & vbCrLf _
+''''                             & "Fecha y Hora [" & FechaSistema & " - " & Format(Time, FormatoTimes) & "]: " & vbCrLf _
+''''                             & "Del Servidor " & strIPServidor & " se ha actualizado la base de Datos: " & NombreBase(IdBase)
+''''           TMail.Remitente = strIPServidor
+''''           TMail.para = CorreoUpdate
+''''           TMail.Asunto = "Actualizacion exitosa de la Base de Datos: " & NombreBase(IdBase) & " (" & Format(IdBase, "00") & ") Duracion: " _
+''''                        & Format(Time - MiTiempo, FormatoTimes)
+''''           FEnviarCorreos.Show 1
+''''        Else
+''''           MsgBox "LA CONEXION NO ESTA ESTABLECIDA" & vbCrLf _
+''''                & "POR FAVOR LLAME AL BENEFICIARIO" & vbCrLf _
+''''                & "PARA QUE CONECTE LA VPN"
+''''           AdoStrCnn = AdoStrCnnTemp
+''''        End If
+''''    Next IdBase
     Datos_Procesados_BD vbCrLf & "ACTUALIZACION DEL SERVIDOR EXITOSA"
     RatonNormal
     FrmBaseDatos.Caption = "BASE DE DATOS, Tiempo transcurrido: " & Format(Time - MiTiempo, FormatoTimes)

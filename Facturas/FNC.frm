@@ -1839,6 +1839,7 @@ Private Sub DCLinea_LostFocus()
   ReIngNC = False
   FA.TC = "NC"
   FA.Cod_CxC = DCLinea
+  FA.Autorizacion = Ninguno
   Lineas_De_CxC FA
   TextBanco = FA.Autorizacion
   TextCheqNo = FA.Serie_NC

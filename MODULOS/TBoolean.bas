@@ -33,6 +33,7 @@ Global MenuDeModulos As Boolean
 Global OpcCoop As Boolean
 Global OpcServicio As Boolean
 Global Presentar_Inventario As Boolean
+Global EsTransporte As Boolean
 'Global Leyenda_FA As Boolean
 Global ConSucursal As Boolean
 Global Si_No As Boolean
@@ -132,3 +133,5 @@ Global Cierre_Periodo As Boolean
 Global PorCtasCostos As Boolean
 Global EsFileCSV As Boolean
 Global Resultado As Boolean
+Global CargarFrom As Boolean
+

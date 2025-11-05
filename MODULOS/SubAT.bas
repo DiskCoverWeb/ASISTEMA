@@ -10,8 +10,8 @@ Public Function CampoXML(Campo_XML As String, Valor_XML As Variant, Optional Dec
 Dim Result_XML As String
 Dim sValor_XML As String
     Result_XML = ""
-    'sValor_XML = Sin_Signos_Especiales(CStr(Valor_XML))
-    sValor_XML = CStr(Valor_XML)
+    sValor_XML = Sin_Signos_Especiales(CStr(Valor_XML))
+    'sValor_XML = CStr(Valor_XML)
     If IsNumeric(sValor_XML) Then
        If Decimales > 0 Then sValor_XML = Format$(Val(sValor_XML), "#0." & String$(Decimales, "0"))
     End If
@@ -1130,20 +1130,28 @@ Dim PosLineaFinal As Single
                cPrint.printTexto 1.55, PosLinea, .fields("Codigo"), PorteDeLetra
                cPrint.printTexto 3.4, PosLinea, TrimStrg(MidStrg(.fields("Ruta"), 1, 10)), PorteDeLetra
             Else
-                If TFA.SP Then
-                   If Len(Cod_Bar) > 1 Then cPrint.printTexto 1.55, PosLinea, Cod_Bar, PorteDeLetra
-                   If Len(Cod_Aux) > 1 Then
-                      cPrint.printTexto 3.4, PosLinea, Cod_Aux, PorteDeLetra
-                   Else
-                      cPrint.printTexto 3.4, PosLinea, .fields("Codigo"), PorteDeLetra
-                   End If
+                If EsTransporte Then
+                   cPrint.printTexto 1.55, PosLinea, .fields("Codigo"), PorteDeLetra
+                   cPrint.printTexto 3.4, PosLinea, "H492001", PorteDeLetra
+                ElseIf RUCOperadora = TFA.RUC_CI Then
+                   cPrint.printTexto 1.55, PosLinea, .fields("Codigo"), PorteDeLetra
+                   cPrint.printTexto 3.4, PosLinea, "H492002", PorteDeLetra
                 Else
-                   If Len(Cod_Aux) > 1 Then
-                      cPrint.printTexto 1.55, PosLinea, Cod_Aux, PorteDeLetra
-                   Else
-                      cPrint.printTexto 1.55, PosLinea, .fields("Codigo"), PorteDeLetra
-                   End If
-                   If Len(Cod_Bar) > 1 Then cPrint.printTexto 3.4, PosLinea, Cod_Bar, PorteDeLetra
+                    If TFA.SP Then
+                       If Len(Cod_Bar) > 1 Then cPrint.printTexto 1.55, PosLinea, Cod_Bar, PorteDeLetra
+                       If Len(Cod_Aux) > 1 Then
+                          cPrint.printTexto 3.4, PosLinea, Cod_Aux, PorteDeLetra
+                       Else
+                          cPrint.printTexto 3.4, PosLinea, .fields("Codigo"), PorteDeLetra
+                       End If
+                    Else
+                       If Len(Cod_Aux) > 1 Then
+                          cPrint.printTexto 1.55, PosLinea, Cod_Aux, PorteDeLetra
+                       Else
+                          cPrint.printTexto 1.55, PosLinea, .fields("Codigo"), PorteDeLetra
+                       End If
+                       If Len(Cod_Bar) > 1 Then cPrint.printTexto 3.4, PosLinea, Cod_Bar, PorteDeLetra
+                    End If
                 End If
             End If
             cPrint.printFields 4.45, PosLinea, .fields("Cantidad"), PorteDeLetra
@@ -3152,7 +3160,7 @@ Dim DocXML As String
        'Actualizamos el documento autorizado en la base de datos del sistema
         SRI_Actualizar_Documento_XML SRI_Autorizacion
         RatonNormal
-        If VerMsgDoc Then MsgBox "Comprobante Autorizado con exito"
+       'If VerMsgDoc Then MsgBox "Comprobante Autorizado con exito"
         
 '''        If PreguntarEnvio Then
 '''           Titulo = "ENVIAR MAIL DOCUMENTO"
@@ -3493,20 +3501,26 @@ Dim SecuencialReembolo As String
              '''               Producto = Producto & ", Serie No. " & .Fields("Serie_No")
              '''            End If
                      Insertar_Campo_XML AbrirXML("detalle")
-                     If TFA.SP Then
-                        If Len(Cod_Bar) > 1 Then Insertar_Campo_XML CampoXML("codigoPrincipal", Cod_Bar)
-                        If Len(Cod_Aux) > 1 Then
-                           Insertar_Campo_XML CampoXML("codigoAuxiliar", Cod_Aux)
-                        Else
-                           Insertar_Campo_XML CampoXML("codigoAuxiliar", .fields("Codigo"))
-                        End If
+                     If EsTransporte Then
+                        Insertar_Campo_XML CampoXML("codigoAuxiliar", "H492001")
+                     ElseIf RUCOperadora = TFA.RUC_CI Then
+                        Insertar_Campo_XML CampoXML("codigoAuxiliar", "H492002")
                      Else
-                        If Len(Cod_Aux) > 1 Then
-                           Insertar_Campo_XML CampoXML("codigoPrincipal", Cod_Aux)
+                        If TFA.SP Then
+                           If Len(Cod_Bar) > 1 Then Insertar_Campo_XML CampoXML("codigoPrincipal", Cod_Bar)
+                           If Len(Cod_Aux) > 1 Then
+                              Insertar_Campo_XML CampoXML("codigoAuxiliar", Cod_Aux)
+                           Else
+                              Insertar_Campo_XML CampoXML("codigoAuxiliar", .fields("Codigo"))
+                           End If
                         Else
-                           Insertar_Campo_XML CampoXML("codigoPrincipal", .fields("Codigo"))
+                           If Len(Cod_Aux) > 1 Then
+                              Insertar_Campo_XML CampoXML("codigoPrincipal", Cod_Aux)
+                           Else
+                              Insertar_Campo_XML CampoXML("codigoPrincipal", .fields("Codigo"))
+                           End If
+                           If Len(Cod_Bar) > 1 Then Insertar_Campo_XML CampoXML("codigoAuxiliar", Cod_Bar)
                         End If
-                        If Len(Cod_Bar) > 1 Then Insertar_Campo_XML CampoXML("codigoAuxiliar", Cod_Bar)
                      End If
                      Insertar_Campo_XML CampoXML("descripcion", Producto)
                      Insertar_Campo_XML CampoXML("unidadMedida", "DOLAR")
@@ -3616,13 +3630,12 @@ Dim SecuencialReembolo As String
            Case "NV": Insertar_Campo_XML CerrarXML("notaVenta")
            Case Else: Insertar_Campo_XML CerrarXML("puntoVenta")
          End Select
+         AdoDBDet.Close
+         AdoDBFA.Close
         'FIN XML DE FACTURA/NOTA DE VENTA
         '-------------------------------------------------------------------
          SRI_Enviar_Documento_Autorizar "FA", VerFactura, GeneraXML, TFA, EnviarxMail
         '-------------------------------------------------------------------
-
-       AdoDBDet.Close
-       AdoDBFA.Close
     End If
     RatonNormal
 End Sub

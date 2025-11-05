@@ -2029,7 +2029,7 @@ Dim AdoRet As ADODB.Recordset
          & "AND R.Periodo = '" & Periodo_Contable & "' " _
          & "AND R.TP = '" & Co.TP & "' " _
          & "AND R.Item = '" & Co.Item & "' " _
-         & "AND TR.Año = '" & Format(Year(Co.Fecha), "0000") & "' " _
+         & "AND TR.Anio = '" & Format(Year(Co.Fecha), "0000") & "' " _
          & "UNION " _
          & "SELECT R.Cta,R.TD,TIV.Detalle As Concepto,R.TP,R.Numero,R.Valor_Fact,R.MontoRetIVA1,R.MontoRetIVA2," _
          & "R.Porc,R.Valor_Ret,R.Secuencial,R.Retencion_No,R.TT,R.CodigoTR,R.MontoIVA1,R.MontoIVA2 " _
@@ -2040,7 +2040,7 @@ Dim AdoRet As ADODB.Recordset
          & "AND R.Item = '" & Co.Item & "' " _
          & "AND R.Periodo = '" & Periodo_Contable & "' " _
          & "AND TIV.Cod = 'C' " _
-         & "AND TIV.Año = '" & Format(Year(Co.Fecha), "0000") & "' " _
+         & "AND TIV.Anio = '" & Format(Year(Co.Fecha), "0000") & "' " _
          & "ORDER BY R.Cta,R.Porc "
     Select_AdoDB AdoRet, sSQL
     If AdoComp.RecordCount > 0 Then ConceptoComp = AdoComp.Fields("Numero")
@@ -2128,21 +2128,21 @@ Pagina = 1
 With DataComp
  If .RecordCount > 0 Then
     .MoveFirst
-     Printer.FontSize = SetD(3).Tamaño
+     Printer.FontSize = SetD(3).Porte
      PrinterFields SetD(3).PosX, SetD(3).PosY, .Fields("Cliente")
-     Printer.FontSize = SetD(9).Tamaño
+     Printer.FontSize = SetD(9).Porte
      PrinterFields SetD(9).PosX, SetD(9).PosY, .Fields("CI_RUC")
-     Printer.FontSize = SetD(4).Tamaño
+     Printer.FontSize = SetD(4).Porte
      PrinterFields SetD(4).PosX, SetD(4).PosY, .Fields("Direccion")
-     Printer.FontSize = SetD(6).Tamaño
+     Printer.FontSize = SetD(6).Porte
      PrinterFields SetD(6).PosX, SetD(6).PosY, .Fields("Telefono")
-     Printer.FontSize = SetD(10).Tamaño
+     Printer.FontSize = SetD(10).Porte
      PrinterTexto SetD(10).PosX, SetD(10).PosY, FechaAnio(.Fields("Fecha"))
-     Printer.FontSize = SetD(2).Tamaño
+     Printer.FontSize = SetD(2).Porte
      PrinterFields SetD(2).PosX, SetD(2).PosY, .Fields("Fecha")
-     Printer.FontSize = SetD(5).Tamaño
+     Printer.FontSize = SetD(5).Porte
      PrinterFields SetD(5).PosX, SetD(5).PosY, .Fields("Ciudad")
-     Printer.FontSize = SetD(1).Tamaño
+     Printer.FontSize = SetD(1).Porte
      PrinterTexto SetD(1).PosX, SetD(1).PosY, Autorizacion
  End If
 End With
@@ -2150,7 +2150,7 @@ With DataRets
  If .RecordCount > 0 Then
     .MoveFirst
     'Encabezado de la Retencion
-     Printer.FontSize = SetD(1).Tamaño
+     Printer.FontSize = SetD(1).Porte
      PrinterFields SetD(1).PosX, SetD(1).PosY, .Fields("Secuencial")
      Select Case .Fields("TT")
        Case "N": Cadena = "NOTA VENTA"
@@ -2158,14 +2158,14 @@ With DataRets
        Case "T": Cadena = "TICKET"
        Case Else: Cadena = "FACTURA"
      End Select
-     Printer.FontSize = SetD(7).Tamaño
+     Printer.FontSize = SetD(7).Porte
      PrinterTexto SetD(7).PosX, SetD(7).PosY, Cadena
-     Printer.FontSize = SetD(8).Tamaño
+     Printer.FontSize = SetD(8).Porte
      Select Case .Fields("CodigoTR")
           Case "RF": PrinterTexto SetD(8).PosX, SetD(8).PosY, PrintRet.LblNumFac.Caption  '.Fields("Secuencial")
           Case "RI", "IV": PrinterTexto SetD(8).PosX, SetD(8).PosY, .Fields("Secuencial")
         End Select
-     Printer.FontSize = SetD(11).Tamaño
+     Printer.FontSize = SetD(11).Porte
      'PrinterLineas SetD(11).PosX, SetD(11).PosY, ConceptoComp, SetD(12).PosX
      PrinterTexto SetD(11).PosX, SetD(11).PosY, PrintRet.TxtBanco
      PrinterTexto SetD(12).PosX, SetD(12).PosY, PrintRet.TxtCheq
@@ -2173,26 +2173,26 @@ With DataRets
      Printer.FontBold = False
      SumaSaldo = 0
      Do While Not .EOF
-        Printer.FontSize = SetD(14).Tamaño
+        Printer.FontSize = SetD(14).Porte
         Select Case .Fields("CodigoTR")
           Case "RF": PrinterTexto SetD(14).PosX, PosLinea, "R.F"
           Case "RI", "IV": PrinterTexto SetD(15).PosX, PosLinea, "R.IVA"
         End Select
-        Printer.FontSize = SetD(16).Tamaño
+        Printer.FontSize = SetD(16).Porte
         PrinterFields SetD(16).PosX, PosLinea, .Fields("TD")
-        Printer.FontSize = SetD(17).Tamaño
+        Printer.FontSize = SetD(17).Porte
         PrinterTexto SetD(17).PosX, PosLinea, MidStrg(.Fields("Concepto"), 1, 45) & "..."
         Cadena = .Fields("TP") & "-" & .Fields("Numero")
-        Printer.FontSize = SetD(18).Tamaño
+        Printer.FontSize = SetD(18).Porte
         PrinterTexto SetD(18).PosX, PosLinea, Cadena
-        Printer.FontSize = SetD(19).Tamaño
+        Printer.FontSize = SetD(19).Porte
         Select Case .Fields("CodigoTR")
           Case "RF": Total_RetCta = .Fields("Valor_Fact")
           Case "RI", "IV": Total_RetCta = .Fields("MontoIVA1") + .Fields("MontoIVA2")
         End Select
         PrinterVariables SetD(19).PosX, PosLinea, Total_RetCta
         
-        Printer.FontSize = SetD(21).Tamaño
+        Printer.FontSize = SetD(21).Porte
         If .Fields("CodigoTR") = "IV" Then
             Total_DetRet = .Fields("MontoRetIVA1") + .Fields("MontoRetIVA2")
         Else
@@ -2202,7 +2202,7 @@ With DataRets
         Diferencia = 0
         If Total_RetCta <> 0 Then Diferencia = Total_DetRet / Total_RetCta
         ' MsgBox Diferencia
-        Printer.FontSize = SetD(20).Tamaño
+        Printer.FontSize = SetD(20).Porte
         'PrinterTexto SetD(20).PosX, PosLinea, Format(.Fields("Porc"), "##0%")
         PrinterVariables SetD(20).PosX, PosLinea, Format(Diferencia, "##0%")
         
@@ -2211,7 +2211,7 @@ With DataRets
         PosLinea = PosLinea + 0.4
        .MoveNext
      Loop
-     Printer.FontSize = SetD(22).Tamaño
+     Printer.FontSize = SetD(22).Porte
      PrinterVariables SetD(22).PosX, SetD(22).PosY, SumaSaldo
 End If
 End With

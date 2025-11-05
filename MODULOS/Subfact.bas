@@ -1407,6 +1407,7 @@ Dim AdoDBFA As ADODB.Recordset
   TFA.Descuento_0 = 0
   TFA.Descuento_X = 0
   TFA.Servicio = 0
+  TFA.Utilidad = 0
   
  'Miramos de cuanto es la factura para los calculos de los totales
   Total_Desc_ME = 0
@@ -1429,6 +1430,7 @@ Dim AdoDBFA As ADODB.Recordset
               TFA.Sin_IVA = TFA.Sin_IVA + .fields("TOTAL")
               TFA.Descuento_0 = TFA.Descuento_0 + TFA.Descuento + TFA.Descuento2
           End If
+          TFA.Utilidad = TFA.Utilidad + .fields("Utilidad")
          'MsgBox TFA.Sin_IVA
          .MoveNext
        Loop
@@ -1441,6 +1443,7 @@ Dim AdoDBFA As ADODB.Recordset
   TFA.Con_IVA = Redondear(TFA.Con_IVA, 2)
   TFA.Sin_IVA = Redondear(TFA.Sin_IVA, 2)
   TFA.Servicio = Redondear(TFA.Servicio, 2)
+  TFA.Utilidad = Redondear(TFA.Utilidad, 2)
   TFA.SubTotal = TFA.Sin_IVA + TFA.Con_IVA - TFA.Descuento - TFA.Descuento2
   TFA.Total_MN = TFA.Sin_IVA + TFA.Con_IVA - TFA.Descuento - TFA.Descuento2 + TFA.Total_IVA + TFA.Servicio
 End Sub
@@ -3960,16 +3963,16 @@ If PonImpresoraDefecto(SetNombrePRN) Then
          End If
       End If
       If SetD(2).PosX > 0 And SetD(2).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(2).Tamaño
+         cPrint.PorteDeLetra = SetD(2).Porte
          cPrint.printTexto SetD(2).PosX, SetD(2).PosY, TFA.Serie & "-" & Format$(TFA.Factura, "000000000")
       End If
       If SetD(8).PosX > 0 And SetD(8).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(8).Tamaño
+         cPrint.PorteDeLetra = SetD(8).Porte
          If TFA.Razon_Social = TFA.Cliente Then Cadena = TFA.Cliente Else Cadena = TFA.Razon_Social
          cPrint.printTexto SetD(8).PosX, SetD(8).PosY, Cadena
       End If
       If SetD(64).PosX > 0 And SetD(64).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(64).Tamaño
+         cPrint.PorteDeLetra = SetD(64).Porte
          If TFA.Razon_Social <> TFA.Cliente Then
             cPrint.printTexto SetD(64).PosX, SetD(64).PosY, TFA.Cliente
          End If
@@ -3979,117 +3982,117 @@ If PonImpresoraDefecto(SetNombrePRN) Then
          If Len(TFA.DirNumero) > 1 And TFA.DirNumero <> Ninguno Then
             If TFA.DirNumero <> "S/N" Then DireccionCli = DireccionCli & " (" & TFA.DirNumero & ")"
          End If
-         cPrint.PorteDeLetra = SetD(11).Tamaño
+         cPrint.PorteDeLetra = SetD(11).Porte
          cPrint.printTexto SetD(11).PosX, SetD(11).PosY, DireccionCli
       End If
       If SetD(10).PosX > 0 And SetD(10).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(10).Tamaño
+         cPrint.PorteDeLetra = SetD(10).Porte
          cPrint.printTexto SetD(10).PosX, SetD(10).PosY, TFA.Grupo
       End If
      'Codigo abreviado del Usuario
       If SetD(18).PosX > 0 And SetD(18).PosY > 0 Then
          NombUusuario = TFA.Digitador
          Cadena = Cambio_Usuario_Inicial(NombUusuario)
-         cPrint.PorteDeLetra = SetD(18).Tamaño
+         cPrint.PorteDeLetra = SetD(18).Porte
          cPrint.printTexto SetD(18).PosX, SetD(18).PosY, Cadena
       End If
       If SetD(21).PosX > 0 And SetD(21).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(21).Tamaño
+         cPrint.PorteDeLetra = SetD(21).Porte
          cPrint.printTexto SetD(21).PosX, SetD(21).PosY, TFA.Ejecutivo_Venta
       End If
       If SetD(3).PosX > 0 And SetD(3).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(3).Tamaño
+         cPrint.PorteDeLetra = SetD(3).Porte
          cPrint.printTexto SetD(3).PosX, SetD(3).PosY, FechaStrgCorta(TFA.Fecha)
       End If
       If SetD(4).PosX > 0 And SetD(4).PosY > 0 Then
          Cadena = FechaDia(TFA.Fecha) & Space(10) & FechaMes(TFA.Fecha) & Space(10) & FechaAnio(TFA.Fecha)
-         cPrint.PorteDeLetra = SetD(4).Tamaño
+         cPrint.PorteDeLetra = SetD(4).Porte
          cPrint.printTexto SetD(4).PosX, SetD(4).PosY, Cadena
       End If
       If SetD(7).PosX > 0 And SetD(7).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(7).Tamaño
+         cPrint.PorteDeLetra = SetD(7).Porte
          cPrint.printTexto SetD(7).PosX, SetD(7).PosY, FechaStrgCiudad(TFA.Fecha)
       End If
       If SetD(5).PosX > 0 And SetD(5).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(5).Tamaño
+         cPrint.PorteDeLetra = SetD(5).Porte
          cPrint.printTexto SetD(5).PosX, SetD(5).PosY, FechaStrgCorta(TFA.Fecha_V)
       End If
       If SetD(6).PosX > 0 And SetD(6).PosY > 0 Then
          Cadena = FechaDia(TFA.Fecha_V) & Space(10) & FechaMes(TFA.Fecha_V) & Space(10) & FechaAnio(TFA.Fecha_V)
-         cPrint.PorteDeLetra = SetD(6).Tamaño
+         cPrint.PorteDeLetra = SetD(6).Porte
          cPrint.printTexto SetD(6).PosX, SetD(6).PosY, Cadena
       End If
       If SetD(14).PosX > 0 And SetD(14).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(14).Tamaño
+         cPrint.PorteDeLetra = SetD(14).Porte
          cPrint.printTexto SetD(14).PosX, SetD(14).PosY, TFA.TelefonoC
       End If
       If SetD(12).PosX > 0 And SetD(12).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(12).Tamaño
+         cPrint.PorteDeLetra = SetD(12).Porte
          cPrint.printTexto SetD(12).PosX, SetD(12).PosY, TFA.CiudadC
       End If
       If SetD(13).PosX > 0 And SetD(13).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(13).Tamaño
+         cPrint.PorteDeLetra = SetD(13).Porte
          cPrint.printTexto SetD(13).PosX, SetD(13).PosY, TFA.CI_RUC
       End If
       If SetD(15).PosX > 0 And SetD(15).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(15).Tamaño
+         cPrint.PorteDeLetra = SetD(15).Porte
          cPrint.printTexto SetD(15).PosX, SetD(15).PosY, TFA.EmailC
       End If
       If SetD(51).PosX > 0 And SetD(71).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(51).Tamaño
+         cPrint.PorteDeLetra = SetD(51).Porte
          cPrint.printTexto SetD(51).PosX, SetD(51).PosY, TFA.DAU
       End If
       If SetD(52).PosX > 0 And SetD(52).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(52).Tamaño
+         cPrint.PorteDeLetra = SetD(52).Porte
          cPrint.printTexto SetD(52).PosX, SetD(52).PosY, TFA.FUE
       End If
       If SetD(53).PosX > 0 And SetD(53).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(53).Tamaño
+         cPrint.PorteDeLetra = SetD(53).Porte
          cPrint.printTexto SetD(53).PosX, SetD(53).PosY, TFA.Declaracion
       End If
       If SetD(54).PosX > 0 And SetD(54).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(54).Tamaño
+         cPrint.PorteDeLetra = SetD(54).Porte
          cPrint.printTexto SetD(54).PosX, SetD(54).PosY, TFA.Remision
       End If
       If SetD(55).PosX > 0 And SetD(55).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(55).Tamaño
+         cPrint.PorteDeLetra = SetD(55).Porte
          cPrint.printTexto SetD(55).PosX, SetD(55).PosY, TFA.Comercial
       End If
       If SetD(56).PosX > 0 And SetD(56).PosY > 0 Then
-        cPrint.PorteDeLetra = SetD(56).Tamaño
+        cPrint.PorteDeLetra = SetD(56).Porte
         cPrint.printTexto SetD(56).PosX, SetD(56).PosY, TFA.Solicitud
       End If
       If SetD(57).PosX > 0 And SetD(57).PosY > 0 Then
-        cPrint.PorteDeLetra = SetD(57).Tamaño
+        cPrint.PorteDeLetra = SetD(57).Porte
         cPrint.printTexto SetD(57).PosX, SetD(57).PosY, TFA.Cantidad
       End If
       If SetD(58).PosX > 0 And SetD(58).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(58).Tamaño
+         cPrint.PorteDeLetra = SetD(58).Porte
          cPrint.printTexto SetD(58).PosX, SetD(58).PosY, TFA.Kilos
       End If
       If SetD(60).PosX > 0 And SetD(60).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(60).Tamaño
+         cPrint.PorteDeLetra = SetD(60).Porte
          cPrint.printTexto SetD(60).PosX, SetD(60).PosY, Format$(Day(TFA.Fecha), "00")
       End If
       If SetD(61).PosX > 0 And SetD(61).PosY > 0 Then
          Cadena = UCaseStrg(MidStrg(MesesLetras(CInt(Month(TFA.Fecha))), 1, 3))
-         cPrint.PorteDeLetra = SetD(61).Tamaño
+         cPrint.PorteDeLetra = SetD(61).Porte
          cPrint.printTexto SetD(61).PosX, SetD(61).PosY, Cadena
       End If
       If SetD(62).PosX > 0 And SetD(62).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(62).Tamaño
+         cPrint.PorteDeLetra = SetD(62).Porte
          cPrint.printTexto SetD(62).PosX, SetD(62).PosY, Format$(Year(TFA.Fecha), "0000")
       End If
       If SetD(67).PosX > 0 And SetD(67).PosY > 0 Then
-        cPrint.PorteDeLetra = SetD(67).Tamaño
+        cPrint.PorteDeLetra = SetD(67).Porte
         cPrint.printTexto SetD(67).PosX, SetD(67).PosY, FechaStrgCorta(TFA.Fecha_C)
       End If
       If SetD(16).PosX > 0 And SetD(16).PosY > 0 Then
-        cPrint.PorteDeLetra = SetD(16).Tamaño
+        cPrint.PorteDeLetra = SetD(16).Porte
         NumeroLineas = cPrint.printTextoMultiple(SetD(16).PosX, SetD(16).PosY, TFA.Observacion, SetD(26).PosX)
       End If
       If SetD(17).PosX > 0 And SetD(17).PosY > 0 Then
-        cPrint.PorteDeLetra = SetD(17).Tamaño
+        cPrint.PorteDeLetra = SetD(17).Porte
         NumeroLineas = cPrint.printTextoMultiple(SetD(17).PosX, SetD(17).PosY, TFA.Nota, SetD(26).PosX)
       End If
      '--------------------------------------------------------------------------------------------------------
@@ -4100,106 +4103,106 @@ If PonImpresoraDefecto(SetNombrePRN) Then
       Total_ME = Redondear(TFA.Total_ME, 2)
      'Porcentaje Con IVA
       If SetD(39).PosX > 0 And SetD(39).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(39).Tamaño
+         cPrint.PorteDeLetra = SetD(39).Porte
          cPrint.printTexto SetD(39).PosX, SetD(39).PosY, CStr(TFA.Porc_IVA * 100)
       End If
      'Sin IVA
       If SetD(37).PosX > 0 And SetD(37).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(37).Tamaño
+         cPrint.PorteDeLetra = SetD(37).Porte
          Diferencia = TFA.Sin_IVA - TFA.Descuento_0
          cPrint.printVariable SetD(37).PosX, SetD(37).PosY, Diferencia
       End If
      'Con IVA
       If SetD(38).PosX > 0 And SetD(38).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(38).Tamaño
+         cPrint.PorteDeLetra = SetD(38).Porte
          Diferencia = TFA.Con_IVA - TFA.Descuento_X
          cPrint.printVariable SetD(38).PosX, SetD(38).PosY, Diferencia
       End If
      'Descuento palabra
       If SetD(43).PosX > 0 And SetD(43).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(43).Tamaño
+         cPrint.PorteDeLetra = SetD(43).Porte
          cPrint.printTexto SetD(43).PosX, SetD(43).PosY, "Descuento"
       End If
      'Total Descuento
       If SetD(42).PosX > 0 And SetD(42).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(42).Tamaño
+         cPrint.PorteDeLetra = SetD(42).Porte
          cPrint.printVariable SetD(42).PosX, SetD(42).PosY, TFA.Total_Descuento
       End If
      'Total Comision
       If SetD(48).PosX > 0 And SetD(48).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(48).Tamaño
+         cPrint.PorteDeLetra = SetD(48).Porte
          cPrint.printVariable SetD(48).PosX, SetD(48).PosY, TFA.Comision
       End If
      'Total Servicio
       If SetD(49).PosX > 0 And SetD(49).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(49).Tamaño
+         cPrint.PorteDeLetra = SetD(49).Porte
          cPrint.printVariable SetD(49).PosX, SetD(49).PosY, TFA.Servicio
       End If
      'IVA Porcentaje
       If SetD(41).PosX > 0 And SetD(41).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(41).Tamaño
+         cPrint.PorteDeLetra = SetD(41).Porte
          cPrint.printTexto SetD(41).PosX, SetD(41).PosY, CStr(TFA.Porc_IVA * 100) & " "
       End If
      'Total IVA
       If SetD(40).PosX > 0 And SetD(40).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(40).Tamaño
+         cPrint.PorteDeLetra = SetD(40).Porte
          cPrint.printVariable SetD(40).PosX, SetD(40).PosY, TFA.Total_IVA
       End If
      'SubTotal
       If SetD(36).PosX > 0 And SetD(36).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(36).Tamaño
+         cPrint.PorteDeLetra = SetD(36).Porte
          cPrint.printVariable SetD(36).PosX, SetD(36).PosY, TFA.SubTotal
       End If
      'SubTotal - Descuentos
       If SetD(66).PosX > 0 And SetD(66).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(66).Tamaño
+         cPrint.PorteDeLetra = SetD(66).Porte
          cPrint.printVariable SetD(66).PosX, SetD(66).PosY, TFA.SubTotal - TFA.Total_Descuento
       End If
      'Total Facturado
       If SetD(44).PosX > 0 And SetD(44).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(44).Tamaño
+         cPrint.PorteDeLetra = SetD(44).Porte
          cPrint.printVariable SetD(44).PosX, SetD(44).PosY, TFA.Total_MN
       End If
      'Total Facturado en letras
       If SetD(45).PosX > 0 And SetD(45).PosY > 0 Then
          Numero_Letras = Cambio_Letras(TFA.Total_MN, 2)
-         cPrint.PorteDeLetra = SetD(45).Tamaño
+         cPrint.PorteDeLetra = SetD(45).Porte
          PrinterLineas SetD(45).PosX, SetD(45).PosY, Numero_Letras, 11.5
       End If
      'CxC Clientes: Linea de Produccion
       If SetD(50).PosX > 0 And SetD(50).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(50).Tamaño
+         cPrint.PorteDeLetra = SetD(50).Porte
          cPrint.printTexto SetD(50).PosX, SetD(50).PosY, TFA.CxC_Clientes
       End If
      'Hora de Proceso
       If SetD(63).PosX > 0 And SetD(63).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(63).Tamaño
+         cPrint.PorteDeLetra = SetD(63).Porte
          cPrint.printTexto SetD(63).PosX, SetD(63).PosY, TFA.Hora
       End If
       If SetD(68).PosX > 0 And SetD(68).PosY > 0 Then
-         cPrint.PorteDeLetra = SetD(68).Tamaño
+         cPrint.PorteDeLetra = SetD(68).Porte
          cPrint.printTexto SetD(68).PosX, SetD(68).PosY, TrimStrg(Orden_No_S)
       End If
      'Tipo_Pago
       If Len(TFA.Tipo_Pago_Det) > 1 Then
          If SetD(79).PosX > 0 And SetD(79).PosY > 0 Then
-            cPrint.PorteDeLetra = SetD(79).Tamaño
+            cPrint.PorteDeLetra = SetD(79).Porte
             cPrint.printVariable SetD(79).PosX, SetD(79).PosY, TFA.Fecha_V
          End If
          If SetD(78).PosX > 0 And SetD(78).PosY > 0 Then
-            cPrint.PorteDeLetra = SetD(78).Tamaño
+            cPrint.PorteDeLetra = SetD(78).Porte
             cPrint.printVariable SetD(78).PosX, SetD(78).PosY, TFA.Total_MN
          End If
          If SetD(77).PosX > 0 And SetD(77).PosY > 0 Then
             RutaOrigen = RutaSistema & "\FORMATOS\Vistofp.jpg"
-            cPrint.printImagen RutaOrigen, SetD(77).PosX, SetD(77).PosY, SetD(77).Tamaño, SetD(77).Tamaño
+            cPrint.printImagen RutaOrigen, SetD(77).PosX, SetD(77).PosY, SetD(77).Porte, SetD(77).Porte
          End If
          If SetD(76).PosX > 0 And SetD(76).PosY > 0 Then
-            cPrint.PorteDeLetra = SetD(76).Tamaño
+            cPrint.PorteDeLetra = SetD(76).Porte
             cPrint.printTexto SetD(76).PosX, SetD(76).PosY, "TIPO PAGO:"
          End If
          If SetD(75).PosX > 0 And SetD(75).PosY > 0 Then
-            cPrint.PorteDeLetra = SetD(75).Tamaño
+            cPrint.PorteDeLetra = SetD(75).Porte
             cPrint.printTexto SetD(75).PosX, SetD(75).PosY, TrimStrg(MidStrg(TFA.Tipo_Pago_Det, 15, Len(TFA.Tipo_Pago_Det)))
          End If
       End If
@@ -4233,33 +4236,33 @@ If PonImpresoraDefecto(SetNombrePRN) Then
           'MsgBox .RecordCount
            SaldoInic = SaldoInic + .fields("Cantidad")
            SaldoFinal = SaldoFinal + .fields("Tonelaje")
-           cPrint.PorteDeLetra = SetD(23).Tamaño
+           cPrint.PorteDeLetra = SetD(23).Porte
            cPrint.printFields SetD(23).PosX, PFil, .fields("Codigo")
-           cPrint.PorteDeLetra = SetD(30).Tamaño
+           cPrint.PorteDeLetra = SetD(30).Porte
            cPrint.printFields SetD(30).PosX, PFil, .fields("Codigo_Barra")
            If .fields("CodMarca") <> Ninguno Then
-               cPrint.PorteDeLetra = SetD(31).Tamaño
+               cPrint.PorteDeLetra = SetD(31).Porte
                cPrint.printTexto SetD(31).PosX, PFil, "(" & TrimStrg(MidStrg(.fields("Marca"), 1, 3)) & ")"
            End If
-           cPrint.PorteDeLetra = SetD(33).Tamaño
+           cPrint.PorteDeLetra = SetD(33).Porte
            cPrint.printFields SetD(33).PosX, PFil, .fields("Ruta")
-           cPrint.PorteDeLetra = SetD(32).Tamaño
+           cPrint.PorteDeLetra = SetD(32).Porte
            cPrint.printFields SetD(32).PosX, PFil, .fields("Unidad")
            If .fields("Cant_Hab") > 0 And Len(.fields("Tipo_Hab")) > 1 Then
-               cPrint.PorteDeLetra = SetD(70).Tamaño
+               cPrint.PorteDeLetra = SetD(70).Porte
                cPrint.printFields SetD(70).PosX, PFil, .fields("Fecha_IN")
-               cPrint.PorteDeLetra = SetD(71).Tamaño
+               cPrint.PorteDeLetra = SetD(71).Porte
                cPrint.printFields SetD(71).PosX, PFil, .fields("Fecha_OUT")
-               cPrint.PorteDeLetra = SetD(72).Tamaño
+               cPrint.PorteDeLetra = SetD(72).Porte
                cPrint.printFields SetD(72).PosX, PFil, .fields("Cant_Hab")
-               cPrint.PorteDeLetra = SetD(73).Tamaño
+               cPrint.PorteDeLetra = SetD(73).Porte
                cPrint.printFields SetD(73).PosX, PFil, .fields("Tipo_Hab")
            End If
            If SetD(24).PosX <= SetD(25).PosX Then
-              cPrint.PorteDeLetra = SetD(24).Tamaño
+              cPrint.PorteDeLetra = SetD(24).Porte
               cPrint.printTexto SetD(24).PosX, PFil, " " & CStr(.fields("Cantidad"))
            End If
-           cPrint.PorteDeLetra = SetD(25).Tamaño
+           cPrint.PorteDeLetra = SetD(25).Porte
            PFilTemp = PFil
            PFilT = PrinterLineasTexto(SetD(25).PosX, PFil - 0.2, .fields("Producto"), SetD(26).PosX)
            If PVP_Al_Inicio Then PFil = PFilTemp Else PFil = PFilT
@@ -4276,21 +4279,21 @@ If PonImpresoraDefecto(SetNombrePRN) Then
            End If
            PFil = PFil + 0.2
            If SetD(24).PosX > SetD(25).PosX Then
-              cPrint.PorteDeLetra = SetD(24).Tamaño
+              cPrint.PorteDeLetra = SetD(24).Porte
               cPrint.printTexto SetD(24).PosX, PFil, " " & CStr(.fields("Cantidad"))
            End If
-           cPrint.PorteDeLetra = SetD(29).Tamaño
+           cPrint.PorteDeLetra = SetD(29).Porte
            cPrint.printFields SetD(29).PosX, PFil, .fields("Total")
            PVP_Desc = .fields("Total") - .fields("Total_Desc") - .fields("Total_Desc2")
-           cPrint.PorteDeLetra = SetD(69).Tamaño
+           cPrint.PorteDeLetra = SetD(69).Porte
            cPrint.printVariable SetD(69).PosX, PFil, PVP_Desc
-           cPrint.PorteDeLetra = SetD(28).Tamaño
+           cPrint.PorteDeLetra = SetD(28).Porte
            cPrint.printFields SetD(28).PosX, PFil, .fields("Precio"), , , , Dec_PVP
-           cPrint.PorteDeLetra = SetD(27).Tamaño
+           cPrint.PorteDeLetra = SetD(27).Porte
            If .fields("Precio") > 0 And .fields("Cantidad") > 0 Then
                cPrint.printTexto SetD(27).PosX, PFil, Format$(.fields("Total_Desc") / (.fields("Cantidad") * .fields("Precio")), "00.00%")
            End If
-           cPrint.PorteDeLetra = SetD(34).Tamaño
+           cPrint.PorteDeLetra = SetD(34).Porte
            cPrint.printTexto SetD(34).PosX, PFil, Format$(.fields("Tonelaje"), "#,##0.00")
           'Descuentos en Ventas
            If .fields("Total_IVA") > 0 Then
@@ -4417,7 +4420,7 @@ If TFA.Factura > 0 And Len(TFA.Serie) = 6 And Len(TFA.Autorizacion) > 3 Then
         Cadena = Cadena & Format$(TFA.Factura, "00000000")
         PrinterTexto SetD(2).PosX, SetD(2).PosY, Cadena
         If SetD(8).PosX > 0 And SetD(8).PosY > 0 Then
-           Printer.FontSize = SetD(8).Tamaño
+           Printer.FontSize = SetD(8).Porte
            If .fields("Razon_Social") = .fields("Cliente") Then
                PrinterFields SetD(8).PosX, SetD(8).PosY, .fields("Cliente")
            Else
@@ -4425,7 +4428,7 @@ If TFA.Factura > 0 And Len(TFA.Serie) = 6 And Len(TFA.Autorizacion) > 3 Then
            End If
         End If
         If SetD(64).PosX > 0 And SetD(64).PosY > 0 Then
-           Printer.FontSize = SetD(64).Tamaño
+           Printer.FontSize = SetD(64).Porte
            If .fields("Razon_Social") <> .fields("Cliente") Then
                PrinterTexto SetD(64).PosX, SetD(64).PosY, .fields("Cliente")
            End If
@@ -4434,9 +4437,9 @@ If TFA.Factura > 0 And Len(TFA.Serie) = 6 And Len(TFA.Autorizacion) > 3 Then
         If .fields("DirNumero") <> Ninguno Then
             If .fields("DirNumero") <> "S/N" Then DireccionCli = DireccionCli & " (" & .fields("DirNumero") & ")"
         End If
-        Printer.FontSize = SetD(11).Tamaño
+        Printer.FontSize = SetD(11).Porte
         PrinterTexto SetD(11).PosX, SetD(11).PosY, DireccionCli
-        Printer.FontSize = SetD(10).Tamaño
+        Printer.FontSize = SetD(10).Porte
         PrinterFields SetD(10).PosX, SetD(10).PosY, .fields("Grupo")
        'Codigo del Usuario
         Cadena = ""
@@ -4451,58 +4454,58 @@ If TFA.Factura > 0 And Len(TFA.Serie) = 6 And Len(TFA.Autorizacion) > 3 Then
               NombUsuario = ""
            End If
         Loop
-        Printer.FontSize = SetD(18).Tamaño
+        Printer.FontSize = SetD(18).Porte
         PrinterTexto SetD(18).PosX, SetD(18).PosY, Cadena
-        Printer.FontSize = SetD(21).Tamaño
+        Printer.FontSize = SetD(21).Porte
         PrinterTexto SetD(21).PosX, SetD(21).PosY, NombEjecutivo
-        Printer.FontSize = SetD(3).Tamaño
+        Printer.FontSize = SetD(3).Porte
         PrinterTexto SetD(3).PosX, SetD(3).PosY, FechaStrgCorta(.fields("Fecha"))
         Cadena = FechaDia(.fields("Fecha")) & Space(10) & FechaMes(.fields("Fecha")) & Space(10) & FechaAnio(.fields("Fecha"))
-        Printer.FontSize = SetD(4).Tamaño
+        Printer.FontSize = SetD(4).Porte
         PrinterTexto SetD(4).PosX, SetD(4).PosY, Cadena
-        Printer.FontSize = SetD(7).Tamaño
+        Printer.FontSize = SetD(7).Porte
         PrinterTexto SetD(7).PosX, SetD(7).PosY, FechaStrgCiudad(.fields("Fecha"))
-        Printer.FontSize = SetD(5).Tamaño
+        Printer.FontSize = SetD(5).Porte
         PrinterTexto SetD(5).PosX, SetD(5).PosY, FechaStrgCorta(.fields("Fecha_V"))
         Cadena = FechaDia(.fields("Fecha_V")) & Space(10) & FechaMes(.fields("Fecha_V")) & Space(10) & FechaAnio(.fields("Fecha_V"))
-        Printer.FontSize = SetD(6).Tamaño
+        Printer.FontSize = SetD(6).Porte
         PrinterTexto SetD(6).PosX, SetD(6).PosY, Cadena
-        Printer.FontSize = SetD(14).Tamaño
+        Printer.FontSize = SetD(14).Porte
         PrinterFields SetD(14).PosX, SetD(14).PosY, .fields("Telefono")
-        Printer.FontSize = SetD(12).Tamaño
+        Printer.FontSize = SetD(12).Porte
         PrinterFields SetD(12).PosX, SetD(12).PosY, .fields("Ciudad")
-        Printer.FontSize = SetD(13).Tamaño
+        Printer.FontSize = SetD(13).Porte
         PrinterFields SetD(13).PosX, SetD(13).PosY, .fields("CI_RUC")
-        Printer.FontSize = SetD(15).Tamaño
+        Printer.FontSize = SetD(15).Porte
         PrinterFields SetD(15).PosX, SetD(15).PosY, .fields("Email")
-        Printer.FontSize = SetD(51).Tamaño
+        Printer.FontSize = SetD(51).Porte
         PrinterFields SetD(51).PosX, SetD(51).PosY, .fields("DAU")
-        Printer.FontSize = SetD(52).Tamaño
+        Printer.FontSize = SetD(52).Porte
         PrinterFields SetD(52).PosX, SetD(52).PosY, .fields("FUE")
-        Printer.FontSize = SetD(53).Tamaño
+        Printer.FontSize = SetD(53).Porte
         PrinterFields SetD(53).PosX, SetD(53).PosY, .fields("Declaracion")
-        Printer.FontSize = SetD(54).Tamaño
+        Printer.FontSize = SetD(54).Porte
         PrinterFields SetD(54).PosX, SetD(54).PosY, .fields("Remision")
-        Printer.FontSize = SetD(55).Tamaño
+        Printer.FontSize = SetD(55).Porte
         PrinterFields SetD(55).PosX, SetD(55).PosY, .fields("Comercial")
-        Printer.FontSize = SetD(56).Tamaño
+        Printer.FontSize = SetD(56).Porte
         PrinterFields SetD(56).PosX, SetD(56).PosY, .fields("Solicitud")
-        Printer.FontSize = SetD(57).Tamaño
+        Printer.FontSize = SetD(57).Porte
         PrinterFields SetD(57).PosX, SetD(57).PosY, .fields("Cantidad")
-        Printer.FontSize = SetD(58).Tamaño
+        Printer.FontSize = SetD(58).Porte
         PrinterFields SetD(58).PosX, SetD(58).PosY, .fields("Kilos")
-        Printer.FontSize = SetD(60).Tamaño
+        Printer.FontSize = SetD(60).Porte
         PrinterTexto SetD(60).PosX, SetD(60).PosY, Format$(Day(.fields("Fecha")), "00")
         Cadena = UCaseStrg(MidStrg(MesesLetras(CInt(Month(.fields("Fecha")))), 1, 3))
-        Printer.FontSize = SetD(61).Tamaño
+        Printer.FontSize = SetD(61).Porte
         PrinterTexto SetD(61).PosX, SetD(61).PosY, Cadena
-        Printer.FontSize = SetD(62).Tamaño
+        Printer.FontSize = SetD(62).Porte
         PrinterTexto SetD(62).PosX, SetD(62).PosY, Format$(Year(.fields("Fecha")), "0000")
-        Printer.FontSize = SetD(67).Tamaño
+        Printer.FontSize = SetD(67).Porte
         PrinterTexto SetD(67).PosX, SetD(67).PosY, FechaStrgCorta(.fields("Fecha_A"))
-        Printer.FontSize = SetD(16).Tamaño
+        Printer.FontSize = SetD(16).Porte
         NumeroLineas = PrinterLineasMayor(SetD(16).PosX, SetD(16).PosY, .fields("Observacion"), SetD(26).PosX)
-        Printer.FontSize = SetD(17).Tamaño
+        Printer.FontSize = SetD(17).Porte
         NumeroLineas = PrinterLineasMayor(SetD(17).PosX, SetD(17).PosY, .fields("Nota"), SetD(26).PosX)
         'MsgBox "Encabezado...."
     End If
@@ -4537,50 +4540,50 @@ If TFA.Factura > 0 And Len(TFA.Serie) = 6 And Len(TFA.Autorizacion) > 3 Then
            'MsgBox .RecordCount
            SaldoInic = SaldoInic + .fields("Cantidad")
            SaldoFinal = SaldoFinal + .fields("Tonelaje")
-           Printer.FontSize = SetD(23).Tamaño
+           Printer.FontSize = SetD(23).Porte
            PrinterFields SetD(23).PosX, PFil, .fields("Codigo")
-           Printer.FontSize = SetD(30).Tamaño
+           Printer.FontSize = SetD(30).Porte
            PrinterFields SetD(30).PosX, PFil, .fields("Codigo_Barra")
            If .fields("CodMarca") <> Ninguno Then
-               Printer.FontSize = SetD(31).Tamaño
+               Printer.FontSize = SetD(31).Porte
                PrinterTexto SetD(31).PosX, PFil, "(" & TrimStrg(MidStrg(.fields("Marca"), 1, 3)) & ")"
            End If
-           Printer.FontSize = SetD(33).Tamaño
+           Printer.FontSize = SetD(33).Porte
            PrinterFields SetD(33).PosX, PFil, .fields("Ruta")
-           Printer.FontSize = SetD(32).Tamaño
+           Printer.FontSize = SetD(32).Porte
            PrinterFields SetD(32).PosX, PFil, .fields("Unidad")
            If .fields("Cant_Hab") > 0 And Len(.fields("Tipo_Hab")) > 1 Then
-               Printer.FontSize = SetD(70).Tamaño
+               Printer.FontSize = SetD(70).Porte
                PrinterFields SetD(70).PosX, PFil, .fields("Fecha_IN")
-               Printer.FontSize = SetD(71).Tamaño
+               Printer.FontSize = SetD(71).Porte
                PrinterFields SetD(71).PosX, PFil, .fields("Fecha_OUT")
-               Printer.FontSize = SetD(72).Tamaño
+               Printer.FontSize = SetD(72).Porte
                PrinterFields SetD(72).PosX, PFil, .fields("Cant_Hab")
-               Printer.FontSize = SetD(73).Tamaño
+               Printer.FontSize = SetD(73).Porte
                PrinterFields SetD(73).PosX, PFil, .fields("Tipo_Hab")
            End If
            If SetD(24).PosX <= SetD(25).PosX Then
-              Printer.FontSize = SetD(24).Tamaño
+              Printer.FontSize = SetD(24).Porte
               PrinterTexto SetD(24).PosX, PFil, " " & CStr(.fields("Cantidad"))
            End If
-           Printer.FontSize = SetD(25).Tamaño
+           Printer.FontSize = SetD(25).Porte
            PFil = PrinterLineasTexto(SetD(25).PosX, PFil, .fields("Producto"), SetD(26).PosX)
            If SetD(24).PosX > SetD(25).PosX Then
-              Printer.FontSize = SetD(24).Tamaño
+              Printer.FontSize = SetD(24).Porte
               PrinterTexto SetD(24).PosX, PFil, " " & CStr(.fields("Cantidad"))
            End If
-           Printer.FontSize = SetD(29).Tamaño
+           Printer.FontSize = SetD(29).Porte
            PrinterFields SetD(29).PosX, PFil, .fields("Total")
            PVP_Desc = .fields("Total") - .fields("Total_Desc")
-           Printer.FontSize = SetD(69).Tamaño
+           Printer.FontSize = SetD(69).Porte
            PrinterVariables SetD(69).PosX, PFil, PVP_Desc
-           Printer.FontSize = SetD(28).Tamaño
+           Printer.FontSize = SetD(28).Porte
            PrinterFields SetD(28).PosX, PFil, .fields("Precio")
-           Printer.FontSize = SetD(27).Tamaño
+           Printer.FontSize = SetD(27).Porte
            If .fields("Precio") > 0 And .fields("Cantidad") > 0 Then
                PrinterTexto SetD(27).PosX, PFil, Format$(.fields("Total_Desc") / (.fields("Cantidad") * .fields("Precio")), "00.00%")
            End If
-           Printer.FontSize = SetD(34).Tamaño
+           Printer.FontSize = SetD(34).Porte
            PrinterTexto SetD(34).PosX, PFil, Format$(.fields("Tonelaje"), "#,##0.00")
           'Descuentos en Ventas
            If .fields("Total_IVA") > 0 Then
@@ -4608,71 +4611,71 @@ If TFA.Factura > 0 And Len(TFA.Serie) = 6 And Len(TFA.Autorizacion) > 3 Then
         Total = Redondear(.fields("Total_MN"), 2)
         Total_ME = Redondear(.fields("Total_ME"), 2)
        'Porcentaje Con IVA
-        Printer.FontSize = SetD(39).Tamaño
+        Printer.FontSize = SetD(39).Porte
         PrinterTexto SetD(39).PosX, SetD(39).PosY, CStr(Porc_IVA * 100) & " "
        'Con IVA
-        Printer.FontSize = SetD(38).Tamaño
+        Printer.FontSize = SetD(38).Porte
         Desc_Con_IVA = .fields("Con_IVA") - Desc_Con_IVA
         PrinterVariables SetD(38).PosX, SetD(38).PosY, Desc_Con_IVA   '.Fields("Con_IVA")
        'Sin IVA
-        Printer.FontSize = SetD(37).Tamaño
+        Printer.FontSize = SetD(37).Porte
         Desc_Sin_IVA = .fields("Sin_IVA") - Desc_Sin_IVA
         PrinterVariables SetD(37).PosX, SetD(37).PosY, Desc_Sin_IVA   '.Fields("Sin_IVA")
        'Descuento palabra
-        Printer.FontSize = SetD(43).Tamaño
+        Printer.FontSize = SetD(43).Porte
         PrinterTexto SetD(43).PosX, SetD(43).PosY, "Descuento"
        'Total Descuento
-        Printer.FontSize = SetD(42).Tamaño
+        Printer.FontSize = SetD(42).Porte
         PrinterFields SetD(42).PosX, SetD(42).PosY, .fields("Descuento")
        'Total Comision
-        Printer.FontSize = SetD(48).Tamaño
+        Printer.FontSize = SetD(48).Porte
         PrinterFields SetD(48).PosX, SetD(48).PosY, .fields("Comision")
        'Total Servicio
-        Printer.FontSize = SetD(49).Tamaño
+        Printer.FontSize = SetD(49).Porte
         PrinterFields SetD(49).PosX, SetD(49).PosY, .fields("Servicio")
        'IVA Porcentaje
-        Printer.FontSize = SetD(41).Tamaño
+        Printer.FontSize = SetD(41).Porte
         PrinterTexto SetD(41).PosX, SetD(41).PosY, CStr(Porc_IVA * 100) & " "
        'IVA
-        Printer.FontSize = SetD(40).Tamaño
+        Printer.FontSize = SetD(40).Porte
         PrinterFields SetD(40).PosX, SetD(40).PosY, .fields("IVA")
        'SubTotal
-        Printer.FontSize = SetD(36).Tamaño
+        Printer.FontSize = SetD(36).Porte
         PrinterFields SetD(36).PosX, SetD(36).PosY, .fields("SubTotal")
        'SubTotal
-        Printer.FontSize = SetD(66).Tamaño
+        Printer.FontSize = SetD(66).Porte
         PrinterVariables SetD(66).PosX, SetD(66).PosY, .fields("SubTotal") - .fields("Descuento")
        'Total Facturado
-        Printer.FontSize = SetD(44).Tamaño
+        Printer.FontSize = SetD(44).Porte
         PrinterVariables SetD(44).PosX, SetD(44).PosY, Total
        'Total Facturador en letras
         Numero_Letras = Cambio_Letras(Total, 2)
-        Printer.FontSize = SetD(45).Tamaño
+        Printer.FontSize = SetD(45).Porte
         PrinterLineas SetD(45).PosX, SetD(45).PosY, Numero_Letras, 11.5
        'CxC Clientes: Linea de Produccion
-        Printer.FontSize = SetD(50).Tamaño
+        Printer.FontSize = SetD(50).Porte
         PrinterTexto SetD(50).PosX, SetD(50).PosY, TFA.CxC_Clientes
        'Hora de Proceso
-        Printer.FontSize = SetD(63).Tamaño
+        Printer.FontSize = SetD(63).Porte
         PrinterTexto SetD(63).PosX, SetD(63).PosY, .fields("Hora")
-        Printer.FontSize = SetD(68).Tamaño
+        Printer.FontSize = SetD(68).Porte
         PrinterTexto SetD(68).PosX, SetD(68).PosY, TrimStrg(Orden_No_S)
        'Tipo_Pago
         If SetD(78).PosX > 0 And SetD(78).PosY > 0 Then
-           Printer.FontSize = SetD(78).Tamaño
+           Printer.FontSize = SetD(78).Porte
            PrinterVariables SetD(78).PosX, SetD(78).PosY, Total
         End If
         If SetD(77).PosX > 0 And SetD(77).PosY > 0 Then
            RutaOrigen = RutaSistema & "\FORMATOS\Vistofp.jpg"
-           PrinterPaint RutaOrigen, SetD(77).PosX, SetD(77).PosY, SetD(77).Tamaño, SetD(77).Tamaño
+           PrinterPaint RutaOrigen, SetD(77).PosX, SetD(77).PosY, SetD(77).Porte, SetD(77).Porte
         End If
         If Len(Cad_Tipo_Pago) > 1 Then
            If SetD(76).PosX > 0 And SetD(76).PosY > 0 Then
-              Printer.FontSize = SetD(76).Tamaño
+              Printer.FontSize = SetD(76).Porte
               PrinterTexto SetD(76).PosX, SetD(76).PosY, "TIPO PAGO:"
            End If
            If SetD(75).PosX > 0 And SetD(75).PosY > 0 Then
-              Printer.FontSize = SetD(75).Tamaño
+              Printer.FontSize = SetD(75).Porte
               PrinterTexto SetD(75).PosX, SetD(75).PosY, Cad_Tipo_Pago
            End If
         End If
@@ -4759,59 +4762,59 @@ If PonImpresoraDefecto(SetNombrePRN) Then
         'NumFact = .Fields("Remision")
         DireccionCli = .fields("Direccion")
         DireccionGuia = .fields("Comercial")
-        Printer.FontSize = SetD(2).Tamaño
+        Printer.FontSize = SetD(2).Porte
         PrinterTexto SetD(2).PosX, SetD(2).PosY, Format$(.fields("Remision"), "0000000")
-        Printer.FontSize = SetD(8).Tamaño
+        Printer.FontSize = SetD(8).Porte
         PrinterFields SetD(8).PosX, SetD(8).PosY, .fields("Cliente")
-        Printer.FontSize = SetD(11).Tamaño
+        Printer.FontSize = SetD(11).Porte
         PrinterTexto SetD(11).PosX, SetD(11).PosY, DireccionGuia
-        Printer.FontSize = SetD(10).Tamaño
+        Printer.FontSize = SetD(10).Porte
         PrinterFields SetD(10).PosX, SetD(10).PosY, .fields("Grupo")
         Cadena = "Elab.[" & .fields("CodigoU") & "]"
-        Printer.FontSize = SetD(18).Tamaño
+        Printer.FontSize = SetD(18).Porte
         PrinterTexto SetD(18).PosX, SetD(18).PosY, Cadena
-        Printer.FontSize = SetD(3).Tamaño
+        Printer.FontSize = SetD(3).Porte
         PrinterTexto SetD(3).PosX, SetD(3).PosY, FechaStrgCorta(.fields("Fecha"))
         Cadena = FechaDia(.fields("Fecha")) & Space(10) & FechaMes(.fields("Fecha")) & Space(10) & FechaAnio(.fields("Fecha"))
-        Printer.FontSize = SetD(4).Tamaño
+        Printer.FontSize = SetD(4).Porte
         PrinterTexto SetD(4).PosX, SetD(4).PosY, Cadena
-        Printer.FontSize = SetD(7).Tamaño
+        Printer.FontSize = SetD(7).Porte
         PrinterTexto SetD(7).PosX, SetD(7).PosY, FechaStrgCiudad(.fields("Fecha"))
-        Printer.FontSize = SetD(5).Tamaño
+        Printer.FontSize = SetD(5).Porte
         PrinterTexto SetD(5).PosX, SetD(5).PosY, FechaStrgCorta(.fields("Fecha_V"))
         Cadena = FechaDia(.fields("Fecha_V")) & Space(10) & FechaMes(.fields("Fecha_V")) & Space(10) & FechaAnio(.fields("Fecha_V"))
-        Printer.FontSize = SetD(6).Tamaño
+        Printer.FontSize = SetD(6).Porte
         PrinterTexto SetD(6).PosX, SetD(6).PosY, Cadena
-        Printer.FontSize = SetD(14).Tamaño
+        Printer.FontSize = SetD(14).Porte
         PrinterFields SetD(14).PosX, SetD(14).PosY, .fields("Telefono")
-        Printer.FontSize = SetD(12).Tamaño
+        Printer.FontSize = SetD(12).Porte
         PrinterFields SetD(12).PosX, SetD(12).PosY, .fields("Ciudad")
-        Printer.FontSize = SetD(13).Tamaño
+        Printer.FontSize = SetD(13).Porte
         PrinterFields SetD(13).PosX, SetD(13).PosY, .fields("CI_RUC")
-        Printer.FontSize = SetD(15).Tamaño
+        Printer.FontSize = SetD(15).Porte
         PrinterFields SetD(15).PosX, SetD(15).PosY, .fields("Email")
-        Printer.FontSize = SetD(51).Tamaño
+        Printer.FontSize = SetD(51).Porte
         PrinterFields SetD(51).PosX, SetD(51).PosY, .fields("DAU")
-        Printer.FontSize = SetD(52).Tamaño
+        Printer.FontSize = SetD(52).Porte
         PrinterFields SetD(52).PosX, SetD(52).PosY, .fields("FUE")
-        Printer.FontSize = SetD(53).Tamaño
+        Printer.FontSize = SetD(53).Porte
         PrinterFields SetD(53).PosX, SetD(53).PosY, .fields("Declaracion")
-        Printer.FontSize = SetD(56).Tamaño
+        Printer.FontSize = SetD(56).Porte
         PrinterFields SetD(56).PosX, SetD(56).PosY, .fields("Solicitud")
-        Printer.FontSize = SetD(57).Tamaño
+        Printer.FontSize = SetD(57).Porte
         PrinterFields SetD(57).PosX, SetD(57).PosY, .fields("Cantidad")
-        Printer.FontSize = SetD(58).Tamaño
+        Printer.FontSize = SetD(58).Porte
         PrinterFields SetD(58).PosX, SetD(58).PosY, .fields("Kilos")
-        Printer.FontSize = SetD(60).Tamaño
+        Printer.FontSize = SetD(60).Porte
         PrinterTexto SetD(60).PosX, SetD(60).PosY, Format$(Day(.fields("Fecha")), "00")
         Cadena = UCaseStrg(MidStrg(MesesLetras(CInt(Month(.fields("Fecha")))), 1, 3))
-        Printer.FontSize = SetD(61).Tamaño
+        Printer.FontSize = SetD(61).Porte
         PrinterTexto SetD(61).PosX, SetD(61).PosY, Cadena
-        Printer.FontSize = SetD(62).Tamaño
+        Printer.FontSize = SetD(62).Porte
         PrinterTexto SetD(62).PosX, SetD(62).PosY, Format$(Year(.fields("Fecha")), "0000")
-        Printer.FontSize = SetD(16).Tamaño
+        Printer.FontSize = SetD(16).Porte
         NumeroLineas = PrinterLineasMayor(SetD(16).PosX, SetD(16).PosY, .fields("Observacion"), SetD(26).PosX)
-        Printer.FontSize = SetD(17).Tamaño
+        Printer.FontSize = SetD(17).Porte
         NumeroLineas = PrinterLineasMayor(SetD(17).PosX, SetD(17).PosY, .fields("Nota"), SetD(26).PosX)
         'MsgBox "Encabezado...."
     End If
@@ -4840,27 +4843,27 @@ If PonImpresoraDefecto(SetNombrePRN) Then
         Do While (Not .EOF)
            SaldoInic = SaldoInic + .fields("Cantidad")
            SaldoFinal = SaldoFinal + .fields("Tonelaje")
-           Printer.FontSize = SetD(23).Tamaño
+           Printer.FontSize = SetD(23).Porte
            PrinterFields SetD(23).PosX, PFil, .fields("Codigo")
-           Printer.FontSize = SetD(30).Tamaño
+           Printer.FontSize = SetD(30).Porte
            PrinterFields SetD(30).PosX, PFil, .fields("Codigo_Barra")
-           Printer.FontSize = SetD(33).Tamaño
+           Printer.FontSize = SetD(33).Porte
            PrinterFields SetD(33).PosX, PFil, .fields("Ruta")
            If SetD(24).PosX <= SetD(25).PosX Then
-              Printer.FontSize = SetD(24).Tamaño
+              Printer.FontSize = SetD(24).Porte
               PrinterTexto SetD(24).PosX, PFil, " " & CStr(.fields("Cantidad"))
            End If
-           Printer.FontSize = SetD(25).Tamaño
+           Printer.FontSize = SetD(25).Porte
            PFil = PrinterLineasTexto(SetD(25).PosX, PFil, .fields("Producto"), SetD(26).PosX)
            If SetD(24).PosX > SetD(25).PosX Then
-              Printer.FontSize = SetD(24).Tamaño
+              Printer.FontSize = SetD(24).Porte
               PrinterTexto SetD(24).PosX, PFil, " " & CStr(.fields("Cantidad"))
            End If
-           Printer.FontSize = SetD(29).Tamaño
+           Printer.FontSize = SetD(29).Porte
            PrinterFields SetD(29).PosX, PFil, .fields("Total")
-           Printer.FontSize = SetD(28).Tamaño
+           Printer.FontSize = SetD(28).Porte
            PrinterFields SetD(28).PosX, PFil, .fields("Precio")
-           Printer.FontSize = SetD(34).Tamaño
+           Printer.FontSize = SetD(34).Porte
            PrinterTexto SetD(34).PosX, PFil, Format$(.fields("Tonelaje"), "#,##0.00")
            'MsgBox "Detalle...."
            PFil = PFil + Printer.TextHeight("H") + 0.05
@@ -4876,44 +4879,44 @@ If PonImpresoraDefecto(SetNombrePRN) Then
         Total = Redondear(.fields("Total_MN"), 2)
         Total_ME = Redondear(.fields("Total_ME"), 2)
        'Porcentaje Con IVA
-        Printer.FontSize = SetD(39).Tamaño
+        Printer.FontSize = SetD(39).Porte
         PrinterTexto SetD(39).PosX, SetD(39).PosY, CStr(Porc_IVA * 100) & " "
        'Sin IVA
-        Printer.FontSize = SetD(37).Tamaño
+        Printer.FontSize = SetD(37).Porte
         PrinterFields SetD(37).PosX, SetD(37).PosY, .fields("Sin_IVA")
        'Con IVA
-        Printer.FontSize = SetD(38).Tamaño
+        Printer.FontSize = SetD(38).Porte
         PrinterFields SetD(38).PosX, SetD(38).PosY, .fields("Con_IVA")
        'Descuento palabra
-        Printer.FontSize = SetD(43).Tamaño
+        Printer.FontSize = SetD(43).Porte
         PrinterTexto SetD(43).PosX, SetD(43).PosY, "Descuento"
        'Total Descuento
-        Printer.FontSize = SetD(42).Tamaño
+        Printer.FontSize = SetD(42).Porte
         PrinterFields SetD(42).PosX, SetD(42).PosY, .fields("Descuento")
        'Total Comision
-        Printer.FontSize = SetD(48).Tamaño
+        Printer.FontSize = SetD(48).Porte
         PrinterFields SetD(48).PosX, SetD(48).PosY, .fields("Comision")
        'Total Servicio
-        Printer.FontSize = SetD(49).Tamaño
+        Printer.FontSize = SetD(49).Porte
         PrinterFields SetD(49).PosX, SetD(49).PosY, .fields("Servicio")
        'IVA Porcentaje
-        Printer.FontSize = SetD(41).Tamaño
+        Printer.FontSize = SetD(41).Porte
         PrinterTexto SetD(41).PosX, SetD(41).PosY, CStr(Porc_IVA * 100) & " "
        'IVA
-        Printer.FontSize = SetD(40).Tamaño
+        Printer.FontSize = SetD(40).Porte
         PrinterFields SetD(40).PosX, SetD(40).PosY, .fields("IVA")
        'SubTotal
-        Printer.FontSize = SetD(36).Tamaño
+        Printer.FontSize = SetD(36).Porte
         PrinterFields SetD(36).PosX, SetD(36).PosY, .fields("SubTotal")
        'Total Facturado
-        Printer.FontSize = SetD(44).Tamaño
+        Printer.FontSize = SetD(44).Porte
         PrinterVariables SetD(44).PosX, SetD(44).PosY, Total
        'Total Facturador en letras
         Numero_Letras = Cambio_Letras(Total)
-        Printer.FontSize = SetD(45).Tamaño
+        Printer.FontSize = SetD(45).Porte
         PrinterLineas SetD(45).PosX, SetD(45).PosY, Numero_Letras, 11.5
        'CxC Clientes: Linea de Produccion
-        Printer.FontSize = SetD(50).Tamaño
+        Printer.FontSize = SetD(50).Porte
         PrinterTexto SetD(50).PosX, SetD(50).PosY, TFA.CxC_Clientes
         'MsgBox "...."
     End If
@@ -6117,7 +6120,7 @@ End Sub
 ''   If AdoPrinter.RecordCount > 0 Then
 ''
 ''      Do While Not AdoPrinter.EOF
-''         Printer.FontSize = AdoPrinter.Fields("Tamaño")
+''         Printer.FontSize = AdoPrinter.fields("Porte")
 ''         Pos_XX = AdoPrinter.Fields("Pos_X")
 ''         Pos_YY = AdoPrinter.Fields("Pos_Y")
 ''         If Pos_XX > 0 And Pos_XX > 0 Then
@@ -8811,7 +8814,7 @@ Dim Imp_Mes As Boolean
      Codigo4 = Format$(.fields("Factura"), "000000000")
      If SetD(1).PosX > 0 And SetD(1).PosY > 0 Then
         TamañoAnt = Printer.FontSize
-        Printer.FontSize = SetD(1).Tamaño
+        Printer.FontSize = SetD(1).Porte
            'MsgBox PosInic + 0.01 & vbCrLf & PosLinea1 + 0.01 & vbCrLf & AnchoFactura & vbCrLf & AltoFactura
            PrinterPaint LogoTipo, PosInic + SetD(38).PosX + 0.05, PosLinea1 + SetD(38).PosY + 0.05, 3, 1.5
            If Empresa = NombreComercial Then
@@ -8834,7 +8837,7 @@ Dim Imp_Mes As Boolean
            End If
            
            If SetD(28).PosX > 0 And SetD(28).PosY > 0 Then
-              Printer.FontSize = SetD(28).Tamaño
+              Printer.FontSize = SetD(28).Porte
               Printer.FontBold = False
               Cuenta = "Autorización otorgada por el S.R.I. para imprimir por medios Computarizados Facturas, Autorización No. " & Autorizacion
               PrinterTexto PosInic + SetD(28).PosX, PosLinea1 + SetD(28).PosY, Cuenta
@@ -8875,51 +8878,51 @@ Dim Imp_Mes As Boolean
              Printer.FontSize = 14
              PrinterTexto PosInic + 2.5, PosLinea1 + 1.6, Codigo4
           Else
-             Printer.FontSize = SetD(2).Tamaño
+             Printer.FontSize = SetD(2).Porte
              PrinterTexto PosInic + SetD(2).PosX, PosLinea1 + SetD(2).PosY, Codigo4
           End If
        End If
        If SetD(3).PosX > 0 Then
-          Printer.FontSize = SetD(3).Tamaño
+          Printer.FontSize = SetD(3).Porte
           PrinterFields PosInic + SetD(3).PosX, PosLinea1 + SetD(3).PosY, .fields("Fecha")
        End If
        If SetD(4).PosX > 0 Then
-          Printer.FontSize = SetD(4).Tamaño
+          Printer.FontSize = SetD(4).Porte
           PrinterFields PosInic + SetD(4).PosX, PosLinea1 + SetD(4).PosY, .fields("Fecha_V")
        End If
        If SetD(10).PosX > 0 Then
-          Printer.FontSize = SetD(10).Tamaño
+          Printer.FontSize = SetD(10).Porte
           PrinterFields PosInic + SetD(10).PosX, PosLinea1 + SetD(10).PosY, .fields("Ciudad")
        End If
        If SetD(62).PosX > 0 Then
-          Printer.FontSize = SetD(62).Tamaño
+          Printer.FontSize = SetD(62).Porte
           PrinterFields PosInic + SetD(62).PosX, PosLinea1 + SetD(62).PosY, .fields("Nota")
        End If
        If SetD(65).PosX > 0 Then
-          Printer.FontSize = SetD(65).Tamaño
+          Printer.FontSize = SetD(65).Porte
           PrinterFields PosInic + SetD(65).PosX, PosLinea1 + SetD(65).PosY, .fields("Observacion")
        End If
        NivelNo = SinEspaciosIzq(.fields("Direccion"))
        If NivelNo = "" Then NivelNo = Ninguno
        If SetD(29).PosX > 0 Then
-          Printer.FontSize = SetD(29).Tamaño
+          Printer.FontSize = SetD(29).Porte
           PrinterTexto PosInic + SetD(29).PosX, PosLinea1 + SetD(29).PosY, NivelNo
        End If
        NivelNo = MidStrg(.fields("Direccion"), Len(NivelNo) + 1, Len(.fields("Direccion")) - Len(NivelNo) + 1)
        If NivelNo = "" Then NivelNo = Ninguno
        If SetD(30).PosX > 0 Then
-          Printer.FontSize = SetD(30).Tamaño
+          Printer.FontSize = SetD(30).Porte
           PrinterTexto PosInic + SetD(30).PosX, PosLinea1 + SetD(30).PosY, NivelNo
        End If
        
       'Datos del Cliente/Represetante
       'MsgBox .Fields("Razon_Social") & vbCrLf & .Fields("Cliente")
        If .fields("Razon_Social") = .fields("Cliente") Then
-           Printer.FontSize = SetD(5).Tamaño
+           Printer.FontSize = SetD(5).Porte
            If SetD(5).PosX > 0 Then PrinterTexto PosInic + SetD(5).PosX, PosLinea1 + SetD(5).PosY, .fields("Cliente")
-           Printer.FontSize = SetD(8).Tamaño
+           Printer.FontSize = SetD(8).Porte
            If SetD(8).PosX > 0 Then PrinterFields PosInic + SetD(8).PosX, PosLinea1 + SetD(8).PosY, .fields("Direccion")
-           Printer.FontSize = SetD(11).Tamaño
+           Printer.FontSize = SetD(11).Porte
            If SetD(11).PosX > 0 Then PrinterFields PosInic + SetD(11).PosX, PosLinea1 + SetD(11).PosY, .fields("CI_RUC")
        Else
            Select Case .fields("TB")
@@ -8932,71 +8935,71 @@ Dim Imp_Mes As Boolean
                   RAZON_SOCIAL_SRI = "CONSUMIDOR FINAL"
                   DIRECCION_SRI = "SD"
            End Select
-           Printer.FontSize = SetD(5).Tamaño
+           Printer.FontSize = SetD(5).Porte
            If SetD(5).PosX > 0 Then PrinterTexto PosInic + SetD(5).PosX, PosLinea1 + SetD(5).PosY, RAZON_SOCIAL_SRI
-           Printer.FontSize = SetD(41).Tamaño
+           Printer.FontSize = SetD(41).Porte
            If SetD(41).PosX > 0 Then PrinterTexto PosInic + SetD(41).PosX, PosLinea1 + SetD(41).PosY, DIRECCION_SRI
-           Printer.FontSize = SetD(36).Tamaño
+           Printer.FontSize = SetD(36).Porte
            If SetD(36).PosX > 0 Then PrinterTexto PosInic + SetD(36).PosX, PosLinea1 + SetD(36).PosY, CI_RUC_SRI
             
-           Printer.FontSize = SetD(64).Tamaño
+           Printer.FontSize = SetD(64).Porte
            If SetD(64).PosX > 0 Then PrinterTexto PosInic + SetD(64).PosX, PosLinea1 + SetD(64).PosY, .fields("Cliente")
-           Printer.FontSize = SetD(8).Tamaño
+           Printer.FontSize = SetD(8).Porte
            If SetD(8).PosX > 0 Then PrinterFields PosInic + SetD(8).PosX, PosLinea1 + SetD(8).PosY, .fields("Direccion")
-           Printer.FontSize = SetD(11).Tamaño
+           Printer.FontSize = SetD(11).Porte
            If SetD(11).PosX > 0 Then PrinterFields PosInic + SetD(11).PosX, PosLinea1 + SetD(11).PosY, .fields("CI_RUC")
        End If
        
 ''       If SetD(32).PosX > 0 Then
-''          Printer.FontSize = SetD(32).Tamaño
+''          Printer.FontSize = SetD(32).Porte
 ''          If .Fields("Representante") <> Ninguno Then
 ''              PrinterTexto PosInic + SetD(32).PosX, PosLinea1 + SetD(32).PosY, .Fields("Representante")
 ''          End If
 ''       End If
        If SetD(9).PosX > 0 Then
-          Printer.FontSize = SetD(9).Tamaño
+          Printer.FontSize = SetD(9).Porte
           PrinterFields PosInic + SetD(9).PosX, PosLinea1 + SetD(9).PosY, .fields("Telefono")
        End If
        If SetD(45).PosX > 0 Then
-          Printer.FontSize = SetD(45).Tamaño
+          Printer.FontSize = SetD(45).Porte
           PrinterFields PosInic + SetD(45).PosX, PosLinea1 + SetD(45).PosY, .fields("TelefonoT")
        End If
        If SetD(6).PosX > 0 Then
-          Printer.FontSize = SetD(6).Tamaño
+          Printer.FontSize = SetD(6).Porte
           PrinterFields PosInic + SetD(6).PosX, PosLinea1 + SetD(6).PosY, .fields("Codigo")
        End If
        If SetD(7).PosX > 0 Then
-          Printer.FontSize = SetD(7).Tamaño
+          Printer.FontSize = SetD(7).Porte
           PrinterFields PosInic + SetD(7).PosX, PosLinea1 + SetD(7).PosY, .fields("Grupo")
        End If
        If SetD(13).PosX > 0 Then
-          Printer.FontSize = SetD(13).Tamaño
+          Printer.FontSize = SetD(13).Porte
           PrinterFields PosInic + SetD(13).PosX, PosLinea1 + SetD(13).PosY, .fields("Email")
        End If
        'MsgBox "Pie"
       'Pie de Factura
         If SetD(22).PosX > 0 Then
-           Printer.FontSize = SetD(22).Tamaño
+           Printer.FontSize = SetD(22).Porte
            PrinterFields PosInic + SetD(22).PosX, PosLinea1 + SetD(22).PosY, .fields("SubTotal"), , True
         End If
         If SetD(23).PosX > 0 Then
-           Printer.FontSize = SetD(23).Tamaño
+           Printer.FontSize = SetD(23).Porte
            PrinterFields PosInic + SetD(23).PosX, PosLinea1 + SetD(23).PosY, .fields("Con_IVA"), , True
         End If
         If SetD(24).PosX > 0 Then
-           Printer.FontSize = SetD(24).Tamaño
+           Printer.FontSize = SetD(24).Porte
            PrinterFields PosInic + SetD(24).PosX, PosLinea1 + SetD(24).PosY, .fields("Sin_IVA"), , True
         End If
         If SetD(39).PosX > 0 Then
-           Printer.FontSize = SetD(39).Tamaño
+           Printer.FontSize = SetD(39).Porte
            PrinterVariables PosInic + SetD(39).PosX, PosLinea1 + SetD(39).PosY, .fields("Descuento") + .fields("Descuento2"), True
         End If
         If SetD(25).PosX > 0 Then
-           Printer.FontSize = SetD(25).Tamaño
+           Printer.FontSize = SetD(25).Porte
            PrinterFields PosInic + SetD(25).PosX, PosLinea1 + SetD(25).PosY, .fields("IVA"), , True
         End If
         If SetD(26).PosX > 0 Then
-           Printer.FontSize = SetD(26).Tamaño
+           Printer.FontSize = SetD(26).Porte
            If .fields("TC") = "NV" Then
               PrinterVariables PosInic + SetD(26).PosX, PosLinea1 + SetD(26).PosY, 0, True
            Else
@@ -9004,47 +9007,47 @@ Dim Imp_Mes As Boolean
            End If
         End If
         If SetD(27).PosX > 0 Then
-           Printer.FontSize = SetD(27).Tamaño
+           Printer.FontSize = SetD(27).Porte
            PrinterFields PosInic + SetD(27).PosX, PosLinea1 + SetD(27).PosY, .fields("Total_MN"), , True
         End If
         If SetD(33).PosX > 0 Then
-           Printer.FontSize = SetD(33).Tamaño
+           Printer.FontSize = SetD(33).Porte
            PrinterVariables PosInic + SetD(33).PosX, PosLinea1 + SetD(33).PosY, CCur(Diferencia), True
         End If
         If SetD(34).PosX > 0 Then
-           Printer.FontSize = SetD(34).Tamaño
+           Printer.FontSize = SetD(34).Porte
            PrinterVariables PosInic + SetD(34).PosX, PosLinea1 + SetD(34).PosY, CCur(SaldoPendiente), True
            If CheqSinCodigo Then PrinterTexto PosInic + 2, PosLinea1 + SetD(34).PosY, "P A G A R   E N   C O L E C T U R I A"
         End If
         If SetD(37).PosX > 0 Then
            If Not CheqSinCodigo Then
-              Printer.FontSize = SetD(37).Tamaño
+              Printer.FontSize = SetD(37).Porte
               PrinterTexto PosInic + SetD(37).PosX, PosLinea1 + SetD(37).PosY, CodigoDelBanco
            End If
         End If
         If SetD(40).PosX > 0 Then
-           Printer.FontSize = SetD(40).Tamaño
+           Printer.FontSize = SetD(40).Porte
            PrinterTexto PosInic + SetD(40).PosX, PosLinea1 + SetD(40).PosY, .fields("Hora")
         End If
         If SetD(42).PosX > 0 Then
            SubTotal_Desc = .fields("SubTotal") - .fields("Descuento")
-           Printer.FontSize = SetD(42).Tamaño
+           Printer.FontSize = SetD(42).Porte
            PrinterVariables PosInic + SetD(42).PosX, PosLinea1 + SetD(42).PosY, SubTotal_Desc, True
         End If
         If SetD(43).PosX > 0 Then
-           Printer.FontSize = SetD(43).Tamaño
+           Printer.FontSize = SetD(43).Porte
            PrinterTexto PosInic + SetD(43).PosX, PosLinea1 + SetD(43).PosY, "Descuento"
         End If
         If SetD(44).PosX > 0 Then
-           Printer.FontSize = SetD(44).Tamaño
+           Printer.FontSize = SetD(44).Porte
            PrinterTexto PosInic + SetD(44).PosX, PosLinea1 + SetD(44).PosY, NombreCiudad & ", " & .fields("Fecha")
         End If
         If SetD(46).PosX > 0 Then
-           Printer.FontSize = SetD(46).Tamaño
+           Printer.FontSize = SetD(46).Porte
            PrinterFields PosInic + SetD(46).PosX, PosLinea1 + SetD(46).PosY, .fields("DirNumero")
         End If
         If SetD(66).PosX > 0 And SetD(66).PosY > 0 Then
-           Printer.FontSize = SetD(66).Tamaño
+           Printer.FontSize = SetD(66).Porte
            If Len(TextoFormaPago) > 1 Then
                PrinterTexto PosInic + SetD(66).PosX, PosLinea1 + SetD(66).PosY, TextoFormaPago
            End If
@@ -9053,23 +9056,23 @@ Dim Imp_Mes As Boolean
        'MsgBox PosInic & vbCrLf & PosLinea1
         If Len(Tipo_Pago) > 1 Then
            If SetD(79).PosX > 0 And SetD(79).PosY > 0 Then
-              Printer.FontSize = SetD(79).Tamaño
+              Printer.FontSize = SetD(79).Porte
               PrinterFields PosInic + SetD(79).PosX, PosLinea1 + SetD(79).PosY, .fields("Fecha_V")
            End If
            If SetD(78).PosX > 0 And SetD(78).PosY > 0 Then
-              Printer.FontSize = SetD(78).Tamaño
+              Printer.FontSize = SetD(78).Porte
               PrinterFields PosInic + SetD(78).PosX, PosLinea1 + SetD(78).PosY, .fields("Total_MN")
            End If
            If SetD(77).PosX > 0 And SetD(77).PosY > 0 Then
               RutaOrigen = RutaSistema & "\FORMATOS\Vistofp.jpg"
-              PrinterPaint RutaOrigen, PosInic + SetD(77).PosX, PosLinea1 + SetD(77).PosY, SetD(77).Tamaño, SetD(77).Tamaño
+              PrinterPaint RutaOrigen, PosInic + SetD(77).PosX, PosLinea1 + SetD(77).PosY, SetD(77).Porte, SetD(77).Porte
            End If
            If SetD(76).PosX > 0 And SetD(76).PosY > 0 Then
-              Printer.FontSize = SetD(76).Tamaño
+              Printer.FontSize = SetD(76).Porte
               PrinterTexto PosInic + SetD(76).PosX, PosLinea1 + SetD(76).PosY, "TIPO PAGO:"
            End If
            If SetD(75).PosX > 0 And SetD(75).PosY > 0 Then
-              Printer.FontSize = SetD(75).Tamaño
+              Printer.FontSize = SetD(75).Porte
               PrinterTexto PosInic + SetD(75).PosX, PosLinea1 + SetD(75).PosY, Tipo_Pago
            End If
         End If
@@ -9080,13 +9083,13 @@ Dim Imp_Mes As Boolean
       MesFactV(IDMes) = ""
   Next IDMes
   AltoLetras = 0.4
-  Printer.FontSize = SetD(17).Tamaño
+  Printer.FontSize = SetD(17).Porte
   
   'MsgBox AltoLetras
   With DtaD
    If .RecordCount > 0 Then
       .MoveFirst
-       Printer.FontSize = SetD(14).Tamaño
+       Printer.FontSize = SetD(14).Porte
        AltoLetras = Redondear(Printer.TextHeight("H"), 2)
        PFil1 = PosLinea1 + SetD(14).PosY
        PAncho = SetD(18).PosX
@@ -9122,15 +9125,15 @@ Dim Imp_Mes As Boolean
                  If Len(CodigoP) > 1 Then CodigoP = MidStrg(CodigoP, 1, Len(CodigoP) - 2)
                  Producto = Producto & CodigoP & " "
                  If SetD(16).PosX > 0 Then
-                    Printer.FontSize = SetD(16).Tamaño
+                    Printer.FontSize = SetD(16).Porte
                     PrinterTexto PosInic + SetD(16).PosX, PFil1, CStr(Cantidad)
                  End If
                  If SetD(15).PosX > 0 Then
-                    Printer.FontSize = SetD(15).Tamaño
+                    Printer.FontSize = SetD(15).Porte
                     PrinterTexto PosInic + SetD(15).PosX, PFil1, CodigoInv
                  End If
                  If SetD(17).PosX > 0 Then
-                    Printer.FontSize = SetD(17).Tamaño
+                    Printer.FontSize = SetD(17).Porte
                     'MsgBox "<<<< " & PFil1
                     LineasNo = PrinterLineasMayor(PosInic + SetD(17).PosX, PFil1, Producto, PAncho)
                     'If LineasNo > 1 Then PFil1 = LineasNo * 0.35
@@ -9139,15 +9142,15 @@ Dim Imp_Mes As Boolean
                     'MsgBox PFil1
                  End If
                  If SetD(20).PosX > 0 Then
-                    Printer.FontSize = SetD(20).Tamaño
+                    Printer.FontSize = SetD(20).Porte
                     PrinterVariables PosInic + SetD(20).PosX, PFil1, SubTotal, True
                  End If
                  If SetD(19).PosX > 0 Then
-                    Printer.FontSize = SetD(19).Tamaño
+                    Printer.FontSize = SetD(19).Porte
                     PrinterVariables PosInic + SetD(19).PosX, PFil1, ValorUnit, True
                  End If
                  If SetD(47).PosX > 0 Then
-                    Printer.FontSize = SetD(47).Tamaño
+                    Printer.FontSize = SetD(47).Porte
                     PrinterVariables PosInic + SetD(47).PosX, PFil1, ValorUnit2, True
                  End If
                  
@@ -9177,29 +9180,29 @@ Dim Imp_Mes As Boolean
            If Len(CodigoP) > 1 Then CodigoP = MidStrg(CodigoP, 1, Len(CodigoP) - 2)
            Producto = Producto & CodigoP & " "
            If SetD(16).PosX > 0 Then
-              Printer.FontSize = SetD(16).Tamaño
+              Printer.FontSize = SetD(16).Porte
               PrinterTexto PosInic + SetD(16).PosX, PFil1, CStr(Cantidad)
            End If
            If SetD(15).PosX > 0 Then
-              Printer.FontSize = SetD(15).Tamaño
+              Printer.FontSize = SetD(15).Porte
               PrinterTexto PosInic + SetD(15).PosX, PFil1, CodigoInv
            End If
            If SetD(17).PosX > 0 Then
-              Printer.FontSize = SetD(17).Tamaño
+              Printer.FontSize = SetD(17).Porte
               LineasNo = 0
               LineasNo = PrinterLineasMayor(PosInic + SetD(17).PosX, PFil1, Producto, PAncho)
               PFil1 = PosLinea_Aux
            End If
            If SetD(20).PosX > 0 Then
-              Printer.FontSize = SetD(20).Tamaño
+              Printer.FontSize = SetD(20).Porte
               PrinterVariables PosInic + SetD(20).PosX, PFil1, SubTotal, True
            End If
            If SetD(19).PosX > 0 Then
-              Printer.FontSize = SetD(19).Tamaño
+              Printer.FontSize = SetD(19).Porte
               PrinterVariables PosInic + SetD(19).PosX, PFil1, ValorUnit, True
            End If
            If SetD(47).PosX > 0 Then
-              Printer.FontSize = SetD(47).Tamaño
+              Printer.FontSize = SetD(47).Porte
               PrinterVariables PosInic + SetD(47).PosX, PFil1, ValorUnit2, True
            End If
            If SetD(31).PosX > 0 Then
@@ -9209,7 +9212,7 @@ Dim Imp_Mes As Boolean
               Next IDMes
               MesFact = TrimStrg(MesFact)
               MesFact = MidStrg(MesFact, 1, Len(MesFact) - 1)
-              Printer.FontSize = SetD(31).Tamaño
+              Printer.FontSize = SetD(31).Porte
               PrinterTexto PosInic + SetD(31).PosX, PosLinea1 + SetD(31).PosY, MesFact
            End If
        End If
@@ -9726,7 +9729,7 @@ Dim IDMes As Byte
      PrinterPaint RutaOrigen, PosInic + SetD(38).PosX, PosLinea1 + SetD(38).PosY, 10.5, 14
      If SetD(1).PosX > 0 And SetD(1).PosY > 0 Then
         TamañoAnt = Printer.FontSize
-        Printer.FontSize = SetD(1).Tamaño
+        Printer.FontSize = SetD(1).Porte
            'MsgBox PosInic + 0.01 & vbCrLf & PosLinea1 + 0.01 & vbCrLf & AnchoFactura & vbCrLf & AltoFactura
            PrinterPaint LogoTipo, PosInic + SetD(38).PosX + 1.05, PosLinea1 + SetD(38).PosY + 0.05, 3, 1.35
            If Empresa = NombreComercial Then
@@ -9749,7 +9752,7 @@ Dim IDMes As Byte
                Codigo4 = "RECIBO DE PAGO No. " & .fields("CI_RUC")
            End If
            If SetD(28).PosX > 0 And SetD(28).PosY > 0 Then
-              Printer.FontSize = SetD(28).Tamaño
+              Printer.FontSize = SetD(28).Porte
               Printer.FontBold = False
               Cuenta = ""
               PrinterTexto PosInic + SetD(28).PosX, PosLinea1 + SetD(28).PosY, Cuenta
@@ -9762,15 +9765,15 @@ Dim IDMes As Byte
       'MsgBox Codigo4
       'Pie de Factura
        If SetD(2).PosX > 0 Then
-          Printer.FontSize = SetD(2).Tamaño
+          Printer.FontSize = SetD(2).Porte
           PrinterTexto PosInic + 1.05, PosLinea1 + 0.4 + SetD(2).PosY, Codigo4
        End If
        If SetD(3).PosX > 0 Then
-          Printer.FontSize = SetD(3).Tamaño
+          Printer.FontSize = SetD(3).Porte
           PrinterFields PosInic + SetD(3).PosX, PosLinea1 + SetD(3).PosY, .fields("Fecha")
        End If
        If SetD(4).PosX > 0 Then
-          Printer.FontSize = SetD(4).Tamaño
+          Printer.FontSize = SetD(4).Porte
           If CFechaLong(.fields("Fecha_V")) > CFechaLong(.fields("Fecha")) Then
              PrinterFields PosInic + SetD(4).PosX, PosLinea1 + SetD(4).PosY, .fields("Fecha_V")
           Else
@@ -9778,35 +9781,35 @@ Dim IDMes As Byte
           End If
        End If
        If SetD(11).PosX > 0 Then
-          Printer.FontSize = SetD(11).Tamaño
+          Printer.FontSize = SetD(11).Porte
           PrinterFields PosInic + SetD(11).PosX, PosLinea1 + SetD(11).PosY, .fields("CI_RUC")
        End If
        If SetD(10).PosX > 0 Then
-          Printer.FontSize = SetD(10).Tamaño
+          Printer.FontSize = SetD(10).Porte
           PrinterFields PosInic + SetD(10).PosX, PosLinea1 + SetD(10).PosY, .fields("Ciudad")
        End If
        If SetD(8).PosX > 0 Then
-          Printer.FontSize = SetD(8).Tamaño
+          Printer.FontSize = SetD(8).Porte
           PrinterFields PosInic + SetD(8).PosX, PosLinea1 + SetD(8).PosY, .fields("Direccion")
        End If
        If SetD(65).PosX > 0 Then
-          Printer.FontSize = SetD(65).Tamaño
+          Printer.FontSize = SetD(65).Porte
           PrinterFields PosInic + SetD(65).PosX, PosLinea1 + SetD(65).PosY, .fields("Observacion")
        End If
        NivelNo = SinEspaciosIzq(.fields("Direccion"))
        If NivelNo = "" Then NivelNo = Ninguno
        If SetD(29).PosX > 0 Then
-          Printer.FontSize = SetD(29).Tamaño
+          Printer.FontSize = SetD(29).Porte
           PrinterTexto PosInic + SetD(29).PosX, PosLinea1 + SetD(29).PosY, NivelNo
        End If
        NivelNo = MidStrg(.fields("Direccion"), Len(NivelNo) + 1, Len(.fields("Direccion")) - Len(NivelNo) + 1)
        If NivelNo = "" Then NivelNo = Ninguno
        If SetD(30).PosX > 0 Then
-          Printer.FontSize = SetD(30).Tamaño
+          Printer.FontSize = SetD(30).Porte
           PrinterTexto PosInic + SetD(30).PosX, PosLinea1 + SetD(30).PosY, NivelNo
        End If
        If SetD(5).PosX > 0 Then
-          Printer.FontSize = SetD(5).Tamaño
+          Printer.FontSize = SetD(5).Porte
           If FA_Educativo Then
              If .fields("Representante") = Ninguno Then
                  PrinterFields PosInic + SetD(5).PosX, PosLinea1 + SetD(5).PosY, .fields("Cliente")
@@ -9818,13 +9821,13 @@ Dim IDMes As Byte
           End If
        End If
        If SetD(32).PosX > 0 Then
-          Printer.FontSize = SetD(32).Tamaño
+          Printer.FontSize = SetD(32).Porte
           If .fields("Representante") = Ninguno Then
               PrinterTexto PosInic + SetD(32).PosX, PosLinea1 + SetD(32).PosY, "CONSUMIDOR FINAL"
           End If
        End If
        If SetD(36).PosX > 0 Then
-          Printer.FontSize = SetD(36).Tamaño
+          Printer.FontSize = SetD(36).Porte
           If .fields("CI_RUC_R") = Ninguno Then
               Select Case .fields("TD")
                 Case "C", "P": ''nada'
@@ -9835,45 +9838,45 @@ Dim IDMes As Byte
           End If
        End If
        If SetD(9).PosX > 0 Then
-          Printer.FontSize = SetD(9).Tamaño
+          Printer.FontSize = SetD(9).Porte
           PrinterFields PosInic + SetD(9).PosX, PosLinea1 + SetD(9).PosY, .fields("Telefono")
        End If
        If SetD(6).PosX > 0 Then
-          Printer.FontSize = SetD(6).Tamaño
+          Printer.FontSize = SetD(6).Porte
           PrinterFields PosInic + SetD(6).PosX, PosLinea1 + SetD(6).PosY, .fields("Codigo")
        End If
        If SetD(7).PosX > 0 Then
-          Printer.FontSize = SetD(7).Tamaño
+          Printer.FontSize = SetD(7).Porte
           PrinterFields PosInic + SetD(7).PosX, PosLinea1 + SetD(7).PosY, .fields("Grupo")
        End If
        If SetD(13).PosX > 0 Then
-          Printer.FontSize = SetD(13).Tamaño
+          Printer.FontSize = SetD(13).Porte
           PrinterFields PosInic + SetD(13).PosX, PosLinea1 + SetD(13).PosY, .fields("Email")
        End If
        'MsgBox "Pie"
       'Pie de Factura
         If SetD(22).PosX > 0 Then
-           Printer.FontSize = SetD(22).Tamaño
+           Printer.FontSize = SetD(22).Porte
            PrinterFields PosInic + SetD(22).PosX, PosLinea1 + SetD(22).PosY, .fields("SubTotal")
         End If
         If SetD(23).PosX > 0 Then
-           Printer.FontSize = SetD(23).Tamaño
+           Printer.FontSize = SetD(23).Porte
            PrinterFields PosInic + SetD(23).PosX, PosLinea1 + SetD(23).PosY, .fields("Con_IVA")
         End If
         If SetD(24).PosX > 0 Then
-           Printer.FontSize = SetD(24).Tamaño
+           Printer.FontSize = SetD(24).Porte
            PrinterFields PosInic + SetD(24).PosX, PosLinea1 + SetD(24).PosY, .fields("Sin_IVA")
         End If
         If SetD(39).PosX > 0 Then
-           Printer.FontSize = SetD(39).Tamaño
+           Printer.FontSize = SetD(39).Porte
            PrinterFields PosInic + SetD(39).PosX, PosLinea1 + SetD(39).PosY, .fields("Descuento")
         End If
         If SetD(25).PosX > 0 Then
-           Printer.FontSize = SetD(25).Tamaño
+           Printer.FontSize = SetD(25).Porte
            PrinterFields PosInic + SetD(25).PosX, PosLinea1 + SetD(25).PosY, .fields("IVA")
         End If
         If SetD(26).PosX > 0 Then
-           Printer.FontSize = SetD(26).Tamaño
+           Printer.FontSize = SetD(26).Porte
            If .fields("TC") = "NV" Then
               PrinterVariables PosInic + SetD(26).PosX, PosLinea1 + SetD(26).PosY, 0
            Else
@@ -9881,50 +9884,50 @@ Dim IDMes As Byte
            End If
         End If
         If SetD(27).PosX > 0 Then
-           Printer.FontSize = SetD(27).Tamaño
+           Printer.FontSize = SetD(27).Porte
            PrinterFields PosInic + SetD(27).PosX, PosLinea1 + SetD(27).PosY, .fields("Total_MN")
         End If
         If SetD(34).PosX > 0 Then
-           Printer.FontSize = SetD(34).Tamaño
+           Printer.FontSize = SetD(34).Porte
            PrinterVariables PosInic + SetD(34).PosX, PosLinea1 + SetD(34).PosY, CCur(SaldoPendiente)
         End If
         If SetD(33).PosX > 0 Then
-           Printer.FontSize = SetD(33).Tamaño
+           Printer.FontSize = SetD(33).Porte
            PrinterVariables PosInic + SetD(33).PosX, PosLinea1 + SetD(33).PosY, CCur(Diferencia)
         End If
         If SetD(37).PosX > 0 Then
-           Printer.FontSize = SetD(37).Tamaño
+           Printer.FontSize = SetD(37).Porte
            PrinterTexto PosInic + SetD(37).PosX, PosLinea1 + SetD(37).PosY, CodigoDelBanco
         End If
         If SetD(40).PosX > 0 Then
-           Printer.FontSize = SetD(40).Tamaño
+           Printer.FontSize = SetD(40).Porte
            PrinterTexto PosInic + SetD(40).PosX, PosLinea1 + SetD(40).PosY, .fields("Hora")
         End If
         If SetD(41).PosX > 0 Then
-           Printer.FontSize = SetD(41).Tamaño
+           Printer.FontSize = SetD(41).Porte
            PrinterTexto PosInic + SetD(41).PosX, PosLinea1 + SetD(41).PosY, .fields("DireccionT")
         End If
         If SetD(42).PosX > 0 Then
            SubTotal_Desc = .fields("SubTotal") - .fields("Descuento")
-           Printer.FontSize = SetD(42).Tamaño
+           Printer.FontSize = SetD(42).Porte
            PrinterVariables PosInic + SetD(42).PosX, PosLinea1 + SetD(42).PosY, SubTotal_Desc
         End If
         If SetD(43).PosX > 0 Then
-           Printer.FontSize = SetD(43).Tamaño
+           Printer.FontSize = SetD(43).Porte
            PrinterTexto PosInic + SetD(43).PosX, PosLinea1 + SetD(43).PosY, "Descuento"
         End If
         If SetD(44).PosX > 0 Then
-           Printer.FontSize = SetD(44).Tamaño
+           Printer.FontSize = SetD(44).Porte
            PrinterTexto PosInic + SetD(44).PosX, PosLinea1 + SetD(44).PosY, NombreCiudad & ", " & .fields("Fecha")
         End If
         If SetD(64).PosX > 0 Then
-           Printer.FontSize = SetD(64).Tamaño
+           Printer.FontSize = SetD(64).Porte
            If .fields("Representante") <> Ninguno Then
                PrinterTexto PosInic + SetD(64).PosX, PosLinea1 + SetD(64).PosY, .fields("Cliente")
            End If
         End If
         If SetD(66).PosX > 0 And SetD(66).PosY > 0 Then
-           Printer.FontSize = SetD(66).Tamaño
+           Printer.FontSize = SetD(66).Porte
            If Len(TextoFormaPago) > 1 Then
                PrinterTexto PosInic + SetD(66).PosX, PosLinea1 + SetD(66).PosY, TextoFormaPago
            End If
@@ -9939,7 +9942,7 @@ Dim IDMes As Byte
       MesFactV(IDMes) = ""
   Next IDMes
   AltoLetras = 0.4
-  Printer.FontSize = SetD(17).Tamaño
+  Printer.FontSize = SetD(17).Porte
   AltoLetras = Redondear(Printer.TextHeight("H") - 0.05, 2)
   'MsgBox AltoLetras
   With DtaD.Recordset
@@ -9976,15 +9979,15 @@ Dim IDMes As Byte
                  CodigoP = MidStrg(CodigoP, 1, Len(CodigoP) - 2)
                  Producto = Producto & " " & CodigoP
                  If SetD(16).PosX > 0 Then
-                    Printer.FontSize = SetD(16).Tamaño
+                    Printer.FontSize = SetD(16).Porte
                     PrinterTexto PosInic + SetD(16).PosX, PFil1, CStr(Cantidad)
                  End If
                  If SetD(15).PosX > 0 Then
-                    Printer.FontSize = SetD(15).Tamaño
+                    Printer.FontSize = SetD(15).Porte
                     PrinterTexto PosInic + SetD(15).PosX, PFil1, CodigoInv
                  End If
                  If SetD(17).PosX > 0 Then
-                    Printer.FontSize = SetD(17).Tamaño
+                    Printer.FontSize = SetD(17).Porte
                     'MsgBox "<<<< " & PFil1
                     LineasNo = PrinterLineasMayor(PosInic + SetD(17).PosX, PFil1, Producto, PAncho)
                     'If LineasNo > 1 Then PFil1 = LineasNo * 0.35
@@ -9993,11 +9996,11 @@ Dim IDMes As Byte
                     'MsgBox PFil1
                  End If
                  If SetD(20).PosX > 0 Then
-                    Printer.FontSize = SetD(20).Tamaño
+                    Printer.FontSize = SetD(20).Porte
                     PrinterVariables PosInic + SetD(20).PosX, PFil1, SubTotal
                  End If
                  If SetD(19).PosX > 0 Then
-                    Printer.FontSize = SetD(19).Tamaño
+                    Printer.FontSize = SetD(19).Porte
                     PrinterVariables PosInic + SetD(19).PosX, PFil1, ValorUnit
                  End If
                  Producto = .fields("Producto")
@@ -10022,25 +10025,25 @@ Dim IDMes As Byte
            CodigoP = MidStrg(CodigoP, 1, Len(CodigoP) - 2)
            Producto = Producto & CodigoP
            If SetD(16).PosX > 0 Then
-              Printer.FontSize = SetD(16).Tamaño
+              Printer.FontSize = SetD(16).Porte
               PrinterTexto PosInic + SetD(16).PosX, PFil1, CStr(Cantidad)
            End If
            If SetD(15).PosX > 0 Then
-              Printer.FontSize = SetD(15).Tamaño
+              Printer.FontSize = SetD(15).Porte
               PrinterTexto PosInic + SetD(15).PosX, PFil1, CodigoInv
            End If
            If SetD(17).PosX > 0 Then
-              Printer.FontSize = SetD(17).Tamaño
+              Printer.FontSize = SetD(17).Porte
               LineasNo = 0
               LineasNo = PrinterLineasMayor(PosInic + SetD(17).PosX, PFil1, Producto, PAncho)
               PFil1 = PosLinea_Aux
            End If
            If SetD(20).PosX > 0 Then
-              Printer.FontSize = SetD(20).Tamaño
+              Printer.FontSize = SetD(20).Porte
               PrinterVariables PosInic + SetD(20).PosX, PFil1, SubTotal
            End If
            If SetD(19).PosX > 0 Then
-              Printer.FontSize = SetD(19).Tamaño
+              Printer.FontSize = SetD(19).Porte
               PrinterVariables PosInic + SetD(19).PosX, PFil1, ValorUnit
            End If
            If SetD(31).PosX > 0 Then
@@ -10050,7 +10053,7 @@ Dim IDMes As Byte
               Next IDMes
               MesFact = TrimStrg(MesFact)
               MesFact = MidStrg(MesFact, 1, Len(MesFact) - 1)
-              Printer.FontSize = SetD(31).Tamaño
+              Printer.FontSize = SetD(31).Porte
               PrinterTexto PosInic + SetD(31).PosX, PosLinea1 + SetD(31).PosY, MesFact
            End If
        End If
@@ -10097,43 +10100,43 @@ Dim AltoLetras As Single
      Printer.Font = TipoArialNarrow
       'Encabezado de Factura
        If SetD(2).PosX > 0 Then
-          Printer.FontSize = SetD(2).Tamaño
+          Printer.FontSize = SetD(2).Porte
           PrinterTexto PosInic + SetD(2).PosX, PosLinea1 + SetD(2).PosY, Codigo4
        End If
        If SetD(3).PosX > 0 Then
-          Printer.FontSize = SetD(3).Tamaño
+          Printer.FontSize = SetD(3).Porte
           PrinterTexto PosInic + SetD(3).PosX, PosLinea1 + SetD(3).PosY, FechaRep
        End If
        If SetD(31).PosX > 0 Then
-          Printer.FontSize = SetD(31).Tamaño
+          Printer.FontSize = SetD(31).Porte
           PrinterTexto PosInic + SetD(31).PosX, PosLinea1 + SetD(31).PosY, MesesLetras(Month(FechaRep))
        End If
        If SetD(11).PosX > 0 Then
-          Printer.FontSize = SetD(11).Tamaño
+          Printer.FontSize = SetD(11).Porte
           PrinterFields PosInic + SetD(11).PosX, PosLinea1 + SetD(11).PosY, .fields("CI_RUC")
        End If
        If SetD(10).PosX > 0 Then
-          Printer.FontSize = SetD(10).Tamaño
+          Printer.FontSize = SetD(10).Porte
           PrinterFields PosInic + SetD(10).PosX, PosLinea1 + SetD(10).PosY, .fields("Ciudad")
        End If
        If SetD(8).PosX > 0 Then
-          Printer.FontSize = SetD(8).Tamaño
+          Printer.FontSize = SetD(8).Porte
           PrinterFields PosInic + SetD(8).PosX, PosLinea1 + SetD(8).PosY, .fields("Direccion")
        End If
        NivelNo = SinEspaciosIzq(.fields("Direccion"))
        If NivelNo = "" Then NivelNo = Ninguno
        If SetD(29).PosX > 0 Then
-          Printer.FontSize = SetD(29).Tamaño
+          Printer.FontSize = SetD(29).Porte
           PrinterTexto PosInic + SetD(29).PosX, PosLinea1 + SetD(29).PosY, NivelNo
        End If
        NivelNo = MidStrg(.fields("Direccion"), Len(NivelNo) + 1, Len(.fields("Direccion")) - Len(NivelNo) + 1)
        If NivelNo = "" Then NivelNo = Ninguno
        If SetD(30).PosX > 0 Then
-          Printer.FontSize = SetD(30).Tamaño
+          Printer.FontSize = SetD(30).Porte
           PrinterTexto PosInic + SetD(30).PosX, PosLinea1 + SetD(30).PosY, NivelNo
        End If
        If SetD(5).PosX > 0 Then
-          Printer.FontSize = SetD(5).Tamaño
+          Printer.FontSize = SetD(5).Porte
           If .fields("Representante") = Ninguno Then
               PrinterFields PosInic + SetD(5).PosX, PosLinea1 + SetD(5).PosY, .fields("Cliente")
           Else
@@ -10141,13 +10144,13 @@ Dim AltoLetras As Single
           End If
        End If
        If SetD(32).PosX > 0 Then
-          Printer.FontSize = SetD(32).Tamaño
+          Printer.FontSize = SetD(32).Porte
           If .fields("Representante") = Ninguno Then
               PrinterTexto PosInic + SetD(32).PosX, PosLinea1 + SetD(32).PosY, "CONSUMIDOR FINAL"
           End If
        End If
        If SetD(36).PosX > 0 Then
-          Printer.FontSize = SetD(36).Tamaño
+          Printer.FontSize = SetD(36).Porte
           If .fields("Cedula") = Ninguno Then
               PrinterTexto PosInic + SetD(36).PosX, PosLinea1 + SetD(36).PosY, "9999999999999"
           Else
@@ -10155,31 +10158,31 @@ Dim AltoLetras As Single
           End If
        End If
        If SetD(9).PosX > 0 Then
-          Printer.FontSize = SetD(9).Tamaño
+          Printer.FontSize = SetD(9).Porte
           PrinterFields PosInic + SetD(9).PosX, PosLinea1 + SetD(9).PosY, .fields("Telefono")
        End If
        If SetD(6).PosX > 0 Then
-          Printer.FontSize = SetD(6).Tamaño
+          Printer.FontSize = SetD(6).Porte
           PrinterFields PosInic + SetD(6).PosX, PosLinea1 + SetD(6).PosY, .fields("Codigo")
        End If
        If SetD(7).PosX > 0 Then
-          Printer.FontSize = SetD(7).Tamaño
+          Printer.FontSize = SetD(7).Porte
           PrinterFields PosInic + SetD(7).PosX, PosLinea1 + SetD(7).PosY, .fields("Grupo")
        End If
        If SetD(13).PosX > 0 Then
-          Printer.FontSize = SetD(13).Tamaño
+          Printer.FontSize = SetD(13).Porte
           PrinterFields PosInic + SetD(13).PosX, PosLinea1 + SetD(13).PosY, .fields("Email")
        End If
         If SetD(37).PosX > 0 Then
-           Printer.FontSize = SetD(37).Tamaño
+           Printer.FontSize = SetD(37).Porte
            PrinterTexto PosInic + SetD(37).PosX, PosLinea1 + SetD(37).PosY, CodigoDelBanco
         End If
         If SetD(40).PosX > 0 Then
-           Printer.FontSize = SetD(40).Tamaño
+           Printer.FontSize = SetD(40).Porte
            PrinterTexto PosInic + SetD(40).PosX, PosLinea1 + SetD(40).PosY, .fields("Hora")
         End If
         If SetD(64).PosX > 0 Then
-           Printer.FontSize = SetD(64).Tamaño
+           Printer.FontSize = SetD(64).Porte
            If .fields("Representante") <> Ninguno Then
                PrinterTexto PosInic + SetD(64).PosX, PosLinea1 + SetD(64).PosY, .fields("Cliente")
            End If
@@ -10188,7 +10191,7 @@ Dim AltoLetras As Single
   Printer.Font = TipoArialNarrow
  'Detalle de la Factura
   AltoLetras = 0.4
-  Printer.FontSize = SetD(17).Tamaño
+  Printer.FontSize = SetD(17).Porte
   AltoLetras = Redondear(Printer.TextHeight("H") - 0.05, 2)
   'MsgBox AltoLetras
   Total = 0
@@ -10205,11 +10208,11 @@ Dim AltoLetras As Single
               If Year(.fields("Fecha")) < Year(FechaRep) Then
                   If CodigoP <> .fields("Periodo") Then
                      If SetD(17).PosX > 0 Then
-                        Printer.FontSize = SetD(17).Tamaño
+                        Printer.FontSize = SetD(17).Porte
                         PrinterTexto PosInic + SetD(17).PosX, PosLinea1 + PFil1, "Deuda Pendiente del " & CodigoP
                      End If
                      If SetD(20).PosX > 0 Then
-                        Printer.FontSize = SetD(20).Tamaño
+                        Printer.FontSize = SetD(20).Porte
                         PrinterVariables PosInic + SetD(20).PosX, PosLinea1 + PFil1, SubTotal
                      End If
                      SubTotal = 0
@@ -10219,11 +10222,11 @@ Dim AltoLetras As Single
                   SubTotal = SubTotal + .fields("Valor")
               Else
                  If SetD(17).PosX > 0 Then
-                    Printer.FontSize = SetD(17).Tamaño
+                    Printer.FontSize = SetD(17).Porte
                     PrinterTexto PosInic + SetD(17).PosX, PosLinea1 + PFil1, .fields("Producto") & ": " & .fields("Mes")
                  End If
                  If SetD(20).PosX > 0 Then
-                    Printer.FontSize = SetD(20).Tamaño
+                    Printer.FontSize = SetD(20).Porte
                     PrinterFields PosInic + SetD(20).PosX, PosLinea1 + PFil1, .fields("Total")
                  End If
                  PFil1 = PFil1 + Printer.TextHeight("H")
@@ -10233,11 +10236,11 @@ Dim AltoLetras As Single
            Loop
            If SubTotal > 0 Then
               If SetD(17).PosX > 0 Then
-                 Printer.FontSize = SetD(17).Tamaño
+                 Printer.FontSize = SetD(17).Porte
                  PrinterTexto PosInic + SetD(17).PosX, PosLinea1 + PFil1, "Deuda Pendiente del " & CodigoP
               End If
               If SetD(20).PosX > 0 Then
-                 Printer.FontSize = SetD(20).Tamaño
+                 Printer.FontSize = SetD(20).Porte
                  PrinterVariables PosInic + SetD(20).PosX, PosLinea1 + PFil1, SubTotal
               End If
               'MsgBox CodigoP & ": " & SubTotal
@@ -10248,7 +10251,7 @@ Dim AltoLetras As Single
    With DtaF.Recordset
        'Pie de Factura
         If SetD(27).PosX > 0 Then
-           Printer.FontSize = SetD(27).Tamaño
+           Printer.FontSize = SetD(27).Porte
            PrinterVariables PosInic + SetD(27).PosX, PosLinea1 + SetD(27).PosY, Total
         End If
    End With
@@ -10690,51 +10693,51 @@ Dim CI_RUC_SRI As String
       'MsgBox Codigo4
       'Pie de Factura
        If SetD(2).PosX > 0 Then
-          Printer.FontSize = SetD(2).Tamaño
+          Printer.FontSize = SetD(2).Porte
           PrinterTexto PosInic + SetD(2).PosX, PosLinea1 + SetD(2).PosY, Codigo4
        End If
        If SetD(3).PosX > 0 Then
-          Printer.FontSize = SetD(3).Tamaño
+          Printer.FontSize = SetD(3).Porte
           PrinterFields PosInic + SetD(3).PosX, PosLinea1 + SetD(3).PosY, .fields("Fecha")
        End If
        If SetD(31).PosX > 0 Then
-          Printer.FontSize = SetD(31).Tamaño
+          Printer.FontSize = SetD(31).Porte
           PrinterTexto PosInic + SetD(31).PosX, PosLinea1 + SetD(31).PosY, MesesLetras(Month(.fields("Fecha")))
        End If
        If SetD(4).PosX > 0 Then
-          Printer.FontSize = SetD(4).Tamaño
+          Printer.FontSize = SetD(4).Porte
           PrinterVariables PosInic + SetD(4).PosX, PosLinea1 + SetD(4).PosY, Mifecha
        End If
        If SetD(11).PosX > 0 Then
-          Printer.FontSize = SetD(11).Tamaño
+          Printer.FontSize = SetD(11).Porte
           PrinterFields PosInic + SetD(11).PosX, PosLinea1 + SetD(11).PosY, .fields("CI_RUC")
        End If
        If SetD(10).PosX > 0 Then
-          Printer.FontSize = SetD(10).Tamaño
+          Printer.FontSize = SetD(10).Porte
           PrinterFields PosInic + SetD(10).PosX, PosLinea1 + SetD(10).PosY, .fields("Ciudad")
        End If
        If SetD(8).PosX > 0 Then
-          Printer.FontSize = SetD(8).Tamaño
+          Printer.FontSize = SetD(8).Porte
           PrinterFields PosInic + SetD(8).PosX, PosLinea1 + SetD(8).PosY, .fields("Direccion")
        End If
        NivelNo = SinEspaciosIzq(.fields("Direccion"))
        If NivelNo = "" Then NivelNo = Ninguno
        If SetD(29).PosX > 0 Then
-          Printer.FontSize = SetD(29).Tamaño
+          Printer.FontSize = SetD(29).Porte
           PrinterTexto PosInic + SetD(29).PosX, PosLinea1 + SetD(29).PosY, NivelNo
        End If
        NivelNo = MidStrg(.fields("Direccion"), Len(NivelNo) + 1, Len(.fields("Direccion")) - Len(NivelNo) + 1)
        If NivelNo = "" Then NivelNo = Ninguno
        If SetD(30).PosX > 0 Then
-          Printer.FontSize = SetD(30).Tamaño
+          Printer.FontSize = SetD(30).Porte
           PrinterTexto PosInic + SetD(30).PosX, PosLinea1 + SetD(30).PosY, NivelNo
        End If
        If SetD(9).PosX > 0 Then
-          Printer.FontSize = SetD(9).Tamaño
+          Printer.FontSize = SetD(9).Porte
           PrinterFields PosInic + SetD(9).PosX, PosLinea1 + SetD(9).PosY, .fields("Telefono")
        End If
        If SetD(5).PosX > 0 Then
-          Printer.FontSize = SetD(5).Tamaño
+          Printer.FontSize = SetD(5).Porte
           If FA_Educativo Then
              If .fields("Representante") = Ninguno Then
                  PrinterFields PosInic + SetD(5).PosX, PosLinea1 + SetD(5).PosY, .fields("Cliente")
@@ -10746,7 +10749,7 @@ Dim CI_RUC_SRI As String
           End If
        End If
        If SetD(32).PosX > 0 Then
-          Printer.FontSize = SetD(32).Tamaño
+          Printer.FontSize = SetD(32).Porte
           If .fields("Representante") = Ninguno Then
               PrinterTexto PosInic + SetD(32).PosX, PosLinea1 + SetD(32).PosY, "CONSUMIDOR FINAL"
           End If
@@ -10760,71 +10763,71 @@ Dim CI_RUC_SRI As String
           Else
               CI_RUC_SRI = .fields("Cedula")
           End If
-          Printer.FontSize = SetD(36).Tamaño
+          Printer.FontSize = SetD(36).Porte
           PrinterTexto PosInic + SetD(36).PosX, PosLinea1 + SetD(36).PosY, CI_RUC_SRI
        End If
        If SetD(5).PosX > 0 Then
-          Printer.FontSize = SetD(5).Tamaño
+          Printer.FontSize = SetD(5).Porte
           PrinterFields PosInic + SetD(5).PosX, PosLinea1 + SetD(5).PosY, .fields("Cliente")
        End If
        If SetD(6).PosX > 0 Then
-          Printer.FontSize = SetD(6).Tamaño
+          Printer.FontSize = SetD(6).Porte
           PrinterFields PosInic + SetD(6).PosX, PosLinea1 + SetD(6).PosY, .fields("Codigo")
        End If
        If SetD(7).PosX > 0 Then
-          Printer.FontSize = SetD(7).Tamaño
+          Printer.FontSize = SetD(7).Porte
           PrinterFields PosInic + SetD(7).PosX, PosLinea1 + SetD(7).PosY, .fields("Grupo")
        End If
        If SetD(13).PosX > 0 Then
-          Printer.FontSize = SetD(13).Tamaño
+          Printer.FontSize = SetD(13).Porte
           PrinterFields PosInic + SetD(13).PosX, PosLinea1 + SetD(13).PosY, .fields("Email")
        End If
       'Pie de Factura
         If SetD(22).PosX > 0 Then
-           Printer.FontSize = SetD(22).Tamaño
+           Printer.FontSize = SetD(22).Porte
            PrinterVariables PosInic + SetD(22).PosX, PosLinea1 + SetD(22).PosY, SubTotal_NC
         End If
 '''        If SetD(23).PosX > 0 Then
-'''           Printer.FontSize = SetD(23).Tamaño
+'''           Printer.FontSize = SetD(23).Porte
 '''           PrinterFields PosInic + SetD(23).PosX, PosLinea1 + SetD(23).PosY, .Fields("Con_IVA")
 '''        End If
 '''        If SetD(24).PosX > 0 Then
-'''           Printer.FontSize = SetD(24).Tamaño
+'''           Printer.FontSize = SetD(24).Porte
 '''           PrinterFields PosInic + SetD(24).PosX, PosLinea1 + SetD(24).PosY, .Fields("Sin_IVA")
 '''        End If
         If SetD(25).PosX > 0 Then
-           Printer.FontSize = SetD(25).Tamaño
+           Printer.FontSize = SetD(25).Porte
            PrinterVariables PosInic + SetD(25).PosX, PosLinea1 + SetD(25).PosY, IVA_NC
         End If
         If SetD(26).PosX > 0 Then
-           Printer.FontSize = SetD(26).Tamaño
+           Printer.FontSize = SetD(26).Porte
            PrinterVariables PosInic + SetD(26).PosX, PosLinea1 + SetD(26).PosY, CInt(Porc_IVA * 100)
         End If
         If SetD(27).PosX > 0 Then
-           Printer.FontSize = SetD(27).Tamaño
+           Printer.FontSize = SetD(27).Porte
            PrinterVariables PosInic + SetD(27).PosX, PosLinea1 + SetD(27).PosY, SubTotal_NC + IVA_NC
         End If
 '''        If SetD(34).PosX > 0 Then
-'''           Printer.FontSize = SetD(34).Tamaño
+'''           Printer.FontSize = SetD(34).Porte
 '''           PrinterVariables PosInic + SetD(34).PosX, PosLinea1 + SetD(34).PosY, CCur(SaldoPendiente)
 '''        End If
 '''        If SetD(33).PosX > 0 Then
-'''           Printer.FontSize = SetD(33).Tamaño
+'''           Printer.FontSize = SetD(33).Porte
 '''           PrinterVariables PosInic + SetD(33).PosX, PosLinea1 + SetD(33).PosY, CCur(Diferencia)
 '''        End If
         If SetD(37).PosX > 0 Then
-           Printer.FontSize = SetD(37).Tamaño
+           Printer.FontSize = SetD(37).Porte
            PrinterTexto PosInic + SetD(37).PosX, PosLinea1 + SetD(37).PosY, CodigoDelBanco
         End If
 '''        If SetD(40).PosX > 0 Then
-'''           Printer.FontSize = SetD(40).Tamaño
+'''           Printer.FontSize = SetD(40).Porte
 '''           PrinterTexto PosInic + SetD(40).PosX, PosLinea1 + SetD(40).PosY, .Fields("Hora")
 '''        End If
         'MsgBox Printer.ScaleWidth & vbCrLf & Printer.ScaleHeight & vbCrLf _
         '& "FAM: " & vbCrLf _
         '& PosInic & vbCrLf & PosLinea1 & vbCrLf & Codigo4 & vbCrLf & Diferencia & vbCrLf & SaldoPendiente
         If SetD(64).PosX > 0 Then
-           Printer.FontSize = SetD(64).Tamaño
+           Printer.FontSize = SetD(64).Porte
            If .fields("Representante") <> Ninguno Then
                PrinterTexto PosInic + SetD(64).PosX, PosLinea1 + SetD(64).PosY, .fields("Cliente")
            End If
@@ -10833,7 +10836,7 @@ Dim CI_RUC_SRI As String
   Printer.Font = TipoArialNarrow
  'Detalle de la Factura
   AltoLetras = 0.4
-  Printer.FontSize = SetD(17).Tamaño
+  Printer.FontSize = SetD(17).Porte
   AltoLetras = Redondear(Printer.TextHeight("H") - 0.05, 2)
   'MsgBox AltoLetras
   With DtaD.Recordset
@@ -10853,26 +10856,26 @@ Dim CI_RUC_SRI As String
                  CodigoP = MidStrg(CodigoP, 1, Len(CodigoP) - 2)
                  Producto = Producto & " " & CodigoP
                  If SetD(16).PosX > 0 Then
-                    Printer.FontSize = SetD(16).Tamaño
+                    Printer.FontSize = SetD(16).Porte
                     PrinterTexto PosInic + SetD(16).PosX, PosLinea1 + PFil1, CStr(Cantidad)
                  End If
                  If SetD(15).PosX > 0 Then
-                    Printer.FontSize = SetD(15).Tamaño
+                    Printer.FontSize = SetD(15).Porte
                     PrinterTexto PosInic + SetD(15).PosX, PosLinea1 + PFil1, CodigoInv
                  End If
                  If SetD(17).PosX > 0 Then
-                    Printer.FontSize = SetD(17).Tamaño
+                    Printer.FontSize = SetD(17).Porte
                     LineasNo = 0
                     LineasNo = PrinterLineasMayor(PosInic + SetD(17).PosX, PosLinea1 + PFil1, Producto, PAncho)
                     PFil1 = PFil1 + (LineasNo * 0.35)
                     PFil1 = PFil1 - 0.35
                  End If
                  If SetD(20).PosX > 0 Then
-                    Printer.FontSize = SetD(20).Tamaño
+                    Printer.FontSize = SetD(20).Porte
                     'PrinterVariables PosInic + SetD(20).PosX, PosLinea1 + PFil1, SubTotal
                  End If
                  If SetD(19).PosX > 0 Then
-                    Printer.FontSize = SetD(19).Tamaño
+                    Printer.FontSize = SetD(19).Porte
                     'PrinterVariables PosInic + SetD(19).PosX, PosLinea1 + PFil1, ValorUnit
                  End If
                  Producto = .fields("Producto")
@@ -10893,26 +10896,26 @@ Dim CI_RUC_SRI As String
            CodigoP = MidStrg(CodigoP, 1, Len(CodigoP) - 2)
            Producto = Producto & CodigoP
            If SetD(16).PosX > 0 Then
-              Printer.FontSize = SetD(16).Tamaño
+              Printer.FontSize = SetD(16).Porte
               PrinterTexto PosInic + SetD(16).PosX, PosLinea1 + PFil1, CStr(Cantidad)
            End If
            If SetD(15).PosX > 0 Then
-              Printer.FontSize = SetD(15).Tamaño
+              Printer.FontSize = SetD(15).Porte
               PrinterTexto PosInic + SetD(15).PosX, PosLinea1 + PFil1, CodigoInv
            End If
            If SetD(17).PosX > 0 Then
-              Printer.FontSize = SetD(17).Tamaño
+              Printer.FontSize = SetD(17).Porte
               LineasNo = 0
               LineasNo = PrinterLineasMayor(PosInic + SetD(17).PosX, PosLinea1 + PFil1, Producto, PAncho)
               PFil1 = PFil1 + (LineasNo * 0.35)
               PFil1 = PFil1 - 0.35
            End If
            If SetD(20).PosX > 0 Then
-              Printer.FontSize = SetD(20).Tamaño
+              Printer.FontSize = SetD(20).Porte
               PrinterVariables PosInic + SetD(20).PosX, PosLinea1 + PFil1, SubTotal_NC
            End If
 ''           If SetD(19).PosX > 0 Then
-''              Printer.FontSize = SetD(19).Tamaño
+''              Printer.FontSize = SetD(19).Porte
 ''              PrinterVariables PosInic + SetD(19).PosX, PosLinea1 + PFil1, SubTotal_NC
 ''           End If
        End If
@@ -10934,9 +10937,11 @@ Dim FechaCxC As String
   If Not IsDate(TFA.Fecha) Then TFA.Fecha = FechaSistema
   If Not IsDate(TFA.Fecha_NC) Then TFA.Fecha_NC = FechaSistema
   If TFA.TC = "NC" Then FechaCxC = TFA.Fecha_NC Else FechaCxC = TFA.Fecha
+
   If Len(TFA.Serie) < 6 Then TFA.Serie = Leer_Campo_Empresa("Serie_FA")
   
- 'MsgBox LineaCxC
+  'MsgBox TFA.Cod_CxC
+  If Len(TFA.Cod_CxC) > 1 Then TFA.Serie = Ninguno
   sSQL = "SELECT Concepto, Logo_Factura, Largo, Ancho, Espacios, Pos_Factura, Fact_Pag, Pos_Y_Fact, Serie, Autorizacion, Vencimiento, Fecha, Secuencial, " _
        & "ItemsxFA, Codigo, Fact, CxC, Cta_Venta, CxC_Anterior, Imp_Mes, Nombre_Establecimiento, Direccion_Establecimiento, Telefono_Estab, Logo_Tipo_Estab " _
        & "FROM Catalogo_Lineas " _
@@ -11004,8 +11009,8 @@ Dim FechaCxC As String
      VerSiExisteCta ExisteCtas
   End If
  
-  If Cant_Item_FA <= 0 Then Cant_Item_FA = 15
-  If Cant_Item_PV <= 0 Then Cant_Item_PV = 15
+  If Cant_Item_FA <= 0 Then Cant_Item_FA = 50
+  If Cant_Item_PV <= 0 Then Cant_Item_PV = 50
   Cadena = "Esta Ingresando Comprobantes Caducados" & vbCrLf & vbCrLf _
          & "La Fecha Tope de emision es: " & FA.Vencimiento & vbCrLf
   If CFechaLong(TFA.Fecha) > CFechaLong(TFA.Vencimiento) Then MsgBox Cadena
@@ -12983,12 +12988,12 @@ Dim IdTj As Long
    
   'Comenzamos a recoger los detalles de la factura
   'SQLDec = "Precio " & CStr(Dec_PVP) & "|."
+  '& "AND C.CI_RUC LIKE '%" & MidStrg(CodigoCli, 5, 4) & "' "
    sSQL = "SELECT TOP 1 C.Grupo, CM.Representante, CM.Cedula_R, C.CI_RUC, C.Cliente, CM.Cta_Numero,CM.Cta_Numero,CF.Periodo,CF.Num_Mes,CF.Mes,CF.Codigo_Inv,C.Codigo " _
         & "FROM Clientes AS C, Clientes_Matriculas AS CM, Clientes_Facturacion As CF " _
         & "WHERE CM.Item = '" & NumEmpresa & "' " _
         & "AND CM.Periodo = '" & Periodo_Contable & "' " _
         & "AND CM.Cta_Numero LIKE '" & TarjetaNoTemp & "' " _
-        & "AND C.CI_RUC LIKE '%" & MidStrg(CodigoCli, 5, 4) & "' " _
         & "AND CF.X = '.' " _
         & "AND (CF.Valor - CF.Descuento - CF.Descuento2) = " & Abono & " " _
         & "AND C.Codigo = CM.Codigo " _

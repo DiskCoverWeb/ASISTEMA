@@ -2738,8 +2738,8 @@ On Error GoTo Errorhandler
       Generar_File_SQL NombreFile, SQuerys
      'MsgBox AdoStrCnn
      'MsgBox SQuerys
-     ' Clipboard.Clear
-     ' Clipboard.SetText SQuerys
+     'Clipboard.Clear
+     'Clipboard.SetText SQuerys
       
       Dtas.RecordSource = SQuerys
       Dtas.Refresh
@@ -4015,7 +4015,7 @@ On Error GoTo Errorhandler
                    Case Else: FP_Texto = .fields("Texto")
                  End Select
                  FP_Vertical = .fields("Vertical")
-                 FP_Tamanio = .fields("Tamaño")
+                 FP_Tamanio = .fields("Porte")
                  If FP_Tamanio <= 0 Then FP_Tamanio = 1
                  FP_CentrarTextoW = FP_Pos_Xf - FP_Pos_Xo
                  If FP_CentrarTextoW < 0 Then FP_CentrarTextoW = 0
@@ -4446,7 +4446,7 @@ End Sub
 
 Public Sub UPD_Actualizar_Datos_Defecto(ProgressBarEstado As ProgressBar, _
                                         LstStatud As ListBox, _
-                                        URLinet As Inet, _
+                                        URLInet As Inet, _
                                         Update_Dir As DirListBox, _
                                         Update_File As FileListBox, _
                                         Update_LstTablas As ListBox, _

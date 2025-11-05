@@ -37,6 +37,7 @@ Global AnioFin As Integer
 Global TipoNumAsiento As Integer
 Global FileResp As Integer
 Global NumFile As Integer
+Global NumFile2 As Integer
 Global CantCamposUpdate As Integer
 '--------------------------------
 Global Opcion As Integer

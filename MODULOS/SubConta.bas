@@ -281,14 +281,15 @@ Dim AdoCodigo As ADODB.Recordset
  'Si existe el producto pasamos a recolectar los datos del producto
  '-----------------------------------------------------------------
   If DatInv.Codigo_Inv <> Ninguno Then
-     SQL = "SELECT Producto, Detalle, Codigo_Barra_K, Unidad, Minimo, Maximo, Cta_Inventario, Cta_Costo_Venta, Cta_Ventas, Cta_Ventas_0, Cta_Venta_Anticipada, " _
-         & "Utilidad, Div, PVP_2, Por_Reservas, Reg_Sanitario, IVA, PVP, Tipo_SubMod, Stock, Costo, Valor_Unit, Con_Kardex " _
+     SQL = "SELECT Producto, Detalle, Codigo_Barra_K, Unidad, Minimo, Maximo, Cta_Inventario, Cta_Costo_Venta, Cta_Ventas, Cta_Ventas_0, Cta_Venta_Anticipada, Cta_Ventas_Ant, " _
+         & "Utilidad, Div, Por_Reservas, Reg_Sanitario, IVA, PVP, PVP_2, PVP_3, Tipo_SubMod, Stock, Costo, Valor_Unit, Con_Kardex " _
          & "FROM Catalogo_Productos " _
          & "WHERE Item = '" & NumEmpresa & "' " _
          & "AND Periodo = '" & Periodo_Contable & "' " _
          & "AND Codigo_Inv = '" & DatInv.Codigo_Inv & "' "
      Select_AdoDB AdoCodigo, SQL
      With AdoCodigo
+     'MsgBox "Desktop Test: " & CodigoDeInv & " = " & .RecordCount
       If .RecordCount > 0 Then
           DatInv.Producto = .fields("Producto")
           DatInv.Detalle = .fields("Detalle")
@@ -301,9 +302,11 @@ Dim AdoCodigo As ADODB.Recordset
           DatInv.Cta_Ventas = .fields("Cta_Ventas")
           DatInv.Cta_Ventas_0 = .fields("Cta_Ventas_0")
           DatInv.Cta_Venta_Anticipada = .fields("Cta_Venta_Anticipada")
+          DatInv.Cta_Ventas_Ant = .fields("Cta_Ventas_Ant")
           DatInv.Utilidad = .fields("Utilidad")
           DatInv.Div = .fields("Div")
           DatInv.PVP2 = .fields("PVP_2")
+          DatInv.PVP3 = .fields("PVP_3")
           DatInv.Por_Reservas = .fields("Por_Reservas")
           DatInv.Reg_Sanitario = .fields("Reg_Sanitario")
           DatInv.Stock = .fields("Stock")
@@ -3316,7 +3319,7 @@ For I = 0 To 4
     PosAsiento(I) = SetD(AsientosX + I).PosX
 Next I
 PosAsiento(5) = PosAsiento(4) + 3
-TamanoLetra = SetD(AsientosX).Tamaño
+TamanoLetra = SetD(AsientosX).Porte
 Printer.FontSize = TamanoLetra
 PosLinea = SetD(AsientosX).PosY
 PosLinea = PosLinea + 0.1
@@ -3471,7 +3474,7 @@ If .RecordCount > 0 Then
                      Printer.Line (0.5, PosLinea)-(PosAsiento(5), PosLinea), NoColor
                      Printer.FontItalic = False
                      Printer.FontBold = False
-                     Printer.FontSize = SetD(1).Tamaño
+                     Printer.FontSize = SetD(1).Porte
                      PrinterTexto SetD(1).PosX, SetD(1).PosY, msg
                      Printer.FontSize = 7
                      Printer.FontItalic = True
@@ -3574,7 +3577,7 @@ If .RecordCount > 0 Then
                      Printer.Line (0.5, PosLinea)-(PosAsiento(5), PosLinea), NoColor
                      Printer.FontItalic = False
                      Printer.FontBold = False
-                     Printer.FontSize = SetD(1).Tamaño
+                     Printer.FontSize = SetD(1).Porte
                      PrinterTexto SetD(1).PosX, SetD(1).PosY, msg
                      Printer.FontSize = 7
                      Printer.FontItalic = True
@@ -3613,7 +3616,7 @@ If .RecordCount > 0 Then
          Printer.Line (0.5, PosLinea)-(PosAsiento(5), PosLinea), NoColor
          Printer.FontItalic = False
          Printer.FontBold = False
-         Printer.FontSize = SetD(1).Tamaño
+         Printer.FontSize = SetD(1).Porte
          PrinterTexto SetD(1).PosX, SetD(1).PosY, msg
          Printer.FontSize = 7
          Printer.FontItalic = True
@@ -3640,7 +3643,7 @@ If .RecordCount > 0 Then
     Loop
     Printer.FontItalic = False
     Printer.FontBold = False
-    Printer.FontSize = SetD(1).Tamaño
+    Printer.FontSize = SetD(1).Porte
     PrinterTexto SetD(1).PosX, SetD(1).PosY, msg
     Printer.FontSize = TamanoLetra
     If PosLinea > PosLineaTotal Then PosLineaTotal = PosLinea
@@ -3661,7 +3664,7 @@ If .RecordCount > 0 Then
        NDolares = "U.S.$ " & Format$(DataC.fields("Cotizacion"), "#,###.##")
     End If
     Printer.FontItalic = False
-    Printer.FontSize = SetD(AsientosX + 3).Tamaño
+    Printer.FontSize = SetD(AsientosX + 3).Porte
     PrinterVariables SetD(AsientosX + 3).PosX, PosLineaTotal + 0.1, SumaDebe
     PrinterVariables SetD(AsientosX + 4).PosX, PosLineaTotal + 0.1, SumaHaber
    'Abreviamos el nombre del usuario
@@ -3686,10 +3689,10 @@ If .RecordCount > 0 Then
     EsPropio = 0
     Select Case TipoComp
       Case CompDiario
-           TamanoLetra = SetD(10).Tamaño
+           TamanoLetra = SetD(10).Porte
            EsPropio = SetD(10).PosX
       Case CompEgreso, CompIngreso
-           TamanoLetra = SetD(19).Tamaño
+           TamanoLetra = SetD(19).Porte
            EsPropio = SetD(19).PosX
     End Select
     If TamanoLetra <= 0 Then TamanoLetra = 8
@@ -4450,7 +4453,7 @@ With DtaBanco
     .MoveFirst
      'MsgBox .RecordCount & vbCrLf & Item
      IR = SetD(Item).PosY
-     Printer.FontSize = SetD(Item).Tamaño
+     Printer.FontSize = SetD(Item).Porte
      If .RecordCount > 2 Then
          Cadena = .fields("Cuenta")
          Do While Not .EOF
@@ -4638,9 +4641,9 @@ With DataComp
         ImprimirFormatoComprobantes CompDiario, FechaAnio(Mifecha), .fields("Numero"), CDConLineas, SetD(1).PosY
         Mifecha = FechaStrgCorta(.fields("Fecha"))
         Printer.FontBold = False
-        Printer.FontSize = SetD(2).Tamaño
+        Printer.FontSize = SetD(2).Porte
         PrinterTexto SetD(2).PosX, SetD(2).PosY, FechaStrgCorta(.fields("Fecha"))
-        Printer.FontSize = SetD(3).Tamaño
+        Printer.FontSize = SetD(3).Porte
         PrinterLineas SetD(3).PosX, SetD(3).PosY, .fields("Concepto"), 16
         ImprimirAsientos DataTrans, DataComp, DataSubC1, DataSubC2, 4, 9, CDConLineas, CompDiario, .fields("T"), .fields("Cotizacion")
      End If
@@ -4689,9 +4692,9 @@ With DataComp
      End If
      Mifecha = FechaStrgCorta(.fields("Fecha"))
      Printer.FontBold = False
-     Printer.FontSize = SetD(2).Tamaño
+     Printer.FontSize = SetD(2).Porte
      PrinterTexto SetD(2).PosX, SetD(2).PosY, FechaStrgCorta(.fields("Fecha"))
-     Printer.FontSize = SetD(3).Tamaño
+     Printer.FontSize = SetD(3).Porte
      PrinterLineas SetD(3).PosX, SetD(3).PosY, .fields("Concepto"), 16
      ImprimirAsientos DataTrans, DataComp, DataSubC1, DataSubC2, 4, 9, CDConLineas, "DC", .fields("T"), .fields("Cotizacion")
      Printer.FontName = LetraAnterior
@@ -5276,26 +5279,26 @@ With DataComp
      Mifecha = .fields("Fecha")
      ImprimirFormatoComprobantes CompIngreso, FechaAnio(.fields("Fecha")), .fields("Numero"), CIConLineas, SetD(1).PosY
      Printer.FontBold = False
-     Printer.FontSize = SetD(2).Tamaño
+     Printer.FontSize = SetD(2).Porte
      PrinterTexto SetD(2).PosX, SetD(2).PosY, FechaStrgCorta(.fields("Fecha"))
-     Printer.FontSize = SetD(3).Tamaño
+     Printer.FontSize = SetD(3).Porte
      PrinterFields SetD(3).PosX, SetD(3).PosY, .fields("Cliente")
-     Printer.FontSize = SetD(4).Tamaño
+     Printer.FontSize = SetD(4).Porte
      PrinterFields SetD(4).PosX, SetD(4).PosY, .fields("CI_RUC")
-     Printer.FontSize = SetD(5).Tamaño
+     Printer.FontSize = SetD(5).Porte
      PrinterLineas SetD(5).PosX, SetD(5).PosY, .fields("Concepto"), 16
-     Printer.FontSize = SetD(6).Tamaño
+     Printer.FontSize = SetD(6).Porte
      PrinterTexto SetD(6).PosX, SetD(6).PosY, Format$(.fields("Monto_Total"), "#,##0.00")
-     Printer.FontSize = SetD(7).Tamaño
+     Printer.FontSize = SetD(7).Porte
      PrinterNum SetD(7).PosX, SetD(7).PosY, .fields("Monto_Total")
-     Printer.FontSize = SetD(8).Tamaño
+     Printer.FontSize = SetD(8).Porte
      PrinterFields SetD(8).PosX, SetD(8).PosY, .fields("Efectivo")
      'Diferencia = .Fields("Monto_Total") - .Fields("Efectivo")
-     'Printer.FontSize = SetD(9).Tamaño
+     'Printer.FontSize = SetD(9).Porte
      'PrinterVariables SetD(9).PosX, SetD(9).PosY, Diferencia
      Diferencia = .fields("Monto_Total")
      Diferencia = Diferencia - ImprimirBancos(CompIngreso, DataBanco, 10)
-     Printer.FontSize = SetD(9).Tamaño
+     Printer.FontSize = SetD(9).Porte
      PrinterVariables SetD(9).PosX, SetD(9).PosY, Diferencia
      ImprimirAsientos DataTrans, DataComp, DataSubC1, DataSubC2, 13, 18, CIConLineas, CompIngreso, .fields("T"), .fields("Cotizacion")
      Printer.FontName = LetraAnterior
@@ -5340,29 +5343,29 @@ With DataComp
      If ImpSoloRet = False Then
         ImprimirFormatoComprobantes CompEgreso, FechaAnio(.fields("Fecha")), .fields("Numero"), CEConLineas, SetD(1).PosY
         Printer.FontBold = False
-        Printer.FontSize = SetD(2).Tamaño
+        Printer.FontSize = SetD(2).Porte
         PrinterTexto SetD(2).PosX, SetD(2).PosY, FechaStrgCorta(.fields("Fecha"))
-        Printer.FontSize = SetD(3).Tamaño
+        Printer.FontSize = SetD(3).Porte
         PrinterFields SetD(3).PosX, SetD(3).PosY, .fields("Cliente")
-        Printer.FontSize = SetD(4).Tamaño
+        Printer.FontSize = SetD(4).Porte
         PrinterFields SetD(4).PosX, SetD(4).PosY, .fields("CI_RUC")
-        Printer.FontSize = SetD(5).Tamaño
+        Printer.FontSize = SetD(5).Porte
         PrinterLineas SetD(5).PosX, SetD(5).PosY, .fields("Concepto"), 16
-        Printer.FontSize = SetD(6).Tamaño
+        Printer.FontSize = SetD(6).Porte
         PrinterTexto SetD(6).PosX, SetD(6).PosY, Format$(.fields("Monto_Total"), "#,##0.00")
-        Printer.FontSize = SetD(7).Tamaño
+        Printer.FontSize = SetD(7).Porte
         PrinterNum SetD(7).PosX, SetD(7).PosY, .fields("Monto_Total")
-        Printer.FontSize = SetD(8).Tamaño
+        Printer.FontSize = SetD(8).Porte
         PrinterFields SetD(8).PosX, SetD(8).PosY, .fields("Efectivo")
         Diferencia = .fields("Monto_Total") - .fields("Efectivo")
-        Printer.FontSize = SetD(9).Tamaño
+        Printer.FontSize = SetD(9).Porte
         PrinterVariables SetD(9).PosX, SetD(9).PosY, Diferencia
      End If
  End If
 End With
 If ImpSoloRet = False Then
    Diferencia = Diferencia - ImprimirBancos(CompEgreso, DataBanco, 10)
-   'Printer.FontSize = SetD(9).Tamaño
+   'Printer.FontSize = SetD(9).Porte
    'PrinterVariables SetD(9).PosX, SetD(9).PosY, Diferencia
    ImprimirAsientos DataTrans, DataComp, DataSubC1, DataSubC2, 13, 18, CEConLineas, CompEgreso, DataComp.fields("T"), DataComp.fields("Cotizacion"), SetD(1).PosY
    Valor = 0
@@ -5382,25 +5385,25 @@ If ImpSoloRet = False Then
                         PosY_Chq = SetD(20).PosY
                         TipoBank = TrimStrg(Format$(MidStrg(.fields("Cta"), Len(.fields("Cta")) - 1, 3), "00"))
                         CCHQConLineas = ProcesarSeteos(TipoBank)
-                        Printer.FontSize = SetD(2).Tamaño
+                        Printer.FontSize = SetD(2).Porte
                         PrinterFields SetD(2).PosX + PosX_Chq, SetD(2).PosY + PosY_Chq, .fields("Cliente"), False
-                        Printer.FontSize = SetD(3).Tamaño
+                        Printer.FontSize = SetD(3).Porte
                         PrinterTexto SetD(3).PosX + PosX_Chq, SetD(3).PosY + PosY_Chq, Format$(.fields("Haber"), "#,###.00")
-                        Printer.FontSize = SetD(10).Tamaño
+                        Printer.FontSize = SetD(10).Porte
                         PrinterTexto SetD(10).PosX + PosX_Chq, SetD(10).PosY + PosY_Chq, ULCase(NombreCiudad)
-                        Printer.FontSize = SetD(6).Tamaño
+                        Printer.FontSize = SetD(6).Porte
                         If CFechaLong(.fields("Fecha")) < CFechaLong(.fields("Fecha_Efec")) Then
                            PrinterTexto SetD(6).PosX + PosX_Chq, SetD(6).PosY + PosY_Chq, Format$(.fields("Fecha_Efec"), "yyyy/MM/dd")
                         Else
                            PrinterTexto SetD(6).PosX + PosX_Chq, SetD(6).PosY + PosY_Chq, Format$(.fields("Fecha"), "yyyy/MM/dd")
                         End If
                         If SetD(4).PosX > 0 And SetD(4).PosY > 0 Then
-                           Printer.FontSize = SetD(4).Tamaño
+                           Printer.FontSize = SetD(4).Porte
                            PrinterNumCheque SetD(4).PosX + PosX_Chq, SetD(4).PosY + PosY_Chq, SetD(5).PosX, .fields("Haber")
                         End If
                         If SetD(9).PosX > 0 And SetD(9).PosY > 0 Then
                            Cadena = Empresa & " " & Moneda & " " & Format$(.fields("Haber"), "#,##0.00") & "**"
-                           Printer.FontSize = SetD(9).Tamaño
+                           Printer.FontSize = SetD(9).Porte
                            PrinterTexto SetD(9).PosX + PosX_Chq, SetD(9).PosY + PosY_Chq, Cadena
                         End If
                      End If
@@ -5408,25 +5411,25 @@ If ImpSoloRet = False Then
                      CCHQConLineas = ProcesarSeteos(TipoBank)
                      
                      If SetD(7).PosX = 1 Then Printer.NewPage
-                     Printer.FontSize = SetD(2).Tamaño
+                     Printer.FontSize = SetD(2).Porte
                      PrinterFields SetD(2).PosX, SetD(2).PosY, .fields("Cliente"), False
-                     Printer.FontSize = SetD(3).Tamaño
+                     Printer.FontSize = SetD(3).Porte
                      PrinterTexto SetD(3).PosX, SetD(3).PosY, Format$(.fields("Haber"), "#,###.00")
-                     Printer.FontSize = SetD(10).Tamaño
+                     Printer.FontSize = SetD(10).Porte
                      PrinterTexto SetD(10).PosX + PosX_Chq, SetD(10).PosY + PosY_Chq, ULCase(NombreCiudad)
-                     Printer.FontSize = SetD(6).Tamaño
+                     Printer.FontSize = SetD(6).Porte
                      If CFechaLong(.fields("Fecha")) < CFechaLong(.fields("Fecha_Efec")) Then
                         PrinterTexto SetD(6).PosX, SetD(6).PosY, Format$(.fields("Fecha_Efec"), "yyyy/MM/dd")
                      Else
                         PrinterTexto SetD(6).PosX, SetD(6).PosY, Format$(.fields("Fecha"), "yyyy/MM/dd")
                      End If
                      If SetD(4).PosX > 0 And SetD(4).PosY > 0 Then
-                        Printer.FontSize = SetD(4).Tamaño
+                        Printer.FontSize = SetD(4).Porte
                         PrinterNumCheque SetD(4).PosX, SetD(4).PosY, SetD(5).PosX, .fields("Haber")
                      End If
                      If SetD(9).PosX > 0 And SetD(9).PosY > 0 Then
                         Cadena = Empresa & " " & Moneda & " " & Format$(.fields("Haber"), "#,##0.00") & "**"
-                        Printer.FontSize = SetD(9).Tamaño
+                        Printer.FontSize = SetD(9).Porte
                         PrinterTexto SetD(9).PosX, SetD(9).PosY, Cadena
                      End If
                  End If
@@ -5506,34 +5509,34 @@ Pagina = 1
 With DataComp
  If .RecordCount > 0 Then
     .MoveFirst
-     Printer.FontSize = SetD(3).Tamaño
+     Printer.FontSize = SetD(3).Porte
      If SetD(3).PosX > 0 Then PrinterFields PosXRet + SetD(3).PosX, PosYRet + SetD(3).PosY, .fields("Cliente")
-     Printer.FontSize = SetD(9).Tamaño
+     Printer.FontSize = SetD(9).Porte
      If SetD(9).PosX > 0 Then PrinterFields PosXRet + SetD(9).PosX, PosYRet + SetD(9).PosY, .fields("CI_RUC")
-     Printer.FontSize = SetD(4).Tamaño
+     Printer.FontSize = SetD(4).Porte
      If SetD(4).PosX > 0 Then PrinterFields PosXRet + SetD(4).PosX, PosYRet + SetD(4).PosY, .fields("Direccion")
-     Printer.FontSize = SetD(6).Tamaño
+     Printer.FontSize = SetD(6).Porte
      If SetD(6).PosX > 0 Then PrinterFields PosXRet + SetD(6).PosX, PosYRet + SetD(6).PosY, .fields("Telefono")
-     Printer.FontSize = SetD(10).Tamaño
+     Printer.FontSize = SetD(10).Porte
      If SetD(10).PosX > 0 Then PrinterTexto PosXRet + SetD(10).PosX, PosYRet + SetD(10).PosY, FechaAnio(.fields("Fecha"))
-     Printer.FontSize = SetD(2).Tamaño
+     Printer.FontSize = SetD(2).Porte
      If SetD(2).PosX > 0 Then PrinterFields PosXRet + SetD(2).PosX, PosYRet + SetD(2).PosY, .fields("Fecha")
-     Printer.FontSize = SetD(29).Tamaño
+     Printer.FontSize = SetD(29).Porte
      If SetD(29).PosX > 0 Then PrinterTexto PosXRet + SetD(29).PosX, PosYRet + SetD(29).PosY, Day(.fields("Fecha"))
-     Printer.FontSize = SetD(30).Tamaño
+     Printer.FontSize = SetD(30).Porte
      If SetD(30).PosX > 0 Then PrinterTexto PosXRet + SetD(30).PosX, PosYRet + SetD(30).PosY, MesesLetras(Month(.fields("Fecha")))
-     Printer.FontSize = SetD(31).Tamaño
+     Printer.FontSize = SetD(31).Porte
      If SetD(31).PosX > 0 Then PrinterTexto PosXRet + SetD(31).PosX, PosYRet + SetD(31).PosY, Year(.fields("Fecha"))
      If Len(NombreCiudad) > 1 Then
         Cadena = ULCase(NombreCiudad) & ", " & FechaStrg(.fields("Fecha"))
      Else
         Cadena = FechaStrg(.fields("Fecha"))
      End If
-     Printer.FontSize = SetD(35).Tamaño
+     Printer.FontSize = SetD(35).Porte
      If SetD(35).PosX > 0 Then PrinterTexto PosXRet + SetD(35).PosX, PosYRet + SetD(35).PosY, Cadena
-     Printer.FontSize = SetD(5).Tamaño
+     Printer.FontSize = SetD(5).Porte
      If SetD(5).PosX > 0 Then PrinterFields PosXRet + SetD(5).PosX, PosYRet + SetD(5).PosY, .fields("Ciudad")
-     Printer.FontSize = SetD(1).Tamaño
+     Printer.FontSize = SetD(1).Porte
      If SetD(1).PosX > 0 Then PrinterTexto PosXRet + SetD(1).PosX, PosYRet + SetD(1).PosY, Autorizacion
  End If
 End With
@@ -5543,7 +5546,7 @@ With DataFact
  If .RecordCount > 0 Then
     .MoveFirst
     'Encabezado de la Retencion
-     Printer.FontSize = SetD(1).Tamaño
+     Printer.FontSize = SetD(1).Porte
      If SetD(1).PosX > 0 Then PrinterTexto PosXRet + SetD(1).PosX, PosYRet + SetD(1).PosY, Format$(.fields("Secuencial"), "000000000")
      Cadena = "Factura"
      Select Case .fields("TipoComprobante")
@@ -5555,17 +5558,17 @@ With DataFact
        Case "8": Cadena = "Boletos a entradas a espectaculos públicos"
        Case "9": Cadena = "Tiquetes o Vales emitidos por máquinas registradoras"
      End Select
-     Printer.FontSize = SetD(7).Tamaño
+     Printer.FontSize = SetD(7).Porte
      If SetD(7).PosX > 0 Then PrinterTexto PosXRet + SetD(7).PosX, PosYRet + SetD(7).PosY, UCaseStrg(Cadena)
-     Printer.FontSize = SetD(11).Tamaño
+     Printer.FontSize = SetD(11).Porte
      If SetD(11).PosX > 0 Then PrinterLineas PosXRet + SetD(11).PosX, PosYRet + SetD(11).PosY, ConceptoComp, SetD(12).PosX
      PosLinea = SetD(13).PosY: SumaSaldo = 0
      Printer.FontBold = False
-     Printer.FontSize = SetD(8).Tamaño
+     Printer.FontSize = SetD(8).Porte
      If SetD(8).PosX > 0 Then PrinterTexto PosXRet + SetD(8).PosX, PosYRet + SetD(8).PosY, .fields("Establecimiento") & .fields("PuntoEmision") & "-" & Format$(.fields("Secuencial"), "000000000")
-     Printer.FontSize = SetD(33).Tamaño
+     Printer.FontSize = SetD(33).Porte
      If SetD(33).PosX > 0 Then PrinterTexto PosXRet + SetD(33).PosX, PosYRet + SetD(33).PosY, .fields("Autorizacion")
-     Printer.FontSize = SetD(34).Tamaño
+     Printer.FontSize = SetD(34).Porte
      If SetD(34).PosX > 0 Then PrinterTexto PosXRet + SetD(34).PosX, PosYRet + SetD(34).PosY, .fields("FechaCaducidad")
     '-----------------------------------------------------------------------------------
      Total_DetRet = .fields("ValorRetBienes") + .fields("ValorRetServicios")
@@ -5577,15 +5580,15 @@ With DataFact
          PorcentajeRet = .fields("Porc_Bienes") & "%"
          ConceptoRet = "Retención por Bienes"
         '-------------------------------------------------------------------------
-         Printer.FontSize = SetD(15).Tamaño
+         Printer.FontSize = SetD(15).Porte
          If SetD(15).PosX > 0 Then PrinterTexto PosXRet + SetD(15).PosX, PosLinea, "R. IVA(B)"
-         Printer.FontSize = SetD(17).Tamaño
+         Printer.FontSize = SetD(17).Porte
          If SetD(17).PosX > 0 Then PrinterTexto PosXRet + SetD(17).PosX, PosLinea, ConceptoRet      'Concepto de Retencion
-         Printer.FontSize = SetD(19).Tamaño
+         Printer.FontSize = SetD(19).Porte
          If SetD(19).PosX > 0 Then PrinterVariables PosXRet + SetD(19).PosX, PosLinea, Total_RetCta 'Base Imponible
-         Printer.FontSize = SetD(21).Tamaño
+         Printer.FontSize = SetD(21).Porte
          If SetD(21).PosX > 0 Then PrinterVariables PosXRet + SetD(21).PosX, PosLinea, Total_DetRet 'Valor Retenido
-         Printer.FontSize = SetD(20).Tamaño
+         Printer.FontSize = SetD(20).Porte
          If SetD(20).PosX > 0 Then PrinterVariables PosXRet + SetD(20).PosX, PosLinea, PorcentajeRet 'Porcentaje de Ret.
          PosLinea = PosLinea + 0.4
      End If
@@ -5595,15 +5598,15 @@ With DataFact
          PorcentajeRet = .fields("Porc_Servicios") & "%"
          ConceptoRet = "Retención por Servicios"
         '-------------------------------------------------------------------------
-         Printer.FontSize = SetD(15).Tamaño
+         Printer.FontSize = SetD(15).Porte
          If SetD(15).PosX > 0 Then PrinterTexto PosXRet + SetD(15).PosX, PosLinea, "R. IVA(S)"
-         Printer.FontSize = SetD(17).Tamaño
+         Printer.FontSize = SetD(17).Porte
          If SetD(17).PosX > 0 Then PrinterTexto PosXRet + SetD(17).PosX, PosLinea, ConceptoRet      'Concepto de Retencion
-         Printer.FontSize = SetD(19).Tamaño
+         Printer.FontSize = SetD(19).Porte
          If SetD(19).PosX > 0 Then PrinterVariables PosXRet + SetD(19).PosX, PosLinea, Total_RetCta 'Base Imponible
-         Printer.FontSize = SetD(21).Tamaño
+         Printer.FontSize = SetD(21).Porte
          If SetD(21).PosX > 0 Then PrinterVariables PosXRet + SetD(21).PosX, PosLinea, Total_DetRet 'Valor Retenido
-         Printer.FontSize = SetD(20).Tamaño
+         Printer.FontSize = SetD(20).Porte
          If SetD(20).PosX > 0 Then PrinterVariables PosXRet + SetD(20).PosX, PosLinea, PorcentajeRet 'Porcentaje de Ret.
          PosLinea = PosLinea + 0.4
      End If
@@ -5622,26 +5625,26 @@ With DataRets
         ConceptoRet = MidStrg(.fields("Concepto"), 1, 40) & "..."
         PorcentajeRet = Format$(.fields("Porcentaje"), "#0.00%")
        '-------------------------------------------------------------------------------
-        Printer.FontSize = SetD(14).Tamaño
+        Printer.FontSize = SetD(14).Porte
         If SetD(14).PosX > 0 Then PrinterTexto PosXRet + SetD(14).PosX, PosLinea, "R. Renta "          'Tipo de Retencion
-        Printer.FontSize = SetD(17).Tamaño
+        Printer.FontSize = SetD(17).Porte
         If SetD(17).PosX > 0 Then PrinterTexto PosXRet + SetD(17).PosX, PosLinea, ConceptoRet      'Concepto de Retencion
-        Printer.FontSize = SetD(18).Tamaño
+        Printer.FontSize = SetD(18).Porte
         If SetD(18).PosX > 0 Then PrinterTexto PosXRet + SetD(18).PosX, PosLinea, Cadena1          'Referencia
-        Printer.FontSize = SetD(19).Tamaño
+        Printer.FontSize = SetD(19).Porte
         If SetD(19).PosX > 0 Then PrinterVariables PosXRet + SetD(19).PosX, PosLinea, Total_RetCta 'Base Imponible
-        Printer.FontSize = SetD(21).Tamaño
+        Printer.FontSize = SetD(21).Porte
         If SetD(21).PosX > 0 Then PrinterVariables PosXRet + SetD(21).PosX, PosLinea, Total_DetRet 'Valor Retenido
-        Printer.FontSize = SetD(16).Tamaño
+        Printer.FontSize = SetD(16).Porte
         If SetD(16).PosX > 0 Then PrinterFields PosXRet + SetD(16).PosX, PosLinea, .fields("CodRet") 'Codigo de Retencion
-        Printer.FontSize = SetD(20).Tamaño
+        Printer.FontSize = SetD(20).Porte
         If SetD(20).PosX > 0 Then PrinterVariables PosXRet + SetD(20).PosX, PosLinea, PorcentajeRet 'Porcentaje de Retencion
         PosLinea = PosLinea + 0.4
        .MoveNext
      Loop
-     Printer.FontSize = SetD(22).Tamaño
+     Printer.FontSize = SetD(22).Porte
      If SetD(22).PosX > 0 Then PrinterVariables PosXRet + SetD(22).PosX, PosYRet + SetD(22).PosY, SumaSaldo 'Total Retenido
-     Printer.FontSize = SetD(32).Tamaño
+     Printer.FontSize = SetD(32).Porte
      If SetD(32).PosX > 0 Then PrinterTexto PosXRet + SetD(32).PosX, PosYRet + SetD(32).PosY, UCaseStrg(Cambio_Letras(SumaSaldo)) 'Total Retenido en letras
  End If
 End With
@@ -9676,23 +9679,23 @@ Public Sub Imprimir_Cheque_No(PosLinea1 As Single)
      Printer.FontSize = 10
      Printer.FontName = TipoCourier
      Total = Valor
-     Printer.FontSize = SetD(2).Tamaño
+     Printer.FontSize = SetD(2).Porte
      PrinterTexto SetD(2).PosX, PosLinea1 + SetD(2).PosY, Beneficiario
-     Printer.FontSize = SetD(3).Tamaño
+     Printer.FontSize = SetD(3).Porte
      PrinterTexto SetD(3).PosX, PosLinea1 + SetD(3).PosY, Format$(Total, "#,###.00")
      If SetD(4).PosX > 0 And SetD(4).PosY > 0 Then
-        Printer.FontSize = SetD(4).Tamaño
+        Printer.FontSize = SetD(4).Porte
         PrinterNumCheque SetD(4).PosX, PosLinea1 + SetD(4).PosY, SetD(5).PosX, Total
      End If
      If SetD(9).PosX > 0 And SetD(9).PosY > 0 Then
         Cadena = Empresa & " " & Moneda & " " & Format$(Total, "#,##0.00") & "**"
-        Printer.FontSize = SetD(9).Tamaño
+        Printer.FontSize = SetD(9).Porte
         PrinterTexto SetD(9).PosX, PosLinea1 + SetD(9).PosY, Cadena
      End If
-     Printer.FontSize = SetD(10).Tamaño
+     Printer.FontSize = SetD(10).Porte
      PrinterTexto SetD(10).PosX, PosLinea1 + SetD(10).PosY, ULCase(NombreCiudad)
      
-     Printer.FontSize = SetD(6).Tamaño
+     Printer.FontSize = SetD(6).Porte
      PrinterTexto SetD(6).PosX, PosLinea1 + SetD(6).PosY, Format$(FechaTexto, "yyyy/MM/dd")
      Printer.FontBold = False
 End Sub

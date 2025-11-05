@@ -151,7 +151,7 @@ Type CtasAsiento
  Type Seteos_Documentos
       PosX       As Single
       PosY       As Single
-      Tamaño     As Single
+      Porte      As Single
       Encabezado As String
  End Type
 '-------------------------------------
@@ -165,7 +165,7 @@ Type CtasAsiento
       Pos_Yo      As Single
       Pos_Xf      As Single
       Pos_Yf      As Single
-      Tamaño      As Single
+      Porte       As Single
  End Type
 '-------------------------------------
  Type Datos_Giros
@@ -195,6 +195,7 @@ Type CtasAsiento
       Cta_Ventas           As String
       Cta_Ventas_0         As String
       Cta_Venta_Anticipada As String
+      Cta_Ventas_Ant       As String
       Patron_Busqueda      As String
       Fecha_Exp            As String
       Fecha_Fab            As String
@@ -210,8 +211,9 @@ Type CtasAsiento
       Stock                As Double
       Costo                As Double
       Valor_Unit           As Double
-      PVP                  As Currency
-      PVP2                 As Currency
+      PVP                  As Double
+      PVP2                 As Double
+      PVP3                 As Double
       Div                  As Boolean
       Por_Reservas         As Boolean
       IVA                  As Boolean
@@ -415,6 +417,7 @@ Type CtasAsiento
       Kilos            As Currency
       Saldo_Actual     As Currency
       Efectivo         As Currency
+      Utilidad         As Currency
       Saldo_Pend       As Currency
       Saldo_Pend_MN    As Currency
       Saldo_Pend_ME    As Currency
@@ -646,7 +649,7 @@ End Type
  Type Tipo_Lista_Mail
      'Datos para enviar
       Correo_Electronico As String
-      Contraseña As String
+      Clave              As String
  End Type
 '-------------------------------------
 Type Directorio_Dialogo
@@ -895,10 +898,10 @@ Type Asiento_SRI
      SubModulo              As String
      Codigo_B               As String
      Ambiente               As Byte
-     CodPorIva              As Byte
      Cod_Ret_IVA_B          As Byte
      Cod_Ret_IVA_S          As Byte
      Comprobante            As Long
+     CodPorIva              As Integer
      SubTotal               As Currency
      Total_IVA              As Currency
      Total                  As Currency

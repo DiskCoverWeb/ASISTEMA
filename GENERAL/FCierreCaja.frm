@@ -286,63 +286,93 @@ Begin VB.Form FCierreCaja
       TabCaption(1)   =   "&2.- INVENTARIO"
       TabPicture(1)   =   "FCierreCaja.frx":0036
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "AdoInv"
+      Tab(1).Control(0)=   "DGCierres"
       Tab(1).Control(0).Enabled=   0   'False
-      Tab(1).Control(1)=   "DGInv"
+      Tab(1).Control(1)=   "DGProductos"
       Tab(1).Control(1).Enabled=   0   'False
-      Tab(1).Control(2)=   "DGProductos"
+      Tab(1).Control(2)=   "DGInv"
       Tab(1).Control(2).Enabled=   0   'False
-      Tab(1).Control(3)=   "DGCierres"
+      Tab(1).Control(3)=   "AdoInv"
       Tab(1).Control(3).Enabled=   0   'False
       Tab(1).ControlCount=   4
       TabCaption(2)   =   "&3.- CONTABILIDAD"
       TabPicture(2)   =   "FCierreCaja.frx":0052
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "Label13"
-      Tab(2).Control(1)=   "LblDiferencia1"
-      Tab(2).Control(2)=   "LblConcepto1"
-      Tab(2).Control(3)=   "LblConcepto"
-      Tab(2).Control(4)=   "LblDiferencia"
-      Tab(2).Control(5)=   "Label1"
-      Tab(2).Control(6)=   "Label11"
+      Tab(2).Control(0)=   "DGAsiento1"
+      Tab(2).Control(0).Enabled=   0   'False
+      Tab(2).Control(1)=   "DGAsiento"
+      Tab(2).Control(1).Enabled=   0   'False
+      Tab(2).Control(2)=   "DGAnticipos"
+      Tab(2).Control(2).Enabled=   0   'False
+      Tab(2).Control(3)=   "LabelHaber1"
+      Tab(2).Control(3).Enabled=   0   'False
+      Tab(2).Control(4)=   "LabelDebe1"
+      Tab(2).Control(4).Enabled=   0   'False
+      Tab(2).Control(5)=   "Label15"
+      Tab(2).Control(5).Enabled=   0   'False
+      Tab(2).Control(6)=   "LabelHaber"
+      Tab(2).Control(6).Enabled=   0   'False
       Tab(2).Control(7)=   "LabelDebe"
-      Tab(2).Control(8)=   "LabelHaber"
-      Tab(2).Control(9)=   "Label15"
-      Tab(2).Control(10)=   "LabelDebe1"
-      Tab(2).Control(11)=   "LabelHaber1"
-      Tab(2).Control(12)=   "DGAnticipos"
-      Tab(2).Control(13)=   "DGAsiento"
-      Tab(2).Control(14)=   "DGAsiento1"
+      Tab(2).Control(7).Enabled=   0   'False
+      Tab(2).Control(8)=   "Label11"
+      Tab(2).Control(8).Enabled=   0   'False
+      Tab(2).Control(9)=   "Label1"
+      Tab(2).Control(9).Enabled=   0   'False
+      Tab(2).Control(10)=   "LblDiferencia"
+      Tab(2).Control(10).Enabled=   0   'False
+      Tab(2).Control(11)=   "LblConcepto"
+      Tab(2).Control(11).Enabled=   0   'False
+      Tab(2).Control(12)=   "LblConcepto1"
+      Tab(2).Control(12).Enabled=   0   'False
+      Tab(2).Control(13)=   "LblDiferencia1"
+      Tab(2).Control(13).Enabled=   0   'False
+      Tab(2).Control(14)=   "Label13"
+      Tab(2).Control(14).Enabled=   0   'False
       Tab(2).ControlCount=   15
       TabCaption(3)   =   "&4.- ANULADAS"
       TabPicture(3)   =   "FCierreCaja.frx":006E
       Tab(3).ControlEnabled=   0   'False
       Tab(3).Control(0)=   "DGFactAnul"
+      Tab(3).Control(0).Enabled=   0   'False
       Tab(3).ControlCount=   1
       TabCaption(4)   =   "&5.- REPORTE DE AUDITORIA"
       TabPicture(4)   =   "FCierreCaja.frx":008A
       Tab(4).ControlEnabled=   0   'False
       Tab(4).Control(0)=   "DGSRI"
+      Tab(4).Control(0).Enabled=   0   'False
       Tab(4).Control(1)=   "AdoSRI"
+      Tab(4).Control(1).Enabled=   0   'False
       Tab(4).Control(2)=   "LblTotalFacturado"
+      Tab(4).Control(2).Enabled=   0   'False
       Tab(4).Control(3)=   "Label16"
+      Tab(4).Control(3).Enabled=   0   'False
       Tab(4).Control(4)=   "LblServicio"
+      Tab(4).Control(4).Enabled=   0   'False
       Tab(4).Control(5)=   "Label7"
+      Tab(4).Control(5).Enabled=   0   'False
       Tab(4).Control(6)=   "LblIVA"
+      Tab(4).Control(6).Enabled=   0   'False
       Tab(4).Control(7)=   "LblDescuento"
+      Tab(4).Control(7).Enabled=   0   'False
       Tab(4).Control(8)=   "LblSinIVA"
+      Tab(4).Control(8).Enabled=   0   'False
       Tab(4).Control(9)=   "LblConIVA"
+      Tab(4).Control(9).Enabled=   0   'False
       Tab(4).Control(10)=   "Label18"
+      Tab(4).Control(10).Enabled=   0   'False
       Tab(4).Control(11)=   "Label14"
+      Tab(4).Control(11).Enabled=   0   'False
       Tab(4).Control(12)=   "Label12"
+      Tab(4).Control(12).Enabled=   0   'False
       Tab(4).Control(13)=   "Label9"
+      Tab(4).Control(13).Enabled=   0   'False
       Tab(4).ControlCount=   14
       TabCaption(5)   =   "&6.- REPORTE DEL BANCO"
       TabPicture(5)   =   "FCierreCaja.frx":00A6
       Tab(5).ControlEnabled=   0   'False
-      Tab(5).Control(0)=   "DCBanco"
+      Tab(5).Control(0)=   "DGBanco"
       Tab(5).Control(0).Enabled=   0   'False
-      Tab(5).Control(1)=   "DGBanco"
+      Tab(5).Control(1)=   "DCBanco"
       Tab(5).Control(1).Enabled=   0   'False
       Tab(5).ControlCount=   2
       Begin MSDataGridLib.DataGrid DGCxC 
@@ -416,7 +446,7 @@ Begin VB.Form FCierreCaja
       Begin MSDataGridLib.DataGrid DGVentas 
          Bindings        =   "FCierreCaja.frx":00D7
          Height          =   3090
-         Left            =   105
+         Left            =   -105
          TabIndex        =   1
          Top             =   420
          Width           =   14160
@@ -2828,6 +2858,7 @@ Dim FechaA As Long
   IniciarAsientosDe DGAsiento1, AdoAsiento1     ' Abonos
   Trans_No = 96
   IniciarAsientosDe DGAsiento, AdoAsiento       ' CxC
+  
   Progreso_Barra.Mensaje_Box = "Actualizando Productos"
   Progreso_Esperar
   Insertar_Productos_Cierre_Caja_SP MBFechaI, MBFechaF
@@ -2836,6 +2867,9 @@ Dim FechaA As Long
   Mayorizar_Inventario_SP
   Progreso_Barra.Mensaje_Box = "Actualizando Abonos"
   Progreso_Esperar
+ 'Cero para actualizaer las cuentas de Venta
+  FA.Serie = Ninguno
+  FA.Factura = 0
   Actualizar_Abonos_Facturas_SP FA, True, True
   Progreso_Barra.Mensaje_Box = "Actualizando Clientes"
   Progreso_Esperar

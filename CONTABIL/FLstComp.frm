@@ -399,24 +399,24 @@ Begin VB.Form FListComprobantes
       TabCaption(1)   =   "&5.- RETENCIONES"
       TabPicture(1)   =   "FLstComp.frx":6BDC
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "DGRet"
+      Tab(1).Control(0)=   "DGFAV"
       Tab(1).Control(1)=   "DGFAC"
-      Tab(1).Control(2)=   "DGFAV"
+      Tab(1).Control(2)=   "DGRet"
       Tab(1).ControlCount=   3
       TabCaption(2)   =   "&6.- SUBCUENTAS"
       TabPicture(2)   =   "FLstComp.frx":6BF8
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "DGCxCxP"
-      Tab(2).Control(1)=   "DGIxExCC"
+      Tab(2).Control(0)=   "DGIxExCC"
+      Tab(2).Control(1)=   "DGCxCxP"
       Tab(2).ControlCount=   2
       TabCaption(3)   =   "&7.- KARDEX"
       TabPicture(3)   =   "FLstComp.frx":6C14
       Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "DGKardex"
-      Tab(3).Control(1)=   "Label11"
+      Tab(3).Control(0)=   "LblTotalC"
+      Tab(3).Control(1)=   "LblTotalComp"
       Tab(3).Control(2)=   "Label10"
-      Tab(3).Control(3)=   "LblTotalComp"
-      Tab(3).Control(4)=   "LblTotalC"
+      Tab(3).Control(3)=   "Label11"
+      Tab(3).Control(4)=   "DGKardex"
       Tab(3).ControlCount=   5
       Begin MSDataGridLib.DataGrid DGAsientos 
          Bindings        =   "FLstComp.frx":6C30
@@ -1857,21 +1857,21 @@ If PonImpresoraDefecto(SetNombrePRN) Then
               Codigo = .Fields("Cta")
               CCHQConLineas = ProcesarSeteos(Format(Val(MidStrg(Codigo, Len(Codigo) - 1, 3)), "00"))
               Total = .Fields("Haber")
-              Printer.FontSize = SetD(2).Tamaño
+              Printer.FontSize = SetD(2).Porte
               PrinterTexto SetD(2).PosX, PosLinea + SetD(2).PosY, NombreCliente
-              Printer.FontSize = SetD(3).Tamaño
+              Printer.FontSize = SetD(3).Porte
               PrinterTexto SetD(3).PosX, PosLinea + SetD(3).PosY, Format(Total, "#,###.00")
-              Printer.FontSize = SetD(10).Tamaño
+              Printer.FontSize = SetD(10).Porte
               PrinterTexto SetD(10).PosX, PosLinea + SetD(10).PosY, ULCase(NombreCiudad)
-              Printer.FontSize = SetD(6).Tamaño
+              Printer.FontSize = SetD(6).Porte
               PrinterTexto SetD(6).PosX, PosLinea + SetD(6).PosY, Format(FechaTexto, "yyyy/MM/dd")
               If SetD(4).PosX > 0 And SetD(4).PosY > 0 Then
-                 Printer.FontSize = SetD(4).Tamaño
+                 Printer.FontSize = SetD(4).Porte
                  PrinterNumCheque SetD(4).PosX, PosLinea + SetD(4).PosY, SetD(5).PosX, Total
               End If
               If SetD(9).PosX > 0 And SetD(9).PosY > 0 Then
                  Cadena = Empresa & " " & Moneda & " " & Format(Total, "#,##0.00") & "**"
-                 Printer.FontSize = SetD(9).Tamaño
+                 Printer.FontSize = SetD(9).Porte
                  PrinterTexto SetD(9).PosX, PosLinea + SetD(9).PosY, Cadena
               End If
               Printer.NewPage
@@ -2345,7 +2345,7 @@ Public Sub ListarComprobantes()
     'Llenar Inventario
      sSQL = "SELECT TK.Codigo_Inv,CC.Producto,TK.CodBodega,TK.Entrada,TK.Salida,TK.Valor_Unitario,TK.Valor_Total,TK.Costo,TK.Total," _
           & "TK.Fecha,TK.TC,TK.Serie,TK.Factura,TK.Orden_No,TK.Lote_No,TK.Fecha_Fab,TK.Fecha_Exp,CC.Reg_Sanitario,TK.Modelo," _
-          & "TK.Procedencia,TK.Serie_No,TK.Codigo_Barra,TK.Cta_Inv,TK.Contra_Cta " _
+          & "TK.Procedencia,TK.Serie_No,TK.Codigo_Barra,TK.Cta_Inv,TK.Contra_Cta,TK.Detalle " _
           & "FROM Trans_Kardex As TK,Catalogo_Productos As CC " _
           & "WHERE TK.Periodo = '" & Periodo_Contable & "' " _
           & "AND TK.Item = '" & Co.Item & "' " _

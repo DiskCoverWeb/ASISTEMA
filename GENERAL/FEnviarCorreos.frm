@@ -314,6 +314,7 @@ Dim RutaGeneraFile As String
       TextoHTML = ReplaceHTML(TextoHTML, "vFecha_Reporte", Mifecha)
       TextoHTML = ReplaceHTML(TextoHTML, "vCiudad_Empresa", NombreCiudad)
       TextoHTML = ReplaceHTML(TextoHTML, "vPais_Empresa", NombrePais)
+      TextoHTML = ReplaceHTML(TextoHTML, "vIP_Local", IP_PC.IP_PC)
               
       TextoHTML = ReplaceHTML(TextoHTML, "vGrupo_Cliente", FA.Grupo)
       TextoHTML = ReplaceHTML(TextoHTML, "vNombre_Cliente", FA.Cliente)
@@ -472,40 +473,36 @@ Dim RutaGeneraFile As String
                  & "&fromName=" & TMail.Remitente & " <" & TMail.de & ">" _
                  & "&to=" & TMail.para _
                  & "&subject=" & TMail.Asunto _
-                 & "&HTML=1" _
-                 & "&body=" & Sin_Signos_XML(TMail.MensajeHTML) _
+                 & "&HTML=1&reply=&replyName=&debug=0" _
                  & "&Archivo=" & TMail.Adjunto _
-                 & "&reply=&replyName=&debug=0"
+                 & "&item=" & NumEmpresa _
+                 & "&modulo=" & Modulo _
+                 & "&CodigoU=" & CodigoUsuario _
+                 & "&RUCEmpresa=" & RUC _
+                 & "&Nombre=" & NombreUsuario _
+                 & "&Mail_de=" & TrimStrg(MidStrg(TMail.de, 1, 60)) _
+                 & "&Mail_para=" & TrimStrg(MidStrg(TMail.para, 1, 255)) _
+                 & "&Proceso=" & TrimStrg(MidStrg("Email de: " & TMail.de, 1, 120)) _
+                 & "&Tarea=" & TrimStrg(MidStrg("Asunto: " & TMail.Asunto, 1, 120)) _
+                 & "&Credito_No=" _
+                 & "&body=" & Sin_Signos_XML(TMail.MensajeHTML)
+'       MsgBox "Desktop Test: Enviando: " & TMail.Asunto & "..."
        Si_No = PostUrlSource(URLHTTP, URLParams)
        Cursor_Img
-      'MsgBox Si_No
-      'Clipboard.Clear
-      'Clipboard.SetText Si_No & vbCrLf & URLParams & vbCrLf & TMail.MensajeHTML
-      'MsgBox Si_No & vbCrLf & URLParams & vbCrLf & TMail.MensajeHTML
-      'MsgBox "Desktop Test: " & Si_No & vbCrLf & TMail.Adjunto
+     'MsgBox Si_No
+ '     Clipboard.Clear
+ '     Clipboard.SetText Si_No & vbCrLf & URLParams ' & vbCrLf & TMail.MensajeHTML
+      'MsgBox Si_No & vbCrLf & URLParams '& vbCrLf & TMail.MensajeHTML
+'      MsgBox "Desktop Test: " & Si_No & vbCrLf & TMail.Adjunto
       '----------------------------------------------------------------------------------------------
-       If Si_No Then
-          Cursor_Img
-'''          EMailPara = TMail.para
-'''          CaracPiloto = InStr(EMailPara, ";")
-'''          If CaracPiloto > 0 Then
-'''             Do While Len(EMailPara) > 1 And CaracPiloto > 0
-'''                File = MidStrg(EMailPara, 1, CaracPiloto - 1)
-'''               'MsgBox "Desktop Test: " & "Email: " & TMail.de & " => " & File & ", Asunto: " & TMail.Asunto
-'''                Control_Procesos "EM", "Email: " & TMail.de & " => " & File, "Asunto: " & TMail.Asunto
-'''                EMailPara = MidStrg(EMailPara, CaracPiloto + 1, Len(EMailPara))
-'''                CaracPiloto = InStr(EMailPara, ";")
-'''                Cursor_Img
-'''             Loop
-'''             Control_Procesos "EM", "Email: " & TMail.de & " => " & EMailPara, "Asunto: " & TMail.Asunto
-'''          Else
-'''             Control_Procesos "EM", "Email: " & TMail.de & " => " & EMailPara, "Asunto: " & TMail.Asunto
-'''          End If
-          Control_Procesos "EM", "Email de: " & TMail.de & " => " & TMail.para, "Asunto: " & TMail.Asunto
-       Else
-          Control_Procesos "Err", "Email: " & TMail.de & " => " & TMail.para, "Asunto(Error): " & TMail.Asunto
-       End If
-       Cursor_Img
+'''       If Si_No Then
+'''          Cursor_Img
+'''          Control_Procesos "EM", "Email de: " & TMail.de & " => " & TMail.para, "Asunto: " & TMail.Asunto
+'''       Else
+'''          Cursor_Img
+'''          Control_Procesos "Err", "Email: " & TMail.de & " => " & TMail.para, "Asunto(Error): " & TMail.Asunto
+'''       End If
+'''       Cursor_Img
       'MsgBox "Desktop Test: Eliminando..."
       'Eliminando archivos que se fueron con los correos
        If ContFile >= 0 Then
@@ -595,13 +592,13 @@ Dim IdImg As Integer
     Contactos = ""
    'Contamos cuantos mails se han enviado por medio de MySQL
     ContMails = 0
-    sSQL = "SELECT Fecha, COUNT(Fecha) As ContMails " _
+    sSQL = "SELECT Fecha_Hora, COUNT(Fecha_Hora) As ContMails " _
          & "FROM acceso_pcs " _
-         & "WHERE Fecha = '" & BuscarFecha(FechaSistema) & "' " _
+         & "WHERE Fecha_Hora = '" & BuscarFecha(FechaSistema) & "' " _
          & "AND ES IN ('EM') "
     Select_AdoDB_MySQL AdoSMTP, sSQL
     If AdoSMTP.RecordCount > 0 Then
-       ContMails = AdoSMTP.fields("ContMails")
+       ContMails = AdoSMTP.Fields("ContMails")
     End If
     AdoSMTP.Close
     Cursor_Img
@@ -616,7 +613,7 @@ Dim IdImg As Integer
     Cursor_Img
    'Determinamos si esta activado envio de correos
     sSQL = "SELECT smtp_Servidor, smtp_Puerto, smtp_UseAuntentificacion, smtp_SSL, smtp_Secure, " _
-         & "Email_Conexion, Email_Contraseña, Email_Conexion_CE, Email_Contraseña_CE, Email_Procesos, Email_CE_Copia " _
+         & "Email_Conexion, Email_Clave, Email_Conexion_CE, Email_Clave_CE, Email_Procesos, Email_CE_Copia " _
          & "FROM Empresas " _
          & "WHERE Item = '" & NumEmpresa & "' " _
          & "AND LEN(smtp_Servidor) > 1 " _
@@ -625,21 +622,21 @@ Dim IdImg As Integer
     Cursor_Img
     With AdoSMTP
      If .RecordCount > 0 Then
-         EmailProcesos = .fields("Email_Procesos")
-         TMail.useAuntentificacion = CBool(.fields("smtp_UseAuntentificacion"))
-         TMail.ssl = CBool(.fields("smtp_SSL"))
-         TMail.tls = CBool(.fields("smtp_Secure"))
-         TMail.Puerto = .fields("smtp_Puerto")
-         Email_CE_Copia = CBool(.fields("Email_CE_Copia"))
-         TMail.servidor = .fields("smtp_Servidor")
+         EmailProcesos = .Fields("Email_Procesos")
+         TMail.useAuntentificacion = CBool(.Fields("smtp_UseAuntentificacion"))
+         TMail.ssl = CBool(.Fields("smtp_SSL"))
+         TMail.tls = CBool(.Fields("smtp_Secure"))
+         TMail.Puerto = .Fields("smtp_Puerto")
+         Email_CE_Copia = CBool(.Fields("Email_CE_Copia"))
+         TMail.servidor = .Fields("smtp_Servidor")
          If TMail.TipoDeEnvio = "CE" Then
-            TMail.Usuario = .fields("Email_Conexion_CE")
-            TMail.Password = .fields("Email_Contraseña_CE")
-            TMail.de = .fields("Email_Conexion_CE")
+            TMail.Usuario = .Fields("Email_Conexion_CE")
+            TMail.Password = .Fields("Email_Clave_CE")
+            TMail.de = .Fields("Email_Conexion_CE")
          Else
-            TMail.Usuario = .fields("Email_Conexion")
-            TMail.Password = .fields("Email_Contraseña")
-            If TMail.TipoDeEnvio <> "NN" Then TMail.de = .fields("Email_Conexion")
+            TMail.Usuario = .Fields("Email_Conexion")
+            TMail.Password = .Fields("Email_Clave")
+            If TMail.TipoDeEnvio <> "NN" Then TMail.de = .Fields("Email_Conexion")
          End If
          
          If Email_CE_Copia Then Insertar_Mail TMail.para, EmailProcesos

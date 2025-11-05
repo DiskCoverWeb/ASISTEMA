@@ -11,16 +11,16 @@ Begin VB.Form FSeteos
    BackColor       =   &H00C0C0C0&
    BorderStyle     =   4  'Fixed ToolWindow
    Caption         =   "SETEOS PRINCIPALES Y MANTENIMIENTO"
-   ClientHeight    =   8205
+   ClientHeight    =   8175
    ClientLeft      =   -15
    ClientTop       =   210
-   ClientWidth     =   14415
+   ClientWidth     =   14355
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MDIChild        =   -1  'True
    MinButton       =   0   'False
-   ScaleHeight     =   8205
-   ScaleWidth      =   14415
+   ScaleHeight     =   8175
+   ScaleWidth      =   14355
    ShowInTaskbar   =   0   'False
    Begin InetCtlsObjects.Inet URLinet 
       Left            =   14490
@@ -98,46 +98,46 @@ Begin VB.Form FSeteos
       TabCaption(2)   =   "&Niveles de Seguridad"
       TabPicture(2)   =   "FSeteos.frx":0342
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "Label4"
-      Tab(2).Control(1)=   "Label10"
-      Tab(2).Control(2)=   "Label1"
-      Tab(2).Control(3)=   "Label2"
-      Tab(2).Control(4)=   "Label5"
-      Tab(2).Control(5)=   "Label3"
-      Tab(2).Control(6)=   "DCBodega"
-      Tab(2).Control(7)=   "MBPeriodo"
-      Tab(2).Control(8)=   "TextClave"
-      Tab(2).Control(9)=   "Frame2"
-      Tab(2).Control(10)=   "TxtItem"
-      Tab(2).Control(11)=   "Command2"
-      Tab(2).Control(12)=   "Command3"
-      Tab(2).Control(13)=   "TxtUsuario"
-      Tab(2).Control(14)=   "Command7"
-      Tab(2).Control(15)=   "DCUsuario"
-      Tab(2).Control(16)=   "Command13"
-      Tab(2).Control(17)=   "Command5"
-      Tab(2).Control(18)=   "Command11"
-      Tab(2).Control(19)=   "DGEmp1"
-      Tab(2).Control(20)=   "Command10"
-      Tab(2).Control(21)=   "LstModulos"
-      Tab(2).Control(22)=   "Command6"
-      Tab(2).Control(23)=   "LstEmpresas"
-      Tab(2).Control(24)=   "Command1"
-      Tab(2).Control(25)=   "Command4"
+      Tab(2).Control(0)=   "Command4"
+      Tab(2).Control(1)=   "Command1"
+      Tab(2).Control(2)=   "LstEmpresas"
+      Tab(2).Control(3)=   "Command6"
+      Tab(2).Control(4)=   "LstModulos"
+      Tab(2).Control(5)=   "Command10"
+      Tab(2).Control(6)=   "DGEmp1"
+      Tab(2).Control(7)=   "Command11"
+      Tab(2).Control(8)=   "Command5"
+      Tab(2).Control(9)=   "Command13"
+      Tab(2).Control(10)=   "DCUsuario"
+      Tab(2).Control(11)=   "Command7"
+      Tab(2).Control(12)=   "TxtUsuario"
+      Tab(2).Control(13)=   "Command3"
+      Tab(2).Control(14)=   "Command2"
+      Tab(2).Control(15)=   "TxtItem"
+      Tab(2).Control(16)=   "Frame2"
+      Tab(2).Control(17)=   "TextClave"
+      Tab(2).Control(18)=   "MBPeriodo"
+      Tab(2).Control(19)=   "DCBodega"
+      Tab(2).Control(20)=   "Label3"
+      Tab(2).Control(21)=   "Label5"
+      Tab(2).Control(22)=   "Label2"
+      Tab(2).Control(23)=   "Label1"
+      Tab(2).Control(24)=   "Label10"
+      Tab(2).Control(25)=   "Label4"
       Tab(2).ControlCount=   26
       TabCaption(3)   =   "&Impresiones"
       TabPicture(3)   =   "FSeteos.frx":035E
       Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "DGFormato"
-      Tab(3).Control(1)=   "Command17(0)"
-      Tab(3).Control(2)=   "Command16"
-      Tab(3).Control(3)=   "PictFormatos"
-      Tab(3).Control(4)=   "DGSeteosPRN"
-      Tab(3).Control(5)=   "Command21"
-      Tab(3).Control(6)=   "Command17(1)"
-      Tab(3).Control(7)=   "Command17(2)"
-      Tab(3).Control(8)=   "Command17(3)"
-      Tab(3).Control(9)=   "Command8"
+      Tab(3).Control(0)=   "Command8"
+      Tab(3).Control(1)=   "Command17(3)"
+      Tab(3).Control(2)=   "Command17(2)"
+      Tab(3).Control(3)=   "Command17(1)"
+      Tab(3).Control(4)=   "Command21"
+      Tab(3).Control(5)=   "DGSeteosPRN"
+      Tab(3).Control(6)=   "PictFormatos"
+      Tab(3).Control(7)=   "Command16"
+      Tab(3).Control(8)=   "Command17(0)"
+      Tab(3).Control(9)=   "DGFormato"
       Tab(3).ControlCount=   10
       Begin VB.CommandButton Command4 
          Caption         =   "Migracion a MySQL"
@@ -3234,7 +3234,7 @@ Dim IdProc As Byte
                 Prueba_Envio_de_Correos
            Case "Actualizar Avreviaturas Accesos Usuarios"
                 Poner_Avreviatura_Accesos
-           
+                
            Case "Realizar Copia de Actualizacion"
                 Procesar_Update_DB
          End Select
@@ -3566,7 +3566,7 @@ Private Sub DGFormato_DblClick()
   Si_No = True
   Titulo = "Seteos de Documentos"
   Mensajes = "Formato Propio?"
-  sSQL = "SELECT TP,Campo,Encabezado,Pos_X,Pos_Y,Tamaño,Item " _
+  sSQL = "SELECT TP,Campo,Encabezado,Pos_X,Pos_Y,Porte,Item " _
        & "FROM Seteos_Documentos "
   If BoxMensaje = vbYes Then
      Si_No = True
@@ -4241,8 +4241,8 @@ Dim VectFields() As Variant
   Duplicar_Tabla_SP "Seteos_Documentos", "Seteos_Documentos_T"
 
  'Ahora pasamos a actualizar los formatos de Impresion de comprobantes
-  sSQL = "INSERT INTO Seteos_Documentos_T (Item, TP, Campo, Encabezado, Pos_X, Pos_Y, Tamaño, X) " _
-       & "SELECT Item, TP, Campo, Encabezado, Pos_X, Pos_Y, Tamaño, 'U' " _
+  sSQL = "INSERT INTO Seteos_Documentos_T (Item, TP, Campo, Encabezado, Pos_X, Pos_Y, Porte, X) " _
+       & "SELECT Item, TP, Campo, Encabezado, Pos_X, Pos_Y, Porte, 'U' " _
        & "FROM Seteos_Documentos " _
        & "WHERE Item = '000' " _
        & "ORDER BY Item, TP, Campo, Encabezado "
@@ -4261,8 +4261,8 @@ Dim VectFields() As Variant
        & "WHERE X = '.' "
   Ejecutar_SQL_SP sSQL
   
-  sSQL = "INSERT INTO Seteos_Documentos (Item, TP, Campo, Encabezado, Pos_X, Pos_Y, Tamaño, X) " _
-       & "SELECT '" & NumEmpresa & "', 'P'+TP, Campo, Encabezado, Pos_X, Pos_Y, Tamaño, X " _
+  sSQL = "INSERT INTO Seteos_Documentos (Item, TP, Campo, Encabezado, Pos_X, Pos_Y, Porte, X) " _
+       & "SELECT '" & NumEmpresa & "', 'P'+TP, Campo, Encabezado, Pos_X, Pos_Y, Porte, X " _
        & "FROM Seteos_Documentos_T " _
        & "WHERE Item = '000' " _
        & "ORDER BY Item, TP, Campo, Encabezado "
@@ -6390,7 +6390,7 @@ Dim Mes_FA As Long
 End Sub
 
 Public Sub Actualizar_Facturas_Electronicas()
-Dim ObjAutori As New WS_Autorizacion
+'Dim ObjAutori As New WS_Autorizacion
 Dim URLAutorizacion As String
 Dim RutaXMLAutorizado As String
 Dim RutaXMLRechazado As String
@@ -6475,7 +6475,7 @@ Dim AdoDBAut As ADODB.Recordset
            For Tiempo_SRI = 0 To 300
                Progreso_Esperar True
            Next Tiempo_SRI
-           ArrayAutorizacion = ObjAutori.FF_ObtieneNumAutorizado(URLAutorizacion, FA.ClaveAcceso, RutaXMLAutorizado, RutaXMLRechazado)
+'           ArrayAutorizacion = ObjAutori.FF_ObtieneNumAutorizado(URLAutorizacion, FA.ClaveAcceso, RutaXMLAutorizado, RutaXMLRechazado)
            If ArrayAutorizacion(0) = "AUTORIZADO" Then Exit For
        Next Tiempo_Espera
       'Ok Documento Firmado y Autorizado
@@ -6504,7 +6504,7 @@ Dim AdoDBAut As ADODB.Recordset
 End Sub
 
 Public Sub Actualizar_Retenciones_Electronicas()
-Dim ObjAutori As New WS_Autorizacion
+'Dim ObjAutori As New WS_Autorizacion
 Dim URLAutorizacion As String
 Dim RutaXMLAutorizado As String
 Dim RutaXMLRechazado As String
@@ -6609,7 +6609,7 @@ Dim AdoDBAut As ADODB.Recordset
        
        For Tiempo_Espera = 1 To 3
            Progreso_Esperar True
-           ArrayAutorizacion = ObjAutori.FF_ObtieneNumAutorizado(URLAutorizacion, FA.ClaveAcceso, RutaXMLAutorizado, RutaXMLRechazado)
+'           ArrayAutorizacion = ObjAutori.FF_ObtieneNumAutorizado(URLAutorizacion, FA.ClaveAcceso, RutaXMLAutorizado, RutaXMLRechazado)
            If ArrayAutorizacion(0) = "AUTORIZADO" Then Exit For
            For Tiempo_SRI = 0 To 50
                Progreso_Esperar True
@@ -7403,6 +7403,7 @@ Dim ITab As Long
 Dim JCamp As Long
 Dim KCamp As Long
 Dim NombreTabla As String
+Dim NombreTablaE As String
 Dim CamposTabla As String
 Dim Si_Periodo As Boolean
 Dim Si_Fecha As Boolean
@@ -7539,7 +7540,7 @@ Next ITab
      RatonReloj
      LstTablas.Text = LstTablas.List(ITab)
      Select Case LstTablas.List(ITab)
-       Case "Accesos", "Clientes", "Empresas_Externas": Si_Update = False
+       Case "Accesos", "Clientes", "Clientes_Auxiliar", "Empresas_Externas": Si_Update = False
        Case Else: Si_Update = True
      End Select
      If Si_Update Then
@@ -7611,6 +7612,12 @@ Progreso_Esperar
 RutaGeneraFile = RutaSistema & "\BASES\UPDATE_DB\ABASES.txt"
 NumFile = FreeFile
 Open RutaGeneraFile For Output As #NumFile
+
+RutaGeneraFile = RutaSistema & "\BASES\UPDATE_DB\ACAMPOS.txt"
+NumFile2 = FreeFile
+Open RutaGeneraFile For Output As #NumFile2
+
+
 Print #NumFile, "+";
 Print #NumFile, String$(89, "=");
 Print #NumFile, "+"
@@ -7623,6 +7630,18 @@ Print #NumFile, "+";
 Print #NumFile, String$(89, "=");
 Print #NumFile, "+"
 
+Print #NumFile2, "+";
+Print #NumFile2, String$(89, "=");
+Print #NumFile2, "+"
+NombreTabla = "CANTIDAD DE TABLAS PARA ACTUALIZAR DE LA BASE DE DATOS: " & LstTablas.ListCount
+Print #NumFile2, "|";
+Print #NumFile2, NombreTabla;
+Print #NumFile2, String$(89 - Len(NombreTabla), " ");
+Print #NumFile2, "|"
+Print #NumFile2, "+";
+Print #NumFile2, String$(89, "=");
+Print #NumFile2, "+"
+
 For I = 0 To LstTablas.ListCount - 1
     LstTablas.Text = LstTablas.List(I)
     sSQL = "SELECT * " _
@@ -7632,6 +7651,7 @@ For I = 0 To LstTablas.ListCount - 1
     RatonReloj
     With AdoComp.Recordset
     'FSeteos.Caption = "(" & RutaGeneraFile & ") => TABLA: " & LstTablas.List(I)
+     NombreTablaE = LstTablas.List(I)
      NombreTabla = "TABLA: " & Format(.fields.Count, "000") & " - " & LstTablas.List(I)
      Print #NumFile, "|";
      Print #NumFile, NombreTabla;
@@ -7680,6 +7700,13 @@ For I = 0 To LstTablas.ListCount - 1
          Print #NumFile, Cadena2;
          Print #NumFile, String$(15 - Len(Cadena2), " ");
          Print #NumFile, "|"
+         
+         If InStr(UCase(.fields(J).Name), "Ñ") Then Print #NumFile2, NombreTablaE & "." & .fields(J).Name
+         If InStr(UCase(.fields(J).Name), "Á") Then Print #NumFile2, NombreTablaE & "." & .fields(J).Name
+         If InStr(UCase(.fields(J).Name), "É") Then Print #NumFile2, NombreTablaE & "." & .fields(J).Name
+         If InStr(UCase(.fields(J).Name), "Í") Then Print #NumFile2, NombreTablaE & "." & .fields(J).Name
+         If InStr(UCase(.fields(J).Name), "Ó") Then Print #NumFile2, NombreTablaE & "." & .fields(J).Name
+         If InStr(UCase(.fields(J).Name), "Ú") Then Print #NumFile2, NombreTablaE & "." & .fields(J).Name
      Next J
     End With
     Print #NumFile, "+";
@@ -7690,8 +7717,8 @@ For I = 0 To LstTablas.ListCount - 1
     Progreso_Esperar
     'MsgBox RutaSistema & "\BASES\UPDATE_DB\ABASES.TXT"
 Next I
+Close #NumFile2
 Close #NumFile
-'
 End Sub
 
 Public Sub Procesar_Duplicados_Clientes()

@@ -869,7 +869,7 @@ Option Explicit
 Dim Retencion_No As Long
 Dim Serie_R As String
  
-Dim ObjAutori As New WS_Autorizacion
+'Dim ObjAutori As New WS_Autorizacion
 
 Dim ArrayAutorizacion() As String
 Dim DocDesde As Long

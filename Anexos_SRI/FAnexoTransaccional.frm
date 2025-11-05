@@ -4932,7 +4932,7 @@ Public Sub Consultar_Anexos()
        & "WHERE TC.Fecha Between #" & FechaIni & "# AND #" & FechaFin & "# " _
        & "AND TC.Periodo = '" & Periodo_Contable & "' " _
        & "AND TC.Item IN (" & sItem & ") "
-  If CheqATSConElect.value = 0 Then sSQL = sSQL & "AND LEN(TC.AutRetencion) < 13 " Else sSQL = sSQL & "AND LEN(TC.AutRetencion) <> 13 "
+  If CheqATSConElect.value = 0 Then sSQL = sSQL & "AND LEN(TC.AutRetencion) < 13 " Else sSQL = sSQL & "AND LEN(TC.AutRetencion) >= 6 "
   sSQL = sSQL _
        & "AND TC.IdProv = C.Codigo " _
        & "ORDER BY TC.Linea_SRI,C.Cliente, C.CI_RUC, C.TD "
@@ -5121,7 +5121,7 @@ On Error GoTo Errorhandler
    With AdoRolPagos.Recordset
     If .RecordCount Then
        'ENCABEZADO DEL EMPLEADO
-        Printer.FontSize = SetD(2).Tamaño
+        Printer.FontSize = SetD(2).Porte
         Printer.FontBold = True
         Codigo = CStr(.Fields("AñoRet"))
         AnchoLetra = SetD(2).PosX
@@ -5142,18 +5142,18 @@ On Error GoTo Errorhandler
             PrinterTexto AnchoLetra, SetD(4).PosY, MidStrg(RUC, I, 1)
             AnchoLetra = AnchoLetra + 0.5
         Next I
-        Printer.FontSize = SetD(5).Tamaño
+        Printer.FontSize = SetD(5).Porte
         PrinterTexto SetD(5).PosX, SetD(5).PosY, UCaseStrg(NombreComercial)
         AnchoLetra = SetD(6).PosX
         For I = 1 To 10
-            Printer.FontSize = SetD(6).Tamaño
+            Printer.FontSize = SetD(6).Porte
             PrinterTexto AnchoLetra, SetD(6).PosY, MidStrg(.Fields("CI_RUC"), I, 1)
             AnchoLetra = AnchoLetra + 0.5
         Next I
-        Printer.FontSize = SetD(7).Tamaño
+        Printer.FontSize = SetD(7).Porte
         PrinterTexto SetD(7).PosX, SetD(7).PosY, .Fields("Cliente")
        'LIQUIDACION DE IMPUESTOS
-        Printer.FontSize = SetD(8).Tamaño
+        Printer.FontSize = SetD(8).Porte
         PrinterFields SetD(8).PosX, SetD(8).PosY, .Fields("SuelSal"), , True
         PrinterFields SetD(9).PosX, SetD(9).PosY, .Fields("SobSuelComRemu"), , True
         PrinterFields SetD(10).PosX, SetD(10).PosY, .Fields("PartUtil"), , True

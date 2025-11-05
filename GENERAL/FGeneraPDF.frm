@@ -1,9 +1,9 @@
 VERSION 5.00
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{65E121D4-0C60-11D2-A9FC-0000F8754DA1}#2.0#0"; "mschrt20.ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
+Object = "{65E121D4-0C60-11D2-A9FC-0000F8754DA1}#2.0#0"; "mschrt20.ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.Ocx"
 Begin VB.Form FGeneraPDF 
    Caption         =   "PDF"
@@ -20,7 +20,7 @@ Begin VB.Form FGeneraPDF
       Align           =   1  'Align Top
       Height          =   660
       Left            =   0
-      TabIndex        =   0
+      TabIndex        =   6
       Top             =   0
       Width           =   15960
       _ExtentX        =   28152
@@ -161,25 +161,9 @@ Begin VB.Form FGeneraPDF
          EndProperty
          Height          =   645
          Left            =   11340
-         TabIndex        =   4
+         TabIndex        =   7
          Top             =   0
          Width           =   7575
-         Begin VB.CommandButton Command2 
-            Caption         =   "Command1"
-            Height          =   330
-            Left            =   3360
-            TabIndex        =   7
-            Top             =   210
-            Width           =   1065
-         End
-         Begin VB.CommandButton Command1 
-            Caption         =   "Boton1"
-            Height          =   330
-            Left            =   2205
-            TabIndex        =   6
-            Top             =   210
-            Width           =   1065
-         End
          Begin VB.ComboBox CTipoCtrl 
             BeginProperty Font 
                Name            =   "MS Sans Serif"
@@ -192,9 +176,25 @@ Begin VB.Form FGeneraPDF
             EndProperty
             Height          =   315
             Left            =   105
-            TabIndex        =   5
+            TabIndex        =   10
             Top             =   210
             Width           =   2010
+         End
+         Begin VB.CommandButton Command1 
+            Caption         =   "Boton1"
+            Height          =   330
+            Left            =   2205
+            TabIndex        =   9
+            Top             =   210
+            Width           =   1065
+         End
+         Begin VB.CommandButton Command2 
+            Caption         =   "Command1"
+            Height          =   330
+            Left            =   3360
+            TabIndex        =   8
+            Top             =   210
+            Width           =   1065
          End
          Begin MSAdodcLib.Adodc AdoDataGrid 
             Height          =   330
@@ -244,6 +244,25 @@ Begin VB.Form FGeneraPDF
          End
       End
    End
+   Begin VB.ListBox LstStatud 
+      Appearance      =   0  'Flat
+      BackColor       =   &H00C00000&
+      BeginProperty Font 
+         Name            =   "Terminal"
+         Size            =   9
+         Charset         =   255
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   570
+      Left            =   105
+      TabIndex        =   5
+      Top             =   4305
+      Width           =   6315
+   End
    Begin InetCtlsObjects.Inet Inet1 
       Left            =   12390
       Top             =   840
@@ -258,20 +277,20 @@ Begin VB.Form FGeneraPDF
       Left            =   105
       ScaleHeight     =   1005
       ScaleWidth      =   6150
-      TabIndex        =   8
+      TabIndex        =   3
       Top             =   735
       Visible         =   0   'False
       Width           =   6210
    End
    Begin VB.Timer msgTimer 
-      Left            =   6195
-      Top             =   840
+      Left            =   4725
+      Top             =   1995
    End
    Begin MSChart20Lib.MSChart MSChart 
       Height          =   2745
       Left            =   105
       OleObjectBlob   =   "FGeneraPDF.frx":0000
-      TabIndex        =   2
+      TabIndex        =   1
       Top             =   5775
       Width           =   5790
    End
@@ -279,7 +298,7 @@ Begin VB.Form FGeneraPDF
       Bindings        =   "FGeneraPDF.frx":1BAC
       Height          =   2010
       Left            =   105
-      TabIndex        =   1
+      TabIndex        =   0
       Top             =   2205
       Width           =   3900
       _ExtentX        =   6879
@@ -489,11 +508,123 @@ Begin VB.Form FGeneraPDF
       EndProperty
       _Version        =   393216
    End
+   Begin ComctlLib.ListView LstVwFTP 
+      Height          =   540
+      Left            =   7035
+      TabIndex        =   4
+      Top             =   4305
+      Visible         =   0   'False
+      Width           =   1905
+      _ExtentX        =   3360
+      _ExtentY        =   953
+      View            =   3
+      LabelWrap       =   -1  'True
+      HideSelection   =   -1  'True
+      _Version        =   327682
+      Icons           =   "ImgLstFTP"
+      SmallIcons      =   "ImgLstFTP"
+      ForeColor       =   -2147483640
+      BackColor       =   -2147483643
+      BorderStyle     =   1
+      Appearance      =   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      NumItems        =   3
+      BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+         Key             =   ""
+         Object.Tag             =   ""
+         Text            =   "Archivos"
+         Object.Width           =   3351
+      EndProperty
+      BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+         SubItemIndex    =   1
+         Key             =   ""
+         Object.Tag             =   ""
+         Text            =   "Tamaño"
+         Object.Width           =   1587
+      EndProperty
+      BeginProperty ColumnHeader(3) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+         SubItemIndex    =   2
+         Key             =   ""
+         Object.Tag             =   ""
+         Text            =   "Modificado"
+         Object.Width           =   2646
+      EndProperty
+   End
+   Begin ComctlLib.ImageList ImgLstFTP 
+      Left            =   6405
+      Top             =   4410
+      _ExtentX        =   1005
+      _ExtentY        =   1005
+      BackColor       =   -2147483643
+      ImageWidth      =   32
+      ImageHeight     =   32
+      MaskColor       =   12632256
+      _Version        =   327682
+      BeginProperty Images {0713E8C2-850A-101B-AFC0-4210102A8DA7} 
+         NumListImages   =   12
+         BeginProperty ListImage1 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "FGeneraPDF.frx":1BC6
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage2 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "FGeneraPDF.frx":1EE0
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage3 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "FGeneraPDF.frx":21FA
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage4 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "FGeneraPDF.frx":2500
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage5 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "FGeneraPDF.frx":281A
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage6 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "FGeneraPDF.frx":2B34
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage7 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "FGeneraPDF.frx":2E26
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage8 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "FGeneraPDF.frx":3640
+            Key             =   "archivo"
+         EndProperty
+         BeginProperty ListImage9 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "FGeneraPDF.frx":395A
+            Key             =   "carpeta"
+         EndProperty
+         BeginProperty ListImage10 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "FGeneraPDF.frx":3C74
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage11 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "FGeneraPDF.frx":3EB2
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage12 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "FGeneraPDF.frx":41CC
+            Key             =   ""
+         EndProperty
+      EndProperty
+   End
    Begin VB.Label msgLabel 
       Caption         =   "Label1"
       Height          =   225
       Left            =   7035
-      TabIndex        =   3
+      TabIndex        =   2
       Top             =   945
       Width           =   1695
    End
@@ -510,83 +641,83 @@ Begin VB.Form FGeneraPDF
       BeginProperty Images {0713E8C2-850A-101B-AFC0-4210102A8DA7} 
          NumListImages   =   20
          BeginProperty ListImage1 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FGeneraPDF.frx":1BC6
+            Picture         =   "FGeneraPDF.frx":44E6
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FGeneraPDF.frx":1EE0
+            Picture         =   "FGeneraPDF.frx":4800
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FGeneraPDF.frx":2FD92
+            Picture         =   "FGeneraPDF.frx":326B2
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FGeneraPDF.frx":2FFD0
+            Picture         =   "FGeneraPDF.frx":328F0
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FGeneraPDF.frx":302EA
+            Picture         =   "FGeneraPDF.frx":32C0A
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FGeneraPDF.frx":387BC
+            Picture         =   "FGeneraPDF.frx":3B0DC
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FGeneraPDF.frx":38AD6
+            Picture         =   "FGeneraPDF.frx":3B3F6
             Key             =   ""
          EndProperty
          BeginProperty ListImage8 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FGeneraPDF.frx":38DF0
+            Picture         =   "FGeneraPDF.frx":3B710
             Key             =   ""
          EndProperty
          BeginProperty ListImage9 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FGeneraPDF.frx":3910A
+            Picture         =   "FGeneraPDF.frx":3BA2A
             Key             =   ""
          EndProperty
          BeginProperty ListImage10 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FGeneraPDF.frx":39424
+            Picture         =   "FGeneraPDF.frx":3BD44
             Key             =   ""
          EndProperty
          BeginProperty ListImage11 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FGeneraPDF.frx":39716
+            Picture         =   "FGeneraPDF.frx":3C036
             Key             =   ""
          EndProperty
          BeginProperty ListImage12 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FGeneraPDF.frx":39A30
+            Picture         =   "FGeneraPDF.frx":3C350
             Key             =   ""
          EndProperty
          BeginProperty ListImage13 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FGeneraPDF.frx":39D4A
+            Picture         =   "FGeneraPDF.frx":3C66A
             Key             =   ""
          EndProperty
          BeginProperty ListImage14 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FGeneraPDF.frx":3E90C
+            Picture         =   "FGeneraPDF.frx":4122C
             Key             =   ""
          EndProperty
          BeginProperty ListImage15 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FGeneraPDF.frx":3EC26
+            Picture         =   "FGeneraPDF.frx":41546
             Key             =   ""
          EndProperty
          BeginProperty ListImage16 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FGeneraPDF.frx":3F878
+            Picture         =   "FGeneraPDF.frx":42198
             Key             =   ""
          EndProperty
          BeginProperty ListImage17 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FGeneraPDF.frx":3FB92
+            Picture         =   "FGeneraPDF.frx":424B2
             Key             =   ""
          EndProperty
          BeginProperty ListImage18 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FGeneraPDF.frx":42BE4
+            Picture         =   "FGeneraPDF.frx":45504
             Key             =   ""
          EndProperty
          BeginProperty ListImage19 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FGeneraPDF.frx":45C36
+            Picture         =   "FGeneraPDF.frx":48556
             Key             =   ""
          EndProperty
          BeginProperty ListImage20 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FGeneraPDF.frx":45E74
+            Picture         =   "FGeneraPDF.frx":48794
             Key             =   ""
          EndProperty
       EndProperty
@@ -1022,11 +1153,11 @@ Dim v10 As Date
         'Progreso_Esperar True
         'LblConexion.Refresh
         URLHTTP = "https://erp.diskcoversystem.com/php/comprobantes/SRI/autorizar_sri_visual.php?CERecibidos=true"
-        AClaveAcceso(0) = "0809202501179321263100120010010000001111234567811"
-        AClaveAcceso(1) = "0809202501179321263100120010010000001151234567811"
-        AClaveAcceso(2) = "1908202501179321263100120010010000001001234567811"
-       Cadena = ""
-        For I = 0 To 2
+        AClaveAcceso(0) = "2410202501179321301800120010020000582670000000010"
+        AClaveAcceso(1) = "2410202501099315216100124500020001837470018374710"
+        AClaveAcceso(2) = "2010202501171817099400120010010000011929846951114"
+        Cadena = ""
+        For I = 0 To UBound(AClaveAcceso)
             URLParams = "XML=" & AClaveAcceso(I)
             Progreso_Barra.Mensaje_Box = URLParams
             Progreso_Esperar True
@@ -1037,12 +1168,40 @@ Dim v10 As Date
             Cadena = Cadena & Progreso_Barra.Mensaje_Box & vbCrLf
             '-------------------------------------------------------------------------------------------------------------------
             'Le indicamos el ListView donde se listarán los archivos
-            ' Clipboard.Clear
-            ' Clipboard.SetText URLHTTP & vbCrLf & URLParams & vbCrLf & String(80, "-") & vbCrLf & "Resultado: " & MensajeError
+            'Clipboard.Clear
+            'Clipboard.SetText TextoError
+            'MsgBox "Desktop Test:" & URLHTTP & vbCrLf & URLParams
         Next I
         MsgBox "Desktop Test: " & URLHTTP & vbCrLf & "Respuesta: " & vbCrLf & Cadena
+         
+         'Conectamos al servidor ERP
+          With ftp
+              .Inicializar FGeneraPDF
+              .Password = ftpPwr  'Le establecemos la contraseña de la cuenta Ftp
+              .Usuario = ftpUse   'Le establecemos el nombre de usuario de la cuenta
+              .servidor = ftpSvr  'Establecesmo el nombre del Servidor FTP
+               Set .ListView = LstVwFTP
+              .ConStatus = True
+               If .ConectarFtp(LstStatud) Then
+                 RatonReloj
+                 Cadena = ""
+                .CambiarDirectorio "/ComprobantesElectronicos/ce_recibidos/"
+                .ListarArchivos
+                
+                 For I = 1 To LstVwFTP.ListItems.Count
+                     Cadena = Cadena & LstVwFTP.ListItems(I) & vbCrLf
+                 
+''                     Progreso_Barra.Mensaje_Box = "Actualizando: " & LstVwFTP.ListItems(I)
+''                    .Mostar_Estado_FTP ProgressBarEstado, LstStatud
+''                    .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\CERTIFIC\" & LstVwFTP.ListItems(I), True
+                 Next I
+                 RatonNormal
+               Else
+                 MsgBox "Seridor FTP del ERP no disponible"
+               End If
+          End With
         
-        MsgBox "Desktop Test:"
+        MsgBox "Desktop Test: " & LstVwFTP.ListItems.Count & vbCrLf & Cadena
 ''           .Estado_SRI = MensajeError
 ''            If MensajeError = "Autorizado" Then
        
@@ -1470,12 +1629,12 @@ Dim A_No As Long
            RatonReloj
            Progreso_Barra.Valor_Maximo = Progreso_Barra.Valor_Maximo + .RecordCount
            Do While Not .EOF
-              Mifecha = .fields("Fecha")
-              CodigoB = .fields("Codigo_P")
-              TipoDoc = .fields("TP")
-              Numero = .fields("Numero")
-              Cta = .fields("Cta_Inv")
-              Contra_Cta = .fields("Contra_Cta")
+              Mifecha = .Fields("Fecha")
+              CodigoB = .Fields("Codigo_P")
+              TipoDoc = .Fields("TP")
+              Numero = .Fields("Numero")
+              Cta = .Fields("Cta_Inv")
+              Contra_Cta = .Fields("Contra_Cta")
               Progreso_Barra.Mensaje_Box = "[" & ContIDX & "] Ins. Cta. Trans." & TipoDoc & " = " & Numero & ": " & Mifecha & ", " & CodigoCli
               Progreso_Esperar
 
@@ -1526,11 +1685,11 @@ Dim A_No As Long
            Progreso_Barra.Valor_Maximo = Progreso_Barra.Valor_Maximo + .RecordCount
            'MsgBox "...."
            Do While Not .EOF
-              Mifecha = .fields("Fecha")
-              CodigoB = .fields("Codigo_B")
-              TipoDoc = .fields("TP")
-              Numero = .fields("Numero")
-              CodigoCli = .fields("Cliente")
+              Mifecha = .Fields("Fecha")
+              CodigoB = .Fields("Codigo_B")
+              TipoDoc = .Fields("TP")
+              Numero = .Fields("Numero")
+              CodigoCli = .Fields("Cliente")
               Progreso_Barra.Mensaje_Box = "[" & ContIDX & "] " & TipoDoc & " = " & Numero & ": " & Mifecha & ", " & CodigoCli
               Progreso_Esperar
               sSQL = "SELECT Cta_Inv, SUM(Valor_Total) As TotalInv " _
@@ -1544,8 +1703,8 @@ Dim A_No As Long
               Select_Adodc AdoCtas, sSQL
               If AdoCtas.Recordset.RecordCount > 0 Then
                  Do While Not AdoCtas.Recordset.EOF
-                    Haber = Redondear(AdoCtas.Recordset.fields("TotalInv"), 2)
-                    Cta = AdoCtas.Recordset.fields("Cta_Inv")
+                    Haber = Redondear(AdoCtas.Recordset.Fields("TotalInv"), 2)
+                    Cta = AdoCtas.Recordset.Fields("Cta_Inv")
                     sSQL = "UPDATE Transacciones " _
                          & "SET Haber = " & Haber & " " _
                          & "WHERE Periodo = '" & Periodo_Contable & "' " _
@@ -1569,8 +1728,8 @@ Dim A_No As Long
               Select_Adodc AdoCtas, sSQL
               If AdoCtas.Recordset.RecordCount > 0 Then
                  Do While Not AdoCtas.Recordset.EOF
-                    Debe = Redondear(AdoCtas.Recordset.fields("TotalInv"), 2)
-                    Cta = AdoCtas.Recordset.fields("Contra_Cta")
+                    Debe = Redondear(AdoCtas.Recordset.Fields("TotalInv"), 2)
+                    Cta = AdoCtas.Recordset.Fields("Contra_Cta")
                     
                     sSQL = "UPDATE Transacciones " _
                          & "SET Debe = " & Debe & " " _
@@ -1607,10 +1766,10 @@ Dim A_No As Long
               Select_Adodc AdoCtas, sSQL
               If AdoCtas.Recordset.RecordCount > 0 Then
                  Do While Not AdoCtas.Recordset.EOF
-                    Debe = Redondear(AdoCtas.Recordset.fields("Valor_Total"), 2)
-                    Cta = AdoCtas.Recordset.fields("Contra_Cta")
-                    SubCta = AdoCtas.Recordset.fields("TC")
-                    CodigoL = AdoCtas.Recordset.fields("CodigoL")
+                    Debe = Redondear(AdoCtas.Recordset.Fields("Valor_Total"), 2)
+                    Cta = AdoCtas.Recordset.Fields("Contra_Cta")
+                    SubCta = AdoCtas.Recordset.Fields("TC")
+                    CodigoL = AdoCtas.Recordset.Fields("CodigoL")
                     If Len(CodigoL) > 1 Then
                        SetAdoAddNew "Trans_SubCtas"
                        SetAdoFields "T", "N"
@@ -1730,12 +1889,12 @@ Dim A_No As Long
            RatonReloj
            Progreso_Barra.Valor_Maximo = Progreso_Barra.Valor_Maximo + .RecordCount
            Do While Not .EOF
-              Mifecha = .fields("Fecha")
-              TipoDoc = .fields("TC")
-              Factura_No = .fields("Factura")
-              CodigoInv = .fields("Codigo")
-              Cod_Bodega = .fields("CodBodega")
-              Cod_Marca = .fields("CodMarca")
+              Mifecha = .Fields("Fecha")
+              TipoDoc = .Fields("TC")
+              Factura_No = .Fields("Factura")
+              CodigoInv = .Fields("Codigo")
+              Cod_Bodega = .Fields("CodBodega")
+              Cod_Marca = .Fields("CodMarca")
               Progreso_Barra.Mensaje_Box = "[" & ContIDX & "] Ins. Cta. Trans." & TipoDoc & " = " & Factura_No & ": " & Mifecha & ", " & CodigoInv
               Progreso_Esperar
 
@@ -1746,31 +1905,31 @@ Dim A_No As Long
                  If DatInv.Costo > 0 And Len(DatInv.Cta_Inventario) > 1 And Len(DatInv.Cta_Costo_Venta) > 1 Then
                     SetAdoAddNew "Trans_Kardex"
                     SetAdoFields "T", "@" ' Normal
-                    SetAdoFields "TC", .fields("TC")
-                    SetAdoFields "Serie", .fields("Serie")
-                    SetAdoFields "Fecha", .fields("Fecha")
-                    SetAdoFields "Factura", .fields("Factura")
-                    SetAdoFields "Codigo_P", .fields("CodigoC")
-                    SetAdoFields "CodBodega", .fields("CodBodega")
-                    SetAdoFields "CodMarca", .fields("CodMarca")
-                    SetAdoFields "Codigo_Inv", .fields("Codigo")
-                    SetAdoFields "CodigoL", .fields("CodigoL")
-                    SetAdoFields "Lote_No", .fields("Lote_No")
-                    SetAdoFields "Fecha_Fab", .fields("Fecha_Fab")
-                    SetAdoFields "Fecha_Exp", .fields("Fecha_Exp")
-                    SetAdoFields "Procedencia", .fields("Procedencia")
-                    SetAdoFields "Modelo", .fields("Modelo")
-                    SetAdoFields "Orden_No", .fields("Orden_No")
-                    SetAdoFields "Serie_No", .fields("Serie_No")
-                    SetAdoFields "Total_IVA", .fields("Total_IVA")
-                    SetAdoFields "Porc_C", .fields("Porc_C")
-                    SetAdoFields "Salida", .fields("Cantidad")
-                    SetAdoFields "PVP", .fields("Precio")
-                    SetAdoFields "Valor_Unitario", .fields("Precio")
+                    SetAdoFields "TC", .Fields("TC")
+                    SetAdoFields "Serie", .Fields("Serie")
+                    SetAdoFields "Fecha", .Fields("Fecha")
+                    SetAdoFields "Factura", .Fields("Factura")
+                    SetAdoFields "Codigo_P", .Fields("CodigoC")
+                    SetAdoFields "CodBodega", .Fields("CodBodega")
+                    SetAdoFields "CodMarca", .Fields("CodMarca")
+                    SetAdoFields "Codigo_Inv", .Fields("Codigo")
+                    SetAdoFields "CodigoL", .Fields("CodigoL")
+                    SetAdoFields "Lote_No", .Fields("Lote_No")
+                    SetAdoFields "Fecha_Fab", .Fields("Fecha_Fab")
+                    SetAdoFields "Fecha_Exp", .Fields("Fecha_Exp")
+                    SetAdoFields "Procedencia", .Fields("Procedencia")
+                    SetAdoFields "Modelo", .Fields("Modelo")
+                    SetAdoFields "Orden_No", .Fields("Orden_No")
+                    SetAdoFields "Serie_No", .Fields("Serie_No")
+                    SetAdoFields "Total_IVA", .Fields("Total_IVA")
+                    SetAdoFields "Porc_C", .Fields("Porc_C")
+                    SetAdoFields "Salida", .Fields("Cantidad")
+                    SetAdoFields "PVP", .Fields("Precio")
+                    SetAdoFields "Valor_Unitario", .Fields("Precio")
                     SetAdoFields "Costo", DatInv.Costo
-                    SetAdoFields "Valor_Total", Redondear(.fields("Cantidad") * .fields("Precio"), 2)
-                    SetAdoFields "Total", Redondear(.fields("Cantidad") * DatInv.Costo, 2)
-                    SetAdoFields "Detalle", "FA: " + MidStrg(.fields("Cliente"), 1, 96)
+                    SetAdoFields "Valor_Total", Redondear(.Fields("Cantidad") * .Fields("Precio"), 2)
+                    SetAdoFields "Total", Redondear(.Fields("Cantidad") * DatInv.Costo, 2)
+                    SetAdoFields "Detalle", "FA: " + MidStrg(.Fields("Cliente"), 1, 96)
                     SetAdoFields "Codigo_Barra", DatInv.Codigo_Barra
                     SetAdoFields "Cta_Inv", DatInv.Cta_Inventario
                     SetAdoFields "Contra_Cta", DatInv.Cta_Costo_Venta
@@ -1839,13 +1998,13 @@ Dim A_No As Long
        If .RecordCount > 0 Then
            RatonReloj
            Progreso_Barra.Valor_Maximo = .RecordCount
-           Cont = .fields("IDX")
-           Mifecha = .fields("FECHA")
-           CodigoA = .fields("CI_RUC")
-           CodigoB = TrimStrg(.fields("APELLIDOS_NOMBRES"))
-           CodigoC = TrimStrg(.fields("FICHA_CLINICA"))
-           Codigo1 = TrimStrg(.fields("CATEGORIA"))
-           CodigoCli = .fields("CODIGO")
+           Cont = .Fields("IDX")
+           Mifecha = .Fields("FECHA")
+           CodigoA = .Fields("CI_RUC")
+           CodigoB = TrimStrg(.Fields("APELLIDOS_NOMBRES"))
+           CodigoC = TrimStrg(.Fields("FICHA_CLINICA"))
+           Codigo1 = TrimStrg(.Fields("CATEGORIA"))
+           CodigoCli = .Fields("CODIGO")
            
            sSQL = "UPDATE Trans_Kardex " _
                 & "SET X = '.' " _
@@ -1877,9 +2036,9 @@ Dim A_No As Long
            Ejecutar_SQL_SP sSQL
            
            Do While Not .EOF
-              Progreso_Barra.Mensaje_Box = "[" & ContIDX & "] CD = " & NumComp & ": " & Mifecha & ", " & CodigoB & " -> (" & A_No & ") " & .fields("CODIGO_INVENTARIO")
+              Progreso_Barra.Mensaje_Box = "[" & ContIDX & "] CD = " & NumComp & ": " & Mifecha & ", " & CodigoB & " -> (" & A_No & ") " & .Fields("CODIGO_INVENTARIO")
               Progreso_Esperar
-              If Cont <> .fields("IDX") Then
+              If Cont <> .Fields("IDX") Then
                  Ln_No = 0
                  sSQL = "SELECT CONTRA_CTA, SUM(VALOR_TOTAL) As TotCta " _
                       & "FROM Asiento_K " _
@@ -1891,7 +2050,7 @@ Dim A_No As Long
                  Select_Adodc AdoCtas, sSQL
                  If AdoCtas.Recordset.RecordCount > 0 Then
                     Do While Not AdoCtas.Recordset.EOF
-                       InsertarAsientos AdoAsiento, AdoCtas.Recordset.fields("CONTRA_CTA"), 0, AdoCtas.Recordset.fields("TotCta"), 0
+                       InsertarAsientos AdoAsiento, AdoCtas.Recordset.Fields("CONTRA_CTA"), 0, AdoCtas.Recordset.Fields("TotCta"), 0
                        Ln_No = Ln_No + 1
                        AdoCtas.Recordset.MoveNext
                     Loop
@@ -1907,7 +2066,7 @@ Dim A_No As Long
                  Select_Adodc AdoCtas, sSQL
                  If AdoCtas.Recordset.RecordCount > 0 Then
                     Do While Not AdoCtas.Recordset.EOF
-                       InsertarAsientos AdoAsiento, AdoCtas.Recordset.fields("CTA_INVENTARIO"), 0, 0, AdoCtas.Recordset.fields("TotCta")
+                       InsertarAsientos AdoAsiento, AdoCtas.Recordset.Fields("CTA_INVENTARIO"), 0, 0, AdoCtas.Recordset.Fields("TotCta")
                        Ln_No = Ln_No + 1
                        AdoCtas.Recordset.MoveNext
                     Loop
@@ -1939,14 +2098,14 @@ Dim A_No As Long
                       & "WHERE IDX = " & Cont & " "
                  Ejecutar_SQL_SP sSQL
                 'MsgBox sSQL
-                 Cont = .fields("IDX")
+                 Cont = .Fields("IDX")
                  ContIDX = ContIDX + 1
-                 Mifecha = .fields("FECHA")
-                 CodigoA = .fields("CI_RUC")
-                 CodigoB = TrimStrg(.fields("APELLIDOS_NOMBRES"))
-                 CodigoC = TrimStrg(.fields("FICHA_CLINICA"))
-                 Codigo1 = TrimStrg(.fields("CATEGORIA"))
-                 CodigoCli = .fields("CODIGO")
+                 Mifecha = .Fields("FECHA")
+                 CodigoA = .Fields("CI_RUC")
+                 CodigoB = TrimStrg(.Fields("APELLIDOS_NOMBRES"))
+                 CodigoC = TrimStrg(.Fields("FICHA_CLINICA"))
+                 Codigo1 = TrimStrg(.Fields("CATEGORIA"))
+                 CodigoCli = .Fields("CODIGO")
                 'MsgBox "CD = " & NumComp & " .."
                  IniciarAsientosAdo AdoAsiento
                  A_No = 0
@@ -1960,22 +2119,22 @@ Dim A_No As Long
               End If
 
              'Averiguamos el costo promedio de salida
-              Stock_Actual_Inventario .fields("FECHA"), .fields("CODIGO_INVENTARIO"), "01"
-              ValorTotal = Redondear(ValorUnit * .fields("CANTIDAD_SALIDA"), 2)
+              Stock_Actual_Inventario .Fields("FECHA"), .Fields("CODIGO_INVENTARIO"), "01"
+              ValorTotal = Redondear(ValorUnit * .Fields("CANTIDAD_SALIDA"), 2)
               RatonReloj
               
               '.Fields ("FICHA_CLINICA")
               SetAdoAddNew "Asiento_K"
               SetAdoFields "DH", "2"
-              SetAdoFields "CODIGO_INV", .fields("CODIGO_INVENTARIO")
-              SetAdoFields "PRODUCTO", .fields("PRODUCTO")
-              SetAdoFields "CANT_ES", .fields("CANTIDAD_SALIDA")
+              SetAdoFields "CODIGO_INV", .Fields("CODIGO_INVENTARIO")
+              SetAdoFields "PRODUCTO", .Fields("PRODUCTO")
+              SetAdoFields "CANT_ES", .Fields("CANTIDAD_SALIDA")
               SetAdoFields "VALOR_UNIT", ValorUnit
               SetAdoFields "VALOR_TOTAL", ValorTotal
-              SetAdoFields "CTA_INVENTARIO", .fields("CTA_INVENTARIO")
-              SetAdoFields "CONTRA_CTA", .fields("CODIGO_CONTABLE")
-              SetAdoFields "CANTIDAD", .fields("CANTIDAD_SALIDA")
-              SetAdoFields "SUBCTA", .fields("CODIGO_CC")
+              SetAdoFields "CTA_INVENTARIO", .Fields("CTA_INVENTARIO")
+              SetAdoFields "CONTRA_CTA", .Fields("CODIGO_CONTABLE")
+              SetAdoFields "CANTIDAD", .Fields("CANTIDAD_SALIDA")
+              SetAdoFields "SUBCTA", .Fields("CODIGO_CC")
               SetAdoFields "UNIDAD", "UNIDAD"
               SetAdoFields "Codigo_B", CodigoCli
               SetAdoFields "CodBod", "01"
@@ -1989,9 +2148,9 @@ Dim A_No As Long
               SetAdoFields "TM", "1"
               SetAdoFields "DH", "1"
               SetAdoFields "Factura", 0
-              SetAdoFields "Codigo", .fields("CODIGO_CC")
-              SetAdoFields "FECHA_V", .fields("FECHA")
-              SetAdoFields "Cta", .fields("CODIGO_CONTABLE")
+              SetAdoFields "Codigo", .Fields("CODIGO_CC")
+              SetAdoFields "FECHA_V", .Fields("FECHA")
+              SetAdoFields "Cta", .Fields("CODIGO_CONTABLE")
               SetAdoFields "Detalle_SubCta", CodigoB
               SetAdoFields "TC", "CC"
               SetAdoFields "T_No", Trans_No
@@ -2013,7 +2172,7 @@ Dim A_No As Long
            Select_Adodc AdoCtas, sSQL
            If AdoCtas.Recordset.RecordCount > 0 Then
               Do While Not AdoCtas.Recordset.EOF
-                 InsertarAsientos AdoAsiento, AdoCtas.Recordset.fields("CONTRA_CTA"), 0, AdoCtas.Recordset.fields("TotCta"), 0
+                 InsertarAsientos AdoAsiento, AdoCtas.Recordset.Fields("CONTRA_CTA"), 0, AdoCtas.Recordset.Fields("TotCta"), 0
                  Ln_No = Ln_No + 1
                  AdoCtas.Recordset.MoveNext
               Loop
@@ -2029,7 +2188,7 @@ Dim A_No As Long
            Select_Adodc AdoCtas, sSQL
            If AdoCtas.Recordset.RecordCount > 0 Then
               Do While Not AdoCtas.Recordset.EOF
-                 InsertarAsientos AdoAsiento, AdoCtas.Recordset.fields("CTA_INVENTARIO"), 0, 0, AdoCtas.Recordset.fields("TotCta")
+                 InsertarAsientos AdoAsiento, AdoCtas.Recordset.Fields("CTA_INVENTARIO"), 0, 0, AdoCtas.Recordset.Fields("TotCta")
                  Ln_No = Ln_No + 1
                  AdoCtas.Recordset.MoveNext
               Loop
@@ -2097,8 +2256,8 @@ Dim rsExcel As ADODB.Recordset
        AdoDataGrid.Recordset.MoveLast
        DataGrid.Caption = AdoDataGrid.Recordset.RecordCount
        Cadena = "Registros: " & AdoDataGrid.Recordset.RecordCount & vbCrLf
-       For I = 0 To AdoDataGrid.Recordset.fields.Count - 1
-           Cadena = Cadena & AdoDataGrid.Recordset.fields(I).Name & " = " & AdoDataGrid.Recordset.fields(I) & vbCrLf
+       For I = 0 To AdoDataGrid.Recordset.Fields.Count - 1
+           Cadena = Cadena & AdoDataGrid.Recordset.Fields(I).Name & " = " & AdoDataGrid.Recordset.Fields(I) & vbCrLf
        Next I
        'MsgBox Cadena
        End If

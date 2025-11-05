@@ -712,37 +712,37 @@ With AdoDiarioCaja.Recordset
     .MoveFirst
      Printer.FontBold = True
      Printer.FontName = TipoTimes
-     Printer.FontSize = SetD(2).Tamaño
+     Printer.FontSize = SetD(2).Porte
      PrinterTexto SetD(2).PosX, SetD(2).PosY, FechaStrgCiudad(.fields("Fecha"))
-     Printer.FontSize = SetD(3).Tamaño
+     Printer.FontSize = SetD(3).Porte
      PrinterTexto SetD(3).PosX, SetD(3).PosY, NombreCliente
-     Printer.FontSize = SetD(5).Tamaño
+     Printer.FontSize = SetD(5).Porte
      PrinterLineasTexto SetD(5).PosX, SetD(5).PosY, LblConcepto, 15
-     Printer.FontSize = SetD(10).Tamaño
+     Printer.FontSize = SetD(10).Porte
      PrinterTexto SetD(10).PosX, SetD(10).PosY, LblBanco     ' Banco
-     Printer.FontSize = SetD(12).Tamaño
+     Printer.FontSize = SetD(12).Porte
      PrinterTexto SetD(12).PosX, SetD(12).PosY, LblCheque    ' Cheque
-     Printer.FontSize = SetD(8).Tamaño
+     Printer.FontSize = SetD(8).Porte
      PrinterVariables SetD(8).PosX, SetD(8).PosY, Total      ' Efectivo
-     Printer.FontSize = SetD(9).Tamaño
+     Printer.FontSize = SetD(9).Porte
      PrinterVariables SetD(9).PosX, SetD(9).PosY, SaldoDisp  ' Valor Banco
      PosLinea = SetD(13).PosY
      Printer.FontBold = False
      Real1 = 0:     Real2 = 0:     Real3 = 0:     Real4 = 0
      Do While Not .EOF
-        Printer.FontSize = SetD(13).Tamaño
+        Printer.FontSize = SetD(13).Porte
         PrinterTexto SetD(13).PosX, PosLinea, Format$(.fields("Factura"), "0000000")
-        Printer.FontSize = SetD(19).Tamaño
+        Printer.FontSize = SetD(19).Porte
         PrinterFields SetD(19).PosX, PosLinea, .fields("Comprobante")
-        Printer.FontSize = SetD(14).Tamaño
+        Printer.FontSize = SetD(14).Porte
         PrinterFields SetD(14).PosX, PosLinea, .fields("Saldo_Anterior")
-        Printer.FontSize = SetD(15).Tamaño
+        Printer.FontSize = SetD(15).Porte
         PrinterFields SetD(15).PosX, PosLinea, .fields("RET_FTE")
-        Printer.FontSize = SetD(16).Tamaño
+        Printer.FontSize = SetD(16).Porte
         PrinterFields SetD(16).PosX, PosLinea, .fields("RET_IVA")
-        Printer.FontSize = SetD(17).Tamaño
+        Printer.FontSize = SetD(17).Porte
         PrinterFields SetD(17).PosX, PosLinea, .fields("ABONO")
-        Printer.FontSize = SetD(18).Tamaño
+        Printer.FontSize = SetD(18).Porte
         PrinterFields SetD(18).PosX, PosLinea, .fields("Saldo_Actual")
         Real1 = Real1 + .fields("RET_FTE")
         Real2 = Real2 + .fields("RET_IVA")
@@ -752,7 +752,7 @@ With AdoDiarioCaja.Recordset
        .MoveNext
      Loop
      PosLinea = SetD(20).PosY
-     Printer.FontSize = SetD(20).Tamaño
+     Printer.FontSize = SetD(20).Porte
      PrinterVariables SetD(15).PosX, PosLinea, Real1
      PrinterVariables SetD(16).PosX, PosLinea, Real2
      PrinterVariables SetD(17).PosX, PosLinea, Real3

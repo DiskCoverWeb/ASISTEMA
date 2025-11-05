@@ -1129,24 +1129,24 @@ If PonImpresoraDefecto(SetNombrePRN) Then
     If .RecordCount > 0 Then
        'MsgBox LineaNo
         Do While Not .EOF
-           'If LineaNo > SetD(7).Tamaño Then LineaNo = 1
+           'If LineaNo > SetD(7).Porte Then LineaNo = 1
            If LineaNo = 0 Then LineaNo = 1
            If LineaNo = 1 Then
               Printer.FontBold = True
               If ImpReverso = False Then
-                 Printer.FontSize = SetD(11).Tamaño
+                 Printer.FontSize = SetD(11).Porte
                  PrinterTexto SetD(11).PosX, SetD(11).PosY, "LIBRETA DE AHORRO"
-                 Printer.FontSize = SetD(3).Tamaño
+                 Printer.FontSize = SetD(3).Porte
                  PrinterTexto SetD(3).PosX, SetD(3).PosY, Nombres
-                 Printer.FontSize = SetD(30).Tamaño
+                 Printer.FontSize = SetD(30).Porte
                  PrinterTexto SetD(30).PosX, SetD(30).PosY, Apellidos
-                 Printer.FontSize = SetD(4).Tamaño
+                 Printer.FontSize = SetD(4).Porte
                  PrinterTexto SetD(4).PosX, SetD(4).PosY, DirCliente
-                 Printer.FontSize = SetD(5).Tamaño
+                 Printer.FontSize = SetD(5).Porte
                  PrinterTexto SetD(5).PosX, SetD(5).PosY, "C.I./R.U.C. " & CICliente
                  Cadena = CuentaNo
                  If SetD(31).PosX > 0 And SetD(31).PosY > 0 Then Cadena = SetD(31).Encabezado & " " & Cadena
-                 Printer.FontSize = SetD(2).Tamaño
+                 Printer.FontSize = SetD(2).Porte
                  PrinterTexto SetD(2).PosX, SetD(2).PosY, Cadena
               End If
              'MsgBox ImpReverso
@@ -1155,17 +1155,17 @@ If PonImpresoraDefecto(SetNombrePRN) Then
               Else
                  PosLinea = SetD(22).PosY + (LineaNo * EspLinea)
               End If
-              Printer.FontSize = SetD(16).Tamaño
+              Printer.FontSize = SetD(16).Porte
               PrinterTexto SetD(16).PosX, PosLinea, "FECHA"
-              Printer.FontSize = SetD(17).Tamaño
+              Printer.FontSize = SetD(17).Porte
               PrinterTexto SetD(17).PosX, PosLinea, "TIPO"
-              Printer.FontSize = SetD(20).Tamaño
+              Printer.FontSize = SetD(20).Porte
               PrinterTexto SetD(20).PosX, PosLinea, "M O N T O "
-              Printer.FontSize = SetD(18).Tamaño
+              Printer.FontSize = SetD(18).Porte
               PrinterTexto SetD(18).PosX, PosLinea, "  DEBITOS"
-              Printer.FontSize = SetD(19).Tamaño
+              Printer.FontSize = SetD(19).Porte
               PrinterTexto SetD(19).PosX, PosLinea, "  CREDITOS"
-              Printer.FontSize = SetD(21).Tamaño
+              Printer.FontSize = SetD(21).Porte
               PrinterTexto SetD(21).PosX, PosLinea, "S A L D O "
               If (SetD(16).PosX + SetD(17).PosX + SetD(20).PosX + SetD(21).PosX) > 0 Then
                  LineaNo = LineaNo + 1
@@ -1176,7 +1176,7 @@ If PonImpresoraDefecto(SetNombrePRN) Then
                  Printer.NewPage
               End If
            End If
-           Printer.FontSize = SetD(22).Tamaño
+           Printer.FontSize = SetD(22).Porte
            Printer.FontBold = False
 '           If .Fields("ID") <> LineaNo Then .Fields("ID") = LineaNo
           'Verificar si imprimimos al reverso
@@ -1207,13 +1207,13 @@ If PonImpresoraDefecto(SetNombrePRN) Then
            PrinterTexto SetD(23).PosX, PosLinea, CStr(LineaNo)
            'MsgBox LineaNo
            LineaNo = LineaNo + 1
-           If LineaNo > SetD(10).Tamaño And ImpReverso Then
+           If LineaNo > SetD(10).Porte And ImpReverso Then
               PosLinea = 1
               LineaNo = 0
               ImpReverso = Not ImpReverso
               Printer.NewPage
            End If
-           If LineaNo > SetD(7).Tamaño And ImpReverso = False Then
+           If LineaNo > SetD(7).Porte And ImpReverso = False Then
               PosLinea = 1
               LineaNo = 0
               ImpReverso = Not ImpReverso
@@ -1311,20 +1311,20 @@ If PonImpresoraDefecto(SetNombrePRN) Then
     If .RecordCount > 0 Then
        'MsgBox LineaNo
         Do While Not .EOF
-           If LineaNo > SetD(7).Tamaño Then LineaNo = 1
+           If LineaNo > SetD(7).Porte Then LineaNo = 1
            If LineaNo = 0 Then LineaNo = 1
            If LineaNo = 1 Then
               Printer.FontBold = True
               If ImpReverso = False Then
-                 Printer.FontSize = SetD(11).Tamaño
+                 Printer.FontSize = SetD(11).Porte
                  PrinterTexto SetD(11).PosX, SetD(11).PosY, "CERTIFICADOS DE APORTACION"
-                 Printer.FontSize = SetD(3).Tamaño
+                 Printer.FontSize = SetD(3).Porte
                  PrinterTexto SetD(3).PosX, SetD(3).PosY, Nombres
-                 Printer.FontSize = SetD(4).Tamaño
+                 Printer.FontSize = SetD(4).Porte
                  PrinterTexto SetD(4).PosX, SetD(4).PosY, DirCliente
-                 Printer.FontSize = SetD(5).Tamaño
+                 Printer.FontSize = SetD(5).Porte
                  PrinterTexto SetD(5).PosX, SetD(5).PosY, CICliente
-                 Printer.FontSize = SetD(2).Tamaño
+                 Printer.FontSize = SetD(2).Porte
                  PrinterTexto SetD(2).PosX, SetD(2).PosY, CuentaNo
                  
               End If
@@ -1334,17 +1334,17 @@ If PonImpresoraDefecto(SetNombrePRN) Then
               Else
                  PosLinea = SetD(22).PosY + (LineaNo * EspLinea)
               End If
-              Printer.FontSize = SetD(16).Tamaño
+              Printer.FontSize = SetD(16).Porte
               PrinterTexto SetD(16).PosX, PosLinea, "FECHA"
-              Printer.FontSize = SetD(17).Tamaño
+              Printer.FontSize = SetD(17).Porte
               PrinterTexto SetD(17).PosX, PosLinea, "TIPO"
-              Printer.FontSize = SetD(20).Tamaño
+              Printer.FontSize = SetD(20).Porte
               PrinterTexto SetD(20).PosX, PosLinea, "M O N T O "
-              Printer.FontSize = SetD(18).Tamaño
+              Printer.FontSize = SetD(18).Porte
               PrinterTexto SetD(18).PosX, PosLinea, "  DEBITOS"
-              Printer.FontSize = SetD(19).Tamaño
+              Printer.FontSize = SetD(19).Porte
               PrinterTexto SetD(19).PosX, PosLinea, "  CREDITOS"
-              Printer.FontSize = SetD(21).Tamaño
+              Printer.FontSize = SetD(21).Porte
               PrinterTexto SetD(21).PosX, PosLinea, "S A L D O "
               If (SetD(16).PosX + SetD(17).PosX + SetD(20).PosX + SetD(21).PosX) > 0 Then
                  LineaNo = LineaNo + 1
@@ -1355,7 +1355,7 @@ If PonImpresoraDefecto(SetNombrePRN) Then
                  Printer.NewPage
               End If
            End If
-           Printer.FontSize = SetD(22).Tamaño
+           Printer.FontSize = SetD(22).Porte
            Printer.FontBold = False
 '           If .Fields("ID") <> LineaNo Then .Fields("ID") = LineaNo
           'Verificar si imprimimos al reverso
@@ -1386,12 +1386,12 @@ If PonImpresoraDefecto(SetNombrePRN) Then
            PrinterTexto SetD(23).PosX, PosLinea, CStr(LineaNo)
            'MsgBox LineaNo
            LineaNo = LineaNo + 1
-           If LineaNo > SetD(10).Tamaño And ImpReverso Then
+           If LineaNo > SetD(10).Porte And ImpReverso Then
               PosLinea = 1
               ImpReverso = Not ImpReverso
               Printer.NewPage
            End If
-           If LineaNo > SetD(7).Tamaño And ImpReverso = False Then
+           If LineaNo > SetD(7).Porte And ImpReverso = False Then
               PosLinea = 1
               ImpReverso = Not ImpReverso
               Printer.NewPage
