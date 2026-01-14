@@ -12,8 +12,8 @@ Begin VB.Form FacturaReembolso
    ClientWidth     =   15960
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   10335
-   ScaleWidth      =   15960
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    WindowState     =   1  'Minimized
    Begin VB.TextBox TxtAutProvee 
       BeginProperty Font 
@@ -27,12 +27,12 @@ Begin VB.Form FacturaReembolso
       EndProperty
       ForeColor       =   &H00FF0000&
       Height          =   330
-      Left            =   9345
+      Left            =   9450
       MaxLength       =   49
       TabIndex        =   21
       Text            =   $"FacturaR.frx":0000
       Top             =   2100
-      Width           =   6840
+      Width           =   6735
    End
    Begin VB.CommandButton Command2 
       Caption         =   "&+"
@@ -72,7 +72,7 @@ Begin VB.Form FacturaReembolso
       TabIndex        =   19
       Text            =   "FacturaR.frx":5C19
       Top             =   2100
-      Width           =   1170
+      Width           =   1275
    End
    Begin VB.TextBox TxtSerieP 
       Alignment       =   1  'Right Justify
@@ -839,11 +839,11 @@ Begin VB.Form FacturaReembolso
       Bindings        =   "FacturaR.frx":6854
       DataSource      =   "AdoTipoPago"
       Height          =   360
-      Left            =   9345
+      Left            =   9450
       TabIndex        =   12
       Top             =   1365
-      Width           =   6840
-      _ExtentX        =   12065
+      Width           =   6735
+      _ExtentX        =   11880
       _ExtentY        =   635
       _Version        =   393216
       BackColor       =   12648447
@@ -1011,10 +1011,10 @@ Begin VB.Form FacturaReembolso
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   9345
+      Left            =   9450
       TabIndex        =   20
       Top             =   1785
-      Width           =   6840
+      Width           =   6735
    End
    Begin VB.Label Label34 
       BackColor       =   &H00808000&
@@ -1031,10 +1031,10 @@ Begin VB.Form FacturaReembolso
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   330
-      Left            =   9345
+      Left            =   9450
       TabIndex        =   11
       Top             =   1050
-      Width           =   6840
+      Width           =   6735
    End
    Begin VB.Label LblDireccion 
       BackColor       =   &H00FFFFFF&
@@ -1053,7 +1053,7 @@ Begin VB.Form FacturaReembolso
       Left            =   105
       TabIndex        =   10
       Top             =   1365
-      Width           =   9150
+      Width           =   9255
    End
    Begin VB.Label Label5 
       Alignment       =   2  'Center
@@ -1073,7 +1073,7 @@ Begin VB.Form FacturaReembolso
       Left            =   8085
       TabIndex        =   18
       Top             =   1785
-      Width           =   1170
+      Width           =   1275
    End
    Begin VB.Label Label2 
       Alignment       =   2  'Center
@@ -1113,7 +1113,7 @@ Begin VB.Form FacturaReembolso
       Left            =   105
       TabIndex        =   9
       Top             =   1050
-      Width           =   9150
+      Width           =   9255
    End
    Begin VB.Label Label24 
       BackColor       =   &H00808080&
@@ -1824,7 +1824,7 @@ Public Sub ProcGrabarReembolso()
      If Saldo < 0 Then Saldo = 0
      FA.Nuevo_Doc = True
      FA.EsPorReembolso = True
-     Factura_No = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, True)
+     Factura_No = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, False)
      FA.Factura = Factura_No
      TipoFactura = FA.TC
      
@@ -1893,6 +1893,10 @@ Private Sub TxtAutProvee_KeyDown(KeyCode As Integer, Shift As Integer)
   PresionoEnter KeyCode
 End Sub
 
+Private Sub TxtAutProvee_LostFocus()
+  If Len(TxtAutProvee) < 10 Then TxtAutProvee = "1234567890"
+End Sub
+
 Private Sub TxtDocumentos_GotFocus()
   MarcarTexto TxtDocumentos
 End Sub
@@ -1906,7 +1910,6 @@ Private Sub TxtDocumentos_LostFocus()
 Dim Grabar_PV As Boolean
 Dim ProductoAux As String
 Dim CodTipoComp As Byte
-
 
     CodTipoComp = 1
    'Busca que sea igual a la Descripcion
@@ -1965,6 +1968,7 @@ End Sub
 
 Private Sub TxtFacturaP_LostFocus()
   TxtFacturaP = Format(Val(TxtFacturaP), "000000000")
+  If TxtFacturaP.Text = "000000000" Then TxtFacturaP.Text = "000000001"
 End Sub
 
 Private Sub TxtNota_GotFocus()
@@ -2002,4 +2006,5 @@ End Sub
 Private Sub TxtSerieP_LostFocus()
   TextoValido TxtSerieP
   If Len(TxtSerieP) < 6 Then TxtSerieP = String(6 - Len(TxtSerieP), "0") & TxtSerieP
+  If TxtSerieP.Text = "000000" Then TxtSerieP.Text = "001001"
 End Sub

@@ -542,15 +542,15 @@ Begin VB.Form FComprobantes
       TabCaption(2)   =   "&6.- RETENCIONES"
       TabPicture(2)   =   "Comproba.frx":016E
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "DGAsientosR"
-      Tab(2).Control(1)=   "DGAC"
+      Tab(2).Control(0)=   "DGAC"
+      Tab(2).Control(1)=   "DGAsientosR"
       Tab(2).ControlCount=   2
       TabCaption(3)   =   "&7.- AV - AI - AE"
       TabPicture(3)   =   "Comproba.frx":018A
       Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "DGAV"
+      Tab(3).Control(0)=   "DGAE"
       Tab(3).Control(1)=   "DGAI"
-      Tab(3).Control(2)=   "DGAE"
+      Tab(3).Control(2)=   "DGAV"
       Tab(3).ControlCount=   3
       TabCaption(4)   =   "&8.- INVENTARIO"
       TabPicture(4)   =   "Comproba.frx":01A6
@@ -2818,6 +2818,7 @@ Private Sub Tipo_De_Comprobante_No(C1 As Comprobantes)
   CheckEfect.Visible = False
   CheckBco.value = False
   Label6.Caption = Moneda
+  If MBoxFecha = "00/00/0000" Then MBoxFecha = FechaSistema
  'Determinamos que tipo de comprobante realizamos
   Select Case C1.TP
     Case CompDiario

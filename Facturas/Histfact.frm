@@ -2947,7 +2947,10 @@ Dim Nombre_Campo As String
      End Select
     'MsgBox Modulo & vbCrLf & sSQL
      SelectDB_Combo DCCliente, AdoCliente, sSQL, Nombre_Campo
-     If AdoCliente.Recordset.RecordCount > 0 Then DCCliente.SetFocus
+'     If AdoCliente.Recordset.RecordCount > 0 Then
+     
+ '       DCCliente.SetFocus
+'     End If
   End If
 End Sub
 
@@ -3303,9 +3306,12 @@ Private Sub ToolbarMenu_ButtonClick(ByVal Button As MSComctlLib.Button)
   PorCxC = False
   
   If FechaRep <> MBFechaF.Text Then
-     Actualizar_Datos_Representantes_SP Mas_Grupos
-     Actualizar_Abonos_Facturas_SP FA
-     FechaRep = MBFechaF.Text
+     If Button.key <> "Buscar_Malla" Or Button.key <> "Salir" Then
+       'MsgBox "Desktop Test: " & Button.key
+        Actualizar_Datos_Representantes_SP Mas_Grupos
+        Actualizar_Abonos_Facturas_SP FA
+        FechaRep = MBFechaF.Text
+     End If
   End If
   
   If CheqCxC.value = 1 Then PorCxC = True
@@ -3400,7 +3406,7 @@ Private Sub ToolbarMenu_ButtonClick(ByVal Button As MSComctlLib.Button)
     Case "Buscar_Malla"
          sSQL = "SELECT Codigo, Cliente " _
               & "FROM Clientes " _
-              & "WHERE Codigo = '-' "
+              & "WHERE FA <> 0 "
          SelectDB_Combo DCCliente, AdoCliente, sSQL, "Cliente"
          PresionoEsc = False
          FrmPatronBusqueda.Top = Label5.Top

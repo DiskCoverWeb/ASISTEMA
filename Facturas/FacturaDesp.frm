@@ -1148,7 +1148,7 @@ Private Sub Form_Activate()
   FechaValida MBFecha
   FA.TC = TipoFactura
   FA.Fecha = MBFecha
-  FA.Cod_CxC = Ninguno
+  
   FacturaDespensa.Caption = "(" & FA.TC & ") "
   sSQL = "SELECT Codigo, Usuario, Clave, Nombre_Completo, TODOS, Ok, CodBod, EmailUsuario, Serie_FA " _
        & "FROM Accesos " _
@@ -1158,83 +1158,89 @@ Private Sub Form_Activate()
   If AdoGrupo.Recordset.RecordCount > 0 Then
      Cod_Bodega = AdoGrupo.Recordset.fields("CodBod")
      FA.Serie = AdoGrupo.Recordset.fields("Serie_FA")
-     FA.Autorizacion = "1111111111"
-     Lineas_De_CxC FA
-     If FA.Cta_CxP <> Ninguno Then
-        FacturaDespensa.Caption = FacturaDespensa.Caption & ": " & UCase(FA.NombreEstab)
-        CodigoL = FA.Cod_CxC
-        Cta_Cobrar = FA.Cta_CxP
-        Ln_No = 1
-        Cant_Item_PV = 100
-        TextCant.Text = "0"
-        TextVUnit.Text = "0"
-        LabelVTotal.Caption = "0"
-        Modificar = False
-        Bandera = True
-        Label1.Caption = "DESPENSA No. " & FA.Autorizacion & "-" & FA.Serie & "-"
-        FA.Nuevo_Doc = True
-        FA.Factura = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, False)
-        TextFacturaNo = Format(FA.Factura, "000000000")
-              
-        sSQL = "DELETE * " _
-             & "FROM Asiento_F " _
-             & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND CodigoU = '" & CodigoUsuario & "' "
-        Ejecutar_SQL_SP sSQL
-    
-        sSQL = "SELECT CodBod " _
-             & "FROM Catalogo_Bodegas " _
-             & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND Periodo = '" & Periodo_Contable & "' " _
-             & "AND CodBod = '" & Cod_Bodega & "' "
-        SelectDB_Combo DCBodega, AdoBodega, sSQL, "CodBod"
-        Cod_Bodega = Ninguno
-        If AdoBodega.Recordset.RecordCount > 0 Then
-           Cod_Bodega = AdoBodega.Recordset.fields("CodBod")
-           sSQL = "SELECT CP.Producto, CP.Codigo_Inv, CP.Codigo_Barra, SUM(TK.Entrada-TK.Salida) " _
-                & "FROM Catalogo_Productos As CP, Trans_Kardex As TK " _
-                & "WHERE CP.Item = '" & NumEmpresa & "' " _
-                & "AND CP.Periodo = '" & Periodo_Contable & "' " _
-                & "AND TK.CodBodega = '" & Cod_Bodega & "' " _
-                & "AND CP.TC = 'P' " _
-                & "AND CP.Item = TK.Item " _
-                & "AND CP.Periodo = TK.Periodo " _
-                & "AND CP.Codigo_Inv = TK.Codigo_Inv " _
-                & "GROUP BY TK.CodBodega, CP.Producto, CP.Codigo_Inv, CP.Codigo_Barra " _
-                & "HAVING SUM(TK.Entrada - TK.Salida) > 0 " _
-                & "ORDER BY CP.Producto, CP.Codigo_Inv "
-           SelectDB_Combo DCArticulo, AdoArticulo, sSQL, "Producto"
-           RatonNormal
-           If AdoArticulo.Recordset.RecordCount > 0 Then
-              FacturaDespensa.WindowState = 2
-              FA.Fecha_Desde = BuscarFecha(PrimerDiaMes(MBFecha))
-              FA.Fecha_Hasta = BuscarFecha(UltimoDiaMes(MBFecha))
-          '   DGAsientoF.width = MDI_X_Max - 100
-              DGAsientoF.Height = MDI_Y_Max - DGAsientoF.Top - 1000
-              DGAsientoF.Refresh
-              Label26.Top = DGAsientoF.Top + DGAsientoF.Height + 100
-              LabelTotal.Top = DGAsientoF.Top + Label26.Height + DGAsientoF.Height + 60
-              Command1.Top = DGAsientoF.Top + DGAsientoF.Height + 100
-              Command3.Top = DGAsientoF.Top + DGAsientoF.Height + 100
-              sSQL = "SELECT * " _
-                   & "FROM Asiento_F " _
-                   & "WHERE Item = '" & NumEmpresa & "' " _
-                   & "AND CodigoU = '" & CodigoUsuario & "' "
-              SQLDec = "PRECIO 4|CORTE 5|."
-              Select_Adodc_Grid DGAsientoF, AdoAsientoF, sSQL, SQLDec
-              Buscar_Cliente Ninguno
-           Else
-              MsgBox "No existen Productos a despachar"
-              Unload FacturaDespensa
-           End If
-        Else
-           MsgBox "No existe Bodega asignada"
-           Unload FacturaDespensa
-        End If
+     FA.Cod_CxC = "DE999" & MidStrg(FA.Serie, 4, 3)
+     If Cod_Bodega <> Ninguno Then
+         FA.Autorizacion = "1111111111"
+         Lineas_De_CxC FA
+         If FA.Cta_CxP <> Ninguno Then
+            FacturaDespensa.Caption = FacturaDespensa.Caption & ": " & UCase(FA.NombreEstab)
+            CodigoL = FA.Cod_CxC
+            Cta_Cobrar = FA.Cta_CxP
+            Ln_No = 1
+            Cant_Item_PV = 100
+            TextCant.Text = "0"
+            TextVUnit.Text = "0"
+            LabelVTotal.Caption = "0"
+            Modificar = False
+            Bandera = True
+            Label1.Caption = "DESPENSA No. " & FA.Autorizacion & "-" & FA.Serie & "-"
+            FA.Nuevo_Doc = True
+            FA.Factura = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, False)
+            TextFacturaNo = Format(FA.Factura, "000000000")
+                  
+            sSQL = "DELETE * " _
+                 & "FROM Asiento_F " _
+                 & "WHERE Item = '" & NumEmpresa & "' " _
+                 & "AND CodigoU = '" & CodigoUsuario & "' "
+            Ejecutar_SQL_SP sSQL
+        
+            sSQL = "SELECT CodBod " _
+                 & "FROM Catalogo_Bodegas " _
+                 & "WHERE Item = '" & NumEmpresa & "' " _
+                 & "AND Periodo = '" & Periodo_Contable & "' " _
+                 & "AND CodBod = '" & Cod_Bodega & "' "
+            SelectDB_Combo DCBodega, AdoBodega, sSQL, "CodBod"
+            Cod_Bodega = Ninguno
+            If AdoBodega.Recordset.RecordCount > 0 Then
+               Cod_Bodega = AdoBodega.Recordset.fields("CodBod")
+               sSQL = "SELECT CP.Producto, CP.Codigo_Inv, CP.Codigo_Barra, SUM(TK.Entrada-TK.Salida) " _
+                    & "FROM Catalogo_Productos As CP, Trans_Kardex As TK " _
+                    & "WHERE CP.Item = '" & NumEmpresa & "' " _
+                    & "AND CP.Periodo = '" & Periodo_Contable & "' " _
+                    & "AND TK.CodBodega = '" & Cod_Bodega & "' " _
+                    & "AND CP.TC = 'P' " _
+                    & "AND CP.Item = TK.Item " _
+                    & "AND CP.Periodo = TK.Periodo " _
+                    & "AND CP.Codigo_Inv = TK.Codigo_Inv " _
+                    & "GROUP BY TK.CodBodega, CP.Producto, CP.Codigo_Inv, CP.Codigo_Barra " _
+                    & "HAVING SUM(TK.Entrada - TK.Salida) > 0 " _
+                    & "ORDER BY CP.Producto, CP.Codigo_Inv "
+               SelectDB_Combo DCArticulo, AdoArticulo, sSQL, "Producto"
+               RatonNormal
+               If AdoArticulo.Recordset.RecordCount > 0 Then
+                  FacturaDespensa.WindowState = 2
+                  FA.Fecha_Desde = BuscarFecha(PrimerDiaMes(MBFecha))
+                  FA.Fecha_Hasta = BuscarFecha(UltimoDiaMes(MBFecha))
+              '   DGAsientoF.width = MDI_X_Max - 100
+                  DGAsientoF.Height = MDI_Y_Max - DGAsientoF.Top - 1000
+                  DGAsientoF.Refresh
+                  Label26.Top = DGAsientoF.Top + DGAsientoF.Height + 100
+                  LabelTotal.Top = DGAsientoF.Top + Label26.Height + DGAsientoF.Height + 60
+                  Command1.Top = DGAsientoF.Top + DGAsientoF.Height + 100
+                  Command3.Top = DGAsientoF.Top + DGAsientoF.Height + 100
+                  sSQL = "SELECT * " _
+                       & "FROM Asiento_F " _
+                       & "WHERE Item = '" & NumEmpresa & "' " _
+                       & "AND CodigoU = '" & CodigoUsuario & "' "
+                  SQLDec = "PRECIO 4|CORTE 5|."
+                  Select_Adodc_Grid DGAsientoF, AdoAsientoF, sSQL, SQLDec
+                  Buscar_Cliente Ninguno
+               Else
+                  MsgBox "No existen Productos a despachar"
+                  Unload FacturaDespensa
+               End If
+            Else
+               MsgBox "No existe Bodega asignada"
+               Unload FacturaDespensa
+            End If
+         Else
+            MsgBox "Falta Organizar la CxC en Puntos de Venta." & vbCrLf _
+                 & "Salga de este proceso y llame al su técnico" & vbCrLf _
+                 & "o al Contador de su Organizacion."
+            Unload FacturaDespensa
+         End If
      Else
-        MsgBox "Falta Organizar la CxC en Puntos de Venta." & vbCrLf _
-             & "Salga de este proceso y llame al su técnico" & vbCrLf _
-             & "o al Contador de su Organizacion."
+        MsgBox "Error: Falta asignar la bodega a la despensa, llame al su técnico o al Contador de su Organizacion."
         Unload FacturaDespensa
      End If
   Else
@@ -1343,7 +1349,8 @@ Public Sub Buscar_Cliente(Busqueda As String)
          & "AND F.TC IN ('NV','FA') " _
          & "AND F.T <> 'A' " _
          & "AND F.Cont_Salidas > 0 " _
-         & "AND F.Fecha BETWEEN #" & FA.Fecha_Desde & "# AND #" & FA.Fecha_Hasta & "# "
+         & "AND F.Fecha BETWEEN #" & FA.Fecha_Desde & "# AND #" & FA.Fecha_Hasta & "# " _
+         & "AND C.Grupo = '" & MidStrg(FA.Serie, 4, 3) & "' "
     If Len(Busqueda) > 1 Then
        If IsNumeric(Busqueda) Then
           sSQL = sSQL & "AND C.CI_RUC LIKE '" & Busqueda & "%' "
@@ -1354,7 +1361,7 @@ Public Sub Buscar_Cliente(Busqueda As String)
     sSQL = sSQL _
          & "AND C.Codigo=F.CodigoC " _
          & "ORDER BY Cliente "
-   ' MsgBox sSQL
+   'MsgBox sSQL
     SelectDB_Combo DCCliente, AdoCliente, sSQL, "Cliente"
 End Sub
 

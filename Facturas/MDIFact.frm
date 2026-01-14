@@ -237,10 +237,10 @@ Begin VB.MDIForm MDIFact
          End
       End
       Begin VB.Menu MAbonoNV 
-         Caption         =   "Facturación/Cobros Automática por"
+         Caption         =   "Facturación/Cobros Automáticos (CxC)"
       End
       Begin VB.Menu MRecaudacionAut 
-         Caption         =   "Envio/Recepcion Recaudación del Banco"
+         Caption         =   "Envio/Recepcion Recaudación del Banco (PreFA)"
       End
       Begin VB.Menu MBAbono1 
          Caption         =   "-"

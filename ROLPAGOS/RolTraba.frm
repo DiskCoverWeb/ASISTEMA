@@ -1398,12 +1398,9 @@ End Sub
 Public Sub Presentar_Rol_Pago(TipoArchivo As Byte)
  'Detalle del Rol de Pago
  
-  sSQL = "SELECT CR.Fecha As Fecha_Ing,C.CI_RUC,C.TD,C.Cliente,C.Sexo,C.Profesion,CR.Porcentaje," _
-       & "CR.CodProfesion,CR.FormaPago10to,CR.FP,CR.Codigo," _
-       & "CR.Valor_Dec_3ro,CR.Valor_Dec_4to," _
-       & "CR.Dias_Dec_3ro,CR.Dias_Dec_4to," _
-       & "Cta_Decimo_Tercer_P,Cta_Decimo_Cuarto_P,Pagar_Decimos " _
-       & "FROM Clientes As C, Catalogo_Rol_Pagos As CR " _
+  sSQL = "SELECT CR.Fecha As Fecha_Ing,C.CI_RUC,C.TD,C.Cliente,C.Sexo,C.Profesion,CR.Porcentaje,CR.CodProfesion,CR.FormaPago10to,CR.FP,CR.Codigo," _
+       & "CR.Valor_Dec_3ro,CR.Valor_Dec_4to,CR.Dias_Dec_3ro,CR.Dias_Dec_4to,CRC.Cta_Decimo_Tercer_P,CRC.Cta_Decimo_Cuarto_P, Pagar_Decimos " _
+       & "FROM Clientes As C, Catalogo_Rol_Pagos As CR, Catalogo_Rol_Cuentas As CRC " _
        & "WHERE CR.Item = '" & NumEmpresa & "' " _
        & "AND CR.Periodo = '" & Periodo_Contable & "' "
   Select Case TipoArchivo
@@ -1415,18 +1412,25 @@ Public Sub Presentar_Rol_Pago(TipoArchivo As Byte)
   ElseIf OpcM.value Then
      sSQL = sSQL & "AND C.Sexo = 'M' "
   End If
-  sSQL = sSQL & "AND CR.Codigo = C.Codigo " _
+  sSQL = sSQL _
+       & "AND CR.Item = CRC.Item " _
+       & "AND CR.Periodo = CRC.Periodo " _
+       & "AND CR.Grupo_Rol = CRC.Grupo_Rol " _
+       & "AND CR.Codigo = C.Codigo " _
        & "ORDER BY C.Cliente,CR.Codigo "
   Select_Adodc_Grid DGClientes, AdoClientes, sSQL
 End Sub
 
 Public Sub Ctas_Asientos_Decimos()
   RatonReloj
-  sSQL = "SELECT Grupo_Rol, Cta_Decimo_Tercer_P, Cta_Decimo_Cuarto_P " _
-       & "FROM Catalogo_Rol_Pagos " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND Periodo = '" & Periodo_Contable & "' " _
-       & "GROUP BY Grupo_Rol, Cta_Decimo_Tercer_P, Cta_Decimo_Cuarto_P "
+  sSQL = "SELECT CRP.Grupo_Rol, CRC.Cta_Decimo_Tercer_P, CRC.Cta_Decimo_Cuarto_P " _
+       & "FROM Catalogo_Rol_Pagos CRP, Catalogo_Rol_Cuentas As CRC " _
+       & "WHERE CRP.Item = '" & NumEmpresa & "' " _
+       & "AND CRP.Periodo = '" & Periodo_Contable & "' " _
+       & "AND CRP.Item = CRP.Item " _
+       & "AND CRP.Periodo = CRP.Periodo " _
+       & "AND CRP.Grupo_Rol = CRP.Grupo_Rol " _
+       & "GROUP BY CRP.Grupo_Rol, CRC.Cta_Decimo_Tercer_P, CRC.Cta_Decimo_Cuarto_P "
   Select_Adodc AdoAux, sSQL
   With AdoAux.Recordset
    If .RecordCount > 0 Then

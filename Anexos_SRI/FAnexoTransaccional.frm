@@ -38,10 +38,10 @@ Begin VB.Form FAnexoTransaccional
       TabCaption(1)   =   "Resumen del RDEP"
       TabPicture(1)   =   "FAnexoTransaccional.frx":0962
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "LblA4"
-      Tab(1).Control(1)=   "AdoRolPagos"
-      Tab(1).Control(2)=   "DGRolPagos"
-      Tab(1).Control(3)=   "TxtCodigo"
+      Tab(1).Control(0)=   "TxtCodigo"
+      Tab(1).Control(1)=   "DGRolPagos"
+      Tab(1).Control(2)=   "AdoRolPagos"
+      Tab(1).Control(3)=   "LblA4"
       Tab(1).ControlCount=   4
       Begin AcroPDFLibCtl.AcroPDF APDFATS 
          Height          =   2325
@@ -4932,7 +4932,7 @@ Public Sub Consultar_Anexos()
        & "WHERE TC.Fecha Between #" & FechaIni & "# AND #" & FechaFin & "# " _
        & "AND TC.Periodo = '" & Periodo_Contable & "' " _
        & "AND TC.Item IN (" & sItem & ") "
-  If CheqATSConElect.value = 0 Then sSQL = sSQL & "AND LEN(TC.AutRetencion) < 13 " Else sSQL = sSQL & "AND LEN(TC.AutRetencion) >= 6 "
+  If CheqATSConElect.value = 0 Then sSQL = sSQL & "AND LEN(TC.AutRetencion) < 13 "
   sSQL = sSQL _
        & "AND TC.IdProv = C.Codigo " _
        & "ORDER BY TC.Linea_SRI,C.Cliente, C.CI_RUC, C.TD "

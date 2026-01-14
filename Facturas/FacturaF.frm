@@ -1392,6 +1392,8 @@ Private Sub Command3_Click()
     FechaTexto = MBFecha
     FA.Fecha = MBFecha
     FA.Fecha_V = MBFecha
+    FA.Tipo_Pago = "01"
+    
     Mensajes = "Esta Seguro que desea grabar: " & vbCrLf _
              & "La Factura No. " & TextFacturaNo.Text
     Titulo = "Formulario de Grabacion"

@@ -21,8 +21,8 @@ Begin VB.Form ResumenKardex
       Left            =   0
       TabIndex        =   18
       Top             =   0
-      Width           =   20595
-      _ExtentX        =   36327
+      Width           =   28560
+      _ExtentX        =   50377
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -1291,6 +1291,7 @@ Private Sub Stock(StockSuperior As Boolean)
   DGQuery.Visible = False
   QTipoInv = False
   Control_Procesos "I", "Proceso Stock de Inventario, del " & MBoxFechaI & " al " & MBoxFechaF
+ 'MsgBox Cod_Bodega
   Reporte_Resumen_Existencias_SP MBoxFechaI, MBoxFechaF, Cod_Bodega
   If CheqProducto.value Then
      Opcion = 2
@@ -1303,7 +1304,7 @@ Private Sub Stock(StockSuperior As Boolean)
 
     'SQLDec = "Promedio " & CStr(Dec_Costo) & "|Valor_Total 2|."
                                                
-     sSQL = "SELECT TC,Codigo_Inv,Stock_Anterior,Entradas,Salidas,Stock_Actual,Promedio,Valor_Total " _
+     sSQL = "SELECT TC,Codigo_Inv,Stock_Anterior,Entradas,Salidas,Stock_Actual,Promedio,Valor_Total,Bodega " _
           & "FROM Catalogo_Productos " _
           & "WHERE Item = '" & NumEmpresa & "' " _
           & "AND Periodo = '" & Periodo_Contable & "' "
@@ -1323,17 +1324,17 @@ Private Sub Stock(StockSuperior As Boolean)
      Progreso_Iniciar
     
     'StockInvent StockSuperior
-     sSQL = "SELECT TC,Codigo_Inv,Producto,Unidad,Stock_Anterior,Entradas,Salidas,Stock_Actual, Promedio As Costo_Unit,Valor_Total, 0 As Diferencias, Ubicacion " _
+     sSQL = "SELECT TC,Codigo_Inv,Producto,Unidad,Stock_Anterior,Entradas,Salidas,Stock_Actual, Promedio As Costo_Unit,Valor_Total, 0 As Diferencias, Ubicacion, Bodega " _
           & "FROM Catalogo_Productos As CP " _
           & "WHERE Item = '" & NumEmpresa & "' " _
           & "AND Periodo = '" & Periodo_Contable & "' " _
-          & SQL_Tipo_Busqueda
+          & SQL_Tipo_Busqueda_CP
      If CheqGrupo.value <> 0 Then sSQL = sSQL & "AND Codigo_Inv LIKE '" & Buscar_Grupo_Inventario & "%' "
      sSQL = sSQL & "ORDER BY Codigo_Inv "
   End If
   SQLDec = "Costo_Unit " & CStr(Dec_Costo) & "|Total 2|."
   Select_Adodc_Grid DGQuery, AdoDetKardex, sSQL, SQLDec
-  'MsgBox Opcion & vbCrLf & SQLDec & vbCrLf & Cod_Bodega
+ 'MsgBox Opcion & vbCrLf & SQLDec & vbCrLf & Cod_Bodega
   Total = 0
   Debitos = 0
   Creditos = 0
@@ -1878,12 +1879,30 @@ Dim BSQL As String
   End If
   
   If CheqMonto.value <> 0 Then BSQL = BSQL & "AND CP.Stock_Actual = " & Val(TxtMonto) & " "
-  
-  If CheqExist.value = 0 Then
-     BSQL = BSQL _
-          & "AND CP.Valor_Total <> 0 "
-  End If
+  If CheqExist.value = 0 Then BSQL = BSQL & "AND CP.Valor_Total <> 0 "
  'MsgBox BSQL
   SQL_Tipo_Busqueda = BSQL
+End Function
+
+Public Function SQL_Tipo_Busqueda_CP() As String
+Dim BSQL As String
+
+  BSQL = " "
+  CodigoInv = Ninguno
+  If OpcProducto.value Then
+     With AdoBusqueda.Recordset
+      If .RecordCount > 0 Then
+         .MoveFirst
+         .Find ("Producto = '" & DCTipoBusqueda & "' ")
+          If Not .EOF Then CodigoInv = .fields("Codigo")
+      End If
+     End With
+  Else
+     CodigoInv = DCTipoBusqueda
+  End If
+  If CheqMonto.value <> 0 Then BSQL = BSQL & "AND CP.Stock_Actual = " & Val(TxtMonto) & " "
+  If CheqExist.value = 0 Then BSQL = BSQL & "AND CP.Valor_Total <> 0 "
+ 'MsgBox BSQL
+  SQL_Tipo_Busqueda_CP = BSQL
 End Function
 

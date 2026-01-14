@@ -13,8 +13,8 @@ Begin VB.Form Facturas
    ClientWidth     =   15960
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   15615
-   ScaleWidth      =   28560
+   ScaleHeight     =   10215
+   ScaleWidth      =   15960
    WindowState     =   2  'Maximized
    Begin ComctlLib.Toolbar TBarFactura 
       Align           =   1  'Align Top
@@ -22,8 +22,8 @@ Begin VB.Form Facturas
       Left            =   0
       TabIndex        =   129
       Top             =   0
-      Width           =   28560
-      _ExtentX        =   50377
+      Width           =   15960
+      _ExtentX        =   28152
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -4376,7 +4376,7 @@ Private Sub DCEjecutivo_LostFocus()
    With AdoEjecutivo.Recordset
     If .RecordCount > 0 Then
        .MoveFirst
-       .Find ("Cliente Like '" & DCEjecutivo & "' ")
+       .Find ("Ejecutivo = '" & DCEjecutivo & "' ")
         If Not .EOF Then
            FA.Cod_Ejec = .fields("Codigo")
            TextComision = Format$(.fields("Porc_Com") * 100, "#0.00")
@@ -5021,8 +5021,10 @@ Dim ID_Trans_Aux As Long
             'Descuento
              SubTotalDescuento = .fields("Total_Desc")
             'IVA = SubTotal - Descuento
-             If .fields("Total_IVA") > 0 Then SubTotalIVA = Redondear((SubTotal - SubTotalDescuento) * Porc_IVA, 2)
-            .fields("Total_IVA") = SubTotalIVA
+             If .fields("Total_IVA") > 0 Then
+                 SubTotalIVA = Redondear((SubTotal - SubTotalDescuento) * Porc_IVA, 2)
+                .fields("Total_IVA") = SubTotalIVA
+             End If
             .fields("TOTAL") = Redondear(SubTotal, 2)
             .fields("VALOR_TOTAL") = Redondear(SubTotal + SubTotalIVA, 2)
             .Update
@@ -5178,7 +5180,7 @@ Private Sub Form_Activate()
        & "AND Codigo IN ('01','16','17','18','19','20','21') " _
        & "ORDER BY Codigo "
   SelectDB_Combo DCTipoPago, AdoTipoPago, sSQL, "CTipoPago"
-  
+
   sSQL = "SELECT CC.Codigo " _
        & "FROM Catalogo_Cuentas As CC INNER JOIN Catalogo_Productos As CP " _
        & "ON CC.Item = CP.Item " _
@@ -5189,7 +5191,7 @@ Private Sub Form_Activate()
        & "AND CC.DG = 'D' " _
        & "AND CC.TC IN ('I','CC') "
   Select_Adodc AdoAux, sSQL
-
+  
   sSQL = "SELECT Detalle, Codigo, TC " _
        & "FROM Catalogo_SubCtas " _
        & "WHERE Item = '" & NumEmpresa & "' " _
@@ -5202,14 +5204,14 @@ Private Sub Form_Activate()
   sSQL = sSQL & "ORDER BY Detalle "
   SelectDB_Combo DCMod, AdoMod, sSQL, "Detalle"
   If AdoMod.Recordset.RecordCount > 0 Then DCMod.Visible = True
-  
+    
   sSQL = "SELECT TOP 50 Cliente, CI_RUC, TD, Codigo, Cta_CxP " _
        & "FROM Clientes " _
        & "WHERE Asignar_Dr <> " & Val(adFalse) & " " _
        & "ORDER BY Cliente "
   SelectDB_Combo DCMedico, AdoMedico, sSQL, "Cliente"
   If AdoMedico.Recordset.RecordCount > 0 Then DCMedico.Visible = True
-   
+
   sSQL = "SELECT Grupo " _
        & "FROM Clientes " _
        & "WHERE T = 'N' " _
@@ -5217,7 +5219,6 @@ Private Sub Form_Activate()
        & "GROUP BY Grupo " _
        & "ORDER BY Grupo "
   SelectDB_Combo DCGrupo_No, AdoGrupo, sSQL, "Grupo"
-  
   FA.TC = TipoFactura
   FA.Fecha = MBoxFecha
   sSQL = "SELECT Codigo, Concepto, CxC, Serie, Autorizacion " _
@@ -5269,13 +5270,12 @@ Private Sub Form_Activate()
    TipoDoc = TipoFactura
              
    If ComisionEjec Then
-      sSQL = "SELECT CR.Codigo,C.Cliente,C.CI_RUC,CR.Porc_Com " _
-           & "FROM Catalogo_Rol_Pagos As CR, Clientes As C " _
-           & "WHERE CR.Item = '" & NumEmpresa & "' " _
-           & "AND CR.Periodo = '" & Periodo_Contable & "' " _
-           & "AND CR.Codigo = C.Codigo " _
-           & "ORDER BY C.Cliente "
-      SelectDB_Combo DCEjecutivo, AdoEjecutivo, sSQL, "Cliente"
+      sSQL = "SELECT Codigo, Ejecutivo, Porc_Com " _
+           & "FROM Catalogo_Rol_Pagos " _
+           & "WHERE Item = '" & NumEmpresa & "' " _
+           & "AND Periodo = '" & Periodo_Contable & "' " _
+           & "ORDER BY Ejecutivo "
+      SelectDB_Combo DCEjecutivo, AdoEjecutivo, sSQL, "Ejecutivo"
    Else
       DCEjecutivo.Text = Ninguno
    End If
@@ -5342,9 +5342,9 @@ Private Sub Form_Activate()
    End If
    Total_Desc = 0
    Ln_No = 0
-   
-   Listar_Productos DCArticulo, AdoArticulo, OpcServicio
-   
+
+   'Listar_Productos DCArticulo, AdoArticulo, OpcServicio
+
    Listar_Lotes
    
    sSQL = "SELECT " & Full_Fields("Catalogo_Lineas") & " " _
@@ -5401,8 +5401,7 @@ Private Sub Form_Load()
    ConectarAdodc AdoTransporte
    ConectarAdodc AdoMedico
    ConectarAdodc AdoSerieGR
-   
-   SRI_Obtener_Datos_Comprobantes_Electronicos
+  'SRI_Obtener_Datos_Comprobantes_Electronicos
 End Sub
 
 Private Sub LstOrden_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -6246,7 +6245,7 @@ End Sub
 
 Public Sub Listar_Tipo_Beneficiarios(Grupo As String)
     RatonReloj
-    DCCliente.Visible = False
+    'DCCliente.Visible = False
     sSQL = "SELECT TOP 50 Cliente, CI_RUC, Codigo, Cta_CxP, Grupo, Cod_Ejec " _
          & "FROM Clientes " _
          & "WHERE FA <> " & Val(adFalse) & " " _
@@ -6254,9 +6253,8 @@ Public Sub Listar_Tipo_Beneficiarios(Grupo As String)
     If Grupo <> Ninguno Then sSQL = sSQL & "AND Grupo = '" & Grupo & "' "
     sSQL = sSQL & "ORDER BY Cliente "
     SelectDB_Combo DCCliente, AdoCliente, sSQL, "Cliente"
-   'MsgBox "Desktop Test: " & Grupo & vbCrLf & AdoCliente.Recordset.RecordCount
     RatonNormal
-    DCCliente.Visible = True
+    'DCCliente.Visible = True
     DCCliente.SetFocus
 End Sub
 

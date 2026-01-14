@@ -1,10 +1,1 @@
-Línea 19: la clase ComctlLib.Toolbar del control Toolbar1 no era una clase de control cargada.
-Línea 199: la clase MSAdodcLib.Adodc del control AdoDataGrid no era una clase de control cargada.
-Línea 247: la clase InetCtlsObjects.Inet del control Inet1 no era una clase de control cargada.
-Línea 270: la clase MSChart20Lib.MSChart del control MSChart no era una clase de control cargada.
-Línea 278: la clase MSDataGridLib.DataGrid del control DataGrid no era una clase de control cargada.
-Línea 344: la clase MSAdodcLib.Adodc del control AdoUDET no era una clase de control cargada.
-Línea 391: la clase MSComDlg.CommonDialog del control CommonDialog1 no era una clase de control cargada.
-Línea 398: la clase MSAdodcLib.Adodc del control AdoCtas no era una clase de control cargada.
-Línea 445: la clase MSAdodcLib.Adodc del control AdoAsiento no era una clase de control cargada.
-Línea 500: la clase ComctlLib.ImageList del control ImageList1 no era una clase de control cargada.
+Línea 248: la clase SHDocVwCtl.WebBrowser del control WebBrowser1 no era una clase de control cargada.

@@ -84,6 +84,7 @@ Class=cJSONScript; ..\CLASES\cJSONScript.cls
 Class=cStringBuilder; ..\CLASES\cStringBuilder.cls
 Class=cPing; ..\CLASES\cPing.cls
 Form=..\GENERAL\FAutorizaXmlSRI.frm
+Object={EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}#1.1#0; ieframe.dll
 IconForm="MDISeteos"
 Startup="MDISeteos"
 HelpFile=""

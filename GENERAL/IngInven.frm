@@ -13,8 +13,8 @@ Begin VB.Form IngProdInv
    ClientWidth     =   11385
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   8760
-   ScaleWidth      =   11385
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    WindowState     =   2  'Maximized
    Begin VB.Frame FrmInv1 
       BackColor       =   &H00C0FFC0&
@@ -337,16 +337,16 @@ Begin VB.Form IngProdInv
       TabCaption(1)   =   "Validación de Texto"
       TabPicture(1)   =   "IngInven.frx":40A0
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "Label5"
-      Tab(1).Control(1)=   "TxtDetalle"
-      Tab(1).Control(2)=   "Command5"
-      Tab(1).Control(3)=   "Command4"
+      Tab(1).Control(0)=   "Command4"
+      Tab(1).Control(1)=   "Command5"
+      Tab(1).Control(2)=   "TxtDetalle"
+      Tab(1).Control(3)=   "Label5"
       Tab(1).ControlCount=   4
       TabCaption(2)   =   "Salidas Automáticas"
       TabPicture(2)   =   "IngInven.frx":497A
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "DGReceta"
-      Tab(2).Control(1)=   "AdoReceta"
+      Tab(2).Control(0)=   "AdoReceta"
+      Tab(2).Control(1)=   "DGReceta"
       Tab(2).ControlCount=   2
       Begin VB.Frame Frame2 
          Caption         =   "Tipo de Producto"

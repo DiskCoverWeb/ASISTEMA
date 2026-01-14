@@ -932,13 +932,18 @@ Dim SiActualizar As Boolean
          MascaraCodigoK = .fields("Formato_Inventario")
          MascaraCodigoA = .fields("Formato_Activo")
          MascaraCtas = Replace(.fields("Formato_Cuentas"), "C", "#")
-         RUCOperadora = .fields("RUC_Operadora")
          FormatoCtas = MascaraCtas
          LimpiarCtas = Replace(MascaraCtas, "#", " ")
          Fecha_Igualar = .fields("Fecha_Igualar")
+         RUCOperadora = .fields("RUC_Operadora")
          Porc_Serv = Redondear(.fields("Servicio") / 100, 2)
+         NombreCertificado = .fields("Ruta_Certificado")
          RutaCertificado = RutaSistema & "\CERTIFIC\" & .fields("Ruta_Certificado")
          ClaveCertificado = .fields("Clave_Certificado")
+        
+        'Pagina de Conexion con el SRI
+         URLRecepcion = .fields("Web_SRI_Recepcion")
+         URLAutorizacion = .fields("Web_SRI_Autorizado")
 
          OpcCoop = CBool(.fields("Opc"))
          CentroDeCosto = CBool(.fields("Centro_Costos"))
@@ -1086,7 +1091,7 @@ Dim SiActualizar As Boolean
     Else
        FechaCierreFiscal = "01/01/" & Year(FechaSistema)
     End If
-    
+
    'MsgBox "Desktop Test: " & Fecha_CE & vbCrLf & Fecha_P12
    'Actualiza Datos iniciales de la Empresa
    '+++++++++++++++++++++++++++++++++++++++

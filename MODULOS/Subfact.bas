@@ -1502,8 +1502,8 @@ Public Sub Grabar_Factura(TFA As Tipo_Facturas, VerFactura As Boolean, Optional 
   'TFA = Leer_Datos_Cliente_FA(TFA)
   
   TFA.T = Pendiente
-  If TFA.TC = "FR" Then TFA.TC = "FA"
   If Len(TFA.Autorizacion) >= 13 Then TMail.TipoDeEnvio = "CE"
+  If TFA.TC = "FR" Then TFA.TC = "FA"
   Grabar_Factura_SP TFA
   With TFA
        Cadena = ""
@@ -10933,6 +10933,7 @@ Dim FechaCxC As String
   Cant_Item_FA = 1
   Cant_Item_PV = 1
   TFA.Cta_CxP = Ninguno
+  TFA.ResultadoFA = "OK"
   TFA.Cta_Venta = Ninguno
   If Not IsDate(TFA.Fecha) Then TFA.Fecha = FechaSistema
   If Not IsDate(TFA.Fecha_NC) Then TFA.Fecha_NC = FechaSistema
@@ -10995,7 +10996,7 @@ Dim FechaCxC As String
           TipoFactura = .fields("Fact")
        End If
    Else
-       MsgBox "Linea CxC No Asignados o fuera de fecha"
+       TFA.ResultadoFA = "Error: Linea CxC No Asignados o fuera de fecha"
    End If
   End With
   AdoLineaDB.Close
@@ -11011,9 +11012,8 @@ Dim FechaCxC As String
  
   If Cant_Item_FA <= 0 Then Cant_Item_FA = 50
   If Cant_Item_PV <= 0 Then Cant_Item_PV = 50
-  Cadena = "Esta Ingresando Comprobantes Caducados" & vbCrLf & vbCrLf _
-         & "La Fecha Tope de emision es: " & FA.Vencimiento & vbCrLf
-  If CFechaLong(TFA.Fecha) > CFechaLong(TFA.Vencimiento) Then MsgBox Cadena
+  Cadena = "Error: Esta Ingresando Comprobantes Caducados. La Fecha Tope de emision es: " & FA.Vencimiento & vbCrLf
+  If CFechaLong(TFA.Fecha) > CFechaLong(TFA.Vencimiento) Then TFA.ResultadoFA = Cadena
 End Sub
 
 '''Public Sub Lineas_De_CxC(TFA As Tipo_Facturas)
@@ -12786,12 +12786,6 @@ Dim TotDescuento As Currency
          TFA.Contacto = .fields("Contacto")
          TFA.Cliente = .fields("Cliente")
          TFA.CI_RUC = .fields("CI_RUC")
-         TFA.TD = .fields("TD")
-         TFA.Razon_Social = .fields("Razon_Social")
-         TFA.RUC_CI = .fields("RUC_CI")
-         TFA.TB = .fields("TB")
-         TFA.DireccionC = .fields("Direccion_RS")
-         TFA.TelefonoC = .fields("Telefono_RS")
          TFA.DirNumero = .fields("DirNumero")
          TFA.Curso = .fields("Direccion")
          TFA.CiudadC = .fields("Ciudad")
@@ -12804,6 +12798,7 @@ Dim TotDescuento As Currency
          TFA.Fecha_Aut = .fields("Fecha_Aut")
          TFA.Hora = .fields("Hora")
          TFA.Tipo_Pago = .fields("Tipo_Pago")
+         TFA.Forma_Pago = .fields("Forma_Pago")
          TFA.EmailC = .fields("Email")
          TFA.EmailC2 = .fields("Email2")
          TFA.EmailR = .fields("EmailR")
@@ -12811,8 +12806,16 @@ Dim TotDescuento As Currency
          TFA.Nota = .fields("Nota")
          TFA.Orden_Compra = .fields("Orden_Compra")
          TFA.Gavetas = .fields("Gavetas")
+         TFA.TB = .fields("TB")
+         
+        'Razon Social de la Factura
+         TFA.TD = .fields("TD")
+         TFA.Razon_Social = .fields("Cliente")
+         TFA.RUC_CI = .fields("CI_RUC")
+         TFA.DireccionC = .fields("Direccion")
+         TFA.TelefonoC = .fields("Celular")
          If TFA.EmailR = Ninguno Then TFA.EmailR = EmailProcesos
-
+         
         'SubTotales de la Factura
          TFA.Descuento = .fields("Descuento")
          TFA.Descuento2 = .fields("Descuento2")
@@ -12866,6 +12869,24 @@ Dim TotDescuento As Currency
          TFA.Orden_Compra = .fields("Orden_Compra")
          TFA.Placa_Vehiculo = .fields("Placa_Vehiculo")
          TFA.Lugar_Entrega = .fields("Lugar_Entrega")
+     End If
+    End With
+    AdoDBFac.Close
+            
+    sSQL = "SELECT Cedula_R, Representante, Lugar_Trabajo_R, TD, Telefono_RS,  Email_R " _
+         & "FROM Clientes_Matriculas " _
+         & "WHERE Item = '" & NumEmpresa & "' " _
+         & "AND Periodo = '" & Periodo_Contable & "' " _
+         & "AND Codigo = '" & TFA.CodigoC & "' "
+    Select_AdoDB AdoDBFac, sSQL
+    With AdoDBFac
+     If .RecordCount > 0 Then
+         TFA.TD = .fields("TD")
+         TFA.Razon_Social = .fields("Representante")
+         TFA.RUC_CI = .fields("Cedula_R")
+         TFA.DireccionC = .fields("Lugar_Trabajo_R")
+         TFA.TelefonoC = .fields("Telefono_RS")
+         TFA.EmailR = .fields("Email_R")
      End If
     End With
     AdoDBFac.Close

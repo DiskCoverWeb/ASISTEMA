@@ -1978,6 +1978,7 @@ Dim SubTotalDescuento As Currency
                             End If
                    Case 18: If Len(Codigo) > 1 Then TA.Comprobante = Codigo Else TA.Comprobante = Ninguno
                    Case 20: If Len(Codigo) > 1 Then FA.Cod_Ejec = Codigo Else FA.Cod_Ejec = Ninguno
+                   Case 22: If Len(Codigo) > 1 Then FA.Tipo_Pago = Codigo Else FA.Tipo_Pago = "01"
                  End Select
              Next IdField
              SubTotal = Redondear(Cantidad * Precio, 2)
@@ -2617,7 +2618,7 @@ Public Sub Generar_Facturas()
             FechaTexto = .fields("FECHA")
             CodigoCli = .fields("Codigo_Cliente")
             NombreCliente = .fields("RUTA")
-            NoMeses = .fields("A_No")
+            NoMeses = .fields("NoMes")
             Codigo = .fields("CODIGO")
             Codigo2 = .fields("HABIT")
             SubCta = .fields("Cta")

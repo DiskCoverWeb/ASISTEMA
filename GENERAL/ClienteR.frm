@@ -1410,6 +1410,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
+
 Dim AdoRegs As ADODB.Recordset
 Dim Archivo_Foto As String
 Dim Cliente_Ant As String

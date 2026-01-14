@@ -98,46 +98,46 @@ Begin VB.Form FSeteos
       TabCaption(2)   =   "&Niveles de Seguridad"
       TabPicture(2)   =   "FSeteos.frx":0342
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "Command4"
-      Tab(2).Control(1)=   "Command1"
-      Tab(2).Control(2)=   "LstEmpresas"
-      Tab(2).Control(3)=   "Command6"
-      Tab(2).Control(4)=   "LstModulos"
-      Tab(2).Control(5)=   "Command10"
-      Tab(2).Control(6)=   "DGEmp1"
-      Tab(2).Control(7)=   "Command11"
-      Tab(2).Control(8)=   "Command5"
-      Tab(2).Control(9)=   "Command13"
-      Tab(2).Control(10)=   "DCUsuario"
-      Tab(2).Control(11)=   "Command7"
-      Tab(2).Control(12)=   "TxtUsuario"
-      Tab(2).Control(13)=   "Command3"
-      Tab(2).Control(14)=   "Command2"
-      Tab(2).Control(15)=   "TxtItem"
-      Tab(2).Control(16)=   "Frame2"
-      Tab(2).Control(17)=   "TextClave"
-      Tab(2).Control(18)=   "MBPeriodo"
-      Tab(2).Control(19)=   "DCBodega"
-      Tab(2).Control(20)=   "Label3"
-      Tab(2).Control(21)=   "Label5"
-      Tab(2).Control(22)=   "Label2"
-      Tab(2).Control(23)=   "Label1"
-      Tab(2).Control(24)=   "Label10"
-      Tab(2).Control(25)=   "Label4"
+      Tab(2).Control(0)=   "Label4"
+      Tab(2).Control(1)=   "Label10"
+      Tab(2).Control(2)=   "Label1"
+      Tab(2).Control(3)=   "Label2"
+      Tab(2).Control(4)=   "Label5"
+      Tab(2).Control(5)=   "Label3"
+      Tab(2).Control(6)=   "DCBodega"
+      Tab(2).Control(7)=   "MBPeriodo"
+      Tab(2).Control(8)=   "TextClave"
+      Tab(2).Control(9)=   "Frame2"
+      Tab(2).Control(10)=   "TxtItem"
+      Tab(2).Control(11)=   "Command2"
+      Tab(2).Control(12)=   "Command3"
+      Tab(2).Control(13)=   "TxtUsuario"
+      Tab(2).Control(14)=   "Command7"
+      Tab(2).Control(15)=   "DCUsuario"
+      Tab(2).Control(16)=   "Command13"
+      Tab(2).Control(17)=   "Command5"
+      Tab(2).Control(18)=   "Command11"
+      Tab(2).Control(19)=   "DGEmp1"
+      Tab(2).Control(20)=   "Command10"
+      Tab(2).Control(21)=   "LstModulos"
+      Tab(2).Control(22)=   "Command6"
+      Tab(2).Control(23)=   "LstEmpresas"
+      Tab(2).Control(24)=   "Command1"
+      Tab(2).Control(25)=   "Command4"
       Tab(2).ControlCount=   26
       TabCaption(3)   =   "&Impresiones"
       TabPicture(3)   =   "FSeteos.frx":035E
       Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "Command8"
-      Tab(3).Control(1)=   "Command17(3)"
-      Tab(3).Control(2)=   "Command17(2)"
-      Tab(3).Control(3)=   "Command17(1)"
-      Tab(3).Control(4)=   "Command21"
-      Tab(3).Control(5)=   "DGSeteosPRN"
-      Tab(3).Control(6)=   "PictFormatos"
-      Tab(3).Control(7)=   "Command16"
-      Tab(3).Control(8)=   "Command17(0)"
-      Tab(3).Control(9)=   "DGFormato"
+      Tab(3).Control(0)=   "DGFormato"
+      Tab(3).Control(1)=   "Command17(0)"
+      Tab(3).Control(2)=   "Command16"
+      Tab(3).Control(3)=   "PictFormatos"
+      Tab(3).Control(4)=   "DGSeteosPRN"
+      Tab(3).Control(5)=   "Command21"
+      Tab(3).Control(6)=   "Command17(1)"
+      Tab(3).Control(7)=   "Command17(2)"
+      Tab(3).Control(8)=   "Command17(3)"
+      Tab(3).Control(9)=   "Command8"
       Tab(3).ControlCount=   10
       Begin VB.CommandButton Command4 
          Caption         =   "Migracion a MySQL"
@@ -7448,6 +7448,27 @@ If Existe_File(RutaSistema & "\BASES\UPDATE_DB\*.upd") Then Kill RutaSistema & "
     Do Until RstSchema.EOF
        If RstSchema!TABLE_TYPE = "TABLE" And MidStrg(RstSchema!TABLE_NAME, 1, 1) <> "~" Then
          'Llenamos la lista de Tablas
+          Si_No = False
+          If InStr(RstSchema!TABLE_NAME, "Asiento_CSV") Then Si_No = True
+          If InStr(RstSchema!TABLE_NAME, "Asiento_TXT") Then Si_No = True
+          If InStr(RstSchema!TABLE_NAME, "Asiento_Bancos") Then Si_No = True
+          If InStr(RstSchema!TABLE_NAME, "Balance_Consolidado") Then Si_No = True
+          If InStr(RstSchema!TABLE_NAME, "Tabla_Temporal_Balance") Then Si_No = True
+          
+         'Procedemos a eliminar las tablas temporales que se crean solas
+          If Si_No Then Ejecutar_SQL_SP "DROP TABLE IF EXISTS " & RstSchema!TABLE_NAME
+       End If
+       RstSchema.MoveNext
+    Loop
+    AdoCon1.Close
+    
+   'MsgBox "Desktop Test: " & Cadena
+    Set AdoCon1 = New ADODB.Connection
+    AdoCon1.open AdoStrCnn
+    Set RstSchema = AdoCon1.OpenSchema(adSchemaTables)
+    Do Until RstSchema.EOF
+       If RstSchema!TABLE_TYPE = "TABLE" And MidStrg(RstSchema!TABLE_NAME, 1, 1) <> "~" Then
+         'Llenamos la lista de Tablas
           
           If RstSchema!TABLE_NAME <> "Actualizacion" Then
              LstTablas.AddItem RstSchema!TABLE_NAME
@@ -7456,7 +7477,8 @@ If Existe_File(RutaSistema & "\BASES\UPDATE_DB\*.upd") Then Kill RutaSistema & "
        End If
        RstSchema.MoveNext
     Loop
-
+    AdoCon1.Close
+    
  'MsgBox "Desktop Test: " & Contador
  
  Progreso_Barra.Incremento = 0

@@ -71,19 +71,19 @@ Begin VB.Form FComprasAT
       TabCaption(1)   =   "Conceptos AIR"
       TabPicture(1)   =   "FComprasAT.frx":06B2
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "Label44"
+      Tab(1).Control(0)=   "CmdGrabar"
       Tab(1).Control(0).Enabled=   0   'False
-      Tab(1).Control(1)=   "LblResolucion"
+      Tab(1).Control(1)=   "CmdCerrar"
       Tab(1).Control(1).Enabled=   0   'False
-      Tab(1).Control(2)=   "Frame2"
+      Tab(1).Control(2)=   "FrmPagoExterior"
       Tab(1).Control(2).Enabled=   0   'False
       Tab(1).Control(3)=   "CFormaPago"
       Tab(1).Control(3).Enabled=   0   'False
-      Tab(1).Control(4)=   "FrmPagoExterior"
+      Tab(1).Control(4)=   "Frame2"
       Tab(1).Control(4).Enabled=   0   'False
-      Tab(1).Control(5)=   "CmdCerrar"
+      Tab(1).Control(5)=   "LblResolucion"
       Tab(1).Control(5).Enabled=   0   'False
-      Tab(1).Control(6)=   "CmdGrabar"
+      Tab(1).Control(6)=   "Label44"
       Tab(1).Control(6).Enabled=   0   'False
       Tab(1).ControlCount=   7
       TabCaption(2)   =   "Partidos Políticos"
@@ -3195,7 +3195,7 @@ Private Sub CmdGrabar_Click()
    'Grabamos el Asiento de la Compra
     If Leer_Campo_Empresa("Registrar_IVA") Then
        Cta = Cta_IVA_Inventario
-       DetalleComp = "Registro del IVA en compras Doc. No. " & TxtNumSerieUno & TxtNumSerieDos & "-" & TxtNumSerietres & ", " & NombreCliente
+       DetalleComp = "Registro del IVA en compras Doc. No. " & TxtNumSerieUno & TxtNumSerieDos & "-" & TxtNumSerieTres & ", " & NombreCliente
        Codigo = Leer_Cta_Catalogo(Cta)
        ValorDH = Redondear(CCur(TxtMontoIva), 2)
        If ValorDH > 0 Then InsertarAsiento AdoAsientos
@@ -3416,8 +3416,8 @@ Private Sub DCTipoComprobante_LostFocus()
           MBFechaCad = AdoAux.Recordset.Fields("FechaCaducidad")
           TxtNumSerieUno = AdoAux.Recordset.Fields("Establecimiento")
           TxtNumSerieDos = AdoAux.Recordset.Fields("PuntoEmision")
-          TxtNumSerietres = AdoAux.Recordset.Fields("Secuencial") + 1
-          If Val(TxtNumSerietres) <= 0 Then TxtNumSerietres = 1
+          TxtNumSerieTres = AdoAux.Recordset.Fields("Secuencial") + 1
+          If Val(TxtNumSerieTres) <= 0 Then TxtNumSerieTres = 1
           If Len(AdoAux.Recordset.Fields("Autorizacion")) >= 13 Then
              TxtNumAutor = RUC
           Else
@@ -3636,7 +3636,7 @@ Sub Insertar_DataGrid()
        SetAdoFields "Cta_Retencion", SinEspaciosIzq(DCRetFuente)
        SetAdoFields "EstabFactura", TxtNumSerieUno
        SetAdoFields "PuntoEmiFactura", TxtNumSerieDos
-       SetAdoFields "Factura_No", CTNumero(TxtNumSerietres)
+       SetAdoFields "Factura_No", CTNumero(TxtNumSerieTres)
        SetAdoFields "IdProv", CodigoCliente
        SetAdoFields "A_No", Maximo_De("Asiento_Air", "A_No")
        SetAdoFields "T_No", Trans_No
@@ -3831,7 +3831,7 @@ Private Sub Form_Activate()
    LblTD.Caption = TipoBenef                  ' Tipo de Cliente: C,R,P,O
    LblNumIdent = CICliente                    ' CI o RUC del Cliente
    DCProveedor.Text = NombreCliente           ' Nombre del Cliente
-   TxtNumSerietres = "0000001"
+   TxtNumSerieTres = "0000001"
    TxtNumSerieUno = "001"
    TxtNumSerieDos = "001"
    TxtNumAutor = String(10, "0")
@@ -3936,7 +3936,7 @@ Private Sub MBFechaRegis_LostFocus()
       If CFechaLong(MBFechaRegis) < CFechaLong(MBFechaEmi) Then
          MsgBox "La Fecha de Registro debe ser mayor o igual que la Fecha de Emisión", vbInformation, "Aviso"
          MBFechaRegis.SetFocus
-      ElseIf (CFechaLong(MBFechaRegis) - CFechaLong(MBFechaEmi)) > 5 Then
+      ElseIf (CFechaLong(MBFechaRegis) - CFechaLong(MBFechaEmi)) > 7 Then
          MsgBox "La Fecha de Registro debe ser menor o igual a cinco dias despues de la Fecha de Emisión", vbInformation, "Aviso"
          MBFechaRegis.SetFocus
       End If
@@ -4087,14 +4087,14 @@ Private Sub TxtNumAutor_LostFocus()
          & "AND Item = '" & NumEmpresa & "' " _
          & "AND Establecimiento = '" & TxtNumSerieUno & "' " _
          & "AND PuntoEmision = '" & TxtNumSerieDos & "' " _
-         & "AND Secuencial = " & CLng(TxtNumSerietres) & " " _
+         & "AND Secuencial = " & CLng(TxtNumSerieTres) & " " _
          & "AND Autorizacion = '" & TxtNumAutor & "' " _
          & "ORDER BY Fecha DESC, Secuencial DESC "
     Select_Adodc AdoAux, sSQL
     If AdoAux.Recordset.RecordCount > 0 Then MsgBox "USTED ESTA TRATANDO DE INGRESAR UNA FACTURA EXISTENTE"
     If cod = 3 Then
        Co.Autorizacion_LC = TxtNumAutor
-       If Val(TxtNumSerietres) <> ReadSetDataNum("LC_SERIE_" & Co.Serie_LC, True, False) Then
+       If Val(TxtNumSerieTres) <> ReadSetDataNum("LC_SERIE_" & Co.Serie_LC, True, False) Then
           Titulo = "SECUENCIAL DE LIQUIDACION DE COMPRAS"
           Mensajes = "Número de Liquidacion de Compras: " & Co.Serie_LC & "-" & Format(Co.Liquidacion, "000000000") & ", no esta en orden secuencial." & vbCrLf & vbCrLf _
                    & "QUIERE PROCESARLA?"
@@ -4167,7 +4167,7 @@ Private Sub TxtNumSerieDos_LostFocus()
     TxtNumSerieDos = Format(Val(TxtNumSerieDos), "000")
     Co.Serie_LC = Ninguno
     TxtNumAutor = "0000000001"
-    TxtNumSerietres = "000000001"
+    TxtNumSerieTres = "000000001"
     sSQL = "SELECT TOP 1 Fecha, Secuencial, FechaCaducidad, Establecimiento, PuntoEmision, Autorizacion " _
          & "FROM Trans_Compras " _
          & "WHERE TipoComprobante = " & cod & " " _
@@ -4179,14 +4179,14 @@ Private Sub TxtNumSerieDos_LostFocus()
     Select Case cod
       Case 3 ' Liquidacion de Compras
            Co.Serie_LC = TxtNumSerieUno & TxtNumSerieDos
-           TxtNumSerietres = ReadSetDataNum("LC_SERIE_" & Co.Serie_LC, True, False)
+           TxtNumSerieTres = ReadSetDataNum("LC_SERIE_" & Co.Serie_LC, True, False)
            If AdoAux.Recordset.RecordCount > 0 Then
               TxtNumAutor = AdoAux.Recordset.Fields("Autorizacion")
               If Len(TxtNumAutor) >= 13 Then TxtNumAutor = RUC
            End If
       Case 4 ' Notas de Credito
            If AdoAux.Recordset.RecordCount > 0 Then
-              TxtNumSerietres = AdoAux.Recordset.Fields("Secuencial") + 1
+              TxtNumSerieTres = AdoAux.Recordset.Fields("Secuencial") + 1
               MBFechaCad = AdoAux.Recordset.Fields("FechaCaducidad")
               TxtNumSerieUno = AdoAux.Recordset.Fields("Establecimiento")
               TxtNumSerieDos = AdoAux.Recordset.Fields("PuntoEmision")
@@ -4194,7 +4194,7 @@ Private Sub TxtNumSerieDos_LostFocus()
            End If
       Case Else
            If AdoAux.Recordset.RecordCount > 0 Then
-              TxtNumSerietres = AdoAux.Recordset.Fields("Secuencial") + 1
+              TxtNumSerieTres = AdoAux.Recordset.Fields("Secuencial") + 1
               TxtNumAutor = AdoAux.Recordset.Fields("Autorizacion")
               If Len(TxtNumAutor) >= 13 Then TxtNumAutor = RUC
            End If
@@ -4216,12 +4216,12 @@ Private Sub TxtNumSerieDosComp_LostFocus()
 End Sub
 
 Private Sub TxtNumSerietres_GotFocus()
-    TxtNumSerietres = Format(Val(Round(TxtNumSerietres)), "000000000")
+    TxtNumSerieTres = Format(Val(Round(TxtNumSerieTres)), "000000000")
     Co.LCNueva = True
     Co.LCSecuencial = True
     Co.Liquidacion = 0
     Co.Serie_LC = Ninguno
-    MarcarTexto TxtNumSerietres
+    MarcarTexto TxtNumSerieTres
 End Sub
 
 Private Sub TxtNumSerietres_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -4229,11 +4229,11 @@ Private Sub TxtNumSerietres_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub TxtNumSerietres_LostFocus()
-   If Val(TxtNumSerietres) <= 0 Then TxtNumSerietres = "000000001"
-   TxtNumSerietres = Format(Round(Val(TxtNumSerietres)), "000000000")
+   If Val(TxtNumSerieTres) <= 0 Then TxtNumSerieTres = "000000001"
+   TxtNumSerieTres = Format(Round(Val(TxtNumSerieTres)), "000000000")
    If cod = 3 Then
       Co.Serie_LC = TxtNumSerieUno & TxtNumSerieDos
-      Co.Liquidacion = Val(TxtNumSerietres)
+      Co.Liquidacion = Val(TxtNumSerieTres)
       sSQL = "SELECT * " _
            & "FROM Trans_Compras " _
            & "WHERE Item = '" & NumEmpresa & "' " _
@@ -4250,7 +4250,7 @@ Private Sub TxtNumSerietres_LostFocus()
                   & "número de Liquidacion de Compras." & vbCrLf & vbCrLf _
                   & "QUIERE REPROCESARLA"
          If BoxMensaje = vbYes Then
-            Co.Liquidacion = Val(TxtNumSerietres)
+            Co.Liquidacion = Val(TxtNumSerieTres)
             Co.LCNueva = False
             Co.LCSecuencial = False
          End If
@@ -4528,7 +4528,7 @@ Public Sub Limpiar_Controles()
     DCTipoComprobante.Text = ""
     TxtNumSerieUno.Text = "001"
     TxtNumSerieDos.Text = "001"
-    TxtNumSerietres.Text = "0"
+    TxtNumSerieTres.Text = "0"
     TxtNumAutor.Text = ""
     FechaValida MBFechaEmi
     FechaValida MBFechaRegis
@@ -4708,7 +4708,7 @@ Dim FormaPago As String
     SetAdoFields "TipoComprobante", cod
     SetAdoFields "Establecimiento", TxtNumSerieUno
     SetAdoFields "PuntoEmision", TxtNumSerieDos
-    SetAdoFields "Secuencial", CTNumero(TxtNumSerietres)
+    SetAdoFields "Secuencial", CTNumero(TxtNumSerieTres)
     SetAdoFields "Autorizacion", TxtNumAutor
     SetAdoFields "FechaEmision", MBFechaEmi
     SetAdoFields "FechaRegistro", MBFechaRegis

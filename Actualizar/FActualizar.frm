@@ -35,7 +35,7 @@ Begin VB.Form FActualizar
       ImageList       =   "ImgLstFTP"
       _Version        =   327682
       BeginProperty Buttons {0713E452-850A-101B-AFC0-4210102A8DA7} 
-         NumButtons      =   9
+         NumButtons      =   5
          BeginProperty Button1 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "Salir"
             Object.ToolTipText     =   "Salir de la actualizacion"
@@ -43,48 +43,24 @@ Begin VB.Form FActualizar
             ImageIndex      =   1
          EndProperty
          BeginProperty Button2 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   "Completa"
-            Object.ToolTipText     =   "Actualiza toda la base de datos con los ejecutable"
-            Object.Tag             =   ""
-            ImageIndex      =   2
-         EndProperty
-         BeginProperty Button3 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "Ejecutables"
             Object.ToolTipText     =   "Actualiza solo los ejecutables"
             Object.Tag             =   ""
             ImageIndex      =   3
          EndProperty
-         BeginProperty Button4 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   "BaseDatos"
-            Object.ToolTipText     =   "Actualiza solo la base de Datos"
-            Object.Tag             =   ""
-            ImageIndex      =   4
-         EndProperty
-         BeginProperty Button5 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   "SoloDatos"
-            Object.ToolTipText     =   "Actualiza Base de Datos sin transmision"
-            Object.Tag             =   ""
-            ImageIndex      =   5
-         EndProperty
-         BeginProperty Button6 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   "SoloSPFN"
-            Object.ToolTipText     =   "Actualiza SP y FN sin transmision"
-            Object.Tag             =   ""
-            ImageIndex      =   6
-         EndProperty
-         BeginProperty Button7 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+         BeginProperty Button3 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "Imagenes"
             Object.ToolTipText     =   "Actualizar los Fondos y formatos"
             Object.Tag             =   ""
             ImageIndex      =   7
          EndProperty
-         BeginProperty Button8 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+         BeginProperty Button4 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "Servidor"
             Object.ToolTipText     =   "Actualiza todas las bases del servidor actual"
             Object.Tag             =   ""
             ImageIndex      =   10
          EndProperty
-         BeginProperty Button9 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+         BeginProperty Button5 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "Servidor_SP_FN"
             Object.ToolTipText     =   "Actualiza los SP y FN de todas las bases del servidor actual"
             Object.Tag             =   ""
@@ -105,7 +81,7 @@ Begin VB.Form FActualizar
             Strikethrough   =   0   'False
          EndProperty
          Height          =   495
-         Left            =   5355
+         Left            =   3045
          TabIndex        =   11
          Text            =   "00"
          Top             =   105
@@ -693,36 +669,10 @@ Dim Thread As Long
             Progreso_Barra.Valor_Maximo = 100
             RatonNormal
             End
-      Case "Completa"                       'Actualizar toda la base de datos con los ejecutable
-            Progreso_Barra.Valor_Maximo = 3500
-            TMail.Mensaje = TMail.Mensaje
-            Actualizacion_Completa
-            Enviar_Mail_Actualizacion
-            Proceso_Terminado_Exitosamente
       Case "Ejecutables"                    'Actualiza solo los ejecutables
             Progreso_Barra.Valor_Maximo = 30
             Bajar_Archivos_FTP "[2]"
             TMail.Mensaje = TMail.Mensaje & "Se actualizon Los ejecutables" & vbCrLf
-            Enviar_Mail_Actualizacion
-            Proceso_Terminado_Exitosamente
-      Case "BaseDatos"                      'Actualiza solo la base de datos
-            Progreso_Barra.Valor_Maximo = 2500
-            Bajar_Archivos_FTP "[1]"
-            TMail.Mensaje = TMail.Mensaje & "Se actualizo solo las bases de datos" & vbCrLf
-            UPD_Actualizar_SP
-            Enviar_Mail_Actualizacion
-            Proceso_Terminado_Exitosamente
-      Case "SoloDatos"                      'Actualiza base de datos sin transmision
-            Progreso_Barra.Valor_Maximo = 1900
-            TMail.Mensaje = TMail.Mensaje & "Se actualizon solo los datos" & vbCrLf
-            UPD_Actualizar_SP
-            Enviar_Mail_Actualizacion
-            Proceso_Terminado_Exitosamente
-      Case "SoloSPFN"                       'Actualiza SP y FN sin transmision
-            Progreso_Barra.Valor_Maximo = 150
-            UPD_Actualizar_SP True
-            Iniciar_Datos_Default_SP
-            TMail.Mensaje = TMail.Mensaje & "Se actualizon los procedimientos por defaul" & vbCrLf
             Enviar_Mail_Actualizacion
             Proceso_Terminado_Exitosamente
       Case "Imagenes"                       'Actualiza solo la imagenes
@@ -1114,42 +1064,42 @@ error_Handler:
      RatonNormal
 End Sub
 
-Public Sub Actualizacion_Completa()
-Dim Si_Actualiza As Boolean
-Dim Nombre_Key As String
- 
- FActualizar.Caption = Modulo & ": " & strIPServidor & " - " & strNombreBaseDatos
- Si_Actualiza = True
- If Si_Actualiza Then
-   'Empezamos a bajar la actualizacion del servidor en las nubes
-    Bajar_Archivos_FTP "[1][2]"
-    RatonReloj
-    Progreso_Barra.Mensaje_Box = "PROGRESO DEL RESPALDO"
-    UPD_Actualizar_SP
-  Else
-    Mensajes = "LO SIENTO NO PODER ACTUALIZAR EL SISTEMA, USTED NO ESTA LEGALIZADO " _
-             & "O YA SE VENCIO SU CONTRATO, LLAME AL 593-09-8910-5300" & vbCrLf & vbCrLf _
-             & "O ENVIE UN MAILS A: diskcoversystem@msn.com PARA SU LEGALIZACION" & vbCrLf & vbCrLf & vbCrLf _
-             & "DESEA LEGALIZAR SU CLAVE"
-    Titulo = "LEGALIZACION DE CLAVE"
-    If BoxMensaje = vbYes Then
-       ''fLeer_Campos_Key LineasLogIn(4)
-       Nombre_Key = ""
-       For I = 1 To CantCampos
-           If (10 <= Len(TipoC(I).Valor) And Len(TipoC(I).Valor) <= 13) And IsNumeric(TipoC(I).Valor) Then
-              Nombre_Key = TipoC(I).Valor
-              I = CantCampos + 1
-           End If
-       Next I
-       RutaOrigen = RutaSistema & "\FORMATOS\LOGINSYSTEM.KEY"
-       Dir_Dialog.Filename = RutaSysBases & "\Key_" & Nombre_Key & ".Zip"
-       Dir_Dialog.InitDir = RutaSysBases & "\"
-       RutaDestino = UCase(SelectDialogFile())
-       '''NombreArchivoZip = RutaDestino
-       '''Empaquetar_Archivos_Zip
-    End If
-  End If
-End Sub
+'''Public Sub Actualizacion_Completa()
+'''Dim Si_Actualiza As Boolean
+'''Dim Nombre_Key As String
+'''
+''' FActualizar.Caption = Modulo & ": " & strIPServidor & " - " & strNombreBaseDatos
+''' Si_Actualiza = True
+''' If Si_Actualiza Then
+'''   'Empezamos a bajar la actualizacion del servidor en las nubes
+'''    Bajar_Archivos_FTP "[1][2]"
+'''    RatonReloj
+'''    Progreso_Barra.Mensaje_Box = "PROGRESO DEL RESPALDO"
+'''    UPD_Actualizar_SP
+'''  Else
+'''    Mensajes = "LO SIENTO NO PODER ACTUALIZAR EL SISTEMA, USTED NO ESTA LEGALIZADO " _
+'''             & "O YA SE VENCIO SU CONTRATO, LLAME AL 593-09-8910-5300" & vbCrLf & vbCrLf _
+'''             & "O ENVIE UN MAILS A: diskcoversystem@msn.com PARA SU LEGALIZACION" & vbCrLf & vbCrLf & vbCrLf _
+'''             & "DESEA LEGALIZAR SU CLAVE"
+'''    Titulo = "LEGALIZACION DE CLAVE"
+'''    If BoxMensaje = vbYes Then
+'''       ''fLeer_Campos_Key LineasLogIn(4)
+'''       Nombre_Key = ""
+'''       For I = 1 To CantCampos
+'''           If (10 <= Len(TipoC(I).Valor) And Len(TipoC(I).Valor) <= 13) And IsNumeric(TipoC(I).Valor) Then
+'''              Nombre_Key = TipoC(I).Valor
+'''              I = CantCampos + 1
+'''           End If
+'''       Next I
+'''       RutaOrigen = RutaSistema & "\FORMATOS\LOGINSYSTEM.KEY"
+'''       Dir_Dialog.Filename = RutaSysBases & "\Key_" & Nombre_Key & ".Zip"
+'''       Dir_Dialog.InitDir = RutaSysBases & "\"
+'''       RutaDestino = UCase(SelectDialogFile())
+'''       '''NombreArchivoZip = RutaDestino
+'''       '''Empaquetar_Archivos_Zip
+'''    End If
+'''  End If
+'''End Sub
 
 Private Sub Form_Activate()
    UPD_Listar_Tablas LstTablas
@@ -1380,12 +1330,8 @@ On Error GoTo error_Handler
     LstStatud.Refresh
     
    'Store Procedure que procesa la version nueva de la actualizacion
-    If Solo_FN_SP Then
-       Actualizar_SP_FN_SP
-    Else
-      'Empezamos actualizar
-       Actualizar_Base_Datos_SP
-       
+    Actualizar_Base_Datos_SP Solo_FN_SP
+    If Not Solo_FN_SP Then
       'Codigos Catalogo Ctas_Proceso
        LstStatud.AddItem "Determinando Duplicados de: Ctas_Proceso"
        LstStatud.Refresh
@@ -2454,7 +2400,14 @@ Dim JSONFiles As String
    'Empezamos a bajar la actualizacion del servidor de las nubes
     Datos_Procesados_BD "Transfiriendo Datos del Servidor..."
     
+    MsgBox strNombreBaseDatos & vbCrLf & AdoStrCnn
+    
+    AdoStrCnn = Replace(AdoStrCnn, strNombreBaseDatos, "DiskCover_#Update")
+    
     Bajar_Archivos_FTP "[1]"
+    
+    MsgBox AdoStrCnn
+    
     
 ''''    JSONFiles = Lista_Archivo_JSON
 ''''

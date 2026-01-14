@@ -602,7 +602,7 @@ Declare Function SetWindowRgn Lib "user32" (ByVal hwnd As Long, _
 '-----------------------------------------------------------------------------------------------------------------------------------------------------------
 Declare Function GetDeviceCaps Lib "gdi32" (ByVal hdc As Long, ByVal nIndex As Long) As Long
 Declare Function BitBlt Lib "gdi32" (ByVal hDestDC As Long, ByVal X As Long, ByVal y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hSrcDC As Long, ByVal XSrc As Long, ByVal YSrc As Long, ByVal dwRop As Long) As Long
-Declare Function CreateFont Lib "gdi32" Alias "CreateFontA" (ByVal H As Long, ByVal W As Long, ByVal E As Long, ByVal O As Long, ByVal W As Long, ByVal i As Long, ByVal U As Long, ByVal S As Long, ByVal C As Long, ByVal OP As Long, ByVal cp As Long, ByVal Q As Long, ByVal PAF As Long, ByVal F As String) As Long
+Declare Function CreateFont Lib "gdi32" Alias "CreateFontA" (ByVal H As Long, ByVal W As Long, ByVal E As Long, ByVal O As Long, ByVal W As Long, ByVal I As Long, ByVal U As Long, ByVal S As Long, ByVal C As Long, ByVal OP As Long, ByVal cp As Long, ByVal Q As Long, ByVal PAF As Long, ByVal F As String) As Long
 Declare Function SelectObject Lib "gdi32" (ByVal hdc As Long, ByVal hObject As Long) As Long
 Declare Function DeleteObject Lib "gdi32" (ByVal hObject As Long) As Long
 ' Crea la región
@@ -1012,7 +1012,7 @@ Dim Handle As Long
 End Function
 
 Public Function Unidades_De_Red() As String
-Dim i As Long
+Dim I As Long
 Dim ret As Long
 Dim Unidad_Disp As String
 Dim Unidad_No_Disp As String
@@ -1022,15 +1022,15 @@ Unidad_No_Disp = ""
 
 ret = GetLogicalDrives()
 If ret Then
-    For i = 0 To 25
+    For I = 0 To 25
         ' Si el bit es cero, es que no existe la unidad o no está mapeada
-        If (ret And 2 ^ i) = 0 Then
+        If (ret And 2 ^ I) = 0 Then
             ' Mostrar el nombre de la unidad disponible
-            Unidad_Disp = Unidad_Disp & Chr$(i + 65) & ":" & vbCrLf
+            Unidad_Disp = Unidad_Disp & Chr$(I + 65) & ":" & vbCrLf
             'Combo2.AddItem Chr$(i + 65) & ":"
         Else
             ' Mostrar el nombre de la unidad ocupada
-            Unidad_No_Disp = Unidad_No_Disp & Chr$(i + 65) & ":" & vbCrLf
+            Unidad_No_Disp = Unidad_No_Disp & Chr$(I + 65) & ":" & vbCrLf
             'Combo1.AddItem Chr$(i + 65) & ":"
         End If
     Next
@@ -1047,33 +1047,33 @@ Unidades_De_Red = Unidad_Disp & vbCrLf & Unidad_No_Disp
 End Function
 
 Public Function Unidades_De_Red_Disponibles() As String
-Dim i As Long
+Dim I As Long
 Dim ret As Long
 Dim S As String
 Dim Unidades_Disponibles As String
 '
 Unidades_Disponibles = ""
-i = 260
-S = String$(i, Chr$(0))
-ret = GetLogicalDriveStrings(i, S)
+I = 260
+S = String$(I, Chr$(0))
+ret = GetLogicalDriveStrings(I, S)
 ' Si el valor devuelto es mayor que el tamaño del buffer, es que el buffer debe ser mayor
-If ret > i Then
-    i = ret + 2
-    S = String$(i, Chr$(0))
-    ret = GetLogicalDriveStrings(i, S)
+If ret > I Then
+    I = ret + 2
+    S = String$(I, Chr$(0))
+    ret = GetLogicalDriveStrings(I, S)
 End If
 '
 If ret Then
     ' Quitar los caracteres extras
     S = LeftStrg(S, ret)
     Do
-        i = InStr(S, Chr$(0))
-        If i Then
-            Unidades_Disponibles = Unidades_Disponibles & LeftStrg(S, i - 1) & vbCrLf
+        I = InStr(S, Chr$(0))
+        If I Then
+            Unidades_Disponibles = Unidades_Disponibles & LeftStrg(S, I - 1) & vbCrLf
             'Combo1.AddItem LeftStrg(S, I - 1)
-            S = MidStrg(S, i + 1)
+            S = MidStrg(S, I + 1)
         End If
-    Loop While i
+    Loop While I
     ' Mostrar la primera letra disponible
 '    If Combo1.ListCount > 0 Then
 '        Combo1.ListIndex = 0
@@ -1322,20 +1322,20 @@ End Function
 Function AddressStringToLong(ByVal tmp As String) As Long
 
 
-   Dim i As Integer
+   Dim I As Integer
    Dim parts(1 To 4) As String
    
-   i = 0
+   I = 0
    While InStr(tmp, ".") > 0
-      i = i + 1
-      parts(i) = Mid(tmp, 1, InStr(tmp, ".") - 1)
+      I = I + 1
+      parts(I) = Mid(tmp, 1, InStr(tmp, ".") - 1)
       tmp = Mid(tmp, InStr(tmp, ".") + 1)
    Wend
    
-   i = i + 1
-   parts(i) = tmp
+   I = I + 1
+   parts(I) = tmp
    
-   If i <> 4 Then
+   If I <> 4 Then
       AddressStringToLong = 0
       Exit Function
    End If
@@ -1369,7 +1369,7 @@ Public Function SocketsCleanup() As Boolean
     Dim X As Long
     X = WSACleanup()
     If X <> 0 Then
-        MsgBox "Windows Sockets error " & TrimStrg(str$(X)) & _
+        MsgBox "Windows Sockets error " & TrimStrg(Str$(X)) & _
                " occurred in Cleanup.", vbExclamation
         SocketsCleanup = False
     Else
@@ -1394,8 +1394,8 @@ Public Function SocketsInitialize() As Boolean
        (LoByte(WSAD.wVersion) = WS_VERSION_MAJOR And _
         HiByte(WSAD.wVersion) < WS_VERSION_MINOR) Then
         
-        szHiByte = TrimStrg(str$(HiByte(WSAD.wVersion)))
-        szLoByte = TrimStrg(str$(LoByte(WSAD.wVersion)))
+        szHiByte = TrimStrg(Str$(HiByte(WSAD.wVersion)))
+        szLoByte = TrimStrg(Str$(LoByte(WSAD.wVersion)))
         szBuf = "Windows Sockets Version " & szLoByte & "." & szHiByte
         szBuf = szBuf & " is not supported by Windows " & _
                           "Sockets for 32 bit Windows environments."
@@ -1405,7 +1405,7 @@ Public Function SocketsInitialize() As Boolean
     End If
     If WSAD.wMaxSockets < MIN_SOCKETS_REQD Then
         szBuf = "This application requires a minimum of " & _
-                 TrimStrg(str$(MIN_SOCKETS_REQD)) & " supported sockets."
+                 TrimStrg(Str$(MIN_SOCKETS_REQD)) & " supported sockets."
         MsgBox szBuf, vbExclamation
         SocketsInitialize = False
         Exit Function
@@ -1589,21 +1589,21 @@ Private Function BytesLength(abBytes() As Byte) As Long
     BytesLength = UBound(abBytes) - LBound(abBytes) + 1
 End Function
 
-Function StringToUTF8(ByVal str As String) As String
+Function StringToUTF8(ByVal Str As String) As String
     Dim utf8Bytes() As Byte
-    Dim i As Integer
-    Dim result As String
+    Dim I As Integer
+    Dim Result As String
 
     ' Convertir la cadena a bytes usando la codificación Unicode (UTF-16)
-    utf8Bytes = StrConv(str, vbFromUnicode)
+    utf8Bytes = StrConv(Str, vbFromUnicode)
 
     ' Construir la cadena UTF-8
-    result = ""
-    For i = 0 To UBound(utf8Bytes)
-        result = result & Chr(utf8Bytes(i))
-    Next i
+    Result = ""
+    For I = 0 To UBound(utf8Bytes)
+        Result = Result & Chr(utf8Bytes(I))
+    Next I
 
-    StringToUTF8 = result
+    StringToUTF8 = Result
 End Function
 
 ''' Return VBA "Unicode" string from byte array encoded in UTF-8
@@ -1840,7 +1840,9 @@ Dim RespuestaURL As String
    ' Clipboard.SetText vURLHTTP & vbCrLf & vbCrLf & vURLParams & vbCrLf & vbCrLf & DomDoc.responseBody
    'MsgBox Len(DomDoc.responseBody) & " [" & DomDoc.responseBody & "]"
     If Len(DomDoc.responseBody) > 0 Then RespuestaURL = StrConv(DomDoc.responseBody, vbUnicode) Else RespuestaURL = "CNASS"
-    PostUrlSourceStr = Trim(Replace(RespuestaURL, """", ""))
+     
+   'PostUrlSourceStr = Trim(Replace(RespuestaURL, """", ""))
+    PostUrlSourceStr = RespuestaURL
 End Function
 
 Public Function Ping_IP(My_IP_PC As String) As Boolean

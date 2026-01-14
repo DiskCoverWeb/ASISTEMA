@@ -348,6 +348,7 @@ Type CtasAsiento
       Tipo_Cta         As String
       Cta_Numero       As String
       Fecha_Cad        As String
+      ResultadoFA      As String
 
       C                As Boolean
       p                As Boolean
@@ -843,6 +844,7 @@ Type Tipo_Espe_DBF
 End Type
 '-------------------------------------
 Type Tipo_Estado_SRI
+     Resultado          As Boolean
      Tipo_Doc_SRI       As String
      Clave_De_Acceso    As String
      Autorizacion       As String

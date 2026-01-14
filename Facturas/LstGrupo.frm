@@ -13,8 +13,8 @@ Begin VB.Form ListarGrupos
    ClientWidth     =   11280
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   10935
-   ScaleWidth      =   11280
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    WindowState     =   1  'Minimized
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
@@ -942,7 +942,7 @@ Begin VB.Form ListarGrupos
       _ExtentY        =   714
       _Version        =   393216
       Tabs            =   7
-      Tab             =   6
+      Tab             =   5
       TabsPerRow      =   7
       TabHeight       =   520
       TabCaption(0)   =   "LISTADO POR GRUPOS"
@@ -967,11 +967,11 @@ Begin VB.Form ListarGrupos
       Tab(4).ControlCount=   0
       TabCaption(5)   =   "CARTERA RECAUDADA"
       TabPicture(5)   =   "LstGrupo.frx":0136
-      Tab(5).ControlEnabled=   0   'False
+      Tab(5).ControlEnabled=   -1  'True
       Tab(5).ControlCount=   0
       TabCaption(6)   =   "ENVIAR DEUDA POR API Y EMAIL"
       TabPicture(6)   =   "LstGrupo.frx":0152
-      Tab(6).ControlEnabled=   -1  'True
+      Tab(6).ControlEnabled=   0   'False
       Tab(6).ControlCount=   0
    End
    Begin MSAdodcLib.Adodc AdoCiudad 

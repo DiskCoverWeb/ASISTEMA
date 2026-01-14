@@ -12,6 +12,8 @@ Global SiUnidadEducativa As Boolean
 Global ExisteErrores As Boolean
 Global SetPapelCopia As Boolean
 Global Medio_Rol As Boolean
+Global CentroDeIngresos As Boolean
+Global CentroDeGastos As Boolean
 Global CentroDeCosto As Boolean
 Global Num_Meses_CD As Boolean
 Global Num_Meses_CE As Boolean

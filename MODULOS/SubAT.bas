@@ -78,22 +78,22 @@ Dim AdoDBEmpresa As ADODB.Recordset
     Select_AdoDB AdoDBEmpresa, sSQL
     With AdoDBEmpresa
      If .RecordCount > 0 Then
-         Mod_PVP = .fields("Mod_PVP")
-         Mod_Fact = .fields("Mod_Fact")
-         ComisionEjec = .fields("Comision_Ejecutivo")
+         Mod_PVP = .Fields("Mod_PVP")
+         Mod_Fact = .Fields("Mod_Fact")
+         ComisionEjec = .Fields("Comision_Ejecutivo")
 
-         Ambiente = .fields("Ambiente")
-         ContEspec = .fields("Codigo_Contribuyente_Especial")
-         Obligado_Conta = .fields("Obligado_Conta")
+         Ambiente = .Fields("Ambiente")
+         ContEspec = .Fields("Codigo_Contribuyente_Especial")
+         Obligado_Conta = .Fields("Obligado_Conta")
          
         'Ruta del Certificado para Firmar el documento
-         NombreCertificado = .fields("Ruta_Certificado")
-         RutaCertificado = RutaSistema & "\CERTIFIC\" & .fields("Ruta_Certificado")
-         ClaveCertificado = .fields("Clave_Certificado")
+         NombreCertificado = .Fields("Ruta_Certificado")
+         RutaCertificado = RutaSistema & "\CERTIFIC\" & .Fields("Ruta_Certificado")
+         ClaveCertificado = .Fields("Clave_Certificado")
     
         'Pagina de Conexion con el SRI
-         URLRecepcion = .fields("Web_SRI_Recepcion")
-         URLAutorizacion = .fields("Web_SRI_Autorizado")
+         URLRecepcion = .Fields("Web_SRI_Recepcion")
+         URLAutorizacion = .Fields("Web_SRI_Autorizado")
      End If
     End With
     AdoDBEmpresa.Close
@@ -139,7 +139,7 @@ If .RecordCount > 0 Then
      Printer.FontName = TipoLetra
      Do While Not .EOF
         Printer.FontBold = False
-        If .fields("Ln") = 9999 Then
+        If .Fields("Ln") = 9999 Then
             Imprimir_Linea_H PosLinea - 0.05, Ancho(0), LimiteAncho
             PosLinea = PosLinea + 0.05
             Printer.FontBold = True
@@ -206,7 +206,7 @@ Dim AdoListAT As ADODB.Recordset
   With AdoListAT
    If .RecordCount > 0 Then
        Do While Not .EOF
-          CModificaciones.AddItem Format$(.fields("Linea_SRI"), "000") & " " & .fields("Cliente")
+          CModificaciones.AddItem Format$(.Fields("Linea_SRI"), "000") & " " & .Fields("Cliente")
          .MoveNext
        Loop
        CModificaciones.Text = CModificaciones.List(0)
@@ -315,10 +315,10 @@ Set DBAT_Air = New ADODB.Recordset
      With DBAT_Air
       If .RecordCount > 0 Then
           Do While Not .EOF
-             Secuencial = .fields("SecRetencion")
-             Autorizacion_No = .fields("AutRetencion")
-             Establecimiento = .fields("EstabRetencion")
-             Emision = .fields("PtoEmiRetencion")
+             Secuencial = .Fields("SecRetencion")
+             Autorizacion_No = .Fields("AutRetencion")
+             Establecimiento = .Fields("EstabRetencion")
+             Emision = .Fields("PtoEmiRetencion")
              sSQL = "DELETE * " _
                   & "FROM Trans_Air " _
                   & "WHERE Item = '" & NumEmpresa & "' " _
@@ -457,13 +457,13 @@ Dim DatosSelect As String
   RegAdodc.open DatosSelect, AdoStrCnn, , , adCmdText
   If RegAdodc.RecordCount > 0 Then
      With CR_AT
-         .Codigo = RegAdodc.fields("Codigo")
-         .Concepto = RegAdodc.fields("Concepto")
-         .Fecha_Final = RegAdodc.fields("Fecha_Final")
-         .Fecha_Inicio = RegAdodc.fields("Fecha_Inicio")
-         .Ingresar_Porcentaje = RegAdodc.fields("Ingresar_Porcentaje")
-         .Porcentaje = RegAdodc.fields("Porcentaje")
-         .T = RegAdodc.fields("T")
+         .Codigo = RegAdodc.Fields("Codigo")
+         .Concepto = RegAdodc.Fields("Concepto")
+         .Fecha_Final = RegAdodc.Fields("Fecha_Final")
+         .Fecha_Inicio = RegAdodc.Fields("Fecha_Inicio")
+         .Ingresar_Porcentaje = RegAdodc.Fields("Ingresar_Porcentaje")
+         .Porcentaje = RegAdodc.Fields("Porcentaje")
+         .T = RegAdodc.Fields("T")
      End With
   End If
   RegAdodc.Close
@@ -1121,20 +1121,20 @@ Dim PosLineaFinal As Single
             Progreso_Barra.Mensaje_Box = "Generando documento PDF"
             Progreso_Esperar
             
-            If Len(.fields("Codigo_Barra")) > 1 Then Cod_Bar = .fields("Codigo_Barra") Else Cod_Bar = .fields("Cod_Barras")
-            Cod_Aux = .fields("Desc_Item")
-            Total_Desc = .fields("Total_Desc") + .fields("Total_Desc2")
-            If Total_Desc > 0 And .fields("Total") <> 0 Then Porc_Str = Format(Total_Desc / .fields("Total"), "00%") Else Porc_Str = ""
+            If Len(.Fields("Codigo_Barra")) > 1 Then Cod_Bar = .Fields("Codigo_Barra") Else Cod_Bar = .Fields("Cod_Barras")
+            Cod_Aux = .Fields("Desc_Item")
+            Total_Desc = .Fields("Total_Desc") + .Fields("Total_Desc2")
+            If Total_Desc > 0 And .Fields("Total") <> 0 Then Porc_Str = Format(Total_Desc / .Fields("Total"), "00%") Else Porc_Str = ""
 
             If TFA.EsPorReembolso Then
-               cPrint.printTexto 1.55, PosLinea, .fields("Codigo"), PorteDeLetra
-               cPrint.printTexto 3.4, PosLinea, TrimStrg(MidStrg(.fields("Ruta"), 1, 10)), PorteDeLetra
+               cPrint.printTexto 1.55, PosLinea, .Fields("Codigo"), PorteDeLetra
+               cPrint.printTexto 3.4, PosLinea, TrimStrg(MidStrg(.Fields("Ruta"), 1, 10)), PorteDeLetra
             Else
                 If EsTransporte Then
-                   cPrint.printTexto 1.55, PosLinea, .fields("Codigo"), PorteDeLetra
+                   cPrint.printTexto 1.55, PosLinea, .Fields("Codigo"), PorteDeLetra
                    cPrint.printTexto 3.4, PosLinea, "H492001", PorteDeLetra
                 ElseIf RUCOperadora = TFA.RUC_CI Then
-                   cPrint.printTexto 1.55, PosLinea, .fields("Codigo"), PorteDeLetra
+                   cPrint.printTexto 1.55, PosLinea, .Fields("Codigo"), PorteDeLetra
                    cPrint.printTexto 3.4, PosLinea, "H492002", PorteDeLetra
                 Else
                     If TFA.SP Then
@@ -1142,76 +1142,76 @@ Dim PosLineaFinal As Single
                        If Len(Cod_Aux) > 1 Then
                           cPrint.printTexto 3.4, PosLinea, Cod_Aux, PorteDeLetra
                        Else
-                          cPrint.printTexto 3.4, PosLinea, .fields("Codigo"), PorteDeLetra
+                          cPrint.printTexto 3.4, PosLinea, .Fields("Codigo"), PorteDeLetra
                        End If
                     Else
                        If Len(Cod_Aux) > 1 Then
                           cPrint.printTexto 1.55, PosLinea, Cod_Aux, PorteDeLetra
                        Else
-                          cPrint.printTexto 1.55, PosLinea, .fields("Codigo"), PorteDeLetra
+                          cPrint.printTexto 1.55, PosLinea, .Fields("Codigo"), PorteDeLetra
                        End If
                        If Len(Cod_Bar) > 1 Then cPrint.printTexto 3.4, PosLinea, Cod_Bar, PorteDeLetra
                     End If
                 End If
             End If
-            cPrint.printFields 4.45, PosLinea, .fields("Cantidad"), PorteDeLetra
+            cPrint.printFields 4.45, PosLinea, .Fields("Cantidad"), PorteDeLetra
             
-            Producto = .fields("Producto")
-            If .fields("Codigo") <> "99.41" And TFA.Imp_Mes Then Producto = Producto & " " & .fields("Ticket") & " " & .fields("Mes")
+            Producto = .Fields("Producto")
+            If .Fields("Codigo") <> "99.41" And TFA.Imp_Mes Then Producto = Producto & " " & .Fields("Ticket") & " " & .Fields("Mes")
             
             PosLineaTemp = cPrint.printTextoMultiple(7.6, PosLinea, Producto, 6.5)
             If PosLineaTemp > PosLinea Then PosLinea = PosLineaTemp 'Else PosLinea = PosLinea + 0.35
             If TFA.SP Then
                PosLinea = PosLinea + 0.32
-               If CFechaLong(.fields("Fecha_Fab")) <> CFechaLong(.fields("Fecha_Exp")) Then
-                  Producto = "ELAB. " & .fields("Fecha_Fab") & ", VENC. " & .fields("Fecha_Exp") & " " & vbCrLf
+               If CFechaLong(.Fields("Fecha_Fab")) <> CFechaLong(.Fields("Fecha_Exp")) Then
+                  Producto = "ELAB. " & .Fields("Fecha_Fab") & ", VENC. " & .Fields("Fecha_Exp") & " " & vbCrLf
                   cPrint.printTexto 7.6, PosLinea, Producto, PorteDeLetra
                End If
-               If Len(.fields("Reg_Sanitario")) > 1 Then
+               If Len(.Fields("Reg_Sanitario")) > 1 Then
                   PosLinea = PosLinea + 0.32
-                  Producto = "Reg. Sanit. " & .fields("Reg_Sanitario")
+                  Producto = "Reg. Sanit. " & .Fields("Reg_Sanitario")
                   cPrint.printTexto 7.6, PosLinea, Producto, PorteDeLetra
                End If
-               If Len(.fields("Modelo")) > 1 Then
+               If Len(.Fields("Modelo")) > 1 Then
                   PosLinea = PosLinea + 0.32
-                  Producto = "Modelo: " & .fields("Modelo")
+                  Producto = "Modelo: " & .Fields("Modelo")
                   cPrint.printTexto 7.6, PosLinea, Producto, PorteDeLetra
                End If
-               If Len(.fields("Procedencia")) > 1 Then
+               If Len(.Fields("Procedencia")) > 1 Then
                   PosLinea = PosLinea + 0.32
-                  Producto = "Procedencia: " & .fields("Procedencia")
+                  Producto = "Procedencia: " & .Fields("Procedencia")
                   cPrint.printTexto 7.6, PosLinea, Producto, PorteDeLetra
                End If
             End If
-            If Len(.fields("Serie_No")) > 1 Then
+            If Len(.Fields("Serie_No")) > 1 Then
                PosLinea = PosLinea + 0.32
-               Producto = "Serie No. " & .fields("Serie_No")
+               Producto = "Serie No. " & .Fields("Serie_No")
                cPrint.printTexto 7.6, PosLinea, Producto, PorteDeLetra
             End If
             If TFA.EsPorReembolso Then
                PosLinea = PosLinea + 0.32
-               Cod_Aux = "Autorizacion(" & .fields("Lote_No") & ") " & .fields("Procedencia")
+               Cod_Aux = "Autorizacion(" & .Fields("Lote_No") & ") " & .Fields("Procedencia")
                cPrint.printTexto 7.6, PosLinea, Cod_Aux, PorteDeLetra
                PosLinea = PosLinea + 0.32
                Cod_Aux = "Reembolso de Gastos"
-               If Len(.fields("Tipo_Hab")) > 1 Then Cod_Aux = Cod_Aux & " por " & .fields("Tipo_Hab")
+               If Len(.Fields("Tipo_Hab")) > 1 Then Cod_Aux = Cod_Aux & " por " & .Fields("Tipo_Hab")
                cPrint.printTexto 7.6, PosLinea, Cod_Aux, PorteDeLetra
                
             End If
-            If .fields("Orden_No") <> 0 Then cPrint.printTexto 14.3, PosLinea, Format$(.fields("Orden_No"), "00000000"), PorteDeLetra
+            If .Fields("Orden_No") <> 0 Then cPrint.printTexto 14.3, PosLinea, Format$(.Fields("Orden_No"), "00000000"), PorteDeLetra
             
-            If Len(.fields("Lote_No")) > 1 Then Cadena = .fields("Lote_No") Else Cadena = TrimStrg(MidStrg(.fields("Ruta"), 1, 13))
+            If Len(.Fields("Lote_No")) > 1 Then Cadena = .Fields("Lote_No") Else Cadena = TrimStrg(MidStrg(.Fields("Ruta"), 1, 13))
             If Len(Cadena) > 1 Then cPrint.printTexto 14.25, PosLinea, Cadena, PorteDeLetra
             
             TDec_PVP = Dec_PVP
             If TDec_PVP > 6 Then TDec_PVP = 6
-            cPrint.printFields 15.55, PosLinea, .fields("Precio"), PorteDeLetra, , , TDec_PVP
-            cPrint.printFields 18.65, PosLinea, .fields("Total"), PorteDeLetra, , , 2
+            cPrint.printFields 15.55, PosLinea, .Fields("Precio"), PorteDeLetra, , , TDec_PVP
+            cPrint.printFields 18.65, PosLinea, .Fields("Total"), PorteDeLetra, , , 2
 
-            If Len(.fields("Tipo_Hab")) > 1 Then
+            If Len(.Fields("Tipo_Hab")) > 1 Then
                If Total_Desc > 0 Then
                   PosLinea = PosLinea + 0.32
-                  cPrint.printTexto 7.6, PosLinea, .fields("Tipo_Hab"), PorteDeLetra
+                  cPrint.printTexto 7.6, PosLinea, .Fields("Tipo_Hab"), PorteDeLetra
                   cPrint.printVariable 18.6, PosLinea, Total_Desc, PorteDeLetra, , , 2
                End If
             Else
@@ -1388,9 +1388,9 @@ Dim PosLineaFinal As Single
             cPrint.tipoNegrilla = False
             cPrint.letraTipo tipoDeLetra, 6
             Do While Not AdoDBAbo.EOF
-               cPrint.printFields 8.4, PosLinea, AdoDBAbo.fields("Fecha"), PorteDeLetra
-               cPrint.printTexto 9.8, PosLinea, ULCase(AdoDBAbo.fields("Banco")), PorteDeLetra
-               cPrint.printFields 12.25, PosLinea, AdoDBAbo.fields("Abono"), PorteDeLetra, , , 2
+               cPrint.printFields 8.4, PosLinea, AdoDBAbo.Fields("Fecha"), PorteDeLetra
+               cPrint.printTexto 9.8, PosLinea, ULCase(AdoDBAbo.Fields("Banco")), PorteDeLetra
+               cPrint.printFields 12.25, PosLinea, AdoDBAbo.Fields("Abono"), PorteDeLetra, , , 2
                PosLinea = PosLinea + 0.3
                AdoDBAbo.MoveNext
             Loop
@@ -1555,16 +1555,16 @@ Dim tipoDeLetra As String
     Select_AdoDB AdoDBDet, sSQL
     With AdoDBDet
      If .RecordCount > 0 Then
-         TFA.Fecha_NC = .fields("Fecha")
-         TFA.Serie_NC = .fields("Serie_NC")
-         TFA.ClaveAcceso_NC = .fields("Clave_Acceso_NC")
-         TFA.Autorizacion_NC = .fields("Autorizacion_NC")
-         TFA.Nota_Credito = .fields("Secuencial_NC")
+         TFA.Fecha_NC = .Fields("Fecha")
+         TFA.Serie_NC = .Fields("Serie_NC")
+         TFA.ClaveAcceso_NC = .Fields("Clave_Acceso_NC")
+         TFA.Autorizacion_NC = .Fields("Autorizacion_NC")
+         TFA.Nota_Credito = .Fields("Secuencial_NC")
          Do While Not .EOF
-            If .fields("Cheque") = "I.V.A." Then
-                TFA.Total_IVA_NC = TFA.Total_IVA_NC + .fields("Abono")
+            If .Fields("Cheque") = "I.V.A." Then
+                TFA.Total_IVA_NC = TFA.Total_IVA_NC + .Fields("Abono")
             Else
-                TFA.SubTotal_NC = TFA.SubTotal_NC + .fields("Abono")
+                TFA.SubTotal_NC = TFA.SubTotal_NC + .Fields("Abono")
             End If
            .MoveNext
          Loop
@@ -1609,22 +1609,22 @@ Dim tipoDeLetra As String
             Do While Not AdoDBDetFA.EOF
                Progreso_Barra.Mensaje_Box = "Generando documento PDF"
                Progreso_Esperar
-               cPrint.printTexto 1.6, PosLinea, AdoDBDetFA.fields("Codigo_Inv")
+               cPrint.printTexto 1.6, PosLinea, AdoDBDetFA.Fields("Codigo_Inv")
                
-               PosLineaTemp = cPrint.printTextoMultiple(4.3, PosLinea, AdoDBDetFA.fields("Producto"), 6.5)
+               PosLineaTemp = cPrint.printTextoMultiple(4.3, PosLinea, AdoDBDetFA.Fields("Producto"), 6.5)
                If PosLineaTemp > PosLinea Then PosLinea = PosLineaTemp
                'If cPrint.dNoLineas > 0 Then PosLinea = cPrint.dNoLineas
-               cPrint.printVariable 11.4, PosLinea, AdoDBDetFA.fields("Cantidad")
-               cPrint.printVariable 13.9, PosLinea, AdoDBDetFA.fields("Precio"), , , , 4
-               cPrint.printFields 15.9, PosLinea, AdoDBDetFA.fields("Descuento"), , , , 2
-               cPrint.printFields 18.3, PosLinea, AdoDBDetFA.fields("Total"), , , , 2
+               cPrint.printVariable 11.4, PosLinea, AdoDBDetFA.Fields("Cantidad")
+               cPrint.printVariable 13.9, PosLinea, AdoDBDetFA.Fields("Precio"), , , , 4
+               cPrint.printFields 15.9, PosLinea, AdoDBDetFA.Fields("Descuento"), , , , 2
+               cPrint.printFields 18.3, PosLinea, AdoDBDetFA.Fields("Total"), , , , 2
                
-               TFA.SubTotal_NC = TFA.SubTotal_NC + AdoDBDetFA.fields("Total")
-               Total_Desc = Total_Desc + AdoDBDetFA.fields("Descuento")
-               If AdoDBDetFA.fields("Total_IVA") > 0 Then
-                  Total_Con_IVA = Total_Con_IVA + AdoDBDetFA.fields("Total")
+               TFA.SubTotal_NC = TFA.SubTotal_NC + AdoDBDetFA.Fields("Total")
+               Total_Desc = Total_Desc + AdoDBDetFA.Fields("Descuento")
+               If AdoDBDetFA.Fields("Total_IVA") > 0 Then
+                  Total_Con_IVA = Total_Con_IVA + AdoDBDetFA.Fields("Total")
                Else
-                  Total_Sin_IVA = Total_Sin_IVA + AdoDBDetFA.fields("Total")
+                  Total_Sin_IVA = Total_Sin_IVA + AdoDBDetFA.Fields("Total")
                End If
                PosLinea = PosLinea + 0.4
                AdoDBDetFA.MoveNext
@@ -1773,19 +1773,19 @@ Dim TempPosLineaAbono As Single
          Do While Not .EOF
             Progreso_Barra.Mensaje_Box = "Generando documento PDF"
             Progreso_Esperar
-            Producto = .fields("Producto")
-            If .fields("Ticket") <> Ninguno Then Producto = Producto & " " & .fields("Ticket")
-            If .fields("Mes") <> Ninguno And TFA.Imp_Mes Then Producto = Producto & " " & .fields("Mes")
+            Producto = .Fields("Producto")
+            If .Fields("Ticket") <> Ninguno Then Producto = Producto & " " & .Fields("Ticket")
+            If .Fields("Mes") <> Ninguno And TFA.Imp_Mes Then Producto = Producto & " " & .Fields("Mes")
             If TFA.SP Then
                Producto = Producto & vbCrLf _
-                        & "Lote No. " & .fields("Lote_No") & ", ELAB. " & .fields("Fecha_Fab") & ", VENC. " & .fields("Fecha_Exp") _
-                        & ", Reg. Sanit. " & .fields("Reg_Sanitario") _
-                        & ", Modelo: " & .fields("Modelo") & ", Serie No. " & .fields("Serie_No") _
-                        & ", Procedencia: " & .fields("Procedencia")
+                        & "Lote No. " & .Fields("Lote_No") & ", ELAB. " & .Fields("Fecha_Fab") & ", VENC. " & .Fields("Fecha_Exp") _
+                        & ", Reg. Sanit. " & .Fields("Reg_Sanitario") _
+                        & ", Modelo: " & .Fields("Modelo") & ", Serie No. " & .Fields("Serie_No") _
+                        & ", Procedencia: " & .Fields("Procedencia")
             End If
-            cPrint.printFields 1.65, PosLinea, .fields("Codigo")
-            If Len(.fields("Codigo_Barra")) > 1 Then cPrint.printFields 3.4, PosLinea, .fields("Codigo_Barra")
-            cPrint.printFields 4.5, PosLinea, .fields("Cantidad")
+            cPrint.printFields 1.65, PosLinea, .Fields("Codigo")
+            If Len(.Fields("Codigo_Barra")) > 1 Then cPrint.printFields 3.4, PosLinea, .Fields("Codigo_Barra")
+            cPrint.printFields 4.5, PosLinea, .Fields("Cantidad")
             PosLinea = cPrint.printTextoMultiple(6.5, PosLinea, Producto, 14)
             If cPrint.dNoLineas > 0 Then PosLinea = cPrint.dNoLineas Else PosLinea = PosLinea + 0.35
             If PosLinea > 27 Then
@@ -1890,22 +1890,22 @@ Dim NombreTipoDeLetra As String
     Select_AdoDB AdoDBCompras, sSQL
     With AdoDBCompras
      If .RecordCount > 0 Then
-         TFA.Fecha = .fields("Fecha")
-         TFA.Cliente = .fields("Cliente")
-         TFA.Razon_Social = .fields("Cliente")
-         TFA.CI_RUC = .fields("CI_RUC")
-         TFA.RUC_CI = .fields("CI_RUC")
-         TFA.DireccionC = .fields("Direccion")
+         TFA.Fecha = .Fields("Fecha")
+         TFA.Cliente = .Fields("Cliente")
+         TFA.Razon_Social = .Fields("Cliente")
+         TFA.CI_RUC = .Fields("CI_RUC")
+         TFA.RUC_CI = .Fields("CI_RUC")
+         TFA.DireccionC = .Fields("Direccion")
         'TFA.Serie_R
         'TFA.Retencion
-         TFA.Fecha_Aut = .fields("Fecha_Aut")
-         TFA.Hora = .fields("Hora_Aut")
-         TFA.Autorizacion_R = .fields("AutRetencion")
-         TFA.ClaveAcceso = .fields("Clave_Acceso")
-         TFA.Serie = .fields("Establecimiento") & .fields("PuntoEmision")
-         TFA.Factura = .fields("Secuencial")
-         TFA.Fecha = .fields("Fecha")
-         TFA.Tipo_Comp = CStr(.fields("TipoComprobante"))
+         TFA.Fecha_Aut = .Fields("Fecha_Aut")
+         TFA.Hora = .Fields("Hora_Aut")
+         TFA.Autorizacion_R = .Fields("AutRetencion")
+         TFA.ClaveAcceso = .Fields("Clave_Acceso")
+         TFA.Serie = .Fields("Establecimiento") & .Fields("PuntoEmision")
+         TFA.Factura = .Fields("Secuencial")
+         TFA.Fecha = .Fields("Fecha")
+         TFA.Tipo_Comp = CStr(.Fields("TipoComprobante"))
          FechaTexto = TFA.Fecha
          EjercicioFiscal = CStr(Year(TFA.Fecha))
          Validar_Porc_IVA TFA.Fecha
@@ -1919,7 +1919,7 @@ Dim NombreTipoDeLetra As String
          & "WHERE TC = 'TDC' " _
          & "AND Tipo_Comprobante_Codigo = " & Val(TFA.Tipo_Comp) & " "
     Select_AdoDB AdoDBAir, sSQL
-    If AdoDBAir.RecordCount > 0 Then TFA.Tipo_Comp = AdoDBAir.fields("Descripcion")
+    If AdoDBAir.RecordCount > 0 Then TFA.Tipo_Comp = AdoDBAir.Fields("Descripcion")
     AdoDBAir.Close
     
    'Listar las Retenciones de la Fuente
@@ -1971,24 +1971,24 @@ Dim NombreTipoDeLetra As String
        With AdoDBCompras
         If .RecordCount > 0 Then
             Do While Not .EOF
-               If .fields("ValorRetBienes") > 0 Then
+               If .Fields("ValorRetBienes") > 0 Then
                    cPrint.printTexto 1.6, PosLinea, "I.V.A."
                    cPrint.printTexto 2.9, PosLinea, "Retención I.V.A. Bienes"
-                   cPrint.printTexto 13.8, PosLinea, .fields("PorRetBienes")    '"---"
-                   cPrint.printVariable 14.7, PosLinea, .fields("MontoIvaBienes")
-                   cPrint.printTexto 17.3, PosLinea, .fields("Porc_Bienes") & "%"
-                   cPrint.printVariable 18.2, PosLinea, .fields("ValorRetBienes")
-                   Sumatoria = Sumatoria + .fields("ValorRetBienes")
+                   cPrint.printTexto 13.8, PosLinea, .Fields("PorRetBienes")    '"---"
+                   cPrint.printVariable 14.7, PosLinea, .Fields("MontoIvaBienes")
+                   cPrint.printTexto 17.3, PosLinea, .Fields("Porc_Bienes") & "%"
+                   cPrint.printVariable 18.2, PosLinea, .Fields("ValorRetBienes")
+                   Sumatoria = Sumatoria + .Fields("ValorRetBienes")
                    PosLinea = PosLinea + 0.4
                End If
-               If .fields("ValorRetServicios") > 0 Then
+               If .Fields("ValorRetServicios") > 0 Then
                    cPrint.printTexto 1.6, PosLinea, "I.V.A."
                    cPrint.printTexto 2.9, PosLinea, "Retención I.V.A. Servicios"
-                   cPrint.printTexto 13.8, PosLinea, .fields("PorRetServicios")  '"---"
-                   cPrint.printVariable 14.7, PosLinea, .fields("MontoIvaServicios")
-                   cPrint.printTexto 17.3, PosLinea, .fields("Porc_Servicios") & "%"
-                   cPrint.printVariable 18.2, PosLinea, .fields("ValorRetServicios")
-                   Sumatoria = Sumatoria + .fields("ValorRetServicios")
+                   cPrint.printTexto 13.8, PosLinea, .Fields("PorRetServicios")  '"---"
+                   cPrint.printVariable 14.7, PosLinea, .Fields("MontoIvaServicios")
+                   cPrint.printTexto 17.3, PosLinea, .Fields("Porc_Servicios") & "%"
+                   cPrint.printVariable 18.2, PosLinea, .Fields("ValorRetServicios")
+                   Sumatoria = Sumatoria + .Fields("ValorRetServicios")
                    PosLinea = PosLinea + 0.4
                End If
               .MoveNext
@@ -2003,15 +2003,15 @@ Dim NombreTipoDeLetra As String
             Do While Not .EOF
                Progreso_Barra.Mensaje_Box = "Generando documento PDF"
                Progreso_Esperar
-               ConceptoRet = .fields("Concepto")
+               ConceptoRet = .Fields("Concepto")
                cPrint.printTexto 1.6, PosLinea, "RENTA"
                PosLinea = cPrint.printTextoMultiple(2.9, PosLinea, ConceptoRet, 10.5)
                If cPrint.dNoLineas > 0 Then PosLinea = cPrint.dNoLineas
-               cPrint.printTexto 13.8, PosLinea, .fields("CodRet")
-               cPrint.printVariable 14.7, PosLinea, .fields("BaseImp")
-               cPrint.printTexto 17.3, PosLinea, Format$(.fields("Porcentaje"), "00.00%")
-               cPrint.printVariable 18.2, PosLinea, .fields("ValRet")
-               Sumatoria = Sumatoria + .fields("ValRet")
+               cPrint.printTexto 13.8, PosLinea, .Fields("CodRet")
+               cPrint.printVariable 14.7, PosLinea, .Fields("BaseImp")
+               cPrint.printTexto 17.3, PosLinea, Format$(.Fields("Porcentaje"), "00.00%")
+               cPrint.printVariable 18.2, PosLinea, .Fields("ValRet")
+               Sumatoria = Sumatoria + .Fields("ValRet")
                PosLinea = PosLinea + 0.4
               .MoveNext
             Loop
@@ -2039,13 +2039,13 @@ Dim NombreTipoDeLetra As String
          cPrint.tipoNegrilla = False
          PosLinea = PosLinea + 0.4
          Cadena = ""
-         Codigo = TrimStrg(.fields("Telefono"))
+         Codigo = TrimStrg(.Fields("Telefono"))
          Codigo = Replace(Codigo, " ", "")
          Codigo = Replace(Codigo, ".", "")
          Codigo = Replace(Codigo, "-", "")
          If Val(Codigo) > 0 Then Cadena = Cadena & "Teléfono: " & Codigo & ", "
          Cadena = Cadena & "Tipo Comprobante: " & TFA.TP & "-" & Format$(TFA.Numero, "00000000") & ", "
-         Codigo = TrimStrg(.fields("Email"))
+         Codigo = TrimStrg(.Fields("Email"))
          If InStr(Codigo, "@") And Len(Codigo) > 3 Then Cadena = Cadena & "Email: " & Codigo
          cPrint.printTexto 1.6, PosLinea, Cadena
          cPrint.printCuadro 1.5, TempPosLinea, 14.5, PosLinea - 0.25, Negro, "B"
@@ -2096,30 +2096,30 @@ Dim NombreTipoDeLetra As String
     Select_AdoDB AdoDBCompras, sSQL
     With AdoDBCompras
      If .RecordCount > 0 Then
-         TFA.Fecha = .fields("Fecha")
-         TFA.Cliente = .fields("Cliente")
-         TFA.Razon_Social = .fields("Cliente")
-         TFA.CI_RUC = .fields("CI_RUC")
-         TFA.RUC_CI = .fields("CI_RUC")
-         TFA.DireccionC = .fields("Direccion")
-         TFA.Fecha_Aut = .fields("Fecha_Aut")
-         TFA.Hora = .fields("Hora_Aut")
-         TFA.Autorizacion_LC = .fields("Autorizacion")
-         TFA.ClaveAcceso_LC = .fields("Clave_Acceso_LC")
-         TFA.Serie_LC = .fields("Establecimiento") & .fields("PuntoEmision")
-         TFA.Factura = .fields("Secuencial")
-         TFA.Fecha = .fields("Fecha")
-         TFA.EmailC = .fields("Email")
-         TFA.Sin_IVA = .fields("BaseImponible")
-         TFA.Con_IVA = .fields("BaseImpGrav")
-         TFA.Total_IVA = .fields("MontoIva")
-         TFA.Nota = .fields("Concepto")
+         TFA.Fecha = .Fields("Fecha")
+         TFA.Cliente = .Fields("Cliente")
+         TFA.Razon_Social = .Fields("Cliente")
+         TFA.CI_RUC = .Fields("CI_RUC")
+         TFA.RUC_CI = .Fields("CI_RUC")
+         TFA.DireccionC = .Fields("Direccion")
+         TFA.Fecha_Aut = .Fields("Fecha_Aut")
+         TFA.Hora = .Fields("Hora_Aut")
+         TFA.Autorizacion_LC = .Fields("Autorizacion")
+         TFA.ClaveAcceso_LC = .Fields("Clave_Acceso_LC")
+         TFA.Serie_LC = .Fields("Establecimiento") & .Fields("PuntoEmision")
+         TFA.Factura = .Fields("Secuencial")
+         TFA.Fecha = .Fields("Fecha")
+         TFA.EmailC = .Fields("Email")
+         TFA.Sin_IVA = .Fields("BaseImponible")
+         TFA.Con_IVA = .Fields("BaseImpGrav")
+         TFA.Total_IVA = .Fields("MontoIva")
+         TFA.Nota = .Fields("Concepto")
          If TFA.Nota = Ninguno Then TFA.Nota = "Liquidacion de Compras"
          TFA.Total_MN = TFA.Sin_IVA + TFA.Con_IVA + TFA.Total_IVA
          TFA.SubTotal = TFA.Sin_IVA + TFA.Con_IVA
          Validar_Porc_IVA TFA.Fecha
          TFA.Porc_IVA = Porc_IVA * 100
-         TFA.Tipo_Comp = CStr(.fields("TipoComprobante"))
+         TFA.Tipo_Comp = CStr(.Fields("TipoComprobante"))
          TFA.Si_Existe_Doc = True
          FechaTexto = TFA.Fecha
          EjercicioFiscal = CStr(Year(TFA.Fecha))
@@ -2133,7 +2133,7 @@ Dim NombreTipoDeLetra As String
          & "WHERE TC = 'TDC' " _
          & "AND Tipo_Comprobante_Codigo = " & Val(TFA.Tipo_Comp) & " "
     Select_AdoDB AdoDBAir, sSQL
-    If AdoDBAir.RecordCount > 0 Then TFA.Tipo_Comp = AdoDBAir.fields("Descripcion")
+    If AdoDBAir.RecordCount > 0 Then TFA.Tipo_Comp = AdoDBAir.Fields("Descripcion")
     AdoDBAir.Close
     PorteDeLetra = 7
    'Listar las Retenciones de la Fuente
@@ -2300,10 +2300,10 @@ Dim NombreTipoDeLetra As String
     With AdoDBCompras
      If .RecordCount > 0 Then
          PosLinea = InfoPosLinea
-         cPrint.printTexto 1.6, PosLinea, "Teléfono: " & .fields("Telefono")
+         cPrint.printTexto 1.6, PosLinea, "Teléfono: " & .Fields("Telefono")
          cPrint.printTexto 7.5, PosLinea, "Tipo Comprobante: " & TFA.TP & "-" & Format$(TFA.Numero, "00000000")
          PosLinea = PosLinea + 0.35
-         cPrint.printTexto 1.6, PosLinea, "Email: " & .fields("Email")
+         cPrint.printTexto 1.6, PosLinea, "Email: " & .Fields("Email")
          'cPrint.printCuadroLinea 1.5, TempPosLinea, 12.9, PosLinea + 0.5, Negro, "B"
          'cPrint.printCuadroLinea 1.1, TempPosLinea + 0.2, 13.2, TempPosLinea + 0.2, Negro
      End If
@@ -2346,15 +2346,15 @@ Dim Documento As Long
        Select_AdoDB AdoDBXML, sSQL
        If AdoDBXML.RecordCount <= 0 Then
           AdoDBXML.AddNew
-          AdoDBXML.fields("Item") = NumEmpresa
-          AdoDBXML.fields("Periodo") = Periodo_Contable
-          AdoDBXML.fields("Clave_Acceso") = SRI_Auto.Clave_De_Acceso
+          AdoDBXML.Fields("Item") = NumEmpresa
+          AdoDBXML.Fields("Periodo") = Periodo_Contable
+          AdoDBXML.Fields("Clave_Acceso") = SRI_Auto.Clave_De_Acceso
        End If
-       AdoDBXML.fields("TD") = TD
-       AdoDBXML.fields("Serie") = SerieF
-       AdoDBXML.fields("Documento") = Documento
-       AdoDBXML.fields("Documento_Autorizado") = DatosXMLA
-       AdoDBXML.fields("Fecha") = SRI_Auto.Fecha_Autorizacion & " " & SRI_Auto.Hora_Autorizacion
+       AdoDBXML.Fields("TD") = TD
+       AdoDBXML.Fields("Serie") = SerieF
+       AdoDBXML.Fields("Documento") = Documento
+       AdoDBXML.Fields("Documento_Autorizado") = DatosXMLA
+       AdoDBXML.Fields("Fecha") = SRI_Auto.Fecha_Autorizacion & " " & SRI_Auto.Hora_Autorizacion
        AdoDBXML.Update
        AdoDBXML.Close
     End If
@@ -2645,23 +2645,23 @@ Dim Autorizar_XML As Boolean
           TextoXML = ""
 ''        TFA.Serie_R = .Fields("Serie_Retencion")
 ''        TFA.Retencion = .Fields("SecRetencion")
-          TFA.Autorizacion_R = .fields("AutRetencion")
-          TFA.Autorizacion = .fields("Autorizacion")
-          TFA.Fecha = .fields("FechaEmision")      '.Fields("FechaRegistro")
-          TFA.Vencimiento = .fields("FechaRegistro")
-          TFA.Serie = .fields("Establecimiento") & .fields("PuntoEmision")
-          TFA.Factura = .fields("Secuencial")
+          TFA.Autorizacion_R = .Fields("AutRetencion")
+          TFA.Autorizacion = .Fields("Autorizacion")
+          TFA.Fecha = .Fields("FechaEmision")      '.Fields("FechaRegistro")
+          TFA.Vencimiento = .Fields("FechaRegistro")
+          TFA.Serie = .Fields("Establecimiento") & .Fields("PuntoEmision")
+          TFA.Factura = .Fields("Secuencial")
           TFA.Hora = Format$(Time, FormatoTimes)
-          TFA.Cliente = .fields("Cliente")
-          TFA.CI_RUC = .fields("CI_RUC")
-          TFA.TD = .fields("TD")
-          TFA.DireccionC = .fields("Direccion")
-          TFA.TelefonoC = .fields("Telefono")
-          TFA.EmailC = .fields("Email")
-          CodSustento = Format$(.fields("CodSustento"), "00")
-          tipoCodComprobante = Format$(.fields("TipoComprobante"), "00")
+          TFA.Cliente = .Fields("Cliente")
+          TFA.CI_RUC = .Fields("CI_RUC")
+          TFA.TD = .Fields("TD")
+          TFA.DireccionC = .Fields("Direccion")
+          TFA.TelefonoC = .Fields("Telefono")
+          TFA.EmailC = .Fields("Email")
+          CodSustento = Format$(.Fields("CodSustento"), "00")
+          tipoCodComprobante = Format$(.Fields("TipoComprobante"), "00")
          'Obtener_Cod_Porc_IVA TFA.Fecha, (TFA.Porc_IVA * 100)
-          Obtener_Porc_IVA TFA.Fecha, .fields("PorcentajeIva")
+          Obtener_Porc_IVA TFA.Fecha, .Fields("PorcentajeIva")
          'Validar_Porc_IVA TFA.Fecha
          'Algoritmo Modulo 11 para la clave de la retencion
          '& Format$(TFA.Vencimiento, "ddmmyyyy")
@@ -2702,10 +2702,10 @@ Dim Autorizar_XML As Boolean
                   Case "P": TFA.TD = "06"
                 End Select
                 Insertar_Campo_XML CampoXML("tipoIdentificacionSujetoRetenido", TFA.TD)
-                If .fields("PagoLocExt") = "01" Then
+                If .Fields("PagoLocExt") = "01" Then
                     Insertar_Campo_XML CampoXML("parteRel", "NO")
                 Else
-                    Insertar_Campo_XML CampoXML("tipoSujetoRetenido", .fields("PagoLocExt"))
+                    Insertar_Campo_XML CampoXML("tipoSujetoRetenido", .Fields("PagoLocExt"))
                     Insertar_Campo_XML CampoXML("parteRel", "SI")
                 End If
                 Insertar_Campo_XML CampoXML("razonSocialSujetoRetenido", TFA.Cliente)
@@ -2721,10 +2721,10 @@ Dim Autorizar_XML As Boolean
                     Total_IVA = 0
                     Total_Sin_No_IVA = 0
                     Total_Con_IVA = 0
-                    Total_Sin_IVA = .fields("BaseImponible")
+                    Total_Sin_IVA = .Fields("BaseImponible")
                     Do While Not .EOF
-                       Total_Con_IVA = Total_Con_IVA + .fields("BaseImpGrav")
-                       Total_IVA = Total_IVA + .fields("MontoIva")
+                       Total_Con_IVA = Total_Con_IVA + .Fields("BaseImpGrav")
+                       Total_IVA = Total_IVA + .Fields("MontoIva")
                       .MoveNext
                     Loop
                    .MoveFirst
@@ -2738,7 +2738,7 @@ Dim Autorizar_XML As Boolean
                     Insertar_Campo_XML CampoXML("fechaRegistroContable", TFA.Fecha)
                     'Insertar_Campo_XML CampoXML("fechaRegistroContable", TFA.Vencimiento)
                     Insertar_Campo_XML CampoXML("numAutDocSustento", TFA.Autorizacion)
-                    Insertar_Campo_XML CampoXML("pagoLocExt", .fields("PagoLocExt"))
+                    Insertar_Campo_XML CampoXML("pagoLocExt", .Fields("PagoLocExt"))
                     Insertar_Campo_XML CampoXML("totalSinImpuestos", Total_SubTotal, 2)
                     Insertar_Campo_XML CampoXML("importeTotal", Total_Factura, 2)
                     
@@ -2746,19 +2746,19 @@ Dim Autorizar_XML As Boolean
                     Do While Not .EOF
                         Insertar_Campo_XML AbrirXML("impuestoDocSustento")
                             Insertar_Campo_XML CampoXML("codImpuestoDocSustento", "2")
-                            Insertar_Campo_XML CampoXML("codigoPorcentaje", .fields("PorcentajeIva"))
-                            Insertar_Campo_XML CampoXML("baseImponible", .fields("BaseImpGrav"), 2) 'Total_Con_IVA
-                            Insertar_Campo_XML CampoXML("tarifa", .fields("Porc_IVA") * 100) 'Porc_IVA * 100
-                            Insertar_Campo_XML CampoXML("valorImpuesto", .fields("MontoIva"), 2) 'Total_IVA
+                            Insertar_Campo_XML CampoXML("codigoPorcentaje", .Fields("PorcentajeIva"))
+                            Insertar_Campo_XML CampoXML("baseImponible", .Fields("BaseImpGrav"), 2) 'Total_Con_IVA
+                            Insertar_Campo_XML CampoXML("tarifa", .Fields("Porc_IVA") * 100) 'Porc_IVA * 100
+                            Insertar_Campo_XML CampoXML("valorImpuesto", .Fields("MontoIva"), 2) 'Total_IVA
                         Insertar_Campo_XML CerrarXML("impuestoDocSustento")
                        .MoveNext
                     Loop
                    .MoveFirst
-                    If .fields("BaseImponible") > 0 Then
+                    If .Fields("BaseImponible") > 0 Then
                         Insertar_Campo_XML AbrirXML("impuestoDocSustento")
                             Insertar_Campo_XML CampoXML("codImpuestoDocSustento", "2")
                             Insertar_Campo_XML CampoXML("codigoPorcentaje", "0")
-                            Insertar_Campo_XML CampoXML("baseImponible", .fields("BaseImponible"), 2) 'Total_Sin_IVA
+                            Insertar_Campo_XML CampoXML("baseImponible", .Fields("BaseImponible"), 2) 'Total_Sin_IVA
                             Insertar_Campo_XML CampoXML("tarifa", "0")
                             Insertar_Campo_XML CampoXML("valorImpuesto", "0.00")
                         Insertar_Campo_XML CerrarXML("impuestoDocSustento")
@@ -2768,17 +2768,17 @@ Dim Autorizar_XML As Boolean
                     
                     Insertar_Campo_XML AbrirXML("retenciones")
                     Do While Not .EOF
-                    If Val(.fields("Porc_Bienes")) > 0 Then
+                    If Val(.Fields("Porc_Bienes")) > 0 Then
                        Insertar_Campo_XML AbrirXML("retencion")
-                          Select Case Val(.fields("Porc_Bienes"))
+                          Select Case Val(.Fields("Porc_Bienes"))
                             Case 10: CodigoA = "9"
                             Case 30: CodigoA = "1"
                             Case 70: CodigoA = "2"
                             Case 100: CodigoA = "3"
                             Case Else: CodigoA = "2"
                           End Select
-                          Total = .fields("MontoIvaBienes")
-                          Retencion = Val(.fields("Porc_Bienes"))
+                          Total = .Fields("MontoIvaBienes")
+                          Retencion = Val(.Fields("Porc_Bienes"))
                           Valor = Redondear(Total * (Retencion / 100), 2)
                           Insertar_Campo_XML CampoXML("codigo", "2")
                           Insertar_Campo_XML CampoXML("codigoRetencion", CodigoA)
@@ -2788,17 +2788,17 @@ Dim Autorizar_XML As Boolean
                        Insertar_Campo_XML CerrarXML("retencion")
                     End If
                     'MsgBox "|" & .fields("Porc_Servicios") & "|"
-                    If Val(.fields("Porc_Servicios")) > 0 Then
+                    If Val(.Fields("Porc_Servicios")) > 0 Then
                        Insertar_Campo_XML AbrirXML("retencion")
-                          Select Case Val(.fields("Porc_Servicios"))
+                          Select Case Val(.Fields("Porc_Servicios"))
                             Case 20: CodigoA = "10"
                             Case 30: CodigoA = "1"
                             Case 70: CodigoA = "2"
                             Case 100: CodigoA = "3"
                             Case Else: CodigoA = "2"
                           End Select
-                          Total = .fields("MontoIvaServicios")
-                          Retencion = Val(.fields("Porc_Servicios"))
+                          Total = .Fields("MontoIvaServicios")
+                          Retencion = Val(.Fields("Porc_Servicios"))
                           Valor = Redondear(Total * (Retencion / 100), 2)
                           Insertar_Campo_XML CampoXML("codigo", "2")
                           Insertar_Campo_XML CampoXML("codigoRetencion", CodigoA)
@@ -2827,13 +2827,13 @@ Dim Autorizar_XML As Boolean
                     Select_AdoDB AdoAir, sSQL
                     If AdoAir.RecordCount > 0 Then
                        Do While Not AdoAir.EOF
-                          If AdoAir.fields("BaseImp") > 0 Then
+                          If AdoAir.Fields("BaseImp") > 0 Then
                              Insertar_Campo_XML AbrirXML("retencion")
                                  Insertar_Campo_XML CampoXML("codigo", "1")
-                                 Insertar_Campo_XML CampoXML("codigoRetencion", AdoAir.fields("CodRet"))
-                                 Insertar_Campo_XML CampoXML("baseImponible", AdoAir.fields("BaseImp"), 2)
-                                 Insertar_Campo_XML CampoXML("porcentajeRetener", (AdoAir.fields("Porcentaje") * 100), 2)
-                                 Insertar_Campo_XML CampoXML("valorRetenido", AdoAir.fields("ValRet"), 2)
+                                 Insertar_Campo_XML CampoXML("codigoRetencion", AdoAir.Fields("CodRet"))
+                                 Insertar_Campo_XML CampoXML("baseImponible", AdoAir.Fields("BaseImp"), 2)
+                                 Insertar_Campo_XML CampoXML("porcentajeRetener", (AdoAir.Fields("Porcentaje") * 100), 2)
+                                 Insertar_Campo_XML CampoXML("valorRetenido", AdoAir.Fields("ValRet"), 2)
                              Insertar_Campo_XML CerrarXML("retencion")
                           End If
                           AdoAir.MoveNext
@@ -2844,7 +2844,7 @@ Dim Autorizar_XML As Boolean
                     
                     Insertar_Campo_XML AbrirXML("pagos")
                        Insertar_Campo_XML AbrirXML("pago")
-                          Insertar_Campo_XML CampoXML("formaPago", .fields("FormaPago"))
+                          Insertar_Campo_XML CampoXML("formaPago", .Fields("FormaPago"))
                           Insertar_Campo_XML CampoXML("total", Total_Factura, 2)
                        Insertar_Campo_XML CerrarXML("pago")
                     Insertar_Campo_XML CerrarXML("pagos")
@@ -2920,28 +2920,28 @@ Dim Autorizar_XML As Boolean
          'Generacion de la Retencion si es Electronica
           Do While Not .EOF
              TextoXML = ""
-             TFA.Autorizacion = .fields("Autorizacion")
-             TFA.Fecha = .fields("FechaRegistro")
-             TFA.Vencimiento = .fields("FechaRegistro")
-             TFA.Serie_LC = .fields("Establecimiento") & .fields("PuntoEmision")
-             TFA.Factura = .fields("Secuencial")
+             TFA.Autorizacion = .Fields("Autorizacion")
+             TFA.Fecha = .Fields("FechaRegistro")
+             TFA.Vencimiento = .Fields("FechaRegistro")
+             TFA.Serie_LC = .Fields("Establecimiento") & .Fields("PuntoEmision")
+             TFA.Factura = .Fields("Secuencial")
              TFA.Hora = Format$(Time, FormatoTimes)
-             TFA.Cliente = .fields("Cliente")
-             TFA.CI_RUC = .fields("CI_RUC")
-             TFA.TD = .fields("TD")
-             TFA.DireccionC = .fields("Direccion")
-             TFA.TelefonoC = .fields("Telefono")
-             TFA.EmailC = .fields("Email")
-             TFA.Sin_IVA = .fields("BaseImponible")
-             TFA.Con_IVA = .fields("BaseImpGrav")
-             TFA.Total_IVA = .fields("MontoIva")
-             TFA.Nota = .fields("Concepto")
+             TFA.Cliente = .Fields("Cliente")
+             TFA.CI_RUC = .Fields("CI_RUC")
+             TFA.TD = .Fields("TD")
+             TFA.DireccionC = .Fields("Direccion")
+             TFA.TelefonoC = .Fields("Telefono")
+             TFA.EmailC = .Fields("Email")
+             TFA.Sin_IVA = .Fields("BaseImponible")
+             TFA.Con_IVA = .Fields("BaseImpGrav")
+             TFA.Total_IVA = .Fields("MontoIva")
+             TFA.Nota = .Fields("Concepto")
              TFA.Total_MN = TFA.Sin_IVA + TFA.Con_IVA + TFA.Total_IVA
              TFA.SubTotal = TFA.Sin_IVA + TFA.Con_IVA
              If TFA.Nota = Ninguno Then TFA.Nota = "Liquidacion de Compras"
-             tipoCodComprobante = Format$(.fields("TipoComprobante"), "00")
+             tipoCodComprobante = Format$(.Fields("TipoComprobante"), "00")
             'Validar_Porc_IVA TFA.Fecha
-             Obtener_Porc_IVA TFA.Fecha, .fields("PorcentajeIva")
+             Obtener_Porc_IVA TFA.Fecha, .Fields("PorcentajeIva")
              TFA.Porc_IVA = Porc_IVA * 100
               
             'Algoritmo Modulo 11 para la clave de la retencion
@@ -3007,7 +3007,7 @@ Dim Autorizar_XML As Boolean
                        
                        Insertar_Campo_XML AbrirXML("totalImpuesto")
                           Insertar_Campo_XML CampoXML("codigo", "2")
-                          Insertar_Campo_XML CampoXML("codigoPorcentaje", .fields("PorcentajeIva"))
+                          Insertar_Campo_XML CampoXML("codigoPorcentaje", .Fields("PorcentajeIva"))
                           Insertar_Campo_XML CampoXML("baseImponible", TFA.Con_IVA)
                           Insertar_Campo_XML CampoXML("tarifa", TFA.Porc_IVA)
                           Insertar_Campo_XML CampoXML("valor", TFA.Total_IVA)
@@ -3057,7 +3057,7 @@ Dim Autorizar_XML As Boolean
                        Insertar_Campo_XML AbrirXML("impuestos")
                           Insertar_Campo_XML AbrirXML("impuesto")
                              Insertar_Campo_XML CampoXML("codigo", "2")
-                             Insertar_Campo_XML CampoXML("codigoPorcentaje", .fields("PorcentajeIva"))
+                             Insertar_Campo_XML CampoXML("codigoPorcentaje", .Fields("PorcentajeIva"))
                              Insertar_Campo_XML CampoXML("tarifa", TFA.Porc_IVA)
                              Insertar_Campo_XML CampoXML("baseImponible", TFA.Con_IVA)
                              Insertar_Campo_XML CampoXML("valor", TFA.Total_IVA)
@@ -3125,9 +3125,10 @@ Dim DocXML As String
      RutaOrigen = RutaDocumentos & "\Comprobantes no Autorizados\" & SRI_Autorizacion.Clave_De_Acceso & ".xml"
      If Dir$(RutaOrigen) <> "" Then Kill RutaOrigen
     'MsgBox "Desktop Test: " & RutaDocumentos
+    
     'Generamos el archivo y que soporte XML valido
-''     Clipboard.Clear
-''     Clipboard.SetText TextoXML
+    'Clipboard.Clear
+    'Clipboard.SetText TextoXML
     
      Set DocumentoXML = New DOMDocument30
      DocumentoXML.loadXML (TextoXML)
@@ -3241,11 +3242,13 @@ Dim SecuencialReembolo As String
        If CFechaLong(TFA.Fecha) < CFechaLong(Fecha_Igualar) Then Autorizar_XML = False
     End If
     TextoXML = ""
-    
+
    'MsgBox Autorizar_XML
     If Autorizar_XML Then
          Leer_Datos_FA_NV TFA
          SRI_Obtener_Datos_Comprobantes_Electronicos
+        'MsgBox TFA.Cliente & vbCrLf & TFA.Razon_Social & vbCrLf & TFA.CI_RUC & vbCrLf & TFA.RUC_CI
+         
         'Detalle de descuentos
          sSQL = "SELECT DF.*,CP.Reg_Sanitario, CP.Marca, CP.Desc_Item, CP.Codigo_Barra " _
               & "FROM Detalle_Factura As DF, Catalogo_Productos As CP " _
@@ -3282,26 +3285,27 @@ Dim SecuencialReembolo As String
           If .RecordCount > 0 Then
               
               Autorizar_XML = True
-              TFA.T = .fields("T")
-              TFA.SP = .fields("SP")
-              TFA.TDT = .fields("TDT")
-              TFA.Porc_IVA = .fields("Porc_IVA")
-              TFA.Imp_Mes = .fields("Imp_Mes")
-              TFA.Fecha = .fields("Fecha")
-              TFA.Vencimiento = .fields("Vencimiento")
-              TFA.SubTotal = .fields("SubTotal")
-              TFA.Sin_IVA = .fields("Sin_IVA")
-              TFA.Con_IVA = .fields("Con_IVA")
-              TFA.Total_IVA = .fields("IVA")
-              TFA.Servicio = .fields("Servicio")
-              TFA.Total_MN = .fields("Total_MN")
-              TFA.Razon_Social = .fields("Razon_Social")
-              TFA.RUC_CI = .fields("RUC_CI")
-              TFA.TB = .fields("TB")
-              TFA.Descuento = .fields("Descuento")
-              TFA.Descuento2 = .fields("Descuento2")
-              TFA.Orden_Compra = .fields("Orden_Compra")
+              TFA.T = .Fields("T")
+              TFA.SP = .Fields("SP")
+              TFA.TDT = .Fields("TDT")
+              TFA.Porc_IVA = .Fields("Porc_IVA")
+              TFA.Imp_Mes = .Fields("Imp_Mes")
+              TFA.Fecha = .Fields("Fecha")
+              TFA.Vencimiento = .Fields("Vencimiento")
+              TFA.SubTotal = .Fields("SubTotal")
+              TFA.Sin_IVA = .Fields("Sin_IVA")
+              TFA.Con_IVA = .Fields("Con_IVA")
+              TFA.Total_IVA = .Fields("IVA")
+              TFA.Servicio = .Fields("Servicio")
+              TFA.Total_MN = .Fields("Total_MN")
+              TFA.Razon_Social = .Fields("Razon_Social")
+              TFA.RUC_CI = .Fields("RUC_CI")
+              TFA.TB = .Fields("TB")
+              TFA.Descuento = .Fields("Descuento")
+              TFA.Descuento2 = .Fields("Descuento2")
+              TFA.Orden_Compra = .Fields("Orden_Compra")
               TFA.Total_Descuento = TFA.Descuento + TFA.Descuento2
+              
               
               If TFA.TDT = 41 Then TFA.EsPorReembolso = True
               
@@ -3395,6 +3399,7 @@ Dim SecuencialReembolo As String
                     Insertar_Campo_XML CampoXML("totalSinImpuestos", Format$(TFA.Sin_IVA + TFA.Con_IVA - TFA.Total_Descuento, "#0.00"))
                  End If
                  Insertar_Campo_XML CampoXML("totalDescuento", Format$(TFA.Total_Descuento, "#0.00"))
+                 
                  If TFA.EsPorReembolso Then
                     Insertar_Campo_XML CampoXML("codDocReembolso", "41")
                     Insertar_Campo_XML CampoXML("totalComprobantesReembolso", Format$(TFA.Total_MN, "#0.00"))
@@ -3455,25 +3460,25 @@ Dim SecuencialReembolo As String
           If .RecordCount > 0 Then
               Insertar_Campo_XML AbrirXML("detalles")
               Do While Not .EOF
-                 Producto = .fields("Producto")
-                 Cod_Aux = .fields("Desc_Item")
-                 Cod_Bar = .fields("Codigo_Barra")
-                 SubTotal = (.fields("Cantidad") * .fields("Precio")) - (.fields("Total_Desc") + .fields("Total_Desc2"))
+                 Producto = .Fields("Producto")
+                 Cod_Aux = .Fields("Desc_Item")
+                 Cod_Bar = .Fields("Codigo_Barra")
+                 SubTotal = (.Fields("Cantidad") * .Fields("Precio")) - (.Fields("Total_Desc") + .Fields("Total_Desc2"))
                  If TFA.EsPorReembolso Then
                     Cod_Aux = "Reembolso de Gastos"
-                    If Len(.fields("Tipo_Hab")) > 1 Then Cod_Aux = Cod_Aux & " por " & .fields("Tipo_Hab")
-                    SubTotal = SubTotal + .fields("Total_IVA")
+                    If Len(.Fields("Tipo_Hab")) > 1 Then Cod_Aux = Cod_Aux & " por " & .Fields("Tipo_Hab")
+                    SubTotal = SubTotal + .Fields("Total_IVA")
                     Insertar_Campo_XML AbrirXML("detalle")
-                         Insertar_Campo_XML CampoXML("codigoPrincipal", .fields("Codigo"))
-                         Insertar_Campo_XML CampoXML("codigoAuxiliar", TrimStrg(MidStrg(.fields("Ruta"), 1, 10)))
-                         Insertar_Campo_XML CampoXML("descripcion", .fields("Producto"))
+                         Insertar_Campo_XML CampoXML("codigoPrincipal", .Fields("Codigo"))
+                         Insertar_Campo_XML CampoXML("codigoAuxiliar", TrimStrg(MidStrg(.Fields("Ruta"), 1, 10)))
+                         Insertar_Campo_XML CampoXML("descripcion", .Fields("Producto"))
                          Insertar_Campo_XML CampoXML("cantidad", "1.000000")
                          Insertar_Campo_XML CampoXML("precioUnitario", Format$(SubTotal, "#0.000000"))
                          Insertar_Campo_XML CampoXML("descuento", "0.00")
                          Insertar_Campo_XML CampoXML("precioTotalSinImpuesto", Format$(SubTotal, "#0.00"))
                          Insertar_Campo_XML AbrirXML("detallesAdicionales")
-                             Insertar_Campo_XML "<detAdicional nombre=""RUC Factura"" valor = """ & .fields("Ruta") & """/>"
-                             Insertar_Campo_XML "<detAdicional nombre=""Serie y Factura"" valor = """ & .fields("Serie_No") & """/>"
+                             Insertar_Campo_XML "<detAdicional nombre=""RUC Factura"" valor = """ & .Fields("Ruta") & """/>"
+                             Insertar_Campo_XML "<detAdicional nombre=""Serie y Factura"" valor = """ & .Fields("Serie_No") & """/>"
                              Insertar_Campo_XML "<detAdicional nombre=""Descripcion Reembolso"" valor = """ & Cod_Aux & """/>"
                          Insertar_Campo_XML CerrarXML("detallesAdicionales")
                          Insertar_Campo_XML AbrirXML("impuestos")
@@ -3487,15 +3492,15 @@ Dim SecuencialReembolo As String
                          Insertar_Campo_XML CerrarXML("impuestos")
                     Insertar_Campo_XML CerrarXML("detalle")
                  Else
-                     If TFA.Imp_Mes Then Producto = Producto & ", " & .fields("Ticket") & ": " & .fields("Mes") & " "
+                     If TFA.Imp_Mes Then Producto = Producto & ", " & .Fields("Ticket") & ": " & .Fields("Mes") & " "
                      If TFA.SP Then
                         Producto = Producto _
-                                 & ", Lote No. " & .fields("Lote_No") _
-                                 & ", ELAB. " & .fields("Fecha_Fab") _
-                                 & ", VENC. " & .fields("Fecha_Exp") _
-                                 & ", Reg. Sanit. " & .fields("Reg_Sanitario") _
-                                 & ", Modelo: " & .fields("Modelo") _
-                                 & ", Procedencia: " & .fields("Procedencia")
+                                 & ", Lote No. " & .Fields("Lote_No") _
+                                 & ", ELAB. " & .Fields("Fecha_Fab") _
+                                 & ", VENC. " & .Fields("Fecha_Exp") _
+                                 & ", Reg. Sanit. " & .Fields("Reg_Sanitario") _
+                                 & ", Modelo: " & .Fields("Modelo") _
+                                 & ", Procedencia: " & .Fields("Procedencia")
                      End If
              '''            If Len(.Fields("Serie_No")) > 1 Then
              '''               Producto = Producto & ", Serie No. " & .Fields("Serie_No")
@@ -3506,13 +3511,13 @@ Dim SecuencialReembolo As String
                         If Len(Cod_Aux) > 1 Then
                            Insertar_Campo_XML CampoXML("codigoAuxiliar", Cod_Aux)
                         Else
-                           Insertar_Campo_XML CampoXML("codigoAuxiliar", .fields("Codigo"))
+                           Insertar_Campo_XML CampoXML("codigoAuxiliar", .Fields("Codigo"))
                         End If
                      Else
                         If Len(Cod_Aux) > 1 Then
                            Insertar_Campo_XML CampoXML("codigoPrincipal", Cod_Aux)
                         Else
-                           Insertar_Campo_XML CampoXML("codigoPrincipal", .fields("Codigo"))
+                           Insertar_Campo_XML CampoXML("codigoPrincipal", .Fields("Codigo"))
                         End If
                         If EsTransporte Then
                            Insertar_Campo_XML CampoXML("codigoAuxiliar", "H492001")
@@ -3524,28 +3529,28 @@ Dim SecuencialReembolo As String
                      End If
                      Insertar_Campo_XML CampoXML("descripcion", Producto)
                      Insertar_Campo_XML CampoXML("unidadMedida", "DOLAR")
-                     Insertar_Campo_XML CampoXML("cantidad", Format$(.fields("Cantidad"), "#0.000000"))
-                     Insertar_Campo_XML CampoXML("precioUnitario", Format$(.fields("Precio"), "#0.000000"))
-                     Insertar_Campo_XML CampoXML("descuento", Format$(.fields("Total_Desc") + .fields("Total_Desc2"), "#0.00"))
+                     Insertar_Campo_XML CampoXML("cantidad", Format$(.Fields("Cantidad"), "#0.000000"))
+                     Insertar_Campo_XML CampoXML("precioUnitario", Format$(.Fields("Precio"), "#0.000000"))
+                     Insertar_Campo_XML CampoXML("descuento", Format$(.Fields("Total_Desc") + .Fields("Total_Desc2"), "#0.00"))
                      Insertar_Campo_XML CampoXML("precioTotalSinImpuesto", Format$(SubTotal, "#0.00"))
-                     
-                     If Len(.fields("Serie_No")) > 1 Then
+
+                     If Len(.Fields("Serie_No")) > 1 Then
                         Insertar_Campo_XML AbrirXML("detallesAdicionales")
-                            Insertar_Campo_XML "<detAdicional nombre=""Serie_No"" valor=""" & .fields("Serie_No") & """/>"
+                            Insertar_Campo_XML "<detAdicional nombre=""Serie_No"" valor=""" & .Fields("Serie_No") & """/>"
                         Insertar_Campo_XML CerrarXML("detallesAdicionales")
                      End If
                          Insertar_Campo_XML AbrirXML("impuestos")
                              Insertar_Campo_XML AbrirXML("impuesto")
                                 Insertar_Campo_XML CampoXML("codigo", "2")
-                                If .fields("Total_IVA") = 0 Then
+                                If .Fields("Total_IVA") = 0 Then
                                     Insertar_Campo_XML CampoXML("codigoPorcentaje", "0")
                                     Insertar_Campo_XML CampoXML("tarifa", "0")
                                 Else
                                     Insertar_Campo_XML CampoXML("codigoPorcentaje", Cod_Porc_IVA)
                                     Insertar_Campo_XML CampoXML("tarifa", Porc_IVA * 100)
                                 End If
-                                Insertar_Campo_XML CampoXML("baseImponible", Format$(.fields("Total") - (.fields("Total_Desc") + .fields("Total_Desc2")), "#0.00"))
-                                Insertar_Campo_XML CampoXML("valor", Format$(.fields("Total_IVA"), "#0.00"))
+                                Insertar_Campo_XML CampoXML("baseImponible", Format$(SubTotal, "#0.00"))
+                                Insertar_Campo_XML CampoXML("valor", Format$(.Fields("Total_IVA"), "#0.00"))
                             Insertar_Campo_XML CerrarXML("impuesto")
                          Insertar_Campo_XML CerrarXML("impuestos")
                      Insertar_Campo_XML CerrarXML("detalle")
@@ -3564,31 +3569,32 @@ Dim SecuencialReembolo As String
                 .MoveFirst
                  Insertar_Campo_XML AbrirXML("reembolsos")
                  Do While Not .EOF
-                    If .fields("Ruta") = String(13, "9") Then TipoIdent = "07" Else TipoIdent = "04"
-                    If MidStrg(.fields("Ruta"), 3, 1) = "9" Then TipoProvReemb = "02" Else TipoProvReemb = "01"
-                    Serie1Reembolo = MidStrg(.fields("Serie_No"), 1, 3)
-                    Serie2Reembolo = MidStrg(.fields("Serie_No"), 4, 3)
-                    SecuencialReembolo = MidStrg(.fields("Serie_No"), 8, 9)
-                    SubTotal = (.fields("Cantidad") * .fields("Precio")) - (.fields("Total_Desc") + .fields("Total_Desc2"))
+                    If .Fields("Ruta") = String(13, "9") Then TipoIdent = "07" Else TipoIdent = "04"
+                    If MidStrg(.Fields("Ruta"), 3, 1) = "9" Then TipoProvReemb = "02" Else TipoProvReemb = "01"
+                    Serie1Reembolo = MidStrg(.Fields("Serie_No"), 1, 3)
+                    Serie2Reembolo = MidStrg(.Fields("Serie_No"), 4, 3)
+                    SecuencialReembolo = MidStrg(.Fields("Serie_No"), 8, 9)
+                    SubTotal = (.Fields("Cantidad") * .Fields("Precio")) - (.Fields("Total_Desc") + .Fields("Total_Desc2"))
+
                     Insertar_Campo_XML AbrirXML("reembolsoDetalle")
                          Insertar_Campo_XML CampoXML("tipoIdentificacionProveedorReembolso", TipoIdent)
-                         Insertar_Campo_XML CampoXML("identificacionProveedorReembolso", .fields("Ruta"))
+                         Insertar_Campo_XML CampoXML("identificacionProveedorReembolso", .Fields("Ruta"))
                          Insertar_Campo_XML CampoXML("codPaisPagoProveedorReembolso", "593")
                          Insertar_Campo_XML CampoXML("tipoProveedorReembolso", TipoProvReemb)
-                         Insertar_Campo_XML CampoXML("codDocReembolso", .fields("Lote_No"))
+                         Insertar_Campo_XML CampoXML("codDocReembolso", .Fields("Lote_No"))
                          Insertar_Campo_XML CampoXML("estabDocReembolso", Serie1Reembolo)
                          Insertar_Campo_XML CampoXML("ptoEmiDocReembolso", Serie2Reembolo)
                          Insertar_Campo_XML CampoXML("secuencialDocReembolso", SecuencialReembolo)
                          Insertar_Campo_XML CampoXML("fechaEmisionDocReembolso", TFA.Fecha)
-                         Insertar_Campo_XML CampoXML("numeroautorizacionDocReemb", .fields("Procedencia")) 'String(10, "9"))
+                         Insertar_Campo_XML CampoXML("numeroautorizacionDocReemb", .Fields("Procedencia")) 'String(10, "9"))
                          Insertar_Campo_XML AbrirXML("detalleImpuestos")
                             Insertar_Campo_XML AbrirXML("detalleImpuesto")
                                Insertar_Campo_XML CampoXML("codigo", "2")
-                               If .fields("Total_IVA") > 0 Then
+                               If .Fields("Total_IVA") > 0 Then
                                   Insertar_Campo_XML CampoXML("codigoPorcentaje", Cod_Porc_IVA)
                                   Insertar_Campo_XML CampoXML("tarifa", Porc_IVA * 100)
                                   Insertar_Campo_XML CampoXML("baseImponibleReembolso", Format$(SubTotal, "#0.00"))
-                                  Insertar_Campo_XML CampoXML("impuestoReembolso", Format$(.fields("Total_IVA"), "#0.00"))
+                                  Insertar_Campo_XML CampoXML("impuestoReembolso", Format$(.Fields("Total_IVA"), "#0.00"))
                                Else
                                   Insertar_Campo_XML CampoXML("codigoPorcentaje", "0")
                                   Insertar_Campo_XML CampoXML("tarifa", "0")
@@ -3722,22 +3728,22 @@ Dim Autorizar_XML As Boolean
         With AdoDBFA
          If .RecordCount > 0 Then
              Autorizar_XML = True
-             TFA.T = .fields("T")
-             TFA.SP = .fields("SP")
-             TFA.Porc_IVA = .fields("Porc_IVA")
-             TFA.Imp_Mes = .fields("Imp_Mes")
-             TFA.Fecha = .fields("Fecha")
-             TFA.Vencimiento = .fields("Vencimiento")
-             TFA.SubTotal = .fields("SubTotal")
-             TFA.Sin_IVA = .fields("Sin_IVA")
-             TFA.Con_IVA = .fields("Con_IVA")
-             TFA.Descuento = .fields("Descuento")
-             TFA.Descuento2 = .fields("Descuento2")
-             TFA.Total_IVA = .fields("IVA")
-             TFA.Total_MN = .fields("Total_MN")
-             TFA.Razon_Social = .fields("Razon_Social")
-             TFA.RUC_CI = .fields("RUC_CI")
-             TFA.TB = .fields("TB")
+             TFA.T = .Fields("T")
+             TFA.SP = .Fields("SP")
+             TFA.Porc_IVA = .Fields("Porc_IVA")
+             TFA.Imp_Mes = .Fields("Imp_Mes")
+             TFA.Fecha = .Fields("Fecha")
+             TFA.Vencimiento = .Fields("Vencimiento")
+             TFA.SubTotal = .Fields("SubTotal")
+             TFA.Sin_IVA = .Fields("Sin_IVA")
+             TFA.Con_IVA = .Fields("Con_IVA")
+             TFA.Descuento = .Fields("Descuento")
+             TFA.Descuento2 = .Fields("Descuento2")
+             TFA.Total_IVA = .Fields("IVA")
+             TFA.Total_MN = .Fields("Total_MN")
+             TFA.Razon_Social = .Fields("Razon_Social")
+             TFA.RUC_CI = .Fields("RUC_CI")
+             TFA.TB = .Fields("TB")
              
             'MsgBox "Validar Porc IVA"
              
@@ -3789,35 +3795,35 @@ Dim Autorizar_XML As Boolean
              
              Insertar_Campo_XML AbrirXML("infoGuiaRemision")
                 Insertar_Campo_XML CampoXML("dirEstablecimiento", ULCase(DireccionEstab))
-                Insertar_Campo_XML CampoXML("dirPartida", .fields("CiudadGRI"))
-                Insertar_Campo_XML CampoXML("razonSocialTransportista", .fields("Comercial"))
-                DigVerif = Digito_Verificador(.fields("CIRUC_Comercial"))
+                Insertar_Campo_XML CampoXML("dirPartida", .Fields("CiudadGRI"))
+                Insertar_Campo_XML CampoXML("razonSocialTransportista", .Fields("Comercial"))
+                DigVerif = Digito_Verificador(.Fields("CIRUC_Comercial"))
                 TipoIdent = "P"
                 Select Case Tipo_RUC_CI.Tipo_Beneficiario
-                  Case "R": If .fields("CIRUC_Comercial") = String(13, "9") Then TipoIdent = "07" Else TipoIdent = "04"
+                  Case "R": If .Fields("CIRUC_Comercial") = String(13, "9") Then TipoIdent = "07" Else TipoIdent = "04"
                   Case "C": TipoIdent = "05"
                   Case "P": TipoIdent = "06"
                   Case Else: TipoIdent = "07"
                 End Select
                 Insertar_Campo_XML CampoXML("tipoIdentificacionTransportista", TipoIdent)
-                Insertar_Campo_XML CampoXML("rucTransportista", .fields("CIRUC_Comercial"))
+                Insertar_Campo_XML CampoXML("rucTransportista", .Fields("CIRUC_Comercial"))
                 Insertar_Campo_XML CampoXML("rise", "000")
                 Insertar_Campo_XML CampoXML("obligadoContabilidad", Obligado_Conta)
                 If Len(ContEspec) > 1 Then Insertar_Campo_XML CampoXML("contribuyenteEspecial", ContEspec)
-                Insertar_Campo_XML CampoXML("fechaIniTransporte", .fields("FechaGRI"))
-                Insertar_Campo_XML CampoXML("fechaFinTransporte", .fields("FechaGRF"))
-                Insertar_Campo_XML CampoXML("placa", .fields("Placa_Vehiculo"))
+                Insertar_Campo_XML CampoXML("fechaIniTransporte", .Fields("FechaGRI"))
+                Insertar_Campo_XML CampoXML("fechaFinTransporte", .Fields("FechaGRF"))
+                Insertar_Campo_XML CampoXML("placa", .Fields("Placa_Vehiculo"))
              Insertar_Campo_XML CerrarXML("infoGuiaRemision")
              
              Insertar_Campo_XML AbrirXML("destinatarios")
                 Insertar_Campo_XML AbrirXML("destinatario")
-                Insertar_Campo_XML CampoXML("identificacionDestinatario", .fields("CIRUC_Entrega"))
-                Insertar_Campo_XML CampoXML("razonSocialDestinatario", .fields("Entrega"))
-                Insertar_Campo_XML CampoXML("dirDestinatario", .fields("CiudadGRF"))
+                Insertar_Campo_XML CampoXML("identificacionDestinatario", .Fields("CIRUC_Entrega"))
+                Insertar_Campo_XML CampoXML("razonSocialDestinatario", .Fields("Entrega"))
+                Insertar_Campo_XML CampoXML("dirDestinatario", .Fields("CiudadGRF"))
                 Insertar_Campo_XML CampoXML("motivoTraslado", "Translado de mercaderia")
     ''            Insertar_Campo_XML CampoXML("docAduaneroUnico", "")
     ''            Insertar_Campo_XML CampoXML("codEstabDestino", "001")
-                Insertar_Campo_XML CampoXML("ruta", "De " & .fields("CiudadGRI") & " a " & .fields("CiudadGRF"))
+                Insertar_Campo_XML CampoXML("ruta", "De " & .Fields("CiudadGRI") & " a " & .Fields("CiudadGRF"))
                 Select Case TFA.TC
                   Case "FA": Insertar_Campo_XML CampoXML("codDocSustento", "01")
                   Case "NV": Insertar_Campo_XML CampoXML("codDocSustento", "02")
@@ -3834,27 +3840,27 @@ Dim Autorizar_XML As Boolean
                  If .RecordCount > 0 Then
                      Insertar_Campo_XML AbrirXML("detalles")
                      Do While Not .EOF
-                        Producto = TrimStrg(.fields("Producto"))
+                        Producto = TrimStrg(.Fields("Producto"))
                         If TFA.Imp_Mes Then
-                           If Len(.fields("Ticket")) > 1 Then Producto = Producto & ", " & .fields("Ticket")
-                           If Len(.fields("Mes")) > 1 Then Producto = Producto & ": " & .fields("Mes")
+                           If Len(.Fields("Ticket")) > 1 Then Producto = Producto & ", " & .Fields("Ticket")
+                           If Len(.Fields("Mes")) > 1 Then Producto = Producto & ": " & .Fields("Mes")
                         End If
                         If TFA.SP Then
                            Producto = Producto _
-                                    & ", Lote No. " & .fields("Lote_No") _
-                                    & ", ELAB. " & .fields("Fecha_Fab") _
-                                    & ", VENC. " & .fields("Fecha_Exp") _
-                                    & ", Reg. Sanit. " & .fields("Reg_Sanitario") _
-                                    & ", Modelo: " & .fields("Modelo") _
-                                    & ", Serie No. " & .fields("Serie_No") _
-                                    & ", Procedencia: " & .fields("Procedencia")
+                                    & ", Lote No. " & .Fields("Lote_No") _
+                                    & ", ELAB. " & .Fields("Fecha_Fab") _
+                                    & ", VENC. " & .Fields("Fecha_Exp") _
+                                    & ", Reg. Sanit. " & .Fields("Reg_Sanitario") _
+                                    & ", Modelo: " & .Fields("Modelo") _
+                                    & ", Serie No. " & .Fields("Serie_No") _
+                                    & ", Procedencia: " & .Fields("Procedencia")
                         End If
-                        SubTotal = (.fields("Cantidad") * .fields("Precio")) - (.fields("Total_Desc") + .fields("Total_Desc2"))
+                        SubTotal = (.Fields("Cantidad") * .Fields("Precio")) - (.Fields("Total_Desc") + .Fields("Total_Desc2"))
                         Insertar_Campo_XML AbrirXML("detalle")
-                            Insertar_Campo_XML CampoXML("codigoInterno", .fields("Codigo"))
-                            If Len(.fields("Codigo_Barra")) > 1 Then Insertar_Campo_XML CampoXML("codigoAdicional", .fields("Codigo_Barra"))
+                            Insertar_Campo_XML CampoXML("codigoInterno", .Fields("Codigo"))
+                            If Len(.Fields("Codigo_Barra")) > 1 Then Insertar_Campo_XML CampoXML("codigoAdicional", .Fields("Codigo_Barra"))
                             Insertar_Campo_XML CampoXML("descripcion", Producto)
-                            Insertar_Campo_XML CampoXML("cantidad", Format$(.fields("Cantidad"), "#0.000000"))
+                            Insertar_Campo_XML CampoXML("cantidad", Format$(.Fields("Cantidad"), "#0.000000"))
                         Insertar_Campo_XML CerrarXML("detalle")
                        .MoveNext
                      Loop
@@ -3932,13 +3938,13 @@ Dim Con_Inv As Boolean
          If .RecordCount > 0 Then
              Con_Inv = True
              Do While Not .EOF
-                Total_Desc = Total_Desc + .fields("Descuento")
-                If .fields("Total_IVA") = 0 Then
-                    Total_Sin_IVA = Total_Sin_IVA + .fields("Total")
+                Total_Desc = Total_Desc + .Fields("Descuento")
+                If .Fields("Total_IVA") = 0 Then
+                    Total_Sin_IVA = Total_Sin_IVA + .Fields("Total")
                 Else
-                    Total_Con_IVA = Total_Con_IVA + .fields("Total")
+                    Total_Con_IVA = Total_Con_IVA + .Fields("Total")
                 End If
-                TFA.Total_IVA_NC = TFA.Total_IVA_NC + .fields("Total_IVA")
+                TFA.Total_IVA_NC = TFA.Total_IVA_NC + .Fields("Total_IVA")
                .MoveNext
              Loop
          End If
@@ -3962,13 +3968,13 @@ Dim Con_Inv As Boolean
               'MsgBox .RecordCount
              If .RecordCount > 0 Then
                  Do While Not .EOF
-                    If .fields("Cheque") = "I.V.A." Then
-                        TFA.Total_IVA_NC = .fields("Abono")
+                    If .Fields("Cheque") = "I.V.A." Then
+                        TFA.Total_IVA_NC = .Fields("Abono")
                         SubT_Con_Inv = True
-                    ElseIf .fields("Cheque") = "VENTAS SIN IVA" Then
-                        Total_Sin_IVA = .fields("Abono")
+                    ElseIf .Fields("Cheque") = "VENTAS SIN IVA" Then
+                        Total_Sin_IVA = .Fields("Abono")
                     Else
-                        Total_Con_IVA = .fields("Abono")
+                        Total_Con_IVA = .Fields("Abono")
                     End If
                    .MoveNext
                  Loop
@@ -4074,31 +4080,31 @@ Dim Con_Inv As Boolean
                  .MoveFirst
                   Insertar_Campo_XML AbrirXML("detalles")
                     Do While Not .EOF
-                       CodAdicional = CambioCodigoCtaSup(.fields("Codigo_Inv"))
+                       CodAdicional = CambioCodigoCtaSup(.Fields("Codigo_Inv"))
                        'MsgBox PVP_NC & vbCrLf & .Fields("Cantidad_NC")
                        Insertar_Campo_XML AbrirXML("detalle")
-                           Insertar_Campo_XML CampoXML("codigoInterno", .fields("Codigo_Inv"))
+                           Insertar_Campo_XML CampoXML("codigoInterno", .Fields("Codigo_Inv"))
                            Insertar_Campo_XML CampoXML("codigoAdicional", CodAdicional)
-                           Insertar_Campo_XML CampoXML("descripcion", .fields("Producto"))
-                           Insertar_Campo_XML CampoXML("cantidad", Format$(.fields("Cantidad"), "#0.00"))
-                           Insertar_Campo_XML CampoXML("precioUnitario", Format$(.fields("Precio"), "#0.0000"))
-                           Insertar_Campo_XML CampoXML("descuento", Format$(.fields("Descuento"), "#0.00"))
-                           Insertar_Campo_XML CampoXML("precioTotalSinImpuesto", Format$(.fields("Total") - .fields("Descuento"), "#0.00"))
+                           Insertar_Campo_XML CampoXML("descripcion", .Fields("Producto"))
+                           Insertar_Campo_XML CampoXML("cantidad", Format$(.Fields("Cantidad"), "#0.00"))
+                           Insertar_Campo_XML CampoXML("precioUnitario", Format$(.Fields("Precio"), "#0.0000"))
+                           Insertar_Campo_XML CampoXML("descuento", Format$(.Fields("Descuento"), "#0.00"))
+                           Insertar_Campo_XML CampoXML("precioTotalSinImpuesto", Format$(.Fields("Total") - .Fields("Descuento"), "#0.00"))
                           'MsgBox .Fields("Codigo_Inv") & vbCrLf & .Fields("Total_IVA")
                            
                            Insertar_Campo_XML AbrirXML("impuestos")
                               Insertar_Campo_XML AbrirXML("impuesto")
                                   Insertar_Campo_XML CampoXML("codigo", "2")
                                  ' MsgBox "....."
-                                  If .fields("Total_IVA") = 0 Then
+                                  If .Fields("Total_IVA") = 0 Then
                                       Insertar_Campo_XML CampoXML("codigoPorcentaje", "0")
                                       Insertar_Campo_XML CampoXML("tarifa", "0")
                                   Else
                                       Insertar_Campo_XML CampoXML("codigoPorcentaje", Cod_Porc_IVA)
                                       Insertar_Campo_XML CampoXML("tarifa", Porc_IVA * 100)
                                   End If
-                                  Insertar_Campo_XML CampoXML("baseImponible", Format$(.fields("Total") - .fields("Descuento"), "#0.00"))
-                                  Insertar_Campo_XML CampoXML("valor", Format$(.fields("Total_IVA"), "#0.00"))
+                                  Insertar_Campo_XML CampoXML("baseImponible", Format$(.Fields("Total") - .Fields("Descuento"), "#0.00"))
+                                  Insertar_Campo_XML CampoXML("valor", Format$(.Fields("Total_IVA"), "#0.00"))
                               Insertar_Campo_XML CerrarXML("impuesto")
                            Insertar_Campo_XML CerrarXML("impuestos")
                        Insertar_Campo_XML CerrarXML("detalle")
@@ -4198,7 +4204,7 @@ Dim AdoDBXMLFirmado As ADODB.Recordset
    'MsgBox "Documento Firmado: " & AdoDBXMLFirmado.RecordCount
     If AdoDBXMLFirmado.RecordCount > 0 Then
        RutaXMLFirmado = RutaSysBases & "\TEMP\" & ClaveDeAcceso & ".xml"
-       Escribir_Archivo RutaXMLFirmado, AdoDBXMLFirmado.fields("Documento_Autorizado")
+       Escribir_Archivo RutaXMLFirmado, AdoDBXMLFirmado.Fields("Documento_Autorizado")
       'MsgBox RutaXMLFirmado
     End If
     AdoDBXMLFirmado.Close

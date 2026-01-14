@@ -57,7 +57,6 @@ On Error GoTo Errorhandler
    'Clipboard.Clear
    'Clipboard.SetText Len(ListP) & vbCrLf & vbCrLf & ListP
    'MsgBox Len(ListP) & vbCrLf & vbCrLf & ListP
-   
    'Generar_File_SQL "Store_Procedure", ListP
     
 '''    Progreso_Esperar True
@@ -170,7 +169,7 @@ Dim MiHora1 As String
          Set rsMySQL = cnMySQL.Execute("SELECT @pActivo;")
           
         'Pasamos a variables globales lso resultados del SP
-         If Not rsMySQL.EOF Then vActivo = rsMySQL.Fields(0)
+         If Not rsMySQL.EOF Then vActivo = rsMySQL.fields(0)
          
         ' MsgBox CodigoUsuario & vbCrLf & IP_PC.IP_PC & vbCrLf & IP_PC.WAN_PC & vbCrLf & IP_PC.Nombre_PC & vbCrLf & IP_PC.MAC_PC & vbCrLf & Mifecha1 & vbCrLf & MiHora1 & vbCrLf & vActivo
          
@@ -234,7 +233,7 @@ Dim Mail_para As String
          Set rsMySQL = cnMySQL.Execute("SELECT @pPausaMails;")
           
         'Pasamos a variables globales lso resultados del SP
-         If Not rsMySQL.EOF Then PausaMails = rsMySQL.Fields(0)
+         If Not rsMySQL.EOF Then PausaMails = rsMySQL.fields(0)
          
         'Hacer pausa si ya tiene 20 envios
          If PausaMails = 0 Then
@@ -337,31 +336,31 @@ Dim ParametrosDeSalida As String
         Set rsMySQL = cmdMySQL.Execute
        'Recolectamos los resultados de los parametros de salida
         Set rsMySQL = cnMySQL.Execute("SELECT " & ParametrosDeSalida & ";")
-        Fecha_CO = Format(rsMySQL.Fields(0), FormatoFechas)
-        Fecha_CE = Format(rsMySQL.Fields(1), FormatoFechas)
-        Fecha_DB = Format(rsMySQL.Fields(2), FormatoFechas)
-        Fecha_P12 = Format(rsMySQL.Fields(3), FormatoFechas)
-        AgenteRetencion = rsMySQL.Fields(4)
-        MicroEmpresa = rsMySQL.Fields(5)
-        EstadoEmpresa = rsMySQL.Fields(6)
-        DescripcionEstado = rsMySQL.Fields(7)
-        NombreEntidad = rsMySQL.Fields(8)
-        RepresentanteLegal = rsMySQL.Fields(9)
-        MensajeEmpresa = rsMySQL.Fields(10)
-        ComunicadoEntidad = rsMySQL.Fields(11)
-        SerieFE = rsMySQL.Fields(12)
-        Cartera = rsMySQL.Fields(13)
-        Cant_FA = rsMySQL.Fields(14)
-        TipoPlan = rsMySQL.Fields(15)
-        PCActivo = rsMySQL.Fields(16)
-        EstadoUsuario = rsMySQL.Fields(17)
-        Token = rsMySQL.Fields(18)
-        URLToken = rsMySQL.Fields(19)
+        Fecha_CO = Format(rsMySQL.fields(0), FormatoFechas)
+        Fecha_CE = Format(rsMySQL.fields(1), FormatoFechas)
+        Fecha_DB = Format(rsMySQL.fields(2), FormatoFechas)
+        Fecha_P12 = Format(rsMySQL.fields(3), FormatoFechas)
+        AgenteRetencion = rsMySQL.fields(4)
+        MicroEmpresa = rsMySQL.fields(5)
+        EstadoEmpresa = rsMySQL.fields(6)
+        DescripcionEstado = rsMySQL.fields(7)
+        NombreEntidad = rsMySQL.fields(8)
+        RepresentanteLegal = rsMySQL.fields(9)
+        MensajeEmpresa = rsMySQL.fields(10)
+        ComunicadoEntidad = rsMySQL.fields(11)
+        SerieFE = rsMySQL.fields(12)
+        Cartera = rsMySQL.fields(13)
+        Cant_FA = rsMySQL.fields(14)
+        TipoPlan = rsMySQL.fields(15)
+        PCActivo = rsMySQL.fields(16)
+        EstadoUsuario = rsMySQL.fields(17)
+        Token = rsMySQL.fields(18)
+        URLToken = rsMySQL.fields(19)
         ServidorMySQL = True
         ParametrosDeSalida = ""
         
         For I = 0 To 19
-            ParametrosDeSalida = ParametrosDeSalida & rsMySQL.Fields(I).Name & " = " & rsMySQL.Fields(I) & vbCrLf
+            ParametrosDeSalida = ParametrosDeSalida & rsMySQL.fields(I).Name & " = " & rsMySQL.fields(I) & vbCrLf
         Next I
        'Cerramos la conexion con MySQL
         rsMySQL.Close
@@ -435,26 +434,26 @@ Dim ParametrosDeSalida As String
        
        'Pasamos a variables globales lso resultados del SP
         If Not rsMySQL.EOF Then
-           Fecha_CO = Format(rsMySQL.Fields(0), FormatoFechas)
-           Fecha_CE = Format(rsMySQL.Fields(1), FormatoFechas)
-           Fecha_VPN = Format(rsMySQL.Fields(2), FormatoFechas)
-           Fecha_DB = Format(rsMySQL.Fields(3), FormatoFechas)
-           Fecha_P12 = Format(rsMySQL.Fields(4), FormatoFechas)
+           Fecha_CO = Format(rsMySQL.fields(0), FormatoFechas)
+           Fecha_CE = Format(rsMySQL.fields(1), FormatoFechas)
+           Fecha_VPN = Format(rsMySQL.fields(2), FormatoFechas)
+           Fecha_DB = Format(rsMySQL.fields(3), FormatoFechas)
+           Fecha_P12 = Format(rsMySQL.fields(4), FormatoFechas)
          
-           AgenteRetencion = rsMySQL.Fields(5)
-           MicroEmpresa = rsMySQL.Fields(6)
-           EstadoEmpresa = rsMySQL.Fields(7)
-           DescripcionEstado = rsMySQL.Fields(8)
-           NombreEntidad = rsMySQL.Fields(9)
-           RepresentanteLegal = rsMySQL.Fields(10)
-           MensajeEmpresa = rsMySQL.Fields(11)
-           ComunicadoEntidad = rsMySQL.Fields(12)
-           Cartera = rsMySQL.Fields(13)
-           Cant_FA = rsMySQL.Fields(14)
-           TipoPlan = rsMySQL.Fields(15)
-           SerieFE = rsMySQL.Fields(16)
-           PCActivo = rsMySQL.Fields(17)
-           EstadoUsuario = rsMySQL.Fields(18)
+           AgenteRetencion = rsMySQL.fields(5)
+           MicroEmpresa = rsMySQL.fields(6)
+           EstadoEmpresa = rsMySQL.fields(7)
+           DescripcionEstado = rsMySQL.fields(8)
+           NombreEntidad = rsMySQL.fields(9)
+           RepresentanteLegal = rsMySQL.fields(10)
+           MensajeEmpresa = rsMySQL.fields(11)
+           ComunicadoEntidad = rsMySQL.fields(12)
+           Cartera = rsMySQL.fields(13)
+           Cant_FA = rsMySQL.fields(14)
+           TipoPlan = rsMySQL.fields(15)
+           SerieFE = rsMySQL.fields(16)
+           PCActivo = rsMySQL.fields(17)
+           EstadoUsuario = rsMySQL.fields(18)
            ServidorMySQL = True
         End If
         
@@ -506,8 +505,8 @@ Dim cmdMySQL As ADODB.Command
         
       'Pasamos a variables globales lso resultados del SP
        If Not rsMySQL.EOF Then
-          vAgenteRetencion = rsMySQL.Fields(0)
-          vMicroEmpresa = rsMySQL.Fields(1)
+          vAgenteRetencion = rsMySQL.fields(0)
+          vMicroEmpresa = rsMySQL.fields(1)
        End If
       'Cerramos la conexion con MySQL
        rsMySQL.Close
@@ -556,8 +555,8 @@ Dim cmdMySQL As ADODB.Command
         
       'Pasamos a variables globales lso resultados del SP
        If Not rsMySQL.EOF Then
-          vURL = rsMySQL.Fields(0)
-          vToken = rsMySQL.Fields(1)
+          vURL = rsMySQL.fields(0)
+          vToken = rsMySQL.fields(1)
        End If
       'Cerramos la conexion con MySQL
        rsMySQL.Close
@@ -697,13 +696,14 @@ Dim MiReg As ADODB.Recordset
     End If
 End Sub
 
-Public Sub Actualizar_Base_Datos_SP()
+Public Sub Actualizar_Base_Datos_SP(Solo_SP_FN As Boolean)
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
 Dim MiReg As ADODB.Recordset
 
     Iniciar_Stored_Procedure "Actualizar Base Datos", MiSQL, MiCmd, MiReg
     MiCmd.CommandText = "sp_Actualizar_Base_Datos"
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Solo_SP_FN", adBoolean, adParamInput, 1, Solo_SP_FN)
     Procesar_Stored_Procedure MiCmd, MiReg
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
@@ -715,17 +715,6 @@ Dim MiReg As ADODB.Recordset
 
     Iniciar_Stored_Procedure "Insertar Clientes Auxiliar", MiSQL, MiCmd, MiReg
     MiCmd.CommandText = "sp_Insertar_Clientes_Auxiliar"
-    Procesar_Stored_Procedure MiCmd, MiReg
-    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
-End Sub
-
-Public Sub Actualizar_SP_FN_SP()
-Dim MiSQL As ADODB.Connection
-Dim MiCmd As ADODB.Command
-Dim MiReg As ADODB.Recordset
-
-    Iniciar_Stored_Procedure "Actualizar SP FN", MiSQL, MiCmd, MiReg
-    MiCmd.CommandText = "sp_Actualizar_SP_FN"
     Procesar_Stored_Procedure MiCmd, MiReg
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
@@ -882,6 +871,54 @@ Dim FechaFacSP As String
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
 
+Public Sub Grabar_Facturas_x_PreFA_SP(TFA As Tipo_Facturas)
+Dim MiSQL As ADODB.Connection
+Dim MiCmd As ADODB.Command
+Dim MiReg As ADODB.Recordset
+    
+    TFA.Desde = 0
+    TFA.Hasta = 0
+    Iniciar_Stored_Procedure "Generacion de PreFacturas en Bloque", MiSQL, MiCmd, MiReg
+    MiCmd.CommandText = "sp_Grabar_Facturas_x_PreFA"
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@NumModulo", adVarChar, adParamInput, 2, NumModulo)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Usuario", adVarChar, adParamInput, 10, CodigoUsuario)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaFact", adVarChar, adParamOutput, 10, TFA.Fecha)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@FacturaDesde", adInteger, adParamOutput, 14, TFA.Desde)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@FacturaHasta", adInteger, adParamOutput, 14, TFA.Hasta)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@CantidadClientes", adInteger, adParamOutput, 14, TFA.CantFact)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@ValorTotal", adCurrency, adParamOutput, 16, TFA.SubTotal)
+    Procesar_Stored_Procedure MiCmd, MiReg
+   'Recojemos los datos salientes de los campos que retorna valor el store procedure del SQL Server
+    TFA.Fecha = MiCmd.Parameters("@FechaFact").value
+    TFA.Desde = MiCmd.Parameters("@FacturaDesde").value
+    TFA.Hasta = MiCmd.Parameters("@FacturaHasta").value
+    TFA.CantFact = MiCmd.Parameters("@CantidadClientes").value
+    TFA.SubTotal = MiCmd.Parameters("@ValorTotal").value
+    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+End Sub
+
+Public Sub Grabar_Abonos_Bancos_SP(TFA As Tipo_Facturas)
+Dim MiSQL As ADODB.Connection
+Dim MiCmd As ADODB.Command
+Dim MiReg As ADODB.Recordset
+    
+    Iniciar_Stored_Procedure "Generacion de Abonos del Banco en Bloque", MiSQL, MiCmd, MiReg
+    MiCmd.CommandText = "sp_Grabar_Abonos_Bancos"
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@NumModulo", adVarChar, adParamInput, 2, NumModulo)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Usuario", adVarChar, adParamInput, 10, CodigoUsuario)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@CantidadAbonos", adInteger, adParamOutput, 14, TFA.CantFact)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@ValorTotal", adCurrency, adParamOutput, 16, TFA.SubTotal)
+    Procesar_Stored_Procedure MiCmd, MiReg
+   'Recojemos los datos salientes de los campos que retorna valor el store procedure del SQL Server
+    TFA.CantFact = MiCmd.Parameters("@CantidadAbonos").value
+    TFA.SubTotal = MiCmd.Parameters("@ValorTotal").value
+    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+End Sub
+
 Public Sub Grabar_Comprobante_SP(Comp As Comprobantes, CtaConciliada As String)
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
@@ -892,7 +929,7 @@ Dim JSONResult As String
 
     JSONComprobante = "{"
     With Comp
-        'MsgBox "Desktop Test: " & .CodigoB & " - " & .Beneficiario
+        'MsgBox "Desktop Test: " & .CodigoB & " - " & .Beneficiario & ", Periodo: " & .Periodo
         'Datos por default
         .Ctas_Modificar = ""
         .CodigoInvModificar = "0"
@@ -977,10 +1014,10 @@ Dim JSONResult As String
     Comp.Numero = pJSON.Item("Numero")
     Comp.GrabadoExitoso = CBool(pJSON.Item("Ok_Save"))
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
-    If Not Comp.GrabadoExitoso Then
-       Clipboard.Clear
-       Clipboard.SetText JSONComprobante & vbCrLf & String(80, "-") & vbCrLf & JSONResult
-    End If
+''    If Not Comp.GrabadoExitoso Then
+''       Clipboard.Clear
+''       Clipboard.SetText JSONComprobante & vbCrLf & String(80, "-") & vbCrLf & JSONResult
+''    End If
 End Sub
 
 Public Sub Grabar_Factura_SP(TFA As Tipo_Facturas)
@@ -2085,20 +2122,20 @@ Dim JSONResult As String
   Select_AdoDB AdoRegistros, sSQL
   With AdoRegistros
    If .RecordCount > 0 Then
-       C1.Fecha = .Fields("Fecha")
-       C1.Beneficiario = .Fields("Cliente")
-       C1.Email = .Fields("Email")
-       C1.Cotizacion = .Fields("Cotizacion")
-       C1.Monto_Total = .Fields("Monto_Total")
-       C1.Efectivo = .Fields("Efectivo")
-       C1.RUC_CI = .Fields("CI_RUC")
-       C1.TD = .Fields("TD")
-       C1.Fecha = .Fields("Fecha")
-       C1.Direccion = .Fields("Direccion")
-       C1.Telefono = .Fields("Telefono")
-       C1.Grupo = .Fields("Grupo")
-       If .Fields("RISE") Then C1.TipoContribuyente = C1.TipoContribuyente & " RISE"
-       If .Fields("Especial") Then C1.TipoContribuyente = C1.TipoContribuyente & " Contribuyente especial"
+       C1.Fecha = .fields("Fecha")
+       C1.Beneficiario = .fields("Cliente")
+       C1.Email = .fields("Email")
+       C1.Cotizacion = .fields("Cotizacion")
+       C1.Monto_Total = .fields("Monto_Total")
+       C1.Efectivo = .fields("Efectivo")
+       C1.RUC_CI = .fields("CI_RUC")
+       C1.TD = .fields("TD")
+       C1.Fecha = .fields("Fecha")
+       C1.Direccion = .fields("Direccion")
+       C1.Telefono = .fields("Telefono")
+       C1.Grupo = .fields("Grupo")
+       If .fields("RISE") Then C1.TipoContribuyente = C1.TipoContribuyente & " RISE"
+       If .fields("Especial") Then C1.TipoContribuyente = C1.TipoContribuyente & " Contribuyente especial"
       'TipoSRI = consulta_RUC_SRI( C1.RUC_CI)
        If Len(C1.RUC_CI) = 13 Then Tipo_Contribuyente_SP_MySQL C1.RUC_CI, TipoSRI.MicroEmpresa, TipoSRI.AgenteRetencion
        Select Case C1.TD
@@ -2228,13 +2265,11 @@ Dim NumFile As Long
     RatonNormal
 End Sub
 
-Public Sub Subir_Archivo_Abonos_Bancos_SP(PathTXT As String, TipoBanco As String)
+Public Sub Subir_Archivo_Abonos_Bancos_SP(PathTXT As String, TipoBanco As String, CodCxC As String, OrdenNo As String, Cta_Banco As String, Resultado As String)
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
 Dim MiReg As ADODB.Recordset
 
-Dim FileTXT As String
-Dim PathTXTT As String
 Dim LineFile As String
 Dim LineTXT As String
 Dim Separador As String
@@ -2242,91 +2277,90 @@ Dim TablaAbonos As String
 
 Dim CampoEsNumero As Boolean
 Dim AnchoMaxCampo As Integer
+Dim CIni As Integer
+Dim CFin As Integer
+Dim ContCampos As Integer
 Dim NumFile As Long
 
     RatonReloj
     If Len(PathTXT) > 1 Then
-       Separador = Ninguno
-       FileTXT = Right$(PathTXT, Len(PathTXT) - InStrRev(PathTXT, "\"))
-       PathTXTT = MidStrg(PathTXT, 1, Len(PathTXT) - Len(FileTXT))
-       
-       LineTXT = ""
+       Separador = vbCrLf
        NumFile = FreeFile
+       Open PathTXT For Input As #NumFile
+          Line Input #NumFile, LineFile
+          ContCampos = 0
+          Do While Len(LineFile) > 0
+             ReDim Preserve TipoC(ContCampos + 1) As Campos_Tabla
+             TipoC(ContCampos).Campo = "C" & Format(ContCampos, "00")
+             TipoC(ContCampos).Ancho = 0
+             If InStr(LineFile, "|") > 0 Then Separador = "|"
+             If InStr(LineFile, ",") > 0 Then Separador = ","
+             If InStr(LineFile, ";") > 0 Then Separador = ";"
+             If InStr(LineFile, vbTab) > 0 Then Separador = vbTab
+             CIni = InStr(LineFile, Separador)
+             If CIni = 0 Then LineFile = "" Else LineFile = MidStrg(LineFile, CIni + 1, Len(LineFile))
+             ContCampos = ContCampos + 1
+          Loop
+       Close #NumFile
+       
+      'MsgBox "Desktop Test: " & Asc(Separador) & vbCrLf & ContCampos
+       
        Open PathTXT For Input As #NumFile
        Do While Not EOF(NumFile)
           Line Input #NumFile, LineFile
-          If Separador = Ninguno And InStr(LineFile, vbTab) > 0 Then Separador = vbTab
-          LineTXT = LineTXT & LineFile & vbCrLf
+          ContCampos = 0
+          LineTXT = LineFile
+         'MsgBox "Deskto Test: " & LineTXT
+          Do While Len(LineTXT) > 0
+             CIni = InStr(LineTXT, Separador)
+             CFin = TipoC(ContCampos).Ancho
+             If CIni = 0 Then
+                CIni = Len(LineTXT)
+                LineTXT = ""
+             Else
+                LineTXT = MidStrg(LineTXT, CIni + 1, Len(LineTXT))
+             End If
+            'MsgBox "Deskto Test: F [" & ContCampos & "] - (" & Separador & "):" & vbCrLf & LineTXT
+             If CIni > CFin Then TipoC(ContCampos).Ancho = CIni
+             ContCampos = ContCampos + 1
+          Loop
        Loop
        Close #NumFile
-       
-       'If InStr(LineTXT, vbCrLf) = 0 Then
-         'MsgBox LineTXT
-       '   LineTXT = Replace(LineTXT, vbLf, vbCrLf)
-          NumFile = FreeFile
-          Open PathTXTT & FileTXT For Output As #NumFile
-          Print #NumFile, MidStrg(LineTXT, 1, Len(LineTXT) - 2)
-          Close #NumFile
-      ' End If
-       
-       LineFile = Replace(LineTXT, vbCrLf, vbTab)
-       No_Hasta = 1
-       AnchoMaxCampo = 0
-       Do While Len(LineFile) > 0 And No_Hasta > 0
-          No_Hasta = InStr(LineFile, Separador)
-          If No_Hasta > AnchoMaxCampo Then AnchoMaxCampo = No_Hasta
-          LineFile = TrimStrg(MidStrg(LineFile, No_Hasta + 1, Len(LineFile)))
-       Loop
-       
-       CantCampos = 0
+
        TablaAbonos = "CREATE TABLE Asiento_Bancos_" & CodigoUsuario & " ("
-       If Separador = vbTab Then
-          NumFile = FreeFile
-          Open PathTXT For Input As #NumFile
-               Line Input #NumFile, LineFile
-               No_Hasta = 1
-               Do While Len(LineFile) > 0 And No_Hasta > 0
-                   No_Hasta = InStr(LineFile, Separador)
-                   CampoEsNumero = False
-                   If No_Hasta > 1 Then CampoEsNumero = IsNumeric(Mid(LineFile, 1, No_Hasta - 1))
-                   If CampoEsNumero Then
-                      TablaAbonos = TablaAbonos & "C" & Format$(CantCampos, "00") & " VARCHAR(14), "
-'''                   ElseIf No_Hasta <= 13 Then
-'''                      TablaAbonos = TablaAbonos & "C" & Format$(CantCampos, "00") & " VARCHAR(" & No_Hasta + 1 & "), "
-                   Else
-                      TablaAbonos = TablaAbonos & "C" & Format$(CantCampos, "00") & " VARCHAR(" & AnchoMaxCampo + 1 & "), "
-                   End If
-                  'MsgBox CantCampos & vbCrLf & No_Hasta & vbCrLf & LineFile
-                   LineFile = TrimStrg(MidStrg(LineFile, No_Hasta + 1, Len(LineFile)))
-                   CantCampos = CantCampos + 1
-               Loop
-          Close #NumFile
-       Else
-           TablaAbonos = TablaAbonos & "C00" & " VARCHAR(1024), "
-       End If
-       TablaAbonos = MidStrg(TablaAbonos, 1, Len(TablaAbonos) - 2) & ")"
-      'MsgBox "Ok: " & vbCrLf & TablaAbonos
-      '----------------------------------------------------------------------------
-        NumFile = FreeFile
-        Open RutaSysBases & "\TEMP\Campos_Tabla.txt" For Output As #NumFile
-        Print #NumFile, TablaAbonos
-        Close #NumFile
-      '----------------------------------------------------------------------------
-       If Len(TablaAbonos) >= 10 Then
-          FileTXT = Right$(PathTXT, Len(PathTXT) - InStrRev(PathTXT, "\"))
-          PathTXTT = MidStrg(PathTXT, 1, Len(PathTXT) - Len(FileTXT))
-         'MsgBox PathTXTT & vbCrLf & FileTXT
+       For CIni = 0 To UBound(TipoC) - 1
+           TablaAbonos = TablaAbonos & TipoC(CIni).Campo & " VARCHAR(" & TipoC(CIni).Ancho + 2 & "),"
+       Next CIni
+       TablaAbonos = MidStrg(TablaAbonos, 1, Len(TablaAbonos) - 1) & ")"
+      '----------------------------------------------
+'       Clipboard.Clear
+'       Clipboard.SetText TablaAbonos
+'       MsgBox "Desktop Test:" & vbCrLf & TipoBanco & vbCrLf & PathTXT & vbCrLf & TablaAbonos
+'       Exit Sub
+      '----------------------------------------------
+       If Len(TablaAbonos) >= 10 And Len(CodCxC) <= 10 Then
           Iniciar_Stored_Procedure "sp Subir Archivo Abonos Bancos", MiSQL, MiCmd, MiReg
           MiCmd.CommandText = "sp_Subir_Archivo_Abonos_Bancos"
-          MiCmd.Parameters.Append MiCmd.CreateParameter("@strIPServidor", adVarChar, adParamInput, 100, strIPServidor)
-          MiCmd.Parameters.Append MiCmd.CreateParameter("@PathFileTXT", adVarChar, adParamInput, Len(PathTXTT) + 2, PathTXTT)
-          MiCmd.Parameters.Append MiCmd.CreateParameter("@FileTXT", adVarChar, adParamInput, 100, FileTXT)
+         'Parametros de Entrada
+          MiCmd.Parameters.Append MiCmd.CreateParameter("@strIPServidor", adVarChar, adParamInput, 30, strIPServidor)
+          MiCmd.Parameters.Append MiCmd.CreateParameter("@NumModulo", adVarChar, adParamInput, 2, NumModulo)
+          MiCmd.Parameters.Append MiCmd.CreateParameter("@PathFileTXT", adVarChar, adParamInput, 255, PathTXT)
+          MiCmd.Parameters.Append MiCmd.CreateParameter("@Separador", adVarChar, adParamInput, 2, Separador)
           MiCmd.Parameters.Append MiCmd.CreateParameter("@Usuario", adVarChar, adParamInput, 10, CodigoUsuario)
           MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
           MiCmd.Parameters.Append MiCmd.CreateParameter("@TipoBanco", adVarChar, adParamInput, 20, TipoBanco)
-          MiCmd.Parameters.Append MiCmd.CreateParameter("@Tabla_Bancos", adVarChar, adParamInput, Len(TablaAbonos) + 10, TablaAbonos)
+          MiCmd.Parameters.Append MiCmd.CreateParameter("@CodCxC", adVarChar, adParamInput, 10, CodCxC)
+          MiCmd.Parameters.Append MiCmd.CreateParameter("@OrdenNo", adVarChar, adParamInput, 10, OrdenNo)
+          MiCmd.Parameters.Append MiCmd.CreateParameter("@Cta_Banco", adVarChar, adParamInput, 18, Cta_Banco)
+          MiCmd.Parameters.Append MiCmd.CreateParameter("@Tabla_Bancos", adVarChar, adParamInput, Len(TablaAbonos) + 2, TablaAbonos)
+         'Parametros de Salida
+          MiCmd.Parameters.Append MiCmd.CreateParameter("@Resultado", adVarChar, adParamOutput, 100, Resultado)
+         'Recibimos datos del resultado del SP
           Procesar_Stored_Procedure MiCmd, MiReg
+          Resultado = MiCmd.Parameters("@Resultado").value
           Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+       Else
+          Resultado = "Falta seleccionar mas datos para procesar"
        End If
     End If
     RatonNormal

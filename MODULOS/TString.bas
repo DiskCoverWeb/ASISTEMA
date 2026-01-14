@@ -14,6 +14,7 @@ Global URLHTTP As String
 Global URLParams As String
 Global XML As String
 Global HTML As String
+Global ResultadoSubida As String
 '-----------------------------------------
 Global strIPServidor As String
 Global strNombreBaseDatos As String

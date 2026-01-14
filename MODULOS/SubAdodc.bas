@@ -117,8 +117,7 @@ Dim sSQL1 As String
     sSQL1 = "SELECT Codigo, Porc " _
           & "FROM Tabla_Por_ICE_IVA " _
           & "WHERE Codigo IN ('IESS_Per','IESS_Pat','IESS_ExtC','Sueldo_Bas','Canasta_Ba') " _
-          & "AND Fecha_Inicio <= #" & BuscarFecha(FechaMes) & "# " _
-          & "AND Fecha_Final >= #" & BuscarFecha(FechaMes) & "# " _
+          & "AND #" & BuscarFecha(FechaMes) & "# BETWEEN Fecha_Inicio and Fecha_Final " _
           & "ORDER BY Codigo "
     Select_AdoDB RegIESS, sSQL1
     With RegIESS
@@ -2737,10 +2736,10 @@ On Error GoTo Errorhandler
       SQuerys = CompilarSQL(SQuerys)
       Generar_File_SQL NombreFile, SQuerys
      'MsgBox AdoStrCnn
-     'MsgBox SQuerys
+     
      'Clipboard.Clear
      'Clipboard.SetText SQuerys
-      
+     'MsgBox SQuerys
       Dtas.RecordSource = SQuerys
       Dtas.Refresh
 
@@ -2761,7 +2760,7 @@ On Error GoTo Errorhandler
      'Array para almacenar el ancho de cada columna
       ReDim Vect_Dec(CantCampos) As Campos_Decimal
      'Enceramos la impresion
-      DBGMalla.HeadFont.bold = True
+      DBGMalla.HeadFont.Bold = True
       For Col = 0 To CantCampos - 1
           Vect_Dec(Col).Campo = Dtas.Recordset.fields(Col).Name
           Vect_Dec(Col).CantDec = 2
@@ -6724,7 +6723,7 @@ Dim columnas As Long
            
              'Generamos encabezado con colores
               With APIExcel.Range(APIExcel.cells(1, 1), APIExcel.cells(1, columnas))
-                  .Font.bold = True
+                  .Font.Bold = True
                   .Interior.color = RGB(128, 128, 128)
                   .HorizontalAlignment = 3
                  '.VerticalAlignment = 2
@@ -6732,7 +6731,7 @@ Dim columnas As Long
               End With
            
               With APIExcel.Range(APIExcel.cells(2, 1), APIExcel.cells(2, columnas))
-                  .Font.bold = True
+                  .Font.Bold = True
                   .Interior.color = RGB(168, 168, 0)
                   .HorizontalAlignment = 3
                   .VerticalAlignment = 2
@@ -6811,7 +6810,7 @@ Dim columnas As Long
            
             'Generamos encabezado con colores
              With APIExcel.Range(APIExcel.cells(1, 1), APIExcel.cells(1, columnas))
-                 .Font.bold = True
+                 .Font.Bold = True
                  .Interior.color = RGB(128, 128, 128)
                  .HorizontalAlignment = 3
                 '.VerticalAlignment = 2
@@ -6819,7 +6818,7 @@ Dim columnas As Long
              End With
            
              With APIExcel.Range(APIExcel.cells(2, 1), APIExcel.cells(2, columnas))
-                 .Font.bold = True
+                 .Font.Bold = True
                  .Interior.color = RGB(168, 168, 0)
                  .HorizontalAlignment = 3
                  .VerticalAlignment = 2

@@ -31,9 +31,9 @@ Begin VB.Form ListFact
       Caption         =   "| SELECCIONE EL EJECUTIVO DE VENTA |"
       ForeColor       =   &H0000FFFF&
       Height          =   3690
-      Left            =   14805
+      Left            =   14595
       TabIndex        =   57
-      Top             =   3465
+      Top             =   3780
       Visible         =   0   'False
       Width           =   8520
       Begin VB.CommandButton Command1 
@@ -111,7 +111,7 @@ Begin VB.Form ListFact
       Height          =   3540
       Left            =   525
       TabIndex        =   66
-      Top             =   5355
+      Top             =   5880
       Visible         =   0   'False
       Width           =   11670
       _ExtentX        =   20585
@@ -159,7 +159,7 @@ Begin VB.Form ListFact
       ScrollBars      =   3  'Both
       TabIndex        =   67
       Text            =   "ListFact.frx":0D41
-      Top             =   5250
+      Top             =   5670
       Visible         =   0   'False
       Width           =   13770
    End
@@ -167,7 +167,7 @@ Begin VB.Form ListFact
       Height          =   1620
       Left            =   14490
       TabIndex        =   75
-      Top             =   735
+      Top             =   840
       Visible         =   0   'False
       Width           =   2220
    End
@@ -177,9 +177,9 @@ Begin VB.Form ListFact
       Left            =   105
       TabIndex        =   65
       ToolTipText     =   "<Alt+F9> Cambia el Producto, <Alt+F10> Cambia la Bodega, <Ctrl+S> Actualiza la Serie, "
-      Top             =   5145
-      Width           =   14610
-      _ExtentX        =   25770
+      Top             =   5460
+      Width           =   14505
+      _ExtentX        =   25585
       _ExtentY        =   3545
       _Version        =   393216
       AllowUpdate     =   -1  'True
@@ -245,7 +245,7 @@ Begin VB.Form ListFact
       Height          =   540
       Left            =   105
       TabIndex        =   69
-      Top             =   10185
+      Top             =   10500
       Visible         =   0   'False
       Width           =   7890
       Begin VB.Label LabelHaber 
@@ -314,7 +314,7 @@ Begin VB.Form ListFact
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H00800000&
-      Height          =   1080
+      Height          =   1395
       Left            =   9765
       MultiLine       =   -1  'True
       ScrollBars      =   2  'Vertical
@@ -326,7 +326,7 @@ Begin VB.Form ListFact
       Height          =   750
       Left            =   105
       TabIndex        =   39
-      Top             =   9345
+      Top             =   9660
       Width           =   12930
       Begin VB.Label LabelSaldoAct 
          Alignment       =   1  'Right Justify
@@ -511,7 +511,7 @@ Begin VB.Form ListFact
       MaxLength       =   100
       TabIndex        =   23
       ToolTipText     =   "<Ctrl+O> Coloca una Observacion a la factura"
-      Top             =   3465
+      Top             =   3780
       Width           =   13035
    End
    Begin VB.TextBox TxtAutorizacion 
@@ -1035,7 +1035,7 @@ Begin VB.Form ListFact
       Height          =   390
       Left            =   105
       TabIndex        =   27
-      Top             =   4725
+      Top             =   5040
       Width           =   14400
       _ExtentX        =   25400
       _ExtentY        =   688
@@ -1065,13 +1065,13 @@ Begin VB.Form ListFact
       Height          =   330
       Left            =   105
       TabIndex        =   24
-      Top             =   8925
+      Top             =   9660
       Width           =   435
    End
    Begin MSAdodcLib.Adodc AdoDetAcomp 
       Height          =   330
       Left            =   2415
-      Top             =   5880
+      Top             =   6615
       Visible         =   0   'False
       Width           =   2325
       _ExtentX        =   4101
@@ -1118,7 +1118,7 @@ Begin VB.Form ListFact
    Begin MSAdodcLib.Adodc AdoDiarioCaja 
       Height          =   330
       Left            =   2415
-      Top             =   6510
+      Top             =   7245
       Visible         =   0   'False
       Width           =   2220
       _ExtentX        =   3916
@@ -1165,7 +1165,7 @@ Begin VB.Form ListFact
    Begin MSAdodcLib.Adodc AdoDetalle 
       Height          =   330
       Left            =   210
-      Top             =   5880
+      Top             =   6615
       Visible         =   0   'False
       Width           =   2220
       _ExtentX        =   3916
@@ -1212,7 +1212,7 @@ Begin VB.Form ListFact
    Begin MSAdodcLib.Adodc AdoFactura 
       Height          =   330
       Left            =   210
-      Top             =   6195
+      Top             =   6930
       Visible         =   0   'False
       Width           =   2220
       _ExtentX        =   3916
@@ -1259,7 +1259,7 @@ Begin VB.Form ListFact
    Begin MSAdodcLib.Adodc AdoArticulo 
       Height          =   330
       Left            =   210
-      Top             =   6510
+      Top             =   7245
       Visible         =   0   'False
       Width           =   2220
       _ExtentX        =   3916
@@ -1305,7 +1305,7 @@ Begin VB.Form ListFact
    End
    Begin MSComctlLib.ImageList ImageList1 
       Left            =   13560
-      Top             =   9360
+      Top             =   9675
       _ExtentX        =   1005
       _ExtentY        =   1005
       BackColor       =   -2147483643
@@ -1444,7 +1444,7 @@ Begin VB.Form ListFact
    Begin MSAdodcLib.Adodc AdoEjecutivo 
       Height          =   330
       Left            =   2415
-      Top             =   6195
+      Top             =   6930
       Visible         =   0   'False
       Width           =   2325
       _ExtentX        =   4101
@@ -1490,13 +1490,13 @@ Begin VB.Form ListFact
    End
    Begin MSComctlLib.Toolbar TBarFactura 
       Align           =   1  'Align Top
-      Height          =   1800
+      Height          =   660
       Left            =   0
       TabIndex        =   68
       Top             =   0
       Width           =   11280
       _ExtentX        =   19897
-      _ExtentY        =   3175
+      _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
       Appearance      =   1
@@ -1784,7 +1784,7 @@ Begin VB.Form ListFact
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H00C0FFFF&
-      Height          =   1065
+      Height          =   1380
       Left            =   105
       TabIndex        =   13
       Top             =   2310
@@ -1798,7 +1798,7 @@ Begin VB.Form ListFact
       Height          =   330
       Left            =   11235
       TabIndex        =   19
-      Top             =   4305
+      Top             =   4620
       Width           =   960
    End
    Begin VB.Label Label14 
@@ -1807,7 +1807,7 @@ Begin VB.Form ListFact
       Height          =   330
       Left            =   9765
       TabIndex        =   18
-      Top             =   4305
+      Top             =   4620
       Width           =   1485
    End
    Begin VB.Label LabelTransp 
@@ -1816,7 +1816,7 @@ Begin VB.Form ListFact
       Height          =   330
       Left            =   1470
       TabIndex        =   16
-      Top             =   3885
+      Top             =   4200
       Width           =   13035
    End
    Begin VB.Label LabelVendedor 
@@ -1845,7 +1845,7 @@ Begin VB.Form ListFact
       Height          =   330
       Left            =   105
       TabIndex        =   15
-      Top             =   3885
+      Top             =   4200
       Width           =   1380
    End
    Begin VB.Label Label12 
@@ -1854,7 +1854,7 @@ Begin VB.Form ListFact
       Height          =   330
       Left            =   105
       TabIndex        =   17
-      Top             =   3465
+      Top             =   3780
       Width           =   1380
    End
    Begin VB.Label LabelCliente 
@@ -1873,7 +1873,7 @@ Begin VB.Form ListFact
       Height          =   330
       Left            =   1470
       TabIndex        =   21
-      Top             =   4305
+      Top             =   4620
       Width           =   8205
    End
    Begin VB.Label Label17 
@@ -1882,7 +1882,7 @@ Begin VB.Form ListFact
       Height          =   330
       Left            =   105
       TabIndex        =   22
-      Top             =   4305
+      Top             =   4620
       Width           =   1380
    End
    Begin VB.Label Label10 
@@ -2682,32 +2682,47 @@ Public Sub Cambia_Fechas_Facturas()
      TextoValido TextFHasta
      Factura_Desde = Val(TextFDesde)
      Factura_Hasta = Val(TextFHasta)
-     Control_Procesos "F", "Cambio de Fecha desde " & Factura_Desde & " a la " & Factura_Hasta
-     If (Factura_Hasta - Factura_Desde) >= 0 Then
-        RatonReloj
-        SQL2 = "UPDATE Facturas " _
-             & "SET Fecha = #" & Mifecha & "# " _
-             & "WHERE Factura BETWEEN " & Factura_Desde & " and " & Factura_Hasta & " " _
-             & "AND TC = '" & FA.TC & "' " _
-             & "AND Serie = '" & FA.Serie & "' " _
-             & "AND Autorizacion = '" & FA.Autorizacion & "' " _
-             & "AND Item = '" & NumEmpresa & "' " _
-             & "AND Periodo = '" & Periodo_Contable & "' "
-        Ejecutar_SQL_SP SQL2
-        SQL2 = "UPDATE Detalle_Factura " _
-             & "SET Fecha = #" & Mifecha & "# " _
-             & "WHERE Factura BETWEEN " & Factura_Desde & " and " & Factura_Hasta & " " _
-             & "AND TC = '" & FA.TC & "' " _
-             & "AND Serie = '" & FA.Serie & "' " _
-             & "AND Autorizacion = '" & FA.Autorizacion & "' " _
-             & "AND Item = '" & NumEmpresa & "' " _
-             & "AND Periodo = '" & Periodo_Contable & "' "
-        Ejecutar_SQL_SP SQL2
-        RatonNormal
-        MsgBox "Proceso Terminado"
-    Else
-      MsgBox "No se puede procesar el rando de Facturas"
-    End If
+     
+     Titulo = "CONFIRMACION DE ACTUALIZACION"
+     Mensajes = "¿Realmente desea cambiar a la fecha " & MBFecha.Text & " la emision de " & FA.TC & " Serie " & FA.Serie & vbCrLf _
+              & "Autorizacion: " & FA.Autorizacion & " las facturas desde: " & Format(Factura_Desde, "000000000") & " al " & Format(Factura_Hasta, "000000000") & vbCrLf
+     If BoxMensaje = vbYes Then
+        Control_Procesos "F", "Cambio de Fecha desde " & Factura_Desde & " a la " & Factura_Hasta
+        If (Factura_Hasta - Factura_Desde) >= 0 Then
+           RatonReloj
+           SQL2 = "UPDATE Facturas " _
+                & "SET Fecha = #" & Mifecha & "# " _
+                & "WHERE Item = '" & NumEmpresa & "' " _
+                & "AND Periodo = '" & Periodo_Contable & "' " _
+                & "AND TC = '" & FA.TC & "' " _
+                & "AND Serie = '" & FA.Serie & "' " _
+                & "AND Autorizacion = '" & FA.Autorizacion & "' " _
+                & "AND Factura BETWEEN " & Factura_Desde & " and " & Factura_Hasta & " "
+           Ejecutar_SQL_SP SQL2
+           SQL2 = "UPDATE Detalle_Factura " _
+                & "SET Fecha = #" & Mifecha & "# " _
+                & "WHERE Item = '" & NumEmpresa & "' " _
+                & "AND Periodo = '" & Periodo_Contable & "' " _
+                & "AND TC = '" & FA.TC & "' " _
+                & "AND Serie = '" & FA.Serie & "' " _
+                & "AND Autorizacion = '" & FA.Autorizacion & "' " _
+                & "AND Factura BETWEEN " & Factura_Desde & " and " & Factura_Hasta & " "
+           Ejecutar_SQL_SP SQL2
+           SQL2 = "UPDATE Trans_Abonos " _
+                & "SET Fecha = #" & Mifecha & "# " _
+                & "WHERE Item = '" & NumEmpresa & "' " _
+                & "AND Periodo = '" & Periodo_Contable & "' " _
+                & "AND TP = '" & FA.TC & "' " _
+                & "AND Serie = '" & FA.Serie & "' " _
+                & "AND Autorizacion = '" & FA.Autorizacion & "' " _
+                & "AND Factura BETWEEN " & Factura_Desde & " and " & Factura_Hasta & " "
+           Ejecutar_SQL_SP SQL2
+           RatonNormal
+           MsgBox "Proceso Terminado"
+        Else
+           MsgBox "No se puede procesar el rando de Facturas"
+        End If
+     End If
   End If
 End Sub
 
@@ -2818,7 +2833,7 @@ Private Sub DCTipo_LostFocus()
 End Sub
 
 Private Sub DGDetalle_BeforeDelete(Cancel As Integer)
-  'If OpcionTab <> 1 Then
+ 'If OpcionTab <> 1 Then
   Cancel = True
 End Sub
 
@@ -3245,6 +3260,7 @@ Private Sub Form_Activate()
         & "ORDER BY TC "
    SelectDB_Combo DCTipo, AdoTipo, sSQL, "TC"
    If AdoTipo.Recordset.RecordCount > 0 Then
+      DCTipo.Text = "FA"
       FA.TC = DCTipo
       FA.Serie = "001001"
       FA.Factura = 0
@@ -3281,7 +3297,7 @@ Private Sub Form_Load()
    ConectarAdodc AdoEjecutivo
    ConectarAdodc AdoAutorizacion
    
-   SRI_Obtener_Datos_Comprobantes_Electronicos
+  'SRI_Obtener_Datos_Comprobantes_Electronicos
 End Sub
 
 Public Sub BuscarFactura()
@@ -3341,6 +3357,7 @@ Public Sub BuscarFactura()
      Label8.Caption = "Razon Social: " & FA.Razon_Social & ", CI/RUC: " & FA.CI_RUC & vbCrLf _
                     & "Dirección: " & FA.DireccionC & ", Teléfono: " & FA.TelefonoC & vbCrLf _
                     & "Emails: " & FA.EmailC & "; " & FA.EmailR & vbCrLf _
+                    & "Forma de pago: " & FA.Forma_Pago & vbCrLf _
                     & "Elaborado por: " & FA.Digitador & " (" & FA.Hora & ")"
      LabelVendedor.Caption = " Ejecutivo: " & FA.Ejecutivo_Venta
      DireccionGuia = FA.Comercial

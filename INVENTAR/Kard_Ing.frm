@@ -15,7 +15,7 @@ Begin VB.Form Kard_Ing
    MDIChild        =   -1  'True
    Picture         =   "Kard_Ing.frx":0442
    ScaleHeight     =   15615
-   ScaleWidth      =   28560
+   ScaleWidth      =   15960
    WindowState     =   2  'Maximized
    Begin VB.TextBox TxtSerie 
       Alignment       =   1  'Right Justify
@@ -677,7 +677,7 @@ Begin VB.Form Kard_Ing
    Begin MSDataGridLib.DataGrid DGKardex 
       Bindings        =   "Kard_Ing.frx":108D
       Height          =   3060
-      Left            =   105
+      Left            =   0
       TabIndex        =   66
       Top             =   4725
       Width           =   15030
@@ -2419,9 +2419,13 @@ Dim PVP3 As Currency
              Entrada = Redondear(CCur(obj_Worksheet.cells(I, 1).value), 2)
              CodigoBarra = TrimStrg(obj_Worksheet.cells(I, 2).value)
              CodigoInv = TrimStrg(obj_Worksheet.cells(I, 3).value)
+             Costo = TrimStrg(obj_Worksheet.cells(I, 4).value)
              PVP = obj_Worksheet.cells(I, 5).value
              PVP2 = obj_Worksheet.cells(I, 6).value
              PVP3 = obj_Worksheet.cells(I, 7).value
+             CadenaParcial = obj_Worksheet.cells(I, 9).value
+             Tasa = Val(obj_Worksheet.cells(I, 10).value)
+             'MsgBox "Desktop Test"
              If AdoInv.Recordset.RecordCount > 0 Then
                 AdoInv.Recordset.MoveFirst
                 AdoInv.Recordset.Find ("Codigo_Inv Like '" & CodigoInv & "' ")
@@ -2471,6 +2475,8 @@ Dim PVP3 As Currency
                 SetFields AdoKardex, "Codigo_B", CodigoCliente
                 SetFields AdoKardex, "COD_BAR", CodigoBarra
                 SetFields AdoKardex, "ORDEN", TextOrden
+                If Tasa > 0 Then SetFields AdoKardex, "Peso", Tasa
+                If Len(CadenaParcial) > 1 Then SetFields AdoKardex, "Detalle", UCase(MidStrg(CadenaParcial, 1, 60))
                 SetUpdate AdoKardex
                 
                 sSQL = "UPDATE Catalogo_Productos " _

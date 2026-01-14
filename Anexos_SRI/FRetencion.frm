@@ -6,18 +6,18 @@ Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Begin VB.Form FRetencion 
    BackColor       =   &H00C0FFFF&
-   ClientHeight    =   7680
+   ClientHeight    =   7815
    ClientLeft      =   60
    ClientTop       =   345
-   ClientWidth     =   11895
+   ClientWidth     =   15960
    FillColor       =   &H00FFC0C0&
    Icon            =   "FRetencion.frx":0000
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
    MouseIcon       =   "FRetencion.frx":030A
-   ScaleHeight     =   8274.749
+   ScaleHeight     =   16824.25
    ScaleMode       =   0  'User
-   ScaleWidth      =   11976.19
+   ScaleWidth      =   13777.08
    WindowState     =   2  'Maximized
    Begin VB.TextBox TxtSalarioBasico 
       Alignment       =   1  'Right Justify
@@ -33,9 +33,9 @@ Begin VB.Form FRetencion
       EndProperty
       ForeColor       =   &H000000FF&
       Height          =   330
-      Left            =   3885
+      Left            =   7560
       MaxLength       =   10
-      TabIndex        =   4
+      TabIndex        =   6
       Text            =   "0.00"
       Top             =   105
       Width           =   1800
@@ -53,11 +53,11 @@ Begin VB.Form FRetencion
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H00FF0000&
-      Height          =   645
+      Height          =   855
       Left            =   105
       TabIndex        =   0
-      Top             =   105
-      Width           =   2220
+      Top             =   0
+      Width           =   1065
       Begin VB.OptionButton OpcCosta 
          BackColor       =   &H00C0FFFF&
          Caption         =   "Costa"
@@ -71,10 +71,10 @@ Begin VB.Form FRetencion
             Strikethrough   =   0   'False
          EndProperty
          ForeColor       =   &H00FF0000&
-         Height          =   330
-         Left            =   1155
+         Height          =   225
+         Left            =   105
          TabIndex        =   2
-         Top             =   210
+         Top             =   525
          Width           =   855
       End
       Begin VB.OptionButton OpcSierra 
@@ -90,7 +90,7 @@ Begin VB.Form FRetencion
             Strikethrough   =   0   'False
          EndProperty
          ForeColor       =   &H00FF0000&
-         Height          =   330
+         Height          =   225
          Left            =   105
          TabIndex        =   1
          Top             =   210
@@ -109,25 +109,23 @@ Begin VB.Form FRetencion
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   960
-      Left            =   10710
+      Height          =   855
+      Left            =   14700
       Picture         =   "FRetencion.frx":0614
       Style           =   1  'Graphical
-      TabIndex        =   64
-      Top             =   1155
-      Width           =   1065
+      TabIndex        =   66
+      Top             =   105
+      Width           =   1905
    End
    Begin TabDlg.SSTab SSTab1 
-      Height          =   6210
+      Height          =   6315
       Left            =   105
       TabIndex        =   12
-      Top             =   1365
-      Width           =   10410
-      _ExtentX        =   18362
-      _ExtentY        =   10954
+      Top             =   1050
+      Width           =   18495
+      _ExtentX        =   32623
+      _ExtentY        =   11139
       _Version        =   393216
-      Tabs            =   4
-      TabsPerRow      =   4
       TabHeight       =   876
       BackColor       =   12648447
       ForeColor       =   4194304
@@ -140,7 +138,7 @@ Begin VB.Form FRetencion
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      TabCaption(0)   =   "&1.- Liquidacion de Impuesto"
+      TabCaption(0)   =   "&1.- Liquidacion de Impuesto y Consolidacion de Ingresos"
       TabPicture(0)   =   "FRetencion.frx":0E96
       Tab(0).ControlEnabled=   -1  'True
       Tab(0).Control(0)=   "Label11"
@@ -179,583 +177,98 @@ Begin VB.Form FRetencion
       Tab(0).Control(16).Enabled=   0   'False
       Tab(0).Control(17)=   "LblSubtotal"
       Tab(0).Control(17).Enabled=   0   'False
-      Tab(0).Control(18)=   "TxtIngLiqui"
+      Tab(0).Control(18)=   "Label21"
       Tab(0).Control(18).Enabled=   0   'False
-      Tab(0).Control(19)=   "TxtOtrosIng"
+      Tab(0).Control(19)=   "Label30"
       Tab(0).Control(19).Enabled=   0   'False
-      Tab(0).Control(20)=   "Txt10Tercero"
+      Tab(0).Control(20)=   "Label13"
       Tab(0).Control(20).Enabled=   0   'False
-      Tab(0).Control(21)=   "Txt10Cuarto"
+      Tab(0).Control(21)=   "Label7"
       Tab(0).Control(21).Enabled=   0   'False
-      Tab(0).Control(22)=   "TxtFondoReserva"
+      Tab(0).Control(22)=   "Label12"
       Tab(0).Control(22).Enabled=   0   'False
-      Tab(0).Control(23)=   "TxtUtilidades"
+      Tab(0).Control(23)=   "Label29"
       Tab(0).Control(23).Enabled=   0   'False
-      Tab(0).Control(24)=   "TxtDesahucio"
+      Tab(0).Control(24)=   "Label28"
       Tab(0).Control(24).Enabled=   0   'False
-      Tab(0).Control(25)=   "TxtApoIESS"
+      Tab(0).Control(25)=   "Label15"
       Tab(0).Control(25).Enabled=   0   'False
-      Tab(0).Control(26)=   "TxtVivienda"
+      Tab(0).Control(26)=   "Line1"
       Tab(0).Control(26).Enabled=   0   'False
-      Tab(0).Control(27)=   "TxtSalud"
+      Tab(0).Control(27)=   "TxtIngLiqui"
       Tab(0).Control(27).Enabled=   0   'False
-      Tab(0).Control(28)=   "TxtEducacion"
+      Tab(0).Control(28)=   "TxtOtrosIng"
       Tab(0).Control(28).Enabled=   0   'False
-      Tab(0).Control(29)=   "TxtAlimentacion"
+      Tab(0).Control(29)=   "Txt10Tercero"
       Tab(0).Control(29).Enabled=   0   'False
-      Tab(0).Control(30)=   "TxtVestimenta"
+      Tab(0).Control(30)=   "Txt10Cuarto"
       Tab(0).Control(30).Enabled=   0   'False
-      Tab(0).Control(31)=   "TxtDiscap"
+      Tab(0).Control(31)=   "TxtFondoReserva"
       Tab(0).Control(31).Enabled=   0   'False
-      Tab(0).Control(32)=   "Txt3Edad"
+      Tab(0).Control(32)=   "TxtUtilidades"
       Tab(0).Control(32).Enabled=   0   'False
-      Tab(0).Control(33)=   "TxtIREmpleador"
+      Tab(0).Control(33)=   "TxtDesahucio"
       Tab(0).Control(33).Enabled=   0   'False
-      Tab(0).Control(34)=   "TxtAportePersonal"
+      Tab(0).Control(34)=   "TxtApoIESS"
       Tab(0).Control(34).Enabled=   0   'False
-      Tab(0).ControlCount=   35
-      TabCaption(1)   =   "&2.- Consolidacion de Ingresos"
+      Tab(0).Control(35)=   "TxtVivienda"
+      Tab(0).Control(35).Enabled=   0   'False
+      Tab(0).Control(36)=   "TxtSalud"
+      Tab(0).Control(36).Enabled=   0   'False
+      Tab(0).Control(37)=   "TxtEducacion"
+      Tab(0).Control(37).Enabled=   0   'False
+      Tab(0).Control(38)=   "TxtAlimentacion"
+      Tab(0).Control(38).Enabled=   0   'False
+      Tab(0).Control(39)=   "TxtVestimenta"
+      Tab(0).Control(39).Enabled=   0   'False
+      Tab(0).Control(40)=   "TxtDiscap"
+      Tab(0).Control(40).Enabled=   0   'False
+      Tab(0).Control(41)=   "Txt3Edad"
+      Tab(0).Control(41).Enabled=   0   'False
+      Tab(0).Control(42)=   "TxtIREmpleador"
+      Tab(0).Control(42).Enabled=   0   'False
+      Tab(0).Control(43)=   "TxtAportePersonal"
+      Tab(0).Control(43).Enabled=   0   'False
+      Tab(0).Control(44)=   "TxtNumComp"
+      Tab(0).Control(44).Enabled=   0   'False
+      Tab(0).Control(45)=   "TxtImpAnterior"
+      Tab(0).Control(45).Enabled=   0   'False
+      Tab(0).Control(46)=   "TxtValorRet"
+      Tab(0).Control(46).Enabled=   0   'False
+      Tab(0).Control(47)=   "TxtIRCausado"
+      Tab(0).Control(47).Enabled=   0   'False
+      Tab(0).Control(48)=   "TxtBaseImpo"
+      Tab(0).Control(48).Enabled=   0   'False
+      Tab(0).Control(49)=   "TxtRebajas"
+      Tab(0).Control(49).Enabled=   0   'False
+      Tab(0).Control(50)=   "TxtDeduccion"
+      Tab(0).Control(50).Enabled=   0   'False
+      Tab(0).Control(51)=   "TxtIngOtrosEmp"
+      Tab(0).Control(51).Enabled=   0   'False
+      Tab(0).Control(52)=   "DGConcepto"
+      Tab(0).Control(52).Enabled=   0   'False
+      Tab(0).ControlCount=   53
+      TabCaption(1)   =   "&2.- Resumen del Rol de Pagos"
       TabPicture(1)   =   "FRetencion.frx":0EB2
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "TxtNumComp"
-      Tab(1).Control(1)=   "TxtImpAnterior"
-      Tab(1).Control(2)=   "TxtValorRet"
-      Tab(1).Control(3)=   "TxtIRCausado"
-      Tab(1).Control(4)=   "TxtBaseImpo"
-      Tab(1).Control(5)=   "TxtRebajas"
-      Tab(1).Control(6)=   "TxtDeduccion"
-      Tab(1).Control(7)=   "TxtIngOtrosEmp"
-      Tab(1).Control(8)=   "DGConcepto"
-      Tab(1).Control(9)=   "Label21"
-      Tab(1).Control(10)=   "Label30"
-      Tab(1).Control(11)=   "Label13"
-      Tab(1).Control(12)=   "Label7"
-      Tab(1).Control(13)=   "Label12"
-      Tab(1).Control(14)=   "Label29"
-      Tab(1).Control(15)=   "Label28"
-      Tab(1).Control(16)=   "Label15"
-      Tab(1).ControlCount=   17
-      TabCaption(2)   =   "&3.- Resumen del Rol de Pagos"
+      Tab(1).Control(0)=   "DGRolAnio"
+      Tab(1).ControlCount=   1
+      TabCaption(2)   =   "&3.- Rubros de Todo el año"
       TabPicture(2)   =   "FRetencion.frx":0ECE
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "DGRolAnio"
+      Tab(2).Control(0)=   "DGRolPagos"
       Tab(2).ControlCount=   1
-      TabCaption(3)   =   "&4.- Rubros de Todo el año"
-      TabPicture(3)   =   "FRetencion.frx":0EEA
-      Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "DGRolPagos"
-      Tab(3).ControlCount=   1
-      Begin VB.TextBox TxtAportePersonal 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   6510
-         MaxLength       =   10
-         TabIndex        =   28
-         Text            =   "9.35"
-         Top             =   2880
-         Width           =   645
-      End
-      Begin VB.TextBox TxtNumComp 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00C00000&
-         Height          =   330
-         Left            =   -66810
-         MaxLength       =   10
-         TabIndex        =   63
-         Text            =   "0000000"
-         Top             =   2880
-         Width           =   1800
-      End
-      Begin VB.TextBox TxtImpAnterior 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   -66810
-         MaxLength       =   10
-         TabIndex        =   61
-         Text            =   "0.00"
-         Top             =   2565
-         Width           =   1800
-      End
-      Begin VB.TextBox TxtValorRet 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   -66810
-         MaxLength       =   10
-         TabIndex        =   59
-         Text            =   "0.00"
-         Top             =   2250
-         Width           =   1800
-      End
-      Begin VB.TextBox TxtIRCausado 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   -66810
-         MaxLength       =   10
-         TabIndex        =   57
-         Text            =   "0.00"
-         Top             =   1935
-         Width           =   1800
-      End
-      Begin VB.TextBox TxtBaseImpo 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   -66810
-         MaxLength       =   10
-         TabIndex        =   55
-         Text            =   "0.00"
-         Top             =   1620
-         Width           =   1800
-      End
-      Begin VB.TextBox TxtRebajas 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   -66810
-         MaxLength       =   10
-         TabIndex        =   53
-         Text            =   "0.00"
-         Top             =   1305
-         Width           =   1800
-      End
-      Begin VB.TextBox TxtIREmpleador 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   8190
-         MaxLength       =   10
-         TabIndex        =   45
-         Text            =   "0.00"
-         Top             =   5400
-         Width           =   1800
-      End
-      Begin VB.TextBox Txt3Edad 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   8190
-         MaxLength       =   10
-         TabIndex        =   43
-         Text            =   "0.00"
-         Top             =   5085
-         Width           =   1800
-      End
-      Begin VB.TextBox TxtDiscap 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   8190
-         MaxLength       =   10
-         TabIndex        =   41
-         Text            =   "0.00"
-         Top             =   4770
-         Width           =   1800
-      End
-      Begin VB.TextBox TxtVestimenta 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   8190
-         MaxLength       =   10
-         TabIndex        =   39
-         Text            =   "0.00"
-         Top             =   4455
-         Width           =   1800
-      End
-      Begin VB.TextBox TxtAlimentacion 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   8190
-         MaxLength       =   10
-         TabIndex        =   37
-         Text            =   "0.00"
-         Top             =   4140
-         Width           =   1800
-      End
-      Begin VB.TextBox TxtEducacion 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   8190
-         MaxLength       =   10
-         TabIndex        =   35
-         Text            =   "0.00"
-         Top             =   3825
-         Width           =   1800
-      End
-      Begin VB.TextBox TxtSalud 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   8190
-         MaxLength       =   10
-         TabIndex        =   33
-         Text            =   "0.00"
-         Top             =   3510
-         Width           =   1800
-      End
-      Begin VB.TextBox TxtVivienda 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   8190
-         MaxLength       =   10
-         TabIndex        =   31
-         Text            =   "0.00"
-         Top             =   3195
-         Width           =   1800
-      End
-      Begin VB.TextBox TxtApoIESS 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   8190
-         MaxLength       =   10
-         TabIndex        =   29
-         Text            =   "0.00"
-         Top             =   2880
-         Width           =   1800
-      End
-      Begin VB.TextBox TxtDesahucio 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   8190
-         MaxLength       =   10
-         TabIndex        =   26
-         Text            =   "0.00"
-         Top             =   2565
-         Width           =   1800
-      End
-      Begin VB.TextBox TxtUtilidades 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   8190
-         MaxLength       =   10
-         TabIndex        =   24
-         Text            =   "0.00"
-         Top             =   2250
-         Width           =   1800
-      End
-      Begin VB.TextBox TxtFondoReserva 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   8190
-         MaxLength       =   10
-         TabIndex        =   22
-         Text            =   "0.00"
-         Top             =   1935
-         Width           =   1800
-      End
-      Begin VB.TextBox Txt10Cuarto 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   8190
-         MaxLength       =   10
-         TabIndex        =   20
-         Text            =   "0.00"
-         Top             =   1620
-         Width           =   1800
-      End
-      Begin VB.TextBox Txt10Tercero 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   8190
-         MaxLength       =   10
-         TabIndex        =   18
-         Text            =   "0.00"
-         Top             =   1305
-         Width           =   1800
-      End
-      Begin VB.TextBox TxtOtrosIng 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   8190
-         MaxLength       =   10
-         TabIndex        =   16
-         Text            =   "0.00"
-         Top             =   990
-         Width           =   1800
-      End
-      Begin VB.TextBox TxtDeduccion 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   -66810
-         MaxLength       =   10
-         TabIndex        =   51
-         Text            =   "0.00"
-         Top             =   990
-         Width           =   1800
-      End
-      Begin VB.TextBox TxtIngOtrosEmp 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   -66810
-         MaxLength       =   10
-         TabIndex        =   49
-         Text            =   "0.00"
-         Top             =   675
-         Width           =   1800
-      End
-      Begin VB.TextBox TxtIngLiqui 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   8190
-         MaxLength       =   10
-         TabIndex        =   14
-         Text            =   "0.00"
-         Top             =   675
-         Width           =   1800
-      End
-      Begin MSDataGridLib.DataGrid DGRolPagos 
-         Bindings        =   "FRetencion.frx":0F06
+      Begin MSDataGridLib.DataGrid DGRolAnio 
+         Bindings        =   "FRetencion.frx":0EEA
          Height          =   5475
          Left            =   -74895
-         TabIndex        =   67
-         Top             =   630
-         Width           =   10200
-         _ExtentX        =   17992
+         TabIndex        =   68
+         Top             =   597
+         Width           =   18285
+         _ExtentX        =   32253
          _ExtentY        =   9657
          _Version        =   393216
+         BorderStyle     =   0
          HeadLines       =   1
          RowHeight       =   15
          BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -811,16 +324,17 @@ Begin VB.Form FRetencion
             EndProperty
          EndProperty
       End
-      Begin MSDataGridLib.DataGrid DGRolAnio 
-         Bindings        =   "FRetencion.frx":0F20
+      Begin MSDataGridLib.DataGrid DGRolPagos 
+         Bindings        =   "FRetencion.frx":0F03
          Height          =   5475
          Left            =   -74895
-         TabIndex        =   68
-         Top             =   630
-         Width           =   10200
-         _ExtentX        =   17992
+         TabIndex        =   69
+         Top             =   597
+         Width           =   18285
+         _ExtentX        =   32253
          _ExtentY        =   9657
          _Version        =   393216
+         BorderStyle     =   0
          HeadLines       =   1
          RowHeight       =   15
          BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -877,15 +391,16 @@ Begin VB.Form FRetencion
          EndProperty
       End
       Begin MSDataGridLib.DataGrid DGConcepto 
-         Bindings        =   "FRetencion.frx":0F39
-         Height          =   2640
-         Left            =   -74580
-         TabIndex        =   69
+         Bindings        =   "FRetencion.frx":0F1D
+         Height          =   2850
+         Left            =   9345
+         TabIndex        =   64
          Top             =   3360
-         Width           =   9570
-         _ExtentX        =   16880
-         _ExtentY        =   4657
+         Width           =   9045
+         _ExtentX        =   15954
+         _ExtentY        =   5027
          _Version        =   393216
+         BorderStyle     =   0
          HeadLines       =   1
          RowHeight       =   15
          BeginProperty HeadFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -941,10 +456,9 @@ Begin VB.Form FRetencion
             EndProperty
          EndProperty
       End
-      Begin VB.Label Label21 
-         BackColor       =   &H00C0FFFF&
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   " Número de Retenciones"
+      Begin VB.TextBox TxtIngOtrosEmp 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
          BeginProperty Font 
             Name            =   "MS Sans Serif"
             Size            =   8.25
@@ -954,18 +468,17 @@ Begin VB.Form FRetencion
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         ForeColor       =   &H00800000&
          Height          =   330
-         Left            =   -74580
-         TabIndex        =   62
-         ToolTipText     =   "Número de comprobante de Retención"
-         Top             =   2865
-         Width           =   7785
+         Left            =   16590
+         MaxLength       =   10
+         TabIndex        =   49
+         Text            =   "0.00"
+         Top             =   630
+         Width           =   1800
       End
-      Begin VB.Label Label30 
-         BackColor       =   &H00C0FFFF&
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   " Valor del Impuesto Retenido por Empleadores anteriores durante el período"
+      Begin VB.TextBox TxtDeduccion 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
          BeginProperty Font 
             Name            =   "MS Sans Serif"
             Size            =   8.25
@@ -975,17 +488,17 @@ Begin VB.Form FRetencion
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         ForeColor       =   &H00800000&
          Height          =   330
-         Left            =   -74580
-         TabIndex        =   60
-         Top             =   2550
-         Width           =   7785
+         Left            =   16590
+         MaxLength       =   10
+         TabIndex        =   51
+         Text            =   "0.00"
+         Top             =   945
+         Width           =   1800
       End
-      Begin VB.Label Label13 
-         BackColor       =   &H00C0FFFF&
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   " Valor del Impuesto Retenido por este Empleador"
+      Begin VB.TextBox TxtRebajas 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
          BeginProperty Font 
             Name            =   "MS Sans Serif"
             Size            =   8.25
@@ -995,17 +508,465 @@ Begin VB.Form FRetencion
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         ForeColor       =   &H00800000&
          Height          =   330
-         Left            =   -74580
-         TabIndex        =   58
-         Top             =   2235
-         Width           =   7785
+         Left            =   16590
+         MaxLength       =   10
+         TabIndex        =   53
+         Text            =   "0.00"
+         Top             =   1260
+         Width           =   1800
       End
-      Begin VB.Label Label7 
+      Begin VB.TextBox TxtBaseImpo 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   16590
+         MaxLength       =   10
+         TabIndex        =   55
+         Text            =   "0.00"
+         Top             =   1575
+         Width           =   1800
+      End
+      Begin VB.TextBox TxtIRCausado 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   16590
+         MaxLength       =   10
+         TabIndex        =   57
+         Text            =   "0.00"
+         Top             =   1890
+         Width           =   1800
+      End
+      Begin VB.TextBox TxtValorRet 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   16590
+         MaxLength       =   10
+         TabIndex        =   59
+         Text            =   "0.00"
+         Top             =   2205
+         Width           =   1800
+      End
+      Begin VB.TextBox TxtImpAnterior 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   16590
+         MaxLength       =   10
+         TabIndex        =   61
+         Text            =   "0.00"
+         Top             =   2520
+         Width           =   1800
+      End
+      Begin VB.TextBox TxtNumComp 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00C00000&
+         Height          =   330
+         Left            =   16590
+         MaxLength       =   10
+         TabIndex        =   63
+         Text            =   "0000000"
+         Top             =   2835
+         Width           =   1800
+      End
+      Begin VB.TextBox TxtAportePersonal 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   6195
+         MaxLength       =   10
+         TabIndex        =   28
+         Text            =   "9.35"
+         Top             =   2847
+         Width           =   645
+      End
+      Begin VB.TextBox TxtIREmpleador 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   7350
+         MaxLength       =   10
+         TabIndex        =   45
+         Text            =   "0.00"
+         Top             =   5460
+         Width           =   1800
+      End
+      Begin VB.TextBox Txt3Edad 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   7350
+         MaxLength       =   10
+         TabIndex        =   43
+         Text            =   "0.00"
+         Top             =   5040
+         Width           =   1800
+      End
+      Begin VB.TextBox TxtDiscap 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   7350
+         MaxLength       =   10
+         TabIndex        =   41
+         Text            =   "0.00"
+         Top             =   4725
+         Width           =   1800
+      End
+      Begin VB.TextBox TxtVestimenta 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   7350
+         MaxLength       =   10
+         TabIndex        =   39
+         Text            =   "0.00"
+         Top             =   4410
+         Width           =   1800
+      End
+      Begin VB.TextBox TxtAlimentacion 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   7350
+         MaxLength       =   10
+         TabIndex        =   37
+         Text            =   "0.00"
+         Top             =   4095
+         Width           =   1800
+      End
+      Begin VB.TextBox TxtEducacion 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   7350
+         MaxLength       =   10
+         TabIndex        =   35
+         Text            =   "0.00"
+         Top             =   3780
+         Width           =   1800
+      End
+      Begin VB.TextBox TxtSalud 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   7350
+         MaxLength       =   10
+         TabIndex        =   33
+         Text            =   "0.00"
+         Top             =   3465
+         Width           =   1800
+      End
+      Begin VB.TextBox TxtVivienda 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   7350
+         MaxLength       =   10
+         TabIndex        =   31
+         Text            =   "0.00"
+         Top             =   3150
+         Width           =   1800
+      End
+      Begin VB.TextBox TxtApoIESS 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   7350
+         MaxLength       =   10
+         TabIndex        =   29
+         Text            =   "0.00"
+         Top             =   2835
+         Width           =   1800
+      End
+      Begin VB.TextBox TxtDesahucio 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   7350
+         MaxLength       =   10
+         TabIndex        =   26
+         Text            =   "0.00"
+         Top             =   2520
+         Width           =   1800
+      End
+      Begin VB.TextBox TxtUtilidades 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   7350
+         MaxLength       =   10
+         TabIndex        =   24
+         Text            =   "0.00"
+         Top             =   2205
+         Width           =   1800
+      End
+      Begin VB.TextBox TxtFondoReserva 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   7350
+         MaxLength       =   10
+         TabIndex        =   22
+         Text            =   "0.00"
+         Top             =   1890
+         Width           =   1800
+      End
+      Begin VB.TextBox Txt10Cuarto 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   7350
+         MaxLength       =   10
+         TabIndex        =   20
+         Text            =   "0.00"
+         Top             =   1575
+         Width           =   1800
+      End
+      Begin VB.TextBox Txt10Tercero 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   7350
+         MaxLength       =   10
+         TabIndex        =   18
+         Text            =   "0.00"
+         Top             =   1260
+         Width           =   1800
+      End
+      Begin VB.TextBox TxtOtrosIng 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   7350
+         MaxLength       =   10
+         TabIndex        =   16
+         Text            =   "0.00"
+         Top             =   945
+         Width           =   1800
+      End
+      Begin VB.TextBox TxtIngLiqui 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   7350
+         MaxLength       =   10
+         TabIndex        =   14
+         Text            =   "0.00"
+         Top             =   630
+         Width           =   1800
+      End
+      Begin VB.Line Line1 
+         X1              =   9240
+         X2              =   9240
+         Y1              =   525
+         Y2              =   6300
+      End
+      Begin VB.Label Label15 
          BackColor       =   &H00C0FFFF&
          BorderStyle     =   1  'Fixed Single
-         Caption         =   " Impuesto a la Renta Causado"
+         Caption         =   " Ingresos gravados generados por otros Empleadores"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
             Size            =   8.25
@@ -1017,16 +978,16 @@ Begin VB.Form FRetencion
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   330
-         Left            =   -74580
-         TabIndex        =   56
+         Left            =   9345
+         TabIndex        =   48
          ToolTipText     =   "Base para Retencíon"
-         Top             =   1920
-         Width           =   7785
+         Top             =   630
+         Width           =   7260
       End
-      Begin VB.Label Label12 
+      Begin VB.Label Label28 
          BackColor       =   &H00C0FFFF&
          BorderStyle     =   1  'Fixed Single
-         Caption         =   " Base Imponible Rentas Total anual"
+         Caption         =   " (-) Deducción gastos personales consideradas por otros Empleadores"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
             Size            =   8.25
@@ -1038,11 +999,11 @@ Begin VB.Form FRetencion
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   330
-         Left            =   -74580
-         TabIndex        =   54
+         Left            =   9345
+         TabIndex        =   50
          ToolTipText     =   "Base para Retencíon"
-         Top             =   1605
-         Width           =   7785
+         Top             =   945
+         Width           =   7260
       End
       Begin VB.Label Label29 
          BackColor       =   &H00C0FFFF&
@@ -1059,10 +1020,113 @@ Begin VB.Form FRetencion
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   330
-         Left            =   -74580
+         Left            =   9345
          TabIndex        =   52
-         Top             =   1290
-         Width           =   7785
+         Top             =   1260
+         Width           =   7260
+      End
+      Begin VB.Label Label12 
+         BackColor       =   &H00C0FFFF&
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " Base Imponible Rentas Total anual"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   330
+         Left            =   9345
+         TabIndex        =   54
+         ToolTipText     =   "Base para Retencíon"
+         Top             =   1575
+         Width           =   7260
+      End
+      Begin VB.Label Label7 
+         BackColor       =   &H00C0FFFF&
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " Impuesto a la Renta Causado"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   330
+         Left            =   9345
+         TabIndex        =   56
+         ToolTipText     =   "Base para Retencíon"
+         Top             =   1890
+         Width           =   7260
+      End
+      Begin VB.Label Label13 
+         BackColor       =   &H00C0FFFF&
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " Valor del Impuesto Retenido por este Empleador"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   330
+         Left            =   9345
+         TabIndex        =   58
+         Top             =   2205
+         Width           =   7260
+      End
+      Begin VB.Label Label30 
+         BackColor       =   &H00C0FFFF&
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " Valor del Impuesto Retenido por Empleadores anteriores durante el período"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   330
+         Left            =   9345
+         TabIndex        =   60
+         Top             =   2520
+         Width           =   7260
+      End
+      Begin VB.Label Label21 
+         BackColor       =   &H00C0FFFF&
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " Número de Retenciones"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   330
+         Left            =   9345
+         TabIndex        =   62
+         ToolTipText     =   "Número de comprobante de Retención"
+         Top             =   2835
+         Width           =   7260
       End
       Begin VB.Label LblSubtotal 
          Alignment       =   1  'Right Justify
@@ -1080,10 +1144,10 @@ Begin VB.Form FRetencion
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   330
-         Left            =   8190
+         Left            =   7350
          TabIndex        =   47
          ToolTipText     =   "Serie Comprobante de Retención"
-         Top             =   5700
+         Top             =   5880
          Width           =   1800
       End
       Begin VB.Label Label22 
@@ -1101,11 +1165,11 @@ Begin VB.Form FRetencion
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   330
-         Left            =   420
+         Left            =   105
          TabIndex        =   46
          ToolTipText     =   "Serie Comprobante de Retención"
-         Top             =   5700
-         Width           =   7785
+         Top             =   5880
+         Width           =   7260
       End
       Begin VB.Label Label8 
          BackColor       =   &H00C0FFFF&
@@ -1122,10 +1186,10 @@ Begin VB.Form FRetencion
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   330
-         Left            =   420
+         Left            =   105
          TabIndex        =   44
-         Top             =   5385
-         Width           =   7785
+         Top             =   5460
+         Width           =   7260
       End
       Begin VB.Label Label19 
          BackColor       =   &H00C0FFFF&
@@ -1142,10 +1206,10 @@ Begin VB.Form FRetencion
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   330
-         Left            =   420
+         Left            =   105
          TabIndex        =   42
-         Top             =   5070
-         Width           =   7785
+         Top             =   5037
+         Width           =   7260
       End
       Begin VB.Label Label20 
          BackColor       =   &H00C0FFFF&
@@ -1162,10 +1226,10 @@ Begin VB.Form FRetencion
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   330
-         Left            =   420
+         Left            =   105
          TabIndex        =   40
-         Top             =   4740
-         Width           =   7785
+         Top             =   4725
+         Width           =   7260
       End
       Begin VB.Label Label27 
          BackColor       =   &H00C0FFFF&
@@ -1182,10 +1246,10 @@ Begin VB.Form FRetencion
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   330
-         Left            =   420
+         Left            =   105
          TabIndex        =   38
-         Top             =   4425
-         Width           =   7785
+         Top             =   4410
+         Width           =   7260
       End
       Begin VB.Label Label26 
          BackColor       =   &H00C0FFFF&
@@ -1202,10 +1266,10 @@ Begin VB.Form FRetencion
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   330
-         Left            =   420
+         Left            =   105
          TabIndex        =   36
-         Top             =   4125
-         Width           =   7785
+         Top             =   4092
+         Width           =   7260
       End
       Begin VB.Label Label25 
          BackColor       =   &H00C0FFFF&
@@ -1222,10 +1286,10 @@ Begin VB.Form FRetencion
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   330
-         Left            =   420
+         Left            =   105
          TabIndex        =   34
-         Top             =   3810
-         Width           =   7785
+         Top             =   3777
+         Width           =   7260
       End
       Begin VB.Label Label24 
          BackColor       =   &H00C0FFFF&
@@ -1242,10 +1306,10 @@ Begin VB.Form FRetencion
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   330
-         Left            =   420
+         Left            =   105
          TabIndex        =   32
-         Top             =   3495
-         Width           =   7785
+         Top             =   3462
+         Width           =   7260
       End
       Begin VB.Label Label23 
          BackColor       =   &H00C0FFFF&
@@ -1262,10 +1326,10 @@ Begin VB.Form FRetencion
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   330
-         Left            =   420
+         Left            =   105
          TabIndex        =   30
-         Top             =   3180
-         Width           =   7785
+         Top             =   3147
+         Width           =   7260
       End
       Begin VB.Label Label9 
          BackColor       =   &H00C0FFFF&
@@ -1282,10 +1346,10 @@ Begin VB.Form FRetencion
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   330
-         Left            =   420
+         Left            =   105
          TabIndex        =   27
-         Top             =   2865
-         Width           =   7785
+         Top             =   2832
+         Width           =   7260
       End
       Begin VB.Label Label17 
          BackColor       =   &H00C0FFFF&
@@ -1302,10 +1366,10 @@ Begin VB.Form FRetencion
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   330
-         Left            =   420
+         Left            =   105
          TabIndex        =   25
-         Top             =   2550
-         Width           =   7785
+         Top             =   2517
+         Width           =   7260
       End
       Begin VB.Label Label16 
          BackColor       =   &H00C0FFFF&
@@ -1322,10 +1386,10 @@ Begin VB.Form FRetencion
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   330
-         Left            =   420
+         Left            =   105
          TabIndex        =   23
-         Top             =   2235
-         Width           =   7785
+         Top             =   2202
+         Width           =   7260
       End
       Begin VB.Label Label6 
          BackColor       =   &H00C0FFFF&
@@ -1342,10 +1406,10 @@ Begin VB.Form FRetencion
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   330
-         Left            =   420
+         Left            =   105
          TabIndex        =   21
-         Top             =   1920
-         Width           =   7785
+         Top             =   1887
+         Width           =   7260
       End
       Begin VB.Label Label5 
          BackColor       =   &H00C0FFFF&
@@ -1362,10 +1426,10 @@ Begin VB.Form FRetencion
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   330
-         Left            =   420
+         Left            =   105
          TabIndex        =   19
-         Top             =   1590
-         Width           =   7785
+         Top             =   1575
+         Width           =   7260
       End
       Begin VB.Label Label4 
          BackColor       =   &H00C0FFFF&
@@ -1382,10 +1446,10 @@ Begin VB.Form FRetencion
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   330
-         Left            =   420
+         Left            =   105
          TabIndex        =   17
-         Top             =   1275
-         Width           =   7785
+         Top             =   1260
+         Width           =   7260
       End
       Begin VB.Label Label18 
          BackColor       =   &H00C0FFFF&
@@ -1402,52 +1466,10 @@ Begin VB.Form FRetencion
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   330
-         Left            =   420
+         Left            =   105
          TabIndex        =   15
-         Top             =   975
-         Width           =   7785
-      End
-      Begin VB.Label Label28 
-         BackColor       =   &H00C0FFFF&
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   " (-) Deducción gastos personales consideradas por otros Empleadores"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00800000&
-         Height          =   330
-         Left            =   -74580
-         TabIndex        =   50
-         ToolTipText     =   "Base para Retencíon"
-         Top             =   975
-         Width           =   7785
-      End
-      Begin VB.Label Label15 
-         BackColor       =   &H00C0FFFF&
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   " Ingresos gravados generados por otros Empleadores"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00800000&
-         Height          =   330
-         Left            =   -74580
-         TabIndex        =   48
-         ToolTipText     =   "Base para Retencíon"
-         Top             =   660
-         Width           =   7785
+         Top             =   942
+         Width           =   7260
       End
       Begin VB.Label Label11 
          BackColor       =   &H00C0FFFF&
@@ -1464,10 +1486,10 @@ Begin VB.Form FRetencion
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   330
-         Left            =   420
+         Left            =   105
          TabIndex        =   13
-         Top             =   660
-         Width           =   7785
+         Top             =   627
+         Width           =   7260
       End
    End
    Begin VB.CommandButton Command3 
@@ -1482,13 +1504,13 @@ Begin VB.Form FRetencion
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   960
-      Left            =   10710
-      Picture         =   "FRetencion.frx":0F53
+      Height          =   855
+      Left            =   12705
+      Picture         =   "FRetencion.frx":0F37
       Style           =   1  'Graphical
       TabIndex        =   65
       Top             =   105
-      Width           =   1065
+      Width           =   1905
    End
    Begin VB.TextBox TxtNumero 
       Alignment       =   1  'Right Justify
@@ -1504,17 +1526,17 @@ Begin VB.Form FRetencion
       EndProperty
       ForeColor       =   &H00FF0000&
       Height          =   330
-      Left            =   9660
+      Left            =   11970
       MaxLength       =   10
       TabIndex        =   11
       Text            =   "0"
-      Top             =   945
-      Width           =   855
+      Top             =   525
+      Width           =   645
    End
    Begin VB.CommandButton Command1 
       BackColor       =   &H0080FFFF&
       Caption         =   "&Salir Módulo"
-      DisabledPicture =   "FRetencion.frx":1395
+      DisabledPicture =   "FRetencion.frx":1379
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   8.25
@@ -1524,20 +1546,20 @@ Begin VB.Form FRetencion
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   960
-      Left            =   10710
-      MouseIcon       =   "FRetencion.frx":1DDF
-      Picture         =   "FRetencion.frx":2829
+      Height          =   855
+      Left            =   16695
+      MouseIcon       =   "FRetencion.frx":1DC3
+      Picture         =   "FRetencion.frx":280D
       Style           =   1  'Graphical
-      TabIndex        =   66
-      Top             =   2205
-      Width           =   1065
+      TabIndex        =   67
+      Top             =   105
+      Width           =   1905
    End
    Begin MSDataListLib.DataCombo DCRetenido 
-      Bindings        =   "FRetencion.frx":2C6B
+      Bindings        =   "FRetencion.frx":2C4F
       DataSource      =   "AdoRetenido"
       Height          =   315
-      Left            =   3885
+      Left            =   2730
       TabIndex        =   8
       Top             =   525
       Width           =   6630
@@ -1689,8 +1711,8 @@ Begin VB.Form FRetencion
    End
    Begin MSMask.MaskEdBox MBoxFechaI 
       Height          =   330
-      Left            =   9240
-      TabIndex        =   6
+      Left            =   4725
+      TabIndex        =   4
       Top             =   105
       Width           =   1275
       _ExtentX        =   2249
@@ -1949,8 +1971,7 @@ Begin VB.Form FRetencion
       _Version        =   393216
    End
    Begin VB.Label Label10 
-      BackColor       =   &H00E0E0E0&
-      BackStyle       =   0  'Transparent
+      BackColor       =   &H0000FFFF&
       BorderStyle     =   1  'Fixed Single
       Caption         =   " Salario &Básico:"
       BeginProperty Font 
@@ -1964,8 +1985,8 @@ Begin VB.Form FRetencion
       EndProperty
       ForeColor       =   &H00C00000&
       Height          =   330
-      Left            =   2415
-      TabIndex        =   3
+      Left            =   6090
+      TabIndex        =   5
       ToolTipText     =   "Retenido a:"
       Top             =   105
       Width           =   1485
@@ -1986,17 +2007,17 @@ Begin VB.Form FRetencion
       EndProperty
       ForeColor       =   &H00800000&
       Height          =   330
-      Left            =   105
+      Left            =   9450
       TabIndex        =   9
       ToolTipText     =   "Retenido a:"
-      Top             =   945
-      Width           =   5265
+      Top             =   105
+      Width           =   3165
    End
    Begin VB.Label Label14 
       BackColor       =   &H00E0E0E0&
       BackStyle       =   0  'Transparent
       BorderStyle     =   1  'Fixed Single
-      Caption         =   " Numero de mese trabajados con este Empleado"
+      Caption         =   " Meses trabajados Empleado"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   8.25
@@ -2007,15 +2028,14 @@ Begin VB.Form FRetencion
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   5460
+      Left            =   9450
       TabIndex        =   10
       ToolTipText     =   "Número de comprobante Contable"
-      Top             =   945
-      Width           =   4215
+      Top             =   525
+      Width           =   2535
    End
    Begin VB.Label Label2 
-      BackColor       =   &H00E0E0E0&
-      BackStyle       =   0  'Transparent
+      BackColor       =   &H0000FFFF&
       BorderStyle     =   1  'Fixed Single
       Caption         =   " &Empleado:"
       BeginProperty Font 
@@ -2029,7 +2049,7 @@ Begin VB.Form FRetencion
       EndProperty
       ForeColor       =   &H00C00000&
       Height          =   330
-      Left            =   2415
+      Left            =   1260
       TabIndex        =   7
       ToolTipText     =   "Retenido a:"
       Top             =   525
@@ -2037,8 +2057,7 @@ Begin VB.Form FRetencion
    End
    Begin VB.Label Label1 
       AutoSize        =   -1  'True
-      BackColor       =   &H00E0E0E0&
-      BackStyle       =   0  'Transparent
+      BackColor       =   &H0000FFFF&
       BorderStyle     =   1  'Fixed Single
       Caption         =   " Fecha de Generación del RDEP (107):"
       BeginProperty Font 
@@ -2052,8 +2071,8 @@ Begin VB.Form FRetencion
       EndProperty
       ForeColor       =   &H00C00000&
       Height          =   360
-      Left            =   5775
-      TabIndex        =   5
+      Left            =   1260
+      TabIndex        =   3
       ToolTipText     =   "Informacion para el mes de:"
       Top             =   105
       Width           =   3495
@@ -2123,7 +2142,7 @@ Public Sub Grabar_Anexo_Dependencia(CodigoC As String)
            .Fields("BasImp") = Val(CCur(TxtBaseImpo))
            .Fields("ValRet") = Val(CCur(TxtValorRet))
            .Fields("NumRet") = Val(CInt(TxtNumComp))
-           .Fields("AñoRet") = Year(MBoxFechaI)
+           .Fields("AnioRet") = Year(MBoxFechaI)
            .Fields("Fecha_107") = MBoxFechaI
            .Fields("Numero") = Val(CInt(TxtNumero))
            .Fields("Vivienda") = Val(CCur(TxtVivienda))
@@ -2185,7 +2204,7 @@ Dim ImpuestoCausado As Currency
         Do While Not .EOF
            If (.Fields("Desde") <= BaseImponible) And (BaseImponible <= .Fields("Hasta")) Then
               ImpuestoCausado = BaseImponible - .Fields("Desde")
-              ImpuestoCausado = (ImpuestoCausado * .Fields("Excede")) / 100
+              ImpuestoCausado = (ImpuestoCausado * .Fields("Excede_")) / 100
               ImpuestoCausado = ImpuestoCausado + .Fields("Basico")
              .MoveLast
            End If
@@ -2545,6 +2564,7 @@ Private Sub Form_Activate()
    IngLiqui = 0
    BaseImpor = 0
    BaseImpon = 0
+   
   'Listamos el catalogo del rol de pagos
    SQL2 = "SELECT * " _
         & "FROM Catalogo_Rol_Pagos " _
@@ -2562,11 +2582,10 @@ Private Sub Form_Activate()
         & "ORDER BY C.Cliente "
    SelectDB_Combo DCRetenido, AdoRetenido, sSQL, "Cliente"
    RatonNormal
-   
 End Sub
 
 Private Sub Form_Load()
-  'CentrarForm FRetencion
+ 'CentrarForm FRetencion
   ConectarAdodc AdoAux
   ConectarAdodc AdoConcepto
   ConectarAdodc AdoRetenido
@@ -2589,6 +2608,7 @@ End Sub
 
 Private Sub MBoxFechaI_LostFocus()
   FechaValida MBoxFechaI
+  Datos_IESS MBoxFechaI
   Anio = Format(Year(MBoxFechaI), "0000")
   FechaIni = BuscarFecha("01/01/" & Anio)
   FechaFin = BuscarFecha(MBoxFechaI)
@@ -2611,12 +2631,13 @@ Private Sub MBoxFechaI_LostFocus()
        & "AND Periodo = '" & Periodo_Contable & "' "
   Ejecutar_SQL_SP sSQL
 
-  SQL2 = "SELECT Desde, Hasta, Basico, Excede " _
+  SQL2 = "SELECT Desde, Hasta, Basico, (Excede/100) As Excede_ " _
        & "FROM Tabla_Renta " _
        & "WHERE Anio = '" & CStr(Anio) & "' " _
        & "ORDER BY Desde,Hasta "
-  Select_Adodc_Grid DGConcepto, AdoConcepto, SQL2, 2, True
+  Select_Adodc_Grid DGConcepto, AdoConcepto, SQL2, 2
   Presentar_Rol_Anual
+  TxtSalarioBasico = Format(Sueldo_Basico, "#,##0.00")
   DCRetenido.SetFocus
 End Sub
 
@@ -2822,8 +2843,8 @@ End Sub
 Private Sub TxtIREmpleador_LostFocus()
   TextoValido TxtIREmpleador, True, , 2
   RDep_Subtotal
-  SSTab1.Tab = 1
-  TxtIngOtrosEmp.SetFocus
+  'SSTab1.Tab = 1
+  'TxtIngOtrosEmp.SetFocus
 End Sub
 
 Private Sub TxtNumComp_GotFocus()
@@ -2838,7 +2859,7 @@ End Sub
 Private Sub TxtNumComp_LostFocus()
    TextoValido TxtNumComp, True, , 0
    RDep_Subtotal
-   SSTab1.Tab = 0
+   'SSTab1.Tab = 0
    TxtIngLiqui.SetFocus
 End Sub
 

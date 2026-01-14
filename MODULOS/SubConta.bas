@@ -76,9 +76,9 @@ Dim TotalSubModulo As Currency
          & "AND Codigo = '" & Cta & "' "
     Select_AdoDB AdoBenefDB, sSQL
     If AdoBenefDB.RecordCount > 0 Then
-       TC = AdoBenefDB.fields("TC")
-       Codigo = AdoBenefDB.fields("Codigo")
-       Cuenta = UCaseStrg(AdoBenefDB.fields("Cuenta"))
+       TC = AdoBenefDB.Fields("TC")
+       Codigo = AdoBenefDB.Fields("Codigo")
+       Cuenta = UCaseStrg(AdoBenefDB.Fields("Cuenta"))
     End If
     AdoBenefDB.Close
 
@@ -134,25 +134,25 @@ Dim TotalSubModulo As Currency
          PosLinea = PosLinea + 0.1
          cPrint.colorDeLetra = Negro
          cPrint.tipoNegrilla = False
-         Beneficiario = .fields("Beneficiario")
+         Beneficiario = .Fields("Beneficiario")
          cPrint.printTexto PosCampo(1), PosLinea, Beneficiario
          Do While Not .EOF
-            If InStr(.fields("Anio"), "TOTAL") Then
+            If InStr(.Fields("Anio"), "TOTAL") Then
                PosLinea = PosLinea + 0.1
                cPrint.printLinea 1.2, PosLinea - 0.1, cPrint.dAnchoPapel - 1, PosLinea - 0.1
                cPrint.printLinea 1.2, PosLinea + 0.3, cPrint.dAnchoPapel - 1, PosLinea + 0.3
-               TotalSubModulo = TotalSubModulo + .fields("Valor_x_Mes")
+               TotalSubModulo = TotalSubModulo + .Fields("Valor_x_Mes")
             End If
-            If Beneficiario <> .fields("Beneficiario") Then
-               Beneficiario = .fields("Beneficiario")
+            If Beneficiario <> .Fields("Beneficiario") Then
+               Beneficiario = .Fields("Beneficiario")
                cPrint.printTexto PosCampo(1), PosLinea, Beneficiario
             End If
-            cPrint.printFields PosCampo(2), PosLinea, .fields("Anio")
-            cPrint.printFields PosCampo(3), PosLinea, .fields("Mes")
-            cPrint.printFields PosCampo(4), PosLinea, .fields("Valor_x_Mes")
-            cPrint.printFields PosCampo(5), PosLinea, .fields("Categoria")
+            cPrint.printFields PosCampo(2), PosLinea, .Fields("Anio")
+            cPrint.printFields PosCampo(3), PosLinea, .Fields("Mes")
+            cPrint.printFields PosCampo(4), PosLinea, .Fields("Valor_x_Mes")
+            cPrint.printFields PosCampo(5), PosLinea, .Fields("Categoria")
             PosLinea = PosLinea + 0.4
-            If InStr(.fields("Anio"), "TOTAL") Then PosLinea = PosLinea + 0.1
+            If InStr(.Fields("Anio"), "TOTAL") Then PosLinea = PosLinea + 0.1
             'Siguiente Pagina
             If PosLinea > (cPrint.dAltoPapel - 1.5) Then
                cPrint.paginaNueva
@@ -210,31 +210,31 @@ Dim Cod_Cta As String
   With AdoSubCtasDB
   If .RecordCount > 0 Then
      .MoveFirst
-      Cod_Cta = .fields("Codigo")
-      FechaTexto = .fields("Fecha")
-      Mifecha = .fields("Fecha")
+      Cod_Cta = .Fields("Codigo")
+      FechaTexto = .Fields("Fecha")
+      Mifecha = .Fields("Fecha")
       SumaCta = 0: Suma_ME = 0
       Do While Not .EOF
-         If Cod_Cta <> .fields("Codigo") Then
+         If Cod_Cta <> .Fields("Codigo") Then
            'Determinamos que la cuenta ya fue mayorizada
-            Cod_Cta = .fields("Codigo")
-            Mifecha = .fields("Fecha")
+            Cod_Cta = .Fields("Codigo")
+            Mifecha = .Fields("Fecha")
             SumaCta = 0: Suma_ME = 0
          End If
-         Debe = Redondear(.fields("Debitos"), 2)
-         Haber = Redondear(.fields("Creditos"), 2)
-         If .fields("Parcial_ME") >= 0 Then
-             Debe_ME = Redondear(.fields("Parcial_ME"), 2)
+         Debe = Redondear(.Fields("Debitos"), 2)
+         Haber = Redondear(.Fields("Creditos"), 2)
+         If .Fields("Parcial_ME") >= 0 Then
+             Debe_ME = Redondear(.Fields("Parcial_ME"), 2)
              Haber_ME = 0
          Else
-             Haber_ME = Redondear(-.fields("Parcial_ME"), 2)
+             Haber_ME = Redondear(-.Fields("Parcial_ME"), 2)
              Debe_ME = 0
          End If
-         Mayorizar_Saldos .fields("Cta")
+         Mayorizar_Saldos .Fields("Cta")
         'MsgBox .Fields("ID")
-         If ((SumaCta <> .fields("Saldo_MN")) Or (Suma_ME <> .fields("Saldo_ME"))) Then
-            .fields("Saldo_MN") = SumaCta
-            .fields("Saldo_ME") = Suma_ME
+         If ((SumaCta <> .Fields("Saldo_MN")) Or (Suma_ME <> .Fields("Saldo_ME"))) Then
+            .Fields("Saldo_MN") = SumaCta
+            .Fields("Saldo_ME") = Suma_ME
             .Update
          End If
         .MoveNext
@@ -291,36 +291,36 @@ Dim AdoCodigo As ADODB.Recordset
      With AdoCodigo
      'MsgBox "Desktop Test: " & CodigoDeInv & " = " & .RecordCount
       If .RecordCount > 0 Then
-          DatInv.Producto = .fields("Producto")
-          DatInv.Detalle = .fields("Detalle")
-          DatInv.Codigo_Barra = .fields("Codigo_Barra_K")
-          DatInv.Unidad = .fields("Unidad")
-          DatInv.Minimo = .fields("Minimo")
-          DatInv.Maximo = .fields("Maximo")
-          DatInv.Cta_Inventario = .fields("Cta_Inventario")
-          DatInv.Cta_Costo_Venta = .fields("Cta_Costo_Venta")
-          DatInv.Cta_Ventas = .fields("Cta_Ventas")
-          DatInv.Cta_Ventas_0 = .fields("Cta_Ventas_0")
-          DatInv.Cta_Venta_Anticipada = .fields("Cta_Venta_Anticipada")
-          DatInv.Cta_Ventas_Ant = .fields("Cta_Ventas_Ant")
-          DatInv.Utilidad = .fields("Utilidad")
-          DatInv.Div = .fields("Div")
-          DatInv.PVP2 = .fields("PVP_2")
-          DatInv.PVP3 = .fields("PVP_3")
-          DatInv.Por_Reservas = .fields("Por_Reservas")
-          DatInv.Reg_Sanitario = .fields("Reg_Sanitario")
-          DatInv.Stock = .fields("Stock")
-          DatInv.Costo = Redondear(.fields("Costo"), Dec_Costo)
-          DatInv.Valor_Unit = Redondear(.fields("Valor_Unit"), Dec_Costo)
-          DatInv.Tipo_SubMod = .fields("Tipo_SubMod")
-          DatInv.Con_Kardex = .fields("Con_Kardex")
+          DatInv.Producto = .Fields("Producto")
+          DatInv.Detalle = .Fields("Detalle")
+          DatInv.Codigo_Barra = .Fields("Codigo_Barra_K")
+          DatInv.Unidad = .Fields("Unidad")
+          DatInv.Minimo = .Fields("Minimo")
+          DatInv.Maximo = .Fields("Maximo")
+          DatInv.Cta_Inventario = .Fields("Cta_Inventario")
+          DatInv.Cta_Costo_Venta = .Fields("Cta_Costo_Venta")
+          DatInv.Cta_Ventas = .Fields("Cta_Ventas")
+          DatInv.Cta_Ventas_0 = .Fields("Cta_Ventas_0")
+          DatInv.Cta_Venta_Anticipada = .Fields("Cta_Venta_Anticipada")
+          DatInv.Cta_Ventas_Ant = .Fields("Cta_Ventas_Ant")
+          DatInv.Utilidad = .Fields("Utilidad")
+          DatInv.Div = .Fields("Div")
+          DatInv.PVP2 = .Fields("PVP_2")
+          DatInv.PVP3 = .Fields("PVP_3")
+          DatInv.Por_Reservas = .Fields("Por_Reservas")
+          DatInv.Reg_Sanitario = .Fields("Reg_Sanitario")
+          DatInv.Stock = .Fields("Stock")
+          DatInv.Costo = Redondear(.Fields("Costo"), Dec_Costo)
+          DatInv.Valor_Unit = Redondear(.Fields("Valor_Unit"), Dec_Costo)
+          DatInv.Tipo_SubMod = .Fields("Tipo_SubMod")
+          DatInv.Con_Kardex = .Fields("Con_Kardex")
           Select Case DatInv.TC
             Case "NV", "PV"
-                 If .fields("IVA") Then DatInv.PVP = .fields("PVP") * (1 + Porc_IVA) Else DatInv.PVP = .fields("PVP")
+                 If .Fields("IVA") Then DatInv.PVP = .Fields("PVP") * (1 + Porc_IVA) Else DatInv.PVP = .Fields("PVP")
                  DatInv.IVA = False
             Case Else
-                 DatInv.PVP = .fields("PVP")
-                 DatInv.IVA = .fields("IVA")
+                 DatInv.PVP = .Fields("PVP")
+                 DatInv.IVA = .Fields("IVA")
           End Select
           'If Len(DatInv.Cta_Inventario) <= 1 Then DatInv.Stock = 1
           Codigo_Ok = True
@@ -757,9 +757,9 @@ Printer.FontBold = False
 With Datas.Recordset
     .MoveFirst
      Encabezado Ancho(0), Ancho(9)
-     NombreCliente = .fields("Cliente")
-     Contrato_No = .fields("Contrato_No")
-     CodigoInv = .fields("Producto")
+     NombreCliente = .Fields("Cliente")
+     Contrato_No = .Fields("Contrato_No")
+     CodigoInv = .Fields("Producto")
      Printer.FontSize = 10
      PrinterTexto Ancho(0), PosLinea, SQLMsg1
      PosLinea = PosLinea + 0.45
@@ -768,7 +768,7 @@ With Datas.Recordset
      PrinterTexto Ancho(1), PosLinea, UCaseStrg(CodigoInv) & ":"
      PosLinea = PosLinea + 0.4
      Do While Not .EOF
-        If NombreCliente <> .fields("Cliente") Or Contrato_No <> .fields("Contrato_No") Then
+        If NombreCliente <> .Fields("Cliente") Or Contrato_No <> .Fields("Contrato_No") Then
            Imprimir_Linea_H PosLinea, Ancho(0), Ancho(9)
            PosLinea = PosLinea + 0.05
            PrinterTexto Ancho(7), PosLinea, "SALDO"
@@ -785,17 +785,17 @@ With Datas.Recordset
            Printer.FontSize = 10
            PrinterTexto Ancho(0), PosLinea, SQLMsg1
            PosLinea = PosLinea + 0.45
-           NombreCliente = .fields("Cliente")
-           Contrato_No = .fields("Contrato_No")
-           CodigoInv = .fields("Producto")
+           NombreCliente = .Fields("Cliente")
+           Contrato_No = .Fields("Contrato_No")
+           CodigoInv = .Fields("Producto")
            Encab_Estdo_Cuentas
            Printer.FontSize = SizeLetra
            PrinterTexto Ancho(1), PosLinea, UCaseStrg(CodigoInv) & ":"
            PosLinea = PosLinea + 0.4
            Total = 0
         End If
-        If CodigoInv <> .fields("Producto") Then
-           CodigoInv = .fields("Producto")
+        If CodigoInv <> .Fields("Producto") Then
+           CodigoInv = .Fields("Producto")
            Imprimir_Linea_H PosLinea, Ancho(0), Ancho(9)
            PosLinea = PosLinea + 0.05
            PrinterTexto Ancho(7), PosLinea, "SALDO"
@@ -805,13 +805,13 @@ With Datas.Recordset
            PrinterTexto Ancho(1), PosLinea, UCaseStrg(CodigoInv) & ":"
            PosLinea = PosLinea + 0.4
         End If
-        PrinterFields Ancho(2), PosLinea, .fields("Fecha")
-        PrinterFields Ancho(3), PosLinea, .fields("Detalle")
-        PrinterFields Ancho(4), PosLinea, .fields("Comprobante")
-        PrinterFields Ancho(6), PosLinea, .fields("Por_Cobrar")
-        PrinterFields Ancho(7), PosLinea, .fields("Abono")
-        PrinterFields Ancho(8), PosLinea, .fields("Saldo")
-        Saldo = .fields("Saldo")
+        PrinterFields Ancho(2), PosLinea, .Fields("Fecha")
+        PrinterFields Ancho(3), PosLinea, .Fields("Detalle")
+        PrinterFields Ancho(4), PosLinea, .Fields("Comprobante")
+        PrinterFields Ancho(6), PosLinea, .Fields("Por_Cobrar")
+        PrinterFields Ancho(7), PosLinea, .Fields("Abono")
+        PrinterFields Ancho(8), PosLinea, .Fields("Saldo")
+        Saldo = .Fields("Saldo")
         PosLinea = PosLinea + 0.36
         If PosLinea >= LimiteAlto Then
            Imprimir_Linea_H PosLinea, Ancho(0), Ancho(9)
@@ -820,11 +820,11 @@ With Datas.Recordset
            Printer.FontSize = 10
            PrinterTexto Ancho(0), PosLinea, SQLMsg1
            PosLinea = PosLinea + 0.45
-           Contrato_No = .fields("Contrato_No")
-           CodigoInv = .fields("Producto")
+           Contrato_No = .Fields("Contrato_No")
+           CodigoInv = .Fields("Producto")
            Encab_Estdo_Cuentas
            Printer.FontSize = SizeLetra
-           PrinterFields Ancho(1), PosLinea, .fields("Contrato_No")
+           PrinterFields Ancho(1), PosLinea, .Fields("Contrato_No")
         End If
         'If Pagina > 20 Then Exit Do
        .MoveNext
@@ -940,14 +940,14 @@ Public Sub GenerarTablaPrestamoCxCP(BoxMiFecha As String, _
        Valor_ME = 0: Total_ME = 0: Comision = 0
        For I = 0 To Numero
            SetAddNew DtaTabla
-          .fields("Cuotas") = I
+          .Fields("Cuotas") = I
           '.Fields("Dia") = Weekday(MiFecha)
            If I = 0 Then
-             .fields("Fecha") = Mifecha
-             .fields("Capital") = 0
-             .fields("Interes") = 0
-             .fields("Comision") = 0
-             .fields("Pagos") = 0
+             .Fields("Fecha") = Mifecha
+             .Fields("Capital") = 0
+             .Fields("Interes") = 0
+             .Fields("Comision") = 0
+             .Fields("Pagos") = 0
               Mifecha = SiguienteMes(Mifecha)
            Else
               If I = Numero Then
@@ -958,17 +958,17 @@ Public Sub GenerarTablaPrestamoCxCP(BoxMiFecha As String, _
                  Valor = Total_ME + Valor_ME
                  Total = 0
               End If
-             .fields("Fecha") = Mifecha
-             .fields("Capital") = Total_ME
-             .fields("Interes") = Valor_ME
-             .fields("Comision") = Comision
-             .fields("Pagos") = Valor
+             .Fields("Fecha") = Mifecha
+             .Fields("Capital") = Total_ME
+             .Fields("Interes") = Valor_ME
+             .Fields("Comision") = Comision
+             .Fields("Pagos") = Valor
               Mifecha = SiguienteMes(Mifecha)
            End If
-          .fields("Saldo") = Total
-          .fields("CodigoU") = CodigoUsuario
-          .fields("Cta") = TipoPrest
-          .fields("T_No") = Trans_No
+          .Fields("Saldo") = Total
+          .Fields("CodigoU") = CodigoUsuario
+          .Fields("Cta") = TipoPrest
+          .Fields("T_No") = Trans_No
            SetUpdate DtaTabla
           'Comision del 1%
            If SinComis = False Then Comision = Redondear(Total * 0.012, 2)
@@ -1038,7 +1038,7 @@ Salir_Busq:
      Printer.FontBold = False
      Do While Not .EOF
         For I = 3 To CantCampos - 3
-            If IsNumeric(.fields(I)) Then VectCurr(I) = VectCurr(I) + .fields(I)
+            If IsNumeric(.Fields(I)) Then VectCurr(I) = VectCurr(I) + .Fields(I)
         Next I
         PrinterTexto 0.01, PosLinea + 0.2, Val(Contador) & ".-"
         PrinterAllFields CantCampos, PosLinea + 0.2, Datas, False, False
@@ -1114,7 +1114,7 @@ With Datas.Recordset
       EncabezadoData Datas
       Printer.FontSize = SizeLetra
       Do While Not .EOF
-         If MidStrg(.fields("Codigo"), 1, 1) = " " Then
+         If MidStrg(.Fields("Codigo"), 1, 1) = " " Then
             Imprimir_Linea_H PosLinea, Ancho(0), Ancho(CantCampos)
             PosLinea = PosLinea + 0.05
             Printer.FontBold = True
@@ -1123,7 +1123,7 @@ With Datas.Recordset
          End If
          PrinterAllFields CantCampos, PosLinea, Datas, True, False
          PosLinea = PosLinea + 0.36
-         If MidStrg(.fields("Codigo"), 1, 1) = " " Then
+         If MidStrg(.Fields("Codigo"), 1, 1) = " " Then
             Imprimir_Linea_H PosLinea, Ancho(0), Ancho(CantCampos)
             PosLinea = PosLinea + 0.05
          End If
@@ -1189,23 +1189,23 @@ With Datas.Recordset
      PrinterPaint LogoTipo, 1.2, PosLinea + 0.01, 3.5, 1.5
      Printer.FontSize = 10
      Printer.FontBold = True
-     If .fields("Ingreso") <> 0 Then
+     If .Fields("Ingreso") <> 0 Then
          PrinterTexto 1.2, PosLinea + 2.5, "Recibi de: "
      Else
          PrinterTexto 1.2, PosLinea + 2.5, "Pagado a: "
      End If
      Printer.FontBold = False
-     PrinterFields 14.4, PosLinea + 0.2, .fields("Fecha")
-     PrinterFields 3.1, PosLinea + 2.5, .fields("Beneficiario")
-     Valor = Redondear(.fields("Ingreso") + .fields("Egreso"), 2)
+     PrinterFields 14.4, PosLinea + 0.2, .Fields("Fecha")
+     PrinterFields 3.1, PosLinea + 2.5, .Fields("Beneficiario")
+     Valor = Redondear(.Fields("Ingreso") + .Fields("Egreso"), 2)
      Cadena = Cambio_Letras(Valor)
      NumeroLineas = PrinterLineasMayor(4, PosLinea + 3.3, Cadena, 10)
      Cadena = ""
-     If Len(.fields("Detalle")) > 1 Then Cadena = Cadena & .fields("Detalle") & ": "
-     If Len(.fields("Concepto")) > 1 Then Cadena = Cadena & .fields("Concepto")
+     If Len(.Fields("Detalle")) > 1 Then Cadena = Cadena & .Fields("Detalle") & ": "
+     If Len(.Fields("Concepto")) > 1 Then Cadena = Cadena & .Fields("Concepto")
      NumeroLineas = PrinterLineasMayor(4.1, PosLinea + 4.4, Cadena, 12)
      Printer.FontSize = 12
-     PrinterTexto 14.5, PosLinea + 1.4, Format$(.fields("Numero"), "0000000")
+     PrinterTexto 14.5, PosLinea + 1.4, Format$(.Fields("Numero"), "0000000")
      PrinterVariables 13.5, PosLinea + 2.5, Valor
      Printer.FontBold = True
      If Empresa = NombreComercial Then
@@ -1218,7 +1218,7 @@ With Datas.Recordset
      PrinterTexto 4, PosLinea + 1, "Dir. " & Direccion
      Printer.FontSize = 12
      Printer.FontBold = True
-     If .fields("Ingreso") <> 0 Then
+     If .Fields("Ingreso") <> 0 Then
          PrinterTexto 5.1, PosLinea + 1.4, "COMPROBANTE DE INGRESO DE CAJA"
      Else
          PrinterTexto 5.1, PosLinea + 1.4, "COMPROBANTE DE EGRESO DE CAJA"
@@ -1267,30 +1267,30 @@ With Datas.Recordset
     .MoveFirst
      EncabezadoData Datas
      Printer.FontSize = SizeLetra
-     Mifecha = .fields("Fecha")
+     Mifecha = .Fields("Fecha")
      PrinterTexto Ancho(1), PosLinea, " (*) MES DE: " & UCaseStrg(MesesLetras(FechaMes(Mifecha)))
      Imprimir_Lineas_Campos PosLinea
      PosLinea = PosLinea + 0.36
      Do While Not .EOF
-        If Mifecha <> .fields("Fecha") Then
-           Mifecha = .fields("Fecha")
+        If Mifecha <> .Fields("Fecha") Then
+           Mifecha = .Fields("Fecha")
            PrinterTexto Ancho(1), PosLinea, " (*) MES DE: " & UCaseStrg(MesesLetras(FechaMes(Mifecha)))
            Imprimir_Lineas_Campos PosLinea
            PosLinea = PosLinea + 0.36
         End If
-        PrinterFields Ancho(1), PosLinea, .fields("Cliente")
-        PrinterFields Ancho(2), PosLinea, .fields("Cedula")
-        Si_No = .fields("SN")
+        PrinterFields Ancho(1), PosLinea, .Fields("Cliente")
+        PrinterFields Ancho(2), PosLinea, .Fields("Cedula")
+        Si_No = .Fields("SN")
         If Si_No Then
            PrinterTexto Ancho(3), PosLinea, "Si"
         Else
            PrinterTexto Ancho(3), PosLinea, "No"
         End If
-        PrinterFields Ancho(4), PosLinea, .fields("Aporte_Per")
-        PrinterFields Ancho(5), PosLinea, .fields("Porc_Aporte")
-        PrinterFields Ancho(6), PosLinea, .fields("Ingresos_Liq")
-        PrinterFields Ancho(7), PosLinea, .fields("Base_Imponible")
-        PrinterFields Ancho(8), PosLinea, .fields("Retenido")
+        PrinterFields Ancho(4), PosLinea, .Fields("Aporte_Per")
+        PrinterFields Ancho(5), PosLinea, .Fields("Porc_Aporte")
+        PrinterFields Ancho(6), PosLinea, .Fields("Ingresos_Liq")
+        PrinterFields Ancho(7), PosLinea, .Fields("Base_Imponible")
+        PrinterFields Ancho(8), PosLinea, .Fields("Retenido")
         Imprimir_Lineas_Campos PosLinea
         PosLinea = PosLinea + 0.36
         If PosLinea >= LimiteAlto Then
@@ -1353,8 +1353,8 @@ With Datas.Recordset
       Encabezado Ancho(0), Ancho(13)
       Printer.FontName = TipoCondensed
       PosLinea = PosLinea + 0.1
-      Cuenta = .fields("Cuenta")
-      Total_Ret = .fields("Porc")
+      Cuenta = .Fields("Cuenta")
+      Total_Ret = .Fields("Porc")
       Cadena = Cuenta & ": " & Format$(Total_Ret, "00%")
       Total = 0
       Printer.FontBold = False
@@ -1381,14 +1381,14 @@ With Datas.Recordset
       PosLinea = PosLinea + 0.1
       Printer.FontBold = False
       Do While Not .EOF
-         If Cuenta <> .fields("Cuenta") Or Total_Ret <> .fields("Porc") Then
+         If Cuenta <> .Fields("Cuenta") Or Total_Ret <> .Fields("Porc") Then
             Printer.FontBold = False
             Imprimir_Linea_H PosLinea, Ancho(0), Ancho(CantCampos)
             PosLinea = PosLinea + 0.1
             PrinterTexto Ancho(9), PosLinea, "T O T A L"
             PrinterVariables Ancho(10), PosLinea, Total
-            Cuenta = .fields("Cuenta")
-            Total_Ret = .fields("Porc")
+            Cuenta = .Fields("Cuenta")
+            Total_Ret = .Fields("Porc")
             PosLinea = PosLinea + 0.5
             Cadena = Cuenta & ": " & Format$(Total_Ret, "00%")
             Printer.FontBold = False
@@ -1418,18 +1418,18 @@ With Datas.Recordset
          End If
          Printer.FontBold = False
          Printer.FontSize = SizeLetra
-         PrinterFields Ancho(1), PosLinea, .fields("T")
-         PrinterFields Ancho(2), PosLinea, .fields("Fecha")
-         PrinterFields Ancho(3), PosLinea, .fields("Autorizacion")
-         PrinterFields Ancho(4), PosLinea, .fields("Secuencial")
-         PrinterFields Ancho(5), PosLinea, .fields("Cliente")
-         PrinterFields Ancho(6), PosLinea, .fields("CI_RUC")
-         PrinterFields Ancho(7), PosLinea, .fields("TP")
-         PrinterFields Ancho(8), PosLinea, .fields("Numero")
-         PrinterFields Ancho(9), PosLinea, .fields("Valor_Fact")
-         PrinterFields Ancho(10), PosLinea, .fields("IVA")
-         PrinterFields Ancho(11), PosLinea, .fields("Valor_Ret")
-         PrinterFields Ancho(12), PosLinea, .fields("Porc")
+         PrinterFields Ancho(1), PosLinea, .Fields("T")
+         PrinterFields Ancho(2), PosLinea, .Fields("Fecha")
+         PrinterFields Ancho(3), PosLinea, .Fields("Autorizacion")
+         PrinterFields Ancho(4), PosLinea, .Fields("Secuencial")
+         PrinterFields Ancho(5), PosLinea, .Fields("Cliente")
+         PrinterFields Ancho(6), PosLinea, .Fields("CI_RUC")
+         PrinterFields Ancho(7), PosLinea, .Fields("TP")
+         PrinterFields Ancho(8), PosLinea, .Fields("Numero")
+         PrinterFields Ancho(9), PosLinea, .Fields("Valor_Fact")
+         PrinterFields Ancho(10), PosLinea, .Fields("IVA")
+         PrinterFields Ancho(11), PosLinea, .Fields("Valor_Ret")
+         PrinterFields Ancho(12), PosLinea, .Fields("Porc")
          PosLinea = PosLinea + 0.35
          If PosLinea >= LimiteAlto Then
             Imprimir_Linea_H PosLinea, Ancho(0), Ancho(CantCampos)
@@ -1458,7 +1458,7 @@ With Datas.Recordset
             Printer.FontBold = False
             Printer.FontSize = SizeLetra
          End If
-         Total = Total + .fields("Valor_Ret")
+         Total = Total + .Fields("Valor_Ret")
         .MoveNext
       Loop
   End If
@@ -1536,41 +1536,41 @@ With Datas.Recordset
       Printer.FontBold = False
       If Opc = 3 Then
          Printer.FontBold = True
-         Saldo = Redondear(.fields("Saldo") + .fields("Egreso") - .fields("Ingreso"), 2)
+         Saldo = Redondear(.Fields("Saldo") + .Fields("Egreso") - .Fields("Ingreso"), 2)
          PrinterTexto Ancho(4), PosLinea, "S A L D O    A N T E R I O R"
          PrinterVariables Ancho(7) - 0.5, PosLinea, Saldo
          PosLinea = PosLinea + 0.4
          Printer.FontBold = False
       End If
       Debe = 0: Haber = 0: Total = 0: Saldo = 0
-      Codigo = SinEspaciosIzq(.fields("Concepto"))
+      Codigo = SinEspaciosIzq(.Fields("Concepto"))
       Do While Not .EOF
          Printer.FontSize = SizeLetra
          Printer.FontBold = False
-         If Mifecha <> .fields("Fecha") Then
-            PrinterFields Ancho(1), PosLinea, .fields("Fecha")
-            Mifecha = .fields("Fecha")
+         If Mifecha <> .Fields("Fecha") Then
+            PrinterFields Ancho(1), PosLinea, .Fields("Fecha")
+            Mifecha = .Fields("Fecha")
          End If
-         PrinterTexto Ancho(2), PosLinea, Format$(.fields("Numero"), "000000")
-         PrinterFields Ancho(3), PosLinea, .fields("Beneficiario")
-         PrinterFields Ancho(4), PosLinea, .fields("Concepto")
+         PrinterTexto Ancho(2), PosLinea, Format$(.Fields("Numero"), "000000")
+         PrinterFields Ancho(3), PosLinea, .Fields("Beneficiario")
+         PrinterFields Ancho(4), PosLinea, .Fields("Concepto")
          Select Case Opc
            Case 1
-                PrinterFields Ancho(5), PosLinea, .fields("Ingreso")
-                Total = Total + .fields("Ingreso")
-                Saldo = Saldo + .fields("Ingreso")
+                PrinterFields Ancho(5), PosLinea, .Fields("Ingreso")
+                Total = Total + .Fields("Ingreso")
+                Saldo = Saldo + .Fields("Ingreso")
            Case 2
-                PrinterFields Ancho(5), PosLinea, .fields("Egreso")
-                Total = Total + .fields("Egreso")
-                Saldo = Saldo + .fields("Egreso")
+                PrinterFields Ancho(5), PosLinea, .Fields("Egreso")
+                Total = Total + .Fields("Egreso")
+                Saldo = Saldo + .Fields("Egreso")
            Case 3
-                PrinterFields Ancho(7), PosLinea, .fields("Saldo")
-                PrinterFields Ancho(6), PosLinea, .fields("Egreso")
-                PrinterFields Ancho(5), PosLinea, .fields("Ingreso")
-                Debe = Debe + .fields("Ingreso")
-                Haber = Haber + .fields("Egreso")
-                Saldo = Saldo + .fields("Saldo")
-                Total = .fields("Saldo")
+                PrinterFields Ancho(7), PosLinea, .Fields("Saldo")
+                PrinterFields Ancho(6), PosLinea, .Fields("Egreso")
+                PrinterFields Ancho(5), PosLinea, .Fields("Ingreso")
+                Debe = Debe + .Fields("Ingreso")
+                Haber = Haber + .Fields("Egreso")
+                Saldo = Saldo + .Fields("Saldo")
+                Total = .Fields("Saldo")
          End Select
          PosLinea = PosLinea + 0.35
          If PosLinea >= LimiteAlto Then
@@ -1867,8 +1867,8 @@ Dim TotalCtas As Long
      .MoveFirst
       CantCtas = 0
       TotalCtas = .RecordCount
-      Cuenta = .fields("Cta")
-      Caracter = MidStrg(.fields("Cta"), 1, 1)
+      Cuenta = .Fields("Cta")
+      Caracter = MidStrg(.Fields("Cta"), 1, 1)
       For I = 0 To 4: Semana(I) = 0: Next I
       For I = 0 To 4: Domingos(I) = 0: Next I
       For I = 0 To 4: TotalSemana(I) = 0: Next I
@@ -1884,15 +1884,15 @@ Dim TotalCtas As Long
       Do While Not .EOF
          Progreso_Barra.Mensaje_Box = "Cuenta: " & Cuenta
          Progreso_Esperar
-         If Caracter <> MidStrg(.fields("Cta"), 1, 1) Then
+         If Caracter <> MidStrg(.Fields("Cta"), 1, 1) Then
             Cantidad = 0
             For I = 0 To 4
                 Cantidad = Cantidad + TotalSemana(I)
             Next I
-            Caracter = MidStrg(.fields("Cta"), 1, 1)
+            Caracter = MidStrg(.Fields("Cta"), 1, 1)
             For I = 0 To 4: TotalSemana(I) = 0: Next I
          End If
-         If Cuenta <> .fields("Cta") Then
+         If Cuenta <> .Fields("Cta") Then
             MiTiempo = Time - MiTiempo1
             
             'FormPadre.Caption = Cadena
@@ -1906,53 +1906,53 @@ Dim TotalCtas As Long
             For I = 0 To 4
                 Cantidad = Cantidad + Semana(I)
             Next I
-            Cuenta = .fields("Cta")
+            Cuenta = .Fields("Cta")
             Debe = 0: Haber = 0: Saldo = 0
             Debe_ME = 0: Haber_ME = 0: Saldo_ME = 0
             For I = 0 To 4: Semana(I) = 0: Next I
          End If
-         NoDias = Day(.fields("Fecha"))
+         NoDias = Day(.Fields("Fecha"))
          Select Case NoDias
            Case Domingos(0) To Domingos(1) - 1
-                If MidStrg(.fields("Cta"), 1, 1) = "4" Then
-                   Semana(0) = Semana(0) + .fields("Haber")
+                If MidStrg(.Fields("Cta"), 1, 1) = "4" Then
+                   Semana(0) = Semana(0) + .Fields("Haber")
                 Else
-                   Semana(0) = Semana(0) + .fields("Debe")
+                   Semana(0) = Semana(0) + .Fields("Debe")
                 End If
            Case Domingos(1) To Domingos(2) - 1
-                If MidStrg(.fields("Cta"), 1, 1) = "4" Then
-                   Semana(1) = Semana(1) + .fields("Haber")
+                If MidStrg(.Fields("Cta"), 1, 1) = "4" Then
+                   Semana(1) = Semana(1) + .Fields("Haber")
                 Else
-                   Semana(1) = Semana(1) + .fields("Debe")
+                   Semana(1) = Semana(1) + .Fields("Debe")
                 End If
            Case Domingos(2) To Domingos(3) - 1
-                If MidStrg(.fields("Cta"), 1, 1) = "4" Then
-                   Semana(2) = Semana(2) + .fields("Haber")
+                If MidStrg(.Fields("Cta"), 1, 1) = "4" Then
+                   Semana(2) = Semana(2) + .Fields("Haber")
                 Else
-                   Semana(2) = Semana(2) + .fields("Debe")
+                   Semana(2) = Semana(2) + .Fields("Debe")
                 End If
            Case Domingos(3) To Domingos(4) - 1
-                If MidStrg(.fields("Cta"), 1, 1) = "4" Then
-                   Semana(3) = Semana(3) + .fields("Haber")
+                If MidStrg(.Fields("Cta"), 1, 1) = "4" Then
+                   Semana(3) = Semana(3) + .Fields("Haber")
                 Else
-                   Semana(3) = Semana(3) + .fields("Debe")
+                   Semana(3) = Semana(3) + .Fields("Debe")
                 End If
            Case Domingos(4) To 31
-                If MidStrg(.fields("Cta"), 1, 1) = "4" Then
-                   Semana(4) = Semana(4) + .fields("Haber")
+                If MidStrg(.Fields("Cta"), 1, 1) = "4" Then
+                   Semana(4) = Semana(4) + .Fields("Haber")
                 Else
-                   Semana(4) = Semana(4) + .fields("Debe")
+                   Semana(4) = Semana(4) + .Fields("Debe")
                 End If
          End Select
-         Debe = Debe + Redondear(.fields("Debe"), 2)
-         Haber = Haber + Redondear(.fields("Haber"), 2)
-         If .fields("Parcial_ME") > 0 Then
-             Debe_ME = Debe_ME + Redondear(.fields("Parcial_ME"), 2)
+         Debe = Debe + Redondear(.Fields("Debe"), 2)
+         Haber = Haber + Redondear(.Fields("Haber"), 2)
+         If .Fields("Parcial_ME") > 0 Then
+             Debe_ME = Debe_ME + Redondear(.Fields("Parcial_ME"), 2)
          Else
-             Haber_ME = Haber_ME + Redondear(-.fields("Parcial_ME"), 2)
+             Haber_ME = Haber_ME + Redondear(-.Fields("Parcial_ME"), 2)
          End If
-         SumaDebe = SumaDebe + Redondear(.fields("Debe"), 2)
-         SumaHaber = SumaHaber + Redondear(.fields("Haber"), 2)
+         SumaDebe = SumaDebe + Redondear(.Fields("Debe"), 2)
+         SumaHaber = SumaHaber + Redondear(.Fields("Haber"), 2)
          CantCtas = CantCtas + 1
          Cadena = "BALANCE DE COMPROBACION MENSUAL: " & Format$(CantCtas * 100 / TotalCtas, "00") & "% " _
                    & " Tiempo: " & Format$(MiTiempo, "HH:MM:SS") _
@@ -2614,17 +2614,17 @@ With Datas.Recordset
      End If
     'Encabezados del libro diario
      Printer.FontBold = False
-     PrinterFields Ancho(0) + 1.1, PosLinea + 0.1, .fields("Fecha")
+     PrinterFields Ancho(0) + 1.1, PosLinea + 0.1, .Fields("Fecha")
      If OpcCoop Then
         PosLinea = PosLinea + 1.1
      Else
-        NumeroLineas = PrinterLineasMayor(Ancho(0) + 1.8, PosLinea + 0.5, .fields("Concepto"), 15)
+        NumeroLineas = PrinterLineasMayor(Ancho(0) + 1.8, PosLinea + 0.5, .Fields("Concepto"), 15)
         'MsgBox PosLinea & vbCrLf & NumeroLineas & vbCrLf & PosLinea_Aux
         'PrinterFields Ancho(0) + 1.8, PosLinea + 0.5, .Fields("Concepto")
         'PosLinea = PosLinea + 0.8
-        PrinterFields Ancho(0) + 6.2, PosLinea + 0.1, .fields("CodigoU")
-        PrinterFields Ancho(2) + 0.6, PosLinea + 0.1, .fields("TP")
-        PrinterTexto Ancho(3) + 1.8, PosLinea + 0.1, Format$(.fields("Numero"), "00000000")
+        PrinterFields Ancho(0) + 6.2, PosLinea + 0.1, .Fields("CodigoU")
+        PrinterFields Ancho(2) + 0.6, PosLinea + 0.1, .Fields("TP")
+        PrinterTexto Ancho(3) + 1.8, PosLinea + 0.1, Format$(.Fields("Numero"), "00000000")
         Printer.Line (Ancho(5), PosLinea + 0.4)-(Ancho(5), PosLinea + 1.4), Negro
         Printer.Line (Ancho(0), PosLinea + 0.9)-(Ancho(5), PosLinea + 0.9), Negro
         PosLinea = PosLinea + 1.5
@@ -2755,13 +2755,13 @@ Public Sub CalculosTotalesInventario(DataCta As Adodc, _
    With DataCta.Recordset
     If .RecordCount > 0 Then
         Cta_Sup = CodigoCuentaSup(CodigoCta)
-       .fields("Stock_Anterior") = TSaldoAnt
-       .fields("Entradas") = TEntradas
-       .fields("Salidas") = TSalidas
-       .fields("Stock_Actual") = TSaldoAct
-        .fields("Promedio") = Valor_Prom
+       .Fields("Stock_Anterior") = TSaldoAnt
+       .Fields("Entradas") = TEntradas
+       .Fields("Salidas") = TSalidas
+       .Fields("Stock_Actual") = TSaldoAct
+        .Fields("Promedio") = Valor_Prom
         'If Contador > 0 Then .Fields("Promedio") = Redondear(Precio / Contador, 4)
-       .fields("Valor_Total") = TSaldo
+       .Fields("Valor_Total") = TSaldo
        .Update
         'If .Fields("Codigo_Inv") = "05.01.02" Then MsgBox Valor_Prom & vbCrLf & TSaldoAct
     End If
@@ -2805,7 +2805,7 @@ Dim SaldoTotalME As Currency
     If .RecordCount > 0 Then
         Cta_Sup = CodigoCuentaSup(CodigoCta)
         If OpcCoop Then
-           Select Case MidStrg(.fields("Codigo"), 1, 1)
+           Select Case MidStrg(.Fields("Codigo"), 1, 1)
              Case "1", "4", "6", "8"
                   SaldoTotal = Redondear(TSaldo + TDebe - THaber, 2)
                   SaldoTotalME = Redondear(TSaldoME + TDebeME - THaberME, 2)
@@ -2814,7 +2814,7 @@ Dim SaldoTotalME As Currency
                   SaldoTotalME = Redondear(TSaldoME + THaberME - TDebeME, 2)
            End Select
         Else
-           Select Case MidStrg(.fields("Codigo"), 1, 1)
+           Select Case MidStrg(.Fields("Codigo"), 1, 1)
              Case "1", "5"
                   SaldoTotal = Redondear(TSaldo + TDebe - THaber, 2)
                   SaldoTotalME = Redondear(TSaldoME + TDebeME - THaberME, 2)
@@ -2824,11 +2824,11 @@ Dim SaldoTotalME As Currency
            End Select
         End If
         'If .Fields("ME") = False Then SaldoTotalME = 0
-       .fields("Saldo_Anterior") = TSaldo
-       .fields("Debitos") = TDebe
-       .fields("Creditos") = THaber
-       .fields("Saldo_Total") = SaldoTotal
-       .fields("Saldo_Total_ME") = SaldoTotalME
+       .Fields("Saldo_Anterior") = TSaldo
+       .Fields("Debitos") = TDebe
+       .Fields("Creditos") = THaber
+       .Fields("Saldo_Total") = SaldoTotal
+       .Fields("Saldo_Total_ME") = SaldoTotalME
        .Update
     End If
    End With
@@ -2897,7 +2897,7 @@ Dim NumeroDeMeses As Integer
   With Datas.Recordset
   KE = 2
   For J = IRR To JRR
-      PrinterTexto Ancho(KE), PosLinea, UCaseStrg(.fields(J).Name)
+      PrinterTexto Ancho(KE), PosLinea, UCaseStrg(.Fields(J).Name)
       PrinterTexto Ancho(KE), PosLinea + 0.5, "Parcial"
       PrinterTexto Ancho(KE) + 1.8, PosLinea + 0.5, "Total"
       KE = KE + 1
@@ -2939,7 +2939,7 @@ Dim NumeroDeMeses As Integer
   Printer.FontSize = 6: NoMeses = 1
   With Datas.Recordset
   For J = 3 To CantCampos - 1
-      PrinterTexto Ancho(J), PosLinea, UCaseStrg(MidStrg(.fields(J).Name, 1, 10))
+      PrinterTexto Ancho(J), PosLinea, UCaseStrg(MidStrg(.Fields(J).Name, 1, 10))
       NoMeses = NoMeses + 1
   Next J
   Printer.Line (Ancho(0), PosLinea - 0.1)-(Ancho(0), PosLinea + 0.35), Negro
@@ -3075,7 +3075,7 @@ PosLinea = PosLinea + 0.1
 PrinterTexto 2, PosLinea, "GRUPO:"
 With Datas1.Recordset
  If .RecordCount > 0 Then
-     If (.fields("PAX") <> 0) And (.fields("Guia") <> Ninguno) Then
+     If (.Fields("PAX") <> 0) And (.Fields("Guia") <> Ninguno) Then
          PrinterTexto 2, PosLinea + 0.5, "GUIA:"
          PrinterFields 3.5, PosLinea + 0.5, Datas1, "Guia"
          PrinterTexto 9, PosLinea + 0.5, "No. PAX:"
@@ -3083,7 +3083,7 @@ With Datas1.Recordset
      End If
      PrinterTexto 2, PosLinea + 1, "PERIODO:"
      PrinterTexto 3.5, PosLinea, SQLMsg1
-     Cadena = "DESDE " & .fields("Fecha_De") & " AL " & .fields("Fecha_Al")
+     Cadena = "DESDE " & .Fields("Fecha_De") & " AL " & .Fields("Fecha_Al")
      PrinterTexto 4, PosLinea + 1, Cadena
  End If
 End With
@@ -3115,7 +3115,7 @@ With DataBanco.Recordset
      If .RecordCount > 0 Then
         .MoveFirst
          Do While Not DataBanco.Recordset.EOF
-            SumaBank = SumaBank + .fields("VALOR")
+            SumaBank = SumaBank + .Fields("VALOR")
            .MoveNext
          Loop
      End If
@@ -3169,8 +3169,8 @@ Public Sub SumaTotalAsientos(DataAsiento As Adodc) ', LabelD As Control, LabelH 
    If .RecordCount > 0 Then
       .MoveFirst
        Do While Not .EOF
-          SumaDebe = SumaDebe + .fields("Debe")
-          SumaHaber = SumaHaber + .fields("Haber")
+          SumaDebe = SumaDebe + .Fields("Debe")
+          SumaHaber = SumaHaber + .Fields("Haber")
          .MoveNext
        Loop
       .MoveFirst
@@ -3191,13 +3191,13 @@ Public Sub CalculosTotalAsientos(DataAsiento As Adodc, _
       .MoveFirst
        Do While Not .EOF
           'If InStr(Co.Ctas_Modificar, .fields("CODIGO")) <= 0 Then Co.Ctas_Modificar = Co.Ctas_Modificar & .fields("CODIGO") & ","
-          If Cta_Ret_Egreso = .fields("CODIGO") Then
+          If Cta_Ret_Egreso = .Fields("CODIGO") Then
              LlenarRetencion = True
-             Total_RetCta = .fields("DEBE")
-             If Total_RetCta <= 0 Then Total_RetCta = .fields("HABER")
+             Total_RetCta = .Fields("DEBE")
+             If Total_RetCta <= 0 Then Total_RetCta = .Fields("HABER")
           End If
-          SumaDebe = SumaDebe + .fields("DEBE")
-          SumaHaber = SumaHaber + .fields("HABER")
+          SumaDebe = SumaDebe + .Fields("DEBE")
+          SumaHaber = SumaHaber + .Fields("HABER")
          'MsgBox "hola"
          .MoveNext
        Loop
@@ -3230,6 +3230,8 @@ Dim AdoRetAut As ADODB.Recordset
   FA.Retencion = C1.Retencion
   FA.Serie_R = C1.Serie_R
   FA.Serie_LC = C1.Serie_LC
+  C1.Periodo = Periodo_Contable
+  C1.Usuario = CodigoUsuario
   
   Grabar_Comprobante_SP C1, CtaConciliada
   FA.TP = C1.TP
@@ -3260,29 +3262,29 @@ Public Sub InsertarAsientosC(DtaAsiento As Adodc)
      If ValorDH <> 0 Then
         With DtaAsiento.Recordset
          .AddNew
-         .fields("CODIGO") = Codigo
-         .fields("CUENTA") = Cuenta
-         .fields("DETALLE") = DetalleComp
-         .fields("Item") = NumEmpresa
+         .Fields("CODIGO") = Codigo
+         .Fields("CUENTA") = Cuenta
+         .Fields("DETALLE") = DetalleComp
+         .Fields("Item") = NumEmpresa
           If OpcCoop And Moneda_US Then
              Debe = Debe / Dolar
              Haber = Haber / Dolar
           Else
-            .fields("PARCIAL_ME") = 0
-             If Moneda_US Then .fields("PARCIAL_ME") = (Debe - Haber) / Dolar
+            .Fields("PARCIAL_ME") = 0
+             If Moneda_US Then .Fields("PARCIAL_ME") = (Debe - Haber) / Dolar
           End If
-         .fields("DEBE") = Debe
-         .fields("HABER") = Haber
-         .fields("EFECTIVIZAR") = Fecha_Vence
-         .fields("CHEQ_DEP") = NoCheque
-         .fields("ME") = Moneda_US
-         .fields("T_No") = Trans_No
-         .fields("CODIGO_C") = CodigoCli
-         .fields("CODIGO_CC") = CodigoCC
-         .fields("Item") = NumEmpresa
-         .fields("CodigoU") = CodigoUsuario
-         .fields("TC") = SubCta
-         .fields("A_No") = Ln_No
+         .Fields("DEBE") = Debe
+         .Fields("HABER") = Haber
+         .Fields("EFECTIVIZAR") = Fecha_Vence
+         .Fields("CHEQ_DEP") = NoCheque
+         .Fields("ME") = Moneda_US
+         .Fields("T_No") = Trans_No
+         .Fields("CODIGO_C") = CodigoCli
+         .Fields("CODIGO_CC") = CodigoCC
+         .Fields("Item") = NumEmpresa
+         .Fields("CodigoU") = CodigoUsuario
+         .Fields("TC") = SubCta
+         .Fields("A_No") = Ln_No
           Ln_No = Ln_No + 1
           If Cuenta <> Ninguno Then .Update
         End With
@@ -3343,58 +3345,58 @@ If .RecordCount > 0 Then
        Printer.FontItalic = False
        Printer.FontSize = TamanoLetra
     
-      Valor_ME = .fields("Parcial_ME")
-      Cta_Sup = .fields("Cta")
-      Valor_Prom = .fields("Debe") - .fields("Haber")
-      PrinterFields PosAsiento(0) + 0.1, PosLinea, .fields("Cta")
-      PrinterFields PosAsiento(1) + 0.1, PosLinea, .fields("Cuenta")
+      Valor_ME = .Fields("Parcial_ME")
+      Cta_Sup = .Fields("Cta")
+      Valor_Prom = .Fields("Debe") - .Fields("Haber")
+      PrinterFields PosAsiento(0) + 0.1, PosLinea, .Fields("Cta")
+      PrinterFields PosAsiento(1) + 0.1, PosLinea, .Fields("Cuenta")
       If OpcCoop Then
          If Valor_ME <> 0 Then
-            PrinterFields PosAsiento(3) + 0.1, PosLinea, .fields("Debe_ME")
-            PrinterFields PosAsiento(4) + 0.1, PosLinea, .fields("Haber_ME")
-            SumaDebe = SumaDebe + .fields("Debe")
-            SumaHaber = SumaHaber + .fields("Haber")
+            PrinterFields PosAsiento(3) + 0.1, PosLinea, .Fields("Debe_ME")
+            PrinterFields PosAsiento(4) + 0.1, PosLinea, .Fields("Haber_ME")
+            SumaDebe = SumaDebe + .Fields("Debe")
+            SumaHaber = SumaHaber + .Fields("Haber")
          Else
-            PrinterFields PosAsiento(3) + 0.1, PosLinea, .fields("Debe")
-            PrinterFields PosAsiento(4) + 0.1, PosLinea, .fields("Haber")
-            SumaDebe = SumaDebe + .fields("Debe")
-            SumaHaber = SumaHaber + .fields("Haber")
+            PrinterFields PosAsiento(3) + 0.1, PosLinea, .Fields("Debe")
+            PrinterFields PosAsiento(4) + 0.1, PosLinea, .Fields("Haber")
+            SumaDebe = SumaDebe + .Fields("Debe")
+            SumaHaber = SumaHaber + .Fields("Haber")
          End If
       Else
          If Valor_ME <> 0 Then PrinterVariables PosAsiento(2) + 0.1, PosLinea, Valor_ME
          Printer.FontItalic = False
-         PrinterFields PosAsiento(3) + 0.1, PosLinea, .fields("Debe")
-         PrinterFields PosAsiento(4) + 0.1, PosLinea, .fields("Haber")
+         PrinterFields PosAsiento(3) + 0.1, PosLinea, .Fields("Debe")
+         PrinterFields PosAsiento(4) + 0.1, PosLinea, .Fields("Haber")
          For J = 0 To 5
              Printer.Line (PosAsiento(J), PosLinea - 0.05)-(PosAsiento(J), PosLinea + 0.4), NoColor
          Next J
-         SumaDebe = SumaDebe + .fields("Debe")
-         SumaHaber = SumaHaber + .fields("Haber")
+         SumaDebe = SumaDebe + .Fields("Debe")
+         SumaHaber = SumaHaber + .Fields("Haber")
       End If
       PosLinea = PosLinea + 0.35
-      If Len(.fields("Detalle")) > 1 Then
+      If Len(.Fields("Detalle")) > 1 Then
          Printer.FontSize = 7
-         PrinterFields PosAsiento(1) + 0.1, PosLinea, .fields("Detalle")
-         If .fields("Cheq_Dep") <> Ninguno Then
-             If IsNumeric(.fields("Cheq_Dep")) Then
-                PrinterTexto PosAsiento(1) + 5.1, PosLinea, " No. " & .fields("Cheq_Dep")
+         PrinterFields PosAsiento(1) + 0.1, PosLinea, .Fields("Detalle")
+         If .Fields("Cheq_Dep") <> Ninguno Then
+             If IsNumeric(.Fields("Cheq_Dep")) Then
+                PrinterTexto PosAsiento(1) + 5.1, PosLinea, " No. " & .Fields("Cheq_Dep")
              Else
-                PrinterTexto PosAsiento(1) + 5.1, PosLinea, " " & .fields("Cheq_Dep")
+                PrinterTexto PosAsiento(1) + 5.1, PosLinea, " " & .Fields("Cheq_Dep")
              End If
          End If
          PosLinea = PosLinea + 0.35
       Else
-         If .fields("Cheq_Dep") <> Ninguno Then
+         If .Fields("Cheq_Dep") <> Ninguno Then
              Printer.FontSize = 7
-             If IsNumeric(.fields("Cheq_Dep")) Then
+             If IsNumeric(.Fields("Cheq_Dep")) Then
                 Select Case TipoComp
-                  Case "CD": PrinterTexto PosAsiento(1) + 0.1, PosLinea, "No. " & Format$(Val(.fields("Cheq_Dep")), "00000000")
-                  Case "CI": PrinterTexto PosAsiento(1) + 0.1, PosLinea, "Deposito No. " & Format$(Val(.fields("Cheq_Dep")), "00000000")
-                  Case "CE": PrinterTexto PosAsiento(1) + 0.1, PosLinea, "Cheque No. " & Format$(Val(.fields("Cheq_Dep")), "00000000")
-                  Case Else: PrinterTexto PosAsiento(1) + 0.1, PosLinea, "Documento No. " & Format$(Val(.fields("Cheq_Dep")), "00000000")
+                  Case "CD": PrinterTexto PosAsiento(1) + 0.1, PosLinea, "No. " & Format$(Val(.Fields("Cheq_Dep")), "00000000")
+                  Case "CI": PrinterTexto PosAsiento(1) + 0.1, PosLinea, "Deposito No. " & Format$(Val(.Fields("Cheq_Dep")), "00000000")
+                  Case "CE": PrinterTexto PosAsiento(1) + 0.1, PosLinea, "Cheque No. " & Format$(Val(.Fields("Cheq_Dep")), "00000000")
+                  Case Else: PrinterTexto PosAsiento(1) + 0.1, PosLinea, "Documento No. " & Format$(Val(.Fields("Cheq_Dep")), "00000000")
                 End Select
              Else
-                PrinterTexto PosAsiento(1) + 0.1, PosLinea, "Referencia: " & .fields("Cheq_Dep")
+                PrinterTexto PosAsiento(1) + 0.1, PosLinea, "Referencia: " & .Fields("Cheq_Dep")
              End If
              PosLinea = PosLinea + 0.35
          End If
@@ -3409,60 +3411,60 @@ If .RecordCount > 0 Then
             DetSubCta = Ninguno
             Do While Not Datas1.EOF
                Printer.FontItalic = True
-               If Cta_Sup = Datas1.fields("Cta") And Datas1.fields("Codigo") <> Ninguno Then
-                  If Datas1.fields("Debitos") > 0 And Valor_Prom > 0 Then
+               If Cta_Sup = Datas1.Fields("Cta") And Datas1.Fields("Codigo") <> Ninguno Then
+                  If Datas1.Fields("Debitos") > 0 And Valor_Prom > 0 Then
                      ImpDetSubCta = False
-                     If DetSubCta <> Datas1.fields("Cliente") Then
-                        PrinterTexto PosAsiento(1) + 0.1, PosLinea, "-" & Datas1.fields("Cliente")
-                        DetSubCta = Datas1.fields("Cliente")
+                     If DetSubCta <> Datas1.Fields("Cliente") Then
+                        PrinterTexto PosAsiento(1) + 0.1, PosLinea, "-" & Datas1.Fields("Cliente")
+                        DetSubCta = Datas1.Fields("Cliente")
                         ImpDetSubCta = True
                      End If
                      Printer.FontItalic = False
                      
-                     If Datas1.fields("Detalle_SubCta") <> Ninguno Then
+                     If Datas1.Fields("Detalle_SubCta") <> Ninguno Then
                         If ImpDetSubCta Then PosLinea = PosLinea + 0.35
-                        PrinterTexto PosAsiento(1) + 0.2, PosLinea, Datas1.fields("Detalle_SubCta")
+                        PrinterTexto PosAsiento(1) + 0.2, PosLinea, Datas1.Fields("Detalle_SubCta")
                      End If
                      
-                     If Datas1.fields("Factura") <> 0 Then
-                        PrinterTexto PosAsiento(1) + 5.1, PosLinea, " No. " & Format$(Datas1.fields("Factura"), "0000000")
-                     ElseIf Datas1.fields("Prima") <> 0 Then
+                     If Datas1.Fields("Factura") <> 0 Then
+                        PrinterTexto PosAsiento(1) + 5.1, PosLinea, " No. " & Format$(Datas1.Fields("Factura"), "0000000")
+                     ElseIf Datas1.Fields("Prima") <> 0 Then
                         PrinterTexto PosAsiento(1) + 5.1, PosLinea, " Valor Prima"
                      Else
-                        If Datas1.fields("TC") <> "CC" Then PrinterTexto PosAsiento(1) + 4.6, PosLinea, " - Venc. " & Datas1.fields("Fecha_V")
+                        If Datas1.Fields("TC") <> "CC" Then PrinterTexto PosAsiento(1) + 4.6, PosLinea, " - Venc. " & Datas1.Fields("Fecha_V")
                      End If
                      
-                     If Datas1.fields("Prima") <> 0 Then
-                        PrinterVariables PosAsiento(2) + 0.1, PosLinea, Datas1.fields("Prima")
+                     If Datas1.Fields("Prima") <> 0 Then
+                        PrinterVariables PosAsiento(2) + 0.1, PosLinea, Datas1.Fields("Prima")
                      Else
-                        PrinterFields PosAsiento(2) + 0.1, PosLinea, Datas1.fields("Debitos")
+                        PrinterFields PosAsiento(2) + 0.1, PosLinea, Datas1.Fields("Debitos")
                      End If
                      PosLinea = PosLinea + 0.35
                   End If
-                  If Datas1.fields("Creditos") > 0 And Valor_Prom < 0 Then
+                  If Datas1.Fields("Creditos") > 0 And Valor_Prom < 0 Then
                      ImpDetSubCta = False
-                     If DetSubCta <> Datas1.fields("Cliente") Then
-                        PrinterTexto PosAsiento(1) + 0.1, PosLinea, "-" & Datas1.fields("Cliente")
-                        DetSubCta = Datas1.fields("Cliente")
+                     If DetSubCta <> Datas1.Fields("Cliente") Then
+                        PrinterTexto PosAsiento(1) + 0.1, PosLinea, "-" & Datas1.Fields("Cliente")
+                        DetSubCta = Datas1.Fields("Cliente")
                         ImpDetSubCta = True
                      End If
                      Printer.FontItalic = False
                      
-                     If Datas1.fields("Detalle_SubCta") <> Ninguno Then
+                     If Datas1.Fields("Detalle_SubCta") <> Ninguno Then
                         If ImpDetSubCta Then PosLinea = PosLinea + 0.35
-                        PrinterTexto PosAsiento(1) + 0.2, PosLinea, Datas1.fields("Detalle_SubCta")
+                        PrinterTexto PosAsiento(1) + 0.2, PosLinea, Datas1.Fields("Detalle_SubCta")
                      End If
-                     If Datas1.fields("Factura") <> 0 Then
-                        PrinterTexto PosAsiento(1) + 5.1, PosLinea, " No. " & Format$(Datas1.fields("Factura"), "0000000")
-                     ElseIf Datas1.fields("Prima") <> 0 Then
+                     If Datas1.Fields("Factura") <> 0 Then
+                        PrinterTexto PosAsiento(1) + 5.1, PosLinea, " No. " & Format$(Datas1.Fields("Factura"), "0000000")
+                     ElseIf Datas1.Fields("Prima") <> 0 Then
                         PrinterTexto PosAsiento(1) + 5.1, PosLinea, " Valor Prima"
                      Else
-                        If Datas1.fields("TC") <> "CC" Then PrinterTexto PosAsiento(1) + 4.6, PosLinea, " - Venc. " & Datas1.fields("Fecha_V")
+                        If Datas1.Fields("TC") <> "CC" Then PrinterTexto PosAsiento(1) + 4.6, PosLinea, " - Venc. " & Datas1.Fields("Fecha_V")
                      End If
-                     If Datas1.fields("Prima") <> 0 Then
-                        PrinterVariables PosAsiento(2) + 0.1, PosLinea, Datas1.fields("Prima")
+                     If Datas1.Fields("Prima") <> 0 Then
+                        PrinterVariables PosAsiento(2) + 0.1, PosLinea, Datas1.Fields("Prima")
                      Else
-                        PrinterFields PosAsiento(2) + 0.9, PosLinea, Datas1.fields("Creditos")
+                        PrinterFields PosAsiento(2) + 0.9, PosLinea, Datas1.Fields("Creditos")
                      End If
                      PosLinea = PosLinea + 0.35
                   End If
@@ -3512,60 +3514,60 @@ If .RecordCount > 0 Then
             DetSubCta = Ninguno
             Do While Not Datas2.EOF
                Printer.FontItalic = True
-               If Cta_Sup = Datas2.fields("Cta") And Datas2.fields("Codigo") <> Ninguno Then
-                  If Datas2.fields("Debitos") > 0 And Valor_Prom > 0 Then
+               If Cta_Sup = Datas2.Fields("Cta") And Datas2.Fields("Codigo") <> Ninguno Then
+                  If Datas2.Fields("Debitos") > 0 And Valor_Prom > 0 Then
                      ImpDetSubCta = False
-                     If DetSubCta <> Datas2.fields("Cliente") Then
-                        PrinterTexto PosAsiento(1) + 0.1, PosLinea, "-" & Datas2.fields("Cliente")
-                        DetSubCta = Datas2.fields("Cliente")
+                     If DetSubCta <> Datas2.Fields("Cliente") Then
+                        PrinterTexto PosAsiento(1) + 0.1, PosLinea, "-" & Datas2.Fields("Cliente")
+                        DetSubCta = Datas2.Fields("Cliente")
                         ImpDetSubCta = True
                      End If
                      Printer.FontItalic = False
                      
-                     If Datas2.fields("Detalle_SubCta") <> Ninguno Then
+                     If Datas2.Fields("Detalle_SubCta") <> Ninguno Then
                         If ImpDetSubCta Then PosLinea = PosLinea + 0.35
-                        PrinterTexto PosAsiento(1) + 0.2, PosLinea, Datas2.fields("Detalle_SubCta")
+                        PrinterTexto PosAsiento(1) + 0.2, PosLinea, Datas2.Fields("Detalle_SubCta")
                      End If
                      
-                     If Datas2.fields("Factura") <> 0 Then
-                        PrinterTexto PosAsiento(1) + 5.1, PosLinea, " No. " & Format$(Datas2.fields("Factura"), "0000000")
-                     ElseIf Datas2.fields("Prima") <> 0 Then
+                     If Datas2.Fields("Factura") <> 0 Then
+                        PrinterTexto PosAsiento(1) + 5.1, PosLinea, " No. " & Format$(Datas2.Fields("Factura"), "0000000")
+                     ElseIf Datas2.Fields("Prima") <> 0 Then
                         PrinterTexto PosAsiento(1) + 5.1, PosLinea, " Valor Prima"
                      Else
-                        If Datas2.fields("TC") <> "CC" Then PrinterTexto PosAsiento(1) + 4.6, PosLinea, " - Venc. " & Datas2.fields("Fecha_V")
+                        If Datas2.Fields("TC") <> "CC" Then PrinterTexto PosAsiento(1) + 4.6, PosLinea, " - Venc. " & Datas2.Fields("Fecha_V")
                      End If
                      
-                     If Datas2.fields("Prima") <> 0 Then
-                        PrinterVariables PosAsiento(2) + 0.1, PosLinea, Datas2.fields("Prima")
+                     If Datas2.Fields("Prima") <> 0 Then
+                        PrinterVariables PosAsiento(2) + 0.1, PosLinea, Datas2.Fields("Prima")
                      Else
-                        PrinterFields PosAsiento(2) + 0.1, PosLinea, Datas2.fields("Debitos")
+                        PrinterFields PosAsiento(2) + 0.1, PosLinea, Datas2.Fields("Debitos")
                      End If
                      PosLinea = PosLinea + 0.35
                   End If
-                  If Datas2.fields("Creditos") > 0 And Valor_Prom < 0 Then
+                  If Datas2.Fields("Creditos") > 0 And Valor_Prom < 0 Then
                      ImpDetSubCta = False
-                     If DetSubCta <> Datas2.fields("Cliente") Then
-                        PrinterTexto PosAsiento(1) + 0.1, PosLinea, "-" & Datas2.fields("Cliente")
-                        DetSubCta = Datas2.fields("Cliente")
+                     If DetSubCta <> Datas2.Fields("Cliente") Then
+                        PrinterTexto PosAsiento(1) + 0.1, PosLinea, "-" & Datas2.Fields("Cliente")
+                        DetSubCta = Datas2.Fields("Cliente")
                         ImpDetSubCta = True
                      End If
                      Printer.FontItalic = False
                      
-                     If Datas2.fields("Detalle_SubCta") <> Ninguno Then
+                     If Datas2.Fields("Detalle_SubCta") <> Ninguno Then
                         If ImpDetSubCta Then PosLinea = PosLinea + 0.35
-                        PrinterTexto PosAsiento(1) + 0.2, PosLinea, Datas2.fields("Detalle_SubCta")
+                        PrinterTexto PosAsiento(1) + 0.2, PosLinea, Datas2.Fields("Detalle_SubCta")
                      End If
-                     If Datas2.fields("Factura") <> 0 Then
-                        PrinterTexto PosAsiento(1) + 5.1, PosLinea, " No. " & Format$(Datas2.fields("Factura"), "0000000")
-                     ElseIf Datas2.fields("Prima") <> 0 Then
+                     If Datas2.Fields("Factura") <> 0 Then
+                        PrinterTexto PosAsiento(1) + 5.1, PosLinea, " No. " & Format$(Datas2.Fields("Factura"), "0000000")
+                     ElseIf Datas2.Fields("Prima") <> 0 Then
                         PrinterTexto PosAsiento(1) + 5.1, PosLinea, " Valor Prima"
                      Else
-                        If Datas2.fields("TC") <> "CC" Then PrinterTexto PosAsiento(1) + 4.6, PosLinea, " - Venc. " & Datas2.fields("Fecha_V")
+                        If Datas2.Fields("TC") <> "CC" Then PrinterTexto PosAsiento(1) + 4.6, PosLinea, " - Venc. " & Datas2.Fields("Fecha_V")
                      End If
-                     If Datas2.fields("Prima") <> 0 Then
-                        PrinterVariables PosAsiento(2) + 0.1, PosLinea, Datas2.fields("Prima")
+                     If Datas2.Fields("Prima") <> 0 Then
+                        PrinterVariables PosAsiento(2) + 0.1, PosLinea, Datas2.Fields("Prima")
                      Else
-                        PrinterFields PosAsiento(2) + 0.9, PosLinea, Datas2.fields("Creditos")
+                        PrinterFields PosAsiento(2) + 0.9, PosLinea, Datas2.Fields("Creditos")
                      End If
                      PosLinea = PosLinea + 0.35
                   End If
@@ -3658,10 +3660,10 @@ If .RecordCount > 0 Then
           PrinterPaint Dibujo, 1, PosLineaTotal - 1.7, 6, 1.5
        End If
     End If
-    NUsuario = ULCase(DataC.fields("Nombre_Completo"))
+    NUsuario = ULCase(DataC.Fields("Nombre_Completo"))
     NDolares = " "
-    If Redondear(DataC.fields("Cotizacion"), 2) <> 0 Then
-       NDolares = "U.S.$ " & Format$(DataC.fields("Cotizacion"), "#,###.##")
+    If Redondear(DataC.Fields("Cotizacion"), 2) <> 0 Then
+       NDolares = "U.S.$ " & Format$(DataC.Fields("Cotizacion"), "#,###.##")
     End If
     Printer.FontItalic = False
     Printer.FontSize = SetD(AsientosX + 3).Porte
@@ -3765,20 +3767,20 @@ If PonImpresoraDefecto(SetNombrePRN) Then
          Do While Not .EOF
             cPrint.PorteDeLetra = 9
             cPrint.tipoNormal = True
-            If .fields("DG") = "G" Then cPrint.tipoNegrilla = True
-            cPrint.printFields Ancho(0), PosLinea, .fields("Codigo")
-            If .fields("TC") <> "N" Then cPrint.tipoItalica = True
-            Select Case .fields("TC")
+            If .Fields("DG") = "G" Then cPrint.tipoNegrilla = True
+            cPrint.printFields Ancho(0), PosLinea, .Fields("Codigo")
+            If .Fields("TC") <> "N" Then cPrint.tipoItalica = True
+            Select Case .Fields("TC")
               Case "BA", "CJ", "C", "P": cPrint.tipoSubrayado = True
             End Select
-            cPrint.printFields Ancho(1), PosLinea, .fields("Cuenta")
+            cPrint.printFields Ancho(1), PosLinea, .Fields("Cuenta")
             cPrint.tipoItalica = False
             cPrint.tipoSubrayado = False
-            cPrint.printFields Ancho(2), PosLinea, .fields("Saldo_Anterior")
-            cPrint.printFields Ancho(3), PosLinea, .fields("Debitos")
-            cPrint.printFields Ancho(4), PosLinea, .fields("Creditos")
-            cPrint.printFields Ancho(5), PosLinea, .fields("Saldo_Total")
-            If .fields("DG") = "G" Then
+            cPrint.printFields Ancho(2), PosLinea, .Fields("Saldo_Anterior")
+            cPrint.printFields Ancho(3), PosLinea, .Fields("Debitos")
+            cPrint.printFields Ancho(4), PosLinea, .Fields("Creditos")
+            cPrint.printFields Ancho(5), PosLinea, .Fields("Saldo_Total")
+            If .Fields("DG") = "G" Then
                 cPrint.printLinea Ancho(0) - 0.3, PosLinea - 0.4, Ancho(6) - 0.3, PosLinea - 0.4, Negro
                 cPrint.printLinea Ancho(0) - 0.3, PosLinea + 0.1, Ancho(6) - 0.3, PosLinea + 0.1, Negro
             End If
@@ -3943,16 +3945,16 @@ LetraAnterior = Printer.FontName
 Printer.FontName = TipoArialNarrow
 Printer.FontBold = True: Printer.FontItalic = False: Printer.FontSize = 9
 With DtaSaldos.Recordset
-TipoCta = MidStrg(.fields("Cta"), 1, 1)
+TipoCta = MidStrg(.Fields("Cta"), 1, 1)
 Select Case TipoCta
   Case "1", "5"
        'SaldoAnt = SaldoAct - DebeAct + HaberAct
-       SaldoAnt = .fields("Saldo") - .fields("Debe") + .fields("Haber")
-       SaldoAntME = .fields("Saldo_ME") - .fields("Parcial_ME")
+       SaldoAnt = .Fields("Saldo") - .Fields("Debe") + .Fields("Haber")
+       SaldoAntME = .Fields("Saldo_ME") - .Fields("Parcial_ME")
   Case "2", "3", "4"
        'SaldoAnt = SaldoAct - HaberAct + DebeAct
-       SaldoAnt = .fields("Saldo") - .fields("Haber") + .fields("Debe")
-       SaldoAntME = .fields("Saldo_ME") - .fields("Parcial_ME")
+       SaldoAnt = .Fields("Saldo") - .Fields("Haber") + .Fields("Debe")
+       SaldoAntME = .Fields("Saldo_ME") - .Fields("Parcial_ME")
 End Select
 End With
 PrinterTexto Ancho(0), PosLinea + 0.1, "CUENTA:"
@@ -4005,16 +4007,16 @@ Else
 End If
 Printer.FontBold = True: Printer.FontSize = 9
 With DtaTrans.Recordset
-TipoCta = MidStrg(.fields("Cta"), 1, 1)
+TipoCta = MidStrg(.Fields("Cta"), 1, 1)
 Select Case TipoCta
   Case "1", "5"
-       SaldoAnt = .fields("Saldo") - .fields("Parcial_MN")
-       SaldoAnt_ME = .fields("Saldo_ME") - .fields("Parcial_ME")
+       SaldoAnt = .Fields("Saldo") - .Fields("Parcial_MN")
+       SaldoAnt_ME = .Fields("Saldo_ME") - .Fields("Parcial_ME")
   Case "2", "3", "4"
-       SaldoAnt = .fields("Saldo") + .fields("Parcial_MN")
-       SaldoAnt_ME = .fields("Saldo_ME") + .fields("Parcial_ME")
+       SaldoAnt = .Fields("Saldo") + .Fields("Parcial_MN")
+       SaldoAnt_ME = .Fields("Saldo_ME") + .Fields("Parcial_ME")
 End Select
-If .fields("Parcial_ME") = 0 Then SaldoAnt_ME = 0
+If .Fields("Parcial_ME") = 0 Then SaldoAnt_ME = 0
 End With
 PrinterTexto Ancho(4) + 7.5, PosLinea + 0.5, "Saldo Anterior:"
 Printer.FontBold = False
@@ -4043,14 +4045,14 @@ Printer.FontItalic = False
 Printer.FontSize = 8
 With DtaTrans.Recordset
 If Not .EOF Then
-TipoCta = MidStrg(.fields("Cta"), 1, 1)
+TipoCta = MidStrg(.Fields("Cta"), 1, 1)
 'MsgBox Cta & vbCrLf & CtaSup
 Select Case TipoCta
   Case "1", "5"
-       SaldoAnt = .fields("Saldo_MN") - .fields("Debitos") + .fields("Creditos")
+       SaldoAnt = .Fields("Saldo_MN") - .Fields("Debitos") + .Fields("Creditos")
        'SaldoAnt_ME = .Fields("Saldo_ME") + .Fields("Parcial_ME")
   Case "2", "3", "4"
-       SaldoAnt = .fields("Saldo_MN") - .fields("Creditos") + .fields("Debitos")
+       SaldoAnt = .Fields("Saldo_MN") - .Fields("Creditos") + .Fields("Debitos")
        'SaldoAnt_ME = .Fields("Saldo_ME") - .Fields("Parcial_ME")
 End Select
 'If .Fields("Parcial_ME") = 0 Then SaldoAnt_ME = 0
@@ -4098,8 +4100,8 @@ Printer.FontBold = True
 Printer.FontItalic = False
 SaldoAnt = 0: SaldoAntME = 0
 With DtaLibBanc.Recordset
-     SaldoAnt = .fields("Saldo") - .fields("Debe") + .fields("Haber")
-     SaldoAntME = .fields("Saldo_ME") - .fields("Parcial_ME")
+     SaldoAnt = .Fields("Saldo") - .Fields("Debe") + .Fields("Haber")
+     SaldoAntME = .Fields("Saldo_ME") - .Fields("Parcial_ME")
 End With
 PosLinea = PosLinea - 0.5
 Printer.FontSize = 20
@@ -4168,15 +4170,15 @@ With DtaAsientoBanco.Recordset
  If .RecordCount < 5 Then
     .AddNew
      If Moneda_US Then Total_Cheq_Dep = Total_Cheq_Dep * Dolar
-    .fields("ME") = Moneda_US
-    .fields("CTA_BANCO") = CuentaBanco
-    .fields("BANCO") = NombreBanco
-    .fields("CHEQ_DEP") = NoCheque
-    .fields("EFECTIVIZAR") = Fecha_Vence
-    .fields("VALOR") = Total_Cheq_Dep
-    .fields("T_No") = Trans_No
-    .fields("Item") = NumEmpresa
-    .fields("CodigoU") = CodigoUsuario
+    .Fields("ME") = Moneda_US
+    .Fields("CTA_BANCO") = CuentaBanco
+    .Fields("BANCO") = NombreBanco
+    .Fields("CHEQ_DEP") = NoCheque
+    .Fields("EFECTIVIZAR") = Fecha_Vence
+    .Fields("VALOR") = Total_Cheq_Dep
+    .Fields("T_No") = Trans_No
+    .Fields("Item") = NumEmpresa
+    .Fields("CodigoU") = CodigoUsuario
     .Update
  End If
 End With
@@ -4278,7 +4280,7 @@ Dim Ln_No_A As Integer
                Select_AdoDB AdoRegSC, sSQL
                If AdoRegSC.RecordCount > 0 Then
                   InsertarCta = False
-                  Ln_No_A = AdoRegSC.fields("A_No")
+                  Ln_No_A = AdoRegSC.Fields("A_No")
                End If
                AdoRegSC.Close
         End Select
@@ -4291,11 +4293,11 @@ Dim Ln_No_A As Integer
                .Find ("A_No = " & Ln_No_A & " ")
                 If .EOF Then .AddNew
              End If
-            .fields("PARCIAL_ME") = 0
-            .fields("ME") = False
-            .fields("CODIGO") = Codigo
-            .fields("CUENTA") = Cuenta
-            .fields("DETALLE") = TrimStrg(MidStrg(DetalleComp, 1, 60))
+            .Fields("PARCIAL_ME") = 0
+            .Fields("ME") = False
+            .Fields("CODIGO") = Codigo
+            .Fields("CUENTA") = Cuenta
+            .Fields("DETALLE") = TrimStrg(MidStrg(DetalleComp, 1, 60))
              If OpcCoop Then
                 If Moneda_US Then
                    Debe = Redondear(Debe / Dolar, 2)
@@ -4305,27 +4307,27 @@ Dim Ln_No_A As Integer
                    Haber = Redondear(Haber, 2)
                 End If
              Else
-               .fields("PARCIAL_ME") = 0
+               .Fields("PARCIAL_ME") = 0
                 If Moneda_US Or OpcTM = 2 Then
                    If (Debe - Haber) < 0 Then ValorDHAux = -ValorDHAux
-                  .fields("PARCIAL_ME") = ValorDHAux
-                  .fields("ME") = True
+                  .Fields("PARCIAL_ME") = ValorDHAux
+                  .Fields("ME") = True
                 End If
                 Debe = Redondear(Debe, 2)
                 Haber = Redondear(Haber, 2)
              End If
-            .fields("DEBE") = Debe
-            .fields("HABER") = Haber
-            .fields("EFECTIVIZAR") = Fecha_Vence
-            .fields("CHEQ_DEP") = NoCheque
-            .fields("CODIGO_C") = CodigoCli
-            .fields("CODIGO_CC") = CodigoCC
-            .fields("T_No") = Trans_No
-            .fields("Item") = NumEmpresa
-            .fields("CodigoU") = CodigoUsuario
-            .fields("TC") = SubCta
+            .Fields("DEBE") = Debe
+            .Fields("HABER") = Haber
+            .Fields("EFECTIVIZAR") = Fecha_Vence
+            .Fields("CHEQ_DEP") = NoCheque
+            .Fields("CODIGO_C") = CodigoCli
+            .Fields("CODIGO_CC") = CodigoCC
+            .Fields("T_No") = Trans_No
+            .Fields("Item") = NumEmpresa
+            .Fields("CodigoU") = CodigoUsuario
+            .Fields("TC") = SubCta
              If InsertarCta Then
-               .fields("A_No") = Ln_No
+               .Fields("A_No") = Ln_No
                 Ln_No = Ln_No + 1
              End If
             .Update
@@ -4362,8 +4364,8 @@ Dim Cuenta As String
         AdoReg.open SQL1, AdoStrCnn, , , adCmdText
         If AdoReg.RecordCount > 0 Then
            InsAsiento = True
-           Cuenta = AdoReg.fields("Cuenta")
-           SubCta = AdoReg.fields("TC")
+           Cuenta = AdoReg.Fields("Cuenta")
+           SubCta = AdoReg.Fields("TC")
         End If
         AdoReg.Close
         
@@ -4376,9 +4378,9 @@ Dim Cuenta As String
            AdoReg.open SQL1, AdoStrCnn, , , adCmdText
            If AdoReg.RecordCount > 0 Then
               InsAsiento = True
-              CodCta = AdoReg.fields("Codigo")
-              Cuenta = AdoReg.fields("Cuenta")
-              SubCta = AdoReg.fields("TC")
+              CodCta = AdoReg.Fields("Codigo")
+              Cuenta = AdoReg.Fields("Cuenta")
+              SubCta = AdoReg.Fields("TC")
            End If
            AdoReg.Close
         End If
@@ -4431,8 +4433,8 @@ Dim SQL As String
         SumaDebe = 0
         SumaHaber = 0
         Do While Not .EOF
-           SumaDebe = SumaDebe + .fields("DEBE")
-           SumaHaber = SumaHaber + .fields("HABER")
+           SumaDebe = SumaDebe + .Fields("DEBE")
+           SumaHaber = SumaHaber + .Fields("HABER")
           .MoveNext
         Loop
         If (SumaDebe - SumaHaber) = 0 Then SiCuadra = True
@@ -4455,15 +4457,15 @@ With DtaBanco
      IR = SetD(Item).PosY
      Printer.FontSize = SetD(Item).Porte
      If .RecordCount > 2 Then
-         Cadena = .fields("Cuenta")
+         Cadena = .Fields("Cuenta")
          Do While Not .EOF
-            Cadena = .fields("Cuenta")
+            Cadena = .Fields("Cuenta")
             Select Case TipoComp
               Case CompIngreso
-                   Total_de_Banco = Total_de_Banco + .fields("Debe")
+                   Total_de_Banco = Total_de_Banco + .Fields("Debe")
                    Cadena1 = "Depósitos: En bloque"
               Case CompEgreso
-                   Total_de_Banco = Total_de_Banco + .fields("Haber")
+                   Total_de_Banco = Total_de_Banco + .Fields("Haber")
                    Cadena1 = "Cheques: En bloque"
             End Select
            .MoveNext
@@ -4478,23 +4480,23 @@ With DtaBanco
             Printer.FontBold = True
             Select Case TipoComp
               Case CompIngreso
-                   If .fields("Debe") > 0 Then
-                       Total_de_Banco = Total_de_Banco + .fields("Debe")
+                   If .Fields("Debe") > 0 Then
+                       Total_de_Banco = Total_de_Banco + .Fields("Debe")
                        PrinterTexto SetD(Item + 2).PosX - 2.1, IR, "Depósito No."
                        Printer.FontBold = False
                        'PrinterTexto SetD(Item - 1).PosX, IR, .Fields("Debe")
-                       PrinterTexto SetD(Item).PosX, IR, .fields("Cuenta")
-                       PrinterFields SetD(Item + 2).PosX, IR, .fields("Cheq_Dep")
+                       PrinterTexto SetD(Item).PosX, IR, .Fields("Cuenta")
+                       PrinterFields SetD(Item + 2).PosX, IR, .Fields("Cheq_Dep")
                        IR = IR + 0.4
                    End If
               Case CompEgreso
-                   If .fields("Haber") > 0 Then
-                       Total_de_Banco = Total_de_Banco + .fields("Haber")
+                   If .Fields("Haber") > 0 Then
+                       Total_de_Banco = Total_de_Banco + .Fields("Haber")
                        PrinterTexto SetD(Item + 2).PosX - 2.1, IR, "Cheque No."
                        Printer.FontBold = False
                        'PrinterTexto SetD(Item - 1).PosX, IR, .Fields("Haber")
-                       PrinterTexto SetD(Item).PosX, IR, .fields("Cuenta")
-                       PrinterFields SetD(Item + 2).PosX, IR, .fields("Cheq_Dep")
+                       PrinterTexto SetD(Item).PosX, IR, .Fields("Cuenta")
+                       PrinterFields SetD(Item + 2).PosX, IR, .Fields("Cheq_Dep")
                        IR = IR + 0.4
                    End If
             End Select
@@ -4567,7 +4569,7 @@ With Datas.Recordset
      .MoveFirst
       Printer.FontName = TipoCourierNew
       Do While Not .EOF
-         Select Case Niveles(.fields("Codigo"))
+         Select Case Niveles(.Fields("Codigo"))
            Case 1: PCol = 0
            Case 2: PCol = 0.3
            Case 3: PCol = 0.6
@@ -4578,16 +4580,16 @@ With Datas.Recordset
          Printer.FontBold = False
          Printer.FontItalic = False
          Printer.FontSize = SizeLetra
-         If .fields("DG") = "G" Then Printer.FontBold = True
-         If .fields("Clave") <> 0 Then PrinterTexto Ancho(0), PosLinea, String$(3, " ") & Str(.fields("Clave")), True
-         PrinterFields Ancho(1), PosLinea, .fields("TC"), True
-         PrinterFields Ancho(2), PosLinea, .fields("ME"), True
-         PrinterFields Ancho(3), PosLinea, .fields("DG"), True
-         PrinterFields Ancho(4), PosLinea, .fields("Codigo"), True
-         If .fields("TC") <> "N" Then Printer.FontItalic = True
-         PrinterFields Ancho(5) + PCol, PosLinea, .fields("Cuenta"), False
+         If .Fields("DG") = "G" Then Printer.FontBold = True
+         If .Fields("Clave") <> 0 Then PrinterTexto Ancho(0), PosLinea, String$(3, " ") & Str(.Fields("Clave")), True
+         PrinterFields Ancho(1), PosLinea, .Fields("TC"), True
+         PrinterFields Ancho(2), PosLinea, .Fields("ME"), True
+         PrinterFields Ancho(3), PosLinea, .Fields("DG"), True
+         PrinterFields Ancho(4), PosLinea, .Fields("Codigo"), True
+         If .Fields("TC") <> "N" Then Printer.FontItalic = True
+         PrinterFields Ancho(5) + PCol, PosLinea, .Fields("Cuenta"), False
          Printer.FontItalic = False
-         PrinterFields Ancho(6), PosLinea, .fields("Presupuesto"), True
+         PrinterFields Ancho(6), PosLinea, .Fields("Presupuesto"), True
          Printer.Line (Ancho(CantCampos), PosLinea - 0.1)-(Ancho(CantCampos), PosLinea + 0.4), Negro
          PosLinea = PosLinea + 0.36
          If PosLinea >= LimiteAlto Then
@@ -4636,16 +4638,16 @@ Pagina = 1
 'MsgBox DataComp.Fields("Fecha")
 With DataComp
  If .RecordCount > 0 Then
-     Mifecha = .fields("Fecha")
+     Mifecha = .Fields("Fecha")
      If ImpSoloRet = False Then
-        ImprimirFormatoComprobantes CompDiario, FechaAnio(Mifecha), .fields("Numero"), CDConLineas, SetD(1).PosY
-        Mifecha = FechaStrgCorta(.fields("Fecha"))
+        ImprimirFormatoComprobantes CompDiario, FechaAnio(Mifecha), .Fields("Numero"), CDConLineas, SetD(1).PosY
+        Mifecha = FechaStrgCorta(.Fields("Fecha"))
         Printer.FontBold = False
         Printer.FontSize = SetD(2).Porte
-        PrinterTexto SetD(2).PosX, SetD(2).PosY, FechaStrgCorta(.fields("Fecha"))
+        PrinterTexto SetD(2).PosX, SetD(2).PosY, FechaStrgCorta(.Fields("Fecha"))
         Printer.FontSize = SetD(3).Porte
-        PrinterLineas SetD(3).PosX, SetD(3).PosY, .fields("Concepto"), 16
-        ImprimirAsientos DataTrans, DataComp, DataSubC1, DataSubC2, 4, 9, CDConLineas, CompDiario, .fields("T"), .fields("Cotizacion")
+        PrinterLineas SetD(3).PosX, SetD(3).PosY, .Fields("Concepto"), 16
+        ImprimirAsientos DataTrans, DataComp, DataSubC1, DataSubC2, 4, 9, CDConLineas, CompDiario, .Fields("T"), .Fields("Cotizacion")
      End If
      If NoImpRet = False Then
         If DataRets.RecordCount > 0 Then
@@ -4684,19 +4686,19 @@ Pagina = 1
 'MsgBox DataComp.Fields("Fecha")
 With DataComp
  If .RecordCount > 0 Then
-     Mifecha = .fields("Fecha")
+     Mifecha = .Fields("Fecha")
      If Tipo_D_C = "ND" Then
-        ImprimirFormatoComprobantes CompNotaDebito, FechaAnio(Mifecha), .fields("Numero"), CDConLineas, SetD(1).PosY
+        ImprimirFormatoComprobantes CompNotaDebito, FechaAnio(Mifecha), .Fields("Numero"), CDConLineas, SetD(1).PosY
      Else
-        ImprimirFormatoComprobantes CompNotaCredito, FechaAnio(Mifecha), .fields("Numero"), CDConLineas, SetD(1).PosY
+        ImprimirFormatoComprobantes CompNotaCredito, FechaAnio(Mifecha), .Fields("Numero"), CDConLineas, SetD(1).PosY
      End If
-     Mifecha = FechaStrgCorta(.fields("Fecha"))
+     Mifecha = FechaStrgCorta(.Fields("Fecha"))
      Printer.FontBold = False
      Printer.FontSize = SetD(2).Porte
-     PrinterTexto SetD(2).PosX, SetD(2).PosY, FechaStrgCorta(.fields("Fecha"))
+     PrinterTexto SetD(2).PosX, SetD(2).PosY, FechaStrgCorta(.Fields("Fecha"))
      Printer.FontSize = SetD(3).Porte
-     PrinterLineas SetD(3).PosX, SetD(3).PosY, .fields("Concepto"), 16
-     ImprimirAsientos DataTrans, DataComp, DataSubC1, DataSubC2, 4, 9, CDConLineas, "DC", .fields("T"), .fields("Cotizacion")
+     PrinterLineas SetD(3).PosX, SetD(3).PosY, .Fields("Concepto"), 16
+     ImprimirAsientos DataTrans, DataComp, DataSubC1, DataSubC2, 4, 9, CDConLineas, "DC", .Fields("T"), .Fields("Cotizacion")
      Printer.FontName = LetraAnterior
      If NuevaPagina Then Printer.NewPage Else Printer.EndDoc
  End If
@@ -4785,12 +4787,12 @@ With DtaNotaDC.Recordset
      Printer.FontUnderline = False
      Printer.FontBold = False
      Do While Not .EOF
-        If .fields("Debitos") <> 0 Then
-            PrinterFields 0.5, PosLinea, .fields("Fecha"), False
-            PrinterFields 2.5, PosLinea, .fields("Concepto"), False
-            PrinterFields 12, PosLinea, .fields("TP"), False
-            PrinterFields 13, PosLinea, .fields("Documento"), False
-            PrinterFields 17, PosLinea, .fields("Debitos"), False
+        If .Fields("Debitos") <> 0 Then
+            PrinterFields 0.5, PosLinea, .Fields("Fecha"), False
+            PrinterFields 2.5, PosLinea, .Fields("Concepto"), False
+            PrinterFields 12, PosLinea, .Fields("TP"), False
+            PrinterFields 13, PosLinea, .Fields("Documento"), False
+            PrinterFields 17, PosLinea, .Fields("Debitos"), False
             PosLinea = PosLinea + 0.4
             If PosLinea > LimiteAlto Then
                Printer.Line (0.5, PosLinea)-(19.5, PosLinea), Negro
@@ -4824,12 +4826,12 @@ With DtaNotaDC.Recordset
      Printer.FontBold = False
      Printer.FontSize = SizeLetra
      Do While Not .EOF
-        If .fields("Creditos") <> 0 Then
-            PrinterFields 0.5, PosLinea, .fields("Fecha"), False
-            PrinterFields 2.5, PosLinea, .fields("Concepto"), False
-            PrinterFields 12, PosLinea, .fields("TP"), False
-            PrinterFields 13, PosLinea, .fields("Documento"), False
-            PrinterFields 17, PosLinea, .fields("Creditos"), False
+        If .Fields("Creditos") <> 0 Then
+            PrinterFields 0.5, PosLinea, .Fields("Fecha"), False
+            PrinterFields 2.5, PosLinea, .Fields("Concepto"), False
+            PrinterFields 12, PosLinea, .Fields("TP"), False
+            PrinterFields 13, PosLinea, .Fields("Documento"), False
+            PrinterFields 17, PosLinea, .Fields("Creditos"), False
             PosLinea = PosLinea + 0.4
             If PosLinea > LimiteAlto Then
                Printer.Line (0.5, PosLinea)-(19.5, PosLinea), Negro
@@ -4902,13 +4904,13 @@ With DtaDebCred.Recordset
     .MoveFirst
      Printer.FontSize = SizeLetra
      Do While Not .EOF
-        If .fields("Debe") <> 0 Then
-            PrinterFields 0.5, PosLinea, .fields("Fecha"), False
-            PrinterFields 2.5, PosLinea, .fields("Cliente"), False
-            PrinterFields 10, PosLinea, .fields("TP"), False
-            PrinterFields 11, PosLinea, .fields("Numero"), False
-            PrinterFields 12.5, PosLinea, .fields("Cheq_Dep"), False
-            PrinterFields 17, PosLinea, .fields("Debe"), False
+        If .Fields("Debe") <> 0 Then
+            PrinterFields 0.5, PosLinea, .Fields("Fecha"), False
+            PrinterFields 2.5, PosLinea, .Fields("Cliente"), False
+            PrinterFields 10, PosLinea, .Fields("TP"), False
+            PrinterFields 11, PosLinea, .Fields("Numero"), False
+            PrinterFields 12.5, PosLinea, .Fields("Cheq_Dep"), False
+            PrinterFields 17, PosLinea, .Fields("Debe"), False
             PosLinea = PosLinea + 0.4
             If PosLinea > LimiteAlto Then
                Printer.Line (0.5, PosLinea)-(19.5, PosLinea), Negro
@@ -4943,16 +4945,16 @@ With DtaDebCred.Recordset
     .MoveFirst
      Printer.FontSize = SizeLetra
      Do While Not .EOF
-        If .fields("Haber") <> 0 Then
-            PrinterFields 0.5, PosLinea, .fields("Fecha"), False
-            PrinterFields 2.5, PosLinea, .fields("Cliente"), False
-            PrinterFields 10, PosLinea, .fields("TP"), False
-            PrinterFields 11, PosLinea, .fields("Numero"), False
-            PrinterFields 12.5, PosLinea, .fields("Cheq_Dep"), False
+        If .Fields("Haber") <> 0 Then
+            PrinterFields 0.5, PosLinea, .Fields("Fecha"), False
+            PrinterFields 2.5, PosLinea, .Fields("Cliente"), False
+            PrinterFields 10, PosLinea, .Fields("TP"), False
+            PrinterFields 11, PosLinea, .Fields("Numero"), False
+            PrinterFields 12.5, PosLinea, .Fields("Cheq_Dep"), False
             'If TipoCta Then
             '   PrinterFields 17, PosLinea, .Fields("Haber_ME"), False
             'Else
-            PrinterFields 17, PosLinea, .fields("Haber"), False
+            PrinterFields 17, PosLinea, .Fields("Haber"), False
             'End If
             PosLinea = PosLinea + 0.4
             If PosLinea > LimiteAlto Then
@@ -5010,12 +5012,12 @@ With DtaTransito.Recordset
     .MoveFirst
      Printer.FontSize = SizeLetra
      Do While Not .EOF
-        If .fields("Debe") <> 0 Then
-            PrinterFields 0.5, PosLinea, .fields("Fecha"), False
-            PrinterFields 2.5, PosLinea, .fields("Concepto"), False
-            PrinterFields 10, PosLinea, .fields("TP"), False
-            PrinterFields 11, PosLinea, .fields("Documento"), False
-            PrinterFields 17, PosLinea, .fields("Debe"), False
+        If .Fields("Debe") <> 0 Then
+            PrinterFields 0.5, PosLinea, .Fields("Fecha"), False
+            PrinterFields 2.5, PosLinea, .Fields("Concepto"), False
+            PrinterFields 10, PosLinea, .Fields("TP"), False
+            PrinterFields 11, PosLinea, .Fields("Documento"), False
+            PrinterFields 17, PosLinea, .Fields("Debe"), False
             PosLinea = PosLinea + 0.4
             If PosLinea > LimiteAlto Then
                Printer.Line (0.5, PosLinea)-(19.5, PosLinea), Negro
@@ -5050,15 +5052,15 @@ With DtaTransito.Recordset
     .MoveFirst
      Printer.FontSize = SizeLetra
      Do While Not .EOF
-        If .fields("Haber") <> 0 Then
-            PrinterFields 0.5, PosLinea, .fields("Fecha"), False
-            PrinterFields 2.5, PosLinea, .fields("Concepto"), False
-            PrinterFields 10, PosLinea, .fields("TP"), False
-            PrinterFields 11, PosLinea, .fields("Documento"), False
+        If .Fields("Haber") <> 0 Then
+            PrinterFields 0.5, PosLinea, .Fields("Fecha"), False
+            PrinterFields 2.5, PosLinea, .Fields("Concepto"), False
+            PrinterFields 10, PosLinea, .Fields("TP"), False
+            PrinterFields 11, PosLinea, .Fields("Documento"), False
             'If TipoCta Then
             '   PrinterFields 17, PosLinea, .Fields("Haber_ME"), False
             'Else
-               PrinterFields 17, PosLinea, .fields("Haber"), False
+               PrinterFields 17, PosLinea, .Fields("Haber"), False
             'End If
             PosLinea = PosLinea + 0.4
             If PosLinea > LimiteAlto Then
@@ -5164,7 +5166,7 @@ Dim AdoSubC2 As ADODB.Recordset
          & "AND C.CodigoU = A.Codigo " _
          & "AND C.Codigo_B = Cl.Codigo "
     Select_AdoDB AdoComp, sSQL
-    If AdoComp.RecordCount > 0 Then Co.Fecha = AdoComp.fields("Fecha")
+    If AdoComp.RecordCount > 0 Then Co.Fecha = AdoComp.Fields("Fecha")
    'Listar las Transacciones
     sSQL = "SELECT T.Cta,Ca.Cuenta,Parcial_ME,Debe,Haber,Detalle,Cheq_Dep,T.Fecha_Efec,Ca.Item " _
          & "FROM Transacciones As T,Catalogo_Cuentas As Ca " _
@@ -5242,7 +5244,7 @@ Dim AdoSubC2 As ADODB.Recordset
          & "ORDER BY T.Cta,C.Detalle,T.Fecha_V,T.Factura "
     Select_AdoDB AdoSubC2, sSQL
     ConceptoComp = Ninguno
-    If AdoComp.RecordCount > 0 Then ConceptoComp = AdoComp.fields("Concepto")
+    If AdoComp.RecordCount > 0 Then ConceptoComp = AdoComp.Fields("Concepto")
     'MsgBox AdoRet.RecordCount
     TipoComp = Co.TP
     Select Case Co.TP
@@ -5276,31 +5278,31 @@ CIConLineas = ProcesarSeteos(CompIngreso)
 'Iniciamos la impresion
 With DataComp
  If .RecordCount > 0 Then
-     Mifecha = .fields("Fecha")
-     ImprimirFormatoComprobantes CompIngreso, FechaAnio(.fields("Fecha")), .fields("Numero"), CIConLineas, SetD(1).PosY
+     Mifecha = .Fields("Fecha")
+     ImprimirFormatoComprobantes CompIngreso, FechaAnio(.Fields("Fecha")), .Fields("Numero"), CIConLineas, SetD(1).PosY
      Printer.FontBold = False
      Printer.FontSize = SetD(2).Porte
-     PrinterTexto SetD(2).PosX, SetD(2).PosY, FechaStrgCorta(.fields("Fecha"))
+     PrinterTexto SetD(2).PosX, SetD(2).PosY, FechaStrgCorta(.Fields("Fecha"))
      Printer.FontSize = SetD(3).Porte
-     PrinterFields SetD(3).PosX, SetD(3).PosY, .fields("Cliente")
+     PrinterFields SetD(3).PosX, SetD(3).PosY, .Fields("Cliente")
      Printer.FontSize = SetD(4).Porte
-     PrinterFields SetD(4).PosX, SetD(4).PosY, .fields("CI_RUC")
+     PrinterFields SetD(4).PosX, SetD(4).PosY, .Fields("CI_RUC")
      Printer.FontSize = SetD(5).Porte
-     PrinterLineas SetD(5).PosX, SetD(5).PosY, .fields("Concepto"), 16
+     PrinterLineas SetD(5).PosX, SetD(5).PosY, .Fields("Concepto"), 16
      Printer.FontSize = SetD(6).Porte
-     PrinterTexto SetD(6).PosX, SetD(6).PosY, Format$(.fields("Monto_Total"), "#,##0.00")
+     PrinterTexto SetD(6).PosX, SetD(6).PosY, Format$(.Fields("Monto_Total"), "#,##0.00")
      Printer.FontSize = SetD(7).Porte
-     PrinterNum SetD(7).PosX, SetD(7).PosY, .fields("Monto_Total")
+     PrinterNum SetD(7).PosX, SetD(7).PosY, .Fields("Monto_Total")
      Printer.FontSize = SetD(8).Porte
-     PrinterFields SetD(8).PosX, SetD(8).PosY, .fields("Efectivo")
+     PrinterFields SetD(8).PosX, SetD(8).PosY, .Fields("Efectivo")
      'Diferencia = .Fields("Monto_Total") - .Fields("Efectivo")
      'Printer.FontSize = SetD(9).Porte
      'PrinterVariables SetD(9).PosX, SetD(9).PosY, Diferencia
-     Diferencia = .fields("Monto_Total")
+     Diferencia = .Fields("Monto_Total")
      Diferencia = Diferencia - ImprimirBancos(CompIngreso, DataBanco, 10)
      Printer.FontSize = SetD(9).Porte
      PrinterVariables SetD(9).PosX, SetD(9).PosY, Diferencia
-     ImprimirAsientos DataTrans, DataComp, DataSubC1, DataSubC2, 13, 18, CIConLineas, CompIngreso, .fields("T"), .fields("Cotizacion")
+     ImprimirAsientos DataTrans, DataComp, DataSubC1, DataSubC2, 13, 18, CIConLineas, CompIngreso, .Fields("T"), .Fields("Cotizacion")
      Printer.FontName = LetraAnterior
  End If
 End With
@@ -5339,25 +5341,25 @@ Pagina = 1
 If DataComp.RecordCount > 0 Then
 With DataComp
  If .RecordCount > 0 Then
-     Mifecha = .fields("Fecha")
+     Mifecha = .Fields("Fecha")
      If ImpSoloRet = False Then
-        ImprimirFormatoComprobantes CompEgreso, FechaAnio(.fields("Fecha")), .fields("Numero"), CEConLineas, SetD(1).PosY
+        ImprimirFormatoComprobantes CompEgreso, FechaAnio(.Fields("Fecha")), .Fields("Numero"), CEConLineas, SetD(1).PosY
         Printer.FontBold = False
         Printer.FontSize = SetD(2).Porte
-        PrinterTexto SetD(2).PosX, SetD(2).PosY, FechaStrgCorta(.fields("Fecha"))
+        PrinterTexto SetD(2).PosX, SetD(2).PosY, FechaStrgCorta(.Fields("Fecha"))
         Printer.FontSize = SetD(3).Porte
-        PrinterFields SetD(3).PosX, SetD(3).PosY, .fields("Cliente")
+        PrinterFields SetD(3).PosX, SetD(3).PosY, .Fields("Cliente")
         Printer.FontSize = SetD(4).Porte
-        PrinterFields SetD(4).PosX, SetD(4).PosY, .fields("CI_RUC")
+        PrinterFields SetD(4).PosX, SetD(4).PosY, .Fields("CI_RUC")
         Printer.FontSize = SetD(5).Porte
-        PrinterLineas SetD(5).PosX, SetD(5).PosY, .fields("Concepto"), 16
+        PrinterLineas SetD(5).PosX, SetD(5).PosY, .Fields("Concepto"), 16
         Printer.FontSize = SetD(6).Porte
-        PrinterTexto SetD(6).PosX, SetD(6).PosY, Format$(.fields("Monto_Total"), "#,##0.00")
+        PrinterTexto SetD(6).PosX, SetD(6).PosY, Format$(.Fields("Monto_Total"), "#,##0.00")
         Printer.FontSize = SetD(7).Porte
-        PrinterNum SetD(7).PosX, SetD(7).PosY, .fields("Monto_Total")
+        PrinterNum SetD(7).PosX, SetD(7).PosY, .Fields("Monto_Total")
         Printer.FontSize = SetD(8).Porte
-        PrinterFields SetD(8).PosX, SetD(8).PosY, .fields("Efectivo")
-        Diferencia = .fields("Monto_Total") - .fields("Efectivo")
+        PrinterFields SetD(8).PosX, SetD(8).PosY, .Fields("Efectivo")
+        Diferencia = .Fields("Monto_Total") - .Fields("Efectivo")
         Printer.FontSize = SetD(9).Porte
         PrinterVariables SetD(9).PosX, SetD(9).PosY, Diferencia
      End If
@@ -5367,68 +5369,68 @@ If ImpSoloRet = False Then
    Diferencia = Diferencia - ImprimirBancos(CompEgreso, DataBanco, 10)
    'Printer.FontSize = SetD(9).Porte
    'PrinterVariables SetD(9).PosX, SetD(9).PosY, Diferencia
-   ImprimirAsientos DataTrans, DataComp, DataSubC1, DataSubC2, 13, 18, CEConLineas, CompEgreso, DataComp.fields("T"), DataComp.fields("Cotizacion"), SetD(1).PosY
+   ImprimirAsientos DataTrans, DataComp, DataSubC1, DataSubC2, 13, 18, CEConLineas, CompEgreso, DataComp.Fields("T"), DataComp.Fields("Cotizacion"), SetD(1).PosY
    Valor = 0
    If NuevaPagina = False And Modulo <> "CAJACREDITO" Then
       With DataBanco
        If .RecordCount > 0 Then
           .MoveFirst
-           Mensajes = "Imprimir Cheque No. " & .fields("Cheq_Dep")
+           Mensajes = "Imprimir Cheque No. " & .Fields("Cheq_Dep")
            Titulo = "Pregunta de Impresion"
            If BoxMensaje = vbYes Then
               Printer.FontBold = True
               Do While Not .EOF
-                 If .fields("Haber") > 0 Then
+                 If .Fields("Haber") > 0 Then
                     'Impresion de constancia del cheque, no importa si no tiene papel copia o quimico
                      If SetD(20).PosX > 0 And SetD(20).PosY > 0 Then
                         PosX_Chq = SetD(20).PosX
                         PosY_Chq = SetD(20).PosY
-                        TipoBank = TrimStrg(Format$(MidStrg(.fields("Cta"), Len(.fields("Cta")) - 1, 3), "00"))
+                        TipoBank = TrimStrg(Format$(MidStrg(.Fields("Cta"), Len(.Fields("Cta")) - 1, 3), "00"))
                         CCHQConLineas = ProcesarSeteos(TipoBank)
                         Printer.FontSize = SetD(2).Porte
-                        PrinterFields SetD(2).PosX + PosX_Chq, SetD(2).PosY + PosY_Chq, .fields("Cliente"), False
+                        PrinterFields SetD(2).PosX + PosX_Chq, SetD(2).PosY + PosY_Chq, .Fields("Cliente"), False
                         Printer.FontSize = SetD(3).Porte
-                        PrinterTexto SetD(3).PosX + PosX_Chq, SetD(3).PosY + PosY_Chq, Format$(.fields("Haber"), "#,###.00")
+                        PrinterTexto SetD(3).PosX + PosX_Chq, SetD(3).PosY + PosY_Chq, Format$(.Fields("Haber"), "#,###.00")
                         Printer.FontSize = SetD(10).Porte
                         PrinterTexto SetD(10).PosX + PosX_Chq, SetD(10).PosY + PosY_Chq, ULCase(NombreCiudad)
                         Printer.FontSize = SetD(6).Porte
-                        If CFechaLong(.fields("Fecha")) < CFechaLong(.fields("Fecha_Efec")) Then
-                           PrinterTexto SetD(6).PosX + PosX_Chq, SetD(6).PosY + PosY_Chq, Format$(.fields("Fecha_Efec"), "yyyy/MM/dd")
+                        If CFechaLong(.Fields("Fecha")) < CFechaLong(.Fields("Fecha_Efec")) Then
+                           PrinterTexto SetD(6).PosX + PosX_Chq, SetD(6).PosY + PosY_Chq, Format$(.Fields("Fecha_Efec"), "yyyy/MM/dd")
                         Else
-                           PrinterTexto SetD(6).PosX + PosX_Chq, SetD(6).PosY + PosY_Chq, Format$(.fields("Fecha"), "yyyy/MM/dd")
+                           PrinterTexto SetD(6).PosX + PosX_Chq, SetD(6).PosY + PosY_Chq, Format$(.Fields("Fecha"), "yyyy/MM/dd")
                         End If
                         If SetD(4).PosX > 0 And SetD(4).PosY > 0 Then
                            Printer.FontSize = SetD(4).Porte
-                           PrinterNumCheque SetD(4).PosX + PosX_Chq, SetD(4).PosY + PosY_Chq, SetD(5).PosX, .fields("Haber")
+                           PrinterNumCheque SetD(4).PosX + PosX_Chq, SetD(4).PosY + PosY_Chq, SetD(5).PosX, .Fields("Haber")
                         End If
                         If SetD(9).PosX > 0 And SetD(9).PosY > 0 Then
-                           Cadena = Empresa & " " & Moneda & " " & Format$(.fields("Haber"), "#,##0.00") & "**"
+                           Cadena = Empresa & " " & Moneda & " " & Format$(.Fields("Haber"), "#,##0.00") & "**"
                            Printer.FontSize = SetD(9).Porte
                            PrinterTexto SetD(9).PosX + PosX_Chq, SetD(9).PosY + PosY_Chq, Cadena
                         End If
                      End If
-                     TipoBank = TrimStrg(Format$(MidStrg(.fields("Cta"), Len(.fields("Cta")) - 1, 3), "00"))
+                     TipoBank = TrimStrg(Format$(MidStrg(.Fields("Cta"), Len(.Fields("Cta")) - 1, 3), "00"))
                      CCHQConLineas = ProcesarSeteos(TipoBank)
                      
                      If SetD(7).PosX = 1 Then Printer.NewPage
                      Printer.FontSize = SetD(2).Porte
-                     PrinterFields SetD(2).PosX, SetD(2).PosY, .fields("Cliente"), False
+                     PrinterFields SetD(2).PosX, SetD(2).PosY, .Fields("Cliente"), False
                      Printer.FontSize = SetD(3).Porte
-                     PrinterTexto SetD(3).PosX, SetD(3).PosY, Format$(.fields("Haber"), "#,###.00")
+                     PrinterTexto SetD(3).PosX, SetD(3).PosY, Format$(.Fields("Haber"), "#,###.00")
                      Printer.FontSize = SetD(10).Porte
                      PrinterTexto SetD(10).PosX + PosX_Chq, SetD(10).PosY + PosY_Chq, ULCase(NombreCiudad)
                      Printer.FontSize = SetD(6).Porte
-                     If CFechaLong(.fields("Fecha")) < CFechaLong(.fields("Fecha_Efec")) Then
-                        PrinterTexto SetD(6).PosX, SetD(6).PosY, Format$(.fields("Fecha_Efec"), "yyyy/MM/dd")
+                     If CFechaLong(.Fields("Fecha")) < CFechaLong(.Fields("Fecha_Efec")) Then
+                        PrinterTexto SetD(6).PosX, SetD(6).PosY, Format$(.Fields("Fecha_Efec"), "yyyy/MM/dd")
                      Else
-                        PrinterTexto SetD(6).PosX, SetD(6).PosY, Format$(.fields("Fecha"), "yyyy/MM/dd")
+                        PrinterTexto SetD(6).PosX, SetD(6).PosY, Format$(.Fields("Fecha"), "yyyy/MM/dd")
                      End If
                      If SetD(4).PosX > 0 And SetD(4).PosY > 0 Then
                         Printer.FontSize = SetD(4).Porte
-                        PrinterNumCheque SetD(4).PosX, SetD(4).PosY, SetD(5).PosX, .fields("Haber")
+                        PrinterNumCheque SetD(4).PosX, SetD(4).PosY, SetD(5).PosX, .Fields("Haber")
                      End If
                      If SetD(9).PosX > 0 And SetD(9).PosY > 0 Then
-                        Cadena = Empresa & " " & Moneda & " " & Format$(.fields("Haber"), "#,##0.00") & "**"
+                        Cadena = Empresa & " " & Moneda & " " & Format$(.Fields("Haber"), "#,##0.00") & "**"
                         Printer.FontSize = SetD(9).Porte
                         PrinterTexto SetD(9).PosX, SetD(9).PosY, Cadena
                      End If
@@ -5510,32 +5512,32 @@ With DataComp
  If .RecordCount > 0 Then
     .MoveFirst
      Printer.FontSize = SetD(3).Porte
-     If SetD(3).PosX > 0 Then PrinterFields PosXRet + SetD(3).PosX, PosYRet + SetD(3).PosY, .fields("Cliente")
+     If SetD(3).PosX > 0 Then PrinterFields PosXRet + SetD(3).PosX, PosYRet + SetD(3).PosY, .Fields("Cliente")
      Printer.FontSize = SetD(9).Porte
-     If SetD(9).PosX > 0 Then PrinterFields PosXRet + SetD(9).PosX, PosYRet + SetD(9).PosY, .fields("CI_RUC")
+     If SetD(9).PosX > 0 Then PrinterFields PosXRet + SetD(9).PosX, PosYRet + SetD(9).PosY, .Fields("CI_RUC")
      Printer.FontSize = SetD(4).Porte
-     If SetD(4).PosX > 0 Then PrinterFields PosXRet + SetD(4).PosX, PosYRet + SetD(4).PosY, .fields("Direccion")
+     If SetD(4).PosX > 0 Then PrinterFields PosXRet + SetD(4).PosX, PosYRet + SetD(4).PosY, .Fields("Direccion")
      Printer.FontSize = SetD(6).Porte
-     If SetD(6).PosX > 0 Then PrinterFields PosXRet + SetD(6).PosX, PosYRet + SetD(6).PosY, .fields("Telefono")
+     If SetD(6).PosX > 0 Then PrinterFields PosXRet + SetD(6).PosX, PosYRet + SetD(6).PosY, .Fields("Telefono")
      Printer.FontSize = SetD(10).Porte
-     If SetD(10).PosX > 0 Then PrinterTexto PosXRet + SetD(10).PosX, PosYRet + SetD(10).PosY, FechaAnio(.fields("Fecha"))
+     If SetD(10).PosX > 0 Then PrinterTexto PosXRet + SetD(10).PosX, PosYRet + SetD(10).PosY, FechaAnio(.Fields("Fecha"))
      Printer.FontSize = SetD(2).Porte
-     If SetD(2).PosX > 0 Then PrinterFields PosXRet + SetD(2).PosX, PosYRet + SetD(2).PosY, .fields("Fecha")
+     If SetD(2).PosX > 0 Then PrinterFields PosXRet + SetD(2).PosX, PosYRet + SetD(2).PosY, .Fields("Fecha")
      Printer.FontSize = SetD(29).Porte
-     If SetD(29).PosX > 0 Then PrinterTexto PosXRet + SetD(29).PosX, PosYRet + SetD(29).PosY, Day(.fields("Fecha"))
+     If SetD(29).PosX > 0 Then PrinterTexto PosXRet + SetD(29).PosX, PosYRet + SetD(29).PosY, Day(.Fields("Fecha"))
      Printer.FontSize = SetD(30).Porte
-     If SetD(30).PosX > 0 Then PrinterTexto PosXRet + SetD(30).PosX, PosYRet + SetD(30).PosY, MesesLetras(Month(.fields("Fecha")))
+     If SetD(30).PosX > 0 Then PrinterTexto PosXRet + SetD(30).PosX, PosYRet + SetD(30).PosY, MesesLetras(Month(.Fields("Fecha")))
      Printer.FontSize = SetD(31).Porte
-     If SetD(31).PosX > 0 Then PrinterTexto PosXRet + SetD(31).PosX, PosYRet + SetD(31).PosY, Year(.fields("Fecha"))
+     If SetD(31).PosX > 0 Then PrinterTexto PosXRet + SetD(31).PosX, PosYRet + SetD(31).PosY, Year(.Fields("Fecha"))
      If Len(NombreCiudad) > 1 Then
-        Cadena = ULCase(NombreCiudad) & ", " & FechaStrg(.fields("Fecha"))
+        Cadena = ULCase(NombreCiudad) & ", " & FechaStrg(.Fields("Fecha"))
      Else
-        Cadena = FechaStrg(.fields("Fecha"))
+        Cadena = FechaStrg(.Fields("Fecha"))
      End If
      Printer.FontSize = SetD(35).Porte
      If SetD(35).PosX > 0 Then PrinterTexto PosXRet + SetD(35).PosX, PosYRet + SetD(35).PosY, Cadena
      Printer.FontSize = SetD(5).Porte
-     If SetD(5).PosX > 0 Then PrinterFields PosXRet + SetD(5).PosX, PosYRet + SetD(5).PosY, .fields("Ciudad")
+     If SetD(5).PosX > 0 Then PrinterFields PosXRet + SetD(5).PosX, PosYRet + SetD(5).PosY, .Fields("Ciudad")
      Printer.FontSize = SetD(1).Porte
      If SetD(1).PosX > 0 Then PrinterTexto PosXRet + SetD(1).PosX, PosYRet + SetD(1).PosY, Autorizacion
  End If
@@ -5547,9 +5549,9 @@ With DataFact
     .MoveFirst
     'Encabezado de la Retencion
      Printer.FontSize = SetD(1).Porte
-     If SetD(1).PosX > 0 Then PrinterTexto PosXRet + SetD(1).PosX, PosYRet + SetD(1).PosY, Format$(.fields("Secuencial"), "000000000")
+     If SetD(1).PosX > 0 Then PrinterTexto PosXRet + SetD(1).PosX, PosYRet + SetD(1).PosY, Format$(.Fields("Secuencial"), "000000000")
      Cadena = "Factura"
-     Select Case .fields("TipoComprobante")
+     Select Case .Fields("TipoComprobante")
        Case "1": Cadena = "Factura"
        Case "2": Cadena = "Nota de Venta"
        Case "3": Cadena = "Liquidación de Compra de Bienes o Prestación de Servicios"
@@ -5565,19 +5567,19 @@ With DataFact
      PosLinea = SetD(13).PosY: SumaSaldo = 0
      Printer.FontBold = False
      Printer.FontSize = SetD(8).Porte
-     If SetD(8).PosX > 0 Then PrinterTexto PosXRet + SetD(8).PosX, PosYRet + SetD(8).PosY, .fields("Establecimiento") & .fields("PuntoEmision") & "-" & Format$(.fields("Secuencial"), "000000000")
+     If SetD(8).PosX > 0 Then PrinterTexto PosXRet + SetD(8).PosX, PosYRet + SetD(8).PosY, .Fields("Establecimiento") & .Fields("PuntoEmision") & "-" & Format$(.Fields("Secuencial"), "000000000")
      Printer.FontSize = SetD(33).Porte
-     If SetD(33).PosX > 0 Then PrinterTexto PosXRet + SetD(33).PosX, PosYRet + SetD(33).PosY, .fields("Autorizacion")
+     If SetD(33).PosX > 0 Then PrinterTexto PosXRet + SetD(33).PosX, PosYRet + SetD(33).PosY, .Fields("Autorizacion")
      Printer.FontSize = SetD(34).Porte
-     If SetD(34).PosX > 0 Then PrinterTexto PosXRet + SetD(34).PosX, PosYRet + SetD(34).PosY, .fields("FechaCaducidad")
+     If SetD(34).PosX > 0 Then PrinterTexto PosXRet + SetD(34).PosX, PosYRet + SetD(34).PosY, .Fields("FechaCaducidad")
     '-----------------------------------------------------------------------------------
-     Total_DetRet = .fields("ValorRetBienes") + .fields("ValorRetServicios")
-     SumaSaldo = SumaSaldo + .fields("ValorRetBienes") + .fields("ValorRetServicios")
+     Total_DetRet = .Fields("ValorRetBienes") + .Fields("ValorRetServicios")
+     SumaSaldo = SumaSaldo + .Fields("ValorRetBienes") + .Fields("ValorRetServicios")
      If SetD(26).PosY > 0 Then PosLinea = SetD(26).PosY
-     If .fields("ValorRetBienes") > 0 Then
-         Total_RetCta = .fields("MontoIvaBienes")
-         Total_DetRet = .fields("ValorRetBienes")
-         PorcentajeRet = .fields("Porc_Bienes") & "%"
+     If .Fields("ValorRetBienes") > 0 Then
+         Total_RetCta = .Fields("MontoIvaBienes")
+         Total_DetRet = .Fields("ValorRetBienes")
+         PorcentajeRet = .Fields("Porc_Bienes") & "%"
          ConceptoRet = "Retención por Bienes"
         '-------------------------------------------------------------------------
          Printer.FontSize = SetD(15).Porte
@@ -5592,10 +5594,10 @@ With DataFact
          If SetD(20).PosX > 0 Then PrinterVariables PosXRet + SetD(20).PosX, PosLinea, PorcentajeRet 'Porcentaje de Ret.
          PosLinea = PosLinea + 0.4
      End If
-     If .fields("ValorRetServicios") > 0 Then
-         Total_RetCta = .fields("MontoIvaServicios")
-         Total_DetRet = .fields("ValorRetServicios")
-         PorcentajeRet = .fields("Porc_Servicios") & "%"
+     If .Fields("ValorRetServicios") > 0 Then
+         Total_RetCta = .Fields("MontoIvaServicios")
+         Total_DetRet = .Fields("ValorRetServicios")
+         PorcentajeRet = .Fields("Porc_Servicios") & "%"
          ConceptoRet = "Retención por Servicios"
         '-------------------------------------------------------------------------
          Printer.FontSize = SetD(15).Porte
@@ -5618,12 +5620,12 @@ With DataRets
     .MoveFirst
      Printer.FontBold = False
      Do While Not .EOF
-        Total_RetCta = .fields("BaseImp")
-        Total_DetRet = .fields("ValRet")
-        SumaSaldo = SumaSaldo + .fields("ValRet")
-        Cadena1 = .fields("TP") & "-" & .fields("Numero")
-        ConceptoRet = MidStrg(.fields("Concepto"), 1, 40) & "..."
-        PorcentajeRet = Format$(.fields("Porcentaje"), "#0.00%")
+        Total_RetCta = .Fields("BaseImp")
+        Total_DetRet = .Fields("ValRet")
+        SumaSaldo = SumaSaldo + .Fields("ValRet")
+        Cadena1 = .Fields("TP") & "-" & .Fields("Numero")
+        ConceptoRet = MidStrg(.Fields("Concepto"), 1, 40) & "..."
+        PorcentajeRet = Format$(.Fields("Porcentaje"), "#0.00%")
        '-------------------------------------------------------------------------------
         Printer.FontSize = SetD(14).Porte
         If SetD(14).PosX > 0 Then PrinterTexto PosXRet + SetD(14).PosX, PosLinea, "R. Renta "          'Tipo de Retencion
@@ -5636,7 +5638,7 @@ With DataRets
         Printer.FontSize = SetD(21).Porte
         If SetD(21).PosX > 0 Then PrinterVariables PosXRet + SetD(21).PosX, PosLinea, Total_DetRet 'Valor Retenido
         Printer.FontSize = SetD(16).Porte
-        If SetD(16).PosX > 0 Then PrinterFields PosXRet + SetD(16).PosX, PosLinea, .fields("CodRet") 'Codigo de Retencion
+        If SetD(16).PosX > 0 Then PrinterFields PosXRet + SetD(16).PosX, PosLinea, .Fields("CodRet") 'Codigo de Retencion
         Printer.FontSize = SetD(20).Porte
         If SetD(20).PosX > 0 Then PrinterVariables PosXRet + SetD(20).PosX, PosLinea, PorcentajeRet 'Porcentaje de Retencion
         PosLinea = PosLinea + 0.4
@@ -5714,13 +5716,13 @@ Pagina = 1
 Printer.FontBold = False
 With Datas.Recordset
      .MoveFirst
-      NombreBanco = .fields("Cuenta")
+      NombreBanco = .Fields("Cuenta")
       EncabezadoData Datas
       Printer.FontSize = 8
       Total = 0
-      PrinterFields Ancho(0), PosLinea, .fields("Cuenta"), False
+      PrinterFields Ancho(0), PosLinea, .Fields("Cuenta"), False
       Do While Not .EOF
-         If NombreBanco <> .fields("Cuenta") Then
+         If NombreBanco <> .Fields("Cuenta") Then
             Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
             PosLinea = PosLinea + 0.1
             PrinterTexto Ancho(5), PosLinea, "TOTAL"
@@ -5728,20 +5730,20 @@ With Datas.Recordset
             PosLinea = PosLinea + 0.6
             Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
             PosLinea = PosLinea + 0.1
-            NombreBanco = .fields("Cuenta")
-            PrinterFields Ancho(0), PosLinea, .fields("Cuenta"), False
+            NombreBanco = .Fields("Cuenta")
+            PrinterFields Ancho(0), PosLinea, .Fields("Cuenta"), False
             Total = 0
          End If
-         PrinterFields Ancho(1), PosLinea, .fields("Beneficiario"), False
-         PrinterFields Ancho(2), PosLinea, .fields("Fecha"), False
-         PrinterFields Ancho(3), PosLinea, .fields("TP"), False
-         PrinterFields Ancho(4), PosLinea, .fields("Numero"), False
-         PrinterFields Ancho(5), PosLinea, .fields("Cheq_Dep"), False
-         PrinterFields Ancho(6), PosLinea, .fields("Valor"), False
+         PrinterFields Ancho(1), PosLinea, .Fields("Beneficiario"), False
+         PrinterFields Ancho(2), PosLinea, .Fields("Fecha"), False
+         PrinterFields Ancho(3), PosLinea, .Fields("TP"), False
+         PrinterFields Ancho(4), PosLinea, .Fields("Numero"), False
+         PrinterFields Ancho(5), PosLinea, .Fields("Cheq_Dep"), False
+         PrinterFields Ancho(6), PosLinea, .Fields("Valor"), False
          For I = 0 To CantCampos
             Printer.Line (Ancho(I), PosLinea - 0.1)-(Ancho(I), PosLinea + 0.4), Negro
          Next I
-         Total = Total + .fields("Valor")
+         Total = Total + .Fields("Valor")
          PosLinea = PosLinea + 0.4
          If PosLinea > LimiteAlto Then
             Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
@@ -5821,24 +5823,24 @@ Printer.FontBold = False
       Printer.FontSize = SizeLetra
       Do While Not .EOF
          If ImpResum = False Then
-         PrinterFields Ancho(0), PosLinea, .fields("Fecha")
-         PrinterTexto Ancho(1), PosLinea, ULCase(.fields("Beneficiario"))
-         PrinterFields Ancho(2), PosLinea, .fields("Cuenta")
-         PrinterFields Ancho(3), PosLinea, .fields("Tipo")
-         PrinterFields Ancho(4), PosLinea, .fields("Numero")
-         PrinterFields Ancho(5), PosLinea, .fields("Debitos")
-         PrinterFields Ancho(6), PosLinea, .fields("Creditos")
+         PrinterFields Ancho(0), PosLinea, .Fields("Fecha")
+         PrinterTexto Ancho(1), PosLinea, ULCase(.Fields("Beneficiario"))
+         PrinterFields Ancho(2), PosLinea, .Fields("Cuenta")
+         PrinterFields Ancho(3), PosLinea, .Fields("Tipo")
+         PrinterFields Ancho(4), PosLinea, .Fields("Numero")
+         PrinterFields Ancho(5), PosLinea, .Fields("Debitos")
+         PrinterFields Ancho(6), PosLinea, .Fields("Creditos")
          End If
          If MN_ME Then
-            If ImpResum = False Then PrinterFields Ancho(7), PosLinea, .fields("Valor_ME"), True
-            Parcial_ME = Parcial_ME - .fields("Valor_ME")
-            If .fields("Valor_ME") >= 0 Then Valor = Valor + .fields("Valor_ME")
+            If ImpResum = False Then PrinterFields Ancho(7), PosLinea, .Fields("Valor_ME"), True
+            Parcial_ME = Parcial_ME - .Fields("Valor_ME")
+            If .Fields("Valor_ME") >= 0 Then Valor = Valor + .Fields("Valor_ME")
             If ImpResum = False Then Printer.Line (Ancho(8), PosLinea - 0.1)-(Ancho(8), PosLinea + 0.4), Negro
          Else
             'If ImpResum = False Then Printer.Line (Ancho(7), PosLinea - 0.1)-(Ancho(7), PosLinea + 0.4), NEGRO
          End If
-         Debe = Debe + .fields("Debitos")
-         Haber = Haber + .fields("Creditos")
+         Debe = Debe + .Fields("Debitos")
+         Haber = Haber + .Fields("Creditos")
          If ImpResum = False Then
             PosLinea = PosLinea + 0.4
             If PosLinea >= LimiteAlto Then
@@ -5897,13 +5899,13 @@ End If
       PosLinea = PosLinea + 0.5
       SumaDebe = 0: SumaHaber = 0: Diferencia = 0: Sumatoria = 0
       Do While Not .EOF
-         PrinterTexto Ancho(0), PosLinea, ULCase(.fields("Beneficiario"))
-         PrinterFields Ancho(2), PosLinea, .fields("Suma_Debitos")
-         PrinterFields Ancho(3) - 0.5, PosLinea, .fields("Suma_Creditos")
+         PrinterTexto Ancho(0), PosLinea, ULCase(.Fields("Beneficiario"))
+         PrinterFields Ancho(2), PosLinea, .Fields("Suma_Debitos")
+         PrinterFields Ancho(3) - 0.5, PosLinea, .Fields("Suma_Creditos")
          'PrinterFields Ancho(5), PosLinea, .Fields("Presupuesto"), True
          If MN_ME Then
-            PrinterFields Ancho(6), PosLinea, .fields("Valor_ME")
-            PrinterFields Ancho(7), PosLinea, .fields("Diferencia")
+            PrinterFields Ancho(6), PosLinea, .Fields("Valor_ME")
+            PrinterFields Ancho(7), PosLinea, .Fields("Diferencia")
             Printer.Line (Ancho(8), PosLinea - 0.1)-(Ancho(8), PosLinea + 0.4), Negro
          Else
             'PrinterFields Ancho(6), PosLinea, .Fields("Diferencia"), True
@@ -5932,8 +5934,8 @@ End If
             Printer.FontBold = False
             PosLinea = PosLinea + 0.5
          End If
-         SumaDebe = SumaDebe + .fields("Suma_Debitos")
-         SumaHaber = SumaHaber + .fields("Suma_Creditos")
+         SumaDebe = SumaDebe + .Fields("Suma_Debitos")
+         SumaHaber = SumaHaber + .Fields("Suma_Creditos")
          'Diferencia = Diferencia + .Fields("Diferencia")
          'Sumatoria = Sumatoria + .Fields("Presupuesto")
         .MoveNext
@@ -5977,12 +5979,12 @@ If MN_ME Then
    PrinterVariables Ancho(6) - 1, PosLinea, Parcial_ME
    PosLinea = PosLinea + 0.5
    PrinterTexto Ancho(1) + 2, PosLinea, "UTILIDAD(Perdida) PAX"
-   PrinterVariables Ancho(4), PosLinea, (Haber - Debe) / Datas2.Recordset.fields("PAX")
-   PrinterVariables Ancho(6) - 1, PosLinea, Parcial_ME / Datas2.Recordset.fields("PAX")
+   PrinterVariables Ancho(4), PosLinea, (Haber - Debe) / Datas2.Recordset.Fields("PAX")
+   PrinterVariables Ancho(6) - 1, PosLinea, Parcial_ME / Datas2.Recordset.Fields("PAX")
    PosLinea = PosLinea + 0.5
    PrinterTexto Ancho(1) + 2, PosLinea, "GASTOS PAX"
-   PrinterVariables Ancho(4), PosLinea, Debe / Datas2.Recordset.fields("PAX")
-   PrinterVariables Ancho(6) - 1, PosLinea, Valor / Datas2.Recordset.fields("PAX")
+   PrinterVariables Ancho(4), PosLinea, Debe / Datas2.Recordset.Fields("PAX")
+   PrinterVariables Ancho(6) - 1, PosLinea, Valor / Datas2.Recordset.Fields("PAX")
 Else
    PrinterVariables Ancho(4), PosLinea, Haber - Debe
 End If
@@ -6075,12 +6077,12 @@ Pagina = 1
 Printer.FontBold = False
 With Datas.Recordset
      .MoveFirst
-      Moneda_US = .fields("ME")
-      TipoProc = .fields("TC")
+      Moneda_US = .Fields("ME")
+      TipoProc = .Fields("TC")
       EncabezadoData Datas
       Printer.FontSize = 8
       Do While Not .EOF
-         If Moneda_US <> .fields("ME") Or TipoProc <> .fields("TC") Then
+         If Moneda_US <> .Fields("ME") Or TipoProc <> .Fields("TC") Then
             Printer.FontBold = True
             'PosLinea = PosLinea + 0.1
             Printer.Line (InicioX, PosLinea)-(Ancho(CantCampos), PosLinea), Negro
@@ -6090,19 +6092,19 @@ With Datas.Recordset
             PosLinea = PosLinea + 0.6
             Printer.Line (InicioX, PosLinea)-(Ancho(CantCampos), PosLinea), Negro
             PosLinea = PosLinea + 0.1
-            Moneda_US = .fields("ME")
-            TipoProc = .fields("TC")
+            Moneda_US = .Fields("ME")
+            TipoProc = .Fields("TC")
             Saldo = 0
          End If
          Printer.FontBold = False
-         PrinterFields Ancho(1), PosLinea, .fields("Cuenta"), False
+         PrinterFields Ancho(1), PosLinea, .Fields("Cuenta"), False
          Cadena = " "
-         If .fields("ME") Then Cadena = "Si"
+         If .Fields("ME") Then Cadena = "Si"
          PrinterTexto Ancho(2), PosLinea, Cadena
-         PrinterFields Ancho(3), PosLinea, .fields("Saldo_Anterior"), False
-         PrinterFields Ancho(4), PosLinea, .fields("Debitos"), False
-         PrinterFields Ancho(5), PosLinea, .fields("Creditos"), False
-         PrinterFields Ancho(6), PosLinea, .fields("Saldo_Actual"), False
+         PrinterFields Ancho(3), PosLinea, .Fields("Saldo_Anterior"), False
+         PrinterFields Ancho(4), PosLinea, .Fields("Debitos"), False
+         PrinterFields Ancho(5), PosLinea, .Fields("Creditos"), False
+         PrinterFields Ancho(6), PosLinea, .Fields("Saldo_Actual"), False
          For I = 0 To CantCampos
             Printer.Line (Ancho(I), PosLinea - 0.1)-(Ancho(I), PosLinea + 0.4), Negro
          Next
@@ -6113,7 +6115,7 @@ With Datas.Recordset
             EncabezadoData Datas
             Printer.FontSize = 8
          End If
-         Saldo = Saldo + .fields("Saldo_Actual")
+         Saldo = Saldo + .Fields("Saldo_Actual")
         .MoveNext
       Loop
 End With
@@ -6164,14 +6166,14 @@ With Datas.Recordset
  If .RecordCount > 0 Then
      .MoveFirst
       'Moneda_US = .Fields("ME")
-      TipoProc = .fields("TC")
+      TipoProc = .Fields("TC")
       EncabezadoData Datas
       Printer.FontSize = 8
       For I = 1 To 7
           TotalDia(I) = 0
       Next I
       Do While Not .EOF
-         If TipoProc <> .fields("TC") Then
+         If TipoProc <> .Fields("TC") Then
             'PosLinea = PosLinea + 0.1
             Printer.Line (InicioX, PosLinea)-(Ancho(CantCampos), PosLinea), Negro
             PosLinea = PosLinea + 0.1
@@ -6184,19 +6186,19 @@ With Datas.Recordset
             Printer.Line (InicioX, PosLinea)-(Ancho(CantCampos), PosLinea), Negro
             PosLinea = PosLinea + 0.1
             'Moneda_US = .Fields("ME")
-            TipoProc = .fields("TC")
+            TipoProc = .Fields("TC")
             For I = 1 To 7
                 TotalDia(I) = 0
             Next I
             Saldo = 0
          End If
-         PrinterFields Ancho(1), PosLinea, .fields("Detalle")
+         PrinterFields Ancho(1), PosLinea, .Fields("Detalle")
          'PrinterFields Ancho(2), PosLinea, .Fields("ME")
          For NoDias = 2 To 7
-             PrinterFields Ancho(1 + NoDias), PosLinea, .fields(DiasLetras(NoDias))
-             TotalDia(NoDias) = TotalDia(NoDias) + .fields(DiasLetras(NoDias))
+             PrinterFields Ancho(1 + NoDias), PosLinea, .Fields(DiasLetras(NoDias))
+             TotalDia(NoDias) = TotalDia(NoDias) + .Fields(DiasLetras(NoDias))
          Next NoDias
-         PrinterFields Ancho(9), PosLinea, .fields("Total")
+         PrinterFields Ancho(9), PosLinea, .Fields("Total")
          For I = 0 To 10
             Printer.Line (Ancho(I), PosLinea - 0.1)-(Ancho(I), PosLinea + 0.4), Negro
          Next
@@ -6207,7 +6209,7 @@ With Datas.Recordset
             EncabezadoData Datas
             Printer.FontSize = 8
          End If
-         Saldo = Saldo + .fields("Total")
+         Saldo = Saldo + .Fields("Total")
         .MoveNext
       Loop
   End If
@@ -6316,8 +6318,8 @@ Pagina = 1
 Printer.FontBold = False
 With Datas.Recordset
      .MoveFirst
-      Moneda_US = .fields("ME")
-      TipoProc = .fields("TC")
+      Moneda_US = .Fields("ME")
+      TipoProc = .Fields("TC")
       Encabezados
       Printer.FontSize = 8
       Printer.FontName = TipoLetra
@@ -6327,13 +6329,13 @@ With Datas.Recordset
       PrinterAllFields CantCampos, PosLinea, Datas, False, True
       PosLinea = PosLinea + 0.5
       Do While Not .EOF
-         If Moneda_US <> .fields("ME") Or TipoProc <> .fields("TC") Then
+         If Moneda_US <> .Fields("ME") Or TipoProc <> .Fields("TC") Then
             Printer.FontBold = True
             Tipo_Flujo
             PrinterVariables Ancho(5), PosLinea, "T O T A L"
             PrinterVariables Ancho(6), PosLinea, Saldo
-            Moneda_US = .fields("ME")
-            TipoProc = .fields("TC")
+            Moneda_US = .Fields("ME")
+            TipoProc = .Fields("TC")
             PosLinea = PosLinea + 0.6
             Saldo = 0
          End If
@@ -6346,7 +6348,7 @@ With Datas.Recordset
             Printer.FontSize = 8
             Printer.FontName = TipoLetra
          End If
-         Saldo = Saldo + .fields("Saldo_Actual")
+         Saldo = Saldo + .Fields("Saldo_Actual")
         .MoveNext
       Loop
 End With
@@ -6399,9 +6401,9 @@ With Datas.Recordset
      .MoveFirst
       EncabezadoData Datas
       Printer.FontSize = 10
-      Codigo = CodigoIzqGuion(.fields("Cuenta"))
+      Codigo = CodigoIzqGuion(.Fields("Cuenta"))
       Do While Not .EOF
-         If Codigo <> CodigoIzqGuion(.fields("Cuenta")) And NivelB Then
+         If Codigo <> CodigoIzqGuion(.Fields("Cuenta")) And NivelB Then
             PosLinea = PosLinea + 0.1
             Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
             PosLinea = PosLinea + 0.1
@@ -6412,7 +6414,7 @@ With Datas.Recordset
             PosLinea = PosLinea + 0.6
             Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
             PosLinea = PosLinea + 0.1
-            Codigo = CodigoIzqGuion(.fields("Cuenta"))
+            Codigo = CodigoIzqGuion(.Fields("Cuenta"))
             Total = 0: Total_ME = 0:  Valor_ME = 0
          End If
          PrinterAllFields CantCampos, PosLinea, Datas, True, False
@@ -6424,13 +6426,13 @@ With Datas.Recordset
             Printer.FontSize = 10
          End If
         'Total
-         Saldo_ME = Saldo_ME + .fields("Saldo_ME")
-         Saldo = Saldo + .fields("Saldo_MN")
-         Valor = Valor + .fields("Saldo")
+         Saldo_ME = Saldo_ME + .Fields("Saldo_ME")
+         Saldo = Saldo + .Fields("Saldo_MN")
+         Valor = Valor + .Fields("Saldo")
         'SubTotal
-         Total_ME = Total_ME + .fields("Saldo_ME")
-         Total = Total + .fields("Saldo_MN")
-         Valor_ME = Valor_ME + .fields("Saldo")
+         Total_ME = Total_ME + .Fields("Saldo_ME")
+         Total = Total + .Fields("Saldo_MN")
+         Valor_ME = Valor_ME + .Fields("Saldo")
         .MoveNext
       Loop
 End With
@@ -6518,8 +6520,8 @@ Printer.FontBold = False
  
      .MoveFirst
       Encabezado_SubCta_Venc Vertical
-      Cuenta = UCaseStrg(.fields("Cuenta"))
-      SubCta = ULCase(.fields("Cliente"))
+      Cuenta = UCaseStrg(.Fields("Cuenta"))
+      SubCta = ULCase(.Fields("Cliente"))
       Si_No = True
       Printer.FontName = TipoVerdana
       Printer.FontItalic = False
@@ -6530,7 +6532,7 @@ Printer.FontBold = False
       Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
       PosLinea = PosLinea + 0.1
       Do While Not .EOF
-         If Cuenta <> UCaseStrg(.fields("Cuenta")) And NivelB Then
+         If Cuenta <> UCaseStrg(.Fields("Cuenta")) And NivelB Then
             PosLinea = PosLinea + 0.1
             Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
             PosLinea = PosLinea + 0.05
@@ -6567,8 +6569,8 @@ Printer.FontBold = False
             Debe = 0: Haber = 0
             Debitos = 0: Creditos = 0
             Debe_ME = 0: Haber_ME = 0
-            Cuenta = UCaseStrg(.fields("Cuenta"))
-            SubCta = ULCase(.fields("Cliente"))
+            Cuenta = UCaseStrg(.Fields("Cuenta"))
+            SubCta = ULCase(.Fields("Cliente"))
             Si_No = True
             PrinterTexto Ancho(0), PosLinea, Cuenta & ":"
             PosLinea = PosLinea + 0.3
@@ -6577,7 +6579,7 @@ Printer.FontBold = False
             Bandera = True
             Ln_No = 1
          End If
-         If SubCta <> ULCase(.fields("Cliente")) Then
+         If SubCta <> ULCase(.Fields("Cliente")) Then
             PosLinea = PosLinea + 0.1
             Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
             PosLinea = PosLinea + 0.05
@@ -6593,8 +6595,8 @@ Printer.FontBold = False
                PrinterVariables Ancho(10), PosLinea, Creditos
             End If
             Debitos = 0: Creditos = 0
-            Cuenta = UCaseStrg(.fields("Cuenta"))
-            SubCta = ULCase(.fields("Cliente"))
+            Cuenta = UCaseStrg(.Fields("Cuenta"))
+            SubCta = ULCase(.Fields("Cliente"))
             PosLinea = PosLinea + 0.4
             Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
             PosLinea = PosLinea + 0.05
@@ -6610,35 +6612,35 @@ Printer.FontBold = False
          
          'PrinterTexto Ancho(2) - 0.5, PosLinea, Format(Ln_No, "00")
 
-         PrinterFields Ancho(2), PosLinea, .fields(2), True
-         PrinterTexto Ancho(3), PosLinea, .fields(3) & "-" & Format(.fields(4), "000000000")
-         PrinterFields Ancho(4), PosLinea, .fields(5), True
-         PrinterTexto Ancho(5), PosLinea, Format(.fields(6), "00000000")
-         PrinterFields Ancho(6), PosLinea, .fields(7), True
-         PrinterFields Ancho(7), PosLinea, .fields(8), True
+         PrinterFields Ancho(2), PosLinea, .Fields(2), True
+         PrinterTexto Ancho(3), PosLinea, .Fields(3) & "-" & Format(.Fields(4), "000000000")
+         PrinterFields Ancho(4), PosLinea, .Fields(5), True
+         PrinterTexto Ancho(5), PosLinea, Format(.Fields(6), "00000000")
+         PrinterFields Ancho(6), PosLinea, .Fields(7), True
+         PrinterFields Ancho(7), PosLinea, .Fields(8), True
          If Vertical Then
-            PrinterFields Ancho(8), PosLinea, .fields(9), True
-            PrinterFields Ancho(9), PosLinea, .fields(10), True
-            PrinterFields Ancho(10), PosLinea, .fields(11), True
+            PrinterFields Ancho(8), PosLinea, .Fields(9), True
+            PrinterFields Ancho(9), PosLinea, .Fields(10), True
+            PrinterFields Ancho(10), PosLinea, .Fields(11), True
          Else
-            PrinterFields Ancho(8), PosLinea, .fields(9), True
-            PrinterFields Ancho(9), PosLinea, .fields(10), True
-            PrinterFields Ancho(10), PosLinea, .fields(11), True
-            PrinterFields Ancho(11), PosLinea, .fields(12), True
+            PrinterFields Ancho(8), PosLinea, .Fields(9), True
+            PrinterFields Ancho(9), PosLinea, .Fields(10), True
+            PrinterFields Ancho(10), PosLinea, .Fields(11), True
+            PrinterFields Ancho(11), PosLinea, .Fields(12), True
          End If
          PosLinea = PosLinea + 0.3
          For I = 0 To CantCampos
              If I <> 1 Then Printer.Line (Ancho(I), PosLinea - 0.3)-(Ancho(I), PosLinea), Negro
          Next I
         'Total
-         Total = Total + .fields("Total")
-         Saldo = Saldo + .fields("Saldo")
+         Total = Total + .Fields("Total")
+         Saldo = Saldo + .Fields("Saldo")
         'SubTotal
-         Debe = Debe + .fields("Total")
-         Haber = Haber + .fields("Saldo")
+         Debe = Debe + .Fields("Total")
+         Haber = Haber + .Fields("Saldo")
         'SubTotal SubModulo
-         Debitos = Debitos + .fields("Total")
-         Creditos = Creditos + .fields("Saldo")
+         Debitos = Debitos + .Fields("Total")
+         Creditos = Creditos + .Fields("Saldo")
          Ln_No = Ln_No + 1
          If PosLinea >= (LimiteAlto - 0.3) Then
             Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
@@ -6755,8 +6757,8 @@ With Datas.Recordset
  If .RecordCount > 0 Then
      .MoveFirst
       Encabezado_SubCta_IE Benef
-      Cuenta = .fields("Cuenta")
-      SubCta = .fields("Sub_Modulos")
+      Cuenta = .Fields("Cuenta")
+      SubCta = .Fields("Sub_Modulos")
       Printer.FontName = TipoVerdana
       Printer.FontItalic = False
       Printer.FontBold = False
@@ -6766,7 +6768,7 @@ With Datas.Recordset
       Printer.Line (Ancho(1), PosLinea)-(Ancho(1), PosLinea + 0.3), Negro
       PrinterTexto Ancho(1), PosLinea, SubCta
       Do While Not .EOF
-         If Cuenta <> .fields("Cuenta") And SubCta <> .fields("Sub_Modulos") Then
+         If Cuenta <> .Fields("Cuenta") And SubCta <> .Fields("Sub_Modulos") Then
             PosLinea = PosLinea + 0.05
             Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
             PosLinea = PosLinea + 0.05
@@ -6790,12 +6792,12 @@ With Datas.Recordset
             PosLinea = PosLinea + 0.1
             Debe = 0
             Haber = 0
-            Cuenta = .fields("Cuenta")
-            SubCta = .fields("Sub_Modulos")
+            Cuenta = .Fields("Cuenta")
+            SubCta = .Fields("Sub_Modulos")
             PrinterTexto Ancho(0), PosLinea, Cuenta
             PrinterTexto Ancho(1), PosLinea, SubCta
          End If
-         If Cuenta <> .fields("Cuenta") Then
+         If Cuenta <> .Fields("Cuenta") Then
             PosLinea = PosLinea + 0.05
             Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
             PosLinea = PosLinea + 0.05
@@ -6811,13 +6813,13 @@ With Datas.Recordset
             PosLinea = PosLinea + 0.1
             Debe = 0
             Haber = 0
-            Cuenta = .fields("Cuenta")
-            SubCta = .fields("Sub_Modulos")
+            Cuenta = .Fields("Cuenta")
+            SubCta = .Fields("Sub_Modulos")
             PrinterTexto Ancho(0), PosLinea, Cuenta
             PrinterTexto Ancho(1), PosLinea, SubCta
          End If
          
-         If SubCta <> .fields("Sub_Modulos") Then
+         If SubCta <> .Fields("Sub_Modulos") Then
             PosLinea = PosLinea + 0.05
             Printer.Line (Ancho(1), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
             PosLinea = PosLinea + 0.05
@@ -6832,16 +6834,16 @@ With Datas.Recordset
             Printer.Line (Ancho(1), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
             PosLinea = PosLinea + 0.1
             Haber = 0
-            SubCta = .fields("Sub_Modulos")
+            SubCta = .Fields("Sub_Modulos")
             PrinterTexto Ancho(1), PosLinea, SubCta
          End If
          'PrinterTexto Ancho(1), PosLinea, ULCase(.Fields(1))
          
          If Benef Then
-            PrinterFields Ancho(2), PosLinea, .fields(2), True
-            PrinterFields Ancho(3), PosLinea, .fields(3), True
+            PrinterFields Ancho(2), PosLinea, .Fields(2), True
+            PrinterFields Ancho(3), PosLinea, .Fields(3), True
          Else
-            PrinterFields Ancho(2), PosLinea, .fields(2), True
+            PrinterFields Ancho(2), PosLinea, .Fields(2), True
             'PrinterFields Ancho(3), PosLinea, .Fields(3), True
          End If
          For I = 1 To CantCampos
@@ -6859,11 +6861,11 @@ With Datas.Recordset
             PrinterTexto Ancho(0), PosLinea, Cuenta
          End If
         'Total
-         Total = Total + .fields("Total")
+         Total = Total + .Fields("Total")
         'SubTotal
-         Debe = Debe + .fields("Total")
+         Debe = Debe + .Fields("Total")
         'SubTotal Detalle
-         Haber = Haber + .fields("Total")
+         Haber = Haber + .Fields("Total")
         .MoveNext
       Loop
      .MoveFirst
@@ -6957,15 +6959,15 @@ With DataT.Recordset
      Printer.FontSize = PorteLetra
      Printer.FontName = TipoLetra
      Encab_Diario_General DataT
-     TipoCta = .fields("TP")
-     Numero = .fields("Numero")
-     Mifecha = .fields("Fecha")
-     ConceptoDe = .fields("Concepto")
-     NoItem = .fields("Item")
+     TipoCta = .Fields("TP")
+     Numero = .Fields("Numero")
+     Mifecha = .Fields("Fecha")
+     ConceptoDe = .Fields("Concepto")
+     NoItem = .Fields("Item")
      Debe = 0: Haber = 0
      Do While Not .EOF
         PorteLetra = 9
-        If TipoCta <> .fields("TP") Or Numero <> .fields("Numero") Or Mifecha <> .fields("Fecha") Then
+        If TipoCta <> .Fields("TP") Or Numero <> .Fields("Numero") Or Mifecha <> .Fields("Fecha") Then
            Printer.FontSize = PorteLetra
            Printer.FontBold = True
            Printer.FontItalic = False
@@ -6990,31 +6992,31 @@ With DataT.Recordset
               Printer.FontName = TipoLetra
               Encab_Diario_General DataT
            End If
-           TipoCta = .fields("TP")
-           Numero = .fields("Numero")
-           Mifecha = .fields("Fecha")
-           ConceptoDe = .fields("Concepto")
-           NoItem = .fields("Item")
+           TipoCta = .Fields("TP")
+           Numero = .Fields("Numero")
+           Mifecha = .Fields("Fecha")
+           ConceptoDe = .Fields("Concepto")
+           NoItem = .Fields("Item")
            Debe = 0: Haber = 0
         End If
         Printer.FontSize = PorteLetra
         Printer.FontName = TipoLetra
         Printer.FontBold = False
         Printer.FontItalic = False
-        ID_Trans = .fields("ID")
-        Cta_Aux = .fields("Cta")
-        PrinterFields Ancho(0), PosLinea, .fields("Cta"), False
-        PrinterFields Ancho(1), PosLinea, .fields("Cuenta"), False
-        If .fields("Parcial_ME") <> 0 Then PrinterFields Ancho(2), PosLinea, .fields("Parcial_ME"), False
-        PrinterFields Ancho(3), PosLinea, .fields("Debe"), False
-        PrinterFields Ancho(4), PosLinea, .fields("Haber"), False
+        ID_Trans = .Fields("ID")
+        Cta_Aux = .Fields("Cta")
+        PrinterFields Ancho(0), PosLinea, .Fields("Cta"), False
+        PrinterFields Ancho(1), PosLinea, .Fields("Cuenta"), False
+        If .Fields("Parcial_ME") <> 0 Then PrinterFields Ancho(2), PosLinea, .Fields("Parcial_ME"), False
+        PrinterFields Ancho(3), PosLinea, .Fields("Debe"), False
+        PrinterFields Ancho(4), PosLinea, .Fields("Haber"), False
         Printer.FontSize = 7
-        If Len(.fields("Detalle")) > 1 Then
+        If Len(.Fields("Detalle")) > 1 Then
            For I = 0 To C
                Printer.Line (Ancho(I), PosLinea - 0.1)-(Ancho(I), PosLinea + 0.3), Negro
            Next I
            PosLinea = PosLinea + 0.32
-           PrinterFields Ancho(1), PosLinea, .fields("Detalle"), False
+           PrinterFields Ancho(1), PosLinea, .Fields("Detalle"), False
         End If
         Printer.FontItalic = True
         Evaluar = False
@@ -7029,24 +7031,24 @@ With DataT.Recordset
                  If Not AdoSubCtas.Recordset.EOF Then
                     Si_No = True
                     Do While Not AdoSubCtas.Recordset.EOF And Si_No
-                       If Cta_Aux = AdoSubCtas.Recordset.fields("Cta") And _
-                          Numero = AdoSubCtas.Recordset.fields("Numero") And _
-                          TipoCta = AdoSubCtas.Recordset.fields("TP") Then
+                       If Cta_Aux = AdoSubCtas.Recordset.Fields("Cta") And _
+                          Numero = AdoSubCtas.Recordset.Fields("Numero") And _
+                          TipoCta = AdoSubCtas.Recordset.Fields("TP") Then
                           'MsgBox "..."
                           For I = 0 To C
                               Printer.Line (Ancho(I), PosLinea - 0.1)-(Ancho(I), PosLinea + 0.3), Negro
                           Next I
                           PosLinea = PosLinea + 0.32
                           Printer.FontItalic = True
-                          PrinterFields Ancho(1) + 0.4, PosLinea, AdoSubCtas.Recordset.fields("Cliente"), False
+                          PrinterFields Ancho(1) + 0.4, PosLinea, AdoSubCtas.Recordset.Fields("Cliente"), False
                           Printer.FontItalic = False
-                          If AdoSubCtas.Recordset.fields("Prima") <> 0 Then
-                             PrinterTexto Ancho(1) + 5.9, PosLinea, " Pr. No. " & Format$(AdoSubCtas.Recordset.fields("Prima"), "000000")
+                          If AdoSubCtas.Recordset.Fields("Prima") <> 0 Then
+                             PrinterTexto Ancho(1) + 5.9, PosLinea, " Pr. No. " & Format$(AdoSubCtas.Recordset.Fields("Prima"), "000000")
                           End If
-                          If AdoSubCtas.Recordset.fields("Factura") <> 0 Then
-                             PrinterTexto Ancho(1) + 7.7, PosLinea, " F. No. " & Format$(AdoSubCtas.Recordset.fields("Factura"), "000000")
+                          If AdoSubCtas.Recordset.Fields("Factura") <> 0 Then
+                             PrinterTexto Ancho(1) + 7.7, PosLinea, " F. No. " & Format$(AdoSubCtas.Recordset.Fields("Factura"), "000000")
                           End If
-                          PrinterVariables Ancho(2), PosLinea, Abs(AdoSubCtas.Recordset.fields("Debitos") - AdoSubCtas.Recordset.fields("Creditos"))
+                          PrinterVariables Ancho(2), PosLinea, Abs(AdoSubCtas.Recordset.Fields("Debitos") - AdoSubCtas.Recordset.Fields("Creditos"))
                           Evaluar = True
                        Else
                           Si_No = False
@@ -7061,8 +7063,8 @@ With DataT.Recordset
         For I = 0 To C
             Printer.Line (Ancho(I), PosLinea - 0.1)-(Ancho(I), PosLinea + 0.38), Negro
         Next I
-        Debe = Debe + .fields("Debe")
-        Haber = Haber + .fields("Haber")
+        Debe = Debe + .Fields("Debe")
+        Haber = Haber + .Fields("Haber")
         If Evaluar Then PosLinea = PosLinea + 0.32 Else PosLinea = PosLinea + 0.37
         If PosLinea >= LimiteAlto Then
            PosLinea = PosLinea + 0.05
@@ -7128,32 +7130,32 @@ With Datas.Recordset
       Printer.FontSize = 8
       Printer.FontBold = False
       Debe = 0: Haber = 0
-      Fecha = .fields("Fecha")
-      Numero = .fields("Numero")
-      TP = .fields("TP")
-      PrinterFields Ancho(0), PosLinea, .fields("Fecha")
+      Fecha = .Fields("Fecha")
+      Numero = .Fields("Numero")
+      TP = .Fields("TP")
+      PrinterFields Ancho(0), PosLinea, .Fields("Fecha")
       PrinterVariables Ancho(0), PosLinea + 0.35, TP & "-" & Format$(Numero, "000000")
-      NumeroLineas = PrinterLineasMayor(Ancho(2), PosLinea, .fields("Concepto"), 5.5)
+      NumeroLineas = PrinterLineasMayor(Ancho(2), PosLinea, .Fields("Concepto"), 5.5)
       PFil = 0
       If NumeroLineas > 1 Then PFil = PosLinea + (NumeroLineas * 0.4)
       Do While Not .EOF
-         If Fecha <> .fields("Fecha") Or Numero <> .fields("Numero") Or TP <> .fields("TP") Then
+         If Fecha <> .Fields("Fecha") Or Numero <> .Fields("Numero") Or TP <> .Fields("TP") Then
             PosLinea = PosLinea + 0.2
-            Fecha = .fields("Fecha")
-            Numero = .fields("Numero")
-            TP = .fields("TP")
+            Fecha = .Fields("Fecha")
+            Numero = .Fields("Numero")
+            TP = .Fields("TP")
             If PosLinea < PFil Then PosLinea = PFil
-            PrinterFields Ancho(0), PosLinea, .fields("Fecha")
+            PrinterFields Ancho(0), PosLinea, .Fields("Fecha")
             PrinterVariables Ancho(0), PosLinea + 0.35, TP & "-" & Format$(Numero, "000000")
-            NumeroLineas = PrinterLineasMayor(Ancho(2), PosLinea, .fields("Concepto"), 5.5)
+            NumeroLineas = PrinterLineasMayor(Ancho(2), PosLinea, .Fields("Concepto"), 5.5)
             PFil = 0
             If NumeroLineas > 1 Then PFil = PosLinea + (NumeroLineas * 0.4)
          End If
          Printer.FontBold = False
-         PrinterFields Ancho(3), PosLinea, .fields("Cta")
-         PrinterFields Ancho(4), PosLinea, .fields("Cuenta")
-         PrinterFields Ancho(5), PosLinea, .fields("Debe")
-         PrinterFields Ancho(6), PosLinea, .fields("Haber")
+         PrinterFields Ancho(3), PosLinea, .Fields("Cta")
+         PrinterFields Ancho(4), PosLinea, .Fields("Cuenta")
+         PrinterFields Ancho(5), PosLinea, .Fields("Debe")
+         PrinterFields Ancho(6), PosLinea, .Fields("Haber")
          PosLinea = PosLinea + 0.35
          If PosLinea > LimiteAlto Then
             If PosLinea < PFil Then PosLinea = PFil
@@ -7173,8 +7175,8 @@ With Datas.Recordset
             Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
             PosLinea = PosLinea + 0.1
          End If
-         Debe = Debe + .fields("Debe")
-         Haber = Haber + .fields("Haber")
+         Debe = Debe + .Fields("Debe")
+         Haber = Haber + .Fields("Haber")
         .MoveNext
       Loop
 End With
@@ -7229,11 +7231,11 @@ With DataT.Recordset
     .MoveFirst
      Encabezado Ancho(0), Ancho(5)
      Encab_Diario_General DataT
-     TipoCta = .fields("TP")
-     Numero = .fields("Numero")
-     Mifecha = .fields("Fecha")
-     ConceptoDe = .fields("Concepto")
-     AutorizadoPor = .fields("Autorizado")
+     TipoCta = .Fields("TP")
+     Numero = .Fields("Numero")
+     Mifecha = .Fields("Fecha")
+     ConceptoDe = .Fields("Concepto")
+     AutorizadoPor = .Fields("Autorizado")
      Debe = 0: Haber = 0
      Do While Not .EOF
         Printer.FontSize = 9
@@ -7253,12 +7255,12 @@ With DataT.Recordset
            PosLinea = PosLinea + 0.1
            Encab_Diario_General DataT
         End If
-        If TipoCta <> .fields("TP") Or Numero <> .fields("Numero") Or Mifecha <> .fields("Fecha") Then
+        If TipoCta <> .Fields("TP") Or Numero <> .Fields("Numero") Or Mifecha <> .Fields("Fecha") Then
            PrinterVariables Ancho(0), PosLinea, "CONCEPTO: " & ConceptoDe
            PosLinea = PosLinea + 0.4
-           If Mifecha <> .fields("Fecha") Then
+           If Mifecha <> .Fields("Fecha") Then
               PrinterVariables Ancho(0), PosLinea, "F E C H A:"
-              PrinterFields Ancho(1), PosLinea, .fields("Fecha"), False
+              PrinterFields Ancho(1), PosLinea, .Fields("Fecha"), False
               PosLinea = PosLinea + 0.4
               Printer.Line (Ancho(0), PosLinea)-(Ancho(C), PosLinea), Negro
               PosLinea = PosLinea + 0.1
@@ -7279,18 +7281,18 @@ With DataT.Recordset
               PosLinea = PosLinea + 0.1
               Encab_Diario_General DataT
            End If
-           TipoCta = .fields("TP")
-           Numero = .fields("Numero")
-           Mifecha = .fields("Fecha")
-           ConceptoDe = .fields("Concepto")
+           TipoCta = .Fields("TP")
+           Numero = .Fields("Numero")
+           Mifecha = .Fields("Fecha")
+           ConceptoDe = .Fields("Concepto")
         End If
-        PrinterFields Ancho(0), PosLinea, .fields("Cta")
-        PrinterFields Ancho(1), PosLinea, .fields("Cuenta")
-        PrinterFields Ancho(3), PosLinea, .fields("Debe")
-        PrinterFields Ancho(4), PosLinea, .fields("Haber")
-        Debe = Debe + .fields("Debe")
-        Haber = Haber + .fields("Haber")
-        If AutorizadoPor = Ninguno Then AutorizadoPor = .fields("Autorizado")
+        PrinterFields Ancho(0), PosLinea, .Fields("Cta")
+        PrinterFields Ancho(1), PosLinea, .Fields("Cuenta")
+        PrinterFields Ancho(3), PosLinea, .Fields("Debe")
+        PrinterFields Ancho(4), PosLinea, .Fields("Haber")
+        Debe = Debe + .Fields("Debe")
+        Haber = Haber + .Fields("Haber")
+        If AutorizadoPor = Ninguno Then AutorizadoPor = .Fields("Autorizado")
         PosLinea = PosLinea + 0.4
        .MoveNext
      Loop
@@ -7353,34 +7355,34 @@ With Datas.Recordset
      Printer.FontName = TipoArialNarrow
      Do While Not .EOF
         Printer.FontSize = 9
-        NivelCta = Niveles(.fields("Codigo"))
+        NivelCta = Niveles(.Fields("Codigo"))
         Printer.FontBold = False
         Printer.FontItalic = False
         Printer.FontUnderline = False
-        If .fields("DG") = "G" Then Printer.FontBold = True
-        PrinterFields Ancho(0), PosLinea, .fields("Codigo")
-        If .fields("TC") <> "N" Then Printer.FontItalic = True
-        Select Case .fields("TC")
+        If .Fields("DG") = "G" Then Printer.FontBold = True
+        PrinterFields Ancho(0), PosLinea, .Fields("Codigo")
+        If .Fields("TC") <> "N" Then Printer.FontItalic = True
+        Select Case .Fields("TC")
           Case "C", "P": Printer.FontUnderline = True
         End Select
-        If Opcion = 1 Then PrinterFields Ancho(0), PosLinea, .fields("Codigo")
+        If Opcion = 1 Then PrinterFields Ancho(0), PosLinea, .Fields("Codigo")
         PCol = Ancho(1) + (NivelCta * 0.3)
-        PrinterFields PCol, PosLinea, .fields("Cuenta")
+        PrinterFields PCol, PosLinea, .Fields("Cuenta")
         Printer.FontItalic = False
         Printer.FontUnderline = False
-        If MidStrg(.fields("Cuenta"), 1, 3) = " - " Then
+        If MidStrg(.Fields("Cuenta"), 1, 3) = " - " Then
            Printer.Line (17, PosLinea)-(19.5, PosLinea), Negro
            PosLinea = PosLinea + 0.05
            Printer.Line (17, PosLinea)-(19.5, PosLinea), Negro
            PosLinea = PosLinea + 0.05
         End If
-        PrinterVariables 12.5, PosLinea, .fields("Total_N6")
-        PrinterVariables 13.5, PosLinea, .fields("Total_N5")
-        PrinterVariables 14.5, PosLinea, .fields("Total_N4")
-        PrinterVariables 15.5, PosLinea, .fields("Total_N3")
-        PrinterVariables 16.5, PosLinea, .fields("Total_N2")
-        PrinterVariables 17.5, PosLinea, .fields("Total_N1")
-        If MidStrg(.fields("Cuenta"), 1, 3) = " - " Then
+        PrinterVariables 12.5, PosLinea, .Fields("Total_N6")
+        PrinterVariables 13.5, PosLinea, .Fields("Total_N5")
+        PrinterVariables 14.5, PosLinea, .Fields("Total_N4")
+        PrinterVariables 15.5, PosLinea, .Fields("Total_N3")
+        PrinterVariables 16.5, PosLinea, .Fields("Total_N2")
+        PrinterVariables 17.5, PosLinea, .Fields("Total_N1")
+        If MidStrg(.Fields("Cuenta"), 1, 3) = " - " Then
            PosLinea = PosLinea + 0.45
         Else
            PosLinea = PosLinea + 0.35
@@ -7469,7 +7471,7 @@ NumeroDeMeses = Month(Fecha_Final)
 'Iniciamos la impresion
 With Datas.Recordset
  If .RecordCount > 0 Then
-     Id_Campos = .fields.Count - 1
+     Id_Campos = .Fields.Count - 1
      IE = 2
      JE = IE + 5
      If JE > Id_Campos Then JE = Id_Campos
@@ -7480,31 +7482,31 @@ Volver_Imprimir:
      Printer.FontSize = 7.5
      Do While Not .EOF
         Printer.FontBold = False
-        Select Case MidStrg(.fields(0), 1, 1)
+        Select Case MidStrg(.Fields(0), 1, 1)
           Case "-", "+", "(", " "
                Printer.FontBold = True
         End Select
-        PrinterFields Ancho(0), PosLinea, .fields(1), False
+        PrinterFields Ancho(0), PosLinea, .Fields(1), False
         J = 2
         For I = IE To JE
-            If MidStrg(TrimStrg(.fields(1)), 1, 1) = "*" Then
-               Select Case MidStrg(.fields(0), 1, 1)
+            If MidStrg(TrimStrg(.Fields(1)), 1, 1) = "*" Then
+               Select Case MidStrg(.Fields(0), 1, 1)
                  Case "-", "+", "("
-                      PrinterFields Ancho(J) + 1.8, PosLinea, .fields(I), False
+                      PrinterFields Ancho(J) + 1.8, PosLinea, .Fields(I), False
                  Case Else
-                      PrinterFields Ancho(J), PosLinea, .fields(I), False
+                      PrinterFields Ancho(J), PosLinea, .Fields(I), False
                End Select
             Else
-               PrinterFields Ancho(J) + 1.8, PosLinea, .fields(I), False
+               PrinterFields Ancho(J) + 1.8, PosLinea, .Fields(I), False
             End If
             J = J + 1
         Next I
-        Select Case MidStrg(.fields(0), 1, 1)
+        Select Case MidStrg(.Fields(0), 1, 1)
           Case "-", "+", "("
                Printer.Line (Ancho(0), PosLinea - 0.05)-(Ancho(8), PosLinea - 0.05), Negro
                Printer.Line (Ancho(0), PosLinea + 0.36)-(Ancho(8), PosLinea + 0.36), Negro
         End Select
-        Select Case MidStrg(TrimStrg(.fields(1)), 1, 1)
+        Select Case MidStrg(TrimStrg(.Fields(1)), 1, 1)
           Case "-"
                Printer.Line (Ancho(0), PosLinea + 0.36)-(Ancho(8), PosLinea + 0.36), Negro
         End Select
@@ -7562,7 +7564,7 @@ NumeroDeMeses = Month(Fecha_Final)
 'Iniciamos la impresion
 With Datas.Recordset
  If .RecordCount > 0 Then
-     CantCampos = .fields.Count
+     CantCampos = .Fields.Count
      ReDim Ancho(CantCampos + 1) As Single
      Ancho(0) = 0.1   ' Cta
      Ancho(1) = 0.1   ' SubCta
@@ -7587,24 +7589,24 @@ With Datas.Recordset
         Printer.FontSize = 6
         Printer.FontBold = False
         Printer.FontItalic = False
-        Cadena = Space(Len(.fields("Codigo")) - 1) & .fields("Cuenta")
-        If .fields("DG") = "G" Then
+        Cadena = Space(Len(.Fields("Codigo")) - 1) & .Fields("Cuenta")
+        If .Fields("DG") = "G" Then
             Printer.FontBold = True
             Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
             PosLinea = PosLinea + 0.05
         End If
-        If MidStrg(.fields("Cuenta"), 1, 3) = " * " Then
+        If MidStrg(.Fields("Cuenta"), 1, 3) = " * " Then
            Printer.FontSize = 5.5
            'Printer.FontBold = True
            Printer.FontItalic = True
            'Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), NEGRO
            'PosLinea = PosLinea + 0.05
-           Cadena = Space(Len(.fields("Codigo"))) & .fields("Cuenta")
+           Cadena = Space(Len(.Fields("Codigo"))) & .Fields("Cuenta")
         End If
         PrinterTexto Ancho(0), PosLinea, Cadena
         Printer.Line (Ancho(3), PosLinea)-(Ancho(CantCampos), PosLinea + 0.35), Blanco, BF
         For I = 3 To CantCampos - 1
-            PrinterFields Ancho(I), PosLinea, .fields(I), False
+            PrinterFields Ancho(I), PosLinea, .Fields(I), False
         Next I
         Printer.Line (Ancho(0), PosLinea - 0.1)-(Ancho(0), PosLinea + 0.35), Negro
         For J = 3 To CantCampos
@@ -7675,16 +7677,16 @@ With Datas.Recordset
      Do While Not .EOF
         Printer.FontSize = 10
         IParcial = 0
-        If .fields("DG") = "G" Then Printer.FontBold = True
-        PrinterFields Ancho(0), PosLinea, .fields("Codigo"), False
-        If .fields("TC") <> "N" Then Printer.FontItalic = True
-        PrinterFields Ancho(1), PosLinea, .fields("Cuenta"), False
+        If .Fields("DG") = "G" Then Printer.FontBold = True
+        PrinterFields Ancho(0), PosLinea, .Fields("Codigo"), False
+        If .Fields("TC") <> "N" Then Printer.FontItalic = True
+        PrinterFields Ancho(1), PosLinea, .Fields("Cuenta"), False
         Printer.FontBold = False
         Printer.FontItalic = False
-        Total = .fields("Total_N6") + .fields("Total_N5") + .fields("Total_N4") + .fields("Total_N3")
+        Total = .Fields("Total_N6") + .Fields("Total_N5") + .Fields("Total_N4") + .Fields("Total_N3")
         PrinterVariables Ancho(2), PosLinea, Total
-        PrinterFields Ancho(3), PosLinea, .fields("Total_N2"), False
-        PrinterFields Ancho(4), PosLinea, .fields("Total_N1"), False
+        PrinterFields Ancho(3), PosLinea, .Fields("Total_N2"), False
+        PrinterFields Ancho(4), PosLinea, .Fields("Total_N1"), False
         
 ''        Select Case Opcion
 ''          Case 1
@@ -7744,9 +7746,9 @@ Dim CtaSup As String
        & "AND Periodo = '" & Periodo_Contable & "' "
   Select_AdoDB AdoReg, sSQL
   If AdoReg.RecordCount > 0 Then
-     NomCta = AdoReg.fields("Cuenta")
-     TipoDoc = AdoReg.fields("TC")
-     TipoBenef = AdoReg.fields("TC")
+     NomCta = AdoReg.Fields("Cuenta")
+     TipoDoc = AdoReg.Fields("TC")
+     TipoBenef = AdoReg.Fields("TC")
      CtaSup = CambioCodigoCtaSup(Cuenta)
   End If
   AdoReg.Close
@@ -7757,7 +7759,7 @@ Dim CtaSup As String
        & "AND Item = '" & NumEmpresa & "' " _
        & "AND Periodo = '" & Periodo_Contable & "' "
   Select_AdoDB AdoReg, sSQL
-  If AdoReg.RecordCount > 0 Then NomCtaSup = AdoReg.fields("Cuenta")
+  If AdoReg.RecordCount > 0 Then NomCtaSup = AdoReg.Fields("Cuenta")
   AdoReg.Close
        
   If CodigoC <> "" Then
@@ -7766,7 +7768,7 @@ Dim CtaSup As String
           & "FROM Clientes " _
           & "WHERE Codigo = '" & CodigoC & "' "
      Select_AdoDB AdoReg, sSQL
-     If AdoReg.RecordCount > 0 Then NombreCliente = AdoReg.fields("Cliente")
+     If AdoReg.RecordCount > 0 Then NombreCliente = AdoReg.Fields("Cliente")
      AdoReg.Close
   End If
 End Sub
@@ -7813,7 +7815,7 @@ LimiteAlto = LimiteAlto - 1
 Cta = Ninguno: NomCta = "": CtaSup = "": NomCtaSup = ""
 If DataT.Recordset.RecordCount > 0 Then
    DataT.Recordset.MoveFirst
-   Cta = DataT.Recordset.fields("Cta")
+   Cta = DataT.Recordset.Fields("Cta")
 End If
 Leer_Cta_Superior Cta
 CadCtaSup = CtaSup & Space(5) & NomCtaSup
@@ -7832,15 +7834,15 @@ Printer.FontBold = False
 Printer.FontItalic = False
 Printer.FontName = TipoLetra
 Printer.FontSize = PorteLetra
-MesActual = FechaMes(.fields("Fecha"))
+MesActual = FechaMes(.Fields("Fecha"))
 Suma_ME = 0: SumaDebe = 0: SumaHaber = 0: SumaSaldo = 0
-Mifecha = .fields("Fecha")
-TipoDoc = .fields("TP")
-Numero = .fields("Numero")
-NoItem = .fields("Item")
-PrinterFields Ancho(0), PosLinea, .fields("Fecha"), False
-PrinterFields Ancho(1), PosLinea, .fields("TP"), False
-PrinterFields Ancho(2), PosLinea, .fields("Numero"), False
+Mifecha = .Fields("Fecha")
+TipoDoc = .Fields("TP")
+Numero = .Fields("Numero")
+NoItem = .Fields("Item")
+PrinterFields Ancho(0), PosLinea, .Fields("Fecha"), False
+PrinterFields Ancho(1), PosLinea, .Fields("TP"), False
+PrinterFields Ancho(2), PosLinea, .Fields("Numero"), False
 PosLineaIni = PosLinea
 Do While Not .EOF
    PorteLetra = 9
@@ -7849,7 +7851,7 @@ Do While Not .EOF
    Printer.FontName = TipoLetra
    Printer.FontSize = PorteLetra
    'MsgBox "Hola"
-   If Cta <> .fields("Cta") Then
+   If Cta <> .Fields("Cta") Then
       For J = 0 To C
           Printer.Line (Ancho(J), PosLineaIni - 0.1)-(Ancho(J), PosLinea + 0.1), Negro
       Next J
@@ -7860,7 +7862,7 @@ Do While Not .EOF
       Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
       PosLinea = PosLinea + 0.05
       PrinterVariableTexto Ancho(0), PosLinea, "Fin de: ", MesesLetras(MesActual)
-      MesActual = FechaMes(.fields("Fecha"))
+      MesActual = FechaMes(.Fields("Fecha"))
       PrinterTexto Ancho(4) - 2, PosLinea, "TOTALES"
       PrinterVariables Ancho(4), PosLinea, Suma_ME
       PrinterVariables Ancho(5), PosLinea, SumaDebe
@@ -7868,7 +7870,7 @@ Do While Not .EOF
       PrinterVariables Ancho(7), PosLinea, SumaSaldo
       Documento = Documento + 1
       NomCta = "": CtaSup = "": NomCtaSup = ""
-      Cta = .fields("Cta")
+      Cta = .Fields("Cta")
       Leer_Cta_Superior Cta
       
       SumaDebe = 0: SumaHaber = 0: Suma_ME = 0
@@ -7884,14 +7886,14 @@ Do While Not .EOF
       EncabMayor1 CadCta, CadCtaSup, DataT
       PosLineaIni = PosLinea
       '.Fields("Debe"), .Fields("Haber"), .Fields("Saldo")
-      PrinterFields Ancho(0), PosLinea, .fields("Fecha"), False
-      Mifecha = .fields("Fecha")
+      PrinterFields Ancho(0), PosLinea, .Fields("Fecha"), False
+      Mifecha = .Fields("Fecha")
       Printer.FontBold = False
       Printer.FontItalic = False
       Printer.FontName = TipoLetra
       Printer.FontSize = PorteLetra
    End If
-   If MesActual <> FechaMes(.fields("Fecha")) Then
+   If MesActual <> FechaMes(.Fields("Fecha")) Then
       For J = 0 To C
           Printer.Line (Ancho(J), PosLineaIni - 0.1)-(Ancho(J), PosLinea + 0.1), Negro
       Next J
@@ -7902,7 +7904,7 @@ Do While Not .EOF
       Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
       PosLinea = PosLinea + 0.1
       PrinterVariableTexto Ancho(0), PosLinea, "Fin de: ", MesesLetras(MesActual)
-      MesActual = FechaMes(DataT.Recordset.fields("Fecha"))
+      MesActual = FechaMes(DataT.Recordset.Fields("Fecha"))
       PrinterTexto Ancho(4) - 2, PosLinea, "TOTALES"
       PrinterVariables Ancho(4), PosLinea, Suma_ME
       PrinterVariables Ancho(5), PosLinea, SumaDebe
@@ -7918,33 +7920,33 @@ Do While Not .EOF
       Printer.FontItalic = False
       PosLineaIni = PosLinea
    End If
-   If Mifecha <> .fields("Fecha") Then
-      PrinterFields Ancho(0), PosLinea, .fields("Fecha"), False
-      Mifecha = .fields("Fecha")
+   If Mifecha <> .Fields("Fecha") Then
+      PrinterFields Ancho(0), PosLinea, .Fields("Fecha"), False
+      Mifecha = .Fields("Fecha")
    End If
-   If TipoDoc <> .fields("TP") Or Numero <> .fields("Numero") Then
-      PrinterFields Ancho(1), PosLinea, .fields("TP"), False
-      PrinterFields Ancho(2), PosLinea, .fields("Numero"), False
-      Numero = .fields("Numero")
-      TipoDoc = .fields("TP")
+   If TipoDoc <> .Fields("TP") Or Numero <> .Fields("Numero") Then
+      PrinterFields Ancho(1), PosLinea, .Fields("TP"), False
+      PrinterFields Ancho(2), PosLinea, .Fields("Numero"), False
+      Numero = .Fields("Numero")
+      TipoDoc = .Fields("TP")
    End If
-   If Len(.fields("Cliente")) > 1 Then
+   If Len(.Fields("Cliente")) > 1 Then
       Printer.FontBold = True
       Printer.FontSize = PorteLetra - 2
-      PrinterFields Ancho(3), PosLinea, .fields("Cliente"), False
+      PrinterFields Ancho(3), PosLinea, .Fields("Cliente"), False
       Printer.FontSize = PorteLetra
       Printer.FontBold = False
       PosLinea = PosLinea + 0.3
    End If
-   Concepto_Aux = .fields("Concepto")
-   If Len(.fields("Cheq_Dep")) > 1 Then Concepto_Aux = Concepto_Aux & ". Doc. " & .fields("Cheq_Dep")
+   Concepto_Aux = .Fields("Concepto")
+   If Len(.Fields("Cheq_Dep")) > 1 Then Concepto_Aux = Concepto_Aux & ". Doc. " & .Fields("Cheq_Dep")
    If OpcCoop Then
       NumeroLineas = PrinterLineasMayor(Ancho(3), PosLinea, Concepto_Aux, 9.5)
       PosLinea = PosLinea_Aux
-      PrinterFields Ancho(4), PosLinea, .fields("Parcial_ME"), False
-      PrinterFields Ancho(5), PosLinea, .fields("Debe"), False
-      PrinterFields Ancho(6), PosLinea, .fields("Haber"), False
-      PrinterFields Ancho(7), PosLinea, .fields("Saldo"), False
+      PrinterFields Ancho(4), PosLinea, .Fields("Parcial_ME"), False
+      PrinterFields Ancho(5), PosLinea, .Fields("Debe"), False
+      PrinterFields Ancho(6), PosLinea, .Fields("Haber"), False
+      PrinterFields Ancho(7), PosLinea, .Fields("Saldo"), False
       
 '''      If .Fields("ME") Then
 '''          PrinterFields Ancho(5), PosLinea, .Fields("Debe_ME"), False
@@ -7964,34 +7966,34 @@ Do While Not .EOF
    Else
       NumeroLineas = PrinterLineasMayor(Ancho(3), PosLinea, Concepto_Aux, Ancho(4) - Ancho(3) - 0.2)
       PosLinea = PosLinea_Aux
-      PrinterFields Ancho(4), PosLinea, .fields("Parcial_ME"), False
-      PrinterFields Ancho(5), PosLinea, .fields("Debe"), False
-      PrinterFields Ancho(6), PosLinea, .fields("Haber"), False
-      PrinterFields Ancho(7), PosLinea, .fields("Saldo"), False
-      SumaSaldo = .fields("Saldo")
-      Suma_ME = .fields("Saldo_ME")
-      SumaDebe = SumaDebe + .fields("Debe")
-      SumaHaber = SumaHaber + .fields("Haber")
+      PrinterFields Ancho(4), PosLinea, .Fields("Parcial_ME"), False
+      PrinterFields Ancho(5), PosLinea, .Fields("Debe"), False
+      PrinterFields Ancho(6), PosLinea, .Fields("Haber"), False
+      PrinterFields Ancho(7), PosLinea, .Fields("Saldo"), False
+      SumaSaldo = .Fields("Saldo")
+      Suma_ME = .Fields("Saldo_ME")
+      SumaDebe = SumaDebe + .Fields("Debe")
+      SumaHaber = SumaHaber + .Fields("Haber")
    End If
    PosLinea = PosLinea + AltoLetra
    If ConSubMod Then
      'Llenar SubCtas
       sSQLSC = "SELECT T.TC,T.Factura,C.Cliente,T.Detalle_SubCta,T.Debitos,T.Creditos,T.Fecha_V,T.Prima,T.Codigo " _
              & "FROM Trans_SubCtas As T,Clientes As C " _
-             & "WHERE T.TP = '" & .fields("TP") & "' " _
-             & "AND T.Numero = " & .fields("Numero") & " " _
-             & "AND T.Item = '" & .fields("Item") & "' " _
-             & "AND T.Cta = '" & .fields("Cta") & "' " _
+             & "WHERE T.TP = '" & .Fields("TP") & "' " _
+             & "AND T.Numero = " & .Fields("Numero") & " " _
+             & "AND T.Item = '" & .Fields("Item") & "' " _
+             & "AND T.Cta = '" & .Fields("Cta") & "' " _
              & "AND T.Periodo = '" & Periodo_Contable & "' " _
              & "AND T.TC IN ('C','P') " _
              & "AND T.Codigo = C.Codigo " _
              & "UNION " _
              & "SELECT T.TC,T.Factura,C.Detalle As Cliente,T.Detalle_SubCta,T.Debitos,T.Creditos,T.Fecha_V,T.Prima,T.Codigo " _
              & "FROM Trans_SubCtas As T,Catalogo_SubCtas As C " _
-             & "WHERE T.TP = '" & .fields("TP") & "' " _
-             & "AND T.Numero = " & .fields("Numero") & " " _
-             & "AND T.Item = '" & .fields("Item") & "' " _
-             & "AND T.Cta = '" & .fields("Cta") & "' " _
+             & "WHERE T.TP = '" & .Fields("TP") & "' " _
+             & "AND T.Numero = " & .Fields("Numero") & " " _
+             & "AND T.Item = '" & .Fields("Item") & "' " _
+             & "AND T.Cta = '" & .Fields("Cta") & "' " _
              & "AND T.Periodo = '" & Periodo_Contable & "' " _
              & "AND T.TC = C.TC " _
              & "AND T.Item = C.Item " _
@@ -8027,15 +8029,15 @@ Do While Not .EOF
                PosLineaIni = PosLinea
             End If
             Printer.FontItalic = True
-            If RegSubCtas.fields("TC") = "CC" Then
-               sSQLSC = " * " & RegSubCtas.fields("Codigo") & ": " & RegSubCtas.fields("Cliente")
+            If RegSubCtas.Fields("TC") = "CC" Then
+               sSQLSC = " * " & RegSubCtas.Fields("Codigo") & ": " & RegSubCtas.Fields("Cliente")
             Else
-               sSQLSC = " * " & RegSubCtas.fields("Cliente")
+               sSQLSC = " * " & RegSubCtas.Fields("Cliente")
             End If
             PrinterTexto Ancho(3), PosLinea, sSQLSC
             Printer.FontItalic = False
-            PrinterFields Ancho(4) - 0.3, PosLinea, RegSubCtas.fields("Debitos"), False
-            PrinterFields Ancho(4) + 0.65, PosLinea, RegSubCtas.fields("Creditos"), False
+            PrinterFields Ancho(4) - 0.3, PosLinea, RegSubCtas.Fields("Debitos"), False
+            PrinterFields Ancho(4) + 0.65, PosLinea, RegSubCtas.Fields("Creditos"), False
             PosLinea = PosLinea + AltoLetra
             RegSubCtas.MoveNext
          Loop
@@ -8137,8 +8139,8 @@ Ancho(9) = 19.7  'Fin
 NomCta = "": CtaSup = ""
 NomCtaSup = ""
 DataT.Recordset.MoveFirst
-Cta = DataT.Recordset.fields("Cta")
-Codigo = DataT.Recordset.fields("Codigo")
+Cta = DataT.Recordset.Fields("Cta")
+Codigo = DataT.Recordset.Fields("Codigo")
 Leer_Cta_Superior Cta, Codigo
 Select Case TipoDoc
   Case "C": TipoDoc = "Ctas. por Cobrar"
@@ -8159,14 +8161,14 @@ Encabezado Ancho(0), Ancho(9)
 PosLinea = PosLinea - 0.5
 EncabMayor "Modulos de Subcuentas de Bloque", FechaCorte, Ancho(9)
 EncabMayorMA CadCta, CadCtaSup, DataT, True
-MesActual = FechaMes(.fields("Fecha"))
-Mifecha = .fields("Fecha")
+MesActual = FechaMes(.Fields("Fecha"))
+Mifecha = .Fields("Fecha")
 Total_Prima = 0: Suma_ME = 0: Suma_MN = 0: SumaDebe = 0: SumaHaber = 0: SumaSaldo = 0: SumaParcial_ME = 0
 Printer.FontBold = False
 Printer.FontItalic = False
 Printer.FontName = TipoLetra
 Printer.FontSize = PorteLetra
-PrinterFields Ancho(0), PosLinea, .fields("Fecha"), True
+PrinterFields Ancho(0), PosLinea, .Fields("Fecha"), True
 Do While Not .EOF
    If PosLinea > LimiteAlto Then
       Printer.Line (InicioX, PosLinea + 0.05)-(Ancho(C), PosLinea + 0.05), Negro
@@ -8182,12 +8184,12 @@ Do While Not .EOF
       Printer.FontName = TipoLetra
       Printer.FontSize = PorteLetra
    End If
-   If Cta <> .fields("Cta") Then
+   If Cta <> .Fields("Cta") Then
       Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
       Printer.Line (InicioX, PosLinea + 0.05)-(Ancho(C), PosLinea + 0.05), Negro
       PosLinea = PosLinea + 0.15
       'PrinterVariableTexto Ancho(0), PosLinea, "Fin de: ", MesesLetras(MesActual), False
-      MesActual = FechaMes(.fields("Fecha"))
+      MesActual = FechaMes(.Fields("Fecha"))
       Printer.FontBold = True
       PrinterTexto Ancho(5), PosLinea, "T O T A L E S"
       If TipoBenef = "PM" Then PrinterVariables Ancho(1), PosLinea, Total_Prima
@@ -8195,7 +8197,7 @@ Do While Not .EOF
       PrinterVariables Ancho(7), PosLinea, SumaHaber
       PrinterVariables Ancho(8), PosLinea, Saldo
       Documento = Documento + 1
-      Cta = .fields("Cta")
+      Cta = .Fields("Cta")
       Leer_Cta_Superior Cta, Codigo
       Select Case TipoDoc
         Case "C": TipoDoc = "Ctas. por Cobrar"
@@ -8216,26 +8218,26 @@ Do While Not .EOF
          EncabMayor "Modulos de Subcuentas de Bloque", FechaCorte, Ancho(9)
       End If
       EncabMayorMA CadCta, CadCtaSup, DataT, True '.Fields("Debitos"), .Fields("Creditos"), .Fields("Saldo")
-      Mifecha = .fields("Fecha")
+      Mifecha = .Fields("Fecha")
       Printer.FontBold = False
       Printer.FontItalic = False
       Printer.FontName = TipoLetra
       Printer.FontSize = PorteLetra
-      PrinterFields Ancho(0), PosLinea, .fields("Fecha"), True
+      PrinterFields Ancho(0), PosLinea, .Fields("Fecha"), True
    End If
-   If Codigo <> .fields("Codigo") Then
+   If Codigo <> .Fields("Codigo") Then
       Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
       Printer.Line (InicioX, PosLinea + 0.05)-(Ancho(C), PosLinea + 0.05), Negro
       PosLinea = PosLinea + 0.15
       'PrinterVariableTexto Ancho(0), PosLinea, "Fin de: ", MesesLetras(MesActual), False
-      MesActual = FechaMes(.fields("Fecha"))
+      MesActual = FechaMes(.Fields("Fecha"))
       Printer.FontBold = True
       PrinterTexto Ancho(5), PosLinea, "T O T A L E S"
       PrinterVariables Ancho(6), PosLinea, SumaDebe
       PrinterVariables Ancho(7), PosLinea, SumaHaber
       PrinterVariables Ancho(8), PosLinea, Saldo
       Documento = Documento + 1
-      Codigo = .fields("Codigo")
+      Codigo = .Fields("Codigo")
       Leer_Cta_Superior Cta, Codigo
       CadCta = Cta & " - " & NomCta
       CadCtaSup = Codigo & " - " & NombreCliente
@@ -8250,30 +8252,30 @@ Do While Not .EOF
          EncabMayor "Modulos de Subcuentas de Bloque", FechaCorte, Ancho(9)
       End If
       EncabMayorMA CadCta, CadCtaSup, DataT, True '.Fields("Debitos"), .Fields("Creditos"), .Fields("Saldo")
-      Mifecha = .fields("Fecha")
+      Mifecha = .Fields("Fecha")
       Printer.FontBold = False
       Printer.FontItalic = False
       Printer.FontName = TipoLetra
       Printer.FontSize = PorteLetra
-      PrinterFields Ancho(0), PosLinea, .fields("Fecha"), True
+      PrinterFields Ancho(0), PosLinea, .Fields("Fecha"), True
    End If
-   If Mifecha <> .fields("Fecha") Then
-      PrinterFields Ancho(0), PosLinea, .fields("Fecha"), True
-      Mifecha = .fields("Fecha")
+   If Mifecha <> .Fields("Fecha") Then
+      PrinterFields Ancho(0), PosLinea, .Fields("Fecha"), True
+      Mifecha = .Fields("Fecha")
    End If
    If TipoBenef = "PM" Then
-      PrinterFields Ancho(1), PosLinea, .fields("Prima"), True
+      PrinterFields Ancho(1), PosLinea, .Fields("Prima"), True
    Else
-      PrinterFields Ancho(1), PosLinea, .fields("Factura"), True
+      PrinterFields Ancho(1), PosLinea, .Fields("Factura"), True
    End If
-   PrinterFields Ancho(2), PosLinea, .fields("TP"), True
-   PrinterFields Ancho(3), PosLinea, .fields("Numero"), True
+   PrinterFields Ancho(2), PosLinea, .Fields("TP"), True
+   PrinterFields Ancho(3), PosLinea, .Fields("Numero"), True
    Detalle_Concepto = ""
-   If .fields("Concepto") <> Ninguno And .fields("Detalle_SubCta") <> Ninguno Then
-       Detalle_Concepto = .fields("Concepto") & ", " & .fields("Detalle_SubCta")
+   If .Fields("Concepto") <> Ninguno And .Fields("Detalle_SubCta") <> Ninguno Then
+       Detalle_Concepto = .Fields("Concepto") & ", " & .Fields("Detalle_SubCta")
    Else
-       If .fields("Concepto") <> Ninguno Then Detalle_Concepto = .fields("Concepto")
-       If .fields("Detalle_SubCta") <> Ninguno Then Detalle_Concepto = Detalle_Concepto & " " & .fields("Detalle_SubCta")
+       If .Fields("Concepto") <> Ninguno Then Detalle_Concepto = .Fields("Concepto")
+       If .Fields("Detalle_SubCta") <> Ninguno Then Detalle_Concepto = Detalle_Concepto & " " & .Fields("Detalle_SubCta")
    End If
    Detalle_Concepto = TrimStrg(Detalle_Concepto)
    NumeroLineas = PrinterLineasMayor(Ancho(4), PosLinea, Detalle_Concepto, Ancho(5) - Ancho(4) - 0.2)
@@ -8286,14 +8288,14 @@ Do While Not .EOF
       Next
       PosLinea = PosLinea - 0.4
    End If
-   PrinterFields Ancho(5), PosLinea, .fields("Parcial_ME"), True
-   PrinterFields Ancho(6), PosLinea, .fields("Debitos"), True
-   PrinterFields Ancho(7), PosLinea, .fields("Creditos"), True
-   PrinterFields Ancho(8), PosLinea, .fields("Saldo_MN"), True
-   If TipoBenef = "PM" Then Total_Prima = Total_Prima + .fields("Prima")
-   SumaDebe = SumaDebe + .fields("Debitos")
-   SumaHaber = SumaHaber + .fields("Creditos")
-   Saldo = .fields("Saldo_MN")
+   PrinterFields Ancho(5), PosLinea, .Fields("Parcial_ME"), True
+   PrinterFields Ancho(6), PosLinea, .Fields("Debitos"), True
+   PrinterFields Ancho(7), PosLinea, .Fields("Creditos"), True
+   PrinterFields Ancho(8), PosLinea, .Fields("Saldo_MN"), True
+   If TipoBenef = "PM" Then Total_Prima = Total_Prima + .Fields("Prima")
+   SumaDebe = SumaDebe + .Fields("Debitos")
+   SumaHaber = SumaHaber + .Fields("Creditos")
+   Saldo = .Fields("Saldo_MN")
    For J = 0 To C
       Printer.Line (Ancho(J), PosLinea - 0.1)-(Ancho(J), PosLinea + 0.4), Negro
    Next J
@@ -8356,7 +8358,7 @@ Ancho(9) = 26.5
 NomCta = "": Cta_Sup = "": NomCtaSup = NombreCtaSuperior
 If DataT.Recordset.RecordCount > 0 Then
 DataT.Recordset.MoveFirst
-Cta = DataT.Recordset.fields("Codigo")
+Cta = DataT.Recordset.Fields("Codigo")
 sSQL = "SELECT * " _
      & "FROM Catalogo_SubCtas " _
      & "WHERE Codigo = '" & Cta & "' " _
@@ -8364,7 +8366,7 @@ sSQL = "SELECT * " _
      & "AND Periodo = '" & Periodo_Contable & "' "
 DataReg.open sSQL, AdoStrCnn, , , adCmdText
 If DataReg.RecordCount > 0 Then
-   NomCta = DataReg.fields("Beneficiario")
+   NomCta = DataReg.Fields("Beneficiario")
    Cta_Sup = CambioCodigoCtaSup(Cta)
 End If
 CadCtaSup = NomCtaSup
@@ -8376,7 +8378,7 @@ Encabezado Ancho(0), Ancho(9)
 EncabMayor "Modulos de Subcuentas de Bloque", FechaCorte, Ancho(9)
 EncabMayorM CadCta, CadCtaSup, DataT, True
 Printer.Font.bold = False
-MesActual = FechaMes(.fields("Fecha"))
+MesActual = FechaMes(.Fields("Fecha"))
 Suma_ME = 0: SumaDebe = 0: SumaHaber = 0: SumaSaldo = 0: SumaParcial_ME = 0
 Do While Not .EOF
    If PosLinea > LimiteAlto Then
@@ -8388,13 +8390,13 @@ Do While Not .EOF
       EncabMayor "Modulos de Subcuentas de Bloque", FechaCorte, Ancho(9)
       EncabMayorM CadCta, CadCtaSup, DataT, True
    End If
-   If Cta <> .fields("Codigo") Then
+   If Cta <> .Fields("Codigo") Then
       Printer.FontBold = True
       Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
       Printer.Line (InicioX, PosLinea + 0.1)-(Ancho(C), PosLinea + 0.1), Negro
       PosLinea = PosLinea + 0.2
       PrinterVariableTexto Ancho(0), PosLinea, "Fin de: ", MesesLetras(MesActual)
-      MesActual = FechaMes(.fields("Fecha"))
+      MesActual = FechaMes(.Fields("Fecha"))
       Printer.FontBold = False
       PrinterTexto Ancho(4) + 3.8, PosLinea, "T O T A L E S"
       PrinterVariables Ancho(5), PosLinea, Suma_ME
@@ -8403,7 +8405,7 @@ Do While Not .EOF
       PrinterVariables Ancho(8), PosLinea, SumaSaldo
       Documento = Documento + 1
       NomCta = "": Cta_Sup = ""
-      Cta = .fields("Codigo")
+      Cta = .Fields("Codigo")
       sSQL = "SELECT * " _
            & "FROM Catalogo_SubCtas " _
            & "WHERE Codigo = '" & Cta & "' " _
@@ -8411,7 +8413,7 @@ Do While Not .EOF
            & "AND Periodo = '" & Periodo_Contable & "' "
       DataReg.open sSQL, AdoStrCnn, , , adCmdText
       If DataReg.RecordCount > 0 Then
-         NomCta = DataReg.fields("Beneficiario")
+         NomCta = DataReg.Fields("Beneficiario")
          Cta_Sup = CambioCodigoCtaSup(Cta)
       End If
       SumaDebe = 0: SumaHaber = 0: Suma_ME = 0: SumaParcial_ME = 0
@@ -8426,12 +8428,12 @@ Do While Not .EOF
       End If
       EncabMayorM CadCta, CadCtaSup, DataT, True '.Fields("Debitos"), .Fields("Creditos"), .Fields("Saldo")
    End If
-   If MesActual <> FechaMes(.fields("Fecha")) Then
+   If MesActual <> FechaMes(.Fields("Fecha")) Then
       Printer.FontBold = True
       Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
       PosLinea = PosLinea + 0.1
       PrinterVariableTexto Ancho(0), PosLinea, "Fin de: ", MesesLetras(MesActual)
-      MesActual = FechaMes(DataT.Recordset.fields("Fecha"))
+      MesActual = FechaMes(DataT.Recordset.Fields("Fecha"))
       Printer.FontBold = False
       PrinterTexto Ancho(3) + 2, PosLinea, "TOTALES"
       PrinterVariables Ancho(4), PosLinea, SumaDebe
@@ -8447,11 +8449,11 @@ Do While Not .EOF
       Printer.FontBold = False
    End If
    Printer.FontSize = 8
-   PrinterFields Ancho(0), PosLinea, .fields("Fecha"), True
-   PrinterFields Ancho(1), PosLinea, .fields("Factura"), True
-   PrinterFields Ancho(2), PosLinea, .fields("TP"), True
-   PrinterFields Ancho(3), PosLinea, .fields("Numero"), True
-   NumeroLineas = PrinterLineasMayor(Ancho(4), PosLinea, .fields("Concepto"), 10.4)
+   PrinterFields Ancho(0), PosLinea, .Fields("Fecha"), True
+   PrinterFields Ancho(1), PosLinea, .Fields("Factura"), True
+   PrinterFields Ancho(2), PosLinea, .Fields("TP"), True
+   PrinterFields Ancho(3), PosLinea, .Fields("Numero"), True
+   NumeroLineas = PrinterLineasMayor(Ancho(4), PosLinea, .Fields("Concepto"), 10.4)
    If NumeroLineas > 1 Then
       For I = 1 To NumeroLineas
          For J = 0 To C
@@ -8461,18 +8463,18 @@ Do While Not .EOF
       Next
       PosLinea = PosLinea - 0.4
    End If
-   PrinterFields Ancho(5), PosLinea, .fields("Parcial_MN"), True
-   PrinterFields Ancho(6), PosLinea, .fields("Parcial_ME"), True
-   PrinterFields Ancho(7), PosLinea, .fields("Saldo"), True
-   PrinterFields Ancho(8), PosLinea, .fields("Saldo_ME"), True
+   PrinterFields Ancho(5), PosLinea, .Fields("Parcial_MN"), True
+   PrinterFields Ancho(6), PosLinea, .Fields("Parcial_ME"), True
+   PrinterFields Ancho(7), PosLinea, .Fields("Saldo"), True
+   PrinterFields Ancho(8), PosLinea, .Fields("Saldo_ME"), True
    For J = 0 To C
       Printer.Line (Ancho(J), PosLinea - 0.1)-(Ancho(J), PosLinea + 0.4), Negro
    Next J
-   SumaSaldo = .fields("Saldo")
-   If .fields("Parcial_ME") = 0 Then Suma_ME = 0 Else Suma_ME = .fields("Saldo_ME")
-   SumaParcial_ME = SumaParcial_ME + .fields("Parcial_ME")
-   SumaDebe = SumaDebe + .fields("Parcial_MN")
-   SumaHaber = SumaHaber + .fields("Parcial_ME")
+   SumaSaldo = .Fields("Saldo")
+   If .Fields("Parcial_ME") = 0 Then Suma_ME = 0 Else Suma_ME = .Fields("Saldo_ME")
+   SumaParcial_ME = SumaParcial_ME + .Fields("Parcial_ME")
+   SumaDebe = SumaDebe + .Fields("Parcial_MN")
+   SumaHaber = SumaHaber + .Fields("Parcial_ME")
    PosLinea = PosLinea + AltoLetra
   .MoveNext
 Loop
@@ -8548,7 +8550,7 @@ Next I
 '''Ancho(10) = 25.5 ' Fin
 'MsgBox Ancho(6) - Ancho(5)
 NomCta = "": CtaSup = "": NomCtaSup = ""
-Cta = DataT.Recordset.fields("Cta")
+Cta = DataT.Recordset.Fields("Cta")
 End If
 Leer_Cta_Superior Cta
 CadCtaSup = CtaSup & Space(10) & NomCtaSup
@@ -8566,9 +8568,9 @@ Printer.FontBold = False
 Printer.FontItalic = False
 Printer.FontName = TipoLetra
 Printer.FontSize = PorteLetra
-MesActual = FechaMes(.fields("Fecha"))
-Mifecha = .fields("Fecha")
-PrinterFields Ancho(0), PosLinea, .fields("Fecha"), True
+MesActual = FechaMes(.Fields("Fecha"))
+Mifecha = .Fields("Fecha")
+PrinterFields Ancho(0), PosLinea, .Fields("Fecha"), True
 Do While Not .EOF
    If PosLinea > LimiteAlto Then
       'MsgBox LimiteAlto
@@ -8588,13 +8590,13 @@ Do While Not .EOF
    Printer.FontItalic = False
    Printer.FontName = TipoLetra
    Printer.FontSize = PorteLetra
-   If MesActual <> FechaMes(.fields("Fecha")) Then
+   If MesActual <> FechaMes(.Fields("Fecha")) Then
       PosLinea = PosLinea + 0.1
       Printer.Line (InicioX, PosLinea)-(Ancho(C), PosLinea), Negro
       PosLinea = PosLinea + 0.05
       Printer.FontBold = True
       PrinterVariableTexto Ancho(0), PosLinea, "Fin de: ", MesesLetras(MesActual)
-      MesActual = FechaMes(DataT.Recordset.fields("Fecha"))
+      MesActual = FechaMes(DataT.Recordset.Fields("Fecha"))
       PrinterTexto Ancho(6) - 2, PosLinea, "TOTALES"
       If OpcCoop = False Then PrinterVariables Ancho(6), PosLinea, Suma_ME
       PrinterVariables Ancho(7), PosLinea, SumaDebe
@@ -8611,16 +8613,16 @@ Do While Not .EOF
       Printer.FontName = TipoLetra
       Printer.FontSize = PorteLetra
    End If
-   If Mifecha <> .fields("Fecha") Then
-      PrinterFields Ancho(0), PosLinea, .fields("Fecha"), True
-      Mifecha = .fields("Fecha")
+   If Mifecha <> .Fields("Fecha") Then
+      PrinterFields Ancho(0), PosLinea, .Fields("Fecha"), True
+      Mifecha = .Fields("Fecha")
    End If
-   PrinterFields Ancho(1), PosLinea, .fields("TP"), True
-   PrinterFields Ancho(2), PosLinea, .fields("Numero"), True
-   PrinterFields Ancho(3), PosLinea, .fields("Cheq_Dep"), True
-   PrinterFields Ancho(4), PosLinea, .fields("Cliente"), True
+   PrinterFields Ancho(1), PosLinea, .Fields("TP"), True
+   PrinterFields Ancho(2), PosLinea, .Fields("Numero"), True
+   PrinterFields Ancho(3), PosLinea, .Fields("Cheq_Dep"), True
+   PrinterFields Ancho(4), PosLinea, .Fields("Cliente"), True
    If OpcCoop Then
-      NumeroLineas = PrinterLineasMayor(Ancho(5), PosLinea, .fields("Concepto"), Redondear(Ancho(6) - Ancho(5)))
+      NumeroLineas = PrinterLineasMayor(Ancho(5), PosLinea, .Fields("Concepto"), Redondear(Ancho(6) - Ancho(5)))
       If NumeroLineas > 1 Then
          For I = 1 To NumeroLineas
             For J = 0 To C
@@ -8630,29 +8632,29 @@ Do While Not .EOF
          Next
          PosLinea = PosLinea - 0.35
       End If
-      If (.fields("Parcial_ME")) <> 0 Then
-         PrinterFields Ancho(7), PosLinea, .fields("Debe_ME"), True
-         PrinterFields Ancho(8), PosLinea, .fields("Haber_ME"), True
-         PrinterFields Ancho(9), PosLinea, .fields("Saldo_ME"), True
-         SumaDebe = SumaDebe + .fields("Debe_ME")
-         SumaHaber = SumaHaber + .fields("Haber_ME")
+      If (.Fields("Parcial_ME")) <> 0 Then
+         PrinterFields Ancho(7), PosLinea, .Fields("Debe_ME"), True
+         PrinterFields Ancho(8), PosLinea, .Fields("Haber_ME"), True
+         PrinterFields Ancho(9), PosLinea, .Fields("Saldo_ME"), True
+         SumaDebe = SumaDebe + .Fields("Debe_ME")
+         SumaHaber = SumaHaber + .Fields("Haber_ME")
       Else
-         PrinterFields Ancho(7), PosLinea, .fields("Debe"), True
-         PrinterFields Ancho(8), PosLinea, .fields("Haber"), True
-         PrinterFields Ancho(9), PosLinea, .fields("Saldo"), True
-         SumaDebe = SumaDebe + .fields("Debe")
-         SumaHaber = SumaHaber + .fields("Haber")
+         PrinterFields Ancho(7), PosLinea, .Fields("Debe"), True
+         PrinterFields Ancho(8), PosLinea, .Fields("Haber"), True
+         PrinterFields Ancho(9), PosLinea, .Fields("Saldo"), True
+         SumaDebe = SumaDebe + .Fields("Debe")
+         SumaHaber = SumaHaber + .Fields("Haber")
       End If
       For J = 0 To C
          If J <> 6 Then Printer.Line (Ancho(J), PosLinea - 0.1)-(Ancho(J), PosLinea + 0.4), Negro
       Next J
-      If .fields("T") <> Anulado Then
-          SumaSaldo = .fields("Saldo")
-          Suma_ME = .fields("Saldo_ME")
+      If .Fields("T") <> Anulado Then
+          SumaSaldo = .Fields("Saldo")
+          Suma_ME = .Fields("Saldo_ME")
       End If
       If Suma_ME <> 0 Then SumaSaldo = Suma_ME
    Else
-      NumeroLineas = PrinterLineasMayor(Ancho(5), PosLinea, .fields("Concepto"), Redondear(Ancho(6) - Ancho(5)))
+      NumeroLineas = PrinterLineasMayor(Ancho(5), PosLinea, .Fields("Concepto"), Redondear(Ancho(6) - Ancho(5)))
       If NumeroLineas > 1 Then
       For I = 1 To NumeroLineas
          For J = 0 To C
@@ -8662,18 +8664,18 @@ Do While Not .EOF
       Next
       PosLinea = PosLinea - 0.35
       End If
-      PrinterFields Ancho(6), PosLinea, .fields("Parcial_ME"), True
-      PrinterFields Ancho(7), PosLinea, .fields("Debe"), True
-      PrinterFields Ancho(8), PosLinea, .fields("Haber"), True
-      PrinterFields Ancho(9), PosLinea, .fields("Saldo"), True
+      PrinterFields Ancho(6), PosLinea, .Fields("Parcial_ME"), True
+      PrinterFields Ancho(7), PosLinea, .Fields("Debe"), True
+      PrinterFields Ancho(8), PosLinea, .Fields("Haber"), True
+      PrinterFields Ancho(9), PosLinea, .Fields("Saldo"), True
       For J = 0 To C
          Printer.Line (Ancho(J), PosLinea - 0.1)-(Ancho(J), PosLinea + 0.4), Negro
       Next J
-      SumaDebe = SumaDebe + .fields("Debe")
-      SumaHaber = SumaHaber + .fields("Haber")
-      If .fields("T") <> Anulado Then
-          SumaSaldo = .fields("Saldo")
-          Suma_ME = .fields("Saldo_ME")
+      SumaDebe = SumaDebe + .Fields("Debe")
+      SumaHaber = SumaHaber + .Fields("Haber")
+      If .Fields("T") <> Anulado Then
+          SumaSaldo = .Fields("Saldo")
+          Suma_ME = .Fields("Saldo_ME")
       End If
    End If
    PosLinea = PosLinea + AltoLetra
@@ -8943,10 +8945,10 @@ Dim CodExterno As String
             & "AND Periodo = '" & Periodo_Contable & "' "
        Select_AdoDB AdoBuscarCta, sSQL
        If AdoBuscarCta.RecordCount > 0 Then
-          Codigo = AdoBuscarCta.fields("Codigo")
-          Cuenta = AdoBuscarCta.fields("Cuenta")
-          SubCta = AdoBuscarCta.fields("TC")
-          Moneda_US = AdoBuscarCta.fields("ME")
+          Codigo = AdoBuscarCta.Fields("Codigo")
+          Cuenta = AdoBuscarCta.Fields("Cuenta")
+          SubCta = AdoBuscarCta.Fields("TC")
+          Moneda_US = AdoBuscarCta.Fields("ME")
           TCodigo.Text = Codigo
           TCuenta.Text = Cuenta
           FrmAsigna.Visible = True
@@ -8976,10 +8978,10 @@ Dim CodExterno As String
             & "AND Periodo = '" & Periodo_Contable & "' "
        Select_AdoDB AdoBuscarCta, sSQL
        If AdoBuscarCta.RecordCount > 0 Then
-          Codigo = AdoBuscarCta.fields("Codigo")
-          Cuenta = AdoBuscarCta.fields("Cuenta")
-          SubCta = AdoBuscarCta.fields("TC")
-          Moneda_US = AdoBuscarCta.fields("ME")
+          Codigo = AdoBuscarCta.Fields("Codigo")
+          Cuenta = AdoBuscarCta.Fields("Cuenta")
+          SubCta = AdoBuscarCta.Fields("TC")
+          Moneda_US = AdoBuscarCta.Fields("ME")
           TCodigo.Text = Codigo
           TCuenta.Text = Cuenta
           FrmAsigna.Visible = True
@@ -8995,10 +8997,10 @@ Dim CodExterno As String
           Select_AdoDB AdoBuscarCta, sSQL
           If AdoBuscarCta.RecordCount > 0 Then
             'MsgBox TCodigo.Text
-             Codigo = AdoBuscarCta.fields("Codigo")
-             Cuenta = AdoBuscarCta.fields("Cuenta")
-             SubCta = AdoBuscarCta.fields("TC")
-             Moneda_US = AdoBuscarCta.fields("ME")
+             Codigo = AdoBuscarCta.Fields("Codigo")
+             Cuenta = AdoBuscarCta.Fields("Cuenta")
+             SubCta = AdoBuscarCta.Fields("TC")
+             Moneda_US = AdoBuscarCta.Fields("ME")
              TCodigo.Text = Codigo
              TCuenta.Text = Cuenta
              FrmAsigna.Visible = True
@@ -9036,9 +9038,9 @@ Public Sub LeerBanco(Datas As Adodc, _
   With Datas.Recordset
    If .RecordCount > 0 Then
       'CtaCteNo = .Fields("No_Cta")
-       CuentaBanco = .fields("Codigo")
-       NombreBanco = .fields("Cuenta")
-       Moneda_US = .fields("ME")
+       CuentaBanco = .Fields("Codigo")
+       NombreBanco = .Fields("Cuenta")
+       Moneda_US = .Fields("ME")
    End If
   End With
 End Sub
@@ -9070,13 +9072,13 @@ Dim Codigo_Catalogo As String
      DataReg.open sSQL, AdoStrCnn, , , adCmdText
      With DataReg
       If .RecordCount > 0 Then
-          Codigo_Catalogo = .fields("Codigo")
-          Cuenta = .fields("Cuenta")
-          SubCta = .fields("TC")
-          Moneda_US = .fields("ME")
-          TipoCta = .fields("DG")
-          TipoPago = .fields("Tipo_Pago")
-          CodRolPago = .fields("Cod_Rol_Pago")
+          Codigo_Catalogo = .Fields("Codigo")
+          Cuenta = .Fields("Cuenta")
+          SubCta = .Fields("TC")
+          Moneda_US = .Fields("ME")
+          TipoCta = .Fields("DG")
+          TipoPago = .Fields("Tipo_Pago")
+          CodRolPago = .Fields("Cod_Rol_Pago")
           If Val(TipoPago) <= 0 Then TipoPago = "01"
       End If
      End With
@@ -9104,8 +9106,8 @@ Dim Codigo_Catalogo As String
      DataReg.open sSQL, AdoStrCnn, , , adCmdText
      With DataReg
       If .RecordCount > 0 Then
-          Codigo_Catalogo = .fields("Codigo")
-          Sub_Cuenta = .fields("Detalle")
+          Codigo_Catalogo = .Fields("Codigo")
+          Sub_Cuenta = .Fields("Detalle")
       End If
      End With
      DataReg.Close
@@ -9122,8 +9124,8 @@ Dim Codigo_Catalogo As String
         DataReg.open sSQL, AdoStrCnn, , , adCmdText
         With DataReg
          If .RecordCount > 0 Then
-             Codigo_Catalogo = .fields("Codigo")
-             Sub_Cuenta = .fields("Detalle")
+             Codigo_Catalogo = .Fields("Codigo")
+             Sub_Cuenta = .Fields("Detalle")
          End If
         End With
         DataReg.Close
@@ -9138,8 +9140,8 @@ Dim Codigo_Catalogo As String
         DataReg.open sSQL, AdoStrCnn, , , adCmdText
         With DataReg
          If .RecordCount > 0 Then
-             Codigo_Catalogo = .fields("Codigo")
-             Sub_Cuenta = .fields("Cliente")
+             Codigo_Catalogo = .Fields("Codigo")
+             Sub_Cuenta = .Fields("Cliente")
          End If
         End With
         DataReg.Close
@@ -9373,39 +9375,39 @@ With Datas.Recordset
     .MoveFirst
      EncabezadoData Datas
      Printer.FontSize = SizeLetra
-     Cadena = .fields("Detalles")
+     Cadena = .Fields("Detalles")
      Printer.FontBold = True
      Printer.FontUnderline = True
      Printer.FontSize = 6.5
-     PrinterFields Ancho(1), PosLinea, .fields("Detalles")
+     PrinterFields Ancho(1), PosLinea, .Fields("Detalles")
      Printer.FontSize = SizeLetra
      Printer.FontBold = False
      Printer.FontUnderline = False
      Do While Not .EOF
         Printer.FontBold = False
-        If Cadena <> .fields("Detalles") Then
+        If Cadena <> .Fields("Detalles") Then
            Printer.FontBold = True
            Printer.FontUnderline = True
            Printer.FontSize = 6.5
-           PrinterFields Ancho(1), PosLinea, .fields("Detalles")
+           PrinterFields Ancho(1), PosLinea, .Fields("Detalles")
            Printer.FontSize = SizeLetra
            Printer.FontBold = False
            Printer.FontUnderline = False
-           Cadena = .fields("Detalles")
+           Cadena = .Fields("Detalles")
         End If
-        If MidStrg(.fields("Cta"), 1, 1) <> "I" Then
-           PrinterFields Ancho(2), PosLinea, .fields("Cta")
+        If MidStrg(.Fields("Cta"), 1, 1) <> "I" Then
+           PrinterFields Ancho(2), PosLinea, .Fields("Cta")
         Else
            Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
            PosLinea = PosLinea + 0.1
            Printer.FontBold = True
         End If
-        PrinterFields Ancho(3), PosLinea, .fields("Cuentas")
-        PrinterFields Ancho(4), PosLinea, .fields("Saldo_Anterior")
-        PrinterFields Ancho(5), PosLinea, .fields("Ingresos")
-        PrinterFields Ancho(6), PosLinea, .fields("Egresos")
-        PrinterFields Ancho(7), PosLinea, .fields("Saldo_Actual")
-        If MidStrg(.fields("Cta"), 1, 1) = "I" Then PosLinea = PosLinea + 0.1
+        PrinterFields Ancho(3), PosLinea, .Fields("Cuentas")
+        PrinterFields Ancho(4), PosLinea, .Fields("Saldo_Anterior")
+        PrinterFields Ancho(5), PosLinea, .Fields("Ingresos")
+        PrinterFields Ancho(6), PosLinea, .Fields("Egresos")
+        PrinterFields Ancho(7), PosLinea, .Fields("Saldo_Actual")
+        If MidStrg(.Fields("Cta"), 1, 1) = "I" Then PosLinea = PosLinea + 0.1
         'PrinterAllFields CantCampos, PosLinea, Datas, True
         PosLinea = PosLinea + 0.36
         If PosLinea >= LimiteAlto Then
@@ -9471,29 +9473,29 @@ With Datas.Recordset
      EncabezadoData Datas
      Printer.FontName = TipoCondensed
      Printer.FontSize = SizeLetra
-     NombreCliente = .fields("Cliente")
+     NombreCliente = .Fields("Cliente")
      PrinterTexto Ancho(0), PosLinea, NombreCliente
      Do While Not .EOF
-        If NombreCliente <> .fields("Cliente") Then
-           NombreCliente = .fields("Cliente")
+        If NombreCliente <> .Fields("Cliente") Then
+           NombreCliente = .Fields("Cliente")
            PrinterTexto Ancho(0), PosLinea, NombreCliente
         End If
         For I = 1 To CantCampos - 1
             If Opcion_Imp <= 2 Then
-               PrinterTexto Ancho(I), PosLinea, UCaseStrg(MidStrg(.fields(I), 1, 3))
+               PrinterTexto Ancho(I), PosLinea, UCaseStrg(MidStrg(.Fields(I), 1, 3))
             Else
                If I <= 2 Then
-                  PrinterFields Ancho(I), PosLinea, .fields(I)
+                  PrinterFields Ancho(I), PosLinea, .Fields(I)
                Else
                   Cod_Benef = " "
                  'MsgBox "..."
                   If Opcion_Imp = 0 Then
-                     If .fields(I) <> Ninguno Then Cod_Benef = "Ok"
+                     If .Fields(I) <> Ninguno Then Cod_Benef = "Ok"
                      PrinterTexto Ancho(I), PosLinea, Cod_Benef
                   ElseIf Opcion_Imp = 1 Then
-                     PrinterFields Ancho(I), PosLinea, .fields(I)
+                     PrinterFields Ancho(I), PosLinea, .Fields(I)
                   Else
-                     PrinterFields Ancho(I), PosLinea, .fields(I)
+                     PrinterFields Ancho(I), PosLinea, .Fields(I)
                   End If
                End If
             End If
@@ -9568,11 +9570,11 @@ With Datas.Recordset
      Next I
      Total = 0: Monto_Total = 0
      Encabezados
-     NombreCliente = .fields("Cliente")
+     NombreCliente = .Fields("Cliente")
      EncabezadoSaldosTemp
      Printer.FontSize = SizeLetra
      Do While Not .EOF
-        If TrimStrg(NombreCliente) <> TrimStrg(.fields("Cliente")) Then
+        If TrimStrg(NombreCliente) <> TrimStrg(.Fields("Cliente")) Then
            PosLinea = PosLinea + 0.05
            Imprimir_Linea_H PosLinea, Ancho(0), Ancho(CantCampos), Negro
            PosLinea = PosLinea + 0.05
@@ -9584,7 +9586,7 @@ With Datas.Recordset
            PrinterVariables Ancho(8), PosLinea, VSubTotales(4)
            PrinterVariables Ancho(9), PosLinea, VSubTotales(5)
            PosLinea = PosLinea + 0.4
-           NombreCliente = .fields("Cliente")
+           NombreCliente = .Fields("Cliente")
            EncabezadoSaldosTemp
            Printer.FontSize = SizeLetra
            For I = 0 To 6
@@ -9600,30 +9602,30 @@ With Datas.Recordset
            Printer.FontSize = SizeLetra
         End If
         'PrinterFields Ancho(0), PosLinea, .Fields("T")
-        PrinterFields Ancho(1), PosLinea, .fields("Fecha")
-        PrinterFields Ancho(2), PosLinea, .fields("Fecha_Venc")
-        PrinterFields Ancho(3), PosLinea, .fields("Factura")
-        PrinterFields Ancho(4), PosLinea, .fields("Total")
-        PrinterFields Ancho(5), PosLinea, .fields("Vencido")
-        PrinterFields Ancho(6), PosLinea, .fields("Ven_1_a_30")
-        PrinterFields Ancho(7), PosLinea, .fields("Ven_31_a_60")
-        PrinterFields Ancho(8), PosLinea, .fields("Ven_61_a_90")
-        PrinterFields Ancho(9), PosLinea, .fields("Mas_91")
-        PrinterFields Ancho(10), PosLinea, .fields("Cta")
+        PrinterFields Ancho(1), PosLinea, .Fields("Fecha")
+        PrinterFields Ancho(2), PosLinea, .Fields("Fecha_Venc")
+        PrinterFields Ancho(3), PosLinea, .Fields("Factura")
+        PrinterFields Ancho(4), PosLinea, .Fields("Total")
+        PrinterFields Ancho(5), PosLinea, .Fields("Vencido")
+        PrinterFields Ancho(6), PosLinea, .Fields("Ven_1_a_30")
+        PrinterFields Ancho(7), PosLinea, .Fields("Ven_31_a_60")
+        PrinterFields Ancho(8), PosLinea, .Fields("Ven_61_a_90")
+        PrinterFields Ancho(9), PosLinea, .Fields("Mas_91")
+        PrinterFields Ancho(10), PosLinea, .Fields("Cta")
         
-        Total = Total + .fields("Total")
-        Monto_Total = Monto_Total + .fields("Total")
-        VTotales(1) = VTotales(1) + .fields("Vencido")
-        VTotales(2) = VTotales(2) + .fields("Ven_1_a_30")
-        VTotales(3) = VTotales(3) + .fields("Ven_31_a_60")
-        VTotales(4) = VTotales(4) + .fields("Ven_61_a_90")
-        VTotales(5) = VTotales(5) + .fields("Mas_91")
+        Total = Total + .Fields("Total")
+        Monto_Total = Monto_Total + .Fields("Total")
+        VTotales(1) = VTotales(1) + .Fields("Vencido")
+        VTotales(2) = VTotales(2) + .Fields("Ven_1_a_30")
+        VTotales(3) = VTotales(3) + .Fields("Ven_31_a_60")
+        VTotales(4) = VTotales(4) + .Fields("Ven_61_a_90")
+        VTotales(5) = VTotales(5) + .Fields("Mas_91")
         
-        VSubTotales(1) = VSubTotales(1) + .fields("Vencido")
-        VSubTotales(2) = VSubTotales(2) + .fields("Ven_1_a_30")
-        VSubTotales(3) = VSubTotales(3) + .fields("Ven_31_a_60")
-        VSubTotales(4) = VSubTotales(4) + .fields("Ven_61_a_90")
-        VSubTotales(5) = VSubTotales(5) + .fields("Mas_91")
+        VSubTotales(1) = VSubTotales(1) + .Fields("Vencido")
+        VSubTotales(2) = VSubTotales(2) + .Fields("Ven_1_a_30")
+        VSubTotales(3) = VSubTotales(3) + .Fields("Ven_31_a_60")
+        VSubTotales(4) = VSubTotales(4) + .Fields("Ven_61_a_90")
+        VSubTotales(5) = VSubTotales(5) + .Fields("Mas_91")
         For J = 1 To 11
             Printer.Line (Ancho(J), PosLinea - 0.05)-(Ancho(J), PosLinea + 0.36), Negro
         Next J
@@ -9767,45 +9769,45 @@ If PonImpresoraDefecto(SetNombrePRN) Then
    With AdoComp
     If .RecordCount > 0 Then
         If Desde = Hasta Then
-           FechaTexto = .fields("Fecha")
-           If CFechaLong(.fields("Fecha")) < CFechaLong(.fields("Fecha_Efec")) Then
-              FechaTexto = .fields("Fecha_Efec")
+           FechaTexto = .Fields("Fecha")
+           If CFechaLong(.Fields("Fecha")) < CFechaLong(.Fields("Fecha_Efec")) Then
+              FechaTexto = .Fields("Fecha_Efec")
            End If
-           Beneficiario = .fields("Cliente")
-           CodigoCli = .fields("Codigo_C")
+           Beneficiario = .Fields("Cliente")
+           CodigoCli = .Fields("Codigo_C")
            If Beneficiario = Ninguno Then
               If AdoCliente.RecordCount > 0 Then
                  AdoCliente.MoveFirst
                  AdoCliente.Find ("Codigo = '" & CodigoCli & "' ")
-                 If Not AdoCliente.EOF Then Beneficiario = AdoCliente.fields("Cliente")
+                 If Not AdoCliente.EOF Then Beneficiario = AdoCliente.Fields("Cliente")
               End If
            End If
-           Valor = .fields("Haber")
-           NumCheque = .fields("Cheq_Dep")
-           Cuenta = .fields("Cta")
+           Valor = .Fields("Haber")
+           NumCheque = .Fields("Cheq_Dep")
+           Cuenta = .Fields("Cta")
            Imprimir_Cheque_No PosLinea
         Else
           .MoveFirst
           .Find ("Cta = '" & Codigo1 & "' ")
            If Not .EOF Then
               Do While Not .EOF
-                 If (Desde <= .fields("Cheq_Dep")) And (.fields("Cheq_Dep") <= Hasta) Then
-                    FechaTexto = .fields("Fecha")
-                    If CFechaLong(.fields("Fecha")) < CFechaLong(.fields("Fecha_Efec")) Then
-                       FechaTexto = .fields("Fecha_Efec")
+                 If (Desde <= .Fields("Cheq_Dep")) And (.Fields("Cheq_Dep") <= Hasta) Then
+                    FechaTexto = .Fields("Fecha")
+                    If CFechaLong(.Fields("Fecha")) < CFechaLong(.Fields("Fecha_Efec")) Then
+                       FechaTexto = .Fields("Fecha_Efec")
                     End If
-                    Beneficiario = .fields("Cliente")
-                    CodigoCli = .fields("Codigo_C")
+                    Beneficiario = .Fields("Cliente")
+                    CodigoCli = .Fields("Codigo_C")
                     If Beneficiario = Ninguno Then
                        If AdoCliente.RecordCount > 0 Then
                           AdoCliente.MoveFirst
                           AdoCliente.Find ("Codigo = '" & CodigoCli & "' ")
-                          If Not AdoCliente.EOF Then Beneficiario = AdoCliente.fields("Cliente")
+                          If Not AdoCliente.EOF Then Beneficiario = AdoCliente.Fields("Cliente")
                        End If
                     End If
-                    Valor = .fields("Haber")
-                    NumCheque = .fields("Cheq_Dep")
-                    Cuenta = .fields("Cta")
+                    Valor = .Fields("Haber")
+                    NumCheque = .Fields("Cheq_Dep")
+                    Cuenta = .Fields("Cta")
                     Imprimir_Cheque_No PosLinea
                     PosLinea = PosLinea + 7.5
                     If PosLinea >= LimiteAlto Then
@@ -9864,9 +9866,9 @@ With Datas.Recordset
      .MoveFirst
       Encabezado_SubCta_Costos PorCta
       If PorCta.value = 1 Then
-         Cuenta = .fields("Cta") & " - " & .fields("Cuenta")
+         Cuenta = .Fields("Cta") & " - " & .Fields("Cuenta")
       Else
-         Cuenta = .fields("Sub_Modulos")
+         Cuenta = .Fields("Sub_Modulos")
       End If
       Si_No = True
       Printer.FontName = TipoVerdana
@@ -9876,7 +9878,7 @@ With Datas.Recordset
       PrinterTexto Ancho(0), PosLinea, UCaseStrg(Cuenta)
       Do While Not .EOF
          If PorCta.value = 1 Then
-            If Cuenta <> .fields("Cta") & " - " & .fields("Cuenta") Then
+            If Cuenta <> .Fields("Cta") & " - " & .Fields("Cuenta") Then
                PosLinea = PosLinea + 0.05
                Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
                PosLinea = PosLinea + 0.05
@@ -9886,14 +9888,14 @@ With Datas.Recordset
                Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
                PosLinea = PosLinea + 0.1
                SubTotal = 0
-               Cuenta = .fields("Cta") & " - " & .fields("Cuenta")
+               Cuenta = .Fields("Cta") & " - " & .Fields("Cuenta")
                Si_No = True
                PrinterTexto Ancho(0), PosLinea, UCaseStrg(Cuenta)
             End If
-            PrinterFields Ancho(2), PosLinea, .fields(2)
-            PrinterFields Ancho(3), PosLinea, .fields(3)
+            PrinterFields Ancho(2), PosLinea, .Fields(2)
+            PrinterFields Ancho(3), PosLinea, .Fields(3)
          Else
-            If Cuenta <> .fields("Sub_Modulos") Then
+            If Cuenta <> .Fields("Sub_Modulos") Then
                PosLinea = PosLinea + 0.05
                Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
                PosLinea = PosLinea + 0.05
@@ -9903,13 +9905,13 @@ With Datas.Recordset
                Printer.Line (Ancho(0), PosLinea)-(Ancho(CantCampos), PosLinea), Negro
                PosLinea = PosLinea + 0.1
                SubTotal = 0
-               Cuenta = .fields("Sub_Modulos")
+               Cuenta = .Fields("Sub_Modulos")
                Si_No = True
                PrinterTexto Ancho(0), PosLinea, UCaseStrg(Cuenta)
             End If
-            PrinterFields Ancho(1), PosLinea, .fields(1)
-            PrinterFields Ancho(2), PosLinea, .fields(2)
-            PrinterFields Ancho(3), PosLinea, .fields(3)
+            PrinterFields Ancho(1), PosLinea, .Fields(1)
+            PrinterFields Ancho(2), PosLinea, .Fields(2)
+            PrinterFields Ancho(3), PosLinea, .Fields(3)
          End If
          For I = 0 To CantCampos
              If PorCta.value = 1 Then
@@ -9930,8 +9932,8 @@ With Datas.Recordset
             PrinterTexto Ancho(0), PosLinea, Cuenta
          End If
         'Total
-         Total = Total + .fields("Total")
-         SubTotal = SubTotal + .fields("Total")
+         Total = Total + .Fields("Total")
+         SubTotal = SubTotal + .Fields("Total")
         .MoveNext
       Loop
      .MoveFirst
@@ -10033,7 +10035,7 @@ Dim AdoCCDB As ADODB.Recordset
             If AdoCCDB.RecordCount > 0 Then
                sSQL = "SELECT Item, Codigo, Cuenta, "
                Do While Not AdoCCDB.EOF
-                  sSQL = sSQL & "Total_" & AdoCCDB.fields("Codigo") & ", "
+                  sSQL = sSQL & "Total_" & AdoCCDB.Fields("Codigo") & ", "
                   AdoCCDB.MoveNext
                Loop
                sSQL = sSQL & "Saldo_Total, DG "

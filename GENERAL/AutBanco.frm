@@ -285,7 +285,7 @@ Begin VB.Form FRecaudacionBancosCxC
       MultiLine       =   -1  'True
       ScrollBars      =   3  'Both
       TabIndex        =   18
-      Top             =   2415
+      Top             =   2310
       Width           =   10725
    End
    Begin VB.CommandButton Command2 
@@ -308,8 +308,8 @@ Begin VB.Form FRecaudacionBancosCxC
       Width           =   330
    End
    Begin MSComctlLib.ImageList ImageList1 
-      Left            =   2730
-      Top             =   2940
+      Left            =   1155
+      Top             =   8295
       _ExtentX        =   1005
       _ExtentY        =   1005
       BackColor       =   -2147483643
@@ -1663,7 +1663,7 @@ Dim Tabulador As String
 End Sub
 
 'Recibir Abonos del Banco
-Private Sub Recibir_Abonos()
+Private Sub Recibir_Abonos_CxC()
 Dim Estab As Boolean
 Dim OrdenValida As Boolean
 
@@ -1686,418 +1686,437 @@ Dim Proceso_Ok As String
 Dim Orden_Pago As String
 Dim AuxNumEmp As String
 
-  FechaValida MBFechaI
-  FechaValida MBFechaF
+    FechaValida MBFechaI
+    FechaValida MBFechaF
   
-  If Label4.Caption <> Ninguno Then
-     Mensajes = "SUBIR EL ARCHIVO DE LA PANTALLA"
-     Titulo = "Formulario de Grabacion"
-     If BoxMensaje = vbYes Then
-        NombreArchivo = Label4.Caption
-     Else
-        NombreArchivo = SelectDialogFile(RutaSysBases & "\Banco\Abonos\", "Todos los archivos|*.txt")
-        RutaGeneraFile = NombreArchivo
-     End If
-  Else
-     NombreArchivo = SelectDialogFile(RutaSysBases & "\Banco\Abonos\", "Todos los archivos|*.txt")
-     RutaGeneraFile = NombreArchivo
-  End If
-  NombreArchivo = Replace(NombreArchivo, vbCrLf, "")
-  RutaGeneraFile = Replace(RutaGeneraFile, vbCrLf, "")
-  Label4.Caption = Replace(Label4.Caption, vbCrLf, "")
-  Progreso_Barra.Mensaje_Box = ""
-  Progreso_Iniciar
- 'Subo el archivo al Servidor dse DB
-  Subir_Archivo_FTP_Linode ftp, LstStatud, LstVwFTP, RutaGeneraFile
- 'Proceso el archivo de abonos
-  '''''Subir_Archivo_Abonos_Bancos_SP RutaGeneraFile, TextoBanco
-'''  MsgBox "proceso terminado"
-'''  Exit Sub
-  Contador = 0
-  CantCampos = 0
-  TotalIngreso = 0
-  Separador = Ninguno
-  Orden_Pago = Ninguno
-  OrdenValida = False
-  
-  ReDim Preserve CamposFile(100) As Campos_Tabla
-  NumFile = FreeFile
-  Open RutaGeneraFile For Input As #NumFile
-       Line Input #NumFile, Cod_Field
-       If Separador = Ninguno Then
-          If InStr(Cod_Field, vbTab) > 0 Then Separador = vbTab
+    If Label4.Caption <> Ninguno Then
+       Mensajes = "SUBIR EL ARCHIVO DE LA PANTALLA"
+       Titulo = "Formulario de Grabacion"
+       If BoxMensaje = vbYes Then
+          NombreArchivo = Label4.Caption
+       Else
+          NombreArchivo = SelectDialogFile(RutaSysBases & "\Banco\Abonos\", "Todos los archivos|*.txt")
+          RutaGeneraFile = NombreArchivo
        End If
-       Do While Len(Cod_Field) > 2
-          No_Hasta = InStr(Cod_Field, Separador)
-          CamposFile(CantCampos).Campo = "C" & Format$(CantCampos, "00")
-          CamposFile(CantCampos).Ancho = No_Hasta
-          If No_Hasta > 1 Then
-             CampoTemp = TrimStrg(MidStrg(Cod_Field, 1, No_Hasta - 1))
-             Select Case TextoBanco
-               Case "PICHINCHA"
-                  If CantCampos = 14 And TxtOrden = CampoTemp Then
-                     Orden_Pago = CampoTemp  ' Orden No
-                     OrdenValida = True
-                  End If
-                  'MsgBox CantCampos & " _ " & CampoTemp
-               Case Else
-                  OrdenValida = True
-             End Select
-             Cod_Field = TrimStrg(MidStrg(Cod_Field, No_Hasta + 1, Len(Cod_Field)))
-          Else
-             Cod_Field = ""
-          End If
-          CantCampos = CantCampos + 1
-       Loop
-  Close #NumFile
+    Else
+       NombreArchivo = SelectDialogFile(RutaSysBases & "\Banco\Abonos\", "Todos los archivos|*.txt")
+       RutaGeneraFile = NombreArchivo
+    End If
+    NombreArchivo = Replace(NombreArchivo, vbCrLf, "")
+    RutaGeneraFile = Replace(RutaGeneraFile, vbCrLf, "")
+    Label4.Caption = Replace(Label4.Caption, vbCrLf, "")
+    Progreso_Barra.Mensaje_Box = ""
+    Progreso_Iniciar
   
-  'MsgBox "Ok"
-  
-  Total_Alumnos = Contador
-  
-  Cadena = ""
-  For I = 0 To CantCampos - 1
-      Cadena = Cadena & CamposFile(I).Campo & "=" & CamposFile(I).Ancho & vbCrLf
-  Next I
-  'MsgBox Total_Alumnos & " - " & CantCampos & " - " & OrdenValida & vbCrLf & String(100, "_") & vbCrLf & Cadena
-  
- '--------------------------------------------------------
-  
-  Progreso_Barra.Valor_Maximo = (Total_Alumnos * 3) + 100
-  
-  If Not OrdenValida Then
-     MsgBox "La informacion del archivo no pertenece a la Orden No. " & TxtOrden & " registrada del Banco, vuelva a seleccionar el documento correcto."
-     GoTo Salida_Rutina
-  End If
-    
- 'Procedemos a borrar los abonos recibidos
-  NumFile = FreeFile
-  Open RutaGeneraFile For Input As #NumFile
-    Do While Not EOF(NumFile)
-       Line Input #NumFile, Cod_Field
-      'Colocamos los datos del archivo en un array de texto
+    If RutaGeneraFile <> "" Then
+       Contador = 0
        CantCampos = 0
-       Do While Len(Cod_Field) > 2
-         'MsgBox UBound(CamposFile) & " - " & CantCampos & ".- " & CamposFile(35).Valor & " - " & MidStrg(Cod_Field, 1, No_Hasta - 1)
-          No_Hasta = InStr(Cod_Field, Separador)
-          If No_Hasta > 1 Then
-             CamposFile(CantCampos).Valor = TrimStrg(MidStrg(Cod_Field, 1, No_Hasta - 1))
-             Cod_Field = TrimStrg(MidStrg(Cod_Field, No_Hasta + 1, Len(Cod_Field)))
-          Else
-             Cod_Field = ""
-          End If
-          CantCampos = CantCampos + 1
-       Loop
-      'Procedemos a eliminar los abonos que se encuentran en el archivo, por si volvemos a subir
-       Select Case TextoBanco
-         Case "PICHINCHA"
-              TipoDoc = CamposFile(7).Valor
-              TipoProc = SinEspaciosDer(TipoDoc)
-              TA.Serie = SinEspaciosDer(TrimStrg(MidStrg(TipoDoc, 1, Len(TipoDoc) - Len(TipoProc))))
-              TA.Factura = Val(CamposFile(35).Valor)
-              TA.Recibo_No = Format(Val(CamposFile(34).Valor), "0000000000")
-              sSQL = "DELETE * " _
-                   & "FROM Trans_Abonos " _
-                   & "WHERE Periodo = '" & Periodo_Contable & "' " _
-                   & "AND Item = '" & NumEmpresa & "' " _
-                   & "AND TP = 'FA' " _
-                   & "AND Serie = '" & TA.Serie & "' " _
-                   & "AND Factura = " & TA.Factura & " " _
-                   & "AND Recibo_No = '" & TA.Recibo_No & "' "
-              Ejecutar_SQL_SP sSQL
-       End Select
-       Progreso_Barra.Mensaje_Box = "Borrando Abono No. " & TA.Recibo_No & ", documento No. " & TA.Serie & "-" & Format(TA.Factura, "000000000")
-       Progreso_Esperar
-    Loop
-  Close #NumFile
-  
-  FA.Serie = Ninguno
-  FA.TC = Ninguno
-  FA.Factura = 0
-  FA.Fecha_Desde = "01/01/2000"
-  FA.Fecha_Hasta = FechaSistema
-  
-  Actualizar_Abonos_Facturas_SP FA
-  
-  AbonosAnticipados = 0
-  Total_Dep_Confirmar = 0
-  Trans_No = 200
-  Eliminar_Asientos_SP True
-  SubCtaGen = Leer_Seteos_Ctas("Cta_Anticipos_Clientes")
-  Cta_Del_Banco = TrimStrg(SinEspaciosIzq(DCBanco))
-  Contrato_No = Ninguno
-  
-  TxtFile.Text = ""
-  Fecha_Tope = FechaSistema
-  Total_Costo_Banco = 0
-  CaptionTemp = FRecaudacionBancosCxC.Caption
-  TextoImprimio = ""
-  
- 'Alumnos/Clientes que estan activados para Generar las Facturas
-  sSQL = "SELECT Codigo, Cliente, CI_RUC, Direccion, Grupo, Email, Email2, EmailR " _
-       & "FROM Clientes " _
-       & "WHERE Codigo <> '.' " _
-       & "ORDER BY CI_RUC "
-  Select_Adodc AdoClientes, sSQL
-  
-  FechaValida MBFechaI
-  Mifecha = BuscarFecha(MBFechaI)
-  FechaTexto = MBFechaI ' FechaSistema
-  DiarioCaja = ReadSetDataNum("Recibo_No", True, True)
-  Label4.Caption = Dir_Dialog.Filename
-  RutaGeneraFile = UCaseStrg(NombreArchivo)
-  If RutaGeneraFile <> "" Then
-     TotalIngreso = 0
-     Contador = 0
-     FileResp = 0
-    'Establecemos los campos del archivo plano del Banco
-     NumFile = FreeFile
-     Total_Alumnos = 0
-     FechaTexto = FechaSistema
-     TxtFile.Text = ""
-     Open RutaGeneraFile For Input As #NumFile
-       Do While Not EOF(NumFile)
-          Line Input #NumFile, Cod_Field
-          Cod_Field = Replace(Cod_Field, Chr(34), "")
-          TxtFile.Text = TxtFile.Text & Cod_Field & vbCrLf
-          TxtFile.SelStart = Len(TxtFile.Text)
-          TxtFile.SelLength = Len(TxtFile.Text)
-          TxtFile.Refresh
-          
-         'Comenzamos la subida de los Abonos
-          CantCampos = 0
-          Do While Len(Cod_Field) > 2
-             No_Hasta = InStr(Cod_Field, Separador)
-             CamposFile(CantCampos).Valor = TrimStrg(MidStrg(Cod_Field, 1, No_Hasta - 1))
-             Cod_Field = TrimStrg(MidStrg(Cod_Field, No_Hasta + 1, Len(Cod_Field)))
-             CantCampos = CantCampos + 1
-          Loop
-           
-         'Actualizamos de que alumnos vamos a ingresar el abono
-          TA.Serie = Ninguno
-          TA.Factura = 0
-          TA.Fecha = FechaSistema
-          TA.CodigoC = Ninguno
-          TA.Recibo_No = "0000000000"
-          CodigoCli = Ninguno
-          CodigoP = "0"
-          Proceso_Ok = "PROCESO OK"
-          Select Case TextoBanco
-            Case "PICHINCHA"
-    ''           CodigoP = CStr(Val(CamposFile(7).Valor))
-    ''           FechaTexto = CamposFile(12).Valor
-                 If Tipo_Carga = 1 Then
-                    CodigoP = TrimStrg(CStr(Val(MidStrg(Cod_Field, 25, 19))))
-                    FechaTexto = MidStrg(Cod_Field, 205, 2) & "/" & MidStrg(Cod_Field, 207, 2) & "/" & MidStrg(Cod_Field, 209, 4)
-                 Else
-                   'Serie de la Factura
-                    TipoDoc = CamposFile(7).Valor
-                    TipoProc = SinEspaciosDer(TipoDoc)
-                    TipoDoc = TrimStrg(MidStrg(TipoDoc, 1, Len(TipoDoc) - Len(TipoProc)))
+       TotalIngreso = 0
+       Separador = Ninguno
+       Orden_Pago = Ninguno
+       OrdenValida = False
+       
+       ReDim Preserve CamposFile(100) As Campos_Tabla
+       NumFile = FreeFile
+       Open RutaGeneraFile For Input As #NumFile
+            Line Input #NumFile, Cod_Field
+            If Separador = Ninguno Then
+               If InStr(Cod_Field, vbTab) > 0 Then Separador = vbTab
+            End If
+            Do While Len(Cod_Field) > 2
+               No_Hasta = InStr(Cod_Field, Separador)
+               CamposFile(CantCampos).Campo = "C" & Format$(CantCampos, "00")
+               CamposFile(CantCampos).Ancho = No_Hasta
+               If No_Hasta > 1 Then
+                  CampoTemp = TrimStrg(MidStrg(Cod_Field, 1, No_Hasta - 1))
+                  Select Case TextoBanco
+                    Case "PICHINCHA"
+                       If CantCampos = 14 And TxtOrden = CampoTemp Then
+                          Orden_Pago = CampoTemp  ' Orden No
+                          OrdenValida = True
+                       End If
+                    Case Else
+                       OrdenValida = True
+                  End Select
+                  Cod_Field = TrimStrg(MidStrg(Cod_Field, No_Hasta + 1, Len(Cod_Field)))
+               Else
+                  Cod_Field = ""
+               End If
+               CantCampos = CantCampos + 1
+            Loop
+       Close #NumFile
+      'Subo el archivo al Servidor dse DB
+       Subir_Archivo_FTP_Linode ftp, LstStatud, LstVwFTP, RutaGeneraFile
+      'Subida de Abonos de Bancos, tarjetas y ottos
+       Subir_Archivo_Abonos_Bancos_SP RutaGeneraFile, TextoBanco, FA.Cod_CxC, TxtOrden, Cta_Bancaria, ResultadoSubida
+      'Eliminamos del servidor el archivo subido
+       Eliminar_Archivo_FTP_Linode ftp, LstStatud, LstVwFTP, RutaGeneraFile
+      'Resultado de la subida del Archivo
+'''       sSQL = "SELECT Serie " _
+'''            & "FROM Asiento_Bancos_" & CodigoUsuario & " " _
+'''            & "WHERE Serie = '000000' "
+'''       Select_Adodc AdoAux, sSQL
+'''       If AdoAux.Recordset.RecordCount > 0 Then TextoImprimio = "Errores"
+       Total_Alumnos = Contador
+        
+       ' Cadena = ""
+       ' For I = 0 To CantCampos - 1
+       '     Cadena = Cadena & CamposFile(I).Campo & "=" & CamposFile(I).Ancho & vbCrLf
+       ' Next I
+       ' MsgBox Total_Alumnos & " - " & CantCampos & " - " & OrdenValida & vbCrLf & String(100, "_") & vbCrLf & Cadena
+      '--------------------------------------------------------
+       Progreso_Barra.Valor_Maximo = (Total_Alumnos * 3) + 100
+       If Not OrdenValida Then
+          MsgBox "La informacion del archivo no pertenece a la Orden No. " & TxtOrden & " registrada del Banco, vuelva a seleccionar el documento correcto."
+          GoTo Salida_Rutina
+       End If
+        
+       Grabar_Abonos_Bancos_SP FA
+       
+       If ResultadoSubida = "OK" Then
+          MsgBox "Proceso terminado con exito, revise los resultados"
+       Else
+          MsgBox ResultadoSubida
+          FInfoError.Show
+       End If
+ 
 
-                    TA.Serie = SinEspaciosDer(TipoDoc)                              ' Serie
-                    TA.Factura = Val(CamposFile(35).Valor)                          ' Factura
-                    TA.CodigoC = CamposFile(4).Valor                                ' Codigo Cliente
-                    TA.Fecha = Replace((CamposFile(25).Valor), " ", "/")            ' Fecha de Pago
-                    TA.Recibo_No = Format(Val(CamposFile(34).Valor), "0000000000")  ' Recibo No
-                    TA.Abono = Val(CamposFile(27).Valor)                            ' Valor del Abono
-
-                    Proceso_Ok = CStr(TrimStrg(CamposFile(22).Valor))               ' Procesado Ok
-                    If Proceso_Ok = "REVERSO OK" Then CodigoP = Format$(Val(CodigoP), "0000000000000")
-                    CodigoP = TA.CodigoC
-                   'Detalle del Abono
-                    If TrimStrg(CamposFile(29).Valor) = "EFE" Then
-                       TA.Banco = "PAGO EN EFECTIVO"
-                       TA.Cheque = "VENT.: " & Replace(MidStrg(CamposFile(26).Valor, 12, 5), " ", "h") & "s"
-                    Else
-                       TA.Banco = "TRANS. " & CamposFile(29).Valor & "|" & CamposFile(16).Valor
-                      'Tipo de Transaccion y Hora del pago
-                       TA.Cheque = CamposFile(18).Valor & "-" & CamposFile(19).Valor & ": " & Replace(MidStrg(CamposFile(26).Valor, 12, 5), " ", "h") & "s"
-                    End If
-                 End If
-            Case "BOLIVARIANO"
-                  If CheqSAT.value = 1 Then
-                     CodigoP = MidStrg(Cod_Field, 14, 8)
-                  Else
-                     CodigoP = MidStrg(Cod_Field, 1, 8)
-                  End If
-                  If Total_Alumnos = 0 Then
-                     FechaTexto = MidStrg(Cod_Field, 12, 2) & "/" _
-                                & MidStrg(Cod_Field, 10, 2) & "/" _
-                                & MidStrg(Cod_Field, 6, 4)
-                     CodigoP = Ninguno
-                  End If
-            Case "BGR_EC"
-                  If Tipo_Carga = 1 Then
-                     CodigoP = TrimStrg(CStr(Val(MidStrg(Cod_Field, 25, 19))))
-                     FechaTexto = MidStrg(Cod_Field, 205, 2) & "/" _
-                                & MidStrg(Cod_Field, 207, 2) & "/" _
-                                & MidStrg(Cod_Field, 209, 4)
-                  Else
-                     CodigoP = CamposFile(11).Valor
-                     FechaTexto = Replace(CamposFile(25).Valor, " ", "/")
-                     HoraTexto = Replace(CamposFile(26).Valor, " ", ":")
-                     CodigoB = CamposFile(29).Valor & ":" & CamposFile(20).Valor & "-" & Replace(CamposFile(26).Valor, " ", ":")
-                  End If
-            Case "INTERNACIONAL"
-                  CodigoP = TrimStrg(CStr(Val(MidStrg(Cod_Field, 25, 19))))
-                  FechaTexto = MidStrg(Cod_Field, 205, 2) & "/" _
-                             & MidStrg(Cod_Field, 207, 2) & "/" _
-                             & MidStrg(Cod_Field, 209, 4)
-            Case "PACIFICO"
-                  If CheqSAT.value Then
-                     CodigoP = CamposFile(17).Valor
-                     FechaTexto = Format$(CamposFile(11).Valor, FormatoFechas)
-                  Else
-                     If Total_Alumnos <> 0 Then
-                        CodigoP = CamposFile(4).Valor
-                        FechaTexto = MidStrg(CamposFile(6).Valor, 1, 10)
-                     End If
-                  End If
-            Case "PRODUBANCO"
-                  CodigoP = CamposFile(7).Valor
-                  FechaTexto = CamposFile(12).Valor
-                  CodigoB = CamposFile(14).Valor
-                  NoAnio = Val(MidStrg(SinEspaciosDer(CodigoB), 1, 4))
-                  If NoAnio <= "1900" And IsDate(FechaTexto) Then
-                     NoMeses = Month(FechaTexto)
-                     NoAnio = CStr(Year(FechaTexto))
-                     Mes = MesesLetras(NoMeses)
-                  End If
-            Case "INTERMATICO"
-                  CodigoP = CamposFile(7).Valor
-                  FechaTexto = CamposFile(1).Valor
-                  If Len(FechaTexto) > 10 Then
-                     FechaTexto = FechaSistema
-                     CodigoP = Ninguno
-                  End If
-                  Mifecha = FechaTexto
-            Case "COOPJEP"
-                  CodigoP = TrimStrg(CamposFile(16).Valor)
-                  FechaTexto = CamposFile(1).Valor
-            Case "CACPE"
-                  CodigoP = CStr(Val(CamposFile(6).Valor))
-                  FechaTexto = MidStrg(CamposFile(8).Valor, 4, 2) & "/" _
-                             & MidStrg(CamposFile(8).Valor, 1, 2) & "/" _
-                             & MidStrg(CamposFile(8).Valor, 7, 4)
-            Case Else
-                  CodigoP = Ninguno
-                  TipoDoc = CamposFile(0).Valor
-                  FechaTexto = CamposFile(1).Valor
-                  SerieFactura = MidStrg(CamposFile(2).Valor, 1, 3) & MidStrg(CamposFile(2).Valor, 5, 3)
-                  Factura_No = Val(MidStrg(CamposFile(2).Valor, 9, 10))
-                  Autorizacion = CamposFile(3).Valor
-                  sSQL = "SELECT F.*,C.CI_RUC " _
-                       & "FROM Facturas As F, Clientes As C " _
-                       & "WHERE F.Periodo = '" & Periodo_Contable & "' " _
-                       & "AND F.Item = '" & NumEmpresa & "' " _
-                       & "AND F.TC = '" & TipoDoc & "' " _
-                       & "AND F.Serie = '" & SerieFactura & "' " _
-                       & "AND F.Autorizacion = '" & Autorizacion & "' " _
-                       & "AND F.Factura = " & Factura_No & " " _
-                       & "AND F.CodigoC = C.Codigo "
-                  Select_Adodc AdoFactura, sSQL
-                  If AdoFactura.Recordset.RecordCount > 0 Then
-                     CodigoP = AdoFactura.Recordset.fields("CI_RUC")
-                     CodigoCli = AdoFactura.Recordset.fields("CodigoC")
-                  End If
-                 
-          End Select
-           
-         'MsgBox CodigoP & vbCrLf & FechaTexto & vbCrLf & SerieFactura & vbCrLf & Factura_No
-          Si_No = True
-          With AdoClientes.Recordset
-           If .RecordCount > 0 Then
-               Do While Len(CodigoP) <= 10 And Si_No
-                 .MoveFirst
-                 .Find ("CI_RUC = '" & CodigoP & "' ")
-                  If Not .EOF Then
-                     TA.CodigoC = .fields("Codigo")
-                     NombreCliente = .fields("Cliente")
-                     FA.CodigoC = TA.CodigoC
-                     FA.Cliente = NombreCliente
-                     FA.EmailC = .fields("Email")
-                     FA.EmailC2 = .fields("Email2")
-                     FA.EmailR = .fields("EmailR")
-                     Si_No = False
-                  Else
-                     CodigoP = "0" & CodigoP
-                  End If
-               Loop
-           End If
-          End With
-          If Len(CodigoP) > 10 Then TA.CodigoC = Ninguno
-           
-          Progreso_Barra.Mensaje_Box = "Extrayendo abonos de: " & NombreCliente & ", Espere un momento"
-          Progreso_Esperar
-         'Procedemos a ingresar los abonos
-          If TA.CodigoC <> Ninguno Then
-             TotalIngreso = TotalIngreso + TA.Abono
-             sSQL = "SELECT CodigoC, Cta_CxP, TC, Vencimiento, Autorizacion, Saldo_MN, Fecha " _
-                  & "FROM Facturas " _
-                  & "WHERE Item = '" & NumEmpresa & "' " _
-                  & "AND Periodo = '" & Periodo_Contable & "' " _
-                  & "AND T <> 'A' " _
-                  & "AND TC = 'FA' " _
-                  & "AND CodigoC = '" & TA.CodigoC & "' " _
-                  & "AND Serie = " & TA.Serie & " " _
-                  & "AND Factura = " & TA.Factura & " " _
-                  & "AND Saldo_MN > 0 "
-             Select_Adodc AdoAbono, sSQL
-             
-             AbonosPar = NombreCliente & " (" & TA.CodigoC & "): Valor Abono: " & Format$(TA.Abono, "#,##0.00")
-             
-             ''If InStr(NombreCliente, "GOMEZCOELLO") > 0 Then MsgBox CodigoP & " - " & Total & ", Cliente: " & NombreCliente
-             
-             If AdoAbono.Recordset.RecordCount > 0 Then
-                FA.Fecha = AdoAbono.Recordset.fields("Fecha")
-                TA.Cta_CxP = AdoAbono.Recordset.fields("Cta_CxP")
-                TA.Autorizacion = AdoAbono.Recordset.fields("Autorizacion")
-                SetAdoAddNew "Trans_Abonos"
-                SetAdoFields "T", Cancelado
-                SetAdoFields "TP", "FA"
-                SetAdoFields "CodigoC", TA.CodigoC
-                SetAdoFields "Fecha", TA.Fecha
-                SetAdoFields "Comprobante", "Orden No. " & Orden_Pago
-                SetAdoFields "Serie", TA.Serie
-                SetAdoFields "Factura", TA.Factura
-                SetAdoFields "Abono", TA.Abono
-                SetAdoFields "Banco", TA.Banco
-                SetAdoFields "Cheque", TA.Cheque
-                SetAdoFields "Cta", Cta_Del_Banco     'Cta_CajaG
-                SetAdoFields "Cta_CxP", TA.Cta_CxP
-                SetAdoFields "Autorizacion", TA.Autorizacion
-                SetAdoFields "Recibo_No", TA.Recibo_No
-                SetAdoUpdate
-                
-'''               'Enviar por mail el Abono receptado
-'''                FA.TC = TA.TP
-'''                FA.Serie = TA.Serie
-'''                FA.Factura = TA.Factura
-'''                FA.ClaveAcceso = FA.Autorizacion
-'''                FA.Autorizacion = TA.Autorizacion
-'''                FA.Fecha_C = TA.Fecha
-'''                FA.Fecha_V = TA.Fecha
-'''                FA.Hora_FA = TA.Cheque
-'''                FA.Cliente = NombreCliente
-'''                FA.Fecha_Aut = FechaSistema
-'''                SRI_Autorizacion.Autorizacion = TA.Autorizacion
-'''                FA.Nota = "Tipo de Abono" & vbTab & ": " & TA.Banco & vbCrLf _
-'''                        & "Hora" & vbTab & vbTab & ": " & TA.Cheque & vbCrLf _
-'''                        & "Documento" & vbTab & ": " & TA.Recibo_No & vbCrLf _
-'''                        & "Valor Recibdo USD " & Format(TA.Abono, "#,##0.00") & vbCrLf
-'''                SRI_Enviar_Mails FA, SRI_Autorizacion, "AB"
-
-             End If
-          End If
-         'MsgBox NombreCliente & vbCrLf & CodigoCli & vbCrLf & CodigoP
-       Loop
-     Close #NumFile
-     
-     FA.Serie = Ninguno
-     FA.TC = Ninguno
-     FA.Factura = 0
-     Actualizar_Abonos_Facturas_SP FA
+'''  Exit Sub
+'''
+'''
+'''  'MsgBox "Ok"
+'''
+'''
+'''
+'''
+''' 'Procedemos a borrar los abonos recibidos
+'''  NumFile = FreeFile
+'''  Open RutaGeneraFile For Input As #NumFile
+'''    Do While Not EOF(NumFile)
+'''       Line Input #NumFile, Cod_Field
+'''      'Colocamos los datos del archivo en un array de texto
+'''       CantCampos = 0
+'''       Do While Len(Cod_Field) > 2
+'''         'MsgBox UBound(CamposFile) & " - " & CantCampos & ".- " & CamposFile(35).Valor & " - " & MidStrg(Cod_Field, 1, No_Hasta - 1)
+'''          No_Hasta = InStr(Cod_Field, Separador)
+'''          If No_Hasta > 1 Then
+'''             CamposFile(CantCampos).Valor = TrimStrg(MidStrg(Cod_Field, 1, No_Hasta - 1))
+'''             Cod_Field = TrimStrg(MidStrg(Cod_Field, No_Hasta + 1, Len(Cod_Field)))
+'''          Else
+'''             Cod_Field = ""
+'''          End If
+'''          CantCampos = CantCampos + 1
+'''       Loop
+'''      'Procedemos a eliminar los abonos que se encuentran en el archivo, por si volvemos a subir
+'''       Select Case TextoBanco
+'''         Case "PICHINCHA"
+'''              TipoDoc = CamposFile(7).Valor
+'''              TipoProc = SinEspaciosDer(TipoDoc)
+'''              TA.Serie = SinEspaciosDer(TrimStrg(MidStrg(TipoDoc, 1, Len(TipoDoc) - Len(TipoProc))))
+'''              TA.Factura = Val(CamposFile(35).Valor)
+'''              TA.Recibo_No = Format(Val(CamposFile(34).Valor), "0000000000")
+'''              sSQL = "DELETE * " _
+'''                   & "FROM Trans_Abonos " _
+'''                   & "WHERE Periodo = '" & Periodo_Contable & "' " _
+'''                   & "AND Item = '" & NumEmpresa & "' " _
+'''                   & "AND TP = 'FA' " _
+'''                   & "AND Serie = '" & TA.Serie & "' " _
+'''                   & "AND Factura = " & TA.Factura & " " _
+'''                   & "AND Recibo_No = '" & TA.Recibo_No & "' "
+'''              Ejecutar_SQL_SP sSQL
+'''       End Select
+'''       Progreso_Barra.Mensaje_Box = "Borrando Abono No. " & TA.Recibo_No & ", documento No. " & TA.Serie & "-" & Format(TA.Factura, "000000000")
+'''       Progreso_Esperar
+'''    Loop
+'''  Close #NumFile
+'''
+'''  FA.Serie = Ninguno
+'''  FA.TC = Ninguno
+'''  FA.Factura = 0
+'''  FA.Fecha_Desde = "01/01/2000"
+'''  FA.Fecha_Hasta = FechaSistema
+'''
+'''  Actualizar_Abonos_Facturas_SP FA
+'''
+'''  AbonosAnticipados = 0
+'''  Total_Dep_Confirmar = 0
+'''  Trans_No = 200
+'''  Eliminar_Asientos_SP True
+'''  SubCtaGen = Leer_Seteos_Ctas("Cta_Anticipos_Clientes")
+'''  Cta_Del_Banco = TrimStrg(SinEspaciosIzq(DCBanco))
+'''  Contrato_No = Ninguno
+'''
+'''  TxtFile.Text = ""
+'''  Fecha_Tope = FechaSistema
+'''  Total_Costo_Banco = 0
+'''  CaptionTemp = FRecaudacionBancosCxC.Caption
+'''  TextoImprimio = ""
+'''
+''' 'Alumnos/Clientes que estan activados para Generar las Facturas
+'''  sSQL = "SELECT Codigo, Cliente, CI_RUC, Direccion, Grupo, Email, Email2, EmailR " _
+'''       & "FROM Clientes " _
+'''       & "WHERE Codigo <> '.' " _
+'''       & "ORDER BY CI_RUC "
+'''  Select_Adodc AdoClientes, sSQL
+'''
+'''  FechaValida MBFechaI
+'''  Mifecha = BuscarFecha(MBFechaI)
+'''  FechaTexto = MBFechaI ' FechaSistema
+'''  DiarioCaja = ReadSetDataNum("Recibo_No", True, True)
+'''  Label4.Caption = Dir_Dialog.Filename
+'''  RutaGeneraFile = UCaseStrg(NombreArchivo)
+'''  If RutaGeneraFile <> "" Then
+'''     TotalIngreso = 0
+'''     Contador = 0
+'''     FileResp = 0
+'''    'Establecemos los campos del archivo plano del Banco
+'''     NumFile = FreeFile
+'''     Total_Alumnos = 0
+'''     FechaTexto = FechaSistema
+'''     TxtFile.Text = ""
+'''     Open RutaGeneraFile For Input As #NumFile
+'''       Do While Not EOF(NumFile)
+'''          Line Input #NumFile, Cod_Field
+'''          Cod_Field = Replace(Cod_Field, Chr(34), "")
+'''          TxtFile.Text = TxtFile.Text & Cod_Field & vbCrLf
+'''          TxtFile.SelStart = Len(TxtFile.Text)
+'''          TxtFile.SelLength = Len(TxtFile.Text)
+'''          TxtFile.Refresh
+'''
+'''         'Comenzamos la subida de los Abonos
+'''          CantCampos = 0
+'''          Do While Len(Cod_Field) > 2
+'''             No_Hasta = InStr(Cod_Field, Separador)
+'''             CamposFile(CantCampos).Valor = TrimStrg(MidStrg(Cod_Field, 1, No_Hasta - 1))
+'''             Cod_Field = TrimStrg(MidStrg(Cod_Field, No_Hasta + 1, Len(Cod_Field)))
+'''             CantCampos = CantCampos + 1
+'''          Loop
+'''
+'''         'Actualizamos de que alumnos vamos a ingresar el abono
+'''          TA.Serie = Ninguno
+'''          TA.Factura = 0
+'''          TA.Fecha = FechaSistema
+'''          TA.CodigoC = Ninguno
+'''          TA.Recibo_No = "0000000000"
+'''          CodigoCli = Ninguno
+'''          CodigoP = "0"
+'''          Proceso_Ok = "PROCESO OK"
+'''          Select Case TextoBanco
+'''            Case "PICHINCHA"
+'''    ''           CodigoP = CStr(Val(CamposFile(7).Valor))
+'''    ''           FechaTexto = CamposFile(12).Valor
+'''                 If Tipo_Carga = 1 Then
+'''                    CodigoP = TrimStrg(CStr(Val(MidStrg(Cod_Field, 25, 19))))
+'''                    FechaTexto = MidStrg(Cod_Field, 205, 2) & "/" & MidStrg(Cod_Field, 207, 2) & "/" & MidStrg(Cod_Field, 209, 4)
+'''                 Else
+'''                   'Serie de la Factura
+'''                    TipoDoc = CamposFile(7).Valor
+'''                    TipoProc = SinEspaciosDer(TipoDoc)
+'''                    TipoDoc = TrimStrg(MidStrg(TipoDoc, 1, Len(TipoDoc) - Len(TipoProc)))
+'''
+'''                    TA.Serie = SinEspaciosDer(TipoDoc)                              ' Serie
+'''                    TA.Factura = Val(CamposFile(35).Valor)                          ' Factura
+'''                    TA.CodigoC = CamposFile(4).Valor                                ' Codigo Cliente
+'''                    TA.Fecha = Replace((CamposFile(25).Valor), " ", "/")            ' Fecha de Pago
+'''                    TA.Recibo_No = Format(Val(CamposFile(34).Valor), "0000000000")  ' Recibo No
+'''                    TA.Abono = Val(CamposFile(27).Valor)                            ' Valor del Abono
+'''
+'''                    Proceso_Ok = CStr(TrimStrg(CamposFile(22).Valor))               ' Procesado Ok
+'''                    If Proceso_Ok = "REVERSO OK" Then CodigoP = Format$(Val(CodigoP), "0000000000000")
+'''                    CodigoP = TA.CodigoC
+'''                   'Detalle del Abono
+'''                    If TrimStrg(CamposFile(29).Valor) = "EFE" Then
+'''                       TA.Banco = "PAGO EN EFECTIVO"
+'''                       TA.Cheque = "VENT.: " & Replace(MidStrg(CamposFile(26).Valor, 12, 5), " ", "h") & "s"
+'''                    Else
+'''                       TA.Banco = "TRANS. " & CamposFile(29).Valor & "|" & CamposFile(16).Valor
+'''                      'Tipo de Transaccion y Hora del pago
+'''                       TA.Cheque = CamposFile(18).Valor & "-" & CamposFile(19).Valor & ": " & Replace(MidStrg(CamposFile(26).Valor, 12, 5), " ", "h") & "s"
+'''                    End If
+'''                 End If
+'''            Case "BOLIVARIANO"
+'''                  If CheqSAT.value = 1 Then
+'''                     CodigoP = MidStrg(Cod_Field, 14, 8)
+'''                  Else
+'''                     CodigoP = MidStrg(Cod_Field, 1, 8)
+'''                  End If
+'''                  If Total_Alumnos = 0 Then
+'''                     FechaTexto = MidStrg(Cod_Field, 12, 2) & "/" _
+'''                                & MidStrg(Cod_Field, 10, 2) & "/" _
+'''                                & MidStrg(Cod_Field, 6, 4)
+'''                     CodigoP = Ninguno
+'''                  End If
+'''            Case "BGR_EC"
+'''                  If Tipo_Carga = 1 Then
+'''                     CodigoP = TrimStrg(CStr(Val(MidStrg(Cod_Field, 25, 19))))
+'''                     FechaTexto = MidStrg(Cod_Field, 205, 2) & "/" _
+'''                                & MidStrg(Cod_Field, 207, 2) & "/" _
+'''                                & MidStrg(Cod_Field, 209, 4)
+'''                  Else
+'''                     CodigoP = CamposFile(11).Valor
+'''                     FechaTexto = Replace(CamposFile(25).Valor, " ", "/")
+'''                     HoraTexto = Replace(CamposFile(26).Valor, " ", ":")
+'''                     CodigoB = CamposFile(29).Valor & ":" & CamposFile(20).Valor & "-" & Replace(CamposFile(26).Valor, " ", ":")
+'''                  End If
+'''            Case "INTERNACIONAL"
+'''                  CodigoP = TrimStrg(CStr(Val(MidStrg(Cod_Field, 25, 19))))
+'''                  FechaTexto = MidStrg(Cod_Field, 205, 2) & "/" _
+'''                             & MidStrg(Cod_Field, 207, 2) & "/" _
+'''                             & MidStrg(Cod_Field, 209, 4)
+'''            Case "PACIFICO"
+'''                  If CheqSAT.value Then
+'''                     CodigoP = CamposFile(17).Valor
+'''                     FechaTexto = Format$(CamposFile(11).Valor, FormatoFechas)
+'''                  Else
+'''                     If Total_Alumnos <> 0 Then
+'''                        CodigoP = CamposFile(4).Valor
+'''                        FechaTexto = MidStrg(CamposFile(6).Valor, 1, 10)
+'''                     End If
+'''                  End If
+'''            Case "PRODUBANCO"
+'''                  CodigoP = CamposFile(7).Valor
+'''                  FechaTexto = CamposFile(12).Valor
+'''                  CodigoB = CamposFile(14).Valor
+'''                  NoAnio = Val(MidStrg(SinEspaciosDer(CodigoB), 1, 4))
+'''                  If NoAnio <= "1900" And IsDate(FechaTexto) Then
+'''                     NoMeses = Month(FechaTexto)
+'''                     NoAnio = CStr(Year(FechaTexto))
+'''                     Mes = MesesLetras(NoMeses)
+'''                  End If
+'''            Case "INTERMATICO"
+'''                  CodigoP = CamposFile(7).Valor
+'''                  FechaTexto = CamposFile(1).Valor
+'''                  If Len(FechaTexto) > 10 Then
+'''                     FechaTexto = FechaSistema
+'''                     CodigoP = Ninguno
+'''                  End If
+'''                  Mifecha = FechaTexto
+'''            Case "COOPJEP"
+'''                  CodigoP = TrimStrg(CamposFile(16).Valor)
+'''                  FechaTexto = CamposFile(1).Valor
+'''            Case "CACPE"
+'''                  CodigoP = CStr(Val(CamposFile(6).Valor))
+'''                  FechaTexto = MidStrg(CamposFile(8).Valor, 4, 2) & "/" _
+'''                             & MidStrg(CamposFile(8).Valor, 1, 2) & "/" _
+'''                             & MidStrg(CamposFile(8).Valor, 7, 4)
+'''            Case Else
+'''                  CodigoP = Ninguno
+'''                  TipoDoc = CamposFile(0).Valor
+'''                  FechaTexto = CamposFile(1).Valor
+'''                  SerieFactura = MidStrg(CamposFile(2).Valor, 1, 3) & MidStrg(CamposFile(2).Valor, 5, 3)
+'''                  Factura_No = Val(MidStrg(CamposFile(2).Valor, 9, 10))
+'''                  Autorizacion = CamposFile(3).Valor
+'''                  sSQL = "SELECT F.*,C.CI_RUC " _
+'''                       & "FROM Facturas As F, Clientes As C " _
+'''                       & "WHERE F.Periodo = '" & Periodo_Contable & "' " _
+'''                       & "AND F.Item = '" & NumEmpresa & "' " _
+'''                       & "AND F.TC = '" & TipoDoc & "' " _
+'''                       & "AND F.Serie = '" & SerieFactura & "' " _
+'''                       & "AND F.Autorizacion = '" & Autorizacion & "' " _
+'''                       & "AND F.Factura = " & Factura_No & " " _
+'''                       & "AND F.CodigoC = C.Codigo "
+'''                  Select_Adodc AdoFactura, sSQL
+'''                  If AdoFactura.Recordset.RecordCount > 0 Then
+'''                     CodigoP = AdoFactura.Recordset.fields("CI_RUC")
+'''                     CodigoCli = AdoFactura.Recordset.fields("CodigoC")
+'''                  End If
+'''
+'''          End Select
+'''
+'''         'MsgBox CodigoP & vbCrLf & FechaTexto & vbCrLf & SerieFactura & vbCrLf & Factura_No
+'''          Si_No = True
+'''          With AdoClientes.Recordset
+'''           If .RecordCount > 0 Then
+'''               Do While Len(CodigoP) <= 10 And Si_No
+'''                 .MoveFirst
+'''                 .Find ("CI_RUC = '" & CodigoP & "' ")
+'''                  If Not .EOF Then
+'''                     TA.CodigoC = .fields("Codigo")
+'''                     NombreCliente = .fields("Cliente")
+'''                     FA.CodigoC = TA.CodigoC
+'''                     FA.Cliente = NombreCliente
+'''                     FA.EmailC = .fields("Email")
+'''                     FA.EmailC2 = .fields("Email2")
+'''                     FA.EmailR = .fields("EmailR")
+'''                     Si_No = False
+'''                  Else
+'''                     CodigoP = "0" & CodigoP
+'''                  End If
+'''               Loop
+'''           End If
+'''          End With
+'''          If Len(CodigoP) > 10 Then TA.CodigoC = Ninguno
+'''
+'''          Progreso_Barra.Mensaje_Box = "Extrayendo abonos de: " & NombreCliente & ", Espere un momento"
+'''          Progreso_Esperar
+'''         'Procedemos a ingresar los abonos
+'''          If TA.CodigoC <> Ninguno Then
+'''             TotalIngreso = TotalIngreso + TA.Abono
+'''             sSQL = "SELECT CodigoC, Cta_CxP, TC, Vencimiento, Autorizacion, Saldo_MN, Fecha " _
+'''                  & "FROM Facturas " _
+'''                  & "WHERE Item = '" & NumEmpresa & "' " _
+'''                  & "AND Periodo = '" & Periodo_Contable & "' " _
+'''                  & "AND T <> 'A' " _
+'''                  & "AND TC = 'FA' " _
+'''                  & "AND CodigoC = '" & TA.CodigoC & "' " _
+'''                  & "AND Serie = " & TA.Serie & " " _
+'''                  & "AND Factura = " & TA.Factura & " " _
+'''                  & "AND Saldo_MN > 0 "
+'''             Select_Adodc AdoAbono, sSQL
+'''
+'''             AbonosPar = NombreCliente & " (" & TA.CodigoC & "): Valor Abono: " & Format$(TA.Abono, "#,##0.00")
+'''
+'''             ''If InStr(NombreCliente, "GOMEZCOELLO") > 0 Then MsgBox CodigoP & " - " & Total & ", Cliente: " & NombreCliente
+'''
+'''             If AdoAbono.Recordset.RecordCount > 0 Then
+'''                FA.Fecha = AdoAbono.Recordset.fields("Fecha")
+'''                TA.Cta_CxP = AdoAbono.Recordset.fields("Cta_CxP")
+'''                TA.Autorizacion = AdoAbono.Recordset.fields("Autorizacion")
+'''                SetAdoAddNew "Trans_Abonos"
+'''                SetAdoFields "T", Cancelado
+'''                SetAdoFields "TP", "FA"
+'''                SetAdoFields "CodigoC", TA.CodigoC
+'''                SetAdoFields "Fecha", TA.Fecha
+'''                SetAdoFields "Comprobante", "Orden No. " & Orden_Pago
+'''                SetAdoFields "Serie", TA.Serie
+'''                SetAdoFields "Factura", TA.Factura
+'''                SetAdoFields "Abono", TA.Abono
+'''                SetAdoFields "Banco", TA.Banco
+'''                SetAdoFields "Cheque", TA.Cheque
+'''                SetAdoFields "Cta", Cta_Del_Banco     'Cta_CajaG
+'''                SetAdoFields "Cta_CxP", TA.Cta_CxP
+'''                SetAdoFields "Autorizacion", TA.Autorizacion
+'''                SetAdoFields "Recibo_No", TA.Recibo_No
+'''                SetAdoUpdate
+'''
+''''''               'Enviar por mail el Abono receptado
+''''''                FA.TC = TA.TP
+''''''                FA.Serie = TA.Serie
+''''''                FA.Factura = TA.Factura
+''''''                FA.ClaveAcceso = FA.Autorizacion
+''''''                FA.Autorizacion = TA.Autorizacion
+''''''                FA.Fecha_C = TA.Fecha
+''''''                FA.Fecha_V = TA.Fecha
+''''''                FA.Hora_FA = TA.Cheque
+''''''                FA.Cliente = NombreCliente
+''''''                FA.Fecha_Aut = FechaSistema
+''''''                SRI_Autorizacion.Autorizacion = TA.Autorizacion
+''''''                FA.Nota = "Tipo de Abono" & vbTab & ": " & TA.Banco & vbCrLf _
+''''''                        & "Hora" & vbTab & vbTab & ": " & TA.Cheque & vbCrLf _
+''''''                        & "Documento" & vbTab & ": " & TA.Recibo_No & vbCrLf _
+''''''                        & "Valor Recibdo USD " & Format(TA.Abono, "#,##0.00") & vbCrLf
+''''''                SRI_Enviar_Mails FA, SRI_Autorizacion, "AB"
+'''
+'''             End If
+'''          End If
+'''         'MsgBox NombreCliente & vbCrLf & CodigoCli & vbCrLf & CodigoP
+'''       Loop
+'''     Close #NumFile
+'''
+'''     FA.Serie = Ninguno
+'''     FA.TC = Ninguno
+'''     FA.Factura = 0
+'''     Actualizar_Abonos_Facturas_SP FA
 ''''Costo Bancario por deposito
 ''' If Costo_Banco > 0 Then
 '''    Total_Costo_Banco = Total_Costo_Banco + Costo_Banco
@@ -2208,8 +2227,8 @@ Dim AuxNumEmp As String
 '''  Cadena = TextoImprimio
   
     MsgBox "ARCHIVO DE ABONO DEL DIA: " & FechaTexto & vbCrLf _
-         & "SE ACTUALIZARON: " & Total_Alumnos & " ESTUDIANTES." & vbCrLf _
-         & "EL CIERRE DIARIO DE CAJA ES POR " & Moneda & " " & Format$(TotalIngreso, "#,##0.00") & vbCrLf _
+         & "SE ACTUALIZARON: " & FA.CantFact & " ESTUDIANTES." & vbCrLf _
+         & "EL CIERRE DIARIO DE CAJA ES POR " & Moneda & " " & Format$(FA.SubTotal, "#,##0.00") & vbCrLf _
          & "EL COSTO BANCARIO ES POR " & Moneda & " " & Format$(Total_Costo_Banco, "#,##0.00") & vbCrLf _
          & "OBTENIDO DEL ARCHIVO: " & vbCrLf & RutaGeneraFile & vbCrLf
   Else
@@ -3540,14 +3559,17 @@ End Sub
 
 Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
   FA.Tipo_PRN = "FM"
-  Cta_Bancaria = SinEspaciosDer(DCBanco)
+  
   Select Case Button.key
     Case "Visualizar"
+         Cta_Bancaria = SinEspaciosIzq(DCBanco)
          Visualizar_Archivo
     Case "Enviar"
          Enviar_Rubros
+         Cta_Bancaria = SinEspaciosDer(DCBanco)
     Case "Recibir"
-         Recibir_Abonos
+         Cta_Bancaria = SinEspaciosIzq(DCBanco)
+         Recibir_Abonos_CxC
     Case "Salir"
          Unload FRecaudacionBancosCxC
   End Select

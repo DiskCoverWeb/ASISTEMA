@@ -1,6 +1,5 @@
 Type=Exe
 Reference=*\G{F5078F18-C551-11D3-89B9-0000F81FE221}#3.0#0#..\..\Windows\SysWOW64\msxml3.dll#Microsoft XML, v3.0
-Reference=*\G{2B29DA88-F9FE-4876-97A3-5A9D505378FC}#1.0#0#..\..\WINDOWS\LIBRERIA\FacturacionElect.tlb#FacturacionElect
 Reference=*\G{00025E01-0000-0000-C000-000000000046}#4.0#0#..\..\Program Files (x86)\Common Files\Microsoft Shared\DAO\DAO350.DLL#Microsoft DAO 3.5 Object Library
 Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\Windows\SysWOW64\stdole2.tlb#OLE Automation
 Reference=*\G{2A75196C-D9EB-4129-B803-931327F72D5C}#2.8#0#..\..\Program Files (x86)\Common Files\System\ado\msado28.tlb#Microsoft ActiveX Data Objects 2.8 Library

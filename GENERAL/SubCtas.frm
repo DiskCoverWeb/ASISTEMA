@@ -1860,6 +1860,7 @@ Private Sub Form_Activate()
    End If
    SelectDB_Combo DCSubCta, AdoNivel, sSQL, "Detalle"
    If AdoNivel.Recordset.RecordCount > 0 Then DCSubCta.Visible = True
+   
    sSQL = "SELECT Detalle_SubCta " _
         & "FROM Trans_SubCtas " _
         & "WHERE Item = '" & NumEmpresa & "' " _
