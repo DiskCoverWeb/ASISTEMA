@@ -627,31 +627,18 @@ Private Sub MCostoDelProyecto_Click()
 End Sub
 
 Private Sub MDIForm_Activate()
-'    MDI_X_Max = Screen.width - 150
-'    MDI_Y_Max = Screen.Height - 1900
     screen_size
 End Sub
 
 Private Sub MDIForm_Load()
   Set MDIFormulario = Me
-  Primera_Vez = True
-  Bandera = True
-  UnidadSistema
+  Timer1.Enabled = True
+  Timer1.Interval = 1000
+  Times_Sistema
   TipoModulo = conta
-  IngresarClave = True
-''  FEsperar.Show
-''  MsgBox ".."
-''  Unload FEsperar
-''  MsgBox "..."
  'MODULOS
   NumModulo = "0"
   Modulo = "CONTABILIDAD"
-  MenuDeModulos = True
- 'TiempoTarea = Time
-  TiempoSistema = Time
-  Timer1.Enabled = True
-  Timer1.Interval = 1000
-  
   ListEmp.Show 1
   PonerDirEmpresa
 End Sub
@@ -695,6 +682,7 @@ Private Sub MEmails_Click()
 ''    TMail.para = "diskcover@msn.com"
 ''    FEnviarCorreos.Show 1
 ''  Next I
+
     TMail.de = "informacion@diskcoversystem.com"
     TMail.ListaMail = 255
     TMail.TipoDeEnvio = "NN"
@@ -726,6 +714,36 @@ Private Sub MEmails_Click()
     Insertar_Mail TMail.para, "diskcover.system@gmail.com"
     Insertar_Mail TMail.para, EmailProcesos
     FEnviarCorreos.Show 1
+    
+    MsgBox "Correos Enviados a (" & Si_No & "):" & vbCrLf & Replace(TMail.para, ";", ";" & vbCrLf) & vbCrLf _
+    
+    'TMail.de = "informacion@diskcoversystem.com"
+    TMail.ListaMail = 255
+    TMail.TipoDeEnvio = "CE"
+    TMail.Asunto = "Prueba de Mails por imap.diskcoversystem.com desde " & Modulo & " [" & Right(CodigoUsuario, 6) & "], Hora (" & Time & ")"
+    TMail.MensajeHTML = Leer_Archivo_Texto(RutaSistema & "\JAVASCRIPT\f_cartera.html")
+    
+    html_Informacion_adicional = "<strong>INFORMACION ADICIONAL:</strong><br><br>" _
+                               & "<strong>Importe total: USD </strong>150,00<br>" _
+                               & "<strong>Importe total: USD </strong>150,00<br>" _
+                               & "<strong>Importe total: USD </strong>150,00<br>"
+                               
+    html_Detalle_adicional = "<tr>" _
+                           & "<td>13/12/2024</td>" _
+                           & "<td>Prueba de Envio</td>" _
+                           & "<td class='row text-right'>60,00</td>" _
+                           & "</tr>" _
+                           & "<tr>" _
+                           & "<td>" & FechaSistema & "</td>" _
+                           & "<td>Por IMAP</td>" _
+                           & "<td class='row text-right'>60,00</td>" _
+                           & "</tr>"
+    FA.Fecha = FechaSistema
+    FA.Recibo_No = Format(FA.Fecha, "yyyymmdd") & Format(FA.Factura, "000000000")
+    TMail.Adjunto = "C:\SYSBASES\TEMP\archivo.xml"
+    TMail.para = EmailProcesos
+    FEnviarCorreos.Show 1
+    
     MsgBox "Correos Enviados a (" & Si_No & "):" & vbCrLf & Replace(TMail.para, ";", ";" & vbCrLf) & vbCrLf _
          & String(70, "_") & vbCrLf & vbCrLf _
          & "De: " & TMail.de & vbCrLf & vbCrLf _

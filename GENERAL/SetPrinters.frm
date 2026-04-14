@@ -311,7 +311,6 @@ Private Sub Form_Activate()
        & "FROM Accesos " _
        & "WHERE Codigo = '" & CodigoUsuario & "' "
   Select_Adodc AdoSetImpresora, sSQL
- 
   If ListPrinter.ListCount > 0 Then
      TxtImpresora = ListPrinter.Text
      SetNombrePRN = ListPrinter.Text
@@ -367,12 +366,12 @@ Private Sub Form_Load()
   ConectarAdodc AdoSetImpresora
  
  'Revizamos cuantas Impresoras estan instaladas y activas
-  ReDim ListaDeImpresoras(Printers.Count + 1) As String
+  ReDim ListaDeImpresoras(Printers.Count) As String
   For I = 0 To Printers.Count - 1
       ListaDeImpresoras(I) = Printers(I).DeviceName
   Next I
-  ListaDeImpresoras(Printers.Count) = Impresota_PDF
-  
+ 'ListaDeImpresoras(Printers.Count) = Impresota_PDF
+
  'llenamos las impresoras en el combobox
   ListPrinter.Clear
   For I = 0 To UBound(ListaDeImpresoras) - 1

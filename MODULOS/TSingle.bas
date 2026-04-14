@@ -73,6 +73,7 @@ Global XMenu5 As Single
 Global YMenu5 As Single
 Global TiempoServidor As Single
 Global TiempoSistema As Single
+Global TiempoSistema1 As Single
 Global TiempoTarea As Single
 Global MiTiempo As Single
 Global MiTiempo1 As Single
@@ -88,6 +89,7 @@ Global WidthCurrency As Single
 Global WidthSingle As Single
 Global WidthDouble  As Single
 
+Global MinutosTime As Single
 Global Minutos As Single
 Global Segundos As Single
 Global Horas As Single

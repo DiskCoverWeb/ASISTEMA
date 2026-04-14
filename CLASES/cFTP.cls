@@ -75,6 +75,9 @@ Private Type WIN32_FIND_DATA
 End Type
 
 Public ConStatus As Boolean
+
+Public MsgError As String
+
 Private ret As Long
 
 ' Declaraciones Apis
@@ -188,9 +191,9 @@ Public Function ConectarFtp(Optional ControlStatus As Object = Nothing) As Boole
 
 'Verificamos que los datos de la cuenta estén establecidas, si no mostramos un _
  mensaje y salimos
+ 
 If m_Usuario = "" Or m_Servidor = "" Or m_PassWord = "" Then
-   MsgBox "No se puede conectar. Verifique el Nombre de usuario," _
-   & "El nombre del Servidor y la contraseña que estén establecidas", vbCritical
+   MsgError = "No se puede conectar. Verifique el Nombre de usuario, del Servidor y la contraseña que estén establecidas"
    ConectarFtp = False
    Exit Function
 End If
@@ -205,6 +208,7 @@ End If
 hOpen = InternetOpen(Modulo, INTERNET_OPEN_TYPE_PRECONFIG, vbNullString, vbNullString, 0)
 If hOpen = 0 Then
    Status "Error en la conexión a internet, compruebe la conexión"
+   MsgError = "Error en la conexión a internet, compruebe la conexión"
    m_form.MousePointer = vbDefault
    ConectarFtp = False
    Exit Function
@@ -214,13 +218,16 @@ End If
                 INTERNET_SERVICE_FTP, IIf(PassiveConnection, INTERNET_FLAG_PASSIVE, 0), 0)
 If HandleConect = 0 Then
    m_form.MousePointer = vbDefault
-   Status "Error (" & Err.Number & ")" & Err.Description & ". Compruebe los datos del servidor Ftp sin son correctos"
+   Status "Error (" & Err.Number & ")" & Err.Description & ". Compruebe los datos del servidor Ftp si son correctos"
+   MsgError = "Error (" & Err.Number & ")" & Err.Description & ". Compruebe los datos del servidor Ftp si son correctos"
    ConectarFtp = False
    Exit Function
 End If
 
 Status "Conectado a: " & m_Servidor
+MsgError = "Conectado a: " & m_Servidor
 m_form.MousePointer = vbDefault
+'MsgBox MsgError
 ConectarFtp = True
 End Function
 
@@ -315,6 +322,7 @@ If ret Then
    End If
 Else
    Status "Error al subir el fichero:" & NombreArchivoRemoto
+   MsgError = "Error al subir el fichero:" & NombreArchivoRemoto
 End If
 End Sub
         

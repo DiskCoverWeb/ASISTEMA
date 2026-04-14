@@ -255,7 +255,7 @@ Begin VB.Form Retenciones
       EndProperty
       ForeColor       =   &H000000FF&
       Height          =   315
-      Left            =   5145
+      Left            =   5160
       TabIndex        =   4
       Text            =   "Diciembre"
       Top             =   735
@@ -1036,7 +1036,8 @@ Dim TipoProc As String
         RatonNormal
     End If
    End With
-   LblResultado.Caption = SRI_Leer_Comprobantes_no_Autorizados(FA.Autorizacion_R)
+   SRI_Autorizacion.Clave_De_Acceso = FA.Autorizacion_R
+   LblResultado.Caption = SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion)
   'LblResultado.Caption = SRI_Leer_Comprobantes_no_Autorizados("2604202507070216417900110010030000000421234567814")   ' FA.Autorizacion_R
 End Sub
 
@@ -1083,7 +1084,7 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
          FA.Serie_R = DCSerie.Text
          FA.Retencion = Val(DCComp.Text)
          SRI_Crear_Clave_Acceso_Retenciones FA, False
-         LblResultado.Caption = SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion.Clave_De_Acceso)
+         LblResultado.Caption = SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion)
     Case "Autorizar_Grupo"
          If Len(DCSerie) < 6 Then DCSerie = "001001"
          sSQL = "SELECT C.Cliente,C.CI_RUC,C.TD,C.Direccion,C.Email,C.Ciudad,C.DirNumero,C.Telefono,TC.* " _
@@ -1116,7 +1117,7 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
                  SRI_Crear_Clave_Acceso_Retenciones FA, False
                  
                 'Leemos el Error si lo tubiera
-                 LblResultado.Caption = SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion.Clave_De_Acceso)
+                 LblResultado.Caption = SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion)
                  If Len(LblResultado.Caption) > 1 Then TextoImprimio = TextoImprimio & LblResultado.Caption & vbCrLf & String(80, "-") & vbCrLf
                  RatonNormal
                 .MoveNext
@@ -1191,17 +1192,30 @@ Dim MesNo As Integer
        & "AND Periodo = '" & Periodo_Contable & "' " _
        & "AND Serie_Retencion = '" & Serie_R & "' " _
        & "AND SecRetencion > 0 "
+       
   If OpcNoAut.value Then
       sSQL = sSQL _
-          & "AND LEN(AutRetencion) = 13 " _
+          & "AND LEN(AutRetencion) BETWEEN 13 and 49 " _
           & "AND LEN(Clave_Acceso) >= 1 " _
           & "AND Estado_SRI <> 'OK' "
+  ElseIf OpcManuales.value Then
+     sSQL = sSQL _
+          & "AND LEN(AutRetencion) < 13 " _
+          & "AND LEN(Clave_Acceso) = 1 "
+  Else
+    sSQL = sSQL _
+          & "AND LEN(AutRetencion) > 13 " _
+          & "AND LEN(Clave_Acceso) > 13 " _
+          & "AND Estado_SRI = 'OK' "
   End If
   If MesNo > 0 Then sSQL = sSQL & "AND MONTH(Fecha) = " & MesNo & " "
   sSQL = sSQL _
        & "GROUP BY SecRetencion " _
        & "ORDER BY SecRetencion "
   SelectDB_Combo DCComp, AdoComp, sSQL, "SecRetencion", True
+  Clipboard.Clear
+  Clipboard.SetText sSQL
+  
 End Sub
 
 Public Sub Listar_Tipo_Serie_Retencion()
@@ -1329,7 +1343,7 @@ Private Sub TxtClave_KeyDown(KeyCode As Integer, Shift As Integer)
           FA.Retencion = Val(DCComp.Text)
           SRI_Crear_Clave_Acceso_Retenciones FA, False, CBool(CheqClaveAcceso.value)
           RatonNormal
-          LblResultado.Caption = SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion.Clave_De_Acceso)
+          LblResultado.Caption = SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion)
           Generar_Informe_Errores
        Else
           RatonNormal

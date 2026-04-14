@@ -1153,7 +1153,7 @@ Dim GrupoInv As String
        & "AND TK.Periodo = CM.Periodo " _
        & "AND TK.Codigo_Inv = CP.Codigo_Inv " _
        & "AND TK.CodMarca = CM.CodMar " _
-       & "ORDER BY TK.Codigo_Inv, TK.Fecha,TK.Entrada DESC,TK.Salida,TK.TP,TK.Numero,TK.ID "
+       & "ORDER BY TK.CodBodega, TK.Codigo_Inv, TK.Fecha,TK.Entrada DESC,TK.Salida,TK.TP,TK.Numero,TK.ID "
   SQLDec = "TK.Costo " & CStr(Dec_Costo) & "| TK.Valor_Unitario " & CStr(Dec_Costo) & "|,TK.Valor_Total 2|."
   Select_Adodc_Grid DGKardex, AdoKardex, sSQL, SQLDec
   DGKardex.Visible = False
@@ -1223,7 +1223,7 @@ Dim GrupoInv As String
        & "AND TK.Codigo_Inv = CP.Codigo_Inv " _
        & "AND TC.Envio_No = SUBSTRING(TK.Codigo_Barra,1,LEN(TC.Envio_No)) " _
        & "AND TK.CodMarca = CM.CodMar " _
-       & "ORDER BY TK.Codigo_Inv, TK.Fecha,TK.Entrada DESC,TK.Salida,TK.TP,TK.Numero,TK.ID "
+       & "ORDER BY TK.CodBodega,TK.Codigo_Inv, TK.Fecha,TK.Entrada DESC,TK.Salida,TK.TP,TK.Numero,TK.ID "
   SQLDec = "TK.Costo " & CStr(Dec_Costo) & "| TK.Valor_Unitario " & CStr(Dec_Costo) & "|,TK.Valor_Total 2|."
   Select_Adodc_Grid DGKardex, AdoKardex, sSQL, SQLDec
   DGKardex.Visible = False

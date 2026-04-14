@@ -8,13 +8,23 @@ Public Function JSON_Insert(JSONDato, Campo As String, Valor As Variant) As Stri
            Valor = Replace(Valor, "&", "Y")
            Valor = Replace(Valor, "\", "/")
            Valor = Replace(Valor, vbTab, " ")
-           If Len(Valor) > 0 Then JSONDato = JSONDato & "'" & Campo & "': '" & TrimStrg(Valor) & "'," & vbCrLf
+           If Len(Valor) > 0 Then JSONDato = JSONDato & "'" & Campo & "': '" & TrimStrg(Valor) & "',"  ' & vbCrLf
       Case vbByte, vbInteger, vbLong, vbSingle, vbDouble, vbCurrency, vbBoolean
-           JSONDato = JSONDato & "'" & Campo & "': " & Valor & "," & vbCrLf
+           JSONDato = JSONDato & "'" & Campo & "': " & Valor & "," '& vbCrLf
     End Select
    'MsgBox "->" & Campo & " :" & vbCrLf & JSONDato
    'Retornamos el resultado
     JSON_Insert = JSONDato
+End Function
+
+Public Function JSON_Insert_XML(JSONDato, Campo As String, Valor As Variant) As String
+    Select Case VarType(Valor)
+      Case vbObject, vbString, vbDate
+           If Len(Valor) > 0 Then JSONDato = JSONDato & "'" & Campo & "': '" & TrimStrg(Valor) & "'," & vbCrLf
+      Case vbByte, vbInteger, vbLong, vbSingle, vbDouble, vbCurrency, vbBoolean
+           JSONDato = JSONDato & "'" & Campo & "': " & Valor & "," & vbCrLf
+    End Select
+    JSON_Insert_XML = JSONDato
 End Function
 
 Public Sub Iniciar_Stored_Procedure(cMensajeProceso As String, _
@@ -53,13 +63,13 @@ On Error GoTo Errorhandler
     For IdP = 0 To cMiCmd.Parameters.Count - 1
         ListP = ListP & cMiCmd.Parameters.Item(IdP).Name & " = '" & cMiCmd.Parameters.Item(IdP) & "'" & vbCrLf
     Next IdP
-   
+    
    'Clipboard.Clear
    'Clipboard.SetText Len(ListP) & vbCrLf & vbCrLf & ListP
    'MsgBox Len(ListP) & vbCrLf & vbCrLf & ListP
    'Generar_File_SQL "Store_Procedure", ListP
     
-'''    Progreso_Esperar True
+''' Progreso_Esperar True
     cMiCmd.CommandTimeout = 0
     cMiCmd.Prepared = True
     Set cMiReg = New ADODB.Recordset
@@ -708,6 +718,20 @@ Dim MiReg As ADODB.Recordset
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
 
+Public Sub Upload_File_Update_SP(JSONInPut As String)
+Dim MiSQL As ADODB.Connection
+Dim MiCmd As ADODB.Command
+Dim MiReg As ADODB.Recordset
+
+    Iniciar_Stored_Procedure "Upload File Update", MiSQL, MiCmd, MiReg
+    MiCmd.CommandText = "sp_Upload_File_Update"
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@ServerName", adVarChar, adParamInput, 50, strIPServidor)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Unidad", adVarChar, adParamInput, 2, MidStrg(RutaSistema, 1, 2))
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@JSON", adVarChar, adParamInput, Len(JSONInPut) + 10, JSONInPut)
+    Procesar_Stored_Procedure MiCmd, MiReg
+    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+End Sub
+
 Public Sub Insertar_Clientes_Auxiliar_SP()
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
@@ -793,8 +817,7 @@ Dim MiReg As ADODB.Recordset
     Procesar_Stored_Procedure MiCmd, MiReg
     'ExisteErrores = MiCmd.Parameters("@ExisteErrores").value
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
-    'If ExisteErrores Then
-    FInfoError.Show
+    Informe_Errores
 End Sub
 
 Public Sub Presenta_Errores_Facturacion_SP(FechaDesde As MaskEdBox, FechaHasta As MaskEdBox)
@@ -993,7 +1016,7 @@ Dim JSONResult As String
          JSONComprobante = JSON_Insert(JSONComprobante, "LCSecuencial", .LCSecuencial)
     End With
    'Transformacion de Comillas simples a comillas dobles y de tipos booleanos
-    JSONComprobante = MidStrg(JSONComprobante, 1, Len(JSONComprobante) - 3) & "}"
+    JSONComprobante = MidStrg(JSONComprobante, 1, Len(JSONComprobante) - 1) & "}"
     JSONComprobante = Replace(JSONComprobante, "'", """")
     JSONComprobante = Replace(JSONComprobante, "True", "1")
     JSONComprobante = Replace(JSONComprobante, "False", "0")
@@ -1020,7 +1043,143 @@ Dim JSONResult As String
 ''    End If
 End Sub
 
-Public Sub Grabar_Factura_SP(TFA As Tipo_Facturas)
+Public Sub Grabar_Abonos_Factura_SP(FTA As Tipo_Abono)
+Dim MiSQL As ADODB.Connection
+Dim MiCmd As ADODB.Command
+Dim MiReg As ADODB.Recordset
+Dim pJSON As Object
+Dim JSONResult As String
+
+    JSONInPutAbonos = "[{""T"":""N"",""TP"":""FA"",""Fecha"":""" & BuscarFecha(FechaSistema) & """,""Recibo_No"":""000000000"",""Tipo_Cta"":""N""," _
+                    & """Cta"":""0"",""Cta_CxP"":""0"",""Factura"":0,""CodigoC"":""9999999999"",""Abono"":0.00,""Banco"":""."",""Cheque"":""."",""Codigo_Inv"":"".""," _
+                    & """Comprobante"":""."", ""Serie"":""."",""Autorizacion"":""."",""Cod_Ejec"":""."",""Serie_NC"":""."",""Autorizacion_NC"":""."",""Secuencial_NC"":0," _
+                    & """Serie_R"":""."", ""Autorizacion_R"":""."",""Secuencial_R"":0,""Porc"":0}" & JSONInPutAbonos & "]"
+   'Transformacion de Comillas simples a comillas dobles y de tipos booleanos
+    JSONInPutAbonos = Replace(JSONInPutAbonos, "'", """")
+    JSONInPutAbonos = Replace(JSONInPutAbonos, "True", "1")
+    JSONInPutAbonos = Replace(JSONInPutAbonos, "False", "0")
+    JSONInPutAbonos = Replace(JSONInPutAbonos, "Verdadero", "1")
+    JSONInPutAbonos = Replace(JSONInPutAbonos, "Falso", "0")
+   '---------------------------------------
+   ' Clipboard.Clear
+   ' Clipboard.SetText JSONInPutAbonos
+   ' MsgBox JSONInPutAbonos
+   '---------------------------------------
+    Iniciar_Stored_Procedure "SP Grabar Abonos Factura", MiSQL, MiCmd, MiReg
+    MiCmd.CommandText = "sp_Grabar_Abonos_Factura"
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@CodigoU", adVarChar, adParamInput, 10, CodigoUsuario)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@JSON_InPut", adVarChar, adParamInput, Len(JSONInPutAbonos) + 10, JSONInPutAbonos)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@JSON_OutPut", adVarChar, adParamOutput, 2048, JSONResult)
+    Procesar_Stored_Procedure MiCmd, MiReg
+   'Recolectamos los resultados del Store Procedure
+    JSONResult = MiCmd.Parameters("@JSON_OutPut").value
+    Set pJSON = JSON.parse(MiCmd.Parameters("@JSON_OutPut").value)
+    Resultado = CBool(pJSON.Item("Ok_Save"))
+    TotalAbonos = pJSON.Item("Total_Abonos")
+    FTA.TP = pJSON.Item("TJ")
+    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+   'Clipboard.Clear
+   'Clipboard.SetText JSONInPutAbonos & vbCrLf & String(80, "-") & vbCrLf & JSONResult
+    JSONInPutAbonos = ""
+    If Resultado Then
+       Control_Procesos "P", "El importe a la Cta: " & FTA.Cta_CxP & ": " & FTA.TP & " No. " & FTA.Serie & "-" & Format$(FTA.Factura, "000000000") & ", Total de Abonos USD " & Format(TotalAbonos, "#,##0.00") & ", se realizo con exito."
+       If FTA.TP = "TJ" Then Imprimir_FA_NV_TJ FTA
+'       MsgBox "Proceso realizado con exito"
+    End If
+End Sub
+
+Public Sub Autorizar_Documento_XML_SP(SRIUpdateCE As Tipo_Estado_SRI, TFA As Tipo_Facturas)
+Dim MiSQL As ADODB.Connection
+Dim MiCmd As ADODB.Command
+Dim MiReg As ADODB.Recordset
+
+Dim pJSON As Object
+
+Dim JSONComprobante As String
+Dim JSONResult As String
+    JSONComprobante = "{"
+   'Datos del Comprobante Electronico
+    With SRIUpdateCE
+        'MsgBox "Desktop Test: Aut No. " & .Autorizacion
+        'Datos por default
+        .Ok_Update = False
+         If .Fecha_Autorizacion = LimpiarFechas Then .Fecha_Autorizacion = FechaSistema
+
+        'Formacion del JSON para enviar el SP de grabado
+         JSONComprobante = JSON_Insert(JSONComprobante, "Item", NumEmpresa)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Periodo", Periodo_Contable)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Usuario", CodigoUsuario)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Resultado", .Resultado)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Tipo_Doc_SRI", .Tipo_Doc_SRI)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Clave_De_Acceso", .Clave_De_Acceso)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Autorizacion", .Autorizacion)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Fecha_Autorizacion", .Fecha_Autorizacion)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Hora_Autorizacion", .Hora_Autorizacion)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Estado_SRI", .Estado_SRI)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Error_SRI", .Error_SRI)
+    End With
+   'Datos de la FA, NC, LC y RE
+    With TFA
+         JSONComprobante = JSON_Insert(JSONComprobante, "TC", .TC)
+         JSONComprobante = JSON_Insert(JSONComprobante, "TP", .TP)
+         JSONComprobante = JSON_Insert(JSONComprobante, "CodigoC", .CodigoC)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Serie", .Serie)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Serie_R", .Serie_R)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Serie_NC", .Serie_NC)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Serie_LC", .Serie_LC)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Serie_GR", .Serie_GR)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Autorizacion_R", .Autorizacion_R)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Factura", .Factura)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Numero", .Numero)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Nota_Credito", .Nota_Credito)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Retencion", .Retencion)
+    End With
+   'Transformacion de Comillas simples a comillas dobles y de tipos booleanos
+    JSONComprobante = MidStrg(JSONComprobante, 1, Len(JSONComprobante) - 1) & "}"
+    JSONComprobante = Replace(JSONComprobante, "'", """")
+    JSONComprobante = Replace(JSONComprobante, "True", "1")
+    JSONComprobante = Replace(JSONComprobante, "False", "0")
+    JSONComprobante = Replace(JSONComprobante, "Verdadero", "1")
+    JSONComprobante = Replace(JSONComprobante, "Falso", "0")
+   '=============================================================
+'   Clipboard.Clear
+'   Clipboard.SetText JSONComprobante 'SRIUpdateCE.Documento_XML
+'   MsgBox "Desktop: JSON Enviado"
+   '=============================================================
+    Iniciar_Stored_Procedure "SP Autorizar Documento XML", MiSQL, MiCmd, MiReg
+    MiCmd.CommandText = "sp_Autorizar_Documento_XML"
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@JSON_InPut", adVarChar, adParamInput, Len(JSONComprobante) + 10, JSONComprobante)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@XML", adVarChar, adParamInput, Len(SRIUpdateCE.Documento_XML) + 10, SRIUpdateCE.Documento_XML)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@JSON_OutPut", adVarChar, adParamOutput, 2048, JSONResult)
+    Procesar_Stored_Procedure MiCmd, MiReg
+        
+   'Recolectamos los resultados del Store Procedure
+    JSONResult = MiCmd.Parameters("@JSON_OutPut").value
+'    Clipboard.Clear
+'    Clipboard.SetText JSONResult
+'    MsgBox "Desktop: JSON Respuesta"
+    Set pJSON = JSON.parse(MiCmd.Parameters("@JSON_OutPut").value)
+    With SRIUpdateCE
+        .Ok_Update = CBool(pJSON.Item("Ok_Save"))
+        .Autorizacion = pJSON.Item("Autorizacion")
+         Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+         If .Ok_Update Then
+             Select Case .Tipo_Doc_SRI
+               Case "FA": TFA.Autorizacion = .Clave_De_Acceso
+               Case "NV": TFA.Autorizacion = .Clave_De_Acceso
+               Case "LC": TFA.Autorizacion_LC = .Clave_De_Acceso
+               Case "NC": TFA.Autorizacion_NC = .Clave_De_Acceso
+               Case "GR": TFA.Autorizacion_GR = .Clave_De_Acceso
+               Case "RE": TFA.Autorizacion_R = .Clave_De_Acceso
+               Case Else: TFA.Autorizacion = .Clave_De_Acceso
+             End Select
+         End If
+    End With
+End Sub
+
+Public Sub Grabar_Factura_SP(TFA As Tipo_Facturas, FTA As Tipo_Abono)
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
 Dim MiReg As ADODB.Recordset
@@ -1118,7 +1277,7 @@ Dim JSONResult As String
          JSONFactura = JSON_Insert(JSONFactura, "T_No", Trans_No)
     End With
    'Transformacion de Comillas simples a comillas dobles y de tipos booleanos
-    JSONFactura = MidStrg(JSONFactura, 1, Len(JSONFactura) - 3) & "}"
+    JSONFactura = MidStrg(JSONFactura, 1, Len(JSONFactura) - 1) & "}"
     JSONFactura = Replace(JSONFactura, "'", """")
     JSONFactura = Replace(JSONFactura, "True", "1")
     JSONFactura = Replace(JSONFactura, "False", "0")
@@ -1126,13 +1285,29 @@ Dim JSONResult As String
     JSONFactura = Replace(JSONFactura, "Falso", "0")
     
    'Guardar en el porta papeles para verificacion
+    If Len(JSONInPutAbonos) > 1 Then
+       JSONInPutAbonos = "[{""T"":""N"",""TP"":""FA"",""Fecha"":""" & BuscarFecha(FechaSistema) & """,""Recibo_No"":""000000000"",""Tipo_Cta"":""N""," _
+                       & """Cta"":""0"",""Cta_CxP"":""0"",""Factura"":0,""CodigoC"":""9999999999"",""Abono"":0.00,""Banco"":""."",""Cheque"":""."",""Codigo_Inv"":"".""," _
+                       & """Comprobante"":""."", ""Serie"":""."",""Autorizacion"":""."",""Cod_Ejec"":""."",""Serie_NC"":""."",""Autorizacion_NC"":""."",""Secuencial_NC"":0," _
+                       & """Serie_R"":""."", ""Autorizacion_R"":""."",""Secuencial_R"":0,""Porc"":0}" & JSONInPutAbonos & "]"
+    Else
+       JSONInPutAbonos = ""
+    End If
+   'Transformacion de Comillas simples a comillas dobles y de tipos booleanos
+    JSONInPutAbonos = Replace(JSONInPutAbonos, "'", """")
+    JSONInPutAbonos = Replace(JSONInPutAbonos, "True", "1")
+    JSONInPutAbonos = Replace(JSONInPutAbonos, "False", "0")
+    JSONInPutAbonos = Replace(JSONInPutAbonos, "Verdadero", "1")
+    JSONInPutAbonos = Replace(JSONInPutAbonos, "Falso", "0")
+   'MsgBox JSONInPutAbonos
 '    Clipboard.Clear
-'    Clipboard.SetText JSONFactura
+'    Clipboard.SetText JSONFactura & vbCrLf & String(80, "-") & vbCrLf & JSONInPutAbonos
 '    MsgBox "Desktop Test: " & Len(JSONFactura) & vbCrLf & JSONFactura
-    
+
     Iniciar_Stored_Procedure "SP Grabar Factura", MiSQL, MiCmd, MiReg
     MiCmd.CommandText = "sp_Grabar_Factura"
     MiCmd.Parameters.Append MiCmd.CreateParameter("@JSON_InPut", adVarChar, adParamInput, Len(JSONFactura) + 10, JSONFactura)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@JSON_InPut_Abonos", adVarChar, adParamInput, Len(JSONInPutAbonos) + 10, JSONInPutAbonos)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@JSON_OutPut", adVarChar, adParamOutput, 2048, JSONResult)
     Procesar_Stored_Procedure MiCmd, MiReg
     
@@ -1140,14 +1315,40 @@ Dim JSONResult As String
     RatonReloj
     JSONResult = MiCmd.Parameters("@JSON_OutPut").value
     Set pJSON = JSON.parse(MiCmd.Parameters("@JSON_OutPut").value)
+    
+    SerieFactura = pJSON.Item("Serie")
+    Factura_No = pJSON.Item("Factura")
+    TotalAbonos = pJSON.Item("Total_Abonos")
+    
+    Cadena = ""
     With TFA
+        .Hora = Format$(Time, FormatoTimes)
         .Existe_Cliente = pJSON.Item("Existe_Cliente")
-        .GrabadoExitoso = pJSON.Item("Ok_Save")
+        .GrabadoExitoso = CBool(pJSON.Item("Ok_Save"))
+        .GrabadoAbonos = CBool(pJSON.Item("Ok_Save_TA"))
         .Cantidad_Rubros = pJSON.Item("Cantidad_Rubros")
-         SerieFactura = pJSON.Item("Serie")
-         Factura_No = pJSON.Item("Factura")
+         If Not .Existe_Cliente Then Cadena = Cadena & "No se puedo grabar porque no existe Beneficiario" & vbCrLf
+         If .Cantidad_Rubros = 0 Then Cadena = Cadena & "No se puedo grabar porque no existe rubros para facturar" & vbCrLf
+    End With
+    
+    With FTA
+        .Recibi_de = TFA.Cliente
+        .Serie = TFA.Serie
+        .Factura = TFA.Factura
+        .TP = pJSON.Item("TJ")
+        .Abono = pJSON.Item("Abono_TJ")
     End With
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+    
+    If TFA.GrabadoExitoso Then
+       Control_Procesos "G", "Grabar " & TFA.TC & " No. " & TFA.Serie & "-" & Format$(TFA.Factura, "000000000") & " [" & TFA.Hora & "], Cta CxC: " & FTA.Cta_CxP
+       If TFA.GrabadoAbonos Then
+          Control_Procesos "P", "El importe a la Cta: " & FTA.Cta_CxP & ": " & FTA.TP & " No. " & FTA.Serie & "-" & Format$(FTA.Factura, "000000000") & ", Total de Abonos USD " & Format(TotalAbonos, "#,##0.00")
+          If FTA.TP = "TJ" Then Imprimir_FA_NV_TJ FTA
+       End If
+    Else
+       Control_Procesos "E", "No se pudo grabar " & TFA.TC & " No. " & TFA.Serie & "-" & Format$(TFA.Factura, "000000000") & " [" & TFA.Hora & "]", Cadena
+    End If
 End Sub
 
 Public Sub Digito_Verificador_SP(NumeroRUC As String)
@@ -1197,9 +1398,6 @@ Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
 Dim MiReg As ADODB.Recordset
 
-''''facturacion2@fidal-amlat.org    Fidal2022
-''''facturacion1@asproduc.com   Fidal2022
-
    'Determinamos formatos de los parametros de entrada
    'MsgBox "=> " & TFA.Fecha_Corte & vbCrLf & TFA.Fecha_Desde & vbCrLf & TFA.Fecha_Hasta
     FechaCorte = TFA.Fecha_Corte
@@ -1212,16 +1410,12 @@ Dim MiReg As ADODB.Recordset
     If FechaCorte = BuscarFecha(FechaSistema) Then SaldoReal = True
     
    'MsgBox "==> " & TFA.Fecha_Corte & vbCrLf & TFA.Fecha_Desde & vbCrLf & TFA.Fecha_Hasta & vbCrLf & SaldoReal & vbCrLf & PorFecha
-    
     Iniciar_Stored_Procedure "Actualiza Abonos Facturas", MiSQL, MiCmd, MiReg
     MiCmd.CommandText = "sp_Actualizar_Abonos_Facturas"
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@NumModulo", adVarChar, adParamInput, 2, NumModulo)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Usuario", adVarChar, adParamInput, 10, CodigoUsuario)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@TC", adVarChar, adParamInput, 3, TFA.TC)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@Serie", adVarChar, adParamInput, 6, TFA.Serie)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@Factura", adInteger, adParamInput, 14, TFA.Factura)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaCorte", adVarChar, adParamInput, 10, FechaCorte)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaDesde", adVarChar, adParamInput, 10, FechaIni)
     MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaHasta", adVarChar, adParamInput, 10, FechaFin)
@@ -1753,7 +1947,6 @@ Dim MiReg As ADODB.Recordset
      MiCmd.Parameters.Append MiCmd.CreateParameter("@Texto", adVarChar, adParamInput, 100, MidStrg(Texto, 1, 100))
      Procesar_Stored_Procedure MiCmd, MiReg
      Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
-
 End Sub
 
 Public Sub Actualizar_Datos_ATS_SP(Items As String, MBFechaI As String, MBFechaF As String, Numero As Long, ATFisico As Boolean)
@@ -2201,11 +2394,12 @@ Dim LineFile As String
 Dim TipoFile As String
 Dim NumFile As Long
     RatonReloj
-    TipoFile = ""
+    TipoFile = "01"
     If Len(PathCSV) > 1 Then
        NumFile = FreeFile
        Open PathCSV For Input As #NumFile
          If Not EOF(NumFile) Then Line Input #NumFile, LineFile
+         
          If InStr(LineFile, ";emision") > 0 Then TipoFile = "05"
          If InStr(LineFile, ";CI_RUC_Codigo") > 0 Then TipoFile = "15"
          If InStr(LineFile, ";COD_MES") > 0 Then TipoFile = "27"

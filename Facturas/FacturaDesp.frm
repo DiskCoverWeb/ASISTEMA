@@ -1411,7 +1411,7 @@ Public Sub ProcGrabarDespensa()
        'Grabamos el numero de factura
         FA.Nuevo_Doc = True
         FA.Tipo_PRN = "FM"
-        Grabar_Factura FA, True
+        Grabar_Factura FA, TA, True
         
         sSQL = "UPDATE Facturas " _
              & "SET Cont_Salidas = Cont_Salidas - 1 " _

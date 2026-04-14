@@ -2310,7 +2310,7 @@ Public Sub ListarComprobantes()
     'Llenar Cuentas de Transacciones
      Co.Cheque = Ninguno
      Co.Cta_Banco = Ninguno
-     sSQL = "SELECT T.Cta,Ca.Cuenta,T.Parcial_ME,T.Debe,T.Haber,Ca.TC,T.Detalle,T.Cheq_Dep,T.Fecha_Efec,T.Codigo_C,Ca.Item,T.TP,T.Numero,T.Fecha,T.ID " _
+     sSQL = "SELECT Ca.TC,T.Cta,Ca.Cuenta,T.Parcial_ME,T.Debe,T.Haber,T.Detalle,T.Cheq_Dep,T.Fecha_Efec,T.Codigo_C,Ca.Item,T.TP,T.Numero,T.Fecha,T.ID " _
           & "FROM Transacciones As T, Catalogo_Cuentas As Ca " _
           & "WHERE T.TP = '" & Co.TP & "' " _
           & "AND T.Numero = " & Co.Numero & " " _

@@ -13,8 +13,8 @@ Begin VB.Form ListarGrupos
    ClientWidth     =   11280
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   15615
-   ScaleWidth      =   28560
+   ScaleHeight     =   10935
+   ScaleWidth      =   11280
    WindowState     =   1  'Minimized
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
@@ -3105,8 +3105,8 @@ Dim GrupoDireccion As String
        & "AND C.Codigo = CA.Codigo " _
        & "AND C.FA <> " & Val(adFalse) & " " _
        & "ORDER BY C.Grupo, C.Cliente "
-    Clipboard.Clear
-    Clipboard.SetText sSQL
+'    Clipboard.Clear
+'    Clipboard.SetText sSQL
 '  MsgBox "Desktop Test: " & sSQL
   Select_Adodc_Grid DGQuery, AdoQuery, sSQL, , True
   
@@ -3245,8 +3245,8 @@ Private Sub SSTab2_Click(PreviousTab As Integer)
                    & "AND CF.Item = CP.Item " _
                    & "ORDER BY CF.Periodo,CF.GrupoNo,CP.Producto "
               Select_Adodc_Grid DGQuery, AdoQuery, sSQL, 2
-              Clipboard.Clear
-              Clipboard.SetText sSQL
+'              Clipboard.Clear
+'              Clipboard.SetText sSQL
               
               DGQuery.Visible = True
       Case 5: 'Listado de CxC Recaudadas

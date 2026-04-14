@@ -673,6 +673,7 @@ Private Sub Command1_Click()
   FA.Fecha_Corte = MBFechaA
   FA.Fecha_Desde = MBFechaA
   FA.Fecha_Hasta = MBFechaA
+  JSONInPutAbonos = ""
   Mensajes = "Esta Seguro que desea grabar Abonos"
   Titulo = "Formulario de Grabación."
   If BoxMensaje = vbYes Then
@@ -707,17 +708,18 @@ Private Sub Command1_Click()
                 TA.Banco = "Cierre de Periodo"
              End If
              Grabar_Abonos TA
-             sSQL = "UPDATE Facturas " _
-                  & "SET Saldo_MN = 0, T = 'C' " _
-                  & "WHERE Fecha <= #" & BuscarFecha(MBFecha) & "# " _
-                  & "AND Item = '" & NumEmpresa & "' " _
-                  & "AND Periodo = '" & Periodo_Contable & "' " _
-                  & "AND TC = '" & TA.TP & "' " _
-                  & "AND Serie = '" & TA.Serie & "' " _
-                  & "AND Autorizacion = '" & TA.Autorizacion & "' " _
-                  & "AND T <> 'A' " _
-                  & "AND Saldo_MN > 0 "
-             Ejecutar_SQL_SP sSQL
+''             sSQL = "UPDATE Facturas " _
+''                  & "SET Saldo_MN = 0, T = 'C' " _
+''                  & "WHERE Fecha <= #" & BuscarFecha(MBFecha) & "# " _
+''                  & "AND Item = '" & NumEmpresa & "' " _
+''                  & "AND Periodo = '" & Periodo_Contable & "' " _
+''                  & "AND TC = '" & TA.TP & "' " _
+''                  & "AND Serie = '" & TA.Serie & "' " _
+''                  & "AND Autorizacion = '" & TA.Autorizacion & "' " _
+''                  & "AND T <> 'A' " _
+''                  & "AND Saldo_MN > 0 "
+''             Ejecutar_SQL_SP sSQL
+             Grabar_Abonos_Factura_SP TA
              Contador = Contador + 1
              AbonoAutomatico.Caption = "Factura No. " & TA.Serie & "-" & TA.Factura & " " & Format$(Contador / .RecordCount, "00%")
             .MoveNext

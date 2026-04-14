@@ -940,7 +940,7 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
          FA.Serie_R = DCSerie.Text
          FA.Retencion = Val(DCComp.Text)
          SRI_Crear_Clave_Acceso_Liquidacion FA, False
-         LblResultado.Caption = SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion.Clave_De_Acceso)
+         LblResultado.Caption = SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion)
     Case "Autorizar_Grupo"
 '''         If Len(DCSerie) < 6 Then DCSerie = "001001"
 '''         sSQL = "SELECT C.Cliente,C.CI_RUC,C.TD,C.Direccion,C.Email,C.Ciudad,C.DirNumero,C.Telefono,TC.* " _
@@ -1171,15 +1171,15 @@ Private Sub TxtClave_KeyDown(KeyCode As Integer, Shift As Integer)
           FA.TP = Co.TP
           SRI_Crear_Clave_Acceso_Liquidacion FA, False, CBool(CheqClaveAcceso.value)
           RatonNormal
-          LblResultado.Caption = SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion.Clave_De_Acceso)
-          If TextoImprimio <> "" Then
-             RutaGeneraFile = RutaSysBases & "\TEMP\Informe de Errores de Liquidacion de Compras " & Replace(FechaSistema, "/", "-") & ".txt"
-             NumFile = FreeFile
-             Open RutaGeneraFile For Output As #NumFile ' Abre el archivo.
-                  Print #NumFile, TextoImprimio;
-             Close #NumFile
-             MsgBox "ARCHIVO DE INFORME DE ERRORES:" & vbCrLf & vbCrLf & RutaGeneraFile
-          End If
+          LblResultado.Caption = SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion)
+''          If TextoImprimio <> "" Then
+''             RutaGeneraFile = RutaSysBases & "\TEMP\Informe de Errores de Liquidacion de Compras " & Replace(FechaSistema, "/", "-") & ".txt"
+''             NumFile = FreeFile
+''             Open RutaGeneraFile For Output As #NumFile ' Abre el archivo.
+''                  Print #NumFile, TextoImprimio;
+''             Close #NumFile
+''             MsgBox "ARCHIVO DE INFORME DE ERRORES:" & vbCrLf & vbCrLf & RutaGeneraFile
+''          End If
         'MsgBox "Proceso Exitoso, Vuelva a Intentar conectarce con el S.R.I."
        Else
           RatonNormal

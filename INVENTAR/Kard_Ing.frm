@@ -14,8 +14,8 @@ Begin VB.Form Kard_Ing
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
    Picture         =   "Kard_Ing.frx":0442
-   ScaleHeight     =   15615
-   ScaleWidth      =   15960
+   ScaleHeight     =   8340
+   ScaleWidth      =   13635
    WindowState     =   2  'Maximized
    Begin VB.TextBox TxtSerie 
       Alignment       =   1  'Right Justify
@@ -2354,6 +2354,7 @@ Dim I As Long
 Dim N As Long
 Dim No_Bancos As Long
 Dim TextoCel As String
+Dim Serie_No As String
 Dim ContItem As Integer
 Dim DepItem As String
 Dim PVP As Currency
@@ -2423,6 +2424,7 @@ Dim PVP3 As Currency
              PVP = obj_Worksheet.cells(I, 5).value
              PVP2 = obj_Worksheet.cells(I, 6).value
              PVP3 = obj_Worksheet.cells(I, 7).value
+             Serie_No = obj_Worksheet.cells(I, 8).value
              CadenaParcial = obj_Worksheet.cells(I, 9).value
              Tasa = Val(obj_Worksheet.cells(I, 10).value)
              'MsgBox "Desktop Test"
@@ -2474,6 +2476,7 @@ Dim PVP3 As Currency
                 SetFields AdoKardex, "TC", SubCta
                 SetFields AdoKardex, "Codigo_B", CodigoCliente
                 SetFields AdoKardex, "COD_BAR", CodigoBarra
+                SetFields AdoKardex, "Serie_No", Serie_No
                 SetFields AdoKardex, "ORDEN", TextOrden
                 If Tasa > 0 Then SetFields AdoKardex, "Peso", Tasa
                 If Len(CadenaParcial) > 1 Then SetFields AdoKardex, "Detalle", UCase(MidStrg(CadenaParcial, 1, 60))

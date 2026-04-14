@@ -221,28 +221,14 @@ Private Sub MDIForm_Activate()
 End Sub
 
 Private Sub MDIForm_Load()
-  TiempoTarea = Time
-  TiempoSistema = Time
-  TiempoServidor = Time
-  Timer1.Interval = 1000
-  
-  ContadorServidor = 1
-  ServidorMySQL = False
-  ServidorSQLServer = False
-  ServidorSRIPrueba = False
-  ServidorSRIProduccion = False
-
   Set MDIFormulario = Me
-  Primera_Vez = True
-  Bandera = True
-  UnidadSistema
- ' TipoModulo = Factu
-  IngresarClave = True
+  Timer1.Enabled = True
+  Timer1.Interval = 1000
+  Times_Sistema
+ 
  'MODULOS
   NumModulo = "08"
   Modulo = "DESPENSA"
-  MenuDeModulos = True
-  IngresarClave = True
   ListEmp.Show 1
   PonerDirEmpresa
 End Sub

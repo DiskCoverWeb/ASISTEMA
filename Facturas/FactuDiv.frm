@@ -1589,7 +1589,7 @@ Private Sub Form_Load()
   ConectarAdodc AdoArticulo
   ConectarAdodc AdoAsientoF
   
-  SRI_Obtener_Datos_Comprobantes_Electronicos
+ 'SRI_Obtener_Datos_Comprobantes_Electronicos
   
   MBFecha.Text = FechaSistema
 End Sub
@@ -1667,7 +1667,7 @@ Public Sub ProcGrabar()
      FA.Cotizacion = Dolar
     
     'Grabamos el numero de factura
-     Grabar_Factura FA, True
+     Grabar_Factura FA, TA, True
      
      sSQL = "SELECT * " _
           & "FROM Asiento_F " _

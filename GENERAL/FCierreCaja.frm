@@ -336,8 +336,8 @@ Begin VB.Form FCierreCaja
       TabCaption(5)   =   "&6.- REPORTE DEL BANCO"
       TabPicture(5)   =   "FCierreCaja.frx":00A6
       Tab(5).ControlEnabled=   0   'False
-      Tab(5).Control(0)=   "DGBanco"
-      Tab(5).Control(1)=   "DCBanco"
+      Tab(5).Control(0)=   "DCBanco"
+      Tab(5).Control(1)=   "DGBanco"
       Tab(5).ControlCount=   2
       Begin MSDataGridLib.DataGrid DGCxC 
          Bindings        =   "FCierreCaja.frx":00C2
@@ -410,9 +410,9 @@ Begin VB.Form FCierreCaja
       Begin MSDataGridLib.DataGrid DGVentas 
          Bindings        =   "FCierreCaja.frx":00D7
          Height          =   3090
-         Left            =   -105
+         Left            =   120
          TabIndex        =   1
-         Top             =   420
+         Top             =   480
          Width           =   14160
          _ExtentX        =   24977
          _ExtentY        =   5450
@@ -2825,23 +2825,26 @@ Dim FechaA As Long
   
   Progreso_Barra.Mensaje_Box = "Actualizando Productos"
   Progreso_Esperar
+  RatonReloj
   Insertar_Productos_Cierre_Caja_SP MBFechaI, MBFechaF
   Progreso_Barra.Mensaje_Box = "Mayorizando Inventarios"
   Progreso_Esperar
+  RatonReloj
   Mayorizar_Inventario_SP
   Progreso_Barra.Mensaje_Box = "Actualizando Abonos"
   Progreso_Esperar
  'Cero para actualizaer las cuentas de Venta
-  FA.Serie = Ninguno
-  FA.Factura = 0
+  RatonReloj
   Actualizar_Abonos_Facturas_SP FA, True, True
   Progreso_Barra.Mensaje_Box = "Actualizando Clientes"
   Progreso_Esperar
-  Actualizar_Datos_Representantes_SP Mas_Grupos
+  RatonReloj
+ 'Actualizar_Datos_Representantes_SP Mas_Grupos
  'PROCESAR ASIENTOS DE FACTURACION
  '---------------------------------
   Progreso_Barra.Mensaje_Box = "Procesando Asientos Contables..."
   Progreso_Esperar
+  
   Grabar_Asientos_Facturacion Normal
 
   Progreso_Barra.Mensaje_Box = "Verificando Errores"
@@ -2849,15 +2852,9 @@ Dim FechaA As Long
   Presenta_Errores_Facturacion_SP MBFechaI, MBFechaF
     
   RatonNormal
-
-''     Command1.SetFocus
-''  Else
-''     If Command2.Enabled Then Command2.SetFocus Else Command5.SetFocus
-''  End If
-   Progreso_Barra.Mensaje_Box = "OK"
-   Progreso_Final
-
-  FInfoError.Show
+  Progreso_Barra.Mensaje_Box = "OK"
+  Progreso_Final
+  Informe_Errores
 End Sub
 
 'Grabacion de los comprobantes contables

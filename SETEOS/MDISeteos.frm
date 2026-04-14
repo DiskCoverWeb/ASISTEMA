@@ -255,19 +255,12 @@ End Sub
 
 Private Sub MDIForm_Load()
   Set MDIFormulario = Me
-  Primera_Vez = True
-  Bandera = True
-  UnidadSistema
-  IngresarClave = True
+  Timer1.Enabled = True
+  Timer1.Interval = 1000
+  Times_Sistema
  'MODULOS
   NumModulo = "0"
   Modulo = "SETEOS"
-  MenuDeModulos = True
-  'TiempoTarea = Time
-  'TiempoSistema = Time
-  'MsgBox TiempoSistema
-  Timer1.Enabled = True
-  Timer1.Interval = 1000
   ListEmp.Show 1
   PonerDirEmpresa
 End Sub

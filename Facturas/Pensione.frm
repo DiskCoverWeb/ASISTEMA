@@ -1162,8 +1162,8 @@ Begin VB.Form FacturasPension
       Left            =   0
       TabIndex        =   72
       Top             =   0
-      Width           =   28560
-      _ExtentX        =   50377
+      Width           =   15960
+      _ExtentX        =   28152
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -2451,6 +2451,7 @@ End Sub
 
 Public Sub Grabar_FA_Pensiones()
  'Procedemos a grabar la factura
+  JSONInPutAbonos = ""
   sSQL = "SELECT * " _
        & "FROM Asiento_F " _
        & "WHERE Item = '" & NumEmpresa & "' " _
@@ -2460,13 +2461,14 @@ Public Sub Grabar_FA_Pensiones()
   With AdoAsientoF.Recordset
   'MsgBox "FA Pensiones: " & .RecordCount
    If .RecordCount > 0 Then
+       RatonReloj
       'Actualizamos tipos de pago
        Total_Bancos = Redondear(Val(CCur(TextCheque.Text)), 2)
        Total_Anticipo = Redondear(Val(CCur(TxtSaldoFavor)), 2)
 '       SubTotal_NC = Redondear(Val(CCur(TxtNC.Text)), 2)
        TotalCajaMN = Redondear(Val(CCur(TxtEfectivo.Text)), 2)
        
-       Calculos_Totales_Factura FA
+      'Calculos_Totales_Factura FA
        FA.Tipo_PRN = "FM"
        FA.Nuevo_Doc = True
        FA.Factura = Val(TextFacturaNo)
@@ -2558,8 +2560,7 @@ Public Sub Grabar_FA_Pensiones()
       'Grabamos el numero de factura
        Calculos_Totales_Factura FA
       ' MsgBox "............."
-       Grabar_Factura FA, True
-      
+    
       'Seteos de Abonos Generales para todos los tipos de abonos
        TA.T = FA.T
        TA.TP = FA.TC
@@ -2626,6 +2627,8 @@ Public Sub Grabar_FA_Pensiones()
        TA.Recibi_de = FA.Cliente
        Grabar_Abonos TA
        
+       Grabar_Factura FA, TA, True
+       
        RatonNormal
        TxtEfectivo.Text = "0.00"
       'MsgBox FA.Autorizacion
@@ -2650,10 +2653,15 @@ Public Sub Grabar_FA_Pensiones()
           End If
          'Imprimir_Comprobante_Caja TA
        End If
+       'Grabar_Abonos_Factura_SP TA
+'      -------------------------------------------------------
+'       Clipboard.Clear
+'       Clipboard.SetText JSONInPutAbonos
+'      --------------------------------------------------------
        RatonReloj
        TA.Autorizacion = FA.Autorizacion
-       Actualizar_Saldos_Facturas_SP FA.TC, FA.Serie, FA.Factura
-       'MsgBox TA.Factura & vbCrLf & TA.TP & vbCrLf & TA.Serie
+'       Actualizar_Saldos_Facturas_SP FA.TC, FA.Serie, FA.Factura
+      'MsgBox JSONInPutAbonos & vbCrLf & TA.Factura & vbCrLf & TA.TP & vbCrLf & TA.Serie
        Facturas_Impresas FA
        
        sSQL = "SELECT * " _
@@ -2765,7 +2773,6 @@ Dim SiGrabarFactura As Boolean
        FA.Nuevo_Doc = True
        FA.Autorizacion = Ninguno
        TextFacturaNo = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, False)
-       
        DCLinea.SetFocus
     End If
   End If
@@ -3474,7 +3481,7 @@ Private Sub Form_Load()
    ConectarAdodc AdoAnticipo
    ConectarAdodc AdoHistoria
    
-   SRI_Obtener_Datos_Comprobantes_Electronicos
+  'SRI_Obtener_Datos_Comprobantes_Electronicos
    
    FA.CodigoC = "9999999999"
    TBeneficiario = Leer_Datos_Cliente_SP(FA.CodigoC)

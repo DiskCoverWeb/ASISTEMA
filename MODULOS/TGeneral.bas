@@ -363,6 +363,7 @@ Type CtasAsiento
       Por_Deposito     As Boolean
       Existe_Cliente   As Boolean
       GrabadoExitoso   As Boolean
+      GrabadoAbonos    As Boolean
       
       Gavetas          As Byte
       
@@ -478,6 +479,7 @@ Type CtasAsiento
       Categoria          As String
       AgenteRetencion    As String
       MicroEmpresa       As String
+      DatoContribuyente  As String
  End Type
 '-------------------------------------
  Type Tipo_Rol_Pago_Individual
@@ -608,13 +610,14 @@ Type Tipo_Equivalencias
 End Type
 '-------------------------------------
  Type Tipo_De_Identificacion
+      RUC_Natural        As Boolean
       RUC_CI             As String
       Codigo_RUC_CI      As String
       Digito_Verificador As String
       Tipo_Beneficiario  As String
       MicroEmpresa       As String
       AgenteRetencion    As String
-      RUC_Natural        As Boolean
+      DatoContribuyente  As String
  End Type
 '-------------------------------------
  Type Tipo_Mail
@@ -845,6 +848,7 @@ End Type
 '-------------------------------------
 Type Tipo_Estado_SRI
      Resultado          As Boolean
+     Ok_Update          As Boolean
      Tipo_Doc_SRI       As String
      Clave_De_Acceso    As String
      Autorizacion       As String

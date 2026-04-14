@@ -3756,7 +3756,13 @@ Private Sub TextCodigo_LostFocus()
     Case ".": Select_Cuentas DLCuentas, AdoCuentas
               DLCuentas.Visible = True
               DLCuentas.SetFocus
-    Case "AC": FComprasAT.Show 1
+    Case "AC": Select Case Co.TD
+                 Case "C", "R", "P"
+                      FComprasAT.Show 1
+                 Case Else
+                      RatonNormal
+                      MsgBox "Este Beneficiario no es valido para esta operacion"
+               End Select
                Asientos_Grabados
                TextCodigo.SetFocus
     Case "AV": FVentasAT.Show 1

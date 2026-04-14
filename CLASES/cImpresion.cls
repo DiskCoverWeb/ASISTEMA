@@ -1683,6 +1683,11 @@ Dim CantBlanco As Byte
           TextAux = TextAux & Caracter
           AnchoDeLetras = anchoTexto(TextAux)
           If Caracter = vbCr Then
+             TextAux = Replace(TextAux, vbCr, "")
+             TextAux = Replace(TextAux, vbLf, "")
+'            Clipboard.Clear
+'            Clipboard.SetText TextAux
+'            MsgBox TextAux
              printTexto dXo, Yo1, TextAux
              Yo1 = Yo1 + AltoDeLetras
              TextTemp = TrimStrg(MidStrg(TextTemp, PosCar + 2, Len(TextTemp)))
@@ -1731,6 +1736,8 @@ Dim CantBlanco As Byte
              PosCar = 0
           End If
        Loop
+       TextAux = Replace(TextAux, vbCr, "")
+       TextAux = Replace(TextAux, vbLf, "")
        If Len(TextAux) > 0 Then printTexto dXo, Yo1, TextAux
        'MsgBox "Residuo: " & TextTemp & vbCrLf & TextAux
     End If

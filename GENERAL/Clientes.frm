@@ -82,7 +82,6 @@ Begin VB.Form FClientes
             ImageIndex      =   8
          EndProperty
          BeginProperty Button9 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   ""
             Object.Tag             =   ""
             ImageIndex      =   9
             Style           =   3
@@ -101,7 +100,6 @@ Begin VB.Form FClientes
             ImageIndex      =   10
          EndProperty
          BeginProperty Button12 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   ""
             Object.Tag             =   ""
             ImageIndex      =   11
             Style           =   3
@@ -3426,28 +3424,10 @@ Private Sub Command5_Click()
 Dim ActualizarRUC As Boolean
   ActualizarRUC = False
   LblSRI.Caption = ""
-  Mensajes = ""
  'Consultamos al SRI el RUC
   If Len(TxtCI_RUC) = 13 Then
      TipoSRI = consulta_RUC_SRI(TxtCI_RUC)
-       With TipoSRI
-         If Len(.RUC_SRI) > 1 Then Mensajes = Mensajes & "R.U.C.: " & .RUC_SRI & vbCrLf
-         If Len(.RazonSocial) > 1 Then Mensajes = Mensajes & "RAZON SOCIAL: " & .RazonSocial & vbCrLf
-         If Len(.NombreComercial) > 1 Then Mensajes = Mensajes & "NOMBRE COMERCIAL: " & .NombreComercial & vbCrLf
-         If Len(.TipoRUC) > 1 Then Mensajes = Mensajes & UCaseStrg(.TipoRUC) & ", "
-         If Len(.Obligado) > 1 Then Mensajes = Mensajes & .Obligado & " OBLIGADO A LLEVAR CONTABILIDAD" & vbCrLf
-         If Len(.ActividadEconomica) > 1 Then Mensajes = Mensajes & "ACTIVIDAD ECONOMICA: " & .ActividadEconomica & vbCrLf
-         If Len(.FechaInicio) > 1 Then Mensajes = Mensajes & "INICIO SU ACTIVIDAD EL " & .FechaInicio & vbCrLf
-         If Len(.FechaActualización) > 1 Then Mensajes = Mensajes & "R.U.C. ACTUALIZADO EL " & .FechaActualización & vbCrLf
-         If Len(.FechaReinicio) > 1 Then Mensajes = Mensajes & "REINICIO DE ACTIVIDADES: " & .FechaReinicio & vbCrLf
-         If Len(.Categoria) > 1 And Len(.ClaseRUC) > 1 Then Mensajes = Mensajes & "CATEGORIA: " & .Categoria & ", CLASE: " & .ClaseRUC & vbCrLf
-         If Len(.FechaCese) > 1 Then Mensajes = Mensajes & "CESE DE ACTIVIDADES: " & .FechaCese & vbCrLf
-         If Len(.MicroEmpresa) > 1 Then Mensajes = Mensajes & "TIPO DE CONTRIBUYENTE: """ & UCaseStrg(.MicroEmpresa) & """ " & vbCrLf
-         If Len(.AgenteRetencion) > 1 Then Mensajes = Mensajes & "AGENTE DE RETENCION: """ & UCaseStrg(.AgenteRetencion) & """ " & vbCrLf
-         If Len(.Estado) > 1 Then Mensajes = Mensajes & "ESTADO DEL CONTRIBUYENTE: """ & UCaseStrg(.Estado) & """ "
-       End With
-       LblSRI.Caption = Mensajes
-    
+     LblSRI.Caption = TipoSRI.DatoContribuyente
     'MsgBox Temp_CI_RUC & " - " & TxtCI_RUC & " ..."
      If Temp_CI_RUC <> TxtCI_RUC Then
         If Cadena <> "" Then
@@ -4477,6 +4457,8 @@ Private Sub TxtCI_RUC_LostFocus()
     If Len(TxtCI_RUC) > 1 Then
        Mensajes = ""
        DigVerif = Digito_Verificador(TxtCI_RUC)
+       LblSRI.Caption = Tipo_RUC_CI.DatoContribuyente
+       
        If Tipo_RUC_CI.Tipo_Beneficiario = "P" Then
           Mensajes = "Este código es un Pasaporte"
           Titulo = "CONFIRMACION DE PASAPORTE"
@@ -4491,7 +4473,7 @@ Private Sub TxtCI_RUC_LostFocus()
                       CTipoProv.Text = "OTRO"
                       CParteR.Text = "NO"
                       If Len(TxtApellidosS) <= 1 Then
-                         TipoSRI = consulta_RUC_SRI(TxtCI_RUC)
+                         'TipoSRI = consulta_RUC_SRI(TxtCI_RUC)
                          TxtApellidosS = TipoSRI.RazonSocial
                       End If
             Case "C": Label4.Caption = "* APELLIDOS Y NOMBRES"

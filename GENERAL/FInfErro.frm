@@ -275,8 +275,9 @@ Private Sub Form_Activate()
 Dim cSQL As String
 Dim WidthText As Single
 Dim AnchoMax As Byte
+    
     RatonReloj
-    Imagen_Esperar "Iniciamos el informe de Errores"
+    'Imagen_Esperar "Iniciamos el informe de Errores"
     cSQL = "SELECT Texto " _
          & "FROM Tabla_Temporal " _
          & "WHERE Item = '" & NumEmpresa & "' " _
@@ -288,21 +289,22 @@ Dim AnchoMax As Byte
      If .RecordCount > 0 Then
          FInfoError.Visible = True
          FInfoError.WindowState = vbNormal
-         FInfoError.Refresh
-         CentrarForm FInfoError
+         'FInfoError.Refresh
          DGInfoError.Columns(0).width = AdoInfoError.width - 100
          DGInfoError.Refresh
-         Unload FEsperar
+         'Unload FEsperar
          RatonNormal
+        'MsgBox "Desktop Test: Informe de Errores. " & NumEmpresa & " - " & NumModulo & " - " & CodigoUsuario
      Else
          RatonNormal
-         Unload FEsperar
+         'Unload FEsperar
          Unload FInfoError
      End If
     End With
 End Sub
 
 Private Sub Form_Load()
+    CentrarForm FInfoError
     ConectarAdodc AdoInfoError
 End Sub
 

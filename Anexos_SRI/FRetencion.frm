@@ -9,7 +9,7 @@ Begin VB.Form FRetencion
    ClientHeight    =   7815
    ClientLeft      =   60
    ClientTop       =   345
-   ClientWidth     =   15960
+   ClientWidth     =   19950
    FillColor       =   &H00FFC0C0&
    Icon            =   "FRetencion.frx":0000
    LinkTopic       =   "Form1"
@@ -17,7 +17,7 @@ Begin VB.Form FRetencion
    MouseIcon       =   "FRetencion.frx":030A
    ScaleHeight     =   16824.25
    ScaleMode       =   0  'User
-   ScaleWidth      =   13777.08
+   ScaleWidth      =   17221.35
    WindowState     =   2  'Maximized
    Begin VB.TextBox TxtSalarioBasico 
       Alignment       =   1  'Right Justify
@@ -2270,7 +2270,7 @@ Dim Salario_Basico As Currency
                     RDep_Subtotal
                     TxtFondoReserva = Format(Val(CCur(TxtIngLiqui)) / 12, "#,##0.00")
                     'Txt10Tercero = Format(Val(CCur(TxtIngLiqui)) / 12, "#,##0.00")
-                    Txt10Cuarto = Format((Salario_Basico / 12) * Val(CInt(TxtNumero)), "#,##0.00")
+                    'Txt10Cuarto = Format((Salario_Basico / 12) * Val(CInt(TxtNumero)), "#,##0.00")
                     Grabar_Anexo_Dependencia CodigoCliente
                     Encerar_Datos_Dependencia
                     CodigoCliente = .Fields("Codigo")
@@ -2323,6 +2323,7 @@ End Sub
 
 Public Sub Presentar_Rol_Anual_Empleado(Optional CodigoEmpleado As String)
   If CodigoEmpleado = "" Then CodigoEmpleado = Ninguno
+  'AND TRP.Cod_Rol_Pago IN ('Salario','Fon_Res_G')
   sSQL = ""
   SQL2 = "SELECT C.Cliente As Empleado,TRP.Detalle,SUM(TRP.Ingresos) As Total_Ing,SUM(TRP.Egresos) AS Total_Egr," _
        & "TRP.Fecha_D,TRP.Fecha_H,COUNT(TRP.ID) As No_Meses,TRP.Cod_Rol_Pago,TRP.Tipo_Rubro,TRP.Codigo " _
@@ -2331,7 +2332,7 @@ Public Sub Presentar_Rol_Anual_Empleado(Optional CodigoEmpleado As String)
   SQL1 = SQL2 _
        & "AND TRP.Fecha_D >= #" & FechaIni & "# " _
        & "AND TRP.Fecha_H <= #" & FechaFin & "# " _
-       & "AND TRP.Cod_Rol_Pago IN ('Salario','Fon_Res_G') " _
+       & "AND TRP.iess <> 0 " _
        & "AND TRP.Ingresos > 0 " _
        & "AND TRP.Codigo = '" & CodigoEmpleado & "' " _
        & "AND TRP.Codigo = C.Codigo " _
@@ -2539,6 +2540,15 @@ Private Sub DCRetenido_LostFocus()
 '''       & "GROUP BY C.Cliente,TRP.Codigo,TRP.Cod_Rol_Pago,TRP.Tipo_Rubro,TRP.Detalle,TRP.ID,TRP.Fecha_D,TRP.Fecha_H " _
 '''       & "ORDER BY C.Cliente,TRP.ID,TRP.Cod_Rol_Pago,TRP.Detalle "
 '''  SelectMSFGrid MSFGRolAnio, AdoRolAnio, SQL2, 2
+End Sub
+
+Private Sub DGRolAnio_KeyDown(KeyCode As Integer, Shift As Integer)
+  Keys_Especiales Shift
+  If KeyCode = vbKeyF1 Then
+     DGRolAnio.Visible = False
+     GenerarDataTexto FRetencion, AdoRolAnio
+     DGRolAnio.Visible = True
+  End If
 End Sub
 
 Private Sub DGRolPagos_KeyDown(KeyCode As Integer, Shift As Integer)

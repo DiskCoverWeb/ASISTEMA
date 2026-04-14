@@ -3198,8 +3198,8 @@ Dim IdProc As Byte
                 Actualizar_Codigo_Superiores
            Case "Actualizacion de Documentos Electronicos Autorizados"
                 If CFechaLong(FechaSistema) <= CFechaLong(Fecha_CE) Then
-                   Actualizar_Facturas_Electronicas
-                   Actualizar_Retenciones_Electronicas
+                   'Actualizar_Facturas_Electronicas
+                   'Actualizar_Retenciones_Electronicas
                 Else
                    RatonNormal
                    MsgBox MensajeNoAutorizarCE
@@ -6389,256 +6389,256 @@ Dim Mes_FA As Long
     Progreso_Final
 End Sub
 
-Public Sub Actualizar_Facturas_Electronicas()
-'Dim ObjAutori As New WS_Autorizacion
-Dim URLAutorizacion As String
-Dim RutaXMLAutorizado As String
-Dim RutaXMLRechazado As String
-Dim ArrayAutorizacion() As String
-Dim Tiempo_Espera As Integer
-Dim Tiempo_SRI As Integer
-Dim SRI_Aut As Tipo_Estado_SRI
-Dim AdoDBAut As ADODB.Recordset
+'''Public Sub Actualizar_Facturas_Electronicas()
+''''Dim ObjAutori As New WS_Autorizacion
+'''Dim URLAutorizacion As String
+'''Dim RutaXMLAutorizado As String
+'''Dim RutaXMLRechazado As String
+'''Dim ArrayAutorizacion() As String
+'''Dim Tiempo_Espera As Integer
+'''Dim Tiempo_SRI As Integer
+'''Dim SRI_Aut As Tipo_Estado_SRI
+'''Dim AdoDBAut As ADODB.Recordset
+'''
+''''Certificado para Firmar el documento
+''' RatonReloj
+''' Progreso_Barra.Mensaje_Box = "Consultado Documentos no autorizados"
+''' Progreso_Iniciar
+'''
+''''Pagina de Conexion con el SRI
+''' URLAutorizacion = Leer_Campo_Empresa("Web_SRI_Autorizado")
+'''
+''''Listar fechas de facturas no autorizadas
+''' FechaIni = FechaSistema
+''' FechaFin = FechaSistema
+''' sSQL = "SELECT Autorizacion, MIN(Fecha) As Fecha_Min, MAX(Fecha) As Fecha_Max " _
+'''      & "FROM Facturas " _
+'''      & "WHERE Item = '" & NumEmpresa & "' " _
+'''      & "AND Periodo = '" & Periodo_Contable & "' " _
+'''      & "AND T <> '" & Anulado & "' " _
+'''      & "AND LEN(Autorizacion) = 13 " _
+'''      & "GROUP BY Autorizacion "
+''' Select_AdoDB AdoDBAut, sSQL
+''' If AdoDBAut.RecordCount > 0 Then
+'''    FechaIni = AdoDBAut.fields("Fecha_Min")
+'''    FechaFin = AdoDBAut.fields("Fecha_Max")
+''' End If
+''' FechaIni = BuscarFecha(FechaIni)
+''' FechaFin = BuscarFecha(FechaFin)
+''' AdoDBAut.Close
+''' Contador = 0
+''' sSQL = "SELECT CodigoC,Clave_Acceso,Estado_SRI,TC,Fecha,Serie,Factura,Autorizacion " _
+'''      & "FROM Facturas " _
+'''      & "WHERE Item = '" & NumEmpresa & "' " _
+'''      & "AND Periodo = '" & Periodo_Contable & "' " _
+'''      & "AND Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
+'''      & "AND LEN(Autorizacion) = 13 " _
+'''      & "ORDER BY Fecha,TC,Serie,Factura "
+''' Select_AdoDB AdoDBAut, sSQL
+''' If AdoDBAut.RecordCount > 0 Then
+'''    Progreso_Barra.Valor_Maximo = Progreso_Barra.Valor_Maximo + AdoDBAut.RecordCount
+'''
+'''    RutaXMLRechazado = RutaDocumentos & "\Comprobantes no Autorizados\*.xml"
+'''    If Dir$(RutaXMLRechazado) <> "" Then Kill RutaXMLRechazado
+'''
+'''   'Empezamos a autorizar
+'''    Do While Not AdoDBAut.EOF
+'''       RatonReloj
+'''       Contador = Contador + 1
+'''       FA.Estado_SRI = "CN"
+'''       FA.CodigoC = AdoDBAut.fields("CodigoC")
+'''       FA.TC = AdoDBAut.fields("TC")
+'''       FA.Serie = AdoDBAut.fields("Serie")
+'''       FA.Fecha = AdoDBAut.fields("Fecha")
+'''       FA.Factura = AdoDBAut.fields("Factura")
+'''       FA.Autorizacion = AdoDBAut.fields("Autorizacion")
+'''       FA.ClaveAcceso = AdoDBAut.fields("Clave_Acceso")
+'''       If Len(FA.ClaveAcceso) < 13 Then
+'''         'MsgBox "Ant: " & FA.ClaveAcceso
+'''          FA.ClaveAcceso = Format$(FA.Fecha, "ddmmyyyy") & "01" & RUC & Ambiente & FA.Serie _
+'''                         & Format$(FA.Factura, String(9, "0")) _
+'''                         & "123456781"
+'''          FA.ClaveAcceso = FA.ClaveAcceso & Digito_Verificador_Modulo11(FA.ClaveAcceso)
+'''       End If
+'''       Progreso_Barra.Mensaje_Box = "[" & Contador & " de " & AdoDBAut.RecordCount & " - " _
+'''                                  & Format(FA.Fecha, "MM/yyyy") & "] " _
+'''                                  & "Consultando " & FA.TC _
+'''                                  & " No. " & FA.Serie & "-" & Format(FA.Factura, "000000000")
+'''       Progreso_Esperar
+'''       SRI_Aut.Clave_De_Acceso = FA.ClaveAcceso
+'''       SRI_Aut.Estado_SRI = "CF"
+'''       SRI_Aut.Error_SRI = ""
+'''       RutaXMLAutorizado = RutaDocumentos & "\Comprobantes Autorizados\" & FA.ClaveAcceso & ".xml"
+'''       RutaXMLRechazado = RutaDocumentos & "\Comprobantes no Autorizados\" & FA.ClaveAcceso & ".xml"
+'''       For Tiempo_Espera = 1 To 3
+'''           Progreso_Esperar True
+'''           For Tiempo_SRI = 0 To 300
+'''               Progreso_Esperar True
+'''           Next Tiempo_SRI
+''''           ArrayAutorizacion = ObjAutori.FF_ObtieneNumAutorizado(URLAutorizacion, FA.ClaveAcceso, RutaXMLAutorizado, RutaXMLRechazado)
+'''           If ArrayAutorizacion(0) = "AUTORIZADO" Then Exit For
+'''       Next Tiempo_Espera
+'''      'Ok Documento Firmado y Autorizado
+'''       If ArrayAutorizacion(0) = "AUTORIZADO" Then
+'''          Progreso_Barra.Mensaje_Box = "[Ok] " & "Actualizando " & FA.TC _
+'''                                     & " No. " & FA.Serie & "-" & Format(FA.Factura, "000000000")
+'''          Progreso_Esperar True
+'''          SRI_Aut.Estado_SRI = "OK"
+'''          SRI_Aut.Error_SRI = "OK"
+'''          SRI_Aut.Autorizacion = ArrayAutorizacion(1)
+'''          SRI_Aut.Fecha_Autorizacion = Format$(MidStrg(ArrayAutorizacion(2), 1, 10), "dd/MM/yyyy")
+'''          SRI_Aut.Hora_Autorizacion = MidStrg(ArrayAutorizacion(2), 12, 8)
+'''          SRI_Aut.Documento_XML = Leer_Archivo_Texto(RutaXMLAutorizado)
+'''          SRI_Actualizar_Documento_XML SRI_Aut
+'''          SRI_Actualizar_Autorizacion_Comprobante FA.TC, SRI_Aut, FA
+'''       Else
+'''          SRI_Aut.Error_SRI = ArrayAutorizacion(0) & " " & ArrayAutorizacion(1)
+'''          'SRI_Actualizar_XML_Factura FA, SRI_Aut
+'''       End If
+'''       AdoDBAut.MoveNext
+'''    Loop
+''' End If
+''' AdoDBAut.Close
+''' RatonNormal
+''' Progreso_Final
+'''End Sub
 
-'Certificado para Firmar el documento
- RatonReloj
- Progreso_Barra.Mensaje_Box = "Consultado Documentos no autorizados"
- Progreso_Iniciar
-
-'Pagina de Conexion con el SRI
- URLAutorizacion = Leer_Campo_Empresa("Web_SRI_Autorizado")
- 
-'Listar fechas de facturas no autorizadas
- FechaIni = FechaSistema
- FechaFin = FechaSistema
- sSQL = "SELECT Autorizacion, MIN(Fecha) As Fecha_Min, MAX(Fecha) As Fecha_Max " _
-      & "FROM Facturas " _
-      & "WHERE Item = '" & NumEmpresa & "' " _
-      & "AND Periodo = '" & Periodo_Contable & "' " _
-      & "AND T <> '" & Anulado & "' " _
-      & "AND LEN(Autorizacion) = 13 " _
-      & "GROUP BY Autorizacion "
- Select_AdoDB AdoDBAut, sSQL
- If AdoDBAut.RecordCount > 0 Then
-    FechaIni = AdoDBAut.fields("Fecha_Min")
-    FechaFin = AdoDBAut.fields("Fecha_Max")
- End If
- FechaIni = BuscarFecha(FechaIni)
- FechaFin = BuscarFecha(FechaFin)
- AdoDBAut.Close
- Contador = 0
- sSQL = "SELECT CodigoC,Clave_Acceso,Estado_SRI,TC,Fecha,Serie,Factura,Autorizacion " _
-      & "FROM Facturas " _
-      & "WHERE Item = '" & NumEmpresa & "' " _
-      & "AND Periodo = '" & Periodo_Contable & "' " _
-      & "AND Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-      & "AND LEN(Autorizacion) = 13 " _
-      & "ORDER BY Fecha,TC,Serie,Factura "
- Select_AdoDB AdoDBAut, sSQL
- If AdoDBAut.RecordCount > 0 Then
-    Progreso_Barra.Valor_Maximo = Progreso_Barra.Valor_Maximo + AdoDBAut.RecordCount
-    
-    RutaXMLRechazado = RutaDocumentos & "\Comprobantes no Autorizados\*.xml"
-    If Dir$(RutaXMLRechazado) <> "" Then Kill RutaXMLRechazado
-    
-   'Empezamos a autorizar
-    Do While Not AdoDBAut.EOF
-       RatonReloj
-       Contador = Contador + 1
-       FA.Estado_SRI = "CN"
-       FA.CodigoC = AdoDBAut.fields("CodigoC")
-       FA.TC = AdoDBAut.fields("TC")
-       FA.Serie = AdoDBAut.fields("Serie")
-       FA.Fecha = AdoDBAut.fields("Fecha")
-       FA.Factura = AdoDBAut.fields("Factura")
-       FA.Autorizacion = AdoDBAut.fields("Autorizacion")
-       FA.ClaveAcceso = AdoDBAut.fields("Clave_Acceso")
-       If Len(FA.ClaveAcceso) < 13 Then
-         'MsgBox "Ant: " & FA.ClaveAcceso
-          FA.ClaveAcceso = Format$(FA.Fecha, "ddmmyyyy") & "01" & RUC & Ambiente & FA.Serie _
-                         & Format$(FA.Factura, String(9, "0")) _
-                         & "123456781"
-          FA.ClaveAcceso = FA.ClaveAcceso & Digito_Verificador_Modulo11(FA.ClaveAcceso)
-       End If
-       Progreso_Barra.Mensaje_Box = "[" & Contador & " de " & AdoDBAut.RecordCount & " - " _
-                                  & Format(FA.Fecha, "MM/yyyy") & "] " _
-                                  & "Consultando " & FA.TC _
-                                  & " No. " & FA.Serie & "-" & Format(FA.Factura, "000000000")
-       Progreso_Esperar
-       SRI_Aut.Clave_De_Acceso = FA.ClaveAcceso
-       SRI_Aut.Estado_SRI = "CF"
-       SRI_Aut.Error_SRI = ""
-       RutaXMLAutorizado = RutaDocumentos & "\Comprobantes Autorizados\" & FA.ClaveAcceso & ".xml"
-       RutaXMLRechazado = RutaDocumentos & "\Comprobantes no Autorizados\" & FA.ClaveAcceso & ".xml"
-       For Tiempo_Espera = 1 To 3
-           Progreso_Esperar True
-           For Tiempo_SRI = 0 To 300
-               Progreso_Esperar True
-           Next Tiempo_SRI
-'           ArrayAutorizacion = ObjAutori.FF_ObtieneNumAutorizado(URLAutorizacion, FA.ClaveAcceso, RutaXMLAutorizado, RutaXMLRechazado)
-           If ArrayAutorizacion(0) = "AUTORIZADO" Then Exit For
-       Next Tiempo_Espera
-      'Ok Documento Firmado y Autorizado
-       If ArrayAutorizacion(0) = "AUTORIZADO" Then
-          Progreso_Barra.Mensaje_Box = "[Ok] " & "Actualizando " & FA.TC _
-                                     & " No. " & FA.Serie & "-" & Format(FA.Factura, "000000000")
-          Progreso_Esperar True
-          SRI_Aut.Estado_SRI = "OK"
-          SRI_Aut.Error_SRI = "OK"
-          SRI_Aut.Autorizacion = ArrayAutorizacion(1)
-          SRI_Aut.Fecha_Autorizacion = Format$(MidStrg(ArrayAutorizacion(2), 1, 10), "dd/MM/yyyy")
-          SRI_Aut.Hora_Autorizacion = MidStrg(ArrayAutorizacion(2), 12, 8)
-          SRI_Aut.Documento_XML = Leer_Archivo_Texto(RutaXMLAutorizado)
-          SRI_Actualizar_Documento_XML SRI_Aut
-          SRI_Actualizar_Autorizacion_Comprobante FA.TC, SRI_Aut, FA
-       Else
-          SRI_Aut.Error_SRI = ArrayAutorizacion(0) & " " & ArrayAutorizacion(1)
-          'SRI_Actualizar_XML_Factura FA, SRI_Aut
-       End If
-       AdoDBAut.MoveNext
-    Loop
- End If
- AdoDBAut.Close
- RatonNormal
- Progreso_Final
-End Sub
-
-Public Sub Actualizar_Retenciones_Electronicas()
-'Dim ObjAutori As New WS_Autorizacion
-Dim URLAutorizacion As String
-Dim RutaXMLAutorizado As String
-Dim RutaXMLRechazado As String
-Dim ArrayAutorizacion() As String
-Dim Tiempo_Espera As Integer
-Dim Tiempo_SRI As Integer
-Dim SRI_Aut As Tipo_Estado_SRI
-Dim AdoDBAut As ADODB.Recordset
-
-'Certificado para Firmar el documento
- RatonReloj
- Progreso_Barra.Mensaje_Box = "Consultado Documentos no autorizados"
- Progreso_Iniciar
-
-'Pagina de Conexion con el SRI
- URLAutorizacion = Leer_Campo_Empresa("Web_SRI_Autorizado")
- 
-'Listar fechas de facturas no autorizadas
- FechaIni = FechaSistema
- FechaFin = FechaSistema
- 
-  sSQL = "SELECT AutRetencion, MIN(Fecha) As Fecha_Min, MAX(Fecha) As Fecha_Max  " _
-       & "FROM Trans_Compras " _
-       & "WHERE Item = '" & NumEmpresa & "' " _
-       & "AND Periodo = '" & Periodo_Contable & "' " _
-       & "AND LEN(Serie_Retencion) = 6 " _
-       & "AND LEN(AutRetencion) BETWEEN 13 and 49 " _
-       & "AND LEN(Clave_Acceso) > 1 " _
-       & "AND Estado_SRI <> 'OK' " _
-       & "GROUP BY AutRetencion " _
-       & "ORDER BY AutRetencion "
-  Select_AdoDB AdoDBAut, sSQL
-  If AdoDBAut.RecordCount > 0 Then
-     FechaIni = AdoDBAut.fields("Fecha_Min")
-     FechaFin = AdoDBAut.fields("Fecha_Max")
-  End If
-  FechaIni = BuscarFecha(FechaIni)
-  FechaFin = BuscarFecha(FechaFin)
-  AdoDBAut.Close
-  Contador = 0
- 
-   sSQL = "SELECT C.Cliente,C.CI_RUC,C.TD,C.Direccion,C.Email,C.Email2,C.Ciudad,C.DirNumero,C.Telefono,TC.* " _
-        & "FROM Trans_Compras As TC,Clientes As C " _
-        & "WHERE TC.Item = '" & NumEmpresa & "' " _
-        & "AND TC.Periodo = '" & Periodo_Contable & "' " _
-        & "AND TC.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
-        & "AND LEN(TC.Serie_Retencion) = 6 " _
-        & "AND LEN(TC.AutRetencion) = 13 " _
-        & "AND TC.Estado_SRI <> 'OK' " _
-        & "AND TC.IdProv = C.Codigo " _
-        & "ORDER BY TC.Fecha,Cta_Servicio,Cta_Bienes "
- Select_AdoDB AdoDBAut, sSQL
- If AdoDBAut.RecordCount > 0 Then
-    Progreso_Barra.Valor_Maximo = Progreso_Barra.Valor_Maximo + AdoDBAut.RecordCount
-    
-    RutaXMLRechazado = RutaDocumentos & "\Comprobantes no Autorizados\*.xml"
-    If Dir$(RutaXMLRechazado) <> "" Then Kill RutaXMLRechazado
-    
-   'Empezamos a autorizar
-    Do While Not AdoDBAut.EOF
-       RatonReloj
-       Contador = Contador + 1
-       FechaTexto = AdoDBAut.fields("Fecha")
-       Co.Fecha = AdoDBAut.fields("Fecha")
-       Co.Beneficiario = AdoDBAut.fields("Cliente")
-       Co.RUC_CI = AdoDBAut.fields("CI_RUC")
-       Co.Direccion = AdoDBAut.fields("Direccion")
-       Co.TD = AdoDBAut.fields("TD")
-       Co.Email = AdoDBAut.fields("Email")
-       Co.TP = AdoDBAut.fields("TP")
-       Co.Numero = AdoDBAut.fields("Numero")
-             
-       FA.EmailC = AdoDBAut.fields("Email")
-       FA.EmailR = AdoDBAut.fields("Email2")
-       FA.TP = Co.TP
-       FA.Numero = Co.Numero
-       FA.Fecha = AdoDBAut.fields("FechaEmision")
-       FA.Serie_R = AdoDBAut.fields("Serie_Retencion")
-       FA.Retencion = AdoDBAut.fields("SecRetencion")
-       FA.ClaveAcceso = AdoDBAut.fields("Clave_Acceso")
-       FA.Estado_SRI = "CN"
-       FA.Autorizacion_R = AdoDBAut.fields("AutRetencion")
-       FA.Serie = AdoDBAut.fields("Establecimiento") & AdoDBAut.fields("PuntoEmision")
-       FA.Factura = AdoDBAut.fields("Secuencial")
-       If Len(FA.ClaveAcceso) = 13 Then
-        '  MsgBox "Ant RE: '" & FA.ClaveAcceso & "'"
-           FA.ClaveAcceso = Format$(FA.Fecha, "ddmmyyyy") & "07" & RUC & Ambiente & FA.Serie_R & Format$(FA.Retencion, String(9, "0")) _
-                          & "123456781"
-           FA.ClaveAcceso = Replace(FA.ClaveAcceso, ".", "1")
-           FA.ClaveAcceso = FA.ClaveAcceso & Digito_Verificador_Modulo11(FA.ClaveAcceso)
-       End If
-       Progreso_Barra.Mensaje_Box = "[" & Contador & " de " & AdoDBAut.RecordCount & " - " _
-                                  & Format(FA.Fecha, "MM/yyyy") & "] " _
-                                  & "Consultando RE " _
-                                  & " No. " & FA.Serie_R & "-" & Format(FA.Retencion, "000000000")
-       Progreso_Esperar
-       SRI_Aut.Clave_De_Acceso = FA.ClaveAcceso
-       SRI_Aut.Estado_SRI = "CF"
-       SRI_Aut.Error_SRI = ""
-       RutaXMLAutorizado = RutaDocumentos & "\Comprobantes Autorizados\" & FA.ClaveAcceso & ".xml"
-       RutaXMLRechazado = RutaDocumentos & "\Comprobantes no Autorizados\" & FA.ClaveAcceso & ".xml"
-       
-       For Tiempo_Espera = 1 To 3
-           Progreso_Esperar True
-'           ArrayAutorizacion = ObjAutori.FF_ObtieneNumAutorizado(URLAutorizacion, FA.ClaveAcceso, RutaXMLAutorizado, RutaXMLRechazado)
-           If ArrayAutorizacion(0) = "AUTORIZADO" Then Exit For
-           For Tiempo_SRI = 0 To 50
-               Progreso_Esperar True
-           Next Tiempo_SRI
-       Next Tiempo_Espera
-      'Ok Documento Firmado y Autorizado
-       If ArrayAutorizacion(0) = "AUTORIZADO" Then
-          Progreso_Barra.Mensaje_Box = "[Ok] " & "Actualizando RE " _
-                                     & " No. " & FA.Serie_R & "-" & Format(FA.Retencion, "000000000")
-          Progreso_Esperar True
-          SRI_Aut.Estado_SRI = "OK"
-          SRI_Aut.Error_SRI = "OK"
-          SRI_Aut.Autorizacion = ArrayAutorizacion(1)
-          SRI_Aut.Fecha_Autorizacion = Format$(MidStrg(ArrayAutorizacion(2), 1, 10), "dd/MM/yyyy")
-          SRI_Aut.Hora_Autorizacion = MidStrg(ArrayAutorizacion(2), 12, 8)
-          SRI_Aut.Documento_XML = Leer_Archivo_Texto(RutaXMLAutorizado)
-          SRI_Actualizar_Documento_XML SRI_Aut
-          SRI_Actualizar_Autorizacion_Comprobante "RE", SRI_Aut, FA
-       Else
-          SRI_Aut.Error_SRI = ArrayAutorizacion(0) & " " & ArrayAutorizacion(1)
-          'SRI_Actualizar_XML_Factura FA, SRI_Aut
-       End If
-       AdoDBAut.MoveNext
-    Loop
- End If
- AdoDBAut.Close
- RatonNormal
- Progreso_Final
-End Sub
+'''Public Sub Actualizar_Retenciones_Electronicas()
+''''Dim ObjAutori As New WS_Autorizacion
+'''Dim URLAutorizacion As String
+'''Dim RutaXMLAutorizado As String
+'''Dim RutaXMLRechazado As String
+'''Dim ArrayAutorizacion() As String
+'''Dim Tiempo_Espera As Integer
+'''Dim Tiempo_SRI As Integer
+'''Dim SRI_Aut As Tipo_Estado_SRI
+'''Dim AdoDBAut As ADODB.Recordset
+'''
+''''Certificado para Firmar el documento
+''' RatonReloj
+''' Progreso_Barra.Mensaje_Box = "Consultado Documentos no autorizados"
+''' Progreso_Iniciar
+'''
+''''Pagina de Conexion con el SRI
+''' URLAutorizacion = Leer_Campo_Empresa("Web_SRI_Autorizado")
+'''
+''''Listar fechas de facturas no autorizadas
+''' FechaIni = FechaSistema
+''' FechaFin = FechaSistema
+'''
+'''  sSQL = "SELECT AutRetencion, MIN(Fecha) As Fecha_Min, MAX(Fecha) As Fecha_Max  " _
+'''       & "FROM Trans_Compras " _
+'''       & "WHERE Item = '" & NumEmpresa & "' " _
+'''       & "AND Periodo = '" & Periodo_Contable & "' " _
+'''       & "AND LEN(Serie_Retencion) = 6 " _
+'''       & "AND LEN(AutRetencion) BETWEEN 13 and 49 " _
+'''       & "AND LEN(Clave_Acceso) > 1 " _
+'''       & "AND Estado_SRI <> 'OK' " _
+'''       & "GROUP BY AutRetencion " _
+'''       & "ORDER BY AutRetencion "
+'''  Select_AdoDB AdoDBAut, sSQL
+'''  If AdoDBAut.RecordCount > 0 Then
+'''     FechaIni = AdoDBAut.fields("Fecha_Min")
+'''     FechaFin = AdoDBAut.fields("Fecha_Max")
+'''  End If
+'''  FechaIni = BuscarFecha(FechaIni)
+'''  FechaFin = BuscarFecha(FechaFin)
+'''  AdoDBAut.Close
+'''  Contador = 0
+'''
+'''   sSQL = "SELECT C.Cliente,C.CI_RUC,C.TD,C.Direccion,C.Email,C.Email2,C.Ciudad,C.DirNumero,C.Telefono,TC.* " _
+'''        & "FROM Trans_Compras As TC,Clientes As C " _
+'''        & "WHERE TC.Item = '" & NumEmpresa & "' " _
+'''        & "AND TC.Periodo = '" & Periodo_Contable & "' " _
+'''        & "AND TC.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
+'''        & "AND LEN(TC.Serie_Retencion) = 6 " _
+'''        & "AND LEN(TC.AutRetencion) = 13 " _
+'''        & "AND TC.Estado_SRI <> 'OK' " _
+'''        & "AND TC.IdProv = C.Codigo " _
+'''        & "ORDER BY TC.Fecha,Cta_Servicio,Cta_Bienes "
+''' Select_AdoDB AdoDBAut, sSQL
+''' If AdoDBAut.RecordCount > 0 Then
+'''    Progreso_Barra.Valor_Maximo = Progreso_Barra.Valor_Maximo + AdoDBAut.RecordCount
+'''
+'''    RutaXMLRechazado = RutaDocumentos & "\Comprobantes no Autorizados\*.xml"
+'''    If Dir$(RutaXMLRechazado) <> "" Then Kill RutaXMLRechazado
+'''
+'''   'Empezamos a autorizar
+'''    Do While Not AdoDBAut.EOF
+'''       RatonReloj
+'''       Contador = Contador + 1
+'''       FechaTexto = AdoDBAut.fields("Fecha")
+'''       Co.Fecha = AdoDBAut.fields("Fecha")
+'''       Co.Beneficiario = AdoDBAut.fields("Cliente")
+'''       Co.RUC_CI = AdoDBAut.fields("CI_RUC")
+'''       Co.Direccion = AdoDBAut.fields("Direccion")
+'''       Co.TD = AdoDBAut.fields("TD")
+'''       Co.Email = AdoDBAut.fields("Email")
+'''       Co.TP = AdoDBAut.fields("TP")
+'''       Co.Numero = AdoDBAut.fields("Numero")
+'''
+'''       FA.EmailC = AdoDBAut.fields("Email")
+'''       FA.EmailR = AdoDBAut.fields("Email2")
+'''       FA.TP = Co.TP
+'''       FA.Numero = Co.Numero
+'''       FA.Fecha = AdoDBAut.fields("FechaEmision")
+'''       FA.Serie_R = AdoDBAut.fields("Serie_Retencion")
+'''       FA.Retencion = AdoDBAut.fields("SecRetencion")
+'''       FA.ClaveAcceso = AdoDBAut.fields("Clave_Acceso")
+'''       FA.Estado_SRI = "CN"
+'''       FA.Autorizacion_R = AdoDBAut.fields("AutRetencion")
+'''       FA.Serie = AdoDBAut.fields("Establecimiento") & AdoDBAut.fields("PuntoEmision")
+'''       FA.Factura = AdoDBAut.fields("Secuencial")
+'''       If Len(FA.ClaveAcceso) = 13 Then
+'''        '  MsgBox "Ant RE: '" & FA.ClaveAcceso & "'"
+'''           FA.ClaveAcceso = Format$(FA.Fecha, "ddmmyyyy") & "07" & RUC & Ambiente & FA.Serie_R & Format$(FA.Retencion, String(9, "0")) _
+'''                          & "123456781"
+'''           FA.ClaveAcceso = Replace(FA.ClaveAcceso, ".", "1")
+'''           FA.ClaveAcceso = FA.ClaveAcceso & Digito_Verificador_Modulo11(FA.ClaveAcceso)
+'''       End If
+'''       Progreso_Barra.Mensaje_Box = "[" & Contador & " de " & AdoDBAut.RecordCount & " - " _
+'''                                  & Format(FA.Fecha, "MM/yyyy") & "] " _
+'''                                  & "Consultando RE " _
+'''                                  & " No. " & FA.Serie_R & "-" & Format(FA.Retencion, "000000000")
+'''       Progreso_Esperar
+'''       SRI_Aut.Clave_De_Acceso = FA.ClaveAcceso
+'''       SRI_Aut.Estado_SRI = "CF"
+'''       SRI_Aut.Error_SRI = ""
+'''       RutaXMLAutorizado = RutaDocumentos & "\Comprobantes Autorizados\" & FA.ClaveAcceso & ".xml"
+'''       RutaXMLRechazado = RutaDocumentos & "\Comprobantes no Autorizados\" & FA.ClaveAcceso & ".xml"
+'''
+'''       For Tiempo_Espera = 1 To 3
+'''           Progreso_Esperar True
+''''           ArrayAutorizacion = ObjAutori.FF_ObtieneNumAutorizado(URLAutorizacion, FA.ClaveAcceso, RutaXMLAutorizado, RutaXMLRechazado)
+'''           If ArrayAutorizacion(0) = "AUTORIZADO" Then Exit For
+'''           For Tiempo_SRI = 0 To 50
+'''               Progreso_Esperar True
+'''           Next Tiempo_SRI
+'''       Next Tiempo_Espera
+'''      'Ok Documento Firmado y Autorizado
+'''       If ArrayAutorizacion(0) = "AUTORIZADO" Then
+'''          Progreso_Barra.Mensaje_Box = "[Ok] " & "Actualizando RE " _
+'''                                     & " No. " & FA.Serie_R & "-" & Format(FA.Retencion, "000000000")
+'''          Progreso_Esperar True
+'''          SRI_Aut.Estado_SRI = "OK"
+'''          SRI_Aut.Error_SRI = "OK"
+'''          SRI_Aut.Autorizacion = ArrayAutorizacion(1)
+'''          SRI_Aut.Fecha_Autorizacion = Format$(MidStrg(ArrayAutorizacion(2), 1, 10), "dd/MM/yyyy")
+'''          SRI_Aut.Hora_Autorizacion = MidStrg(ArrayAutorizacion(2), 12, 8)
+'''          SRI_Aut.Documento_XML = Leer_Archivo_Texto(RutaXMLAutorizado)
+'''          SRI_Actualizar_Documento_XML SRI_Aut
+'''          SRI_Actualizar_Autorizacion_Comprobante "RE", SRI_Aut, FA
+'''       Else
+'''          SRI_Aut.Error_SRI = ArrayAutorizacion(0) & " " & ArrayAutorizacion(1)
+'''          'SRI_Actualizar_XML_Factura FA, SRI_Aut
+'''       End If
+'''       AdoDBAut.MoveNext
+'''    Loop
+''' End If
+''' AdoDBAut.Close
+''' RatonNormal
+''' Progreso_Final
+'''End Sub
 
 Public Sub Actualizar_Codigo_Superiores()
     Contador = 0

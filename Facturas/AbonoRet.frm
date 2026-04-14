@@ -1108,43 +1108,43 @@ Dim EsNotaDeVenta As Boolean
 Dim AutorizacionFA As String
 Dim SerieFA As String
 
-Public Sub GrabarAbonosRetenciones(CtaCierre As String, _
-                                   DetalleCta As String, _
-                                   Cheq_Dep As String, _
-                                   DetTP As String, _
-                                   Factura As Long, _
-                                   Valor As Currency, _
-                                   FechaAbono As String, _
-                                   Establecimiento, _
-                                   Emision As String, _
-                                   Autorizacion As String, _
-                                   Porcentaje As Byte)
-  If Valor > 0 Then
-     If Cheq_Dep = Ninguno And DiarioCaja > 0 Then Cheq_Dep = CStr(DiarioCaja)
-     SetAdoAddNew "Trans_Abonos"
-     SetAdoFields "T", Normal '
-     SetAdoFields "TP", DetTP '
-     SetAdoFields "Fecha", FechaAbono '
-     SetAdoFields "Recibo_No", Format$(DiarioCaja, "0000000")
-     SetAdoFields "Cta", CtaCierre '
-     SetAdoFields "Cta_CxP", Cta_Cobrar
-     SetAdoFields "Factura", Factura '
-     SetAdoFields "Autorizacion", AutorizacionFA
-     SetAdoFields "Serie", SerieFA
-     SetAdoFields "CodigoC", CodigoCliente
-     SetAdoFields "Abono", Valor '
-     SetAdoFields "Banco", UCaseStrg(DetalleCta) '
-     SetAdoFields "Cheque", Format$(Val(Cheq_Dep), "0000000")
-     SetAdoFields "Codigo_Inv", CodigoP
-     SetAdoFields "Comprobante", Autorizacion
-     SetAdoFields "EstabRetencion", Establecimiento
-     SetAdoFields "PtoEmiRetencion", Emision
-     SetAdoFields "Porc", Porcentaje
-     SetAdoFields "CodigoU", CodigoUsuario
-     SetAdoFields "Item", NumEmpresa
-     SetAdoUpdate
-  End If
-End Sub
+'''Public Sub GrabarAbonosRetenciones(CtaCierre As String, _
+'''                                   DetalleCta As String, _
+'''                                   Cheq_Dep As String, _
+'''                                   DetTP As String, _
+'''                                   Factura As Long, _
+'''                                   Valor As Currency, _
+'''                                   FechaAbono As String, _
+'''                                   Establecimiento, _
+'''                                   Emision As String, _
+'''                                   Autorizacion As String, _
+'''                                   Porcentaje As Byte)
+'''  If Valor > 0 Then
+'''     If Cheq_Dep = Ninguno And DiarioCaja > 0 Then Cheq_Dep = CStr(DiarioCaja)
+'''     SetAdoAddNew "Trans_Abonos"
+'''     SetAdoFields "T", Normal '
+'''     SetAdoFields "TP", DetTP '
+'''     SetAdoFields "Fecha", FechaAbono '
+'''     SetAdoFields "Recibo_No", Format$(DiarioCaja, "0000000")
+'''     SetAdoFields "Cta", CtaCierre '
+'''     SetAdoFields "Cta_CxP", Cta_Cobrar
+'''     SetAdoFields "Factura", Factura '
+'''     SetAdoFields "Autorizacion", AutorizacionFA
+'''     SetAdoFields "Serie", SerieFA
+'''     SetAdoFields "CodigoC", CodigoCliente
+'''     SetAdoFields "Abono", Valor '
+'''     SetAdoFields "Banco", UCaseStrg(DetalleCta) '
+'''     SetAdoFields "Cheque", Format$(Val(Cheq_Dep), "0000000")
+'''     SetAdoFields "Codigo_Inv", CodigoP
+'''     SetAdoFields "Comprobante", Autorizacion
+'''     SetAdoFields "EstabRetencion", Establecimiento
+'''     SetAdoFields "PtoEmiRetencion", Emision
+'''     SetAdoFields "Porc", Porcentaje
+'''     SetAdoFields "CodigoU", CodigoUsuario
+'''     SetAdoFields "Item", NumEmpresa
+'''     SetAdoUpdate
+'''  End If
+'''End Sub
 
 Public Sub Carga_ConceptosRetencion(MBFecha As String)
 Dim FechaCodAir As String
@@ -1184,42 +1184,53 @@ Private Sub Command1_Click()
     Titulo = "Formulario de Grabación."
     If BoxMensaje = vbYes Then
        Calculo_Saldo
+       JSONInPutAbonos = ""
+       CodigoVen = Ninguno
        TotalAbonos = Total_RetIVAB + Total_RetIVAS + Total_Ret
        SaldoDisp = Saldo - TotalAbonos
-       Control_Procesos "P", "Abono de " & TipoFactura & ". No. " & Factura_No & "Por Ret " & Format$(TotalAbonos, "#,##0.00")
        FechaTexto = FechaSistema
-       If CheqRecibo.value = 1 Then
-          DiarioCaja = ReadSetDataNum("Recibo_No", True, True)
-       Else
-          DiarioCaja = Val(TxtRecibo)
+       If CheqRecibo.value = 1 Then DiarioCaja = ReadSetDataNum("Recibo_No", True, True) Else DiarioCaja = Val(TxtRecibo)
+       
+       TA.Cta_CxP = Cta_Cobrar
+       TA.CodigoC = CodigoCliente
+       TA.Cheque = DCRecibo.Text
+       TA.T = Normal
+       TA.TP = TipoFactura
+       TA.Serie = SerieFA
+       TA.Factura = Factura_No
+       TA.Fecha = MBFecha
+       TA.Serie_NC = Ninguno
+       TA.Autorizacion_NC = Ninguno
+       TA.Nota_Credito = 0
+       TA.Serie_R = TextCheqNo
+       TA.Autorizacion = AutorizacionFA
+       TA.AutorizacionR = TextBanco
+       TA.Secuencial_R = Val(TextCompRet)
+       
+       If ChRetB.value <> 0 And Total_RetIVAB > 0 Then
+          TA.Cta = SinEspaciosIzq(DCRetIBienes)
+          TA.Banco = "RETENCION IVA BIENES"
+          TA.Abono = Total_RetIVAB
+          TA.Porcentaje = Val(CBienes)
+          Grabar_Abonos TA
        End If
-       Codigo1 = Format$(Val(TrimStrg(MidStrg(TextCheqNo, 1, 3))), "000")
-       Codigo2 = Format$(Val(TrimStrg(MidStrg(TextCheqNo, 4, 3))), "000")
-       If ChRetB.value <> 0 Then
-          Cta_Ret_IVA = SinEspaciosIzq(DCRetIBienes)
-          GrabarAbonosRetenciones Cta_Ret_IVA, "RETENCION IVA BIENES", TextCompRet, TipoFactura, Factura_No, Total_RetIVAB, MBFecha, Codigo1, Codigo2, TextBanco, Val(CBienes)
+       
+       If ChRetS.value <> 0 And Total_RetIVAS > 0 Then
+          TA.Cta = SinEspaciosIzq(DCRetISer)
+          TA.Banco = "RETENCION IVA SERVICIO"
+          TA.Abono = Total_RetIVAS
+          TA.Porcentaje = Val(CServicio)
+          Grabar_Abonos TA
        End If
-       If ChRetS.value <> 0 Then
-          Cta_Ret_IVA = SinEspaciosIzq(DCRetISer)
-          GrabarAbonosRetenciones Cta_Ret_IVA, "RETENCION IVA SERVICIO", TextCompRet, TipoFactura, Factura_No, Total_RetIVAS, MBFecha, Codigo1, Codigo2, TextBanco, Val(CServicio)
+       
+       If ChRetF.value <> 0 And Total_Ret > 0 Then
+          TA.Cta = SinEspaciosIzq(DCRetFuente)
+          TA.Banco = "RETENCION FUENTE - " & DCCodRet
+          TA.Abono = Total_Ret
+          TA.Porcentaje = Val(TextPorc)
+          Grabar_Abonos TA
        End If
-       If ChRetF.value <> 0 Then
-          Cta_Ret = SinEspaciosIzq(DCRetFuente)
-          GrabarAbonosRetenciones Cta_Ret, "RETENCION FUENTE - " & DCCodRet, TextCompRet, TipoFactura, Factura_No, Total_Ret, MBFecha, Codigo1, Codigo2, TextBanco, Val(TextPorc)
-       End If
-       T = "P"
-       If SaldoDisp <= 0 Then
-          T = "C"
-          SaldoDisp = 0
-       End If
-       sSQL = "UPDATE Facturas " _
-            & "SET Saldo_MN = " & SaldoDisp & ",T = '" & T & "' " _
-            & "WHERE Item = '" & NumEmpresa & "' " _
-            & "AND Factura = " & Factura_No & " " _
-            & "AND TC = '" & TipoFactura & "' " _
-            & "AND Periodo = '" & Periodo_Contable & "' " _
-            & "AND CodigoC = '" & CodigoCliente & "' "
-       Ejecutar_SQL_SP sSQL
+       Grabar_Abonos_Factura_SP TA
        TextCajaMN = "0.00"
        TextCajaME = "0.00"
        TextRet = "0.00"
@@ -1376,7 +1387,7 @@ Private Sub Form_Activate()
        & "FROM Catalogo_Cuentas " _
        & "WHERE Item = '" & NumEmpresa & "' " _
        & "AND Periodo = '" & Periodo_Contable & "' " _
-       & "AND TC = 'CI' " _
+       & "AND TC = 'CB' " _
        & "AND DG = 'D' " _
        & "ORDER BY Codigo "
   SelectDB_Combo DCRetIBienes, AdoRetIvaBienes, sSQL, "Cuentas"

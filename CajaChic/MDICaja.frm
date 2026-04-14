@@ -263,20 +263,13 @@ End Sub
 
 Private Sub MDIForm_Load()
   Set MDIFormulario = Me
-  Primera_Vez = True
-  Bandera = True
-  UnidadSistema
-  TipoModulo = conta
-  IngresarClave = True
+  Timer1.Enabled = True
+  Timer1.Interval = 1000
+  Times_Sistema
+ 
  'MODULOS
   NumModulo = "0"
   Modulo = "CAJA CHICA"
-  MenuDeModulos = True
- 'TiempoTarea = Time
-  TiempoSistema = Time
-  Timer1.Enabled = True
-  Timer1.Interval = 1000
-  
   ListEmp.Show 1
   PonerDirEmpresa
 End Sub

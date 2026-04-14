@@ -7,7 +7,7 @@ Begin VB.Form FUpdSystem
    BackColor       =   &H00808080&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "DATOS Y PROGRAMAS"
-   ClientHeight    =   3015
+   ClientHeight    =   2805
    ClientLeft      =   105
    ClientTop       =   780
    ClientWidth     =   6540
@@ -18,7 +18,7 @@ Begin VB.Form FUpdSystem
    MaxButton       =   0   'False
    MinButton       =   0   'False
    Picture         =   "FUpdSystem.frx":1297D
-   ScaleHeight     =   3015
+   ScaleHeight     =   2805
    ScaleWidth      =   6540
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
@@ -534,10 +534,10 @@ On Error GoTo error_Handler
          .Usuario = ftpUse                       'Le establecemos el nombre de usuario de la cuenta
          .Puerto = ftpPuerto
        End If
-      'MsgBox .servidor
+      'MsgBox .servidor & vbCrLf & .Puerto
       'Conectamos al servidor FTP. EL label es el control donde mostrar los errores y el estado de la conexión
        If .ConectarFtp(LstStatud) = False Then
-           MsgBox "No se pudo conectar"
+           MsgBox "No se pudo conectar" & .MsgError
            Exit Sub
        End If
        FUpdSystem.Caption = "DATOS Y PROGRAMAS: " & .servidor
@@ -558,7 +558,7 @@ On Error GoTo error_Handler
          'Borramos archivos antiguos
           Eliminar_Si_Existe_File RutaSistema & "\JAVASCRIPT\*.*"
           
-         .CambiarDirectorio "/SISTEMA"
+         .CambiarDirectorio ftpUpDir & "/SISTEMA"
          .ListarArchivos
           For I = 1 To LstVwFTP.ListItems.Count
               Select Case UCaseStrg(RightStrg(LstVwFTP.ListItems(I), 3))
@@ -570,7 +570,7 @@ On Error GoTo error_Handler
               Cadena = Cadena & LstVwFTP.ListItems(I) & vbCrLf
           Next I
           
-         .CambiarDirectorio "/SISTEMA/JAVASCRIPT/"
+         .CambiarDirectorio ftpUpDir & "/SISTEMA/JAVASCRIPT/"
          .ListarArchivos
           For I = 1 To LstVwFTP.ListItems.Count
               Progreso_Barra.Mensaje_Box = "Eliminando: " & LstVwFTP.ListItems(I)
@@ -580,7 +580,7 @@ On Error GoTo error_Handler
           Next I
           
          'Copiamos nuevos archivos del servidor
-         .CambiarDirectorio "/SISTEMA"
+         .CambiarDirectorio ftpUpDir & "/SISTEMA"
          .ListarArchivos
           Cadena = ""
           For I = 1 To LstVwFTP.ListItems.Count
@@ -594,7 +594,7 @@ On Error GoTo error_Handler
           Next I
           'Sleep 5000
           
-         .CambiarDirectorio "/SISTEMA/JAVASCRIPT/"
+         .CambiarDirectorio ftpUpDir & "/SISTEMA/JAVASCRIPT/"
          .ListarArchivos
           For I = 1 To LstVwFTP.ListItems.Count
               Progreso_Barra.Mensaje_Box = "Actualizando: " & LstVwFTP.ListItems(I)
@@ -602,7 +602,7 @@ On Error GoTo error_Handler
              .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\JAVASCRIPT\" & LstVwFTP.ListItems(I), True
           Next I
           
-         .CambiarDirectorio "/SISTEMA/"
+         .CambiarDirectorio ftpUpDir & "/SISTEMA/"
          .ListarArchivos
           For I = 1 To LstVwFTP.ListItems.Count
               If UCaseStrg(RightStrg(LstVwFTP.ListItems(I), 3)) = "EXE" Then
@@ -612,9 +612,9 @@ On Error GoTo error_Handler
                 .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\" & LstVwFTP.ListItems(I), True
               End If
           Next I
-         
+         'MsgBox Cadena
          'Conectamos la nueva Base de Datos para sacar los fondos del Adobe Reader DC
-         .CambiarDirectorio "/SISTEMA/FONTSPDF/"
+         .CambiarDirectorio ftpUpDir & "/SISTEMA/FONTSPDF/"
          .ListarArchivos
           For I = 1 To LstVwFTP.ListItems.Count
               If Len(LstVwFTP.ListItems(I)) > 3 Then
@@ -631,7 +631,7 @@ On Error GoTo error_Handler
        If InStr(TypeUpdate, "[3]") Then
          'Borrammos fondos antiguos de cada mes
           For J = 1 To 12
-             .CambiarDirectorio "/SISTEMA/FONDOS/M" & Format(J, "00") & "/"
+             .CambiarDirectorio ftpUpDir & "/SISTEMA/FONDOS/M" & Format(J, "00") & "/"
              .ListarArchivos
               For I = 1 To LstVwFTP.ListItems.Count
                   If Len(LstVwFTP.ListItems(I)) > 3 Then
@@ -642,7 +642,7 @@ On Error GoTo error_Handler
               Next I
           Next J
          
-         .CambiarDirectorio "/SISTEMA/LOGOS/"
+         .CambiarDirectorio ftpUpDir & "/SISTEMA/LOGOS/"
          .ListarArchivos
           For I = 1 To LstVwFTP.ListItems.Count
               If Len(LstVwFTP.ListItems(I)) > 3 Then
@@ -652,7 +652,7 @@ On Error GoTo error_Handler
               End If
           Next I
           
-         .CambiarDirectorio "/SISTEMA/FOTOS/"
+         .CambiarDirectorio ftpUpDir & "/SISTEMA/FOTOS/"
          .ListarArchivos
           For I = 1 To LstVwFTP.ListItems.Count
               If Len(LstVwFTP.ListItems(I)) > 3 Then
@@ -662,7 +662,7 @@ On Error GoTo error_Handler
               End If
           Next I
           
-         .CambiarDirectorio "/SISTEMA/FORMATOS/"
+         .CambiarDirectorio ftpUpDir & "/SISTEMA/FORMATOS/"
          .ListarArchivos
           For I = 1 To LstVwFTP.ListItems.Count
               If Len(LstVwFTP.ListItems(I)) > 3 Then
@@ -674,7 +674,7 @@ On Error GoTo error_Handler
                     
          'Insertamos los fondos por Mes
           For J = 1 To 12
-             .CambiarDirectorio "/SISTEMA/FONDOS/M" & Format(J, "00") & "/"
+             .CambiarDirectorio ftpUpDir & "/SISTEMA/FONDOS/M" & Format(J, "00") & "/"
              .ListarArchivos
              'Cadena = "/SISTEMA/FONDOS/M" & Format(J, "00") & "/" & vbCrLf
               For I = 1 To LstVwFTP.ListItems.Count
@@ -688,7 +688,7 @@ On Error GoTo error_Handler
              'MsgBox Cadena
           Next J
           
-         .CambiarDirectorio "/SISTEMA/LOGOS/"
+         .CambiarDirectorio ftpUpDir & "/SISTEMA/LOGOS/"
          .ListarArchivos
           For I = 1 To LstVwFTP.ListItems.Count
               If Len(LstVwFTP.ListItems(I)) > 3 Then
@@ -698,7 +698,7 @@ On Error GoTo error_Handler
               End If
           Next I
           
-         .CambiarDirectorio "/SISTEMA/FOTOS/"
+         .CambiarDirectorio ftpUpDir & "/SISTEMA/FOTOS/"
          .ListarArchivos
           For I = 1 To LstVwFTP.ListItems.Count
               If Len(LstVwFTP.ListItems(I)) > 3 Then
@@ -708,7 +708,7 @@ On Error GoTo error_Handler
               End If
           Next I
           
-         .CambiarDirectorio "/SISTEMA/FORMATOS/"
+         .CambiarDirectorio ftpUpDir & "/SISTEMA/FORMATOS/"
          .ListarArchivos
           For I = 1 To LstVwFTP.ListItems.Count
               If Len(LstVwFTP.ListItems(I)) > 3 Then

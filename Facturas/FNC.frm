@@ -1500,6 +1500,8 @@ Dim Grupo As String
     FechaValida MBoxFecha
    'MsgBox CCur(LblTotalDC.Caption) & vbCrLf & CCur(LblSaldo.Caption)
     If CCur(LblTotalDC.Caption) <= CCur(LblSaldo.Caption) Then
+       JSONInPutAbonos = ""
+    
        If Not ReIngNC Then FA.Nota_Credito = ReadSetDataNum("NC_SERIE_" & FA.Serie_NC, True, True)
         FA.Fecha_NC = MBoxFecha
         Contra_Cta = SinEspaciosIzq(DCContraCta)
@@ -1631,6 +1633,8 @@ Dim Grupo As String
         TA.Abono = FA.Total_IVA_NC
         Grabar_Abonos TA
 
+        Grabar_Abonos_Factura_SP TA
+        
         If TxtConcepto = "" Then TxtConcepto = Ninguno
         
         sSQL = "UPDATE Facturas " _
@@ -1643,19 +1647,19 @@ Dim Grupo As String
              & "AND Autorizacion = '" & FA.Autorizacion & "' "
         Ejecutar_SQL_SP sSQL
             
-        sSQL = "UPDATE Trans_Abonos " _
-             & "SET Serie_NC = '" & FA.Serie_NC & "', " _
-             & "Autorizacion_NC = '" & FA.Autorizacion_NC & "', " _
-             & "Secuencial_NC = '" & FA.Nota_Credito & "', " _
-             & "Clave_Acceso_NC = '" & Ninguno & "', " _
-             & "Estado_SRI_NC = 'CG' " _
-             & "WHERE Item = '" & NumEmpresa & "' " _
-             & "AND Periodo = '" & Periodo_Contable & "' " _
-             & "AND Factura = " & FA.Factura & " " _
-             & "AND TP = '" & FA.TC & "' " _
-             & "AND Serie = '" & FA.Serie & "' " _
-             & "AND Autorizacion = '" & FA.Autorizacion & "' "
-        Ejecutar_SQL_SP sSQL
+'        sSQL = "UPDATE Trans_Abonos " _
+'             & "SET Serie_NC = '" & FA.Serie_NC & "', " _
+'             & "Autorizacion_NC = '" & FA.Autorizacion_NC & "', " _
+'             & "Secuencial_NC = '" & FA.Nota_Credito & "', " _
+'             & "Clave_Acceso_NC = '" & Ninguno & "', " _
+'             & "Estado_SRI_NC = 'CG' " _
+'             & "WHERE Item = '" & NumEmpresa & "' " _
+'             & "AND Periodo = '" & Periodo_Contable & "' " _
+'             & "AND Factura = " & FA.Factura & " " _
+'             & "AND TP = '" & FA.TC & "' " _
+'             & "AND Serie = '" & FA.Serie & "' " _
+'             & "AND Autorizacion = '" & FA.Autorizacion & "' "
+'        Ejecutar_SQL_SP sSQL
         If ((FA.SubTotal_NC + FA.Total_IVA_NC) > 0) And Len(FA.Autorizacion_NC) >= 13 Then SRI_Crear_Clave_Acceso_Nota_Credito FA, True
         
     ''''  If SaldoPendiente + SubTotal_IVA > 0 Then
@@ -1829,6 +1833,8 @@ Private Sub DCFactura_LostFocus()
    End If
   End With
   AdoAuxDB.Close
+  
+  If Len(Leer_Cta_Catalogo(FA.Cta_CxP)) <= 1 Then MsgBox "La cuenta por cobrar: " & FA.Cta_CxP & ", no existe en el Catalogo de Cuentas"
 End Sub
 
 Private Sub DCLinea_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -1994,7 +2000,7 @@ Private Sub Form_Load()
   FA.Factura = 0
   Actualizar_Saldos_Facturas_SP FA.TC, FA.Serie, FA.Factura
   
-  SRI_Obtener_Datos_Comprobantes_Electronicos
+ 'SRI_Obtener_Datos_Comprobantes_Electronicos
 End Sub
 
 Private Sub TextCant_GotFocus()

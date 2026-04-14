@@ -1947,6 +1947,8 @@ Private Sub Command1_Click()
       Mensajes = "Esta Seguro que desea grabar estos pagos."
       Titulo = "Formulario de Grabación."
       If BoxMensaje = vbYes Then
+         IDRegJSON = 0
+         JSONInPutAbonos = ""
          CodigoVen = CodigoUsuario
          If ComisionEjec Then
             With AdoRecibo.Recordset
@@ -2058,8 +2060,13 @@ Private Sub Command1_Click()
          If TA.Abono > 0 Then TotalAbonos = TotalAbonos + TA.Abono
          Grabar_Abonos TA
          
-         Actualizar_Saldos_Facturas_SP FA.TC, FA.Serie, FA.Factura
-
+         Grabar_Abonos_Factura_SP TA
+'''         Actualizar_Saldos_Facturas_SP FA.TC, FA.Serie, FA.Factura
+'        --------------------------------------------------------
+'        Clipboard.Clear
+'        Clipboard.SetText JSONInPutAbonos
+'        MsgBox JSONInPutAbonos
+'        --------------------------------------------------------
          LabelCambio.Caption = "0.00"
          TextCajaMN = "0.00"
          TextCajaME = "0.00"

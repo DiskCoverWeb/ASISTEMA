@@ -1495,7 +1495,7 @@ Dim Total_Mod_11 As Long
   Digito_Verificador_Modulo11 = CStr(Mod_11)
 End Function
 
-Public Sub Grabar_Factura(TFA As Tipo_Facturas, VerFactura As Boolean, Optional NoRegTrans As Boolean)
+Public Sub Grabar_Factura(TFA As Tipo_Facturas, FTA As Tipo_Abono, VerFactura As Boolean, Optional NoRegTrans As Boolean)
   RatonReloj
  'TFA.CodigoC = Parameto de entrada
  
@@ -1504,18 +1504,7 @@ Public Sub Grabar_Factura(TFA As Tipo_Facturas, VerFactura As Boolean, Optional 
   TFA.T = Pendiente
   If Len(TFA.Autorizacion) >= 13 Then TMail.TipoDeEnvio = "CE"
   If TFA.TC = "FR" Then TFA.TC = "FA"
-  Grabar_Factura_SP TFA
-  With TFA
-       Cadena = ""
-      .Hora = Format$(Time, FormatoTimes)
-       If Not .Existe_Cliente Then Cadena = Cadena & "No se puedo grabar porque no existe Beneficiario" & vbCrLf
-       If .Cantidad_Rubros = 0 Then Cadena = Cadena & "No se puedo grabar porque no existe rubros para facturar" & vbCrLf
-       If .GrabadoExitoso Then
-           Control_Procesos "G", "Grabar " & TFA.TC & " No. " & TFA.Serie & "-" & Format$(TFA.Factura, "000000000") & " [" & TFA.Hora & "]"
-       Else
-           Control_Procesos "E", "No se pudo grabar " & TFA.TC & " No. " & TFA.Serie & "-" & Format$(TFA.Factura, "000000000") & " [" & TFA.Hora & "]"
-       End If
-  End With
+  Grabar_Factura_SP TFA, FTA
   RatonNormal
 End Sub
 
@@ -1566,74 +1555,120 @@ End Sub
 '''End Sub
 
 'Parametros de entrada: CodigoCliente
-Public Sub Grabar_Abonos(FTA As Tipo_Abono, Optional NoRegTrans As Boolean)
-Dim CodigoCta As String
-  
+'''Public Sub Grabar_Abonos(FTA As Tipo_Abono, Optional NoRegTrans As Boolean)
+'''Dim CodigoCta As String
+'''
+'''  With FTA
+'''   CodigoCta = Leer_Cta_Catalogo(.Cta_CxP)
+'''   If Len(CodigoCta) > 1 Then
+'''      CodigoCta = Leer_Cta_Catalogo(.Cta)
+'''     'MsgBox "Abono: " & .Banco & " - " & .Cheque & " - " & .Abono
+'''      If .Abono > 0 And Len(CodigoCta) > 1 And TipoCta = "D" Then
+'''          If .T = "" Or .T = Ninguno Or .T = "A" Then .T = Normal
+'''          If .Cta_CxP = "" Or .Cta_CxP = Ninguno Then .Cta_CxP = Cta_Cobrar
+'''          If .CodigoC = "" Or .CodigoC = Ninguno Then .CodigoC = CodigoCliente
+'''          If .Comprobante = "" Then .Comprobante = Ninguno
+'''          If .Codigo_Inv = "" Then .Codigo_Inv = Ninguno
+'''          If .Fecha = Ninguno Then .Fecha = FechaSistema
+'''          If .Serie = Ninguno Then .Serie = "001001"
+'''          If .Autorizacion = Ninguno Then .Autorizacion = "1234567890"
+'''          If .Cheque = Ninguno And DiarioCaja > 0 Then .Cheque = Format$(DiarioCaja, "00000000")
+'''          If DiarioCaja > 0 Then .Recibo_No = Format$(DiarioCaja, "0000000000") Else .Recibo_No = "0000000000"
+'''         .Tipo_Cta = SubCta
+'''
+'''          SetAdoAddNew "Trans_Abonos"
+'''          SetAdoFields "T", .T
+'''          SetAdoFields "TP", .TP
+'''          SetAdoFields "Fecha", .Fecha
+'''          SetAdoFields "Recibo_No", .Recibo_No
+'''          SetAdoFields "Tipo_Cta", .Tipo_Cta
+'''          SetAdoFields "Cta", .Cta
+'''          SetAdoFields "Cta_CxP", .Cta_CxP
+'''          SetAdoFields "Factura", .Factura
+'''          SetAdoFields "CodigoC", .CodigoC
+'''          SetAdoFields "Abono", .Abono
+'''          SetAdoFields "Banco", .Banco
+'''          SetAdoFields "Cheque", .Cheque
+'''          SetAdoFields "Codigo_Inv", .Codigo_Inv
+'''          SetAdoFields "Comprobante", .Comprobante
+'''          SetAdoFields "Serie", .Serie
+'''          SetAdoFields "Autorizacion", .Autorizacion
+'''          SetAdoFields "Item", NumEmpresa
+'''          SetAdoFields "CodigoU", CodigoUsuario
+'''          SetAdoFields "Cod_Ejec", CodigoVen
+'''          If .Banco = "NOTA DE CREDITO" Then
+'''              SetAdoFields "Serie_NC", .Serie_NC
+'''              SetAdoFields "Autorizacion_NC", .Autorizacion_NC
+'''              SetAdoFields "Secuencial_NC", .Nota_Credito
+'''          End If
+'''          If Len(.Serie_R) = 6 Then
+'''             SetAdoFields "Serie_R", .Serie_R
+'''             SetAdoFields "Autorizacion_R", .AutorizacionR
+'''             SetAdoFields "Secuencial_R", .Secuencial_R
+'''             SetAdoFields "Porc", .Porcentaje
+'''          End If
+'''          SetAdoUpdate
+'''          If Not NoRegTrans Then
+'''             If .Banco = "NOTA DE CREDITO" Then
+'''                 Control_Procesos "A", "Anulación por " & .Banco & " de " & .TP & " No. " & .Serie & "-" & Format$(.Factura, "000000000")
+'''             Else
+'''                 Control_Procesos "P", "Abono de " & .TP & " No. " & .Serie & "-" & Format$(.Factura, "000000000") & ", Por: " & Format$(.Abono, "#,##0.00")
+'''             End If
+'''          End If
+'''
+'''          Inserta_Abonos_JSON FTA, NoRegTrans
+'''
+'''      Else
+'''        Control_Procesos "P", "El importe a la Cta (" & .Cta & ") " & .TP & " No. " & .Serie & "-" & Format$(.Factura, "000000000") & ", Por: " & Format$(.Abono, "#,##0.00"), "No se realizo con exito " & .Banco & " " & .Cheque
+'''      End If
+'''   Else
+'''      Control_Procesos "P", "El importe a la Cta (" & .Cta_CxP & ") " & .TP & " No. " & .Serie & "-" & Format$(.Factura, "000000000") & ", Por: " & Format$(.Abono, "#,##0.00"), "No se realizo con exito " & .Banco & " " & .Cheque
+'''   End If
+'''  End With
+'''End Sub
+
+Public Sub Grabar_Abonos(FTA As Tipo_Abono)
   With FTA
-   CodigoCta = Leer_Cta_Catalogo(.Cta_CxP)
-   If Len(CodigoCta) > 1 Then
-      CodigoCta = Leer_Cta_Catalogo(.Cta)
-     'MsgBox "Abono: " & .Banco & " - " & .Cheque & " - " & .Abono
-      If .Abono > 0 And Len(CodigoCta) > 1 And TipoCta = "D" Then
-          If .T = "" Or .T = Ninguno Or .T = "A" Then .T = Normal
-          If .Cta_CxP = "" Or .Cta_CxP = Ninguno Then .Cta_CxP = Cta_Cobrar
-          If .CodigoC = "" Or .CodigoC = Ninguno Then .CodigoC = CodigoCliente
-          If .Comprobante = "" Then .Comprobante = Ninguno
-          If .Codigo_Inv = "" Then .Codigo_Inv = Ninguno
-          If .Fecha = Ninguno Then .Fecha = FechaSistema
-          If .Serie = Ninguno Then .Serie = "001001"
-          If .Autorizacion = Ninguno Then .Autorizacion = "1234567890"
-          If .Cheque = Ninguno And DiarioCaja > 0 Then .Cheque = Format$(DiarioCaja, "00000000")
-          If DiarioCaja > 0 Then .Recibo_No = Format$(DiarioCaja, "0000000000") Else .Recibo_No = "0000000000"
-         .Tipo_Cta = SubCta
-        
-          SetAdoAddNew "Trans_Abonos"
-          SetAdoFields "T", .T
-          SetAdoFields "TP", .TP
-          SetAdoFields "Fecha", .Fecha
-          SetAdoFields "Recibo_No", .Recibo_No
-          SetAdoFields "Tipo_Cta", .Tipo_Cta
-          SetAdoFields "Cta", .Cta
-          SetAdoFields "Cta_CxP", .Cta_CxP
-          SetAdoFields "Factura", .Factura
-          SetAdoFields "CodigoC", .CodigoC
-          SetAdoFields "Abono", .Abono
-          SetAdoFields "Banco", .Banco
-          SetAdoFields "Cheque", .Cheque
-          SetAdoFields "Codigo_Inv", .Codigo_Inv
-          SetAdoFields "Comprobante", .Comprobante
-          SetAdoFields "Serie", .Serie
-          SetAdoFields "Autorizacion", .Autorizacion
-          SetAdoFields "Item", NumEmpresa
-          SetAdoFields "CodigoU", CodigoUsuario
-          SetAdoFields "Cod_Ejec", CodigoVen
-          If .Banco = "NOTA DE CREDITO" Then
-              SetAdoFields "Serie_NC", .Serie_NC
-              SetAdoFields "Autorizacion_NC", .Autorizacion_NC
-              SetAdoFields "Secuencial_NC", .Nota_Credito
-          End If
-          If Len(.Serie_R) = 6 Then
-             SetAdoFields "Serie_R", .Serie_R
-             SetAdoFields "Autorizacion_R", .AutorizacionR
-             SetAdoFields "Secuencial_R", .Secuencial_R
-             SetAdoFields "Porc", .Porcentaje
-          End If
-          SetAdoUpdate
-          If Not NoRegTrans Then
-             If .Banco = "NOTA DE CREDITO" Then
-                 Control_Procesos "A", "Anulación por " & .Banco & " de " & .TP & " No. " & .Serie & "-" & Format$(.Factura, "000000000")
-             Else
-                 Control_Procesos "P", "Abono de " & .TP & " No. " & .Serie & "-" & Format$(.Factura, "000000000") & ", Por: " & Format$(.Abono, "#,##0.00")
-             End If
-          End If
-         'Grabar_Abonos_Periodo_Superior FTA
-          If FTA.TP = "TJ" Then Imprimir_FA_NV_TJ FTA
-      Else
-        Control_Procesos "P", "El importe a la Cta (" & .Cta & ") " & .TP & " No. " & .Serie & "-" & Format$(.Factura, "000000000") & ", Por: " & Format$(.Abono, "#,##0.00"), "No se realizo con exito " & .Banco & " " & .Cheque
-      End If
-   Else
-      Control_Procesos "P", "El importe a la Cta (" & .Cta_CxP & ") " & .TP & " No. " & .Serie & "-" & Format$(.Factura, "000000000") & ", Por: " & Format$(.Abono, "#,##0.00"), "No se realizo con exito " & .Banco & " " & .Cheque
-   End If
+   'MsgBox "Abono: " & .Banco & " - " & .Cheque & " - " & .Abono
+    If .Abono > 0 And Len(.Cta_CxP) > 1 And Len(.Cta) > 1 Then
+        If .T = "" Or .T = Ninguno Or .T = "A" Then .T = Normal
+        If .Cta_CxP = "" Or .Cta_CxP = Ninguno Then .Cta_CxP = Cta_Cobrar
+        If .CodigoC = "" Or .CodigoC = Ninguno Then .CodigoC = CodigoCliente
+        If .Comprobante = "" Then .Comprobante = Ninguno
+        If .Codigo_Inv = "" Then .Codigo_Inv = Ninguno
+        If .Fecha = "" Or .Fecha = Ninguno Then .Fecha = FechaSistema
+        If .Serie = "" Then .Serie = "."
+        If .Serie_R = "" Then .Serie_R = "."
+        If .Serie_NC = "" Then .Serie_NC = "."
+        If .Autorizacion = Ninguno Then .Autorizacion = "0123456789"
+        If .AutorizacionR = "" Then .AutorizacionR = "."
+        If .Cheque = Ninguno And DiarioCaja > 0 Then .Cheque = Format$(DiarioCaja, "0000000000")
+        If DiarioCaja > 0 Then .Recibo_No = Format$(DiarioCaja, "0000000000") Else .Recibo_No = "0000000000"
+        If CodigoVen = "" Then CodigoVen = Ninguno
+        JSONInPutAbonos = JSONInPutAbonos & ",{""T"":""" & .T & ""","
+        JSONInPutAbonos = JSONInPutAbonos & """TP"":""" & .TP & ""","
+        JSONInPutAbonos = JSONInPutAbonos & """Fecha"":""" & BuscarFecha(.Fecha) & ""","
+        JSONInPutAbonos = JSONInPutAbonos & """Recibo_No"":""" & .Recibo_No & ""","
+        JSONInPutAbonos = JSONInPutAbonos & """Cta"":""" & .Cta & ""","
+        JSONInPutAbonos = JSONInPutAbonos & """Cta_CxP"":""" & .Cta_CxP & ""","
+        JSONInPutAbonos = JSONInPutAbonos & """Factura"":" & .Factura & ","
+        JSONInPutAbonos = JSONInPutAbonos & """CodigoC"":""" & .CodigoC & ""","
+        JSONInPutAbonos = JSONInPutAbonos & """Abono"":" & .Abono & ","
+        JSONInPutAbonos = JSONInPutAbonos & """Banco"":""" & .Banco & ""","
+        JSONInPutAbonos = JSONInPutAbonos & """Cheque"":""" & .Cheque & ""","
+        JSONInPutAbonos = JSONInPutAbonos & """Codigo_Inv"":""" & .Codigo_Inv & ""","
+        JSONInPutAbonos = JSONInPutAbonos & """Comprobante"":""" & .Comprobante & ""","
+        JSONInPutAbonos = JSONInPutAbonos & """Serie"":""" & .Serie & ""","
+        JSONInPutAbonos = JSONInPutAbonos & """Autorizacion"":""" & .Autorizacion & ""","
+        JSONInPutAbonos = JSONInPutAbonos & """Cod_Ejec"":""" & CodigoVen & ""","
+        JSONInPutAbonos = JSONInPutAbonos & """Serie_NC"":""" & .Serie_NC & ""","
+        JSONInPutAbonos = JSONInPutAbonos & """Autorizacion_NC"":""" & .Autorizacion_NC & ""","
+        JSONInPutAbonos = JSONInPutAbonos & """Secuencial_NC"":" & .Nota_Credito & ","
+        JSONInPutAbonos = JSONInPutAbonos & """Serie_R"":""" & .Serie_R & ""","
+        JSONInPutAbonos = JSONInPutAbonos & """Autorizacion_R"":""" & .AutorizacionR & ""","
+        JSONInPutAbonos = JSONInPutAbonos & """Secuencial_R"":" & .Secuencial_R & ","
+        JSONInPutAbonos = JSONInPutAbonos & """Porc"":" & .Porcentaje & "}"
+    End If
   End With
 End Sub
 
@@ -9656,7 +9691,7 @@ End If
 End Sub
 
 Public Sub Imprimir_FA_NV_TJ(FTA As Tipo_Abono)
-    Mensajes = "Imprimir Transaccion" & vbCrLf & FTA.Factura
+    Mensajes = "Imprimir Transaccion de la Tarjeta" & vbCrLf & FTA.Factura
     Titulo = "IMPRESION TARJETA DE CREDITO"
     Bandera = False
     SetPrinters.Show 1
@@ -10941,7 +10976,7 @@ Dim FechaCxC As String
 
   If Len(TFA.Serie) < 6 Then TFA.Serie = Leer_Campo_Empresa("Serie_FA")
   
-  'MsgBox TFA.Cod_CxC
+ 'MsgBox TFA.Cod_CxC
   If Len(TFA.Cod_CxC) > 1 Then TFA.Serie = Ninguno
   sSQL = "SELECT Concepto, Logo_Factura, Largo, Ancho, Espacios, Pos_Factura, Fact_Pag, Pos_Y_Fact, Serie, Autorizacion, Vencimiento, Fecha, Secuencial, " _
        & "ItemsxFA, Codigo, Fact, CxC, Cta_Venta, CxC_Anterior, Imp_Mes, Nombre_Establecimiento, Direccion_Establecimiento, Telefono_Estab, Logo_Tipo_Estab " _
@@ -10956,7 +10991,7 @@ Dim FechaCxC As String
   If Len(TFA.Autorizacion) >= 6 Then sSQL = sSQL & "AND Autorizacion = '" & TFA.Autorizacion & "' "
   If Len(TFA.Cod_CxC) > 1 Then sSQL = sSQL & "AND '" & TFA.Cod_CxC & "' IN (Concepto, Codigo, CxC) "
   sSQL = sSQL & "ORDER BY Codigo "
-  Select_AdoDB AdoLineaDB, sSQL
+  Select_AdoDB AdoLineaDB, sSQL             ', "Lineas_CxC"
  'MsgBox sSQL
   With AdoLineaDB
    If .RecordCount > 0 Then
@@ -10995,6 +11030,7 @@ Dim FechaCxC As String
           CodigoL = .fields("Codigo")
           TipoFactura = .fields("Fact")
        End If
+       'MsgBox "..."
    Else
        TFA.ResultadoFA = "Error: Linea CxC No Asignados o fuera de fecha"
    End If
@@ -13188,7 +13224,7 @@ Cuadricula = False
          RutaDestino = RutaSysBases & "\TEMP\MSChartB" & CodigoUsuario & ".gif"
          SavePicture Clipboard.GetData(3), RutaDestino
          Printer.PaintPicture LoadPicture(RutaDestino), 1, PosLinea
-        ' Clipboard.Clear
+         Clipboard.Clear
          Kill RutaDestino
     
        ' Hacemos el pastel

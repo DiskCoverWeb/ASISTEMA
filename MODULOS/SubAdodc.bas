@@ -1,5 +1,6 @@
 Attribute VB_Name = "SubAdodc"
 Option Explicit
+
 'SetAdoAddNew "Nombre_Tabla"
 'SetAdoFields "", 0
 'SetAdoUpdate
@@ -38,6 +39,24 @@ Option Explicit
 '''
 '''Loop
 '''Close #NumFile                      ' Close file.
+Public Sub Informe_Errores()
+Dim AdoErrorDB As ADODB.Recordset
+Dim HayReg As Boolean
+Dim cSQL As String
+    
+    HayReg = False
+    cSQL = "SELECT Texto " _
+         & "FROM Tabla_Temporal " _
+         & "WHERE Item = '" & NumEmpresa & "' " _
+         & "AND Modulo = '" & NumModulo & "' " _
+         & "AND CodigoU = '" & CodigoUsuario & "' "
+    Select_AdoDB AdoErrorDB, cSQL
+    
+    If AdoErrorDB.RecordCount > 0 Then HayReg = True
+    AdoErrorDB.Close
+    
+    If HayReg Then FInfoError.Show
+End Sub
 
 Public Function Crear_FN_SP(RutaFile As String) As String
 Dim Si_Crear As Boolean
@@ -123,12 +142,12 @@ Dim sSQL1 As String
     With RegIESS
      If .RecordCount > 0 Then
          Do While Not .EOF
-            Select Case .fields("Codigo")
-              Case "IESS_Per": IESS_Per = .fields("Porc") / 100
-              Case "IESS_Pat": IESS_Pat = .fields("Porc") / 100
-              Case "IESS_ExtC": IESS_Ext = .fields("Porc") / 100
-              Case "Sueldo_Bas": Sueldo_Basico = .fields("Porc")
-              Case "Canasta_Ba": Canasta_Basica = .fields("Porc")
+            Select Case .Fields("Codigo")
+              Case "IESS_Per": IESS_Per = .Fields("Porc") / 100
+              Case "IESS_Pat": IESS_Pat = .Fields("Porc") / 100
+              Case "IESS_ExtC": IESS_Ext = .Fields("Porc") / 100
+              Case "Sueldo_Bas": Sueldo_Basico = .Fields("Porc")
+              Case "Canasta_Ba": Canasta_Basica = .Fields("Porc")
             End Select
            .MoveNext
          Loop
@@ -169,50 +188,50 @@ If BoxMensaje = vbYes Then
     With Datas.Recordset
      If .RecordCount > 0 Then
         .MoveFirst
-         If Len(.fields("Nombre_Completo")) > 1 Then
-            Codigo1 = .fields("Nombre_Completo")
+         If Len(.Fields("Nombre_Completo")) > 1 Then
+            Codigo1 = .Fields("Nombre_Completo")
             If para.Recordset.RecordCount > 0 Then
                para.Recordset.MoveFirst
                para.Recordset.Find ("Cliente = '" & Codigo1 & "' ")
-               If Not para.Recordset.EOF Then Codigo2 = para.Recordset.fields("Email")
+               If Not para.Recordset.EOF Then Codigo2 = para.Recordset.Fields("Email")
             End If
          End If
-         TMail.Asunto = .fields("Asunto")
+         TMail.Asunto = .Fields("Asunto")
          TMail.Mensaje = String$(20, " ") & "M E M O R A N D O" & vbCrLf _
                        & String$(20, " ") & "-----------------" & vbCrLf _
-                       & "Fecha: " & .fields("Fecha") _
+                       & "Fecha: " & .Fields("Fecha") _
                        & String$(50, " ") & "Numero No. " _
-                       & Format$(Day(.fields("Fecha")), "00") & Format$(Month(.fields("Fecha")), "00") & "-" & Format$(.fields("Numero"), "000000") & vbCrLf _
-                       & "DE: " & UCaseStrg(.fields("Nombre_Completo")) & ", " _
+                       & Format$(Day(.Fields("Fecha")), "00") & Format$(Month(.Fields("Fecha")), "00") & "-" & Format$(.Fields("Numero"), "000000") & vbCrLf _
+                       & "DE: " & UCaseStrg(.Fields("Nombre_Completo")) & ", " _
                        & "Email: " & Codigo2 & vbCrLf _
-                       & "PARA: " & UCaseStrg(.fields("Cliente")) & ", " _
-                       & "Email: " & .fields("Email") & vbCrLf _
-                       & "ATENCION: " & .fields("Atencion") & vbCrLf _
+                       & "PARA: " & UCaseStrg(.Fields("Cliente")) & ", " _
+                       & "Email: " & .Fields("Email") & vbCrLf _
+                       & "ATENCION: " & .Fields("Atencion") & vbCrLf _
                        & String$(70, "_") & vbCrLf _
-                       & .fields("Texto_Memo") & vbCrLf & vbCrLf _
+                       & .Fields("Texto_Memo") & vbCrLf & vbCrLf _
                        & "Atentamente," & vbCrLf & vbCrLf _
-                       & .fields("Nombre_Completo") & vbCrLf _
+                       & .Fields("Nombre_Completo") & vbCrLf _
                        & Empresa
-          TMail.para = .fields("Email")
+          TMail.para = .Fields("Email")
           If EsUnEmail(TMail.para) Then FEnviarCorreos.Show 1
-          If Len(.fields("CC1")) > 1 Then
-             Codigo1 = .fields("CC1")
+          If Len(.Fields("CC1")) > 1 Then
+             Codigo1 = .Fields("CC1")
              If para.Recordset.RecordCount > 0 Then
                 para.Recordset.MoveFirst
                 para.Recordset.Find ("Codigo = '" & Codigo1 & "' ")
                 If Not para.Recordset.EOF Then
-                   TMail.para = para.Recordset.fields("Email")
+                   TMail.para = para.Recordset.Fields("Email")
                    If EsUnEmail(TMail.para) Then FEnviarCorreos.Show 1
                 End If
              End If
           End If
-          If Len(.fields("CC2")) > 1 Then
-             Codigo1 = .fields("CC2")
+          If Len(.Fields("CC2")) > 1 Then
+             Codigo1 = .Fields("CC2")
              If para.Recordset.RecordCount > 0 Then
                 para.Recordset.MoveFirst
                 para.Recordset.Find ("Codigo = '" & Codigo1 & "' ")
                 If Not para.Recordset.EOF Then
-                   TMail.para = para.Recordset.fields("Email")
+                   TMail.para = para.Recordset.Fields("Email")
                    If EsUnEmail(TMail.para) Then FEnviarCorreos.Show 1
                 End If
              End If
@@ -262,20 +281,20 @@ If PonImpresoraDefecto(SetNombrePRN) Then
 With Datas.Recordset
  If .RecordCount > 0 Then
     .MoveFirst
-     Codigo1 = .fields("CC1")
-     Codigo2 = .fields("CC2")
+     Codigo1 = .Fields("CC1")
+     Codigo2 = .Fields("CC2")
      Cadena1 = Ninguno: Cadena2 = Ninguno
      If para.Recordset.RecordCount > 0 Then
         para.Recordset.MoveFirst
         para.Recordset.Find ("Codigo = '" & Codigo1 & "' ")
-        If Not para.Recordset.EOF Then Cadena1 = para.Recordset.fields("Cliente")
+        If Not para.Recordset.EOF Then Cadena1 = para.Recordset.Fields("Cliente")
      End If
      If para.Recordset.RecordCount > 0 Then
         para.Recordset.MoveFirst
         para.Recordset.Find ("Codigo = '" & Codigo2 & "' ")
-        If Not para.Recordset.EOF Then Cadena2 = para.Recordset.fields("Cliente")
+        If Not para.Recordset.EOF Then Cadena2 = para.Recordset.Fields("Cliente")
      End If
-     TextoMemo = .fields("Texto_Memo")
+     TextoMemo = .Fields("Texto_Memo")
      Encabezado InicioX, 18.5
      Printer.FontSize = 22
      Printer.FontBold = True
@@ -285,8 +304,8 @@ With Datas.Recordset
      PrinterTexto 14, PosLinea, "NUMERO:"
      PrinterTexto InicioX, PosLinea, "FECHA:"
      Printer.FontBold = False
-     PrinterTexto 15.5, PosLinea, Format$(Day(.fields("Fecha")), "00") & Format$(Month(.fields("Fecha")), "00") & "-" & Format$(.fields("Numero"), "000000")
-     PrinterTexto InicioX + 1.5, PosLinea, .fields("Fecha")
+     PrinterTexto 15.5, PosLinea, Format$(Day(.Fields("Fecha")), "00") & Format$(Month(.Fields("Fecha")), "00") & "-" & Format$(.Fields("Numero"), "000000")
+     PrinterTexto InicioX + 1.5, PosLinea, .Fields("Fecha")
      PosLinea = PosLinea + 0.5
      Imprimir_Linea_H PosLinea, InicioX, 18.5, Negro, True
      PosLinea = PosLinea + 0.1
@@ -294,13 +313,13 @@ With Datas.Recordset
      Printer.FontBold = True
      PrinterTexto InicioX, PosLinea, "DE:"
      Printer.FontBold = False
-     PrinterTexto InicioX + 2, PosLinea, UCaseStrg(.fields("Nombre_Completo"))
+     PrinterTexto InicioX + 2, PosLinea, UCaseStrg(.Fields("Nombre_Completo"))
      PosLinea = PosLinea + 0.5
 
      Printer.FontBold = True
      PrinterTexto InicioX, PosLinea, "PARA:"
      Printer.FontBold = False
-     PrinterTexto InicioX + 2, PosLinea, .fields("Cliente")
+     PrinterTexto InicioX + 2, PosLinea, .Fields("Cliente")
      PosLinea = PosLinea + 0.5
      
      If Cadena1 <> Ninguno Then
@@ -322,13 +341,13 @@ With Datas.Recordset
      Printer.FontBold = True
      PrinterTexto InicioX, PosLinea, "ASUNTO:"
      Printer.FontBold = False
-     PrinterTexto InicioX + 2, PosLinea, .fields("Asunto")
+     PrinterTexto InicioX + 2, PosLinea, .Fields("Asunto")
      PosLinea = PosLinea + 0.5
      
      Printer.FontBold = True
      PrinterTexto InicioX, PosLinea, "ATENCION:"
      Printer.FontBold = False
-     PrinterTexto InicioX + 2, PosLinea, .fields("Atencion")
+     PrinterTexto InicioX + 2, PosLinea, .Fields("Atencion")
      PosLinea = PosLinea + 0.5
      Printer.FontSize = 12
      Printer.FontBold = True
@@ -339,8 +358,8 @@ With Datas.Recordset
      PosLinea = PosLinea + 0.1
      Printer.FontSize = SizeLetra
      TextoTemp = ""
-     For I = 1 To Len(.fields("Texto_Memo"))
-         TextoMemo = MidStrg(.fields("Texto_Memo"), I, 1)
+     For I = 1 To Len(.Fields("Texto_Memo"))
+         TextoMemo = MidStrg(.Fields("Texto_Memo"), I, 1)
          Select Case Asc(TextoMemo)
            Case 13
                   TextoTemp = TextoTemp & " "
@@ -356,8 +375,8 @@ With Datas.Recordset
                      PrinterTexto 14, PosLinea, "NUMERO:"
                      PrinterTexto InicioX, PosLinea, "FECHA:"
                      Printer.FontBold = False
-                     PrinterTexto 15.5, PosLinea, Format$(Day(.fields("Fecha")), "00") & Format$(Month(.fields("Fecha")), "00") & "-" & Format$(.fields("Numero"), "000000")
-                     PrinterTexto InicioX + 1.5, PosLinea, .fields("Fecha")
+                     PrinterTexto 15.5, PosLinea, Format$(Day(.Fields("Fecha")), "00") & Format$(Month(.Fields("Fecha")), "00") & "-" & Format$(.Fields("Numero"), "000000")
+                     PrinterTexto InicioX + 1.5, PosLinea, .Fields("Fecha")
                      PosLinea = PosLinea + 0.5
                      Imprimir_Linea_H PosLinea, InicioX, 18.5, Negro, True
                      PosLinea = PosLinea + 0.1
@@ -366,11 +385,11 @@ With Datas.Recordset
            Case Else
                 TextoTemp = TextoTemp & TextoMemo
                 If Printer.TextWidth(TextoTemp) >= 16 Then
-                   If MidStrg(.fields("Texto_Memo"), I + 1, 1) <> " " Then
+                   If MidStrg(.Fields("Texto_Memo"), I + 1, 1) <> " " Then
                       Do While TextoMemo <> " "
                          TextoTemp = MidStrg(TextoTemp, 1, Len(TextoTemp) - 1)
                          I = I - 1
-                         TextoMemo = MidStrg(.fields("Texto_Memo"), I, 1)
+                         TextoMemo = MidStrg(.Fields("Texto_Memo"), I, 1)
                       Loop
                    End If
                    PrinterTexto InicioX, PosLinea, TrimStrg(TextoTemp), , 16
@@ -383,8 +402,8 @@ With Datas.Recordset
                       PrinterTexto 14, PosLinea, "NUMERO:"
                       PrinterTexto InicioX, PosLinea, "FECHA:"
                       Printer.FontBold = False
-                      PrinterTexto 15.5, PosLinea, Format$(Day(.fields("Fecha")), "00") & Format$(Month(.fields("Fecha")), "00") & "-" & Format$(.fields("Numero"), "000000")
-                      PrinterTexto InicioX + 1.5, PosLinea, .fields("Fecha")
+                      PrinterTexto 15.5, PosLinea, Format$(Day(.Fields("Fecha")), "00") & Format$(Month(.Fields("Fecha")), "00") & "-" & Format$(.Fields("Numero"), "000000")
+                      PrinterTexto InicioX + 1.5, PosLinea, .Fields("Fecha")
                       PosLinea = PosLinea + 0.5
                       Imprimir_Linea_H PosLinea, InicioX, 18.5, Negro, True
                       PosLinea = PosLinea + 0.1
@@ -397,7 +416,7 @@ With Datas.Recordset
      PrinterTexto 2, PosLinea, "Atentamente,"
      PosLinea = PosLinea + 2
      Printer.FontBold = True
-     PrinterTexto 2, PosLinea, .fields("Nombre_Completo")
+     PrinterTexto 2, PosLinea, .Fields("Nombre_Completo")
      PosLinea = PosLinea + 0.5
      PrinterTexto 2, PosLinea, Empresa
  Else
@@ -656,7 +675,7 @@ Public Sub SetFields(DtaTemp As Adodc, _
   If NombCampo <> "ID" Then
     With DtaTemp.Recordset
       If IsNull(Valor) Or IsEmpty(Valor) Then
-         Select Case .fields(NombCampo).Type
+         Select Case .Fields(NombCampo).Type
            Case TadBoolean
                 Valor = False
            Case TadDate, TadDate1
@@ -672,10 +691,10 @@ Public Sub SetFields(DtaTemp As Adodc, _
          End Select
       End If
        
-      Select Case .fields(NombCampo).Type
+      Select Case .Fields(NombCampo).Type
         Case TadText, TadMemo
-             If Len(Valor) > .fields(NombCampo).DefinedSize Then
-                Valor = TrimStrg(MidStrg(Valor, 1, .fields(NombCampo).DefinedSize))
+             If Len(Valor) > .Fields(NombCampo).DefinedSize Then
+                Valor = TrimStrg(MidStrg(Valor, 1, .Fields(NombCampo).DefinedSize))
              End If
              If Len(Valor) = 0 Then Valor = Ninguno
         Case TadDate, TadDate1
@@ -686,7 +705,7 @@ Public Sub SetFields(DtaTemp As Adodc, _
              If Valor > 9999999999.99 Then Valor = 0
       End Select
       'MsgBox .Fields(NombCampo) & vbCrLf & Valor
-     .fields(NombCampo) = Valor
+     .Fields(NombCampo) = Valor
     End With
   End If
 End Sub
@@ -699,31 +718,31 @@ Public Sub SetUpdate(DtaTemp As Adodc)
 Dim IUp As Integer
  'MsgBox DtaTemp.RecordSource
   With DtaTemp.Recordset
-    For IUp = 0 To .fields.Count - 1
-      If .fields(IUp).Name <> "ID" Then
-         If IsNull(.fields(IUp)) Or IsEmpty(.fields(IUp)) Then
-            Select Case .fields(IUp).Type
+    For IUp = 0 To .Fields.Count - 1
+      If .Fields(IUp).Name <> "ID" Then
+         If IsNull(.Fields(IUp)) Or IsEmpty(.Fields(IUp)) Then
+            Select Case .Fields(IUp).Type
               Case TadBoolean
-                  .fields(IUp) = False
+                  .Fields(IUp) = False
               Case TadDate, TadDate1
-                  .fields(IUp) = FechaSistema
+                  .Fields(IUp) = FechaSistema
               Case TadTime
-                  .fields(IUp) = Time
+                  .Fields(IUp) = Time
               Case TadByte, TadInteger, TadCurrency, TadSingle, TadDouble
-                  .fields(IUp) = 0
+                  .Fields(IUp) = 0
               Case TadLong
-                  .fields(IUp) = 0
+                  .Fields(IUp) = 0
               Case TadText, TadMemo
-                  .fields(IUp) = Ninguno
+                  .Fields(IUp) = Ninguno
               Case Else
-                  .fields(IUp) = Ninguno
+                  .Fields(IUp) = Ninguno
             End Select
          End If
-         Select Case .fields(IUp).Type
+         Select Case .Fields(IUp).Type
            Case TadBoolean
                '.Fields(IUp) = False
            Case TadDate, TadDate1
-                If CFechaLong(.fields(IUp)) <= CFechaLong("01/01/1900") Then .fields(IUp) = "01/01/1900"
+                If CFechaLong(.Fields(IUp)) <= CFechaLong("01/01/1900") Then .Fields(IUp) = "01/01/1900"
            Case TadTime
                '.Fields(IUp) = Time
            Case TadByte, TadInteger, TadLong, TadCurrency, TadSingle, TadDouble
@@ -733,9 +752,9 @@ Dim IUp As Integer
            Case Else
                '.Fields(IUp) = Ninguno
          End Select
-         If .fields(IUp).Name = "Item" Then
-             If IsNull(.fields(IUp)) Or IsEmpty(.fields(IUp)) Then .fields(IUp) = NumEmpresa
-             If Len(.fields(IUp)) < 3 Then .fields(IUp) = NumEmpresa
+         If .Fields(IUp).Name = "Item" Then
+             If IsNull(.Fields(IUp)) Or IsEmpty(.Fields(IUp)) Then .Fields(IUp) = NumEmpresa
+             If Len(.Fields(IUp)) < 3 Then .Fields(IUp) = NumEmpresa
          End If
         'MsgBox .Fields(IUp).Name & vbCrLf & .Fields(IUp)
       End If
@@ -767,16 +786,16 @@ Dim IndDato As Long
   RegAdodc.CursorLocation = adUseClient
   RegAdodc.open DatosSelect, AdoStrCnn, , , adCmdText
   With RegAdodc
-       ReDim DatosTabla(.fields.Count + 1) As Campos_Tabla
+       ReDim DatosTabla(.Fields.Count + 1) As Campos_Tabla
        DatosTabla(0).Campo = NombreTabla
-       DatosTabla(0).Ancho = .fields.Count
+       DatosTabla(0).Ancho = .Fields.Count
        DatosTabla(0).Valor = 0
        DatosTabla(0).Tipo = 0
-       For IndDato = 0 To .fields.Count - 1
-           DatosTabla(IndDato + 1).Campo = .fields(IndDato).Name
-           DatosTabla(IndDato + 1).Ancho = .fields(IndDato).DefinedSize
-           DatosTabla(IndDato + 1).Tipo = .fields(IndDato).Type
-           Select Case .fields(IndDato).Type
+       For IndDato = 0 To .Fields.Count - 1
+           DatosTabla(IndDato + 1).Campo = .Fields(IndDato).Name
+           DatosTabla(IndDato + 1).Ancho = .Fields(IndDato).DefinedSize
+           DatosTabla(IndDato + 1).Tipo = .Fields(IndDato).Type
+           Select Case .Fields(IndDato).Type
              Case TadBoolean
                   DatosTabla(IndDato + 1).Valor = adFalse
              Case TadText, TadMemo
@@ -1026,13 +1045,13 @@ Dim IdTime As Long
   RegAdodc.CursorLocation = adUseClient
   RegAdodc.open DatosSelect, AdoStrCnn, , , adCmdText
   With RegAdodc
-       ReDim DatosTabla(.fields.Count + 1) As Campos_Tabla
+       ReDim DatosTabla(.Fields.Count + 1) As Campos_Tabla
        DatosTabla(0).Campo = NombreTabla
-       DatosTabla(0).Ancho = .fields.Count
+       DatosTabla(0).Ancho = .Fields.Count
        DatosTabla(0).Valor = 0
        DatosTabla(0).Tipo = 0
-       For IndDato = 0 To .fields.Count - 1
-           DatosTabla(IndDato + 1).Campo = .fields(IndDato).Name
+       For IndDato = 0 To .Fields.Count - 1
+           DatosTabla(IndDato + 1).Campo = .Fields(IndDato).Name
            DatosTabla(IndDato + 1).Ancho = 0
            DatosTabla(IndDato + 1).Tipo = 0
            DatosTabla(IndDato + 1).Valor = 0
@@ -1111,14 +1130,14 @@ Dim IdTime        As Long
               & "WHERE 1 = 0 "
   Select_AdoDB RegAdodc, DatosSelect
   With RegAdodc
-       ReDim DatosTabla(.fields.Count + 1) As Campos_Tabla
+       ReDim DatosTabla(.Fields.Count + 1) As Campos_Tabla
        DatosTabla(0).Campo = NombreTabla
-       DatosTabla(0).Ancho = .fields.Count
+       DatosTabla(0).Ancho = .Fields.Count
        DatosTabla(0).Valor = 0
        DatosTabla(0).Tipo = 0
        DatosTabla(0).Si_Periodo = False
-       For IndDato = 0 To .fields.Count - 1
-           DatosTabla(IndDato + 1).Campo = .fields(IndDato).Name
+       For IndDato = 0 To .Fields.Count - 1
+           DatosTabla(IndDato + 1).Campo = .Fields(IndDato).Name
            DatosTabla(IndDato + 1).Ancho = 0
            DatosTabla(IndDato + 1).Tipo = 0
            DatosTabla(IndDato + 1).Valor = 0
@@ -1166,13 +1185,13 @@ Dim IdTime        As Long
           Progreso_Barra.Mensaje_Box = "[" & Format(Contador / .RecordCount, "00%") & "] Copiando de " & NombreTabla
           Progreso_Esperar True
           SetAdoAddNew NombreTabla
-          For IndDato = 0 To .fields.Count - 1
+          For IndDato = 0 To .Fields.Count - 1
               InsFields = True
-              Select Case .fields(IndDato).Name
+              Select Case .Fields(IndDato).Name
                 Case "ID": InsFields = False
                 Case "Item": InsFields = False
               End Select
-              If InsFields Then SetAdoFields .fields(IndDato).Name, .fields(IndDato)
+              If InsFields Then SetAdoFields .Fields(IndDato).Name, .Fields(IndDato)
           Next IndDato
           SetAdoUpdate
           Contador = Contador + 1
@@ -1242,13 +1261,13 @@ Dim IdTime As Long
   RegAdodc.CursorLocation = adUseClient
   RegAdodc.open DatosSelect, AdoStrCnn, , , adCmdText
   With RegAdodc
-       ReDim DatosTabla(.fields.Count + 1) As Campos_Tabla
+       ReDim DatosTabla(.Fields.Count + 1) As Campos_Tabla
        DatosTabla(0).Campo = NombreTabla
-       DatosTabla(0).Ancho = .fields.Count
+       DatosTabla(0).Ancho = .Fields.Count
        DatosTabla(0).Valor = 0
        DatosTabla(0).Tipo = 0
-       For IndDato = 0 To .fields.Count - 1
-           DatosTabla(IndDato + 1).Campo = .fields(IndDato).Name
+       For IndDato = 0 To .Fields.Count - 1
+           DatosTabla(IndDato + 1).Campo = .Fields(IndDato).Name
            DatosTabla(IndDato + 1).Ancho = 0
            DatosTabla(IndDato + 1).Tipo = 0
            DatosTabla(IndDato + 1).Valor = 0
@@ -1309,15 +1328,15 @@ Dim NombreCampo As String
 Dim ValorCampo As Variant
   With DtaTemp.Recordset
    If .RecordCount > 0 Then
-       ReDim TipoC(.fields.Count) As Campos_Tabla
-       For IUp = 0 To .fields.Count - 1
-           TipoC(IUp).Campo = .fields(IUp).Name
-           TipoC(IUp).Valor = .fields(IUp)
+       ReDim TipoC(.Fields.Count) As Campos_Tabla
+       For IUp = 0 To .Fields.Count - 1
+           TipoC(IUp).Campo = .Fields(IUp).Name
+           TipoC(IUp).Valor = .Fields(IUp)
        Next IUp
        SetAddNew DtaTemp
-       For IUp = 0 To .fields.Count - 1
-           NombreCampo = .fields(IUp).Name
-           ValorCampo = .fields(IUp)
+       For IUp = 0 To .Fields.Count - 1
+           NombreCampo = .Fields(IUp).Name
+           ValorCampo = .Fields(IUp)
            SetFields DtaTemp, TipoC(IUp).Campo, TipoC(IUp).Valor
        Next IUp
        SetFields DtaTemp, Campo, Valor
@@ -1332,8 +1351,8 @@ Public Function ReadField(DtaTemp As Adodc, _
                           NombCampo As String) As Variant
 Dim Valor As Variant
   With DtaTemp.Recordset
-    If IsNull(.fields(NombCampo)) Then
-       Select Case .fields(NombCampo).Type
+    If IsNull(.Fields(NombCampo)) Then
+       Select Case .Fields(NombCampo).Type
          Case TadBoolean
               Valor = False
          Case TadDate, TadDate1
@@ -1348,7 +1367,7 @@ Dim Valor As Variant
               Valor = Ninguno
        End Select
     Else
-       Valor = .fields(NombCampo)
+       Valor = .Fields(NombCampo)
     End If
   End With
   ReadField = Valor
@@ -1411,10 +1430,10 @@ With DataAllFields.Recordset
             'MsgBox Xi & vbCrLf & Yo & vbCrLf & PonerLineas
             If NombresCampos Then
                Distancia = 0.05
-               StrgFormatoCampo = .fields(ItemCampo).Name
+               StrgFormatoCampo = .Fields(ItemCampo).Name
             Else
                LimpiarLinea Xi, Yo, PonerLineas
-               Distancia = CampoWidth(.fields(ItemCampo))
+               Distancia = CampoWidth(.Fields(ItemCampo))
             End If
            ' If Yo <= LimiteAlto Then
                PictPrint_Cuadro_Linea Printer, Xi + 0.05, Yo, AnchoPapel, Yo + 0.4, Blanco, "BF"
@@ -1430,7 +1449,7 @@ With DataAllFields.Recordset
       End If
   Next ItemCampo
   If PonerLineas Then
-     LongNumero = Printer.TextWidth(AnchoTipoCampo(.fields(CFinal))) + 0.1
+     LongNumero = Printer.TextWidth(AnchoTipoCampo(.Fields(CFinal))) + 0.1
      If Ancho(CFinal) > 0 Then Imprimir_Linea_V Ancho(CFinal) + LongNumero, Yo, Yo + 0.35
   End If
 End With
@@ -1495,11 +1514,11 @@ Printer.FontUnderline = False
 SetAnchoCampos Printer, EsCampoCorto
 CantCampos = 0
 With Datas
-     CantCampos = .fields.Count
+     CantCampos = .Fields.Count
      ReDim Ancho(CantCampos + 1) As Single
      ReDim AnchoDeCampo(CantCampos + 1) As String
      For I = 0 To CantCampos - 1
-         AnchoDeCampo(I) = AnchoTipoCampo(.fields(I))
+         AnchoDeCampo(I) = AnchoTipoCampo(.Fields(I))
          Ancho(I) = 0
      Next I
 End With
@@ -1573,11 +1592,11 @@ Dim AnchoCampo As Single
  CantCampos = 0
 With Datas.Recordset
  If .RecordCount > 0 Then
-     CantCampos = .fields.Count
+     CantCampos = .Fields.Count
      ReDim Ancho(CantCampos + 1) As Single
      ReDim AnchoDeCampo(CantCampos + 1) As String
      For I = 0 To CantCampos - 1
-         AnchoDeCampo(I) = AnchoTipoCampo(.fields(I))
+         AnchoDeCampo(I) = AnchoTipoCampo(.Fields(I))
          Ancho(I) = 0
      Next I
      Ancho(0) = SumaTotalAncho
@@ -1630,11 +1649,11 @@ Printer.FontUnderline = False
 
 CantCampos = 0
 With Datas
-     CantCampos = .fields.Count
+     CantCampos = .Fields.Count
      ReDim Ancho(CantCampos + 1) As Single
      ReDim AnchoDeCampo(CantCampos + 1) As String
      For I = 0 To CantCampos - 1
-         AnchoDeCampo(I) = AnchoTipoCampo(.fields(I))
+         AnchoDeCampo(I) = AnchoTipoCampo(.Fields(I))
          Ancho(I) = 0
      Next I
 End With
@@ -1666,7 +1685,7 @@ Line Input #NumFile, sSQL
 Select_Adodc DtaAux, sSQL, False
 FAConLineas = True
 With DtaAux.Recordset
-     ReDim TipoC(.fields.Count - 1) As Campos_Tabla
+     ReDim TipoC(.Fields.Count - 1) As Campos_Tabla
      Line Input #NumFile, LineaTexto
      I = 0
      Do
@@ -1685,13 +1704,13 @@ With DtaAux.Recordset
      Do While Not EOF(NumFile)
         Line Input #NumFile, LineaTexto
         NumPos = 1
-        For I = 0 To .fields.Count - 1
+        For I = 0 To .Fields.Count - 1
             TipoC(I).Valor = SinEspaciosCampo(MidStrg(LineaTexto, NumPos, TipoC(I).Ancho))
             NumPos = NumPos + TipoC(I).Ancho
         Next I
        .AddNew
-        For I = 0 To .fields.Count - 1
-           .fields(TipoC(I).Campo) = TipoC(I).Valor
+        For I = 0 To .Fields.Count - 1
+           .Fields(TipoC(I).Campo) = TipoC(I).Valor
         Next I
        .Update
      Loop
@@ -1839,7 +1858,7 @@ PrinterTexto CentrarTexto(SQLMsg2), PosLinea, SQLMsg2
 Printer.FontSize = 9: PosLinea = 2.2
 '========================================================================
 For I = 0 To 14
-   PrinterTexto Ancho(I), PosLinea, Datas.Recordset.fields(I).Name
+   PrinterTexto Ancho(I), PosLinea, Datas.Recordset.Fields(I).Name
 Next I
 LimpiarLinea Ancho(14), PosLinea, True
 Printer.Line (Ancho(0), PosLinea - 0.1)-(Ancho(15), PosLinea - 0.1), Negro
@@ -1957,10 +1976,10 @@ Public Sub SelectDB_Combo(DBCombos As DataCombo, _
      Generar_File_SQL NombreFile, SQLs
      DataSQL.RecordSource = SQLs
      DataSQL.Refresh
-     DBCombos.ListField = DataSQL.Recordset.fields(NombreCampo).Name
+     DBCombos.ListField = DataSQL.Recordset.Fields(NombreCampo).Name
      If DataSQL.Recordset.RecordCount > 0 Then
         If Final Then DataSQL.Recordset.MoveLast
-        DBCombos.Text = DataSQL.Recordset.fields(NombreCampo)
+        DBCombos.Text = DataSQL.Recordset.Fields(NombreCampo)
         MarcarTexto DBCombos
      Else
         DBCombos.Text = "No existen datos."
@@ -1980,10 +1999,10 @@ Public Sub SelectDB_List(DBLists As DataList, _
      Generar_File_SQL NombreFile, SQLs
      DataSQL.RecordSource = SQLs
      DataSQL.Refresh
-     DBLists.ListField = DataSQL.Recordset.fields(NombreCampo).Name
+     DBLists.ListField = DataSQL.Recordset.Fields(NombreCampo).Name
      If DataSQL.Recordset.RecordCount > 0 Then
         If Final Then DataSQL.Recordset.MoveLast
-        DBLists.Text = DataSQL.Recordset.fields(NombreCampo)
+        DBLists.Text = DataSQL.Recordset.Fields(NombreCampo)
      Else
         DBLists.Text = "No existen datos."
      End If
@@ -1994,8 +2013,8 @@ Public Function DeleteSiNo(DataSQL As Adodc) As Boolean
 Dim Cancelar As Boolean
   With DataSQL.Recordset
      Mensajes = "Eliminar la transacción: " & vbCrLf
-     For I = 0 To .fields.Count - 1
-        Mensajes = Mensajes & Space(20) & UCaseStrg(.fields(I).Name) & ": " & .fields(I) & "." & vbCrLf
+     For I = 0 To .Fields.Count - 1
+        Mensajes = Mensajes & Space(20) & UCaseStrg(.Fields(I).Name) & ": " & .Fields(I) & "." & vbCrLf
      Next I
   End With
   Mensajes = Mensajes & vbCrLf _
@@ -2010,10 +2029,10 @@ Public Function ActualizarSiNo(DataSQL As Adodc) As Integer
 Dim ResultadoSiNo As Integer
   Mensajes = "Actualizar la Transaccion: " & vbCrLf
   With DataSQL.Recordset
-     For I = 0 To .fields.Count - 1
+     For I = 0 To .Fields.Count - 1
         Mensajes = Mensajes & Space(20) _
-                 & UCaseStrg(.fields(I).Name) & ": " _
-                 & .fields(I) & "." & vbCrLf
+                 & UCaseStrg(.Fields(I).Name) & ": " _
+                 & .Fields(I) & "." & vbCrLf
      Next I
   End With
   Mensajes = Mensajes & vbCrLf _
@@ -2050,34 +2069,34 @@ FAConLineas = True
 With DtaAux.Recordset
   If DetFile Then
      'Print #NumFile, DtaAux.RecordSource
-     ReDim TipoC(.fields.Count - 1) As Campos_Tabla
-     For I = 0 To .fields.Count - 1
-         TipoC(I).Campo = .fields(I).Name
-         TipoC(I).Ancho = AnchoTipoCampoTexto(.fields(I))
+     ReDim TipoC(.Fields.Count - 1) As Campos_Tabla
+     For I = 0 To .Fields.Count - 1
+         TipoC(I).Campo = .Fields(I).Name
+         TipoC(I).Ancho = AnchoTipoCampoTexto(.Fields(I))
      Next I
-     For I = 0 To .fields.Count - 1
+     For I = 0 To .Fields.Count - 1
          Cadena2 = TipoC(I).Campo
          'MsgBox UCaseStrg(Cadena2)
          If UCaseStrg(Cadena2) = "ID" Then Cadena2 = "I"
-         If I <> .fields.Count - 1 Then
+         If I <> .Fields.Count - 1 Then
             Print #NumFile, SetearBlancos(Cadena2, Len(TipoC(I).Campo), 0, False, FAConLineas);
          Else
             Print #NumFile, SetearBlancos(Cadena2, Len(TipoC(I).Campo), 0, False, FAConLineas)
          End If
      Next I
-     For I = 0 To .fields.Count - 1
+     For I = 0 To .Fields.Count - 1
       Cadena = CStr(TipoC(I).Ancho)
-      If I <> .fields.Count - 1 Then
+      If I <> .Fields.Count - 1 Then
          Print #NumFile, SetearBlancos(Cadena, Len(Cadena), 0, True, FAConLineas);
       Else
          Print #NumFile, SetearBlancos(Cadena, Len(Cadena), 0, True, FAConLineas)
       End If
      Next I
   Else
-     ReDim TipoC(.fields.Count - 1) As Campos_Tabla
-     For I = 0 To .fields.Count - 1
-         TipoC(I).Campo = .fields(I).Name
-         TipoC(I).Ancho = AnchoTipoCampoTexto(.fields(I))
+     ReDim TipoC(.Fields.Count - 1) As Campos_Tabla
+     For I = 0 To .Fields.Count - 1
+         TipoC(I).Campo = .Fields(I).Name
+         TipoC(I).Ancho = AnchoTipoCampoTexto(.Fields(I))
      Next I
   End If
      FAConLineas = True
@@ -2085,38 +2104,38 @@ With DtaAux.Recordset
         .MoveFirst
          Do While Not .EOF
          MiFrom.Caption = RutaGeneraFile & ": Registro No. " & Format$(Contador / .RecordCount, "00%")
-         For I = 0 To .fields.Count - 1
-          If I <> .fields.Count - 1 Then
-             Select Case .fields(I).Type
+         For I = 0 To .Fields.Count - 1
+          If I <> .Fields.Count - 1 Then
+             Select Case .Fields(I).Type
                Case TadByte, TadInteger, TadLong
-                    Print #NumFile, SetearBlancos(.fields(I), TipoC(I).Ancho, 0, True, FAConLineas);
+                    Print #NumFile, SetearBlancos(.Fields(I), TipoC(I).Ancho, 0, True, FAConLineas);
                Case TadSingle, TadDouble, TadCurrency
-                    Print #NumFile, SetearBlancos(.fields(I), TipoC(I).Ancho, 0, True, FAConLineas, True);
+                    Print #NumFile, SetearBlancos(.Fields(I), TipoC(I).Ancho, 0, True, FAConLineas, True);
                Case TadBoolean
-                    If .fields(I) = 0 Then
+                    If .Fields(I) = 0 Then
                         ValorBool = "0"
                     Else
                         ValorBool = "1"
                     End If
                     Print #NumFile, SetearBlancos(ValorBool, TipoC(I).Ancho, 0, True, FAConLineas);
                Case Else
-                    Print #NumFile, SetearBlancos(.fields(I), TipoC(I).Ancho, 0, False, FAConLineas);
+                    Print #NumFile, SetearBlancos(.Fields(I), TipoC(I).Ancho, 0, False, FAConLineas);
              End Select
           Else
-             Select Case .fields(I).Type
+             Select Case .Fields(I).Type
                Case TadByte, TadInteger, TadLong
-                    Print #NumFile, SetearBlancos(.fields(I), TipoC(I).Ancho, 0, True, FAConLineas)
+                    Print #NumFile, SetearBlancos(.Fields(I), TipoC(I).Ancho, 0, True, FAConLineas)
                Case TadSingle, TadDouble, TadCurrency
-                    Print #NumFile, SetearBlancos(.fields(I), TipoC(I).Ancho, 0, True, FAConLineas, True)
+                    Print #NumFile, SetearBlancos(.Fields(I), TipoC(I).Ancho, 0, True, FAConLineas, True)
                Case TadBoolean
-                    If .fields(I) = 0 Then
+                    If .Fields(I) = 0 Then
                         ValorBool = "0"
                     Else
                         ValorBool = "1"
                     End If
                     Print #NumFile, SetearBlancos(ValorBool, TipoC(I).Ancho, 0, True, FAConLineas)
                Case Else
-                    Print #NumFile, SetearBlancos(.fields(I), TipoC(I).Ancho, 0, False, FAConLineas)
+                    Print #NumFile, SetearBlancos(.Fields(I), TipoC(I).Ancho, 0, False, FAConLineas)
              End Select
           End If
          Next I
@@ -2153,7 +2172,7 @@ With DtaAux.Recordset
  If .RecordCount > 0 Then
     .MoveLast
      TotalReg = .RecordCount
-     TotalCampo = .fields.Count - 1
+     TotalCampo = .Fields.Count - 1
      Progreso_Barra.Incremento = 0
      Progreso_Barra.Valor_Maximo = TotalReg
      Progreso_Barra.Mensaje_Box = NombreTabla
@@ -2172,8 +2191,8 @@ With DtaAux.Recordset
      Print #NumFile, Format$(TotalReg, "##0") & " - " & FechaDesde & " - " & FechaHasta & " - " & NombreTabla
      ReDim TipoC(TotalCampo) As Campos_Tabla
      For I = 0 To TotalCampo
-         TipoC(I).Campo = CompilarString(.fields(I).Name)
-         TipoC(I).Ancho = AnchoTipoCampoTexto(.fields(I))
+         TipoC(I).Campo = CompilarString(.Fields(I).Name)
+         TipoC(I).Ancho = AnchoTipoCampoTexto(.Fields(I))
      Next I
      CadFileReg = ""
      For I = 0 To TotalCampo
@@ -2187,25 +2206,25 @@ With DtaAux.Recordset
         Progreso_Esperar
         CadFileReg = ""
         For I = 0 To TotalCampo
-          If IsNull(.fields(I)) Or IsEmpty(.fields(I)) Then Codigo4 = "0" Else Codigo4 = CStr(.fields(I))
-          Select Case .fields(I).Type
+          If IsNull(.Fields(I)) Or IsEmpty(.Fields(I)) Then Codigo4 = "0" Else Codigo4 = CStr(.Fields(I))
+          Select Case .Fields(I).Type
             Case TadBoolean
                  If Codigo4 = Ninguno Then Codigo4 = "0"
                  Codigo4 = CStr(CInt(CBool(Codigo4)))
                  Codigo4 = SetearBlancos(Codigo4, 2, 0, True, FAConLineas)
             Case TadByte, TadInteger, TadLong
-                 If .fields(I).Name = "Item" Then
-                     Codigo4 = SetearBlancos(Format$(.fields(I), "000"), 3, 0, False, FAConLineas)
+                 If .Fields(I).Name = "Item" Then
+                     Codigo4 = SetearBlancos(Format$(.Fields(I), "000"), 3, 0, False, FAConLineas)
                  Else
                      Codigo4 = SetearBlancos(Codigo4, 0, 0, True, FAConLineas)
                  End If
             Case TadSingle, TadDouble, TadCurrency
                  Codigo4 = SetearBlancos(Codigo4, 0, 0, True, FAConLineas, True)
             Case TadText
-                 If UCaseStrg(.fields(I).Name) = "RUC_CI" Then Codigo4 = CompilarRUC_CI(.fields(I))
-                 If UCaseStrg(.fields(I).Name) = "RUC" Then Codigo4 = CompilarRUC_CI(.fields(I))
-                 If UCaseStrg(.fields(I).Name) = "CI" Then Codigo4 = CompilarRUC_CI(.fields(I))
-                 If UCaseStrg(.fields(I).Name) = "CEDULA" Then Codigo4 = CompilarRUC_CI(.fields(I))
+                 If UCaseStrg(.Fields(I).Name) = "RUC_CI" Then Codigo4 = CompilarRUC_CI(.Fields(I))
+                 If UCaseStrg(.Fields(I).Name) = "RUC" Then Codigo4 = CompilarRUC_CI(.Fields(I))
+                 If UCaseStrg(.Fields(I).Name) = "CI" Then Codigo4 = CompilarRUC_CI(.Fields(I))
+                 If UCaseStrg(.Fields(I).Name) = "CEDULA" Then Codigo4 = CompilarRUC_CI(.Fields(I))
                  If Codigo4 = "0" Then Codigo4 = Ninguno
                  If Codigo4 = " " Then Codigo4 = Ninguno
                  Codigo4 = SetearBlancos(Codigo4, 0, 0, False, FAConLineas)
@@ -2455,7 +2474,7 @@ FechaValida FechaF
 SizeLetra = 5
 InicioX = 0.1: InicioY = 0
 Pagina = 1
-CantCampos = Datas.Recordset.fields.Count
+CantCampos = Datas.Recordset.Fields.Count
 ReDim Ancho(CantCampos + 2) As Single
 Ancho(0) = 0.1   'Codogo
 Ancho(1) = 0.1   'Detalle
@@ -2547,7 +2566,7 @@ FechaValida FechaF
 SizeLetra = 7
 InicioX = 0.1: InicioY = 0
 Pagina = 1
-CantCampos = Datas.Recordset.fields.Count
+CantCampos = Datas.Recordset.Fields.Count
 ReDim Ancho(CantCampos + 1) As Single
 Ancho(0) = 0.1   'Codogo
 Ancho(1) = 0.1   'Detalle
@@ -2642,13 +2661,13 @@ Dim Jdx As Long
       DataSQL.Refresh
       
      'Determinamos el ancho de los campos
-      CantCampos = DataSQL.Recordset.fields.Count
+      CantCampos = DataSQL.Recordset.Fields.Count
      
      'Array para almacenar el ancho de cada columna
       ReDim Vect_Dec(CantCampos) As Campos_Decimal
      'Enceramos la impresion
       For Idx = 0 To CantCampos - 1
-          Vect_Dec(Idx).Campo = DataSQL.Recordset.fields(Idx).Name
+          Vect_Dec(Idx).Campo = DataSQL.Recordset.Fields(Idx).Name
           Vect_Dec(Idx).CantDec = 2
           Vect_Dec(Idx).AnchoCampo = 0
       Next Idx
@@ -2656,9 +2675,9 @@ Dim Jdx As Long
       For Idx = 0 To CantCampos - 1
          'MsgBox Decimales & vbCrLf & Vect_Dec(Col).Campo & vbCrLf & Vect_Dec(Col).CantDec & vbCrLf & Vect_Dec(Col).AnchoCampo
           If Decimales <> "" Then
-             LenCamposDec = Len(DataSQL.Recordset.fields(Idx).Name)
+             LenCamposDec = Len(DataSQL.Recordset.Fields(Idx).Name)
              For Jdx = 1 To Len(Decimales)
-                 If DataSQL.Recordset.fields(Idx).Name = MidStrg(Decimales, Jdx, LenCamposDec) Then
+                 If DataSQL.Recordset.Fields(Idx).Name = MidStrg(Decimales, Jdx, LenCamposDec) Then
                     CantDecCampo = ""
                     For CantDec = Jdx + LenCamposDec To Len(Decimales)
                         If MidStrg(Decimales, CantDec, 1) = "|" Then CantDec = Len(Decimales) + 1
@@ -2744,7 +2763,7 @@ On Error GoTo Errorhandler
       Dtas.Refresh
 
      'Variables para la cantidad de registros y columnas
-      CantCampos = Dtas.Recordset.fields.Count
+      CantCampos = Dtas.Recordset.Fields.Count
       
      'MsgBox Dtas.Recordset.Fields.Count
      'Si el número de registros es igual a 0 salimos
@@ -2760,11 +2779,11 @@ On Error GoTo Errorhandler
      'Array para almacenar el ancho de cada columna
       ReDim Vect_Dec(CantCampos) As Campos_Decimal
      'Enceramos la impresion
-      DBGMalla.HeadFont.Bold = True
+      DBGMalla.HeadFont.bold = True
       For Col = 0 To CantCampos - 1
-          Vect_Dec(Col).Campo = Dtas.Recordset.fields(Col).Name
+          Vect_Dec(Col).Campo = Dtas.Recordset.Fields(Col).Name
           Vect_Dec(Col).CantDec = 2
-          Vect_Dec(Col).AnchoCampo = DBGMalla.Parent.TextWidth(UCase(Dtas.Recordset.fields(Col).Name & " "))
+          Vect_Dec(Col).AnchoCampo = DBGMalla.Parent.TextWidth(UCase(Dtas.Recordset.Fields(Col).Name & " "))
       Next Col
      'Determinados si hay que presentar mas de dos decimales a los numeros
       CadAux = Decimales
@@ -2788,7 +2807,7 @@ On Error GoTo Errorhandler
                'Vect_Dec(Col).AnchoCampo = DBGMalla.Parent.TextWidth(Dtas.Recordset.Fields(Col).Name)
                Vect_Dec(Col).SumaTotal = 0
                'MsgBox Vect_Dec(Col).AnchoCampo & vbCrLf & Dtas.Recordset.Fields(Col).Name
-               Select Case Dtas.Recordset.fields(Col).Type
+               Select Case Dtas.Recordset.Fields(Col).Type
                  Case TadBoolean
                      .Columns(Col).NumberFormat = Format$("Yes/No")
                       If Vect_Dec(Col).AnchoCampo < WidthBoolean Then Vect_Dec(Col).AnchoCampo = WidthBoolean
@@ -2814,7 +2833,7 @@ On Error GoTo Errorhandler
                       If Vect_Dec(Col).AnchoCampo < WidthSingle Then Vect_Dec(Col).AnchoCampo = WidthSingle
                  Case TadDouble, TadCurrency
                       CantDec = 2
-                      C1 = InStr(Decimales, Dtas.Recordset.fields(Col).Name)
+                      C1 = InStr(Decimales, Dtas.Recordset.Fields(Col).Name)
                       If C1 > 0 Then
                          CadAux = MidStrg(Decimales, C1, Len(Decimales))
                          C1 = InStr(CadAux, " ")
@@ -2824,14 +2843,14 @@ On Error GoTo Errorhandler
                       'MsgBox Dtas.Recordset.Fields(Col).Name & vbCrLf & CantDec
                      .Columns(Col).Alignment = dbgRight
                      .Columns(Col).NumberFormat = "#,##0." & String$(CantDec, "0")
-                      If Dtas.Recordset.fields(Col).Type = TadDouble Then
+                      If Dtas.Recordset.Fields(Col).Type = TadDouble Then
                         If Vect_Dec(Col).AnchoCampo < WidthDouble Then Vect_Dec(Col).AnchoCampo = WidthDouble
                       Else
                         If Vect_Dec(Col).AnchoCampo < WidthCurrency Then Vect_Dec(Col).AnchoCampo = WidthCurrency
                       End If
                  Case TadText
                      'Determinamos el ancho maximo mas abajo dependendo de la cantidad de caracteres por celda
-                      AnchoMax = Dtas.Recordset.fields(Col).DefinedSize
+                      AnchoMax = Dtas.Recordset.Fields(Col).DefinedSize
                       If AnchoMax > 50 Then AnchoMax = 50
                       If EsCampoCorto Then
                          WidthText = DBGMalla.Parent.TextWidth(String$(AnchoMax, ".") & " ")
@@ -2840,8 +2859,8 @@ On Error GoTo Errorhandler
                       End If
                       If Vect_Dec(Col).AnchoCampo < WidthText Then Vect_Dec(Col).AnchoCampo = WidthText
                  Case Else
-                      If Dtas.Recordset.fields(Col).DefinedSize <= 50 Then
-                         AnchoMax = Dtas.Recordset.fields(Col).DefinedSize
+                      If Dtas.Recordset.Fields(Col).DefinedSize <= 50 Then
+                         AnchoMax = Dtas.Recordset.Fields(Col).DefinedSize
                       Else
                          AnchoMax = 50
                       End If
@@ -2881,19 +2900,19 @@ End Sub
 Public Sub Obtener_Campos_Patron_Busqueda(Dtas As Adodc)
 Dim Col As Long
    SQLPatron = ""
-   If Dtas.Recordset.fields.Count > 0 Then
+   If Dtas.Recordset.Fields.Count > 0 Then
       RatonReloj
      'Variables para la cantidad de registros y columnas
-      CantCampos = Dtas.Recordset.fields.Count
+      CantCampos = Dtas.Recordset.Fields.Count
       
      'Array para almacenar el ancho de cada columna
       ReDim Campos_Patron_Busqueda(CantCampos) As Campos_Decimal
      'Enceramos la impresion
       For Col = 0 To CantCampos - 1
-          Campos_Patron_Busqueda(Col).Campo = Dtas.Recordset.fields(Col).Name
+          Campos_Patron_Busqueda(Col).Campo = Dtas.Recordset.Fields(Col).Name
           Campos_Patron_Busqueda(Col).CantDec = 2
-          Campos_Patron_Busqueda(Col).AnchoCampo = Dtas.Recordset.fields(Col).DefinedSize
-          Select Case Dtas.Recordset.fields(Col).Type
+          Campos_Patron_Busqueda(Col).AnchoCampo = Dtas.Recordset.Fields(Col).DefinedSize
+          Select Case Dtas.Recordset.Fields(Col).Type
             Case TadDate, TadDate1
                  Campos_Patron_Busqueda(Col).TipoCampo = "D"
             Case TadBoolean, TadByte, TadInteger, TadLong, TadSingle, TadDouble, TadCurrency
@@ -3109,7 +3128,7 @@ Public Sub Select_AdoDB(AdoReg As ADODB.Recordset, _
  'MsgBox SQLQuery
   RatonReloj
   SQLQuery = CompilarSQL(SQLQuery)
-  'MsgBox SQLQuery
+ 'MsgBox SQLQuery
   Generar_File_SQL NombreFile, SQLQuery
   Set AdoReg = New ADODB.Recordset
   AdoReg.CursorType = adOpenStatic   'adOpenDynamic
@@ -3117,7 +3136,7 @@ Public Sub Select_AdoDB(AdoReg As ADODB.Recordset, _
   AdoReg.LockType = adLockOptimistic
   AdoReg.open SQLQuery, AdoStrCnn, , , adCmdText
  'Determinamos el ancho de los campos
-  CantCampos = AdoReg.fields.Count
+  CantCampos = AdoReg.Fields.Count
   RatonNormal
 End Sub
 
@@ -3145,7 +3164,7 @@ Public Sub Select_AdoDB_MySQL(AdoReg As ADODB.Recordset, _
   AdoReg.open SQLQuery, AdoStrCnnMySQL, , , adCmdText
   
  'Determinamos el ancho de los campos
-  CantCampos = AdoReg.fields.Count
+  CantCampos = AdoReg.Fields.Count
  'MsgBox SQLQuery & vbCrLf & AdoStrCnnMySQL
   RatonNormal
  'MsgBox CantCampos
@@ -3504,7 +3523,7 @@ Dim RegMaximo As Long
           & "FROM " & Tabla & " " _
           & "WHERE " & Campo & " <> 0 "
      DataReg.open sSQL, AdoStrCnn, , , adCmdText
-     If DataReg.RecordCount > 0 Then If Not IsNull(DataReg.fields("Maximo")) Then RegMaximo = DataReg.fields("Maximo") + 1
+     If DataReg.RecordCount > 0 Then If Not IsNull(DataReg.Fields("Maximo")) Then RegMaximo = DataReg.Fields("Maximo") + 1
      DataReg.Close
   End If
   Maximo_De = RegMaximo
@@ -3539,13 +3558,13 @@ Dim DN1 As Datos_Naciones
   DataReg.open sSQLDN, AdoStrCnn, , , adCmdText
   With DataReg
    If .RecordCount > 0 Then
-       DN1.CCiudad = .fields("CCiudad")
-       DN1.Codigo = .fields("Codigo")
-       DN1.CPais = .fields("CPais")
-       DN1.CProvincia = .fields("CProvincia")
-       DN1.CRegion = .fields("CRegion")
-       DN1.Descripcion = .fields("Descripcion_Rubro")
-       DN1.Tipo_Rubro = .fields("TR")
+       DN1.CCiudad = .Fields("CCiudad")
+       DN1.Codigo = .Fields("Codigo")
+       DN1.CPais = .Fields("CPais")
+       DN1.CProvincia = .Fields("CProvincia")
+       DN1.CRegion = .Fields("CRegion")
+       DN1.Descripcion = .Fields("Descripcion_Rubro")
+       DN1.Tipo_Rubro = .Fields("TR")
    End If
   End With
   DataReg.Close
@@ -3560,8 +3579,8 @@ Dim DN1 As Datos_Naciones
   DataReg.open sSQLDN, AdoStrCnn, , , adCmdText
   With DataReg
    If .RecordCount > 0 Then
-       DN1.Pais = .fields("Descripcion_Rubro")
-       DN1.CPais = .fields("CPais")
+       DN1.Pais = .Fields("Descripcion_Rubro")
+       DN1.CPais = .Fields("CPais")
    End If
   End With
   DataReg.Close
@@ -3573,7 +3592,7 @@ Dim DN1 As Datos_Naciones
   DataReg.open sSQLDN, AdoStrCnn, , , adCmdText
   With DataReg
    If .RecordCount > 0 Then
-       DN1.Provincia = .fields("Descripcion_Rubro")
+       DN1.Provincia = .Fields("Descripcion_Rubro")
    End If
   End With
   DataReg.Close
@@ -3715,8 +3734,8 @@ Dim C As Integer
          & "FROM " & Nombre_Tabla & " " _
          & "WHERE 1 = 0 "
     Select_AdoDB AdoAuxDB, sSQL
-    For C = 0 To AdoAuxDB.fields.Count - 1
-        If NCampo = AdoAuxDB.fields(C).Name Then ExisteC = True
+    For C = 0 To AdoAuxDB.Fields.Count - 1
+        If NCampo = AdoAuxDB.Fields(C).Name Then ExisteC = True
     Next C
     AdoAuxDB.Close
     Existe_Campo = ExisteC
@@ -3762,7 +3781,7 @@ Dim ClaveDelUsuario As String
         & "FROM Accesos " _
         & "WHERE UCaseStrg(Usuario) = '" & UCaseStrg(NombreDelUsuario) & "' "
    Select_AdoDB AdoUsuario, sSQL
-   If AdoUsuario.RecordCount > 0 Then ClaveDelUsuario = AdoUsuario.fields("Clave")
+   If AdoUsuario.RecordCount > 0 Then ClaveDelUsuario = AdoUsuario.Fields("Clave")
    AdoUsuario.Close
    Obtener_Clave = ClaveDelUsuario
 End Function
@@ -3782,8 +3801,8 @@ Dim sSQL1 As String
       Select_AdoDB AdoFecha, sSQL
       With AdoFecha
        If .RecordCount > 0 Then
-           MBoxFechaI = .fields("Fecha_Inicial")
-           MBoxFechaF = .fields("Fecha_Final")
+           MBoxFechaI = .Fields("Fecha_Inicial")
+           MBoxFechaF = .Fields("Fecha_Final")
        Else
            sSQL1 = "INSERT INTO Fechas_Balance " _
                 & "(Detalle,Item,Periodo,Fecha_Inicial,Fecha_Final,Cerrado) " _
@@ -3965,18 +3984,18 @@ On Error GoTo Errorhandler
          If Inicio_X > 0 And Inicio_Y > 0 Then
             RatonReloj
             Do While Not .EOF
-               If .fields("Tipo_Letra") <> Ninguno Then
-                   Printer.FontName = .fields("Tipo_Letra")
+               If .Fields("Tipo_Letra") <> Ninguno Then
+                   Printer.FontName = .Fields("Tipo_Letra")
                Else
                    Printer.FontName = TipoArial ' TipoVerdana
                End If
-               FP_Radio = .fields("Radio")
-               FP_Pos_Xo = .fields("Pos_Xo")
-               FP_Pos_Yo = .fields("Pos_Yo")
-               FP_Pos_Xf = .fields("Pos_Xf")
-               FP_Pos_Yf = .fields("Pos_Yf")
+               FP_Radio = .Fields("Radio")
+               FP_Pos_Xo = .Fields("Pos_Xo")
+               FP_Pos_Yo = .Fields("Pos_Yo")
+               FP_Pos_Xf = .Fields("Pos_Xf")
+               FP_Pos_Yf = .Fields("Pos_Yf")
                If FP_Pos_Xo > 0 And FP_Pos_Yo > 0 Then
-                 Select Case UCaseStrg(.fields("Color"))
+                 Select Case UCaseStrg(.Fields("Color"))
                    Case "NEGRO": FP_Color = Negro
                    Case "AZUL": FP_Color = Azul
                    Case "VERDE": FP_Color = Verde
@@ -3995,7 +4014,7 @@ On Error GoTo Errorhandler
                    Case "BLANCO_BRILLANTE": FP_Color = Blanco
                    Case "BLANCO": FP_Color = Blanco
                    Case Else
-                        FP_RGB = .fields("Color")
+                        FP_RGB = .Fields("Color")
                         FP_R = CInt(SinEspaciosIzq(FP_RGB))
                         FP_RGB = TrimStrg(MidStrg(FP_RGB, Len(SinEspaciosIzq(FP_RGB)) + 1, Len(FP_RGB)))
                         FP_G = CInt(SinEspaciosIzq(FP_RGB))
@@ -4003,18 +4022,18 @@ On Error GoTo Errorhandler
                         FP_B = CInt(TrimStrg(SinEspaciosIzq(FP_RGB)))
                         If (FP_R + FP_G + FP_B) = 0 Then FP_Color = Blanco Else FP_Color = RGB(FP_R, FP_G, FP_B)
                  End Select
-                 If .fields("Negrilla") Then Printer.FontBold = True Else Printer.FontBold = False
-                 Select Case .fields("Tipo_Objeto")
+                 If .Fields("Negrilla") Then Printer.FontBold = True Else Printer.FontBold = False
+                 Select Case .Fields("Tipo_Objeto")
                    Case "DATO_EMP": FP_Texto = Empresa
                    Case "DATO_COM": FP_Texto = NombreComercial
                    Case "DATO_DIR": FP_Texto = Direccion & " * Telef. " & Telefono1 & "*"
                    Case "DATO_TEL": FP_Texto = Telefono1
                    Case "DATO_RUC": FP_Texto = "R.U.C. " & RUC
                    Case "DATO_PAI": FP_Texto = NombreCiudad & " - " & NombrePais
-                   Case Else: FP_Texto = .fields("Texto")
+                   Case Else: FP_Texto = .Fields("Texto")
                  End Select
-                 FP_Vertical = .fields("Vertical")
-                 FP_Tamanio = .fields("Porte")
+                 FP_Vertical = .Fields("Vertical")
+                 FP_Tamanio = .Fields("Porte")
                  If FP_Tamanio <= 0 Then FP_Tamanio = 1
                  FP_CentrarTextoW = FP_Pos_Xf - FP_Pos_Xo
                  If FP_CentrarTextoW < 0 Then FP_CentrarTextoW = 0
@@ -4024,7 +4043,7 @@ On Error GoTo Errorhandler
                     FP_CentrarTextoW = FP_Pos_Xo
                  End If
                 'Imprimir el Tipo de Objeto
-                 Select Case .fields("Tipo_Objeto")
+                 Select Case .Fields("Tipo_Objeto")
                    Case "LINEA"
                         Printer.DrawWidth = FP_Tamanio
                         Printer.Line (Inicio_X + FP_Pos_Xo, Inicio_Y + FP_Pos_Yo) _
@@ -4042,7 +4061,7 @@ On Error GoTo Errorhandler
                         If FP_Texto = Ninguno Then FP_Texto = " "
                         Printer.FontSize = FP_Tamanio
                         Printer.ForeColor = FP_Color
-                        If .fields("Centrar") Then
+                        If .Fields("Centrar") Then
                             Printer.CurrentX = Inicio_X + FP_CentrarTextoW
                         Else
                             Printer.CurrentX = Inicio_X + FP_Pos_Xo
@@ -4139,13 +4158,13 @@ Dim Porcentaje As Single
        Progreso_Barra.Valor_Maximo = .RecordCount
        RutaGeneraFile = RutaSysBases & "\Auditoria\" & RutaGeneraFile & ".xls"
        If Dir(RutaGeneraFile) <> "" Then Kill RutaGeneraFile
-       For NRegistro = 0 To .fields.Count - 1
-           oSheet.Range(Chr(65 + NRegistro) & "1").value = .fields(NRegistro).Name
+       For NRegistro = 0 To .Fields.Count - 1
+           oSheet.Range(Chr(65 + NRegistro) & "1").value = .Fields(NRegistro).Name
        Next NRegistro
        Do While Not .EOF
           Contador = Contador + 1
-          For NRegistro = 0 To .fields.Count - 1
-              oSheet.Range(Chr(65 + NRegistro) & CStr(Contador)).value = CStr(.fields(NRegistro))
+          For NRegistro = 0 To .Fields.Count - 1
+              oSheet.Range(Chr(65 + NRegistro) & CStr(Contador)).value = CStr(.Fields(NRegistro))
           Next NRegistro
           Porcentaje = Contador / .RecordCount
           Progreso_Esperar
@@ -4191,13 +4210,13 @@ Dim Porcentaje As Single
        Progreso_Barra.Valor_Maximo = .RecordCount
        RutaGeneraFile = RutaSysBases & "\Auditoria\" & RutaGeneraFile & ".xls"
        If Dir(RutaGeneraFile) <> "" Then Kill RutaGeneraFile
-       For NRegistro = 0 To .fields.Count - 1
-           oSheet.Range(Chr(65 + NRegistro) & "1").value = .fields(NRegistro).Name
+       For NRegistro = 0 To .Fields.Count - 1
+           oSheet.Range(Chr(65 + NRegistro) & "1").value = .Fields(NRegistro).Name
        Next NRegistro
        Do While Not .EOF
           Contador = Contador + 1
-          For NRegistro = 0 To .fields.Count - 1
-              oSheet.Range(Chr(65 + NRegistro) & CStr(Contador)).value = CStr(.fields(NRegistro))
+          For NRegistro = 0 To .Fields.Count - 1
+              oSheet.Range(Chr(65 + NRegistro) & CStr(Contador)).value = CStr(.Fields(NRegistro))
           Next NRegistro
           Porcentaje = Contador / .RecordCount
           Progreso_Esperar
@@ -4255,19 +4274,19 @@ Dim Crear_Campo As Boolean
   Select_AdoDB AdoCompDB, sSQL
   With AdoCompDB
    SQL1 = "CREATE TABLE A_" & ROrigen & " ("
-   For K = 0 To .fields.Count - 1
-       SQL1 = SQL1 & "[" & .fields(K).Name & "] "
+   For K = 0 To .Fields.Count - 1
+       SQL1 = SQL1 & "[" & .Fields(K).Name & "] "
        If SQL_Server Then
-          Cadena1 = FieldTypeSQL(.fields(K).Type)
+          Cadena1 = FieldTypeSQL(.Fields(K).Type)
        Else
-          Cadena1 = FieldTypeAccess(.fields(K).Type)
+          Cadena1 = FieldTypeAccess(.Fields(K).Type)
        End If
        SQL1 = SQL1 & Cadena1
        If Cadena1 = "NVARCHAR" Or Cadena1 = "TEXT" Then
-          SQL1 = SQL1 & "(" & .fields(K).DefinedSize & ")"
+          SQL1 = SQL1 & "(" & .Fields(K).DefinedSize & ")"
        End If
        SQL1 = SQL1 & " NULL "
-       If K <> (.fields.Count - 1) Then SQL1 = SQL1 & ","
+       If K <> (.Fields.Count - 1) Then SQL1 = SQL1 & ","
    Next K
    SQL1 = SQL1 & "); "
    Ejecutar_SQL_SP SQL1
@@ -4280,30 +4299,30 @@ Dim Crear_Campo As Boolean
    Ejecutar_SQL_SP SQL1
  ' Volvemos a crear la tabla
    SQL1 = "CREATE TABLE " & ROrigen & " ("
-   For K = 0 To .fields.Count - 1
+   For K = 0 To .Fields.Count - 1
        Crear_Campo = True
-       If ROrigen = "Accesos" And .fields(K).Name = "Item" Then Crear_Campo = False
-       If ROrigen = "Accesos" And .fields(K).Name = "CI" Then Crear_Campo = False
+       If ROrigen = "Accesos" And .Fields(K).Name = "Item" Then Crear_Campo = False
+       If ROrigen = "Accesos" And .Fields(K).Name = "CI" Then Crear_Campo = False
        If Crear_Campo Then
-           SQL1 = SQL1 & "[" & .fields(K).Name & "] "
+           SQL1 = SQL1 & "[" & .Fields(K).Name & "] "
            If SQL_Server Then
-              Cadena1 = FieldTypeSQL(.fields(K).Type)
+              Cadena1 = FieldTypeSQL(.Fields(K).Type)
            Else
-              Cadena1 = FieldTypeAccess(.fields(K).Type)
+              Cadena1 = FieldTypeAccess(.Fields(K).Type)
            End If
            SQL1 = SQL1 & Cadena1
            If Cadena1 = "NVARCHAR" Or Cadena1 = "TEXT" Then
               If EsAccesos Then
-                 If .fields(K).Name = "Codigo" Then
+                 If .Fields(K).Name = "Codigo" Then
                      SQL1 = SQL1 & "(10)"
                  Else
-                     SQL1 = SQL1 & "(" & .fields(K).DefinedSize & ")"
+                     SQL1 = SQL1 & "(" & .Fields(K).DefinedSize & ")"
                  End If
               Else
-                 If .fields(K).Name = "CodigoU" Or .fields(K).Name = "CodigoA" Then
+                 If .Fields(K).Name = "CodigoU" Or .Fields(K).Name = "CodigoA" Then
                      SQL1 = SQL1 & "(10)"
                  Else
-                     SQL1 = SQL1 & "(" & .fields(K).DefinedSize & ")"
+                     SQL1 = SQL1 & "(" & .Fields(K).DefinedSize & ")"
                  End If
               End If
            End If
@@ -4324,15 +4343,15 @@ Dim Crear_Campo As Boolean
    Select_AdoDB AdoCompDB1, sSQL
    With AdoCompDB1
         SQL2 = "INSERT INTO " & ROrigen & " ("
-        For K = 0 To .fields.Count - 1
-            SQL2 = SQL2 & "[" & .fields(K).Name & "] "
-            If K <> (.fields.Count - 1) Then SQL2 = SQL2 & ","
+        For K = 0 To .Fields.Count - 1
+            SQL2 = SQL2 & "[" & .Fields(K).Name & "] "
+            If K <> (.Fields.Count - 1) Then SQL2 = SQL2 & ","
         Next K
         SQL2 = SQL2 & ") " _
              & "SELECT "
-        For K = 0 To .fields.Count - 1
-            SQL2 = SQL2 & "[" & .fields(K).Name & "] "
-            If K <> (.fields.Count - 1) Then SQL2 = SQL2 & ","
+        For K = 0 To .Fields.Count - 1
+            SQL2 = SQL2 & "[" & .Fields(K).Name & "] "
+            If K <> (.Fields.Count - 1) Then SQL2 = SQL2 & ","
         Next K
         SQL2 = SQL2 & "FROM A_" & ROrigen & ";"
    End With
@@ -4480,7 +4499,7 @@ Dim CantCampos As Integer
        & "AND Periodo = '" & Periodo_Contable & "' "
   Select_AdoDB AdoCompDB, sSQL
   If AdoCompDB.RecordCount > 0 Then
-     If Not IsNull(AdoCompDB.fields("Fecha_MIN")) Then FechaInicial = PrimerDiaMes(AdoCompDB.fields("Fecha_MIN"))
+     If Not IsNull(AdoCompDB.Fields("Fecha_MIN")) Then FechaInicial = PrimerDiaMes(AdoCompDB.Fields("Fecha_MIN"))
   End If
   AdoCompDB.Close
 
@@ -4490,9 +4509,9 @@ Dim CantCampos As Integer
        & "AND Periodo = '" & Periodo_Contable & "' "
   Select_AdoDB AdoCompDB, sSQL
   If AdoCompDB.RecordCount > 0 Then
-     If Not IsNull(AdoCompDB.fields("Fecha_MIN")) Then
-        If CFechaLong(FechaInicial) > CFechaLong(AdoCompDB.fields("Fecha_MIN")) Then
-           FechaInicial = PrimerDiaMes(AdoCompDB.fields("Fecha_MIN"))
+     If Not IsNull(AdoCompDB.Fields("Fecha_MIN")) Then
+        If CFechaLong(FechaInicial) > CFechaLong(AdoCompDB.Fields("Fecha_MIN")) Then
+           FechaInicial = PrimerDiaMes(AdoCompDB.Fields("Fecha_MIN"))
         End If
      End If
   End If
@@ -4509,9 +4528,9 @@ Dim CantCampos As Integer
            & "FROM " & Update_LstTablas.List(I) & " " _
            & "WHERE 1 = 0 "
       Select_AdoDB AdoAuxDB, sSQL
-      ReDim nCampos(AdoAuxDB.fields.Count) As String
+      ReDim nCampos(AdoAuxDB.Fields.Count) As String
       For K = 0 To UBound(nCampos) - 1
-          nCampos(K) = AdoAuxDB.fields(K).Name
+          nCampos(K) = AdoAuxDB.Fields(K).Name
       Next K
       AdoAuxDB.Close
       
@@ -4557,8 +4576,8 @@ Dim CantCampos As Integer
                    SubCtaGen = Format(Contador / AdoAuxDB.RecordCount, "00%")
 '''                   Progreso_Barra.Mensaje_Box = "(" & SubCtaGen & ") Representante: " & AdoAuxDB.Fields("Periodo") & " " & AdoAuxDB.Fields("Representante")
 '''                   Progreso_Esperar True
-                   DigVerif = Digito_Verificador(AdoAuxDB.fields("Cedula_R"))
-                   AdoAuxDB.fields("TD") = Tipo_RUC_CI.Tipo_Beneficiario
+                   DigVerif = Digito_Verificador(AdoAuxDB.Fields("Cedula_R"))
+                   AdoAuxDB.Fields("TD") = Tipo_RUC_CI.Tipo_Beneficiario
                    AdoAuxDB.Update
                    AdoAuxDB.MoveNext
                 Loop
@@ -5865,7 +5884,7 @@ Dim ListaCampos As String
        With AdoTableDB
         If .RecordCount > 0 Then
             Do While Not .EOF
-               ListaCampos = ListaCampos & .fields("name") & ", "
+               ListaCampos = ListaCampos & .Fields("name") & ", "
               .MoveNext
             Loop
             ListaCampos = TrimStrg(ListaCampos)
@@ -6097,9 +6116,9 @@ Dim cSQL As String
     cSQL = CompilarSQL(cSQL)
     AdoReg.open cSQL, AdoStrCnn, , , adCmdText
     If AdoReg.RecordCount > 0 Then
-       CodigoCliente = AdoReg.fields("Codigo")
-       NombreCliente = AdoReg.fields("Cliente")
-       DireccionCli = AdoReg.fields("Direccion")
+       CodigoCliente = AdoReg.Fields("Codigo")
+       NombreCliente = AdoReg.Fields("Cliente")
+       DireccionCli = AdoReg.Fields("Direccion")
        'Grupo = AdoReg.Fields("Grupo")
     End If
     AdoReg.Close
@@ -6131,15 +6150,15 @@ Dim AdoRegs As ADODB.Recordset
     Select_AdoDB AdoRegs, Strgs
     With AdoRegs
      If .RecordCount > 0 Then
-         C1.RUC_CI = .fields("CI_RUC")
-         C1.Beneficiario = .fields("Cliente")
-         C1.Email = .fields("Email")
-         C1.TD = .fields("TD")
-         C1.Direccion = .fields("Direccion")
-         C1.Telefono = .fields("Telefono")
-         C1.Grupo = .fields("Grupo")
-         If .fields("RISE") Then C1.TipoContribuyente = C1.TipoContribuyente & " RISE"
-         If .fields("Especial") Then C1.TipoContribuyente = C1.TipoContribuyente & " Contribuyente especial"
+         C1.RUC_CI = .Fields("CI_RUC")
+         C1.Beneficiario = .Fields("Cliente")
+         C1.Email = .Fields("Email")
+         C1.TD = .Fields("TD")
+         C1.Direccion = .Fields("Direccion")
+         C1.Telefono = .Fields("Telefono")
+         C1.Grupo = .Fields("Grupo")
+         If .Fields("RISE") Then C1.TipoContribuyente = C1.TipoContribuyente & " RISE"
+         If .Fields("Especial") Then C1.TipoContribuyente = C1.TipoContribuyente & " Contribuyente especial"
          'TipoSRI = consulta_RUC_SRI( C1.RUC_CI)
          If Len(C1.RUC_CI) = 13 Then Tipo_Contribuyente_SP_MySQL C1.RUC_CI, TipoSRI.MicroEmpresa, TipoSRI.AgenteRetencion
          Select Case C1.TD
@@ -6382,19 +6401,19 @@ Dim Existe_ID As Boolean
           Select_AdoDB AdoTabla, sSQL
           With AdoTabla
                Campos = ""
-               For Idx = 0 To .fields.Count - 1
-                   If .fields(Idx).Name <> "ID" Then
-                       Campos = Campos & "[" & .fields(Idx).Name & "] "
+               For Idx = 0 To .Fields.Count - 1
+                   If .Fields(Idx).Name <> "ID" Then
+                       Campos = Campos & "[" & .Fields(Idx).Name & "] "
                        If SQL_Server Then
-                          Campos = Campos & FieldTypeSQL(.fields(Idx).Type) & " "
+                          Campos = Campos & FieldTypeSQL(.Fields(Idx).Type) & " "
                        Else
-                          Campos = Campos & FieldTypeAccess(.fields(Idx).Type) & " "
+                          Campos = Campos & FieldTypeAccess(.Fields(Idx).Type) & " "
                        End If
-                       If .fields(Idx).Type = adVarWChar Then Campos = Campos & "(" & CStr(.fields(Idx).DefinedSize) & ")"
-                       If .fields(Idx).Type = adNumeric Then Campos = Campos & "(18,0)"
+                       If .Fields(Idx).Type = adVarWChar Then Campos = Campos & "(" & CStr(.Fields(Idx).DefinedSize) & ")"
+                       If .Fields(Idx).Type = adNumeric Then Campos = Campos & "(18,0)"
                        Campos = Campos & " NULL"
                    End If
-                   If .fields(Idx).Name = "ID" Then
+                   If .Fields(Idx).Name = "ID" Then
                        If SQL_Server Then
                           Campos = Campos & "[ID] INT IDENTITY NOT NULL PRIMARY KEY NONCLUSTERED "
                        Else
@@ -6440,9 +6459,9 @@ Dim Existe_ID As Boolean
           Select_AdoDB AdoTabla, sSQL
           With AdoTabla
                InsCampos = ""
-               For Idx = 0 To .fields.Count - 1
-                   If .fields(Idx).Name <> "ID" Then InsCampos = InsCampos & .fields(Idx).Name & ","
-                   If .fields(Idx).Name = "ID" Then Existe_ID = True
+               For Idx = 0 To .Fields.Count - 1
+                   If .Fields(Idx).Name <> "ID" Then InsCampos = InsCampos & .Fields(Idx).Name & ","
+                   If .Fields(Idx).Name = "ID" Then Existe_ID = True
                Next Idx
           End With
           AdoTabla.Close
@@ -6477,8 +6496,8 @@ Dim Existe_ID As Boolean
                & "FROM " & NombreTabla & " "
           Select_AdoDB AdoTabla, sSQL
           With AdoTabla
-               For Idx = 0 To .fields.Count - 1
-                   If .fields(Idx).Name = "ID" Then Existe_ID = True
+               For Idx = 0 To .Fields.Count - 1
+                   If .Fields(Idx).Name = "ID" Then Existe_ID = True
                Next Idx
           End With
           AdoTabla.Close
@@ -6511,11 +6530,11 @@ Dim AdoFnSP As ADODB.Recordset
     With AdoFnSP
      If .RecordCount > 0 Then
          Do While Not .EOF
-            sSQL = "IF EXISTS (SELECT name FROM sysobjects WHERE name = '" & .fields("ROUTINE_NAME") & "') "
-            If .fields("ROUTINE_TYPE") = "FUNCTION" Then
-                sSQL = sSQL & "DROP FUNCTION " & .fields("ROUTINE_NAME") & ";"
+            sSQL = "IF EXISTS (SELECT name FROM sysobjects WHERE name = '" & .Fields("ROUTINE_NAME") & "') "
+            If .Fields("ROUTINE_TYPE") = "FUNCTION" Then
+                sSQL = sSQL & "DROP FUNCTION " & .Fields("ROUTINE_NAME") & ";"
             Else
-                sSQL = sSQL & "DROP PROCEDURE " & .fields("ROUTINE_NAME") & ";"
+                sSQL = sSQL & "DROP PROCEDURE " & .Fields("ROUTINE_NAME") & ";"
             End If
             Ejecutar_SQL_AdoDB sSQL
            .MoveNext
@@ -6718,12 +6737,12 @@ Dim columnas As Long
               Progreso_Esperar True
               
              'Traemos los datos de cabecera de la tabla Access y los pegamos en la hoja excel
-              columnas = consulta.fields.Count
+              columnas = consulta.Fields.Count
               filas = consulta.RecordCount
            
              'Generamos encabezado con colores
               With APIExcel.Range(APIExcel.cells(1, 1), APIExcel.cells(1, columnas))
-                  .Font.Bold = True
+                  .Font.bold = True
                   .Interior.color = RGB(128, 128, 128)
                   .HorizontalAlignment = 3
                  '.VerticalAlignment = 2
@@ -6731,7 +6750,7 @@ Dim columnas As Long
               End With
            
               With APIExcel.Range(APIExcel.cells(2, 1), APIExcel.cells(2, columnas))
-                  .Font.Bold = True
+                  .Font.bold = True
                   .Interior.color = RGB(168, 168, 0)
                   .HorizontalAlignment = 3
                   .VerticalAlignment = 2
@@ -6747,7 +6766,7 @@ Dim columnas As Long
              'Escribimos el encabezado de la consulta
               APIExcel.cells(1, 1) = Empresa & " [" & nombreHoja & "]"
               For I = 0 To columnas - 1
-                  APIExcel.cells(2, I + 1) = consulta.fields(I).Name
+                  APIExcel.cells(2, I + 1) = consulta.Fields(I).Name
               Next I
            
              'Pegamos los datos de la tabla en la nueva hoja
@@ -6805,12 +6824,12 @@ Dim columnas As Long
              AddHoja.Name = "DiskCover System"
               
             'Traemos los datos de cabecera de la tabla Access y los pegamos en la hoja excel
-             columnas = consulta.fields.Count
+             columnas = consulta.Fields.Count
              filas = consulta.RecordCount
            
             'Generamos encabezado con colores
              With APIExcel.Range(APIExcel.cells(1, 1), APIExcel.cells(1, columnas))
-                 .Font.Bold = True
+                 .Font.bold = True
                  .Interior.color = RGB(128, 128, 128)
                  .HorizontalAlignment = 3
                 '.VerticalAlignment = 2
@@ -6818,7 +6837,7 @@ Dim columnas As Long
              End With
            
              With APIExcel.Range(APIExcel.cells(2, 1), APIExcel.cells(2, columnas))
-                 .Font.Bold = True
+                 .Font.bold = True
                  .Interior.color = RGB(168, 168, 0)
                  .HorizontalAlignment = 3
                  .VerticalAlignment = 2
@@ -6834,7 +6853,7 @@ Dim columnas As Long
             'Escribimos el encabezado de la consulta
              APIExcel.cells(1, 1) = Empresa & " [" & nombreHoja & "]"
              For I = 0 To columnas - 1
-                 APIExcel.cells(2, I + 1) = consulta.fields(I).Name
+                 APIExcel.cells(2, I + 1) = consulta.Fields(I).Name
              Next I
            
             'Pegamos los datos de la tabla en la nueva hoja

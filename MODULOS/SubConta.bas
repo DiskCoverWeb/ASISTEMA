@@ -330,7 +330,7 @@ Dim AdoCodigo As ADODB.Recordset
      End With
      AdoCodigo.Close
   Else
-     MsgBox "No existen datos"
+     MsgBox "No existen datos de costeo en el Inventario"
   End If
   RatonNormal
   Leer_Codigo_Inv = Codigo_Ok
@@ -3243,7 +3243,7 @@ Dim AdoRetAut As ADODB.Recordset
     'Actualiza_Procesado_Kardex .fields("Codigo_Inv")
     'Pasamos a Autorizar la retencion si es electronica
      RatonReloj
-     'MsgBox FA.Autorizacion_R & vbCrLf & FA.Autorizacion_LC
+    'MsgBox "DeskTop Test: " & FA.Autorizacion_R & vbCrLf & FA.Autorizacion_LC
      If Len(C1.Autorizacion_R) >= 13 Then SRI_Crear_Clave_Acceso_Retenciones FA, True
      If Len(C1.Autorizacion_LC) >= 13 Then SRI_Crear_Clave_Acceso_Liquidacion FA, True
   End If

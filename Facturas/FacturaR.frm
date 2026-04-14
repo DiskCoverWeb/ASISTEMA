@@ -12,8 +12,8 @@ Begin VB.Form FacturaReembolso
    ClientWidth     =   15960
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   15615
-   ScaleWidth      =   28560
+   ScaleHeight     =   10335
+   ScaleWidth      =   15960
    WindowState     =   1  'Minimized
    Begin VB.TextBox TxtAutProvee 
       BeginProperty Font 
@@ -1758,7 +1758,7 @@ Private Sub Form_Load()
   ConectarAdodc AdoTipoPago
   ConectarAdodc AdoTipoComprobante
   
-  SRI_Obtener_Datos_Comprobantes_Electronicos
+ 'SRI_Obtener_Datos_Comprobantes_Electronicos
   
   Encerar_Factura FA
 End Sub
@@ -1848,7 +1848,7 @@ Public Sub ProcGrabarReembolso()
      T = Pendiente
     'Grabamos el numero de factura
      RatonNormal
-     Grabar_Factura FA, True
+     Grabar_Factura FA, TA, True
      
      sSQL = "SELECT * " _
           & "FROM Asiento_F " _

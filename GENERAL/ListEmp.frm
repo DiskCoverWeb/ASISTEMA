@@ -866,7 +866,7 @@ Dim SiActualizar As Boolean
     With AdoAux.Recordset
      If .RecordCount > 0 Then
          Do While Not .EOF
-            CadenaParcial = CadenaParcial & .fields("Modulo") & "^" & .fields("Item") & "^" & .fields("Codigo") & "^~"
+            CadenaParcial = CadenaParcial & .Fields("Modulo") & "^" & .Fields("Item") & "^" & .Fields("Codigo") & "^~"
            .MoveNext
          Loop
      End If
@@ -885,102 +885,102 @@ Dim SiActualizar As Boolean
     'MsgBox Cadena
     With AdoEmp.Recordset
      If .RecordCount > 0 Then
-         NumEmpresa = .fields("Item")
-         GrupoEmpresa = .fields("Grupo")
-         Empresa = .fields("Empresa")
-         EmailEmpresa = .fields("Email")
-         EmailContador = .fields("Email_Contabilidad")
-         EmailProcesos = .fields("Email_Procesos")
-         EmailRespaldos = .fields("Email_Respaldos")
-         RazonSocial = .fields("Razon_Social")
-         NombreComercial = .fields("Nombre_Comercial")
-         RUC = .fields("RUC")
-         NLogoTipo = .fields("Logo_Tipo")
-         NMarcaAgua = .fields("Marca_Agua")
-         NombreContador = .fields("Contador")
-         NombreCiudad = .fields("Ciudad")
-         RUC_Contador = .fields("RUC_Contador")
-         NombreGerente = .fields("Gerente")
-         NFirmaDigital = .fields("Firma_Digital")
-         NombrePais = .fields("Pais")
-         CodigoPais = .fields("CPais")
-         CodigoProv = .fields("CProv")
-         ReferenciaEmpresa = .fields("Referencia")
-         CI_Representante = .fields("CI_Representante")
-         TID_Repres = .fields("TD")
-         FAX = .fields("FAX")
-         Moneda = .fields("S_M")
-         Telefono1 = .fields("Telefono1")
-         Telefono2 = .fields("Telefono2")
-         Direccion = .fields("Direccion")
-         DireccionEstab = .fields("Direccion")
-         CodigoDelBanco = .fields("CodBanco")
-         NombreBanco = .fields("Nombre_Banco")
-         Dec_PVP = .fields("Dec_PVP")
-         Dec_Costo = .fields("Dec_Costo")
-         Dec_IVA = .fields("Dec_IVA")
-         Dec_Cant = .fields("Dec_Cant")
-         Cant_Item_PV = .fields("Cant_Item_PV")
-         Cant_Ancho_PV = .fields("Cant_Ancho_PV")
-        
+         NumEmpresa = .Fields("Item")
+         GrupoEmpresa = .Fields("Grupo")
+         Empresa = .Fields("Empresa")
+         EmailEmpresa = .Fields("Email")
+         EmailContador = .Fields("Email_Contabilidad")
+         EmailProcesos = .Fields("Email_Procesos")
+         EmailRespaldos = .Fields("Email_Respaldos")
+         RazonSocial = .Fields("Razon_Social")
+         NombreComercial = .Fields("Nombre_Comercial")
+         RUC = .Fields("RUC")
+         NLogoTipo = .Fields("Logo_Tipo")
+         NMarcaAgua = .Fields("Marca_Agua")
+         NombreContador = .Fields("Contador")
+         NombreCiudad = .Fields("Ciudad")
+         RUC_Contador = .Fields("RUC_Contador")
+         NombreGerente = .Fields("Gerente")
+         NFirmaDigital = .Fields("Firma_Digital")
+         NombrePais = .Fields("Pais")
+         CodigoPais = .Fields("CPais")
+         CodigoProv = .Fields("CProv")
+         ReferenciaEmpresa = .Fields("Referencia")
+         CI_Representante = .Fields("CI_Representante")
+         TID_Repres = .Fields("TD")
+         FAX = .Fields("FAX")
+         Moneda = .Fields("S_M")
+         Telefono1 = .Fields("Telefono1")
+         Telefono2 = .Fields("Telefono2")
+         Direccion = .Fields("Direccion")
+         DireccionEstab = .Fields("Direccion")
+         CodigoDelBanco = .Fields("CodBanco")
+         NombreBanco = .Fields("Nombre_Banco")
+         Dec_PVP = .Fields("Dec_PVP")
+         Dec_Costo = .Fields("Dec_Costo")
+         Dec_IVA = .Fields("Dec_IVA")
+         Dec_Cant = .Fields("Dec_Cant")
+         Cant_Item_PV = .Fields("Cant_Item_PV")
+         Cant_Ancho_PV = .Fields("Cant_Ancho_PV")
+
         'Documentos Electronicos
-         Ambiente = .fields("Ambiente")
-         Obligado_Conta = .fields("Obligado_Conta")
-         ContEspec = .fields("Codigo_Contribuyente_Especial")
-         Informativo_FA = .fields("LeyendaFA")
-         Informativo_FAT = .fields("LeyendaFAT")
-         MascaraCodigoK = .fields("Formato_Inventario")
-         MascaraCodigoA = .fields("Formato_Activo")
-         MascaraCtas = Replace(.fields("Formato_Cuentas"), "C", "#")
+         Ambiente = .Fields("Ambiente")
+         Obligado_Conta = .Fields("Obligado_Conta")
+         ContEspec = .Fields("Codigo_Contribuyente_Especial")
+         Informativo_FA = .Fields("LeyendaFA")
+         Informativo_FAT = .Fields("LeyendaFAT")
+         MascaraCodigoK = .Fields("Formato_Inventario")
+         MascaraCodigoA = .Fields("Formato_Activo")
+         MascaraCtas = Replace(.Fields("Formato_Cuentas"), "C", "#")
          FormatoCtas = MascaraCtas
          LimpiarCtas = Replace(MascaraCtas, "#", " ")
-         Fecha_Igualar = .fields("Fecha_Igualar")
-         RUCOperadora = .fields("RUC_Operadora")
-         Porc_Serv = Redondear(.fields("Servicio") / 100, 2)
-         NombreCertificado = .fields("Ruta_Certificado")
-         RutaCertificado = RutaSistema & "\CERTIFIC\" & .fields("Ruta_Certificado")
-         ClaveCertificado = .fields("Clave_Certificado")
+         Fecha_Igualar = .Fields("Fecha_Igualar")
+         RUCOperadora = .Fields("RUC_Operadora")
+         Porc_Serv = Redondear(.Fields("Servicio") / 100, 2)
+         NombreCertificado = .Fields("Ruta_Certificado")
+         RutaCertificado = RutaSistema & "\CERTIFIC\" & .Fields("Ruta_Certificado")
+         ClaveCertificado = .Fields("Clave_Certificado")
         
         'Pagina de Conexion con el SRI
-         URLRecepcion = .fields("Web_SRI_Recepcion")
-         URLAutorizacion = .fields("Web_SRI_Autorizado")
+         URLRecepcion = .Fields("Web_SRI_Recepcion")
+         URLAutorizacion = .Fields("Web_SRI_Autorizado")
 
-         OpcCoop = CBool(.fields("Opc"))
-         CentroDeCosto = CBool(.fields("Centro_Costos"))
-         Copia_PV = CBool(.fields("Copia_PV"))
-         Mod_PVP = CBool(.fields("Mod_PVP"))
-         Mod_Fact = CBool(.fields("Mod_Fact"))
-         Mod_Fecha = CBool(.fields("Mod_Fecha"))
-         Num_Meses_CD = CBool(.fields("Num_CD"))
-         Num_Meses_CE = CBool(.fields("Num_CE"))
-         Num_Meses_CI = CBool(.fields("Num_CI"))
-         Num_Meses_ND = CBool(.fields("Num_ND"))
-         Num_Meses_NC = CBool(.fields("Num_NC"))
-         Plazo_Fijo = CBool(.fields("Plazo_Fijo"))
-         No_Autorizar = CBool(.fields("No_Autorizar"))
-         Mas_Grupos = CBool(.fields("Separar_Grupos"))
-         Medio_Rol = CBool(.fields("Medio_Rol"))
-         Encabezado_PV = CBool(.fields("Encabezado_PV"))
-         CalcComision = CBool(.fields("Calcular_Comision"))
-         Grafico_PV = CBool(.fields("Grafico_PV"))
-         ComisionEjec = CBool(.fields("Comision_Ejecutivo"))
-         ImpCeros = CBool(.fields("Imp_Ceros"))
-         Email_CE_Copia = CBool(.fields("Email_CE_Copia"))
-         Ret_Aut = CBool(.fields("Ret_Aut"))
-         ConciliacionAut = CBool(.fields("Conciliacion_Aut"))
-         NumeroFASubModulo = CBool(.fields("Abonos_FA"))
-         EsTransporte = CBool(.fields("Es_Transporte"))
+         OpcCoop = CBool(.Fields("Opc"))
+         CentroDeCosto = CBool(.Fields("Centro_Costos"))
+         Copia_PV = CBool(.Fields("Copia_PV"))
+         Mod_PVP = CBool(.Fields("Mod_PVP"))
+         Mod_Fact = CBool(.Fields("Mod_Fact"))
+         Mod_Fecha = CBool(.Fields("Mod_Fecha"))
+         Num_Meses_CD = CBool(.Fields("Num_CD"))
+         Num_Meses_CE = CBool(.Fields("Num_CE"))
+         Num_Meses_CI = CBool(.Fields("Num_CI"))
+         Num_Meses_ND = CBool(.Fields("Num_ND"))
+         Num_Meses_NC = CBool(.Fields("Num_NC"))
+         Plazo_Fijo = CBool(.Fields("Plazo_Fijo"))
+         No_Autorizar = CBool(.Fields("No_Autorizar"))
+         Mas_Grupos = CBool(.Fields("Separar_Grupos"))
+         Medio_Rol = CBool(.Fields("Medio_Rol"))
+         Encabezado_PV = CBool(.Fields("Encabezado_PV"))
+         CalcComision = CBool(.Fields("Calcular_Comision"))
+         Grafico_PV = CBool(.Fields("Grafico_PV"))
+         ComisionEjec = CBool(.Fields("Comision_Ejecutivo"))
+         ImpCeros = CBool(.Fields("Imp_Ceros"))
+         Email_CE_Copia = CBool(.Fields("Email_CE_Copia"))
+         Ret_Aut = CBool(.Fields("Ret_Aut"))
+        'ConciliacionAut = CBool(.Fields("Conciliacion_Aut"))
+         NumeroFASubModulo = CBool(.Fields("Abonos_FA"))
+         EsTransporte = CBool(.Fields("Es_Transporte"))
          
          Debo_Pagare = MensajeDeboPagare
          If Len(RazonSocial) > 1 Then CodigoA = RazonSocial Else CodigoA = Empresa
-         If .fields("Debo_Pagare") = "SI" Then Debo_Pagare = Replace(Debo_Pagare, "vRazon_Social", CodigoA) Else Debo_Pagare = Ninguno
+         If .Fields("Debo_Pagare") = "SI" Then Debo_Pagare = Replace(Debo_Pagare, "vRazon_Social", CodigoA) Else Debo_Pagare = Ninguno
          
         'Datos de iniciacion desde MySQL
-         Fecha_CE = .fields("Fecha_CE")
-         Fecha_P12 = .fields("Fecha_P12")
-         TipoPlan = .fields("Tipo_Plan")
-         EstadoEmpresa = .fields("Estado")
-         SerieFactura = .fields("Serie_FA")
+         Fecha_CE = .Fields("Fecha_CE")
+         Fecha_P12 = .Fields("Fecha_P12")
+         TipoPlan = .Fields("Tipo_Plan")
+         EstadoEmpresa = .Fields("Estado")
+         SerieFactura = .Fields("Serie_FA")
          
          CodigoA = Ninguno
          If MascaraCodigoK = Ninguno Then
@@ -1001,14 +1001,14 @@ Dim SiActualizar As Boolean
              Lista_De_Correos(I).Clave = ContrasenaDiskCover
          Next I
         
-         If Len(.fields("Email_Conexion")) > 1 And Len(.fields("Email_Clave")) > 1 Then
-            Lista_De_Correos(0).Correo_Electronico = .fields("Email_Conexion")
-            Lista_De_Correos(0).Clave = .fields("Email_Clave")
+         If Len(.Fields("Email_Conexion")) > 1 And Len(.Fields("Email_Clave")) > 1 Then
+            Lista_De_Correos(0).Correo_Electronico = .Fields("Email_Conexion")
+            Lista_De_Correos(0).Clave = .Fields("Email_Clave")
          End If
          
-         If Len(.fields("Email_Conexion_CE")) > 1 And Len(.fields("Email_Clave_CE")) > 1 Then
-            Lista_De_Correos(4).Correo_Electronico = .fields("Email_Conexion_CE")
-            Lista_De_Correos(4).Clave = .fields("Email_Clave_CE")
+         If Len(.Fields("Email_Conexion_CE")) > 1 And Len(.Fields("Email_Clave_CE")) > 1 Then
+            Lista_De_Correos(4).Correo_Electronico = .Fields("Email_Conexion_CE")
+            Lista_De_Correos(4).Clave = .Fields("Email_Clave_CE")
          End If
          Lista_De_Correos(6).Correo_Electronico = "credenciales@diskcoversystem.com"
          Lista_De_Correos(6).Clave = "Dlcjvl1210@Credenciales"
@@ -1021,8 +1021,8 @@ Dim SiActualizar As Boolean
         'MsgBox "Desktop Test: MySQL - " & Format(Time - Minutos, "hh:mm:ss")
         'MsgBox "Desktop Test: " & ServidorMySQL
          If ServidorMySQL Then
-            If .fields("Estado") <> EstadoEmpresa Or .fields("Cartera") <> Cartera Or .fields("Cant_FA") <> Cant_FA Or .fields("Serie_FA") <> SerieFE Or _
-               .fields("Fecha_CE") <> Fecha_CE Or .fields("Fecha_P12") <> Fecha_P12 Or .fields("Tipo_Plan") <> Fecha_CO Or .fields("Tipo_Plan") <> TipoPlan Then
+            If .Fields("Estado") <> EstadoEmpresa Or .Fields("Cartera") <> Cartera Or .Fields("Cant_FA") <> Cant_FA Or .Fields("Serie_FA") <> SerieFE Or _
+               .Fields("Fecha_CE") <> Fecha_CE Or .Fields("Fecha_P12") <> Fecha_P12 Or .Fields("Tipo_Plan") <> Fecha_CO Or .Fields("Tipo_Plan") <> TipoPlan Then
                 sSQL = "UPDATE Empresas " _
                      & "SET Cartera = " & Cartera & ", " _
                      & "Cant_FA = " & Cant_FA & ",  " _
@@ -1052,7 +1052,7 @@ Dim SiActualizar As Boolean
         'SavePicture Me.Picture, RutaDestino
          NombreRUC = "R.U.C."
         'MsgBox LogoTipo
-         Carpeta = .fields("SubDir")
+         Carpeta = .Fields("SubDir")
          EmpresaActual = "[" & RutaEmpresa & "]."
                   
          If Not PCActivo Then
@@ -1077,7 +1077,7 @@ Dim SiActualizar As Boolean
             & "AND Periodo = '" & Periodo_Contable & "' " _
             & "AND CodBod = '" & Cod_Bodega & "' "
        Select_Adodc AdoAux, sSQL
-       If AdoAux.Recordset.RecordCount > 0 Then Nom_Bodega = AdoAux.Recordset.fields("Bodega")
+       If AdoAux.Recordset.RecordCount > 0 Then Nom_Bodega = AdoAux.Recordset.Fields("Bodega")
     End If
     
     sSQL = "SELECT MIN(Fecha) As FechaCierreFiscal " _
@@ -1087,7 +1087,7 @@ Dim SiActualizar As Boolean
     Select_Adodc AdoAux, sSQL
     If AdoAux.Recordset.RecordCount > 0 Then
        'MsgBox AdoAux.Recordset.fields("FechaCierreFiscal")
-       If IsNull(AdoAux.Recordset.fields("FechaCierreFiscal")) Then FechaCierreFiscal = "01/01/2000" Else FechaCierreFiscal = AdoAux.Recordset.fields("FechaCierreFiscal")
+       If IsNull(AdoAux.Recordset.Fields("FechaCierreFiscal")) Then FechaCierreFiscal = "01/01/2000" Else FechaCierreFiscal = AdoAux.Recordset.Fields("FechaCierreFiscal")
     Else
        FechaCierreFiscal = "01/01/" & Year(FechaSistema)
     End If
@@ -1099,7 +1099,6 @@ Dim SiActualizar As Boolean
    'MsgBox "Desktop Test: MySQL - " & Format(Time - Minutos, "hh:mm:ss")
    '+++++++++++++++++++++++++++++++++++++++
    'MsgBox URLToken & vbCrLf & Token
-   'MsgBox "Desktop Test: " & Fecha_CE & vbCrLf & Fecha_P12
    'Resultado del SP del MySQL
     ListaFacturas = ""
     TMail.Asunto = "CARTERA VENCIDA"
@@ -1128,7 +1127,7 @@ Dim SiActualizar As Boolean
            TMail.Asunto = "BLOQUEO DEFINITIVO, COMUNIQUESE A DISKCOVER SYSTEM"
            Evaluar = True
     End Select
-   'MsgBox "Desktop Test: Estado = " & EstadoEmpresa
+  ' MsgBox "Desktop Test: 1 Estado = " & EstadoEmpresa
     RatonNormal
     Cadena1 = ""
     If Len(NombreGerente) <= 1 Then Cadena1 = Cadena1 & "Representante Legal," & vbCrLf
@@ -1242,7 +1241,7 @@ Dim SiActualizar As Boolean
       Case "EDUCATIVO"
            Leer_Periodo_Lectivo                 'Datos del Periodo Lectivo
       Case "CONTABILIDAD", "FACTURACION", "SETEOS"
-           Descargar_Certificados_Logos_Empresa 'Descargar Logos y Certificados electronicos
+          ' Descargar_Certificados_Logos_Empresa 'Descargar Logos y Certificados electronicos
       Case "CAJACREDITO"
            Cambio_Tipo_Cuentas                  'Si estamos en el modulo de Caja Credito
       Case "CYBER PCs"
@@ -1257,9 +1256,9 @@ Dim SiActualizar As Boolean
                 ReDim VCyber_Tiempo(Cantidad_Cyber_Tiempo)
                 I = 0
                 Do While Not .EOF
-                   VCyber_Tiempo(I).Desde = .fields("Desde")
-                   VCyber_Tiempo(I).Hasta = .fields("Hasta")
-                   VCyber_Tiempo(I).Valor = .fields("Valor")
+                   VCyber_Tiempo(I).Desde = .Fields("Desde")
+                   VCyber_Tiempo(I).Hasta = .Fields("Hasta")
+                   VCyber_Tiempo(I).Valor = .Fields("Valor")
                    I = I + 1
                   .MoveNext
                 Loop
@@ -1271,7 +1270,7 @@ Dim SiActualizar As Boolean
     PathEmpresa = UCaseStrg(RutaEmpresa & "\DISKCOVE.MDB")
     FechaCierre = FechaSistema
    'Label5.Caption = "Actualizando Tablas Temporales"
-    'MsgBox "Desktop Test: "
+   ' MsgBox "Desktop Test: 2"
     
     SeteosCtas
    'Fin del seteo de impresoras
@@ -1289,7 +1288,7 @@ Dim SiActualizar As Boolean
       Case Else: Cadena = ""
     End Select
     Control_Procesos Normal, "Ingreso a " & Empresa, "R.U.C. " & RUC & ", Item: " & NumEmpresa
-    'MsgBox "Desktop Test: " & ListaFacturas
+   'MsgBox "Desktop Test: 2" & ListaFacturas
    'If Cadena <> "" Then MsgBox UCaseStrg(Cadena)
     If Len(ListaFacturas) > 1 Then
        ListaFacturas = ListaFacturas _
@@ -1321,11 +1320,9 @@ Dim SiActualizar As Boolean
         .Asunto = ""
         .Mensaje = ""
         .MensajeHTML = ""
-        .para = ""
     End With
     
     TiempoSistema = Time - 0.01
-    
     RatonNormal
     Unload ListEmp
     If Evaluar Then
@@ -1357,22 +1354,22 @@ Dim Respuesta As Boolean
     Select_Adodc AdoEmp, sSQL
     With AdoEmp.Recordset
      If .RecordCount > 0 Then
-         NombreUsuario = .fields("Nombre_Completo")
-         CodigoUsuario = .fields("Codigo")
-         IDEUsuario = .fields("Usuario")
-         PWRUsuario = .fields("Clave")
-         Todas_Las_Empresas = .fields("TODOS")
-         Supervisor = .fields("TODOS")
-         Cod_Bodega = .fields("CodBod")
+         NombreUsuario = .Fields("Nombre_Completo")
+         CodigoUsuario = .Fields("Codigo")
+         IDEUsuario = .Fields("Usuario")
+         PWRUsuario = .Fields("Clave")
+         Todas_Las_Empresas = .Fields("TODOS")
+         Supervisor = .Fields("TODOS")
+         Cod_Bodega = .Fields("CodBod")
          If Todas_Las_Empresas = False Then
-            CNivel(1) = .fields("Nivel_1")
-            CNivel(2) = .fields("Nivel_2")
-            CNivel(3) = .fields("Nivel_3")
-            CNivel(4) = .fields("Nivel_4")
-            CNivel(5) = .fields("Nivel_5")
-            CNivel(6) = .fields("Nivel_6")
-            CNivel(7) = .fields("Nivel_7")
-            Supervisor = .fields("Supervisor")
+            CNivel(1) = .Fields("Nivel_1")
+            CNivel(2) = .Fields("Nivel_2")
+            CNivel(3) = .Fields("Nivel_3")
+            CNivel(4) = .Fields("Nivel_4")
+            CNivel(5) = .Fields("Nivel_5")
+            CNivel(6) = .Fields("Nivel_6")
+            CNivel(7) = .Fields("Nivel_7")
+            Supervisor = .Fields("Supervisor")
          End If
          Respuesta = True
      Else
@@ -1434,14 +1431,14 @@ Private Sub Command1_Click()
           Modo_Educativo = False
           SQL_Server = False
           
-          strIPServidor = .fields("IP_VPN_RUTA")
-          strNombreBaseDatos = .fields("Base_Datos")
-          strWebServices = .fields("WebServices")
-          strPassword = .fields("Clave_DB")
-          strUsuario = .fields("Usuario_DB")
-          strPuerto = .fields("Puerto")
+          strIPServidor = .Fields("IP_VPN_RUTA")
+          strNombreBaseDatos = .Fields("Base_Datos")
+          strWebServices = .Fields("WebServices")
+          strPassword = .Fields("Clave_DB")
+          strUsuario = .Fields("Usuario_DB")
+          strPuerto = .Fields("Puerto")
           
-          Select Case .fields("Tipo_Base")
+          Select Case .Fields("Tipo_Base")
             Case "SQL SERVER"
                  If strPuerto <> 1433 Then
                      AdoStrCnn = "Data Source=tcp:" & strIPServidor & "," & CStr(strPuerto) & ";"
@@ -1460,7 +1457,7 @@ Private Sub Command1_Click()
                            & "DATABASE=" & strNombreBaseDatos & ";" _
                            & "USER=" & strUsuario & ";" _
                            & "PASSWORD=" & strPassword & ";" _
-                           & "PORT=" & .fields("Puerto") & ";" _
+                           & "PORT=" & .Fields("Puerto") & ";" _
                            & "OPTION=3;"
             Case "ACCESS"
                  AdoStrCnn = "Data Source=" & strIPServidor & "\" & strNombreBaseDatos & ".MDB;" _
@@ -1539,7 +1536,7 @@ Private Sub DCEmpresa_KeyDown(KeyCode As Integer, Shift As Integer)
          .MoveFirst
          .Find ("Item = '" & NumItem & "'")
           If Not .EOF Then
-             DCEmpresa.Text = .fields("Empresa")
+             DCEmpresa.Text = .Fields("Empresa")
              Dolar = Val(CCur(TextDolar.Text))
              'FrameClave.Visible = False
              LlenarEmpresa
@@ -1597,10 +1594,10 @@ Private Sub DLEntidad_KeyUp(KeyCode As Integer, Shift As Integer)
       .MoveFirst
       .Find ("Entidad_Comercial = '" & DLEntidad & "' ")
        If Not .EOF Then
-          TxtReferencia = "IP VPN    : " & .fields("IP_VPN_RUTA") & vbCrLf _
-                        & "BASE DATOS: " & .fields("Base_Datos") & vbCrLf _
-                        & "CLAVE DB  : " & .fields("Clave_DB") & vbCrLf _
-                        & "PUERTO    : " & .fields("Puerto")
+          TxtReferencia = "IP VPN    : " & .Fields("IP_VPN_RUTA") & vbCrLf _
+                        & "BASE DATOS: " & .Fields("Base_Datos") & vbCrLf _
+                        & "CLAVE DB  : " & .Fields("Clave_DB") & vbCrLf _
+                        & "PUERTO    : " & .Fields("Puerto")
        End If
    End If
   End With
@@ -1642,7 +1639,7 @@ Dim RetVal
          & "WHERE Modulo = 'VS' "
     Select_Adodc AdoAux, sSQL
     If AdoAux.Recordset.RecordCount > 0 Then
-       Version_Sistema = "Actualización de: " & AdoAux.Recordset.fields("Aplicacion") & " - Ver. 5.20 "
+       Version_Sistema = "Actualización de: " & AdoAux.Recordset.Fields("Aplicacion") & " - Ver. 5.20 "
     Else
        Version_Sistema = "Teléfono del proveedor: " & vbCrLf & "(+593) 09-9965-4196/09-8652-4396. "
     End If
@@ -1666,7 +1663,8 @@ Dim RetVal
    ListEmp.Caption = "UNIDAD DE RED: [" & RutaSistema & "]."
    Dolar = 0
    TextDolar.Text = "0.00"
-       
+   JSONInPutAbonos = ""
+   
 '''   sSQL = "SELECT * " _
 '''        & "FROM Empresas " _
 '''        & "WHERE Item <> '.' " _
@@ -1852,7 +1850,7 @@ Dim Txt_SMTP_Mails As String
       Unload ListEmp
       CrearEmp.Show
    Else
-      EmpresaTemp = AdoEmpresa.Recordset.fields("Empresa")
+      EmpresaTemp = AdoEmpresa.Recordset.Fields("Empresa")
       DCEmpresa.Text = EmpresaTemp
       CmdBAceptar.Enabled = False
       CmdBCrearEmp.Enabled = False
@@ -1913,8 +1911,8 @@ Dim ContadorUsuario As Integer
                TMail.MensajeHTML = Leer_Archivo_Texto(RutaSistema & "\JAVASCRIPT\f_mail_basico.html")
           
                html_Informacion_adicional = "<strong>INFORMACION DEL USUARIO:</strong><br>" _
-                                          & "<strong>Usuario: </strong>" & .fields("Usuario") & "<br>" _
-                                          & "<strong>Clave: </strong>" & .fields("Clave") & "<br><br>"
+                                          & "<strong>Usuario: </strong>" & .Fields("Usuario") & "<br>" _
+                                          & "<strong>Clave: </strong>" & .Fields("Clave") & "<br><br>"
                                       
                html_Detalle_adicional = ""
           
@@ -1924,7 +1922,7 @@ Dim ContadorUsuario As Integer
                TMail.Mensaje = ""
                TMail.Adjunto = ""
                TMail.Credito_No = ""
-               TMail.Asunto = "Credenciales de: " & .fields("Nombre_Usuario")
+               TMail.Asunto = "Credenciales de: " & .Fields("Nombre_Usuario")
                TMail.para = ""
                Insertar_Mail TMail.para, EmailUsuario
                Insertar_Mail TMail.para, CorreoDiskCover
@@ -1965,7 +1963,7 @@ Private Sub TextClave_GotFocus()
  With AdoEmp.Recordset
   If .RecordCount > 0 Then
      .MoveFirst
-      Dolar = .fields("Cotizacion")
+      Dolar = .Fields("Cotizacion")
       TextDolar = Dolar
   End If
  End With
@@ -1978,7 +1976,7 @@ Private Sub TextClave_GotFocus()
  With AdoAcceso.Recordset
   If .RecordCount > 0 Then
      .Find ("Codigo = '" & CodigoCliente & "' ")
-    If Not .EOF Then NumItem = .fields("Item")
+    If Not .EOF Then NumItem = .Fields("Item")
   End If
  End With
 End Sub
@@ -2030,7 +2028,7 @@ If Claves <> "" And TextUsuario.Text <> "" Then
            & "FROM Modulos " _
            & "WHERE Aplicacion = '" & Modulo & "' "
       Select_Adodc AdoAux, sSQL
-      If AdoAux.Recordset.RecordCount > 0 Then NumModulo = Format(AdoAux.Recordset.fields("Modulo"), "00")
+      If AdoAux.Recordset.RecordCount > 0 Then NumModulo = Format(AdoAux.Recordset.Fields("Modulo"), "00")
 
       Select Case CodigoUsuario
         Case "0702164179", "ACCESO01" To "ACCESO11"
@@ -2043,7 +2041,7 @@ If Claves <> "" And TextUsuario.Text <> "" Then
                   & "WHERE Codigo = '" & CodigoUsuario & "' "
              Select_Adodc AdoEmp, sSQL
              If AdoEmp.Recordset.RecordCount > 0 Then
-                EmailUsuario = AdoEmp.Recordset.fields("EmailUsuario")
+                EmailUsuario = AdoEmp.Recordset.Fields("EmailUsuario")
                 If Len(EmailUsuario) <= 1 Then
                    Cadena = "ESTIMADO USUARIO, con el cambio del sistema al metodo de procesamiento bajo las nubes (cloud), " _
                           & "es necesario registrar un correo personal donde se enviará las credenciales para el respectivo " _
@@ -2054,7 +2052,7 @@ If Claves <> "" And TextUsuario.Text <> "" Then
                    EmailUsuario = InputBox(Cadena, "EMAIL PERSONAL DEL USUARIO", "")
                    If EmailUsuario = "" Then EmailUsuario = Ninguno
                    If Len(EmailUsuario) > 3 And InStr(EmailUsuario, "@") Then
-                      AdoEmp.Recordset.fields("EmailUsuario") = LCase(EmailUsuario)
+                      AdoEmp.Recordset.Fields("EmailUsuario") = LCase(EmailUsuario)
                       AdoEmp.Recordset.Update
                    End If
                    Cadena = ""
@@ -2122,7 +2120,7 @@ If Claves <> "" And TextUsuario.Text <> "" Then
                 .MoveFirst
                 .Find ("Item = '" & NumItem & "' ")
                  If Not .EOF Then
-                    DCEmpresa.Text = .fields("Empresa")
+                    DCEmpresa.Text = .Fields("Empresa")
                     Dolar = Val(CCur(TextDolar.Text))
                     'FrameClave.Visible = False
                     LlenarEmpresa
@@ -2245,14 +2243,14 @@ Private Sub TextUsuario_LostFocus()
      Select_Adodc AdoEmp, sSQL
      With AdoEmp.Recordset
       If .RecordCount > 0 Then
-          CodigoCliente = .fields("Codigo")
-          Opc_Primaria = CBool(.fields("Primaria"))
-          Opc_Secundaria = CBool(.fields("Secundaria"))
-          Opc_Bachillerato = CBool(.fields("Bachillerato"))
-          SetPRN_2 = .fields("Impresora_Defecto_2")
-          SetPapelPRN_2 = .fields("Papel_Impresora_2")
-          If Len(.fields("Clave")) <= 1 Then
-             NombreCliente = .fields("Nombre_Completo")
+          CodigoCliente = .Fields("Codigo")
+          Opc_Primaria = CBool(.Fields("Primaria"))
+          Opc_Secundaria = CBool(.Fields("Secundaria"))
+          Opc_Bachillerato = CBool(.Fields("Bachillerato"))
+          SetPRN_2 = .Fields("Impresora_Defecto_2")
+          SetPapelPRN_2 = .Fields("Papel_Impresora_2")
+          If Len(.Fields("Clave")) <= 1 Then
+             NombreCliente = .Fields("Nombre_Completo")
              Cadena = "ESTE USUARIO NO HA SIDO REGISTRADA" & vbCrLf _
                     & "SU CLAVE, DEBE INGRESAR UNA CON UN" & vbCrLf _
                     & "MAXIMO DE 10 CARACTERES Y/O NUMEROS." & vbCrLf & vbCrLf _
@@ -2333,12 +2331,12 @@ Dim Logo_Tipo1 As String
           PosPicX = 300
           PosLinea = 300
           LogoTipo1 = Ninguno
-          If .fields("Logo_Tipo") <> Ninguno Then
+          If .Fields("Logo_Tipo") <> Ninguno Then
               RutaOrigen = RutaSistema & "\LOGOS\"
-              If Existe_File(RutaOrigen & .fields("Logo_Tipo") & ".gif") Then
-                 LogoTipo1 = RutaSistema & "\LOGOS\" & .fields("Logo_Tipo") & ".gif"
-              ElseIf Existe_File(RutaOrigen & .fields("Logo_Tipo") & ".jpg") Then
-                 LogoTipo1 = RutaSistema & "\LOGOS\" & .fields("Logo_Tipo") & ".jpg"
+              If Existe_File(RutaOrigen & .Fields("Logo_Tipo") & ".gif") Then
+                 LogoTipo1 = RutaSistema & "\LOGOS\" & .Fields("Logo_Tipo") & ".gif"
+              ElseIf Existe_File(RutaOrigen & .Fields("Logo_Tipo") & ".jpg") Then
+                 LogoTipo1 = RutaSistema & "\LOGOS\" & .Fields("Logo_Tipo") & ".jpg"
               Else
                  LogoTipo1 = RutaSistema & "\LOGOS\DEFAULT.jpg"
               End If
@@ -2353,12 +2351,12 @@ Dim Logo_Tipo1 As String
                   
          Pict_Version.CurrentX = PosPicX
          Pict_Version.CurrentY = PosLinea
-         Pict_Version.Print .fields("Razon_Social")
+         Pict_Version.Print .Fields("Razon_Social")
          PosLinea = PosLinea + AltoL
          
          Pict_Version.CurrentX = PosPicX
          Pict_Version.CurrentY = PosLinea
-         Pict_Version.Print .fields("Nombre_Comercial")
+         Pict_Version.Print .Fields("Nombre_Comercial")
          PosLinea = PosLinea + AltoL
          
          Pict_Version.CurrentX = PosPicX
@@ -2412,46 +2410,46 @@ Dim Logo_Tipo1 As String
          
          Pict_Version.CurrentX = PosPicX
          Pict_Version.CurrentY = PosLinea
-         Pict_Version.Print .fields("RUC")
+         Pict_Version.Print .Fields("RUC")
          PosLinea = PosLinea + AltoL
                   
          Pict_Version.CurrentX = PosPicX
          Pict_Version.CurrentY = PosLinea
-         Pict_Version.Print ULCase(.fields("Ciudad"))
+         Pict_Version.Print ULCase(.Fields("Ciudad"))
          PosLinea = PosLinea + AltoL
          
          Pict_Version.CurrentX = PosPicX
          Pict_Version.CurrentY = PosLinea
-         Pict_Version.Print .fields("Telefono1") & "-" & .fields("Telefono2")
+         Pict_Version.Print .Fields("Telefono1") & "-" & .Fields("Telefono2")
          PosLinea = PosLinea + AltoL
          
          PosPicX = 2400
          Pict_Version.CurrentX = PosPicX
          Pict_Version.CurrentY = PosLinea
-         Pict_Version.Print .fields("Direccion")
+         Pict_Version.Print .Fields("Direccion")
          PosLinea = PosLinea + AltoL
          
          
          Pict_Version.CurrentX = PosPicX
          Pict_Version.CurrentY = PosLinea
-         Pict_Version.Print .fields("Gerente")
+         Pict_Version.Print .Fields("Gerente")
          PosLinea = PosLinea + AltoL
          
          Pict_Version.CurrentX = PosPicX
          Pict_Version.CurrentY = PosLinea
-         Pict_Version.Print .fields("Contador")
+         Pict_Version.Print .Fields("Contador")
          PosLinea = PosLinea + AltoL
 
          Pict_Version.CurrentX = PosPicX
          Pict_Version.CurrentY = PosLinea
-         Pict_Version.Print .fields("Item")
+         Pict_Version.Print .Fields("Item")
          PosLinea = PosLinea + AltoL
   
          Pict_Version.CurrentX = PosPicX
          Pict_Version.CurrentY = PosLinea
          Pict_Version.Print ULCase(NombreUsuario)
                   
-         Dolar = .fields("Cotizacion")
+         Dolar = .Fields("Cotizacion")
          TextDolar = Format$(Dolar, "#,##0.00")
          'MsgBox "."
        End If
@@ -2626,21 +2624,21 @@ On Error GoTo error_Handler
     Select_AdoDB AdoDBTemp, sSQL
     If AdoDBTemp.RecordCount > 0 Then
       'MsgBox "Destop Test: Certificado = " & AdoDBTemp.Fields("Ruta_Certificado")
-       If InStr(UCase(AdoDBTemp.fields("Ruta_Certificado")), "P12") > 1 Then
-          RutaDocumentos = RutaSistema & "\CERTIFIC\" & AdoDBTemp.fields("Ruta_Certificado")
+       If InStr(UCase(AdoDBTemp.Fields("Ruta_Certificado")), "P12") > 1 Then
+          RutaDocumentos = RutaSistema & "\CERTIFIC\" & AdoDBTemp.Fields("Ruta_Certificado")
          'MsgBox "Desktop Test: " & Dir$(RutaDocumentos)
-          If Len(Dir$(RutaDocumentos)) = 0 Then Certificado = AdoDBTemp.fields("Ruta_Certificado")
+          If Len(Dir$(RutaDocumentos)) = 0 Then Certificado = AdoDBTemp.Fields("Ruta_Certificado")
        End If
       'MsgBox "Desktop Test: " & Certificado & vbCrLf & RutaDocumentos
-       If Len(AdoDBTemp.fields("Logo_Tipo")) > 1 Then
-          RutaDocumentos = RutaSistema & "\LOGOS\" & AdoDBTemp.fields("Logo_Tipo") & ".jpg"
-          If Len(Dir$(RutaDocumentos)) = 0 Then LogoTipoJPG = AdoDBTemp.fields("Logo_Tipo") & ".jpg"
+       If Len(AdoDBTemp.Fields("Logo_Tipo")) > 1 Then
+          RutaDocumentos = RutaSistema & "\LOGOS\" & AdoDBTemp.Fields("Logo_Tipo") & ".jpg"
+          If Len(Dir$(RutaDocumentos)) = 0 Then LogoTipoJPG = AdoDBTemp.Fields("Logo_Tipo") & ".jpg"
         
-          RutaDocumentos = RutaSistema & "\LOGOS\" & AdoDBTemp.fields("Logo_Tipo") & ".gif"
-          If Len(Dir$(RutaDocumentos)) = 0 Then LogoTipoGIF = AdoDBTemp.fields("Logo_Tipo") & ".gif"
+          RutaDocumentos = RutaSistema & "\LOGOS\" & AdoDBTemp.Fields("Logo_Tipo") & ".gif"
+          If Len(Dir$(RutaDocumentos)) = 0 Then LogoTipoGIF = AdoDBTemp.Fields("Logo_Tipo") & ".gif"
         
-          RutaDocumentos = RutaSistema & "\LOGOS\" & AdoDBTemp.fields("Logo_Tipo") & ".png"
-          If Len(Dir$(RutaDocumentos)) = 0 Then LogoTipoPNG = AdoDBTemp.fields("Logo_Tipo") & ".png"
+          RutaDocumentos = RutaSistema & "\LOGOS\" & AdoDBTemp.Fields("Logo_Tipo") & ".png"
+          If Len(Dir$(RutaDocumentos)) = 0 Then LogoTipoPNG = AdoDBTemp.Fields("Logo_Tipo") & ".png"
        End If
     End If
     AdoDBTemp.Close
@@ -2673,7 +2671,7 @@ On Error GoTo error_Handler
                 LstStatud.Text = LstStatud.Text & .GetDirectorioActual & vbCrLf
                'Conectamos la nueva Base de Datos para sacar los Certificados del servidor que no los obtenga el cliente
                 ActualizoFile = False
-               .CambiarDirectorio "/SISTEMA/CERTIFIC/"
+               .CambiarDirectorio ftpUpDir & "/SISTEMA/CERTIFIC/"
                .ListarArchivos
                 For I = 1 To LstVwFTP.ListItems.Count
                  If Certificado = LstVwFTP.ListItems(I) Then
@@ -2690,7 +2688,7 @@ On Error GoTo error_Handler
             End If
          End If
          If .ConectarFtp(LstStatud) Then
-            .CambiarDirectorio "/SISTEMA/LOGOS/"
+            .CambiarDirectorio ftpUpDir & "/SISTEMA/LOGOS/"
             .ListarArchivos
              For I = 1 To LstVwFTP.ListItems.Count
                  RutaDocumentos = RutaSistema & "\LOGOS\" & LstVwFTP.ListItems(I)

@@ -11,8 +11,8 @@ Begin VB.Form FacturasPV
    ClientWidth     =   15645
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   15615
-   ScaleWidth      =   28560
+   ScaleHeight     =   9885
+   ScaleWidth      =   15645
    WindowState     =   1  'Minimized
    Begin VB.Timer Timer1 
       Left            =   19005
@@ -2482,7 +2482,7 @@ Private Sub Form_Load()
   ConectarAdodc AdoAsientoF
   ConectarAdodc AdoDireccion
   
-  If TipoFactura = "FA" Then SRI_Obtener_Datos_Comprobantes_Electronicos
+ 'If TipoFactura = "FA" Then SRI_Obtener_Datos_Comprobantes_Electronicos
   
   Encerar_Factura FA
 End Sub
@@ -2593,7 +2593,7 @@ Public Sub ProcGrabar()
      FA.T = Pendiente
     'Grabamos el numero de factura
      RatonNormal
-     Grabar_Factura FA, True
+     Grabar_Factura FA, TA, True
      
      If FA.TC <> "CP" Then
         Evaluar = True

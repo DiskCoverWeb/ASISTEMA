@@ -1840,8 +1840,8 @@ Dim RespuestaURL As String
    ' Clipboard.SetText vURLHTTP & vbCrLf & vbCrLf & vURLParams & vbCrLf & vbCrLf & DomDoc.responseBody
    'MsgBox Len(DomDoc.responseBody) & " [" & DomDoc.responseBody & "]"
     If Len(DomDoc.responseBody) > 0 Then RespuestaURL = StrConv(DomDoc.responseBody, vbUnicode) Else RespuestaURL = "CNASS"
-     
-   'PostUrlSourceStr = Trim(Replace(RespuestaURL, """", ""))
+   
+   'PostUrlSourceStr = Trim(Replace(RespuestaURL, "'", """"))
     PostUrlSourceStr = RespuestaURL
 End Function
 

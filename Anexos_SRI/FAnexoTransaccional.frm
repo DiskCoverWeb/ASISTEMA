@@ -1954,7 +1954,7 @@ Dim ContV As Long
              Print #NumFile, CampoXML("tipoProv", "01")
              Print #NumFile, CampoXML("parteRel", "NO")
           End If
-          Print #NumFile, CampoXML("fechaRegistro", .Fields("FechaRegistro"))
+          Print #NumFile, CampoXML("fechaRegistro", .Fields("FechaEmision"))  '.Fields("FechaRegistro")
           Print #NumFile, CampoXML("establecimiento", .Fields("Establecimiento"))
           Print #NumFile, CampoXML("puntoEmision", .Fields("PuntoEmision"))
           Print #NumFile, CampoXML("secuencial", .Fields("Secuencial"))

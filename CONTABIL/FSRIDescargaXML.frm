@@ -4,7 +4,7 @@ Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
-Begin VB.Form FXMLRecibidosSRI 
+Begin VB.Form FSRIDescargaXML 
    BackColor       =   &H80000002&
    Caption         =   "ftpLinode"
    ClientHeight    =   9450
@@ -70,7 +70,7 @@ Begin VB.Form FXMLRecibidosSRI
       End
    End
    Begin MSDataListLib.DataCombo DCSerieRetencion 
-      Bindings        =   "XMLRESRI.frx":0000
+      Bindings        =   "FSRIDescargaXML.frx":0000
       DataSource      =   "AdoSerieRetencion"
       Height          =   315
       Left            =   2100
@@ -103,7 +103,7 @@ Begin VB.Form FXMLRecibidosSRI
       Width           =   5685
    End
    Begin MSDataGridLib.DataGrid DGDocSRI 
-      Bindings        =   "XMLRESRI.frx":0020
+      Bindings        =   "FSRIDescargaXML.frx":0020
       Height          =   2325
       Left            =   105
       TabIndex        =   12
@@ -462,7 +462,7 @@ Begin VB.Form FXMLRecibidosSRI
       _Version        =   393216
    End
    Begin MSDataListLib.DataCombo DCCxP 
-      Bindings        =   "XMLRESRI.frx":0038
+      Bindings        =   "FSRIDescargaXML.frx":0038
       DataSource      =   "AdoCxP"
       Height          =   345
       Left            =   2100
@@ -531,7 +531,7 @@ Begin VB.Form FXMLRecibidosSRI
       _Version        =   393216
    End
    Begin MSDataListLib.DataCombo DCSustento 
-      Bindings        =   "XMLRESRI.frx":004D
+      Bindings        =   "FSRIDescargaXML.frx":004D
       DataSource      =   "AdoSustento"
       Height          =   360
       Left            =   10815
@@ -620,7 +620,7 @@ Begin VB.Form FXMLRecibidosSRI
       Width           =   435
    End
    Begin MSDataListLib.DataCombo DCCtaGasto 
-      Bindings        =   "XMLRESRI.frx":0067
+      Bindings        =   "FSRIDescargaXML.frx":0067
       DataSource      =   "AdoCtaGasto"
       Height          =   345
       Left            =   2100
@@ -642,7 +642,7 @@ Begin VB.Form FXMLRecibidosSRI
       EndProperty
    End
    Begin MSDataListLib.DataCombo DCTipoPago 
-      Bindings        =   "XMLRESRI.frx":0081
+      Bindings        =   "FSRIDescargaXML.frx":0081
       DataSource      =   "AdoTipoPago"
       Height          =   360
       Left            =   10815
@@ -926,51 +926,51 @@ Begin VB.Form FXMLRecibidosSRI
       BeginProperty Images {0713E8C2-850A-101B-AFC0-4210102A8DA7} 
          NumListImages   =   12
          BeginProperty ListImage1 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "XMLRESRI.frx":009B
+            Picture         =   "FSRIDescargaXML.frx":009B
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "XMLRESRI.frx":03B5
+            Picture         =   "FSRIDescargaXML.frx":03B5
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "XMLRESRI.frx":06CF
+            Picture         =   "FSRIDescargaXML.frx":06CF
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "XMLRESRI.frx":09D5
+            Picture         =   "FSRIDescargaXML.frx":09D5
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "XMLRESRI.frx":0CEF
+            Picture         =   "FSRIDescargaXML.frx":0CEF
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "XMLRESRI.frx":1009
+            Picture         =   "FSRIDescargaXML.frx":1009
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "XMLRESRI.frx":12FB
+            Picture         =   "FSRIDescargaXML.frx":12FB
             Key             =   ""
          EndProperty
          BeginProperty ListImage8 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "XMLRESRI.frx":1B15
+            Picture         =   "FSRIDescargaXML.frx":1B15
             Key             =   "archivo"
          EndProperty
          BeginProperty ListImage9 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "XMLRESRI.frx":1E2F
+            Picture         =   "FSRIDescargaXML.frx":1E2F
             Key             =   "carpeta"
          EndProperty
          BeginProperty ListImage10 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "XMLRESRI.frx":2149
+            Picture         =   "FSRIDescargaXML.frx":2149
             Key             =   ""
          EndProperty
          BeginProperty ListImage11 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "XMLRESRI.frx":2387
+            Picture         =   "FSRIDescargaXML.frx":2387
             Key             =   ""
          EndProperty
          BeginProperty ListImage12 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "XMLRESRI.frx":26A1
+            Picture         =   "FSRIDescargaXML.frx":26A1
             Key             =   ""
          EndProperty
       EndProperty
@@ -1060,25 +1060,25 @@ Begin VB.Form FXMLRecibidosSRI
       BeginProperty Images {0713E8C2-850A-101B-AFC0-4210102A8DA7} 
          NumListImages   =   4
          BeginProperty ListImage1 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "XMLRESRI.frx":29BB
+            Picture         =   "FSRIDescargaXML.frx":29BB
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "XMLRESRI.frx":2CD5
+            Picture         =   "FSRIDescargaXML.frx":2CD5
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "XMLRESRI.frx":34EF
+            Picture         =   "FSRIDescargaXML.frx":34EF
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "XMLRESRI.frx":4141
+            Picture         =   "FSRIDescargaXML.frx":4141
             Key             =   ""
          EndProperty
       EndProperty
    End
 End
-Attribute VB_Name = "FXMLRecibidosSRI"
+Attribute VB_Name = "FSRIDescargaXML"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
@@ -1354,7 +1354,7 @@ Dim LineFile As String
         Select_Adodc AdoTxt, sSQL
         With AdoTxt.Recordset
          If .RecordCount > 0 Then
-             ftp.Inicializar FXMLRecibidosSRI
+             ftp.Inicializar FSRIDescargaXML
              ftp.Password = ftpPwr  'Le establecemos la contraseña de la cuenta Ftp
              ftp.Usuario = ftpUse   'Le establecemos el nombre de usuario de la cuenta
              ftp.servidor = ftpSvr  'Establecesmo el nombre del Servidor FTP
@@ -1581,7 +1581,7 @@ Dim LineFile As String
   End If
   
   If Len(TextoImprimio) > 2 Then
-     FXMLRecibidosSRI.WindowState = vbMaximized
+     FSRIDescargaXML.WindowState = vbMaximized
      FInfoError.Show
   End If
  
@@ -2169,7 +2169,7 @@ Dim VerXMLTemp As String
 End Sub
 
 Private Sub Command2_Click()
-  Unload FXMLRecibidosSRI
+  Unload FSRIDescargaXML
 End Sub
 
 Private Sub DCSerieRetencion_Change()
@@ -2345,7 +2345,7 @@ Private Sub Form_Activate()
     Toolbar1.buttons("Excel").Enabled = False
     Toolbar1.buttons("Grabar").Enabled = True
         
-    FXMLRecibidosSRI.Caption = "LECTURA DE COMPROBANTES ELECTRONICOS DEL SRI"
+    FSRIDescargaXML.Caption = "LECTURA DE COMPROBANTES ELECTRONICOS DEL SRI"
     PctSRI.Picture = LoadPicture(RutaSistema & "\LOGOS\srilinea.jpg")
     
     Codigo = Ninguno
@@ -2434,7 +2434,7 @@ Private Sub Form_Activate()
 End Sub
 
 Private Sub Form_Deactivate()
-  FXMLRecibidosSRI.WindowState = vbMaximized
+  FSRIDescargaXML.WindowState = vbMaximized
 End Sub
 
 Private Sub Form_Load()
@@ -2480,7 +2480,7 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
            Leer_XML
       Case "Excel"
            DGDocSRI.Visible = False
-           GenerarDataTexto FXMLRecibidosSRI, AdoDocSRI
+           GenerarDataTexto FSRIDescargaXML, AdoDocSRI
            DGDocSRI.Visible = True
       Case "Grabar"
            Grabar_Comprobantes_XML

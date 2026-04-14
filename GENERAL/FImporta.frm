@@ -223,7 +223,7 @@ Begin VB.Form FImporta
    Begin VB.CommandButton Command2 
       Caption         =   "Subir al Sistema"
       Height          =   645
-      Left            =   12390
+      Left            =   12360
       TabIndex        =   11
       Top             =   105
       Width           =   1065
@@ -1924,7 +1924,7 @@ Dim SubTotalDescuento As Currency
                  Calculos_Totales_Factura FA
                 'MsgBox FA.Factura & "|-> "
                  If Len(FA.Autorizacion) > 13 Then FA.ClaveAcceso = FA.Autorizacion
-                 Grabar_Factura FA, True, True
+                 Grabar_Factura FA, TA, True, True
                  If TA.Abono > 0 Then
                     TA.Fecha = FA.Fecha
                     TA.Abono = FA.Total_MN
@@ -1934,7 +1934,7 @@ Dim SubTotalDescuento As Currency
                     TA.Factura = FA.Factura
                     TA.Autorizacion = FA.Autorizacion
                     TA.Cta_CxP = FA.Cta_CxP
-                    Grabar_Abonos TA, True
+                    Grabar_Abonos TA
                  End If
                 'MsgBox FA.Factura & " ------->"
                  Leer_Encabezado_FA
@@ -1971,6 +1971,7 @@ Dim SubTotalDescuento As Currency
                    Case 14: If IsDate(Codigo) Then FA.Fecha_V = Codigo Else FA.Fecha_V = FechaSistema
                    Case 15: If Len(Codigo) <= 1 Then CodigoInv = "99.99" Else CodigoInv = Codigo
                    Case 16: Mes = Codigo
+                            NoMes = LetrasMeses(Mes)
                    Case 17: TA.Cta = Codigo
                             If Len(TA.Banco) > 1 And Len(TA.Cta) > 1 Then
                                FA.T = Cancelado
@@ -1996,6 +1997,7 @@ Dim SubTotalDescuento As Currency
              SetAdoFields "CODIGO_L", FA.Cod_CxC
              If Len(Mes) >= 3 Then
                 SetAdoFields "Mes", Mes
+                SetAdoFields "NoMes", NoMes
                 SetAdoFields "TICKET", Year(FA.Fecha)
              End If
              SetAdoFields "Item", NumEmpresa
@@ -2011,7 +2013,7 @@ Dim SubTotalDescuento As Currency
       Loop
       Calculos_Totales_Factura FA
       If Len(FA.Autorizacion) > 13 Then FA.ClaveAcceso = FA.Autorizacion
-      Grabar_Factura FA, True, True
+      
       If TA.Abono > 0 Then
          TA.Fecha = FA.Fecha
          TA.Abono = FA.Total_MN
@@ -2021,8 +2023,9 @@ Dim SubTotalDescuento As Currency
          TA.Factura = FA.Factura
          TA.Autorizacion = FA.Autorizacion
          TA.Cta_CxP = FA.Cta_CxP
-         Grabar_Abonos TA, True
+         Grabar_Abonos TA
       End If
+      Grabar_Factura FA, TA, True, True
    End If
   End With
   FA.Fecha_Corte = FechaSistema
@@ -2132,7 +2135,7 @@ Dim Precio2 As Currency
              If Factura_No <> FA.Factura Then
                 Calculos_Totales_Factura FA
                 If FA.Total_MN <= 0 Then FA.T = Anulado
-                Grabar_Factura FA, True, True
+                Grabar_Factura FA, TA, True, True
                 FA.Factura = Val(.fields(10))
                 Codigo = Dato_Campo(.fields(4), True)
                 If IsDate(Codigo) Then FA.Fecha = Codigo Else FA.Fecha = FechaSistema
@@ -2200,7 +2203,7 @@ Dim Precio2 As Currency
       FA.Hasta = FA.Factura
       Calculos_Totales_Factura FA
       If FA.Total_MN <= 0 Then FA.T = Anulado
-      Grabar_Factura FA, True, True
+      Grabar_Factura FA, TA, True, True
    End If
   End With
   Actualiza_Procesado_Kardex_Rango_Factura FA
@@ -2275,62 +2278,9 @@ Dim ComentarioHaber As String
 End Sub
 
 Public Sub Importar_Compras_Diarias()
-Dim EsAlPasivo As Boolean
-Dim CodRetBien As Byte
-Dim CodRetServ As Byte
-Dim I As Long
-Dim N As Long
-Dim A_No_SB As Long
-Dim VInc As Long
-Dim VMax As Long
-Dim SecuencialF As Long
-Dim SecuencialR As Long
-Dim PorcRet As Single
-Dim PorcIVAB As Single
-Dim PorcIVAS As Single
-Dim PorcIVABS As Single
-Dim Valor As Currency
-Dim TotalIVAB As Currency
-Dim TotalIVAS As Currency
-Dim Tot_Propinas As Currency
-Dim SubTotalRet As Currency
-Dim TotalRetFuente As Currency
-Dim TotalRetIVABien As Currency
-Dim TotalRetIVAServ As Currency
-
-Dim DigCta As String
-Dim CodMes As String
-Dim SerieF1 As String
-Dim SerieF2 As String
-Dim SerieR1 As String
-Dim SerieR2 As String
-Dim CodigoTemp As String
-Dim Cta_Gasto As String
-Dim Cta_IVA_Gasto As String
-Dim FormaPago As String
-Dim SubModuloPago As String
-Dim TipoSustento As String
-Dim CtaRetFuente As String
-Dim CtaRetIVABien As String
-Dim CtaRetIVAServ As String
-Dim ConceptoDiario As String
-Dim Identificacion As String
-Dim MifechaTemp As String
-Dim NombreClienteTemp As String
-Dim ErrorLinea As String
-
     Trans_No = 180
-    A_No_SB = 1
-    CodigoCC = Ninguno
     DGExcelAdodc.Visible = False
     DGAsiento.Visible = False
-    
-    Select Case CTP.Text
-      Case "CE": NumComp = ReadSetDataNum("Egresos", True, True)
-      Case "CI": NumComp = ReadSetDataNum("Ingresos", True, True)
-      Case Else: NumComp = ReadSetDataNum("Diario", True, True)
-                 CTP.Text = "CD"
-    End Select
     Importar_Compras_Diarias_SP CTP.Text, NumComp
     DGAsiento.Visible = True
     DGExcelAdodc.Visible = True
@@ -2761,7 +2711,7 @@ Dim Tot_Propinas As Currency
     Progreso_Iniciar
  
     Encerar_Factura FA
-  
+    FA.TC = "FA"
     sSQL = "UPDATE Facturas " _
          & "SET X = '.' " _
          & "WHERE Periodo = '" & Periodo_Contable & "' " _
@@ -2782,6 +2732,7 @@ Dim Tot_Propinas As Currency
     TA.Serie = FA.Serie
     TA.TP = FA.TC
     TA.T = Normal
+    JSONInPutAbonos = ""
     With AdoExcelAdodc.Recordset
      If .RecordCount > 0 Then
          Progreso_Barra.Valor_Maximo = .RecordCount
@@ -2809,6 +2760,7 @@ Dim Tot_Propinas As Currency
                   Case 9: TA.Cta = Dato_Campo(.fields(IdField))
                 End Select
             Next IdField
+           'MsgBox TA.Fecha & vbCrLf & .fields(9)
             If Len(TA.Fecha) >= 10 And Len(Dato_Campo(.fields(9))) >= 2 Then
                sSQL = "DELETE * " _
                     & "FROM Trans_Abonos " _
@@ -2874,6 +2826,7 @@ Dim Tot_Propinas As Currency
                          TA.Banco = "OTROS TIPOS ABONOS"
                          Grabar_Abonos TA
                   End Select
+                  Grabar_Abonos_Factura_SP TA
                End If
             End If
             Progreso_Barra.Mensaje_Box = "Importando Abonos de " & FA.TC & ": " & FA.Serie & "-" & FA.Factura

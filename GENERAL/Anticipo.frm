@@ -752,6 +752,7 @@ Private Sub Command1_Click()
   FechaValida MBFecha
   TextoValido TextCheqNo
   FechaTexto = MBFecha
+  JSONInPutAbonos = ""
   If CFechaLong(MBFecha) < CFechaLong(FechaCorte) Then
      MsgBox "No se puede grabar abonos con fecha inferior a la emision de la factura"
      MBFecha.SetFocus
@@ -794,7 +795,8 @@ Private Sub Command1_Click()
              Grabar_Abonos TA
           End If
        End If
-       Actualizar_Saldos_Facturas_SP TA.TP, TA.Serie, TA.Factura
+       Grabar_Abonos_Factura_SP TA
+      ' Actualizar_Saldos_Facturas_SP TA.TP, TA.Serie, TA.Factura
        RatonNormal
        Imprimir_Comprobante_Caja TA
        Listar_Facturas_Pendientes

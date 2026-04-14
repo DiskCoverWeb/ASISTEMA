@@ -1499,7 +1499,7 @@ Private Sub TBKardex_ButtonClick(ByVal Button As ComctlLib.Button)
     If CheqBod.value <> 0 Then
        If Len(DCBodega) >= 1 Then Cod_Bodega = SinEspaciosIzq(DCBodega)
     End If
-    
+
    'MsgBox Button.key
     Select Case Button.key
       Case "Salir"

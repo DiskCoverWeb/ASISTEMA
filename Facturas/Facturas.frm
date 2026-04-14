@@ -51,7 +51,6 @@ Begin VB.Form Facturas
             ImageIndex      =   3
          EndProperty
          BeginProperty Button4 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   ""
             Object.Tag             =   ""
             Style           =   3
             MixedState      =   -1  'True
@@ -3975,8 +3974,6 @@ Dim GuiaRemision As Long
        SQLDec = "PRECIO " & CStr(Dec_PVP) & "|CORTE " & CStr(Dec_PVP) & "|TOTAL 4|."
        Select_Adodc_Grid DGAsientoF, AdoAsientoF, sSQL, SQLDec
        If AdoAsientoF.Recordset.RecordCount > 0 Then
-          RatonReloj
-          
           Calculos_Totales_Factura FA
           
           LabelSubTotal.Caption = Format$(FA.Sin_IVA, "#,##0.00")
@@ -3997,6 +3994,7 @@ Dim GuiaRemision As Long
           End If
           
           If BoxMensaje = vbYes Then
+             RatonReloj
              Moneda_US = False
              FA.Nuevo_Doc = True
              FA.Factura = Val(TextFacturaNo)
@@ -4047,7 +4045,7 @@ Dim GuiaRemision As Long
             'MsgBox FA.CodigoC
             '------------------
             'Grabamos el numero de factura
-             Grabar_Factura FA, True
+             Grabar_Factura FA, TA, True
              
              SRI_Autorizacion.Tipo_Doc_SRI = TipoDoc
             '-.-.--.-.-.-.--.-.-.-.--.-.-.-.--.-.-.-.--.-.-.-.--.-.-.-.--.-
@@ -4073,7 +4071,7 @@ Dim GuiaRemision As Long
              RatonReloj
             'Autorizamos la factura y/o Guia de Remision
              If Len(FA.Autorizacion) = 13 Then SRI_Crear_Clave_Acceso_Facturas FA, False, , True
-               'MsgBox "Desktop Test: Documento " & FA.TC & " No. " & FA.Serie & "-" & Format(FA.Factura, "000000000")
+               'MsgBox "Desktop Test: Documento " & FA.TC & " No. " & FA.Serie & "-" & Format(FA.Factura, "000000000") & " Autorizacion: " & FA.Autorizacion
                 If Len(FA.Autorizacion_GR) = 13 Then
                    SRI_Crear_Clave_Acceso_Guia_Remision FA, False, True
                   'MsgBox "Desktop Test: Guia No. " & FA.TC & " No. " & FA.Serie_GR & "-" & Format(FA.Remision, "000000000")
@@ -4132,6 +4130,7 @@ Dim GuiaRemision As Long
                       End If
                    End If
                 End If
+                
                 SRI_Generar_PDF_FA FA, True
                 LblGuiaR.Caption = "0"
                 LblGuia.Caption = ""
@@ -5365,6 +5364,10 @@ Private Sub Form_Activate()
    End If
    CheqSP.value = 0
    CheqSP.Visible = 0
+   Ambiente = Leer_Campo_Empresa("Ambiente")
+   Obligado_Conta = Leer_Campo_Empresa("Obligado_Conta")
+   ContEspec = Leer_Campo_Empresa("Codigo_Contribuyente_Especial")
+   
    If Leer_Campo_Empresa("SP") Then
       CheqSP.Visible = 1
       If LstOrden.ListCount > 0 Then CheqSP.value = 1 Else CheqSP.value = 0

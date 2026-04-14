@@ -282,15 +282,12 @@ End Sub
 
 Private Sub MDIForm_Load()
   Set MDIFormulario = Me
-  Primera_Vez = True
-  Bandera = True
-  UnidadSistema
-  IngresarClave = True
+  Timer1.Enabled = True
+  Timer1.Interval = 1000
+  Times_Sistema
+
   NumModulo = "0"
   Modulo = "INVENTARIO"
-  MenuDeModulos = True
-  TiempoSistema = Time
-  Timer1.Interval = 10000
   ListEmp.Show 1
   PonerDirEmpresa
 End Sub

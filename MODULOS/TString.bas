@@ -596,6 +596,9 @@ Global Evaluacion As String
 Global Distrito As String
 Global TipoKardex As String
 '-----------------------------------------
+Global JSONInPutAbonos As String
+Global JSONOutPut As String
+'-----------------------------------------
 Global html_Informacion_adicional As String
 Global html_Detalle_adicional As String
 Global html_Titulo_Mensaje As String

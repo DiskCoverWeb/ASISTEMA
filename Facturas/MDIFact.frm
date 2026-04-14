@@ -511,6 +511,7 @@ Private Sub EnvioEmail_Click()
     Insertar_Mail TMail.para, "diskcoversystem@msn.com"
     Insertar_Mail TMail.para, "diskcover.system@yahoo.com"
     Insertar_Mail TMail.para, "diskcover.system@gmail.com"
+   'Insertar_Mail TMail.para, Email_Procesos
     FEnviarCorreos.Show 1
     MsgBox "Correos Enviados a (" & Si_No & "):" & vbCrLf & Replace(TMail.para, ";", ";" & vbCrLf) & vbCrLf _
          & String(70, "_") & vbCrLf & vbCrLf _
@@ -706,11 +707,6 @@ Private Sub MRecaudacionAut_Click()
 End Sub
 
 Private Sub Timer1_Timer()
-    If TiempoTarea = 0 Then TiempoTarea = Time
-    If TiempoSistema = 0 Then TiempoSistema = Time
-    If TiempoServidor = 0 Then TiempoServidor = Time
-    MiTiempo = Time
-    MiTiempo = CSng(Format$(Minute(MiTiempo - TiempoServidor), "00") & "." & Format$(Second(MiTiempo - TiempoServidor), "00"))
 '''    If MiTiempo >= 0.59 Then
 '''       Select Case ContadorServidor
 '''         Case 1: 'Conectamos el Socket: ServidorMySQL
@@ -742,32 +738,17 @@ Private Sub Timer1_Timer()
 End Sub
 
 Private Sub MDIForm_Activate()
-    screen_size
+  screen_size
 End Sub
 
 Private Sub MDIForm_Load()
-  TiempoTarea = Time
-  TiempoSistema = Time
-  TiempoServidor = Time
-  Timer1.Interval = 1000
-  
-  ContadorServidor = 1
-  ServidorMySQL = False
-  ServidorSQLServer = False
-  ServidorSRIPrueba = False
-  ServidorSRIProduccion = False
-
   Set MDIFormulario = Me
-  Primera_Vez = True
-  Bandera = True
-  UnidadSistema
- ' TipoModulo = Factu
-  IngresarClave = True
+  Timer1.Enabled = True
+  Timer1.Interval = 1000
+  Times_Sistema
  'MODULOS
   NumModulo = "0"
   Modulo = "FACTURACION"
-  MenuDeModulos = True
-  IngresarClave = True
   ListEmp.Show 1
   PonerDirEmpresa
 End Sub

@@ -571,7 +571,8 @@ Dim posPuntoComa As Byte
       ' MsgBox TFA.CodigoC & vbCrLf & TMail.para
       '-----------------------------------------
        FEnviarCorreos.Show vbModal
-       If Existe_File(RutaPDF) Then Kill RutaPDF
+      'MsgBox "Desktop Test:" & vbCrLf & RutaXML & vbCrLf & RutaPDF
+      'If Existe_File(RutaPDF) Then Kill RutaPDF
        If Existe_File(RutaXML) Then Kill RutaXML
        TMail.Volver_Envial = False
 End Sub
@@ -744,6 +745,7 @@ Dim TPosLinea As Single
            Autorizacion = TFA.Autorizacion_R
            MiHora = TFA.Fecha_Aut & " - " & TFA.Hora
     End Select
+   'MsgBox "Desktop Test: " & TFA.PDF_ClaveAcceso
     If TFA.PDF_ClaveAcceso = Ninguno Then TFA.PDF_ClaveAcceso = "Documento_" & Tipo_Documento & "_No_" & Autorizacion & "-" & SerieFactura
 ''    Progreso_Barra.Mensaje_Box = "Documento RIDE Electronico"
 ''    Progreso_Esperar
@@ -1538,20 +1540,18 @@ Dim tipoDeLetra As String
     
          Validar_Porc_IVA TFA.Fecha
          ConsultarDetalle = True
-         
+   'MsgBox "Desktop Test NC"
     sSQL = "SELECT * " _
          & "FROM Trans_Abonos " _
          & "WHERE Item = '" & NumEmpresa & "' " _
          & "AND Periodo = '" & Periodo_Contable & "' " _
          & "AND TP = '" & TFA.TC & "' " _
          & "AND Serie = '" & TFA.Serie & "' " _
-         & "AND Autorizacion = '" & TFA.Autorizacion & "' " _
          & "AND Factura = " & TFA.Factura & " " _
          & "AND Serie_NC = '" & TFA.Serie_NC & "' " _
          & "AND Secuencial_NC = " & TFA.Nota_Credito & " " _
          & "AND Banco = 'NOTA DE CREDITO' " _
          & "ORDER BY Cheque DESC "
-    
     Select_AdoDB AdoDBDet, sSQL
     With AdoDBDet
      If .RecordCount > 0 Then
@@ -1746,7 +1746,7 @@ Dim TempPosLineaAbono As Single
          & "ORDER BY DF.ID "
     Select_AdoDB AdoDBDet, sSQL
     RatonReloj
-          
+   'MsgBox "Desktop Test GR"
    'Encabezado Detalle Factura
    'TipoArial / TipoVerdana
     tipoDeLetra = TipoHelvetica
@@ -1888,6 +1888,7 @@ Dim NombreTipoDeLetra As String
          & "AND TC.IdProv = C.Codigo " _
          & "ORDER BY Cta_Servicio,Cta_Bienes "
     Select_AdoDB AdoDBCompras, sSQL
+    
     With AdoDBCompras
      If .RecordCount > 0 Then
          TFA.Fecha = .Fields("Fecha")
@@ -2317,114 +2318,114 @@ Dim NombreTipoDeLetra As String
     RatonNormal
 End Sub
 
-Public Sub SRI_Actualizar_Documento_XML(SRI_Auto As Tipo_Estado_SRI)
-Dim AdoDBXML As ADODB.Recordset
-Dim DatosXMLA As String
-Dim TD As String
-Dim SerieF As String
-Dim Documento As Long
+'''Public Sub SRI_Actualizar_Documento_XML(SRI_Auto As Tipo_Estado_SRI)
+'''Dim AdoDBXML As ADODB.Recordset
+'''Dim DatosXMLA As String
+'''Dim TD As String
+'''Dim SerieF As String
+'''Dim Documento As Long
+'''
+''' If Len(SRI_Auto.Clave_De_Acceso) >= 13 Then
+'''    DatosXMLA = Leer_Archivo_Texto(RutaSysBases & "\CE\CE" & NumEmpresa & "\Comprobantes Autorizados\" & SRI_Auto.Clave_De_Acceso & ".xml")
+'''   'MsgBox DatosXMLA
+'''    If Len(DatosXMLA) > 1 Then
+'''       SerieF = MidStrg(SRI_Auto.Clave_De_Acceso, 25, 6)
+'''       Documento = Val(MidStrg(SRI_Auto.Clave_De_Acceso, 31, 9))
+'''       Select Case MidStrg(SRI_Auto.Clave_De_Acceso, 9, 2)
+'''         Case "01": TD = "FA"
+'''         Case "03": TD = "LC"
+'''         Case "04": TD = "NC"
+'''         Case "06": TD = "GR"
+'''         Case "07": TD = "RE"
+'''         Case Else: TD = "XX"
+'''       End Select
+'''       sSQL = "SELECT * " _
+'''            & "FROM Trans_Documentos " _
+'''            & "WHERE Item = '" & NumEmpresa & "' " _
+'''            & "AND Periodo = '" & Periodo_Contable & "' " _
+'''            & "AND Clave_Acceso = '" & SRI_Auto.Clave_De_Acceso & "' "
+'''       Select_AdoDB AdoDBXML, sSQL
+'''       If AdoDBXML.RecordCount <= 0 Then
+'''          AdoDBXML.AddNew
+'''          AdoDBXML.fields("Item") = NumEmpresa
+'''          AdoDBXML.fields("Periodo") = Periodo_Contable
+'''          AdoDBXML.fields("Clave_Acceso") = SRI_Auto.Clave_De_Acceso
+'''       End If
+'''       AdoDBXML.fields("TD") = TD
+'''       AdoDBXML.fields("Serie") = SerieF
+'''       AdoDBXML.fields("Documento") = Documento
+'''       AdoDBXML.fields("Documento_Autorizado") = DatosXMLA
+'''       AdoDBXML.fields("Fecha") = SRI_Auto.Fecha_Autorizacion & " " & SRI_Auto.Hora_Autorizacion
+'''       AdoDBXML.Update
+'''       AdoDBXML.Close
+'''    End If
+''' End If
+'''End Sub
 
- If Len(SRI_Auto.Clave_De_Acceso) >= 13 Then
-    DatosXMLA = Leer_Archivo_Texto(RutaSysBases & "\CE\CE" & NumEmpresa & "\Comprobantes Autorizados\" & SRI_Auto.Clave_De_Acceso & ".xml")
-   'MsgBox DatosXMLA
-    If Len(DatosXMLA) > 1 Then
-       SerieF = MidStrg(SRI_Auto.Clave_De_Acceso, 25, 6)
-       Documento = Val(MidStrg(SRI_Auto.Clave_De_Acceso, 31, 9))
-       Select Case MidStrg(SRI_Auto.Clave_De_Acceso, 9, 2)
-         Case "01": TD = "FA"
-         Case "03": TD = "LC"
-         Case "04": TD = "NC"
-         Case "06": TD = "GR"
-         Case "07": TD = "RE"
-         Case Else: TD = "XX"
-       End Select
-       sSQL = "SELECT * " _
-            & "FROM Trans_Documentos " _
-            & "WHERE Item = '" & NumEmpresa & "' " _
-            & "AND Periodo = '" & Periodo_Contable & "' " _
-            & "AND Clave_Acceso = '" & SRI_Auto.Clave_De_Acceso & "' "
-       Select_AdoDB AdoDBXML, sSQL
-       If AdoDBXML.RecordCount <= 0 Then
-          AdoDBXML.AddNew
-          AdoDBXML.Fields("Item") = NumEmpresa
-          AdoDBXML.Fields("Periodo") = Periodo_Contable
-          AdoDBXML.Fields("Clave_Acceso") = SRI_Auto.Clave_De_Acceso
-       End If
-       AdoDBXML.Fields("TD") = TD
-       AdoDBXML.Fields("Serie") = SerieF
-       AdoDBXML.Fields("Documento") = Documento
-       AdoDBXML.Fields("Documento_Autorizado") = DatosXMLA
-       AdoDBXML.Fields("Fecha") = SRI_Auto.Fecha_Autorizacion & " " & SRI_Auto.Hora_Autorizacion
-       AdoDBXML.Update
-       AdoDBXML.Close
-    End If
- End If
-End Sub
-
-Public Sub SRI_Actualizar_XML_Comprobantes(TipoDoc As String, SRI_Autorizacion As Tipo_Estado_SRI, TFA As Tipo_Facturas)
-    Select Case TipoDoc
-      Case "FA"
-'''    sSQL = "UPDATE Facturas " _
-'''         & "SET Estado_SRI = '" & SRI_Autorizacion.Estado_SRI & "', " _
-'''         & "Clave_Acceso = '" & TFA.ClaveAcceso & "', "
-'''    If SRI_Autorizacion.Estado_SRI = "OK" Then sSQL = sSQL & "Autorizacion = '" & SRI_Autorizacion.Autorizacion & "', "
-'''    sSQL = sSQL _
-'''         & "Error_FA_SRI = '" & SRI_Error & "' " _
-'''         & "WHERE Item = '" & NumEmpresa & "' " _
-'''         & "AND Periodo = '" & Periodo_Contable & "' " _
-'''         & "AND TC = '" & TFA.TC & "' " _
-'''         & "AND Serie = '" & TFA.Serie & "' " _
-'''         & "AND Factura = " & TFA.Factura & " " _
-'''         & "AND CodigoC = '" & TFA.CodigoC & "' " _
-'''         & "AND Autorizacion = '" & TFA.Autorizacion & "' "
-      Case "NC"
-           sSQL = "UPDATE Trans_Abonos " _
-                & "SET Estado_SRI_NC = '" & SRI_Autorizacion.Estado_SRI & "', " _
-                & "Clave_Acceso_NC = '" & TFA.ClaveAcceso_NC & "' " _
-                & "WHERE Item = '" & NumEmpresa & "' " _
-                & "AND Periodo = '" & Periodo_Contable & "' " _
-                & "AND TP = '" & TFA.TC & "' " _
-                & "AND Serie = '" & TFA.Serie & "' " _
-                & "AND Factura = " & TFA.Factura & " " _
-                & "AND CodigoC = '" & TFA.CodigoC & "' " _
-                & "AND Autorizacion = '" & TFA.Autorizacion & "' " _
-                & "AND Serie_NC = '" & TFA.Serie_NC & "' " _
-                & "AND Secuencial_NC = " & TFA.Nota_Credito & " " _
-                & "AND Banco = 'NOTA DE CREDITO' "
-      Case "LC"
-           sSQL = "UPDATE Trans_Compras " _
-                & "SET Estado_SRI_LC = '" & SRI_Autorizacion.Estado_SRI & "', " _
-                & "Clave_Acceso_LC = '" & TFA.ClaveAcceso_LC & "' " _
-                & "WHERE Item = '" & NumEmpresa & "' " _
-                & "AND Periodo = '" & Periodo_Contable & "' " _
-                & "AND TP = '" & TFA.TP & "' " _
-                & "AND Numero = '" & TFA.Numero & "' " _
-                & "AND Establecimiento+PuntoEmision = '" & TFA.Serie_LC & "' "
-      Case "GR"
-           sSQL = "UPDATE Facturas_Auxiliares " _
-                & "SET Estado_SRI_GR = '" & SRI_Autorizacion.Estado_SRI & "', " _
-                & "Clave_Acceso_GR = '" & TFA.ClaveAcceso_GR & "' " _
-                & "WHERE Item = '" & NumEmpresa & "' " _
-                & "AND Periodo = '" & Periodo_Contable & "' " _
-                & "AND TC = '" & TFA.TC & "' " _
-                & "AND Serie = '" & TFA.Serie & "' " _
-                & "AND Factura = " & TFA.Factura & " " _
-                & "AND CodigoC = '" & TFA.CodigoC & "' " _
-                & "AND Autorizacion = '" & TFA.Autorizacion & "' "
-      Case "RE"
-           sSQL = "UPDATE Trans_Compras " _
-                & "SET Estado_SRI = '" & SRI_Autorizacion.Estado_SRI & "', " _
-                & "Clave_Acceso = '" & TFA.ClaveAcceso & "' " _
-                & "WHERE Item = '" & NumEmpresa & "' " _
-                & "AND Periodo = '" & Periodo_Contable & "' " _
-                & "AND TP = '" & TFA.TP & "' " _
-                & "AND Numero = '" & TFA.Numero & "' " _
-                & "AND Serie_Retencion = '" & TFA.Serie_R & "' " _
-                & "AND SecRetencion = '" & TFA.Retencion & "' " _
-                & "AND AutRetencion = '" & TFA.Autorizacion_R & "' "
-    End Select
-    Ejecutar_SQL_SP sSQL
-End Sub
+'''Public Sub SRI_Actualizar_XML_Comprobantes(TipoDoc As String, SRI_Autorizacion As Tipo_Estado_SRI, TFA As Tipo_Facturas)
+'''    Select Case TipoDoc
+'''      Case "FA"
+''''''    sSQL = "UPDATE Facturas " _
+''''''         & "SET Estado_SRI = '" & SRI_Autorizacion.Estado_SRI & "', " _
+''''''         & "Clave_Acceso = '" & TFA.ClaveAcceso & "', "
+''''''    If SRI_Autorizacion.Estado_SRI = "OK" Then sSQL = sSQL & "Autorizacion = '" & SRI_Autorizacion.Autorizacion & "', "
+''''''    sSQL = sSQL _
+''''''         & "Error_FA_SRI = '" & SRI_Error & "' " _
+''''''         & "WHERE Item = '" & NumEmpresa & "' " _
+''''''         & "AND Periodo = '" & Periodo_Contable & "' " _
+''''''         & "AND TC = '" & TFA.TC & "' " _
+''''''         & "AND Serie = '" & TFA.Serie & "' " _
+''''''         & "AND Factura = " & TFA.Factura & " " _
+''''''         & "AND CodigoC = '" & TFA.CodigoC & "' " _
+''''''         & "AND Autorizacion = '" & TFA.Autorizacion & "' "
+'''      Case "NC"
+'''           sSQL = "UPDATE Trans_Abonos " _
+'''                & "SET Estado_SRI_NC = '" & SRI_Autorizacion.Estado_SRI & "', " _
+'''                & "Clave_Acceso_NC = '" & TFA.ClaveAcceso_NC & "' " _
+'''                & "WHERE Item = '" & NumEmpresa & "' " _
+'''                & "AND Periodo = '" & Periodo_Contable & "' " _
+'''                & "AND TP = '" & TFA.TC & "' " _
+'''                & "AND Serie = '" & TFA.Serie & "' " _
+'''                & "AND Factura = " & TFA.Factura & " " _
+'''                & "AND CodigoC = '" & TFA.CodigoC & "' " _
+'''                & "AND Autorizacion = '" & TFA.Autorizacion & "' " _
+'''                & "AND Serie_NC = '" & TFA.Serie_NC & "' " _
+'''                & "AND Secuencial_NC = " & TFA.Nota_Credito & " " _
+'''                & "AND Banco = 'NOTA DE CREDITO' "
+'''      Case "LC"
+'''           sSQL = "UPDATE Trans_Compras " _
+'''                & "SET Estado_SRI_LC = '" & SRI_Autorizacion.Estado_SRI & "', " _
+'''                & "Clave_Acceso_LC = '" & TFA.ClaveAcceso_LC & "' " _
+'''                & "WHERE Item = '" & NumEmpresa & "' " _
+'''                & "AND Periodo = '" & Periodo_Contable & "' " _
+'''                & "AND TP = '" & TFA.TP & "' " _
+'''                & "AND Numero = '" & TFA.Numero & "' " _
+'''                & "AND Establecimiento+PuntoEmision = '" & TFA.Serie_LC & "' "
+'''      Case "GR"
+'''           sSQL = "UPDATE Facturas_Auxiliares " _
+'''                & "SET Estado_SRI_GR = '" & SRI_Autorizacion.Estado_SRI & "', " _
+'''                & "Clave_Acceso_GR = '" & TFA.ClaveAcceso_GR & "' " _
+'''                & "WHERE Item = '" & NumEmpresa & "' " _
+'''                & "AND Periodo = '" & Periodo_Contable & "' " _
+'''                & "AND TC = '" & TFA.TC & "' " _
+'''                & "AND Serie = '" & TFA.Serie & "' " _
+'''                & "AND Factura = " & TFA.Factura & " " _
+'''                & "AND CodigoC = '" & TFA.CodigoC & "' " _
+'''                & "AND Autorizacion = '" & TFA.Autorizacion & "' "
+'''      Case "RE"
+'''           sSQL = "UPDATE Trans_Compras " _
+'''                & "SET Estado_SRI = '" & SRI_Autorizacion.Estado_SRI & "', " _
+'''                & "Clave_Acceso = '" & TFA.ClaveAcceso & "' " _
+'''                & "WHERE Item = '" & NumEmpresa & "' " _
+'''                & "AND Periodo = '" & Periodo_Contable & "' " _
+'''                & "AND TP = '" & TFA.TP & "' " _
+'''                & "AND Numero = '" & TFA.Numero & "' " _
+'''                & "AND Serie_Retencion = '" & TFA.Serie_R & "' " _
+'''                & "AND SecRetencion = '" & TFA.Retencion & "' " _
+'''                & "AND AutRetencion = '" & TFA.Autorizacion_R & "' "
+'''    End Select
+'''    Ejecutar_SQL_SP sSQL
+'''End Sub
 
 Public Sub Generar_Informe_Errores()
     If TextoImprimio <> "" Then
@@ -2438,168 +2439,168 @@ Public Sub Generar_Informe_Errores()
     End If
 End Sub
 
-Public Sub SRI_Actualizar_Autorizacion_Comprobante(TipoDoc As String, SRI_Autorizacion As Tipo_Estado_SRI, TFA As Tipo_Facturas)
-Dim Error_SRI As String
-
-    With SRI_Autorizacion
-      If Len(.Autorizacion) >= 13 Then
-         Select Case TipoDoc
-           Case "FA"
-               'MsgBox TipoDoc
-               'Determinamos el tipo de Error
-                Error_SRI = Replace(.Error_SRI, "'", "`")
-                Error_SRI = Replace(Error_SRI, vbCrLf, "||")
-                Error_SRI = Replace(Error_SRI, "&", " y ")
-                Error_SRI = Replace(Error_SRI, "#", "No.")
-                Error_SRI = TrimStrg(MidStrg(Error_SRI, 1, 100))
-                If Error_SRI = "" Then Error_SRI = Ninguno
-
-               'Actualizamos el estado del documento
-                sSQL = "UPDATE Facturas " _
-                     & "SET Clave_Acceso = '" & .Clave_De_Acceso & "', "
-                If .Estado_SRI = "OK" Then sSQL = sSQL & "Autorizacion = '" & .Autorizacion & "', "
-                sSQL = sSQL _
-                     & "Fecha_Aut = #" & BuscarFecha(.Fecha_Autorizacion) & "#, " _
-                     & "Hora_Aut = '" & .Hora_Autorizacion & "', " _
-                     & "Estado_SRI = '" & .Estado_SRI & "', " _
-                     & "Error_FA_SRI = '" & Error_SRI & "' " _
-                     & "WHERE Item = '" & NumEmpresa & "' " _
-                     & "AND Periodo = '" & Periodo_Contable & "' " _
-                     & "AND TC = '" & TFA.TC & "' " _
-                     & "AND Serie = '" & TFA.Serie & "' " _
-                     & "AND Factura = " & TFA.Factura & " " _
-                     & "AND Autorizacion = '" & TFA.Autorizacion & "' " _
-                     & "AND CodigoC = '" & TFA.CodigoC & "' "
-                Ejecutar_SQL_SP sSQL
-                TFA.Estado_SRI = .Estado_SRI
-                If .Estado_SRI = "OK" Then
-                    sSQL = "UPDATE Detalle_Factura " _
-                         & "SET Autorizacion = '" & .Autorizacion & "' " _
-                         & "WHERE Item = '" & NumEmpresa & "' " _
-                         & "AND Periodo = '" & Periodo_Contable & "' " _
-                         & "AND TC = '" & TFA.TC & "' " _
-                         & "AND Serie = '" & TFA.Serie & "' " _
-                         & "AND Factura = " & TFA.Factura & " " _
-                         & "AND CodigoC = '" & TFA.CodigoC & "' " _
-                         & "AND Autorizacion = '" & TFA.Autorizacion & "' "
-                    Ejecutar_SQL_SP sSQL
-                    sSQL = "UPDATE Trans_Abonos " _
-                         & "SET Autorizacion = '" & .Autorizacion & "' " _
-                         & "WHERE Item = '" & NumEmpresa & "' " _
-                         & "AND Periodo = '" & Periodo_Contable & "' " _
-                         & "AND TP = '" & TFA.TC & "' " _
-                         & "AND Serie = '" & TFA.Serie & "' " _
-                         & "AND Factura = " & TFA.Factura & " " _
-                         & "AND CodigoC = '" & TFA.CodigoC & "' " _
-                         & "AND Autorizacion = '" & TFA.Autorizacion & "' "
-                    Ejecutar_SQL_SP sSQL
-                    sSQL = "UPDATE Facturas_Auxiliares " _
-                         & "SET Autorizacion = '" & .Autorizacion & "' " _
-                         & "WHERE Item = '" & NumEmpresa & "' " _
-                         & "AND Periodo = '" & Periodo_Contable & "' " _
-                         & "AND TC = '" & TFA.TC & "' " _
-                         & "AND Serie = '" & TFA.Serie & "' " _
-                         & "AND Factura = " & TFA.Factura & " " _
-                         & "AND CodigoC = '" & TFA.CodigoC & "' " _
-                         & "AND Autorizacion = '" & TFA.Autorizacion & "' "
-                    Ejecutar_SQL_SP sSQL
-                    TFA.Autorizacion = .Autorizacion
-                End If
-           Case "NC"
-               'MsgBox TipoDoc
-                TFA.Estado_SRI_NC = .Estado_SRI
-                TFA.Fecha_Aut_NC = .Fecha_Autorizacion
-                TFA.Hora_NC = .Hora_Autorizacion
-                sSQL = "UPDATE Trans_Abonos " _
-                     & "SET Autorizacion_NC = '" & .Autorizacion & "', " _
-                     & "Fecha_Aut_NC = #" & BuscarFecha(.Fecha_Autorizacion) & "#, " _
-                     & "Hora_Aut_NC = '" & .Hora_Autorizacion & "', " _
-                     & "Estado_SRI_NC = '" & .Estado_SRI & "' " _
-                     & "WHERE Item = '" & NumEmpresa & "' " _
-                     & "AND Periodo = '" & Periodo_Contable & "' " _
-                     & "AND TP = '" & TFA.TC & "' " _
-                     & "AND Serie = '" & TFA.Serie & "' " _
-                     & "AND Factura = " & TFA.Factura & " " _
-                     & "AND CodigoC = '" & TFA.CodigoC & "' " _
-                     & "AND Autorizacion = '" & TFA.Autorizacion & "' " _
-                     & "AND Serie_NC = '" & TFA.Serie_NC & "' " _
-                     & "AND Secuencial_NC = " & TFA.Nota_Credito & " " _
-                     & "AND Banco = 'NOTA DE CREDITO' "
-                Ejecutar_SQL_SP sSQL
-                
-                sSQL = "UPDATE Detalle_Nota_Credito " _
-                     & "SET Autorizacion = '" & .Autorizacion & "' " _
-                     & "WHERE Item = '" & NumEmpresa & "' " _
-                     & "AND Periodo = '" & Periodo_Contable & "' " _
-                     & "AND TC = '" & TFA.TC & "' " _
-                     & "AND Serie_FA = '" & TFA.Serie & "' " _
-                     & "AND Factura = " & TFA.Factura & " " _
-                     & "AND Serie = '" & TFA.Serie_NC & "' " _
-                     & "AND Secuencial = " & TFA.Nota_Credito & " "
-                Ejecutar_SQL_SP sSQL
-           Case "LC"
-               'MsgBox TipoDoc
-                sSQL = "UPDATE Trans_Compras " _
-                     & "SET Autorizacion = '" & .Autorizacion & "', " _
-                     & "Fecha_Aut_LC = #" & BuscarFecha(.Fecha_Autorizacion) & "#, " _
-                     & "Hora_Aut_LC = '" & .Hora_Autorizacion & "' " _
-                     & "WHERE Item = '" & NumEmpresa & "' " _
-                     & "AND Periodo = '" & Periodo_Contable & "' " _
-                     & "AND TP = '" & TFA.TP & "' " _
-                     & "AND Numero = '" & TFA.Numero & "' " _
-                     & "AND Establecimiento+PuntoEmision = '" & TFA.Serie_LC & "' "
-                Ejecutar_SQL_SP sSQL
-           Case "GR"
-               'MsgBox TipoDoc
-                TFA.Autorizacion_GR = .Autorizacion
-                TFA.Fecha_Aut_GR = .Fecha_Autorizacion
-                TFA.Hora_GR = .Hora_Autorizacion
-                sSQL = "UPDATE Facturas_Auxiliares " _
-                     & "SET Autorizacion_GR = '" & .Autorizacion & "', " _
-                     & "Fecha_Aut_GR = #" & BuscarFecha(.Fecha_Autorizacion) & "#, " _
-                     & "Hora_Aut_GR = '" & .Hora_Autorizacion & "', " _
-                     & "Estado_SRI_GR = '" & .Estado_SRI & "' " _
-                     & "WHERE Item = '" & NumEmpresa & "' " _
-                     & "AND Periodo = '" & Periodo_Contable & "' " _
-                     & "AND TC = '" & TFA.TC & "' " _
-                     & "AND Serie = '" & TFA.Serie & "' " _
-                     & "AND Factura = " & TFA.Factura & " " _
-                     & "AND CodigoC = '" & TFA.CodigoC & "' " _
-                     & "AND Autorizacion = '" & TFA.Autorizacion & "' "
-                Ejecutar_SQL_SP sSQL
-           Case "RE"
-               'MsgBox TipoDoc
-                sSQL = "UPDATE Trans_Compras " _
-                     & "SET AutRetencion = '" & .Autorizacion & "', " _
-                     & "Clave_Acceso = '" & .Clave_De_Acceso & "', " _
-                     & "Estado_SRI = '" & .Estado_SRI & "', " _
-                     & "Fecha_Aut = #" & BuscarFecha(.Fecha_Autorizacion) & "#, " _
-                     & "Hora_Aut = '" & .Hora_Autorizacion & "' " _
-                     & "WHERE Item = '" & NumEmpresa & "' " _
-                     & "AND Periodo = '" & Periodo_Contable & "' " _
-                     & "AND TP = '" & TFA.TP & "' " _
-                     & "AND Numero = '" & TFA.Numero & "' " _
-                     & "AND Serie_Retencion = '" & TFA.Serie_R & "' " _
-                     & "AND SecRetencion = '" & TFA.Retencion & "' " _
-                     & "AND AutRetencion = '" & TFA.Autorizacion_R & "' "
-                Ejecutar_SQL_SP sSQL
-             
-                sSQL = "UPDATE Trans_Air " _
-                     & "SET AutRetencion = '" & .Autorizacion & "' " _
-                     & "WHERE Item = '" & NumEmpresa & "' " _
-                     & "AND Periodo = '" & Periodo_Contable & "' " _
-                     & "AND Tipo_Trans = 'C' " _
-                     & "AND TP = '" & TFA.TP & "' " _
-                     & "AND Numero = '" & TFA.Numero & "' " _
-                     & "AND EstabRetencion = '" & MidStrg(TFA.Serie_R, 1, 3) & "' " _
-                     & "AND PtoEmiRetencion = '" & MidStrg(TFA.Serie_R, 4, 3) & "' " _
-                     & "AND SecRetencion = '" & TFA.Retencion & "' " _
-                     & "AND AutRetencion = '" & TFA.Autorizacion_R & "' "
-                Ejecutar_SQL_SP sSQL
-         End Select
-      End If
-    End With
-End Sub
+'''Public Sub SRI_Actualizar_Autorizacion_Comprobante(TipoDoc As String, SRI_Autorizacion As Tipo_Estado_SRI, TFA As Tipo_Facturas)
+'''Dim Error_SRI As String
+'''
+'''    With SRI_Autorizacion
+'''      If Len(.Autorizacion) >= 13 Then
+'''         Select Case TipoDoc
+'''           Case "FA"
+'''               'MsgBox TipoDoc
+'''               'Determinamos el tipo de Error
+'''                Error_SRI = Replace(.Error_SRI, "'", "`")
+'''                Error_SRI = Replace(Error_SRI, vbCrLf, "||")
+'''                Error_SRI = Replace(Error_SRI, "&", " y ")
+'''                Error_SRI = Replace(Error_SRI, "#", "No.")
+'''                Error_SRI = TrimStrg(MidStrg(Error_SRI, 1, 100))
+'''                If Error_SRI = "" Then Error_SRI = Ninguno
+'''
+'''               'Actualizamos el estado del documento
+'''                sSQL = "UPDATE Facturas " _
+'''                     & "SET Clave_Acceso = '" & .Clave_De_Acceso & "', "
+'''                If .Estado_SRI = "OK" Then sSQL = sSQL & "Autorizacion = '" & .Autorizacion & "', "
+'''                sSQL = sSQL _
+'''                     & "Fecha_Aut = #" & BuscarFecha(.Fecha_Autorizacion) & "#, " _
+'''                     & "Hora_Aut = '" & .Hora_Autorizacion & "', " _
+'''                     & "Estado_SRI = '" & .Estado_SRI & "', " _
+'''                     & "Error_FA_SRI = '" & Error_SRI & "' " _
+'''                     & "WHERE Item = '" & NumEmpresa & "' " _
+'''                     & "AND Periodo = '" & Periodo_Contable & "' " _
+'''                     & "AND TC = '" & TFA.TC & "' " _
+'''                     & "AND Serie = '" & TFA.Serie & "' " _
+'''                     & "AND Factura = " & TFA.Factura & " " _
+'''                     & "AND Autorizacion = '" & TFA.Autorizacion & "' " _
+'''                     & "AND CodigoC = '" & TFA.CodigoC & "' "
+'''                Ejecutar_SQL_SP sSQL
+'''                TFA.Estado_SRI = .Estado_SRI
+'''                If .Estado_SRI = "OK" Then
+'''                    sSQL = "UPDATE Detalle_Factura " _
+'''                         & "SET Autorizacion = '" & .Autorizacion & "' " _
+'''                         & "WHERE Item = '" & NumEmpresa & "' " _
+'''                         & "AND Periodo = '" & Periodo_Contable & "' " _
+'''                         & "AND TC = '" & TFA.TC & "' " _
+'''                         & "AND Serie = '" & TFA.Serie & "' " _
+'''                         & "AND Factura = " & TFA.Factura & " " _
+'''                         & "AND CodigoC = '" & TFA.CodigoC & "' " _
+'''                         & "AND Autorizacion = '" & TFA.Autorizacion & "' "
+'''                    Ejecutar_SQL_SP sSQL
+'''                    sSQL = "UPDATE Trans_Abonos " _
+'''                         & "SET Autorizacion = '" & .Autorizacion & "' " _
+'''                         & "WHERE Item = '" & NumEmpresa & "' " _
+'''                         & "AND Periodo = '" & Periodo_Contable & "' " _
+'''                         & "AND TP = '" & TFA.TC & "' " _
+'''                         & "AND Serie = '" & TFA.Serie & "' " _
+'''                         & "AND Factura = " & TFA.Factura & " " _
+'''                         & "AND CodigoC = '" & TFA.CodigoC & "' " _
+'''                         & "AND Autorizacion = '" & TFA.Autorizacion & "' "
+'''                    Ejecutar_SQL_SP sSQL
+'''                    sSQL = "UPDATE Facturas_Auxiliares " _
+'''                         & "SET Autorizacion = '" & .Autorizacion & "' " _
+'''                         & "WHERE Item = '" & NumEmpresa & "' " _
+'''                         & "AND Periodo = '" & Periodo_Contable & "' " _
+'''                         & "AND TC = '" & TFA.TC & "' " _
+'''                         & "AND Serie = '" & TFA.Serie & "' " _
+'''                         & "AND Factura = " & TFA.Factura & " " _
+'''                         & "AND CodigoC = '" & TFA.CodigoC & "' " _
+'''                         & "AND Autorizacion = '" & TFA.Autorizacion & "' "
+'''                    Ejecutar_SQL_SP sSQL
+'''                    TFA.Autorizacion = .Autorizacion
+'''                End If
+'''           Case "NC"
+'''               'MsgBox TipoDoc
+'''                TFA.Estado_SRI_NC = .Estado_SRI
+'''                TFA.Fecha_Aut_NC = .Fecha_Autorizacion
+'''                TFA.Hora_NC = .Hora_Autorizacion
+'''                sSQL = "UPDATE Trans_Abonos " _
+'''                     & "SET Autorizacion_NC = '" & .Autorizacion & "', " _
+'''                     & "Fecha_Aut_NC = #" & BuscarFecha(.Fecha_Autorizacion) & "#, " _
+'''                     & "Hora_Aut_NC = '" & .Hora_Autorizacion & "', " _
+'''                     & "Estado_SRI_NC = '" & .Estado_SRI & "' " _
+'''                     & "WHERE Item = '" & NumEmpresa & "' " _
+'''                     & "AND Periodo = '" & Periodo_Contable & "' " _
+'''                     & "AND TP = '" & TFA.TC & "' " _
+'''                     & "AND Serie = '" & TFA.Serie & "' " _
+'''                     & "AND Factura = " & TFA.Factura & " " _
+'''                     & "AND CodigoC = '" & TFA.CodigoC & "' " _
+'''                     & "AND Autorizacion = '" & TFA.Autorizacion & "' " _
+'''                     & "AND Serie_NC = '" & TFA.Serie_NC & "' " _
+'''                     & "AND Secuencial_NC = " & TFA.Nota_Credito & " " _
+'''                     & "AND Banco = 'NOTA DE CREDITO' "
+'''                Ejecutar_SQL_SP sSQL
+'''
+'''                sSQL = "UPDATE Detalle_Nota_Credito " _
+'''                     & "SET Autorizacion = '" & .Autorizacion & "' " _
+'''                     & "WHERE Item = '" & NumEmpresa & "' " _
+'''                     & "AND Periodo = '" & Periodo_Contable & "' " _
+'''                     & "AND TC = '" & TFA.TC & "' " _
+'''                     & "AND Serie_FA = '" & TFA.Serie & "' " _
+'''                     & "AND Factura = " & TFA.Factura & " " _
+'''                     & "AND Serie = '" & TFA.Serie_NC & "' " _
+'''                     & "AND Secuencial = " & TFA.Nota_Credito & " "
+'''                Ejecutar_SQL_SP sSQL
+'''           Case "LC"
+'''               'MsgBox TipoDoc
+'''                sSQL = "UPDATE Trans_Compras " _
+'''                     & "SET Autorizacion = '" & .Autorizacion & "', " _
+'''                     & "Fecha_Aut_LC = #" & BuscarFecha(.Fecha_Autorizacion) & "#, " _
+'''                     & "Hora_Aut_LC = '" & .Hora_Autorizacion & "' " _
+'''                     & "WHERE Item = '" & NumEmpresa & "' " _
+'''                     & "AND Periodo = '" & Periodo_Contable & "' " _
+'''                     & "AND TP = '" & TFA.TP & "' " _
+'''                     & "AND Numero = '" & TFA.Numero & "' " _
+'''                     & "AND Establecimiento+PuntoEmision = '" & TFA.Serie_LC & "' "
+'''                Ejecutar_SQL_SP sSQL
+'''           Case "GR"
+'''               'MsgBox TipoDoc
+'''                TFA.Autorizacion_GR = .Autorizacion
+'''                TFA.Fecha_Aut_GR = .Fecha_Autorizacion
+'''                TFA.Hora_GR = .Hora_Autorizacion
+'''                sSQL = "UPDATE Facturas_Auxiliares " _
+'''                     & "SET Autorizacion_GR = '" & .Autorizacion & "', " _
+'''                     & "Fecha_Aut_GR = #" & BuscarFecha(.Fecha_Autorizacion) & "#, " _
+'''                     & "Hora_Aut_GR = '" & .Hora_Autorizacion & "', " _
+'''                     & "Estado_SRI_GR = '" & .Estado_SRI & "' " _
+'''                     & "WHERE Item = '" & NumEmpresa & "' " _
+'''                     & "AND Periodo = '" & Periodo_Contable & "' " _
+'''                     & "AND TC = '" & TFA.TC & "' " _
+'''                     & "AND Serie = '" & TFA.Serie & "' " _
+'''                     & "AND Factura = " & TFA.Factura & " " _
+'''                     & "AND CodigoC = '" & TFA.CodigoC & "' " _
+'''                     & "AND Autorizacion = '" & TFA.Autorizacion & "' "
+'''                Ejecutar_SQL_SP sSQL
+'''           Case "RE"
+'''               'MsgBox TipoDoc
+'''                sSQL = "UPDATE Trans_Compras " _
+'''                     & "SET AutRetencion = '" & .Autorizacion & "', " _
+'''                     & "Clave_Acceso = '" & .Clave_De_Acceso & "', " _
+'''                     & "Estado_SRI = '" & .Estado_SRI & "', " _
+'''                     & "Fecha_Aut = #" & BuscarFecha(.Fecha_Autorizacion) & "#, " _
+'''                     & "Hora_Aut = '" & .Hora_Autorizacion & "' " _
+'''                     & "WHERE Item = '" & NumEmpresa & "' " _
+'''                     & "AND Periodo = '" & Periodo_Contable & "' " _
+'''                     & "AND TP = '" & TFA.TP & "' " _
+'''                     & "AND Numero = '" & TFA.Numero & "' " _
+'''                     & "AND Serie_Retencion = '" & TFA.Serie_R & "' " _
+'''                     & "AND SecRetencion = '" & TFA.Retencion & "' " _
+'''                     & "AND AutRetencion = '" & TFA.Autorizacion_R & "' "
+'''                Ejecutar_SQL_SP sSQL
+'''
+'''                sSQL = "UPDATE Trans_Air " _
+'''                     & "SET AutRetencion = '" & .Autorizacion & "' " _
+'''                     & "WHERE Item = '" & NumEmpresa & "' " _
+'''                     & "AND Periodo = '" & Periodo_Contable & "' " _
+'''                     & "AND Tipo_Trans = 'C' " _
+'''                     & "AND TP = '" & TFA.TP & "' " _
+'''                     & "AND Numero = '" & TFA.Numero & "' " _
+'''                     & "AND EstabRetencion = '" & MidStrg(TFA.Serie_R, 1, 3) & "' " _
+'''                     & "AND PtoEmiRetencion = '" & MidStrg(TFA.Serie_R, 4, 3) & "' " _
+'''                     & "AND SecRetencion = '" & TFA.Retencion & "' " _
+'''                     & "AND AutRetencion = '" & TFA.Autorizacion_R & "' "
+'''                Ejecutar_SQL_SP sSQL
+'''         End Select
+'''      End If
+'''    End With
+'''End Sub
 
 Public Sub SRI_Crear_Clave_Acceso_Retenciones(TFA As Tipo_Facturas, _
                                               VerRetenciones As Boolean, _
@@ -2624,7 +2625,7 @@ Dim Autorizar_XML As Boolean
 
  'Autorizamos la Retenciones
   If Autorizar_XML Then
-     SRI_Obtener_Datos_Comprobantes_Electronicos
+    'SRI_Obtener_Datos_Comprobantes_Electronicos
     'RETENCIONES COMPRAS
      sSQL = "SELECT C.Cliente,C.CI_RUC,C.TD,C.Direccion,C.Telefono,C.Email,TC.* " _
           & "FROM Trans_Compras As TC, Clientes As C " _
@@ -2898,7 +2899,7 @@ Dim Autorizar_XML As Boolean
   End If
  'Autorizamos la Retencion Electronica
   If Autorizar_XML Then
-     SRI_Obtener_Datos_Comprobantes_Electronicos
+    'SRI_Obtener_Datos_Comprobantes_Electronicos
     'RETENCIONES COMPRAS
      sSQL = "SELECT C.Cliente,C.CI_RUC,C.TD,C.Direccion,C.Telefono,C.Email,Co.Concepto,TC.* " _
           & "FROM Trans_Compras As TC, Clientes As C, Comprobantes AS Co " _
@@ -3092,11 +3093,10 @@ End Sub
 
 Public Sub SRI_Enviar_Documento_Autorizar(TipoDoc As String, VerMsgDoc As Boolean, GeneraXML As Boolean, TFA As Tipo_Facturas, Optional EnviarxMail As Boolean)
 Dim DocXML As String
-  
   If InStr("FA,NC,LC,GR,RE", TipoDoc) > 0 Then
-    'MsgBox "Crear Archivos CE: " & RutaGeneraFile
-     SRI_Autorizacion.Tipo_Doc_SRI = TipoDoc
+    'MsgBox "Crear Archivos CE: " & RutaGeneraFile & vbCrLf & SRI_Autorizacion.Tipo_Doc_SRI
      TFA.Estado_SRI = "CG"
+     SRI_Autorizacion.Tipo_Doc_SRI = TipoDoc
      Select Case TipoDoc
        Case "FA"
             SRI_Autorizacion.Clave_De_Acceso = TFA.ClaveAcceso
@@ -3110,7 +3110,6 @@ Dim DocXML As String
        Case "GR"
             SRI_Autorizacion.Clave_De_Acceso = TFA.ClaveAcceso_GR
             DocXML = "GR_" & TFA.Serie_GR & "-" & Format$(TFA.Remision, "000000000")
-            
             TFA.Estado_SRI_GR = SRI_Autorizacion.Estado_SRI
             TFA.Error_SRI = SRI_Autorizacion.Error_SRI
             TFA.Fecha_Aut_GR = SRI_Autorizacion.Fecha_Autorizacion
@@ -3118,40 +3117,29 @@ Dim DocXML As String
        Case "RE" 'Grabamos el comprobante XML de la Retencion
             SRI_Autorizacion.Clave_De_Acceso = TFA.ClaveAcceso
             DocXML = "RE_" & TFA.Serie_R & "-" & Format(TFA.Retencion, "000000000")
+       Case Else
+            SRI_Autorizacion.Tipo_Doc_SRI = "XX"
      End Select
     'Borramos los resultados de intentos anteriores
      RutaOrigen = RutaDocumentos & "\Comprobantes Generados\" & SRI_Autorizacion.Clave_De_Acceso & ".xml"
      If Dir$(RutaOrigen) <> "" Then Kill RutaOrigen
      RutaOrigen = RutaDocumentos & "\Comprobantes no Autorizados\" & SRI_Autorizacion.Clave_De_Acceso & ".xml"
      If Dir$(RutaOrigen) <> "" Then Kill RutaOrigen
-    'MsgBox "Desktop Test: " & RutaDocumentos
-    
-    'Generamos el archivo y que soporte XML valido
-    'Clipboard.Clear
-    'Clipboard.SetText TextoXML
-    
+     
      Set DocumentoXML = New DOMDocument30
      DocumentoXML.loadXML (TextoXML)
      DocumentoXML.save (RutaDocumentos & "\Comprobantes Generados\" & SRI_Autorizacion.Clave_De_Acceso & ".xml")
-     
-    'MsgBox "Desktop Test:" & vbCrLf & TextoXML
-     
-     SRI_Actualizar_XML_Comprobantes TipoDoc, SRI_Autorizacion, TFA
-                 
+    ' MsgBox SRI_Autorizacion.Clave_De_Acceso
     'Enviamos al SRI para que me autorice la Retencion
      RatonReloj
-    'MsgBox Len(SRI_Autorizacion.Clave_De_Acceso) & vbCrLf & SRI_Autorizacion.Clave_De_Acceso
-     FAutorizaXmlSRI.Show 1
+     FSRIAutorizaXML.Show 1
     '----------------------------------------------------------------------------------------------------------------------
-     RatonReloj
-    'MsgBox "Desktop Test: " & SRI_Autorizacion.Estado_SRI
-    '----------------------------------
     ' SRI_Autorizacion.Estado_SRI = "OK"
+    ' MsgBox "Desktop Test: NC: " & SRI_Autorizacion.Estado_SRI & " - " & SRI_Autorizacion.Autorizacion
     '----------------------------------
      If SRI_Autorizacion.Estado_SRI = "OK" Then
         Control_Procesos TipoDoc, DocXML & " Autorizada"
-        SRI_Actualizar_Autorizacion_Comprobante TipoDoc, SRI_Autorizacion, TFA
-        Select Case TipoDoc
+        Select Case SRI_Autorizacion.Tipo_Doc_SRI
           Case "FA": SRI_Generar_PDF_FA TFA, VerMsgDoc
           Case "NC": SRI_Generar_PDF_NC TFA, VerMsgDoc
           Case "LC": SRI_Generar_PDF_LC TFA, VerMsgDoc
@@ -3159,18 +3147,11 @@ Dim DocXML As String
           Case "RE": SRI_Generar_PDF_RE TFA, VerMsgDoc
         End Select
        'Actualizamos el documento autorizado en la base de datos del sistema
-        SRI_Actualizar_Documento_XML SRI_Autorizacion
+    
+       'SRI_Actualizar_Documento_XML SRI_Autorizacion
         RatonNormal
        'If VerMsgDoc Then MsgBox "Comprobante Autorizado con exito"
         
-'''        If PreguntarEnvio Then
-'''           Titulo = "ENVIAR MAIL DOCUMENTO"
-'''           Mensajes = "Enviar por Mail Documento Autorizado?"
-'''           If BoxMensaje Then EnviarDocARI = True Else EnviarDocARI = False
-'''        Else
-'''           EnviarDocARI = True
-'''        End If
-'''        If EnviarDocARI Then
         If Not EnviarxMail Then SRI_Enviar_Mails TFA, SRI_Autorizacion
      Else
         Control_Procesos TipoDoc, DocXML & " No Autorizada"
@@ -3188,8 +3169,7 @@ Dim DocXML As String
                              & "De: " & TFA.Cliente & ", CI/RUC: " & TFA.CI_RUC & vbCrLf
           Case "GR"
                TextoImprimio = TextoImprimio _
-                             & TFA.TC & " No. " & TFA.Serie_GR & vbTab & TFA.Factura & vbTab _
-                             & TFA.Cliente & vbTab & TFA.Error_SRI & vbCrLf _
+                             & TFA.TC & " No. " & TFA.Serie_GR & vbTab & TFA.Factura & vbTab & TFA.Cliente & vbTab & TFA.Error_SRI & vbCrLf _
                              & TFA.Error_SRI
           Case "RE"
                TextoImprimio = TextoImprimio _
@@ -3198,15 +3178,12 @@ Dim DocXML As String
                              & "De: " & TFA.Cliente & ", CI/RUC: " & TFA.CI_RUC & vbCrLf
         End Select
        'Copiar todo el contenido de la caja de texto a un archivo y al corta papeles
-       'MsgBox GeneraXML
-        If GeneraXML Then
-          ' Clipboard.Clear
-          ' Clipboard.SetText TextoXML
-           Grabar_Consulta_Archivo DocXML, TextoXML
-        End If
+        If GeneraXML Then Grabar_Consulta_Archivo DocXML, TextoXML
         RatonNormal
-        SRI_Autorizacion.Error_SRI = DocXML & " No Autorizada"
-        If VerMsgDoc Then MsgBox SRI_Autorizacion.Error_SRI
+        If VerMsgDoc Then
+           SRI_Autorizacion.Error_SRI = DocXML & vbCrLf & SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion)
+           MsgBox SRI_Autorizacion.Error_SRI
+        End If
      End If
      Progreso_Barra.Mensaje_Box = "OK"
      Progreso_Esperar
@@ -3246,7 +3223,7 @@ Dim SecuencialReembolo As String
    'MsgBox Autorizar_XML
     If Autorizar_XML Then
          Leer_Datos_FA_NV TFA
-         SRI_Obtener_Datos_Comprobantes_Electronicos
+        'SRI_Obtener_Datos_Comprobantes_Electronicos
         'MsgBox TFA.Cliente & vbCrLf & TFA.Razon_Social & vbCrLf & TFA.CI_RUC & vbCrLf & TFA.RUC_CI
          
         'Detalle de descuentos
@@ -3283,7 +3260,6 @@ Dim SecuencialReembolo As String
          RatonReloj
          With AdoDBFA
           If .RecordCount > 0 Then
-              
               Autorizar_XML = True
               TFA.T = .Fields("T")
               TFA.SP = .Fields("SP")
@@ -3305,8 +3281,7 @@ Dim SecuencialReembolo As String
               TFA.Descuento2 = .Fields("Descuento2")
               TFA.Orden_Compra = .Fields("Orden_Compra")
               TFA.Total_Descuento = TFA.Descuento + TFA.Descuento2
-              
-              
+
               If TFA.TDT = 41 Then TFA.EsPorReembolso = True
               
              'MsgBox "Validar Porc IVA"
@@ -3336,16 +3311,16 @@ Dim SecuencialReembolo As String
               
               If MidStrg(TFA.CI_RUC, 3, 1) = "9" Then TipoProvReemb = "02" Else TipoProvReemb = "01"
               
-              sSQL = "UPDATE Facturas " _
-                   & "SET Clave_Acceso = '" & TFA.ClaveAcceso & "' " _
-                   & "WHERE Item = '" & NumEmpresa & "' " _
-                   & "AND Periodo = '" & Periodo_Contable & "' " _
-                   & "AND TC = '" & TFA.TC & "' " _
-                   & "AND Serie = '" & TFA.Serie & "' " _
-                   & "AND Factura = " & TFA.Factura & " " _
-                   & "AND CodigoC = '" & TFA.CodigoC & "' " _
-                   & "AND Autorizacion = '" & TFA.Autorizacion & "' "
-              Ejecutar_SQL_SP sSQL
+'''              sSQL = "UPDATE Facturas " _
+'''                   & "SET Clave_Acceso = '" & TFA.ClaveAcceso & "' " _
+'''                   & "WHERE Item = '" & NumEmpresa & "' " _
+'''                   & "AND Periodo = '" & Periodo_Contable & "' " _
+'''                   & "AND TC = '" & TFA.TC & "' " _
+'''                   & "AND Serie = '" & TFA.Serie & "' " _
+'''                   & "AND Factura = " & TFA.Factura & " " _
+'''                   & "AND CodigoC = '" & TFA.CodigoC & "' " _
+'''                   & "AND Autorizacion = '" & TFA.Autorizacion & "' "
+'''              Ejecutar_SQL_SP sSQL
               
              'ENCABEZADO XML PARA EL SRI DE LA FACTURA/NOTA DE VENTA
              'standalone=""yes""148
@@ -3629,7 +3604,7 @@ Dim SecuencialReembolo As String
             If Val(TFA.Orden_Compra) > 0 Then Insertar_Campo_XML "<campoAdicional nombre=""ordenCompra"">" & TFA.Orden_Compra & "</campoAdicional>"
             If Len(TFA.Observacion) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Observacion"">" & TFA.Observacion & "</campoAdicional>"
             If Len(TFA.Nota) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Nota"">" & TFA.Nota & "</campoAdicional>"
-            If Len(Resolucion_Retencion) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Resolucion"">" & Resolucion_Retencion & "</campoAdicional>"
+            'If Len(Resolucion_Retencion) > 1 Then Insertar_Campo_XML "<campoAdicional nombre=""Resolucion"">RESOLUCION: El Articulo 97 del Reglamento para la Aplicacion de la Ley de Regimen Tributario Interno.</campoAdicional>"
          Insertar_Campo_XML CerrarXML("infoAdicional")
          Select Case TFA.TC
            Case "FA": Insertar_Campo_XML CerrarXML("factura")
@@ -3670,10 +3645,12 @@ Dim Autorizar_XML As Boolean
     TextoXML = ""
     
     If Autorizar_XML Then
-       SRI_Obtener_Datos_Comprobantes_Electronicos
+       'MsgBox Ambiente
+       'SRI_Obtener_Datos_Comprobantes_Electronicos
        'Averiguamos si la Factura esta a nombre del Representante
         TBeneficiario = Leer_Datos_Cliente_SP(TFA.CodigoC)
        'MsgBox TBeneficiario.RUC_CI_Rep & vbCrLf & TBeneficiario.Representante & vbCrLf & TBeneficiario.TD_Rep
+       'MsgBox Ambiente
         
         TFA.Cliente = TBeneficiario.Representante
         TFA.TD = TBeneficiario.TD_Rep
@@ -3915,7 +3892,7 @@ Dim Con_Inv As Boolean
 
    'Autorizamos la Nota de Credito
     If Autorizar_XML Then
-       SRI_Obtener_Datos_Comprobantes_Electronicos
+      'SRI_Obtener_Datos_Comprobantes_Electronicos
         Leer_Datos_FA_NV TFA
         Obtener_Cod_Porc_IVA TFA.Fecha, (TFA.Porc_NC * 100)
        'NOTA DE CREDITO
@@ -4132,65 +4109,205 @@ Dim Con_Inv As Boolean
 End Sub
 
 'ClaveDeAcceso As String, ErrorAutorizacion As String
-Public Function SRI_Leer_Comprobantes_no_Autorizados(ClaveDeAcceso As String) As String
-Dim doc As New MSXML2.DOMDocument
-Dim node As MSXML2.IXMLDOMNode
-Dim nodeList As MSXML2.IXMLDOMNodeList
+Public Function SRI_Leer_Comprobantes_no_Autorizados(SRI_Auto As Tipo_Estado_SRI) As String
 Dim success As Boolean
 Dim ErrorEmitido As String
 Dim EstadoXML As String
 Dim Documento As String
-
-    RutaXMLRechazado = RutaSysBases & "\CE\CE" & NumEmpresa & "\Comprobantes no Autorizados\" & ClaveDeAcceso & ".xml"
+Dim nodeXML As String
+Dim ClaveDeAcceso As String
+Dim doc As New MSXML2.DOMDocument
+Dim node As MSXML2.IXMLDOMNode
+Dim nodeList As MSXML2.IXMLDOMNodeList
+    
+    RatonReloj
     ErrorEmitido = ""
-    success = doc.Load(RutaXMLRechazado)
-    If success Then
-       ErrorEmitido = "Clave de Acceso: " & ClaveDeAcceso & vbCrLf & "ERROR: "
-       If InStr(doc.XML, "<autorizacion") Then
-          Set nodeList = doc.selectNodes("/autorizacion")
-          If Not nodeList Is Nothing Then
-             For Each node In nodeList
-                 EstadoXML = node.selectSingleNode("estado").Text
-                 ErrorEmitido = ErrorEmitido & EstadoXML & " "
-                 Select Case EstadoXML
-                   Case "RECHAZADA", "DEVUELTA"
-                        ErrorEmitido = ErrorEmitido & EstadoXML
-                   Case Else
-                        Documento = node.selectSingleNode("fechaAutorizacion").Text
-                        ErrorEmitido = ErrorEmitido & "Fecha: " & SinEspaciosIzq(Documento) & " "
-                        ErrorEmitido = ErrorEmitido & "Hora: " & MidStrg(SinEspaciosDer(Documento), 1, 8) & " "
-                 End Select
-             Next node
-             Set nodeList = doc.selectNodes("/autorizacion/mensajes/mensaje/mensaje")
-          End If
-       ElseIf InStr(doc.XML, "<factura") Then
-          Set nodeList = doc.selectNodes("/factura/ns2:respuestaSolicitud/comprobantes/comprobante/mensajes/mensaje")
-       ElseIf InStr(doc.XML, "<comprobanteRetencion") Then
-          Set nodeList = doc.selectNodes("/comprobanteRetencion/ns2:respuestaSolicitud/comprobantes/comprobante/mensajes/mensaje")
-       ElseIf InStr(doc.XML, "<notaCredito") Then
-          Set nodeList = doc.selectNodes("/notaCredito/ns2:respuestaSolicitud/comprobantes/comprobante/mensajes/mensaje")
-       ElseIf InStr(doc.XML, "<guiaRemision") Then
-          Set nodeList = doc.selectNodes("/guiaRemision/ns2:respuestaSolicitud/comprobantes/comprobante/mensajes/mensaje")
-       End If
-       'MsgBox "Desktop Test: " & SRI_Autorizacion.Estado_SRI
-       ''ErrorEmitido = ErrorEmitido & vbCrLf
-       If Not nodeList Is Nothing Then
-          For Each node In nodeList
-              ErrorEmitido = ErrorEmitido & " (" & node.selectSingleNode("identificador").Text & ") "
-              ErrorEmitido = ErrorEmitido & node.selectSingleNode("mensaje").Text & ": "
-              Select Case SRI_Autorizacion.Estado_SRI
-                Case "RECHAZADA", "DEVUELTA"
-                     ErrorEmitido = ErrorEmitido & node.selectSingleNode("tipo").Text
-                Case Else
-                     ErrorEmitido = ErrorEmitido & node.selectSingleNode("informacionAdicional").Text
-              End Select
-          Next node
-       End If
-       ErrorEmitido = Replace(ErrorEmitido, vbTab, " ")
-      'ErrorEmitido = Sin_Signos_Especiales(ErrorEmitido)
-    End If
+    With SRI_Auto
+      RutaXMLRechazado = RutaSysBases & "\CE\CE" & NumEmpresa & "\Comprobantes no Autorizados\" & .Clave_De_Acceso & ".xml"
+      success = doc.Load(RutaXMLRechazado)
+      If success Then
+         If InStr(doc.XML, "<autorizacion") Then
+            nodeXML = "/autorizacion"
+         ElseIf InStr(doc.XML, "<factura") Then
+            nodeXML = "/factura"
+         ElseIf InStr(doc.XML, "<comprobanteRetencion") Then
+            nodeXML = "/comprobanteRetencion"
+         ElseIf InStr(doc.XML, "<notaCredito") Then
+            nodeXML = "/notaCredito"
+         ElseIf InStr(doc.XML, "<guiaRemision") Then
+            nodeXML = "/guiaRemision"
+         Else
+            nodeXML = ""
+         End If
+        'MsgBox nodeXML
+         If nodeXML <> "" Then
+            If nodeXML <> "/autorizacion" Then nodeXML = nodeXML & "/ns2:respuestaSolicitud"
+           'MsgBox nodeXML
+            Set nodeList = doc.selectNodes(nodeXML)
+            For Each node In nodeList
+                ErrorEmitido = ErrorEmitido & node.selectSingleNode("estado").Text & ": "
+            Next node
+           'MsgBox ErrorEmitido
+            If nodeXML = "/autorizacion" Then
+               nodeXML = nodeXML & "/mensajes/mensaje/mensaje"
+              'MsgBox nodeXML
+               Set nodeList = doc.selectNodes(nodeXML)
+               For Each node In nodeList
+                   ErrorEmitido = ErrorEmitido & "ERROR (" & node.selectSingleNode("identificador").Text & ") " _
+                                & node.selectSingleNode("mensaje").Text & " " _
+                                & node.selectSingleNode("informacionAdicional").Text & "."
+               Next node
+            Else
+               nodeXML = nodeXML & "/comprobantes/comprobante"
+               Set nodeList = doc.selectNodes(nodeXML)
+               For Each node In nodeList
+                   ErrorEmitido = ErrorEmitido & "Clave Acceso " & node.selectSingleNode("claveAcceso").Text & ". "
+               Next node
+               nodeXML = nodeXML & "/mensajes/mensaje"
+               Set nodeList = doc.selectNodes(nodeXML)
+               For Each node In nodeList
+                   ErrorEmitido = ErrorEmitido & node.selectSingleNode("tipo").Text & " (" & node.selectSingleNode("identificador").Text & ") " _
+                                & node.selectSingleNode("mensaje").Text & ". "
+                   If InStr(doc.XML, "<informacionAdicional") Then ErrorEmitido = ErrorEmitido & node.selectSingleNode("informacionAdicional").Text & ". "
+               Next node
+            End If
+         End If
+         ErrorEmitido = TrimStrg(Replace(ErrorEmitido, vbTab, " "))
+      End If
+    End With
+    RatonNormal
     SRI_Leer_Comprobantes_no_Autorizados = ErrorEmitido
 End Function
+
+Public Function SRI_Leer_Comprobantes_no_Autorizados_XML(SRI_Auto As Tipo_Estado_SRI) As String
+Dim success As Boolean
+Dim ErrorEmitido As String
+Dim EstadoXML As String
+Dim Documento As String
+Dim nodeXML As String
+Dim ClaveDeAcceso As String
+Dim doc As New MSXML2.DOMDocument
+Dim node As MSXML2.IXMLDOMNode
+Dim nodeList As MSXML2.IXMLDOMNodeList
+    
+    RatonReloj
+    ErrorEmitido = ""
+    With SRI_Auto
+      RutaXMLRechazado = RutaSysBases & "\SRI\Comprobantes no Autorizados\" & .Clave_De_Acceso & ".xml"
+      success = doc.Load(RutaXMLRechazado)
+      If success Then
+         If InStr(doc.XML, "<autorizacion") Then
+            nodeXML = "/autorizacion"
+         ElseIf InStr(doc.XML, "<factura") Then
+            nodeXML = "/factura"
+         ElseIf InStr(doc.XML, "<comprobanteRetencion") Then
+            nodeXML = "/comprobanteRetencion"
+         ElseIf InStr(doc.XML, "<notaCredito") Then
+            nodeXML = "/notaCredito"
+         ElseIf InStr(doc.XML, "<guiaRemision") Then
+            nodeXML = "/guiaRemision"
+         Else
+            nodeXML = ""
+         End If
+        'MsgBox nodeXML
+         If nodeXML <> "" Then
+            If nodeXML <> "/autorizacion" Then nodeXML = nodeXML & "/ns2:respuestaSolicitud"
+           'MsgBox nodeXML
+            Set nodeList = doc.selectNodes(nodeXML)
+            For Each node In nodeList
+                ErrorEmitido = ErrorEmitido & node.selectSingleNode("estado").Text & ": "
+            Next node
+           'MsgBox ErrorEmitido
+            If nodeXML = "/autorizacion" Then
+               nodeXML = nodeXML & "/mensajes/mensaje/mensaje"
+              'MsgBox nodeXML
+               Set nodeList = doc.selectNodes(nodeXML)
+               For Each node In nodeList
+                   ErrorEmitido = ErrorEmitido & "ERROR (" & node.selectSingleNode("identificador").Text & ") " _
+                                & node.selectSingleNode("mensaje").Text & " " _
+                                & node.selectSingleNode("informacionAdicional").Text & "."
+               Next node
+            Else
+               nodeXML = nodeXML & "/comprobantes/comprobante"
+               Set nodeList = doc.selectNodes(nodeXML)
+               For Each node In nodeList
+                   ErrorEmitido = ErrorEmitido & "Clave Acceso " & node.selectSingleNode("claveAcceso").Text & ". "
+               Next node
+               nodeXML = nodeXML & "/mensajes/mensaje"
+               Set nodeList = doc.selectNodes(nodeXML)
+               For Each node In nodeList
+                   ErrorEmitido = ErrorEmitido & node.selectSingleNode("tipo").Text & " (" & node.selectSingleNode("identificador").Text & ") " _
+                                & node.selectSingleNode("mensaje").Text & ". "
+                   If InStr(doc.XML, "<informacionAdicional") Then ErrorEmitido = ErrorEmitido & node.selectSingleNode("informacionAdicional").Text & ". "
+               Next node
+            End If
+         End If
+         ErrorEmitido = TrimStrg(Replace(ErrorEmitido, vbTab, " "))
+      End If
+    End With
+    RatonNormal
+    SRI_Leer_Comprobantes_no_Autorizados_XML = ErrorEmitido
+End Function
+
+'''Public Function SRI_Leer_Comprobantes_no_Autorizados(ClaveDeAcceso As String) As String
+'''Dim doc As New MSXML2.DOMDocument
+'''Dim node As MSXML2.IXMLDOMNode
+'''Dim nodeList As MSXML2.IXMLDOMNodeList
+'''Dim success As Boolean
+'''Dim ErrorEmitido As String
+'''Dim EstadoXML As String
+'''Dim Documento As String
+'''
+'''    RutaXMLRechazado = RutaSysBases & "\CE\CE" & NumEmpresa & "\Comprobantes no Autorizados\" & ClaveDeAcceso & ".xml"
+'''    ErrorEmitido = ""
+'''    success = doc.Load(RutaXMLRechazado)
+'''    If success Then
+'''       ErrorEmitido = "Clave de Acceso: " & ClaveDeAcceso & vbCrLf & "ERROR: "
+'''       If InStr(doc.XML, "<autorizacion") Then
+'''          Set nodeList = doc.selectNodes("/autorizacion")
+'''          If Not nodeList Is Nothing Then
+'''             For Each node In nodeList
+'''                 EstadoXML = node.selectSingleNode("estado").Text
+'''                 ErrorEmitido = ErrorEmitido & EstadoXML & " "
+'''                 Select Case EstadoXML
+'''                   Case "RECHAZADA", "DEVUELTA"
+'''                        ErrorEmitido = ErrorEmitido & EstadoXML
+'''                   Case Else
+'''                        Documento = node.selectSingleNode("fechaAutorizacion").Text
+'''                        ErrorEmitido = ErrorEmitido & "Fecha: " & SinEspaciosIzq(Documento) & " "
+'''                        ErrorEmitido = ErrorEmitido & "Hora: " & MidStrg(SinEspaciosDer(Documento), 1, 8) & " "
+'''                 End Select
+'''             Next node
+'''             Set nodeList = doc.selectNodes("/autorizacion/mensajes/mensaje/mensaje")
+'''          End If
+'''       ElseIf InStr(doc.XML, "<factura") Then
+'''          Set nodeList = doc.selectNodes("/factura/ns2:respuestaSolicitud/comprobantes/comprobante/mensajes/mensaje")
+'''       ElseIf InStr(doc.XML, "<comprobanteRetencion") Then
+'''          Set nodeList = doc.selectNodes("/comprobanteRetencion/ns2:respuestaSolicitud/comprobantes/comprobante/mensajes/mensaje")
+'''       ElseIf InStr(doc.XML, "<notaCredito") Then
+'''          Set nodeList = doc.selectNodes("/notaCredito/ns2:respuestaSolicitud/comprobantes/comprobante/mensajes/mensaje")
+'''       ElseIf InStr(doc.XML, "<guiaRemision") Then
+'''          Set nodeList = doc.selectNodes("/guiaRemision/ns2:respuestaSolicitud/comprobantes/comprobante/mensajes/mensaje")
+'''       End If
+'''       'MsgBox "Desktop Test: " & SRI_Autorizacion.Estado_SRI
+'''       ''ErrorEmitido = ErrorEmitido & vbCrLf
+'''       If Not nodeList Is Nothing Then
+'''          For Each node In nodeList
+'''              ErrorEmitido = ErrorEmitido & " (" & node.selectSingleNode("identificador").Text & ") "
+'''              ErrorEmitido = ErrorEmitido & node.selectSingleNode("mensaje").Text & ": "
+'''              Select Case SRI_Autorizacion.Estado_SRI
+'''                Case "RECHAZADA", "DEVUELTA"
+'''                     ErrorEmitido = ErrorEmitido & node.selectSingleNode("tipo").Text
+'''                Case Else
+'''                     ErrorEmitido = ErrorEmitido & node.selectSingleNode("informacionAdicional").Text
+'''              End Select
+'''          Next node
+'''       End If
+'''       ErrorEmitido = Replace(ErrorEmitido, vbTab, " ")
+'''      'ErrorEmitido = Sin_Signos_Especiales(ErrorEmitido)
+'''    End If
+'''    SRI_Leer_Comprobantes_no_Autorizados = ErrorEmitido
+'''End Function
 
 Public Sub SRI_Generar_XML_Firmado(ClaveDeAcceso As String)
 Dim AdoDBXMLFirmado As ADODB.Recordset

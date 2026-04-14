@@ -1599,7 +1599,7 @@ Private Sub Form_Load()
   ConectarAdodc AdoArticulo
   ConectarAdodc AdoAsientoF
   
-  SRI_Obtener_Datos_Comprobantes_Electronicos
+ 'SRI_Obtener_Datos_Comprobantes_Electronicos
 End Sub
 
 Private Sub MBFecha_LostFocus()
@@ -1759,7 +1759,7 @@ Public Sub ProcGrabar()
     'Grabamos el numero de factura
      FA.Nuevo_Doc = True
      FA.Tipo_PRN = "FM"
-     Grabar_Factura FA, True
+     Grabar_Factura FA, TA, True
      
     'Abono de Factura
      TA.T = Normal

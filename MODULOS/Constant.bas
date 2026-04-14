@@ -1,5 +1,7 @@
 Attribute VB_Name = "Constantes"
 Option Explicit
+'173.224.122.251
+
 '-------------------------------------------------------
 '+573103673819-- Cristhian Orozco Whatsapp
 'corozcoic@ foodbanking.org
@@ -174,10 +176,12 @@ Global Const urlDatosDelRUC = "https://srienlinea.sri.gob.ec/facturacion-interne
 Global Const CorreoDiskCover = "informacion@diskcoversystem.com"
 Global Const ContrasenaDiskCover = "infoDlcjvl1210DiskCover"
 Global Const CorreoUpdate = "actualizar@diskcoversystem.com"
+Global Const PaswordUpdate = "Dlcjvl1210@"
 'LINODE DB
 Global Const ftpSvrLinode = "ftp.diskcoversystem.com"   'Es el servidor del db.diskcoversystem.com
 Global Const ftpUseLinode = "ftpuser"
 Global Const ftpPwrLinode = "ftp2023User"
+Global Const ftpDirLinode = "/files"
 Global Const ftpPuerto = 21
 'LINODE ERP
 Global Const ftpSvr = "ftpds.diskcoversystem.com"       'Es el servidor del erp.diskcoversystem.com
@@ -188,7 +192,7 @@ Global Const ftpDir = "/files"
 Global Const ftpUpSvr = "only.diskcoversystem.com"      'Es el servidor del only.diskcoversystem.com
 Global Const ftpUpUse = "userftp"
 Global Const ftpUpPwr = "user2025Ftp"
-Global Const ftpUpDir = "/files"
+Global Const ftpUpDir = "" '"/files"
 Global Const ftpUpPuerto = 10021
 'DNSEXIT IMAP
 Global Const imapHost = "imap.diskcoversystem.com"       'Es el servidor del imap.diskcoversystem.com

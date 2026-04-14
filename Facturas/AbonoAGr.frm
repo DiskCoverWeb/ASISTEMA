@@ -521,6 +521,7 @@ Private Sub Command1_Click()
          .MoveFirst
           Do While Not .EOF
             'Abono de Factura
+             JSONInPutAbonos = ""
              TA.T = Normal
              TA.TP = .fields("TC")
              TA.Fecha = MBFecha
@@ -535,22 +536,29 @@ Private Sub Command1_Click()
              TA.CodigoC = .fields("Codigo_Cliente")
              TA.Recibi_de = .fields("Cliente")
              TA.Recibo_No = Format$(DiarioCaja, "0000000000")
+             TA.Serie_NC = Ninguno
+             TA.Autorizacion_NC = Ninguno
+             TA.Nota_Credito = 0
+             TA.Serie_R = Ninguno
+             TA.AutorizacionR = Ninguno
+             TA.Secuencial_R = 0
              Grabar_Abonos TA
-            'Tipo de Abonos con SubCtas
-            ' Grabar_Anticipos TA
-             T = "P"
-             Saldo = .fields("Saldo") - .fields("Abono")
-             If Saldo <= 0 Then T = "C"
-             sSQL = "UPDATE Facturas " _
-                  & "SET Saldo_MN = " & Saldo & ", T = '" & T & "' " _
-                  & "WHERE Item = '" & NumEmpresa & "' " _
-                  & "AND Periodo = '" & Periodo_Contable & "' " _
-                  & "AND CodigoC = '" & TA.CodigoC & "' " _
-                  & "AND TC = '" & TA.TP & "' " _
-                  & "AND Serie = '" & TA.Serie & "' " _
-                  & "AND Factura = " & TA.Factura & " " _
-                  & "AND Autorizacion = '" & TA.Autorizacion & "' "
-             Ejecutar_SQL_SP sSQL
+             Grabar_Abonos_Factura_SP TA
+''            'Tipo de Abonos con SubCtas
+''            ' Grabar_Anticipos TA
+''             T = "P"
+''             Saldo = .fields("Saldo") - .fields("Abono")
+''             If Saldo <= 0 Then T = "C"
+''             sSQL = "UPDATE Facturas " _
+''                  & "SET Saldo_MN = " & Saldo & ", T = '" & T & "' " _
+''                  & "WHERE Item = '" & NumEmpresa & "' " _
+''                  & "AND Periodo = '" & Periodo_Contable & "' " _
+''                  & "AND CodigoC = '" & TA.CodigoC & "' " _
+''                  & "AND TC = '" & TA.TP & "' " _
+''                  & "AND Serie = '" & TA.Serie & "' " _
+''                  & "AND Factura = " & TA.Factura & " " _
+''                  & "AND Autorizacion = '" & TA.Autorizacion & "' "
+''             Ejecutar_SQL_SP sSQL
              DiarioCaja = DiarioCaja + 1
             .MoveNext
           Loop

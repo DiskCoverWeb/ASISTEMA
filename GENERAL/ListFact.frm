@@ -2539,26 +2539,33 @@ Dim ActualizarCliente As Boolean
              End If
           End If
           
-          If Len(FA.Autorizacion) >= 13 And FA.Estado_SRI <> "OK" Then
-             SQL2 = "UPDATE Facturas " _
-                  & "SET RUC_CI = C.CI_RUC, TB = C.TD, Razon_Social = C.Cliente, Direccion_RS = C.Direccion, Telefono_RS = C.Telefono " _
-                  & "FROM Facturas As F, Clientes As C " _
-                  & "WHERE F.Item = '" & NumEmpresa & "' " _
-                  & "AND F.Periodo = '" & Periodo_Contable & "' " _
-                  & "AND F.TC = '" & FA.TC & "' " _
-                  & "AND F.Serie = '" & FA.Serie & "' " _
-                  & "AND F.Factura = " & FA.Factura & " " _
-                  & "AND LEN(F.Razon_Social) = 1 " _
-                  & "AND F.CodigoC = C.Codigo "
-             Ejecutar_SQL_SP SQL2
-
+          If Len(FA.Autorizacion) >= 13 Then
+             If FA.Estado_SRI <> "OK" Then
+                SQL2 = "UPDATE Facturas " _
+                     & "SET RUC_CI = C.CI_RUC, TB = C.TD, Razon_Social = C.Cliente, Direccion_RS = C.Direccion, Telefono_RS = C.Telefono " _
+                     & "FROM Facturas As F, Clientes As C " _
+                     & "WHERE F.Item = '" & NumEmpresa & "' " _
+                     & "AND F.Periodo = '" & Periodo_Contable & "' " _
+                     & "AND F.TC = '" & FA.TC & "' " _
+                     & "AND F.Serie = '" & FA.Serie & "' " _
+                     & "AND F.Factura = " & FA.Factura & " " _
+                     & "AND LEN(F.Razon_Social) = 1 " _
+                     & "AND F.CodigoC = C.Codigo "
+                Ejecutar_SQL_SP SQL2
+             End If
+             SRI_Autorizacion.Autorizacion = FA.Autorizacion
              SRI_Crear_Clave_Acceso_Facturas FA, True, CBool(CheqClaveAcceso.value), True
-             TxtXML = SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion.Clave_De_Acceso)
+             
+             If SRI_Autorizacion.Estado_SRI = "OK" Then
+                TxtXML = ""
+             Else
+                TxtXML = SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion)
+             End If
              TxtXML.Refresh
              RatonNormal
           Else
              Progreso_Final
-             MsgBox "Esta Factura ya esta autorizada"
+             MsgBox "Esta Factura no es electronica, por lo tanto no se autorizara"
           End If
        Else
           MsgBox "No se puede enviar al SRI autorizar documentos que estan anulados"
@@ -2611,17 +2618,17 @@ Dim FAPend() As Tipo_Facturas
              FAPend(Contador).Autorizacion = .fields("Autorizacion")
              FAPend(Contador).ClaveAcceso = .fields("Clave_Acceso")
              FAPend(Contador).CodigoC = .fields("CodigoC")
-             FA.ClaveAcceso = .fields("Clave_Acceso")
-             If FA.ClaveAcceso <> Ninguno Then
-                Progreso_Barra.Mensaje_Box = "Eliminando Documento XML No. " & FA.ClaveAcceso
-                Progreso_Esperar True
-                RutaGeneraFile = RutaDocumentos & "\Comprobantes Generados\" & FA.ClaveAcceso & ".xml"
-                If Dir$(RutaGeneraFile) <> "" Then Kill RutaGeneraFile
-                RutaGeneraFile = RutaDocumentos & "\Comprobantes Firmados\" & FA.ClaveAcceso & ".xml"
-                If Dir$(RutaGeneraFile) <> "" Then Kill RutaGeneraFile
-                RutaGeneraFile = RutaDocumentos & "\Comprobantes no Autorizados\" & FA.ClaveAcceso & ".xml"
-                If Dir$(RutaGeneraFile) <> "" Then Kill RutaGeneraFile
-             End If
+'''             FA.ClaveAcceso = .fields("Clave_Acceso")
+'''             If FA.ClaveAcceso <> Ninguno Then
+'''                Progreso_Barra.Mensaje_Box = "Eliminando Documento XML No. " & FA.ClaveAcceso
+'''                Progreso_Esperar True
+'''                RutaGeneraFile = RutaDocumentos & "\Comprobantes Generados\" & FA.ClaveAcceso & ".xml"
+'''                If Dir$(RutaGeneraFile) <> "" Then Kill RutaGeneraFile
+'''                RutaGeneraFile = RutaDocumentos & "\Comprobantes Firmados\" & FA.ClaveAcceso & ".xml"
+'''                If Dir$(RutaGeneraFile) <> "" Then Kill RutaGeneraFile
+'''                RutaGeneraFile = RutaDocumentos & "\Comprobantes no Autorizados\" & FA.ClaveAcceso & ".xml"
+'''                If Dir$(RutaGeneraFile) <> "" Then Kill RutaGeneraFile
+'''             End If
              Progreso_Barra.Mensaje_Box = Contador & "/" & .RecordCount & " Autorizando Documento No. " & FA.TC & " " & Format(FA.Fecha, "MM/yyyy") & " - " & FA.Serie & "-" & Format(FA.Factura, "000000000")
              Progreso_Esperar
              Contador = Contador + 1
@@ -2645,7 +2652,7 @@ Dim FAPend() As Tipo_Facturas
             Factura_Hasta = FA.Factura
             SRI_Crear_Clave_Acceso_Facturas FA, False, CBool(CheqClaveAcceso.value), True, True
             'MsgBox FA.TC & ": " & FA.Serie & "-" & FA.Factura & vbCrLf & TextoImprimio
-            'If SRI_Autorizacion.Estado_SRI <> "OK" Then MsgBox FA.TC & ": " & FA.Serie & "-" & FA.Factura
+            If SRI_Autorizacion.Estado_SRI <> "OK" Then TextoImprimio = TextoImprimio & FA.TC & ": " & FA.Serie & "-" & FA.Factura & ":" & vbCrLf & SRI_Autorizacion.Error_SRI & vbCrLf
             Progreso_Barra.Mensaje_Box = Contador & "/" & LongFA & " Autorizando Documento No. " & FA.TC & " " & Format(FA.Fecha, "MM/yyyy") & " - " & FA.Serie & "-" & Format(FA.Factura, "000000000")
             Progreso_Esperar
         Next Contador
@@ -2694,6 +2701,7 @@ Public Sub Cambia_Fechas_Facturas()
                 & "SET Fecha = #" & Mifecha & "# " _
                 & "WHERE Item = '" & NumEmpresa & "' " _
                 & "AND Periodo = '" & Periodo_Contable & "' " _
+                & "AND T <> 'A' " _
                 & "AND TC = '" & FA.TC & "' " _
                 & "AND Serie = '" & FA.Serie & "' " _
                 & "AND Autorizacion = '" & FA.Autorizacion & "' " _
@@ -2703,6 +2711,7 @@ Public Sub Cambia_Fechas_Facturas()
                 & "SET Fecha = #" & Mifecha & "# " _
                 & "WHERE Item = '" & NumEmpresa & "' " _
                 & "AND Periodo = '" & Periodo_Contable & "' " _
+                & "AND T <> 'A' " _
                 & "AND TC = '" & FA.TC & "' " _
                 & "AND Serie = '" & FA.Serie & "' " _
                 & "AND Autorizacion = '" & FA.Autorizacion & "' " _
@@ -2712,6 +2721,7 @@ Public Sub Cambia_Fechas_Facturas()
                 & "SET Fecha = #" & Mifecha & "# " _
                 & "WHERE Item = '" & NumEmpresa & "' " _
                 & "AND Periodo = '" & Periodo_Contable & "' " _
+                & "AND T <> 'A' " _
                 & "AND TP = '" & FA.TC & "' " _
                 & "AND Serie = '" & FA.Serie & "' " _
                 & "AND Autorizacion = '" & FA.Autorizacion & "' " _
@@ -3186,6 +3196,10 @@ End Sub
 
 Private Sub Form_Activate()
    
+   Ambiente = Leer_Campo_Empresa("Ambiente")
+   Obligado_Conta = Leer_Campo_Empresa("Obligado_Conta")
+   ContEspec = Leer_Campo_Empresa("Codigo_Contribuyente_Especial")
+   
    Una_Vez = True
    LstBox.Clear
    LstBox.AddItem "<Alt><F9>: Cambiar Codigo de Articulo"
@@ -3385,8 +3399,16 @@ Public Sub BuscarFactura()
     'Consultamos los pagos Interes de Tarjetas y Abonos de Bancos con efectivo
     'Procesamos el Saldo de la Factura
   
-  CheqClaveAcceso.Caption = "Clave de Accceso: " & FA.TC & " "
-  TxtXML = SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion.Clave_De_Acceso)
+     CheqClaveAcceso.Caption = "Clave de Accceso: " & FA.TC & " "
+     SRI_Autorizacion.Estado_SRI = FA.Estado_SRI
+     SRI_Autorizacion.Error_SRI = FA.Error_SRI
+     SRI_Autorizacion.Clave_De_Acceso = FA.ClaveAcceso
+     If SRI_Autorizacion.Estado_SRI = "OK" Then
+        TxtXML = ""
+     Else
+        TxtXML = SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion)
+     End If
+     TxtXML.Refresh
   TxtXML.Refresh
   SSTabDetalle.Tab = 0
 End Sub
@@ -3716,6 +3738,7 @@ Dim TempStrg As String
            DGDetalle.Visible = False
            Actualizar_Saldo_De_Facturas_SP FA.TC, FA.Serie, TextFDesde, TextFHasta, MBFecha
            DGDetalle.Visible = True
+           MsgBox "Proceso Terminado con exito"
            FInfoError.Show
         End If
    Case "Eliminar_Facturas"
@@ -4020,29 +4043,29 @@ Dim VuelveAutorizar As Boolean
                & "AND Periodo = '" & Periodo_Contable & "' "
           Ejecutar_SQL_SP sSQL
 
-          SRI_Crear_Clave_Acceso_Nota_Credito FA, True, CBool(CheqClaveAcceso.value)
+          SRI_Crear_Clave_Acceso_Nota_Credito FA, False, CBool(CheqClaveAcceso.value)
           TxtXML = "(" & SRI_Autorizacion.Estado_SRI & ") " & SRI_Autorizacion.Error_SRI
           
           'MsgBox FA.Autorizacion_NC
-          If Len(FA.Autorizacion_NC) > 13 Then
-             sSQL = "UPDATE Trans_Abonos " _
-                  & "SET Fecha_Aut_NC = #" & BuscarFecha(FA.Fecha_Aut_NC) & "#, " _
-                  & "Autorizacion_NC = '" & FA.Autorizacion_NC & "', " _
-                  & "Clave_Acceso_NC = '" & FA.ClaveAcceso_NC & "', " _
-                  & "Estado_SRI_NC = '" & FA.Estado_SRI_NC & "', " _
-                  & "Hora_Aut_NC = '" & FA.Hora_NC & "' " _
-                  & "WHERE Factura = " & FA.Factura & " " _
-                  & "AND TP = '" & FA.TC & "' " _
-                  & "AND Serie = '" & FA.Serie & "' " _
-                  & "AND Autorizacion = '" & FA.Autorizacion & "' " _
-                  & "AND Serie_NC = '" & FA.Serie_NC & "' " _
-                  & "AND Secuencial_NC = '" & FA.Nota_Credito & "' " _
-                  & "AND Item = '" & NumEmpresa & "' " _
-                  & "AND Periodo = '" & Periodo_Contable & "' "
-            'MsgBox sSQL
-             Ejecutar_SQL_SP sSQL
-          End If
-          RatonNormal
+''          If Len(FA.Autorizacion_NC) > 13 Then
+''             sSQL = "UPDATE Trans_Abonos " _
+''                  & "SET Fecha_Aut_NC = #" & BuscarFecha(FA.Fecha_Aut_NC) & "#, " _
+''                  & "Autorizacion_NC = '" & FA.Autorizacion_NC & "', " _
+''                  & "Clave_Acceso_NC = '" & FA.ClaveAcceso_NC & "', " _
+''                  & "Estado_SRI_NC = '" & FA.Estado_SRI_NC & "', " _
+''                  & "Hora_Aut_NC = '" & FA.Hora_NC & "' " _
+''                  & "WHERE Factura = " & FA.Factura & " " _
+''                  & "AND TP = '" & FA.TC & "' " _
+''                  & "AND Serie = '" & FA.Serie & "' " _
+''                  & "AND Autorizacion = '" & FA.Autorizacion & "' " _
+''                  & "AND Serie_NC = '" & FA.Serie_NC & "' " _
+''                  & "AND Secuencial_NC = '" & FA.Nota_Credito & "' " _
+''                  & "AND Item = '" & NumEmpresa & "' " _
+''                  & "AND Periodo = '" & Periodo_Contable & "' "
+''            'MsgBox sSQL
+''             Ejecutar_SQL_SP sSQL
+''          End If
+''          RatonNormal
        End If
     Else
        MsgBox "Este Tipo de Nota de Credito no es electronica"

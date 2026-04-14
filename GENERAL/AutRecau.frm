@@ -2409,6 +2409,8 @@ Dim CostoTarjeta As Currency
       NombreArchivo = CDialogDir.Filename
      '--------------------------------------------------------------------
       If NombreArchivo <> "" Then
+         TxtFile = Leer_Archivo_Texto(NombreArchivo)
+         
         'Subo el archivo al Servidor dse DB
          Subir_Archivo_FTP_Linode ftp, LstStatud, LstVwFTP, NombreArchivo
         'Subida de Abonos de Bancos, tarjetas y ottos
@@ -2426,13 +2428,11 @@ Dim CostoTarjeta As Currency
   Else
      MsgBox FA.ResultadoFA
      ResultadoSubida = "Error: Faltan datos para procesar"
-     TxtFile = FA.ResultadoFA & vbCrLf
+     TxtFile = ResultadoSubida & vbCrLf & String(Len(FA.ResultadoFA), "-") & vbCrLf & vbCrLf & TxtFile
   End If
-  If ResultadoSubida = "OK" Then
-     TxtFile = Leer_Archivo_Texto(NombreArchivo)
-  Else
+  If ResultadoSubida <> "OK" Then
      MsgBox ResultadoSubida
-     TxtFile = TxtFile & ResultadoSubida & vbCrLf
+     TxtFile = ResultadoSubida & vbCrLf & String(Len(ResultadoSubida), "-") & vbCrLf & vbCrLf & TxtFile
   End If
   Progreso_Final
   FRecaudacionBancosPreFa.Caption = CaptionTemp
@@ -3622,7 +3622,7 @@ With AdoFactura.Recordset
         Print #NumFileFacturas, Format$(MBFechaV, "MM/dd/yyyy");        ' FechaTexto/Fecha Cobis
         Print #NumFileFacturas, "01/01/1900";                          ' Fecha Pago "01/01/1900";
         Print #NumFileFacturas, "N";                                   ' Estado = N
-        Print #NumFileFacturas, Sin_Signos_Especiales(NombreCliente); ' Nombre Alumno
+        Print #NumFileFacturas, Sin_Signos_XML(NombreCliente); ' Nombre Alumno
         Print #NumFileFacturas, Codigo2;                               ' Nombre del Curso
         Print #NumFileFacturas, Codigo3;                               ' Nombre del Paralelo
         Print #NumFileFacturas, Codigo1;                               ' Nombre de la Seccion
@@ -3691,7 +3691,7 @@ Dim CamposFile() As Campos_Tabla
        Do While Not .EOF
           Contador = Contador + 1
           CodigoCli = .fields("Codigo")
-          NombreCliente = Sin_Signos_Especiales(.fields("Cliente"))
+          NombreCliente = Sin_Signos_XML(.fields("Cliente"))
           'MsgBox NombreCliente
           Factura_No = Factura_No + 1
           Total = .fields("Valor_Cobro")
@@ -3699,12 +3699,12 @@ Dim CamposFile() As Campos_Tabla
           CodigoP = .fields("CI_RUC")
           CodigoC = CStr(Val(.fields("CI_RUC")))
           CodigoC = CodigoC & String(Abs(4 - Len(CodigoC)), " ")
-          DireccionCli = Sin_Signos_Especiales(.fields("Direccion"))
+          DireccionCli = Sin_Signos_XML(.fields("Direccion"))
           Codigo3 = SinEspaciosDer(DireccionCli)
           DireccionCli = TrimStrg(MidStrg(DireccionCli, 1, Len(DireccionCli) - Len(Codigo3)))
           Codigo3 = TrimStrg(SinEspaciosDer(DireccionCli))
           Codigo1 = Format$(MidStrg(GrupoNo, 1, 1), "00")
-          Codigo4 = MidStrg(.fields("Codigo_Inv") & " " & .fields("Producto"), 1, 33)
+          Codigo4 = MidStrg(.fields("Codigo_Inv") & " " & Sin_Signos_XML(.fields("Producto")), 1, 33)
           Codigo4 = Codigo4 & String(33 - Len(Codigo4), " ") & Format$(.fields("Num_Mes"), "00") & " " & .fields("Periodo")
                     
 '''          If Tipo_Carga = 2 Then
@@ -3862,8 +3862,8 @@ Dim TipoCta As String
        Do While Not .EOF
           CodigoCli = .fields("Codigo")
           GrupoNo = .fields("Grupo")
-          NombreCliente = Sin_Signos_Especiales(.fields("Cliente"))
-          Producto = Sin_Signos_Especiales(.fields("Producto"))
+          NombreCliente = Sin_Signos_XML(.fields("Cliente"))
+          Producto = Sin_Signos_XML(.fields("Producto"))
           CodigoInv = .fields("Codigo_Inv")
           NoMes = .fields("Num_Mes")
           Mes = Format$(NoMes, "00")
@@ -3879,7 +3879,7 @@ Dim TipoCta As String
           CodigoP = .fields("CI_RUC")
           CodigoC = CStr(Val(.fields("CI_RUC")))
           CodigoC = CodigoC & String(Abs(4 - Len(CodigoC)), " ")
-          DireccionCli = Sin_Signos_Especiales(.fields("Direccion"))
+          DireccionCli = Sin_Signos_XML(.fields("Direccion"))
           Codigo3 = SinEspaciosDer(DireccionCli)
           DireccionCli = TrimStrg(MidStrg(DireccionCli, 1, Len(DireccionCli) - Len(Codigo3)))
           Codigo3 = TrimStrg(SinEspaciosDer(DireccionCli))
@@ -3991,8 +3991,8 @@ Dim TipoCta As String
        Do While Not .EOF
           CodigoCli = .fields("Codigo")
           GrupoNo = .fields("Grupo")
-          NombreCliente = Sin_Signos_Especiales(.fields("Cliente"))
-          Producto = Sin_Signos_Especiales(.fields("Producto"))
+          NombreCliente = Sin_Signos_XML(.fields("Cliente"))
+          Producto = Sin_Signos_XML(.fields("Producto"))
           CodigoInv = .fields("Codigo_Inv")
           NoMes = .fields("Num_Mes")
           Mes = Format$(NoMes, "00")
@@ -4013,7 +4013,7 @@ Dim TipoCta As String
              Total = .fields("Valor_Cobro")
              Saldo = .fields("Valor_Cobro") * 100
              CodigoP = .fields("CI_RUC")
-             DireccionCli = Sin_Signos_Especiales(.fields("Direccion"))
+             DireccionCli = Sin_Signos_XML(.fields("Direccion"))
              Codigo3 = SinEspaciosDer(DireccionCli)
              DireccionCli = TrimStrg(MidStrg(DireccionCli, 1, Len(DireccionCli) - Len(Codigo3)))
              Codigo3 = TrimStrg(SinEspaciosDer(DireccionCli))
@@ -4052,8 +4052,8 @@ Dim TipoCta As String
              Print #NumFileFacturas, vbTab;                                                                 '16
              Print #NumFileFacturas, vbTab;                                                                 '17
              Print #NumFileFacturas, vbTab;                                                                 '18
-             Print #NumFileFacturas, Codigo2 ' Month(.Fields("Fecha")) & vbTab;                             '19
-             Print #NumFileFacturas, Codigo4 ' "Pensión Acumulada" & vbTab;                                 '20
+             Print #NumFileFacturas, Codigo2 & vbTab; ' Month(.Fields("Fecha"))                             '19
+             Print #NumFileFacturas, Codigo4 & vbTab; ' "Pensión Acumulada"                                 '20
              Print #NumFileFacturas, Format$(Saldo, "0000000000000") & vbTab;                               '21
              Print #NumFileFacturas, "0" & vbTab;                                                           '22
              Print #NumFileFacturas, "0" & vbTab;                                                           '23
@@ -4180,8 +4180,8 @@ Dim Total_Banco As Currency
        Do While Not .EOF
           CodigoCli = .fields("Codigo")
           GrupoNo = .fields("Grupo")
-          NombreCliente = Sin_Signos_Especiales(.fields("Cliente"))
-          Producto = Sin_Signos_Especiales(.fields("Producto"))
+          NombreCliente = Sin_Signos_XML(.fields("Cliente"))
+          Producto = Sin_Signos_XML(.fields("Producto"))
           CodigoInv = .fields("Codigo_Inv")
           NoMes = .fields("Num_Mes")
           Mes = Format$(NoMes, "00")
@@ -4203,7 +4203,7 @@ Dim Total_Banco As Currency
                 Total = .fields("Valor_Cobro")
                 Saldo = .fields("Valor_Cobro") * 100
                 CodigoP = .fields("CI_RUC")
-                DireccionCli = Sin_Signos_Especiales(.fields("Direccion"))
+                DireccionCli = Sin_Signos_XML(.fields("Direccion"))
                 Codigo3 = SinEspaciosDer(DireccionCli)
                 DireccionCli = TrimStrg(MidStrg(DireccionCli, 1, Len(DireccionCli) - Len(Codigo3)))
                 Codigo3 = TrimStrg(SinEspaciosDer(DireccionCli))
@@ -4416,7 +4416,7 @@ Dim Total_Banco As Currency
        Do While Not .EOF
           Contador = Contador + 1
           CodigoCli = .fields("CodigoC")
-          NombreCliente = TrimStrg(MidStrg(Sin_Signos_Especiales(.fields("Cliente")), 1, 40))
+          NombreCliente = TrimStrg(MidStrg(Sin_Signos_XML(.fields("Cliente")), 1, 40))
          'MsgBox NombreCliente
           Factura_No = Factura_No + 1
           Total = .fields("Valor_Cobro")
@@ -4427,7 +4427,7 @@ Dim Total_Banco As Currency
           CodigoP = .fields("CI_RUC")
           CodigoC = CStr(Val(.fields("CI_RUC")))
           CodigoC = CodigoC & String(Abs(4 - Len(CodigoC)), " ")
-          DireccionCli = Sin_Signos_Especiales(.fields("Direccion"))
+          DireccionCli = Sin_Signos_XML(.fields("Direccion"))
           Codigo3 = SinEspaciosDer(DireccionCli)
           DireccionCli = TrimStrg(MidStrg(DireccionCli, 1, Len(DireccionCli) - Len(Codigo3)))
           Codigo3 = TrimStrg(SinEspaciosDer(DireccionCli))
@@ -4531,8 +4531,8 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
                 Subir_Abonos
          End Select
          sSQL = "SELECT Fecha, Serie, Numero As Factura, RUTA As Beneficiario, CANT As Cantidad, CODIGO, (PRODUCTO+': '+Serie_No+'-'+Mes) As PRODUCTO_Periodo_Mes, TOTAL, " _
-              & "COSTO As COMISION, Lote_No As Grupo, Orden_No As ID_Trans, NoMes As Mes, Codigo_B As Cod_CxC, Codigo_Cliente, Autorizacion, Cta, CODIGO_L As Forma_P, " _
-              & "TICKET As No_Cta, Cod_Ejec As Cod_Banco, CodigoU, Item " _
+              & "Total_Desc, Total_Desc2, COSTO As COMISION, VALOR_TOTAL, Lote_No As Grupo, Orden_No As ID_Trans, NoMes As Mes, Codigo_B As Cod_CxC, Codigo_Cliente, Autorizacion, Cta, " _
+              & "CODIGO_L As Forma_P, TICKET As No_Cta, Cod_Ejec As Cod_Banco, Codigo_Cliente, CodigoU, Item " _
               & "FROM Asiento_F " _
               & "WHERE Item = '" & NumEmpresa & "' " _
               & "AND CodigoU = '" & CodigoUsuario & "' " _
@@ -4662,7 +4662,7 @@ With AdoFactura.Recordset
         FRecaudacionBancosPreFa.Caption = .fields("Grupo") & " - " & Format$(Contador / .RecordCount, "00%")
         Contador = Contador + 1
         CodigoCli = CStr(Val(.fields("CI_RUC")))
-        NombreCliente = Sin_Signos_Especiales(TrimStrg(MidStrg(.fields("Cliente"), 1, 40)))
+        NombreCliente = Sin_Signos_XML(TrimStrg(MidStrg(.fields("Cliente"), 1, 40)))
         Codigo1 = TrimStrg(MidStrg(.fields("Direccion"), 1, 30))
         FechaTexto = " " & MidStrg(MesesLetras(Month(MBFechaI)), 1, 3) & " " & Year(MBFechaI)
        'Codigo2 = MidStrg(UCaseStrg(MidStrg(MesesLetras(Month(.fields("Fecha"))), 1, 3)) & " " & .fields("Grupo"), 1, 15)

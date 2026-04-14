@@ -264,20 +264,14 @@ Private Sub MDIForm_Activate()
 End Sub
 
 Private Sub MDIForm_Load()
-    Set MDIFormulario = Me
-    
-    Primera_Vez = True
-    Bandera = True
-    UnidadSistema
-    IngresarClave = True
+  Set MDIFormulario = Me
+  Timer1.Enabled = True
+  Timer1.Interval = 1000
+  Times_Sistema
 
    'MODULOS
     NumModulo = "0"
     Modulo = "ROL PAGOS"
-    MenuDeModulos = True
-    TiempoSistema = Time
-    Timer1.Enabled = True
-    Timer1.Interval = 1000
     ListEmp.Show 1
     PonerDirEmpresa
 End Sub

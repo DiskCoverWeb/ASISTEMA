@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{65E121D4-0C60-11D2-A9FC-0000F8754DA1}#2.0#0"; "mschrt20.ocx"
+Object = "{65E121D4-0C60-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSChrt20.ocx"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.Form HistorialFacturas 
@@ -934,7 +934,7 @@ Begin VB.Form HistorialFacturas
             ImageIndex      =   12
             Style           =   5
             BeginProperty ButtonMenus {66833FEC-8583-11D1-B16A-00C0F0283628} 
-               NumButtonMenus  =   7
+               NumButtonMenus  =   8
                BeginProperty ButtonMenu1 {66833FEE-8583-11D1-B16A-00C0F0283628} 
                   Key             =   "Por_Clientes"
                   Text            =   "Ordenadas por Clientes"
@@ -945,7 +945,7 @@ Begin VB.Form HistorialFacturas
                EndProperty
                BeginProperty ButtonMenu3 {66833FEE-8583-11D1-B16A-00C0F0283628} 
                   Key             =   "Por_Vendedor"
-                  Text            =   "CxC Clientes por Vendedor"
+                  Text            =   "Cuentas por Cobrar Clientes por Vendedor"
                EndProperty
                BeginProperty ButtonMenu4 {66833FEE-8583-11D1-B16A-00C0F0283628} 
                   Key             =   "Resumen_Vent_x_Ejec"
@@ -962,6 +962,10 @@ Begin VB.Form HistorialFacturas
                BeginProperty ButtonMenu7 {66833FEE-8583-11D1-B16A-00C0F0283628} 
                   Key             =   "Tipo_Pago_Cliente"
                   Text            =   "Tipo de Pagos Clientes"
+               EndProperty
+               BeginProperty ButtonMenu8 {66833FEE-8583-11D1-B16A-00C0F0283628} 
+                  Key             =   "CxC_Tiempo_Vencimiento"
+                  Text            =   "Cuentas por Cobrar Clientes por Vencimiento"
                EndProperty
             EndProperty
          EndProperty
@@ -1432,9 +1436,9 @@ Public Sub Historico_Facturas()
  Total = 0
  Abono = 0
  Saldo = 0
- sSQL = "SELECT C.Cliente, F.T, F.Serie, F.Factura, F.Fecha, Fecha_V, F.Total_MN As Total, F.Total_Efectivo, F.Total_Banco, " _
+ sSQL = "SELECT C.Cliente, F.T, F.TC, F.Serie, F.Factura, F.Fecha, Fecha_V, F.Total_MN As Total, F.Total_Efectivo, F.Total_Banco, " _
       & "F.Total_Ret_Fuente, F.Total_Ret_IVA_B, F.Total_Ret_IVA_S, F.Otros_Abonos, F.Total_Abonos,F.Saldo_Actual, " _
-      & "F.Fecha_C As Abonado_El, F.CodigoC, C.CI_RUC, F.TC, F.Autorizacion, C.Grupo, A.Nombre_Completo As Ejecutivo, C.Ciudad, " _
+      & "F.Fecha_C As Abonado_El, F.CodigoC, C.CI_RUC, F.Autorizacion, C.Grupo, A.Nombre_Completo As Ejecutivo, C.Ciudad, " _
       & "C.Plan_Afiliado As Sectorizacion, F.Cta_CxP, C.EMail, C.EMail2, C.EMailR, C.Representante " _
       & "FROM Facturas As F, Clientes As C, Accesos As A " _
       & "WHERE F.Item = '" & NumEmpresa & "' " _
@@ -1443,7 +1447,7 @@ Public Sub Historico_Facturas()
       & Tipo_De_Consulta() _
       & "AND F.CodigoC = C.Codigo " _
       & "AND F.Cod_Ejec = A.Codigo " _
-      & "ORDER BY C.Cliente,F.Serie,F.Factura,F.Fecha "
+      & "ORDER BY C.Cliente, F.TC, F.Serie, F.Factura, F.Fecha "
 ' MsgBox sSQL
  Select_Adodc_Grid DGQuery, AdoQuery, sSQL, , , True
  RatonNormal
@@ -2408,12 +2412,13 @@ Dim sSQLT As String
          & "WHERE Item = '" & NumEmpresa & "' " _
          & "AND Periodo = '" & Periodo_Contable & "' "
     Ejecutar_SQL_SP sSQL
-    
+        
     sSQL = "UPDATE Facturas " _
          & "SET Venc_0_60 = Saldo_MN " _
          & "WHERE DATEDIFF(DAY,Fecha, '" & Mifecha & "') BETWEEN 0 and 60 " _
          & "AND Item = '" & NumEmpresa & "' " _
          & "AND Periodo = '" & Periodo_Contable & "' " _
+         & "AND Fecha <= #" & Mifecha & "# " _
          & "AND T = '" & Pendiente & "' "
     Ejecutar_SQL_SP sSQL
    
@@ -2422,6 +2427,7 @@ Dim sSQLT As String
          & "WHERE DATEDIFF(DAY,Fecha, '" & Mifecha & "') BETWEEN 61 and 90 " _
          & "AND Item = '" & NumEmpresa & "' " _
          & "AND Periodo = '" & Periodo_Contable & "' " _
+         & "AND Fecha <= #" & Mifecha & "# " _
          & "AND T = '" & Pendiente & "' "
     Ejecutar_SQL_SP sSQL
 
@@ -2430,6 +2436,7 @@ Dim sSQLT As String
          & "WHERE DATEDIFF(DAY,Fecha, '" & Mifecha & "') BETWEEN 91 and 120 " _
          & "AND Item = '" & NumEmpresa & "' " _
          & "AND Periodo = '" & Periodo_Contable & "' " _
+         & "AND Fecha <= #" & Mifecha & "# " _
          & "AND T = '" & Pendiente & "' "
     Ejecutar_SQL_SP sSQL
 
@@ -2438,6 +2445,7 @@ Dim sSQLT As String
          & "WHERE DATEDIFF(DAY,Fecha, '" & Mifecha & "') BETWEEN 121 and 360 " _
          & "AND Item = '" & NumEmpresa & "' " _
          & "AND Periodo = '" & Periodo_Contable & "' " _
+         & "AND Fecha <= #" & Mifecha & "# " _
          & "AND T = '" & Pendiente & "' "
     Ejecutar_SQL_SP sSQL
 
@@ -2446,6 +2454,7 @@ Dim sSQLT As String
          & "WHERE DATEDIFF(DAY,Fecha, '" & Mifecha & "') > 360 " _
          & "AND Item = '" & NumEmpresa & "' " _
          & "AND Periodo = '" & Periodo_Contable & "' " _
+         & "AND Fecha <= #" & Mifecha & "# " _
          & "AND T = '" & Pendiente & "' "
     Ejecutar_SQL_SP sSQL
 
@@ -2508,6 +2517,66 @@ Dim sSQLT As String
     LabelSaldo.Caption = Format(Saldo, "#,##0.00")
     DGQuery.Visible = True
     Opcion = 18
+End Sub
+
+Public Sub CxC_Tiempo_Vencimiento()
+Dim sSQLV As String
+Dim sSQLT As String
+
+   ' Mifecha = BuscarFecha(FechaSistema)
+    Mifecha = BuscarFecha(MBFechaF)
+
+    sSQLV = "SELECT C.Cliente As Clientes, F.Fecha, F.TC, F.Serie, F.Factura, " _
+          & "F.Total_MN As Total_Facturado, " _
+          & "Venc_0_60 As T_Venc_0_60, " _
+          & "Venc_61_90 As T_Venc_61_90, " _
+          & "Venc_91_120 As T_Venc_61_90, " _
+          & "Venc_121_360 As T_Venc_121_360, " _
+          & "Venc_mas_360 As T_Venc_mas_360, " _
+          & "(Venc_0_60+Venc_61_90+Venc_91_120+Venc_121_360+Venc_mas_360) As Saldo_Total " _
+          & "FROM Facturas As F, Clientes As C, Accesos As A " _
+          & "WHERE F.Fecha <= #" & Mifecha & "# " _
+          & "AND F.Item = '" & NumEmpresa & "' " _
+          & "AND F.Periodo = '" & Periodo_Contable & "' " _
+          & Tipo_De_Consulta() _
+          & "AND F.CodigoC = C.Codigo " _
+          & "AND F.Cod_Ejec = A.Codigo "
+
+    sSQLT = "SELECT ('zz" & String(40, " ") & "SUBTOTALES ' + F.Item) As Clientes, '" & Mifecha & "' As Fecha, 'XX' As TC, 'XXXXXX' As Serie, 999999999 As Factura, " _
+          & "SUM(F.Total_MN) As Total_Facturado, " _
+          & "SUM(Venc_0_60) As T_Venc_0_60, " _
+          & "SUM(Venc_61_90) As T_Venc_61_90, " _
+          & "SUM(Venc_91_120) As T_Venc_61_90, " _
+          & "SUM(Venc_121_360) As T_Venc_121_360, " _
+          & "SUM(Venc_mas_360) As T_Venc_mas_360, " _
+          & "SUM(Venc_0_60+Venc_61_90+Venc_91_120+Venc_121_360+Venc_mas_360) As Saldo_Total " _
+          & "FROM Facturas As F, Clientes As C, Accesos As A " _
+          & "WHERE F.Fecha <= #" & Mifecha & "# " _
+          & "AND F.Item = '" & NumEmpresa & "' " _
+          & "AND F.Periodo = '" & Periodo_Contable & "' " _
+          & Tipo_De_Consulta() _
+          & "AND F.CodigoC = C.Codigo " _
+          & "AND F.Cod_Ejec = A.Codigo " _
+          & "GROUP BY F.Item "
+          
+    sSQL = sSQLV & "UNION " & sSQLT & "ORDER BY Clientes, TC, Serie, Factura, Fecha "
+    Select_Adodc_Grid DGQuery, AdoQuery, sSQL
+    DGQuery.Visible = False
+    RatonReloj
+    Total = 0
+    Saldo = 0
+    With AdoQuery.Recordset
+     If .RecordCount > 0 Then
+        .MoveLast
+         Total = Total + .fields("Total_Facturado")
+         Saldo = Saldo + .fields("Saldo_Total")
+     End If
+    End With
+    LabelFacturado.Caption = Format(Total, "#,##0.00")
+    LabelSaldo.Caption = Format(Saldo, "#,##0.00")
+    DGQuery.Visible = True
+    Opcion = 18
+    RatonNormal
 End Sub
 
 Public Sub Cheques_Protestados()
@@ -3495,6 +3564,8 @@ Private Sub ToolbarMenu_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMe
           'Resumen_Ventas_x_Ejec
      Case "CxC_Tiempo_Credito"
           CxC_Tiempo_Credito
+     Case "CxC_Tiempo_Vencimiento"
+          CxC_Tiempo_Vencimiento
      Case "Tipo_Pago_Cliente"
           Tipo_Pago_Cliente
     'Reportes por Excel
@@ -4144,7 +4215,7 @@ End Function
 Public Sub Ventas_x_Excel()
    DGQuery.Visible = False
    sSQL = "SELECT T,TC,Fecha,'" & Empresa & "' As Razon_Social,'" & RUC & "' As RUC,Serie,Autorizacion," _
-        & "Factura,Con_IVA,Sin_IVA,SubTotal,IVA,Total_MN,'999999' As Serie_R,'0' As Secuencial_R," _
+        & "Factura,Con_IVA,Sin_IVA,SubTotal,IVA,Descuento,Descuento2,Total_MN,'999999' As Serie_R,'0' As Secuencial_R," _
         & "'" & RUC & "' As Autorizacion_R,'312' As Cod_Ret,'0' As Total_Retenido, '5' As Cta_Gasto " _
         & "FROM Facturas " _
         & "WHERE Item = '" & NumEmpresa & "' " _

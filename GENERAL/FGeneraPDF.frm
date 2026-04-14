@@ -1,11 +1,11 @@
 VERSION 5.00
-Object = "{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}#1.1#0"; "ieframe.dll"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{65E121D4-0C60-11D2-A9FC-0000F8754DA1}#2.0#0"; "mschrt20.ocx"
+Object = "{65E121D4-0C60-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSChrt20.ocx"
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.Ocx"
+Object = "{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}#1.1#0"; "ieframe.dll"
 Begin VB.Form FGeneraPDF 
    Caption         =   "PDF"
    ClientHeight    =   11115
@@ -32,7 +32,7 @@ Begin VB.Form FGeneraPDF
       ImageList       =   "ImageList1"
       _Version        =   327682
       BeginProperty Buttons {0713E452-850A-101B-AFC0-4210102A8DA7} 
-         NumButtons      =   19
+         NumButtons      =   18
          BeginProperty Button1 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "Salir"
             Object.ToolTipText     =   "Salir"
@@ -52,96 +52,90 @@ Begin VB.Form FGeneraPDF
             ImageIndex      =   4
          EndProperty
          BeginProperty Button4 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   "Acces_UDET"
-            Object.ToolTipText     =   "Acceso a Microsoft Access"
-            Object.Tag             =   ""
-            ImageIndex      =   6
-         EndProperty
-         BeginProperty Button5 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "SP_Almacenado"
             Object.ToolTipText     =   "Procedimientos almacenas"
             Object.Tag             =   ""
             ImageIndex      =   7
          EndProperty
-         BeginProperty Button6 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+         BeginProperty Button5 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "Exportar_Excel"
             Object.ToolTipText     =   "Exportar a Excel un grafico"
             Object.Tag             =   ""
             ImageIndex      =   5
          EndProperty
-         BeginProperty Button7 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+         BeginProperty Button6 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "Estadistica"
             Object.ToolTipText     =   "Estadistica"
             Object.Tag             =   ""
             ImageIndex      =   9
          EndProperty
-         BeginProperty Button8 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+         BeginProperty Button7 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "Subir_CC"
             Object.ToolTipText     =   "Subir Centro de Costos"
             Object.Tag             =   ""
             ImageIndex      =   10
          EndProperty
-         BeginProperty Button9 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+         BeginProperty Button8 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "Kardex_Trans"
             Object.ToolTipText     =   "Actualiza Kardex con Transacciones"
             Object.Tag             =   ""
             ImageIndex      =   11
          EndProperty
-         BeginProperty Button10 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+         BeginProperty Button9 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "Kardex_Facturas"
             Object.ToolTipText     =   "Igualar Facturas con Kardex"
             Object.Tag             =   ""
             ImageIndex      =   8
          EndProperty
-         BeginProperty Button11 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+         BeginProperty Button10 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "Emails"
             Object.ToolTipText     =   "Envio por mail"
             Object.Tag             =   ""
             ImageIndex      =   12
          EndProperty
-         BeginProperty Button12 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+         BeginProperty Button11 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "SRI"
             Object.ToolTipText     =   "Leer Documento Autorizado del SRI"
             Object.Tag             =   ""
             ImageIndex      =   13
          EndProperty
-         BeginProperty Button13 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+         BeginProperty Button12 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "LeerExcel"
             Object.ToolTipText     =   "Leer Excel en un datagrid"
             Object.Tag             =   ""
             ImageIndex      =   14
          EndProperty
-         BeginProperty Button14 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+         BeginProperty Button13 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "LeerXML"
             Object.ToolTipText     =   "Leer archivo XML"
             Object.Tag             =   ""
             ImageIndex      =   15
          EndProperty
-         BeginProperty Button15 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+         BeginProperty Button14 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "PictureBox"
             Object.ToolTipText     =   "Picture Box"
             Object.Tag             =   ""
             ImageIndex      =   16
          EndProperty
-         BeginProperty Button16 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+         BeginProperty Button15 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "Navegador"
             Object.ToolTipText     =   "Navegador WEB interno"
             Object.Tag             =   ""
             ImageIndex      =   17
          EndProperty
-         BeginProperty Button17 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+         BeginProperty Button16 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "XML_Firmado"
             Object.ToolTipText     =   "Leer XML Firmado del SRI"
             Object.Tag             =   ""
             ImageIndex      =   19
          EndProperty
-         BeginProperty Button18 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+         BeginProperty Button17 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "Enviar_Json"
             Object.ToolTipText     =   "Prueba de Json post"
             Object.Tag             =   ""
             ImageIndex      =   18
          EndProperty
-         BeginProperty Button19 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+         BeginProperty Button18 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "Descarga_CE_SRI"
             Object.ToolTipText     =   "Descarga Comprobante Electronico SRI"
             Object.Tag             =   ""
@@ -161,9 +155,9 @@ Begin VB.Form FGeneraPDF
             Strikethrough   =   0   'False
          EndProperty
          Height          =   645
-         Left            =   11970
+         Left            =   10605
          TabIndex        =   7
-         Top             =   -105
+         Top             =   0
          Width           =   7575
          Begin VB.ComboBox CTipoCtrl 
             BeginProperty Font 
@@ -246,13 +240,13 @@ Begin VB.Form FGeneraPDF
       End
    End
    Begin SHDocVwCtl.WebBrowser WebBrowser1 
-      Height          =   5580
-      Left            =   7350
+      Height          =   2175
+      Left            =   8640
       TabIndex        =   11
-      Top             =   2625
-      Width           =   6105
-      ExtentX         =   10769
-      ExtentY         =   9842
+      Top             =   3360
+      Width           =   4335
+      ExtentX         =   7646
+      ExtentY         =   3836
       ViewMode        =   0
       Offline         =   0
       Silent          =   0
@@ -268,7 +262,7 @@ Begin VB.Form FGeneraPDF
       NoFolders       =   0   'False
       Transparent     =   0   'False
       ViewID          =   "{0057D0E0-3573-11CF-AE69-08002B2E1262}"
-      Location        =   "http:///"
+      Location        =   ""
    End
    Begin VB.ListBox LstStatud 
       Appearance      =   0  'Flat
@@ -874,6 +868,9 @@ Dim v7 As Long
 Dim v8 As Long
 Dim v9 As Date
 Dim v10 As Date
+Dim Inicio As Date
+Dim fin As Date
+
 
 '''Dim Sales(5, 2) As Object
 '''
@@ -883,7 +880,7 @@ Dim v10 As Date
 '''      {"July", 10, 5}, _
 '''      {"August", 30, 15}, _
 '''      {"September", 14, 7}}
-' MsgBox "Boton Presionado de la Barra: [" & Button.key & "]"
+'MsgBox "Boton Presionado de la Barra: [" & Button.key & "]"
  RatonReloj
  Select Case Button.key
    Case "Salir"
@@ -905,8 +902,6 @@ Dim v10 As Date
                  Set oDocument = Nothing
                  If .Filename <> "Seleccione un Archivo" Then WebBrowser1.navigate .Filename
                  'WebBrowser1.Navigate .Filename
-             
-                 
 '''                 fPDF.setZoom 125
 '''                 fPDF.setShowScrollbars True
 '''                 fPDF.setShowToolbar False
@@ -999,53 +994,6 @@ Dim v10 As Date
             'MsgBox "..."
             'Presentar_PDF fPDF, RutaSysBases & "\TEMP\" & tPrint.NombreArchivo & ".pdf"
         'End If
-   Case "Acces_UDET"
-        'Cuadro_Impresora
-'''        Contador = 0
-'''        If Dato_DBF.Tipo_Base = "ACCESS" And Len(Dato_DBF.Actuales) > 1 And Len(Dato_DBF.Carpeta) > 1 Then
-'''           sSQL = "SELECT PAGCRE.mat_alu,PAGCRE.cod_sem,PAGCRE.cod_carr,CARR.des_carr,A.nom_alu,A.ape_alu,PAGCRE.comp_no,PAGCRE.efec,PAGCRE.total " _
-'''                & "FROM pag_cre AS PAGCRE,carrera AS CARR, alumno AS A " _
-'''                & "Where (PAGCRE.mat_alu = a.mat_alu) And (PAGCRE.cod_carr = CARR.cod_carr) "
-'''
-'''
-'''           Set Rs = New ADODB.Recordset
-'''           Cn.open "Provider=Microsoft.Jet.OLEDB.4.0;" _
-'''                 & "Data Source=" & Dato_DBF.Carpeta & Dato_DBF.Actuales & ".MDB"
-'''           Rs.Source = "datosprov"
-'''           Rs.CursorType = adOpenKeyset
-'''           Rs.LockType = adLockOptimistic
-'''           Rs.open sSQL, Cn
-'''           Cadena = ""
-'''           Do While Not Rs.EOF
-'''              Cadena = Cadena & Rs.Fields("mat_alu") & " - " & Rs.Fields("ape_alu") & " - " & Rs.Fields("comp_no") & vbCrLf
-'''
-'''              Contador = Contador + 1
-'''              If Contador > 10 Then Rs.MoveLast
-'''              Rs.MoveNext
-'''           Loop
-'''           Rs.Close
-'''           Cn.Close
-'''
-'''           MsgBox Cadena
-
-'''            SQL_Server1 = SQL_Server
-'''            SQL_Server = False
-'''            '" & Dato_DBF.Carpeta & Dato_DBF.Actuales & "
-'''            AdoStrCnn1 = "Provider=Microsoft.Jet.OLEDB.4.0;" _
-'''                       & "Data Source=" & Dato_DBF.Carpeta & Dato_DBF.Actuales & ";" _
-'''                       & "USer id=admin; password="
-'''            MsgBox AdoStrCnn1
-'''            sSQL = "Select A.nom_alu,A.ape_alu,ACCM.des_carr " _
-'''                 & "From alumno As A, alumnoxcarreraxcob_mat As ACCM " _
-'''                 & "Where a.mat_alu = ACCM.mat_alu "
-'''            sSQL = CompilarSQL(sSQL)
-'''            AdoUDET.ConnectionString = AdoStrCnn1
-'''            AdoUDET.RecordSource = sSQL
-'''            AdoUDET.Refresh
-'''            AdoUDET.Recordset.Close
-
-'''            SQL_Server = SQL_Server1
-'''        End If
    Case "SP_Almacenado"
         'SP_Almacenado
         Dim strFull As String
@@ -1189,44 +1137,88 @@ Dim v10 As Date
    Case "SRI"
        '-------------------------------------------------------------------------------------------------------------------
         With SRI_Autorizacion
-            .Clave_De_Acceso = "1112202501070216417900110010030000000071234567811" '"2503202401070216417900110010030000015701234567811" "0601202507179186152300120010030000028101234567816"  "1612202501070216417900110010030000025981234567815"
-'''          TextoXML = "<xml>ejemplo</xml>"
-'''          Set DocumentoXML = New DOMDocument30
-'''          DocumentoXML.loadXML (TextoXML)
-'''          DocumentoXML.save (RutaDocumentos & "\Comprobantes Generados\" & FA.ClaveAcceso & ".xml")
-                
+             Inicio = Now
+            '2001202601070216417900110010030000025971234567819
+            '1612202501070216417900110010030000025981234567815
+            '0501202607179076457500120010300000646911234567817
+            '-------------------------------------------------
+            '0202202607179185161700120010050000055911234567817
+            '0601202507179186152300120010030000028101234567816
+            '1112202501070216417900110010030000000071234567811
+            '2503202401070216417900110010030000015701234567811
+            
             'MsgBox "Desktop Test:" & RutaDocumentos & "\Comprobantes Generados\" & FA.ClaveAcceso & ".xml"
+             RatonReloj
+            .Clave_De_Acceso = "1102202604171189114100120010020000000101234567810"
+            .Autorizacion = RUC
+             Select Case MidStrg(.Clave_De_Acceso, 9, 2)
+               Case "01": .Tipo_Doc_SRI = "FA"
+               Case "02": .Tipo_Doc_SRI = "NV"
+               Case "03": .Tipo_Doc_SRI = "LC"
+               Case "04": .Tipo_Doc_SRI = "NC"
+               Case "05": .Tipo_Doc_SRI = "ND"
+               Case "06": .Tipo_Doc_SRI = "GR"
+               Case "07": .Tipo_Doc_SRI = "RE"
+               Case Else: .Tipo_Doc_SRI = "NN"
+             End Select
              TextoXML = Leer_Archivo_Texto(RutaDocumentos & "\Comprobantes Generados\" & .Clave_De_Acceso & ".xml")
+             RatonReloj
              If Len(TextoXML) > 0 Then
-                MiTiempo = Timer
+                RatonReloj
                 URLHTTP = "https://erp.diskcoversystem.com/php/comprobantes/SRI/autorizar_sri_visual.php?EnviarAutorizarXMLOnline=true"
                 URLParams = "Autorizacion=" & .Clave_De_Acceso & "&RUTA=" & NombreCertificado & "&PASS=" & ClaveCertificado & "&XML=" & TextoXML
                 ResultadoSubida = PostUrlSourceStr(URLHTTP, URLParams)
-                
-                Clipboard.Clear
-                Clipboard.SetText ResultadoSubida
-                
                 Set pJSON = JSON.parse(ResultadoSubida)
-               .Resultado = CBool(pJSON.Item("respuesta"))
-                If .Resultado Then
-                   .Estado_SRI = "Autorizado"
-                   .Autorizacion = .Clave_De_Acceso
+                If pJSON.Item("respuesta") = "1" Then
+                   .Resultado = True
+                   .Estado_SRI = "OK"
+                   '.Autorizacion = .Clave_De_Acceso
                    .Fecha_Autorizacion = MidStrg(pJSON.Item("FechaAutorizacion"), 1, 10)
                    .Hora_Autorizacion = MidStrg(pJSON.Item("FechaAutorizacion"), 12, 8)
                 Else
-                   .Estado_SRI = "Documento no autorizado"
+                   .Resultado = False
+                   .Estado_SRI = "CNA"
                    .Fecha_Autorizacion = FechaSistema
                    .Hora_Autorizacion = "00:00:00"
-                   .Autorizacion = RUC
                 End If
-                If IsNull(pJSON.Item("mensaje")) Then .Error_SRI = "." Else .Error_SRI = pJSON.Item("mensaje")
-                .Documento_XML = pJSON.Item("XML")
-                Cadena = Format(Timer - MiTiempo, "hh:mm:ss")
+               .Documento_XML = pJSON.Item("XML")
+               
                 Set DocumentoXML = New DOMDocument30
-                DocumentoXML.loadXML (XML)
-                DocumentoXML.save (RutaDocumentos & "\" & .Clave_De_Acceso & ".xml")
-                MsgBox "Desktop Tes: " & Cadena & vbCrLf & .Resultado & vbCrLf & .Estado_SRI & vbCrLf & .Error_SRI & vbCrLf & .Autorizacion & vbCrLf & .Fecha_Autorizacion & vbCrLf & .Hora_Autorizacion & vbCrLf & .Documento_XML
+                DocumentoXML.loadXML (.Documento_XML)
+                
+                If IsNull(pJSON.Item("mensaje")) Then .Error_SRI = "." Else .Error_SRI = pJSON.Item("mensaje")
+
+                If .Resultado Then
+                    DocumentoXML.save (RutaDocumentos & "\Comprobantes Autorizados\" & .Clave_De_Acceso & ".xml")
+                Else
+                    DocumentoXML.save (RutaDocumentos & "\Comprobantes no Autorizados\" & .Clave_De_Acceso & ".xml")
+                End If
+             Else
+               .Resultado = False
+               .Estado_SRI = "CNE"
+               .Error_SRI = "ARCHIVO ERRONEO"
+               .Fecha_Autorizacion = FechaSistema
+               .Hora_Autorizacion = "00:00:00"
+               .Documento_XML = Leer_Archivo_Texto(RutaSistema & "\JAVASCRIPT\sri_file_not_exist.xml")
+               .Documento_XML = Replace(.Documento_XML, "Clave_De_Acceso", .Clave_De_Acceso)
+               'MsgBox .Documento_XML
+                
+                Set DocumentoXML = New DOMDocument30
+                DocumentoXML.loadXML (.Documento_XML)
+                DocumentoXML.save (RutaDocumentos & "\Comprobantes no Autorizados\" & .Clave_De_Acceso & ".xml")
+                'MsgBox "Comprobante no procesado, no existe el archivo"
              End If
+            'MsgBox SRI_Autorizacion.Clave_De_Acceso & vbCrLf & SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion)
+            'Clipboard.Clear
+            'Clipboard.SetText .Documento_XML
+             
+            .Error_SRI = .Error_SRI & ": " & SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion)
+             If .Resultado Then Autorizar_Documento_XML_SP SRI_Autorizacion, FA
+             fin = Now
+            ' Resultado en formato hh:mm:ss
+             RatonNormal
+             MsgBox "Desktop Tes: [" & Format(fin - Inicio, "hh:mm:ss") & "]" & vbCrLf & .Resultado & vbCrLf & .Estado_SRI & vbCrLf & .Error_SRI & vbCrLf & .Autorizacion & vbCrLf & .Fecha_Autorizacion & vbCrLf & .Hora_Autorizacion & vbCrLf & .Ok_Update
+             '& vbCrLf & .Documento_XML
         End With
        '-------------------------------------------------------------------------------------------------------------------
 '''        'Progreso_Barra.Mensaje_Box = "Enviando el Comprobante al S.R.I."
@@ -1249,7 +1241,7 @@ Dim v10 As Date
 '''            Cadena = Cadena & Progreso_Barra.Mensaje_Box & vbCrLf
 '''            '-------------------------------------------------------------------------------------------------------------------
 '''            'Le indicamos el ListView donde se listarán los archivos
-'''            'Clipboard.Clear
+6 '''            'Clipboard.Clear
 '''            'Clipboard.SetText TextoError
 '''            'MsgBox "Desktop Test:" & URLHTTP & vbCrLf & URLParams
 '''        Next I
@@ -2428,25 +2420,45 @@ End Sub
 
 Public Sub Recepcion_SRI_XML(ClaveAcceso As String)
 Dim Documento As String
-    MsgBox Len(ClaveAcceso) & "-" & ClaveAcceso
-    If Len(ClaveAcceso) = 49 Then
-      'RutaXML = RutaDocumentos & "\Comprobantes Generados\" & ClaveDeAcceso & ".xml"
-      'RutaXMLFirmado = RutaDocumentos & "\Comprobantes Firmados\" & ClaveDeAcceso & ".xml"
-       RutaXMLAutorizado = RutaDocumentos & "\Comprobantes Autorizados\" & ClaveAcceso & ".xml"
-       RutaXMLRechazado = RutaDocumentos & "\Comprobantes no Autorizados\" & ClaveAcceso & ".xml"
-       'SRI_Autorizacion = SRI_Leer_XML_Autorizado(RutaXMLAutorizado, RutaXMLRechazado)
-       TextoFileEmp = SRI_Autorizacion.Documento_XML
-       MsgBox SRI_Autorizacion.Documento_XML
-       I = InStr(TextoFileEmp, "<![CDATA[")
-       F = InStr(TextoFileEmp, "]]></comprobante>")
-       If I > 0 And F > 0 Then
-          I = I + 9
-          Documento = TrimStrg(MidStrg(TextoFileEmp, I, F - I))
-          Escribir_Archivo RutaXMLAutorizado, Documento
-          
-       End If
-    End If
+Dim CnnFTPPOK As Boolean
 
+   'MsgBox Len(ClaveAcceso) & "-" & ClaveAcceso
+    If Len(ClaveAcceso) = 49 Then
+       ftp.Inicializar FGeneraPDF
+       ftp.Password = ftpPwr  'Le establecemos la contraseña de la cuenta Ftp
+       ftp.Usuario = ftpUse   'Le establecemos el nombre de usuario de la cuenta
+       ftp.servidor = ftpSvr  'Establecesmo el nombre del Servidor FTP
+       Set ftp.ListView = LstVwFTP
+       ftp.ConStatus = True
+       If ftp.ConectarFtp(LstStatud) Then CnnFTPPOK = True Else CnnFTPPOK = False
+       RutaXMLAutorizado = RutaSysBases & "\SRI\Comprobantes Recibidos\" & ClaveAcceso & ".xml"
+       RutaXMLRechazado = RutaSysBases & "\SRI\Comprobantes no Autorizados\" & ClaveAcceso & ".xml"
+       If Not Existe_File(RutaXMLAutorizado) Then
+          URLHTTP = "https://erp.diskcoversystem.com/php/comprobantes/SRI/autorizar_sri_visual.php?CERecibidos=true"
+          URLParams = "XML=" & ClaveAcceso
+          TextoError = PostUrlSourceStr(URLHTTP, URLParams)
+         'Conectamos al servidor ERP
+          If CnnFTPPOK And TextoError = "OK" Then
+             ftp.CambiarDirectorio "/ComprobantesElectronicos/ce_recibidos/"
+             ftp.ListarArchivos
+             ftp.ObtenerArchivo ClaveAcceso & ".xml", RutaXMLAutorizado, True
+             TextoFileEmp = Leer_Archivo_Plano(RutaXMLAutorizado)
+             I = InStr(TextoFileEmp, "<![CDATA[")
+             F = InStr(TextoFileEmp, "]]></comprobante>")
+             If I > 0 And F > 0 Then
+                I = I + 9
+                Escribir_Archivo RutaXMLAutorizado, TrimStrg(MidStrg(TextoFileEmp, I, F - I))
+             End If
+            'Una vez bajado el archivo procedemos a Borrar
+             ftp.EliminarArchivo "/files/ComprobantesElectronicos/ce_recibidos/" & ClaveAcceso & ".xml"
+          Else
+             SRI_Autorizacion.Clave_De_Acceso = ClaveAcceso
+             Documento = SRI_Leer_Comprobantes_no_Autorizados_XML(SRI_Autorizacion)
+             MsgBox "Tipo de Error: " & vbCrLf & String(70, "_") & vbCrLf & Documento
+          End If
+       End If
+       If CnnFTPPOK Then ftp.Desconectar
+    End If
 End Sub
 
 Private Sub WebBrowser1_NavigateComplete2(ByVal pDisp As Object, URL As Variant)

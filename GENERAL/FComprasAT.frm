@@ -72,19 +72,12 @@ Begin VB.Form FComprasAT
       TabPicture(1)   =   "FComprasAT.frx":06B2
       Tab(1).ControlEnabled=   0   'False
       Tab(1).Control(0)=   "CmdGrabar"
-      Tab(1).Control(0).Enabled=   0   'False
       Tab(1).Control(1)=   "CmdCerrar"
-      Tab(1).Control(1).Enabled=   0   'False
       Tab(1).Control(2)=   "FrmPagoExterior"
-      Tab(1).Control(2).Enabled=   0   'False
       Tab(1).Control(3)=   "CFormaPago"
-      Tab(1).Control(3).Enabled=   0   'False
       Tab(1).Control(4)=   "Frame2"
-      Tab(1).Control(4).Enabled=   0   'False
       Tab(1).Control(5)=   "LblResolucion"
-      Tab(1).Control(5).Enabled=   0   'False
       Tab(1).Control(6)=   "Label44"
-      Tab(1).Control(6).Enabled=   0   'False
       Tab(1).ControlCount=   7
       TabCaption(2)   =   "Partidos Políticos"
       TabPicture(2)   =   "FComprasAT.frx":06CE
@@ -145,7 +138,7 @@ Begin VB.Form FComprasAT
          Begin VB.TextBox TxtIvaSerMonIva 
             Alignment       =   1  'Right Justify
             Height          =   336
-            Left            =   8295
+            Left            =   8280
             MultiLine       =   -1  'True
             TabIndex        =   68
             Text            =   "FComprasAT.frx":0E36
@@ -3109,16 +3102,6 @@ Dim SumaBasesImponibles As Currency
 
   'Carga los conceptos de Retencion segun la fecha de Registro
    If Len(MBFechaEmi) < 10 Then MBFechaEmi = FechaSistema
-   
-   sSQL = "SELECT (Codigo & ' - ' & Cuenta) As Cuentas  " _
-        & "FROM Catalogo_Cuentas " _
-        & "WHERE Item = '" & NumEmpresa & "' " _
-        & "AND Periodo = '" & Periodo_Contable & "' " _
-        & "AND TC = 'RF' " _
-        & "AND DG = 'D' " _
-        & "ORDER BY Codigo "
-   SelectDB_Combo DCRetFuente, AdoRetFuente, sSQL, "Cuentas"
-   If AdoRetFuente.Recordset.RecordCount > 0 Then Rf = 1 Else Rf = 0
 
   'DCConceptoRet = "329 - Por Otros Servicios (N)"
         
@@ -3176,6 +3159,7 @@ Private Sub CmdCerrar_Click()
 '''    DesConectar_Adodc AdoRetFuente
 '''    DesConectar_Adodc AdoRetIvaSerCC
 '''    DesConectar_Adodc AdoRetIvaBienesCC
+    RatonNormal
     Unload FComprasAT
 End Sub
 
@@ -3195,7 +3179,7 @@ Private Sub CmdGrabar_Click()
    'Grabamos el Asiento de la Compra
     If Leer_Campo_Empresa("Registrar_IVA") Then
        Cta = Cta_IVA_Inventario
-       DetalleComp = "Registro del IVA en compras Doc. No. " & TxtNumSerieUno & TxtNumSerieDos & "-" & TxtNumSerieTres & ", " & NombreCliente
+       DetalleComp = "Registro del IVA en compras Doc. No. " & TxtNumSerieUno & TxtNumSerieDos & "-" & TxtNumSerietres & ", " & NombreCliente
        Codigo = Leer_Cta_Catalogo(Cta)
        ValorDH = Redondear(CCur(TxtMontoIva), 2)
        If ValorDH > 0 Then InsertarAsiento AdoAsientos
@@ -3252,6 +3236,7 @@ Private Sub CmdGrabar_Click()
      End If
     End With
     DetalleComp = Ninguno
+    RatonNormal
     Unload FComprasAT
 End Sub
 
@@ -3339,6 +3324,14 @@ Private Sub DCPorcenIva_LostFocus()
     End If
 End Sub
 
+Private Sub DCProveedor_KeyDown(KeyCode As Integer, Shift As Integer)
+  PresionoEnter KeyCode
+End Sub
+
+Private Sub DCProveedor_LostFocus()
+  DCTipoPago.SetFocus
+End Sub
+
 Private Sub DCRetFuente_KeyDown(KeyCode As Integer, Shift As Integer)
   PresionoEnter KeyCode
 End Sub
@@ -3416,8 +3409,8 @@ Private Sub DCTipoComprobante_LostFocus()
           MBFechaCad = AdoAux.Recordset.Fields("FechaCaducidad")
           TxtNumSerieUno = AdoAux.Recordset.Fields("Establecimiento")
           TxtNumSerieDos = AdoAux.Recordset.Fields("PuntoEmision")
-          TxtNumSerieTres = AdoAux.Recordset.Fields("Secuencial") + 1
-          If Val(TxtNumSerieTres) <= 0 Then TxtNumSerieTres = 1
+          TxtNumSerietres = AdoAux.Recordset.Fields("Secuencial") + 1
+          If Val(TxtNumSerietres) <= 0 Then TxtNumSerietres = 1
           If Len(AdoAux.Recordset.Fields("Autorizacion")) >= 13 Then
              TxtNumAutor = RUC
           Else
@@ -3462,6 +3455,10 @@ Private Sub DGConceptoAir_KeyDown(KeyCode As Integer, Shift As Integer)
      End With
    End If
  End If
+End Sub
+
+Private Sub Form_Deactivate()
+    RatonNormal
 End Sub
 
 Private Sub MBFechaCad_GotFocus()
@@ -3636,7 +3633,7 @@ Sub Insertar_DataGrid()
        SetAdoFields "Cta_Retencion", SinEspaciosIzq(DCRetFuente)
        SetAdoFields "EstabFactura", TxtNumSerieUno
        SetAdoFields "PuntoEmiFactura", TxtNumSerieDos
-       SetAdoFields "Factura_No", CTNumero(TxtNumSerieTres)
+       SetAdoFields "Factura_No", CTNumero(TxtNumSerietres)
        SetAdoFields "IdProv", CodigoCliente
        SetAdoFields "A_No", Maximo_De("Asiento_Air", "A_No")
        SetAdoFields "T_No", Trans_No
@@ -3792,63 +3789,69 @@ Private Sub DCSustento_LostFocus()
 End Sub
 
 Private Sub Form_Activate()
-    sSQL = "SELECT (Codigo & ' ' & Descripcion) As CTipoPago " _
-         & "FROM Tabla_Referenciales_SRI " _
-         & "WHERE Tipo_Referencia = 'FORMA DE PAGO' " _
-         & "ORDER BY Codigo "
-    SelectDB_Combo DCTipoPago, AdoTipoPago, sSQL, "CTipoPago"
-
    Select Case Co.TD
      Case "C", "R", "P"
           Label23.Caption = " Estado: ACTIVO"
           Label25.Caption = " TIPO DE PROVEEDOR: "
+          
+          sSQL = "SELECT (Codigo & ' ' & Descripcion) As CTipoPago " _
+               & "FROM Tabla_Referenciales_SRI " _
+               & "WHERE Tipo_Referencia = 'FORMA DE PAGO' " _
+               & "ORDER BY Codigo "
+          SelectDB_Combo DCTipoPago, AdoTipoPago, sSQL, "CTipoPago"
+         
+          If Len(TipoContribuyente) > 1 Then Label25.Caption = Label25.Caption & TipoContribuyente
+          If Len(Co.MicroEmpresa) > 1 Then Label25.Caption = Label25.Caption & " " & Co.MicroEmpresa
+          If Len(Co.AgenteRetencion) > 1 Then Label25.Caption = Label25.Caption & " " & Co.AgenteRetencion
+          If Len(Co.Estado) > 1 Then Label23.Caption = " Estado: " & Co.Estado
+          
+          MBFechaEmi = FechaComp
+          MBFechaRegis = FechaComp
+          MBFechaCad = FechaComp
+         
+          Co.Serie_R = Ninguno
+          Co.Retencion = 0
+          Co.Liquidacion = 0
+          Co.Autorizacion_R = Ninguno
+          Co.RetNueva = True
+          Co.LCNueva = True
+          Co.Autorizacion_R = Ninguno
+          Factura_CxP = 0
+          TxtBaseImpo = "0.00"
+          TxtBaseImpoIce = "0.00"
+          TxtBaseImpoGrav = "0.00"
+          TxtBaseImpoNoObjIVA = "0.00"
+          Carga_Datos_Iniciales MBFechaEmi, Nuevo
+         
+          LblTD.Caption = TipoBenef                  ' Tipo de Cliente: C,R,P,O
+          LblNumIdent = CICliente                    ' CI o RUC del Cliente
+          DCProveedor.Text = NombreCliente           ' Nombre del Cliente
+          TxtNumSerietres = "0000001"
+          TxtNumSerieUno = "001"
+          TxtNumSerieDos = "001"
+          TxtNumAutor = String(10, "0")
+          TxtNumUnoComRet = "001"
+          TxtNumDosComRet = "001"
+          TxtNumTresComRet = "0000001"
+          TxtNumUnoAutComRet = String(10, "0")
+         
+         'Ultima Retencion Emitida
+          TxtNumUnoComRet = "001"
+          TxtNumDosComRet = "001"
+          TxtNumTresComRet = 1
+          TxtNumUnoAutComRet = "1234567890"
+         'MsgBox sSQL & vbCrLf & AdoAux.Recordset.Fields("SecRetencion")
+          RatonNormal
+          DCProveedor.SetFocus
      Case Else
+          RatonNormal
           MsgBox "Este Beneficiario no es valido para esta operacion"
           Unload FComprasAT
    End Select
-   If Len(TipoContribuyente) > 1 Then Label25.Caption = Label25.Caption & TipoContribuyente
-   If Len(Co.MicroEmpresa) > 1 Then Label25.Caption = Label25.Caption & " " & Co.MicroEmpresa
-   If Len(Co.AgenteRetencion) > 1 Then Label25.Caption = Label25.Caption & " " & Co.AgenteRetencion
-   If Len(Co.Estado) > 1 Then Label23.Caption = " Estado: " & Co.Estado
-   MBFechaEmi = FechaComp
-   MBFechaRegis = FechaComp
-   MBFechaCad = FechaComp
-   
-   Co.Serie_R = Ninguno
-   Co.Retencion = 0
-   Co.Liquidacion = 0
-   Co.Autorizacion_R = Ninguno
-   Co.RetNueva = True
-   Co.LCNueva = True
-   Co.Autorizacion_R = Ninguno
-   Factura_CxP = 0
-   TxtBaseImpo = "0.00"
-   TxtBaseImpoIce = "0.00"
-   TxtBaseImpoGrav = "0.00"
-   TxtBaseImpoNoObjIVA = "0.00"
-   Carga_Datos_Iniciales MBFechaEmi, Nuevo
-   
-   LblTD.Caption = TipoBenef                  ' Tipo de Cliente: C,R,P,O
-   LblNumIdent = CICliente                    ' CI o RUC del Cliente
-   DCProveedor.Text = NombreCliente           ' Nombre del Cliente
-   TxtNumSerieTres = "0000001"
-   TxtNumSerieUno = "001"
-   TxtNumSerieDos = "001"
-   TxtNumAutor = String(10, "0")
-   TxtNumUnoComRet = "001"
-   TxtNumDosComRet = "001"
-   TxtNumTresComRet = "0000001"
-   TxtNumUnoAutComRet = String(10, "0")
-   
-  'Ultima Retencion Emitida
-   TxtNumUnoComRet = "001"
-   TxtNumDosComRet = "001"
-   TxtNumTresComRet = 1
-   TxtNumUnoAutComRet = "1234567890"
-   'MsgBox sSQL & vbCrLf & AdoAux.Recordset.Fields("SecRetencion")
 End Sub
 
 Private Sub Form_Load()
+   RatonReloj
    CentrarForm FComprasAT
    ConectarAdodc AdoAux
    ConectarAdodc AdoPais
@@ -3958,6 +3961,7 @@ End Sub
 
 Private Sub TxtIvaBienValRet_LostFocus()
     Grabacion
+    TxtIvaSerMonIva = Format(Val(TxtMontoIva) - Val(TxtIvaBienMonIva), "#,##0.00")
 End Sub
 
 Private Sub TxtIvaSerMonIva_GotFocus()
@@ -3989,7 +3993,7 @@ End Sub
 
 Private Sub TxtIvaSerValRet_LostFocus()
     Grabacion
-'    CmdAir.SetFocus
+    CmdAir.SetFocus
 End Sub
 
 Private Sub TxtMonTitGrat_GotFocus()
@@ -4087,14 +4091,14 @@ Private Sub TxtNumAutor_LostFocus()
          & "AND Item = '" & NumEmpresa & "' " _
          & "AND Establecimiento = '" & TxtNumSerieUno & "' " _
          & "AND PuntoEmision = '" & TxtNumSerieDos & "' " _
-         & "AND Secuencial = " & CLng(TxtNumSerieTres) & " " _
+         & "AND Secuencial = " & CLng(TxtNumSerietres) & " " _
          & "AND Autorizacion = '" & TxtNumAutor & "' " _
          & "ORDER BY Fecha DESC, Secuencial DESC "
     Select_Adodc AdoAux, sSQL
     If AdoAux.Recordset.RecordCount > 0 Then MsgBox "USTED ESTA TRATANDO DE INGRESAR UNA FACTURA EXISTENTE"
     If cod = 3 Then
        Co.Autorizacion_LC = TxtNumAutor
-       If Val(TxtNumSerieTres) <> ReadSetDataNum("LC_SERIE_" & Co.Serie_LC, True, False) Then
+       If Val(TxtNumSerietres) <> ReadSetDataNum("LC_SERIE_" & Co.Serie_LC, True, False) Then
           Titulo = "SECUENCIAL DE LIQUIDACION DE COMPRAS"
           Mensajes = "Número de Liquidacion de Compras: " & Co.Serie_LC & "-" & Format(Co.Liquidacion, "000000000") & ", no esta en orden secuencial." & vbCrLf & vbCrLf _
                    & "QUIERE PROCESARLA?"
@@ -4135,16 +4139,17 @@ Private Sub TxtNumDosComRet_LostFocus()
    TxtNumTresComRet = ReadSetDataNum("RE_SERIE_" & Co.Serie_R, True, False)
    Co.Retencion = 0
    Co.RetSecuencial = True
-   sSQL = "SELECT TOP 1 AutRetencion " _
+   sSQL = "SELECT AutRetencion " _
         & "FROM Trans_Compras " _
         & "WHERE Item = '" & NumEmpresa & "' " _
-        & "AND Periodo = '" & Periodo_Contable & "' " _
         & "AND Fecha <= #" & BuscarFecha(MBFechaRegis) & "# " _
         & "AND Serie_Retencion = '" & Co.Serie_R & "' " _
         & "AND AutRetencion <> '.' " _
+        & "GROUP BY AutRetencion " _
         & "ORDER BY AutRetencion DESC "
    Select_Adodc AdoAux, sSQL
    If AdoAux.Recordset.RecordCount > 0 Then
+     'MsgBox AdoAux.Recordset.Fields("AutRetencion")
       TxtNumUnoAutComRet = AdoAux.Recordset.Fields("AutRetencion")
       If Len(TxtNumUnoAutComRet) >= 13 Then TxtNumUnoAutComRet = RUC
    Else
@@ -4167,7 +4172,7 @@ Private Sub TxtNumSerieDos_LostFocus()
     TxtNumSerieDos = Format(Val(TxtNumSerieDos), "000")
     Co.Serie_LC = Ninguno
     TxtNumAutor = "0000000001"
-    TxtNumSerieTres = "000000001"
+    TxtNumSerietres = "000000001"
     sSQL = "SELECT TOP 1 Fecha, Secuencial, FechaCaducidad, Establecimiento, PuntoEmision, Autorizacion " _
          & "FROM Trans_Compras " _
          & "WHERE TipoComprobante = " & cod & " " _
@@ -4179,14 +4184,14 @@ Private Sub TxtNumSerieDos_LostFocus()
     Select Case cod
       Case 3 ' Liquidacion de Compras
            Co.Serie_LC = TxtNumSerieUno & TxtNumSerieDos
-           TxtNumSerieTres = ReadSetDataNum("LC_SERIE_" & Co.Serie_LC, True, False)
+           TxtNumSerietres = ReadSetDataNum("LC_SERIE_" & Co.Serie_LC, True, False)
            If AdoAux.Recordset.RecordCount > 0 Then
               TxtNumAutor = AdoAux.Recordset.Fields("Autorizacion")
               If Len(TxtNumAutor) >= 13 Then TxtNumAutor = RUC
            End If
       Case 4 ' Notas de Credito
            If AdoAux.Recordset.RecordCount > 0 Then
-              TxtNumSerieTres = AdoAux.Recordset.Fields("Secuencial") + 1
+              TxtNumSerietres = AdoAux.Recordset.Fields("Secuencial") + 1
               MBFechaCad = AdoAux.Recordset.Fields("FechaCaducidad")
               TxtNumSerieUno = AdoAux.Recordset.Fields("Establecimiento")
               TxtNumSerieDos = AdoAux.Recordset.Fields("PuntoEmision")
@@ -4194,7 +4199,7 @@ Private Sub TxtNumSerieDos_LostFocus()
            End If
       Case Else
            If AdoAux.Recordset.RecordCount > 0 Then
-              TxtNumSerieTres = AdoAux.Recordset.Fields("Secuencial") + 1
+              TxtNumSerietres = AdoAux.Recordset.Fields("Secuencial") + 1
               TxtNumAutor = AdoAux.Recordset.Fields("Autorizacion")
               If Len(TxtNumAutor) >= 13 Then TxtNumAutor = RUC
            End If
@@ -4216,12 +4221,12 @@ Private Sub TxtNumSerieDosComp_LostFocus()
 End Sub
 
 Private Sub TxtNumSerietres_GotFocus()
-    TxtNumSerieTres = Format(Val(Round(TxtNumSerieTres)), "000000000")
+    TxtNumSerietres = Format(Val(Round(TxtNumSerietres)), "000000000")
     Co.LCNueva = True
     Co.LCSecuencial = True
     Co.Liquidacion = 0
     Co.Serie_LC = Ninguno
-    MarcarTexto TxtNumSerieTres
+    MarcarTexto TxtNumSerietres
 End Sub
 
 Private Sub TxtNumSerietres_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -4229,11 +4234,11 @@ Private Sub TxtNumSerietres_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub TxtNumSerietres_LostFocus()
-   If Val(TxtNumSerieTres) <= 0 Then TxtNumSerieTres = "000000001"
-   TxtNumSerieTres = Format(Round(Val(TxtNumSerieTres)), "000000000")
+   If Val(TxtNumSerietres) <= 0 Then TxtNumSerietres = "000000001"
+   TxtNumSerietres = Format(Round(Val(TxtNumSerietres)), "000000000")
    If cod = 3 Then
       Co.Serie_LC = TxtNumSerieUno & TxtNumSerieDos
-      Co.Liquidacion = Val(TxtNumSerieTres)
+      Co.Liquidacion = Val(TxtNumSerietres)
       sSQL = "SELECT * " _
            & "FROM Trans_Compras " _
            & "WHERE Item = '" & NumEmpresa & "' " _
@@ -4250,7 +4255,7 @@ Private Sub TxtNumSerietres_LostFocus()
                   & "número de Liquidacion de Compras." & vbCrLf & vbCrLf _
                   & "QUIERE REPROCESARLA"
          If BoxMensaje = vbYes Then
-            Co.Liquidacion = Val(TxtNumSerieTres)
+            Co.Liquidacion = Val(TxtNumSerietres)
             Co.LCNueva = False
             Co.LCSecuencial = False
          End If
@@ -4528,7 +4533,7 @@ Public Sub Limpiar_Controles()
     DCTipoComprobante.Text = ""
     TxtNumSerieUno.Text = "001"
     TxtNumSerieDos.Text = "001"
-    TxtNumSerieTres.Text = "0"
+    TxtNumSerietres.Text = "0"
     TxtNumAutor.Text = ""
     FechaValida MBFechaEmi
     FechaValida MBFechaRegis
@@ -4629,6 +4634,7 @@ Public Sub Carga_Datos_Iniciales(MBFecha As MaskEdBox, EsNuevo As Boolean)
    'Verifico si existen registros caso contrario despliego mensaje
    'Carga los Conceptos de retención en la Fuente al DataCombo
     Carga_ConceptosRetencion MBFechaEmi
+   
    'Carga los Conceptos de retención IVA Servicios al DataCombo
     sSQL = "SELECT (Codigo & ' - ' & Cuenta) As Cuentas  " _
          & "FROM Catalogo_Cuentas " _
@@ -4639,6 +4645,7 @@ Public Sub Carga_Datos_Iniciales(MBFecha As MaskEdBox, EsNuevo As Boolean)
          & "ORDER BY Codigo "
     SelectDB_Combo DCRetISer, AdoRetIvaSerCC, sSQL, "Cuentas"
     If AdoRetIvaSerCC.Recordset.RecordCount > 0 Then rs = 1 Else rs = 0
+   
    'Carga los Conceptos de retención IVA Bienes al DataCombo
     sSQL = "SELECT (Codigo & ' - ' & Cuenta) As Cuentas  " _
          & "FROM Catalogo_Cuentas " _
@@ -4649,6 +4656,17 @@ Public Sub Carga_Datos_Iniciales(MBFecha As MaskEdBox, EsNuevo As Boolean)
          & "ORDER BY Codigo "
     SelectDB_Combo DCRetIBienes, AdoRetIvaBienesCC, sSQL, "Cuentas"
     If AdoRetIvaBienesCC.Recordset.RecordCount > 0 Then Rb = 1 Else Rb = 0
+   
+    sSQL = "SELECT (Codigo & ' - ' & Cuenta) As Cuentas  " _
+         & "FROM Catalogo_Cuentas " _
+         & "WHERE Item = '" & NumEmpresa & "' " _
+         & "AND Periodo = '" & Periodo_Contable & "' " _
+         & "AND TC = 'RF' " _
+         & "AND DG = 'D' " _
+         & "ORDER BY Codigo "
+    SelectDB_Combo DCRetFuente, AdoRetFuente, sSQL, "Cuentas"
+    If AdoRetFuente.Recordset.RecordCount > 0 Then Rf = 1 Else Rf = 0
+   
    'Si es Nuevo ingresa por aqui
     ChRetF.Visible = True
     ChRetF.value = 1
@@ -4665,8 +4683,6 @@ Public Sub Carga_Datos_Iniciales(MBFecha As MaskEdBox, EsNuevo As Boolean)
            FrmRetencion.Visible = False
            'LblMensaje.Visible = True
            'Activar_BS
-       Else
-           ChRetB.SetFocus
        End If
     End If
 End Sub
@@ -4708,7 +4724,7 @@ Dim FormaPago As String
     SetAdoFields "TipoComprobante", cod
     SetAdoFields "Establecimiento", TxtNumSerieUno
     SetAdoFields "PuntoEmision", TxtNumSerieDos
-    SetAdoFields "Secuencial", CTNumero(TxtNumSerieTres)
+    SetAdoFields "Secuencial", CTNumero(TxtNumSerietres)
     SetAdoFields "Autorizacion", TxtNumAutor
     SetAdoFields "FechaEmision", MBFechaEmi
     SetAdoFields "FechaRegistro", MBFechaRegis
