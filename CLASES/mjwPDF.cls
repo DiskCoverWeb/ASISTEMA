@@ -2142,7 +2142,6 @@ Dim PathAcroRd32 As String
     For in_i = 1 To FPageNumber
         PDFSetPageObject (in_i)
     Next in_i
-
     PDFSetBookmarks
 
     PDFSetCatalog
@@ -2156,7 +2155,9 @@ Dim PathAcroRd32 As String
    'RutaDocumentoPDF = Replace(RutaDocumentoPDF, "C:", "Z:")
     If boPDFView Then
         If Dir$(RutaDocumentoPDF) <> "" Then
-           iRet = Shell("rundll32.exe url.dll,FileProtocolHandler " & RutaDocumentoPDF, vbMaximizedFocus)
+          'MsgBox "Desktop Ruta PDF: " & RutaDocumentoPDF
+           iRet = Shell("cmd /c start """" """ & RutaDocumentoPDF & """", vbHide) ' vbMinimizedFocus
+           'iRet = Shell("rundll32.exe url.dll,FileProtocolHandler " & RutaDocumentoPDF, vbMaximizedFocus)
         Else
            MsgBox "EL ARCHIVO:" & vbCrLf & vbCrLf & RutaDocumentoPDF & vbCrLf & vbCrLf & "NO EXISTE O ESTA DAÑADO"
         End If

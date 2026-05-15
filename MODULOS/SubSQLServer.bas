@@ -315,11 +315,11 @@ Dim ParametrosDeSalida As String
         cmdMySQL.CommandType = adCmdText
 
        'Parametros de entrada y de salida
-        ParametrosDeSalida = "@FechaCO, @FechaCE, @FechaDB, @FechaP12, @AgenteRetencion, @MicroEmpresa, @EstadoEmpresa, " _
-                           & "@DescripcionEstado, @NombreEntidad, @Representante, @MensajeEmpresa, @ComunicadoEntidad, @SerieFA, " _
-                           & "@TotCartera, @CantFA, @TipoPlan, @pActivo, @EstadoUsuario, @TokenEmpresa, @URLEmpresa"
-                           
-        cmdMySQL.CommandText = "Call sp_mysql_datos_iniciales_entidad(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?," & ParametrosDeSalida & ");"
+        ParametrosDeSalida = "@FechaCO, @FechaCE, @FechaDB, @FechaP12, @AgenteRetencion, @MicroEmpresa, @EstadoEmpresa, @DescripcionEstado, @NombreEntidad, @Representante, " _
+                           & "@MensajeEmpresa, @ComunicadoEntidad, @SerieFA, @TotCartera, @CantFA, @TipoPlan, @pActivo, @EstadoUsuario, @TokenEmpresa, @URLEmpresa, @Version_Nueva, " _
+                           & "@Archivo_Incluido, @Link_Canal "
+                           'sp_mysql_datos_iniciales_entidad
+        cmdMySQL.CommandText = "Call sp_mysql_leer_entidad(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?," & ParametrosDeSalida & ");"
        'Enviamos los parametro de solo entrada al SP
         cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("ItemEmpresa", adVarChar, adParamInput, 3, NumEmpresa)
         cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("RUCEmpresa", adVarChar, adParamInput, 13, RUC)
@@ -366,12 +366,17 @@ Dim ParametrosDeSalida As String
         EstadoUsuario = rsMySQL.fields(17)
         Token = rsMySQL.fields(18)
         URLToken = rsMySQL.fields(19)
-        ServidorMySQL = True
-        ParametrosDeSalida = ""
+        Version_Nueva = rsMySQL.fields(20)
+        Archivo_Incluido = rsMySQL.fields(21)
+        Link_Canal = rsMySQL.fields(22)
         
-        For I = 0 To 19
-            ParametrosDeSalida = ParametrosDeSalida & rsMySQL.fields(I).Name & " = " & rsMySQL.fields(I) & vbCrLf
-        Next I
+        ServidorMySQL = True
+        
+'        ParametrosDeSalida = ""
+'        For I = 0 To 22
+'            ParametrosDeSalida = ParametrosDeSalida & rsMySQL.fields(I).Name & " = " & rsMySQL.fields(I) & vbCrLf
+'        Next I
+       
        'Cerramos la conexion con MySQL
         rsMySQL.Close
         cnMySQL.Close
@@ -382,7 +387,7 @@ Dim ParametrosDeSalida As String
         Set cnMySQL = Nothing
         Set cmdMySQL = Nothing
         RatonNormal
-       'MsgBox "DeskTop Test: " & ParametrosDeSalida & ".-.-.-.-.-.-.-.-"
+        'MsgBox "DeskTop Test: " & ParametrosDeSalida
     End If
 End Sub
 
@@ -785,7 +790,7 @@ Dim BuscarCodigo1 As String
     Procesar_Stored_Procedure MiCmd, MiReg
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
-
+ 
 Public Sub Actualizar_Transacciones_Kardex_SP()
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
@@ -1299,7 +1304,7 @@ Dim JSONResult As String
     JSONInPutAbonos = Replace(JSONInPutAbonos, "False", "0")
     JSONInPutAbonos = Replace(JSONInPutAbonos, "Verdadero", "1")
     JSONInPutAbonos = Replace(JSONInPutAbonos, "Falso", "0")
-   'MsgBox JSONInPutAbonos
+    
 '    Clipboard.Clear
 '    Clipboard.SetText JSONFactura & vbCrLf & String(80, "-") & vbCrLf & JSONInPutAbonos
 '    MsgBox "Desktop Test: " & Len(JSONFactura) & vbCrLf & JSONFactura
@@ -1464,6 +1469,7 @@ Dim MiReg As ADODB.Recordset
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Factura", adInteger, adParamInput, 14, dFactura)
     Procesar_Stored_Procedure MiCmd, MiReg
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+    MsgBox "Desktop Test"
 End Sub
 
 Public Sub Actualizar_Saldo_De_Facturas_SP(dTC As String, dSerie As String, dFacturaDesde As Long, dFacturaHasta As Long, dFechaCorte As String)
@@ -2054,19 +2060,19 @@ Dim AdoCtasDB As ADODB.Recordset
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
 
-Public Sub Subir_Archivo_Plano_SP(NombreTabla As String, RutaArchivo As String, SeparadorCampo As String)
-Dim MiSQL As ADODB.Connection
-Dim MiCmd As ADODB.Command
-Dim MiReg As ADODB.Recordset
-
-    Iniciar_Stored_Procedure "Subir Archivo de: " & NombreTabla, MiSQL, MiCmd, MiReg
-    MiCmd.CommandText = "sp_Subir_Archivo_Plano"
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@NombreTabla", adVarChar, adParamInput, 255, NombreTabla)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@RutaArchivo", adVarChar, adParamInput, 255, RutaArchivo)
-    MiCmd.Parameters.Append MiCmd.CreateParameter("@SeparadorCampo", adVarChar, adParamInput, 1, SeparadorCampo)
-    Procesar_Stored_Procedure MiCmd, MiReg
-    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
-End Sub
+'''Public Sub Subir_Archivo_Plano_SP(NombreTabla As String, RutaArchivo As String, SeparadorCampo As String)
+'''Dim MiSQL As ADODB.Connection
+'''Dim MiCmd As ADODB.Command
+'''Dim MiReg As ADODB.Recordset
+'''
+'''    Iniciar_Stored_Procedure "Subir Archivo de: " & NombreTabla, MiSQL, MiCmd, MiReg
+'''    MiCmd.CommandText = "sp_Subir_Archivo_Plano"
+'''    MiCmd.Parameters.Append MiCmd.CreateParameter("@NombreTabla", adVarChar, adParamInput, 255, NombreTabla)
+'''    MiCmd.Parameters.Append MiCmd.CreateParameter("@RutaArchivo", adVarChar, adParamInput, 255, RutaArchivo)
+'''    MiCmd.Parameters.Append MiCmd.CreateParameter("@SeparadorCampo", adVarChar, adParamInput, 1, SeparadorCampo)
+'''    Procesar_Stored_Procedure MiCmd, MiReg
+'''    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
+'''End Sub
 
 
 Public Sub Eliminar_Periodo_SP(Periodo As String)
@@ -2607,6 +2613,22 @@ Dim MiReg As ADODB.Recordset
     Procesar_Stored_Procedure MiCmd, MiReg
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
     RatonNormal
+End Sub
+
+Public Sub Importar_Facturas_SP()
+Dim MiSQL As ADODB.Connection
+Dim MiCmd As ADODB.Command
+Dim MiReg As ADODB.Recordset
+    
+    Iniciar_Stored_Procedure "Importar Facturas 01", MiSQL, MiCmd, MiReg
+    MiCmd.CommandText = "sp_Importar_Facturas"
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Item", adVarChar, adParamInput, 3, NumEmpresa)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Periodo", adVarChar, adParamInput, 10, Periodo_Contable)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@CodigoUsuario", adVarChar, adParamInput, 10, CodigoUsuario)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@Modulo", adVarChar, adParamInput, 2, NumModulo)
+    
+    Procesar_Stored_Procedure MiCmd, MiReg
+    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
 
 Public Sub Importar_Compras_Diarias_SP(TipoComp As String, Numero As Long)

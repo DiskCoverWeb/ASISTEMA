@@ -1,6 +1,7 @@
 Attribute VB_Name = "TBoolean"
 '--------------------------------------
 'Global HayCnn As Boolean
+Global Version_Nueva As Boolean
 Global ServidorMySQL As Boolean
 Global ServidorSQLServer As Boolean
 Global ServidorSRIPrueba As Boolean

@@ -932,7 +932,7 @@ End Sub
 
 Private Sub RecibirXML_Click()
   RatonReloj
-  FXMLRecibidosSRI.Show
+  FSRIDescargaXML.Show
 End Sub
 
 '''Private Sub RPeriodo_Click()

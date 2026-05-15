@@ -105,7 +105,6 @@ Begin VB.Form LRolPagos
             ImageIndex      =   17
          EndProperty
          BeginProperty Button13 {0713F354-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   ""
             Object.Tag             =   ""
             Style           =   3
             MixedState      =   -1  'True
@@ -422,31 +421,27 @@ Begin VB.Form LRolPagos
       _ExtentY        =   16140
       _Version        =   393216
       Tabs            =   6
-      Tab             =   1
       TabsPerRow      =   6
       TabHeight       =   520
       BackColor       =   -2147483637
       TabCaption(0)   =   "ROL INDIVIDUAL"
       TabPicture(0)   =   "LRolPag.frx":0017
-      Tab(0).ControlEnabled=   0   'False
+      Tab(0).ControlEnabled=   -1  'True
       Tab(0).Control(0)=   "APDFRol"
       Tab(0).Control(0).Enabled=   0   'False
       Tab(0).ControlCount=   1
       TabCaption(1)   =   "ROL DE PAGOS"
       TabPicture(1)   =   "LRolPag.frx":0033
-      Tab(1).ControlEnabled=   -1  'True
+      Tab(1).ControlEnabled=   0   'False
       Tab(1).Control(0)=   "AdoNomina"
-      Tab(1).Control(0).Enabled=   0   'False
       Tab(1).Control(1)=   "DGTotNomina"
-      Tab(1).Control(1).Enabled=   0   'False
       Tab(1).Control(2)=   "DGNomina"
-      Tab(1).Control(2).Enabled=   0   'False
       Tab(1).ControlCount=   3
       TabCaption(2)   =   "CxC/CxP Empleados"
       TabPicture(2)   =   "LRolPag.frx":004F
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "DGSubCtas"
-      Tab(2).Control(1)=   "DGNomina1"
+      Tab(2).Control(0)=   "DGNomina1"
+      Tab(2).Control(1)=   "DGSubCtas"
       Tab(2).ControlCount=   2
       TabCaption(3)   =   "OTROS INGRESOS/EGRESOS"
       TabPicture(3)   =   "LRolPag.frx":006B
@@ -456,35 +451,35 @@ Begin VB.Form LRolPagos
       TabCaption(4)   =   "CONTABILIDAD"
       TabPicture(4)   =   "LRolPag.frx":0087
       Tab(4).ControlEnabled=   0   'False
-      Tab(4).Control(0)=   "DGAsiento(0)"
-      Tab(4).Control(1)=   "Label1"
-      Tab(4).Control(2)=   "Label19"
+      Tab(4).Control(0)=   "LblConcepto(0)"
+      Tab(4).Control(1)=   "LabelDiferencia"
+      Tab(4).Control(2)=   "LabelHaber"
       Tab(4).Control(3)=   "LabelDebe"
-      Tab(4).Control(4)=   "LabelHaber"
-      Tab(4).Control(5)=   "LabelDiferencia"
-      Tab(4).Control(6)=   "LblConcepto(0)"
+      Tab(4).Control(4)=   "Label19"
+      Tab(4).Control(5)=   "Label1"
+      Tab(4).Control(6)=   "DGAsiento(0)"
       Tab(4).ControlCount=   7
       TabCaption(5)   =   "PROVISIONES"
       TabPicture(5)   =   "LRolPag.frx":00A3
       Tab(5).ControlEnabled=   0   'False
-      Tab(5).Control(0)=   "DGAsiento(2)"
-      Tab(5).Control(1)=   "DGAsiento(1)"
-      Tab(5).Control(2)=   "LblConcepto(2)"
-      Tab(5).Control(3)=   "LblConcepto(1)"
+      Tab(5).Control(0)=   "LblConcepto(1)"
+      Tab(5).Control(1)=   "LblConcepto(2)"
+      Tab(5).Control(2)=   "DGAsiento(1)"
+      Tab(5).Control(3)=   "DGAsiento(2)"
       Tab(5).ControlCount=   4
       Begin AcroPDFLibCtl.AcroPDF APDFRol 
-         Height          =   3690
-         Left            =   -74895
-         TabIndex        =   24
+         Height          =   4635
+         Left            =   105
+         TabIndex        =   36
          Top             =   420
-         Width           =   7680
+         Width           =   6840
          _cx             =   5080
          _cy             =   5080
       End
       Begin MSDataGridLib.DataGrid DGNomina 
          Bindings        =   "LRolPag.frx":00BF
          Height          =   3900
-         Left            =   105
+         Left            =   -74895
          TabIndex        =   20
          ToolTipText     =   $"LRolPag.frx":00D7
          Top             =   420
@@ -551,7 +546,7 @@ Begin VB.Form LRolPagos
       Begin MSDataGridLib.DataGrid DGTotNomina 
          Bindings        =   "LRolPag.frx":0172
          Height          =   1065
-         Left            =   105
+         Left            =   -74895
          TabIndex        =   22
          ToolTipText     =   "<Ctrl + F9>: Comisiones y el I.E.S.S."
          Top             =   4410
@@ -617,7 +612,7 @@ Begin VB.Form LRolPagos
       End
       Begin MSAdodcLib.Adodc AdoNomina 
          Height          =   330
-         Left            =   105
+         Left            =   -74895
          Top             =   5460
          Width           =   10305
          _ExtentX        =   18177
@@ -801,7 +796,7 @@ Begin VB.Form LRolPagos
          Height          =   2850
          Index           =   2
          Left            =   -74895
-         TabIndex        =   25
+         TabIndex        =   24
          Top             =   3885
          Width           =   10305
          _ExtentX        =   18177
@@ -867,7 +862,7 @@ Begin VB.Form LRolPagos
          Height          =   1905
          Index           =   1
          Left            =   -74895
-         TabIndex        =   26
+         TabIndex        =   25
          Top             =   735
          Width           =   10305
          _ExtentX        =   18177
@@ -933,7 +928,7 @@ Begin VB.Form LRolPagos
          Height          =   4635
          Index           =   0
          Left            =   -74895
-         TabIndex        =   29
+         TabIndex        =   28
          Top             =   735
          Width           =   10305
          _ExtentX        =   18177
@@ -998,7 +993,7 @@ Begin VB.Form LRolPagos
          Bindings        =   "LRolPag.frx":020E
          Height          =   3900
          Left            =   -74895
-         TabIndex        =   36
+         TabIndex        =   35
          Top             =   420
          Width           =   10305
          _ExtentX        =   18177
@@ -1074,7 +1069,7 @@ Begin VB.Form LRolPagos
          EndProperty
          Height          =   330
          Left            =   -74895
-         TabIndex        =   35
+         TabIndex        =   34
          Top             =   5565
          Width           =   1170
       End
@@ -1092,7 +1087,7 @@ Begin VB.Form LRolPagos
          EndProperty
          Height          =   330
          Left            =   -71955
-         TabIndex        =   34
+         TabIndex        =   33
          Top             =   5565
          Width           =   1065
       End
@@ -1113,7 +1108,7 @@ Begin VB.Form LRolPagos
          ForeColor       =   &H000000FF&
          Height          =   330
          Left            =   -70905
-         TabIndex        =   33
+         TabIndex        =   32
          Top             =   5565
          Width           =   1800
       End
@@ -1133,7 +1128,7 @@ Begin VB.Form LRolPagos
          ForeColor       =   &H000000FF&
          Height          =   330
          Left            =   -69120
-         TabIndex        =   32
+         TabIndex        =   31
          Top             =   5565
          Width           =   1800
       End
@@ -1154,7 +1149,7 @@ Begin VB.Form LRolPagos
          ForeColor       =   &H000000FF&
          Height          =   330
          Left            =   -73740
-         TabIndex        =   31
+         TabIndex        =   30
          Top             =   5565
          Width           =   1695
       End
@@ -1174,7 +1169,7 @@ Begin VB.Form LRolPagos
          Height          =   330
          Index           =   0
          Left            =   -74895
-         TabIndex        =   30
+         TabIndex        =   29
          Top             =   420
          Width           =   10305
       End
@@ -1194,7 +1189,7 @@ Begin VB.Form LRolPagos
          Height          =   330
          Index           =   2
          Left            =   -74895
-         TabIndex        =   28
+         TabIndex        =   27
          Top             =   3570
          Width           =   10305
       End
@@ -1214,7 +1209,7 @@ Begin VB.Form LRolPagos
          Height          =   330
          Index           =   1
          Left            =   -74895
-         TabIndex        =   27
+         TabIndex        =   26
          Top             =   420
          Width           =   10305
       End
@@ -2507,7 +2502,8 @@ Dim NombFilehtml As String
           'WebBPDF.navigate RutaDocumentoPDF
           'Generar_Rol_html CodigoRol, NombFilehtml
           'MsgBox "...." & vbCrLf & NombFilePict
-          APDFRol.Object.src = RutaSysBases & "\TEMP\" & NombFilePict & ".pdf"
+          
+          APDFRol.Object.src = RutaDocumentoPDF 'RutaSysBases & "\TEMP\" & NombFilePict & ".pdf"
           'WebBPDF.navigate RutaSysBases & "\TEMP\" & NombFilehtml
           'Presentar_PDF RPPDF, RutaDocumentoPDF, 125
        End If

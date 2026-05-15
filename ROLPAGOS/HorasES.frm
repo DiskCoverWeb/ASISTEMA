@@ -864,6 +864,43 @@ Begin VB.Form HorasEntSal
       EndProperty
       _Version        =   393216
    End
+   Begin VB.Label Label11 
+      BackColor       =   &H00FFFFFF&
+      BorderStyle     =   1  'Fixed Single
+      Caption         =   "00/00/0000"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   10290
+      TabIndex        =   39
+      Top             =   1155
+      Width           =   1275
+   End
+   Begin VB.Label Label10 
+      BorderStyle     =   1  'Fixed Single
+      Caption         =   " Fecha Ing."
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   10290
+      TabIndex        =   38
+      Top             =   840
+      Width           =   1275
+   End
    Begin VB.Label Label7 
       BorderStyle     =   1  'Fixed Single
       Caption         =   " ORDEN"
@@ -1052,7 +1089,7 @@ Dim Fecha_IESS As String
     
     If OpcSemana.value Then sSQL = sSQL & "SELECT Periodo, Item, T, 30, Codigo, #" & FechaFin & "#, Horas_Sem, 0 ,0, Valor_Hora, ROUND(Salario/4,2,0), 0, '" & TxtOrden.Text & "' ,'.' "
     If OpcQuincena.value Then sSQL = sSQL & "SELECT Periodo, Item, T, 30, Codigo, #" & FechaFin & "#, Horas_Sem*2, 0 ,0, Valor_Hora, ROUND(Salario/2,2,0), 0, '" & TxtOrden.Text & "' ,'.' "
-    If OpcMensual.value Then sSQL = sSQL & "SELECT Periodo, Item, T, 30, Codigo, #" & FechaFin & "#, Horas_Sem*4, 0 ,0, Valor_Hora, Salario, 0, '" & TxtOrden.Text & "' ,'.' "
+    If OpcMensual.value Then sSQL = sSQL & "SELECT Periodo, Item, T, DATEDIFF(DAY,Fecha,#" & FechaFin & "#)+1, Codigo, #" & FechaFin & "#, Horas_Sem*4, 0 ,0, Valor_Hora, Salario, 0, '" & TxtOrden.Text & "' ,'.' "
        
     sSQL = sSQL & "FROM Catalogo_Rol_Pagos " _
          & "WHERE Item = '" & NumEmpresa & "' " _
@@ -1067,7 +1104,7 @@ Dim Fecha_IESS As String
        
     If OpcSemana.value Then sSQL = sSQL & "SELECT Periodo, Item, T, 30, 0, Codigo, #" & FechaFin & "#, Horas_Sem, 0 ,0, Valor_Hora, ROUND(Salario/4,2,0), 0, '" & TxtOrden.Text & "' ,'.' "
     If OpcQuincena.value Then sSQL = sSQL & "SELECT Periodo, Item, T, 30, 0, Codigo, #" & FechaFin & "#, Horas_Sem*2, 0 ,0, Valor_Hora, ROUND(Salario/2,2,0), 0, '" & TxtOrden.Text & "' ,'.' "
-    If OpcMensual.value Then sSQL = sSQL & "SELECT Periodo, Item, T, 30, 0, Codigo, #" & FechaFin & "#, Horas_Sem*4, 0 ,0, Valor_Hora, Salario, 0, '" & TxtOrden.Text & "' ,'.' "
+    If OpcMensual.value Then sSQL = sSQL & "SELECT Periodo, Item, T, DATEDIFF(DAY,#" & FechaIni & "#,FechaC)+1, 0, Codigo, #" & FechaFin & "#, Horas_Sem*4, 0 ,0, Valor_Hora, Salario, 0, '" & TxtOrden.Text & "' ,'.' "
        
     sSQL = sSQL & "FROM Catalogo_Rol_Pagos " _
          & "WHERE Item = '" & NumEmpresa & "' " _
@@ -1075,55 +1112,70 @@ Dim Fecha_IESS As String
          & "AND FechaC BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
          & "AND Salario > 0 " _
          & "AND T = 'R' " _
+         & "AND Fecha <= #" & FechaIni & "# " _
          & "ORDER BY Ejecutivo "
     Ejecutar_SQL_SP sSQL
+      
+    sSQL = "INSERT INTO Trans_Rol_Horas (Periodo, Item, T, Dias, Dias_Enfermedad, Codigo, Fecha, Horas, Horas_Exts, Porc_Hr_Ext, Valor_Hora, Ing_Liquido, Ing_Horas_Ext, Orden, X) "
+       
+    If OpcSemana.value Then sSQL = sSQL & "SELECT Periodo, Item, T, 30, 0, Codigo, #" & FechaFin & "#, Horas_Sem, 0 ,0, Valor_Hora, ROUND(Salario/4,2,0), 0, '" & TxtOrden.Text & "' ,'.' "
+    If OpcQuincena.value Then sSQL = sSQL & "SELECT Periodo, Item, T, 30, 0, Codigo, #" & FechaFin & "#, Horas_Sem*2, 0 ,0, Valor_Hora, ROUND(Salario/2,2,0), 0, '" & TxtOrden.Text & "' ,'.' "
+    If OpcMensual.value Then sSQL = sSQL & "SELECT Periodo, Item, T, DATEDIFF(DAY,Fecha,FechaC)+1, 0, Codigo, #" & FechaFin & "#, Horas_Sem*4, 0 ,0, Valor_Hora, Salario, 0, '" & TxtOrden.Text & "' ,'.' "
+       
+    sSQL = sSQL & "FROM Catalogo_Rol_Pagos " _
+         & "WHERE Item = '" & NumEmpresa & "' " _
+         & "AND Periodo = '" & Periodo_Contable & "' " _
+         & "AND FechaC BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
+         & "AND Salario > 0 " _
+         & "AND T = 'R' " _
+         & "AND Fecha > #" & FechaIni & "# " _
+         & "ORDER BY Ejecutivo "
+    Ejecutar_SQL_SP sSQL
+      
+    If Month(MBFechaI) = 2 Then
+       If Day(MBFechaI) = 28 Then
+          sSQL = "UPDATE Trans_Rol_Horas " _
+               & "SET Dias=Dias+2 " _
+               & "WHERE Item = '" & NumEmpresa & "' " _
+               & "AND Periodo = '" & Periodo_Contable & "' " _
+               & "AND T = 'N' " _
+               & "AND Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# "
+          Ejecutar_SQL_SP sSQL
+       ElseIf Day(MBFechaI) = 29 Then
+          sSQL = "UPDATE Trans_Rol_Horas " _
+               & "SET Dias=Dias+1 " _
+               & "WHERE Item = '" & NumEmpresa & "' " _
+               & "AND Periodo = '" & Periodo_Contable & "' " _
+               & "AND T = 'N' " _
+               & "AND Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# "
+          Ejecutar_SQL_SP sSQL
+       End If
+    Else
+       If Day(MBFechaI) = 31 Then
+          sSQL = "UPDATE Trans_Rol_Horas " _
+               & "SET Dias=Dias-1 " _
+               & "WHERE Item = '" & NumEmpresa & "' " _
+               & "AND Periodo = '" & Periodo_Contable & "' " _
+               & "AND T = 'N' " _
+               & "AND Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# "
+          Ejecutar_SQL_SP sSQL
+       End If
+    End If
     
     sSQL = "UPDATE Trans_Rol_Horas " _
-         & "SET Dias = DATEDIFF(DAY,CRP.Fecha,TRH.Fecha)+1 " _
-         & "FROM Trans_Rol_Horas As TRH, Catalogo_Rol_Pagos As CRP " _
-         & "WHERE TRH.Item = '" & NumEmpresa & "' " _
-         & "AND TRH.Periodo = '" & Periodo_Contable & "' " _
-         & "AND TRH.Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
-         & "AND DATEDIFF(DAY,CRP.Fecha,TRH.Fecha) < 30 " _
-         & "AND TRH.Item = CRP.Item " _
-         & "AND TRH.Periodo = CRP.Periodo " _
-         & "AND TRH.Codigo = CRP.Codigo "
+         & "SET Dias = 30 " _
+         & "WHERE Item = '" & NumEmpresa & "' " _
+         & "AND Periodo = '" & Periodo_Contable & "' " _
+         & "AND Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
+         & "AND Dias > 30 "
     Ejecutar_SQL_SP sSQL
-    
-    sSQL = "UPDATE Trans_Rol_Horas " _
-         & "SET Dias = DATEDIFF(DAY,'" & FechaIni & "',CRP.FechaC) + 1 " _
-         & "FROM Trans_Rol_Horas As TRH, Catalogo_Rol_Pagos As CRP " _
-         & "WHERE TRH.Item = '" & NumEmpresa & "' " _
-         & "AND TRH.Periodo = '" & Periodo_Contable & "' " _
-         & "AND TRH.Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
-         & "AND CRP.T = 'R' " _
-         & "AND DATEDIFF(DAY,'" & FechaIni & "',CRP.FechaC) < 30 " _
-         & "AND TRH.Item = CRP.Item " _
-         & "AND TRH.Periodo = CRP.Periodo " _
-         & "AND TRH.Codigo = CRP.Codigo "
-    Ejecutar_SQL_SP sSQL
-    
-    sSQL = "UPDATE Trans_Rol_Horas " _
-         & "SET Dias = Dias - 1 " _
-         & "FROM Trans_Rol_Horas As TRH, Catalogo_Rol_Pagos As CRP " _
-         & "WHERE TRH.Item = '" & NumEmpresa & "' " _
-         & "AND TRH.Periodo = '" & Periodo_Contable & "' " _
-         & "AND TRH.Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
-         & "AND DAY(CRP.Fecha) > 1 " _
-         & "AND CRP.Fecha >= #" & FechaIni & "# " _
-         & "AND " & UltimodDiaMes & " > 30 " _
-         & "AND TRH.Item = CRP.Item " _
-         & "AND TRH.Periodo = CRP.Periodo " _
-         & "AND TRH.Codigo = CRP.Codigo "
-    Ejecutar_SQL_SP sSQL
-    
+
     sSQL = "UPDATE Trans_Rol_Horas " _
          & "SET Ing_Liquido = ROUND((Ing_Liquido/30)*Dias,2,0), Horas = ROUND((Horas_Sem*4/30)*Dias,0,0) " _
          & "FROM Trans_Rol_Horas As TRH, Catalogo_Rol_Pagos As CRP " _
          & "WHERE TRH.Item = '" & NumEmpresa & "' " _
          & "AND TRH.Periodo = '" & Periodo_Contable & "' " _
          & "AND TRH.Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
-         & "AND Dias < 30 " _
          & "AND TRH.Item = CRP.Item " _
          & "AND TRH.Periodo = CRP.Periodo " _
          & "AND TRH.Codigo = CRP.Codigo "
@@ -1245,6 +1297,7 @@ Private Sub DCEmpleado_LostFocus()
           TxtValorHora.Text = .fields("Valor_Hora")
           MiTiempo1 = .fields("Horas_Sem") * 4
           TotalIngreso = .fields("Salario")
+          Label11.Caption = .fields("Fecha")
        Else
           .MoveFirst
           .Find ("Grupo = '" & Grupo_No & "' ")
@@ -1257,6 +1310,7 @@ Private Sub DCEmpleado_LostFocus()
               TxtValorHora.Text = .fields("Valor_Hora")
               MiTiempo1 = .fields("Horas_Sem") * 4
               TotalIngreso = .fields("Salario")
+              Label11.Caption = .fields("Fecha")
            Else
               MsgBox "Codigo No asignado"
               MBFechaI.SetFocus
@@ -1457,6 +1511,10 @@ End Sub
 
 Private Sub Opc90_Click()
   ListarHorasTrabajadas CodigoCliente
+End Sub
+
+Private Sub OpcMensual_LostFocus()
+    MBFechaI = UltimoDiaMes(MBFechaI)
 End Sub
 
 Private Sub OpcTodos_Click()

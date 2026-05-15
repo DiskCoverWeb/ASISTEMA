@@ -1815,7 +1815,7 @@ Dim DomDoc As MSXML2.xmlhttp
    'La respuesta, en caso de existir, está en responseBody.
    'También puedes especificar responseXml si tu aplicación devolviese XML
    'PostUrlSource = StrConv(DomDoc.responseBody, vbUnicode)
-   'MsgBox Val(DomDoc.responseBody) & vbCrLf & vURLParams
+   'MsgBox Val(DomDoc.responseBody) & vbCrLf & String(40, "=") & vbCrLf & vURLParams
     PostUrlSource = Val(DomDoc.responseBody)
 End Function
 

@@ -2291,7 +2291,7 @@ Private Sub Form_Activate()
        & "WHERE Item = '" & NumEmpresa & "' " _
        & "AND Periodo = '" & Periodo_Contable & "' " _
        & "AND T = '" & Pendiente & "' " _
-       & "AND NOT TC IN ('OP','C','P') " _
+       & "AND NOT TC IN ('NDU','NDO','NPA','DES','OP','C','P') " _
        & "GROUP BY TC " _
        & "ORDER BY TC "
   SelectDB_Combo DCTipo, AdoDetAcomp, sSQL, "TC"

@@ -449,11 +449,12 @@ Dim RutaGeneraFile As String
                Else
                'Subiendo documento firmado para su autorizacion
                   ContFile = UBound(DirFilesFTP)
+                  
                   For I = 0 To ContFile
                       Cursor_Img
                       sOrigen = DirFiles(I)
                       sDestino = "/files/AddAttachment/" & DirFilesFTP(I)
-                     'MsgBox "Origen: |" & sOrigen & "|" & vbCrLf & "Destino: |" & sDestino & "|"
+                     'MsgBox "Desktop Test Origen: |" & sOrigen & "|" & vbCrLf & "Destino: |" & sDestino & "|"
                      .SubirArchivo DirFiles(I), "/files/AddAttachment/" & DirFilesFTP(I), True
                   Next I
                End If
@@ -486,23 +487,14 @@ Dim RutaGeneraFile As String
                  & "&Tarea=" & TrimStrg(MidStrg("Asunto: " & TMail.Asunto, 1, 120)) _
                  & "&Credito_No=" _
                  & "&body=" & Sin_Signos_XML(TMail.MensajeHTML)
-'       MsgBox "Desktop Test: Enviando: " & TMail.Asunto & "..."
        Si_No = PostUrlSource(URLHTTP, URLParams)
        Cursor_Img
-     'MsgBox Si_No
- '     Clipboard.Clear
- '     Clipboard.SetText Si_No & vbCrLf & URLParams ' & vbCrLf & TMail.MensajeHTML
-      'MsgBox Si_No & vbCrLf & URLParams '& vbCrLf & TMail.MensajeHTML
+'''      MsgBox "(" & Si_No & ") Desktop Test: De: " & TMail.de & vbCrLf & "Para: " & TMail.para & vbCrLf & "Asunto: " & TMail.Asunto & vbCrLf & "Adjunto: " & TMail.Adjunto & "..."
+'''      Clipboard.Clear
+'''      Clipboard.SetText URLParams ' & vbCrLf & TMail.MensajeHTML
+'''      MsgBox Si_No & vbCrLf & URLParams '& vbCrLf & TMail.MensajeHTML
 '      MsgBox "Desktop Test: " & Si_No & vbCrLf & TMail.Adjunto
       '----------------------------------------------------------------------------------------------
-'''       If Si_No Then
-'''          Cursor_Img
-'''          Control_Procesos "EM", "Email de: " & TMail.de & " => " & TMail.para, "Asunto: " & TMail.Asunto
-'''       Else
-'''          Cursor_Img
-'''          Control_Procesos "Err", "Email: " & TMail.de & " => " & TMail.para, "Asunto(Error): " & TMail.Asunto
-'''       End If
-'''       Cursor_Img
       'MsgBox "Desktop Test: Eliminando..."
       'Eliminando archivos que se fueron con los correos
        If ContFile >= 0 Then
@@ -592,13 +584,13 @@ Dim IdImg As Integer
     Contactos = ""
    'Contamos cuantos mails se han enviado por medio de MySQL
     ContMails = 0
-    sSQL = "SELECT Fecha_Hora, COUNT(Fecha_Hora) As ContMails " _
+    sSQL = "SELECT Fecha, COUNT(Fecha) As ContMails " _
          & "FROM acceso_pcs " _
-         & "WHERE Fecha_Hora = '" & BuscarFecha(FechaSistema) & "' " _
+         & "WHERE Fecha = '" & BuscarFecha(FechaSistema) & "' " _
          & "AND ES IN ('EM') "
     Select_AdoDB_MySQL AdoSMTP, sSQL
     If AdoSMTP.RecordCount > 0 Then
-       ContMails = AdoSMTP.Fields("ContMails")
+       ContMails = AdoSMTP.fields("ContMails")
     End If
     AdoSMTP.Close
     Cursor_Img
@@ -622,21 +614,21 @@ Dim IdImg As Integer
     Cursor_Img
     With AdoSMTP
      If .RecordCount > 0 Then
-         EmailProcesos = .Fields("Email_Procesos")
-         TMail.useAuntentificacion = CBool(.Fields("smtp_UseAuntentificacion"))
-         TMail.ssl = CBool(.Fields("smtp_SSL"))
-         TMail.tls = CBool(.Fields("smtp_Secure"))
-         TMail.Puerto = .Fields("smtp_Puerto")
-         Email_CE_Copia = CBool(.Fields("Email_CE_Copia"))
-         TMail.servidor = .Fields("smtp_Servidor")
+         EmailProcesos = .fields("Email_Procesos")
+         TMail.useAuntentificacion = CBool(.fields("smtp_UseAuntentificacion"))
+         TMail.ssl = CBool(.fields("smtp_SSL"))
+         TMail.tls = CBool(.fields("smtp_Secure"))
+         TMail.Puerto = .fields("smtp_Puerto")
+         Email_CE_Copia = CBool(.fields("Email_CE_Copia"))
+         TMail.servidor = .fields("smtp_Servidor")
          If TMail.TipoDeEnvio = "CE" Then
-            TMail.Usuario = .Fields("Email_Conexion_CE")
-            TMail.Password = .Fields("Email_Clave_CE")
-            TMail.de = .Fields("Email_Conexion_CE")
+            TMail.Usuario = .fields("Email_Conexion_CE")
+            TMail.Password = .fields("Email_Clave_CE")
+            TMail.de = .fields("Email_Conexion_CE")
          Else
-            TMail.Usuario = .Fields("Email_Conexion")
-            TMail.Password = .Fields("Email_Clave")
-            If TMail.TipoDeEnvio <> "NN" Then TMail.de = .Fields("Email_Conexion")
+            TMail.Usuario = .fields("Email_Conexion")
+            TMail.Password = .fields("Email_Clave")
+            If TMail.TipoDeEnvio <> "NN" Then TMail.de = .fields("Email_Conexion")
          End If
          
          If Email_CE_Copia Then Insertar_Mail TMail.para, EmailProcesos

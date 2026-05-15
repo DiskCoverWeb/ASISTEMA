@@ -12,8 +12,8 @@ Begin VB.Form CierreEjercicio
    ClientWidth     =   11280
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   8505
-   ScaleWidth      =   11280
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    WindowState     =   2  'Maximized
    Begin VB.CheckBox CheqRenumerar 
       Caption         =   "Renumerar Comprobantes"
@@ -1103,8 +1103,8 @@ Begin VB.Form CierreEjercicio
       Left            =   0
       TabIndex        =   0
       Top             =   0
-      Width           =   11280
-      _ExtentX        =   19897
+      Width           =   28560
+      _ExtentX        =   50377
       _ExtentY        =   1588
       ButtonWidth     =   2540
       ButtonHeight    =   1429

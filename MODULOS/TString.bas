@@ -5,6 +5,8 @@ Global DescripcionDelServidor As String
 Global Nombre_FN_SP As String
 Global URLToken As String
 Global Token As String
+Global Archivo_Incluido As String
+Global Link_Canal As String
 Global MicroEmpresa As String
 Global AgenteRetencion As String
 Global MascaraCtas As String
@@ -33,6 +35,7 @@ Global RutaEmpresa As String
 Global RutaOrigen As String
 Global RutaDestino As String
 Global RutaSysBases As String
+Global RutaSysTemp As String
 Global RutaDocumentos As String
 Global RutaDocumentoPDF As String
 Global RutaEmpresaOld As String

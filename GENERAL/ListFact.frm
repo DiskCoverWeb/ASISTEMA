@@ -1041,11 +1041,12 @@ Begin VB.Form ListFact
       _ExtentY        =   688
       _Version        =   393216
       Tabs            =   4
+      Tab             =   3
       TabsPerRow      =   4
       TabHeight       =   520
       TabCaption(0)   =   "DETALLE DE FACTURA"
       TabPicture(0)   =   "ListFact.frx":17F3
-      Tab(0).ControlEnabled=   -1  'True
+      Tab(0).ControlEnabled=   0   'False
       Tab(0).ControlCount=   0
       TabCaption(1)   =   "ABONOS DE LA FACTURA"
       TabPicture(1)   =   "ListFact.frx":180F
@@ -1057,7 +1058,7 @@ Begin VB.Form ListFact
       Tab(2).ControlCount=   0
       TabCaption(3)   =   "CONTABILIZACION"
       TabPicture(3)   =   "ListFact.frx":1847
-      Tab(3).ControlEnabled=   0   'False
+      Tab(3).ControlEnabled=   -1  'True
       Tab(3).ControlCount=   0
    End
    Begin VB.CommandButton CommandButton2 
@@ -1490,13 +1491,13 @@ Begin VB.Form ListFact
    End
    Begin MSComctlLib.Toolbar TBarFactura 
       Align           =   1  'Align Top
-      Height          =   660
+      Height          =   1800
       Left            =   0
       TabIndex        =   68
       Top             =   0
       Width           =   11280
       _ExtentX        =   19897
-      _ExtentY        =   1164
+      _ExtentY        =   3175
       ButtonWidth     =   1032
       ButtonHeight    =   1005
       Appearance      =   1
@@ -3370,7 +3371,7 @@ Public Sub BuscarFactura()
      LabelCliente.Caption = FA.Cliente
      Label8.Caption = "Razon Social: " & FA.Razon_Social & ", CI/RUC: " & FA.CI_RUC & vbCrLf _
                     & "Dirección: " & FA.DireccionC & ", Teléfono: " & FA.TelefonoC & vbCrLf _
-                    & "Emails: " & FA.EmailC & "; " & FA.EmailR & vbCrLf _
+                    & "Emails: " & FA.EmailC & "; " & FA.EmailC2 & "; " & FA.EmailR & vbCrLf _
                     & "Forma de pago: " & FA.Forma_Pago & vbCrLf _
                     & "Elaborado por: " & FA.Digitador & " (" & FA.Hora & ")"
      LabelVendedor.Caption = " Ejecutivo: " & FA.Ejecutivo_Venta
@@ -3549,6 +3550,7 @@ Dim AdoAuxDB As ADODB.Recordset
                    Insertar_Ctas_Cierre_SP Cta_Desc, .fields("TTotal_Desc")
                    Insertar_Ctas_Cierre_SP Cta_Desc2, .fields("TTotal_Desc2")
                    Insertar_Ctas_Cierre_SP Cta_IVA, -.fields("TTotal_IVA")
+                   'MsgBox "Desktop Test"
                   .MoveNext
                 Loop
             End If

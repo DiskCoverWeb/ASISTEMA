@@ -2501,59 +2501,59 @@ Public Sub Grabar_FA_Pensiones()
        Cta = SinEspaciosIzq(DCBanco)
 '       Cta1 = SinEspaciosIzq(DCNC)
       'MsgBox Total_Abonos
-      .MoveFirst
-       Do While Not .EOF
-          Valor = .fields("TOTAL")
-          Total_Desc = .fields("Total_Desc") + .fields("Total_Desc2")
-          ValorDH = Valor - Total_Desc
-          Codigo = .fields("Codigo_Cliente")
-          Codigo1 = .fields("CODIGO")
-          Codigo2 = .fields("Mes")
-          Codigo3 = .fields("HABIT")
-          Anio1 = .fields("TICKET")
-          ID_Reg = .fields("A_No")
-          Total_Abonos = Total_Abonos - ValorDH
-          If Total_Abonos >= 0 Then
-             sSQL = "UPDATE Clientes_Facturacion " _
-                  & "SET Valor = Valor - " & Valor & " " _
-                  & "WHERE Item = '" & NumEmpresa & "' " _
-                  & "AND Periodo = '" & Anio1 & "' " _
-                  & "AND Codigo_Inv = '" & Codigo1 & "' " _
-                  & "AND Codigo = '" & Codigo & "' " _
-                  & "AND Credito_No = '" & Codigo3 & "' " _
-                  & "AND Mes = '" & Codigo2 & "' "
-             Ejecutar_SQL_SP sSQL
-          Else
-            Valor = Valor + Total_Abonos
-            If Valor > 0 Then
-               sSQL = "UPDATE Clientes_Facturacion " _
-                    & "SET Valor = " & -Total_Abonos + Total_Desc & " " _
-                    & "WHERE Item = '" & NumEmpresa & "' " _
-                    & "AND Periodo = '" & Anio1 & "' " _
-                    & "AND Codigo_Inv = '" & Codigo1 & "' " _
-                    & "AND Codigo = '" & Codigo & "' " _
-                    & "AND Credito_No = '" & Codigo3 & "' " _
-                    & "AND Mes = '" & Codigo2 & "' "
-               Ejecutar_SQL_SP sSQL
-               Total_Abonos = Total_Abonos + Total_Desc
-               Valor = Valor - Total_Desc
-               sSQL = "UPDATE Asiento_F " _
-                    & "SET TOTAL = " & Valor & ", PRECIO = " & Valor & ", Total_Desc = 0, Total_Desc2 = 0 " _
-                    & "WHERE Item = '" & NumEmpresa & "' " _
-                    & "AND CodigoU = '" & CodigoUsuario & "' " _
-                    & "AND A_No = " & ID_Reg & " "
-               Ejecutar_SQL_SP sSQL
-            Else
-               sSQL = "DELETE * " _
-                    & "FROM Asiento_F " _
-                    & "WHERE Item = '" & NumEmpresa & "' " _
-                    & "AND CodigoU = '" & CodigoUsuario & "' " _
-                    & "AND A_No = " & ID_Reg & " "
-               Ejecutar_SQL_SP sSQL
-            End If
-          End If
-         .MoveNext
-       Loop
+'''      .MoveFirst
+'''       Do While Not .EOF
+'''          Valor = .fields("TOTAL")
+'''          Total_Desc = .fields("Total_Desc") + .fields("Total_Desc2")
+'''          ValorDH = Valor - Total_Desc
+'''          Codigo = .fields("Codigo_Cliente")
+'''          Codigo1 = .fields("CODIGO")
+'''          Codigo2 = .fields("Mes")
+'''          Codigo3 = .fields("HABIT")
+'''          Anio1 = .fields("TICKET")
+'''          ID_Reg = .fields("A_No")
+'''          Total_Abonos = Total_Abonos - ValorDH
+'''          If Total_Abonos >= 0 Then
+'''             sSQL = "UPDATE Clientes_Facturacion " _
+'''                  & "SET Valor = Valor - " & Valor & " " _
+'''                  & "WHERE Item = '" & NumEmpresa & "' " _
+'''                  & "AND Periodo = '" & Anio1 & "' " _
+'''                  & "AND Codigo_Inv = '" & Codigo1 & "' " _
+'''                  & "AND Codigo = '" & Codigo & "' " _
+'''                  & "AND Credito_No = '" & Codigo3 & "' " _
+'''                  & "AND Mes = '" & Codigo2 & "' "
+'''             'Ejecutar_SQL_SP sSQL
+'''          Else
+'''            Valor = Valor + Total_Abonos
+'''            If Valor > 0 Then
+'''               sSQL = "UPDATE Clientes_Facturacion " _
+'''                    & "SET Valor = " & -Total_Abonos + Total_Desc & " " _
+'''                    & "WHERE Item = '" & NumEmpresa & "' " _
+'''                    & "AND Periodo = '" & Anio1 & "' " _
+'''                    & "AND Codigo_Inv = '" & Codigo1 & "' " _
+'''                    & "AND Codigo = '" & Codigo & "' " _
+'''                    & "AND Credito_No = '" & Codigo3 & "' " _
+'''                    & "AND Mes = '" & Codigo2 & "' "
+'''               'Ejecutar_SQL_SP sSQL
+'''               Total_Abonos = Total_Abonos + Total_Desc
+'''               Valor = Valor - Total_Desc
+'''               sSQL = "UPDATE Asiento_F " _
+'''                    & "SET TOTAL = " & Valor & ", PRECIO = " & Valor & ", Total_Desc = 0, Total_Desc2 = 0 " _
+'''                    & "WHERE Item = '" & NumEmpresa & "' " _
+'''                    & "AND CodigoU = '" & CodigoUsuario & "' " _
+'''                    & "AND A_No = " & ID_Reg & " "
+'''               'Ejecutar_SQL_SP sSQL
+'''            Else
+'''               sSQL = "DELETE * " _
+'''                    & "FROM Asiento_F " _
+'''                    & "WHERE Item = '" & NumEmpresa & "' " _
+'''                    & "AND CodigoU = '" & CodigoUsuario & "' " _
+'''                    & "AND A_No = " & ID_Reg & " "
+'''               'Ejecutar_SQL_SP sSQL
+'''            End If
+'''          End If
+'''         .MoveNext
+'''       Loop
        
        If Not ComisionEjec Then CodigoVen = Ninguno
        
@@ -2692,7 +2692,7 @@ Public Sub Grabar_FA_Pensiones()
    Else
 NoGrabarFA:
        RatonNormal
-       MsgBox "No se procedio a grabar el documento " & FA.TC & " No. " & FA.Serie & "-" _
+       MsgBox "No se puede grabar el documento " & FA.TC & " No. " & FA.Serie & "-" _
             & Format(FA.Factura, "000000000") & ", revise los datos ingresados y vuelva a intentar"
    End If
   End With
@@ -3624,6 +3624,8 @@ Dim TCta_Ventas As String
    LabelTotal.Caption = Format$(FA.Total_MN, "#,##0.00")
    TextCheque = Format$(FA.Total_MN, "#,##0.00")
    TextCheqNo = CGrupo.Text
+   TextBanco.Text = ""
+   TextBanco.SetFocus
 End Sub
 
 Private Sub MBHistorico_GotFocus()

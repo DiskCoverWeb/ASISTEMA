@@ -402,16 +402,13 @@ Begin VB.MDIForm MDIFact
       Begin VB.Menu MGenerarPDF 
          Caption         =   "General PDF"
       End
-      Begin VB.Menu MWebServices 
-         Caption         =   "Web Services"
+      Begin VB.Menu Mwwwdiskcover 
+         Caption         =   "Visitanos en: www.diskcoversystem.com"
       End
       Begin VB.Menu EnvioEmail 
          Caption         =   "Prueba de Envio Correo Electronico"
          Shortcut        =   ^W
       End
-   End
-   Begin VB.Menu Mwwwdiskcover 
-      Caption         =   "Visitanos en: www.diskcoversystem.com"
    End
    Begin VB.Menu MAmbiente 
       Caption         =   "Ambiente"
@@ -505,7 +502,7 @@ Private Sub EnvioEmail_Click()
                            & "</tr>"
     FA.Fecha = FechaSistema
     FA.Recibo_No = Format(FA.Fecha, "yyyymmdd") & Format(FA.Factura, "000000000")
-    TMail.Adjunto = "C:\SYSBASES\TEMP\archivo.xml"
+    TMail.Adjunto = RutaSistema & "\LOGOS\diskcover_icono.jpg"
     TMail.para = ""
     Insertar_Mail TMail.para, "actualizar@diskcoversystem.com"
     Insertar_Mail TMail.para, "diskcoversystem@msn.com"
@@ -987,16 +984,11 @@ Private Sub MTraslVentAnt_Click()
   AsientoAuto.Show
 End Sub
 
-Private Sub MWebServices_Click()
-   Form_WS.Show
-End Sub
-
 Private Sub Mwwwdiskcover_Click()
 Dim iRet As Long
   Control_Procesos "Q", "Salir por ingresar a la Pagina WEB"
   MsgBox "Estas a punto de ingresar al Centro de descargas del sistema"
   iRet = Shell("rundll32.exe url.dll,FileProtocolHandler " & "https://www.diskcoversystem.com", vbMaximizedFocus)
-  End
 End Sub
 
 Private Sub PorAnticiposCxC_Click()

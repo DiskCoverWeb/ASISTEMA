@@ -1756,12 +1756,8 @@ Public Sub ProcGrabar()
      FA.DireccionC = TBeneficiario.Direccion_Rep
      FA.EmailR = TBeneficiario.EmailR
      
-    'Grabamos el numero de factura
-     FA.Nuevo_Doc = True
-     FA.Tipo_PRN = "FM"
-     Grabar_Factura FA, TA, True
-     
     'Abono de Factura
+     JSONInPutAbonos = ""
      TA.T = Normal
      TA.TP = FA.TC
      TA.Serie = FA.Serie
@@ -1775,7 +1771,11 @@ Public Sub ProcGrabar()
      TA.Cheque = UCase$(Grupo_No)
      TA.Abono = FA.Total_MN
      Grabar_Abonos TA
-    
+     
+    'Grabamos el numero de factura
+     FA.Nuevo_Doc = True
+     FA.Tipo_PRN = "FM"
+     Grabar_Factura FA, TA, True
     'Autorizamos la factura i/o Guia de Remision
      If Len(FA.Autorizacion) = 13 Then SRI_Crear_Clave_Acceso_Facturas FA, True, , True
      RatonNormal

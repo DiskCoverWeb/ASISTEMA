@@ -1344,12 +1344,14 @@ Private Sub Form_Activate()
   FechaTexto = FechaSistema
   CBienes.Clear
   CBienes.AddItem "0"
+  CBienes.AddItem "10"
   CBienes.AddItem "30"
   CBienes.AddItem "100"
   CBienes.Text = "0"
   
   CServicio.Clear
   CServicio.AddItem "0"
+  CServicio.AddItem "20"
   CServicio.AddItem "70"
   CServicio.AddItem "100"
   CServicio.Text = "0"
@@ -1358,7 +1360,7 @@ Private Sub Form_Activate()
        & "FROM Facturas " _
        & "WHERE Item = '" & NumEmpresa & "' " _
        & "AND Periodo = '" & Periodo_Contable & "' " _
-       & "AND TC <> 'OP' " _
+       & "AND NOT TC IN ('NDU','NDO','NPA','DES','OP','C','P') " _
        & "AND T = 'P' " _
        & "GROUP BY TC " _
        & "ORDER BY TC "

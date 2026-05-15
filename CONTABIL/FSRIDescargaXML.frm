@@ -10,20 +10,20 @@ Begin VB.Form FSRIDescargaXML
    ClientHeight    =   9450
    ClientLeft      =   60
    ClientTop       =   345
-   ClientWidth     =   15960
+   ClientWidth     =   17760
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
    ScaleHeight     =   9450
-   ScaleWidth      =   15960
+   ScaleWidth      =   17760
    WindowState     =   2  'Maximized
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
       Height          =   795
       Left            =   0
-      TabIndex        =   16
+      TabIndex        =   15
       Top             =   0
-      Width           =   15960
-      _ExtentX        =   28152
+      Width           =   17760
+      _ExtentX        =   31327
       _ExtentY        =   1402
       ButtonWidth     =   1455
       ButtonHeight    =   1244
@@ -58,24 +58,61 @@ Begin VB.Form FSRIDescargaXML
          EndProperty
       EndProperty
       BorderStyle     =   1
+      Begin VB.Frame Frame1 
+         Caption         =   "Cuenta de Gastos Personales por default"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   750
+         Left            =   3360
+         TabIndex        =   17
+         Top             =   0
+         Width           =   3795
+         Begin VB.Label Label7 
+            BackColor       =   &H00FF0000&
+            BorderStyle     =   1  'Fixed Single
+            Caption         =   " Serie de Rencion "
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   12
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H00C0FFFF&
+            Height          =   435
+            Left            =   105
+            TabIndex        =   18
+            Top             =   210
+            Width           =   3585
+         End
+      End
       Begin VB.PictureBox PctSRI 
          BorderStyle     =   0  'None
          Height          =   540
-         Left            =   3360
+         Left            =   7245
          ScaleHeight     =   540
-         ScaleWidth      =   10725
-         TabIndex        =   17
+         ScaleWidth      =   7890
+         TabIndex        =   16
          Top             =   105
-         Width           =   10725
+         Width           =   7890
       End
    End
    Begin MSDataListLib.DataCombo DCSerieRetencion 
       Bindings        =   "FSRIDescargaXML.frx":0000
       DataSource      =   "AdoSerieRetencion"
       Height          =   315
-      Left            =   2100
+      Left            =   10815
       TabIndex        =   9
-      Top             =   1680
+      Top             =   1260
       Width           =   1905
       _ExtentX        =   3360
       _ExtentY        =   556
@@ -97,7 +134,7 @@ Begin VB.Form FSRIDescargaXML
       ForeColor       =   &H00FFFFFF&
       Height          =   570
       Left            =   6300
-      TabIndex        =   14
+      TabIndex        =   13
       Top             =   5145
       Visible         =   0   'False
       Width           =   5685
@@ -106,10 +143,10 @@ Begin VB.Form FSRIDescargaXML
       Bindings        =   "FSRIDescargaXML.frx":0020
       Height          =   2325
       Left            =   105
-      TabIndex        =   12
-      Top             =   2100
-      Width           =   12090
-      _ExtentX        =   21325
+      TabIndex        =   11
+      Top             =   1680
+      Width           =   21330
+      _ExtentX        =   37624
       _ExtentY        =   4101
       _Version        =   393216
       AllowUpdate     =   0   'False
@@ -615,7 +652,7 @@ Begin VB.Form FSRIDescargaXML
       Height          =   330
       Left            =   630
       Style           =   1  'Graphical
-      TabIndex        =   13
+      TabIndex        =   12
       Top             =   2730
       Width           =   435
    End
@@ -645,7 +682,7 @@ Begin VB.Form FSRIDescargaXML
       Bindings        =   "FSRIDescargaXML.frx":0081
       DataSource      =   "AdoTipoPago"
       Height          =   360
-      Left            =   10815
+      Left            =   15330
       TabIndex        =   7
       ToolTipText     =   "En este campo de selección se despliega un lista de tipos de sustentos tributarios correspondientes a la transacción escogida"
       Top             =   1260
@@ -667,7 +704,7 @@ Begin VB.Form FSRIDescargaXML
    Begin ComctlLib.ListView LstVwFTP 
       Height          =   855
       Left            =   12390
-      TabIndex        =   15
+      TabIndex        =   14
       Top             =   4515
       Visible         =   0   'False
       Width           =   1695
@@ -855,26 +892,6 @@ Begin VB.Form FSRIDescargaXML
       EndProperty
       _Version        =   393216
    End
-   Begin VB.Label Label7 
-      BackColor       =   &H00FF0000&
-      BorderStyle     =   1  'Fixed Single
-      Caption         =   " Serie de Rencion "
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H00C0FFFF&
-      Height          =   330
-      Left            =   5250
-      TabIndex        =   11
-      Top             =   1680
-      Width           =   7785
-   End
    Begin VB.Label Label3 
       Alignment       =   1  'Right Justify
       BackColor       =   &H00FFFFFF&
@@ -890,9 +907,9 @@ Begin VB.Form FSRIDescargaXML
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   3990
+      Left            =   12705
       TabIndex        =   10
-      Top             =   1680
+      Top             =   1260
       Width           =   1170
    End
    Begin VB.Label Label2 
@@ -908,10 +925,10 @@ Begin VB.Form FSRIDescargaXML
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   105
+      Left            =   9135
       TabIndex        =   8
-      Top             =   1680
-      Width           =   2010
+      Top             =   1260
+      Width           =   1695
    End
    Begin ComctlLib.ImageList ImgLstFTP 
       Left            =   4935
@@ -988,10 +1005,10 @@ Begin VB.Form FSRIDescargaXML
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   9135
+      Left            =   13965
       TabIndex        =   6
       Top             =   1260
-      Width           =   1695
+      Width           =   1380
    End
    Begin VB.Label Label5 
       BorderStyle     =   1  'Fixed Single
@@ -1085,6 +1102,13 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
+Dim Lectura_XML As Boolean
+
+Dim MensajeError As String
+
+Dim DocumentoXML As MSXML2.DOMDocument
+Dim pJSON As Object
+
 Dim Cta_Prov As String
 Dim Cta_Prov_Aut As String
 Dim CodRet As String
@@ -1103,157 +1127,23 @@ Dim SecRetencion As Long
 
 Dim Porcentaje As Single
 
-'''Private Function SRI_Leer_XML_Autorizado(RutaAutorizado As String, RutaRechazado As String) As Tipo_Estado_SRI
-'''Dim obj As New Cls_FirmarXML
-'''Dim ObjEnviar As New WS_Recepcion
-'''Dim ObjAutori As New WS_Autorizacion
-'''Dim Resultado As Boolean
-'''Dim MensajeError As String
-'''Dim ArrayRecepcion() As String
-'''Dim ArrayAutorizacion() As String
-'''Dim Tiempo_Espera As Integer
-'''Dim Tiempo_SRI As Integer
-'''Dim EsperaEspera As Integer
-'''Dim SRI_Aut As Tipo_Estado_SRI
-'''Dim Intento_Enviar As Byte
-'''Dim Intento_Autorizar As Byte
-'''Dim IDo As Long
-'''Dim IDn As Long
-'''
-'''    RatonReloj
-'''    Progreso_Barra.Mensaje_Box = "CONECTANDOSE AL S.R.I. ..."
-'''    Progreso_Iniciar
-'''    Progreso_Barra.Incremento = 0
-'''    Progreso_Barra.Valor_Maximo = 100
-'''    Progreso_Esperar True
-'''
-'''    Intento_Enviar = 0
-'''    Intento_Autorizar = 0
-'''
-'''   'Pagina de Conexion con el SRI
-'''   'ClaveDeAcceso = "0909202101179186152300120010040000056111234567815"
-'''
-'''    'MsgBox URLAutorizacion & vbCrLf & ClaveDeAcceso & vbCrLf & MidStrg(ClaveDeAcceso, 24, 1)
-'''
-'''    RatonReloj
-'''    With SRI_Aut
-'''         Progreso_Barra.Mensaje_Box = "Determinando Carpetas de Conexion"
-'''         Progreso_Esperar True
-'''         IDo = Len(RutaAutorizado)
-'''         Do While MidStrg(RutaAutorizado, IDo, 1) <> "\"
-'''            IDo = IDo - 1
-'''         Loop
-'''         IDn = InStr(RutaAutorizado, ".xml")
-'''        .Clave_De_Acceso = MidStrg(RutaAutorizado, IDo + 1, IDn - IDo - 1)
-'''        '.Clave_De_Acceso = "0103202407179130545000120030370000231671791305419"
-'''         Select Case MidStrg(.Clave_De_Acceso, 24, 1)
-'''           Case "1": URLAutorizacion = "https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl"
-'''           Case "2": URLAutorizacion = "https://cel.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl"
-'''         End Select
-'''        .Estado_SRI = "CG"
-'''        .Documento_XML = ""
-'''        .Error_SRI = ""
-'''         EsperaEspera = 3000
-'''         RatonReloj
-'''        'Tiempo de Espera antes de averiguar al SRI de la autorizacion
-'''         For Tiempo_Espera = 0 To 3
-'''             RatonReloj
-'''            'Sleep EsperaEspera
-'''             ArrayAutorizacion = ObjAutori.FF_ObtieneNumAutorizado(URLAutorizacion, .Clave_De_Acceso, RutaAutorizado, RutaRechazado)
-'''             Progreso_Barra.Mensaje_Box = ArrayAutorizacion(0)
-'''             Progreso_Esperar True
-'''             If ArrayAutorizacion(0) = "AUTORIZADO" Then Tiempo_Espera = 3
-'''         Next Tiempo_Espera
-'''         If ArrayAutorizacion(0) = "AUTORIZADO" Then
-'''            Progreso_Barra.Mensaje_Box = "Extrayendo Documentos Autorizado: " & MidStrg(.Clave_De_Acceso, 25, 15)
-'''            Progreso_Esperar True
-'''            RatonReloj
-'''           .Estado_SRI = "OK"
-'''           .Error_SRI = "OK"
-'''           .Autorizacion = ArrayAutorizacion(1)
-'''           .Fecha_Autorizacion = Format$(MidStrg(ArrayAutorizacion(2), 1, 10), "dd/MM/yyyy")
-'''           .Hora_Autorizacion = MidStrg(ArrayAutorizacion(2), 12, 8)
-'''           .Documento_XML = Leer_Archivo_Texto(RutaAutorizado)
-'''
-'''            'SRI_Actualizar_Documento_XML .Clave_De_Acceso
-'''            'Progreso_Barra.Mensaje_Box = "Grabando en la base el Documento: " & MidStrg(ClaveDeAcceso, 25, 15)
-'''            Cadena = ""
-'''            For ContadorEstados = 0 To 3
-'''                If Len(ArrayAutorizacion(ContadorEstados)) > 1 Then Cadena = Cadena & ArrayAutorizacion(ContadorEstados) & ", "
-'''            Next ContadorEstados
-'''           'MsgBox Cadena
-'''            Progreso_Esperar True
-'''         Else
-'''           .Error_SRI = "Error al Autorizar: "
-'''            For ContadorEstados = 0 To 4
-'''                If Len(ArrayAutorizacion(ContadorEstados)) > 1 Then .Error_SRI = .Error_SRI & ArrayAutorizacion(ContadorEstados) & ", "
-'''            Next ContadorEstados
-'''           .Error_SRI = TrimStrg(.Error_SRI)
-'''            'MsgBox .Error_SRI & "....."
-'''         End If
-'''         Progreso_Barra.Mensaje_Box = ArrayAutorizacion(0) & " " & .Estado_SRI & " -> " & ArrayAutorizacion(2)
-'''         Progreso_Esperar True
-'''         Progreso_Final
-'''         RatonNormal
-'''
-'''    End With
-'''    Progreso_Final
-'''    SRI_Leer_XML_Autorizado = SRI_Aut
-'''End Function
+'''                      TextoError = PostUrlSourceStr(URLHTTP, URLParams)
+'''                     'Conectamos al servidor ERP
+'''                      If CnnFTPPOK And TextoError = """OK""" Then
+'''                         ftp.CambiarDirectorio "/ComprobantesElectronicos/ce_recibidos/"
+'''                         ftp.ListarArchivos
+'''                         ftp.ObtenerArchivo ClaveAcceso & ".xml", RutaXMLAutorizado, True
+'''                         TextoFileEmp = Leer_Archivo_Plano(RutaXMLAutorizado)
+'''                         I = InStr(TextoFileEmp, "<![CDATA[")
+'''                         F = InStr(TextoFileEmp, "]]></comprobante>")
+'''                         If I > 0 And F > 0 Then
+'''                            I = I + 9
+'''                            Escribir_Archivo RutaXMLAutorizado, TrimStrg(MidStrg(TextoFileEmp, I, F - I))
+'''                         End If
+'''                        'Una vez bajado el archivo procedemos a Borrar
+'''                         ftp.EliminarArchivo "/files/ComprobantesElectronicos/ce_recibidos/" & ClaveAcceso & ".xml"
+'''                      End If
 
-Private Sub Leer_Porc_Retenciones(TipoRetencion As String)
-Dim AdoDBTemp As ADODB.Recordset
-    
-    AXML.Cta_Ret_Fuente = ""
-    AXML.Cta_Ret_IVA_B = ""
-    AXML.Cta_Ret_IVA_S = ""
-    
-    sSQL = "SELECT TC, Codigo, Cuenta " _
-         & "FROM Catalogo_Cuentas " _
-         & "WHERE Item = '" & NumEmpresa & "' " _
-         & "AND Periodo = '" & Periodo_Contable & "' " _
-         & "AND DG = 'D' "
-    If TipoRetencion = "1" Then
-       sSQL = sSQL & "AND TC IN ('CF','CB','CI') "
-    Else
-       sSQL = sSQL & "AND TC IN ('RF','RB','RI') "
-    End If
-    sSQL = sSQL & "ORDER BY TC, Cuenta "
-    Select_AdoDB AdoDBTemp, sSQL
-    With AdoDBTemp
-     If .RecordCount > 0 Then
-         Do While Not .EOF
-            Cuenta = .Fields("Cuenta")
-            If InStr(Cuenta, CStr(AXML.Porc_Ret & "%")) And AXML.Porc_Ret > 0 Then AXML.Cta_Ret_Fuente = .Fields("Codigo")
-            If InStr(Cuenta, CStr(AXML.Porc_Ret_IVA_B & "%")) And AXML.Porc_Ret_IVA_B > 0 Then AXML.Cta_Ret_IVA_B = .Fields("Codigo")
-            If InStr(Cuenta, CStr(AXML.Porc_Ret_IVA_S & "%")) And AXML.Porc_Ret_IVA_S > 0 Then AXML.Cta_Ret_IVA_S = .Fields("Codigo")
-           .MoveNext
-         Loop
-     End If
-    End With
-    AdoDBTemp.Close
-    
-''    If AXML.Autorizacion = "0701202507179219452000120010020000003391234567811" Then MsgBox AXML.Porc_Ret
-
-    If TipoRetencion = "1" Then
-        If AXML.Porc_Ret > 0 And AXML.Cta_Ret_Fuente = "" And Len(AXML.Cod_Ret) > 1 Then AXML.Cta_Ret_Fuente = Cta_Ret
-        If AXML.Porc_Ret_IVA_B > 0 And AXML.Cta_Ret_IVA_B = "" Then AXML.Cta_Ret_IVA_B = Cta_Ret_IVA
-        If AXML.Porc_Ret_IVA_S > 0 And AXML.Cta_Ret_IVA_S = "" Then AXML.Cta_Ret_IVA_S = Cta_Ret_IVA
-    Else
-        If AXML.Porc_Ret > 0 And AXML.Cta_Ret_Fuente = "" And Len(AXML.Cod_Ret) > 1 Then AXML.Cta_Ret_Fuente = Cta_Ret_Egreso
-        If AXML.Porc_Ret_IVA_B > 0 And AXML.Cta_Ret_IVA_B = "" Then AXML.Cta_Ret_IVA_B = Cta_Ret_IVA_Egreso
-        If AXML.Porc_Ret_IVA_S > 0 And AXML.Cta_Ret_IVA_S = "" Then AXML.Cta_Ret_IVA_S = Cta_Ret_IVA_Egreso
-    End If
-    
-    If AXML.Cod_Ret = "" Then AXML.Cod_Ret = Ninguno
-    If AXML.Cta_Debito = "" Then AXML.Cta_Debito = "0"
-    If AXML.Cta_Credito = "" Then AXML.Cta_Credito = "0"
-    If AXML.Cta_IVA_Gasto = "" Then AXML.Cta_IVA_Gasto = "0"
-    If AXML.Cta_Ret_Fuente = "" Then AXML.Cta_Ret_Fuente = "0"
-    If AXML.Cta_Ret_IVA_B = "" Then AXML.Cta_Ret_IVA_B = "0"
-    If AXML.Cta_Ret_IVA_S = "" Then AXML.Cta_Ret_IVA_S = "0"
-    
-End Sub
 'Sube los abonos
 Private Sub Leer_XML()
 On Error GoTo Errorhandler
@@ -1385,22 +1275,26 @@ Dim LineFile As String
                    If Not Existe_File(RutaXMLAutorizado) Then
                       URLHTTP = "https://erp.diskcoversystem.com/php/comprobantes/SRI/autorizar_sri_visual.php?CERecibidos=true"
                       URLParams = "XML=" & ClaveAcceso
-                      TextoError = PostUrlSourceStr(URLHTTP, URLParams)
-                     'Conectamos al servidor ERP
-                      If CnnFTPPOK And TextoError = "OK" Then
-                         ftp.CambiarDirectorio "/ComprobantesElectronicos/ce_recibidos/"
-                         ftp.ListarArchivos
-                         ftp.ObtenerArchivo ClaveAcceso & ".xml", RutaXMLAutorizado, True
-                         TextoFileEmp = Leer_Archivo_Plano(RutaXMLAutorizado)
+                      MensajeError = PostUrlSourceStr(URLHTTP, URLParams)
+'                      Clipboard.Clear
+'                      Clipboard.SetText MensajeError
+                     '--------------------------------------------------------------------------------------------------------------------------------
+                      Set pJSON = JSON.parse(MensajeError)
+                      'If IsNull(pJSON.Item("mensaje")) Then .Error_SRI = "" Else .Error_SRI = pJSON.Item("mensaje")
+                      
+                      If pJSON.Item("resp") = "1" Then
+                         TextoFileEmp = pJSON.Item("XML")
                          I = InStr(TextoFileEmp, "<![CDATA[")
                          F = InStr(TextoFileEmp, "]]></comprobante>")
                          If I > 0 And F > 0 Then
                             I = I + 9
-                            Escribir_Archivo RutaXMLAutorizado, TrimStrg(MidStrg(TextoFileEmp, I, F - I))
+                            TextoFileEmp = TrimStrg(MidStrg(TextoFileEmp, I, F - I))
                          End If
-                        'Una vez bajado el archivo procedemos a Borrar
-                         ftp.EliminarArchivo "/files/ComprobantesElectronicos/ce_recibidos/" & ClaveAcceso & ".xml"
+                      Else
+                         TextoFileEmp = pJSON.Item("mensaje")
                       End If
+                      DocumentoXML.loadXML TextoFileEmp
+                      DocumentoXML.save RutaXMLAutorizado
                    Else
                      .Fields("Existe") = True
                      .Update
@@ -1594,6 +1488,60 @@ Errorhandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
+End Sub
+
+Private Sub Leer_Porc_Retenciones(TipoRetencion As String)
+Dim AdoDBTemp As ADODB.Recordset
+    
+    AXML.Cta_Ret_Fuente = ""
+    AXML.Cta_Ret_IVA_B = ""
+    AXML.Cta_Ret_IVA_S = ""
+    
+    sSQL = "SELECT TC, Codigo, Cuenta " _
+         & "FROM Catalogo_Cuentas " _
+         & "WHERE Item = '" & NumEmpresa & "' " _
+         & "AND Periodo = '" & Periodo_Contable & "' " _
+         & "AND DG = 'D' "
+    If TipoRetencion = "1" Then
+       sSQL = sSQL & "AND TC IN ('CF','CB','CI') "
+    Else
+       sSQL = sSQL & "AND TC IN ('RF','RB','RI') "
+    End If
+    sSQL = sSQL & "ORDER BY TC, Cuenta "
+    Select_AdoDB AdoDBTemp, sSQL
+    With AdoDBTemp
+     If .RecordCount > 0 Then
+         Do While Not .EOF
+            Cuenta = .Fields("Cuenta")
+            If InStr(Cuenta, CStr(AXML.Porc_Ret & "%")) And AXML.Porc_Ret > 0 Then AXML.Cta_Ret_Fuente = .Fields("Codigo")
+            If InStr(Cuenta, CStr(AXML.Porc_Ret_IVA_B & "%")) And AXML.Porc_Ret_IVA_B > 0 Then AXML.Cta_Ret_IVA_B = .Fields("Codigo")
+            If InStr(Cuenta, CStr(AXML.Porc_Ret_IVA_S & "%")) And AXML.Porc_Ret_IVA_S > 0 Then AXML.Cta_Ret_IVA_S = .Fields("Codigo")
+           .MoveNext
+         Loop
+     End If
+    End With
+    AdoDBTemp.Close
+    
+''    If AXML.Autorizacion = "0701202507179219452000120010020000003391234567811" Then MsgBox AXML.Porc_Ret
+
+    If TipoRetencion = "1" Then
+        If AXML.Porc_Ret > 0 And AXML.Cta_Ret_Fuente = "" And Len(AXML.Cod_Ret) > 1 Then AXML.Cta_Ret_Fuente = Cta_Ret
+        If AXML.Porc_Ret_IVA_B > 0 And AXML.Cta_Ret_IVA_B = "" Then AXML.Cta_Ret_IVA_B = Cta_Ret_IVA
+        If AXML.Porc_Ret_IVA_S > 0 And AXML.Cta_Ret_IVA_S = "" Then AXML.Cta_Ret_IVA_S = Cta_Ret_IVA
+    Else
+        If AXML.Porc_Ret > 0 And AXML.Cta_Ret_Fuente = "" And Len(AXML.Cod_Ret) > 1 Then AXML.Cta_Ret_Fuente = Cta_Ret_Egreso
+        If AXML.Porc_Ret_IVA_B > 0 And AXML.Cta_Ret_IVA_B = "" Then AXML.Cta_Ret_IVA_B = Cta_Ret_IVA_Egreso
+        If AXML.Porc_Ret_IVA_S > 0 And AXML.Cta_Ret_IVA_S = "" Then AXML.Cta_Ret_IVA_S = Cta_Ret_IVA_Egreso
+    End If
+    
+    If AXML.Cod_Ret = "" Then AXML.Cod_Ret = Ninguno
+    If AXML.Cta_Debito = "" Then AXML.Cta_Debito = "0"
+    If AXML.Cta_Credito = "" Then AXML.Cta_Credito = "0"
+    If AXML.Cta_IVA_Gasto = "" Then AXML.Cta_IVA_Gasto = "0"
+    If AXML.Cta_Ret_Fuente = "" Then AXML.Cta_Ret_Fuente = "0"
+    If AXML.Cta_Ret_IVA_B = "" Then AXML.Cta_Ret_IVA_B = "0"
+    If AXML.Cta_Ret_IVA_S = "" Then AXML.Cta_Ret_IVA_S = "0"
+    
 End Sub
 
 Public Sub Grabar_Comprobantes_XML()
@@ -2354,12 +2302,7 @@ Private Sub Form_Activate()
     CopiarComp = False
     Co.CodigoB = ""
     Co.Numero = 0
-        
-   'Cta_Gastos = Leer_Seteos_Ctas("Cta_Gastos")
-    Cta_Gastos_Personales = Leer_Seteos_Ctas("Cta_Gastos_Personales")
-    
-    Label7.Caption = "Cuenta de Gastos Personales: " & Cta_Gastos_Personales & " por default"
-    
+     
     Archivo_TXT = "Asiento_TXT_" & CodigoUsuario
 
     If Existe_Tabla(Archivo_TXT) Then
@@ -2450,13 +2393,17 @@ Private Sub Form_Load()
   ConectarAdodc AdoSustento
   ConectarAdodc AdoSerieRetencion
   
+  Cta_Gastos_Personales = Leer_Seteos_Ctas("Cta_Gastos_Personales")
+  Label7.Caption = Cta_Gastos_Personales
+  
   DGDocSRI.Height = MDI_Y_Max - 2400
   DGDocSRI.width = MDI_X_Max - DGDocSRI.Left - 50
   AdoDocSRI.width = MDI_X_Max - AdoDocSRI.Left - 50
   DCSustento.width = MDI_X_Max - DCSustento.Left - 50
   DCTipoPago.width = MDI_X_Max - DCTipoPago.Left - 50
-  Label7.width = MDI_X_Max - Label7.Left - 50
-  PctSRI.width = MDI_X_Max - PctSRI - 100
+  'Label7.width = MDI_X_Max - Label7.Left - 50
+'  PctSRI.Left = Label7.width + 50
+  PctSRI.width = MDI_X_Max - PctSRI.Left - 100
   AdoDocSRI.Top = DGDocSRI.Top + DGDocSRI.Height + 10
   
  'Verificamos y creamos carpetas de firma electronica
@@ -2468,6 +2415,8 @@ Private Sub Form_Load()
   
   RutaDocumentos = RutaSysBases & "\SRI\Comprobantes Recibidos"
   If Not Existe_Carpeta(RutaDocumentos) Then MkDir RutaDocumentos
+  
+  Set DocumentoXML = New DOMDocument
 End Sub
 
 Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)

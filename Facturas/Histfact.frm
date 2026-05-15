@@ -47,9 +47,9 @@ Begin VB.Form HistorialFacturas
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   4320
-      Left            =   1260
+      Left            =   2760
       TabIndex        =   27
-      Top             =   1785
+      Top             =   720
       Visible         =   0   'False
       Width           =   15765
       Begin VB.ListBox ListCliente 
@@ -158,13 +158,13 @@ Begin VB.Form HistorialFacturas
    End
    Begin MSDataGridLib.DataGrid DGQuery 
       Bindings        =   "Histfact.frx":2698
-      Height          =   4425
-      Left            =   105
+      Height          =   3945
+      Left            =   120
       TabIndex        =   20
-      Top             =   1470
+      Top             =   1440
       Width           =   14610
       _ExtentX        =   25770
-      _ExtentY        =   7805
+      _ExtentY        =   6959
       _Version        =   393216
       AllowUpdate     =   0   'False
       AllowArrows     =   -1  'True
@@ -541,7 +541,7 @@ Begin VB.Form HistorialFacturas
    Begin MSAdodcLib.Adodc AdoFacturas 
       Height          =   330
       Left            =   315
-      Top             =   2835
+      Top             =   6555
       Visible         =   0   'False
       Width           =   2115
       _ExtentX        =   3731
@@ -588,7 +588,7 @@ Begin VB.Form HistorialFacturas
    Begin MSAdodcLib.Adodc AdoCliente 
       Height          =   330
       Left            =   315
-      Top             =   2205
+      Top             =   5925
       Visible         =   0   'False
       Width           =   2115
       _ExtentX        =   3731
@@ -635,7 +635,7 @@ Begin VB.Form HistorialFacturas
    Begin MSAdodcLib.Adodc AdoHistoria 
       Height          =   330
       Left            =   315
-      Top             =   2520
+      Top             =   6240
       Visible         =   0   'False
       Width           =   2115
       _ExtentX        =   3731
@@ -682,7 +682,7 @@ Begin VB.Form HistorialFacturas
    Begin MSAdodcLib.Adodc AdoTipo 
       Height          =   330
       Left            =   315
-      Top             =   3150
+      Top             =   6870
       Visible         =   0   'False
       Width           =   2115
       _ExtentX        =   3731
@@ -729,7 +729,7 @@ Begin VB.Form HistorialFacturas
    Begin MSAdodcLib.Adodc AdoCxC 
       Height          =   330
       Left            =   315
-      Top             =   3465
+      Top             =   7185
       Visible         =   0   'False
       Width           =   2115
       _ExtentX        =   3731
@@ -1110,7 +1110,7 @@ Begin VB.Form HistorialFacturas
    Begin MSAdodcLib.Adodc AdoQuery1 
       Height          =   330
       Left            =   315
-      Top             =   1890
+      Top             =   5610
       Visible         =   0   'False
       Width           =   2115
       _ExtentX        =   3731
@@ -3113,35 +3113,35 @@ End Sub
 Public Sub Tipo_Consulta_CxC(Tipo As String)
 Dim Actualiza_Buses As Boolean
 
-Actualiza_Buses = Leer_Campo_Empresa("Actualizar_Buses")
+'Actualiza_Buses = Leer_Campo_Empresa("Actualizar_Buses")
 DGQuery.Caption = "CXC CLIENTES POR VENDEDOR"
 FA.Fecha_Corte = MBFechaF
 RatonReloj
 FechaIni = BuscarFecha(MBFechaI)
 FechaFin = BuscarFecha(MBFechaF)
-If Actualiza_Buses Then
-   If SQL_Server Then
-      sSQL = "UPDATE Facturas " _
-           & "SET Forma_Pago = MidStrg(DF.Producto,1,10) " _
-           & "FROM Facturas AS F,Detalle_Factura AS DF "
-   Else
-      sSQL = "UPDATE Facturas AS F,Detalle_Factura AS DF " _
-           & "SET F.Forma_Pago = MidStrg(DF.Producto,1,10) "
-   End If
-   sSQL = sSQL _
-        & "WHERE F.Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
-        & "AND F.Item = '" & NumEmpresa & "' " _
-        & "AND F.Periodo = '" & Periodo_Contable & "' " _
-        & "AND F.TC = DF.TC " _
-        & "AND F.Serie = DF.Serie " _
-        & "AND F.Autorizacion = DF.Autorizacion " _
-        & "AND F.CodigoC = DF.CodigoC " _
-        & "AND F.Fecha = DF.Fecha " _
-        & "AND F.Factura = DF.Factura " _
-        & "AND F.Item = DF.Item " _
-        & "AND F.Periodo = DF.Periodo "
-   Ejecutar_SQL_SP sSQL
-End If
+'If Actualiza_Buses Then
+'   If SQL_Server Then
+'      sSQL = "UPDATE Facturas " _
+'           & "SET Forma_Pago = MidStrg(DF.Producto,1,10) " _
+'           & "FROM Facturas AS F,Detalle_Factura AS DF "
+'   Else
+'      sSQL = "UPDATE Facturas AS F,Detalle_Factura AS DF " _
+'           & "SET F.Forma_Pago = MidStrg(DF.Producto,1,10) "
+'   End If
+'   sSQL = sSQL _
+'        & "WHERE F.Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
+'        & "AND F.Item = '" & NumEmpresa & "' " _
+'        & "AND F.Periodo = '" & Periodo_Contable & "' " _
+'        & "AND F.TC = DF.TC " _
+'        & "AND F.Serie = DF.Serie " _
+'        & "AND F.Autorizacion = DF.Autorizacion " _
+'        & "AND F.CodigoC = DF.CodigoC " _
+'        & "AND F.Fecha = DF.Fecha " _
+'        & "AND F.Factura = DF.Factura " _
+'        & "AND F.Item = DF.Item " _
+'        & "AND F.Periodo = DF.Periodo "
+'   Ejecutar_SQL_SP sSQL
+'End If
 
 '''    If Tipo = "V" Then
 '''       sSQL = "UPDATE Facturas " _
@@ -3170,58 +3170,57 @@ End If
 '''    End If
 
 If TipoFactura = "" Then TipoFactura = Ninguno
-sSQL = "SELECT F.T,F.Razon_Social,"
-If SiUnidadEducativa Then sSQL = sSQL & "C.Cliente,"
-sSQL = sSQL & "F.Fecha,F.Fecha_V,F.TC,F.Serie,F.Factura,"
-If Tipo = "R" Then
-   sSQL = sSQL _
-        & "F.Con_IVA,F.Sin_IVA,F.SubTotal,F.IVA,(F.Descuento + F.Descuento2) As Total_Descuento,F.Servicio,F.Total_MN," _
-        & "F.Total_Abonos,F.Saldo_MN,F.Autorizacion,F.Cta_CxP,F.Total_Ret_Fuente,F.Total_Ret_IVA_B,F.Total_Ret_IVA_S,"
-Else
-   sSQL = sSQL & "F.Total_MN,F.Abonos_MN,F.Saldo_MN,F.Total_ME,F.Saldo_ME,F.Autorizacion,F.RUC_CI As RUC_CI_SRI,"
-End If
-If SiUnidadEducativa Then sSQL = sSQL & "C.CI_RUC,"
-sSQL = sSQL & "F.Forma_Pago,C.Telefono,C.Celular,C.Ciudad,C.Direccion,C.DireccionT,C.Email,C.Grupo,"
-If SQL_Server Then
-   sSQL = sSQL & "DATEDIFF(day,'" & BuscarFecha(MBFechaF) & "',F.Fecha_V) As Dias_De_Mora,"
-Else
-   sSQL = sSQL & "DATEDIFF('d',#" & BuscarFecha(MBFechaF) & "#,F.Fecha_V) As Dias_De_Mora,"
-End If
-sSQL = sSQL & "A.Nombre_Completo As Ejecutivo,C.Plan_Afiliado As Sectorizacion,A.Cod_Ejec,F.Chq_Posf " _
+sSQL = "SELECT F.T,F.Razon_Social,F.RUC_CI As RUC_CI_SRI,"
+If SiUnidadEducativa Then sSQL = sSQL & "C.Cliente As Representado,"
+sSQL = sSQL & "F.Fecha,F.Fecha_V,F.TC,F.Serie,F.Factura, F.Con_IVA,F.Sin_IVA,F.SubTotal,F.IVA,(F.Descuento + F.Descuento2) As Descuentos,F.Servicio," _
+     & "F.Total_MN,F.Total_Abonos,F.Saldo_MN, Dias_Vencidos As Dias_De_Mora, F.Autorizacion,F.Cta_CxP,F.Total_Ret_Fuente,F.Total_Ret_IVA_B,F.Total_Ret_IVA_S,"
+
+If SiUnidadEducativa Then sSQL = sSQL & "C.CI_RUC As Documento,"
+
+sSQL = sSQL & "F.Forma_Pago,C.Telefono,C.Celular,C.Ciudad,C.Direccion,C.DireccionT,C.Email,C.Grupo, " _
+     & "A.Nombre_Completo As Ejecutivo,C.Plan_Afiliado As Sectorizacion,A.Cod_Ejec,F.Chq_Posf " _
      & "FROM Facturas As F, Clientes As C, Accesos As A " _
      & "WHERE F.Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
      & "AND F.Item = '" & NumEmpresa & "' " _
      & "AND F.Periodo = '" & Periodo_Contable & "' " _
      & Tipo_De_Consulta() _
+     & "AND F.TC NOT IN ('C','P') " _
      & "AND C.Codigo = F.CodigoC " _
-     & "AND A.Codigo = F.Cod_Ejec " _
-     & "AND F.TC NOT IN ('C','P') "
-If Tipo = "V" Then
-   Opcion = 13
-   sSQL = sSQL & "ORDER BY A.Nombre_Completo,C.Grupo,"
-   If SiUnidadEducativa Then sSQL = sSQL & "C.Cliente,F.Razon_Social," Else sSQL = sSQL & "F.Razon_Social,"
-End If
-If Tipo = "C" Then
-   Opcion = 9
-   If SiUnidadEducativa Then sSQL = sSQL & "ORDER BY C.Cliente,F.Razon_Social," Else sSQL = sSQL & "ORDER BY F.Razon_Social,"
-End If
-If Tipo = "F" Then
-   Opcion = 10
-   sSQL = sSQL & "ORDER BY "
-End If
-If Tipo = "R" Then
-   Opcion = 19
-   If SiUnidadEducativa Then sSQL = sSQL & "ORDER BY C.Cliente,F.Razon_Social," Else sSQL = sSQL & "ORDER BY F.Razon_Social,"
-End If
+     & "AND A.Codigo = F.Cod_Ejec "
+Select Case Tipo
+  Case "V": Opcion = 13
+       sSQL = sSQL & "ORDER BY A.Nombre_Completo,C.Grupo,"
+       If SiUnidadEducativa Then sSQL = sSQL & "C.Cliente,F.Razon_Social," Else sSQL = sSQL & "F.Razon_Social,"
+  Case "C": Opcion = 9
+       If SiUnidadEducativa Then sSQL = sSQL & "ORDER BY C.Cliente,F.Razon_Social," Else sSQL = sSQL & "ORDER BY F.Razon_Social,"
+  Case "F": Opcion = 10
+       sSQL = sSQL & "ORDER BY "
+  Case "R": Opcion = 19
+       If SiUnidadEducativa Then sSQL = sSQL & "ORDER BY C.Cliente,F.Razon_Social," Else sSQL = sSQL & "ORDER BY F.Razon_Social,"
+End Select
 sSQL = sSQL & "F.TC,F.Serie,F.Fecha,F.Factura "
 Select_Adodc_Grid DGQuery, AdoQuery, sSQL, , , True
+RatonReloj
 DGQuery.Visible = False
+DGQuery.Refresh
 Total = 0: Saldo = 0
-With AdoQuery.Recordset
+
+sSQL = "SELECT F.Item, F.Periodo, SUM(F.Total_MN) As T_Total_MN, SUM(F.Saldo_MN) As T_Saldo_MN " _
+     & "FROM Facturas As F, Clientes As C, Accesos As A " _
+     & "WHERE F.Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
+     & "AND F.Item = '" & NumEmpresa & "' " _
+     & "AND F.Periodo = '" & Periodo_Contable & "' " _
+     & Tipo_De_Consulta() _
+     & "AND F.TC NOT IN ('C','P') " _
+     & "AND C.Codigo = F.CodigoC " _
+     & "AND A.Codigo = F.Cod_Ejec " _
+     & "GROUP BY F.Item, F.Periodo "
+Select_Adodc AdoQuery1, sSQL
+With AdoQuery1.Recordset
  If .RecordCount > 0 Then
      Do While Not .EOF
-        Total = Total + .fields("Total_MN")
-        Saldo = Saldo + .fields("Saldo_MN")
+        Total = Total + .fields("T_Total_MN")
+        Saldo = Saldo + .fields("T_Saldo_MN")
        .MoveNext
      Loop
  End If
@@ -4611,13 +4610,18 @@ Dim posPuntoComa As Integer
 
   DGQuery.Visible = False
 
+  Progreso_Iniciar
+  Progreso_Barra.Incremento = 0
+  
   TMail.ListaMail = 0
   TMail.ListaError = ""
   TMail.Adjunto = ""
   TMail.Credito_No = ""
   Total = 0
+  
   With AdoQuery.Recordset
    If .RecordCount > 0 Then
+       Progreso_Barra.Valor_Maximo = .RecordCount
       .MoveFirst
        Codigo = .fields("CodigoC")
        TBeneficiario.Cliente = .fields("Cliente")
@@ -4667,6 +4671,9 @@ Dim posPuntoComa As Integer
              Insertar_Mail TMail.para, EmailProcesos
             'MsgBox TBeneficiario.Representante & " -> " & TBeneficiario.Cliente & vbCrLf & TMail.Mensaje
              FEnviarCorreos.Show vbModal
+             Progreso_Barra.Mensaje_Box = TBeneficiario.Cliente
+             Progreso_Esperar
+
              TMail.Mensaje = ""
              TMail.MensajeHTML = ""
              html_Detalle_adicional = "<thead><tr><strong><td>TC</td><td>FECHA EMIS</td><td>SERIE</td><td>DOCUMENTO</td><td>SALDO ACTUTAL</td></strong></tr></thead>"
@@ -4719,11 +4726,15 @@ Dim posPuntoComa As Integer
        Insertar_Mail TMail.para, TBeneficiario.EmailR
 '      MsgBox TBeneficiario.Representante & " -> " & TBeneficiario.Cliente & vbCrLf & TMail.Mensaje
        FEnviarCorreos.Show vbModal
+       Progreso_Barra.Mensaje_Box = TBeneficiario.Cliente
+       Progreso_Esperar
+
        TMail.Mensaje = ""
        TMail.MensajeHTML = ""
       'If Len(TMail.ListaError) > 1 Then Lista_Error = Lista_Error & TBeneficiario.Representante & " - Email: " & TMail.para & " => " & TMail.ListaError & vbCrLf
    End If
   End With
+  Progreso_Final
   DGQuery.Visible = True
   If Len(TMail.ListaError) > 1 Then
      MsgBox "Rebice en su correo los errores "

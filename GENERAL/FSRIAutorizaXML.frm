@@ -176,6 +176,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
+
 Dim Lectura_XML As Boolean
 
 Dim MensajeError As String
@@ -194,7 +195,7 @@ Private Sub Form_Activate()
          RutaXMLFirmado = RutaSysBases & "\CE\CE" & NumEmpresa & "\Comprobantes Firmados\" & .Clave_De_Acceso & ".xml"
          RutaXMLAutorizado = RutaSysBases & "\CE\CE" & NumEmpresa & "\Comprobantes Autorizados\" & .Clave_De_Acceso & ".xml"
          RutaXMLRechazado = RutaSysBases & "\CE\CE" & NumEmpresa & "\Comprobantes no Autorizados\" & .Clave_De_Acceso & ".xml"
-                  
+
         .Documento_XML = ""
         .Error_SRI = ""
         .Estado_SRI = ""
