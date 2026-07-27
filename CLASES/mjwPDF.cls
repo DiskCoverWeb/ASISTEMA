@@ -2153,6 +2153,7 @@ Dim PathAcroRd32 As String
     If boPDFConfirm Then MsgBox "PDF file generated.", vbOKOnly, "Generated PDF file - " & mjwPDFVersion
     RutaDocumentoPDF = PDFGetFileName
    'RutaDocumentoPDF = Replace(RutaDocumentoPDF, "C:", "Z:")
+   'MsgBox RutaDocumentoPDF
     If boPDFView Then
         If Dir$(RutaDocumentoPDF) <> "" Then
           'MsgBox "Desktop Ruta PDF: " & RutaDocumentoPDF

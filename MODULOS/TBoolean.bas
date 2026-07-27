@@ -37,6 +37,7 @@ Global OpcCoop As Boolean
 Global OpcServicio As Boolean
 Global Presentar_Inventario As Boolean
 Global EsTransporte As Boolean
+Global Sin_Fines_Lucro As Boolean
 'Global Leyenda_FA As Boolean
 Global ConSucursal As Boolean
 Global Si_No As Boolean

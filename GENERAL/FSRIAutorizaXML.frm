@@ -238,13 +238,23 @@ Private Sub Form_Activate()
             
            .Documento_XML = pJSON.Item("XML")
             DocumentoXML.loadXML .Documento_XML
-           '-----------------------------------
-           'Clipboard.Clear
-           'Clipboard.SetText pJSON.Item("XML")
-'           MsgBox "RESULTADO DEL S.R.I. [" & Format(fin - Inicio, "hh:mm:ss") & "]" & vbCrLf _
-'                  & "Documento: " & .Clave_De_Acceso & vbCrLf _
-'                  & "AUTORIZADO: " & .Resultado
-           '-----------------------------------
+           '------------------------------------------------------------------------------------------------
+'            Clipboard.Clear
+'            Clipboard.SetText "RESULTADO DEL S.R.I. [" & Format(fin - Inicio, "hh:mm:ss") & "]" & vbCrLf _
+'                            & String(80, "-") & vbCrLf _
+'                            & URLHTTP & vbCrLf _
+'                            & String(80, "-") & vbCrLf _
+'                            & URLParams & vbCrLf _
+'                            & String(80, "-") & vbCrLf _
+'                            & "Respuesta del Documento: " & .Clave_De_Acceso & vbCrLf _
+'                            & String(80, "-") & vbCrLf _
+'                            & "AUTORIZADO: " & .Resultado & vbCrLf _
+'                            & String(80, "-") & vbCrLf _
+'                            & pJSON.Item("respuesta") & vbCrLf _
+'                            & String(80, "-") & vbCrLf _
+'                            & pJSON.Item("XML")
+'            MsgBox "Respuesta: " & pJSON.Item("respuesta") & " (" & .Resultado & ")"
+           '------------------------------------------------------------------------------------------------
             If .Resultado Then
                .Estado_SRI = "OK"
                .Fecha_Autorizacion = MidStrg(pJSON.Item("FechaAutorizacion"), 1, 10)
@@ -256,7 +266,9 @@ Private Sub Form_Activate()
                                     & "AUTORIZADO."
                 Progreso_Esperar True
                 LblConexion.Refresh
+               '-----------------------------------------------
                 Autorizar_Documento_XML_SP SRI_Autorizacion, FA
+               '-----------------------------------------------
                 TA.Autorizacion = FA.Autorizacion
                 DocumentoXML.save RutaXMLAutorizado
                'MsgBox .Autorizacion

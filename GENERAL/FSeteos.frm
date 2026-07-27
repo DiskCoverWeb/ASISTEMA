@@ -58,7 +58,6 @@ Begin VB.Form FSeteos
       _ExtentY        =   14102
       _Version        =   393216
       Tabs            =   4
-      Tab             =   1
       TabsPerRow      =   4
       TabHeight       =   520
       BackColor       =   16761024
@@ -74,7 +73,7 @@ Begin VB.Form FSeteos
       EndProperty
       TabCaption(0)   =   "Se&teos Generales"
       TabPicture(0)   =   "FSeteos.frx":030A
-      Tab(0).ControlEnabled=   0   'False
+      Tab(0).ControlEnabled=   -1  'True
       Tab(0).Control(0)=   "DGEducativo"
       Tab(0).Control(0).Enabled=   0   'False
       Tab(0).Control(1)=   "DGTipoPrest"
@@ -86,7 +85,7 @@ Begin VB.Form FSeteos
       Tab(0).ControlCount=   4
       TabCaption(1)   =   "&Duplicados/Mantenimiento"
       TabPicture(1)   =   "FSeteos.frx":0326
-      Tab(1).ControlEnabled=   -1  'True
+      Tab(1).ControlEnabled=   0   'False
       Tab(1).Control(0)=   "LstTablas"
       Tab(1).Control(0).Enabled=   0   'False
       Tab(1).Control(1)=   "CheqSCAlum"
@@ -99,72 +98,72 @@ Begin VB.Form FSeteos
       TabCaption(2)   =   "&Niveles de Seguridad"
       TabPicture(2)   =   "FSeteos.frx":0342
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "Command4"
+      Tab(2).Control(0)=   "Label4"
       Tab(2).Control(0).Enabled=   0   'False
-      Tab(2).Control(1)=   "Command1"
+      Tab(2).Control(1)=   "Label10"
       Tab(2).Control(1).Enabled=   0   'False
-      Tab(2).Control(2)=   "LstEmpresas"
+      Tab(2).Control(2)=   "Label1"
       Tab(2).Control(2).Enabled=   0   'False
-      Tab(2).Control(3)=   "Command6"
+      Tab(2).Control(3)=   "Label2"
       Tab(2).Control(3).Enabled=   0   'False
-      Tab(2).Control(4)=   "LstModulos"
+      Tab(2).Control(4)=   "Label5"
       Tab(2).Control(4).Enabled=   0   'False
-      Tab(2).Control(5)=   "Command10"
+      Tab(2).Control(5)=   "Label3"
       Tab(2).Control(5).Enabled=   0   'False
-      Tab(2).Control(6)=   "DGEmp1"
+      Tab(2).Control(6)=   "DCBodega"
       Tab(2).Control(6).Enabled=   0   'False
-      Tab(2).Control(7)=   "Command11"
+      Tab(2).Control(7)=   "MBPeriodo"
       Tab(2).Control(7).Enabled=   0   'False
-      Tab(2).Control(8)=   "Command5"
+      Tab(2).Control(8)=   "TextClave"
       Tab(2).Control(8).Enabled=   0   'False
-      Tab(2).Control(9)=   "Command13"
+      Tab(2).Control(9)=   "Frame2"
       Tab(2).Control(9).Enabled=   0   'False
-      Tab(2).Control(10)=   "DCUsuario"
+      Tab(2).Control(10)=   "TxtItem"
       Tab(2).Control(10).Enabled=   0   'False
-      Tab(2).Control(11)=   "Command7"
+      Tab(2).Control(11)=   "Command2"
       Tab(2).Control(11).Enabled=   0   'False
-      Tab(2).Control(12)=   "TxtUsuario"
+      Tab(2).Control(12)=   "Command3"
       Tab(2).Control(12).Enabled=   0   'False
-      Tab(2).Control(13)=   "Command3"
+      Tab(2).Control(13)=   "TxtUsuario"
       Tab(2).Control(13).Enabled=   0   'False
-      Tab(2).Control(14)=   "Command2"
+      Tab(2).Control(14)=   "Command7"
       Tab(2).Control(14).Enabled=   0   'False
-      Tab(2).Control(15)=   "TxtItem"
+      Tab(2).Control(15)=   "DCUsuario"
       Tab(2).Control(15).Enabled=   0   'False
-      Tab(2).Control(16)=   "Frame2"
+      Tab(2).Control(16)=   "Command13"
       Tab(2).Control(16).Enabled=   0   'False
-      Tab(2).Control(17)=   "TextClave"
+      Tab(2).Control(17)=   "Command5"
       Tab(2).Control(17).Enabled=   0   'False
-      Tab(2).Control(18)=   "MBPeriodo"
+      Tab(2).Control(18)=   "Command11"
       Tab(2).Control(18).Enabled=   0   'False
-      Tab(2).Control(19)=   "DCBodega"
+      Tab(2).Control(19)=   "DGEmp1"
       Tab(2).Control(19).Enabled=   0   'False
-      Tab(2).Control(20)=   "Label3"
+      Tab(2).Control(20)=   "Command10"
       Tab(2).Control(20).Enabled=   0   'False
-      Tab(2).Control(21)=   "Label5"
+      Tab(2).Control(21)=   "LstModulos"
       Tab(2).Control(21).Enabled=   0   'False
-      Tab(2).Control(22)=   "Label2"
+      Tab(2).Control(22)=   "Command6"
       Tab(2).Control(22).Enabled=   0   'False
-      Tab(2).Control(23)=   "Label1"
+      Tab(2).Control(23)=   "LstEmpresas"
       Tab(2).Control(23).Enabled=   0   'False
-      Tab(2).Control(24)=   "Label10"
+      Tab(2).Control(24)=   "Command1"
       Tab(2).Control(24).Enabled=   0   'False
-      Tab(2).Control(25)=   "Label4"
+      Tab(2).Control(25)=   "Command4"
       Tab(2).Control(25).Enabled=   0   'False
       Tab(2).ControlCount=   26
       TabCaption(3)   =   "&Impresiones"
       TabPicture(3)   =   "FSeteos.frx":035E
       Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "DGFormato"
-      Tab(3).Control(1)=   "Command17(0)"
-      Tab(3).Control(2)=   "Command16"
-      Tab(3).Control(3)=   "PictFormatos"
-      Tab(3).Control(4)=   "DGSeteosPRN"
-      Tab(3).Control(5)=   "Command21"
-      Tab(3).Control(6)=   "Command17(1)"
-      Tab(3).Control(7)=   "Command17(2)"
-      Tab(3).Control(8)=   "Command17(3)"
-      Tab(3).Control(9)=   "Command8"
+      Tab(3).Control(0)=   "Command8"
+      Tab(3).Control(1)=   "Command17(3)"
+      Tab(3).Control(2)=   "Command17(2)"
+      Tab(3).Control(3)=   "Command17(1)"
+      Tab(3).Control(4)=   "Command21"
+      Tab(3).Control(5)=   "DGSeteosPRN"
+      Tab(3).Control(6)=   "PictFormatos"
+      Tab(3).Control(7)=   "Command16"
+      Tab(3).Control(8)=   "Command17(0)"
+      Tab(3).Control(9)=   "DGFormato"
       Tab(3).ControlCount=   10
       Begin VB.CommandButton Command4 
          Caption         =   "Migracion a MySQL"
@@ -353,7 +352,7 @@ Begin VB.Form FSeteos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   750
-         Left            =   11550
+         Left            =   -63450
          Style           =   1  'Graphical
          TabIndex        =   46
          Top             =   420
@@ -370,7 +369,7 @@ Begin VB.Form FSeteos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   7350
-         Left            =   2940
+         Left            =   -72060
          Style           =   1  'Checkbox
          TabIndex        =   45
          Top             =   420
@@ -388,7 +387,7 @@ Begin VB.Form FSeteos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   435
-         Left            =   11550
+         Left            =   -63450
          TabIndex        =   41
          Top             =   1260
          Width           =   1800
@@ -404,7 +403,7 @@ Begin VB.Form FSeteos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   7260
-         Left            =   105
+         Left            =   -74895
          TabIndex        =   42
          Top             =   420
          Width           =   2745
@@ -979,7 +978,7 @@ Begin VB.Form FSeteos
       Begin MSDataGridLib.DataGrid DGCodigos 
          Bindings        =   "FSeteos.frx":5280
          Height          =   5265
-         Left            =   -65655
+         Left            =   9345
          TabIndex        =   0
          Top             =   2520
          Width           =   4740
@@ -1063,7 +1062,7 @@ Begin VB.Form FSeteos
       Begin MSDataGridLib.DataGrid DGCuentas 
          Bindings        =   "FSeteos.frx":5299
          Height          =   5265
-         Left            =   -74895
+         Left            =   105
          TabIndex        =   1
          Top             =   2520
          Width           =   9255
@@ -1221,7 +1220,7 @@ Begin VB.Form FSeteos
       Begin MSDataGridLib.DataGrid DGTipoPrest 
          Bindings        =   "FSeteos.frx":52CB
          Height          =   975
-         Left            =   -74895
+         Left            =   105
          TabIndex        =   43
          Top             =   420
          Width           =   12720
@@ -1288,7 +1287,7 @@ Begin VB.Form FSeteos
       Begin MSDataGridLib.DataGrid DGEducativo 
          Bindings        =   "FSeteos.frx":52E6
          Height          =   1065
-         Left            =   -74895
+         Left            =   105
          TabIndex        =   44
          Top             =   1470
          Width           =   13980

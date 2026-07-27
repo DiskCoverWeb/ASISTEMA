@@ -823,7 +823,8 @@ Dim HayCnn As Boolean
     
    ' Acceso_IP_PCs_SP_MySQL Si_No
    '|--=:******* CONECCON A MYSQL *******:=--|
-     Datos_Iniciales_Entidad_SP_MySQL
+    'Datos_Iniciales_Entidad_SP_MySQL
+     Leer_Datos_Entidad_SP_MySQL
    '|--=:******* --------.------- *******:=--|
  
     TMail.de = CorreoDiskCover

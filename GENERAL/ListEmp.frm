@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Begin VB.Form ListEmp 
    BackColor       =   &H00FF8080&
    BorderStyle     =   3  'Fixed Dialog
@@ -796,7 +796,7 @@ Public Sub LlenarEmpresa()
 Dim FechaIniN As Integer
 Dim FechaFinN As Integer
 Dim SiActualizar As Boolean
-
+ 
     RatonReloj
     Primera_Vez = False
     PosPicX = 5600
@@ -858,286 +858,275 @@ Dim SiActualizar As Boolean
     Anio_Lectivo = Ninguno
     NombreProvincia = Ninguno
     
-    CadenaParcial = ""
-    sSQL = "SELECT Modulo, Item, Codigo " _
-         & "FROM Acceso_Empresa " _
-         & "WHERE Modulo <> '00' "
-    Select_Adodc AdoAux, sSQL
-    With AdoAux.Recordset
-     If .RecordCount > 0 Then
-         Do While Not .EOF
-            CadenaParcial = CadenaParcial & .fields("Modulo") & "^" & .fields("Item") & "^" & .fields("Codigo") & "^~"
-           .MoveNext
-         Loop
-     End If
-    End With
-    'MsgBox CadenaParcial
-    If Len(CadenaParcial) > 65535 Then MsgBox "Falta ampliar los niveles de seguridad."
     Minutos = Time
-    sSQL = "SELECT " & Full_Fields("Empresas") & " " _
-         & "FROM Empresas " _
-         & "WHERE Empresa = '" & DCEmpresa & "' "
-    Select_Adodc AdoEmp, sSQL
-    Cadena = Format(Time - Minutos, "hh:mm:ss") & vbCrLf
-    Minutos = Time
-    'Leer_Variables_Sesion_Empresa DCEmpresa
-    Cadena = Cadena & Format(Time - Minutos, "hh:mm:ss") & vbCrLf
-    'MsgBox Cadena
-    With AdoEmp.Recordset
+'    sSQL = "SELECT " & Full_Fields("Empresas") & " " _
+'         & "FROM Empresas " _
+'         & "WHERE Empresa = '" & DCEmpresa & "' "
+'    Select_Adodc AdoEmp, sSQL
+    
+'    Cadena = Format(Time - Minutos, "hh:mm:ss") & vbCrLf
+'    Minutos = Time
+'    'Leer_Variables_Sesion_Empresa DCEmpresa
+'    Cadena = Cadena & Format(Time - Minutos, "hh:mm:ss") & vbCrLf
+'    MsgBox Cadena
+'    With AdoEmp.Recordset
+    With AdoEmpresa.Recordset
      If .RecordCount > 0 Then
-         NumEmpresa = .fields("Item")
-         GrupoEmpresa = .fields("Grupo")
-         Empresa = .fields("Empresa")
-         EmailEmpresa = .fields("Email")
-         EmailContador = .fields("Email_Contabilidad")
-         EmailProcesos = .fields("Email_Procesos")
-         EmailRespaldos = .fields("Email_Respaldos")
-         RazonSocial = .fields("Razon_Social")
-         NombreComercial = .fields("Nombre_Comercial")
-         RUC = .fields("RUC")
-         NLogoTipo = .fields("Logo_Tipo")
-         NMarcaAgua = .fields("Marca_Agua")
-         NombreContador = .fields("Contador")
-         NombreCiudad = .fields("Ciudad")
-         RUC_Contador = .fields("RUC_Contador")
-         NombreGerente = .fields("Gerente")
-         NFirmaDigital = .fields("Firma_Digital")
-         NombrePais = .fields("Pais")
-         CodigoPais = .fields("CPais")
-         CodigoProv = .fields("CProv")
-         ReferenciaEmpresa = .fields("Referencia")
-         CI_Representante = .fields("CI_Representante")
-         TID_Repres = .fields("TD")
-         FAX = .fields("FAX")
-         Moneda = .fields("S_M")
-         Telefono1 = .fields("Telefono1")
-         Telefono2 = .fields("Telefono2")
-         Direccion = .fields("Direccion")
-         DireccionEstab = .fields("Direccion")
-         CodigoDelBanco = .fields("CodBanco")
-         NombreBanco = .fields("Nombre_Banco")
-         Dec_PVP = .fields("Dec_PVP")
-         Dec_Costo = .fields("Dec_Costo")
-         Dec_IVA = .fields("Dec_IVA")
-         Dec_Cant = .fields("Dec_Cant")
-         Cant_Item_PV = .fields("Cant_Item_PV")
-         Cant_Ancho_PV = .fields("Cant_Ancho_PV")
-
-        'Documentos Electronicos
-         Ambiente = .fields("Ambiente")
-         Obligado_Conta = .fields("Obligado_Conta")
-         ContEspec = .fields("Codigo_Contribuyente_Especial")
-         Informativo_FA = .fields("LeyendaFA")
-         Informativo_FAT = .fields("LeyendaFAT")
-         MascaraCodigoK = .fields("Formato_Inventario")
-         MascaraCodigoA = .fields("Formato_Activo")
-         MascaraCtas = Replace(.fields("Formato_Cuentas"), "C", "#")
-         FormatoCtas = MascaraCtas
-         LimpiarCtas = Replace(MascaraCtas, "#", " ")
-         Fecha_Igualar = .fields("Fecha_Igualar")
-         RUCOperadora = .fields("RUC_Operadora")
-         Porc_Serv = Redondear(.fields("Servicio") / 100, 2)
-         NombreCertificado = .fields("Ruta_Certificado")
-         RutaCertificado = RutaSistema & "\CERTIFIC\" & .fields("Ruta_Certificado")
-         ClaveCertificado = .fields("Clave_Certificado")
-        
-        'Pagina de Conexion con el SRI
-         URLRecepcion = .fields("Web_SRI_Recepcion")
-         URLAutorizacion = .fields("Web_SRI_Autorizado")
-
-         OpcCoop = CBool(.fields("Opc"))
-         CentroDeCosto = CBool(.fields("Centro_Costos"))
-         Copia_PV = CBool(.fields("Copia_PV"))
-         Mod_PVP = CBool(.fields("Mod_PVP"))
-         Mod_Fact = CBool(.fields("Mod_Fact"))
-         Mod_Fecha = CBool(.fields("Mod_Fecha"))
-         Num_Meses_CD = CBool(.fields("Num_CD"))
-         Num_Meses_CE = CBool(.fields("Num_CE"))
-         Num_Meses_CI = CBool(.fields("Num_CI"))
-         Num_Meses_ND = CBool(.fields("Num_ND"))
-         Num_Meses_NC = CBool(.fields("Num_NC"))
-         Plazo_Fijo = CBool(.fields("Plazo_Fijo"))
-         No_Autorizar = CBool(.fields("No_Autorizar"))
-         Mas_Grupos = CBool(.fields("Separar_Grupos"))
-         Medio_Rol = CBool(.fields("Medio_Rol"))
-         Encabezado_PV = CBool(.fields("Encabezado_PV"))
-         CalcComision = CBool(.fields("Calcular_Comision"))
-         Grafico_PV = CBool(.fields("Grafico_PV"))
-         ComisionEjec = CBool(.fields("Comision_Ejecutivo"))
-         ImpCeros = CBool(.fields("Imp_Ceros"))
-         Email_CE_Copia = CBool(.fields("Email_CE_Copia"))
-         Ret_Aut = CBool(.fields("Ret_Aut"))
-        'ConciliacionAut = CBool(.Fields("Conciliacion_Aut"))
-         NumeroFASubModulo = CBool(.fields("Abonos_FA"))
-         EsTransporte = CBool(.fields("Es_Transporte"))
-         
-         Debo_Pagare = MensajeDeboPagare
-         If Len(RazonSocial) > 1 Then CodigoA = RazonSocial Else CodigoA = Empresa
-         If .fields("Debo_Pagare") = "SI" Then Debo_Pagare = Replace(Debo_Pagare, "vRazon_Social", CodigoA) Else Debo_Pagare = Ninguno
-         
-        'Datos de iniciacion desde MySQL
-         Fecha_CE = .fields("Fecha_CE")
-         Fecha_P12 = .fields("Fecha_P12")
-         TipoPlan = .fields("Tipo_Plan")
-         EstadoEmpresa = .fields("Estado")
-         SerieFactura = .fields("Serie_FA")
-         
-         CodigoA = Ninguno
-         If MascaraCodigoK = Ninguno Then
-            MascaraCodigoK = "CC.CC.CCC.CCCCCC"
-            FormatoCodigoK = "CC.CC.CCC.CCCCCC"
-         End If
-         If MascaraCodigoA = Ninguno Then
-            MascaraCodigoA = "CC.CC.CCC.CCCCCC"
-            FormatoCodigoA = "CC.CC.CCC.CCCCCC"
-         End If
-         LimpiarCodigoK = Replace(MascaraCodigoK, "C", " ")
-         LimpiarCodigoA = Replace(MascaraCodigoA, "C", " ")
-         
-        'Asignacion de correos automáticos para envio a procesos automatizados
-        '*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-         For I = 0 To 6
-             Lista_De_Correos(I).Correo_Electronico = CorreoDiskCover
-             Lista_De_Correos(I).Clave = ContrasenaDiskCover
-         Next I
-        
-         If Len(.fields("Email_Conexion")) > 1 And Len(.fields("Email_Clave")) > 1 Then
-            Lista_De_Correos(0).Correo_Electronico = .fields("Email_Conexion")
-            Lista_De_Correos(0).Clave = .fields("Email_Clave")
-         End If
-         
-         If Len(.fields("Email_Conexion_CE")) > 1 And Len(.fields("Email_Clave_CE")) > 1 Then
-            Lista_De_Correos(4).Correo_Electronico = .fields("Email_Conexion_CE")
-            Lista_De_Correos(4).Clave = .fields("Email_Clave_CE")
-         End If
-         Lista_De_Correos(6).Correo_Electronico = "credenciales@diskcoversystem.com"
-         Lista_De_Correos(6).Clave = "Dlcjvl1210@Credenciales"
-         Minutos = Time
-         
-        '|--=:******* CONECCON A MYSQL *******:=--|
-          Datos_Iniciales_Entidad_SP_MySQL
-        '|--=:******* --------.------- *******:=--|
-        
-        'MsgBox "Desktop Test: MySQL - " & Format(Time - Minutos, "hh:mm:ss")
-        'MsgBox "Desktop Test: " & ServidorMySQL
-         If ServidorMySQL Then
-            If .fields("Estado") <> EstadoEmpresa Or .fields("Cartera") <> Cartera Or .fields("Cant_FA") <> Cant_FA Or .fields("Serie_FA") <> SerieFE Or _
-               .fields("Fecha_CE") <> Fecha_CE Or .fields("Fecha_P12") <> Fecha_P12 Or .fields("Tipo_Plan") <> Fecha_CO Or .fields("Tipo_Plan") <> TipoPlan Then
-                sSQL = "UPDATE Empresas " _
-                     & "SET Cartera = " & Cartera & ", " _
-                     & "Cant_FA = " & Cant_FA & ",  " _
-                     & "Fecha_CE = '" & BuscarFecha(Fecha_CE) & "', " _
-                     & "Fecha_P12 = '" & BuscarFecha(Fecha_P12) & "', " _
-                     & "Tipo_Plan = '" & TipoPlan & "', " _
-                     & "Estado = '" & EstadoEmpresa & "', " _
-                     & "Serie_FA = '" & SerieFE & "' " _
-                     & "WHERE Item = '" & NumEmpresa & "' "
-                Ejecutar_SQL_SP sSQL
+        .Find ("Empresa = '" & DCEmpresa & "' ")
+         If Not .EOF Then
+            CadenaParcial = ""
+            sSQL = "SELECT Modulo, Item, Codigo " _
+                 & "FROM Acceso_Empresa " _
+                 & "WHERE Modulo <> '00' "
+            Select_Adodc AdoAux, sSQL
+            If AdoAux.Recordset.RecordCount > 0 Then
+               Do While Not AdoAux.Recordset.EOF
+                  CadenaParcial = CadenaParcial & AdoAux.Recordset.fields("Modulo") & "^" & AdoAux.Recordset.fields("Item") & "^" & AdoAux.Recordset.fields("Codigo") & "^~"
+                  AdoAux.Recordset.MoveNext
+               Loop
             End If
-         End If
-         Contador = 0
-         ContadorRUCCI = 0
-         NumItemTemp = NumEmpresa
-         LogoTipo = Obtener_File_Grafico(NLogoTipo)
-         FirmaDigital = Obtener_File_Grafico(NFirmaDigital)
-         MarcaAgua = Obtener_File_Grafico(NMarcaAgua)
-         SQLDec = ""
-         CmdBSalir.Visible = False
-         CmdBAceptar.Visible = False
-         CmdBCrearEmp.Visible = False
-         'FrameClave.Visible = False
-         
-         NumItemTemp = NumEmpresa
-         RutaDocumentos = RutaSysBases & "\CE\CE" & NumEmpresa
-        'SavePicture Me.Picture, RutaDestino
-         NombreRUC = "R.U.C."
-        'MsgBox LogoTipo
-         Carpeta = .fields("SubDir")
-         EmpresaActual = "[" & RutaEmpresa & "]."
-                  
-         If Not PCActivo Then
-            Cadena = NombreUsuario & vbCrLf & "Su Equipo se encuentra en LISTA NEGRA, ingreso no autorizado, comuniquese con el Administrador del Sistema"
-            MsgBox UCaseStrg(Cadena), vbCritical, "ACCESO DEL PC DENEGADO"
-            End
-         End If
-         If Not EstadoUsuario Then
-            Cadena = NombreUsuario & vbCrLf & "Su ingreso no esta autorizado, comuniquese con el Administrador del Sistema"
-            MsgBox UCaseStrg(Cadena), vbCritical, "ACCESO AL SISTEMA DENEGADO"
-            End
+            If Len(CadenaParcial) > 65535 Then MsgIngreso(1).Mensaje = "Falta ampliar los niveles de seguridad."
+            NumEmpresa = .fields("Item")
+            GrupoEmpresa = .fields("Grupo")
+            Empresa = .fields("Empresa")
+            EmailEmpresa = .fields("Email")
+            EmailContador = .fields("Email_Contabilidad")
+            EmailProcesos = .fields("Email_Procesos")
+            EmailRespaldos = .fields("Email_Respaldos")
+            RazonSocial = .fields("Razon_Social")
+            NombreComercial = .fields("Nombre_Comercial")
+            RUC = .fields("RUC")
+            NLogoTipo = .fields("Logo_Tipo")
+            NMarcaAgua = .fields("Marca_Agua")
+            NombreContador = .fields("Contador")
+            NombreCiudad = .fields("Ciudad")
+            RUC_Contador = .fields("RUC_Contador")
+            NombreGerente = .fields("Gerente")
+            NFirmaDigital = .fields("Firma_Digital")
+            NombrePais = .fields("Pais")
+            CodigoPais = .fields("CPais")
+            CodigoProv = .fields("CProv")
+            ReferenciaEmpresa = .fields("Referencia")
+            CI_Representante = .fields("CI_Representante")
+            TID_Repres = .fields("TD")
+            FAX = .fields("FAX")
+            Moneda = .fields("S_M")
+            Telefono1 = .fields("Telefono1")
+            Telefono2 = .fields("Telefono2")
+            Direccion = .fields("Direccion")
+            DireccionEstab = .fields("Direccion")
+            CodigoDelBanco = .fields("CodBanco")
+            NombreBanco = .fields("Nombre_Banco")
+            Dec_PVP = .fields("Dec_PVP")
+            Dec_Costo = .fields("Dec_Costo")
+            Dec_IVA = .fields("Dec_IVA")
+            Dec_Cant = .fields("Dec_Cant")
+            Cant_Item_PV = .fields("Cant_Item_PV")
+            Cant_Ancho_PV = .fields("Cant_Ancho_PV")
+    
+           'Documentos Electronicos
+            Ambiente = .fields("Ambiente")
+            Obligado_Conta = .fields("Obligado_Conta")
+            ContEspec = .fields("Codigo_Contribuyente_Especial")
+            
+            Informativo_FA = .fields("LeyendaFA")
+            Informativo_FAT = .fields("LeyendaFAT")
+            MascaraCodigoK = .fields("Formato_Inventario")
+            MascaraCodigoA = .fields("Formato_Activo")
+            MascaraCtas = Replace(.fields("Formato_Cuentas"), "C", "#")
+            FormatoCtas = MascaraCtas
+            LimpiarCtas = Replace(MascaraCtas, "#", " ")
+            Fecha_Igualar = .fields("Fecha_Igualar")
+            RUCOperadora = .fields("RUC_Operadora")
+            Porc_Serv = Redondear(.fields("Servicio") / 100, 2)
+            NombreCertificado = .fields("Ruta_Certificado")
+            RutaCertificado = RutaSistema & "\CERTIFIC\" & .fields("Ruta_Certificado")
+            ClaveCertificado = .fields("Clave_Certificado")
+            
+           'Pagina de Conexion con el SRI
+            URLRecepcion = .fields("Web_SRI_Recepcion")
+            URLAutorizacion = .fields("Web_SRI_Autorizado")
+    
+            OpcCoop = CBool(.fields("Opc"))
+            CentroDeCosto = CBool(.fields("Centro_Costos"))
+            Copia_PV = CBool(.fields("Copia_PV"))
+            Mod_PVP = CBool(.fields("Mod_PVP"))
+            Mod_Fact = CBool(.fields("Mod_Fact"))
+            Mod_Fecha = CBool(.fields("Mod_Fecha"))
+            Num_Meses_CD = CBool(.fields("Num_CD"))
+            Num_Meses_CE = CBool(.fields("Num_CE"))
+            Num_Meses_CI = CBool(.fields("Num_CI"))
+            Num_Meses_ND = CBool(.fields("Num_ND"))
+            Num_Meses_NC = CBool(.fields("Num_NC"))
+            Plazo_Fijo = CBool(.fields("Plazo_Fijo"))
+            No_Autorizar = CBool(.fields("No_Autorizar"))
+            Mas_Grupos = CBool(.fields("Separar_Grupos"))
+            Medio_Rol = CBool(.fields("Medio_Rol"))
+            Encabezado_PV = CBool(.fields("Encabezado_PV"))
+            CalcComision = CBool(.fields("Calcular_Comision"))
+            Grafico_PV = CBool(.fields("Grafico_PV"))
+            ComisionEjec = CBool(.fields("Comision_Ejecutivo"))
+            ImpCeros = CBool(.fields("Imp_Ceros"))
+            Email_CE_Copia = CBool(.fields("Email_CE_Copia"))
+            Ret_Aut = CBool(.fields("Ret_Aut"))
+            Sin_Fines_Lucro = CBool(.fields("Sin_Fines_Lucro"))
+            
+           'ConciliacionAut = CBool(.Fields("Conciliacion_Aut"))
+            NumeroFASubModulo = CBool(.fields("Abonos_FA"))
+            EsTransporte = CBool(.fields("Es_Transporte"))
+             
+             Debo_Pagare = MensajeDeboPagare
+             If Len(RazonSocial) > 1 Then CodigoA = RazonSocial Else CodigoA = Empresa
+             If .fields("Debo_Pagare") = "SI" Then Debo_Pagare = Replace(Debo_Pagare, "vRazon_Social", CodigoA) Else Debo_Pagare = Ninguno
+             
+            'Datos de iniciacion desde MySQL
+             Fecha_CE = .fields("Fecha_CE")
+             Fecha_P12 = .fields("Fecha_P12")
+             TipoPlan = .fields("Tipo_Plan")
+             EstadoEmpresa = .fields("Estado")
+             SerieFactura = .fields("Serie_FA")
+             
+             CodigoA = Ninguno
+             If MascaraCodigoK = Ninguno Then
+                MascaraCodigoK = "CC.CC.CCC.CCCCCC"
+                FormatoCodigoK = "CC.CC.CCC.CCCCCC"
+             End If
+             If MascaraCodigoA = Ninguno Then
+                MascaraCodigoA = "CC.CC.CCC.CCCCCC"
+                FormatoCodigoA = "CC.CC.CCC.CCCCCC"
+             End If
+             LimpiarCodigoK = Replace(MascaraCodigoK, "C", " ")
+             LimpiarCodigoA = Replace(MascaraCodigoA, "C", " ")
+             
+            'Asignacion de correos automáticos para envio a procesos automatizados
+            '*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+             For I = 0 To 6
+                 Lista_De_Correos(I).Correo_Electronico = CorreoDiskCover
+                 Lista_De_Correos(I).Clave = ContrasenaDiskCover
+             Next I
+            
+             If Len(.fields("Email_Conexion")) > 1 And Len(.fields("Email_Clave")) > 1 Then
+                Lista_De_Correos(0).Correo_Electronico = .fields("Email_Conexion")
+                Lista_De_Correos(0).Clave = .fields("Email_Clave")
+             End If
+             
+             If Len(.fields("Email_Conexion_CE")) > 1 And Len(.fields("Email_Clave_CE")) > 1 Then
+                Lista_De_Correos(4).Correo_Electronico = .fields("Email_Conexion_CE")
+                Lista_De_Correos(4).Clave = .fields("Email_Clave_CE")
+             End If
+             Lista_De_Correos(6).Correo_Electronico = "credenciales@diskcoversystem.com"
+             Lista_De_Correos(6).Clave = "Dlcjvl1210@Credenciales"
+             Minutos = Time
+             
+            '|--=:******* CONECCON A MYSQL *******:=--|
+             Leer_Datos_Entidad_SP_MySQL
+            '|--=:******* --------.------- *******:=--|
+            
+            'MsgBox "Desktop Test: MySQL - " & Format(Time - Minutos, "hh:mm:ss")
+            'MsgBox "Desktop Test: " & ServidorMySQL
+             Contador = 0
+             ContadorRUCCI = 0
+             NumItemTemp = NumEmpresa
+             LogoTipo = Obtener_File_Grafico(NLogoTipo)
+             FirmaDigital = Obtener_File_Grafico(NFirmaDigital)
+             MarcaAgua = Obtener_File_Grafico(NMarcaAgua)
+             SQLDec = ""
+             CmdBSalir.Visible = False
+             CmdBAceptar.Visible = False
+             CmdBCrearEmp.Visible = False
+             'FrameClave.Visible = False
+             
+             NumItemTemp = NumEmpresa
+             RutaDocumentos = RutaSysBases & "\CE\CE" & NumEmpresa
+            'SavePicture Me.Picture, RutaDestino
+             NombreRUC = "R.U.C."
+            'MsgBox LogoTipo
+             Carpeta = .fields("SubDir")
+             EmpresaActual = "[" & RutaEmpresa & "]."
+                      
+             If Not PCActivo Then
+                MsgIngreso(2).Mensaje = NombreUsuario & vbCrLf & "Su Equipo se encuentra en LISTA NEGRA, ingreso no autorizado, comuniquese con el Administrador del Sistema"
+                MsgIngreso(2).Finalizar = True
+             End If
+             If Not EstadoUsuario Then
+                MsgIngreso(3).Mensaje = NombreUsuario & vbCrLf & "Su ingreso no esta autorizado, comuniquese con el Administrador del Sistema"
+                MsgIngreso(3).Finalizar = True
+             End If
+             
+             If Cod_Bodega <> Ninguno Then
+                sSQL = "SELECT Bodega " _
+                     & "FROM Catalogo_Bodegas " _
+                     & "WHERE Item = '" & NumEmpresa & "' " _
+                     & "AND Periodo = '" & Periodo_Contable & "' " _
+                     & "AND CodBod = '" & Cod_Bodega & "' "
+                Select_Adodc AdoAux, sSQL
+                If AdoAux.Recordset.RecordCount > 0 Then Nom_Bodega = AdoAux.Recordset.fields("Bodega")
+             End If
+             
+             FechaCierreFiscal = "01/01/" & Year(FechaSistema)
+             sSQL = "SELECT MIN(Fecha) As FechaCierreFiscal " _
+                   & "FROM Comprobantes " _
+                   & "WHERE Periodo = '" & Periodo_Contable & "' " _
+                   & "AND Item = '" & NumEmpresa & "' "
+             Select_Adodc AdoAux, sSQL
+             If AdoAux.Recordset.RecordCount > 0 Then
+                'MsgBox AdoAux.Recordset.fields("FechaCierreFiscal")
+                If IsNull(AdoAux.Recordset.fields("FechaCierreFiscal")) Then FechaCierreFiscal = "01/01/2000" Else FechaCierreFiscal = AdoAux.Recordset.fields("FechaCierreFiscal")
+             End If
+             
+            'MsgBox "Desktop Test: " & Fecha_CE & vbCrLf & Fecha_P12
+            'Actualiza Datos iniciales de la Empresa
+            '+++++++++++++++++++++++++++++++++++++++
+             Iniciar_Datos_Default_SP
+            'MsgBox "Desktop Test: MySQL - " & Format(Time - Minutos, "hh:mm:ss")
+            '+++++++++++++++++++++++++++++++++++++++
+            'MsgBox URLToken & vbCrLf & Token
+            'Resultado del SP del MySQL
+             ListaFacturas = ""
+             Evaluar = False
+             If Cartera <> 0 And Cant_FA <> 0 Then
+                MsgIngreso(4).Mensaje = "CARTERA VENCIDA: ESTIMADO " & UCase(Empresa) & ", SE LE COMUNICA QUE USTED MANTIENE UNA CARTERA VENCIDA DE USD " & Format(Cartera, "#,##0.00") & ", " _
+                                      & "EQUIVALENTE A " & Cant_FA & " FACTURA(S) EMITIDA(S) A USTED." & vbCrLf
+             End If
+             Select Case EstadoEmpresa
+               Case "VEN30"
+                    MsgIngreso(5).Mensaje = "PRIMER COMUNICADO DE ALVERTENCIA: SU EMPRESA ESTA POR SER BLOQUEADA POR CARTERA DE 30 DIAS DE VENCIMIENTO, "
+               Case "VEN60"
+                    MsgIngreso(5).Mensaje = "SEGUNDO COMUNICADO DE ALVERTENCIA: SU EMPRESA ESTA POR SER BLOQUEADA POR CARTERA DE 60 DIAS DE VENCIMIENTO, "
+               Case "VEN90"
+                    MsgIngreso(5).Mensaje = "TERCER COMUNICADO DE ALVERTENCIA: SU EMPRESA ESTA POR SER BLOQUEADA POR CARTERA DE 90 DIAS DE VENCIMIENTO, "
+               Case "VEN360"
+                    MsgIngreso(5).Mensaje = "SU EMPRESA ESTA BLOQUEADA POR CARTERA DE 360 DIAS DE VENCIMIENTO, "
+                    MsgIngreso(5).Finalizar = True
+               Case "VEN180", "MAS360"
+                    MsgIngreso(5).Mensaje = "LO SENTIMOS, SU EMPRESA ESTA SUSPENDIDA EN EL SISTEMA, "
+                    MsgIngreso(5).Finalizar = True
+               Case "BLOQ"
+                    MsgIngreso(5).Mensaje = "BLOQUEO DEFINITIVO: LO SENTIMOS, SU EMPRESA NO ESTA ACTIVA EN EL SISTEMA, COMUNIQUESE A DISKCOVER SYSTEM, "
+                    MsgIngreso(5).Finalizar = True
+             End Select
+        
+            'MsgBox "Desktop Test: 1 Estado = " & EstadoEmpresa
+             RatonNormal
+             Cadena1 = ""
+             If Len(NombreGerente) <= 1 Then Cadena1 = Cadena1 & "Representante Legal," & vbCrLf
+             If Len(RazonSocial) <= 1 Then Cadena1 = Cadena1 & "Razon Social," & vbCrLf
+             If Len(NombreContador) <= 1 Then Cadena1 = Cadena1 & "Nombre del Contador," & vbCrLf
+             If Len(RUC_Contador) <= 1 Then Cadena1 = Cadena1 & "RUC del Contador," & vbCrLf
+             If Len(EmailProcesos) <= 1 And Email_CE_Copia Then Cadena1 = Cadena1 & "Email de Procesos y Respaldos," & vbCrLf
+             Cadena = "En esta empresa no se ha registrado " & vbCrLf & Cadena1 & vbCrLf _
+                    & "comuniquese con el Administrador del Sistema para que le ayude con la actualizacion de estos datos. "
+             If Len(Cadena1) > 1 Then MsgIngreso(6).Mensaje = "REGISTRAR DATOS DE LA EMPRESA:" & vbCrLf & Cadena
+             
+             Control_Procesos Normal, "Ingreso a " & Empresa, "R.U.C. " & RUC & ", Item: " & NumEmpresa
+         Else
+            MsgIngreso(4).Mensaje = "Seleccione una empresa valida"
          End If
      Else
          NumEmpresa = Ninguno
      End If
     End With
-    
-    If Cod_Bodega <> Ninguno Then
-       sSQL = "SELECT Bodega " _
-            & "FROM Catalogo_Bodegas " _
-            & "WHERE Item = '" & NumEmpresa & "' " _
-            & "AND Periodo = '" & Periodo_Contable & "' " _
-            & "AND CodBod = '" & Cod_Bodega & "' "
-       Select_Adodc AdoAux, sSQL
-       If AdoAux.Recordset.RecordCount > 0 Then Nom_Bodega = AdoAux.Recordset.fields("Bodega")
-    End If
-    
-    sSQL = "SELECT MIN(Fecha) As FechaCierreFiscal " _
-          & "FROM Comprobantes " _
-          & "WHERE Periodo = '" & Periodo_Contable & "' " _
-          & "AND Item = '" & NumEmpresa & "' "
-    Select_Adodc AdoAux, sSQL
-    If AdoAux.Recordset.RecordCount > 0 Then
-       'MsgBox AdoAux.Recordset.fields("FechaCierreFiscal")
-       If IsNull(AdoAux.Recordset.fields("FechaCierreFiscal")) Then FechaCierreFiscal = "01/01/2000" Else FechaCierreFiscal = AdoAux.Recordset.fields("FechaCierreFiscal")
-    Else
-       FechaCierreFiscal = "01/01/" & Year(FechaSistema)
-    End If
 
-   'MsgBox "Desktop Test: " & Fecha_CE & vbCrLf & Fecha_P12
-   'Actualiza Datos iniciales de la Empresa
-   '+++++++++++++++++++++++++++++++++++++++
-    Iniciar_Datos_Default_SP
-   'MsgBox "Desktop Test: MySQL - " & Format(Time - Minutos, "hh:mm:ss")
-   '+++++++++++++++++++++++++++++++++++++++
-   'MsgBox URLToken & vbCrLf & Token
-   'Resultado del SP del MySQL
-    ListaFacturas = ""
-    TMail.Asunto = "CARTERA VENCIDA"
-    Evaluar = False
-    If Cartera <> 0 And Cant_FA <> 0 Then
-       ListaFacturas = "ESTIMADO " & UCase(Empresa) & ", SE LE COMUNICA QUE USTED MANTIENE UNA CARTERA VENCIDA DE USD " & Format(Cartera, "#,##0.00") & ", " _
-                     & "EQUIVALENTE A " & Cant_FA & " FACTURA(S) EMITIDA(S) A USTED." & vbCrLf
-    End If
-    Select Case EstadoEmpresa
-      Case "VEN30"
-           ListaFacturas = ListaFacturas & "PRIMER COMUNICADO DE ALVERTENCIA: SU EMPRESA ESTA POR SER BLOQUEADA POR CARTERA DE 30 DIAS DE VENCIMIENTO, "
-      Case "VEN60"
-           ListaFacturas = ListaFacturas & "SEGUNDO COMUNICADO DE ALVERTENCIA: SU EMPRESA ESTA POR SER BLOQUEADA POR CARTERA DE 60 DIAS DE VENCIMIENTO, "
-      Case "VEN90"
-           ListaFacturas = ListaFacturas & "TERCER COMUNICADO DE ALVERTENCIA: SU EMPRESA ESTA POR SER BLOQUEADA POR CARTERA DE 90 DIAS DE VENCIMIENTO, "
-      Case "VEN360"
-           ListaFacturas = ListaFacturas & "SU EMPRESA ESTA BLOQUEADA POR CARTERA DE 360 DIAS DE VENCIMIENTO, "
-           TMail.Asunto = "EMPRESA BLOQUEADA POR VENCIMIENTO MAYOR A 360 DIAS"
-           Evaluar = True
-      Case "VEN180", "MAS360"
-           ListaFacturas = ListaFacturas & "LO SENTIMOS, SU EMPRESA ESTA SUSPENDIDA EN EL SISTEMA, "
-           TMail.Asunto = "EMPRESA SUSPENDIDA"
-           Evaluar = True
-      Case "BLOQ"
-           ListaFacturas = ListaFacturas & "LO SENTIMOS, SU EMPRESA NO ESTA ACTIVA EN EL SISTEMA, "
-           TMail.Asunto = "BLOQUEO DEFINITIVO, COMUNIQUESE A DISKCOVER SYSTEM"
-           Evaluar = True
-    End Select
-  ' MsgBox "Desktop Test: 1 Estado = " & EstadoEmpresa
-    RatonNormal
-    Cadena1 = ""
-    If Len(NombreGerente) <= 1 Then Cadena1 = Cadena1 & "Representante Legal," & vbCrLf
-    If Len(RazonSocial) <= 1 Then Cadena1 = Cadena1 & "Razon Social," & vbCrLf
-    If Len(NombreContador) <= 1 Then Cadena1 = Cadena1 & "Nombre del Contador," & vbCrLf
-    If Len(RUC_Contador) <= 1 Then Cadena1 = Cadena1 & "RUC del Contador," & vbCrLf
-    If Len(EmailProcesos) <= 1 And Email_CE_Copia Then Cadena1 = Cadena1 & "Email de Procesos y Respaldos," & vbCrLf
-    Cadena = "En esta empresa no se ha registrado " & vbCrLf & Cadena1 & vbCrLf _
-           & "comuniquese con el Administrador del Sistema para que le ayude con este proceso."
-    If Len(Cadena1) > 1 Then MsgBox Cadena, vbCritical, "REGISTRAR DATOS DE LA EMPRESA"
     RatonReloj
    'Encerar datos por default
    '-------------------------
@@ -1268,6 +1257,7 @@ Dim SiActualizar As Boolean
    '---------------------------------------------------------------------------------
    'Ruta donde se generaran los PDF
     RutaSubDirTemp = RutaSysTemp & "\PDF_" & NumEmpresa & "\"
+    If Not Existe_Carpeta(RutaSysTemp) Then MkDir RutaSysTemp
     If Not Existe_Carpeta(RutaSubDirTemp) Then MkDir RutaSubDirTemp
 
    'Rutas generales de las bases
@@ -1286,16 +1276,26 @@ Dim SiActualizar As Boolean
    'MsgBox AgenteRetencion & vbCrLf & MicroEmpresa
    'Ver_Grafico_FormPict
     
-    Select Case Ambiente
-      Case "1": If Not Ping_IP("celcer.sri.gob.ec") Then Cadena = Replace(ServidorEnLineaSRI, "XXXX", "Prueba") Else Cadena = ""
-      Case "2": If Not Ping_IP("cel.sri.gob.ec") Then Cadena = Replace(ServidorEnLineaSRI, "XXXX", "Produccion") Else Cadena = ""
-      Case Else: Cadena = ""
-    End Select
-    Control_Procesos Normal, "Ingreso a " & Empresa, "R.U.C. " & RUC & ", Item: " & NumEmpresa
+'''    Select Case Ambiente
+'''      Case "1": If Not Ping_IP("celcer.sri.gob.ec") Then Cadena = Replace(ServidorEnLineaSRI, "XXXX", "Prueba") Else Cadena = ""
+'''      Case "2": If Not Ping_IP("cel.sri.gob.ec") Then Cadena = Replace(ServidorEnLineaSRI, "XXXX", "Produccion") Else Cadena = ""
+'''      Case Else: Cadena = ""
+'''    End Select
+    
    'MsgBox "Desktop Test: 2" & ListaFacturas
    'If Cadena <> "" Then MsgBox UCaseStrg(Cadena)
+   
+    RatonNormal
+    Evaluar = False
+    ListaFacturas = ""
+    For I = 0 To UBound(MsgIngreso) - 1
+        ListaFacturas = ListaFacturas & MsgIngreso(I).Mensaje
+        If MsgIngreso(I).Finalizar Then Evaluar = True
+    Next I
+  
+
     If Len(ListaFacturas) > 1 Then
-       ListaFacturas = ListaFacturas _
+       ListaFacturas = ListaFacturas & vbCrLf _
                      & "COMUNIQUESE CON SERVICIO AL CLIENTE DE DISKCOVER SYSTEM A LOS TELEFONOS: 098-910-5300/098-652-4396/099-965-4196, " _
                      & "O ENVIE UN MAIL A carteraclientes@diskcoversystem.com; CON EL COMPROBANTE DE DEPOSITO Y ASI PROCEDER A REALIZAR " _
                      & "LA ACTUALIZACION DE LA JUSTIFICACION EN EL SISTEMA." & vbCrLf
@@ -1327,12 +1327,20 @@ Dim SiActualizar As Boolean
     End With
     
     TiempoSistema = Time - 0.01
-    RatonNormal
     Unload ListEmp
+    RatonNormal
     If Evaluar Then
        Control_Procesos "Q", "ACCESO DENEGADO A: " & Empresa, "Motivo: " & EstadoEmpresa
        End
     End If
+End Sub
+
+Public Sub Encerar_Mensajes_de_Ingreso()
+    ReDim MsgIngreso(10) As Mensaje_Sistema
+    For I = 0 To 9
+        MsgIngreso(I).Mensaje = ""
+        MsgIngreso(I).Finalizar = False
+    Next I
 End Sub
 
 Public Function BuscarClave(Usuario As String, Clave As String) As Boolean
@@ -1456,7 +1464,7 @@ Private Sub Command1_Click()
                            & "PWD=" & strPassword & ";"
                  SQL_Server = True
             Case "MY SQL"
-                 AdoStrCnn = "DRIVER={MySQL ODBC 5.1 Driver};" _
+                 AdoStrCnn = "DRIVER={MySQL ODBC 8.0 ANSI Driver};" _
                            & "SERVER=" & strIPServidor & ";" _
                            & "DATABASE=" & strNombreBaseDatos & ";" _
                            & "USER=" & strUsuario & ";" _
@@ -1468,48 +1476,64 @@ Private Sub Command1_Click()
                            & "Provider=Microsoft.Jet.OLEDB.4.0;" _
                            & "Persist Security Info=False;"
           End Select
-'          If Ping_IP(strIPServidor) Then
-            'Buscamos la cadena de conección a la base en SQL SERVER
-             ConectarAdodc AdoAux
-             ConectarAdodc AdoEmp
-             ConectarAdodc AdoEmp000
-             ConectarAdodc AdoAcceso
-             ConectarAdodc AdoEmpresa
-             ChDir RutaSistema
-             ListEmp.Caption = "UNIDAD DE RED: [" & RutaSistema & "]."
-             sSQL = "SELECT " & Full_Fields("Acceso_Empresa") & " " _
-                  & "FROM Acceso_Empresa " _
-                  & "WHERE Item <> '.' " _
-                  & "ORDER BY Item,Modulo,Codigo "
-             Select_Adodc AdoAcceso, sSQL
-             Dolar = 0
-             TextDolar.Text = "0.00"
-              
-             sSQL = "SELECT " & Full_Fields("Empresas") & " " _
-                  & "FROM Empresas " _
-                  & "WHERE Item <> '.' "
-             If Not ConSucursal Then
-                sSQL = sSQL & "ORDER BY Empresa, Item "
-             Else
-                sSQL = sSQL & "ORDER BY Item, Empresa "
-             End If
-             SelectDB_Combo DCEmpresa, AdoEmpresa, sSQL, "Empresa"
-             If AdoEmpresa.Recordset.RecordCount > 0 Then
-               'FrameClave.Visible = True
-                CmdBAceptar.Enabled = False
-               'CmdBCrearUsu.Enabled = False
-                CmdBCrearEmp.Enabled = False
-               'TextUsuario.SetFocus
-                RatonNormal
-               'Crear_LogIn_Sistema
-             Else
-                Unload ListEmp
-                CrearEmp.Show
-             End If
-'          Else
- '             MsgBox "El Servidor no esta en Linea"
- '             End
-  '        End If
+         'Buscamos la cadena de conección a la base en SQL SERVER
+          ConectarAdodc AdoAux
+          ConectarAdodc AdoEmp
+          ConectarAdodc AdoEmp000
+          ConectarAdodc AdoAcceso
+          ConectarAdodc AdoEmpresa
+          
+          ChDir RutaSistema
+          Encerar_Mensajes_de_Ingreso
+          
+          ListEmp.Caption = "UNIDAD DE RED: [" & RutaSistema & "]."
+          
+          ConSucursal = False
+          Version_Sistema = "Teléfono del proveedor: " & vbCrLf & "(+593) 09-9965-4196/09-8652-4396. "
+
+          sSQL = "SELECT " & Full_Fields("Acceso_Empresa") & " " _
+               & "FROM Acceso_Empresa " _
+               & "WHERE Item <> '.' " _
+               & "ORDER BY Item,Modulo,Codigo "
+          Select_Adodc AdoAcceso, sSQL
+          
+          sSQL = "SELECT Sucursal " _
+               & "FROM Acceso_Sucursales " _
+               & "WHERE Sucursal <> '.' "
+          Select_Adodc AdoAux, sSQL
+          If AdoAux.Recordset.RecordCount > 0 Then ConSucursal = True
+             
+          sSQL = "SELECT Aplicacion " _
+               & "FROM Modulos " _
+               & "WHERE Modulo = 'VS' "
+          Select_Adodc AdoAux, sSQL
+          If AdoAux.Recordset.RecordCount > 0 Then Version_Sistema = "Actualización de: " & AdoAux.Recordset.fields("Aplicacion") & " - Ver. 8.0.12 "
+        
+          sSQL = "SELECT " & Full_Fields("Empresas") & " " _
+               & "FROM Empresas " _
+               & "WHERE Item <> '.' "
+          If Not ConSucursal Then
+             sSQL = sSQL & "ORDER BY Empresa, Item "
+          Else
+             sSQL = sSQL & "ORDER BY Item, Empresa "
+          End If
+          SelectDB_Combo DCEmpresa, AdoEmpresa, sSQL, "Empresa"
+             
+          Dolar = 0
+          TextDolar.Text = "0.00"
+         
+          If AdoEmpresa.Recordset.RecordCount > 0 Then
+            'FrameClave.Visible = True
+             CmdBAceptar.Enabled = False
+            'CmdBCrearUsu.Enabled = False
+             CmdBCrearEmp.Enabled = False
+            'TextUsuario.SetFocus
+             RatonNormal
+            'Crear_LogIn_Sistema
+          Else
+             Unload ListEmp
+             CrearEmp.Show
+          End If
        Else
           MsgBox "No ha seleccionado ninguna Entidad"
        End If
@@ -1630,24 +1654,7 @@ Dim RetVal
     UnPrintAgrandar = Chr(18)                'Cancela Agrandar
     
    'MsgBox UltimoDiaMes("15/12/2020") & vbCrLf & MaximoDia(2, 2020)
-    
-    ConSucursal = False
-    sSQL = "SELECT Sucursal " _
-         & "FROM Acceso_Sucursales " _
-         & "WHERE Sucursal <> '.' "
-    Select_Adodc AdoEmp, sSQL
-    If AdoEmp.Recordset.RecordCount > 0 Then ConSucursal = True
-        
-    sSQL = "SELECT Aplicacion " _
-         & "FROM Modulos " _
-         & "WHERE Modulo = 'VS' "
-    Select_Adodc AdoAux, sSQL
-    If AdoAux.Recordset.RecordCount > 0 Then
-       Version_Sistema = "Actualización de: " & AdoAux.Recordset.fields("Aplicacion") & " - Ver. 5.20 "
-    Else
-       Version_Sistema = "Teléfono del proveedor: " & vbCrLf & "(+593) 09-9965-4196/09-8652-4396. "
-    End If
-        
+         
   'MsgBox Version_Sistema
    DetalleComp = Ninguno
    CodigoCC = Ninguno
@@ -1668,28 +1675,6 @@ Dim RetVal
    Dolar = 0
    TextDolar.Text = "0.00"
    JSONInPutAbonos = ""
-   
-'''   sSQL = "SELECT * " _
-'''        & "FROM Empresas " _
-'''        & "WHERE Item <> '.' " _
-'''        & "ORDER BY Sucursal DESC,Empresa,Item "
-'''   SelectDB_Combo DCEmpresa, AdoEmpresa, sSQL, "Empresa"
-   
-'' Cadena = Leer_Archivo_Texto("\\DISKCOVER-VAIO\Data Center\SMTP_Mails.txt")
-'' MsgBox Cadena
-'' Cadena = Leer_Archivo_Texto(RutaSistema & "\FORMATOS\LOGINSYSTEM.key")
-'' Cadena = Leer_Encriptado(Cadena)
-'''MsgBox Cadena
-'' FechaIni = LineasLogIn(2)
-'' FechaFin = FechaSistema
-'' If Len(CStr(LineasLogIn(3))) <= 1 Then             'Averiguamos si esta legalizado dejando 45 dias de gracias
-''    I = CFechaLong(FechaFin) - CFechaLong(FechaIni)
-''    If I >= 45 Then
-''       LogInKey.Show 1
-''       End
-''    End If
-'' End If
- 
 End Sub
 
 Private Sub Form_Load()
@@ -1704,6 +1689,8 @@ Dim MiArchivo, MiRuta, MiNombre
 Dim Txt_SMTP_Mails As String
    
     RatonReloj
+    Encerar_Mensajes_de_Ingreso
+    
     EmpresaTemp = Ninguno
    'Redondear_Control CmdBAceptar
    'Obtenemos la fecha del Sistema
@@ -1728,139 +1715,151 @@ Dim Txt_SMTP_Mails As String
     
 '    MsgBox MDI_X_Max & "x" & MDI_Y_Max
    
-   IP_PC.InterNet = Get_Internet
 '   If Not Get_Internet Then MsgBox "Este Equipo no esta conectado a Internet"
 '   HayCnn = Get_WAN_IP
    
-  'MsgBox IP_PC.InterNet & vbCrLf & IP_PC.Nombre_PC & vbCrLf & IP_PC.IP_PC & vbCrLf & IP_PC.MAC_PC & vbCrLf & IP_PC.WAN_PC
-   If Not IP_PC.InterNet Then
-      Cadena = "Su acceso al Internet es inestable, no podra autorizar los comprobantes " _
-             & "electronicos hasta que su conexion al Internet se estabilice."
-      MsgBox Cadena, vbCritical, "ESTADO DE CONEXION AL INTERNET"
-   End If
-  'Determinar que tipo de bases utilizamos
-   Si_No = False
-   Evaluar = False
-   Modo_Educativo = False
-   CajaPV = "001001"
-   Cadena = Dir(RutaSistema & "\", vbNormal) 'Recupera la primera entrada.
-   Do While Cadena <> ""
-      If Cadena <> "." And Cadena <> ".." Then
-         If (GetAttr(RutaSistema & "\" & Cadena) And vbNormal) = vbNormal Then
-           'Averiguamos el punto de venta del equipo
-            If UCaseStrg(Cadena) = "PUNTOVENTA.KEY" Then
-               CajaPV = ""
-               RutaGeneraFile = RutaSistema & "\PUNTOVENTA.key"
-               NumFile = FreeFile
-               Open RutaGeneraFile For Input As #NumFile
-               Do While Not EOF(NumFile)
-                  CajaPV = CajaPV & Input(1, #NumFile)   ' Obtiene un carácter.
-               Loop
-               Close #NumFile
-            End If
-         End If
-         If (GetAttr(RutaSistema & "\" & Cadena) And vbNormal) = vbNormal Then
-            If UCaseStrg(Cadena) = "EDUCATIVO.TXT" Then Modo_Educativo = True
-         End If
-      End If
-      Cadena = Dir
-   Loop
-   TimerAct.Enabled = True
-   TimerAct.Interval = 500
-   
-   CodigoUsuario = Ninguno
-   NombreImagenEsperar = ""
-   Procesando = 0
-   Dia = Format$(Day(Date), "00")
-   Mes = Format$(Month(Date), "00")
-   Anio = Format$(Year(Date), "0000")
-   H_INCH = 1440 / Screen.TwipsPerPixelX
-   V_INCH = 1440 / Screen.TwipsPerPixelY
-   
-   FrameClave.Left = (Screen.width - FrameClave.width) / 2
-   FrameClave.Top = (Screen.Height - FrameClave.Height - 2000) / 2
+   'MsgBox IP_PC.InterNet & vbCrLf & IP_PC.Nombre_PC & vbCrLf & IP_PC.IP_PC & vbCrLf & IP_PC.MAC_PC & vbCrLf & IP_PC.WAN_PC
+    If Not Get_Internet Then MsgIngreso(0).Mensaje = "Su acceso al Internet es inestable, no podra autorizar los comprobantes electronicos hasta que su conexion al Internet se estabilice."
 
-   Lblwww.Top = FrameClave.Top + FrameClave.Height + 100
-   Lblwww.Left = (Screen.width - Lblwww.width) / 2
+   'Determinar que tipo de bases utilizamos
+    Si_No = False
+    Evaluar = False
+    Modo_Educativo = False
+    CajaPV = "001001"
+    Cadena = Dir(RutaSistema & "\", vbNormal) 'Recupera la primera entrada.
+    Do While Cadena <> ""
+       If Cadena <> "." And Cadena <> ".." Then
+          If (GetAttr(RutaSistema & "\" & Cadena) And vbNormal) = vbNormal Then
+            'Averiguamos el punto de venta del equipo
+             If UCaseStrg(Cadena) = "PUNTOVENTA.KEY" Then
+                CajaPV = ""
+                RutaGeneraFile = RutaSistema & "\PUNTOVENTA.key"
+                NumFile = FreeFile
+                Open RutaGeneraFile For Input As #NumFile
+                Do While Not EOF(NumFile)
+                   CajaPV = CajaPV & Input(1, #NumFile)   ' Obtiene un carácter.
+                Loop
+                Close #NumFile
+             End If
+          End If
+          If (GetAttr(RutaSistema & "\" & Cadena) And vbNormal) = vbNormal Then
+             If UCaseStrg(Cadena) = "EDUCATIVO.TXT" Then Modo_Educativo = True
+          End If
+       End If
+       Cadena = Dir
+    Loop
+    TimerAct.Enabled = True
+    TimerAct.Interval = 500
    
-   Ver_Grafico_Form ListEmp, RutaSistema & "\FORMATOS\INICIO.jpg"
-   Pict_Version.Cls
-   Pict_Version.Picture = LoadPicture(RutaSistema & "\LogIn.jpg")
-   Pict_Version.AutoRedraw = True
-   Pict_Version.ForeColor = Gris
-   Pict_Version.FontName = TipoVerdana
-   
-   Pict_Version.PaintPicture LoadPicture(RutaSistema & "\LOGOS\DiskCove.jpg"), 2500, 800, 2000, 800
+    CodigoUsuario = Ninguno
+    NombreImagenEsperar = ""
+    Procesando = 0
+    Dia = Format$(Day(Date), "00")
+    Mes = Format$(Month(Date), "00")
+    Anio = Format$(Year(Date), "0000")
+    H_INCH = 1440 / Screen.TwipsPerPixelX
+    V_INCH = 1440 / Screen.TwipsPerPixelY
+    
+    FrameClave.Left = (Screen.width - FrameClave.width) / 2
+    FrameClave.Top = (Screen.Height - FrameClave.Height - 2000) / 2
+    
+    Lblwww.Top = FrameClave.Top + FrameClave.Height + 100
+    Lblwww.Left = (Screen.width - Lblwww.width) / 2
+    
+    Ver_Grafico_Form ListEmp, RutaSistema & "\FORMATOS\INICIO.jpg"
+    Pict_Version.Cls
+    Pict_Version.Picture = LoadPicture(RutaSistema & "\LogIn.jpg")
+    Pict_Version.AutoRedraw = True
+    Pict_Version.ForeColor = Gris
+    Pict_Version.FontName = TipoVerdana
+    
+    Pict_Version.PaintPicture LoadPicture(RutaSistema & "\LOGOS\DiskCove.jpg"), 2500, 800, 2000, 800
+    
+    Pict_Version.FontBold = True
+    Pict_Version.FontSize = 12
+    Pict_Version.CurrentX = 350
+    Pict_Version.CurrentY = 2600
+    Pict_Version.Print "Usuario"
 
-   Pict_Version.FontBold = True
-   Pict_Version.FontSize = 12
-   Pict_Version.CurrentX = 350
-   Pict_Version.CurrentY = 2600
-   Pict_Version.Print "Usuario"
+    Pict_Version.CurrentX = 3040
+    Pict_Version.CurrentY = 2600
+    Pict_Version.Print "Contraseña"
+    
+    Pict_Version.CurrentX = 5700
+    Pict_Version.CurrentY = 2600
+    Pict_Version.Print "Cotización"
+    
+    Pict_Version.CurrentX = 350
+    Pict_Version.CurrentY = 3900
+    Pict_Version.Print "Entidad/Empresa"
+    
+    RatonReloj
+   'Averiguamos si el MySQL esta en linea
+    Cadena = ""
+   '-------------------------------------------------------
+   'Buscamos la cadena de conección a la base en SQL SERVER
+   '-------------------------------------------------------
+    Conectar_Base_Datos
+   'Conectamos los ADO a la basa
+    ConectarAdodc AdoAux
+    ConectarAdodc AdoEmp
+    ConectarAdodc AdoEmp000
+    ConectarAdodc AdoAcceso
+    ConectarAdodc AdoEmpresa
+    ConectarAdodc AdoEntidad
 
-   Pict_Version.CurrentX = 3040
-   Pict_Version.CurrentY = 2600
-   Pict_Version.Print "Contraseña"
-  
-   Pict_Version.CurrentX = 5700
-   Pict_Version.CurrentY = 2600
-   Pict_Version.Print "Cotización"
-  
-   Pict_Version.CurrentX = 350
-   Pict_Version.CurrentY = 3900
-   Pict_Version.Print "Entidad/Empresa"
-
-   RatonReloj
-  'Averiguamos si el MySQL esta en linea
-   Cadena = ""
-  '-------------------------------------------------------
-  'Buscamos la cadena de conección a la base en SQL SERVER
-  '-------------------------------------------------------
-   Conectar_Base_Datos
- ' Conectamos los ADO a la basa
-   ConectarAdodc AdoAux
-   ConectarAdodc AdoEmp
-   ConectarAdodc AdoEmp000
-   ConectarAdodc AdoAcceso
-   ConectarAdodc AdoEmpresa
-   ConectarAdodc AdoEntidad
-
-  'Contador de ayuda y fraces en la pantalla temporal
-  '--------------------------------------------------
-'''   ContadorAyuda = 0
-'''   sSQL = "SELECT MAX(No) As No_Max " _
-'''        & "FROM Tabla_Mensajes " _
-'''        & "WHERE No > 0 "
-'''   Select_Adodc AdoAux, sSQL
-'''   If AdoAux.Recordset.RecordCount > 0 Then ContadorAyuda = AdoAux.Recordset.Fields("No_Max")
+   'Determinamos si se esta actulizando el sistema, no permite ingresar
+    sSQL = "SELECT Aplicacion FROM Modulos WHERE Modulo = 'UP' "
+    Select_Adodc AdoAux, sSQL
+    If AdoAux.Recordset.RecordCount > 0 Then
+       MsgBox "NO SE PUEDE INGRESAR AL SISTEMA" & vbCrLf & vbCrLf _
+            & "MIENTRAS SE ENCUENTA ACTUALIZANDO"
+       End
+    End If
+    
+    If UCaseStrg(Modulo) <> "SETEOS" Then CmdBCrearEmp.Caption = "Funciona con Seteos"
+    Set ftp = New cFTP
    
-  'Determinamos si se esta actulizando el sistema, no permite ingresar
-   sSQL = "SELECT Aplicacion FROM Modulos WHERE Modulo = 'UP' "
-   Select_Adodc AdoAux, sSQL
-   If AdoAux.Recordset.RecordCount > 0 Then
-      MsgBox "NO SE PUEDE INGRESAR AL SISTEMA" & vbCrLf & vbCrLf _
-           & "MIENTRAS SE ENCUENTA ACTUALIZANDO"
-      End
-   End If
-   
-   If UCaseStrg(Modulo) <> "SETEOS" Then CmdBCrearEmp.Caption = "Funciona con Seteos"
-   Set ftp = New cFTP
-   
-   sSQL = "SELECT " & Full_Fields("Empresas") & " " _
-        & "FROM Empresas " _
-        & "WHERE Item <> '--' "
-   SelectDB_Combo DCEmpresa, AdoEmpresa, sSQL, "Empresa"
-   If AdoEmpresa.Recordset.RecordCount <= 0 Then
-      Unload ListEmp
-      CrearEmp.Show
-   Else
-      EmpresaTemp = AdoEmpresa.Recordset.fields("Empresa")
-      DCEmpresa.Text = EmpresaTemp
-      CmdBAceptar.Enabled = False
-      CmdBCrearEmp.Enabled = False
-   End If
-      
-   If Not Existe_Carpeta(RutaSysTemp) Then MkDir RutaSysTemp
+    ConSucursal = False
+    Version_Sistema = "Teléfono del proveedor: " & vbCrLf & "(+593) 09-9965-4196/09-8652-4396. "
+    
+    sSQL = "SELECT " & Full_Fields("Acceso_Empresa") & " " _
+         & "FROM Acceso_Empresa " _
+         & "WHERE Item <> '.' " _
+         & "ORDER BY Item,Modulo,Codigo "
+    Select_Adodc AdoAcceso, sSQL
+    
+    sSQL = "SELECT Sucursal " _
+         & "FROM Acceso_Sucursales " _
+         & "WHERE Sucursal <> '.' "
+    Select_Adodc AdoAux, sSQL
+    If AdoAux.Recordset.RecordCount > 0 Then ConSucursal = True
+         
+    sSQL = "SELECT Aplicacion " _
+         & "FROM Modulos " _
+         & "WHERE Modulo = 'VS' "
+    Select_Adodc AdoAux, sSQL
+    If AdoAux.Recordset.RecordCount > 0 Then Version_Sistema = "Actualización de: " & AdoAux.Recordset.fields("Aplicacion") & " - Ver. 8.0.12 "
+    
+    sSQL = "SELECT " & Full_Fields("Empresas") & " " _
+         & "FROM Empresas " _
+         & "WHERE Item <> '.' "
+    If Not ConSucursal Then
+       sSQL = sSQL & "ORDER BY Empresa, Item "
+    Else
+       sSQL = sSQL & "ORDER BY Item, Empresa "
+    End If
+    SelectDB_Combo DCEmpresa, AdoEmpresa, sSQL, "Empresa"
+    
+    If AdoEmpresa.Recordset.RecordCount <= 0 Then
+       Unload ListEmp
+       CrearEmp.Show
+    Else
+       EmpresaTemp = AdoEmpresa.Recordset.fields("Empresa")
+       DCEmpresa.Text = EmpresaTemp
+       CmdBAceptar.Enabled = False
+       CmdBCrearEmp.Enabled = False
+    End If
   'NumEmpresa = "001"
 End Sub
 
@@ -2253,6 +2252,7 @@ Private Sub TextUsuario_LostFocus()
           Opc_Bachillerato = CBool(.fields("Bachillerato"))
           SetPRN_2 = .fields("Impresora_Defecto_2")
           SetPapelPRN_2 = .fields("Papel_Impresora_2")
+          SerieFAUser = .fields("Serie_FA")
           If Len(.fields("Clave")) <= 1 Then
              NombreCliente = .fields("Nombre_Completo")
              Cadena = "ESTE USUARIO NO HA SIDO REGISTRADA" & vbCrLf _
@@ -2281,7 +2281,7 @@ Private Sub TextUsuario_LostFocus()
              MsgBox "Vuelva a Ingresar al Sistema," & vbCrLf _
                   & "para verificar su clave"
              End
-         End If
+          End If
       Else
          MsgBox "Este usuario no esta registrado (" & TextUsuario & "), ingrese uno valido"
          CmdBAceptar.Enabled = False

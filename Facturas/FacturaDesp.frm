@@ -1143,6 +1143,10 @@ Private Sub DGAsientoF_BeforeDelete(Cancel As Integer)
 End Sub
 
 Private Sub Form_Activate()
+   Ambiente = Leer_Campo_Empresa("Ambiente")
+   Obligado_Conta = Leer_Campo_Empresa("Obligado_Conta")
+   ContEspec = Leer_Campo_Empresa("Codigo_Contribuyente_Especial")
+  
   MBFecha = FechaSistema
   Mifecha = BuscarFecha(FechaSistema)
   FechaValida MBFecha

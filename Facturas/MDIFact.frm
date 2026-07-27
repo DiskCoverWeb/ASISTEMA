@@ -410,6 +410,9 @@ Begin VB.MDIForm MDIFact
          Shortcut        =   ^W
       End
    End
+   Begin VB.Menu MVerifEstSRI 
+      Caption         =   "ESTADO DEL SRI"
+   End
    Begin VB.Menu MAmbiente 
       Caption         =   "Ambiente"
       Enabled         =   0   'False
@@ -701,6 +704,27 @@ End Sub
 Private Sub MRecaudacionAut_Click()
   RatonReloj
   FRecaudacionBancosPreFa.Show
+End Sub
+
+Private Sub MVerifEstSRI_Click()
+'Dim msg As String
+'Dim MsgR As String
+'Dim MsgA As String
+'Dim Error As Boolean
+'   Error = False
+'   MsgR = Validar_URL("Servidor de Produccion en Recepcion del SRI", "https://cel.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl")
+'   MsgA = Validar_URL("Servidor de Produccion en Autorizacion del SRI", "https://cel.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl")
+'   msg = Replace(MsgR & vbCrLf & vbCrLf & MsgA, "-", "")
+'   If MidStrg(MsgR, 1, 1) = "-" Then Error = True
+'   If MidStrg(MsgA, 1, 1) = "-" Then Error = True
+'   If Error Then
+'      MsgBox msg, vbCritical, "Servidor del SRI con Error"
+'   Else
+'      MsgBox msg, vbInformation, "Servidor del SRI en línea"
+'   End If
+   
+ Leer_Datos_Entidad_SP_MySQL
+   
 End Sub
 
 Private Sub Timer1_Timer()

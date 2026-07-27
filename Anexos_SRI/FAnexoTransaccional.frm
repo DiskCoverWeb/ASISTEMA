@@ -1122,6 +1122,10 @@ Dim NumTrans As Long
 Dim Segunda_Pag As Boolean
 Dim EsSemestral As Boolean
 
+'TC.TP, TC.Numero, TC.T, TC.FechaCaducidad, TC.PorRetBienes, TC.PorRetServicios, TC.DocModificado, TC.FechaEmiModificado, TC.EstabModificado, TC.PtoEmiModificado,
+'TC.SecModificado, TC.AutModificado, TC.Clave_Acceso, TC.Fecha_Aut, TC.AutRetencion, TC.Serie_Retencion, TC.SecRetencion, TC.Clave_Acceso_NCD,
+'TC.Devolucion , TC.Clave_Acceso_LC, TC.Estado_SRI_LC
+
 Private Sub CATAnio_KeyDown(KeyCode As Integer, Shift As Integer)
   PresionoEnter KeyCode
 End Sub
@@ -1960,33 +1964,33 @@ Dim ContV As Long
           Print #NumFile, CampoXML("secuencial", .Fields("Secuencial"))
           Print #NumFile, CampoXML("fechaEmision", .Fields("FechaEmision"))
           Print #NumFile, CampoXML("autorizacion", .Fields("Autorizacion"))
-          Print #NumFile, CampoXML("baseNoGraIva", Format(.Fields("BaseNoObjIVA"), "#0.00"))         ' hay que aumentar
-          Print #NumFile, CampoXML("baseImponible", Format(.Fields("BaseImponible"), "#0.00"))
-          Print #NumFile, CampoXML("baseImpGrav", Format(.Fields("BaseImpGrav"), "#0.00"))
+          Print #NumFile, CampoXML("baseNoGraIva", Format(.Fields("TBaseNoObjIVA"), "#0.00"))         ' hay que aumentar
+          Print #NumFile, CampoXML("baseImponible", Format(.Fields("TBaseImponible"), "#0.00"))
+          Print #NumFile, CampoXML("baseImpGrav", Format(.Fields("TBaseImpGrav"), "#0.00"))
           Print #NumFile, CampoXML("baseImpExe", "0.00")      'Por Adaptar en la pantalla
-          Print #NumFile, CampoXML("montoIce", Format(.Fields("MontoIce"), "#0.00"))
-          Print #NumFile, CampoXML("montoIva", Format(.Fields("MontoIva"), "#0.00"))
+          Print #NumFile, CampoXML("montoIce", Format(.Fields("TMontoIce"), "#0.00"))
+          Print #NumFile, CampoXML("montoIva", Format(.Fields("TMontoIva"), "#0.00"))
           ValRetBien10 = 0
           ValRetServ20 = 0
           ValRetServ50 = 0
-          If .Fields("Porc_Bienes") = "10" Then ValRetBien10 = .Fields("valorRetBienes")
-          If .Fields("Porc_Servicios") = "20" Then ValRetServ20 = .Fields("ValorRetServicios")
-          If .Fields("Porc_Servicios") = "50" Then ValRetServ50 = .Fields("ValorRetServicios")
+          If .Fields("Porc_Bienes") = "10" Then ValRetBien10 = .Fields("TvalorRetBienes")
+          If .Fields("Porc_Servicios") = "20" Then ValRetServ20 = .Fields("TValorRetServicios")
+          If .Fields("Porc_Servicios") = "50" Then ValRetServ50 = .Fields("TValorRetServicios")
            
           Print #NumFile, CampoXML("valRetBien10", Format(ValRetBien10, "#0.00"))
           Print #NumFile, CampoXML("valRetServ20", Format(ValRetServ20, "#0.00"))
           If ValRetBien10 = 0 Then
-             Print #NumFile, CampoXML("valorRetBienes", Format(.Fields("valorRetBienes"), "#0.00"))
+             Print #NumFile, CampoXML("valorRetBienes", Format(.Fields("TvalorRetBienes"), "#0.00"))
           Else
              Print #NumFile, CampoXML("valorRetBienes", "0.00")
           End If
           Print #NumFile, CampoXML("valRetServ50", Format(ValRetServ50, "#0.00"))
           If ValRetServ20 = 0 Then
-             If .Fields("ValorRetServicios") = .Fields("MontoIva") Then
+             If .Fields("TValorRetServicios") = .Fields("TMontoIva") Then
                  Print #NumFile, CampoXML("valorRetServicios", Format(0, "#0.00"))
-                 Print #NumFile, CampoXML("valRetServ100", Format(.Fields("ValorRetServicios"), "#0.00"))    'hay que aumentar
+                 Print #NumFile, CampoXML("valRetServ100", Format(.Fields("TValorRetServicios"), "#0.00"))    'hay que aumentar
              Else
-                 Print #NumFile, CampoXML("valorRetServicios", Format(.Fields("ValorRetServicios"), "#0.00"))
+                 Print #NumFile, CampoXML("valorRetServicios", Format(.Fields("TValorRetServicios"), "#0.00"))
                  Print #NumFile, CampoXML("valRetServ100", Format(0, "#0.00"))    'hay que aumentar
              End If
           Else
@@ -2007,7 +2011,7 @@ Dim ContV As Long
                'Print #NumFile, CampoXML("pagoRegFis", "NA")  'Por programar en la pantalla
           Print #NumFile, CerrarXML("pagoExterior")
           
-          If (.Fields("BaseNoObjIVA") + .Fields("BaseImponible") + .Fields("BaseImpGrav") + .Fields("MontoIva")) >= 500 Then
+          If (.Fields("TBaseNoObjIVA") + .Fields("TBaseImponible") + .Fields("TBaseImpGrav") + .Fields("TMontoIva")) >= 500 Then
              Print #NumFile, AbrirXML("formasDePago")
                    Print #NumFile, CampoXML("formaPago", .Fields("FormaPago"))
              Print #NumFile, CerrarXML("formasDePago")
@@ -4927,16 +4931,33 @@ Public Sub Consultar_Anexos()
   Select_Adodc AdoAnulados, sSQL
 
  'COMPRAS
-  sSQL = "SELECT C.Cliente, C.Codigo, C.CI_RUC, C.TD, C.Tipo_Pasaporte, C.Parte_Relacionada, TC.* " _
-       & "FROM Trans_Compras As TC, Clientes As C " _
-       & "WHERE TC.Fecha Between #" & FechaIni & "# AND #" & FechaFin & "# " _
-       & "AND TC.Periodo = '" & Periodo_Contable & "' " _
+  sSQL = "SELECT COUNT(TC.Secuencial) As CantSec, C.Codigo, C.Cliente, C.CI_RUC, C.Tipo_Pasaporte, C.Parte_Relacionada, C.TD, TC.CodSustento, TC.TipoComprobante, TC.FechaEmision, " _
+       & "TC.FechaRegistro, TC.Establecimiento, TC.PuntoEmision, TC.Secuencial, TC.Autorizacion, TC.Porc_Bienes, TC.Porc_Servicios, TC.PagoLocExt, TC.PaisEfecPago, TC.AplicConvDobTrib, " _
+       & "TC.PagExtSujRetNorLeg, TC.FormaPago, TC.IdProv, TC.Fecha, TC.DevIva, TC.DocModificado, TC.EstabModificado, TC.PtoEmiModificado, TC.SecModificado, TC.AutModificado, " _
+       & "SUM(TC.BaseImponible) AS TBaseImponible, SUM(TC.BaseImpGrav) AS TBaseImpGrav, SUM(TC.MontoIva) AS TMontoIva, SUM(TC.BaseImpIce) AS TBaseImpIce, SUM(TC.MontoIce) AS TMontoIce, " _
+       & "SUM(TC.MontoIvaBienes) AS TMontoIvaBienes, SUM(TC.ValorRetBienes) AS TValorRetBienes, SUM(TC.MontoIvaServicios) AS TMontoIvaServicios, SUM(TC.ValorRetServicios) AS TValorRetServicios, " _
+       & "SUM(TC.BaseNoObjIVA) AS TBaseNoObjIVA, SUM(TC.ValorRetFuente) AS TValorRetFuente " _
+       & "FROM Trans_Compras AS TC INNER JOIN Clientes AS C ON TC.IdProv = C.Codigo " _
+       & "WHERE TC.Periodo = '" & Periodo_Contable & "' " _
+       & "AND TC.Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
        & "AND TC.Item IN (" & sItem & ") "
   If CheqATSConElect.value = 0 Then sSQL = sSQL & "AND LEN(TC.AutRetencion) < 13 "
   sSQL = sSQL _
-       & "AND TC.IdProv = C.Codigo " _
-       & "ORDER BY TC.Linea_SRI,C.Cliente, C.CI_RUC, C.TD "
-  Select_Adodc AdoCompras, sSQL
+       & "GROUP BY C.Codigo, C.Cliente, C.CI_RUC, C.Tipo_Pasaporte, C.Parte_Relacionada, C.TD, TC.CodSustento, TC.TipoComprobante, TC.FechaEmision, TC.FechaRegistro, TC.Establecimiento, " _
+       & "TC.PuntoEmision, TC.Secuencial, TC.Autorizacion, TC.Porc_Bienes, TC.Porc_Servicios, TC.PagoLocExt, TC.PaisEfecPago, TC.AplicConvDobTrib, TC.PagExtSujRetNorLeg , TC.FormaPago, " _
+       & "TC.IdProv, TC.Fecha, TC.DevIva, TC.DocModificado, TC.EstabModificado, TC.PtoEmiModificado, TC.SecModificado, TC.AutModificado " _
+       & "ORDER BY C.Cliente, C.CI_RUC, C.TD, TC.TipoComprobante, TC.Establecimiento, TC.PuntoEmision, TC.Secuencial "
+    
+''  sSQL = "SELECT C.Cliente, C.Codigo, C.CI_RUC, C.TD, C.Tipo_Pasaporte, C.Parte_Relacionada, TC.* " _
+''       & "FROM Trans_Compras As TC, Clientes As C " _
+''       & "WHERE TC.Fecha Between #" & FechaIni & "# AND #" & FechaFin & "# " _
+''       & "AND TC.Periodo = '" & Periodo_Contable & "' " _
+''       & "AND TC.Item IN (" & sItem & ") "
+''  If CheqATSConElect.value = 0 Then sSQL = sSQL & "AND LEN(TC.AutRetencion) < 13 "
+''  sSQL = sSQL _
+''       & "AND TC.IdProv = C.Codigo " _
+''       & "ORDER BY TC.Linea_SRI, C.Cliente, C.CI_RUC, C.TD "
+  Select_Adodc AdoCompras, sSQL, , , "ATS doble"
   
  'IMPORTACIONES
   sSQL = "SELECT C.Cliente, C.Codigo, C.CI_RUC, C.TD,TI.* " _

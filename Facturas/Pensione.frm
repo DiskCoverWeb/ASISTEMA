@@ -1162,8 +1162,8 @@ Begin VB.Form FacturasPension
       Left            =   0
       TabIndex        =   72
       Top             =   0
-      Width           =   15960
-      _ExtentX        =   28152
+      Width           =   28560
+      _ExtentX        =   50377
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -2352,16 +2352,65 @@ Public Function ReadTextFile(sFilePath As String) As String
    
    Dim Handle As Integer
    If LenB(Dir$(sFilePath)) > 0 Then
-   
       Handle = FreeFile
       Open sFilePath For Binary As #Handle
       ReadTextFile = Space$(LOF(Handle))
       Get #Handle, , ReadTextFile
       Close #Handle
-      
    End If
-   
 End Function
+
+Public Sub Listar_Rubros_Facturar(AdoArt As Adodc)
+Dim S_Valor As String
+Dim S_Descuento1 As String
+Dim S_Descuento2 As String
+Dim S_SubTotal As String
+    
+    With AdoArt.Recordset
+     If .RecordCount > 0 Then
+         S_Valor = "V A L O R"
+         S_Descuento1 = "DESCUENTO"
+         S_Descuento2 = "DESC. P.P."
+         S_SubTotal = "T O T A L"
+         Cadena = "  M E S" & Space(12 - Len("M E S")) _
+                & "C O D I G O" & Space(17 - Len("C O D I G O")) _
+                & "AÑO" & Space(6 - Len("AÑO")) _
+                & "P R O D U C T O" & Space(40 - Len("P R O D U C T O")) _
+                & Space(13 - Len(S_Valor)) & S_Valor _
+                & Space(13 - Len(S_Descuento1)) & S_Descuento1 _
+                & Space(13 - Len(S_Descuento2)) & S_Descuento2 _
+                & Space(13 - Len(S_SubTotal)) & S_SubTotal
+         Label11.Caption = Cadena
+         Do While Not .EOF
+            S_Valor = Format$(.fields("Valor"), "#,##0.00")
+            S_Descuento1 = Format$(.fields("Descuento"), "#,##0.00")
+            S_Descuento2 = Format$(.fields("Descuento2"), "#,##0.00")
+            S_SubTotal = Format$(.fields("Valor") - (.fields("Descuento") + .fields("Descuento2")), "#,##0.00")
+            Producto = .fields("Producto")
+            If Len(.fields("Mensaje")) > 1 Then Producto = Producto & " " & .fields("Mensaje")
+            Producto = TrimStrg(MidStrg(Producto, 1, 40))
+            LstMeses.AddItem .fields("Mes") & Space(12 - Len(.fields("Mes"))) _
+                           & .fields("Codigo_Inv") & Space(17 - Len(.fields("Codigo_Inv"))) _
+                           & .fields("Periodos") & Space(6 - Len(.fields("Periodos"))) _
+                           & Producto & Space(40 - Len(Producto)) _
+                           & Space(13 - Len(S_Valor)) & S_Valor _
+                           & Space(13 - Len(S_Descuento1)) & S_Descuento1 _
+                           & Space(13 - Len(S_Descuento2)) & S_Descuento2 _
+                           & Space(13 - Len(S_SubTotal)) & S_SubTotal _
+                           & "       " & .fields("Credito_No")
+           .MoveNext
+         Loop
+         LstMeses.Refresh
+         ReDim Rubros_Facturar(LstMeses.ListCount) As String
+         For I = 0 To LstMeses.ListCount - 1
+             Rubros_Facturar(I) = LstMeses.List(I)
+         Next I
+     Else
+         MsgBox "No existe datos para Facturar"
+         DCLinea.SetFocus
+     End If
+    End With
+End Sub
 
 Public Sub Actualiza_Datos_Cliente()
     Documento = 0
@@ -2556,11 +2605,8 @@ Public Sub Grabar_FA_Pensiones()
 '''       Loop
        
        If Not ComisionEjec Then CodigoVen = Ninguno
-       
-      'Grabamos el numero de factura
-       Calculos_Totales_Factura FA
+
       ' MsgBox "............."
-    
       'Seteos de Abonos Generales para todos los tipos de abonos
        TA.T = FA.T
        TA.TP = FA.TC
@@ -2627,20 +2673,20 @@ Public Sub Grabar_FA_Pensiones()
        TA.Recibi_de = FA.Cliente
        Grabar_Abonos TA
        
+      'Grabamos el numero de factura
        Grabar_Factura FA, TA, True
        
        RatonNormal
        TxtEfectivo.Text = "0.00"
       'MsgBox FA.Autorizacion
+       
+       
        If Len(FA.Autorizacion) >= 13 Then
           If Not No_Autorizar Then SRI_Crear_Clave_Acceso_Facturas FA, False, , True
           FA.Desde = FA.Factura
           FA.Hasta = FA.Factura
           Imprimir_Facturas_CxC FacturasPension, FA, True, False, True, True
           SRI_Generar_PDF_FA FA, True
-''          RutaDestino = RutaSysBases & "\TEMP\" & FA.Autorizacion & ".pdf"
-''          MsgBox RutaDestino
-''          SRI_Presenta_PDF FacturasPension, RutaDestino
        Else
           Mensajes = "Facturacion Multiple"
           Titulo = "IMPRESION"
@@ -2653,7 +2699,7 @@ Public Sub Grabar_FA_Pensiones()
           End If
          'Imprimir_Comprobante_Caja TA
        End If
-       'Grabar_Abonos_Factura_SP TA
+
 '      -------------------------------------------------------
 '       Clipboard.Clear
 '       Clipboard.SetText JSONInPutAbonos
@@ -2684,8 +2730,7 @@ Public Sub Grabar_FA_Pensiones()
        LabelIVA.Caption = "0.00"
        LabelTotal.Caption = "0.00"
        LblCambio.Caption = "0.00"
-       
-       ListaDeClientes
+
        Nuevo = False
        RatonNormal
       'MsgBox Estudiante_DBF.codest
@@ -2770,9 +2815,13 @@ Dim SiGrabarFactura As Boolean
        Actualiza_Datos_Cliente
        
        Grabar_FA_Pensiones
+       
+       Nuevo = False
        FA.Nuevo_Doc = True
        FA.Autorizacion = Ninguno
        TextFacturaNo = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, False)
+       LstMeses.Clear
+       ListaDeClientes
        DCLinea.SetFocus
     End If
   End If
@@ -3099,10 +3148,6 @@ End Sub
 
 Private Sub DCCliente_LostFocus()
 Dim ExisteCliente As Boolean
-Dim S_Valor As String
-Dim S_Descuento1 As String
-Dim S_Descuento2 As String
-Dim S_SubTotal As String
 
   sSQL = "DELETE * " _
        & "FROM Asiento_F " _
@@ -3255,50 +3300,9 @@ Dim S_SubTotal As String
              & "ORDER BY CF.Periodo,CF.Num_Mes,CP.Codigo_Inv,CF.Credito_No "
      End If
      Select_Adodc AdoArticulo, sSQL
-     With AdoArticulo.Recordset
-      If .RecordCount > 0 Then
-          S_Valor = "V A L O R"
-          S_Descuento1 = "DESCUENTO"
-          S_Descuento2 = "DESC. P.P."
-          S_SubTotal = "T O T A L"
-          Cadena = "  M E S" & Space(12 - Len("M E S")) _
-                 & "C O D I G O" & Space(17 - Len("C O D I G O")) _
-                 & "AÑO" & Space(6 - Len("AÑO")) _
-                 & "P R O D U C T O" & Space(40 - Len("P R O D U C T O")) _
-                 & Space(13 - Len(S_Valor)) & S_Valor _
-                 & Space(13 - Len(S_Descuento1)) & S_Descuento1 _
-                 & Space(13 - Len(S_Descuento2)) & S_Descuento2 _
-                 & Space(13 - Len(S_SubTotal)) & S_SubTotal
-          Label11.Caption = Cadena
-          Do While Not .EOF
-             S_Valor = Format$(.fields("Valor"), "#,##0.00")
-             S_Descuento1 = Format$(.fields("Descuento"), "#,##0.00")
-             S_Descuento2 = Format$(.fields("Descuento2"), "#,##0.00")
-             S_SubTotal = Format$(.fields("Valor") - (.fields("Descuento") + .fields("Descuento2")), "#,##0.00")
-             Producto = .fields("Producto")
-             If Len(.fields("Mensaje")) > 1 Then Producto = Producto & " " & .fields("Mensaje")
-             Producto = TrimStrg(MidStrg(Producto, 1, 40))
-             LstMeses.AddItem .fields("Mes") & Space(12 - Len(.fields("Mes"))) _
-                            & .fields("Codigo_Inv") & Space(17 - Len(.fields("Codigo_Inv"))) _
-                            & .fields("Periodos") & Space(6 - Len(.fields("Periodos"))) _
-                            & Producto & Space(40 - Len(Producto)) _
-                            & Space(13 - Len(S_Valor)) & S_Valor _
-                            & Space(13 - Len(S_Descuento1)) & S_Descuento1 _
-                            & Space(13 - Len(S_Descuento2)) & S_Descuento2 _
-                            & Space(13 - Len(S_SubTotal)) & S_SubTotal _
-                            & "       " & .fields("Credito_No")
-            .MoveNext
-          Loop
-          ReDim Rubros_Facturar(LstMeses.ListCount) As String
-          For I = 0 To LstMeses.ListCount - 1
-              Rubros_Facturar(I) = LstMeses.List(I)
-          Next I
-      Else
-          MsgBox "No existe datos para Facturar"
-          DCLinea.SetFocus
-      End If
-     End With
+     Listar_Rubros_Facturar AdoArticulo
   End If
+  
   If FA.CI_RUC = "9999999999999" Then
      FA.TD = "R"
      FA.Cliente = "CONSUMIDOR FINAL"
@@ -3333,8 +3337,12 @@ Dim S_SubTotal As String
 End Sub
 
 Private Sub Form_Activate()
+  
   Encerar_Factura FA
-  ComisionEjec = Leer_Campo_Empresa("Comision_Ejecutivo")
+   Ambiente = Leer_Campo_Empresa("Ambiente")
+   Obligado_Conta = Leer_Campo_Empresa("Obligado_Conta")
+   ContEspec = Leer_Campo_Empresa("Codigo_Contribuyente_Especial")
+   ComisionEjec = Leer_Campo_Empresa("Comision_Ejecutivo")
   
   sSQL = "SELECT MIN(Fecha) As MinFecha " _
        & "FROM Facturas " _
@@ -3624,7 +3632,7 @@ Dim TCta_Ventas As String
    LabelTotal.Caption = Format$(FA.Total_MN, "#,##0.00")
    TextCheque = Format$(FA.Total_MN, "#,##0.00")
    TextCheqNo = CGrupo.Text
-   TextBanco.Text = ""
+  'TextBanco.Text = ""
    TextBanco.SetFocus
 End Sub
 
@@ -3671,6 +3679,7 @@ Private Sub MBoxFecha_LostFocus()
         & "AND Fecha <= #" & BuscarFecha(FA.Fecha) & "# " _
         & "AND Vencimiento >= #" & BuscarFecha(FA.Fecha) & "# " _
         & "ORDER BY Codigo "
+  'MsgBox sSQL
    SelectDB_Combo DCLinea, AdoLinea, sSQL, "Concepto"
    If AdoLinea.Recordset.RecordCount > 0 Then
       FA.TC = AdoLinea.Recordset.fields("Fact")
@@ -3738,6 +3747,7 @@ End Sub
 Private Sub TextFacturaNo_LostFocus()
   If TextFacturaNo = "" Then TextFacturaNo = "0"
   If Val(TextFacturaNo) <= 0 Then TextFacturaNo = FA.Factura
+  DCCliente.SetFocus
 End Sub
 
 Private Sub TextBanco_GotFocus()
@@ -3848,15 +3858,15 @@ Dim Resultado As Boolean
   Select Case ButtonMenu.key
     Case "CarteraPDF"
          FechaInicial = MBHistorico.Text
-         Reporte_Cartera_Clientes_SP FechaInicial, UltimoDiaMes(FechaSistema), TBeneficiario.Codigo
+         Reporte_Cartera_Clientes_SP FechaInicial, UltimoDiaMes(FechaSistema), TBeneficiario.Codigo, 0, 1
          Resultado = Reporte_Cartera_Clientes_PDF(FechaInicial, TBeneficiario.Codigo, False, True)
     Case "CarteraExcel"
          FechaInicial = MBHistorico.Text
-         Reporte_Cartera_Clientes_SP FechaInicial, UltimoDiaMes(FechaSistema), TBeneficiario.Codigo
+         Reporte_Cartera_Clientes_SP FechaInicial, UltimoDiaMes(FechaSistema), TBeneficiario.Codigo, 0, 1
          Resultado = Reporte_Cartera_Clientes_PDF(FechaInicial, TBeneficiario.Codigo, True, False)
     Case "CarteraMail"
          FechaInicial = MBHistorico.Text
-         Reporte_Cartera_Clientes_SP FechaInicial, UltimoDiaMes(FechaSistema), TBeneficiario.Codigo
+         Reporte_Cartera_Clientes_SP FechaInicial, UltimoDiaMes(FechaSistema), TBeneficiario.Codigo, 0, 1
          Resultado = Reporte_Cartera_Clientes_PDF(FechaInicial, TBeneficiario.Codigo, False, False)
          TMail.TipoDeEnvio = "CO"
          TMail.Asunto = "Estimado(a): " & VerPDF.NombreBeneficiario & ", usted tiene los siguientes pendientes."

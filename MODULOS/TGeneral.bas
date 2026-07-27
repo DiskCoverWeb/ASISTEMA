@@ -321,6 +321,8 @@ Type CtasAsiento
       Pedido           As String
       Zona             As String
       Placa_Vehiculo   As String
+      Placa_Socio      As String
+      Nombre_Socio     As String
       Error_SRI        As String
       Estado_SRI       As String
       Estado_SRI_NC    As String
@@ -364,6 +366,7 @@ Type CtasAsiento
       Existe_Cliente   As Boolean
       GrabadoExitoso   As Boolean
       GrabadoAbonos    As Boolean
+      Sin_Fines_Lucro  As Boolean
       
       Gavetas          As Byte
       
@@ -935,6 +938,11 @@ Type List_Files
      Ext                    As String
 End Type
 
+Type Mensaje_Sistema
+     Mensaje                As String
+     Finalizar              As Boolean
+End Type
+
 'Formulario Padre o Principal
 '-------------------------------------
  Global MDIFormulario As MDIForm
@@ -964,6 +972,7 @@ End Type
  Global DBF_Especialidad() As Tipo_Espe_DBF
 '-------------------------------------
  Global ExisteCtas() As String
+ Global MsgIngreso() As Mensaje_Sistema
 '-------------------------------------
  Global TitulosGraf As Grafico
  Global Impresora As Printer

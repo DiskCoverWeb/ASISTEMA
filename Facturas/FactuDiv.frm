@@ -1405,53 +1405,6 @@ Public Sub Listar_Clientes()
   SelectDB_Combo DCCliente, AdoBenef, sSQL, "Cliente"
 End Sub
 
-''Public Sub Calculos_Totales_Factura(DtaProd As Adodc)
-''Dim NumLn As Byte
-''  Total_ME = 0
-''  Si_No = False
-''  Total_Factura = 0: Total_Desc = 0
-''  Total_Con_IVA = 0: Total_Sin_IVA = 0
-''  Total_IVA = 0
-''  NumLn = 0
-''  With DtaProd.Recordset
-''   If .RecordCount > 0 Then
-''      .MoveFirst
-''       Do While Not .EOF
-''          Total_IVA = Total_IVA + .Fields("Total_IVA")
-''          Total_Desc = Total_Desc + .Fields("Total_Desc")
-''          If .Fields("Total_IVA") > 0 Then
-''             Total_Con_IVA = Total_Con_IVA + .Fields("TOTAL")
-''          Else
-''             Total_Sin_IVA = Total_Sin_IVA + .Fields("TOTAL")
-''          End If
-''          NumLn = NumLn + 1
-''         .MoveNext
-''       Loop
-''   End If
-''  End With
-''  Total_Con_IVA = Redondear(Total_Con_IVA, 2)
-''  Total_Sin_IVA = Redondear(Total_Sin_IVA, 2)
-''  Total_Servicio = Redondear((Total_Sin_IVA + Total_Con_IVA - Total_Desc) * Porc_Serv, 2)
-''  Total_Factura = Redondear(Total_Sin_IVA + Total_Con_IVA - Total_Desc + Total_IVA + Total_Servicio, 2)
-''  LabelSubTotal.Caption = Format$(Total_Sin_IVA, "#,##0.00")
-''  LabelConIVA.Caption = Format$(Total_Con_IVA, "#,##0.00")
-''  LabelIVA.Caption = Format$(Total_IVA, "#,##0.00")
-''  LabelTotal.Caption = Format$(Total_Factura, "#,##0.00")
-''  Total_FacturaME = 0
-''  If Val(TextCotiza) > 0 Then
-''     TotalDolar = Val(CCur(TextCotiza))
-''     If OpcDiv.value Then
-''        Total_FacturaME = Redondear(Total_Factura / TotalDolar, 2)
-''     Else
-''        Total_FacturaME = Redondear(Total_Factura * TotalDolar, 2)
-''     End If
-''  End If
-''  LabelTotalME.Caption = Format$(Total_FacturaME, "#,##0.00")
-''  Label7.Caption = " CAMBIO (" & NumLn & ")"
-''  TextCant.Text = ""
-''  TxtVTotal = ""
-''End Sub
-
 Private Sub Command1_Click()
   Unload FacturasDiv
 End Sub
@@ -1528,6 +1481,10 @@ Private Sub DGAsientoF_BeforeDelete(Cancel As Integer)
 End Sub
 
 Private Sub Form_Activate()
+   Ambiente = Leer_Campo_Empresa("Ambiente")
+   Obligado_Conta = Leer_Campo_Empresa("Obligado_Conta")
+   ContEspec = Leer_Campo_Empresa("Codigo_Contribuyente_Especial")
+  
   Cod_Bodega = Ninguno
   Label20.Caption = "TOTAL EN " & Moneda
   FA.TC = TipoFactura

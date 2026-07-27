@@ -17,6 +17,21 @@ Public Function JSON_Insert(JSONDato, Campo As String, Valor As Variant) As Stri
     JSON_Insert = JSONDato
 End Function
 
+Public Function JSON_Insert_MySQL(JSONDato, Campo As String, Valor As Variant) As String
+    Select Case VarType(Valor)
+      Case vbObject, vbString, vbDate
+           Valor = Replace(Valor, "&", "Y")
+           Valor = Replace(Valor, "\", "/")
+           Valor = Replace(Valor, vbTab, " ")
+           If Len(Valor) > 0 Then JSONDato = JSONDato & Chr(34) & Campo & Chr(34) & ": " & Chr(34) & TrimStrg(Valor) & Chr(34) & ","  ' & vbCrLf
+      Case vbByte, vbInteger, vbLong, vbSingle, vbDouble, vbCurrency, vbBoolean
+           JSONDato = JSONDato & Chr(34) & Campo & Chr(34) & ": " & Valor & ","  '& vbCrLf
+    End Select
+   'MsgBox "->" & Campo & " :" & vbCrLf & JSONDato
+   'Retornamos el resultado
+    JSON_Insert_MySQL = JSONDato
+End Function
+
 Public Function JSON_Insert_XML(JSONDato, Campo As String, Valor As Variant) As String
     Select Case VarType(Valor)
       Case vbObject, vbString, vbDate
@@ -25,6 +40,30 @@ Public Function JSON_Insert_XML(JSONDato, Campo As String, Valor As Variant) As 
            JSONDato = JSONDato & "'" & Campo & "': " & Valor & "," & vbCrLf
     End Select
     JSON_Insert_XML = JSONDato
+End Function
+
+Public Function JSON_Leer_Campo(ByVal JSON As String, ByVal Clave As String) As String
+    Dim regEx As RegExp
+    Dim matches As MatchCollection
+    
+    Set regEx = New RegExp
+    ' Expresión regular que busca "clave": "valor" o "clave": valorNumérico
+    regEx.Pattern = """" & Clave & """\s*:\s*(?:""([^""]*)""|([0-9\.]+))"
+    regEx.IgnoreCase = True
+    
+    If regEx.Test(JSON) Then
+        Set matches = regEx.Execute(JSON)
+        ' Validar si capturó texto entre comillas o un número
+        If Not matches(0).SubMatches(0) = "" Then
+            JSON_Leer_Campo = matches(0).SubMatches(0) ' Retorna cadena
+        Else
+            JSON_Leer_Campo = matches(0).SubMatches(1) ' Retorna número
+        End If
+    Else
+        JSON_Leer_Campo = "" ' No encontrado
+    End If
+    
+    Set regEx = Nothing
 End Function
 
 Public Sub Iniciar_Stored_Procedure(cMensajeProceso As String, _
@@ -64,9 +103,9 @@ On Error GoTo Errorhandler
         ListP = ListP & cMiCmd.Parameters.Item(IdP).Name & " = '" & cMiCmd.Parameters.Item(IdP) & "'" & vbCrLf
     Next IdP
     
-   'Clipboard.Clear
-   'Clipboard.SetText Len(ListP) & vbCrLf & vbCrLf & ListP
-   'MsgBox Len(ListP) & vbCrLf & vbCrLf & ListP
+'   Clipboard.Clear
+'   Clipboard.SetText Len(ListP) & vbCrLf & vbCrLf & ListP
+'   MsgBox Len(ListP) & vbCrLf & vbCrLf & ListP
    'Generar_File_SQL "Store_Procedure", ListP
     
 ''' Progreso_Esperar True
@@ -139,61 +178,61 @@ End Sub
 '''    RatonNormal
 '''End Sub
 
-Public Sub Acceso_IP_PCs_SP_MySQL(vActivo As Boolean)
-Dim cnMySQL As ADODB.Connection
-Dim rsMySQL As ADODB.Recordset
-Dim cmdMySQL As ADODB.Command
-Dim Mifecha1 As String
-Dim MiHora1 As String
-
-   'Conexion a MySQL del servidor en las nubes
-    If Ping_IP(strServidorERP) Then
-         RatonReloj
-         Mifecha1 = CStr(Format(Date, "yyyymmdd"))
-         MiHora1 = CStr(Format(Time, "hh:mm:ss"))
-         
-         Set cmdMySQL = New ADODB.Command
-         Set cnMySQL = New ADODB.Connection
-         cnMySQL.ConnectionString = AdoStrCnnMySQL
-         cnMySQL.open
-          
-         Set cmdMySQL.ActiveConnection = cnMySQL
-         cmdMySQL.CommandType = adCmdText
-          
-        'Parametros de entrada y de salida
-         cmdMySQL.CommandText = "Call sp_acceso_ip_pcs(?,?,?,?,?,?,?,@pActivo);"
-                               
-        'Enviamos los parametro de solo entrada al SP
-         cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("CodigoU", adVarChar, adParamInput, 10, CodigoUsuario)
-         cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("IP_Local", adVarChar, adParamInput, 15, IP_PC.IP_PC)
-         cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("IP_WAN", adVarChar, adParamInput, 15, IP_PC.WAN_PC)
-         cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("PC_Nombre", adVarChar, adParamInput, 15, IP_PC.Nombre_PC)
-         cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("PC_MAC", adVarChar, adParamInput, 17, IP_PC.MAC_PC)
-         cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("Fecha", adVarChar, adParamInput, 10, Mifecha1)
-         cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("Hora", adVarChar, adParamInput, 8, MiHora1)
-
-        'Ejecucion del SP en MySQL
-         Set rsMySQL = cmdMySQL.Execute
-          
-        'Recolectamos los resultados de los parametros de salida
-         Set rsMySQL = cnMySQL.Execute("SELECT @pActivo;")
-          
-        'Pasamos a variables globales lso resultados del SP
-         If Not rsMySQL.EOF Then vActivo = rsMySQL.fields(0)
-         
-        ' MsgBox CodigoUsuario & vbCrLf & IP_PC.IP_PC & vbCrLf & IP_PC.WAN_PC & vbCrLf & IP_PC.Nombre_PC & vbCrLf & IP_PC.MAC_PC & vbCrLf & Mifecha1 & vbCrLf & MiHora1 & vbCrLf & vActivo
-         
-        'Cerramos la conexion con MySQL
-         rsMySQL.Close
-         cnMySQL.Close
-         
-        'Set cmdMySQL.ActiveConnection = Nothing
-         Set rsMySQL = Nothing
-         Set cnMySQL = Nothing
-         Set cmdMySQL = Nothing
-         RatonNormal
-    End If
-End Sub
+''Public Sub Acceso_IP_PCs_SP_MySQL(vActivo As Boolean)
+''Dim cnMySQL As ADODB.Connection
+''Dim rsMySQL As ADODB.Recordset
+''Dim cmdMySQL As ADODB.Command
+''Dim Mifecha1 As String
+''Dim MiHora1 As String
+''
+''   'Conexion a MySQL del servidor en las nubes
+''    If Ping_IP(strServidorERP) Then
+''         RatonReloj
+''         Mifecha1 = CStr(Format(Date, "yyyymmdd"))
+''         MiHora1 = CStr(Format(Time, "hh:mm:ss"))
+''
+''         Set cmdMySQL = New ADODB.Command
+''         Set cnMySQL = New ADODB.Connection
+''         cnMySQL.ConnectionString = AdoStrCnnMySQL
+''         cnMySQL.open
+''
+''         Set cmdMySQL.ActiveConnection = cnMySQL
+''         cmdMySQL.CommandType = adCmdText
+''
+''        'Parametros de entrada y de salida
+''         cmdMySQL.CommandText = "Call sp_acceso_ip_pcs(?,?,?,?,?,?,?,@pActivo);"
+''
+''        'Enviamos los parametro de solo entrada al SP
+''         cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("CodigoU", adVarChar, adParamInput, 10, CodigoUsuario)
+''         cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("IP_Local", adVarChar, adParamInput, 15, IP_PC.IP_PC)
+''         cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("IP_WAN", adVarChar, adParamInput, 15, IP_PC.WAN_PC)
+''         cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("PC_Nombre", adVarChar, adParamInput, 15, IP_PC.Nombre_PC)
+''         cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("PC_MAC", adVarChar, adParamInput, 17, IP_PC.MAC_PC)
+''         cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("Fecha", adVarChar, adParamInput, 10, Mifecha1)
+''         cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("Hora", adVarChar, adParamInput, 8, MiHora1)
+''
+''        'Ejecucion del SP en MySQL
+''         Set rsMySQL = cmdMySQL.Execute
+''
+''        'Recolectamos los resultados de los parametros de salida
+''         Set rsMySQL = cnMySQL.Execute("SELECT @pActivo;")
+''
+''        'Pasamos a variables globales lso resultados del SP
+''         If Not rsMySQL.EOF Then vActivo = rsMySQL.fields(0)
+''
+''        ' MsgBox CodigoUsuario & vbCrLf & IP_PC.IP_PC & vbCrLf & IP_PC.WAN_PC & vbCrLf & IP_PC.Nombre_PC & vbCrLf & IP_PC.MAC_PC & vbCrLf & Mifecha1 & vbCrLf & MiHora1 & vbCrLf & vActivo
+''
+''        'Cerramos la conexion con MySQL
+''         rsMySQL.Close
+''         cnMySQL.Close
+''
+''        'Set cmdMySQL.ActiveConnection = Nothing
+''         Set rsMySQL = Nothing
+''         Set cnMySQL = Nothing
+''         Set cmdMySQL = Nothing
+''         RatonNormal
+''    End If
+''End Sub
 
 Public Sub Control_Procesos_SP_MySQL(IPAcceso As String, TipoTrans As String, Proceso As String, Tarea As String, Optional Credito_No As String)
 Dim cnMySQL As ADODB.Connection
@@ -266,13 +305,147 @@ Dim Mail_para As String
     End If
 End Sub
 
-Public Sub Datos_Iniciales_Entidad_SP_MySQL()
+''Public Sub Datos_Iniciales_Entidad_SP_MySQL()
+''Dim cnMySQL As ADODB.Connection
+''Dim rsMySQL As ADODB.Recordset
+''Dim cmdMySQL As ADODB.Command
+''Dim CantParmIN As Long
+''Dim ParametrosDeSalida As String
+''
+''    ServidorMySQL = False
+''    PCActivo = True
+''    EstadoUsuario = True
+''    IDEntidad = 0
+''    DescripcionEstado = "OK"
+''    EstadoEmpresa = Ninguno
+''    Fecha_CE = FechaSistema
+''    Fecha_CO = FechaSistema
+''    Fecha_VPN = FechaSistema
+''    Fecha_DB = FechaSistema
+''    Fecha_P12 = FechaSistema
+''    SerieFE = Ninguno
+''    MicroEmpresa = Ninguno
+''    AgenteRetencion = Ninguno
+''    Cartera = 0
+''    Cant_FA = 0
+''    TipoPlan = 0
+''
+''    If Ping_IP(strServidorERP) Then
+''        RatonReloj
+''        CantParmIN = Len(CadenaParcial)
+''        If CantParmIN <= 1 Then CantParmIN = 1
+''       'MsgBox AdoStrCnnMySQL
+''       'Set cnMySQL = CreateObject("ADODB.Connection")
+''       'Conexion a MySQL del servidor en las nubes
+''
+''        Set cmdMySQL = New ADODB.Command
+''        Set cnMySQL = New ADODB.Connection
+''        cnMySQL.ConnectionString = AdoStrCnnMySQL
+''        cnMySQL.open
+''        cnMySQL.CursorLocation = adUseClient
+''''        If cnMySQL.State = 0 Then
+''''           MsgBox "error coneccion"
+''''        Else
+''''            MsgBox "OK coneccion"
+''''        End If
+''
+''
+''        Set cmdMySQL.ActiveConnection = cnMySQL
+''        cmdMySQL.CommandType = adCmdText
+''
+''       'Parametros de entrada y de salida
+''        ParametrosDeSalida = "@FechaCO, @FechaCE, @FechaDB, @FechaP12, @AgenteRetencion, @MicroEmpresa, @EstadoEmpresa, @DescripcionEstado, @NombreEntidad, @Representante, " _
+''                           & "@MensajeEmpresa, @ComunicadoEntidad, @SerieFA, @TotCartera, @CantFA, @TipoPlan, @pActivo, @EstadoUsuario, @TokenEmpresa, @URLEmpresa "
+''                           ', @Version_Nueva, @Archivo_Incluido, @Link_Canal "
+''                           'sp_mysql_datos_iniciales_entidad
+''                           'sp_mysql_leer_entidad
+''
+''        cmdMySQL.CommandText = "Call sp_mysql_datos_iniciales_entidad(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?," & ParametrosDeSalida & ");"
+''
+'''        Clipboard.Clear
+'''        Clipboard.SetText cmdMySQL.CommandText
+'''        MsgBox cmdMySQL.CommandText
+''
+''       'Enviamos los parametro de solo entrada al SP
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("ItemEmpresa", adVarChar, adParamInput, 3, NumEmpresa)
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("RUCEmpresa", adVarChar, adParamInput, 13, RUC)
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("CodigoUsuario", adVarChar, adParamInput, 10, CodigoUsuario)
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("NombreUsuario", adVarChar, adParamInput, 60, NombreUsuario)
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("IDEUsuario", adVarChar, adParamInput, 15, IDEUsuario)
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("PWRUsuario", adVarChar, adParamInput, 10, PWRUsuario)
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("NombreEmpresa", adVarChar, adParamInput, 100, UCaseStrg(Empresa))
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("RazonSocialEmpresa", adVarChar, adParamInput, 120, RazonSocial)
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("NombreCiudad", adVarChar, adParamInput, 35, NombreCiudad)
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("ContadorEmpresa", adVarChar, adParamInput, 60, NombreContador)
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("ContadorRUC", adVarChar, adParamInput, 13, RUC_Contador)
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("GerenteEmpresa", adVarChar, adParamInput, 60, NombreGerente)
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("NLogoTipo", adVarChar, adParamInput, 10, NLogoTipo)
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("NMarcaAgua", adVarChar, adParamInput, 10, NMarcaAgua)
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("EmailUsuario", adVarChar, adParamInput, 60, EmailUsuario)
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("NivelesDeAccesos", adVarChar, adParamInput, CantParmIN, CadenaParcial)
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("IP_Local", adVarChar, adParamInput, 15, IP_PC.IP_PC)
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("IP_WAN", adVarChar, adParamInput, 15, IP_PC.WAN_PC)
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("PC_Nombre", adVarChar, adParamInput, 15, IP_PC.Nombre_PC)
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("PC_MAC", adVarChar, adParamInput, 17, IP_PC.MAC_PC)
+''
+''       'Ejecucion del SP en MySQL
+''        Set rsMySQL = cmdMySQL.Execute
+''       'Recolectamos los resultados de los parametros de salida
+''        Set rsMySQL = cnMySQL.Execute("SELECT " & ParametrosDeSalida & ";")
+''
+''        Fecha_CO = Format(rsMySQL.fields(0), FormatoFechas)
+''        Fecha_CE = Format(rsMySQL.fields(1), FormatoFechas)
+''        Fecha_DB = Format(rsMySQL.fields(2), FormatoFechas)
+''        Fecha_P12 = Format(rsMySQL.fields(3), FormatoFechas)
+''        AgenteRetencion = rsMySQL.fields(4)
+''        MicroEmpresa = rsMySQL.fields(5)
+''        EstadoEmpresa = rsMySQL.fields(6)
+''        DescripcionEstado = rsMySQL.fields(7)
+''        NombreEntidad = rsMySQL.fields(8)
+''        RepresentanteLegal = rsMySQL.fields(9)
+''        MensajeEmpresa = rsMySQL.fields(10)
+''        ComunicadoEntidad = rsMySQL.fields(11)
+''        SerieFE = rsMySQL.fields(12)
+''        Cartera = rsMySQL.fields(13)
+''        Cant_FA = rsMySQL.fields(14)
+''        TipoPlan = rsMySQL.fields(15)
+''        PCActivo = rsMySQL.fields(16)
+''        EstadoUsuario = rsMySQL.fields(17)
+''        Token = rsMySQL.fields(18)
+''        URLToken = rsMySQL.fields(19)
+''        'Version_Nueva = rsMySQL.Fields(20)
+''        'Archivo_Incluido = rsMySQL.Fields(21)
+''        'Link_Canal = rsMySQL.Fields(22)
+''
+''        ServidorMySQL = True
+''
+'''        ParametrosDeSalida = ""
+'''        For I = 0 To 22
+'''            ParametrosDeSalida = ParametrosDeSalida & rsMySQL.fields(I).Name & " = " & rsMySQL.fields(I) & vbCrLf
+'''        Next I
+''
+''       'Cerramos la conexion con MySQL
+''        rsMySQL.Close
+''        cnMySQL.Close
+''
+''       'Liberando de la memoria es control de conexion
+''        Set cmdMySQL.ActiveConnection = Nothing
+''        Set rsMySQL = Nothing
+''        Set cnMySQL = Nothing
+''        Set cmdMySQL = Nothing
+''        RatonNormal
+''        'MsgBox "DeskTop Test: " & ParametrosDeSalida
+''    End If
+''End Sub
+
+Public Sub Leer_Datos_Entidad_SP_MySQL()
 Dim cnMySQL As ADODB.Connection
 Dim rsMySQL As ADODB.Recordset
 Dim cmdMySQL As ADODB.Command
-Dim CantParmIN As Long
-Dim ParametrosDeSalida As String
+Dim p_json_output As String
+Dim JSONComprobante As String
 
+    RatonReloj
     ServidorMySQL = False
     PCActivo = True
     EstadoUsuario = True
@@ -287,118 +460,122 @@ Dim ParametrosDeSalida As String
     SerieFE = Ninguno
     MicroEmpresa = Ninguno
     AgenteRetencion = Ninguno
+    If IsNull(NMarcaAgua) Or NMarcaAgua = "" Then NMarcaAgua = "DISKCOVER"
     Cartera = 0
     Cant_FA = 0
     TipoPlan = 0
-    
-    If Ping_IP(strServidorERP) Then
-        RatonReloj
-        CantParmIN = Len(CadenaParcial)
-        If CantParmIN <= 1 Then CantParmIN = 1
-       'MsgBox AdoStrCnnMySQL
-       'Set cnMySQL = CreateObject("ADODB.Connection")
-       'Conexion a MySQL del servidor en las nubes
-        
-        Set cmdMySQL = New ADODB.Command
-        Set cnMySQL = New ADODB.Connection
-        cnMySQL.ConnectionString = AdoStrCnnMySQL
-        cnMySQL.open
-        cnMySQL.CursorLocation = adUseClient
-''        If cnMySQL.State = 0 Then
-''           MsgBox "error coneccion"
-''        Else
-''            MsgBox "OK coneccion"
-''        End If
 
-        
-        Set cmdMySQL.ActiveConnection = cnMySQL
-        cmdMySQL.CommandType = adCmdText
-
-       'Parametros de entrada y de salida
-        ParametrosDeSalida = "@FechaCO, @FechaCE, @FechaDB, @FechaP12, @AgenteRetencion, @MicroEmpresa, @EstadoEmpresa, @DescripcionEstado, @NombreEntidad, @Representante, " _
-                           & "@MensajeEmpresa, @ComunicadoEntidad, @SerieFA, @TotCartera, @CantFA, @TipoPlan, @pActivo, @EstadoUsuario, @TokenEmpresa, @URLEmpresa, @Version_Nueva, " _
-                           & "@Archivo_Incluido, @Link_Canal "
-                           'sp_mysql_datos_iniciales_entidad
-        cmdMySQL.CommandText = "Call sp_mysql_leer_entidad(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?," & ParametrosDeSalida & ");"
-       'Enviamos los parametro de solo entrada al SP
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("ItemEmpresa", adVarChar, adParamInput, 3, NumEmpresa)
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("RUCEmpresa", adVarChar, adParamInput, 13, RUC)
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("CodigoUsuario", adVarChar, adParamInput, 10, CodigoUsuario)
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("NombreUsuario", adVarChar, adParamInput, 60, NombreUsuario)
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("IDEUsuario", adVarChar, adParamInput, 15, IDEUsuario)
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("PWRUsuario", adVarChar, adParamInput, 10, PWRUsuario)
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("NombreEmpresa", adVarChar, adParamInput, 100, UCaseStrg(Empresa))
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("RazonSocialEmpresa", adVarChar, adParamInput, 120, RazonSocial)
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("NombreCiudad", adVarChar, adParamInput, 35, NombreCiudad)
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("ContadorEmpresa", adVarChar, adParamInput, 60, NombreContador)
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("ContadorRUC", adVarChar, adParamInput, 13, RUC_Contador)
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("GerenteEmpresa", adVarChar, adParamInput, 60, NombreGerente)
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("NLogoTipo", adVarChar, adParamInput, 10, NLogoTipo)
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("NMarcaAgua", adVarChar, adParamInput, 10, NMarcaAgua)
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("EmailUsuario", adVarChar, adParamInput, 60, EmailUsuario)
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("NivelesDeAccesos", adVarChar, adParamInput, CantParmIN, CadenaParcial)
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("IP_Local", adVarChar, adParamInput, 15, IP_PC.IP_PC)
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("IP_WAN", adVarChar, adParamInput, 15, IP_PC.WAN_PC)
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("PC_Nombre", adVarChar, adParamInput, 15, IP_PC.Nombre_PC)
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("PC_MAC", adVarChar, adParamInput, 17, IP_PC.MAC_PC)
-        
-       'Ejecucion del SP en MySQL
-        Set rsMySQL = cmdMySQL.Execute
-       'Recolectamos los resultados de los parametros de salida
-        Set rsMySQL = cnMySQL.Execute("SELECT " & ParametrosDeSalida & ";")
-        Fecha_CO = Format(rsMySQL.fields(0), FormatoFechas)
-        Fecha_CE = Format(rsMySQL.fields(1), FormatoFechas)
-        Fecha_DB = Format(rsMySQL.fields(2), FormatoFechas)
-        Fecha_P12 = Format(rsMySQL.fields(3), FormatoFechas)
-        AgenteRetencion = rsMySQL.fields(4)
-        MicroEmpresa = rsMySQL.fields(5)
-        EstadoEmpresa = rsMySQL.fields(6)
-        DescripcionEstado = rsMySQL.fields(7)
-        NombreEntidad = rsMySQL.fields(8)
-        RepresentanteLegal = rsMySQL.fields(9)
-        MensajeEmpresa = rsMySQL.fields(10)
-        ComunicadoEntidad = rsMySQL.fields(11)
-        SerieFE = rsMySQL.fields(12)
-        Cartera = rsMySQL.fields(13)
-        Cant_FA = rsMySQL.fields(14)
-        TipoPlan = rsMySQL.fields(15)
-        PCActivo = rsMySQL.fields(16)
-        EstadoUsuario = rsMySQL.fields(17)
-        Token = rsMySQL.fields(18)
-        URLToken = rsMySQL.fields(19)
-        Version_Nueva = rsMySQL.fields(20)
-        Archivo_Incluido = rsMySQL.fields(21)
-        Link_Canal = rsMySQL.fields(22)
-        
-        ServidorMySQL = True
-        
-'        ParametrosDeSalida = ""
-'        For I = 0 To 22
-'            ParametrosDeSalida = ParametrosDeSalida & rsMySQL.fields(I).Name & " = " & rsMySQL.fields(I) & vbCrLf
-'        Next I
+   'Conexion a MySQL del servidor en las nubes
+    Set cmdMySQL = New ADODB.Command
+    Set cnMySQL = New ADODB.Connection
+    cnMySQL.ConnectionString = AdoStrCnnMySQL
+    cnMySQL.open
        
-       'Cerramos la conexion con MySQL
-        rsMySQL.Close
-        cnMySQL.Close
-         
-       'Liberando de la memoria es control de conexion
-        Set cmdMySQL.ActiveConnection = Nothing
-        Set rsMySQL = Nothing
-        Set cnMySQL = Nothing
-        Set cmdMySQL = Nothing
-        RatonNormal
-        'MsgBox "DeskTop Test: " & ParametrosDeSalida
-    End If
+    Set cmdMySQL.ActiveConnection = cnMySQL
+    cmdMySQL.CommandType = adCmdText
+        
+   'Parametros de entrada
+    JSONComprobante = "{"
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "ItemEmpresa", NumEmpresa)
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "RUCEmpresa", RUC)
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "CodigoUsuario", CodigoUsuario)
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "NombreUsuario", NombreUsuario)
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "IDEUsuario", IDEUsuario)
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "PWRUsuario", PWRUsuario)
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "NombreEmpresa", UCaseStrg(Empresa))
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "RazonSocialEmpresa", RazonSocial)
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "NombreCiudad", NombreCiudad)
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "ContadorEmpresa", NombreContador)
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "ContadorRUC", RUC_Contador)
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "GerenteEmpresa", NombreGerente)
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "NLogoTipo", NLogoTipo)
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "NMarcaAgua", NMarcaAgua)
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "EmailUsuario", EmailUsuario)
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "NivelesDeAccesos", CadenaParcial)
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "IP_Local", IP_PC.IP_PC)
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "IP_WAN", IP_PC.WAN_PC)
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "PC_Nombre", IP_PC.Nombre_PC)
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "PC_MAC", IP_PC.MAC_PC)
+    JSONComprobante = MidStrg(JSONComprobante, 1, Len(JSONComprobante) - 1) & "}" & Space(128)
+   '...........................................................................................
+''    Clipboard.Clear
+''    Clipboard.SetText JSONComprobante
+''    MsgBox JSONComprobante & vbCrLf & String(80, "-") & vbCrLf & Len(CadenaParcial)
+   '...........................................................................................
+   'Comando para Ejecutar el SP
+    cmdMySQL.CommandText = "Call sp_mysql_leer_datos_entidad(?, @p_json_output);"
+   'Enviamos los parametro de solo entrada al SP
+    cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("@p_json_input", adVarChar, adParamInput, Len(JSONComprobante), JSONComprobante)
+   'Ejecucion del SP en MySQL
+    cmdMySQL.Execute
+   'Recolectamos los resultados de los parametros de salida
+    Set rsMySQL = cnMySQL.Execute("SELECT @p_json_output;")
+   'Pasamos a variables globales lso resultados del SP
+    p_json_output = ""
+    If Not rsMySQL.EOF Then p_json_output = rsMySQL.fields(0)
+   'Recojemos los datos de salida del SP
+    Fecha_CO = Format(JSON_Leer_Campo(p_json_output, "Fecha_CO"), FormatoFechas)
+    Fecha_CE = Format(JSON_Leer_Campo(p_json_output, "Fecha_CE"), FormatoFechas)
+    Fecha_DB = Format(JSON_Leer_Campo(p_json_output, "Fecha_DB"), FormatoFechas)
+    Fecha_P12 = Format(JSON_Leer_Campo(p_json_output, "Fecha_P12"), FormatoFechas)
+    AgenteRetencion = JSON_Leer_Campo(p_json_output, "AgenteRetencion")
+    MicroEmpresa = JSON_Leer_Campo(p_json_output, "MicroEmpresa")
+    EstadoEmpresa = JSON_Leer_Campo(p_json_output, "EstadoEmpresa")
+    DescripcionEstado = JSON_Leer_Campo(p_json_output, "DescripcionEstado")
+    NombreEntidad = JSON_Leer_Campo(p_json_output, "NombreEntidad")
+    RepresentanteLegal = JSON_Leer_Campo(p_json_output, "RepresentanteLegal")
+    MensajeEmpresa = JSON_Leer_Campo(p_json_output, "MensajeEmpresa")
+    ComunicadoEntidad = JSON_Leer_Campo(p_json_output, "ComunicadoEntidad")
+    SerieFE = JSON_Leer_Campo(p_json_output, "SerieFE")
+    Cartera = JSON_Leer_Campo(p_json_output, "Cartera")
+    Cant_FA = JSON_Leer_Campo(p_json_output, "Cant_FA")
+    TipoPlan = JSON_Leer_Campo(p_json_output, "TipoPlan")
+    Token = JSON_Leer_Campo(p_json_output, "Token")
+    URLToken = JSON_Leer_Campo(p_json_output, "URLToken")
+    Archivo_Incluido = JSON_Leer_Campo(p_json_output, "Archivo_Incluido")
+    Link_Canal = JSON_Leer_Campo(p_json_output, "Link_Canal")
+    Version_Nueva = CBool(JSON_Leer_Campo(p_json_output, "Version_Nueva"))
+    PCActivo = CBool(JSON_Leer_Campo(p_json_output, "PCActivo"))
+    EstadoUsuario = CBool(JSON_Leer_Campo(p_json_output, "EstadoUsuario"))
+    If Len(AgenteRetencion) > 1 Then AgenteRetencion = " Resolución: " & AgenteRetencion
+    ServidorMySQL = True
+    
+   'Cerramos la conexion con MySQL
+    rsMySQL.Close
+    cnMySQL.Close
+       
+   'Set cmdMySQL.ActiveConnection = Nothing
+    Set rsMySQL = Nothing
+    Set cnMySQL = Nothing
+    Set cmdMySQL = Nothing
+           
+    sSQL = "UPDATE Empresas " _
+         & "SET Cartera = " & Cartera & ", " _
+         & "Cant_FA = " & Cant_FA & ",  " _
+         & "Fecha_CE = '" & BuscarFecha(Fecha_CE) & "', " _
+         & "Fecha_P12 = '" & BuscarFecha(Fecha_P12) & "', " _
+         & "Tipo_Plan = " & TipoPlan & ", " _
+         & "Estado = '" & EstadoEmpresa & "', " _
+         & "Serie_FA = '" & SerieFE & "' " _
+         & "WHERE Item = '" & NumEmpresa & "' " _
+         & "AND Estado <> '" & EstadoEmpresa & "' " _
+         & "OR Cartera <> " & Cartera & " " _
+         & "OR Cant_FA <> " & Cant_FA & " " _
+         & "OR Tipo_Plan <> " & TipoPlan & " " _
+         & "OR Serie_FA <> '" & SerieFE & "' " _
+         & "OR Fecha_CE <> '" & BuscarFecha(Fecha_CE) & "' " _
+         & "OR Fecha_P12 <> '" & BuscarFecha(Fecha_P12) & "' "
+    Ejecutar_SQL_SP sSQL
+    RatonReloj
 End Sub
 
-Public Sub Estado_Empresa_SP_MySQL()
+Public Sub Leer_Estado_Empresa_SP_MySQL()
 Dim cnMySQL As ADODB.Connection
 Dim rsMySQL As ADODB.Recordset
 Dim cmdMySQL As ADODB.Command
-Dim ParametrosDeSalida As String
+Dim p_json_output As String
+Dim JSONComprobante As String
 
-   'Conexion a MySQL del servidor en las nubes
-   'Control_Procesos Normal, "Conexion MySQL Estado Empresa"
     RatonReloj
     ServidorMySQL = False
     PCActivo = True
@@ -417,73 +594,189 @@ Dim ParametrosDeSalida As String
     Cartera = 0
     Cant_FA = 0
     TipoPlan = 0
-    If Ping_IP(strServidorERP) Then
-       'Conexion a MySQL del servidor en las nubes
-        Set cmdMySQL = New ADODB.Command
-        Set cnMySQL = New ADODB.Connection
-        cnMySQL.ConnectionString = AdoStrCnnMySQL
-        cnMySQL.open
-        Set cmdMySQL.ActiveConnection = cnMySQL
-        cmdMySQL.CommandType = adCmdText
-       
-       'Parametros de entrada y de salida
-        ParametrosDeSalida = "@FechaCO, @FechaCE, @FechaVPN, @FechaDB, @FechaP12, @AgenteRetencion, @MicroEmpresa, @EstadoEmpresa, " _
-                           & "@DescripcionEstado, @NombreEntidad, @Representante, @MensajeEmpresa, @ComunicadoEntidad, @TotCartera, " _
-                           & "@CantFA, @TipoPlan, @SerieFA, @pActivo, @EstadoUsuario"
-        cmdMySQL.CommandText = "Call sp_mysql_datos_estado_empresa(?, ?, ?, ?, ?, ?, ?," & ParametrosDeSalida & ");"
-      
-       'Enviamos los parametro de solo entrada al SP
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("ItemEmpresa", adVarChar, adParamInput, 3, NumEmpresa)
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("RUCEmpresa", adVarChar, adParamInput, 13, RUC)
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("CodigoUsuario", adVarChar, adParamInput, 10, CodigoUsuario)
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("IP_Local", adVarChar, adParamInput, 15, IP_PC.IP_PC)
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("IP_WAN", adVarChar, adParamInput, 15, IP_PC.WAN_PC)
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("PC_Nombre", adVarChar, adParamInput, 15, IP_PC.Nombre_PC)
-        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("PC_MAC", adVarChar, adParamInput, 17, IP_PC.MAC_PC)
 
-       'Ejecucion del SP en MySQL
-        Set rsMySQL = cmdMySQL.Execute
+'    If Ping_IP(strServidorERP) Then
+
+   'Conexion a MySQL del servidor en las nubes
+    Set cmdMySQL = New ADODB.Command
+    Set cnMySQL = New ADODB.Connection
+    cnMySQL.ConnectionString = AdoStrCnnMySQL
+    cnMySQL.open
        
-       'Recolectamos los resultados de los parametros de salida
-        Set rsMySQL = cnMySQL.Execute("SELECT " & ParametrosDeSalida & ";")
-       
-       'Pasamos a variables globales lso resultados del SP
-        If Not rsMySQL.EOF Then
-           Fecha_CO = Format(rsMySQL.fields(0), FormatoFechas)
-           Fecha_CE = Format(rsMySQL.fields(1), FormatoFechas)
-           Fecha_VPN = Format(rsMySQL.fields(2), FormatoFechas)
-           Fecha_DB = Format(rsMySQL.fields(3), FormatoFechas)
-           Fecha_P12 = Format(rsMySQL.fields(4), FormatoFechas)
-         
-           AgenteRetencion = rsMySQL.fields(5)
-           MicroEmpresa = rsMySQL.fields(6)
-           EstadoEmpresa = rsMySQL.fields(7)
-           DescripcionEstado = rsMySQL.fields(8)
-           NombreEntidad = rsMySQL.fields(9)
-           RepresentanteLegal = rsMySQL.fields(10)
-           MensajeEmpresa = rsMySQL.fields(11)
-           ComunicadoEntidad = rsMySQL.fields(12)
-           Cartera = rsMySQL.fields(13)
-           Cant_FA = rsMySQL.fields(14)
-           TipoPlan = rsMySQL.fields(15)
-           SerieFE = rsMySQL.fields(16)
-           PCActivo = rsMySQL.fields(17)
-           EstadoUsuario = rsMySQL.fields(18)
-           ServidorMySQL = True
-        End If
+    Set cmdMySQL.ActiveConnection = cnMySQL
+    cmdMySQL.CommandType = adCmdText
         
-       'Cerramos la conexion con MySQL
-        rsMySQL.Close
-        cnMySQL.Close
-    End If
-     
+   'Parametros de entrada
+    JSONComprobante = "{"
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "ItemEmpresa", NumEmpresa)
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "RUCEmpresa", RUC)
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "CodigoUsuario", CodigoUsuario)
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "IP_Local", IP_PC.IP_PC)
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "IP_WAN", IP_PC.WAN_PC)
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "PC_Nombre", IP_PC.Nombre_PC)
+    JSONComprobante = JSON_Insert_MySQL(JSONComprobante, "PC_MAC", IP_PC.MAC_PC)
+    JSONComprobante = MidStrg(JSONComprobante, 1, Len(JSONComprobante) - 1) & "}" & Space(500)
+   '...........................................................................................
+'    Clipboard.Clear
+'    Clipboard.SetText JSONComprobante
+'    MsgBox JSONComprobante
+   '...........................................................................................
+   'Comando para Ejecutar el SP
+    cmdMySQL.CommandText = "Call sp_mysql_leer_estado_empresa(?, @p_json_output);"
+   'Enviamos los parametro de solo entrada al SP
+    cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("@p_json_input", adVarChar, adParamInput, Len(JSONComprobante), JSONComprobante)
+   'Ejecucion del SP en MySQL
+    cmdMySQL.Execute
+   'Recolectamos los resultados de los parametros de salida
+    Set rsMySQL = cnMySQL.Execute("SELECT @p_json_output;")
+   'Pasamos a variables globales lso resultados del SP
+    p_json_output = ""
+    If Not rsMySQL.EOF Then p_json_output = rsMySQL.fields(0)
+   'Recojemos los datos de salida del SP
+    Fecha_CO = Format(JSON_Leer_Campo(p_json_output, "Fecha_CO"), FormatoFechas)
+    Fecha_CE = Format(JSON_Leer_Campo(p_json_output, "Fecha_CE"), FormatoFechas)
+    Fecha_DB = Format(JSON_Leer_Campo(p_json_output, "Fecha_DB"), FormatoFechas)
+    Fecha_P12 = Format(JSON_Leer_Campo(p_json_output, "Fecha_P12"), FormatoFechas)
+    AgenteRetencion = JSON_Leer_Campo(p_json_output, "AgenteRetencion")
+    MicroEmpresa = JSON_Leer_Campo(p_json_output, "MicroEmpresa")
+    EstadoEmpresa = JSON_Leer_Campo(p_json_output, "EstadoEmpresa")
+    DescripcionEstado = JSON_Leer_Campo(p_json_output, "DescripcionEstado")
+    NombreEntidad = JSON_Leer_Campo(p_json_output, "NombreEntidad")
+    RepresentanteLegal = JSON_Leer_Campo(p_json_output, "RepresentanteLegal")
+    MensajeEmpresa = JSON_Leer_Campo(p_json_output, "MensajeEmpresa")
+    ComunicadoEntidad = JSON_Leer_Campo(p_json_output, "ComunicadoEntidad")
+    SerieFE = JSON_Leer_Campo(p_json_output, "SerieFE")
+    Cartera = JSON_Leer_Campo(p_json_output, "Cartera")
+    Cant_FA = JSON_Leer_Campo(p_json_output, "Cant_FA")
+    TipoPlan = JSON_Leer_Campo(p_json_output, "TipoPlan")
+    PCActivo = CBool(JSON_Leer_Campo(p_json_output, "PCActivo"))
+    EstadoUsuario = CBool(JSON_Leer_Campo(p_json_output, "EstadoUsuario"))
+    If Len(AgenteRetencion) > 1 Then AgenteRetencion = " Resolución: " & AgenteRetencion
+    ServidorMySQL = True
+    
+   'Cerramos la conexion con MySQL
+    rsMySQL.Close
+    cnMySQL.Close
+       
    'Set cmdMySQL.ActiveConnection = Nothing
     Set rsMySQL = Nothing
     Set cnMySQL = Nothing
     Set cmdMySQL = Nothing
-    If Len(AgenteRetencion) > 1 Then AgenteRetencion = " Resolución: " & AgenteRetencion
-    RatonNormal
+    
+    sSQL = "UPDATE Empresas " _
+         & "SET Cartera = " & Cartera & ", " _
+         & "Cant_FA = " & Cant_FA & ",  " _
+         & "Fecha_CE = '" & BuscarFecha(Fecha_CE) & "', " _
+         & "Fecha_P12 = '" & BuscarFecha(Fecha_P12) & "', " _
+         & "Tipo_Plan = " & TipoPlan & ", " _
+         & "Estado = '" & EstadoEmpresa & "', " _
+         & "Serie_FA = '" & SerieFE & "' " _
+         & "WHERE Item = '" & NumEmpresa & "' " _
+         & "AND Estado <> '" & EstadoEmpresa & "' " _
+         & "OR Cartera <> " & Cartera & " " _
+         & "OR Cant_FA <> " & Cant_FA & " " _
+         & "OR Tipo_Plan <> " & TipoPlan & " " _
+         & "OR Serie_FA <> '" & SerieFE & "' " _
+         & "OR Fecha_CE <> '" & BuscarFecha(Fecha_CE) & "' " _
+         & "OR Fecha_P12 <> '" & BuscarFecha(Fecha_P12) & "' "
+    Ejecutar_SQL_SP sSQL
+    RatonReloj
+'    End If
 End Sub
+
+''Public Sub Estado_Empresa_SP_MySQL()
+''Dim cnMySQL As ADODB.Connection
+''Dim rsMySQL As ADODB.Recordset
+''Dim cmdMySQL As ADODB.Command
+''Dim ParametrosDeSalida As String
+''
+''   'Conexion a MySQL del servidor en las nubes
+''   'Control_Procesos Normal, "Conexion MySQL Estado Empresa"
+''    RatonReloj
+''    ServidorMySQL = False
+''    PCActivo = True
+''    EstadoUsuario = True
+''    IDEntidad = 0
+''    DescripcionEstado = "OK"
+''    EstadoEmpresa = Ninguno
+''    Fecha_CE = FechaSistema
+''    Fecha_CO = FechaSistema
+''    Fecha_VPN = FechaSistema
+''    Fecha_DB = FechaSistema
+''    Fecha_P12 = FechaSistema
+''    SerieFE = Ninguno
+''    MicroEmpresa = Ninguno
+''    AgenteRetencion = Ninguno
+''    Cartera = 0
+''    Cant_FA = 0
+''    TipoPlan = 0
+''    If Ping_IP(strServidorERP) Then
+''       'Conexion a MySQL del servidor en las nubes
+''        Set cmdMySQL = New ADODB.Command
+''        Set cnMySQL = New ADODB.Connection
+''        cnMySQL.ConnectionString = AdoStrCnnMySQL
+''        cnMySQL.open
+''        Set cmdMySQL.ActiveConnection = cnMySQL
+''        cmdMySQL.CommandType = adCmdText
+''
+''       'Parametros de entrada y de salida
+''        ParametrosDeSalida = "@FechaCO, @FechaCE, @FechaVPN, @FechaDB, @FechaP12, @AgenteRetencion, @MicroEmpresa, @EstadoEmpresa, " _
+''                           & "@DescripcionEstado, @NombreEntidad, @Representante, @MensajeEmpresa, @ComunicadoEntidad, @TotCartera, " _
+''                           & "@CantFA, @TipoPlan, @SerieFA, @pActivo, @EstadoUsuario"
+''        cmdMySQL.CommandText = "Call sp_mysql_datos_estado_empresa(?, ?, ?, ?, ?, ?, ?," & ParametrosDeSalida & ");"
+''
+''       'Enviamos los parametro de solo entrada al SP
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("ItemEmpresa", adVarChar, adParamInput, 3, NumEmpresa)
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("RUCEmpresa", adVarChar, adParamInput, 13, RUC)
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("CodigoUsuario", adVarChar, adParamInput, 10, CodigoUsuario)
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("IP_Local", adVarChar, adParamInput, 15, IP_PC.IP_PC)
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("IP_WAN", adVarChar, adParamInput, 15, IP_PC.WAN_PC)
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("PC_Nombre", adVarChar, adParamInput, 15, IP_PC.Nombre_PC)
+''        cmdMySQL.Parameters.Append cmdMySQL.CreateParameter("PC_MAC", adVarChar, adParamInput, 17, IP_PC.MAC_PC)
+''
+''       'Ejecucion del SP en MySQL
+''        Set rsMySQL = cmdMySQL.Execute
+''
+''       'Recolectamos los resultados de los parametros de salida
+''        Set rsMySQL = cnMySQL.Execute("SELECT " & ParametrosDeSalida & ";")
+''
+''       'Pasamos a variables globales lso resultados del SP
+''        If Not rsMySQL.EOF Then
+''           Fecha_CO = Format(rsMySQL.fields(0), FormatoFechas)
+''           Fecha_CE = Format(rsMySQL.fields(1), FormatoFechas)
+''           Fecha_VPN = Format(rsMySQL.fields(2), FormatoFechas)
+''           Fecha_DB = Format(rsMySQL.fields(3), FormatoFechas)
+''           Fecha_P12 = Format(rsMySQL.fields(4), FormatoFechas)
+''
+''           AgenteRetencion = rsMySQL.fields(5)
+''           MicroEmpresa = rsMySQL.fields(6)
+''           EstadoEmpresa = rsMySQL.fields(7)
+''           DescripcionEstado = rsMySQL.fields(8)
+''           NombreEntidad = rsMySQL.fields(9)
+''           RepresentanteLegal = rsMySQL.fields(10)
+''           MensajeEmpresa = rsMySQL.fields(11)
+''           ComunicadoEntidad = rsMySQL.fields(12)
+''           Cartera = rsMySQL.fields(13)
+''           Cant_FA = rsMySQL.fields(14)
+''           TipoPlan = rsMySQL.fields(15)
+''           SerieFE = rsMySQL.fields(16)
+''           PCActivo = rsMySQL.fields(17)
+''           EstadoUsuario = rsMySQL.fields(18)
+''           ServidorMySQL = True
+''        End If
+''
+''       'Cerramos la conexion con MySQL
+''        rsMySQL.Close
+''        cnMySQL.Close
+''    End If
+''
+''   'Set cmdMySQL.ActiveConnection = Nothing
+''    Set rsMySQL = Nothing
+''    Set cnMySQL = Nothing
+''    Set cmdMySQL = Nothing
+''    If Len(AgenteRetencion) > 1 Then AgenteRetencion = " Resolución: " & AgenteRetencion
+''    RatonNormal
+''End Sub
 
 Public Sub Tipo_Contribuyente_SP_MySQL(RUCContribuyente As String, vMicroEmpresa As String, vAgenteRetencion As String)
 Dim cnMySQL As ADODB.Connection
@@ -1055,20 +1348,27 @@ Dim MiReg As ADODB.Recordset
 Dim pJSON As Object
 Dim JSONResult As String
 
-    JSONInPutAbonos = "[{""T"":""N"",""TP"":""FA"",""Fecha"":""" & BuscarFecha(FechaSistema) & """,""Recibo_No"":""000000000"",""Tipo_Cta"":""N""," _
-                    & """Cta"":""0"",""Cta_CxP"":""0"",""Factura"":0,""CodigoC"":""9999999999"",""Abono"":0.00,""Banco"":""."",""Cheque"":""."",""Codigo_Inv"":"".""," _
-                    & """Comprobante"":""."", ""Serie"":""."",""Autorizacion"":""."",""Cod_Ejec"":""."",""Serie_NC"":""."",""Autorizacion_NC"":""."",""Secuencial_NC"":0," _
-                    & """Serie_R"":""."", ""Autorizacion_R"":""."",""Secuencial_R"":0,""Porc"":0}" & JSONInPutAbonos & "]"
-   'Transformacion de Comillas simples a comillas dobles y de tipos booleanos
-    JSONInPutAbonos = Replace(JSONInPutAbonos, "'", """")
-    JSONInPutAbonos = Replace(JSONInPutAbonos, "True", "1")
-    JSONInPutAbonos = Replace(JSONInPutAbonos, "False", "0")
-    JSONInPutAbonos = Replace(JSONInPutAbonos, "Verdadero", "1")
-    JSONInPutAbonos = Replace(JSONInPutAbonos, "Falso", "0")
+   'Guardar en el porta papeles para verificacion
+    If Len(JSONInPutAbonos) > 1 Then
+       JSONInPutAbonos = "[{""Item"":""" & NumEmpresa & """,""Periodo"":""" & Periodo_Contable & """,""CodigoU"":""" & CodigoUsuario & """,""HABIT"":""."",""Tipo_Cta"":""N""," _
+                       & """T"":""N"",""TP"":""FA"",""Fecha"":""" & BuscarFecha(FechaSistema) & """,""Recibo_No"":""000000"",""Cta"":""0"",""Cta_CxP"":""0"",""Factura"":0," _
+                       & """CodigoC"":""9999999999"",""Abono"":0,""Banco"":""."",""Cheque"":""."",""Codigo_Inv"":""."",""Comprobante"":""."", ""Serie"":""."",""Autorizacion"":"".""," _
+                       & """Cod_Ejec"":""."",""Serie_NC"":""."",""Autorizacion_NC"":""."",""Secuencial_NC"":0,""Serie_R"":""."", ""Autorizacion_R"":""."",""Secuencial_R"":0," _
+                       & """Porc"":0}" & JSONInPutAbonos & "]"
+      'Transformacion de Comillas simples a comillas dobles y de tipos booleanos
+       JSONInPutAbonos = Replace(JSONInPutAbonos, "'", """")
+       JSONInPutAbonos = Replace(JSONInPutAbonos, "True", "1")
+       JSONInPutAbonos = Replace(JSONInPutAbonos, "False", "0")
+       JSONInPutAbonos = Replace(JSONInPutAbonos, "Verdadero", "1")
+       JSONInPutAbonos = Replace(JSONInPutAbonos, "Falso", "0")
+    Else
+       JSONInPutAbonos = ""
+    End If
+
    '---------------------------------------
-   ' Clipboard.Clear
-   ' Clipboard.SetText JSONInPutAbonos
-   ' MsgBox JSONInPutAbonos
+'    Clipboard.Clear
+'    Clipboard.SetText JSONInPutAbonos
+'    MsgBox JSONInPutAbonos
    '---------------------------------------
     Iniciar_Stored_Procedure "SP Grabar Abonos Factura", MiSQL, MiCmd, MiReg
     MiCmd.CommandText = "sp_Grabar_Abonos_Factura"
@@ -1091,7 +1391,7 @@ Dim JSONResult As String
     If Resultado Then
        Control_Procesos "P", "El importe a la Cta: " & FTA.Cta_CxP & ": " & FTA.TP & " No. " & FTA.Serie & "-" & Format$(FTA.Factura, "000000000") & ", Total de Abonos USD " & Format(TotalAbonos, "#,##0.00") & ", se realizo con exito."
        If FTA.TP = "TJ" Then Imprimir_FA_NV_TJ FTA
-'       MsgBox "Proceso realizado con exito"
+       MsgBox "Proceso realizado con exito"
     End If
 End Sub
 
@@ -1140,6 +1440,7 @@ Dim JSONResult As String
          JSONComprobante = JSON_Insert(JSONComprobante, "Numero", .Numero)
          JSONComprobante = JSON_Insert(JSONComprobante, "Nota_Credito", .Nota_Credito)
          JSONComprobante = JSON_Insert(JSONComprobante, "Retencion", .Retencion)
+         JSONComprobante = JSON_Insert(JSONComprobante, "Remision", .Remision)
     End With
    'Transformacion de Comillas simples a comillas dobles y de tipos booleanos
     JSONComprobante = MidStrg(JSONComprobante, 1, Len(JSONComprobante) - 1) & "}"
@@ -1181,6 +1482,7 @@ Dim JSONResult As String
                Case Else: TFA.Autorizacion = .Clave_De_Acceso
              End Select
          End If
+        'MsgBox .Autorizacion
     End With
 End Sub
 
@@ -1291,24 +1593,27 @@ Dim JSONResult As String
     
    'Guardar en el porta papeles para verificacion
     If Len(JSONInPutAbonos) > 1 Then
-       JSONInPutAbonos = "[{""T"":""N"",""TP"":""FA"",""Fecha"":""" & BuscarFecha(FechaSistema) & """,""Recibo_No"":""000000000"",""Tipo_Cta"":""N""," _
-                       & """Cta"":""0"",""Cta_CxP"":""0"",""Factura"":0,""CodigoC"":""9999999999"",""Abono"":0.00,""Banco"":""."",""Cheque"":""."",""Codigo_Inv"":"".""," _
-                       & """Comprobante"":""."", ""Serie"":""."",""Autorizacion"":""."",""Cod_Ejec"":""."",""Serie_NC"":""."",""Autorizacion_NC"":""."",""Secuencial_NC"":0," _
-                       & """Serie_R"":""."", ""Autorizacion_R"":""."",""Secuencial_R"":0,""Porc"":0}" & JSONInPutAbonos & "]"
+       JSONInPutAbonos = "[{""Item"":""" & NumEmpresa & """,""Periodo"":""" & Periodo_Contable & """,""CodigoU"":""" & CodigoUsuario & """,""HABIT"":""."",""Tipo_Cta"":""N""," _
+                       & """T"":""N"",""TP"":""FA"",""Fecha"":""" & BuscarFecha(FechaSistema) & """,""Recibo_No"":""000000"",""Cta"":""0"",""Cta_CxP"":""0"",""Factura"":0," _
+                       & """CodigoC"":""9999999999"",""Abono"":0,""Banco"":""."",""Cheque"":""."",""Codigo_Inv"":""."",""Comprobante"":""."", ""Serie"":""."",""Autorizacion"":"".""," _
+                       & """Cod_Ejec"":""."",""Serie_NC"":""."",""Autorizacion_NC"":""."",""Secuencial_NC"":0,""Serie_R"":""."", ""Autorizacion_R"":""."",""Secuencial_R"":0," _
+                       & """Porc"":0}" & JSONInPutAbonos & "]"
+      'Transformacion de Comillas simples a comillas dobles y de tipos booleanos
+       JSONInPutAbonos = Replace(JSONInPutAbonos, "'", """")
+       JSONInPutAbonos = Replace(JSONInPutAbonos, "True", "1")
+       JSONInPutAbonos = Replace(JSONInPutAbonos, "False", "0")
+       JSONInPutAbonos = Replace(JSONInPutAbonos, "Verdadero", "1")
+       JSONInPutAbonos = Replace(JSONInPutAbonos, "Falso", "0")
     Else
        JSONInPutAbonos = ""
     End If
-   'Transformacion de Comillas simples a comillas dobles y de tipos booleanos
-    JSONInPutAbonos = Replace(JSONInPutAbonos, "'", """")
-    JSONInPutAbonos = Replace(JSONInPutAbonos, "True", "1")
-    JSONInPutAbonos = Replace(JSONInPutAbonos, "False", "0")
-    JSONInPutAbonos = Replace(JSONInPutAbonos, "Verdadero", "1")
-    JSONInPutAbonos = Replace(JSONInPutAbonos, "Falso", "0")
-    
+   '==================================================================================
 '    Clipboard.Clear
-'    Clipboard.SetText JSONFactura & vbCrLf & String(80, "-") & vbCrLf & JSONInPutAbonos
+'    Clipboard.SetText JSONFactura & vbCrLf _
+'                    & String(80, "-") & vbCrLf _
+'                    & JSONInPutAbonos
 '    MsgBox "Desktop Test: " & Len(JSONFactura) & vbCrLf & JSONFactura
-
+   '==================================================================================
     Iniciar_Stored_Procedure "SP Grabar Factura", MiSQL, MiCmd, MiReg
     MiCmd.CommandText = "sp_Grabar_Factura"
     MiCmd.Parameters.Append MiCmd.CreateParameter("@JSON_InPut", adVarChar, adParamInput, Len(JSONFactura) + 10, JSONFactura)
@@ -1354,6 +1659,217 @@ Dim JSONResult As String
     Else
        Control_Procesos "E", "No se pudo grabar " & TFA.TC & " No. " & TFA.Serie & "-" & Format$(TFA.Factura, "000000000") & " [" & TFA.Hora & "]", Cadena
     End If
+End Sub
+
+Public Sub Leer_Datos_FA_NV_SP(TFA As Tipo_Facturas)
+Dim MiSQL As ADODB.Connection
+Dim MiCmd As ADODB.Command
+Dim MiReg As ADODB.Recordset
+
+Dim pJSON As Object
+
+Dim Existe_Formato As Boolean
+Dim JSONFactura As String
+Dim JSONResult As String
+
+    RatonReloj
+    JSONFactura = "{"
+    With TFA
+        'Datos por default
+        .Fecha_Aut_GR = FechaSistema
+        .Hora = HoraSistema
+        .Hora_GR = HoraSistema
+        .Estado_SRI_GR = Ninguno
+        .Serie_GR = Ninguno
+        .ClaveAcceso_GR = Ninguno
+        .Autorizacion_GR = Ninguno
+        .Vendedor = Ninguno
+        .Remision = 0
+        .Comercial = Ninguno
+        .CIRUCComercial = Ninguno
+        .CIRUCEntrega = Ninguno
+        .Entrega = Ninguno
+        .CiudadGRI = Ninguno
+        .CiudadGRF = Ninguno
+        .Serie_GR = Ninguno
+        .FechaGRE = FechaSistema
+        .FechaGRI = FechaSistema
+        .FechaGRF = FechaSistema
+        .Pedido = Ninguno
+        .Zona = Ninguno
+        .Orden_Compra = 0
+        .Placa_Vehiculo = Ninguno
+        .Placa_Socio = Ninguno
+        .Lugar_Entrega = Ninguno
+        .Descuento_X = 0
+        .Descuento_0 = 0
+        .Gavetas = 0
+        .Servicio = 0
+        .EsPorReembolso = False
+        .Si_Existe_Doc = False
+        .Sin_Fines_Lucro = False
+         Cod_Porc_IVA = 0
+ 
+        'Formacion del JSON para enviar al SP de lectura
+         JSONFactura = JSON_Insert(JSONFactura, "Item", NumEmpresa)
+         JSONFactura = JSON_Insert(JSONFactura, "Periodo", Periodo_Contable)
+         JSONFactura = JSON_Insert(JSONFactura, "TC", .TC)
+         JSONFactura = JSON_Insert(JSONFactura, "Serie", .Serie)
+         JSONFactura = JSON_Insert(JSONFactura, "Autorizacion", .Autorizacion)
+         JSONFactura = JSON_Insert(JSONFactura, "Factura", .Factura)
+    End With
+   'Transformacion de Comillas simples a comillas dobles y de tipos booleanos
+    JSONFactura = MidStrg(JSONFactura, 1, Len(JSONFactura) - 1) & "}"
+    JSONFactura = Replace(JSONFactura, "'", """")
+    JSONFactura = Replace(JSONFactura, "True", "1")
+    JSONFactura = Replace(JSONFactura, "False", "0")
+    JSONFactura = Replace(JSONFactura, "Verdadero", "1")
+    JSONFactura = Replace(JSONFactura, "Falso", "0")
+   '=================================================================
+'    Clipboard.Clear
+'    Clipboard.SetText JSONFactura
+'    MsgBox "Desktop Test: " & Len(JSONFactura) & vbCrLf & JSONFactura
+   '=================================================================
+    Iniciar_Stored_Procedure "SP Leer_Datos_FA_NV", MiSQL, MiCmd, MiReg
+    MiCmd.CommandText = "sp_Leer_Datos_FA_NV"
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@JSON_InPutFA", adVarChar, adParamInput, Len(JSONFactura) + 10, JSONFactura)
+    MiCmd.Parameters.Append MiCmd.CreateParameter("@JSON_OutPutFA", adVarChar, adParamOutput, 5120, JSONResult)
+    Procesar_Stored_Procedure MiCmd, MiReg
+    
+   '=================================================================
+'    Clipboard.Clear
+'    Clipboard.SetText JSONResult
+'    MsgBox "Desktop Test: " & Len(JSONResult) & vbCrLf & JSONResult
+   '=================================================================
+    
+   'Recolectamos los resultados del Store Procedure
+    RatonReloj
+    JSONResult = MiCmd.Parameters("@JSON_OutPutFA").value
+    Set pJSON = JSON.parse(MiCmd.Parameters("@JSON_OutPutFA").value)
+     
+    Cadena = ""
+    With TFA
+        .EsPorReembolso = CBool(pJSON.Item("EsPorReembolso"))
+        .Si_Existe_Doc = CBool(pJSON.Item("Si_Existe_Doc"))
+         
+        'Encabezado de Facturas
+        .Sin_Fines_Lucro = CBool(pJSON.Item("Sin_Fines_Lucro"))
+        .SP = CBool(pJSON.Item("SP"))
+        .Imp_Mes = CBool(pJSON.Item("Imp_Mes"))
+         Existe_Formato = CBool(pJSON.Item("Existe_Formato"))
+        .T = pJSON.Item("T")
+        .Porc_IVA = Redondear(pJSON.Item("Porc_IVA"), 2)
+        .Porc_IVA_S = CStr(Redondear(pJSON.Item("Porc_IVA") * 100, 2))
+        .Cta_CxP = pJSON.Item("Cta_CxP")
+        .Cod_CxC = pJSON.Item("Cod_CxC")
+        .Estado_SRI = pJSON.Item("Estado_SRI")
+        .Error_SRI = pJSON.Item("Error_FA_SRI")
+        .ClaveAcceso = pJSON.Item("Clave_Acceso")
+        .CodigoU = pJSON.Item("CodigoU")
+        .Digitador = pJSON.Item("Nombre_Completo")
+        'TFA.Digitador = Replace(TFA.Digitador, vbCrLf, "")
+        .CodigoC = pJSON.Item("CodigoC")
+        .Contacto = pJSON.Item("Contacto")
+        .Cliente = pJSON.Item("Cliente")
+        .CI_RUC = pJSON.Item("CI_RUC")
+        .DirNumero = pJSON.Item("DirNumero")
+        .Curso = pJSON.Item("Direccion")
+        .CiudadC = pJSON.Item("Ciudad")
+        .Grupo = pJSON.Item("Grupo")
+        .Cod_Ejec = pJSON.Item("Cod_Ejec")
+        .Ejecutivo_Venta = pJSON.Item("Ejecutivo_V")
+        .Fecha = Format(MidStrg(pJSON.Item("Fecha"), 1, 10), FormatoFechas)
+        .Fecha_V = Format(MidStrg(pJSON.Item("Fecha_V"), 1, 10), FormatoFechas)
+        .Fecha_C = Format(MidStrg(pJSON.Item("Fecha_C"), 1, 10), FormatoFechas)
+        .Fecha_Aut = Format(MidStrg(pJSON.Item("Fecha_Aut"), 1, 10), FormatoFechas)
+        .Hora = pJSON.Item("Hora")
+        .Tipo_Pago = pJSON.Item("Tipo_Pago")
+        .Forma_Pago = pJSON.Item("Forma_Pago")
+        .Tipo_Pago_Det = "Forma de Pago: " & ULCase(pJSON.Item("Descripcion"))
+        .EmailC = pJSON.Item("Email")
+        .EmailC2 = pJSON.Item("Email2")
+        .Observacion = pJSON.Item("Observacion")
+        .Nota = pJSON.Item("Nota")
+        .Orden_Compra = pJSON.Item("Orden_Compra")
+        .Gavetas = pJSON.Item("Gavetas")
+        .TB = pJSON.Item("TB")
+        .Placa_Vehiculo = pJSON.Item("Placa_Vehiculo")
+        .Placa_Socio = pJSON.Item("Placa_Socio")
+        .Nombre_Socio = pJSON.Item("Nombre_Socio")
+        
+         Cod_Porc_IVA = pJSON.Item("Cod_Porc_IVA")
+         
+        'Razon Social de la Factura
+        .TD = pJSON.Item("TD")
+        .Razon_Social = pJSON.Item("Razon_Social")
+        .RUC_CI = pJSON.Item("RUC_CI")
+        .DireccionC = pJSON.Item("Direccion_RS")
+        .TelefonoC = pJSON.Item("Telefono_RS")
+        .EmailR = pJSON.Item("Email_R")
+         If .EmailR = Ninguno Then .EmailR = EmailProcesos
+         
+        'SubTotales de la Factura
+        .Descuento = pJSON.Item("Descuento")
+        .Descuento2 = pJSON.Item("Descuento2")
+        .Descuento_0 = pJSON.Item("Desc_0")
+        .Descuento_X = pJSON.Item("Desc_X")
+        .SubTotal = pJSON.Item("SubTotal")
+        .Total_IVA = pJSON.Item("IVA")
+        .Con_IVA = pJSON.Item("Con_IVA")
+        .Sin_IVA = pJSON.Item("Sin_IVA")
+        .Servicio = pJSON.Item("Servicio")
+        .Total_MN = pJSON.Item("Total_MN")
+        .Saldo_MN = pJSON.Item("Saldo_MN")
+        .Saldo_Actual = pJSON.Item("Saldo_MN")
+        .Total_Descuento = .Descuento + .Descuento2
+         
+        'Guia de Remision
+        .Fecha_Aut_GR = Format(MidStrg(pJSON.Item("Fecha_Aut_GR"), 1, 10), FormatoFechas)
+        .Hora_GR = pJSON.Item("Hora_Aut_GR")
+        .Estado_SRI_GR = pJSON.Item("Estado_SRI_GR")
+        .Serie_GR = pJSON.Item("Serie_GR")
+        .ClaveAcceso_GR = pJSON.Item("Clave_Acceso_GR")
+        .Autorizacion_GR = pJSON.Item("Autorizacion_GR")
+        .Remision = pJSON.Item("Remision")
+        .Comercial = pJSON.Item("Comercial")
+        .CIRUCComercial = pJSON.Item("CIRUC_Comercial")
+        .CIRUCEntrega = pJSON.Item("CIRUC_Entrega")
+        .Entrega = pJSON.Item("Entrega")
+        .CiudadGRI = pJSON.Item("CiudadGRI")
+        .CiudadGRF = pJSON.Item("CiudadGRF")
+        .Serie_GR = pJSON.Item("Serie_GR")
+        .FechaGRE = Format(MidStrg(pJSON.Item("FechaGRE"), 1, 10), FormatoFechas)
+        .FechaGRI = Format(MidStrg(pJSON.Item("FechaGRI"), 1, 10), FormatoFechas)
+        .FechaGRF = Format(MidStrg(pJSON.Item("FechaGRF"), 1, 10), FormatoFechas)
+        .Pedido = pJSON.Item("Pedido")
+        .Zona = pJSON.Item("Zona")
+        .Orden_Compra = pJSON.Item("Orden_Compra")
+        .Placa_Vehiculo = pJSON.Item("Placa_Vehiculo")
+        .Lugar_Entrega = pJSON.Item("Lugar_Entrega")
+        .Dir_PartidaGR = pJSON.Item("Dir_PartidaGR")
+        .Dir_EntregaGR = pJSON.Item("Dir_EntregaGR")
+        
+        'Facturas_Formatos
+         If Existe_Formato Then
+           .CxC_Clientes = pJSON.Item("Concepto")
+           .LogoFactura = pJSON.Item("Formato_Factura")
+           .AltoFactura = pJSON.Item("Largo")
+           .AnchoFactura = pJSON.Item("Ancho")
+           .EspacioFactura = pJSON.Item("Espacios")
+           .Pos_Factura = pJSON.Item("Pos_Factura")
+           .DireccionEstab = pJSON.Item("Direccion_Establecimiento")
+           .NombreEstab = pJSON.Item("Nombre_Establecimiento")
+           .TelefonoEstab = pJSON.Item("Telefono_Estab")
+           .Vencimiento = pJSON.Item("Fecha_Final")
+           .CantFact = pJSON.Item("Fact_Pag")
+           .LogoTipoEstab = RutaSistema & "\LOGOS\" & pJSON.Item("Logo_Tipo_Estab") & ".jpg"
+         End If
+         
+''         If Not .Existe_Cliente Then Cadena = Cadena & "No se puedo grabar porque no existe Beneficiario" & vbCrLf
+''         If .Cantidad_Rubros = 0 Then Cadena = Cadena & "No se puedo grabar porque no existe rubros para facturar" & vbCrLf
+        'MsgBox "Desktop Test: GR No. " & .Remision
+    End With
+    Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
 End Sub
 
 Public Sub Digito_Verificador_SP(NumeroRUC As String)
@@ -1469,7 +1985,6 @@ Dim MiReg As ADODB.Recordset
     MiCmd.Parameters.Append MiCmd.CreateParameter("@Factura", adInteger, adParamInput, 14, dFactura)
     Procesar_Stored_Procedure MiCmd, MiReg
     Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
-    MsgBox "Desktop Test"
 End Sub
 
 Public Sub Actualizar_Saldo_De_Facturas_SP(dTC As String, dSerie As String, dFacturaDesde As Long, dFacturaHasta As Long, dFechaCorte As String)
@@ -1717,7 +2232,9 @@ End Sub
 
 Public Sub Reporte_Cartera_Clientes_SP(MBFechaInicial As String, _
                                        MBFechaFinal As String, _
-                                       CodigoCliente As String)
+                                       CodigoCliente As String, _
+                                       Optional ResumenVentas As Boolean, _
+                                       Optional ConPrefacturas As Boolean)
 Dim MiSQL As ADODB.Connection
 Dim MiCmd As ADODB.Command
 Dim MiReg As ADODB.Recordset
@@ -1731,6 +2248,8 @@ Dim MiReg As ADODB.Recordset
        MiCmd.Parameters.Append MiCmd.CreateParameter("@CodigoCliente", adVarChar, adParamInput, 10, CodigoCliente)
        MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaInicio", adVarChar, adParamInput, 10, BuscarFecha(MBFechaInicial))
        MiCmd.Parameters.Append MiCmd.CreateParameter("@FechaCorte", adVarChar, adParamInput, 10, BuscarFecha(MBFechaFinal))
+       MiCmd.Parameters.Append MiCmd.CreateParameter("@ResumenVentas", adBoolean, adParamInput, 1, ResumenVentas)
+       MiCmd.Parameters.Append MiCmd.CreateParameter("@ConPrefacturas", adBoolean, adParamInput, 1, ConPrefacturas)
        Procesar_Stored_Procedure MiCmd, MiReg
        Finalizar_Stored_Procedure MiSQL, MiCmd, MiReg
     End If
@@ -2407,11 +2926,12 @@ Dim NumFile As Long
          If Not EOF(NumFile) Then Line Input #NumFile, LineFile
          
          If InStr(LineFile, ";emision") > 0 Then TipoFile = "05"
-         If InStr(LineFile, ";CI_RUC_Codigo") > 0 Then TipoFile = "15"
+         If InStr(LineFile, ";Cod_Pago") > 0 Then TipoFile = "15"
          If InStr(LineFile, ";COD_MES") > 0 Then TipoFile = "27"
          If InStr(LineFile, ";CI_RUC_P_SUBMOD") > 0 Then TipoFile = "99"
        Close #NumFile
        If TipoFile <> "" Then
+          Tipo_Carga = Val(TipoFile)
           FileCSV = Right$(PathCSV, Len(PathCSV) - InStrRev(PathCSV, "\"))
           PathCSVT = MidStrg(PathCSV, 1, Len(PathCSV) - Len(FileCSV))
           Iniciar_Stored_Procedure "sp Subir Archivo CSV", MiSQL, MiCmd, MiReg

@@ -2946,8 +2946,8 @@ On Error GoTo Errorhandler
 '      WebBPDF.navigate RutaDocumentoPDF
      'Presentar_PDF RPPDF, RutaDocumentoPDF
       RatonNormal
-      MsgBox "Proceso Terminado con exito. Busque el archivo es:" & vbCrLf & vbCrLf & RutaSysBases & "\TEMP\" & NombFilePict & ".pdf"
-      Presenta_Archivo_PDF RutaSysBases & "\TEMP\" & NombFilePict & ".pdf"
+      MsgBox "Proceso Terminado con exito. Busque el archivo es:" & vbCrLf & vbCrLf & RutaDocumentoPDF 'RutaSysBases & "\TEMP\" & NombFilePict & ".pdf"
+      Presenta_Archivo_PDF RutaDocumentoPDF 'RutaSysBases & "\TEMP\" & NombFilePict & ".pdf"
    Else
       RatonNormal
    End If

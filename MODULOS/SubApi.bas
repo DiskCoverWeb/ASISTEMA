@@ -1766,6 +1766,29 @@ End Function
 '''Mi_IP_Publica = cTemp
 '''End Function
 
+Public Function Validar_URL(NombreServidor As String, IPsURL As String, Optional Puerto As Integer) As String
+Dim pJSON As Object
+Dim Respuesta As Boolean
+    RatonReloj
+    If Puerto > 0 Then
+       URLHTTP = "https://erp.diskcoversystem.com/php/comprobantes/SRI/autorizar_sri_visual.php?VerificarOnline=true"
+       URLParams = "ip=" & IPsURL & "&puerto=" & CStr(Puerto)
+    Else
+       URLHTTP = "https://erp.diskcoversystem.com/php/comprobantes/SRI/autorizar_sri_visual.php?VerificarOnlineSri=true"
+       URLParams = "link=" & IPsURL
+    End If
+    TextoXML = PostUrlSourceStr(URLHTTP, URLParams)
+   'MsgBox TextoXML
+    Set pJSON = JSON.parse(TextoXML)
+    Respuesta = CBool(pJSON.Item("resp"))
+    RatonNormal
+    If Respuesta Then
+       Validar_URL = UCaseStrg(NombreServidor & " activo")
+    Else
+       Validar_URL = UCaseStrg("-" & NombreServidor & " incactivo/intermitencia")
+    End If
+End Function
+
 Public Function GetUrlSource(sURL As String) As String
 Dim sBuffer As String * BUFFER_LEN, iResult As Integer, sData As String
 Dim hInternet As Long, hSession As Long, lReturn As Long
@@ -1800,9 +1823,9 @@ Dim hInternet As Long, hSession As Long, lReturn As Long
 End Function
 
 Public Function PostUrlSource(vURLHTTP As String, vURLParams As String) As Boolean
-Dim DomDoc As MSXML2.xmlhttp
+Dim DomDoc As MSXML2.xmlHttp
 
-    Set DomDoc = New xmlhttp
+    Set DomDoc = New xmlHttp
     
    'Parámetros en formato URLEncode
    'Metodo a usar, url, y true en caso de manejar la respuesta en modo asíncrono
@@ -1820,11 +1843,14 @@ Dim DomDoc As MSXML2.xmlhttp
 End Function
 
 Public Function PostUrlSourceStr(vURLHTTP As String, vURLParams As String) As String
-Dim DomDoc As MSXML2.xmlhttp
+Dim DomDoc As MSXML2.xmlHttp
 Dim RespuestaURL As String
 
-    Set DomDoc = New xmlhttp
+    Set DomDoc = New xmlHttp
    'MsgBox vURLHTTP & vbCrLf & vURLParams
+   ' Clipboard.Clear
+   ' Clipboard.SetText vURLHTTP & vbCrLf & vbCrLf & vURLParams
+      
    'Parámetros en formato URLEncode
    'Metodo a usar, url, y true en caso de manejar la respuesta en modo asíncrono
     DomDoc.open "POST", vURLHTTP, False
@@ -1874,6 +1900,7 @@ Dim ping As cPing
     IP_PC.Nombre_PC = ping.Nombre_PC
     IP_PC.IP_PC = ping.IP_Del_PC
     IP_PC.MAC_PC = ping.MAC_Del_PC
-    Get_Internet = ping.ConexionInternet
+    IP_PC.InterNet = ping.ConexionInternet
+    Get_Internet = IP_PC.InterNet
 End Function
 

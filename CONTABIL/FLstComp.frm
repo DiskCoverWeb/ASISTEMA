@@ -399,24 +399,24 @@ Begin VB.Form FListComprobantes
       TabCaption(1)   =   "&5.- RETENCIONES"
       TabPicture(1)   =   "FLstComp.frx":6BDC
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "DGFAV"
+      Tab(1).Control(0)=   "DGRet"
       Tab(1).Control(1)=   "DGFAC"
-      Tab(1).Control(2)=   "DGRet"
+      Tab(1).Control(2)=   "DGFAV"
       Tab(1).ControlCount=   3
       TabCaption(2)   =   "&6.- SUBCUENTAS"
       TabPicture(2)   =   "FLstComp.frx":6BF8
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "DGIxExCC"
-      Tab(2).Control(1)=   "DGCxCxP"
+      Tab(2).Control(0)=   "DGCxCxP"
+      Tab(2).Control(1)=   "DGIxExCC"
       Tab(2).ControlCount=   2
       TabCaption(3)   =   "&7.- KARDEX"
       TabPicture(3)   =   "FLstComp.frx":6C14
       Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "LblTotalC"
-      Tab(3).Control(1)=   "LblTotalComp"
+      Tab(3).Control(0)=   "DGKardex"
+      Tab(3).Control(1)=   "Label11"
       Tab(3).Control(2)=   "Label10"
-      Tab(3).Control(3)=   "Label11"
-      Tab(3).Control(4)=   "DGKardex"
+      Tab(3).Control(3)=   "LblTotalComp"
+      Tab(3).Control(4)=   "LblTotalC"
       Tab(3).ControlCount=   5
       Begin MSDataGridLib.DataGrid DGAsientos 
          Bindings        =   "FLstComp.frx":6C30
@@ -2003,14 +2003,14 @@ End Sub
 Private Sub DGAsientos_KeyDown(KeyCode As Integer, Shift As Integer)
 Dim ID_Temp As Long
   Keys_Especiales Shift
-  Codigo1 = DGAsientos.Columns(0)
-  Cta = DGAsientos.Columns(0)
-  CuentaBanco = DGAsientos.Columns(1)
-  Cuenta_No = DGAsientos.Columns(1)
-  Debe = DGAsientos.Columns(3)
-  Haber = DGAsientos.Columns(4)
-  NomCtaSup = DGAsientos.Columns(5)
-  NoCheque = DGAsientos.Columns(6)
+  Codigo1 = DGAsientos.Columns(1)
+  Cta = DGAsientos.Columns(1)
+  CuentaBanco = DGAsientos.Columns(2)
+  Cuenta_No = DGAsientos.Columns(2)
+  Debe = DGAsientos.Columns(4)
+  Haber = DGAsientos.Columns(5)
+  NomCtaSup = DGAsientos.Columns(6)
+  NoCheque = DGAsientos.Columns(7)
   Asiento = DGAsientos.Columns(DGAsientos.Columns.Count - 1)
   If CtrlDown And KeyCode = vbKeyZ Then
      If ClaveContador Then

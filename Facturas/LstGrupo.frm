@@ -13,8 +13,8 @@ Begin VB.Form ListarGrupos
    ClientWidth     =   11280
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   10935
-   ScaleWidth      =   11280
+   ScaleHeight     =   15615
+   ScaleWidth      =   15960
    WindowState     =   1  'Minimized
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
@@ -22,8 +22,8 @@ Begin VB.Form ListarGrupos
       Left            =   0
       TabIndex        =   50
       Top             =   0
-      Width           =   28560
-      _ExtentX        =   50377
+      Width           =   15960
+      _ExtentX        =   28152
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -2064,7 +2064,8 @@ Dim Total_IVAFM As Currency
   Else
      sSQL = sSQL & "AND CF.Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# "
   End If
-  sSQL = sSQL & "AND C.Codigo = CF.Codigo " _
+  sSQL = sSQL _
+       & "AND C.Codigo = CF.Codigo " _
        & "GROUP BY C.Grupo,C.Cliente,C.Codigo,CF.Periodo,CF.Num_Mes " _
        & "ORDER BY C.Grupo,C.Cliente,CF.Periodo,CF.Num_Mes "   'CF.Periodo
   Select_Adodc AdoQuery, sSQL
@@ -2082,7 +2083,7 @@ Dim Total_IVAFM As Currency
     'Grabamos Facturacion Multiple
      Grabar_Facturas_x_Lotes_SP FA.Cod_CxC, DCGrupoI, DCGrupoF, MBFechaI, MBFechaF, MBFecha, NoMes, Periodo_Facturacion, FA.Tipo_Pago, TxtNota, TxtObs, PorGrupo, CheqRangos, CheqFA
      
-     Factura_Hasta = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, False)
+     Factura_Hasta = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, False) - 1
      
      SSTab2.Tab = 0
      RatonNormal

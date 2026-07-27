@@ -1,8 +1,8 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.Ocx"
 Begin VB.Form CrearEmp 
    BackColor       =   &H80000000&
@@ -3410,7 +3410,8 @@ Dim Ind As Integer
       EmailUsuario = Ninguno
    End If
   '|--=:******* CONECCON A MYSQL *******:=--|
-   Datos_Iniciales_Entidad_SP_MySQL
+   'Datos_Iniciales_Entidad_SP_MySQL
+    Leer_Datos_Entidad_SP_MySQL
   '|--=:******* --------.------- *******:=--|
    RatonNormal
    Unload CrearEmp
@@ -4020,7 +4021,8 @@ Dim LogoTipo1 As String
           NMarcaAgua = "DISKCOVER"
           CadenaParcial = ""
          '|--=:******* CONECCON A MYSQL *******:=--|
-          Datos_Iniciales_Entidad_SP_MySQL
+          'Datos_Iniciales_Entidad_SP_MySQL
+          Leer_Datos_Entidad_SP_MySQL
          '|--=:******* --------.------- *******:=--|
        Else
           MsgBox "No existe esta Empresa"

@@ -2030,9 +2030,11 @@ Dim VerXMLTemp As String
              End If
              If Not nodeList Is Nothing Then
                 For Each node In nodeList
-                    AXML.Cod_Sustento = node.selectSingleNode("codDocSustento").Text
-                    AXML.Serie_Receptor = MidStrg(node.selectSingleNode("numDocSustento").Text, 1, 6)
-                    AXML.Comprobante = CLng(MidStrg(node.selectSingleNode("numDocSustento").Text, 7, 9))
+                    If Not node.selectSingleNode("codDocSustento") Is Nothing Then AXML.Cod_Sustento = node.selectSingleNode("codDocSustento").Text
+                    If Not node.selectSingleNode("numDocSustento") Is Nothing Then
+                       AXML.Serie_Receptor = MidStrg(node.selectSingleNode("numDocSustento").Text, 1, 6)
+                       AXML.Comprobante = CLng(MidStrg(node.selectSingleNode("numDocSustento").Text, 7, 9))
+                    End If
                 Next node
              End If
              

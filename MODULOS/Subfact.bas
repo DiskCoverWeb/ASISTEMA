@@ -1411,7 +1411,7 @@ Dim AdoDBFA As ADODB.Recordset
   
  'Miramos de cuanto es la factura para los calculos de los totales
   Total_Desc_ME = 0
-  sSQL = "SELECT * " _
+  sSQL = "SELECT TOTAL, SERVICIO, Total_Desc, Total_Desc2, Total_IVA, Utilidad " _
        & "FROM Asiento_F " _
        & "WHERE Item = '" & NumEmpresa & "' " _
        & "AND CodigoU = '" & CodigoUsuario & "' "
@@ -1554,84 +1554,11 @@ End Sub
 ''' 'Grabar_Abonos_Periodo_Superior FTA
 '''End Sub
 
-'Parametros de entrada: CodigoCliente
-'''Public Sub Grabar_Abonos(FTA As Tipo_Abono, Optional NoRegTrans As Boolean)
-'''Dim CodigoCta As String
-'''
-'''  With FTA
-'''   CodigoCta = Leer_Cta_Catalogo(.Cta_CxP)
-'''   If Len(CodigoCta) > 1 Then
-'''      CodigoCta = Leer_Cta_Catalogo(.Cta)
-'''     'MsgBox "Abono: " & .Banco & " - " & .Cheque & " - " & .Abono
-'''      If .Abono > 0 And Len(CodigoCta) > 1 And TipoCta = "D" Then
-'''          If .T = "" Or .T = Ninguno Or .T = "A" Then .T = Normal
-'''          If .Cta_CxP = "" Or .Cta_CxP = Ninguno Then .Cta_CxP = Cta_Cobrar
-'''          If .CodigoC = "" Or .CodigoC = Ninguno Then .CodigoC = CodigoCliente
-'''          If .Comprobante = "" Then .Comprobante = Ninguno
-'''          If .Codigo_Inv = "" Then .Codigo_Inv = Ninguno
-'''          If .Fecha = Ninguno Then .Fecha = FechaSistema
-'''          If .Serie = Ninguno Then .Serie = "001001"
-'''          If .Autorizacion = Ninguno Then .Autorizacion = "1234567890"
-'''          If .Cheque = Ninguno And DiarioCaja > 0 Then .Cheque = Format$(DiarioCaja, "00000000")
-'''          If DiarioCaja > 0 Then .Recibo_No = Format$(DiarioCaja, "0000000000") Else .Recibo_No = "0000000000"
-'''         .Tipo_Cta = SubCta
-'''
-'''          SetAdoAddNew "Trans_Abonos"
-'''          SetAdoFields "T", .T
-'''          SetAdoFields "TP", .TP
-'''          SetAdoFields "Fecha", .Fecha
-'''          SetAdoFields "Recibo_No", .Recibo_No
-'''          SetAdoFields "Tipo_Cta", .Tipo_Cta
-'''          SetAdoFields "Cta", .Cta
-'''          SetAdoFields "Cta_CxP", .Cta_CxP
-'''          SetAdoFields "Factura", .Factura
-'''          SetAdoFields "CodigoC", .CodigoC
-'''          SetAdoFields "Abono", .Abono
-'''          SetAdoFields "Banco", .Banco
-'''          SetAdoFields "Cheque", .Cheque
-'''          SetAdoFields "Codigo_Inv", .Codigo_Inv
-'''          SetAdoFields "Comprobante", .Comprobante
-'''          SetAdoFields "Serie", .Serie
-'''          SetAdoFields "Autorizacion", .Autorizacion
-'''          SetAdoFields "Item", NumEmpresa
-'''          SetAdoFields "CodigoU", CodigoUsuario
-'''          SetAdoFields "Cod_Ejec", CodigoVen
-'''          If .Banco = "NOTA DE CREDITO" Then
-'''              SetAdoFields "Serie_NC", .Serie_NC
-'''              SetAdoFields "Autorizacion_NC", .Autorizacion_NC
-'''              SetAdoFields "Secuencial_NC", .Nota_Credito
-'''          End If
-'''          If Len(.Serie_R) = 6 Then
-'''             SetAdoFields "Serie_R", .Serie_R
-'''             SetAdoFields "Autorizacion_R", .AutorizacionR
-'''             SetAdoFields "Secuencial_R", .Secuencial_R
-'''             SetAdoFields "Porc", .Porcentaje
-'''          End If
-'''          SetAdoUpdate
-'''          If Not NoRegTrans Then
-'''             If .Banco = "NOTA DE CREDITO" Then
-'''                 Control_Procesos "A", "Anulación por " & .Banco & " de " & .TP & " No. " & .Serie & "-" & Format$(.Factura, "000000000")
-'''             Else
-'''                 Control_Procesos "P", "Abono de " & .TP & " No. " & .Serie & "-" & Format$(.Factura, "000000000") & ", Por: " & Format$(.Abono, "#,##0.00")
-'''             End If
-'''          End If
-'''
-'''          Inserta_Abonos_JSON FTA, NoRegTrans
-'''
-'''      Else
-'''        Control_Procesos "P", "El importe a la Cta (" & .Cta & ") " & .TP & " No. " & .Serie & "-" & Format$(.Factura, "000000000") & ", Por: " & Format$(.Abono, "#,##0.00"), "No se realizo con exito " & .Banco & " " & .Cheque
-'''      End If
-'''   Else
-'''      Control_Procesos "P", "El importe a la Cta (" & .Cta_CxP & ") " & .TP & " No. " & .Serie & "-" & Format$(.Factura, "000000000") & ", Por: " & Format$(.Abono, "#,##0.00"), "No se realizo con exito " & .Banco & " " & .Cheque
-'''   End If
-'''  End With
-'''End Sub
-
 Public Sub Grabar_Abonos(FTA As Tipo_Abono)
   With FTA
-   'MsgBox "Abono: " & .Banco & " - " & .Cheque & " - " & .Abono
     If .Abono > 0 And Len(.Cta_CxP) > 1 And Len(.Cta) > 1 Then
         If .T = "" Or .T = Ninguno Or .T = "A" Then .T = Normal
+        If .Tipo_Cta = "" Then .Tipo_Cta = "N"
         If .Cta_CxP = "" Or .Cta_CxP = Ninguno Then .Cta_CxP = Cta_Cobrar
         If .CodigoC = "" Or .CodigoC = Ninguno Then .CodigoC = CodigoCliente
         If .Comprobante = "" Then .Comprobante = Ninguno
@@ -1645,30 +1572,39 @@ Public Sub Grabar_Abonos(FTA As Tipo_Abono)
         If .Cheque = Ninguno And DiarioCaja > 0 Then .Cheque = Format$(DiarioCaja, "0000000000")
         If DiarioCaja > 0 Then .Recibo_No = Format$(DiarioCaja, "0000000000") Else .Recibo_No = "0000000000"
         If CodigoVen = "" Then CodigoVen = Ninguno
-        JSONInPutAbonos = JSONInPutAbonos & ",{""T"":""" & .T & ""","
-        JSONInPutAbonos = JSONInPutAbonos & """TP"":""" & .TP & ""","
-        JSONInPutAbonos = JSONInPutAbonos & """Fecha"":""" & BuscarFecha(.Fecha) & ""","
-        JSONInPutAbonos = JSONInPutAbonos & """Recibo_No"":""" & .Recibo_No & ""","
-        JSONInPutAbonos = JSONInPutAbonos & """Cta"":""" & .Cta & ""","
-        JSONInPutAbonos = JSONInPutAbonos & """Cta_CxP"":""" & .Cta_CxP & ""","
-        JSONInPutAbonos = JSONInPutAbonos & """Factura"":" & .Factura & ","
-        JSONInPutAbonos = JSONInPutAbonos & """CodigoC"":""" & .CodigoC & ""","
-        JSONInPutAbonos = JSONInPutAbonos & """Abono"":" & .Abono & ","
-        JSONInPutAbonos = JSONInPutAbonos & """Banco"":""" & .Banco & ""","
-        JSONInPutAbonos = JSONInPutAbonos & """Cheque"":""" & .Cheque & ""","
-        JSONInPutAbonos = JSONInPutAbonos & """Codigo_Inv"":""" & .Codigo_Inv & ""","
-        JSONInPutAbonos = JSONInPutAbonos & """Comprobante"":""" & .Comprobante & ""","
-        JSONInPutAbonos = JSONInPutAbonos & """Serie"":""" & .Serie & ""","
-        JSONInPutAbonos = JSONInPutAbonos & """Autorizacion"":""" & .Autorizacion & ""","
-        JSONInPutAbonos = JSONInPutAbonos & """Cod_Ejec"":""" & CodigoVen & ""","
-        JSONInPutAbonos = JSONInPutAbonos & """Serie_NC"":""" & .Serie_NC & ""","
-        JSONInPutAbonos = JSONInPutAbonos & """Autorizacion_NC"":""" & .Autorizacion_NC & ""","
-        JSONInPutAbonos = JSONInPutAbonos & """Secuencial_NC"":" & .Nota_Credito & ","
-        JSONInPutAbonos = JSONInPutAbonos & """Serie_R"":""" & .Serie_R & ""","
-        JSONInPutAbonos = JSONInPutAbonos & """Autorizacion_R"":""" & .AutorizacionR & ""","
-        JSONInPutAbonos = JSONInPutAbonos & """Secuencial_R"":" & .Secuencial_R & ","
-        JSONInPutAbonos = JSONInPutAbonos & """Porc"":" & .Porcentaje & "}"
+
+        JSONInPutAbonos = JSONInPutAbonos & ",{"
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "Item", NumEmpresa)
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "Periodo", Periodo_Contable)
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "CodigoU", CodigoUsuario)
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "HABIT", ".")
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "Tipo_Cta", .Tipo_Cta)
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "T", .T)
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "TP", .TP)
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "Fecha", BuscarFecha(.Fecha))
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "Recibo_No", .Recibo_No)
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "Cta", .Cta)
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "Cta_CxP", .Cta_CxP)
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "Factura", .Factura)
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "CodigoC", .CodigoC)
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "Abono", .Abono)
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "Banco", .Banco)
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "Cheque", .Cheque)
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "Codigo_Inv", .Codigo_Inv)
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "Comprobante", .Comprobante)
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "Serie", .Serie)
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "Autorizacion", .Autorizacion)
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "Cod_Ejec", CodigoVen)
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "Serie_NC", .Serie_NC)
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "Autorizacion_NC", .Autorizacion_NC)
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "Secuencial_NC", .Nota_Credito)
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "Serie_R", .Serie_R)
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "Autorizacion_R", .AutorizacionR)
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "Secuencial_R", .Secuencial_R)
+        JSONInPutAbonos = JSON_Insert(JSONInPutAbonos, "Porc", .Porcentaje)
+        JSONInPutAbonos = MidStrg(JSONInPutAbonos, 1, Len(JSONInPutAbonos) - 1) & "}"
     End If
+   'MsgBox "Abono: " & .Banco & " - " & .Cheque & " - " & .Abono & vbCrLf & JSONInPutAbonos
   End With
 End Sub
 
@@ -12759,250 +12695,217 @@ End Sub
 Public Sub Leer_Datos_FA_NV(TFA As Tipo_Facturas)
 Dim AdoDBFac As ADODB.Recordset
 Dim TotDescuento As Currency
-
-    TFA.Fecha_Aut_GR = FechaSistema
-    TFA.Hora = HoraSistema
-    TFA.Hora_GR = HoraSistema
-    TFA.Estado_SRI_GR = Ninguno
-    TFA.Serie_GR = Ninguno
-    TFA.ClaveAcceso_GR = Ninguno
-    TFA.Autorizacion_GR = Ninguno
-    TFA.Vendedor = Ninguno
-    TFA.Remision = 0
-    TFA.Comercial = Ninguno
-    TFA.CIRUCComercial = Ninguno
-    TFA.CIRUCEntrega = Ninguno
-    TFA.Entrega = Ninguno
-    TFA.CiudadGRI = Ninguno
-    TFA.CiudadGRF = Ninguno
-    TFA.Serie_GR = Ninguno
-    TFA.FechaGRE = FechaSistema
-    TFA.FechaGRI = FechaSistema
-    TFA.FechaGRF = FechaSistema
-    TFA.Pedido = Ninguno
-    TFA.Zona = Ninguno
-    TFA.Orden_Compra = 0
-    TFA.Placa_Vehiculo = Ninguno
-    TFA.Lugar_Entrega = Ninguno
-    TFA.Descuento_X = 0
-    TFA.Descuento_0 = 0
-    TFA.Gavetas = 0
-    TFA.Servicio = 0
-    TFA.EsPorReembolso = False
-    TFA.Si_Existe_Doc = False
-
-    sSQL = "SELECT F.*,C.Cliente,C.CI_RUC,C.TD,C.Grupo,C.Direccion,C.DireccionT,C.Celular,C.Codigo,C.Ciudad,C.Email,C.Email2,C.EmailR," _
-         & "C.Contacto,C.DirNumero,C.Fecha As Fecha_C " _
-         & "FROM Facturas As F, Clientes As C " _
-         & "WHERE F.Item = '" & NumEmpresa & "' " _
-         & "AND F.Periodo = '" & Periodo_Contable & "' " _
-         & "AND F.TC = '" & TFA.TC & "' " _
-         & "AND F.Serie = '" & TFA.Serie & "' " _
-         & "AND F.Autorizacion = '" & TFA.Autorizacion & "' " _
-         & "AND F.Factura = " & TFA.Factura & " " _
-         & "AND C.Codigo = F.CodigoC "
-    Select_AdoDB AdoDBFac, sSQL
-    With AdoDBFac
-     If .RecordCount > 0 Then
-        'Datos del SRI
-         TFA.Si_Existe_Doc = True
-         TFA.T = .fields("T")
-         TFA.SP = .fields("SP")
-         TFA.Porc_IVA = .fields("Porc_IVA")
-         TFA.Porc_IVA_S = CStr(.fields("Porc_IVA") * 100)
-         TFA.Cta_CxP = .fields("Cta_CxP")
-         TFA.Cod_CxC = .fields("Cod_CxC")
-         TFA.Estado_SRI = .fields("Estado_SRI")
-         TFA.Error_SRI = .fields("Error_FA_SRI")
-         TFA.ClaveAcceso = .fields("Clave_Acceso")
-         TFA.CodigoU = .fields("CodigoU")
-                
-        'Encabezado de Facturas
-         TFA.CodigoC = .fields("CodigoC")
-         TFA.Contacto = .fields("Contacto")
-         TFA.Cliente = .fields("Cliente")
-         TFA.CI_RUC = .fields("CI_RUC")
-         TFA.DirNumero = .fields("DirNumero")
-         TFA.Curso = .fields("Direccion")
-         TFA.CiudadC = .fields("Ciudad")
-         TFA.Grupo = .fields("Grupo")
-         TFA.Cod_Ejec = .fields("Cod_Ejec")
-         TFA.Imp_Mes = .fields("Imp_Mes")
-         TFA.Fecha = .fields("Fecha")
-         TFA.Fecha_V = .fields("Fecha_V")
-         TFA.Fecha_C = .fields("Fecha_C")
-         TFA.Fecha_Aut = .fields("Fecha_Aut")
-         TFA.Hora = .fields("Hora")
-         TFA.Tipo_Pago = .fields("Tipo_Pago")
-         TFA.Forma_Pago = .fields("Forma_Pago")
-         TFA.EmailC = .fields("Email")
-         TFA.EmailC2 = .fields("Email2")
-         TFA.EmailR = .fields("EmailR")
-         TFA.Observacion = .fields("Observacion")
-         TFA.Nota = .fields("Nota")
-         TFA.Orden_Compra = .fields("Orden_Compra")
-         TFA.Gavetas = .fields("Gavetas")
-         TFA.TB = .fields("TB")
-         
-        'Razon Social de la Factura
-         TFA.TD = .fields("TD")
-         TFA.Razon_Social = .fields("Cliente")
-         TFA.RUC_CI = .fields("CI_RUC")
-         TFA.DireccionC = .fields("Direccion")
-         TFA.TelefonoC = .fields("Celular")
-         If TFA.EmailR = Ninguno Then TFA.EmailR = EmailProcesos
-         
-        'SubTotales de la Factura
-         TFA.Descuento = .fields("Descuento")
-         TFA.Descuento2 = .fields("Descuento2")
-         TFA.Descuento_0 = .fields("Desc_0")
-         TFA.Descuento_X = .fields("Desc_X")
-         TFA.SubTotal = .fields("SubTotal")
-         TFA.Total_IVA = .fields("IVA")
-         TFA.Con_IVA = .fields("Con_IVA")
-         TFA.Sin_IVA = .fields("Sin_IVA")
-         TFA.Servicio = .fields("Servicio")
-         TFA.Total_MN = .fields("Total_MN")
-         TFA.Saldo_MN = .fields("Saldo_MN")
-         TFA.Saldo_Actual = .fields("Saldo_MN")
-         TFA.Total_Descuento = TFA.Descuento + TFA.Descuento2
-     End If
-    End With
-    AdoDBFac.Close
+    
+    Leer_Datos_FA_NV_SP TFA
+    
+'''    sSQL = "SELECT F.*,C.Cliente,C.CI_RUC,C.TD,C.Grupo,C.Direccion,C.DireccionT,C.Celular,C.Codigo,C.Ciudad,C.Email,C.Email2,C.EmailR," _
+'''         & "C.Contacto,C.DirNumero,C.Fecha As Fecha_C, TRS.Descripcion " _
+'''         & "FROM Facturas As F, Clientes As C, Tabla_Referenciales_SRI TRS " _
+'''         & "WHERE F.Item = '" & NumEmpresa & "' " _
+'''         & "AND F.Periodo = '" & Periodo_Contable & "' " _
+'''         & "AND TRS.Tipo_Referencia = 'FORMA DE PAGO' " _
+'''         & "AND F.TC = '" & TFA.TC & "' " _
+'''         & "AND F.Serie = '" & TFA.Serie & "' " _
+'''         & "AND F.Autorizacion = '" & TFA.Autorizacion & "' " _
+'''         & "AND F.Factura = " & TFA.Factura & " " _
+'''         & "AND C.Codigo = F.CodigoC " _
+'''         & "AND F.Tipo_Pago = TRS.Codigo "
+'''    Select_AdoDB AdoDBFac, sSQL
+'''    With AdoDBFac
+'''     If .RecordCount > 0 Then
+'''        'MsgBox "Desktop Test: " & .RecordCount
+'''        'Datos del SRI
+'''         TFA.Si_Existe_Doc = True
+'''         TFA.T = .fields("T")
+'''         TFA.SP = .fields("SP")
+'''         TFA.Porc_IVA = .fields("Porc_IVA")
+'''         TFA.Porc_IVA_S = CStr(.fields("Porc_IVA") * 100)
+'''         TFA.Cta_CxP = .fields("Cta_CxP")
+'''         TFA.Cod_CxC = .fields("Cod_CxC")
+'''         TFA.Estado_SRI = .fields("Estado_SRI")
+'''         TFA.Error_SRI = .fields("Error_FA_SRI")
+'''         TFA.ClaveAcceso = .fields("Clave_Acceso")
+'''         TFA.CodigoU = .fields("CodigoU")
+'''
+'''        'Encabezado de Facturas
+'''         TFA.CodigoC = .fields("CodigoC")
+'''         TFA.Contacto = .fields("Contacto")
+'''         TFA.Cliente = .fields("Cliente")
+'''         TFA.CI_RUC = .fields("CI_RUC")
+'''         TFA.DirNumero = .fields("DirNumero")
+'''         TFA.Curso = .fields("Direccion")
+'''         TFA.CiudadC = .fields("Ciudad")
+'''         TFA.Grupo = .fields("Grupo")
+'''         TFA.Cod_Ejec = .fields("Cod_Ejec")
+'''         TFA.Imp_Mes = .fields("Imp_Mes")
+'''         TFA.Fecha = .fields("Fecha")
+'''         TFA.Fecha_V = .fields("Fecha_V")
+'''         TFA.Fecha_C = .fields("Fecha_C")
+'''         TFA.Fecha_Aut = .fields("Fecha_Aut")
+'''         TFA.Hora = .fields("Hora")
+'''         TFA.Tipo_Pago = .fields("Tipo_Pago")
+'''         TFA.Forma_Pago = .fields("Forma_Pago")
+'''         TFA.Tipo_Pago_Det = "Forma de Pago: " & ULCase(AdoDBFac.fields("Descripcion"))
+'''         TFA.EmailC = .fields("Email")
+'''         TFA.EmailC2 = .fields("Email2")
+'''         TFA.EmailR = .fields("EmailR")
+'''         TFA.Observacion = .fields("Observacion")
+'''         TFA.Nota = .fields("Nota")
+'''         TFA.Orden_Compra = .fields("Orden_Compra")
+'''         TFA.Gavetas = .fields("Gavetas")
+'''         TFA.TB = .fields("TB")
+'''
+'''        'Razon Social de la Factura
+'''         TFA.TD = .fields("TD")
+'''         TFA.Razon_Social = .fields("Cliente")
+'''         TFA.RUC_CI = .fields("CI_RUC")
+'''         TFA.DireccionC = .fields("Direccion")
+'''         TFA.TelefonoC = .fields("Celular")
+'''         If TFA.EmailR = Ninguno Then TFA.EmailR = EmailProcesos
+'''
+'''        'SubTotales de la Factura
+'''         TFA.Descuento = .fields("Descuento")
+'''         TFA.Descuento2 = .fields("Descuento2")
+'''         TFA.Descuento_0 = .fields("Desc_0")
+'''         TFA.Descuento_X = .fields("Desc_X")
+'''         TFA.SubTotal = .fields("SubTotal")
+'''         TFA.Total_IVA = .fields("IVA")
+'''         TFA.Con_IVA = .fields("Con_IVA")
+'''         TFA.Sin_IVA = .fields("Sin_IVA")
+'''         TFA.Servicio = .fields("Servicio")
+'''         TFA.Total_MN = .fields("Total_MN")
+'''         TFA.Saldo_MN = .fields("Saldo_MN")
+'''         TFA.Saldo_Actual = .fields("Saldo_MN")
+'''         TFA.Total_Descuento = TFA.Descuento + TFA.Descuento2
+'''     End If
+'''    End With
+'''    AdoDBFac.Close
             
-    sSQL = "SELECT * " _
-         & "FROM Facturas_Auxiliares " _
-         & "WHERE Item = '" & NumEmpresa & "' " _
-         & "AND Periodo = '" & Periodo_Contable & "' " _
-         & "AND Remision <> 0 " _
-         & "AND TC = '" & TFA.TC & "' " _
-         & "AND Serie = '" & TFA.Serie & "' " _
-         & "AND Autorizacion = '" & TFA.Autorizacion & "' " _
-         & "AND Factura = " & TFA.Factura & " "
-    Select_AdoDB AdoDBFac, sSQL
-    With AdoDBFac
-     If .RecordCount > 0 Then
-        'Guia de Remision
-         TFA.Fecha_Aut_GR = .fields("Fecha_Aut_GR")
-         TFA.Hora_GR = .fields("Hora_Aut_GR")
-         TFA.Estado_SRI_GR = .fields("Estado_SRI_GR")
-         TFA.Serie_GR = .fields("Serie_GR")
-         TFA.ClaveAcceso_GR = .fields("Clave_Acceso_GR")
-         TFA.Autorizacion_GR = .fields("Autorizacion_GR")
-         TFA.Remision = .fields("Remision")
-         TFA.Comercial = .fields("Comercial")
-         TFA.CIRUCComercial = .fields("CIRUC_Comercial")
-         TFA.CIRUCEntrega = .fields("CIRUC_Entrega")
-         TFA.Entrega = .fields("Entrega")
-         TFA.CiudadGRI = .fields("CiudadGRI")
-         TFA.CiudadGRF = .fields("CiudadGRF")
-         TFA.Serie_GR = .fields("Serie_GR")
-         TFA.FechaGRE = .fields("FechaGRE")
-         TFA.FechaGRI = .fields("FechaGRI")
-         TFA.FechaGRF = .fields("FechaGRF")
-         TFA.Pedido = .fields("Pedido")
-         TFA.Zona = .fields("Zona")
-         TFA.Orden_Compra = .fields("Orden_Compra")
-         TFA.Placa_Vehiculo = .fields("Placa_Vehiculo")
-         TFA.Lugar_Entrega = .fields("Lugar_Entrega")
-     End If
-    End With
-    AdoDBFac.Close
+'''    sSQL = "SELECT * " _
+'''         & "FROM Facturas_Auxiliares " _
+'''         & "WHERE Item = '" & NumEmpresa & "' " _
+'''         & "AND Periodo = '" & Periodo_Contable & "' " _
+'''         & "AND Remision <> 0 " _
+'''         & "AND TC = '" & TFA.TC & "' " _
+'''         & "AND Serie = '" & TFA.Serie & "' " _
+'''         & "AND Autorizacion = '" & TFA.Autorizacion & "' " _
+'''         & "AND Factura = " & TFA.Factura & " "
+'''    Select_AdoDB AdoDBFac, sSQL
+'''    With AdoDBFac
+'''     If .RecordCount > 0 Then
+'''        'Guia de Remision
+'''         TFA.Fecha_Aut_GR = .fields("Fecha_Aut_GR")
+'''         TFA.Hora_GR = .fields("Hora_Aut_GR")
+'''         TFA.Estado_SRI_GR = .fields("Estado_SRI_GR")
+'''         TFA.Serie_GR = .fields("Serie_GR")
+'''         TFA.ClaveAcceso_GR = .fields("Clave_Acceso_GR")
+'''         TFA.Autorizacion_GR = .fields("Autorizacion_GR")
+'''         TFA.Remision = .fields("Remision")
+'''         TFA.Comercial = .fields("Comercial")
+'''         TFA.CIRUCComercial = .fields("CIRUC_Comercial")
+'''         TFA.CIRUCEntrega = .fields("CIRUC_Entrega")
+'''         TFA.Entrega = .fields("Entrega")
+'''         TFA.CiudadGRI = .fields("CiudadGRI")
+'''         TFA.CiudadGRF = .fields("CiudadGRF")
+'''         TFA.Serie_GR = .fields("Serie_GR")
+'''         TFA.FechaGRE = .fields("FechaGRE")
+'''         TFA.FechaGRI = .fields("FechaGRI")
+'''         TFA.FechaGRF = .fields("FechaGRF")
+'''         TFA.Pedido = .fields("Pedido")
+'''         TFA.Zona = .fields("Zona")
+'''         TFA.Orden_Compra = .fields("Orden_Compra")
+'''         TFA.Placa_Vehiculo = .fields("Placa_Vehiculo")
+'''         TFA.Lugar_Entrega = .fields("Lugar_Entrega")
+'''     End If
+'''    End With
+'''    AdoDBFac.Close
             
-    sSQL = "SELECT Cedula_R, Representante, Lugar_Trabajo_R, TD, Telefono_RS,  Email_R " _
-         & "FROM Clientes_Matriculas " _
-         & "WHERE Item = '" & NumEmpresa & "' " _
-         & "AND Periodo = '" & Periodo_Contable & "' " _
-         & "AND Codigo = '" & TFA.CodigoC & "' "
-    Select_AdoDB AdoDBFac, sSQL
-    With AdoDBFac
-     If .RecordCount > 0 Then
-         TFA.TD = .fields("TD")
-         TFA.Razon_Social = .fields("Representante")
-         TFA.RUC_CI = .fields("Cedula_R")
-         TFA.DireccionC = .fields("Lugar_Trabajo_R")
-         TFA.TelefonoC = .fields("Telefono_RS")
-         TFA.EmailR = .fields("Email_R")
-     End If
-    End With
-    AdoDBFac.Close
+'''    sSQL = "SELECT Cedula_R, Representante, Lugar_Trabajo_R, TD, Telefono_RS, Email_R " _
+'''         & "FROM Clientes_Matriculas " _
+'''         & "WHERE Item = '" & NumEmpresa & "' " _
+'''         & "AND Periodo = '" & Periodo_Contable & "' " _
+'''         & "AND Codigo = '" & TFA.CodigoC & "' "
+'''    Select_AdoDB AdoDBFac, sSQL
+'''    With AdoDBFac
+'''     If .RecordCount > 0 Then
+'''         TFA.TD = .fields("TD")
+'''         TFA.Razon_Social = .fields("Representante")
+'''         TFA.RUC_CI = .fields("Cedula_R")
+'''         TFA.DireccionC = .fields("Lugar_Trabajo_R")
+'''         TFA.TelefonoC = .fields("Telefono_RS")
+'''         TFA.EmailR = .fields("Email_R")
+'''     End If
+'''    End With
+'''    AdoDBFac.Close
             
-    If Len(TFA.CIRUCComercial) > 1 And Len(TFA.CIRUCEntrega) > 1 Then
-       sSQL = "SELECT Direccion " _
-            & "FROM Clientes " _
-            & "WHERE CI_RUC = '" & TFA.CIRUCComercial & "' "
-       Select_AdoDB AdoDBFac, sSQL
-       If AdoDBFac.RecordCount > 0 Then TFA.Dir_PartidaGR = AdoDBFac.fields("Direccion")
-       AdoDBFac.Close
+'''    If Len(TFA.CIRUCComercial) > 1 And Len(TFA.CIRUCEntrega) > 1 Then
+'''       sSQL = "SELECT Direccion " _
+'''            & "FROM Clientes " _
+'''            & "WHERE CI_RUC = '" & TFA.CIRUCComercial & "' "
+'''       Select_AdoDB AdoDBFac, sSQL
+'''       If AdoDBFac.RecordCount > 0 Then TFA.Dir_PartidaGR = AdoDBFac.fields("Direccion")
+'''       AdoDBFac.Close
+'''
+'''       sSQL = "SELECT Direccion " _
+'''            & "FROM Clientes " _
+'''            & "WHERE CI_RUC = '" & TFA.CIRUCEntrega & "' "
+'''       Select_AdoDB AdoDBFac, sSQL
+'''       If AdoDBFac.RecordCount > 0 Then TFA.Dir_EntregaGR = AdoDBFac.fields("Direccion")
+'''       AdoDBFac.Close
+'''    End If
+    
+'''    sSQL = "SELECT Nombre_Completo " _
+'''         & "FROM Accesos " _
+'''         & "WHERE Codigo = '" & TFA.Cod_Ejec & "' "
+'''    Select_AdoDB AdoDBFac, sSQL
+'''    If AdoDBFac.RecordCount > 0 Then TFA.Ejecutivo_Venta = AdoDBFac.fields("Nombre_Completo")
+'''    AdoDBFac.Close
+    
+'''    sSQL = "SELECT Nombre_Completo " _
+'''         & "FROM Accesos " _
+'''         & "WHERE Codigo = '" & TFA.CodigoU & "' "
+'''    Select_AdoDB AdoDBFac, sSQL
+'''    If AdoDBFac.RecordCount > 0 Then TFA.Digitador = AdoDBFac.fields("Nombre_Completo")
+'''    AdoDBFac.Close
+    
         
-       sSQL = "SELECT Direccion " _
-            & "FROM Clientes " _
-            & "WHERE CI_RUC = '" & TFA.CIRUCEntrega & "' "
-       Select_AdoDB AdoDBFac, sSQL
-       If AdoDBFac.RecordCount > 0 Then TFA.Dir_EntregaGR = AdoDBFac.fields("Direccion")
-       AdoDBFac.Close
-    End If
+'''    sSQL = "SELECT * " _
+'''         & "FROM Facturas_Formatos " _
+'''         & "WHERE Item = '" & NumEmpresa & "' " _
+'''         & "AND Periodo = '" & Periodo_Contable & "' " _
+'''         & "AND TC = '" & TFA.TC & "' " _
+'''         & "AND Serie = '" & TFA.Serie & "' " _
+'''         & "AND Cod_CxC = '" & TFA.Cod_CxC & "' " _
+'''         & "AND #" & BuscarFecha(TFA.Fecha) & "# BETWEEN Fecha_Inicio and Fecha_Final " _
+'''         & "ORDER BY Cod_CxC "
+'''    Select_AdoDB AdoDBFac, sSQL
+'''    If AdoDBFac.RecordCount > 0 Then
+'''       TFA.CxC_Clientes = AdoDBFac.fields("Concepto")
+'''       TFA.LogoFactura = AdoDBFac.fields("Formato_Factura")
+'''       TFA.AltoFactura = AdoDBFac.fields("Largo")
+'''       TFA.AnchoFactura = AdoDBFac.fields("Ancho")
+'''       TFA.EspacioFactura = AdoDBFac.fields("Espacios")
+'''       TFA.Pos_Factura = AdoDBFac.fields("Pos_Factura")
+'''       TFA.DireccionEstab = AdoDBFac.fields("Direccion_Establecimiento")
+'''       TFA.NombreEstab = AdoDBFac.fields("Nombre_Establecimiento")
+'''       TFA.TelefonoEstab = AdoDBFac.fields("Telefono_Estab")
+'''       TFA.Vencimiento = AdoDBFac.fields("Fecha_Final")
+'''       TFA.CantFact = AdoDBFac.fields("Fact_Pag")
+'''       TFA.LogoTipoEstab = RutaSistema & "\LOGOS\" & AdoDBFac.fields("Logo_Tipo_Estab") & ".jpg"
+'''    End If
+'''    AdoDBFac.Close
     
-    sSQL = "SELECT Nombre_Completo " _
-         & "FROM Accesos " _
-         & "WHERE Codigo = '" & TFA.Cod_Ejec & "' "
-    Select_AdoDB AdoDBFac, sSQL
-    If AdoDBFac.RecordCount > 0 Then TFA.Ejecutivo_Venta = AdoDBFac.fields("Nombre_Completo")
-    AdoDBFac.Close
-    
-    sSQL = "SELECT Nombre_Completo " _
-         & "FROM Accesos " _
-         & "WHERE Codigo = '" & TFA.CodigoU & "' "
-    Select_AdoDB AdoDBFac, sSQL
-    If AdoDBFac.RecordCount > 0 Then TFA.Digitador = AdoDBFac.fields("Nombre_Completo")
-    AdoDBFac.Close
-    TFA.Digitador = Replace(TFA.Digitador, vbCrLf, "")
-    
-    sSQL = "SELECT Descripcion " _
-         & "FROM Tabla_Referenciales_SRI " _
-         & "WHERE Tipo_Referencia = 'FORMA DE PAGO' " _
-         & "AND Codigo = '" & TFA.Tipo_Pago & "' "
-    Select_AdoDB AdoDBFac, sSQL
-    If AdoDBFac.RecordCount > 0 Then TFA.Tipo_Pago_Det = "Forma de Pago: " & ULCase(AdoDBFac.fields("Descripcion"))
-    AdoDBFac.Close
-    
-    sSQL = "SELECT * " _
-         & "FROM Facturas_Formatos " _
-         & "WHERE Item = '" & NumEmpresa & "' " _
-         & "AND Periodo = '" & Periodo_Contable & "' " _
-         & "AND TC = '" & TFA.TC & "' " _
-         & "AND Serie = '" & TFA.Serie & "' " _
-         & "AND Cod_CxC = '" & TFA.Cod_CxC & "' " _
-         & "AND #" & BuscarFecha(TFA.Fecha) & "# BETWEEN Fecha_Inicio and Fecha_Final " _
-         & "ORDER BY Cod_CxC "
-    Select_AdoDB AdoDBFac, sSQL
-    If AdoDBFac.RecordCount > 0 Then
-       TFA.CxC_Clientes = AdoDBFac.fields("Concepto")
-       TFA.LogoFactura = AdoDBFac.fields("Formato_Factura")
-       TFA.AltoFactura = AdoDBFac.fields("Largo")
-       TFA.AnchoFactura = AdoDBFac.fields("Ancho")
-       TFA.EspacioFactura = AdoDBFac.fields("Espacios")
-       TFA.Pos_Factura = AdoDBFac.fields("Pos_Factura")
-       TFA.DireccionEstab = AdoDBFac.fields("Direccion_Establecimiento")
-       TFA.NombreEstab = AdoDBFac.fields("Nombre_Establecimiento")
-       TFA.TelefonoEstab = AdoDBFac.fields("Telefono_Estab")
-       TFA.Vencimiento = AdoDBFac.fields("Fecha_Final")
-       TFA.CantFact = AdoDBFac.fields("Fact_Pag")
-       TFA.LogoTipoEstab = RutaSistema & "\LOGOS\" & AdoDBFac.fields("Logo_Tipo_Estab") & ".jpg"
-    End If
-    AdoDBFac.Close
-    
-    sSQL = "SELECT Codigo " _
-         & "FROM Detalle_Factura " _
-         & "WHERE Item = '" & NumEmpresa & "' " _
-         & "AND Periodo = '" & Periodo_Contable & "' " _
-         & "AND Codigo = '99.41' " _
-         & "AND TC = '" & TFA.TC & "' " _
-         & "AND Serie = '" & TFA.Serie & "' " _
-         & "AND Factura = " & TFA.Factura & " "
-    Select_AdoDB AdoDBFac, sSQL
-    If AdoDBFac.RecordCount > 0 Then TFA.EsPorReembolso = True
-    AdoDBFac.Close
+'''    sSQL = "SELECT Codigo " _
+'''         & "FROM Detalle_Factura " _
+'''         & "WHERE Item = '" & NumEmpresa & "' " _
+'''         & "AND Periodo = '" & Periodo_Contable & "' " _
+'''         & "AND Codigo = '99.41' " _
+'''         & "AND TC = '" & TFA.TC & "' " _
+'''         & "AND Serie = '" & TFA.Serie & "' " _
+'''         & "AND Factura = " & TFA.Factura & " "
+'''    Select_AdoDB AdoDBFac, sSQL
+'''    If AdoDBFac.RecordCount > 0 Then TFA.EsPorReembolso = True
+'''    AdoDBFac.Close
 
 '    MsgBox "...Tiempo: " & Format(Time - TiempoFinal, "hh:mm:ss ff")
 
@@ -13418,22 +13321,19 @@ Dim NombFilePict As String
 Dim EmailCli As String
 Dim PosCampo(1 To 10) As Single
 Dim SiExisteDatos As Boolean
-
-   sSQL = "SELECT C.Cliente, RCC.T, RCC.TC, RCC.Serie, RCC.Factura, RCC.Fecha, RCC.Detalle, RCC.Anio, RCC.Mes, RCC.Cargos, RCC.Abonos, RCC.Saldo, RCC.CodigoC, " _
-        & "C.Email, C.Email2, C.EmailR, C.Direccion " _
-        & "FROM Reporte_Cartera_Clientes As RCC, Clientes As C " _
-        & "WHERE RCC.Item = '" & NumEmpresa & "' " _
-        & "AND RCC.CodigoU = '" & CodigoUsuario & "' " _
-        & "AND RCC.T <> 'A' " _
-        & "AND RCC.CodigoC = C.Codigo " _
-        & "ORDER BY C.Cliente, RCC.TC, RCC.Serie, RCC.Factura, RCC.Anio, RCC.Mes, RCC.ID "
+        
+   sSQL = "SELECT Razon_Social, T, TC, Serie, Factura, Fecha, Detalle, Anio, Mes, Cargos, Abonos, Saldo, Emails, Direccion, Telefono, CodigoC " _
+        & "FROM Reporte_Cartera_Clientes " _
+        & "WHERE Item = '" & NumEmpresa & "' " _
+        & "AND CodigoU = '" & CodigoUsuario & "' " _
+        & "ORDER BY Cod_Benef, TC, Serie, Factura, Anio, Mes, T_No, ID "
    Select_AdoDB AdoCarteraDB, sSQL
    With AdoCarteraDB
     If .RecordCount > 0 Then
-        EmailCli = ""
-        Insertar_Mail EmailCli, .fields("EmailR")
-        Insertar_Mail EmailCli, .fields("Email2")
-        Insertar_Mail EmailCli, .fields("Email")
+        EmailCli = .fields("Emails")
+''        Insertar_Mail EmailCli, .fields("EmailR")
+''        Insertar_Mail EmailCli, .fields("Email2")
+''        Insertar_Mail EmailCli, .fields("Email")
         
         SiExisteDatos = True
         RutaDocumentoPDF = ""
@@ -13470,8 +13370,11 @@ Dim SiExisteDatos As Boolean
            PosCampo(10) = 18.8  ' Abonos
            
            cPrint.printEncabezado 1.2, PosLinea, TipoHelvetica
+           Cadena = "La informacion presente reposa en la base de dato de la Institucion, corte realizado desde " _
+                  & FechaStrg(FechaInicioHistoria) & " al " & FechaStrg(FechaSistema) & ", " _
+                  & "cualquier informacion adicional comuniquese a la institucion."
           'Pagina No. 1
-           NombreCliente = .fields("Cliente")
+           NombreCliente = .fields("Razon_Social")
            DireccionCli = .fields("Direccion")
            TipoCta = .fields("TC")
            SerieFactura = .fields("Serie")
@@ -13490,11 +13393,9 @@ Dim SiExisteDatos As Boolean
               cPrint.printTexto PosCampo(1), PosLinea, "EMAILS: " & EmailCli
               PosLinea = PosLinea + 0.5
            End If
-           Cadena = "La informacion presente reposa en la base de dato de la Institucion, corte realizado desde " _
-                  & FechaStrg(FechaInicioHistoria) & " al " & FechaStrg(FechaSistema) & ", " _
-                  & "cualquier informacion adicional comuniquese a la institucion."
            PosLinea = cPrint.printTextoMultiple(1.5, PosLinea, Cadena, 18.9)
            PosLinea = PosLinea + 0.5
+           
            cPrint.printTexto PosCampo(1), PosLinea, "T"
            cPrint.printTexto PosCampo(2), PosLinea, "TC"
            cPrint.printTexto PosCampo(3), PosLinea, "Serie"
@@ -13509,6 +13410,13 @@ Dim SiExisteDatos As Boolean
            cPrint.printLinea 1.2, PosLinea - 0.55, cPrint.dAnchoPapel - 1, PosLinea - 0.55
            cPrint.printLinea 1.2, PosLinea - 0.05, cPrint.dAnchoPapel - 1, PosLinea - 0.05
            PosLinea = PosLinea + 0.1
+           If CodigoCliente = "Todos" Then
+              cPrint.printTexto PosCampo(1), PosLinea, "RAZON SOCIAL: " & .fields("Razon_Social")
+              cPrint.printTexto PosCampo(9), PosLinea, "TELEFONO: " & .fields("Telefono")
+              PosLinea = PosLinea + 0.4
+              cPrint.printLinea 1.2, PosLinea, cPrint.dAnchoPapel - 1, PosLinea
+              PosLinea = PosLinea + 0.1
+           End If
            cPrint.colorDeLetra = Negro
            cPrint.tipoNegrilla = False
            cPrint.printFields PosCampo(1), PosLinea, .fields("T")
@@ -13522,9 +13430,19 @@ Dim SiExisteDatos As Boolean
            cPrint.printFields PosCampo(9), PosLinea, .fields("Cargos")
            cPrint.printFields PosCampo(10), PosLinea, .fields("Abonos")
            PosLinea = PosLinea + 0.4
-          .MoveNext
+          '.MoveNext
+           CodigoC = .fields("CodigoC")
            Do While Not .EOF
-              If InStr(.fields("Detalle"), "S A L D O   T O T A L") Then
+              If CodigoC <> .fields("CodigoC") Then
+                 cPrint.printTexto PosCampo(1), PosLinea, "RAZON SOCIAL: " & .fields("Razon_Social")
+                 cPrint.printTexto PosCampo(9), PosLinea, "TELEFONO: " & .fields("Telefono")
+                 CodigoC = .fields("CodigoC")
+                 PosLinea = PosLinea + 0.4
+                 cPrint.printLinea 1.2, PosLinea, cPrint.dAnchoPapel - 1, PosLinea
+                 PosLinea = PosLinea + 0.1
+              End If
+              
+              If InStr(.fields("Detalle"), "S A L D O   T O T A L") Or InStr(.fields("Detalle"), "T O T A L   P O R   C O B R A R") Then
                  PosLinea = PosLinea + 0.1
                  cPrint.printLinea 1.2, PosLinea - 0.1, cPrint.dAnchoPapel - 1, PosLinea - 0.1
                  cPrint.printLinea 1.2, PosLinea + 0.3, cPrint.dAnchoPapel - 1, PosLinea + 0.3
@@ -13542,14 +13460,15 @@ Dim SiExisteDatos As Boolean
                   CodigoP = .fields("Detalle")
               End If
               cPrint.printFields PosCampo(9), PosLinea, .fields("Cargos")
-              If InStr(.fields("Detalle"), "S A L D O   T O T A L") Then
+              If InStr(.fields("Detalle"), "S A L D O   T O T A L") Or InStr(.fields("Detalle"), "T O T A L   P O R   C O B R A R") Then
                  cPrint.printFields PosCampo(10), PosLinea, .fields("Saldo")
               Else
                  cPrint.printFields PosCampo(10), PosLinea, .fields("Abonos")
               End If
               PosLinea = PosLinea + 0.4
-              If InStr(.fields("Detalle"), "S A L D O   T O T A L") Then PosLinea = PosLinea + 0.1
-              'Siguiente Pagina
+              If InStr(.fields("Detalle"), "S A L D O   T O T A L") Or InStr(.fields("Detalle"), "T O T A L   P O R   C O B R A R") Then PosLinea = PosLinea + 0.1
+              
+             'Siguiente Pagina
               If PosLinea > (cPrint.dAltoPapel - 1.5) Then
                  cPrint.paginaNueva
                  PosLinea = 1

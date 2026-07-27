@@ -1,14 +1,15 @@
 Attribute VB_Name = "Constantes"
 Option Explicit
-'173.224.122.251
-
+'-------------------------------------------------------
+'Store Procedure:
+'C:\SISTEMA\BASES\UPDATE_DB
+'.......................................................
+'https://downloads.mysql.com/archives/c-odbc/
+'https://downloads.mysql.com/archives/gpg/?file=mysql-connector-odbc-8.0.12-win32.msi&p=10
 '-------------------------------------------------------
 '+573103673819-- Cristhian Orozco Whatsapp
 'corozcoic@ foodbanking.org
 'jsuarezic@ foodbanking.org
-'-------------------------------------------------------
-'Store Procedure:
-'C:\SISTEMA\BASES\UPDATE_DB
 '-------------------------------------------------------
 'Clipboard.Clear
 'Clipboard.SetText SQL2
@@ -158,16 +159,16 @@ Global Const Resolucion_Retencion = "RESOLUCION: El Articulo 97 del Reglamento p
 '-------------------------------------------------------------------------------
 'Global Const AdoStrCnnMySQL = "DRIVER={MySQL ODBC 3.51 Driver};"
 'Global Const AdoStrCnnMySQL = "DRIVER={MySQL ODBC 5.1 Driver};"
-'Global Const AdoStrCnnMySQL = "DRIVER={MySQL ODBC 8.2 ANSI Driver};"
-'Global Const AdoStrCnnMySQL = "DRIVER={MySQL ODBC 8.2 Unicode Driver};"
+'Global Const AdoStrCnnMySQL = "DRIVER={MySQL ODBC 8.0 ANSI Driver};"
 '-------------------------------------------------------------------------------
 'MySQL: root / disk2023@Cover
 'SERVER=db.diskcoversystem.com;
 '-------------------------------------------------------------------------------
 Global Const strServidor = "db.diskcoversystem.com"
 Global Const strServidorERP = "erp.diskcoversystem.com"
-
-Global Const AdoStrCnnMySQL = "DRIVER={MySQL ODBC 5.1 Driver};SERVER=" & strServidorERP & ";PORT=13306;DATABASE=diskcover_empresas;USER=diskcover;PASSWORD=disk2017@Cover;OPTION=3"
+'MySQL ODBC 5.1 Driver
+'MySQL ODBC 8.0 ANSI Driver
+Global Const AdoStrCnnMySQL = "DRIVER={MySQL ODBC 8.0 ANSI Driver};SERVER=" & strServidorERP & ";PORT=13306;DATABASE=diskcover_empresas;USER=diskcover;PASSWORD=disk2017@Cover;OPTION=3"
 
 Global Const urlIdukay = "https://erp.diskcoversystem.com/php/vista/consultarEstudiante.php?id="
 Global Const urlEsUnRUC = "https://srienlinea.sri.gob.ec/sri-catastro-sujeto-servicio-internet/rest/ConsolidadoContribuyente/existePorNumeroRuc?numeroRuc="

@@ -1201,7 +1201,8 @@ Dim HayCnn As Boolean
     
    ' Acceso_IP_PCs_SP_MySQL Si_No
    '|--=:******* CONECCON A MYSQL *******:=--|
-     Datos_Iniciales_Entidad_SP_MySQL
+     'Datos_Iniciales_Entidad_SP_MySQL
+     Leer_Datos_Entidad_SP_MySQL
    '|--=:******* --------.------- *******:=--|
  
     TMail.de = CorreoDiskCover
@@ -2392,7 +2393,7 @@ End Sub
 
 Public Sub Actualizar_Servidor(Optional Solo_FN_SP As Boolean)
 Dim Conn As New ADODB.Connection
-Dim MensajeEmail As String
+Dim MensajeEmailUpdate As String
 Dim NombreBase() As String
 Dim AdoStrCnnTemp As String
 Dim ListaBDActualizada As String
@@ -2402,7 +2403,9 @@ Dim JSONFiles As String
     
     ProgressBarEstado.value = 0
     ProgressBarEstado.Max = 100
+    MensajeEmailUpdate = ""
     MiTiempo = Time
+    MiTiempo1 = MiTiempo
    'Empezamos a bajar la actualizacion del servidor de las nubes
     Datos_Procesados_BD "Transfiriendo Datos del Servidor..."
     AdoStrCnn = Replace(AdoStrCnn, strNombreBaseDatos, "DiskCover_#Update")
@@ -2539,6 +2542,9 @@ Dim JSONFiles As String
            Ejecutar_SP "sp_Crear_FN_SP", "sp_Eliminar_Duplicados"
            Ejecutar_SP "sp_Crear_FN_SP", "sp_Actualizar_Base_Datos"
           'Procedemos a Actualizar la base actual
+           
+          ' MsgBox NombreBase(IdBase)
+           
            Actualizar_Base_Datos_SP Solo_FN_SP
           'Eliminando Registros duplicados
            If Not Solo_FN_SP Then
@@ -2553,10 +2559,11 @@ Dim JSONFiles As String
               Eliminar_Duplicados_SP "Catalogo_Cuentas", "Codigo"
            End If
            Datos_Procesados_BD "      [" & Format(Time - MiTiempo, FormatoTimes) & "] Base actualizada con exito."
-          'Enviamos el mail de confirmacion
+           
+          'Enviamos el mail de confirmacion: strNombreBaseDatos
            sSQL = "SELECT E.Nombre_Entidad, E.Representante, E.RUC_CI_NIC, E.Email_Entidad, L.ID_Empresa " _
                 & "FROM entidad As E, lista_empresas As L " _
-                & "WHERE L.Base_Datos = '" & strNombreBaseDatos & "' " _
+                & "WHERE L.Base_Datos = '" & NombreBase(IdBase) & "' " _
                 & "AND E.ID_Empresa = L.ID_Empresa " _
                 & "ORDER BY E.ID_Empresa "
            Select_AdoDB_MySQL AdoDBMySQL, sSQL
@@ -2570,17 +2577,24 @@ Dim JSONFiles As String
               EmailEmpresa = ""
            End If
            AdoDBMySQL.Close
+           If EmailEmpresa = "" Then EmailEmpresa = CorreoUpdate
+           
+           MensajeEmailUpdate = MensajeEmailUpdate & NombreEntidad & vbCrLf _
+                              & "Informacion de actualizacion del sistema " & vbCrLf _
+                              & "Fecha y Hora [" & FechaSistema & " - " & Format(Time, FormatoTimes) & "]: " & vbCrLf _
+                              & "Del Servidor " & strIPServidor & " se ha actualizado la base de Datos: " & NombreBase(IdBase) & vbCrLf _
+                              & "Representante Legal: " & RepresentanteEntidad & vbCrLf _
+                              & String(80, "_") & vbCrLf
+           
            TMail.Mensaje = NombreEntidad & vbCrLf _
                          & "Informacion de actualizacion del sistema " & vbCrLf _
                          & "Fecha y Hora [" & FechaSistema & " - " & Format(Time, FormatoTimes) & "]: " & vbCrLf _
-                         & "Del Servidor " & strIPServidor & " se ha actualizado la base de Datos: " & strNombreBaseDatos & vbCrLf _
+                         & "Del Servidor " & strIPServidor & " se ha actualizado la base de Datos: " & NombreBase(IdBase) & vbCrLf _
                          & "Representante Legal: " & RepresentanteEntidad & vbCrLf _
                          & vbCrLf _
                          & "SERVIRLES ES NUESTRO COMPROMISO, DISFRUTARLO ES EL SUYO."
            TMail.Remitente = RepresentanteEntidad & " -> " & strIPServidor
-           TMail.para = ""
-           Insertar_Mail TMail.para, EmailEmpresa
-           Insertar_Mail TMail.para, CorreoUpdate
+           TMail.para = EmailEmpresa
            TMail.Asunto = "Actualizacion exitosa de la Base de Datos: " & NombreBase(IdBase) & " (" & Format(IdBase, "00") & ") Duracion: " _
                         & Format(Time - MiTiempo, FormatoTimes)
            FEnviarCorreos.Show 1
@@ -2592,6 +2606,16 @@ Dim JSONFiles As String
            AdoStrCnn = AdoStrCnnTemp
         End If
     Next IdBase
+
+    If MensajeEmailUpdate <> "" Then
+       TMail.Mensaje = MensajeEmailUpdate & vbCrLf _
+                     & "SERVIRLES ES NUESTRO COMPROMISO, DISFRUTARLO ES EL SUYO."
+       TMail.Remitente = "SERVIDOR DISKCOVER SYSTEM -> " & strIPServidor
+       TMail.para = CorreoUpdate
+       TMail.Asunto = "Actualizacion exitosa de las Base de Datos. Duracion del proceso: " & Format(Time - MiTiempo1, FormatoTimes)
+      'MsgBox TMail.Mensaje
+       FEnviarCorreos.Show 1
+    End If
     Datos_Procesados_BD vbCrLf & "ACTUALIZACION DEL SERVIDOR EXITOSA"
     RatonNormal
     FrmBaseDatos.Caption = "BASE DE DATOS, Tiempo transcurrido: " & Format(Time - MiTiempo, FormatoTimes)

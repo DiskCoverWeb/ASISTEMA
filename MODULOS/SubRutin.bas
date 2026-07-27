@@ -1816,6 +1816,7 @@ Dim Result As Long
         
        'Creamos carpetas si no existen
 '''        If Not Existe_Carpeta(WindowsDirectory & "\LIBRERIA") Then MkDir (WindowsDirectory & "\LIBRERIA")
+        If Not Existe_Carpeta(RutaSysTemp) Then MkDir RutaSysTemp
         If Not Existe_Carpeta(RutaSysBases & "\TEMP") Then MkDir RutaSysBases & "\TEMP"
         
        'Verificamos y creamos carpetas de firma electronica
@@ -1987,7 +1988,8 @@ End Function
                          
 Sub Escribir_Texto_Picture(NPicture As PictureBox, _
                            PictTexto As String)
-Dim msg As String
+Dim MsgR As String
+Dim MsgA As String
 Dim Web As String
 Dim DatosEmpresa As String
 Dim AnchoWeb As Single
@@ -2000,8 +2002,10 @@ Dim CantEstadoDescripcion As Long
 Dim Dias_Restantes As Long
 Dim FinEjecucion As Boolean
 
-
   FinEjecucion = False
+ 'Ejecutar API
+  MsgR = Validar_URL("Servidor de Recepcion del SRI", "https://cel.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl")
+  MsgA = Validar_URL("Servidor de Autorizacion del SRI", "https://cel.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl")
   
  'DatosEmpresa = "LICENCIA OTORGADA A LA ENTIDAD:" & vbCrLf
   DatosEmpresa = ""
@@ -2049,7 +2053,7 @@ Dim FinEjecucion As Boolean
   PFil = 60
   PCol = AnchoWeb + 3000
   DatosEmpresa = "Representante: " & NombreGerente & " " & vbCrLf _
-               & "Direccion    : " & Direccion & " " & vbCrLf
+               & "Direccion    : " & NombreCiudad & ", " & Direccion & " " & vbCrLf
   If Telefono1 <> Telefono2 Then
      DatosEmpresa = DatosEmpresa & "Teléfonos    : " & Telefono1 & "/" & Telefono2 & " "
   Else
@@ -2144,6 +2148,19 @@ Dim FinEjecucion As Boolean
                       Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Gris, ColorC, msg
      End Select
   End If
+ 'Estado del SRI
+ '==============
+  NPicture.FontSize = 18
+  PFil = 2700
+  PCol = (MDI_X_Max - Escribir_Texto_Picture_Ancho(NPicture, MsgR)) / 2
+  If MidStrg(MsgR, 1, 1) = "-" Then ColorC = Rojo Else ColorC = Verde
+  Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Blanco_Claro, ColorC, Replace(MsgR, "-", "")
+  
+  PFil = PFil + 400
+  PCol = (MDI_X_Max - Escribir_Texto_Picture_Ancho(NPicture, MsgA)) / 2
+  If MidStrg(MsgA, 1, 1) = "-" Then ColorC = Rojo Else ColorC = Verde
+  Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Blanco_Claro, ColorC, Replace(MsgA, "-", "")
+  NPicture.FontSize = 12
   msg = "Gerencia: gerencia@diskcoversystem.com " & vbCrLf _
       & "Teléfono: 099-965-4196 " & vbCrLf _
       & " " & vbCrLf & " " & vbCrLf _
@@ -2151,7 +2168,7 @@ Dim FinEjecucion As Boolean
   PCol = 120
   PFil = Screen.Height - 3500
   NPicture.FontBold = False
-  Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Color2, Blanco, msg
+  'Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Color2, Blanco, msg
 
   msg = "Presidencia: prisma_net@hotmail.es " & vbCrLf _
       & "Teléfono   : 098-910-5300 " & vbCrLf _
@@ -2163,7 +2180,7 @@ Dim FinEjecucion As Boolean
   'PFil = 4000
   PFil = Screen.Height - 3500
   NPicture.FontBold = False
-  Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Color2, Blanco, msg
+  'Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Color2, Blanco, msg
 
   AltoLetra = NPicture.TextHeight(MidStrg(msg, 1, 1))
   PCol = 100
@@ -2181,7 +2198,7 @@ Dim FinEjecucion As Boolean
   PCol = (MDI_X_Max - AnchoWeb) / 2
   NPicture.CurrentY = PFil
   NPicture.CurrentX = PCol  '150
-  Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Color1, Color2, Web
+  Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Blanco_Claro, Azul, Web 'Color2
 
 ''  NPicture.Print Web
 ''  NPicture.ForeColor = Color2 'Rojo
@@ -2387,13 +2404,13 @@ Dim HalfHeight As Single
    'MsgBox Format$(Time, "HH:MM:SS") & vbCrLf & Format$(TiempoSistema, "HH:MM:SS") & vbCrLf & Minutos & vbCrLf & Segundos & vbCrLf & MiTiempo
    'If CrearYa Then MiTiempo = 6
     
-    If MiTiempo1 >= 0.15 Then
-       TiempoSistema1 = Time
-       DescripcionEstado = ""
-       If Len(NombreCertificado) > 1 Then
-          If Not IP_PC.InterNet Then DescripcionEstado = "Su Ordenador no tiene conexion a internet, " & vbCrLf & "no podra autorizar Comprobantes Electronicos"
-       End If
-    End If
+''    If MiTiempo1 >= 0.15 Then
+''       TiempoSistema1 = Time
+''       DescripcionEstado = ""
+''       If Len(NombreCertificado) > 1 Then
+''          If Not IP_PC.InterNet Then DescripcionEstado = "Su Ordenador no tiene conexion a internet, " & vbCrLf & "no podra autorizar Comprobantes Electronicos"
+''       End If
+''    End If
     
     If MiTiempo >= 5 Then
       'If Len(NumEmpresa) >= 3 Then MsgBox "Desktop Test: Empresa: (" & MiTiempo & ") " & NumEmpresa & vbCrLf & NombreCertificado
@@ -2417,9 +2434,10 @@ Dim HalfHeight As Single
          'Leemos el estado de la Empresa y su fecha de procesamiento
          'Fecha_CO,Fecha_CE,AgenteRetencion,MicroEmpresa,EstadoEmpresa,DescripcionEstado,NombreEntidad,RepresentanteLegal,MensajeEmpresa,ComunicadoEntidad
          '------------------------------------------------------------------------------------------------------------------------------------------------
-          If IP_PC.InterNet Then
+'          If IP_PC.InterNet Then
             '------------------------
-             Estado_Empresa_SP_MySQL
+             'Estado_Empresa_SP_MySQL
+             Leer_Estado_Empresa_SP_MySQL
             '------------------------
              If Len(ComunicadoEntidad) > 1 Or Len(MensajeEmpresa) > 1 Then
                 Titulo = "COMUNICADO A LA ENTIDAD"
@@ -2472,7 +2490,7 @@ Dim HalfHeight As Single
                         & "AND Item = '" & NumEmpresa & "' "
                    Conectar_Ado_Execute_MySQL sSQL
                 End If
-             End If
+'             End If
                             
              'Actualizamos el estado y fecha de comprobantes electronico de la empresa
               sSQL = "UPDATE Empresas " _
@@ -2518,8 +2536,9 @@ Dim HalfHeight As Single
          MDIFormulario.PictMDI.PaintPicture LoadPicture(RutaOrigen1), 5, 1400, MDI_X_Max, MDI_Y_Max - 1000
          
         'Escribe el texto de los logos y los datos de la empresa
+        '-------------------------------------------------------
          Escribir_Texto_Picture MDIFormulario.PictMDI, TextoFile  'Msg
-         
+        '-------------------------------------------------------
          RutaDestino1 = RutaSistema & "\FONDOS\USUARIOS\" & NombFilePict & ".jpg"
          SavePicture MDIFormulario.PictMDI.Image, RutaDestino1
          MDIFormulario.PictMDI.Visible = False
@@ -2537,6 +2556,7 @@ Dim HalfHeight As Single
          End If
        End If
     End If
+    RatonNormal
 End Sub
 
 Public Function ClaveSupervisor() As Boolean
@@ -2628,8 +2648,8 @@ Dim NuevoNumero As Boolean
     Sleep HoraDelSistema
     
     If SQLs <> "" Then
-       MesComp = ""
-       If Len(FechaComp) >= 10 Then MesComp = Format$(Month(FechaComp), "00")
+       If Len(FechaComp) > 10 Then FechaComp = MidStrg(FechaComp, 1, 10)
+       MesComp = Format$(Month(FechaComp), "00")
        If MesComp = "" Then MesComp = "01"
        
        If Num_Meses_CD And SQLs = "Diario" Then
@@ -8514,25 +8534,25 @@ End Function
 
 'Web Service
 Function InvokeWebService(strSoap, strSOAPAction, strURL, ByRef xmlResponse) As Boolean
-Dim xmlhttp As MSXML2.XMLHTTP30
+Dim xmlHttp As MSXML2.XMLHTTP30
 Dim blnSuccess As Boolean
 
-Set xmlhttp = New MSXML2.XMLHTTP30
-xmlhttp.open "POST", strURL, False
-xmlhttp.setRequestHeader "Man", "POST " & strURL & " HTTP/1.1"
-xmlhttp.setRequestHeader "Content-Type", "text/xml; charset=utf-8"
-xmlhttp.setRequestHeader "SOAPAction", strSOAPAction
-Call xmlhttp.send(strSoap)
+Set xmlHttp = New MSXML2.XMLHTTP30
+xmlHttp.open "POST", strURL, False
+xmlHttp.setRequestHeader "Man", "POST " & strURL & " HTTP/1.1"
+xmlHttp.setRequestHeader "Content-Type", "text/xml; charset=utf-8"
+xmlHttp.setRequestHeader "SOAPAction", strSOAPAction
+Call xmlHttp.send(strSoap)
 
-If xmlhttp.Status = 200 Then
+If xmlHttp.Status = 200 Then
 blnSuccess = True
 Else
 blnSuccess = False
 End If
 
-Set xmlResponse = xmlhttp.responseXML
+Set xmlResponse = xmlHttp.responseXML
 InvokeWebService = blnSuccess
-Set xmlhttp = Nothing
+Set xmlHttp = Nothing
 End Function
 
 Public Sub Imagen_Esperar(Optional MensajeEsperar As String)

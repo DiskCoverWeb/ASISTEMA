@@ -1,19 +1,19 @@
 VERSION 5.00
-Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
+Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
 Begin VB.Form FImporta 
    Caption         =   "Importar Datos"
    ClientHeight    =   9180
    ClientLeft      =   60
    ClientTop       =   345
-   ClientWidth     =   19890
+   ClientWidth     =   15960
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
    ScaleHeight     =   9180
-   ScaleWidth      =   19890
+   ScaleWidth      =   15960
    WindowState     =   2  'Maximized
    Begin VB.CommandButton Command3 
       BackColor       =   &H008080FF&
@@ -28,12 +28,12 @@ Begin VB.Form FImporta
          Strikethrough   =   0   'False
       EndProperty
       Height          =   1170
-      Left            =   13650
+      Left            =   13860
       Picture         =   "FImporta.frx":0000
       Style           =   1  'Graphical
       TabIndex        =   12
       Top             =   105
-      Width           =   1170
+      Width           =   1275
    End
    Begin VB.CommandButton Command2 
       BackColor       =   &H00FFC0C0&
@@ -48,12 +48,12 @@ Begin VB.Form FImporta
          Strikethrough   =   0   'False
       EndProperty
       Height          =   1170
-      Left            =   12390
+      Left            =   12495
       Picture         =   "FImporta.frx":08CA
       Style           =   1  'Graphical
       TabIndex        =   11
       Top             =   105
-      Width           =   1170
+      Width           =   1275
    End
    Begin VB.ListBox LstStatud 
       Appearance      =   0  'Flat
@@ -150,7 +150,7 @@ Begin VB.Form FImporta
       Style           =   1  'Graphical
       TabIndex        =   10
       Top             =   105
-      Width           =   1170
+      Width           =   1275
    End
    Begin MSDataGridLib.DataGrid DGAsiento 
       Bindings        =   "FImporta.frx":1784
@@ -735,7 +735,7 @@ Begin VB.Form FImporta
    Begin VB.Label Label4 
       BackColor       =   &H00C0C000&
       BorderStyle     =   1  'Fixed Single
-      Caption         =   " LAS PLANTILLAS: 01, 05, 06, 15, 27, 99. DEBEN SER EN FORMATO CSV"
+      Caption         =   " LAS PLANTILLAS: 01, 05, 06, 15, 27, 31, 99. DEBEN SER EN FORMATO CSV"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   12
@@ -1032,6 +1032,7 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
+Dim SubidaExitosa As Boolean
 Dim CtasProc() As CtasAsiento
 Dim ContCtas As Integer
 Dim NumTrans As Integer
@@ -1041,6 +1042,7 @@ Dim SubModuloCxCxP As String
 Dim SerieF As String
 Dim RUC_CII As String
 Dim RUC_CIF As String
+Dim MsgExt As String
 
 Public Function Dato_Campo(Campo As Variant, Optional EsFecha As Boolean, Optional Mayuscula As Boolean) As String
 Dim Codigo As String
@@ -1107,12 +1109,11 @@ Dim IdName As String
     With ArchivoSubido.Recordset
      If .RecordCount > 0 Then
          Tipo_Carga = 1
-         For IdField = 0 To .Fields.Count - 1
-             IdName = .Fields(IdField).Name
-            'MsgBox IdField & "-" & .Fields(IdField).Name
+         For IdField = 0 To .fields.Count - 1
+             IdName = .fields(IdField).Name
+            'MsgBox IdField & "-" & .fields(IdField).Name
              Select Case IdField
                Case 0
-                    If IdName = "TD" Then Tipo_Carga = 15
                     If IdName = "CI_CLIENTE" Then Tipo_Carga = 20
                     If IdName = "OTRO_PROGRAMA" Then Tipo_Carga = 105         ' Importar Otro Plan de Cuentas
                Case 1
@@ -1132,8 +1133,10 @@ Dim IdName As String
                     If IdName = "COMPROBANTE" Then Tipo_Carga = 12
                     If IdName = "CC" Then Tipo_Carga = 30
                     If IdName = "SALDO_ACT" Then Tipo_Carga = 32
+                    If IdName = "DETALLE_ANTICPOS" Then Tipo_Carga = 33
                Case 4
                     If IdName = "DETALLE_DESCUENTO" Then Tipo_Carga = 19
+                    
                     If IdName = "CODIGO_EXT" Then Tipo_Carga = 4
                Case 5
                     If IdName = "Num_Lista" Then Tipo_Carga = 13
@@ -1156,6 +1159,7 @@ Dim IdName As String
                     If IdName = "CodMateria" Then Tipo_Carga = 21
                     If IdName = "AUXILIAR" Then Tipo_Carga = 28
                Case 10
+                    If IdName = "Cod_Pago" Then Tipo_Carga = 15
                     If IdName = "EDUCATIVO" Then Tipo_Carga = 3
                     If IdName = "Diferencias" Then Tipo_Carga = 14
                Case 11
@@ -1171,7 +1175,7 @@ Dim IdName As String
                     If IdName = "Razon_Social" Then Tipo_Carga = 102         ' Facturas
                Case 16
                     If IdName = "Grupo" Then Tipo_Carga = 100                ' Clientes_Facturacion
-               Case 32
+               Case 33
                     If IdName = "COD_MES" Then Tipo_Carga = 27
                Case 41
                     If IdName = "SUB_MOD_GASTO" Then Tipo_Carga = 254
@@ -1246,10 +1250,12 @@ End Sub
 
 'Procesa importaciones
 Private Sub Command2_Click()
+Dim AdoErrorDB As ADODB.Recordset
+Dim HayReg As Boolean
 Dim Extension As String
-Dim SubidaExitosa As Boolean
 
     RatonReloj
+    MsgExt = ""
     SubidaExitosa = True
     If InStrRev(RutaOrigen, ".") > 0 Then Extension = UCase(Mid$(RutaOrigen, InStrRev(RutaOrigen, ".") + 1)) Else Extension = ""
     Progreso_Barra.Mensaje_Box = "Empezando a copiar archivos"
@@ -1281,6 +1287,9 @@ Dim SubidaExitosa As Boolean
          Case 27: Importar_Compras_Diarias
          Case 99: Importar_Contabilidad_SubModulos
        End Select
+       ConectarAdodc AdoExcelAdodc
+       Select_Adodc AdoExcelAdodc, "SELECT * FROM Asiento_CSV_" & CodigoUsuario
+       DGExcelAdodc.Visible = True
     Else
        Select Case Tipo_Carga
           'Case 2: Importar_Facturas_2
@@ -1334,11 +1343,21 @@ Dim SubidaExitosa As Boolean
     RatonNormal
     Progreso_Barra.Mensaje_Box = "Proceso Terminado con exito, Revise los resultados"
     Progreso_Final
+    HayReg = False
+    sSQL = "SELECT Texto " _
+         & "FROM Tabla_Temporal " _
+         & "WHERE Item = '" & NumEmpresa & "' " _
+         & "AND Modulo = '" & NumModulo & "' " _
+         & "AND CodigoU = '" & CodigoUsuario & "' "
+    Select_AdoDB AdoErrorDB, sSQL
+    If AdoErrorDB.RecordCount > 0 Then HayReg = True
+    AdoErrorDB.Close
     
-    If Len(TextoImprimio) > 2 Then
+    If HayReg Then
+       MsgBox "Proceso Terminado, revise los resultados"
        FInfoError.Show
     Else
-       If SubidaExitosa Then MsgBox "Proceso Terminado con exito, revise los resultados" Else MsgBox "No se puede subir esta plantilla, debe ser un archivo tipo CSV"
+       If SubidaExitosa Then MsgBox "Proceso Terminado con exito, revise los resultados." & vbCrLf & vbCrLf & MsgExt Else MsgBox "No se puede subir esta plantilla, debe ser un archivo tipo CSV"
     End If
     MBFechaI.SetFocus
 End Sub
@@ -1367,163 +1386,6 @@ Private Sub Command4_Click()
       Ejecutar_SQL_SP sSQL
    End If
 End Sub
-
-''''Private Sub Command5_Click()
-''''Dim NumFile As Long
-''''Dim FinComp As Boolean
-''''Dim NuevoComp As Boolean
-''''Dim I As Integer
-''''Dim Codigos(200) As String
-''''Dim ValCC(200) As String
-''''Dim TotDebe(200) As Currency
-''''Dim TotHaber(200) As Currency
-''''
-''''  CDialogDir.Filter = "Todos los archivos|*.*"
-''''  CDialogDir.InitDir = RutaSysBases & "\Datos"
-''''  RutaGeneraFile = SelectDialogFile(CDialogDir, SelectAll)
-''''  If RutaGeneraFile <> "" Then
-''''     DGAsiento.Visible = False
-''''     Progreso_Barra.Mensaje_Box = ""
-''''     Progreso_Iniciar
-''''     Contador = 0
-''''     NumFile = FreeFile
-''''     Open RutaGeneraFile For Input As #NumFile
-''''     Do While Not EOF(NumFile)
-''''        Line Input #NumFile, Cod_Field
-''''        Contador = Contador + 1
-''''     Loop
-''''     Close #NumFile
-''''     Progreso_Barra.Valor_Maximo = (Contador * 2) + 100
-''''
-''''    'Iniciamos la Carga
-''''     sSQL = "DELETE * " _
-''''          & "FROM Asiento_SC " _
-''''          & "WHERE Item = '" & NumEmpresa & "' " _
-''''          & "AND T_No = " & Trans_No & " " _
-''''          & "AND CodigoU = '" & CodigoUsuario & "' "
-''''     Ejecutar_SQL_SP sSQL
-''''
-''''     IniciarAsientosDe DGAsiento, AdoAsiento
-''''
-''''     Contador = 0
-''''     Progreso_Barra.Incremento = 0
-''''     For I = 1 To 200
-''''        Codigos(I) = ""
-''''        ValCC(I) = ""
-''''        TotDebe(I) = 0
-''''        TotHaber(I) = 0
-''''     Next I
-''''     I = 1
-''''     NuevoComp = False
-''''     FinComp = False
-''''     Co.Numero = 0
-''''     Co.Fecha = Ninguno
-''''     Cadena = ""
-''''     NumFile = FreeFile
-''''     Open RutaGeneraFile For Input As #NumFile
-''''     Do While Not EOF(NumFile)
-''''        Line Input #NumFile, Cod_Field
-''''        Progreso_Barra.Mensaje_Box = "Procesando Comprobante: " & Co.Fecha & " - " & Co.TP & " - " & Co.Numero
-''''        Progreso_Esperar
-''''        If IsDate(Co.Fecha) And Co.Numero <> Val(MidStrg(Cod_Field, 8, 10)) And FinComp And Co.Numero > 0 Then
-''''          'Procesamos el Asiento Contable
-''''           For I = 1 To 200
-''''               If Codigos(I) <> "" Then
-''''                  Cta = Codigos(I)
-''''                  CodigoCC = ValCC(I)
-''''                  DetalleComp = "."
-''''                  NoCheque = "."
-''''                  If TotDebe(I) > 0 Then OpcDH = "1"
-''''                  If TotHaber(I) > 0 Then OpcDH = "2"
-''''
-''''                  If OpcDH = "1" Then
-''''                     ValorDH = TotDebe(I)
-''''                     InsertarAsientos AdoAsiento, Cta, 0, ValorDH, 0
-''''                  Else
-''''                     ValorDH = TotHaber(I)
-''''                     InsertarAsientos AdoAsiento, Cta, 0, 0, ValorDH
-''''                  End If
-''''                  'valCC(I) = ""
-''''               End If
-''''           Next I
-''''           FechaComp = Co.Fecha
-''''           FechaTexto = Co.Fecha
-''''           Co.Concepto = Co.Concepto & ", Ref. " & Format(Co.Numero, "00000000")
-''''           NumComp = ReadSetDataNum("Diario", True, True)
-''''           DiarioCaja = NumComp
-''''           Progreso_Barra.Mensaje_Box = "Procesando Comprobante: " & Co.Fecha & " - " & Co.TP & " - " & Co.Numero
-''''           Progreso_Esperar True
-''''
-''''          'Grabacion del Comprobante
-''''           Co.T = Normal
-''''           Co.TP = CompDiario
-''''           Co.Numero = NumComp
-''''           Co.CodigoB = Ninguno
-''''           Co.Efectivo = Debe
-''''           Co.Monto_Total = Debe
-''''           Co.T_No = Trans_No
-''''           Co.Usuario = CodigoUsuario
-''''           Co.Item = NumEmpresa
-''''           GrabarComprobante Co
-''''
-''''          'MsgBox "Comprobante: " & Co.TP & " - " & Co.Numero & vbCrLf & Co.Concepto
-''''           DGAsiento.Visible = False
-''''           NuevoComp = False
-''''           FinComp = False
-''''           Co.Numero = 0
-''''           Co.Fecha = Ninguno
-''''           For I = 1 To 200
-''''               Codigos(I) = ""
-''''               ValCC(I) = ""
-''''               TotDebe(I) = 0
-''''               TotHaber(I) = 0
-''''           Next I
-''''           I = 1
-''''           sSQL = "DELETE * " _
-''''                & "FROM Asiento_SC " _
-''''                & "WHERE Item = '" & NumEmpresa & "' " _
-''''                & "AND T_No = " & Trans_No & " " _
-''''                & "AND CodigoU = '" & CodigoUsuario & "' "
-''''           Ejecutar_SQL_SP sSQL
-''''           IniciarAsientosDe DGAsiento, AdoAsiento
-''''        End If
-''''
-''''        If MidStrg(Cod_Field, 64, 20) = "COMPROBANTE CONTABLE" Then
-''''           Co.Numero = Val(MidStrg(Cod_Field, 88, 10))
-''''           NuevoComp = True
-''''        End If
-''''        If MidStrg(Cod_Field, 2, 22) = "FECHA DE COMPROBANTE :" Then Co.Fecha = MidStrg(Cod_Field, 25, 11)
-''''        If MidStrg(Cod_Field, 2, 22) = "GLOSA GENERAL .......:" Then Co.Concepto = MidStrg(Cod_Field, 25, 100)
-''''        If MidStrg(Cod_Field, 2, 11) = "HECHO POR :" Then FinComp = True
-''''        If IsDate(Co.Fecha) And Len(Co.Concepto) > 1 And Co.Numero <> 0 And NuevoComp Then
-''''           Codigo = MidStrg(Cod_Field, 2, 7)
-''''           If IsNumeric(Codigo) Then
-''''              Codigos(I) = MidStrg(Cod_Field, 2, 7)
-''''              ValCC(I) = TrimStrg(MidStrg(Cod_Field, 11, 7))
-''''              TotDebe(I) = Val(Replace(MidStrg(Cod_Field, 126, 17), ",", ""))
-''''              TotHaber(I) = Val(Replace(MidStrg(Cod_Field, 144, 17), ",", ""))
-''''              I = I + 1
-''''           End If
-''''        End If
-'''''''        MsgBox Cod_Field & vbCrLf _
-'''''''             & "-------------------------------------------" & vbCrLf _
-'''''''             & MidStrg(Cod_Field, 126, 17) & " <=====> " & MidStrg(Cod_Field, 144, 17) & vbCrLf _
-'''''''             & "-------------------------------------------" & vbCrLf _
-'''''''             & Co.Numero & vbCrLf _
-'''''''             & "-------------------------------------------" & vbCrLf _
-'''''''             & Co.Fecha & vbCrLf _
-'''''''             & "-------------------------------------------" & vbCrLf _
-'''''''             & Co.Concepto & vbCrLf _
-'''''''             & "-------------------------------------------" & vbCrLf _
-'''''''             & FinComp & vbCrLf _
-'''''''             & Cadena
-''''     Loop
-''''     Close #NumFile
-''''     Progreso_Final
-''''  End If
-''''  DGAsiento.Visible = True
-''''  MsgBox "Proceso Terminado"
-''''End Sub
 
 Private Sub CommandButton1_Click()
 Dim Tipo_Carga1 As Integer
@@ -1595,12 +1457,6 @@ Private Sub Form_Activate()
    LabelDebe.Top = DGAsiento.Top + DGAsiento.Height + 10
    LabelHaber.Top = DGAsiento.Top + DGAsiento.Height + 10
    LblDiferencia.Top = DGAsiento.Top + DGAsiento.Height + 10
-   
-'''   Select Case Modulo
-'''     Case "FACTURACION", "EDUCATIVO"
-'''          MSFlexGrid1.Height = MDI_Y_Max - MSFlexGrid1.Top - 600
-'''          DGAsiento.Visible = False
-'''   End Select
    
   Trans_No = 199
   FormatoMaskCta MBoxCta_Inv
@@ -1679,7 +1535,7 @@ End Sub
 
 Private Sub Form_Load()
    Me.Caption = "Importar desde Excel"
-   CommandButton1.Caption = "Importar de Excell/CSV"
+   CommandButton1.Caption = "Importar de Excel / CSV"
    ConectarAdodc AdoAux
    ConectarAdodc AdoAct
    ConectarAdodc AdoLinea
@@ -1705,8 +1561,8 @@ Public Sub Importar_Activos()
            SetAdoFields "TDP", "ACT"
            SetAdoFields "T", Normal
            SetAdoFields "TC", "P"
-           For IdField = 0 To .Fields.Count - 1
-               Codigo = TrimStrg(.Fields(IdField))
+           For IdField = 0 To .fields.Count - 1
+               Codigo = TrimStrg(.fields(IdField))
                Codigo1 = Codigo
                Select Case IdField + 1
                  Case 1: SetAdoFields "Fecha", Codigo
@@ -1748,10 +1604,10 @@ Public Sub Importar_Activos()
   With AdoAux.Recordset
    If .RecordCount > 0 Then
        Do While Not .EOF
-          CodigoInv = .Fields("Codigo_Inv")
-          Codigo1 = .Fields("Departamento")
-          Codigo2 = .Fields("Ubicacion")
-          Codigo3 = .Fields("Tipo")
+          CodigoInv = .fields("Codigo_Inv")
+          Codigo1 = .fields("Departamento")
+          Codigo2 = .fields("Ubicacion")
+          Codigo3 = .fields("Tipo")
           CodigoInv = CodigoCuentaSup(CodigoInv)
           sSQL = "SELECT Codigo_Inv " _
                & "FROM Catalogo_Productos " _
@@ -1815,6 +1671,7 @@ Public Sub Importar_Activos()
    End If
   End With
   Progreso_Final
+  SubidaExitosa = True
 End Sub
 
 Public Sub Importar_Autorizacion_Electronica()
@@ -1824,8 +1681,8 @@ Dim N As Long
     If .RecordCount > 0 Then
         Progreso_Barra.Valor_Maximo = .RecordCount + 100
         Do While Not .EOF
-           For IdField = 0 To .Fields.Count - 1
-               Codigo = TrimStrg(Replace(.Fields(IdField), "-", ""))
+           For IdField = 0 To .fields.Count - 1
+               Codigo = TrimStrg(Replace(.fields(IdField), "-", ""))
                Select Case IdField + 1
                  Case 1
                       If Len(Codigo) > 1 Then Numero = Val(Codigo)
@@ -1881,7 +1738,7 @@ Dim N As Long
         Me.Caption = "Importar de FlexGrid a Sistema " & I & " de " & Rango.NumFila2
     End If
   End With
-  MsgBox "Proceso Terminado"
+  SubidaExitosa = True
 End Sub
 
 Public Sub Importar_Facturas()
@@ -1895,215 +1752,11 @@ Dim SubTotalDescuento As Currency
   Progreso_Iniciar
   Importar_Facturas_SP
   
-'''  Encerar_Factura FA
-'''
-'''  Iniciar_Asiento_Beneficiario
-'''
-'''  FA.Fecha = MBFechaI
-'''  FA.Cod_CxC = DCLinea.Text
-'''  FA.TC = "FA"
-'''  FA.Factura = 0
-''' 'Eliminando facturas del excel
-'''  With AdoExcelAdodc.Recordset
-'''   If .RecordCount > 0 Then
-'''       Progreso_Barra.Valor_Maximo = (.RecordCount * 2) + 100
-'''       Progreso_Barra.Incremento = 0
-'''      .MoveFirst
-'''       RUC_CII = Dato_Campo(.fields(0))
-'''       Beneficiario = Dato_Campo(.fields(12), , True)
-'''       FA.Serie = TrimStrg(MidStrg(Dato_Campo(.fields(10)), 1, 6))
-'''       If Len(FA.Serie) < 6 Then FA.Serie = "001001"
-'''       FA.Desde = Val(.fields(2))
-'''       FA.Hasta = FA.Desde
-'''       Insertar_Asiento_Beneficiario RUC_CII, Beneficiario
-'''       Do While Not .EOF
-'''          RUC_CIF = Dato_Campo(.fields(0))
-'''          SerieF = TrimStrg(MidStrg(Dato_Campo(.fields(10)), 1, 6))
-'''          If Len(SerieF) < 6 Then SerieF = "001001"
-'''          FA.Fecha = Dato_Campo(.fields(1), True)
-'''          Mifecha = FA.Fecha
-'''          If IsNull(.fields(2)) Then FA.Factura = FA.Desde Else FA.Factura = Val(.fields(2))
-'''
-'''          If RUC_CII <> RUC_CIF Then
-'''            'MsgBox RUC_CII & vbCrLf & Beneficiario
-'''             Insertar_Asiento_Beneficiario RUC_CII, Beneficiario
-'''             RUC_CII = Dato_Campo(.fields(0))
-'''             Beneficiario = Dato_Campo(.fields(12), , True)
-'''          End If
-'''
-'''          If FA.Serie <> SerieF Then
-'''             Progreso_Barra.Mensaje_Box = "Eliminando Facturas entre " & Format$(FA.Desde, "000000000") & " al " & Format$(FA.Hasta, "000000000")
-'''             Progreso_Esperar True
-'''             Eliminar_Facturas
-'''             FA.Serie = TrimStrg(MidStrg(Dato_Campo(.fields(10)), 1, 6))
-'''             If Len(FA.Serie) < 6 Then FA.Serie = "001001"
-'''             FA.Desde = Val(.fields(2))
-'''             FA.Hasta = FA.Desde
-'''          End If
-'''
-'''          If FA.Factura < FA.Desde Then FA.Desde = FA.Factura
-'''          If FA.Factura > FA.Hasta Then FA.Hasta = FA.Factura
-'''          Progreso_Barra.Mensaje_Box = "Actualizando RUC/CI/Pasaporte: " & RUC_CIF & ", Fecha: " & Mifecha
-'''          Progreso_Esperar
-'''         .MoveNext
-'''       Loop
-'''       Insertar_Asiento_Beneficiario RUC_CII, Beneficiario
-'''       Progreso_Barra.Mensaje_Box = "Eliminando Facturas entre " & Format$(FA.Desde, "000000000") & " al " & Format$(FA.Hasta, "000000000")
-'''       Progreso_Esperar True
-'''       Eliminar_Facturas
-'''   End If
-'''  End With
-'''  Actualizar_Asiento_Beneficiario_Clientes True
-'''
-''' 'Empezamos la importacion de las facturas
-''' '-------------------------------------------
-'''  With AdoExcelAdodc.Recordset
-'''   If .RecordCount > 0 Then
-'''      .MoveFirst
-'''      'MsgBox .Rows & vbCrLf & .Cols
-'''       FA.Cod_CxC = Ninguno
-'''       FA.TC = "FA"
-'''       Leer_Encabezado_FA
-'''
-'''       Lineas_De_CxC FA
-'''       FechaTexto = FA.Fecha
-'''       SerieFactura = FA.Serie
-'''
-'''       Fecha_Vence = FA.Vencimiento
-'''       Cta_Cobrar = FA.Cta_CxP
-'''       Bandera = False
-'''       Evaluar = True
-'''       Ln_No = 1
-'''       TA.Abono = 0
-'''       FA.Servicio = 0
-'''       FA.Propina = 0
-'''       If Len(FA.Cod_CxC) <= 1 Then FA.Cod_CxC = Ninguno
-'''       sSQL = "DELETE * " _
-'''            & "FROM Asiento_F " _
-'''            & "WHERE Item = '" & NumEmpresa & "' " _
-'''            & "AND CodigoU = '" & CodigoUsuario & "' "
-'''       Ejecutar_SQL_SP sSQL
-'''       Do While Not .EOF
-'''          If Not IsNull(.fields(0)) And Not IsNull(.fields(1)) Then
-'''             Factura_No = Val(Dato_Campo(.fields(2)))
-'''             FechaTexto = Dato_Campo(.fields(1), True)
-'''             SerieFactura = MidStrg(Dato_Campo(.fields(10)), 1, 6)
-'''             If Len(SerieFactura) < 6 Then SerieFactura = "001001"
-'''            'MsgBox FA.Factura & vbCrLf & Factura_No
-'''             If FA.Factura <> Factura_No Then
-'''                'MsgBox FA.Cod_CxC & "..."
-'''                'FA.Autorizacion = Autorizacion
-'''                 Calculos_Totales_Factura FA
-'''                'MsgBox FA.Factura & "|-> "
-'''                 If Len(FA.Autorizacion) > 13 Then FA.ClaveAcceso = FA.Autorizacion
-'''                 Grabar_Factura FA, TA, True, True
-'''                 If TA.Abono > 0 Then
-'''                    TA.Fecha = FA.Fecha
-'''                    TA.Abono = FA.Total_MN
-'''                    TA.CodigoC = FA.CodigoC
-'''                    TA.TP = FA.TC
-'''                    TA.Serie = FA.Serie
-'''                    TA.Factura = FA.Factura
-'''                    TA.Autorizacion = FA.Autorizacion
-'''                    TA.Cta_CxP = FA.Cta_CxP
-'''                    Grabar_Abonos TA
-'''                 End If
-'''                'MsgBox FA.Factura & " ------->"
-'''                 Leer_Encabezado_FA
-'''                 FechaTexto = FA.Fecha
-'''                 SerieFactura = FA.Serie
-'''                 Fecha_Vence = FA.Vencimiento
-'''                 Cta_Cobrar = FA.Cta_CxP
-'''                 Bandera = False
-'''                 Evaluar = True
-'''                 Ln_No = 1
-'''                 TA.Abono = 0
-'''                 FA.Servicio = 0
-'''                 FA.Propina = 0
-'''
-'''                 Progreso_Barra.Mensaje_Box = "Documento " & FA.TC & " No. " & Format$(FA.Factura, "000000000") & ", gabado con exito."
-'''                 Progreso_Esperar True
-'''
-'''                 Ln_No = 1
-'''                 FA.Servicio = 0
-'''                 FA.Propina = 0
-'''             End If
-'''
-'''             For IdField = 0 To .fields.Count - 1
-'''                 Codigo = Dato_Campo(.fields(IdField), , True)
-'''                 Select Case IdField
-'''                   Case 3: Precio = Redondear(Val(Codigo), Dec_PVP)
-'''                   Case 4: Cantidad = Redondear(Val(Codigo), 2)
-'''                   Case 5: SubTotalDescuento = Redondear(Val(Codigo), 2)
-'''                   Case 6: SubTotalServicio = Redondear(Val(Codigo), 2)
-'''                   Case 7: FA.Propina = FA.Propina + Redondear(Val(Codigo), 2)
-'''                   Case 8: SubTotalIVA = Redondear(Val(Codigo), 2)
-'''                   Case 9: TA.Banco = Codigo
-'''                   Case 13: If Len(Codigo) <= 1 Then Producto = "VENTAS DEL DIA" Else Producto = Codigo
-'''                   Case 14: If IsDate(Codigo) Then FA.Fecha_V = Codigo Else FA.Fecha_V = FechaSistema
-'''                   Case 15: If Len(Codigo) <= 1 Then CodigoInv = "99.99" Else CodigoInv = Codigo
-'''                   Case 16: Mes = Codigo
-'''                            NoMes = LetrasMeses(Mes)
-'''                   Case 17: TA.Cta = Codigo
-'''                            If Len(TA.Banco) > 1 And Len(TA.Cta) > 1 Then
-'''                               FA.T = Cancelado
-'''                               TA.Abono = TA.Abono + FA.Total_MN
-'''                            End If
-'''                   Case 18: If Len(Codigo) > 1 Then TA.Comprobante = Codigo Else TA.Comprobante = Ninguno
-'''                   Case 20: If Len(Codigo) > 1 Then FA.Cod_Ejec = Codigo Else FA.Cod_Ejec = Ninguno
-'''                   Case 22: If Len(Codigo) > 1 Then FA.Tipo_Pago = Codigo Else FA.Tipo_Pago = "01"
-'''                 End Select
-'''             Next IdField
-'''             SubTotal = Redondear(Cantidad * Precio, 2)
-'''
-'''             SetAdoAddNew "Asiento_F"
-'''             SetAdoFields "CODIGO", CodigoInv
-'''             SetAdoFields "CANT", Cantidad
-'''             SetAdoFields "PRECIO", Precio
-'''             SetAdoFields "Total_Desc", SubTotalDescuento
-'''             SetAdoFields "Total_IVA", SubTotalIVA
-'''             SetAdoFields "SERVICIO", SubTotalServicio
-'''             SetAdoFields "PRODUCTO", Producto
-'''             SetAdoFields "TOTAL", SubTotal
-'''             SetAdoFields "VALOR_TOTAL", SubTotal - SubTotalDescuento + SubTotalIVA
-'''             SetAdoFields "CODIGO_L", FA.Cod_CxC
-'''             If Len(Mes) >= 3 Then
-'''                SetAdoFields "Mes", Mes
-'''                SetAdoFields "NoMes", NoMes
-'''                SetAdoFields "TICKET", Year(FA.Fecha)
-'''             End If
-'''             SetAdoFields "Item", NumEmpresa
-'''             SetAdoFields "CodigoU", CodigoUsuario
-'''             SetAdoFields "Cod_Ejec", FA.Cod_Ejec
-'''             SetAdoFields "A_No", CByte(Ln_No)
-'''             SetAdoUpdate
-'''             Ln_No = Ln_No + 1
-'''          End If
-'''          Progreso_Barra.Mensaje_Box = "Generando El Documento " & FA.TC & " No. " & Format$(FA.Factura, "000000000")
-'''          Progreso_Esperar
-'''         .MoveNext
-'''      Loop
-'''      Calculos_Totales_Factura FA
-'''      If Len(FA.Autorizacion) > 13 Then FA.ClaveAcceso = FA.Autorizacion
-'''
-'''      If TA.Abono > 0 Then
-'''         TA.Fecha = FA.Fecha
-'''         TA.Abono = FA.Total_MN
-'''         TA.CodigoC = FA.CodigoC
-'''         TA.TP = FA.TC
-'''         TA.Serie = FA.Serie
-'''         TA.Factura = FA.Factura
-'''         TA.Autorizacion = FA.Autorizacion
-'''         TA.Cta_CxP = FA.Cta_CxP
-'''         Grabar_Abonos TA
-'''      End If
-'''      Grabar_Factura FA, TA, True, True
-'''   End If
-'''  End With
 '''  FA.Fecha_Corte = FechaSistema
 '''  Actualizar_Abonos_Facturas_SP FA
   Progreso_Final
   DGExcelAdodc.Visible = True
+  SubidaExitosa = True
 End Sub
 
 Public Sub Importar_Facturas_Farmacias()
@@ -2123,7 +1776,7 @@ Dim Precio2 As Currency
    If .RecordCount > 0 Then
        Progreso_Barra.Valor_Maximo = (.RecordCount * 2) + 10
       .MoveFirst
-       FA.Fecha = Dato_Campo(.Fields(4), True)
+       FA.Fecha = Dato_Campo(.fields(4), True)
        Mifecha = FA.Fecha
        FA.Serie = Ninguno
        FA.Autorizacion = Ninguno
@@ -2133,26 +1786,26 @@ Dim Precio2 As Currency
        Fecha_Vence = FA.Vencimiento
        Autorizacion = FA.Autorizacion
        Cta_Cobrar = FA.Cta_CxP
-       FA.Desde = Val(Dato_Campo(.Fields(10)))
+       FA.Desde = Val(Dato_Campo(.fields(10)))
        FA.Hasta = FA.Desde
 
-       RUC_CII = Dato_Campo(.Fields(0))
-       Beneficiario = Dato_Campo(.Fields(1))
-       RUC_CIF = Dato_Campo(.Fields(2))
-       NombreCliente = Dato_Campo(.Fields(3))
+       RUC_CII = Dato_Campo(.fields(0))
+       Beneficiario = Dato_Campo(.fields(1))
+       RUC_CIF = Dato_Campo(.fields(2))
+       NombreCliente = Dato_Campo(.fields(3))
        Insertar_Asiento_Beneficiario RUC_CII, Beneficiario
        Insertar_Asiento_Beneficiario RUC_CIF, NombreCliente
        Do While Not .EOF
-          If RUC_CII <> Dato_Campo(.Fields(0)) Then
+          If RUC_CII <> Dato_Campo(.fields(0)) Then
             'MsgBox Beneficiario & vbCrLf & NombreCliente
-             RUC_CII = Dato_Campo(.Fields(0))
-             Beneficiario = Dato_Campo(.Fields(1))
-             RUC_CIF = Dato_Campo(.Fields(2))
-             NombreCliente = Dato_Campo(.Fields(3))
+             RUC_CII = Dato_Campo(.fields(0))
+             Beneficiario = Dato_Campo(.fields(1))
+             RUC_CIF = Dato_Campo(.fields(2))
+             NombreCliente = Dato_Campo(.fields(3))
              Insertar_Asiento_Beneficiario RUC_CII, Beneficiario
              Insertar_Asiento_Beneficiario RUC_CIF, NombreCliente
           End If
-          FA.Hasta = Val(Dato_Campo(.Fields(10)))
+          FA.Hasta = Val(Dato_Campo(.fields(10)))
           Progreso_Barra.Mensaje_Box = "Verificando: " & Beneficiario
           Progreso_Esperar
          .MoveNext
@@ -2178,58 +1831,58 @@ Dim Precio2 As Currency
        TA.Abono = 0
        FA.Servicio = 0
        FA.Propina = 0
-       FA.Desde = Val(Dato_Campo(.Fields(10)))
+       FA.Desde = Val(Dato_Campo(.fields(10)))
        FA.Factura = FA.Desde
        Factura_No = FA.Factura
-       Codigo = Dato_Campo(.Fields(4), True)
+       Codigo = Dato_Campo(.fields(4), True)
        If IsDate(Codigo) Then FA.Fecha = Codigo Else FA.Fecha = FechaSistema
        FA.Fecha_C = FA.Fecha
        FA.Autorizacion = Autorizacion
        If Len(FA.Autorizacion) > 13 Then FA.ClaveAcceso = FA.Autorizacion
-       RUC_CII = Dato_Campo(.Fields(0))
-       RUC_CIF = Dato_Campo(.Fields(2))
+       RUC_CII = Dato_Campo(.fields(0))
+       RUC_CIF = Dato_Campo(.fields(2))
        CodigoCli = "9999999999"   'RUC/Cedula/Consumidor Final
        sSQL = "SELECT Codigo " _
             & "FROM Clientes " _
             & "WHERE CI_RUC = '" & RUC_CII & "' "
        Select_Adodc AdoAux, sSQL
-       If AdoAux.Recordset.RecordCount > 0 Then CodigoCli = AdoAux.Recordset.Fields("Codigo")
+       If AdoAux.Recordset.RecordCount > 0 Then CodigoCli = AdoAux.Recordset.fields("Codigo")
        FA.CodigoC = CodigoCli
        
        sSQL = "SELECT Codigo " _
             & "FROM Clientes " _
             & "WHERE CI_RUC = '" & RUC_CIF & "' "
        Select_Adodc AdoAux, sSQL
-       If AdoAux.Recordset.RecordCount > 0 Then CodigoB = AdoAux.Recordset.Fields("Codigo")
+       If AdoAux.Recordset.RecordCount > 0 Then CodigoB = AdoAux.Recordset.fields("Codigo")
        Do While Not .EOF
 '          If Not IsNull(.Fields(0)) And Not IsNull(.Fields(1)) Then
-             Factura_No = Val(Dato_Campo(.Fields(10)))
+             Factura_No = Val(Dato_Campo(.fields(10)))
              If Factura_No <> FA.Factura Then
                 Calculos_Totales_Factura FA
                 If FA.Total_MN <= 0 Then FA.T = Anulado
                 Grabar_Factura FA, TA, True, True
-                FA.Factura = Val(.Fields(10))
-                Codigo = Dato_Campo(.Fields(4), True)
+                FA.Factura = Val(.fields(10))
+                Codigo = Dato_Campo(.fields(4), True)
                 If IsDate(Codigo) Then FA.Fecha = Codigo Else FA.Fecha = FechaSistema
                 FA.Fecha_C = FA.Fecha
-                RUC_CII = Dato_Campo(.Fields(0))
-                RUC_CIF = Dato_Campo(.Fields(2))
+                RUC_CII = Dato_Campo(.fields(0))
+                RUC_CIF = Dato_Campo(.fields(2))
                 CodigoCli = "9999999999"   'RUC/Cedula/Consumidor Final
                 sSQL = "SELECT Codigo " _
                      & "FROM Clientes " _
                      & "WHERE CI_RUC = '" & RUC_CII & "' "
                 Select_Adodc AdoAux, sSQL
-                If AdoAux.Recordset.RecordCount > 0 Then CodigoCli = AdoAux.Recordset.Fields("Codigo")
+                If AdoAux.Recordset.RecordCount > 0 Then CodigoCli = AdoAux.Recordset.fields("Codigo")
                 FA.CodigoC = CodigoCli
                 
                 sSQL = "SELECT Codigo " _
                      & "FROM Clientes " _
                      & "WHERE CI_RUC = '" & RUC_CIF & "' "
                 Select_Adodc AdoAux, sSQL
-                If AdoAux.Recordset.RecordCount > 0 Then CodigoB = AdoAux.Recordset.Fields("Codigo")
+                If AdoAux.Recordset.RecordCount > 0 Then CodigoB = AdoAux.Recordset.fields("Codigo")
              End If
-             For IdField = 0 To .Fields.Count - 1
-                 Codigo = Dato_Campo(.Fields(IdField))
+             For IdField = 0 To .fields.Count - 1
+                 Codigo = Dato_Campo(.fields(IdField))
                  If Codigo = "" Then Codigo = Ninguno
                  Codigo1 = Codigo
                  Select Case IdField + 1
@@ -2247,9 +1900,9 @@ Dim Precio2 As Currency
                   & "AND Codigo_IESS = '" & CodigoInv & "' "
              Select_Adodc AdoAux, sSQL
              If AdoAux.Recordset.RecordCount > 0 Then
-                CodigoInv = AdoAux.Recordset.Fields("Codigo_Inv")
-                Producto = AdoAux.Recordset.Fields("Producto")
-                If AdoAux.Recordset.Fields("IVA") Then FA.Total_IVA = Redondear(FA.SubTotal * Porc_IVA, 2)
+                CodigoInv = AdoAux.Recordset.fields("Codigo_Inv")
+                Producto = AdoAux.Recordset.fields("Producto")
+                If AdoAux.Recordset.fields("IVA") Then FA.Total_IVA = Redondear(FA.SubTotal * Porc_IVA, 2)
              Else
                 CodigoInv = "99.99"
                 Producto = "VENTAS DEL DIA"
@@ -2282,6 +1935,7 @@ Dim Precio2 As Currency
   Control_Procesos "G", "Se Grabaron " & FA.TC & " No. " & FA.Serie & ": " & Format$(FA.Desde, "000000000") & " <-> " & Format$(FA.Hasta, "000000000")
   Progreso_Final
   DGExcelAdodc.Visible = True
+  SubidaExitosa = True
 End Sub
 
 Public Sub Importar_Plan_Cuentas()
@@ -2305,8 +1959,8 @@ Dim ComentarioHaber As String
        
       'Empezamos la importacion de las facturas
        Do While Not .EOF
-          For IdField = 0 To .Fields.Count - 1
-              Codigo = Dato_Campo(.Fields(IdField))
+          For IdField = 0 To .fields.Count - 1
+              Codigo = Dato_Campo(.fields(IdField))
              ' MsgBox Codigo
               If Codigo = "" Then Codigo = Ninguno
               Select Case IdField + 1
@@ -2347,6 +2001,7 @@ Dim ComentarioHaber As String
   End With
   RatonNormal
   Progreso_Final
+  SubidaExitosa = True
 End Sub
 
 Public Sub Importar_Compras_Diarias()
@@ -2357,8 +2012,8 @@ Public Sub Importar_Compras_Diarias()
     DGAsiento.Visible = True
     DGExcelAdodc.Visible = True
     Progreso_Final
-    MsgBox "Proceso realizado con exito, se han procesado" & vbCrLf & vbCrLf _
-         & "Comprobantes de " & CTP.Text & " desde el numero: " & NumComp & " en adelante"
+    SubidaExitosa = True
+    MsgExt = "Comprobantes de " & CTP.Text & " generados desde el numero: " & NumComp & " en adelante"
 End Sub
 
 Public Sub Eliminar_Comprobantes_Contabilidad(vTP As String, _
@@ -2412,49 +2067,8 @@ Dim CodigoNew As String
     
     Importar_Contabilidad_SP CTP
     
-    sSQL = "SELECT Codigo, Cliente, CI_RUC, ID " _
-         & "FROM Clientes " _
-         & "WHERE Codigo LIKE '--%' " _
-         & "ORDER BY Cliente "
-    Select_AdoDB AdoCompDB, sSQL
-    With AdoCompDB
-     If .RecordCount > 0 Then
-         Progreso_Barra.Valor_Maximo = .RecordCount
-         Progreso_Barra.Incremento = 1
-         Do While Not .EOF
-            Progreso_Barra.Mensaje_Box = "Grabando las Transacciones del " & FechaTexto & ", CD No. " & Comp_No
-            Progreso_Esperar
-            ID_Trans = .Fields("ID")
-            CodigoOld = .Fields("Codigo")
-            CodigoNew = MidStrg(.Fields("CI_RUC"), 1, 10)
-            If UCase(GetUrlSource(urlEsUnRUC & .Fields("CI_RUC"))) = "TRUE" Then
-               SQL1 = "UPDATE Clientes " _
-                    & "SET Codigo = '" & CodigoNew & "', TD = 'R' " _
-                    & "WHERE Codigo = '" & CodigoOld & "' "
-               Ejecutar_SQL_SP SQL1
-               
-               SQL1 = "UPDATE Comprobantes " _
-                    & "SET Codigo_B = '" & CodigoNew & "' " _
-                    & "WHERE Codigo_B = '" & CodigoOld & "' "
-               Ejecutar_SQL_SP SQL1
-            
-               SQL1 = "UPDATE Transacciones " _
-                    & "SET Codigo_C = '" & CodigoNew & "' " _
-                    & "WHERE Codigo_C = '" & CodigoOld & "' "
-               Ejecutar_SQL_SP SQL1
-            Else
-               
-            End If
-           .MoveNext
-         Loop
-     End If
-    End With
-    AdoCompDB.Close
-    ConectarAdodc AdoExcelAdodc
-    Select_Adodc AdoExcelAdodc, "SELECT * FROM Asiento_CSV_" & CodigoUsuario
-    DGExcelAdodc.Visible = True
     Progreso_Final
-    If Len(TextoImprimio) > 2 Then FInfoError.Show
+    SubidaExitosa = True
 End Sub
 
 Public Sub Importar_Contabilidad_SubModulos()
@@ -2482,23 +2096,11 @@ Dim Fecha_Borrar As String
     Progreso_Iniciar
     RatonReloj
     DGExcelAdodc.Visible = False
-    sSQL = "DELETE * " _
-         & "FROM Tabla_Temporal " _
-         & "WHERE Item = '" & NumEmpresa & "' " _
-         & "AND Modulo = '" & NumModulo & "' " _
-         & "AND CodigoU = '" & CodigoUsuario & "' "
-    Ejecutar_SQL_SP sSQL
-    
     TextoImprimio = ""
     Importar_Contabilidad_SubModulos_SP
-    
-    ConectarAdodc AdoExcelAdodc
-    Select_Adodc AdoExcelAdodc, "SELECT * FROM Asiento_CSV_" & CodigoUsuario
-    
     DGExcelAdodc.Visible = True
     RatonNormal
     Progreso_Final
-    If Len(TextoImprimio) > 2 Then FInfoError.Show
 End Sub
 
 Public Sub Eliminar_Facturas()
@@ -2543,6 +2145,7 @@ Public Sub Eliminar_Facturas()
          & "AND Factura BETWEEN " & FA.Desde & " and " & FA.Hasta & " "
     Ejecutar_SQL_SP sSQL
     Control_Procesos "G", "Grabar " & FA.TC & " No. " & FA.Serie & " Desde " & Format$(FA.Desde, "000000000") & " - " & Format$(FA.Hasta, "000000000") & " [" & FA.Hora & "]"
+    SubidaExitosa = True
  End If
 End Sub
 
@@ -2601,7 +2204,7 @@ Public Sub Generar_Facturas()
     With AdoAct.Recordset
      If .RecordCount > 0 Then
          Do While Not .EOF
-            Factura_No = .Fields("Numero")
+            Factura_No = .fields("Numero")
             FA.Factura = Factura_No
             sSQL = "DELETE * " _
                  & "FROM Facturas " _
@@ -2636,17 +2239,17 @@ Public Sub Generar_Facturas()
          Loop
         .MoveFirst
          Do While Not .EOF
-            Factura_No = .Fields("Numero")
-            FechaTexto = .Fields("FECHA")
-            CodigoCli = .Fields("Codigo_Cliente")
-            NombreCliente = .Fields("RUTA")
-            NoMeses = .Fields("NoMes")
-            Codigo = .Fields("CODIGO")
-            Codigo2 = .Fields("HABIT")
-            SubCta = .Fields("Cta")
-            SubTotal = .Fields("PRECIO")
-            SubTotal_IVA = .Fields("Total_IVA")
-            Producto = .Fields("PRODUCTO")
+            Factura_No = .fields("Numero")
+            FechaTexto = .fields("FECHA")
+            CodigoCli = .fields("Codigo_Cliente")
+            NombreCliente = .fields("RUTA")
+            NoMeses = .fields("NoMes")
+            Codigo = .fields("CODIGO")
+            Codigo2 = .fields("HABIT")
+            SubCta = .fields("Cta")
+            SubTotal = .fields("PRECIO")
+            SubTotal_IVA = .fields("Total_IVA")
+            Producto = .fields("PRODUCTO")
             FA.Factura = Factura_No
             SetAdoAddNew "Detalle_Factura"
             SetAdoFields "T", FA.T
@@ -2684,14 +2287,14 @@ Public Sub Generar_Facturas()
     With AdoAct.Recordset
      If .RecordCount > 0 Then
          Do While Not .EOF
-            Factura_No = .Fields("Numero")
-            Total_IVA = .Fields("TTotal_IVA")
+            Factura_No = .fields("Numero")
+            Total_IVA = .fields("TTotal_IVA")
             Total_Con_IVA = Redondear(Total_IVA / 0.12, 2)
-            Total_Sin_IVA = .Fields("TSubTotal") - Total_Con_IVA
+            Total_Sin_IVA = .fields("TSubTotal") - Total_Con_IVA
             Total_Servicio = 0
             Total_Desc = 0
-            FechaTexto = .Fields("FECHA")
-            CodigoCli = .Fields("Codigo_Cliente")
+            FechaTexto = .fields("FECHA")
+            CodigoCli = .fields("Codigo_Cliente")
             NombreCliente = Ninguno
             FA.Factura = Factura_No
             Total_Factura = Redondear(Total_Sin_IVA + Total_Con_IVA - Total_Desc + Total_IVA + Total_Servicio, 2)
@@ -2752,9 +2355,9 @@ Public Sub Generar_Facturas()
          Loop
      End If
     End With
-    RatonNormal
    DGExcelAdodc.Visible = True
    RatonNormal
+   SubidaExitosa = True
 End Sub
 
 Public Sub Migrar_Cta_Nueva(Tabla As String, Campo As String, Cod_Antiguo As String, Cod_Nuevo As String)
@@ -2810,30 +2413,30 @@ Dim Tot_Propinas As Currency
          Progreso_Barra.Valor_Maximo = .RecordCount
         .MoveFirst
          Do While Not .EOF
-            For IdField = 0 To .Fields.Count - 1
+            For IdField = 0 To .fields.Count - 1
                 Select Case IdField + 1
-                  Case 1: TA.Fecha = Dato_Campo(.Fields(IdField), True)
-                  Case 2: Codigo = Dato_Campo(.Fields(IdField))
+                  Case 1: TA.Fecha = Dato_Campo(.fields(IdField), True)
+                  Case 2: Codigo = Dato_Campo(.fields(IdField))
                           TA.Serie = MidStrg(Codigo, 1, 3) & MidStrg(Codigo, 4, 3)
                           TA.Factura = Val(MidStrg(Codigo, 7, Len(Codigo)))
-                  Case 3: TA.Autorizacion = Dato_Campo(.Fields(IdField))
-                  Case 4: TA.AutorizacionR = Dato_Campo(.Fields(IdField))
-                  Case 5: TA.Abono = Redondear(Val(Dato_Campo(.Fields(IdField))), 2)
-                  Case 6: Codigo = Dato_Campo(.Fields(IdField))
+                  Case 3: TA.Autorizacion = Dato_Campo(.fields(IdField))
+                  Case 4: TA.AutorizacionR = Dato_Campo(.fields(IdField))
+                  Case 5: TA.Abono = Redondear(Val(Dato_Campo(.fields(IdField))), 2)
+                  Case 6: Codigo = Dato_Campo(.fields(IdField))
                           TA.Serie_R = MidStrg(Codigo, 1, 3) & MidStrg(Codigo, 4, 3)
                           TA.Secuencial_R = Val(MidStrg(Codigo, 7, Len(Codigo)))
                           
                           TA.Establecimiento = MidStrg(Codigo, 1, 3)
                           TA.Emision = MidStrg(Codigo, 4, 3)
                           CompRet = Val(MidStrg(Codigo, 7, Len(Codigo)))
-                  Case 7: CodRet = Dato_Campo(.Fields(IdField))
-                  Case 8: TA.Cheque = Dato_Campo(.Fields(IdField))
-                          TA.Banco = Dato_Campo(.Fields(IdField))
-                  Case 9: TA.Cta = Dato_Campo(.Fields(IdField))
+                  Case 7: CodRet = Dato_Campo(.fields(IdField))
+                  Case 8: TA.Cheque = Dato_Campo(.fields(IdField))
+                          TA.Banco = Dato_Campo(.fields(IdField))
+                  Case 9: TA.Cta = Dato_Campo(.fields(IdField))
                 End Select
             Next IdField
            'MsgBox TA.Fecha & vbCrLf & .fields(9)
-            If Len(TA.Fecha) >= 10 And Len(Dato_Campo(.Fields(9))) >= 2 Then
+            If Len(TA.Fecha) >= 10 And Len(Dato_Campo(.fields(9))) >= 2 Then
                sSQL = "DELETE * " _
                     & "FROM Trans_Abonos " _
                     & "WHERE Item = '" & NumEmpresa & "' " _
@@ -2853,7 +2456,7 @@ Dim Tot_Propinas As Currency
                        & "AND Fecha_Inicio <= #" & BuscarFecha(TA.Fecha) & "# " _
                        & "AND Fecha_Final >= #" & BuscarFecha(TA.Fecha) & "# "
                   Select_Adodc AdoAux, sSQL
-                  If AdoAux.Recordset.RecordCount > 0 Then TA.Porcentaje = AdoAux.Recordset.Fields("Porcentaje")
+                  If AdoAux.Recordset.RecordCount > 0 Then TA.Porcentaje = AdoAux.Recordset.fields("Porcentaje")
                End If
                
                If TA.Banco = "" Then TA.Banco = Ninguno
@@ -2872,10 +2475,10 @@ Dim Tot_Propinas As Currency
 '            MsgBox TA.TP & vbCrLf & TA.Serie & vbCrLf & TA.Factura & vbCrLf & vbCrLf & TA.Serie_R & vbCrLf & TA.AutorizacionR & vbCrLf & TA.Secuencial_R & vbCrLf & CodRet & vbCrLf & TA.Porcentaje
                
                If AdoAux.Recordset.RecordCount > 0 Then
-                  TA.CodigoC = AdoAux.Recordset.Fields("CodigoC")
-                  TA.Autorizacion = AdoAux.Recordset.Fields("Autorizacion")
-                  TA.Cta_CxP = AdoAux.Recordset.Fields("Cta_CxP")
-                  Select Case UCaseStrg(Dato_Campo(.Fields(9)))
+                  TA.CodigoC = AdoAux.Recordset.fields("CodigoC")
+                  TA.Autorizacion = AdoAux.Recordset.fields("Autorizacion")
+                  TA.Cta_CxP = AdoAux.Recordset.fields("Cta_CxP")
+                  Select Case UCaseStrg(Dato_Campo(.fields(9)))
                     Case "RIB"
                          TA.Banco = "RETENCION IVA BIENES"
                          TA.Cheque = CompRet
@@ -2911,6 +2514,7 @@ Dim Tot_Propinas As Currency
     FA.Fecha_Corte = FechaSistema
     Actualizar_Abonos_Facturas_SP FA
     Progreso_Final
+    SubidaExitosa = True
 End Sub
 
 Public Sub Importar_Estudiantes_Representantes()
@@ -2926,8 +2530,8 @@ Dim Tot_Propinas As Currency
          Progreso_Barra.Valor_Maximo = .RecordCount
         .MoveFirst
          Do While Not .EOF
-            For IdField = 0 To .Fields.Count - 1
-                If IdField = 2 Then Codigo = Dato_Campo(.Fields(IdField), True) Else Codigo = Dato_Campo(.Fields(IdField), , True)
+            For IdField = 0 To .fields.Count - 1
+                If IdField = 2 Then Codigo = Dato_Campo(.fields(IdField), True) Else Codigo = Dato_Campo(.fields(IdField), , True)
                 Codigo = Sin_Signos_Especiales(Codigo)
                 Select Case IdField + 1
                   Case 1: Cl.T = Codigo               ' T
@@ -2967,7 +2571,7 @@ Dim Tot_Propinas As Currency
             Select_Adodc AdoAux, sSQL
             
             If AdoAux.Recordset.RecordCount > 0 Then
-               Cl.Codigo = AdoAux.Recordset.Fields("Codigo")
+               Cl.Codigo = AdoAux.Recordset.fields("Codigo")
             Else
                SetAdoAddNew "Clientes"
                SetAdoFields "T", Cl.T
@@ -3018,10 +2622,7 @@ Dim Tot_Propinas As Currency
      End If
     End With
     Progreso_Final
-    If Len(TextoImprimio) > 1 Then
-       TextoImprimio = "CLIENTES NUEVOS: " & vbCrLf & TextoImprimio & vbCrLf
-       FInfoError.Show 1
-    End If
+    SubidaExitosa = True
 End Sub
 
 Public Sub Importar_Estudiantes_PreFacturas()
@@ -3037,8 +2638,8 @@ Dim Tot_Propinas As Currency
          Progreso_Barra.Valor_Maximo = .RecordCount
         .MoveFirst
          Do While Not .EOF
-            For IdField = 0 To .Fields.Count - 1
-                If IdField = 1 Then Codigo = Dato_Campo(.Fields(IdField), True) Else Codigo = Dato_Campo(.Fields(IdField))
+            For IdField = 0 To .fields.Count - 1
+                If IdField = 1 Then Codigo = Dato_Campo(.fields(IdField), True) Else Codigo = Dato_Campo(.fields(IdField))
                 Codigo = UCaseStrg(Codigo)
                 Codigo = Sin_Signos_Especiales(Codigo)
                 Select Case IdField + 1
@@ -3075,10 +2676,7 @@ Dim Tot_Propinas As Currency
      End If
     End With
     Progreso_Final
-    If Len(TextoImprimio) > 1 Then
-       TextoImprimio = "CLIENTES NUEVOS: " & vbCrLf & TextoImprimio & vbCrLf
-       FInfoError.Show 1
-    End If
+    SubidaExitosa = True
 End Sub
 
 Public Sub Importar_Personas()
@@ -3097,7 +2695,7 @@ Dim Crear_Nuevo As Boolean
          Do While Not .EOF
             Datos_Default_Beneficiario
             Crear_Nuevo = False
-            Codigo = Dato_Campo(.Fields(1))
+            Codigo = Dato_Campo(.fields(1))
            'MsgBox Codigo
            'RUC/Cedula/Codigo Alumno/Consumidor Final
             If Len(Codigo) > 1 Then
@@ -3121,8 +2719,8 @@ Dim Crear_Nuevo As Boolean
                TBeneficiario.Codigo = Tipo_RUC_CI.Codigo_RUC_CI
             End If
             If TBeneficiario.Codigo <> Ninguno Then
-               For IdField = 0 To .Fields.Count - 1
-                   Codigo = Dato_Campo(.Fields(IdField))
+               For IdField = 0 To .fields.Count - 1
+                   Codigo = Dato_Campo(.fields(IdField))
                    Select Case IdField
                      Case 0: TBeneficiario.T = Codigo       'T
                     'Case 1: YA ESTA ARRIBA DETERMINADO
@@ -3150,25 +2748,25 @@ Dim Crear_Nuevo As Boolean
                        & "WHERE CI_RUC = '" & TBeneficiario.CI_RUC & "' "
                   Select_Adodc AdoClientes, sSQL
                   If AdoClientes.Recordset.RecordCount > 0 Then
-                     If Len(TBeneficiario.T) > 0 Then AdoClientes.Recordset.Fields("T") = TBeneficiario.T
-                     If Len(TBeneficiario.TD_Rep) > 0 Then AdoClientes.Recordset.Fields("TD") = TBeneficiario.TD_Rep
-                     If IsDate(TBeneficiario.Fecha_N) > 1 Then AdoClientes.Recordset.Fields("Fecha_N") = TBeneficiario.Fecha_N
-                     If Len(TBeneficiario.Cliente) > 1 Then AdoClientes.Recordset.Fields("Cliente") = TBeneficiario.Cliente
-                     If Len(TBeneficiario.Sexo) > 1 Then AdoClientes.Recordset.Fields("Sexo") = TBeneficiario.Sexo
-                     If Len(TBeneficiario.Email1) > 1 Then AdoClientes.Recordset.Fields("Email") = TBeneficiario.Email1
-                     If Len(TBeneficiario.Email2) > 1 Then AdoClientes.Recordset.Fields("Email2") = TBeneficiario.Email2
-                     If Len(TBeneficiario.Direccion) > 1 Then AdoClientes.Recordset.Fields("Direccion") = TBeneficiario.Direccion
-                     If Len(TBeneficiario.DirNumero) > 1 Then AdoClientes.Recordset.Fields("DirNumero") = TBeneficiario.DirNumero
-                     If Len(TBeneficiario.Telefono1) > 1 Then AdoClientes.Recordset.Fields("Telefono") = TBeneficiario.Telefono1
-                     If Len(TBeneficiario.Celular) > 1 Then AdoClientes.Recordset.Fields("Celular") = TBeneficiario.Celular
-                     If Len(TBeneficiario.Ciudad) > 1 Then AdoClientes.Recordset.Fields("Ciudad") = MidStrg(TBeneficiario.Ciudad, 1, 35)
-                     If Len(TBeneficiario.Prov) > 1 Then AdoClientes.Recordset.Fields("Prov") = TBeneficiario.Prov
-                     If Len(TBeneficiario.Pais) > 1 Then AdoClientes.Recordset.Fields("Pais") = TBeneficiario.Pais
-                     If Len(TBeneficiario.Grupo_No) > 1 Then AdoClientes.Recordset.Fields("Grupo") = TBeneficiario.Grupo_No
-                     If Len(TBeneficiario.Cod_Ejec) > 1 Then AdoClientes.Recordset.Fields("Cod_Ejec") = TBeneficiario.Cod_Ejec
-                     If Len(TBeneficiario.Cta_CxP) > 1 Then AdoClientes.Recordset.Fields("Cta_CxP") = TBeneficiario.Cta_CxP
-                     If Len(TBeneficiario.Plan_Afiliado) > 1 Then AdoClientes.Recordset.Fields("Plan_Afiliado") = TBeneficiario.Plan_Afiliado
-                     AdoClientes.Recordset.Fields("FA") = TBeneficiario.FA
+                     If Len(TBeneficiario.T) > 0 Then AdoClientes.Recordset.fields("T") = TBeneficiario.T
+                     If Len(TBeneficiario.TD_Rep) > 0 Then AdoClientes.Recordset.fields("TD") = TBeneficiario.TD_Rep
+                     If IsDate(TBeneficiario.Fecha_N) > 1 Then AdoClientes.Recordset.fields("Fecha_N") = TBeneficiario.Fecha_N
+                     If Len(TBeneficiario.Cliente) > 1 Then AdoClientes.Recordset.fields("Cliente") = TBeneficiario.Cliente
+                     If Len(TBeneficiario.Sexo) > 1 Then AdoClientes.Recordset.fields("Sexo") = TBeneficiario.Sexo
+                     If Len(TBeneficiario.Email1) > 1 Then AdoClientes.Recordset.fields("Email") = TBeneficiario.Email1
+                     If Len(TBeneficiario.Email2) > 1 Then AdoClientes.Recordset.fields("Email2") = TBeneficiario.Email2
+                     If Len(TBeneficiario.Direccion) > 1 Then AdoClientes.Recordset.fields("Direccion") = TBeneficiario.Direccion
+                     If Len(TBeneficiario.DirNumero) > 1 Then AdoClientes.Recordset.fields("DirNumero") = TBeneficiario.DirNumero
+                     If Len(TBeneficiario.Telefono1) > 1 Then AdoClientes.Recordset.fields("Telefono") = TBeneficiario.Telefono1
+                     If Len(TBeneficiario.Celular) > 1 Then AdoClientes.Recordset.fields("Celular") = TBeneficiario.Celular
+                     If Len(TBeneficiario.Ciudad) > 1 Then AdoClientes.Recordset.fields("Ciudad") = MidStrg(TBeneficiario.Ciudad, 1, 35)
+                     If Len(TBeneficiario.Prov) > 1 Then AdoClientes.Recordset.fields("Prov") = TBeneficiario.Prov
+                     If Len(TBeneficiario.Pais) > 1 Then AdoClientes.Recordset.fields("Pais") = TBeneficiario.Pais
+                     If Len(TBeneficiario.Grupo_No) > 1 Then AdoClientes.Recordset.fields("Grupo") = TBeneficiario.Grupo_No
+                     If Len(TBeneficiario.Cod_Ejec) > 1 Then AdoClientes.Recordset.fields("Cod_Ejec") = TBeneficiario.Cod_Ejec
+                     If Len(TBeneficiario.Cta_CxP) > 1 Then AdoClientes.Recordset.fields("Cta_CxP") = TBeneficiario.Cta_CxP
+                     If Len(TBeneficiario.Plan_Afiliado) > 1 Then AdoClientes.Recordset.fields("Plan_Afiliado") = TBeneficiario.Plan_Afiliado
+                     AdoClientes.Recordset.fields("FA") = TBeneficiario.FA
                      AdoClientes.Recordset.Update
                   Else
                      Crear_Nuevo = True
@@ -3207,6 +2805,7 @@ Dim Crear_Nuevo As Boolean
      End If
     End With
     Progreso_Final
+    SubidaExitosa = True
 End Sub
 
 Public Sub Importar_Descuento_Empleados()
@@ -3236,16 +2835,16 @@ Dim Aplica_FP As Boolean
          Progreso_Barra.Valor_Maximo = .RecordCount * 2
         .MoveFirst
          'Cuenta = Dato_Campo(.fields(4))
-         NoMes = Dato_Campo(.Fields(5))
-         Codigo = Dato_Campo(.Fields(3))
+         NoMes = Dato_Campo(.fields(5))
+         Codigo = Dato_Campo(.fields(3))
          Cta = Leer_Cta_Catalogo(Codigo)
          CodigoP = CodRolPago ' Rubro_Rol_Pago(Cuenta)
          CodigoPT = Codigo
          Do While Not .EOF
-            NoMesT = Dato_Campo(.Fields(5))
+            NoMesT = Dato_Campo(.fields(5))
             'CodigoPT = Rubro_Rol_Pago(Cuenta)
-            NombreCliente = Dato_Campo(.Fields(1))
-            CodigoPT = Dato_Campo(.Fields(3))
+            NombreCliente = Dato_Campo(.fields(1))
+            CodigoPT = Dato_Campo(.fields(3))
             If NoMesT <> NoMes Or CodigoPT <> Codigo Then
                sSQL = "DELETE * " _
                     & "FROM Catalogo_Rol_Rubros " _
@@ -3255,7 +2854,7 @@ Dim Aplica_FP As Boolean
                     & "AND Cod_Rol_Pago = '" & CodigoP & "' "
                Ejecutar_SQL_SP sSQL
                NoMes = NoMesT
-               Codigo = Dato_Campo(.Fields(3))
+               Codigo = Dato_Campo(.fields(3))
                Cta = Leer_Cta_Catalogo(Codigo)
                CodigoP = CodRolPago ' Rubro_Rol_Pago(Cuenta)
                'CodigoP = CodigoPT
@@ -3274,20 +2873,20 @@ Dim Aplica_FP As Boolean
          
         .MoveFirst
          Do While Not .EOF
-            NombreCliente = Dato_Campo(.Fields(1))
-            Codigo = Dato_Campo(.Fields(0))
+            NombreCliente = Dato_Campo(.fields(1))
+            Codigo = Dato_Campo(.fields(0))
             CICliente = Ninguno
             If AdoClientes.Recordset.RecordCount > 0 Then
                AdoClientes.Recordset.MoveFirst
                AdoClientes.Recordset.Find ("CI_RUC = '" & Codigo & "' ")
-               If Not AdoClientes.Recordset.EOF Then CICliente = AdoClientes.Recordset.Fields("Codigo")
+               If Not AdoClientes.Recordset.EOF Then CICliente = AdoClientes.Recordset.fields("Codigo")
             End If
-            Codigo = Dato_Campo(.Fields(2))
+            Codigo = Dato_Campo(.fields(2))
             Valor = Val(Codigo)
             If Valor > 0 And CICliente <> Ninguno Then
                Crear_Nuevo = False
-               For IdField = 0 To .Fields.Count - 1
-                   Codigo = Dato_Campo(.Fields(IdField))
+               For IdField = 0 To .fields.Count - 1
+                   Codigo = Dato_Campo(.fields(IdField))
                    Select Case IdField + 1
                      Case 2: CodigoCliente = Codigo
                      Case 4: Cta = Leer_Cta_Catalogo(Codigo)
@@ -3309,12 +2908,12 @@ Dim Aplica_FP As Boolean
                     & "ORDER BY Codigo,Cod_Rol_Pago "
                Select_Adodc AdoAux, sSQL
                If AdoAux.Recordset.RecordCount > 0 Then
-                  AdoAux.Recordset.Fields("Valor") = Valor
+                  AdoAux.Recordset.fields("Valor") = Valor
                   Select Case TipoDoc
-                    Case "I": AdoAux.Recordset.Fields("Calc_IESS") = adTrue
-                    Case "IS": AdoAux.Recordset.Fields("Calc_IESS") = adFalse
-                    Case "EC": AdoAux.Recordset.Fields("Calc_IESS") = adTrue
-                    Case Else: AdoAux.Recordset.Fields("Calc_IESS") = adFalse
+                    Case "I": AdoAux.Recordset.fields("Calc_IESS") = adTrue
+                    Case "IS": AdoAux.Recordset.fields("Calc_IESS") = adFalse
+                    Case "EC": AdoAux.Recordset.fields("Calc_IESS") = adTrue
+                    Case Else: AdoAux.Recordset.fields("Calc_IESS") = adFalse
                   End Select
                   AdoAux.Recordset.Update
                Else
@@ -3370,8 +2969,8 @@ Dim Aplica_FP As Boolean
     Progreso_Final
     If Len(Lista_Clientes_Nuevos) > 2 Then
        TextoImprimio = Lista_Clientes_Nuevos
+       SubidaExitosa = True
        Unload FImporta
-      'FInfoError.Show
     End If
 End Sub
 
@@ -3528,8 +3127,8 @@ Dim Detalle_Ret As String
          Progreso_Barra.Valor_Maximo = .RecordCount
         .MoveFirst
         'Nombre del Proveedor
-         NombreCliente = Dato_Campo(.Fields(3))
-         Codigo = Dato_Campo(.Fields(4))
+         NombreCliente = Dato_Campo(.fields(3))
+         Codigo = Dato_Campo(.fields(4))
         'RUC/Cedula/Consumidor Final
          CodigoCli = "9999999999"
          If Len(Codigo) > 1 Then
@@ -3538,12 +3137,12 @@ Dim Detalle_Ret As String
                  & "FROM Clientes " _
                  & "WHERE CI_RUC = '" & Codigo & "' "
             Select_Adodc AdoAux, sSQL
-            If AdoAux.Recordset.RecordCount > 0 Then CodigoCli = AdoAux.Recordset.Fields("Codigo")
+            If AdoAux.Recordset.RecordCount > 0 Then CodigoCli = AdoAux.Recordset.fields("Codigo")
          End If
         .MoveFirst
          Do While Not .EOF
-            For IdField = 0 To .Fields.Count - 1
-                Codigo = Dato_Campo(.Fields(IdField))
+            For IdField = 0 To .fields.Count - 1
+                Codigo = Dato_Campo(.fields(IdField))
                 Select Case IdField + 1
                   Case 2: If Codigo = "FA" Then TipoDoc = "01" Else TipoDoc = "02"
                   Case 3: Mifecha = Codigo
@@ -3575,7 +3174,7 @@ Dim Detalle_Ret As String
                  & "AND Fecha_Inicio <= #" & FechaCodAir & "# " _
                  & "AND Fecha_Final >= #" & FechaCodAir & "# "
             Select_Adodc AdoAux, sSQL
-            If AdoAux.Recordset.RecordCount > 0 Then Porcentaje = AdoAux.Recordset.Fields("Porcentaje")
+            If AdoAux.Recordset.RecordCount > 0 Then Porcentaje = AdoAux.Recordset.fields("Porcentaje")
             Detalle_Ret = "Cta_Ret_" & Format(Porcentaje, "#0.00")
             Cta_Ret_1 = Leer_Seteos_Ctas(Detalle_Ret)
             Porcentaje = Porcentaje / 100
@@ -3586,35 +3185,6 @@ Dim Detalle_Ret As String
 
            'MsgBox NombreCliente
             If IsDate(Mifecha) Then
-'''              sSQL = "DELETE * " _
-'''                   & "FROM Trans_Compras " _
-'''                   & "WHERE Item = '" & NumEmpresa & "' " _
-'''                   & "AND Periodo = '" & Periodo_Contable & "' " _
-'''                   & "AND TP = 'NN' " _
-'''                   & "AND Numero = -1 " _
-'''                   & "AND FechaEmision = #" & BuscarFecha(Mifecha) & "# " _
-'''                   & "AND IdProv = '" & CodigoCli & "' " _
-'''                   & "AND Establecimiento = '" & SerieF1 & "' " _
-'''                   & "AND PuntoEmision = '" & SerieF2 & "' " _
-'''                   & "AND Secuencial = " & SecuencialF & " " _
-'''                   & "AND TipoComprobante = " & Val(TipoDoc) & " " _
-'''                   & "AND Autorizacion = '" & Autorizacion & "' "
-'''              Ejecutar_SQL_SP sSQL
-'''              sSQL = "DELETE * " _
-'''                   & "FROM Trans_Air " _
-'''                   & "WHERE Item = '" & NumEmpresa & "' " _
-'''                   & "AND Periodo = '" & Periodo_Contable & "' " _
-'''                   & "AND TP = 'NN' " _
-'''                   & "AND Numero = -1 " _
-'''                   & "AND IdProv = '" & CodigoCli & "' " _
-'''                   & "AND EstabRetencion = '" & SerieR1 & "' " _
-'''                   & "AND PtoEmiRetencion = '" & SerieR2 & "' " _
-'''                   & "AND SecRetencion = " & SecuencialR & " " _
-'''                   & "AND AutRetencion = '" & AutorizaRet & "' " _
-'''                   & "AND EstabFactura = '" & SerieF1 & "' " _
-'''                   & "AND PuntoEmiFactura = '" & SerieF2 & "' " _
-'''                   & "AND Factura_No = " & SecuencialF & " "
-'''              Ejecutar_SQL_SP sSQL
              'Empezamos a grabar los datos de la retencion
              'MsgBox Mifecha & vbCrLf & FechaTexto
                SetAdoAddNew "Trans_Compras"
@@ -3702,6 +3272,7 @@ Dim Detalle_Ret As String
      End If
     End With
     Progreso_Final
+    SubidaExitosa = True
 End Sub
 
 Public Sub Generar_Asiento_Compras(Optional ParaFarmacia As Boolean)
@@ -3722,9 +3293,9 @@ Dim Cta_Gasto As String
    Select_Adodc AdoAsiento, sSQL
    With AdoAsiento.Recordset
     If .RecordCount > 0 Then
-        FechaIni = .Fields("Fecha")
+        FechaIni = .fields("Fecha")
        .MoveLast
-        FechaFin = .Fields("Fecha")
+        FechaFin = .fields("Fecha")
     End If
    End With
    sSQL = "SELECT Cta_Gasto,Cta_Pago,Cta_Servicio,Cta_Bienes " _
@@ -3757,7 +3328,7 @@ Dim Cta_Gasto As String
    With AdoAsiento.Recordset
     If .RecordCount > 0 Then
         Do While Not .EOF
-           SetearCtasCierre .Fields("Cta_Gasto")
+           SetearCtasCierre .fields("Cta_Gasto")
           .MoveNext
         Loop
     End If
@@ -3766,7 +3337,7 @@ Dim Cta_Gasto As String
    With AdoAux.Recordset
     If .RecordCount > 0 Then
         Do While Not .EOF
-           SetearCtasCierre .Fields("Cta_Retencion")
+           SetearCtasCierre .fields("Cta_Retencion")
           .MoveNext
         Loop
     End If
@@ -3775,8 +3346,8 @@ Dim Cta_Gasto As String
     If .RecordCount > 0 Then
        .MoveFirst
         Do While Not .EOF
-           SetearCtasCierre .Fields("Cta_Servicio")
-           SetearCtasCierre .Fields("Cta_Bienes")
+           SetearCtasCierre .fields("Cta_Servicio")
+           SetearCtasCierre .fields("Cta_Bienes")
           .MoveNext
         Loop
     End If
@@ -3785,7 +3356,7 @@ Dim Cta_Gasto As String
     If .RecordCount > 0 Then
        .MoveFirst
         Do While Not .EOF
-           SetearCtasCierre .Fields("Cta_Pago")
+           SetearCtasCierre .fields("Cta_Pago")
           .MoveNext
         Loop
     End If
@@ -3806,26 +3377,26 @@ Dim Cta_Gasto As String
     If .RecordCount > 0 Then
         Do While Not .EOF
            'MsgBox "...."
-           InsValorCta .Fields("Cta_Pago"), .Fields("TValorRetServicios")
-           InsValorCta .Fields("Cta_Pago"), .Fields("TValorRetBienes")
-           InsValorCta .Fields("Cta_Pago"), -.Fields("TGasto")
-           InsValorCta .Fields("Cta_Pago"), -.Fields("TMontoIva")
-           If .Fields("CodSustento") = "01" Then
-               InsValorCta .Fields("Cta_Gasto"), .Fields("TGasto")
-               InsValorCta Cta_IVA_Inventario, .Fields("TMontoIva")
+           InsValorCta .fields("Cta_Pago"), .fields("TValorRetServicios")
+           InsValorCta .fields("Cta_Pago"), .fields("TValorRetBienes")
+           InsValorCta .fields("Cta_Pago"), -.fields("TGasto")
+           InsValorCta .fields("Cta_Pago"), -.fields("TMontoIva")
+           If .fields("CodSustento") = "01" Then
+               InsValorCta .fields("Cta_Gasto"), .fields("TGasto")
+               InsValorCta Cta_IVA_Inventario, .fields("TMontoIva")
            Else
-               InsValorCta .Fields("Cta_Gasto"), .Fields("TGasto") + .Fields("TMontoIva")
+               InsValorCta .fields("Cta_Gasto"), .fields("TGasto") + .fields("TMontoIva")
            End If
-           InsValorCta .Fields("Cta_Servicio"), -.Fields("TValorRetServicios")
-           InsValorCta .Fields("Cta_Bienes"), -.Fields("TValorRetBienes")
+           InsValorCta .fields("Cta_Servicio"), -.fields("TValorRetServicios")
+           InsValorCta .fields("Cta_Bienes"), -.fields("TValorRetBienes")
 
            sSQL = "SELECT Cta_Retencion,SUM(ValRet) As TValRet " _
                 & "FROM Trans_Air " _
                 & "WHERE Item = '" & NumEmpresa & "' " _
                 & "AND Periodo = '" & Periodo_Contable & "' " _
-                & "AND EstabFactura = '" & .Fields("Establecimiento") & "' " _
-                & "AND PuntoEmiFactura = '" & .Fields("PuntoEmision") & "' " _
-                & "AND Factura_No = " & .Fields("Secuencial") & " " _
+                & "AND EstabFactura = '" & .fields("Establecimiento") & "' " _
+                & "AND PuntoEmiFactura = '" & .fields("PuntoEmision") & "' " _
+                & "AND Factura_No = " & .fields("Secuencial") & " " _
                 & "AND Numero = -1 " _
                 & "AND TP = 'NN' " _
                 & "GROUP BY Cta_Retencion " _
@@ -3834,8 +3405,8 @@ Dim Cta_Gasto As String
            If AdoAux.Recordset.RecordCount > 0 Then
               Do While Not AdoAux.Recordset.EOF
                  'MsgBox "...."
-                 InsValorCta AdoAux.Recordset.Fields("Cta_Retencion"), -AdoAux.Recordset.Fields("TValRet")
-                 InsValorCta .Fields("Cta_Pago"), AdoAux.Recordset.Fields("TValRet")
+                 InsValorCta AdoAux.Recordset.fields("Cta_Retencion"), -AdoAux.Recordset.fields("TValRet")
+                 InsValorCta .fields("Cta_Pago"), AdoAux.Recordset.fields("TValRet")
                  AdoAux.Recordset.MoveNext
               Loop
            End If
@@ -3858,8 +3429,8 @@ Dim Cta_Gasto As String
      If .RecordCount > 0 Then
         .MoveFirst
          Do While Not .EOF
-            For IdField = 0 To .Fields.Count - 1
-                If IdField = 2 Then Codigo = Dato_Campo(.Fields(IdField), True) Else Codigo = Dato_Campo(.Fields(IdField))
+            For IdField = 0 To .fields.Count - 1
+                If IdField = 2 Then Codigo = Dato_Campo(.fields(IdField), True) Else Codigo = Dato_Campo(.fields(IdField))
                 Select Case IdField + 1
                   Case 3: Mifecha = Codigo
                   Case 4: SubModuloCxCxP = Codigo
@@ -3897,7 +3468,7 @@ Dim Cta_Gasto As String
                If AdoAux.Recordset.RecordCount > 0 Then
                   SetAdoAddNew "Asiento_SC"
                   SetAdoFields "Codigo", SubModuloGasto
-                  SetAdoFields "Beneficiario", AdoAux.Recordset.Fields("Detalle")
+                  SetAdoFields "Beneficiario", AdoAux.Recordset.fields("Detalle")
                   SetAdoFields "DH", "1"
                   SetAdoFields "Valor", SubTotal
                   SetAdoFields "FECHA_V", Mifecha
@@ -3922,8 +3493,8 @@ Dim Cta_Gasto As String
                          & "WHERE CI_RUC = '" & SubModuloCxCxP & "' "
                     Select_Adodc AdoAux, sSQL
                     If AdoAux.Recordset.RecordCount > 0 Then
-                       CodigoCli = AdoAux.Recordset.Fields("Codigo")
-                       Beneficiario = AdoAux.Recordset.Fields("Cliente")
+                       CodigoCli = AdoAux.Recordset.fields("Codigo")
+                       Beneficiario = AdoAux.Recordset.fields("Cliente")
                     Else
                        CodigoCli = "9999999999"
                        Beneficiario = "CONSUMIDOR FINAL"
@@ -3973,8 +3544,8 @@ Dim Cta_Gasto As String
      If .RecordCount > 0 Then
         .MoveFirst
          Do While Not .EOF
-            Debe = Debe + .Fields("DEBE")
-            Haber = Haber + .Fields("HABER")
+            Debe = Debe + .fields("DEBE")
+            Haber = Haber + .fields("HABER")
            .MoveNext
          Loop
      End If
@@ -4014,7 +3585,7 @@ Public Sub Leer_Encabezado_FA()
    With AdoExcelAdodc.Recordset
     If .RecordCount > 0 And Not .EOF Then
        'CodigoCliente
-        Codigo = Dato_Campo(.Fields(0), , True)
+        Codigo = Dato_Campo(.fields(0), , True)
         CodigoCli = "9999999999"   'RUC/Cedula/Consumidor Final
         If Len(Codigo) > 1 Then
            sSQL = "SELECT Codigo " _
@@ -4022,32 +3593,32 @@ Public Sub Leer_Encabezado_FA()
                 & "WHERE Item = '" & NumEmpresa & "' " _
                 & "AND RUC_CI = '" & Codigo & "' "
            Select_Adodc AdoAux, sSQL
-           If AdoAux.Recordset.RecordCount > 0 Then CodigoCli = AdoAux.Recordset.Fields("Codigo")
+           If AdoAux.Recordset.RecordCount > 0 Then CodigoCli = AdoAux.Recordset.fields("Codigo")
         End If
         CI_Representante = Codigo
         FA.CodigoC = CodigoCli
         FA.CI_RUC = Codigo
        'Fecha
-        FA.Fecha = Dato_Campo(.Fields(1), True)
+        FA.Fecha = Dato_Campo(.fields(1), True)
        'Fecha Venc
-        FA.Fecha_V = Dato_Campo(.Fields(14), True)
+        FA.Fecha_V = Dato_Campo(.fields(14), True)
        'Factura
-        FA.Factura = Val(Dato_Campo(.Fields(2)))
+        FA.Factura = Val(Dato_Campo(.fields(2)))
        'Serie
-        FA.Serie = MidStrg(Dato_Campo(.Fields(10)), 1, 6)
+        FA.Serie = MidStrg(Dato_Campo(.fields(10)), 1, 6)
         If Len(FA.Serie) < 6 Then FA.Serie = "001001"
        'Estado
-        Select Case MidStrg(Dato_Campo(.Fields(11), , True), 1, 1)
+        Select Case MidStrg(Dato_Campo(.fields(11), , True), 1, 1)
           Case "T": FA.T = Anulado
           Case "C": FA.T = Cancelado
           Case Else: FA.T = Pendiente
         End Select
        'Cliente
-        NombreCliente = Dato_Campo(.Fields(12), , True)
+        NombreCliente = Dato_Campo(.fields(12), , True)
         FA.Cliente = NombreCliente
 
        'Autorizacion
-        Autorizacion = Dato_Campo(.Fields(19), , True)
+        Autorizacion = Dato_Campo(.fields(19), , True)
         If Len(Autorizacion) >= 6 Then FA.Autorizacion = Autorizacion Else FA.Autorizacion = Ninguno
     End If
    End With
@@ -4120,18 +3691,18 @@ Dim AdoDBAux As ADODB.Recordset
      If .RecordCount > 0 Then
          Progreso_Barra.Valor_Maximo = Progreso_Barra.Valor_Maximo + .RecordCount
          Do While Not .EOF
-            Progreso_Barra.Mensaje_Box = "CREANDO A: " & .Fields("Beneficiario")
+            Progreso_Barra.Mensaje_Box = "CREANDO A: " & .fields("Beneficiario")
             Progreso_Esperar
            'MsgBox "....."
-            Select Case .Fields("TD")
+            Select Case .fields("TD")
               Case "G", "I", "CC"
-                   If .Fields("TD") = "G" Then Si_No = True Else Si_No = False
-                   Insertar_SubModulo .Fields("RUC_CI"), .Fields("Beneficiario"), .Fields("TD"), Si_No
-                  .Fields("Codigo") = .Fields("RUC_CI")
+                   If .fields("TD") = "G" Then Si_No = True Else Si_No = False
+                   Insertar_SubModulo .fields("RUC_CI"), .fields("Beneficiario"), .fields("TD"), Si_No
+                  .fields("Codigo") = .fields("RUC_CI")
               Case Else
-                   Insertar_Beneficiario_Nuevo .Fields("RUC_CI"), .Fields("Beneficiario"), InsClienteFA
-                  .Fields("Codigo") = Tipo_RUC_CI.Codigo_RUC_CI
-                  .Fields("TD") = Tipo_RUC_CI.Tipo_Beneficiario
+                   Insertar_Beneficiario_Nuevo .fields("RUC_CI"), .fields("Beneficiario"), InsClienteFA
+                  .fields("Codigo") = Tipo_RUC_CI.Codigo_RUC_CI
+                  .fields("TD") = Tipo_RUC_CI.Tipo_Beneficiario
             End Select
            .MoveNext
          Loop
@@ -4151,11 +3722,11 @@ Dim AdoDBAux As ADODB.Recordset
          DigVerif = Digito_Verificador(NumEmpresa)
          Codigo = Format(Tipo_RUC_CI.Codigo_RUC_CI, "0000000000")
          Do While Not .EOF
-            Progreso_Barra.Mensaje_Box = "ACTUALIZANDO A: " & .Fields("Beneficiario")
+            Progreso_Barra.Mensaje_Box = "ACTUALIZANDO A: " & .fields("Beneficiario")
             Progreso_Esperar True
-           .Fields("TD") = "P"
-           .Fields("Codigo") = Codigo
-           .Fields("RUC_CI") = Codigo
+           .fields("TD") = "P"
+           .fields("Codigo") = Codigo
+           .fields("RUC_CI") = Codigo
             Codigo = Format(Val(Codigo) + 1, "0000000000")
            .MoveNext
          Loop
@@ -4189,18 +3760,18 @@ Dim N As Long
      If .RecordCount > 0 Then
          Do While Not .EOF
             Porc_Proc = Format(N / .RecordCount, "00.0%")
-            Progreso_Barra.Mensaje_Box = "(" & Porc_Proc & ") CREANDO A: " & .Fields("Cliente")
+            Progreso_Barra.Mensaje_Box = "(" & Porc_Proc & ") CREANDO A: " & .fields("Cliente")
             Progreso_Esperar True
-            DigVerif = Digito_Verificador(.Fields("CI_RUC"))
+            DigVerif = Digito_Verificador(.fields("CI_RUC"))
            'MsgBox "....."
             Select Case Tipo_RUC_CI.Tipo_Beneficiario
               Case "G", "I", "CC"
-                   If .Fields("TD") = "G" Then Si_No = True Else Si_No = False
-                   Insertar_SubModulo .Fields("CI_RUC"), .Fields("Cliente"), .Fields("TD"), Si_No
-                  .Fields("Codigo") = .Fields("CI_RUC")
+                   If .fields("TD") = "G" Then Si_No = True Else Si_No = False
+                   Insertar_SubModulo .fields("CI_RUC"), .fields("Cliente"), .fields("TD"), Si_No
+                  .fields("Codigo") = .fields("CI_RUC")
               Case Else
-                  .Fields("Codigo") = Tipo_RUC_CI.Codigo_RUC_CI
-                  .Fields("TD") = Tipo_RUC_CI.Tipo_Beneficiario
+                  .fields("Codigo") = Tipo_RUC_CI.Codigo_RUC_CI
+                  .fields("TD") = Tipo_RUC_CI.Tipo_Beneficiario
             End Select
             N = N + 1
            .MoveNext
@@ -4222,11 +3793,11 @@ Dim N As Long
          Codigo = Format(Tipo_RUC_CI.Codigo_RUC_CI, "0000000000")
          Do While Not .EOF
             Porc_Proc = Format(N / .RecordCount, "00.0%")
-            Progreso_Barra.Mensaje_Box = "(" & Porc_Proc & ") ACTUALIZANDO A: " & .Fields("Cliente")
+            Progreso_Barra.Mensaje_Box = "(" & Porc_Proc & ") ACTUALIZANDO A: " & .fields("Cliente")
             Progreso_Esperar True
-           .Fields("TD") = "P"
-           .Fields("Codigo") = Codigo
-           .Fields("CI_RUC") = Codigo
+           .fields("TD") = "P"
+           .fields("Codigo") = Codigo
+           .fields("CI_RUC") = Codigo
             Codigo = Format(Val(Codigo) + 1, "0000000000")
             N = N + 1
            .MoveNext
@@ -4269,8 +3840,8 @@ Dim AdoDBAux As ADODB.Recordset
           End Select
        End If
     Else
-       Tipo_RUC_CI.Codigo_RUC_CI = AdoDBAux.Fields("Codigo")
-       Tipo_RUC_CI.Tipo_Beneficiario = AdoDBAux.Fields("TD")
+       Tipo_RUC_CI.Codigo_RUC_CI = AdoDBAux.fields("Codigo")
+       Tipo_RUC_CI.Tipo_Beneficiario = AdoDBAux.fields("TD")
     End If
     AdoDBAux.Close
     
@@ -4320,7 +3891,7 @@ Dim NombreSubMod As String
                   & "WHERE Codigo = '" & CodigoSubMod & "' "
              Select_Adodc AdoAux, sSQL
              If AdoAux.Recordset.RecordCount > 0 Then
-                NombreSubMod = TrimStrg(MidStrg(AdoAux.Recordset.Fields("Cliente"), 1, 60))
+                NombreSubMod = TrimStrg(MidStrg(AdoAux.Recordset.fields("Cliente"), 1, 60))
              Else
                 NombreSubMod = "Codigo sin asignar: " & CodigoSubMod
              End If
@@ -4432,8 +4003,8 @@ Dim Cta As String
    Select_AdoDB AdoDBAsiento, SQL
    If AdoDBAsiento.RecordCount > 0 Then
       Do While Not AdoDBAsiento.EOF
-         Suma = AdoDBAsiento.Fields("SumTrans")
-         Cta = AdoDBAsiento.Fields("CODIGO")
+         Suma = AdoDBAsiento.fields("SumTrans")
+         Cta = AdoDBAsiento.fields("CODIGO")
          SQL = "SELECT TOP 1 * " _
              & "FROM Asiento " _
              & "WHERE Item = '" & NumEmpresa & "' " _
@@ -4445,11 +4016,11 @@ Dim Cta As String
          Select_AdoDB AdoDBAux, SQL
          If AdoDBAux.RecordCount > 0 Then
             SetAdoAddNew "Asiento"
-            For IdA = 0 To AdoDBAux.Fields.Count - 1
+            For IdA = 0 To AdoDBAux.fields.Count - 1
                 SiInsTrans = True
-                If AdoDBAux.Fields(IdA).Name = "A_No" Then SiInsTrans = False
-                If AdoDBAux.Fields(IdA).Name = DebeHaber Then SiInsTrans = False
-                If SiInsTrans Then SetAdoFields AdoDBAux.Fields(IdA).Name, AdoDBAux.Fields(IdA)
+                If AdoDBAux.fields(IdA).Name = "A_No" Then SiInsTrans = False
+                If AdoDBAux.fields(IdA).Name = DebeHaber Then SiInsTrans = False
+                If SiInsTrans Then SetAdoFields AdoDBAux.fields(IdA).Name, AdoDBAux.fields(IdA)
             Next IdA
             SetAdoFields DebeHaber, Suma
             SetAdoFields "A_No", A_No
@@ -4470,673 +4041,7 @@ Dim Cta As String
        & "AND A_No < 1000 "
    Ejecutar_SQL_SP SQL
 End Sub
-'-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-'''Public Sub Importar_Depositos()
-'''Dim I As Long
-'''Dim N As Long
-'''Dim NumSem As String
-'''Dim TDebe As Currency
-'''Dim THaber As Currency
-'''Dim Saldo_Final As Currency
-'''Dim Dias_Fin_Anio As Integer
-'''
-'''  Cadena = "INGRESE EL NUEMRO DE SEMANA" & vbCrLf & vbCrLf _
-'''         & "O PRESIONE:" & vbCrLf & vbCrLf _
-'''         & "T = DEPOSITO TOTAL" & vbCrLf & vbCrLf _
-'''         & "R = N/C POR ROL DE PAGOS"
-'''  NumSem = InputBox(Cadena, "IMPORTACION DE TABLA DE DEPOSITOS", "T")
-'''  Mifecha = BuscarFecha(FechaSistema)
-'''
-'''  Dias_Fin_Anio = CFechaLong("31/12/" & Year(FechaSistema)) - CFechaLong(FechaSistema)
-'''  If Dias_Fin_Anio <= 0 Then Dias_Fin_Anio = 1
-'''  sSQL = "DELETE * " _
-'''       & "FROM Trans_Libretas " _
-'''       & "WHERE Item = '" & NumEmpresa & "' " _
-'''       & "AND TP = 'DEFR' " _
-'''       & "AND Fecha = #" & Mifecha & "# "
-'''  Ejecutar_SQL_SP sSQL
-'''  With AdoExcelAdodc.Recordset
-'''       For i = 1 To .rows - 1
-'''          .Row = i
-'''          .Col = 1
-'''           Cuenta_No = TrimStrg(.Text)
-'''           If NumSem = "1" Then .Col = 4
-'''           If NumSem = "2" Then .Col = 5
-'''           If NumSem = "3" Then .Col = 6
-'''           If NumSem = "4" Then .Col = 7
-'''           If NumSem = "5" Then .Col = 8
-'''           If NumSem = "T" Then .Col = 9
-'''           If NumSem = "R" Then .Col = 9
-'''           Total = Val(.Text)
-'''           TDebe = 0
-'''           THaber = Total
-'''           If NumSem = "R" Then
-'''              TipoProc = "N/CR"
-'''           Else
-'''              TipoProc = "DEFR"
-'''           End If
-'''
-'''         'Insertar Transacciones de Libreta
-'''          If Total > 0 Then
-'''            sSQL = "SELECT TOP 1 * " _
-'''                 & "FROM Trans_Libretas " _
-'''                 & "WHERE Cuenta_No = '" & Cuenta_No & "' " _
-'''                 & "ORDER BY Fecha DESC,IDT DESC,Hora DESC,ID DESC "
-'''            Select_Adodc AdoAux, sSQL
-'''            With AdoAux.Recordset
-'''                 If .RecordCount > 0 Then
-'''                     SaldoDisp = .Fields("Saldo_Disp")
-'''                     SaldoCont = .Fields("Saldo_Cont")
-'''                     ID_Trans = .Fields("IDT")
-'''                     NumeroLineas = .Fields("ID")
-'''                 Else
-'''                     SaldoCont = 0
-'''                 End If
-'''                 TiempoTexto = Format$(Time, FormatoTimes)
-'''                .AddNew
-'''                .Fields("Fecha") = FechaSistema
-'''                .Fields("Cuenta_No") = Cuenta_No
-'''                .Fields("TP") = TipoProc
-'''                .Fields("Debitos") = TDebe
-'''                .Fields("Creditos") = THaber
-'''                .Fields("Saldo_Cont") = SaldoCont + THaber - TDebe
-'''                 If TipoGrupo Then
-'''                    If THaber <> 0 Then
-'''                      '.Fields("Saldo_Disp") = SaldoDisp
-'''                      .Fields("Saldo_Disp") = SaldoCont + THaber - TDebe
-'''                      .Fields("T") = Normal
-'''                      Saldo_Final = SaldoCont + THaber - TDebe
-'''                    Else
-'''                      .Fields("Saldo_Disp") = SaldoDisp + THaber - TDebe
-'''                      .Fields("T") = Normal
-'''                      Saldo_Final = SaldoDisp + THaber - TDebe
-'''                    End If
-'''                 Else
-'''                   .Fields("Saldo_Disp") = SaldoDisp + THaber - TDebe
-'''                   .Fields("T") = Normal
-'''                    Saldo_Final = SaldoDisp + THaber - TDebe
-'''                 End If
-'''                .Fields("CodigoU") = CodigoUsuario
-'''                 If NumeroLineas >= 36 Then NumeroLineas = 1
-'''                .Fields("IP") = adFalse
-'''                .Fields("CHT") = adFalse
-'''                 If NumSem = "R" Then
-'''                    .Fields("Banco") = "N/C POR ROL"
-'''                 Else
-'''                    .Fields("Banco") = "DEP TABLA"
-'''                 End If
-'''                .Fields("ACL") = adFalse
-'''                .Fields("AC") = adFalse              ' Quitar
-'''                .Fields("ACC") = adFalse
-'''                .Fields("IDT") = ID_Trans + 1
-'''                .Fields("Hora") = TiempoTexto
-'''                .Fields("Item") = NumEmpresa
-'''                .Fields("ME") = adFalse
-'''                .Fields("Cartilla_No") = Cartilla_No
-'''                .Fields("Papeleta_No") = 0
-'''                 SetUpdate AdoAux
-'''            End With
-'''            If TipoProc = "DEFR" Then
-'''               sSQL = "SELECT * " _
-'''                    & "FROM Trans_Bloqueos "
-'''               Select_Adodc AdoAux, sSQL
-'''               With AdoAux.Recordset
-'''                   .AddNew
-'''                   .Fields("T") = Normal
-'''                   .Fields("Fecha") = FechaSistema
-'''                   .Fields("Cuenta_No") = Cuenta_No
-'''                   .Fields("Valor") = Total
-'''                   .Fields("Cheque") = TipoProc
-'''                   .Fields("Banco") = "DEPOSITO PROGRAMADO"
-'''                   .Fields("Dias") = Dias_Fin_Anio
-'''                   .Fields("Item") = NumEmpresa
-'''                   .Update
-'''               End With
-'''            End If
-'''         End If
-'''         Me.Caption = "Importar de FlexGrid a Sistema " & i & " de " & Rango.NumFila2 & " - " & Cuenta_No & " - " & Format$(Total, "#,##0.00")
-'''       Next
-'''  End With
-'''End Sub
-'-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-'''Public Sub Importar_Facturas_2()
-'''Dim F As Long
-'''Dim N As Long
-'''Dim Tot_Propinas As Currency
-'''
-'''  Encerar_Factura FA
-'''  FA.Cod_CxC = DCLinea.Text
-'''  Lineas_De_CxC FA
-'''  SerieFactura = FA.Serie
-'''  Fecha_Vence = FA.Vencimiento
-'''  Autorizacion = FA.Autorizacion
-'''  Cta_Cobrar = FA.Cta_CxP
-'''  Bandera = False
-'''  Evaluar = True
-''' 'Borramos la tabla temporal de facturas emitidas
-'''  sSQL = "DELETE * " _
-'''       & "FROM Asiento_F " _
-'''       & "WHERE Item = '" & NumEmpresa & "' " _
-'''       & "AND CodigoU = '" & CodigoUsuario & "' "
-'''  Ejecutar_SQL_SP sSQL
-'''  With AdoExcelAdodc.Recordset
-'''     'Empezamos la importacion de las facturas
-'''       For F = 1 To .rows - 1
-'''          .Row = F
-'''           FA.Total_MN = 0
-'''           FA.Total_IVA = 0
-'''           FA.SubTotal = 0
-'''           FA.Con_IVA = 0
-'''           FA.Sin_IVA = 0
-'''           For N = 1 To .cols - 1
-'''              .Col = N
-'''               Codigo = TrimStrg(Replace(.Text, "'", ""))
-'''              'MsgBox Codigo & "...."
-'''               Select Case N
-'''                 Case 1: FA.Serie = Codigo
-'''                         FA.Serie = Replace(FA.Serie, "-", "")
-'''                         If Val(FA.Serie) < 1001 Then FA.Serie = "001001"
-'''                 Case 2: FA.Factura = Val(Codigo)
-'''                 Case 3: FA.Fecha = Codigo
-'''                 Case 4: FA.TC = MidStrg(Codigo, 1, 2)
-'''                 Case 5: NombreCliente = Codigo
-'''                 Case 6: Producto = .Text
-'''                 Case 7: Producto = Producto & vbTab & Codigo
-'''                 Case 8: Producto = Producto & vbTab & Codigo
-'''                 Case 9: Producto = Producto & vbTab & Codigo
-'''                 Case 12: FA.SubTotal = Redondear(Val(Codigo), 2)
-'''                 Case 13: If Codigo = "X" Then FA.Total_IVA = Redondear(FA.SubTotal * Porc_IVA, 2)
-'''                 Case 14: CodigoP = Codigo
-'''                          Producto = Codigo & vbTab & Producto
-'''                 Case 15: Cta = Codigo
-'''                          CodigoInv = "99.99"
-'''                          sSQL = "SELECT * " _
-'''                               & "FROM Catalogo_Productos " _
-'''                               & "WHERE Codigo_Inv = '" & Cta & "' " _
-'''                               & "AND Item = '" & NumEmpresa & "' " _
-'''                               & "AND Periodo = '" & Periodo_Contable & "' "
-'''                          Select_Adodc AdoAux, sSQL
-'''                          If AdoAux.Recordset.RecordCount > 0 Then
-'''                             CodigoA = AdoAux.Recordset.Fields("Producto")
-'''                             CodigoInv = AdoAux.Recordset.Fields("Codigo_Inv")
-'''                          End If
-'''                 Case 16: CodigoCli = "9999999999"
-'''                          Beneficiario = "CONSUMIDOR FINAL"
-'''                          CI_Representante = CodigoCli
-'''                          sSQL = "SELECT * " _
-'''                               & "FROM Clientes " _
-'''                               & "WHERE CI_RUC = '" & Codigo & "' "
-'''                          Select_Adodc AdoAux, sSQL
-'''                          If AdoAux.Recordset.RecordCount > 0 Then
-'''                             CodigoCli = AdoAux.Recordset.Fields("Codigo")
-'''                             CI_Representante = AdoAux.Recordset.Fields("CI_RUC")
-'''                             Beneficiario = AdoAux.Recordset.Fields("Cliente")
-'''                          End If
-'''                          FA.CodigoC = CodigoCli
-'''               End Select
-'''
-'''           Next N
-'''           'MsgBox FA.SubTotal
-'''            If FA.SubTotal > 0 Then
-'''               SetAdoAddNew "Asiento_F"
-'''               SetAdoFields "FECHA", FA.Fecha
-'''               SetAdoFields "CODIGO", CodigoInv
-'''               SetAdoFields "PRODUCTO", Producto
-'''               SetAdoFields "CANT", 1
-'''               SetAdoFields "PRECIO", FA.SubTotal
-'''               SetAdoFields "TOTAL", FA.SubTotal
-'''               SetAdoFields "Total_IVA", FA.Total_IVA
-'''               SetAdoFields "Serie", FA.Serie
-'''               SetAdoFields "Autorizacion", FA.Autorizacion
-'''               SetAdoFields "Numero", FA.Factura
-'''               SetAdoFields "Codigo_Cliente", CodigoCli
-'''               SetAdoFields "CodigoU", CodigoUsuario
-'''               SetAdoFields "A_No", F
-'''               SetAdoFields "Item", NumEmpresa
-'''               SetAdoUpdate
-'''            End If
-'''           Me.Caption = "Importar de FlexGrid a Sistema de Facturacion El Numero: " & FA.Factura & ": " & Format$(F / Rango.NumFila2, "00%")
-'''      Next F
-'''  End With
-'''  Generar_Facturas
-'''End Sub
-'-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-'''Public Sub Importar_Facturas_3()
-'''Dim I As Long
-'''Dim N As Long
-'''Dim Tot_Propinas As Currency
-'''  Encerar_Factura FA
-'''  FA.Cod_CxC = DCLinea.Text
-'''  Lineas_De_CxC FA
-'''  SerieFactura = FA.Serie
-'''  Fecha_Vence = FA.Vencimiento
-'''  Autorizacion = FA.Autorizacion
-'''  Cta_Cobrar = FA.Cta_CxP
-'''  Bandera = False
-'''  Evaluar = True
-'''  With AdoExcelAdodc.Recordset
-'''      .Row = 1
-'''      .Col = 2
-'''       Mifecha = TrimStrg(.Text)
-'''       For i = 1 To .rows - 1
-'''          .Row = i
-'''          .Col = 3
-'''           If Mifecha <> TrimStrg(.Text) Then
-'''              If IsDate(Mifecha) Then Eliminar_Facturas
-'''             'MsgBox Mifecha
-'''              Mifecha = TrimStrg(.Text)
-'''           End If
-'''           Me.Caption = "Revisando Datos en el excel: " & i & " de " & Rango.NumFila2 & ", Fecha: " & Mifecha
-'''      Next i
-'''      If IsDate(Mifecha) Then Eliminar_Facturas
-'''  End With
-''' 'Empezamos la importacion de las facturas
-'''  FA.Factura = 1
-'''  sSQL = "SELECT * " _
-'''       & "FROM Facturas " _
-'''       & "WHERE Item = '" & NumEmpresa & "' " _
-'''       & "AND Periodo = '" & Periodo_Contable & "' " _
-'''       & "AND TC = '" & FA.TC & "' " _
-'''       & "ORDER BY Factura DESC "
-'''  Select_Adodc AdoAux, sSQL
-'''  If AdoAux.Recordset.RecordCount > 0 Then FA.Factura = AdoAux.Recordset.Fields("Factura") + 1
-'''  With AdoExcelAdodc.Recordset
-'''      'MsgBox .Rows & vbCrLf & .Cols
-'''       For i = 1 To .rows - 1
-'''          .Row = i
-'''           FA.Total_MN = 0
-'''           FA.Total_IVA = 0
-'''           FA.SubTotal = 0
-'''           FA.Con_IVA = 0
-'''           FA.Sin_IVA = 0
-'''           CodigoP = Ninguno
-'''           CI_Representante = Ninguno
-'''           For N = 1 To .cols - 1
-'''              .Col = N
-'''               Codigo = TrimStrg(Replace(.Text, "'", ""))
-'''               Codigo1 = TrimStrg(Codigo)
-'''               Select Case N
-'''                 Case 1: 'RUC/Cedula/Consumidor Final
-'''                          CodigoCli = "9999999999"
-'''                         'MsgBox "Codigo: " & Codigo
-'''                          If Len(Codigo) > 1 Then
-'''                             DigVerif = Digito_Verificador( Codigo)
-'''                             CodigoCli = Tipo_RUC_CI.Codigo_RUC_CI
-'''                          End If
-'''                          CI_Representante = Codigo
-'''                         'MsgBox "Digito Verif. " & DigVerif & " (" & Tipo_RUC_CI.Tipo_Beneficiario & ")"
-'''                 Case 2: If Val(Codigo) > 0 Then FA.Factura = Val(Codigo)
-'''                 Case 3: FA.Fecha = Convertir_Fecha(Codigo)
-'''                 Case 4: FA.SubTotal = Redondear(Val(Codigo), 2)
-'''                 Case 5: FA.Total_IVA = Redondear(Val(Codigo), 2)
-'''                 Case 6: FA.Descuento = Redondear(Val(Codigo), 2)
-'''                 Case 7: FA.Total_MN = Redondear(Val(Codigo), 2)
-'''                 Case 8: CodigoP = Codigo        'Representante
-'''                 Case 9: CodigoA = Codigo        'Codigo Alumno
-'''                         CodigoB = Codigo
-'''                 Case 10: NombreCliente = Codigo  'Alumno
-'''               End Select
-'''           Next N
-'''           Factura_No = FA.Factura
-'''           Si_No = True
-'''           CodigoCli = Ninguno
-'''           Grupo_No = "ATS"
-'''           With AdoClientes.Recordset
-'''            If .RecordCount > 0 Then
-'''                Do While Len(CodigoA) <= 10 And Si_No
-'''                  .MoveFirst
-'''                  .Find ("CI_RUC = '" & CodigoA & "' ")
-'''                   If Not .EOF Then
-'''                      CodigoCli = .Fields("Codigo")
-'''                      NombreCliente = .Fields("Cliente")
-'''                      Grupo_No = .Fields("Grupo")
-'''                      Si_No = False
-'''                   Else
-'''                      CodigoA = "0" & CodigoA
-'''                   End If
-'''                Loop
-'''            End If
-'''           End With
-'''           If CodigoCli = Ninguno Then CodigoCli = CodigoB
-'''          'Grabamos el numero de factura
-'''          'MsgBox FA.Factura
-'''           If FA.Factura <> 0 Then
-'''              'MsgBox FA.Factura
-'''              sSQL = "DELETE * " _
-'''                   & "FROM Asiento_F " _
-'''                   & "WHERE Item = '" & NumEmpresa & "' " _
-'''                   & "AND CodigoU = '" & CodigoUsuario & "' "
-'''              Ejecutar_SQL_SP sSQL
-'''              SetAdoAddNew "Asiento_F"
-'''              If FA.TC = "NV" Then
-'''                 SetAdoFields "CODIGO", "99.97"
-'''                 SetAdoFields "PRODUCTO", "VENTAS TICKET DEL DIA"
-'''                 TA.Banco = "Efectivo"
-'''              Else
-'''                 SetAdoFields "CODIGO", "99.99"
-'''                 SetAdoFields "PRODUCTO", "VENTAS DEL DIA"
-'''              End If
-'''              SetAdoFields "CANT", 1
-'''              SetAdoFields "PRECIO", FA.SubTotal
-'''              SetAdoFields "TOTAL", FA.SubTotal
-'''              SetAdoFields "Total_Desc", FA.Descuento
-'''              SetAdoFields "Total_IVA", FA.Total_IVA
-'''              SetAdoFields "CodigoU", CodigoUsuario
-'''              SetAdoFields "TICKET", CStr(Year(FA.Fecha))
-'''              SetAdoFields "Item", NumEmpresa
-'''              SetAdoUpdate
-'''              FA.T = "P"
-'''              FA.CodigoC = CodigoCli
-'''              FA.Fecha_C = FA.Fecha
-'''              FA.Fecha_V = FA.Fecha
-'''              If FA.Total_IVA > 0 Then
-'''                 FA.Con_IVA = FA.SubTotal
-'''              Else
-'''                 FA.Sin_IVA = FA.SubTotal
-'''              End If
-'''              If FA.TC = "NV" Then
-'''                 Tot_Propinas = 0
-'''                 FA.Descuento = 0
-'''                 FA.Servicio = 0
-'''              End If
-'''              If FA.Total_MN <> (FA.SubTotal + FA.Total_IVA - FA.Descuento + FA.Servicio + Tot_Propinas) Then
-'''                 FA.Total_MN = FA.SubTotal + FA.Total_IVA - FA.Descuento + FA.Servicio + Tot_Propinas
-'''              End If
-'''              FA.Saldo_MN = FA.Total_MN
-'''             'MsgBox FA.Fecha
-'''              Grabar_Factura FA, True
-'''              FA.Factura = FA.Factura + 1
-'''           End If
-'''           sSQL = "SELECT * " _
-'''                & "FROM Clientes " _
-'''                & "WHERE Codigo = '" & CodigoCli & "' "
-'''           Select_Adodc AdoAux, sSQL
-'''           If AdoAux.Recordset.RecordCount > 0 Then
-'''              AdoAux.Recordset.Fields("Cedula") = CI_Representante
-'''              AdoAux.Recordset.Fields("CI_RUC_SRI") = CI_Representante
-'''              AdoAux.Recordset.Fields("TD_SRI") = Tipo_RUC_CI.Tipo_Beneficiario
-'''              AdoAux.Recordset.Fields("Representante") = UCaseStrg(CodigoP)
-'''              AdoAux.Recordset.Update
-'''           Else
-'''             'MsgBox NombreCliente
-'''              SetAdoAddNew "Clientes"
-'''              SetAdoFields "T", Normal
-'''              SetAdoFields "Codigo", CodigoCli
-'''              SetAdoFields "TD", "O"
-'''              SetAdoFields "CI_RUC", CodigoB
-'''              SetAdoFields "Cliente", UCaseStrg(NombreCliente)
-'''              SetAdoFields "Representante", UCaseStrg(CodigoP)
-'''              SetAdoFields "Cedula", CI_Representante
-'''              SetAdoFields "CI_RUC_SRI", CI_Representante
-'''              SetAdoFields "TD_SRI", Tipo_RUC_CI.Tipo_Beneficiario
-'''              SetAdoFields "Fecha", FechaSistema
-'''              SetAdoFields "Direccion", "SD"
-'''              SetAdoFields "DirNumero", "SN"
-'''              SetAdoFields "Ciudad", "QUITO"
-'''              SetAdoFields "Grupo", "ATS"
-'''              SetAdoFields "Prov", "17"
-'''              SetAdoFields "Pais", "593"
-'''              SetAdoFields "FA", True
-'''              SetAdoFields "CodigoU", CodigoUsuario
-'''              SetAdoUpdate
-'''           End If
-'''           sSQL = "SELECT * " _
-'''                & "FROM Clientes_Matriculas " _
-'''                & "WHERE Codigo = '" & CodigoCli & "' "
-'''           Select_Adodc AdoAux, sSQL
-'''           If AdoAux.Recordset.RecordCount > 0 Then
-'''              AdoAux.Recordset.Fields("Cedula_R") = CI_Representante
-'''              AdoAux.Recordset.Fields("TD") = Tipo_RUC_CI.Tipo_Beneficiario
-'''              AdoAux.Recordset.Fields("Representante") = UCaseStrg(CodigoP)
-'''              AdoAux.Recordset.Fields("Representante_Alumno") = UCaseStrg(CodigoP)
-'''              AdoAux.Recordset.Update
-'''           Else
-'''              SetAdoAddNew "Clientes_Matriculas"
-'''              SetAdoFields "T", Normal
-'''              SetAdoFields "Codigo", CodigoCli
-'''              SetAdoFields "TD", Tipo_RUC_CI.Tipo_Beneficiario
-'''              SetAdoFields "Cedula_R", CI_Representante
-'''              SetAdoFields "Representante", UCaseStrg(CodigoP)
-'''              SetAdoFields "Representante_Alumno", UCaseStrg(CodigoP)
-'''              SetAdoFields "Fecha", FechaSistema
-'''              SetAdoFields "Direccion", "SD"
-'''              SetAdoFields "DirNumero", "SN"
-'''              SetAdoFields "Grupo_No", "ATS"
-'''              SetAdoFields "Lugar_Nac", "QUITO"
-'''              SetAdoFields "Nacionalidad", "ECUATORIANA"
-'''              SetAdoFields "CodigoU", CodigoUsuario
-'''              SetAdoUpdate
-'''           End If
-'''           Me.Caption = "Importar de FlexGrid a Sistema de Facturacion El Numero: " & FA.Factura & ": " & i & " de " & Rango.NumFila2
-'''      Next i
-'''  End With
-'''End Sub
-'-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-'''Public Sub Importar_Consumos()
-'''Dim I As Long
-'''Dim N As Long
-'''Dim Cod1 As String
-'''Dim Cod2 As String
-'''Dim Cod3 As String
-'''Dim Cod4 As String
-'''Dim Cod5 As String
-'''Dim Cod6 As String
-'''Dim Cod7 As String
-'''Dim Cod8 As String
-'''
-'''Dim Tot_Propinas As Currency
-'''Dim Encontro_Consumo As Boolean
-'''  DGExcelAdodc.Visible = False
-'''  Ln_No = 0
-'''  sSQL = "SELECT C.Codigo,C.Cliente,C.Grupo,CDE.Cuenta_No " _
-'''       & "FROM Clientes As C, Clientes_Datos_Extras As CDE " _
-'''       & "WHERE CDE.Item = '" & NumEmpresa & "' " _
-'''       & "AND CDE.Tipo_Dato = 'MEDIDOR' " _
-'''       & "AND C.Codigo = CDE.Codigo " _
-'''       & "ORDER BY C.Cliente,CDE.Cuenta_No "
-'''  Select_Adodc AdoClientes, sSQL
-''' 'Empezamos la importacion de las facturas
-'''  With AdoExcelAdodc.Recordset
-'''      'MsgBox .Rows & vbCrLf & .Cols
-'''      .Row = 0
-'''      .Col = 3: Cod1 = SinEspaciosDer(.Text)
-'''      .Col = 9: Cod2 = SinEspaciosDer(.Text)
-'''      .Col = 11: Cod3 = SinEspaciosDer(.Text)
-'''      .Col = 12: Cod4 = SinEspaciosDer(.Text)
-'''      .Col = 13: Cod5 = SinEspaciosDer(.Text)
-'''      .Col = 14: Cod6 = SinEspaciosDer(.Text)
-'''      .Col = 15: Cod7 = SinEspaciosDer(.Text)
-'''      .Col = 16: Cod8 = SinEspaciosDer(.Text)
-'''      .Row = 1
-'''      .Col = 10
-'''       Mifecha = TrimStrg(.Text)
-'''       NoMes = CInt(Month(Mifecha))
-'''       MiAnio = Year(Mifecha)
-'''       sSQL = "DELETE * " _
-'''            & "FROM Clientes_Facturacion " _
-'''            & "WHERE Item = '" & NumEmpresa & "' " _
-'''            & "AND Num_Mes = " & NoMes & " " _
-'''            & "AND Periodo = '" & MiAnio & "' " _
-'''            & "AND Codigo_Inv IN ('" & Cod1 & "','" & Cod2 & "','" & Cod3 & "','" & Cod4 & "','" & Cod5 & "','" & Cod6 & "','" & Cod7 & "','" & Cod8 & "') "
-'''       Ejecutar_SQL_SP sSQL
-'''       For i = 1 To .rows - 1
-'''          .Row = i
-'''           For N = 1 To .cols - 1
-'''              .Col = N
-'''               Codigo = TrimStrg(Replace(.Text, "'", ""))
-'''               Select Case N
-'''                 Case 1: Cuenta_No = Format$(Val(Codigo), "000000")   ' Medidor
-'''                 Case 2: TipoDoc = Codigo  ' Consumo
-'''                 Case 3: Real1 = Redondear(Val(Codigo), 2)  ' Base
-'''                 Case 9: Real2 = Redondear(Val(Codigo), 2)  ' Excedente
-'''                 Case 10: Mifecha = TrimStrg(Codigo)           ' Fecha
-'''                 Case 11: Real3 = Redondear(Val(Codigo), 2) ' Mora
-'''                 Case 12: Real4 = Redondear(Val(Codigo), 2) ' Multa Sesiones
-'''                 Case 13: Real5 = Redondear(Val(Codigo), 2) ' Reconecciones
-'''                 Case 14: Real6 = Redondear(Val(Codigo), 2) ' Otros
-'''                 Case 15: Real7 = Redondear(Val(Codigo), 2) ' Otros
-'''                 Case 16: Real8 = Redondear(Val(Codigo), 2) ' Otros
-'''               End Select
-'''           Next N
-'''
-'''           If Val(TipoDoc) >= 0 And IsDate(Mifecha) Then
-'''              NoMes = CInt(Month(Mifecha))
-'''              MiMes = MesesLetras(NoMes)
-'''              MiAnio = Year(Mifecha)
-'''              CodigoCli = Ninguno
-'''              If AdoClientes.Recordset.RecordCount > 0 Then
-'''                 AdoClientes.Recordset.MoveFirst
-'''                 AdoClientes.Recordset.Find ("Cuenta_No = '" & Cuenta_No & "' ")
-'''                 If Not AdoClientes.Recordset.EOF Then
-'''                    CodigoCli = AdoClientes.Recordset.Fields("Codigo")
-'''                    Grupo_No = AdoClientes.Recordset.Fields("Grupo")
-'''                 End If
-'''              End If
-'''              If CodigoCli <> Ninguno Then
-'''                 If Real1 > 0 Then
-'''                    SetAdoAddNew "Clientes_Facturacion"
-'''                    SetAdoFields "T", Normal
-'''                    SetAdoFields "Codigo", CodigoCli
-'''                    SetAdoFields "Codigo_Inv", Cod1
-'''                    SetAdoFields "Valor", Real1
-'''                    SetAdoFields "GrupoNo", Grupo_No
-'''                    SetAdoFields "Mes", MiMes
-'''                    SetAdoFields "Num_Mes", NoMes
-'''                    SetAdoFields "Periodo", MiAnio
-'''                    SetAdoFields "Fecha", Mifecha
-'''                    SetAdoFields "Mensaje", "Med. No. " & Cuenta_No & ", Cons. " & TipoDoc & "M3"
-'''                    SetAdoFields "CodigoU", CodigoUsuario
-'''                    SetAdoFields "Item", NumEmpresa
-'''                    SetAdoFields "Credito_No", Cuenta_No
-'''                    SetAdoUpdate
-'''                 End If
-'''                 If Real2 > 0 Then
-'''                    SetAdoAddNew "Clientes_Facturacion"
-'''                    SetAdoFields "T", Normal
-'''                    SetAdoFields "Codigo", CodigoCli
-'''                    SetAdoFields "Codigo_Inv", Cod2
-'''                    SetAdoFields "Valor", Real2
-'''                    SetAdoFields "GrupoNo", Grupo_No
-'''                    SetAdoFields "Mes", MiMes
-'''                    SetAdoFields "Num_Mes", NoMes
-'''                    SetAdoFields "Periodo", MiAnio
-'''                    SetAdoFields "Fecha", Mifecha
-'''                    SetAdoFields "Mensaje", "Med. No. " & Cuenta_No
-'''                    SetAdoFields "CodigoU", CodigoUsuario
-'''                    SetAdoFields "Item", NumEmpresa
-'''                    SetAdoFields "Credito_No", Cuenta_No
-'''                    SetAdoUpdate
-'''                 End If
-'''                 If Real3 > 0 Then
-'''                    SetAdoAddNew "Clientes_Facturacion"
-'''                    SetAdoFields "T", Normal
-'''                    SetAdoFields "Codigo", CodigoCli
-'''                    SetAdoFields "Codigo_Inv", Cod3
-'''                    SetAdoFields "Valor", Real3
-'''                    SetAdoFields "GrupoNo", Grupo_No
-'''                    SetAdoFields "Mes", MiMes
-'''                    SetAdoFields "Num_Mes", NoMes
-'''                    SetAdoFields "Periodo", MiAnio
-'''                    SetAdoFields "Fecha", Mifecha
-'''                    SetAdoFields "Mensaje", "Med. No. " & Cuenta_No
-'''                    SetAdoFields "CodigoU", CodigoUsuario
-'''                    SetAdoFields "Item", NumEmpresa
-'''                    SetAdoFields "Credito_No", Cuenta_No
-'''                    SetAdoUpdate
-'''                 End If
-'''                 If Real4 > 0 Then
-'''                    SetAdoAddNew "Clientes_Facturacion"
-'''                    SetAdoFields "T", Normal
-'''                    SetAdoFields "Codigo", CodigoCli
-'''                    SetAdoFields "Codigo_Inv", Cod4
-'''                    SetAdoFields "Valor", Real4
-'''                    SetAdoFields "GrupoNo", Grupo_No
-'''                    SetAdoFields "Mes", MiMes
-'''                    SetAdoFields "Num_Mes", NoMes
-'''                    SetAdoFields "Periodo", MiAnio
-'''                    SetAdoFields "Fecha", Mifecha
-'''                    SetAdoFields "Mensaje", "Med. No. " & Cuenta_No
-'''                    SetAdoFields "CodigoU", CodigoUsuario
-'''                    SetAdoFields "Item", NumEmpresa
-'''                    SetAdoFields "Credito_No", Cuenta_No
-'''                    SetAdoUpdate
-'''                 End If
-'''                 If Real5 > 0 Then
-'''                    SetAdoAddNew "Clientes_Facturacion"
-'''                    SetAdoFields "T", Normal
-'''                    SetAdoFields "Codigo", CodigoCli
-'''                    SetAdoFields "Codigo_Inv", Cod5
-'''                    SetAdoFields "Valor", Real5
-'''                    SetAdoFields "GrupoNo", Grupo_No
-'''                    SetAdoFields "Mes", MiMes
-'''                    SetAdoFields "Num_Mes", NoMes
-'''                    SetAdoFields "Periodo", MiAnio
-'''                    SetAdoFields "Fecha", Mifecha
-'''                    SetAdoFields "Mensaje", "Med. No. " & Cuenta_No
-'''                    SetAdoFields "CodigoU", CodigoUsuario
-'''                    SetAdoFields "Item", NumEmpresa
-'''                    SetAdoFields "Credito_No", Cuenta_No
-'''                    SetAdoUpdate
-'''                 End If
-'''                 If Real6 > 0 Then
-'''                    SetAdoAddNew "Clientes_Facturacion"
-'''                    SetAdoFields "T", Normal
-'''                    SetAdoFields "Codigo", CodigoCli
-'''                    SetAdoFields "Codigo_Inv", Cod6
-'''                    SetAdoFields "Valor", Real6
-'''                    SetAdoFields "GrupoNo", Grupo_No
-'''                    SetAdoFields "Mes", MiMes
-'''                    SetAdoFields "Num_Mes", NoMes
-'''                    SetAdoFields "Periodo", MiAnio
-'''                    SetAdoFields "Fecha", Mifecha
-'''                    SetAdoFields "Mensaje", "Med. No. " & Cuenta_No
-'''                    SetAdoFields "CodigoU", CodigoUsuario
-'''                    SetAdoFields "Item", NumEmpresa
-'''                    SetAdoFields "Credito_No", Cuenta_No
-'''                    SetAdoUpdate
-'''                 End If
-'''                 If Real7 > 0 Then
-'''                    SetAdoAddNew "Clientes_Facturacion"
-'''                    SetAdoFields "T", Normal
-'''                    SetAdoFields "Codigo", CodigoCli
-'''                    SetAdoFields "Codigo_Inv", Cod7
-'''                    SetAdoFields "Valor", Real7
-'''                    SetAdoFields "GrupoNo", Grupo_No
-'''                    SetAdoFields "Mes", MiMes
-'''                    SetAdoFields "Num_Mes", NoMes
-'''                    SetAdoFields "Periodo", MiAnio
-'''                    SetAdoFields "Fecha", Mifecha
-'''                    SetAdoFields "Mensaje", "Med. No. " & Cuenta_No
-'''                    SetAdoFields "CodigoU", CodigoUsuario
-'''                    SetAdoFields "Item", NumEmpresa
-'''                    SetAdoFields "Credito_No", Cuenta_No
-'''                    SetAdoUpdate
-'''                 End If
-'''                 If Real8 > 0 Then
-'''                    SetAdoAddNew "Clientes_Facturacion"
-'''                    SetAdoFields "T", Normal
-'''                    SetAdoFields "Codigo", CodigoCli
-'''                    SetAdoFields "Codigo_Inv", Cod8
-'''                    SetAdoFields "Valor", Real8
-'''                    SetAdoFields "GrupoNo", Grupo_No
-'''                    SetAdoFields "Mes", MiMes
-'''                    SetAdoFields "Num_Mes", NoMes
-'''                    SetAdoFields "Periodo", MiAnio
-'''                    SetAdoFields "Fecha", Mifecha
-'''                    SetAdoFields "Mensaje", "Med. No. " & Cuenta_No
-'''                    SetAdoFields "CodigoU", CodigoUsuario
-'''                    SetAdoFields "Item", NumEmpresa
-'''                    SetAdoFields "Credito_No", Cuenta_No
-'''                    SetAdoUpdate
-'''                 End If
-'''               End If
-'''           End If
-'''           Me.Caption = "Importar de FlexGrid a Sistema de Facturacion El Numero: " & Cuenta_No & ": " & i & " de " & Rango.NumFila2
-'''      Next i
-'''  End With
-'''  DGExcelAdodc.Visible = True
-'''End Sub
-'-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 Public Sub Importar_Inventarios()
 Dim I As Long
 Dim N As Long
@@ -5162,7 +4067,7 @@ Dim Consignacion As Boolean
    If .RecordCount > 0 Then
       .MoveFirst
        Do While Not .EOF
-          CodigoInv = Dato_Campo(.Fields(1))
+          CodigoInv = Dato_Campo(.fields(1))
           If CodigoInv = "" Then CodigoInv = Ninguno
           sSQL = "DELETE * " _
                & "FROM Catalogo_Productos " _
@@ -5181,8 +4086,8 @@ Dim Consignacion As Boolean
         Progreso_Barra.Valor_Maximo = .RecordCount + 100
        .MoveFirst
         Do While Not .EOF
-           For IdField = 0 To .Fields.Count - 1
-               Codigo = Dato_Campo(.Fields(IdField))
+           For IdField = 0 To .fields.Count - 1
+               Codigo = Dato_Campo(.fields(IdField))
                Codigo1 = Codigo
                Select Case IdField + 1
                  Case 1: TipoCta = Codigo
@@ -5302,716 +4207,8 @@ Dim Consignacion As Boolean
 
    Progreso_Final
    DGExcelAdodc.Visible = True
+   SubidaExitosa = True
 End Sub
-'-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-'''Public Sub Importar_Facturas_Contabilidad()
-'''Dim I As Long
-'''Dim N As Long
-'''Dim Tot_Propinas As Currency
-''' 'Empezamos la importacion de las facturas
-'''  NumTrans = 0
-'''  DGExcelAdodc.Visible = False
-'''  With AdoExcelAdodc.Recordset
-'''      'MsgBox .Rows & vbCrLf & .Cols
-'''       For i = 1 To .rows - 1
-'''          .Row = i
-'''           CodigoCli = "9999999999"
-'''           NombreCliente = "CONSUMIDOR FINAL"
-'''           For N = 1 To .cols - 1
-'''              .Col = N
-'''               Codigo = UCaseStrg(Replace(.Text, "'", ""))
-'''               Codigo = TrimStrg(Replace(Codigo, "-", ""))
-'''               Codigo3 = TrimStrg(Codigo)
-'''               Select Case N
-'''                 Case 2: 'RUC/Cedula/Consumidor Final
-'''                          If Len(Codigo) > 1 Then
-'''                             DigVerif = Digito_Verificador( Codigo)
-'''                             CodigoCli = Tipo_RUC_CI.Codigo_RUC_CI
-'''                          End If
-'''                          CI_Representante = Codigo
-'''                          NombreCliente = Codigo
-'''                         'MsgBox "Digito Verif. " & DigVerif & " (" & Tipo_RUC_CI.Tipo_Beneficiario & ")"
-'''                 Case 3: TipoDoc = Codigo
-'''                 Case 4: Cantidad = Val(Codigo)
-'''                 Case 5: Total_Sin_IVA = Abs(Val(Codigo))
-'''                 Case 6: Total_Con_IVA = Abs(Val(Codigo))
-'''                 Case 7: Total_Sin_No_IVA = Abs(Val(Codigo))
-'''                 Case 8: Total_IVA = Abs(Val(Codigo))
-'''                 Case 9: Total_RetIVA = Abs(Val(Codigo))
-'''                 Case 10: Total_Ret = Abs(Val(Codigo))
-'''                 Case 11: Real1 = Val(Codigo)
-'''                          PorcIVAB = 0
-'''                          PorcIVAS = 0
-'''                          If (0 < Real1) And (Real1 <= 30) Then
-'''                             PorcIVAB = Real1
-'''                          Else
-'''                             PorcIVAS = Real1
-'''                          End If
-'''                 Case 12: Porc = Val(Codigo)
-'''                 Case 13: Mifecha = Codigo
-'''               End Select
-'''           Next N
-'''           sSQL = "SELECT * " _
-'''                & "FROM Clientes " _
-'''                & "WHERE Codigo = '" & CodigoCli & "' "
-'''           Select_Adodc AdoAux, sSQL
-'''           If AdoAux.Recordset.RecordCount <= 0 Then
-'''              'MsgBox "CLI: " & NombreCliente & vbCrLf & "COD: " & CodigoCli & vbCrLf & "CI/RUC: " & CI_Representante & vbCrLf & "TB: " & Tipo_RUC_CI.Tipo_Beneficiario
-'''              SetAdoAddNew "Clientes"
-'''              SetAdoFields "T", Normal
-'''              SetAdoFields "Codigo", CodigoCli
-'''              SetAdoFields "TD", Tipo_RUC_CI.Tipo_Beneficiario
-'''              SetAdoFields "CI_RUC", CI_Representante
-'''              SetAdoFields "Cliente", UCaseStrg(NombreCliente)
-'''              SetAdoFields "Representante", UCaseStrg(NombreCliente)
-'''              SetAdoFields "Cedula", CI_Representante
-'''              SetAdoFields "CI_RUC_SRI", CI_Representante
-'''              SetAdoFields "TD_SRI", Tipo_RUC_CI.Tipo_Beneficiario
-'''              SetAdoFields "Fecha", FechaSistema
-'''              SetAdoFields "Direccion", "SD"
-'''              SetAdoFields "DirNumero", "SN"
-'''              SetAdoFields "Ciudad", "QUITO"
-'''              SetAdoFields "Grupo", "ATS"
-'''              SetAdoFields "Prov", "17"
-'''              SetAdoFields "Pais", "593"
-'''              SetAdoFields "FA", True
-'''              SetAdoFields "CodigoU", CodigoUsuario
-'''              SetAdoUpdate
-'''           End If
-'''           sSQL = "DELETE * " _
-'''                & "FROM Trans_Ventas " _
-'''                & "WHERE Item = '" & NumEmpresa & "' " _
-'''                & "AND Periodo = '" & Periodo_Contable & "' " _
-'''                & "AND Fecha = #" & BuscarFecha(Mifecha) & "# " _
-'''                & "AND IdProv = '" & CodigoCli & "' " _
-'''                & "AND TipoComprobante = " & TipoDoc & " "
-'''           Ejecutar_SQL_SP sSQL
-'''           sSQL = "DELETE * " _
-'''                & "FROM Trans_Air " _
-'''                & "WHERE Item = '" & NumEmpresa & "' " _
-'''                & "AND Periodo = '" & Periodo_Contable & "' " _
-'''                & "AND Fecha = #" & BuscarFecha(Mifecha) & "# " _
-'''                & "AND IdProv = '" & CodigoCli & "' " _
-'''                & "AND Tipo_Trans = 'V' "
-'''           Ejecutar_SQL_SP sSQL
-'''           FechaFinal = Mifecha
-'''           Numero = 0
-'''           Codigo1 = "001"
-'''           Codigo2 = "001"
-'''           Autorizacion = "9999999999"
-'''           SubTotal = Total_Sin_IVA + Total_Con_IVA
-'''           Insertar_Ventas CodigoCli, CLng(Cantidad), Total_Sin_IVA, Total_Con_IVA, Total_IVA, SubTotal, TipoDoc
-'''           If Total_Ret > 0 Then Insertar_Ventas_Air CodigoCli, SubTotal, Porc, Total_Ret, CLng(Cantidad), 99999999, "001", "001", "9999999999", Ninguno
-'''           NumTrans = NumTrans + 1
-'''           Me.Caption = "Importar de FlexGrid a Sistema a Anexos Transaccionales: " & Mifecha & ": " & i & " de " & Rango.NumFila2
-'''      Next i
-'''  End With
-'''  Me.Caption = "Importar de FlexGrid a Sistema a Anexos Transaccionales: " & Mifecha & ": " & i & " de " & Rango.NumFila2
-'''  DGExcelAdodc.Visible = True
-'''End Sub
-'-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-'''Public Sub Cambio_Numero_Secuencial()
-'''Dim I As Long
-'''Dim N As Long
-'''Dim Tot_Propinas As Currency
-''' 'Empezamos la importacion de las facturas
-'''  sSQL = "SELECT Codigo,Cliente,CI_RUC " _
-'''       & "FROM Clientes " _
-'''       & "WHERE Codigo <> '.' " _
-'''       & "ORDER BY Cliente "
-'''  Select_Adodc AdoClientes, sSQL
-'''
-'''  NumTrans = 0
-'''  DGExcelAdodc.Visible = False
-'''  With AdoExcelAdodc.Recordset
-'''      'MsgBox .Rows & vbCrLf & .Cols
-'''       For i = 1 To .rows - 1
-'''          .Row = i
-'''           For N = 1 To .cols - 1
-'''              .Col = N
-'''               Codigo = UCaseStrg(Replace(.Text, "'", ""))
-'''               Codigo = TrimStrg(Replace(Codigo, "-", ""))
-'''               Select Case N
-'''                 Case 1: NombreCliente = Codigo
-'''                 Case 2: SerieFactura = Codigo
-'''                 Case 3: Autorizacion = Codigo
-'''                 Case 4: Factura_Desde = Val(Codigo)
-'''                 Case 5: Codigo1 = Codigo
-'''                 Case 6: Factura_Hasta = Val(Codigo)
-'''               End Select
-'''           Next N
-'''           CodigoN = Ninguno
-'''           CodigoA = Ninguno
-'''           If AdoClientes.Recordset.RecordCount > 0 Then
-'''              AdoClientes.Recordset.MoveFirst
-'''              AdoClientes.Recordset.Find ("Cliente = '" & NombreCliente & "' ")
-'''              If Not AdoClientes.Recordset.EOF Then
-'''                 CodigoN = AdoClientes.Recordset.Fields("Codigo")
-'''                 Codigo1 = AdoClientes.Recordset.Fields("CI_RUC")
-'''              End If
-'''           End If
-'''           sSQL = "SELECT * " _
-'''                & "FROM Facturas " _
-'''                & "WHERE Factura = " & Factura_Desde & " " _
-'''                & "AND Serie = '" & SerieFactura & "' " _
-'''                & "AND Autorizacion = '" & Autorizacion & "' " _
-'''                & "AND Item = '" & NumEmpresa & "' " _
-'''                & "AND Periodo = '" & Periodo_Contable & "' "
-'''           Select_Adodc AdoAux, sSQL
-'''           If AdoAux.Recordset.RecordCount > 0 Then
-'''              CodigoA = AdoAux.Recordset.Fields("CodigoC")
-'''           End If
-'''           sSQL = "SELECT * " _
-'''                & "FROM Facturas " _
-'''                & "WHERE Factura = " & Factura_Hasta & " " _
-'''                & "AND Item = '" & NumEmpresa & "' " _
-'''                & "AND Periodo = '" & Periodo_Contable & "' "
-'''           Select_Adodc AdoAux, sSQL
-'''           If AdoAux.Recordset.RecordCount > 0 Then
-'''              CodigoCli = AdoAux.Recordset.Fields("CodigoC")
-'''           End If
-'''           If CodigoN <> Ninguno And CodigoCli <> Ninguno Then
-'''              sSQL = "UPDATE Facturas " _
-'''                   & "SET CodigoC = '" & CodigoN & "' " _
-'''                   & "WHERE Item = '" & NumEmpresa & "' " _
-'''                   & "AND Periodo = '" & Periodo_Contable & "' " _
-'''                   & "AND Factura = " & Factura_Hasta & " " _
-'''                   & "AND CodigoC = '" & CodigoCli & "' "
-'''              Ejecutar_SQL_SP sSQL
-'''
-'''              sSQL = "UPDATE Detalle_Factura " _
-'''                   & "SET CodigoC = '" & CodigoN & "' " _
-'''                   & "WHERE Item = '" & NumEmpresa & "' " _
-'''                   & "AND Periodo = '" & Periodo_Contable & "' " _
-'''                   & "AND Factura = " & Factura_Hasta & " " _
-'''                   & "AND CodigoC = '" & CodigoCli & "' "
-'''              Ejecutar_SQL_SP sSQL
-'''
-'''              sSQL = "UPDATE Trans_Abonos " _
-'''                   & "SET CodigoC = '" & CodigoN & "' " _
-'''                   & "WHERE Item = '" & NumEmpresa & "' " _
-'''                   & "AND Periodo = '" & Periodo_Contable & "' " _
-'''                   & "AND Factura = " & Factura_Hasta & " " _
-'''                   & "AND CodigoC = '" & CodigoCli & "' "
-'''              Ejecutar_SQL_SP sSQL
-'''           End If
-'''           Me.Caption = "Actualizando Nombre Alumnos: " & i & " de " & Rango.NumFila2
-'''      Next i
-'''  End With
-'''  Me.Caption = "Actualizando Nombre Alumnos: " & i & " de " & Rango.NumFila2
-'''  DGExcelAdodc.Visible = True
-'''End Sub
-'-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-'''Public Sub Importar_Notas_Materias()
-'''Dim F As Long
-'''Dim N As Long
-'''Dim E As Byte
-'''Dim Nota_Alumno As Currency
-'''Dim Nota_TAI As Currency
-'''Dim Nota_AIC As Currency
-'''Dim Nota_AGC As Currency
-'''Dim Nota_L As Currency
-'''Dim Nota_P As Currency
-'''Dim Nota_Suma As Currency
-'''Dim Nota_Prom As Currency
-'''Dim Nota_Prom1 As Currency
-'''Dim Nota_Prom2 As Currency
-'''Dim Nota_Prom3 As Currency
-'''Dim Nota_ExaP As Currency
-'''Dim Porc_Nota As Single
-'''Dim Dias_L As Integer
-'''Dim ExamenQuimestre As Boolean
-'''Dim ExamenSupletorio As Boolean
-'''Dim ExamenRemedial As Boolean
-'''Dim EncontroNota As Boolean
-'''   RatonReloj
-'''   DGExcelAdodc.Visible = False
-'''   ExamenQuimestre = False
-'''   ExamenSupletorio = False
-'''   ExamenRemedial = False
-'''   CodMatP = Ninguno
-'''   SQLNotas = ""
-'''   SQLTAI = ""
-'''   SQLAIC = ""
-'''   SQLAGC = ""
-'''   SQLL = ""
-'''
-'''   sSQL = "SELECT * " _
-'''        & "FROM Catalogo_Periodo_Lectivo " _
-'''        & "WHERE Item = '" & NumEmpresa & "' " _
-'''        & "AND Periodo = '" & Periodo_Contable & "' "
-'''   Select_Adodc AdoAux, sSQL
-'''   With AdoAux.Recordset
-'''    If .RecordCount > 0 Then
-'''        Asistencias = .Fields("Asistencias")
-'''        If MidStrg(FormatoLibreta, 1, 9) = "QUIMESTRE" Then
-'''           If .Fields("NPQP1") Then
-'''               SQLTAI = "PQTAI1"
-'''               SQLAIC = "PQAIC1"
-'''               SQLAGC = "PQAGC1"
-'''               SQLL = "PQL1"
-'''               SQLProm = "PQBim1"
-'''               SQLExaP = "PQExaP1"
-'''               SQLNotas = "PQBim1"
-'''
-'''               Evaluacion = "ConductaPQ1"
-'''               SQLDias = "PQDias1"
-'''               SQLFJ = "PQBFJ1"
-'''               SQLFI = "PQBFI1"
-'''               SQLAtrasos = "PQBA1"
-'''               Porc_Nota = 0.3
-'''           End If
-'''           If .Fields("NPQP2") Then
-'''               SQLTAI = "PQTAI2"
-'''               SQLAIC = "PQAIC2"
-'''               SQLAGC = "PQAGC2"
-'''               SQLL = "PQL2"
-'''               SQLProm = "PQBim2"
-'''               SQLExaP = "PQExaP2"
-'''               SQLNotas = "PQBim2"
-'''
-'''               Evaluacion = "ConductaPQ2"
-'''               SQLDias = "PQDias2"
-'''               SQLFJ = "PQBFJ2"
-'''               SQLFI = "PQBFI2"
-'''               SQLAtrasos = "PQBA2"
-'''
-'''               Porc_Nota = 0.25
-'''           End If
-'''           If .Fields("NPQP3") Then
-'''               SQLTAI = "PQTAI3"
-'''               SQLAIC = "PQAIC3"
-'''               SQLAGC = "PQAGC3"
-'''               SQLL = "PQL3"
-'''               SQLProm = "PQBim3"
-'''               SQLExaP = "PQExaP3"
-'''               SQLNotas = "PQBim3"
-'''
-'''               Evaluacion = "ConductaPQ3"
-'''               SQLDias = "PQDias3"
-'''               SQLFJ = "PQBFJ3"
-'''               SQLFI = "PQBFI3"
-'''               SQLAtrasos = "PQBA3"
-'''
-'''               Porc_Nota = 0.25
-'''           End If
-'''           If .Fields("NPQEX") Then
-'''               SQLTAI = "XXX"
-'''               SQLAIC = "XXX"
-'''               SQLAGC = "XXX"
-'''               SQLL = "XXX"
-'''               SQLProm = "PromPQ"
-'''               SQLProm1 = "PQBim1"
-'''               SQLProm2 = "PQBim2"
-'''               SQLProm3 = "PQBim3"
-'''               SQLExaP = "ExamenPQ"
-'''               SQLNotas = "XXX"
-'''
-'''               Evaluacion = "XXX"
-'''               SQLDias = "XXX"
-'''               SQLFJ = "XXX"
-'''               SQLFI = "XXX"
-'''               SQLAtrasos = "XXX"
-'''
-'''               Porc_Nota = 0.25
-'''               ExamenQuimestre = True
-'''           End If
-'''           If .Fields("NSQP1") Then
-'''               SQLTAI = "SQTAI1"
-'''               SQLAIC = "SQAIC1"
-'''               SQLAGC = "SQAGC1"
-'''               SQLL = "SQL1"
-'''               SQLProm = "SQBim1"
-'''               SQLExaP = "SQExaP1"
-'''               SQLNotas = "SQBim1"
-'''
-'''               Evaluacion = "ConductaSQ1"
-'''               SQLDias = "SQDias1"
-'''               SQLFJ = "SQBFJ1"
-'''               SQLFI = "SQBFI1"
-'''               SQLAtrasos = "SQBA1"
-'''
-'''               Porc_Nota = 0.3
-'''           End If
-'''           If .Fields("NSQP2") Then
-'''               SQLTAI = "SQTAI2"
-'''               SQLAIC = "SQAIC2"
-'''               SQLAGC = "SQAGC2"
-'''               SQLL = "SQL2"
-'''               SQLProm = "SQBim2"
-'''               SQLExaP = "SQExaP2"
-'''               SQLNotas = "SQBim2"
-'''
-'''               Evaluacion = "ConductaSQ2"
-'''               SQLDias = "SQDias2"
-'''               SQLFJ = "SQBFJ2"
-'''               SQLFI = "SQBFI2"
-'''               SQLAtrasos = "SQBA2"
-'''
-'''               Porc_Nota = 0.25
-'''           End If
-'''           If .Fields("NSQP3") Then
-'''               SQLTAI = "SQTAI3"
-'''               SQLAIC = "SQAIC3"
-'''               SQLAGC = "SQAGC3"
-'''               SQLL = "SQL3"
-'''               SQLProm = "SQBim3"
-'''               SQLExaP = "SQExaP3"
-'''               SQLNotas = "SQBim3"
-'''
-'''               Evaluacion = "ConductaSQ3"
-'''               SQLDias = "SQDias3"
-'''               SQLFJ = "SQBFJ3"
-'''               SQLFI = "SQBFI3"
-'''               SQLAtrasos = "SQBA3"
-'''
-'''               Porc_Nota = 0.25
-'''           End If
-'''           If .Fields("NSQEX") Then
-'''               SQLTAI = "XXX"
-'''               SQLAIC = "XXX"
-'''               SQLAGC = "XXX"
-'''               SQLL = "XXX"
-'''               SQLProm = "PromSQ"
-'''               SQLProm1 = "SQBim1"
-'''               SQLProm2 = "SQBim2"
-'''               SQLProm3 = "SQBim3"
-'''               SQLExaP = "ExamenSQ"
-'''               SQLNotas = "XXX"
-'''
-'''               Evaluacion = "XXX"
-'''               SQLDias = "XXX"
-'''               SQLFJ = "XXX"
-'''               SQLFI = "XXX"
-'''               SQLAtrasos = "XXX"
-'''
-'''               Porc_Nota = 0.25
-'''               ExamenQuimestre = True
-'''           End If
-'''        Else
-'''           SQLTAI = "X"
-'''           SQLAIC = "X"
-'''           SQLAGC = "X"
-'''           SQLL = "X"
-'''           If .Fields("NPQP1") Then SQLNotas = "PQBim1"
-'''           If .Fields("NPQP2") Then SQLNotas = "PQBim2"
-'''           If .Fields("NPQP3") Then SQLNotas = "PQBim3"
-'''           If .Fields("NPQEX") Then SQLNotas = "ExamenPQ"
-'''
-'''           If .Fields("NSQP1") Then SQLNotas = "SQBim1"
-'''           If .Fields("NSQP2") Then SQLNotas = "SQBim2"
-'''           If .Fields("NSQP3") Then SQLNotas = "SQBim3"
-'''           If .Fields("NSQEX") Then SQLNotas = "ExamenSQ"
-'''
-'''           If .Fields("NTQP1") Then SQLNotas = "TQBim1"
-'''           If .Fields("NTQP2") Then SQLNotas = "TQBim2"
-'''           If .Fields("NTQP3") Then SQLNotas = "TQBim3"
-'''           If .Fields("NTQEX") Then SQLNotas = "ExamenTQ"
-'''        End If
-'''        If .Fields("NSUPL") Then
-'''            SQLTAI = "XXX"
-'''            SQLAIC = "XXX"
-'''            SQLAGC = "XXX"
-'''            SQLL = "XXX"
-'''            SQLProm = "PromSQ"
-'''            SQLProm1 = "SQBim1"
-'''            SQLProm2 = "SQBim2"
-'''            SQLProm3 = "SQBim3"
-'''            SQLExaP = "ExamenSQ"
-'''
-'''            Evaluacion = "XXX"
-'''            SQLDias = "XXX"
-'''            SQLFJ = "XXX"
-'''            SQLFI = "XXX"
-'''            SQLAtrasos = "XXX"
-'''
-'''            SQLNotas = "Supletorio"
-'''            ExamenSupletorio = True
-'''        End If
-'''        If .Fields("NREME") Then
-'''            SQLTAI = "XXX"
-'''            SQLAIC = "XXX"
-'''            SQLAGC = "XXX"
-'''            SQLL = "XXX"
-'''            SQLProm = "PromSQ"
-'''            SQLProm1 = "SQBim1"
-'''            SQLProm2 = "SQBim2"
-'''            SQLProm3 = "SQBim3"
-'''            SQLExaP = "ExamenSQ"
-'''
-'''            Evaluacion = "XXX"
-'''            SQLDias = "XXX"
-'''            SQLFJ = "XXX"
-'''            SQLFI = "XXX"
-'''            SQLAtrasos = "XXX"
-'''
-'''            SQLNotas = "Remedial"
-'''            ExamenRemedial = True
-'''        End If
-'''        If .Fields("NGRADO") Then SQLNotas = ""
-'''    End If
-'''   End With
-'''  With AdoExcelAdodc.Recordset
-'''     'Empezamos la importacion de las facturas
-'''       For F = 1 To .rows - 1
-'''          .Row = F
-'''           Dias_L = 0
-'''            For N = 1 To .cols - 1
-'''               .Col = N
-'''                Codigo = TrimStrg(Replace(.Text, "'", ""))
-'''               'MsgBox Codigo & "...."
-'''                EncontroNota = True
-'''                For E = 0 To UBound(Equivalencias) - 1
-'''                    If EncontroNota And Equivalencias(E).Letras = UCaseStrg(Codigo) Then
-'''                       Codigo = CStr(Equivalencias(E).Hasta)
-'''                       EncontroNota = False
-'''                    End If
-'''                    If EncontroNota And Equivalencias(E).Cualitativa = UCaseStrg(Codigo) Then
-'''                       Codigo = CStr(Equivalencias(E).Hasta)
-'''                       EncontroNota = False
-'''                    End If
-'''                    If EncontroNota And Equivalencias(E).Cualitativa2 = UCaseStrg(Codigo) Then
-'''                       Codigo = CStr(Equivalencias(E).Hasta)
-'''                       EncontroNota = False
-'''                    End If
-'''                Next E
-'''
-'''                Select Case N
-'''                  Case 1: NombreCliente = Codigo
-'''                  Case 2: Nota_TAI = Format$(Val(Codigo), "00.00")
-'''                          Nota_Alumno = Format$(Val(Codigo), "00.00")
-'''                          If Nota_TAI > 10 Then Nota_TAI = 10
-'''                          If Nota_Alumno > 20 Then Nota_Alumno = 20
-'''                  Case 3: Nota_AIC = Format$(Val(Codigo), "00.00")
-'''                          Dias_L = CInt(Nota_AIC)
-'''                          If Nota_AIC > 10 Then Nota_AIC = 10
-'''                  Case 4: Nota_AGC = Format$(Val(Codigo), "00.00")
-'''                          If Nota_AGC > 10 Then Nota_AGC = 10
-'''                  Case 5: Nota_L = Format$(Val(Codigo), "00.00")
-'''                          If Nota_L > 10 Then Nota_L = 10
-'''                  Case 6: Nota_ExaP = Format$(Val(Codigo), "00.00")
-'''                          If Nota_ExaP > 10 Then Nota_ExaP = 10
-'''                          Dias_L = Val(Codigo)
-'''                  Case 7: Faltas_Just = Val(Codigo)
-'''                  Case 8: Faltas_Injust = Val(Codigo)
-'''                  Case 9: Atrasos = Val(Codigo)
-'''                  Case 10: CodMat = Codigo       '10
-'''                  Case 11: CodigoCli = Codigo
-'''                  Case 12: TipoCta = Codigo
-'''                  Case 13: CodigoP = Codigo
-'''                End Select
-'''            Next N
-'''            'If F = 1 Then
-'''               sSQL = "SELECT * " _
-'''                    & "FROM Catalogo_Estudiantil " _
-'''                    & "WHERE Item = '" & NumEmpresa & "' " _
-'''                    & "AND Periodo = '" & Periodo_Contable & "' " _
-'''                    & "AND CodMat = '" & CodMat & "' " _
-'''                    & "AND MidStrg(CodigoE,1," & Len(CodigoP) & ") = '" & CodigoP & "' "
-'''               Select_Adodc AdoAux, sSQL
-'''               If AdoAux.Recordset.RecordCount > 0 Then CodMatP = AdoAux.Recordset.Fields("CodMatP")
-'''            'End If
-'''           'MsgBox sSQL
-'''           'MsgBox NombreCliente & vbCrLf & Nota_TAI
-'''
-'''            If SQLTAI <> "" And SQLAIC <> "" And SQLAGC <> "" And SQLL <> "" And SQLNotas <> "" _
-'''               And (Nota_TAI + Nota_AIC + Nota_AGC + Nota_L + Nota_ExaP) > 0 Then
-'''               If MidStrg(CodigoP, 1, 4) <= "1.01" Then
-'''                  Nota_AIC = Nota_TAI
-'''                  Nota_AGC = Nota_TAI
-'''                  Nota_L = Nota_TAI
-'''                  Nota_ExaP = Nota_TAI
-'''               End If
-'''              'Si las notas estan en cero colocamos la anterior
-'''               Nota_Suma = Nota_TAI + Nota_AIC + Nota_AGC + Nota_L + Nota_ExaP
-'''               Nota_Prom = Redondear(Nota_Suma / 5, 2)
-'''               Nota_P = Redondear(Nota_ExaP * Porc_Nota, 2)
-'''               If MidStrg(FormatoLibreta, 1, 9) = "QUIMESTRE" Then
-'''                  If ExamenQuimestre Then
-'''                     If CodMatP = Ninguno Then
-'''                        sSQL = "UPDATE Trans_Notas SET "
-'''                     Else
-'''                        sSQL = "UPDATE Trans_Notas_Auxiliares SET "
-'''                     End If
-'''                     sSQL = sSQL _
-'''                          & SQLExaP & " = " & Nota_TAI & "," _
-'''                          & SQLProm & " = ROUND((" & SQLProm1 & "+" & SQLProm2 & "+" & SQLProm3 & ")/3,2,0) " _
-'''                          & "WHERE Item = '" & NumEmpresa & "' " _
-'''                          & "AND Periodo = '" & Periodo_Contable & "' " _
-'''                          & "AND CodMat = '" & CodMat & "' " _
-'''                          & "AND CodE = '" & CodigoP & "' " _
-'''                          & "AND Codigo = '" & CodigoCli & "' "
-'''                     Ejecutar_SQL_SP sSQL
-'''                  ElseIf ExamenSupletorio Then
-'''                     If CodMatP = Ninguno Then
-'''                        sSQL = "UPDATE Trans_Notas SET "
-'''                     Else
-'''                        sSQL = "UPDATE Trans_Notas_Auxiliares SET "
-'''                     End If
-'''                     sSQL = sSQL _
-'''                          & SQLNotas & " = " & Nota_TAI & " " _
-'''                          & "WHERE Item = '" & NumEmpresa & "' " _
-'''                          & "AND Periodo = '" & Periodo_Contable & "' " _
-'''                          & "AND CodMat = '" & CodMat & "' " _
-'''                          & "AND CodE = '" & CodigoP & "' " _
-'''                          & "AND Codigo = '" & CodigoCli & "' "
-'''                     Ejecutar_SQL_SP sSQL
-'''                  ElseIf ExamenRemedial Then
-'''                     If CodMatP = Ninguno Then
-'''                        sSQL = "UPDATE Trans_Notas SET "
-'''                     Else
-'''                        sSQL = "UPDATE Trans_Notas_Auxiliares SET "
-'''                     End If
-'''                     sSQL = sSQL _
-'''                          & SQLNotas & " = " & Nota_TAI & " " _
-'''                          & "WHERE Item = '" & NumEmpresa & "' " _
-'''                          & "AND Periodo = '" & Periodo_Contable & "' " _
-'''                          & "AND CodMat = '" & CodMat & "' " _
-'''                          & "AND CodE = '" & CodigoP & "' " _
-'''                          & "AND Codigo = '" & CodigoCli & "' "
-'''                     Ejecutar_SQL_SP sSQL
-'''                  Else
-'''                     sSQL = "UPDATE Trans_Asistencia SET " _
-'''                          & Evaluacion & " = " & Nota_TAI & ", " _
-'''                          & SQLDias & " = " & Dias_L & ", " _
-'''                          & SQLFJ & " = " & Faltas_Just & ", " _
-'''                          & SQLFI & " = " & Faltas_Injust & ", " _
-'''                          & SQLAtrasos & " = " & Atrasos & " " _
-'''                          & "WHERE Item = '" & NumEmpresa & "' " _
-'''                          & "AND Periodo = '" & Periodo_Contable & "' " _
-'''                          & "AND CodMat = '" & CodMat & "' " _
-'''                          & "AND CodE = '" & CodigoP & "' " _
-'''                          & "AND Codigo = '" & CodigoCli & "' "
-'''                     Ejecutar_SQL_SP sSQL
-'''
-'''                     If CodMatP = Ninguno Then
-'''                        sSQL = "UPDATE Trans_Notas SET "
-'''                     Else
-'''                        sSQL = "UPDATE Trans_Notas_Auxiliares SET "
-'''                     End If
-'''                     sSQL = sSQL _
-'''                          & SQLTAI & " = " & Nota_TAI & ", " _
-'''                          & SQLAIC & " = " & Nota_AIC & ", " _
-'''                          & SQLAGC & " = " & Nota_AGC & ", " _
-'''                          & SQLL & " = " & Nota_L & ", " _
-'''                          & SQLProm & " = " & Nota_Prom & ", " _
-'''                          & SQLExaP & " = " & Nota_ExaP & " " _
-'''                          & "WHERE Item = '" & NumEmpresa & "' " _
-'''                          & "AND Periodo = '" & Periodo_Contable & "' " _
-'''                          & "AND CodMat = '" & CodMat & "' " _
-'''                          & "AND CodE = '" & CodigoP & "' " _
-'''                          & "AND Codigo = '" & CodigoCli & "' "
-'''                     Ejecutar_SQL_SP sSQL
-'''                  End If
-'''               Else
-'''                  If CodMatP = Ninguno Then
-'''                     sSQL = "UPDATE Trans_Notas SET "
-'''                  Else
-'''                     sSQL = "UPDATE Trans_Notas_Auxiliares SET "
-'''                  End If
-'''                  sSQL = sSQL _
-'''                       & SQLNotas & " = " & Nota_Alumno & " " _
-'''                       & "WHERE Item = '" & NumEmpresa & "' " _
-'''                       & "AND Periodo = '" & Periodo_Contable & "' " _
-'''                       & "AND CodMat = '" & CodMat & "' " _
-'''                       & "AND CodE = '" & CodigoP & "' " _
-'''                       & "AND Codigo = '" & CodigoCli & "' "
-'''                  Ejecutar_SQL_SP sSQL
-'''               End If
-'''           End If
-'''           Me.Caption = "Importar de FlexGrid a Sistema de Notas - " & Format$(F / Rango.NumFila2, "00%")
-'''      Next F
-'''  End With
-'''  DGExcelAdodc.Visible = True
-'''  RatonNormal
-'''End Sub
-'-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-'''Public Sub Importar_Informes_Materias()
-'''Dim F As Long
-'''Dim N As Long
-'''Dim E As Byte
-'''Dim Informe_Alumno As String
-'''
-'''   RatonReloj
-'''   DGExcelAdodc.Visible = False
-'''   CodMatP = Ninguno
-'''   Evaluacion = ""
-'''
-'''   sSQL = "SELECT * " _
-'''        & "FROM Catalogo_Periodo_Lectivo " _
-'''        & "WHERE Item = '" & NumEmpresa & "' " _
-'''        & "AND Periodo = '" & Periodo_Contable & "' "
-'''   Select_Adodc AdoAux, sSQL
-'''   With AdoAux.Recordset
-'''    If .RecordCount > 0 Then
-'''        If MidStrg(FormatoLibreta, 1, 9) = "QUIMESTRE" Then
-'''           If .Fields("NPQP1") Then Evaluacion = "Informe_PQ1"
-'''           If .Fields("NPQP2") Then Evaluacion = "Informe_PQ2"
-'''           If .Fields("NPQP3") Then Evaluacion = "Informe_PQ3"
-'''           If .Fields("NPQEX") Then Evaluacion = "Informe_PQ"
-'''           If .Fields("NSQP1") Then Evaluacion = "Informe_SQ1"
-'''           If .Fields("NSQP2") Then Evaluacion = "Informe_SQ2"
-'''           If .Fields("NSQP3") Then Evaluacion = "Informe_SQ3"
-'''           If .Fields("NSQEX") Then Evaluacion = "Informe_SQ"
-'''           If .Fields("NSUPL") Then Evaluacion = ""
-'''           If .Fields("NREME") Then Evaluacion = ""
-'''        End If
-'''    End If
-'''   End With
-'''  With AdoExcelAdodc.Recordset
-'''     'Empezamos la importacion de las facturas
-'''       For F = 1 To .rows - 1
-'''          .Row = F
-'''            For N = 1 To .cols - 1
-'''               .Col = N
-'''                Codigo = TrimStrg(Replace(.Text, "'", ""))
-'''                Codigo = TrimStrg(Replace(Codigo, "/", " "))
-'''                Codigo = TrimStrg(Replace(Codigo, "&", " "))
-'''               'MsgBox Codigo & "...."
-'''                Select Case N
-'''                  Case 1: NombreCliente = Codigo
-'''                  Case 2: Informe_Alumno = TrimStrg(MidStrg(Codigo, 1, 100))
-'''                  Case 3: CodMat = Codigo
-'''                  Case 4: CodigoCli = Codigo
-'''                  Case 5: TipoCta = Codigo
-'''                  Case 6: CodigoP = Codigo
-'''                End Select
-'''            Next N
-'''            If F = 1 Then
-'''               sSQL = "SELECT * " _
-'''                    & "FROM Catalogo_Estudiantil " _
-'''                    & "WHERE Item = '" & NumEmpresa & "' " _
-'''                    & "AND Periodo = '" & Periodo_Contable & "' " _
-'''                    & "AND CodMat = '" & CodMat & "' " _
-'''                    & "AND MidStrg(CodigoE,1," & Len(CodigoP) & ") = '" & CodigoP & "' "
-'''               Select_Adodc AdoAux, sSQL
-'''               If AdoAux.Recordset.RecordCount > 0 Then CodMatP = AdoAux.Recordset.Fields("CodMatP")
-'''               'MsgBox CodMatP & vbCrLf & sSQL
-'''            End If
-'''
-'''            If Evaluacion <> "" And Len(Informe_Alumno) > 1 Then
-'''               If MidStrg(FormatoLibreta, 1, 9) = "QUIMESTRE" Then
-'''                  If CodMatP = Ninguno Then
-'''                     sSQL = "UPDATE Trans_Notas SET "
-'''                  Else
-'''                     sSQL = "UPDATE Trans_Notas_Auxiliares SET "
-'''                  End If
-'''                  sSQL = sSQL _
-'''                       & Evaluacion & " = '" & Informe_Alumno & "' " _
-'''                       & "WHERE Item = '" & NumEmpresa & "' " _
-'''                       & "AND Periodo = '" & Periodo_Contable & "' " _
-'''                       & "AND CodMat = '" & CodMat & "' " _
-'''                       & "AND CodE = '" & CodigoP & "' " _
-'''                       & "AND Codigo = '" & CodigoCli & "' "
-'''                  Ejecutar_SQL_SP sSQL
-'''               End If
-'''            End If
-'''            Me.Caption = "Importar de FlexGrid a Sistema de Informes académicos - " & Format$(F / Rango.NumFila2, "00%")
-'''      Next F
-'''  End With
-'''  DGExcelAdodc.Visible = True
-'''  RatonNormal
-'''End Sub
 '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 '''Public Sub Transferir_Plan_Cuentas()
 '''Dim F As Long
@@ -6099,67 +4296,6 @@ End Sub
 '''           End If
 '''           Parpadear = Not Parpadear
 '''      Next F
-'''  End With
-'''  RatonNormal
-'''End Sub
-'-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-'''Public Sub Importar_Codigos_Retenciones()
-'''Dim F As Long
-'''Dim N As Long
-'''Dim Parpadear As Boolean
-'''  RatonReloj
-'''  Parpadear = True
-'''  With AdoExcelAdodc.Recordset
-'''   If .rows > 0 Then
-'''      .Row = 1
-'''      .Col = 1
-'''       Mifecha = TrimStrg(Replace(.Text, "'", ""))
-'''       sSQL = "DELETE * " _
-'''            & "FROM Tipo_Concepto_Retencion " _
-'''            & "WHERE Fecha_Inicio >= #" & BuscarFecha(Mifecha) & "# "
-'''       Ejecutar_SQL_SP sSQL
-'''       sSQL = "SELECT * " _
-'''            & "FROM Tipo_Concepto_Retencion " _
-'''            & "WHERE Fecha_Inicio >= #" & BuscarFecha(Mifecha) & "# "
-'''       Select_Adodc AdoAux, sSQL
-'''      'Empezamos la importacion de las facturas
-'''       For F = 1 To .rows - 1
-'''          .Row = F
-'''           For N = 1 To .cols - 1
-'''              .Col = N
-'''               Codigo = TrimStrg(Replace(.Text, "'", ""))
-'''               Select Case N
-'''                 Case 1: TipoCta = Codigo     'Fecha_Inicio
-'''                 Case 2: TipoDoc = Codigo     'Fecha_Final
-'''                 Case 3: Codigo2 = Codigo     'Codigo
-'''                 Case 4: Cuenta = Codigo      'Concepto Retención en la Fuente de Impuesto a la Renta
-'''                 Case 5: Codigo1 = Codigo     'Porcentaje
-'''                 Case 6: Codigo3 = Codigo     'Tipo_Pago
-'''                 Case 7: Codigo4 = Codigo     'Ingresar_Porcentaje
-'''                 Case 8: CodigoB = Codigo     'Sustento
-'''               End Select
-'''           Next N
-'''          'Insertamos el Codigo nuevo
-'''           If Codigo2 <> Ninguno Then
-'''              AdoAux.Recordset.AddNew
-'''              AdoAux.Recordset.Fields("Fecha_Inicio") = TipoCta
-'''              AdoAux.Recordset.Fields("Fecha_Final") = TipoDoc
-'''              AdoAux.Recordset.Fields("Codigo") = Codigo2
-'''              AdoAux.Recordset.Fields("Concepto") = Cuenta
-'''              AdoAux.Recordset.Fields("Porcentaje") = Val(Codigo1)
-'''              AdoAux.Recordset.Fields("Ingresar_Porcentaje") = Codigo4
-'''              AdoAux.Recordset.Fields("T") = CodigoB
-'''              AdoAux.Recordset.Fields("Tipo_Pago") = TrimStrg(MidStrg(Codigo3, 1, 1))
-'''              AdoAux.Recordset.Update
-'''           End If
-'''           If Parpadear Then
-'''              Me.Caption = Format$(F / Rango.NumFila2, "00%") & " Migracion en Curso..."
-'''           Else
-'''              Me.Caption = Format$(F / Rango.NumFila2, "00%")
-'''           End If
-'''           Parpadear = Not Parpadear
-'''       Next F
-'''   End If
 '''  End With
 '''  RatonNormal
 '''End Sub
@@ -6346,400 +4482,6 @@ End Sub
 '''  Progreso_Final
 '''End Sub
 '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-'''Public Sub Importar_Compras()
-'''Dim I As Long
-'''Dim N As Long
-'''Dim SerieF1 As String
-'''Dim SerieF2 As String
-'''Dim SecuencialF As Long
-'''Dim SerieR1 As String
-'''Dim SerieR2 As String
-'''Dim SecuencialR As Long
-'''
-''''Dim NumTrans As Long
-''''Dim NumTransR As Long
-'''Dim Tot_Propinas As Currency
-'''
-'''Dim Cta_Gasto As String
-'''
-'''Dim PagoLocExt As String
-'''Dim PaisEfecPago As String
-'''Dim AplicConvDobTrib As String
-'''Dim PagExtSujRetNorLeg As String
-'''Dim FormaPago As String
-'''
-'''Dim Cta_Ret_1 As String
-'''Dim Cta_Ret_1_75 As String
-'''Dim Cta_Ret_2 As String
-'''Dim Cta_Ret_2_75 As String
-'''Dim Cta_Ret_5 As String
-'''Dim Cta_Ret_8 As String
-'''Dim Cta_Ret_10 As String
-'''Dim Cta_Ret_25 As String
-'''Dim Cta_Ret_IVA_10 As String
-'''Dim Cta_Ret_IVA_20 As String
-'''Dim Cta_Ret_IVA_30 As String
-'''Dim Cta_Ret_IVA_50 As String
-'''Dim Cta_Ret_IVA_70 As String
-'''Dim Cta_Ret_IVAB_100 As String
-'''Dim Cta_Ret_IVAS_100 As String
-'''
-'''Dim Total_Ret_1 As Currency
-'''Dim Total_Ret_1_75 As Currency
-'''Dim Total_Ret_2 As Currency
-'''Dim Total_Ret_2_75 As Currency
-'''Dim Total_Ret_5 As Currency
-'''Dim Total_Ret_8 As Currency
-'''Dim Total_Ret_10 As Currency
-'''Dim Total_Ret_25 As Currency
-'''Dim Total_Ret_IVA_10 As Currency
-'''Dim Total_Ret_IVA_20 As Currency
-'''Dim Total_Ret_IVA_30 As Currency
-'''Dim Total_Ret_IVA_50 As Currency
-'''Dim Total_Ret_IVA_70 As Currency
-'''Dim Total_Ret_IVAB_100 As Currency
-'''Dim Total_Ret_IVAS_100 As Currency
-'''
-'''  Cta_Ret_1 = Leer_Seteos_Ctas("Cta_Ret_1")
-'''  Cta_Ret_1_75 = Leer_Seteos_Ctas("Cta_Ret_1.75")
-'''  Cta_Ret_2 = Leer_Seteos_Ctas("Cta_Ret_2")
-'''  Cta_Ret_2_75 = Leer_Seteos_Ctas("Cta_Ret_2.75")
-'''  Cta_Ret_5 = Leer_Seteos_Ctas("Cta_Ret_5")
-'''  Cta_Ret_8 = Leer_Seteos_Ctas("Cta_Ret_8")
-'''  Cta_Ret_10 = Leer_Seteos_Ctas("Cta_Ret_10")
-'''  Cta_Ret_25 = Leer_Seteos_Ctas("Cta_Ret_10")
-'''
-'''  Cta_Ret_IVA_10 = Leer_Seteos_Ctas("Cta_Ret_IVA_30")
-'''  Cta_Ret_IVA_20 = Leer_Seteos_Ctas("Cta_Ret_IVA_30")
-'''  Cta_Ret_IVA_30 = Leer_Seteos_Ctas("Cta_Ret_IVA_30")
-'''  Cta_Ret_IVA_50 = Leer_Seteos_Ctas("Cta_Ret_IVA_30")
-'''  Cta_Ret_IVA_70 = Leer_Seteos_Ctas("Cta_Ret_IVA_70")
-'''  Cta_Ret_IVAB_100 = Leer_Seteos_Ctas("Cta_Ret_IVAS_100")
-'''  Cta_Ret_IVAS_100 = Leer_Seteos_Ctas("Cta_Ret_IVAS_100")
-'''
-'''  'Encerar_Facturas
-''''''  FA.Cod_CxC = DCLinea.Text
-''''''  Lineas_De_CxC FA
-''''''  SerieFactura = FA.Serie
-''''''  Fecha_Vence = FA.Vencimiento
-''''''  Autorizacion = FA.Autorizacion
-''''''  Cta_Cobrar = FA.Cta_CxP
-'''  Eliminar_Asientos_SP True
-'''  Bandera = False
-'''  Evaluar = True
-''''  NumTrans = Maximo_De("Trans_Compras", "ID")
-''''  NumTransR = Maximo_De("Trans_Air", "ID")
-''' 'MsgBox Tipo_Carga
-'''  With AdoExcelAdodc.Recordset
-'''       For i = 1 To .rows - 1
-'''          .Row = i
-'''           CodigoCli = "9999999999"
-'''          .Col = 1
-'''           TipoDoc = TrimStrg(.Text)
-'''          .Col = 2
-'''           If Len(TrimStrg(.Text)) = 2 Then TipoCta = TrimStrg(.Text) Else TipoCta = "01"
-'''          .Col = 3
-'''           Mifecha = TrimStrg(.Text)
-'''          .Col = 9
-'''           NombreCliente = UCaseStrg(TrimStrg(.Text))
-'''          'MsgBox NombreCliente
-'''          .Col = 4
-'''           Codigo = TrimStrg(Replace(.Text, "'", ""))
-'''          'RUC/Cedula/Consumidor Final
-'''           If Len(Codigo) > 1 Then
-'''              If IsNumeric(Codigo) And Len(Codigo) = 12 Then Codigo = "0" & Codigo
-'''              If IsNumeric(Codigo) And Len(Codigo) = 9 Then Codigo = "0" & Codigo
-'''              DigVerif = Digito_Verificador( Codigo)
-'''              Caracter = MidStrg(Codigo, 10, 1)
-'''              CodigoCli = Tipo_RUC_CI.Codigo_RUC_CI
-'''           End If
-'''           CI_Representante = Codigo
-'''          .Col = 5
-'''           Autorizacion = TrimStrg(.Text)
-'''          .Col = 6
-'''           SerieR1 = Format$(Val(TrimStrg(MidStrg(.Text, 1, 3))), "000")
-'''           SerieR2 = Format$(Val(TrimStrg(MidStrg(.Text, 5, 3))), "000")
-'''           SecuencialR = Val(TrimStrg(MidStrg(.Text, 9, 10)))
-'''          .Col = 7
-'''           SerieF1 = Format$(Val(TrimStrg(MidStrg(.Text, 1, 3))), "000")
-'''           SerieF2 = Format$(Val(TrimStrg(MidStrg(.Text, 5, 3))), "000")
-'''           SecuencialF = Val(TrimStrg(MidStrg(.Text, 9, 10)))
-'''          .Col = 8
-'''           Cta_Gasto = TrimStrg(.Text)
-'''          .Col = 10
-'''          'Concepto que no se procesa
-'''          .Col = 11
-'''           Total_Sin_No_IVA = Redondear(Val(TrimStrg(.Text)), 2)
-'''          'No Objeto de IVA
-'''          .Col = 12
-'''           Total_Sin_IVA = Redondear(Val(TrimStrg(.Text)), 2)
-'''          .Col = 13
-'''           Total_Con_IVA = Redondear(Val(TrimStrg(.Text)), 2)
-'''          .Col = 14
-'''           Total_IVA = Redondear(Val(TrimStrg(.Text)), 2)
-'''          .Col = 15
-'''           Total = Redondear(Val(TrimStrg(.Text)), 2)
-'''           SubTotal = Total_Con_IVA + Total_Sin_IVA + Total_Sin_No_IVA
-'''
-'''          .Col = 16   '1%
-'''           Total_Ret_1 = Redondear(Val(TrimStrg(.Text)), 2)
-'''          .Col = 17   '1.75%
-'''           Total_Ret_1_75 = Redondear(Val(TrimStrg(.Text)), 2)
-'''          .Col = 18
-'''           Total_Ret_2 = Redondear(Val(TrimStrg(.Text)), 2)
-'''          .Col = 19
-'''           Total_Ret_2_75 = Redondear(Val(TrimStrg(.Text)), 2)
-'''          .Col = 20
-'''           Total_Ret_5 = Redondear(Val(TrimStrg(.Text)), 2)
-'''          .Col = 21
-'''           Total_Ret_8 = Redondear(Val(TrimStrg(.Text)), 2)
-'''          .Col = 22
-'''           Total_Ret_10 = Redondear(Val(TrimStrg(.Text)), 2)
-'''          .Col = 23
-'''           Total_Ret_25 = Redondear(Val(TrimStrg(.Text)), 2)
-'''          .Col = 24
-'''           Total_Ret_IVA_10 = Redondear(Val(TrimStrg(.Text)), 2)
-'''          .Col = 25
-'''           Total_Ret_IVA_20 = Redondear(Val(TrimStrg(.Text)), 2)
-'''          .Col = 26
-'''           Total_Ret_IVA_30 = Redondear(Val(TrimStrg(.Text)), 2)
-'''          .Col = 27
-'''           Total_Ret_IVA_50 = Redondear(Val(TrimStrg(.Text)), 2)
-'''          .Col = 28
-'''           Total_Ret_IVA_70 = Redondear(Val(TrimStrg(.Text)), 2)
-'''          .Col = 29
-'''           Total_Ret_IVAB_100 = Redondear(Val(TrimStrg(.Text)), 2)
-'''          .Col = 30
-'''           Total_Ret_IVAS_100 = Redondear(Val(TrimStrg(.Text)), 2)
-'''          .Col = 33
-'''           CodigoP = Val(TrimStrg(.Text))    'Codigo de Retencion
-'''          .Col = 34
-'''           AutorizaRet = TrimStrg(.Text)
-'''          .Col = 35
-'''           FechaTexto = TrimStrg(.Text)       'Caducidad de la Factura
-'''          .Col = 36
-'''           Cta_CajaG = TrimStrg(.Text)
-'''          .Col = 37
-'''           If Len(TrimStrg(.Text)) = 2 Then PagoLocExt = TrimStrg(.Text) Else PagoLocExt = "01"
-'''          .Col = 38
-'''           If Len(TrimStrg(.Text)) = 2 Then PaisEfecPago = TrimStrg(.Text) Else PaisEfecPago = "NA"
-'''          .Col = 39
-'''           If Len(TrimStrg(.Text)) = 2 Then AplicConvDobTrib = TrimStrg(.Text) Else AplicConvDobTrib = "NA"
-'''          .Col = 40
-'''           If Len(TrimStrg(.Text)) = 2 Then PagExtSujRetNorLeg = TrimStrg(.Text) Else PagExtSujRetNorLeg = "NA"
-'''          .Col = 41
-'''           If Len(TrimStrg(.Text)) = 2 Then FormaPago = TrimStrg(.Text) Else FormaPago = "01"
-'''          .Col = 42
-'''           SubModuloGasto = TrimStrg(.Text)
-'''          .Col = 43
-'''           SubModuloCxCxP = TrimStrg(.Text)
-'''
-'''          'MsgBox NombreCliente
-'''           If IsDate(Mifecha) Then
-'''              If CI_Representante = "9999999999999" Then CI_Representante = Ninguno
-'''              If CI_Representante <> Ninguno Then
-'''                 sSQL = "SELECT Codigo, Cliente " _
-'''                      & "FROM Clientes " _
-'''                      & "WHERE Codigo = '" & CodigoCli & "' "
-'''                 Select_Adodc AdoAux, sSQL
-'''                 If AdoAux.Recordset.RecordCount <= 0 Then
-'''                    SetAdoAddNew "Clientes"
-'''                    SetAdoFields "T", Normal
-'''                    SetAdoFields "Codigo", CodigoCli
-'''                    SetAdoFields "TD", Tipo_RUC_CI.Tipo_Beneficiario
-'''                    SetAdoFields "CI_RUC", CI_Representante
-'''                    SetAdoFields "Cliente", UCaseStrg(NombreCliente)
-'''                    SetAdoFields "Fecha", FechaSistema
-'''                    SetAdoFields "Direccion", "SD"
-'''                    SetAdoFields "DirNumero", "SN"
-'''                    SetAdoFields "Ciudad", "QUITO"
-'''                    SetAdoFields "Prov", "17"
-'''                    SetAdoFields "Pais", "593"
-'''                    SetAdoFields "CodigoU", CodigoUsuario
-'''                    SetAdoUpdate
-'''                 End If
-'''              End If
-'''              sSQL = "DELETE * " _
-'''                   & "FROM Trans_Compras " _
-'''                   & "WHERE Item = '" & NumEmpresa & "' " _
-'''                   & "AND Periodo = '" & Periodo_Contable & "' " _
-'''                   & "AND FechaEmision = #" & BuscarFecha(Mifecha) & "# " _
-'''                   & "AND IdProv = '" & CodigoCli & "' " _
-'''                   & "AND Establecimiento = '" & SerieF1 & "' " _
-'''                   & "AND PuntoEmision = '" & SerieF2 & "' " _
-'''                   & "AND Secuencial = " & SecuencialF & " " _
-'''                   & "AND TipoComprobante = " & Val(TipoDoc) & " " _
-'''                   & "AND Autorizacion = '" & Autorizacion & "' "
-'''              Ejecutar_SQL_SP sSQL
-'''              sSQL = "DELETE * " _
-'''                   & "FROM Trans_Air " _
-'''                   & "WHERE Item = '" & NumEmpresa & "' " _
-'''                   & "AND Periodo = '" & Periodo_Contable & "' " _
-'''                   & "AND IdProv = '" & CodigoCli & "' " _
-'''                   & "AND EstabRetencion = '" & SerieR1 & "' " _
-'''                   & "AND PtoEmiRetencion = '" & SerieR2 & "' " _
-'''                   & "AND SecRetencion = " & SecuencialR & " " _
-'''                   & "AND AutRetencion = '" & AutorizaRet & "' " _
-'''                   & "AND EstabFactura = '" & SerieF1 & "' " _
-'''                   & "AND PuntoEmiFactura = '" & SerieF2 & "' " _
-'''                   & "AND Factura_No = " & SecuencialF & " "
-'''              Ejecutar_SQL_SP sSQL
-'''             'Empezamos a grabar los datos de la retencion
-'''             'MsgBox Mifecha & vbCrLf & FechaTexto & vbCrLf & CodigoCli
-'''
-'''              SetAdoAddNew "Trans_Compras"
-'''              SetAdoFields "IdProv", CodigoCli
-'''              SetAdoFields "DevIva", "N"
-'''              SetAdoFields "CodSustento", TipoCta
-'''              SetAdoFields "TipoComprobante", Val(TipoDoc)
-'''              SetAdoFields "Establecimiento", SerieF1
-'''              SetAdoFields "PuntoEmision", SerieF2
-'''              SetAdoFields "Secuencial", SecuencialF
-'''              SetAdoFields "Autorizacion", Autorizacion
-'''              SetAdoFields "FechaEmision", Mifecha
-'''              SetAdoFields "FechaRegistro", Mifecha
-'''              SetAdoFields "FechaCaducidad", FechaTexto
-'''              If Total_IVA > 0 Then
-'''                 SetAdoFields "BaseImpGrav", Total_Con_IVA
-'''                 SetAdoFields "MontoIva", Total_IVA
-'''                 SetAdoFields "PorcentajeIva", 2
-'''              End If
-'''              SetAdoFields "BaseImponible", Total_Sin_IVA
-'''              SetAdoFields "BaseNoObjIVA", Total_Sin_No_IVA
-'''
-'''              If Total_Ret_IVA_10 > 0 Then
-'''                 SetAdoFields "MontoIvaBienes", Total_IVA
-'''                 SetAdoFields "PorRetBienes", 1
-'''                 SetAdoFields "ValorRetBienes", Total_Ret_IVA_10
-'''                 SetAdoFields "Porc_Bienes", "10"
-'''                 SetAdoFields "Cta_Bienes", Cta_Ret_IVA_10
-'''              End If
-'''              If Total_Ret_IVA_30 > 0 Then
-'''                 SetAdoFields "MontoIvaBienes", Total_IVA
-'''                 SetAdoFields "PorRetBienes", 1
-'''                 SetAdoFields "ValorRetBienes", Total_Ret_IVA_30
-'''                 SetAdoFields "Porc_Bienes", "30"
-'''                 SetAdoFields "Cta_Bienes", Cta_Ret_IVA_30
-'''              End If
-'''              If Total_Ret_IVAB_100 > 0 Then
-'''                 SetAdoFields "MontoIvaBienes", Total_IVA
-'''                 SetAdoFields "PorRetBienes", 1
-'''                 SetAdoFields "ValorRetBienes", Total_Ret_IVAB_100
-'''                 SetAdoFields "Porc_Bienes", "100"
-'''                 SetAdoFields "Cta_Bienes", Cta_Ret_IVAB_100
-'''              End If
-'''              If Total_Ret_IVA_20 > 0 Then
-'''                 SetAdoFields "MontoIvaServicios", Total_IVA
-'''                 SetAdoFields "PorRetServicios", 2
-'''                 SetAdoFields "ValorRetServicios", Total_Ret_IVA_20
-'''                 SetAdoFields "Porc_Servicios", "20"
-'''                 SetAdoFields "Cta_Servicio", Cta_Ret_IVA_20
-'''              End If
-'''              If Total_Ret_IVA_50 > 0 Then
-'''                 SetAdoFields "MontoIvaServicios", Total_IVA
-'''                 SetAdoFields "PorRetServicios", 2
-'''                 SetAdoFields "ValorRetServicios", Total_Ret_IVA_50
-'''                 SetAdoFields "Porc_Servicios", "50"
-'''                 SetAdoFields "Cta_Servicio", Cta_Ret_IVA_50
-'''              End If
-'''              If Total_Ret_IVA_70 > 0 Then
-'''                 SetAdoFields "MontoIvaServicios", Total_IVA
-'''                 SetAdoFields "PorRetServicios", 2
-'''                 SetAdoFields "ValorRetServicios", Total_Ret_IVA_70
-'''                 SetAdoFields "Porc_Servicios", "70"
-'''                 SetAdoFields "Cta_Servicio", Cta_Ret_IVA_70
-'''              End If
-'''              If Total_Ret_IVAS_100 > 0 Then
-'''                 SetAdoFields "MontoIvaServicios", Total_IVA
-'''                 SetAdoFields "PorRetServicios", 2
-'''                 SetAdoFields "ValorRetServicios", Total_Ret_IVAS_100
-'''                 SetAdoFields "Porc_Servicios", "100"
-'''                 SetAdoFields "Cta_Servicio", Cta_Ret_IVAS_100
-'''              End If
-'''              SetAdoFields "Cta_Pago", Cta_CajaG
-'''              SetAdoFields "Cta_Gasto", Cta_Gasto
-'''              SetAdoFields "PagoLocExt", PagoLocExt
-'''              SetAdoFields "PaisEfecPago", PaisEfecPago
-'''              SetAdoFields "AplicConvDobTrib", AplicConvDobTrib
-'''              SetAdoFields "PagExtSujRetNorLeg", PagExtSujRetNorLeg
-'''              SetAdoFields "FormaPago", FormaPago
-'''              SetAdoFields "Linea_SRI", 0
-'''              SetAdoFields "FechaEmiModificado", "000"
-'''              SetAdoFields "EstabModificado", "000"
-'''              SetAdoFields "PtoEmiModificado", "000"
-'''              SetAdoFields "SecModificado", "000"
-'''              SetAdoFields "AutModificado", "000"
-'''              SetAdoFields "T", Normal
-'''              SetAdoFields "TP", "NN"
-'''              SetAdoFields "Numero", -1
-'''              SetAdoFields "Fecha", Mifecha
-'''              SetAdoUpdate
-'''              'MsgBox Total_Sin_IVA & vbCrLf & Total_Con_IVA & vbCrLf & NombreCliente
-''''              NumTrans = NumTrans + 1
-'''             'RETENCION EN LA FUENTE
-'''             'MsgBox CodigoP
-'''              Total_Ret = Total_Ret_1 + Total_Ret_1_75 + Total_Ret_2 + Total_Ret_2_75 + Total_Ret_5 + Total_Ret_8 + Total_Ret_10 + Total_Ret_25
-'''              SetAdoAddNew "Trans_Air"
-'''              SetAdoFields "CodRet", CodigoP
-'''              SetAdoFields "BaseImp", SubTotal
-'''              SetAdoFields "ValRet", Total_Ret
-'''              SetAdoFields "EstabRetencion", SerieR1
-'''              SetAdoFields "PtoEmiRetencion", SerieR2
-'''              SetAdoFields "SecRetencion", SecuencialR
-'''              SetAdoFields "AutRetencion", AutorizaRet
-'''              SetAdoFields "Tipo_Trans", "C"
-'''              SetAdoFields "IdProv", CodigoCli
-'''
-'''              If Total_Ret_1 > 0 Then
-'''                 SetAdoFields "Cta_Retencion", Cta_Ret_1
-'''                 SetAdoFields "Porcentaje", 0.01
-'''              End If
-'''              If Total_Ret_1_75 > 0 Then
-'''                 SetAdoFields "Cta_Retencion", Cta_Ret_1_75
-'''                 SetAdoFields "Porcentaje", 0.0175
-'''              End If
-'''              If Total_Ret_2 > 0 Then
-'''                 SetAdoFields "Cta_Retencion", Cta_Ret_2
-'''                 SetAdoFields "Porcentaje", 0.02
-'''              End If
-'''              If Total_Ret_2_75 > 0 Then
-'''                 SetAdoFields "Cta_Retencion", Cta_Ret_2_75
-'''                 SetAdoFields "Porcentaje", 0.0275
-'''              End If
-'''              If Total_Ret_5 > 0 Then
-'''                 SetAdoFields "Cta_Retencion", Cta_Ret_5
-'''                 SetAdoFields "Porcentaje", 0.05
-'''              End If
-'''              If Total_Ret_8 > 0 Then
-'''                 SetAdoFields "Cta_Retencion", Cta_Ret_8
-'''                 SetAdoFields "Porcentaje", 0.08
-'''              End If
-'''              If Total_Ret_10 > 0 Then
-'''                 SetAdoFields "Cta_Retencion", Cta_Ret_10
-'''                 SetAdoFields "Porcentaje", 0.1
-'''              End If
-'''              If Total_Ret_25 > 0 Then
-'''                 SetAdoFields "Cta_Retencion", Cta_Ret_25
-'''                 SetAdoFields "Porcentaje", 0.25
-'''              End If
-'''              SetAdoFields "EstabFactura", SerieF1
-'''              SetAdoFields "PuntoEmiFactura", SerieF2
-'''              SetAdoFields "Factura_No", SecuencialF
-'''              SetAdoFields "Linea_SRI", 0
-'''              SetAdoFields "T", Normal
-'''              SetAdoFields "TP", "NN"
-'''              SetAdoFields "Numero", -1
-'''              SetAdoFields "Fecha", Mifecha
-'''              SetAdoUpdate
-'''
-''''              NumTransR = NumTransR + 1
-'''           End If
-'''           Me.Caption = "Revisando Datos en el excel: " & i & " de " & .rows - 1 & ", Fecha: " & Mifecha & ", Proveedor: " & NombreCliente
-'''      Next i
-'''  End With
-'''End Sub
-'-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-'-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 '''Public Sub Importar_Sobrantes_Faltantes()
 '''Dim I As Long
 '''Dim N As Long
@@ -6859,98 +4601,6 @@ End Sub
 '''  Debe = 0
 '''End Sub
 '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-'-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-'''Public Sub Importar_Parroquias()
-'''Dim I As Long
-'''Dim N As Long
-'''Dim p As Long
-'''Dim D As Long
-'''Dim Dato() As String
-'''
-'''  FechaTexto = FechaSistema
-'''  With AdoExcelAdodc.Recordset
-'''       ReDim Dato(.cols) As String
-'''      'MsgBox .Rows & vbCrLf & .Cols
-'''       For i = 1 To .rows - 1
-'''          .Row = i
-'''           For N = 1 To .cols - 1
-'''              .Col = N
-'''               Codigo = Replace(.Text, "'", "")
-'''               Codigo = Replace(Codigo, "-", "")
-'''               Codigo = Replace(Codigo, "´", "")
-'''               Codigo = Replace(Codigo, "`", "")
-'''               Codigo = TrimStrg(Codigo)
-'''               If Codigo = "" Then Codigo = Ninguno
-'''               Dato(.Col) = Codigo
-'''           Next N
-'''           sSQL = "SELECT * " _
-'''                & "FROM Trans_Parroquias " _
-'''                & "WHERE Item = '" & NumEmpresa & "' " _
-'''                & "AND Periodo = '" & Periodo_Contable & "' " _
-'''                & "AND Beneficiario = '" & Dato(1) & "' "
-'''           Select_Adodc AdoAux, sSQL
-'''           If AdoAux.Recordset.RecordCount <= 0 Then
-'''              SetAdoAddNew "Trans_Parroquias"
-'''              SetAdoFields "T", Normal
-'''              SetAdoFields "Fecha", FechaSistema
-'''              SetAdoFields "Cedula", Ninguno
-'''              SetAdoFields "Cedula_P", Ninguno
-'''              SetAdoFields "Cedula_M", Ninguno
-'''              SetAdoFields "Beneficiario", Dato(1)
-'''              Select Case Tipo_Carga
-'''                Case 50: SetAdoFields "Tipo_Certificado", "BAUTIZO"
-'''                         p = InStr(Dato(2), " Y ")
-'''                         CodigoA = TrimStrg(MidStrg(Dato(2), 1, p))
-'''                         CodigoB = TrimStrg(MidStrg(Dato(2), p + 2, Len(Dato(2))))
-'''                         If CodigoA = "" Then CodigoA = Ninguno
-'''                         If CodigoB = "" Then Codigo = Ninguno
-'''                         Sacar_Ciudad_Fecha Dato(3), CodigoC, Mifecha
-'''                         Sacar_Ciudad_Fecha Dato(4), CodigoP, Fecha_Vence
-'''                         SetAdoFields "Padrinos", Dato(5)
-'''                         SetAdoFields "Ministro", Dato(6)
-'''                         SetAdoFields "Nota_Marginal", Dato(7)
-'''                         SetAdoFields "Tomo", Val(Dato(8))
-'''                         SetAdoFields "Pagina", Val(Dato(9))
-'''                         SetAdoFields "Numero", Val(Dato(10))
-'''                Case 51: SetAdoFields "Tipo_Certificado", "CONFIRMACION"
-'''                         CodigoA = Dato(2)
-'''                         CodigoB = Dato(3)
-'''                         CodigoC = NombreCiudad
-'''                         Mifecha = FechaSistema
-'''                         Sacar_Ciudad_Fecha Dato(6), CodigoP, Fecha_Vence
-'''                         SetAdoFields "Padrinos", Dato(4)
-'''                         SetAdoFields "Ministro", Dato(5)
-'''                         SetAdoFields "Tomo", Val(Dato(7))
-'''                         SetAdoFields "Pagina", Val(Dato(8))
-'''                         SetAdoFields "Numero", Val(Dato(9))
-'''                Case 52: SetAdoFields "Tipo_Certificado", "MATRIMONIO"
-'''                         CodigoA = Ninguno
-'''                         CodigoB = Dato(2)
-'''                         CodigoC = NombreCiudad
-'''                         Mifecha = FechaSistema
-'''                         Sacar_Ciudad_Fecha Dato(3), CodigoP, Fecha_Vence
-'''                         SetAdoFields "Padrinos", Dato(4)
-'''                         SetAdoFields "Ministro", Dato(5)
-'''                         SetAdoFields "Tomo", Val(Dato(6))
-'''                         SetAdoFields "Pagina", Val(Dato(7))
-'''                         SetAdoFields "Numero", Val(Dato(8))
-'''              End Select
-'''             'MsgBox CodigoA & vbCrLf & CodigoB & vbCrLf & CodigoC & vbCrLf & Mifecha & vbCrLf & CodigoP & vbCrLf & Fecha_Vence
-'''              SetAdoFields "Padre", CodigoA
-'''              SetAdoFields "Madre", CodigoB
-'''              SetAdoFields "Ciudad_Nacimiento", CodigoC
-'''              SetAdoFields "Fecha_Nacimiento", Mifecha
-'''              SetAdoFields "Ciudad_B_C_M", CodigoP
-'''              SetAdoFields "Fecha_B_C_M", Fecha_Vence
-'''              SetAdoUpdate
-''           End If
-'''           Me.Caption = "Importar de FlexGrid a Sistema de Parroquias: " & i & " de " & Rango.NumFila2
-'''      Next i
-'''  End With
-'''  Me.Caption = "IMPORTACION DE DATOS DE PARROQUIA"
-'''  MsgBox "Proceso Terminado con exito," & vbCrLf & "Revise los datos procesados"
-'''End Sub
-'-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 Public Sub Importar_Abonos_Transferencias()
 Dim AdoCatalogoDB As ADODB.Recordset
 Dim AdoSubCtaDB As ADODB.Recordset
@@ -6959,12 +4609,6 @@ Dim AdoSubCtaDB As ADODB.Recordset
     Progreso_Iniciar
     RatonReloj
     DGExcelAdodc.Visible = False
-    sSQL = "DELETE * " _
-         & "FROM Tabla_Temporal " _
-         & "WHERE Item = '" & NumEmpresa & "' " _
-         & "AND Modulo = '" & NumModulo & "' " _
-         & "AND CodigoU = '" & CodigoUsuario & "' "
-    Ejecutar_SQL_SP sSQL
     
     TextoImprimio = ""
     Importar_Abonos_Facturas_SP
@@ -6975,14 +4619,14 @@ Dim AdoSubCtaDB As ADODB.Recordset
     DGExcelAdodc.Visible = True
     RatonNormal
     Progreso_Final
-    If Len(TextoImprimio) > 2 Then FInfoError.Show
   
     FA.Factura = 0
     FA.Fecha_Corte = FechaSistema
     Actualizar_Abonos_Facturas_SP FA
     Me.Caption = "IMPORTACION DE ABONOS AUTOMATICOS"
+    SubidaExitosa = True
 End Sub
-'-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 Public Sub Importar_Empleados()
 Dim I As Long
 Dim N As Long
@@ -7032,7 +4676,7 @@ Dim Aplica_FP As Boolean
            TBeneficiario.Profesion = Ninguno
            Crear_Nuevo = False
            
-           Codigo = Dato_Campo(.Fields(9))
+           Codigo = Dato_Campo(.fields(9))
           'RUC/Cedula/Codigo Alumno/Consumidor Final
            If Len(Codigo) > 1 Then
               If IsNumeric(Codigo) Then
@@ -7053,10 +4697,10 @@ Dim Aplica_FP As Boolean
               TBeneficiario.TP = Tipo_RUC_CI.Tipo_Beneficiario
               TBeneficiario.Codigo = Tipo_RUC_CI.Codigo_RUC_CI
            End If
-           TBeneficiario.Fecha_A = Dato_Campo(.Fields(6))
+           TBeneficiario.Fecha_A = Dato_Campo(.fields(6))
            If TBeneficiario.Codigo <> Ninguno And IsDate(TBeneficiario.Fecha_A) Then
-              For IdField = 0 To .Fields.Count - 1
-                  If IdField = 100 Then Codigo = Dato_Campo(.Fields(IdField), True) Else Codigo = Dato_Campo(.Fields(IdField))
+              For IdField = 0 To .fields.Count - 1
+                  If IdField = 100 Then Codigo = Dato_Campo(.fields(IdField), True) Else Codigo = Dato_Campo(.fields(IdField))
                   Codigo = UCaseStrg(Codigo)
                   Codigo = Sin_Signos_Especiales(Codigo)
                   If Codigo = "" Then Codigo = Ninguno
@@ -7090,24 +4734,24 @@ Dim Aplica_FP As Boolean
                  AdoClientes.Recordset.MoveFirst
                  AdoClientes.Recordset.Find ("CI_RUC = '" & TBeneficiario.CI_RUC & "' ")
                  If Not AdoClientes.Recordset.EOF Then
-                    TBeneficiario.Codigo = AdoClientes.Recordset.Fields("Codigo")
-                    AdoClientes.Recordset.Fields("T") = TBeneficiario.T
-                    If IsDate(TBeneficiario.Fecha_N) Then AdoClientes.Recordset.Fields("Fecha_N") = TBeneficiario.Fecha_N
-                    If IsDate(TBeneficiario.Fecha) Then AdoClientes.Recordset.Fields("Fecha") = TBeneficiario.Fecha
-                    If Len(TBeneficiario.Cliente) > 1 Then AdoClientes.Recordset.Fields("Cliente") = TBeneficiario.Cliente
-                    If Len(TBeneficiario.Sexo) > 1 Then AdoClientes.Recordset.Fields("Sexo") = TBeneficiario.Sexo
-                    If Len(TBeneficiario.Email1) > 1 Then AdoClientes.Recordset.Fields("Email") = TBeneficiario.Email1
-                    If Len(TBeneficiario.Email2) > 1 Then AdoClientes.Recordset.Fields("Email2") = TBeneficiario.Email2
-                    If Len(TBeneficiario.Direccion) > 1 Then AdoClientes.Recordset.Fields("Direccion") = TBeneficiario.Direccion
-                    If Len(TBeneficiario.DirNumero) > 1 Then AdoClientes.Recordset.Fields("DirNumero") = TBeneficiario.DirNumero
-                    If Len(TBeneficiario.Telefono1) > 1 Then AdoClientes.Recordset.Fields("Telefono") = TBeneficiario.Telefono1
-                    If Len(TBeneficiario.Celular) > 1 Then AdoClientes.Recordset.Fields("Celular") = TBeneficiario.Celular
-                    If Len(TBeneficiario.Ciudad) > 1 Then AdoClientes.Recordset.Fields("Ciudad") = TBeneficiario.Ciudad
-                    If Len(TBeneficiario.Prov) > 1 Then AdoClientes.Recordset.Fields("Prov") = TBeneficiario.Prov
-                    If Len(TBeneficiario.Pais) > 1 Then AdoClientes.Recordset.Fields("Pais") = TBeneficiario.Pais
-                    If Len(TBeneficiario.Grupo_No) > 1 Then AdoClientes.Recordset.Fields("Grupo") = TBeneficiario.Grupo_No
+                    TBeneficiario.Codigo = AdoClientes.Recordset.fields("Codigo")
+                    AdoClientes.Recordset.fields("T") = TBeneficiario.T
+                    If IsDate(TBeneficiario.Fecha_N) Then AdoClientes.Recordset.fields("Fecha_N") = TBeneficiario.Fecha_N
+                    If IsDate(TBeneficiario.Fecha) Then AdoClientes.Recordset.fields("Fecha") = TBeneficiario.Fecha
+                    If Len(TBeneficiario.Cliente) > 1 Then AdoClientes.Recordset.fields("Cliente") = TBeneficiario.Cliente
+                    If Len(TBeneficiario.Sexo) > 1 Then AdoClientes.Recordset.fields("Sexo") = TBeneficiario.Sexo
+                    If Len(TBeneficiario.Email1) > 1 Then AdoClientes.Recordset.fields("Email") = TBeneficiario.Email1
+                    If Len(TBeneficiario.Email2) > 1 Then AdoClientes.Recordset.fields("Email2") = TBeneficiario.Email2
+                    If Len(TBeneficiario.Direccion) > 1 Then AdoClientes.Recordset.fields("Direccion") = TBeneficiario.Direccion
+                    If Len(TBeneficiario.DirNumero) > 1 Then AdoClientes.Recordset.fields("DirNumero") = TBeneficiario.DirNumero
+                    If Len(TBeneficiario.Telefono1) > 1 Then AdoClientes.Recordset.fields("Telefono") = TBeneficiario.Telefono1
+                    If Len(TBeneficiario.Celular) > 1 Then AdoClientes.Recordset.fields("Celular") = TBeneficiario.Celular
+                    If Len(TBeneficiario.Ciudad) > 1 Then AdoClientes.Recordset.fields("Ciudad") = TBeneficiario.Ciudad
+                    If Len(TBeneficiario.Prov) > 1 Then AdoClientes.Recordset.fields("Prov") = TBeneficiario.Prov
+                    If Len(TBeneficiario.Pais) > 1 Then AdoClientes.Recordset.fields("Pais") = TBeneficiario.Pais
+                    If Len(TBeneficiario.Grupo_No) > 1 Then AdoClientes.Recordset.fields("Grupo") = TBeneficiario.Grupo_No
                     'MsgBox Len(TBeneficiario.Profesion)
-                    If Len(TBeneficiario.Profesion) > 1 Then AdoClientes.Recordset.Fields("Profesion") = TBeneficiario.Profesion
+                    If Len(TBeneficiario.Profesion) > 1 Then AdoClientes.Recordset.fields("Profesion") = TBeneficiario.Profesion
                     AdoClientes.Recordset.Update
                  Else
                     Crear_Nuevo = True
@@ -7147,25 +4791,25 @@ Dim Aplica_FP As Boolean
                  AdoAux.Recordset.MoveFirst
                  AdoAux.Recordset.Find ("Codigo = '" & TBeneficiario.Codigo & "' ")
                  If Not AdoAux.Recordset.EOF Then
-                    If Len(TBeneficiario.Fecha_A) Then AdoAux.Recordset.Fields("Fecha") = TBeneficiario.Fecha_A
-                    If Len(TBeneficiario.Grupo_No) > 1 Then AdoAux.Recordset.Fields("Grupo_Rol") = TBeneficiario.Grupo_No
-                    If Len(TBeneficiario.Salario) > 1 Then AdoAux.Recordset.Fields("Salario") = TBeneficiario.Salario
-                    AdoAux.Recordset.Fields("T") = TBeneficiario.T
-                    AdoAux.Recordset.Fields("SN") = "1"
-                    AdoAux.Recordset.Fields("Valor_Hora") = Redondear(TBeneficiario.Salario / 240, 2)
-                    AdoAux.Recordset.Fields("Horas_Sem") = 60
-                    AdoAux.Recordset.Fields("Porc_IESS_Per") = 0.0945
-                    AdoAux.Recordset.Fields("Porc_IESS_Pat") = 0.1215
-                    AdoAux.Recordset.Fields("Cta_Transferencia") = Cta_Transf
-                    AdoAux.Recordset.Fields("Codigo_Banco") = TBeneficiario.Cod_Banco
-                    AdoAux.Recordset.Fields("Pagar_Fondo_Reserva") = Aplica_FP
-                    AdoAux.Recordset.Fields("Cta_Forma_Pago") = Cta_Aux
+                    If Len(TBeneficiario.Fecha_A) Then AdoAux.Recordset.fields("Fecha") = TBeneficiario.Fecha_A
+                    If Len(TBeneficiario.Grupo_No) > 1 Then AdoAux.Recordset.fields("Grupo_Rol") = TBeneficiario.Grupo_No
+                    If Len(TBeneficiario.Salario) > 1 Then AdoAux.Recordset.fields("Salario") = TBeneficiario.Salario
+                    AdoAux.Recordset.fields("T") = TBeneficiario.T
+                    AdoAux.Recordset.fields("SN") = "1"
+                    AdoAux.Recordset.fields("Valor_Hora") = Redondear(TBeneficiario.Salario / 240, 2)
+                    AdoAux.Recordset.fields("Horas_Sem") = 60
+                    AdoAux.Recordset.fields("Porc_IESS_Per") = 0.0945
+                    AdoAux.Recordset.fields("Porc_IESS_Pat") = 0.1215
+                    AdoAux.Recordset.fields("Cta_Transferencia") = Cta_Transf
+                    AdoAux.Recordset.fields("Codigo_Banco") = TBeneficiario.Cod_Banco
+                    AdoAux.Recordset.fields("Pagar_Fondo_Reserva") = Aplica_FP
+                    AdoAux.Recordset.fields("Cta_Forma_Pago") = Cta_Aux
                     If Len(TBeneficiario.Cte_Ahr_Otro) >= 3 Then
-                       AdoAux.Recordset.Fields("FP") = "T"
-                       AdoAux.Recordset.Fields("TC") = "BA"
+                       AdoAux.Recordset.fields("FP") = "T"
+                       AdoAux.Recordset.fields("TC") = "BA"
                     Else
-                       AdoAux.Recordset.Fields("FP") = "E"
-                       AdoAux.Recordset.Fields("TC") = "CJ"
+                       AdoAux.Recordset.fields("FP") = "E"
+                       AdoAux.Recordset.fields("TC") = "CJ"
                     End If
                     AdoAux.Recordset.Update
                  Else
@@ -7208,8 +4852,8 @@ Dim Aplica_FP As Boolean
   If Len(Lista_Clientes_Nuevos) > 2 Then
      TextoImprimio = Lista_Clientes_Nuevos
      Unload FImporta
-     FInfoError.Show
   End If
+  SubidaExitosa = True
 End Sub
 '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 '''Public Sub Importar_Catalogo_RolPagos()
@@ -8593,8 +6237,8 @@ Dim Tot_Propinas As Currency
          Progreso_Barra.Valor_Maximo = .RecordCount + 10
         .MoveFirst
          Do While Not .EOF
-            For IdField = 0 To .Fields.Count - 1
-                If IdField = 20 Then Codigo = Dato_Campo(.Fields(IdField), True) Else Codigo = Dato_Campo(.Fields(IdField), , True)
+            For IdField = 0 To .fields.Count - 1
+                If IdField = 20 Then Codigo = Dato_Campo(.fields(IdField), True) Else Codigo = Dato_Campo(.fields(IdField), , True)
                'Codigo = Sin_Signos_Especiales(Codigo)
                'MsgBox IdField & " - " & Codigo
                 Select Case IdField
@@ -8614,7 +6258,7 @@ Dim Tot_Propinas As Currency
                  & "FROM Clientes " _
                  & "WHERE CI_RUC = '" & Cl.CI_RUC & "' "
             Select_Adodc AdoAux, sSQL
-            If AdoAux.Recordset.RecordCount > 0 Then CodigoCli = AdoAux.Recordset.Fields("Codigo")
+            If AdoAux.Recordset.RecordCount > 0 Then CodigoCli = AdoAux.Recordset.fields("Codigo")
            'MsgBox CodigoCli
             If CodigoCli <> Ninguno Then
               'Grupo
@@ -8718,6 +6362,6 @@ Dim Tot_Propinas As Currency
      End If
     End With
     Progreso_Final
-    FInfoError.Show 1
+    SubidaExitosa = True
 End Sub
 

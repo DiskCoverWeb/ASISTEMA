@@ -1133,7 +1133,7 @@ Dim GrupoInv As String
   End If
   sSQL = sSQL _
        & "TK.Costo, TK.Total As Saldo, TK.Valor_Unitario, TK.Valor_Total, TK.Fecha_Exp, TK.TC, TK.Serie, TK.Factura, TK.Cta_Inv, TK.Contra_Cta, TK.Serie_No, TK.Lote_No, " _
-       & "TK.Codigo_Tra AS CI_RUC_CC, CM.Marca As 'Marca_Tipo_Proceso', TK.Detalle, TK.Centro_Costo As Beneficiario_Centro_Costo, TK.Orden_No, TK.ID " _
+       & "TK.Codigo_Tra AS CI_RUC_CC, CM.Marca As 'Marca_Tipo_Proceso', TK.Detalle, TK.Centro_Costo As Beneficiario_Centro_Costo, TK.Orden_No, TK.Cmds, TK.ID " _
        & "FROM Trans_Kardex As TK, Catalogo_Productos As CP, Catalogo_Marcas As CM " _
        & "WHERE TK.Item = '" & NumEmpresa & "' " _
        & "AND TK.Periodo = '" & Periodo_Contable & "' " _

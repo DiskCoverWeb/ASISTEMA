@@ -2648,12 +2648,13 @@ End Sub
 Private Sub DCAutorizacion_LostFocus()
  'Listamos las autorizaciones de facturas pendientes por cliente
   FA.Autorizacion = DCAutorizacion
+  If Not IsNumeric(DCFactura.Text) Then DCFactura.Text = "0"
   Factura_No = 0: Saldo = 0: Cotizacion = 0: TotalDolar = 0
   Saldo_ME = 0
   With AdoFactura.Recordset
    If .RecordCount > 0 Then
       .MoveFirst
-      .Find ("Factura Like '" & DCFactura.Text & "' ")
+      .Find ("Factura Like " & DCFactura.Text & " ")
        If Not .EOF Then
           Factura_No = .fields("Factura")
           LblObs.Caption = " " & .fields("Observacion")

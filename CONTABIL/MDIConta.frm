@@ -190,7 +190,7 @@ Begin VB.MDIForm MDIConta
          Caption         =   "-"
       End
       Begin VB.Menu MArchivoExcel 
-         Caption         =   "Archivos de Excel"
+         Caption         =   "Importar Archivos de Excel o CSV"
          Shortcut        =   ^I
       End
       Begin VB.Menu Mxx1 
@@ -390,6 +390,12 @@ Begin VB.MDIForm MDIConta
          Caption         =   "Prueba de Envio Correo Electronico"
          Shortcut        =   ^W
       End
+      Begin VB.Menu MVerificarSRI 
+         Caption         =   "Verificar si el SRI esta en linea"
+      End
+   End
+   Begin VB.Menu MVerifEstSRI 
+      Caption         =   "ESTADO DEL SRI"
    End
    Begin VB.Menu MAmbiente 
       Caption         =   "Ambiwnte"
@@ -881,6 +887,45 @@ Private Sub MSubIngEgr_Click()
   Control_Procesos Normal, "Catalogo de I/E/CC"
   RatonReloj
   ISubCtas.Show
+End Sub
+'Recepcion/Autorizacion
+'Produccion:
+'https://cel.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl
+'https://cel.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl
+'Prueba:
+'https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl
+'https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl
+
+Private Sub MVerifEstSRI_Click()
+Dim msg As String
+Dim MsgR As String
+Dim MsgA As String
+Dim Error As Boolean
+   Error = False
+   MsgR = Validar_URL("Servidor de Produccion en Recepcion del SRI", "https://cel.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl")
+   MsgA = Validar_URL("Servidor de Produccion en Autorizacion del SRI", "https://cel.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl")
+   msg = Replace(MsgR & vbCrLf & vbCrLf & MsgA, "-", "")
+   If MidStrg(MsgR, 1, 1) = "-" Then Error = True
+   If MidStrg(MsgA, 1, 1) = "-" Then Error = True
+   If Error Then
+      MsgBox msg, vbCritical, "Servidor del SRI con Error"
+   Else
+      MsgBox msg, vbInformation, "Servidor del SRI en línea"
+   End If
+End Sub
+
+Private Sub MVerificarSRI_Click()
+Dim miURL As String
+'    miURL = "https://www.google.com" ' Asegúrate de incluir http:// o https://
+    miURL = "https://cel.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl"
+'    miURL = "https://srienlinea.sri.gob.ec/"
+'    miURL = "https://diskcoversystem.com/"
+    'If UrlActiva(miURL) Then
+'    If ValidarURL(miURL) Then
+        MsgBox "¡La URL está activa y respondiendo!", vbInformation, "Éxito"
+'    Else
+        MsgBox "La URL está caída, no existe o hubo un rebasamiento de tiempo.", vbCritical, "Error"
+'    End If
 End Sub
 
 Private Sub NuevoUsu_Click()

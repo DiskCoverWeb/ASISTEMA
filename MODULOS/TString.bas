@@ -92,6 +92,7 @@ Global SerieRet As String
 Global SerieNC As String
 Global SerieNV As String
 Global SerieFE As String
+Global SerieFAUser As String
 Global CodigoDelBanco As String
 Global NombreGerente As String
 Global NombreContador As String
