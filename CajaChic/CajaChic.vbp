@@ -100,6 +100,7 @@ Module=JSON; ..\MODULOS\JSON.bas
 Class=cJSONScript; ..\CLASES\cJSONScript.cls
 Class=cStringBuilder; ..\CLASES\cStringBuilder.cls
 Form=..\GENERAL\FSRIAutorizaXML.frm
+Form=..\GENERAL\FInfMsg.frm
 IconForm="MDICajaChica"
 Startup="MDICajaChica"
 HelpFile=""

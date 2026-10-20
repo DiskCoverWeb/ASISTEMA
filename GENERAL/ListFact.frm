@@ -33,7 +33,7 @@ Begin VB.Form ListFact
       Height          =   3690
       Left            =   14595
       TabIndex        =   57
-      Top             =   3780
+      Top             =   4095
       Visible         =   0   'False
       Width           =   8520
       Begin VB.CommandButton Command1 
@@ -111,7 +111,7 @@ Begin VB.Form ListFact
       Height          =   3540
       Left            =   525
       TabIndex        =   66
-      Top             =   5880
+      Top             =   6195
       Visible         =   0   'False
       Width           =   11670
       _ExtentX        =   20585
@@ -159,7 +159,7 @@ Begin VB.Form ListFact
       ScrollBars      =   3  'Both
       TabIndex        =   67
       Text            =   "ListFact.frx":0D41
-      Top             =   5670
+      Top             =   5985
       Visible         =   0   'False
       Width           =   13770
    End
@@ -177,7 +177,7 @@ Begin VB.Form ListFact
       Left            =   105
       TabIndex        =   65
       ToolTipText     =   "<Alt+F9> Cambia el Producto, <Alt+F10> Cambia la Bodega, <Ctrl+S> Actualiza la Serie, "
-      Top             =   5460
+      Top             =   5775
       Width           =   14505
       _ExtentX        =   25585
       _ExtentY        =   3545
@@ -245,7 +245,7 @@ Begin VB.Form ListFact
       Height          =   540
       Left            =   105
       TabIndex        =   69
-      Top             =   10500
+      Top             =   10815
       Visible         =   0   'False
       Width           =   7890
       Begin VB.Label LabelHaber 
@@ -314,8 +314,8 @@ Begin VB.Form ListFact
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H00800000&
-      Height          =   1395
-      Left            =   9765
+      Height          =   1710
+      Left            =   10290
       MultiLine       =   -1  'True
       ScrollBars      =   2  'Vertical
       TabIndex        =   64
@@ -326,7 +326,7 @@ Begin VB.Form ListFact
       Height          =   750
       Left            =   105
       TabIndex        =   39
-      Top             =   9660
+      Top             =   9975
       Width           =   12930
       Begin VB.Label LabelSaldoAct 
          Alignment       =   1  'Right Justify
@@ -511,7 +511,7 @@ Begin VB.Form ListFact
       MaxLength       =   100
       TabIndex        =   23
       ToolTipText     =   "<Ctrl+O> Coloca una Observacion a la factura"
-      Top             =   3780
+      Top             =   4095
       Width           =   13035
    End
    Begin VB.TextBox TxtAutorizacion 
@@ -1035,7 +1035,7 @@ Begin VB.Form ListFact
       Height          =   390
       Left            =   105
       TabIndex        =   27
-      Top             =   5040
+      Top             =   5355
       Width           =   14400
       _ExtentX        =   25400
       _ExtentY        =   688
@@ -1066,13 +1066,13 @@ Begin VB.Form ListFact
       Height          =   330
       Left            =   105
       TabIndex        =   24
-      Top             =   9660
+      Top             =   9975
       Width           =   435
    End
    Begin MSAdodcLib.Adodc AdoDetAcomp 
       Height          =   330
       Left            =   2415
-      Top             =   6615
+      Top             =   6930
       Visible         =   0   'False
       Width           =   2325
       _ExtentX        =   4101
@@ -1119,7 +1119,7 @@ Begin VB.Form ListFact
    Begin MSAdodcLib.Adodc AdoDiarioCaja 
       Height          =   330
       Left            =   2415
-      Top             =   7245
+      Top             =   7560
       Visible         =   0   'False
       Width           =   2220
       _ExtentX        =   3916
@@ -1166,7 +1166,7 @@ Begin VB.Form ListFact
    Begin MSAdodcLib.Adodc AdoDetalle 
       Height          =   330
       Left            =   210
-      Top             =   6615
+      Top             =   6930
       Visible         =   0   'False
       Width           =   2220
       _ExtentX        =   3916
@@ -1213,7 +1213,7 @@ Begin VB.Form ListFact
    Begin MSAdodcLib.Adodc AdoFactura 
       Height          =   330
       Left            =   210
-      Top             =   6930
+      Top             =   7245
       Visible         =   0   'False
       Width           =   2220
       _ExtentX        =   3916
@@ -1260,7 +1260,7 @@ Begin VB.Form ListFact
    Begin MSAdodcLib.Adodc AdoArticulo 
       Height          =   330
       Left            =   210
-      Top             =   7245
+      Top             =   7560
       Visible         =   0   'False
       Width           =   2220
       _ExtentX        =   3916
@@ -1306,7 +1306,7 @@ Begin VB.Form ListFact
    End
    Begin MSComctlLib.ImageList ImageList1 
       Left            =   13560
-      Top             =   9675
+      Top             =   9990
       _ExtentX        =   1005
       _ExtentY        =   1005
       BackColor       =   -2147483643
@@ -1449,7 +1449,7 @@ Begin VB.Form ListFact
    Begin MSAdodcLib.Adodc AdoEjecutivo 
       Height          =   330
       Left            =   2415
-      Top             =   6930
+      Top             =   7245
       Visible         =   0   'False
       Width           =   2325
       _ExtentX        =   4101
@@ -1553,7 +1553,7 @@ Begin VB.Form ListFact
             ImageIndex      =   25
             Style           =   5
             BeginProperty ButtonMenus {66833FEC-8583-11D1-B16A-00C0F0283628} 
-               NumButtonMenus  =   3
+               NumButtonMenus  =   4
                BeginProperty ButtonMenu1 {66833FEE-8583-11D1-B16A-00C0F0283628} 
                   Key             =   "Mail_FA"
                   Text            =   "Enviar Email Factura"
@@ -1565,6 +1565,10 @@ Begin VB.Form ListFact
                BeginProperty ButtonMenu3 {66833FEE-8583-11D1-B16A-00C0F0283628} 
                   Key             =   "Mail_GR"
                   Text            =   "Enviar Email Guia de Remision"
+               EndProperty
+               BeginProperty ButtonMenu4 {66833FEE-8583-11D1-B16A-00C0F0283628} 
+                  Key             =   "Mail_OP"
+                  Text            =   "Enviar Email Orden Produccion"
                EndProperty
             EndProperty
          EndProperty
@@ -1802,11 +1806,11 @@ Begin VB.Form ListFact
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H00C0FFFF&
-      Height          =   1380
+      Height          =   1695
       Left            =   105
       TabIndex        =   13
       Top             =   2310
-      Width           =   9570
+      Width           =   10095
    End
    Begin VB.Label LabelBultos 
       Alignment       =   1  'Right Justify
@@ -1816,7 +1820,7 @@ Begin VB.Form ListFact
       Height          =   330
       Left            =   11235
       TabIndex        =   19
-      Top             =   4620
+      Top             =   4935
       Width           =   960
    End
    Begin VB.Label Label14 
@@ -1825,7 +1829,7 @@ Begin VB.Form ListFact
       Height          =   330
       Left            =   9765
       TabIndex        =   18
-      Top             =   4620
+      Top             =   4935
       Width           =   1485
    End
    Begin VB.Label LabelTransp 
@@ -1834,7 +1838,7 @@ Begin VB.Form ListFact
       Height          =   330
       Left            =   1470
       TabIndex        =   16
-      Top             =   4200
+      Top             =   4515
       Width           =   13035
    End
    Begin VB.Label LabelVendedor 
@@ -1863,7 +1867,7 @@ Begin VB.Form ListFact
       Height          =   330
       Left            =   105
       TabIndex        =   15
-      Top             =   4200
+      Top             =   4515
       Width           =   1380
    End
    Begin VB.Label Label12 
@@ -1872,7 +1876,7 @@ Begin VB.Form ListFact
       Height          =   330
       Left            =   105
       TabIndex        =   17
-      Top             =   3780
+      Top             =   4095
       Width           =   1380
    End
    Begin VB.Label LabelCliente 
@@ -1891,7 +1895,7 @@ Begin VB.Form ListFact
       Height          =   330
       Left            =   1470
       TabIndex        =   21
-      Top             =   4620
+      Top             =   4935
       Width           =   8205
    End
    Begin VB.Label Label17 
@@ -1900,7 +1904,7 @@ Begin VB.Form ListFact
       Height          =   330
       Left            =   105
       TabIndex        =   22
-      Top             =   4620
+      Top             =   4935
       Width           =   1380
    End
    Begin VB.Label Label10 
@@ -3394,7 +3398,7 @@ Dim Correos As String
        If Not .EOF Then FA.Autorizacion = .fields("Autorizacion")
    End If
   End With
-  Leer_Datos_FA_NV FA
+  Leer_Datos_FA_NV_SP FA
  'Procesamos Factura
   If FA.Si_Existe_Doc Then
      Actualizar_Saldos_Facturas_SP FA.TC, FA.Serie, FA.Factura
@@ -3407,12 +3411,11 @@ Dim Correos As String
   End If
 
     'Consultamos el detalle de la factura
-     SQL2 = "SELECT DF.Codigo,DF.Producto,DF.Cantidad,DF.Precio,DF.Total,DF.Total_Desc,DF.Total_Desc2,DF.Total_IVA," _
-          & "ROUND(((DF.Total-(DF.Total_Desc+DF.Total_Desc2))+DF.Total_IVA),2,0) As Valor_Total,DF.Mes,DF.Ticket," _
-          & "DF.Serie,DF.Factura,DF.Autorizacion,CP.Detalle,CP.Cta_Ventas,CP.Reg_Sanitario,CP.Marca,Lote_No, DF.Modelo, " _
-          & "DF.Procedencia, DF.Serie_No, DF.CodigoC, Cantidad_NC, SubTotal_NC,DF.CodMarca,DF.CodBodega," _
-          & "DF.Tonelaje,Total_Desc_NC,Total_IVA_NC,DF.Periodo,DF.Codigo_Barra,DF.ID " _
-          & "FROM Detalle_Factura As DF,Catalogo_Productos As CP " _
+     SQL2 = "SELECT DF.Codigo, DF.Producto, DF.Cantidad, DF.Precio, DF.Total, DF.Total_Desc, DF.Total_Desc2, DF.Total_IVA, " _
+          & "ROUND(((DF.Total-(DF.Total_Desc+DF.Total_Desc2))+DF.Total_IVA),2,0) As Valor_Total, DF.Tipo_Hab, DF.Ruta, DF.Serie_No, DF.Precio2, DF.Fecha_Fab, " _
+          & "DF.Serie, DF.Factura, DF.Autorizacion, DF.Mes, DF.Ticket, DF.CodigoC, CP.Detalle, CP.Cta_Ventas, CP.Reg_Sanitario, CP.Marca, Lote_No, DF.Modelo, " _
+          & "DF.Procedencia, Cantidad_NC, SubTotal_NC, DF.CodMarca, DF.CodBodega, DF.Tonelaje, Total_Desc_NC, Total_IVA_NC, DF.Periodo, DF.Codigo_Barra, DF.ID " _
+          & "FROM Detalle_Factura As DF, Catalogo_Productos As CP " _
           & "WHERE DF.Item = '" & NumEmpresa & "' " _
           & "AND DF.Periodo = '" & Periodo_Contable & "' " _
           & "AND DF.TC = '" & FA.TC & "' " _
@@ -3719,6 +3722,9 @@ Private Sub TBarFactura_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMe
           SRI_Enviar_Mails FA, SRI_Autorizacion
      Case "Mail_GR"
           SRI_Autorizacion.Tipo_Doc_SRI = "GR"
+          SRI_Enviar_Mails FA, SRI_Autorizacion
+     Case "Mail_OP"
+          SRI_Autorizacion.Tipo_Doc_SRI = "OP"
           SRI_Enviar_Mails FA, SRI_Autorizacion
     '=================================================================================
     'Descarga de XML de Comprobantes Electronicos

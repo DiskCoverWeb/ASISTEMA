@@ -1441,7 +1441,7 @@ Dim AdoCliDB As ADODB.Recordset
 Public Sub Imprimir_Codigos_Banco(Datas As Adodc, _
                                   Optional EsCampoCorto As Boolean)
 Dim TipoLetra As String
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
 
 Mensajes = "Seguro de Imprimir en:" & vbCrLf & Printer.DeviceName & "?"
 Titulo = "IMPRESION"
@@ -1547,7 +1547,7 @@ RatonNormal
 MensajeEncabData = ""
 Printer.EndDoc
 Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -2413,7 +2413,6 @@ Dim CostoTarjeta As Currency
          
         'Subo el archivo al Servidor dse DB
          Subir_Archivo_FTP_Linode ftp, LstStatud, LstVwFTP, NombreArchivo
-        'MsgBox "..."
         'Subida de Abonos de Bancos, tarjetas y ottos
          Subir_Archivo_Abonos_Bancos_SP NombreArchivo, TextoBanco, FA.Cod_CxC, ".", Cta_Bancaria, ResultadoSubida
         'Eliminamos del servidor el archivo subido

@@ -19,29 +19,7 @@ Private Const MAX_PATH = 260
 'Constante para el atributo de directorio
 Private Const FILE_ATTRIBUTE_DIRECTORY = &H10
 
-'--- tipos de archivos --- para el Upload y Download
-Private Const FTP_TRANSFER_TYPE_UNKNOWN = &H0
-Private Const FTP_TRANSFER_TYPE_ASCII = &H1
-Private Const FTP_TRANSFER_TYPE_BINARY = &H2
-
-'Puerto FTP
-Private Const INTERNET_SERVICE_FTP = 1
-
-' Modo de conexión FTP
-Private Const INTERNET_FLAG_PASSIVE = &H8000000
-'Private Const INTERNET_FLAG_PASSIVE = New Binary(0x08000000)
-
 Private Const PassiveConnection As Boolean = True
-
-'--- formas de entrar en internet ---
-' usa config del registro
-Private Const INTERNET_OPEN_TYPE_PRECONFIG = 0
-' directo a internetnet
-Private Const INTERNET_OPEN_TYPE_DIRECT = 1
-' via  proxy
-Private Const INTERNET_OPEN_TYPE_PROXY = 3
-' prevent using java/script/INS
-Private Const INTERNET_OPEN_TYPE_PRECONFIG_WITH_NO_AUTOPROXY = 4
 
 'Type para atributos de fecha y hora de archivos
 Private Type FILETIME
@@ -84,22 +62,6 @@ Private ret As Long
 '***************************************************************
 Private Declare Function FileTimeToSystemTime Lib "kernel32" (lpFileTime As FILETIME, lpSystemTime As SYSTEMTIME) As Long
 
-Private Declare Function InternetCloseHandle Lib "wininet.dll" (ByVal hInet As Long) As Integer
-'Establece una conexión a internet para poder iniciar seción Ftp
-Private Declare Function InternetConnect Lib "wininet.dll" Alias "InternetConnectA" _
-  (ByVal hInternetSession As Long, _
-   ByVal sServerName As String, _
-   ByVal nServerPort As Integer, _
-   ByVal sUserName As String, _
-   ByVal sPassword As String, _
-   ByVal lService As Long, ByVal lFlags As Long, _
-   ByVal lContext As Long) As Long
-'Conecta al Ftp
-Private Declare Function InternetOpen Lib "wininet.dll" Alias "InternetOpenA" _
-   (ByVal sAgent As String, ByVal lAccessType As Long, _
-    ByVal sProxyName As String, _
-    ByVal sProxyBypass As String, _
-    ByVal lFlags As Long) As Long
 'Establece el path corriente
 Private Declare Function FtpSetCurrentDirectory Lib "wininet.dll" Alias "FtpSetCurrentDirectoryA" _
    (ByVal hFtpSession As Long, _
@@ -126,13 +88,6 @@ Private Declare Function FtpRenameFile Lib "wininet.dll" Alias "FtpRenameFileA" 
   (ByVal hFtpSession As Long, _
   ByVal lpszExisting As String, _
   ByVal lpszNew As String) As Boolean
-'Recupera un archivo
-Private Declare Function FtpGetFile Lib "wininet.dll" _
-   Alias "FtpGetFileA" (ByVal hConnect As Long, _
-  ByVal lpszRemoteFile As String, _
-  ByVal lpszNewFile As String, ByVal fFailIfExists As Long, _
-  ByVal dwFlagsAndAttributes As Long, ByVal dwFlags As Long, _
-  ByRef dwContext As Long) As Boolean
 'Escribe un archivo
 Private Declare Function FtpPutFile Lib "wininet.dll" _
    Alias "FtpPutFileA" (ByVal hConnect As Long, _
@@ -167,7 +122,6 @@ End Enum
     Dim hOpen As Long
     
 'Variables locales
-Private INTERNET_DEFAULT_FTP_PORT As Integer
 Private m_Puerto As Integer
 Private m_TipoTransferencia As Long
 Private m_DirectorioActual As String
@@ -192,6 +146,8 @@ Public Function ConectarFtp(Optional ControlStatus As Object = Nothing) As Boole
 'Verificamos que los datos de la cuenta estén establecidas, si no mostramos un _
  mensaje y salimos
  
+'MsgBox m_Usuario & vbCrLf & m_Servidor & vbCrLf & m_PassWord
+
 If m_Usuario = "" Or m_Servidor = "" Or m_PassWord = "" Then
    MsgError = "No se puede conectar. Verifique el Nombre de usuario, del Servidor y la contraseña que estén establecidas"
    ConectarFtp = False
@@ -285,7 +241,7 @@ Public Sub CambiarDirectorio(PathDirectorio As String)
     End If
     
    'Cambia al Directorio especificado
-    ret = FtpSetCurrentDirectory(HandleConect, ftpDir & PathDirectorio)   ' & "/"
+    ret = FtpSetCurrentDirectory(HandleConect, PathDirectorio)    ' & "/"
     'MsgBox ret
     If ret = 0 Then
        Status "Error al cambiar de directorio"

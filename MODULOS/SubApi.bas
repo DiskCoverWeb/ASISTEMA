@@ -555,7 +555,7 @@ Declare Function WinHelp Lib "user32" Alias "WinHelpA" (ByVal hwnd As Long, _
 Declare Function GetSystemMetrics Lib "user32" (ByVal nIndex As Long) As Long
 Declare Function TrackPopupMenu Lib "user32" (ByVal hMenu As Long, _
                                               ByVal wFlags As Long, _
-                                              ByVal X As Long, _
+                                              ByVal x As Long, _
                                               ByVal y As Long, _
                                               ByVal nReserved As Long, _
                                               ByVal hwnd As Long, _
@@ -569,7 +569,7 @@ Declare Function ReleaseDC Lib "user32" (ByVal hwnd As Long, _
                                          ByVal hdc As Long) As Long
 Declare Sub SetWindowPos Lib "user32" (ByVal hwnd As Long, _
                                        ByVal hWndInsertAfter As Long, _
-                                       ByVal X As Long, _
+                                       ByVal x As Long, _
                                        ByVal y As Long, _
                                        ByVal cx As Long, _
                                        ByVal cy As Long, _
@@ -601,7 +601,7 @@ Declare Function SetWindowRgn Lib "user32" (ByVal hwnd As Long, _
 'Funciones API: GDI32
 '-----------------------------------------------------------------------------------------------------------------------------------------------------------
 Declare Function GetDeviceCaps Lib "gdi32" (ByVal hdc As Long, ByVal nIndex As Long) As Long
-Declare Function BitBlt Lib "gdi32" (ByVal hDestDC As Long, ByVal X As Long, ByVal y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hSrcDC As Long, ByVal XSrc As Long, ByVal YSrc As Long, ByVal dwRop As Long) As Long
+Declare Function BitBlt Lib "gdi32" (ByVal hDestDC As Long, ByVal x As Long, ByVal y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hSrcDC As Long, ByVal XSrc As Long, ByVal YSrc As Long, ByVal dwRop As Long) As Long
 Declare Function CreateFont Lib "gdi32" Alias "CreateFontA" (ByVal H As Long, ByVal W As Long, ByVal E As Long, ByVal O As Long, ByVal W As Long, ByVal I As Long, ByVal U As Long, ByVal S As Long, ByVal C As Long, ByVal OP As Long, ByVal cp As Long, ByVal Q As Long, ByVal PAF As Long, ByVal F As String) As Long
 Declare Function SelectObject Lib "gdi32" (ByVal hdc As Long, ByVal hObject As Long) As Long
 Declare Function DeleteObject Lib "gdi32" (ByVal hObject As Long) As Long
@@ -645,11 +645,19 @@ Private Declare Function SHFileOperation Lib "shell32.dll" Alias "SHFileOperatio
 '-----------------------------------------------------------------------------------------------------------------------------------------------------------
 Public Declare Function InternetGetConnectedState Lib "wininet.dll" (ByRef lpdwFlags As Long, ByVal dwReserved As Long) As Long
 Public Declare Function InternetCheckConnection Lib "wininet.dll" Alias "InternetCheckConnectionA" (ByVal lpszUrl As String, ByVal dwFlags As Long, ByVal dwReserved As Long) As Long
-Public Declare Function InternetOpen Lib "wininet.dll" Alias "InternetOpenA" (ByVal sAgent As String, ByVal lAccessType As Long, ByVal sProxyName As String, ByVal sProxyBypass As String, ByVal lFlags As Long) As Long
-Public Declare Function InternetOpenUrl Lib "wininet.dll" Alias "InternetOpenUrlA" (ByVal hInternetSession As Long, ByVal sURL As String, ByVal sHeaders As String, ByVal lHeadersLength As Long, ByVal lFlags As Long, ByVal lContext As Long) As Long
+Public Declare Function InternetOpenUrl Lib "wininet.dll" Alias "InternetOpenUrlA" (ByVal hInternetSession As Long, ByVal sUrl As String, ByVal sHeaders As String, ByVal lHeadersLength As Long, ByVal lFlags As Long, ByVal lContext As Long) As Long
 Public Declare Function InternetReadFile Lib "wininet.dll" (ByVal hFile As Long, ByVal sBuffer As String, ByVal lNumBytesToRead As Long, lNumberOfBytesRead As Long) As Integer
 Public Declare Function InternetCloseHandle Lib "wininet.dll" (ByVal hInet As Long) As Integer
 
+'Conecta al Ftp
+Public Declare Function InternetOpen Lib "wininet.dll" Alias "InternetOpenA" (ByVal sAgent As String, ByVal lAccessType As Long, ByVal sProxyName As String, ByVal sProxyBypass As String, ByVal lFlags As Long) As Long
+
+'Establece una conexión a internet para poder iniciar seción Ftp
+Public Declare Function InternetConnect Lib "wininet.dll" Alias "InternetConnectA" (ByVal hInternetSession As Long, ByVal sServerName As String, ByVal nServerPort As Integer, ByVal sUserName As String, ByVal sPassword As String, ByVal lService As Long, ByVal lFlags As Long, ByVal lContext As Long) As Long
+
+'Recupera un archivo
+Public Declare Function FtpGetFile Lib "wininet.dll" Alias "FtpGetFileA" (ByVal hConnect As Long, ByVal lpszRemoteFile As String, ByVal lpszNewFile As String, ByVal fFailIfExists As Long, ByVal dwFlagsAndAttributes As Long, ByVal dwFlags As Long, ByRef dwContext As Long) As Boolean
+  
 '-----------------------------------------------------------------------------------------------------------------------------------------------------------
 'Funciones API: WINMM
 '-----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -726,6 +734,50 @@ Private Declare Function gethostbyname Lib "WSOCK32" (ByVal Hostname As String) 
 '-----------------------------------------------------------------------------------------------------------------------------------------------------------
 'Funciones propias del sistema
 '-----------------------------------------------------------------------------------------------------------------------------------------------------------
+Public Function DescargarFTP(ByVal servidor As String, _
+                            ByVal Usuario As String, _
+                            ByVal Password As String, _
+                            ByVal ArchivoRemoto As String, _
+                            ByVal ArchivoLocal As String) As Boolean
+
+    Dim hOpen As Long
+    Dim hConnect As Long
+    Dim Exito As Long
+
+    ' 1. Inicializar sesión de Internet
+    hOpen = InternetOpen("VB6_FTP_Client", INTERNET_OPEN_TYPE_DIRECT, vbNullString, vbNullString, 0)
+    
+    If hOpen = 0 Then
+        MsgBox "Error al inicializar la conexión de red.", vbCritical
+        DescargarFTP = False
+        Exit Function
+    End If
+
+    ' 2. Conectar al servidor FTP
+    hConnect = InternetConnect(hOpen, servidor, INTERNET_DEFAULT_FTP_PORT, Usuario, Password, INTERNET_SERVICE_FTP, 0, 0)
+
+    If hConnect = 0 Then
+        MsgBox "Error al conectar con el servidor FTP.", vbCritical
+        InternetCloseHandle hOpen
+        DescargarFTP = False
+        Exit Function
+    End If
+
+    ' 3. Descargar el archivo (0 en fFailIfExists permite sobrescribir si ya existe)
+    Exito = FtpGetFile(hConnect, ArchivoRemoto, ArchivoLocal, 0, 0, FTP_TRANSFER_TYPE_BINARY, 0)
+
+    If Exito <> 0 Then
+        DescargarFTP = True
+    Else
+        MsgBox "Error al descargar el archivo remoto.", vbExclamation
+        DescargarFTP = False
+    End If
+
+    ' 4. Cerrar las conexiones abiertas
+    InternetCloseHandle hConnect
+    InternetCloseHandle hOpen
+End Function
+
 Public Function pvGetFileTitle(sFileName As String) As String
     Dim Buffer As String
     Buffer = String(255, 0)
@@ -733,7 +785,6 @@ Public Function pvGetFileTitle(sFileName As String) As String
     Buffer = Left$(Buffer, InStr(1, Buffer, Chr$(0)) - 1)
     pvGetFileTitle = Buffer
 End Function
-
 
 Public Function DeviceColors(hdc As Long) As Single
 Const PLANES = 14
@@ -1366,10 +1417,10 @@ Function AddressStringToLong(ByVal tmp As String) As Long
 End Function
 
 Public Function SocketsCleanup() As Boolean
-    Dim X As Long
-    X = WSACleanup()
-    If X <> 0 Then
-        MsgBox "Windows Sockets error " & TrimStrg(Str$(X)) & _
+    Dim x As Long
+    x = WSACleanup()
+    If x <> 0 Then
+        MsgBox "Windows Sockets error " & TrimStrg(Str$(x)) & _
                " occurred in Cleanup.", vbExclamation
         SocketsCleanup = False
     Else
@@ -1379,12 +1430,12 @@ End Function
 
 Public Function SocketsInitialize() As Boolean
     Dim WSAD As WSADATA
-    Dim X As Integer
+    Dim x As Integer
     Dim szLoByte As String, szHiByte As String, szBuf As String
     
-    X = WSAStartup(WS_VERSION_REQD, WSAD)
+    x = WSAStartup(WS_VERSION_REQD, WSAD)
     
-    If X <> 0 Then
+    If x <> 0 Then
         MsgBox "Windows Sockets for 32 bit Windows " & _
                "environments is not successfully responding."
         SocketsInitialize = False
@@ -1785,18 +1836,18 @@ Dim Respuesta As Boolean
     If Respuesta Then
        Validar_URL = UCaseStrg(NombreServidor & " activo")
     Else
-       Validar_URL = UCaseStrg("-" & NombreServidor & " incactivo/intermitencia")
+       Validar_URL = UCaseStrg("-" & NombreServidor & " inactivo/intermitencia")
     End If
 End Function
 
-Public Function GetUrlSource(sURL As String) As String
+Public Function GetUrlSource(sUrl As String) As String
 Dim sBuffer As String * BUFFER_LEN, iResult As Integer, sData As String
 Dim hInternet As Long, hSession As Long, lReturn As Long
 
    'get the handle of the current internet connection
     hSession = InternetOpen("vb wininet", 1, vbNullString, vbNullString, 0)
    'get the handle of the url
-    If hSession Then hInternet = InternetOpenUrl(hSession, sURL, vbNullString, 0, IF_NO_CACHE_WRITE, 0)
+    If hSession Then hInternet = InternetOpenUrl(hSession, sUrl, vbNullString, 0, IF_NO_CACHE_WRITE, 0)
    'if we have the handle, then start reading the web page
     If hInternet Then
        'get the first chunk & buffer it.
@@ -1843,33 +1894,67 @@ Dim DomDoc As MSXML2.xmlHttp
 End Function
 
 Public Function PostUrlSourceStr(vURLHTTP As String, vURLParams As String) As String
-Dim DomDoc As MSXML2.xmlHttp
-Dim RespuestaURL As String
+    Dim DomDoc As MSXML2.xmlHttp
+    Dim RespuestaURL As String
 
-    Set DomDoc = New xmlHttp
-   'MsgBox vURLHTTP & vbCrLf & vURLParams
-   ' Clipboard.Clear
-   ' Clipboard.SetText vURLHTTP & vbCrLf & vbCrLf & vURLParams
-      
-   'Parámetros en formato URLEncode
-   'Metodo a usar, url, y true en caso de manejar la respuesta en modo asíncrono
+    On Error GoTo errHandler
+
+   'Clipboard.Clear
+   'Clipboard.SetText vURLHTTP & vbCrLf & vbCrLf & vURLParams
+
+    Set DomDoc = New MSXML2.xmlHttp
+
     DomDoc.open "POST", vURLHTTP, False
-   'Encabezados
-    DomDoc.setRequestHeader "Content-type", "application/x-www-form-urlencoded"
-    DomDoc.setRequestHeader "Content-length", Len(vURLParams)
-    DomDoc.setRequestHeader "Connection", "close"
+    DomDoc.setRequestHeader "Content-Type", "application/x-www-form-urlencoded"
+    ' NO agregar "Content-length" ni "Connection: close", XMLHTTP lo maneja solo.
+
     DomDoc.send vURLParams
-   'La respuesta, en caso de existir, está en responseBody.
-   'También puedes especificar responseXml si tu aplicación devolviese XML
-   'PostUrlSource = StrConv(DomDoc.responseBody, vbUnicode)
-   ' Clipboard.Clear
-   ' Clipboard.SetText vURLHTTP & vbCrLf & vbCrLf & vURLParams & vbCrLf & vbCrLf & DomDoc.responseBody
-   'MsgBox Len(DomDoc.responseBody) & " [" & DomDoc.responseBody & "]"
-    If Len(DomDoc.responseBody) > 0 Then RespuestaURL = StrConv(DomDoc.responseBody, vbUnicode) Else RespuestaURL = "CNASS"
-   
-   'PostUrlSourceStr = Trim(Replace(RespuestaURL, "'", """"))
+
+    ' Validar estado HTTP
+    If DomDoc.Status = 200 Then
+        RespuestaURL = DomDoc.responseText
+    Else
+        RespuestaURL = "CNASS"
+    End If
+
     PostUrlSourceStr = RespuestaURL
+
+    Set DomDoc = Nothing
+    Exit Function
+
+errHandler:
+    PostUrlSourceStr = "CNASS"
+    If Not DomDoc Is Nothing Then Set DomDoc = Nothing
 End Function
+
+'''Public Function PostUrlSourceStr(vURLHTTP As String, vURLParams As String) As String
+'''Dim DomDoc As MSXML2.xmlHttp
+'''Dim RespuestaURL As String
+'''
+'''    Set DomDoc = New xmlHttp
+'''   'MsgBox vURLHTTP & vbCrLf & vURLParams
+'''   ' Clipboard.Clear
+'''   ' Clipboard.SetText vURLHTTP & vbCrLf & vbCrLf & vURLParams
+'''
+'''   'Parámetros en formato URLEncode
+'''   'Metodo a usar, url, y true en caso de manejar la respuesta en modo asíncrono
+'''    DomDoc.open "POST", vURLHTTP, False
+'''   'Encabezados
+'''    DomDoc.setRequestHeader "Content-type", "application/x-www-form-urlencoded"
+'''    DomDoc.setRequestHeader "Content-length", Len(vURLParams)
+'''    DomDoc.setRequestHeader "Connection", "close"
+'''    DomDoc.send vURLParams
+'''   'La respuesta, en caso de existir, está en responseBody.
+'''   'También puedes especificar responseXml si tu aplicación devolviese XML
+'''   'PostUrlSource = StrConv(DomDoc.responseBody, vbUnicode)
+'''   ' Clipboard.Clear
+'''   ' Clipboard.SetText vURLHTTP & vbCrLf & vbCrLf & vURLParams & vbCrLf & vbCrLf & DomDoc.responseBody
+'''   'MsgBox Len(DomDoc.responseBody) & " [" & DomDoc.responseBody & "]"
+'''    If Len(DomDoc.responseBody) > 0 Then RespuestaURL = StrConv(DomDoc.responseBody, vbUnicode) Else RespuestaURL = "CNASS"
+'''
+'''   'PostUrlSourceStr = Trim(Replace(RespuestaURL, "'", """"))
+'''    PostUrlSourceStr = RespuestaURL
+'''End Function
 
 Public Function Ping_IP(My_IP_PC As String) As Boolean
 Dim ping As cPing
@@ -1904,3 +1989,80 @@ Dim ping As cPing
     Get_Internet = IP_PC.InterNet
 End Function
 
+Private Function ConsultarAPIRespaldo(ByVal sCedula As String) As String
+    On Error GoTo ErrRespaldo
+    Dim oHttp As Object
+    Set oHttp = CreateObject("WinHttp.WinHttpRequest.5.1")
+    
+    oHttp.open "GET", "https://facturacion.apisecuador.com/v1/cedula/" & sCedula, False
+    oHttp.Option(9) = 2048
+    oHttp.send
+    
+    If oHttp.Status = 200 Then
+        Dim sResp As String
+        sResp = oHttp.responseText
+        If InStr(1, sResp, "nombre") > 0 Then
+            Dim iIni As Long, iFin As Long
+            iIni = InStr(1, sResp, """nombre"":""") + 10
+            iFin = InStr(iIni, sResp, """")
+            ConsultarAPIRespaldo = Mid(sResp, iIni, iFin - iIni)
+            Exit Function
+        End If
+    End If
+    ConsultarAPIRespaldo = "No encontrado"
+    Exit Function
+ErrRespaldo:
+    ConsultarAPIRespaldo = "Error en consulta"
+End Function
+
+' Función para obtener el nombre a partir de la cédula en VB6
+Public Function ObtenerNombrePorCedula(ByVal sCedula As String) As String
+    On Error GoTo Errorhandler
+    
+    Dim oHttp As Object
+    Dim sUrl As String
+    Dim sRespuesta As String
+    Dim sRuc As String
+    
+    sCedula = Trim(sCedula)
+    If Len(sCedula) = 10 Then
+        sRuc = sCedula & "001"
+    Else
+        sRuc = sCedula
+    End If
+    
+    Set oHttp = CreateObject("WinHttp.WinHttpRequest.5.1")
+    
+    ' URL real y oficial del servidor del SRI
+    sUrl = "https://srienlinea.sri.gob.ec/sri-catastro-sujeto-servicio-internet/rest/ConsolidadoContribuyente/existePorNumeroRuc?numeroRuc=" & sRuc
+    
+    oHttp.open "GET", sUrl, False
+    oHttp.Option(9) = 2048 ' TLS 1.2
+    
+    oHttp.setRequestHeader "User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+    oHttp.setRequestHeader "Accept", "application/json"
+    
+    oHttp.send
+    
+    If oHttp.Status = 200 Then
+        sRespuesta = oHttp.responseText
+        
+        If InStr(1, sRespuesta, """razonSocial"":") > 0 Then
+            Dim iInicio As Long, iFin As Long
+            iInicio = InStr(1, sRespuesta, """razonSocial"":""") + 15
+            iFin = InStr(iInicio, sRespuesta, """")
+            ObtenerNombrePorCedula = Mid(sRespuesta, iInicio, iFin - iInicio)
+        Else
+            ObtenerNombrePorCedula = "Sin registros tributarios"
+        End If
+    Else
+        ObtenerNombrePorCedula = "Error HTTP: " & oHttp.Status
+    End If
+
+    Set oHttp = Nothing
+    Exit Function
+
+Errorhandler:
+    ObtenerNombrePorCedula = "Error de red: " & Err.Description
+    Set oHttp = Nothing
+End Function

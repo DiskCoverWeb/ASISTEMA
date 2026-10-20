@@ -1396,6 +1396,7 @@ Dim AdoDBFA As ADODB.Recordset
   AdoDBFA.CursorType = adOpenStatic
   AdoDBFA.CursorLocation = adUseClient
   
+  TFA.Total_Exento_IVA = 0
   TFA.SubTotal = 0
   TFA.Con_IVA = 0
   TFA.Sin_IVA = 0
@@ -1411,7 +1412,7 @@ Dim AdoDBFA As ADODB.Recordset
   
  'Miramos de cuanto es la factura para los calculos de los totales
   Total_Desc_ME = 0
-  sSQL = "SELECT TOTAL, SERVICIO, Total_Desc, Total_Desc2, Total_IVA, Utilidad " _
+  sSQL = "SELECT TOTAL, SERVICIO, Total_Desc, Total_Desc2, Total_IVA, Utilidad, PRECIO2, TD " _
        & "FROM Asiento_F " _
        & "WHERE Item = '" & NumEmpresa & "' " _
        & "AND CodigoU = '" & CodigoUsuario & "' "
@@ -1446,6 +1447,7 @@ Dim AdoDBFA As ADODB.Recordset
   TFA.Utilidad = Redondear(TFA.Utilidad, 2)
   TFA.SubTotal = TFA.Sin_IVA + TFA.Con_IVA - TFA.Descuento - TFA.Descuento2
   TFA.Total_MN = TFA.Sin_IVA + TFA.Con_IVA - TFA.Descuento - TFA.Descuento2 + TFA.Total_IVA + TFA.Servicio
+  'MsgBox "Desktop Test: Totales_Factura"
 End Sub
 
 Public Sub ReCalcular_PVP_Factura(AdoAsientoF As Adodc, Total_FA As Currency)
@@ -3284,7 +3286,7 @@ If PonImpresoraDefecto(SetNombrePRN) Then
            ReImp = CBool(.fields("P"))
            TFA.Tipo_Pago = .fields("Tipo_Pago")
            Cad_Tipo_Pago = Ninguno
-           Leer_Datos_FA_NV TFA
+           Leer_Datos_FA_NV_SP TFA
            
           'MsgBox TFA.LogoFactura
            If Len(TFA.Autorizacion) >= 13 Then            'Si es electronica en formato PDF
@@ -3899,7 +3901,7 @@ If PonImpresoraDefecto(SetNombrePRN) Then
    Orden_No_S = ""
    cPrint.tipoDeLetra = TipoCourier ' TipoArialNarrow
    cPrint.tipoNegrilla = True
-   Leer_Datos_FA_NV TFA
+   Leer_Datos_FA_NV_SP TFA
    Set AdoDBDetalle = Leer_Datos_FA_NV_Detalle(TFA)
    With AdoDBDetalle
     If .RecordCount > 0 Then
@@ -10255,7 +10257,7 @@ Dim PosLinf As Single
 Dim TempPosLineaAbono As Single
     
     RatonReloj
-    Leer_Datos_FA_NV TFA
+    Leer_Datos_FA_NV_SP TFA
     
     sSQL = "SELECT DF.*, CP.Reg_Sanitario, CP.Marca, CP.Desc_Item, CP.Codigo_Barra As Cod_Barras " _
          & "FROM Detalle_Factura As DF, Catalogo_Productos As CP " _
@@ -12692,225 +12694,6 @@ Dim AdoClientMat As ADODB.Recordset
   End If
 End Sub
 
-Public Sub Leer_Datos_FA_NV(TFA As Tipo_Facturas)
-Dim AdoDBFac As ADODB.Recordset
-Dim TotDescuento As Currency
-    
-    Leer_Datos_FA_NV_SP TFA
-    
-'''    sSQL = "SELECT F.*,C.Cliente,C.CI_RUC,C.TD,C.Grupo,C.Direccion,C.DireccionT,C.Celular,C.Codigo,C.Ciudad,C.Email,C.Email2,C.EmailR," _
-'''         & "C.Contacto,C.DirNumero,C.Fecha As Fecha_C, TRS.Descripcion " _
-'''         & "FROM Facturas As F, Clientes As C, Tabla_Referenciales_SRI TRS " _
-'''         & "WHERE F.Item = '" & NumEmpresa & "' " _
-'''         & "AND F.Periodo = '" & Periodo_Contable & "' " _
-'''         & "AND TRS.Tipo_Referencia = 'FORMA DE PAGO' " _
-'''         & "AND F.TC = '" & TFA.TC & "' " _
-'''         & "AND F.Serie = '" & TFA.Serie & "' " _
-'''         & "AND F.Autorizacion = '" & TFA.Autorizacion & "' " _
-'''         & "AND F.Factura = " & TFA.Factura & " " _
-'''         & "AND C.Codigo = F.CodigoC " _
-'''         & "AND F.Tipo_Pago = TRS.Codigo "
-'''    Select_AdoDB AdoDBFac, sSQL
-'''    With AdoDBFac
-'''     If .RecordCount > 0 Then
-'''        'MsgBox "Desktop Test: " & .RecordCount
-'''        'Datos del SRI
-'''         TFA.Si_Existe_Doc = True
-'''         TFA.T = .fields("T")
-'''         TFA.SP = .fields("SP")
-'''         TFA.Porc_IVA = .fields("Porc_IVA")
-'''         TFA.Porc_IVA_S = CStr(.fields("Porc_IVA") * 100)
-'''         TFA.Cta_CxP = .fields("Cta_CxP")
-'''         TFA.Cod_CxC = .fields("Cod_CxC")
-'''         TFA.Estado_SRI = .fields("Estado_SRI")
-'''         TFA.Error_SRI = .fields("Error_FA_SRI")
-'''         TFA.ClaveAcceso = .fields("Clave_Acceso")
-'''         TFA.CodigoU = .fields("CodigoU")
-'''
-'''        'Encabezado de Facturas
-'''         TFA.CodigoC = .fields("CodigoC")
-'''         TFA.Contacto = .fields("Contacto")
-'''         TFA.Cliente = .fields("Cliente")
-'''         TFA.CI_RUC = .fields("CI_RUC")
-'''         TFA.DirNumero = .fields("DirNumero")
-'''         TFA.Curso = .fields("Direccion")
-'''         TFA.CiudadC = .fields("Ciudad")
-'''         TFA.Grupo = .fields("Grupo")
-'''         TFA.Cod_Ejec = .fields("Cod_Ejec")
-'''         TFA.Imp_Mes = .fields("Imp_Mes")
-'''         TFA.Fecha = .fields("Fecha")
-'''         TFA.Fecha_V = .fields("Fecha_V")
-'''         TFA.Fecha_C = .fields("Fecha_C")
-'''         TFA.Fecha_Aut = .fields("Fecha_Aut")
-'''         TFA.Hora = .fields("Hora")
-'''         TFA.Tipo_Pago = .fields("Tipo_Pago")
-'''         TFA.Forma_Pago = .fields("Forma_Pago")
-'''         TFA.Tipo_Pago_Det = "Forma de Pago: " & ULCase(AdoDBFac.fields("Descripcion"))
-'''         TFA.EmailC = .fields("Email")
-'''         TFA.EmailC2 = .fields("Email2")
-'''         TFA.EmailR = .fields("EmailR")
-'''         TFA.Observacion = .fields("Observacion")
-'''         TFA.Nota = .fields("Nota")
-'''         TFA.Orden_Compra = .fields("Orden_Compra")
-'''         TFA.Gavetas = .fields("Gavetas")
-'''         TFA.TB = .fields("TB")
-'''
-'''        'Razon Social de la Factura
-'''         TFA.TD = .fields("TD")
-'''         TFA.Razon_Social = .fields("Cliente")
-'''         TFA.RUC_CI = .fields("CI_RUC")
-'''         TFA.DireccionC = .fields("Direccion")
-'''         TFA.TelefonoC = .fields("Celular")
-'''         If TFA.EmailR = Ninguno Then TFA.EmailR = EmailProcesos
-'''
-'''        'SubTotales de la Factura
-'''         TFA.Descuento = .fields("Descuento")
-'''         TFA.Descuento2 = .fields("Descuento2")
-'''         TFA.Descuento_0 = .fields("Desc_0")
-'''         TFA.Descuento_X = .fields("Desc_X")
-'''         TFA.SubTotal = .fields("SubTotal")
-'''         TFA.Total_IVA = .fields("IVA")
-'''         TFA.Con_IVA = .fields("Con_IVA")
-'''         TFA.Sin_IVA = .fields("Sin_IVA")
-'''         TFA.Servicio = .fields("Servicio")
-'''         TFA.Total_MN = .fields("Total_MN")
-'''         TFA.Saldo_MN = .fields("Saldo_MN")
-'''         TFA.Saldo_Actual = .fields("Saldo_MN")
-'''         TFA.Total_Descuento = TFA.Descuento + TFA.Descuento2
-'''     End If
-'''    End With
-'''    AdoDBFac.Close
-            
-'''    sSQL = "SELECT * " _
-'''         & "FROM Facturas_Auxiliares " _
-'''         & "WHERE Item = '" & NumEmpresa & "' " _
-'''         & "AND Periodo = '" & Periodo_Contable & "' " _
-'''         & "AND Remision <> 0 " _
-'''         & "AND TC = '" & TFA.TC & "' " _
-'''         & "AND Serie = '" & TFA.Serie & "' " _
-'''         & "AND Autorizacion = '" & TFA.Autorizacion & "' " _
-'''         & "AND Factura = " & TFA.Factura & " "
-'''    Select_AdoDB AdoDBFac, sSQL
-'''    With AdoDBFac
-'''     If .RecordCount > 0 Then
-'''        'Guia de Remision
-'''         TFA.Fecha_Aut_GR = .fields("Fecha_Aut_GR")
-'''         TFA.Hora_GR = .fields("Hora_Aut_GR")
-'''         TFA.Estado_SRI_GR = .fields("Estado_SRI_GR")
-'''         TFA.Serie_GR = .fields("Serie_GR")
-'''         TFA.ClaveAcceso_GR = .fields("Clave_Acceso_GR")
-'''         TFA.Autorizacion_GR = .fields("Autorizacion_GR")
-'''         TFA.Remision = .fields("Remision")
-'''         TFA.Comercial = .fields("Comercial")
-'''         TFA.CIRUCComercial = .fields("CIRUC_Comercial")
-'''         TFA.CIRUCEntrega = .fields("CIRUC_Entrega")
-'''         TFA.Entrega = .fields("Entrega")
-'''         TFA.CiudadGRI = .fields("CiudadGRI")
-'''         TFA.CiudadGRF = .fields("CiudadGRF")
-'''         TFA.Serie_GR = .fields("Serie_GR")
-'''         TFA.FechaGRE = .fields("FechaGRE")
-'''         TFA.FechaGRI = .fields("FechaGRI")
-'''         TFA.FechaGRF = .fields("FechaGRF")
-'''         TFA.Pedido = .fields("Pedido")
-'''         TFA.Zona = .fields("Zona")
-'''         TFA.Orden_Compra = .fields("Orden_Compra")
-'''         TFA.Placa_Vehiculo = .fields("Placa_Vehiculo")
-'''         TFA.Lugar_Entrega = .fields("Lugar_Entrega")
-'''     End If
-'''    End With
-'''    AdoDBFac.Close
-            
-'''    sSQL = "SELECT Cedula_R, Representante, Lugar_Trabajo_R, TD, Telefono_RS, Email_R " _
-'''         & "FROM Clientes_Matriculas " _
-'''         & "WHERE Item = '" & NumEmpresa & "' " _
-'''         & "AND Periodo = '" & Periodo_Contable & "' " _
-'''         & "AND Codigo = '" & TFA.CodigoC & "' "
-'''    Select_AdoDB AdoDBFac, sSQL
-'''    With AdoDBFac
-'''     If .RecordCount > 0 Then
-'''         TFA.TD = .fields("TD")
-'''         TFA.Razon_Social = .fields("Representante")
-'''         TFA.RUC_CI = .fields("Cedula_R")
-'''         TFA.DireccionC = .fields("Lugar_Trabajo_R")
-'''         TFA.TelefonoC = .fields("Telefono_RS")
-'''         TFA.EmailR = .fields("Email_R")
-'''     End If
-'''    End With
-'''    AdoDBFac.Close
-            
-'''    If Len(TFA.CIRUCComercial) > 1 And Len(TFA.CIRUCEntrega) > 1 Then
-'''       sSQL = "SELECT Direccion " _
-'''            & "FROM Clientes " _
-'''            & "WHERE CI_RUC = '" & TFA.CIRUCComercial & "' "
-'''       Select_AdoDB AdoDBFac, sSQL
-'''       If AdoDBFac.RecordCount > 0 Then TFA.Dir_PartidaGR = AdoDBFac.fields("Direccion")
-'''       AdoDBFac.Close
-'''
-'''       sSQL = "SELECT Direccion " _
-'''            & "FROM Clientes " _
-'''            & "WHERE CI_RUC = '" & TFA.CIRUCEntrega & "' "
-'''       Select_AdoDB AdoDBFac, sSQL
-'''       If AdoDBFac.RecordCount > 0 Then TFA.Dir_EntregaGR = AdoDBFac.fields("Direccion")
-'''       AdoDBFac.Close
-'''    End If
-    
-'''    sSQL = "SELECT Nombre_Completo " _
-'''         & "FROM Accesos " _
-'''         & "WHERE Codigo = '" & TFA.Cod_Ejec & "' "
-'''    Select_AdoDB AdoDBFac, sSQL
-'''    If AdoDBFac.RecordCount > 0 Then TFA.Ejecutivo_Venta = AdoDBFac.fields("Nombre_Completo")
-'''    AdoDBFac.Close
-    
-'''    sSQL = "SELECT Nombre_Completo " _
-'''         & "FROM Accesos " _
-'''         & "WHERE Codigo = '" & TFA.CodigoU & "' "
-'''    Select_AdoDB AdoDBFac, sSQL
-'''    If AdoDBFac.RecordCount > 0 Then TFA.Digitador = AdoDBFac.fields("Nombre_Completo")
-'''    AdoDBFac.Close
-    
-        
-'''    sSQL = "SELECT * " _
-'''         & "FROM Facturas_Formatos " _
-'''         & "WHERE Item = '" & NumEmpresa & "' " _
-'''         & "AND Periodo = '" & Periodo_Contable & "' " _
-'''         & "AND TC = '" & TFA.TC & "' " _
-'''         & "AND Serie = '" & TFA.Serie & "' " _
-'''         & "AND Cod_CxC = '" & TFA.Cod_CxC & "' " _
-'''         & "AND #" & BuscarFecha(TFA.Fecha) & "# BETWEEN Fecha_Inicio and Fecha_Final " _
-'''         & "ORDER BY Cod_CxC "
-'''    Select_AdoDB AdoDBFac, sSQL
-'''    If AdoDBFac.RecordCount > 0 Then
-'''       TFA.CxC_Clientes = AdoDBFac.fields("Concepto")
-'''       TFA.LogoFactura = AdoDBFac.fields("Formato_Factura")
-'''       TFA.AltoFactura = AdoDBFac.fields("Largo")
-'''       TFA.AnchoFactura = AdoDBFac.fields("Ancho")
-'''       TFA.EspacioFactura = AdoDBFac.fields("Espacios")
-'''       TFA.Pos_Factura = AdoDBFac.fields("Pos_Factura")
-'''       TFA.DireccionEstab = AdoDBFac.fields("Direccion_Establecimiento")
-'''       TFA.NombreEstab = AdoDBFac.fields("Nombre_Establecimiento")
-'''       TFA.TelefonoEstab = AdoDBFac.fields("Telefono_Estab")
-'''       TFA.Vencimiento = AdoDBFac.fields("Fecha_Final")
-'''       TFA.CantFact = AdoDBFac.fields("Fact_Pag")
-'''       TFA.LogoTipoEstab = RutaSistema & "\LOGOS\" & AdoDBFac.fields("Logo_Tipo_Estab") & ".jpg"
-'''    End If
-'''    AdoDBFac.Close
-    
-'''    sSQL = "SELECT Codigo " _
-'''         & "FROM Detalle_Factura " _
-'''         & "WHERE Item = '" & NumEmpresa & "' " _
-'''         & "AND Periodo = '" & Periodo_Contable & "' " _
-'''         & "AND Codigo = '99.41' " _
-'''         & "AND TC = '" & TFA.TC & "' " _
-'''         & "AND Serie = '" & TFA.Serie & "' " _
-'''         & "AND Factura = " & TFA.Factura & " "
-'''    Select_AdoDB AdoDBFac, sSQL
-'''    If AdoDBFac.RecordCount > 0 Then TFA.EsPorReembolso = True
-'''    AdoDBFac.Close
-
-'    MsgBox "...Tiempo: " & Format(Time - TiempoFinal, "hh:mm:ss ff")
-
-End Sub
-
 Public Function Leer_Datos_FA_NV_Detalle(TFA As Tipo_Facturas) As ADODB.Recordset
 Dim AdoDBDet As ADODB.Recordset
   'Comenzamos a recoger los detalles de la factura
@@ -13504,6 +13287,137 @@ Dim SiExisteDatos As Boolean
    End With
    AdoCarteraDB.Close
    Reporte_Cartera_Clientes_PDF = SiExisteDatos
+End Function
+
+Public Function Reporte_Mayor_Clientes_PDF(FechaInicioHistoria As String, CodigoCliente As String, SalidaExcel As Boolean, VerDocumento As Boolean) As Boolean
+Dim AdoCarteraDB As ADODB.Recordset
+Dim NombFilePict As String
+Dim EmailCli As String
+Dim PosCampo(1 To 10) As Single
+Dim SiExisteDatos As Boolean
+        
+   sSQL = "SELECT  Razon_Social, T, TC, Fecha, Detalle, Cargos, Abonos, Saldo " _
+        & "FROM Reporte_Cartera_Mayor " _
+        & "WHERE Item = '" & NumEmpresa & "' " _
+        & "AND CodigoU = '" & CodigoUsuario & "' " _
+        & "AND T <> 'A' " _
+        & "ORDER BY Cod_Benef, CodigoC, Fecha, TC, ID "
+   Select_AdoDB AdoCarteraDB, sSQL
+   With AdoCarteraDB
+    If .RecordCount > 0 Then
+        SiExisteDatos = True
+        RutaDocumentoPDF = ""
+        MensajeEncabData = "REPORTE CARTERA DE CLIENTES"
+        SQLMsg1 = ""
+        SQLMsg2 = ""
+        SQLMsg3 = ""
+        If SalidaExcel Then
+           Exportar_AdoDB_Excel AdoCarteraDB, "Reporte Carte de Clientes"
+        Else
+           NombFilePict = "RMC_" & BuscarFecha(FechaSistema) & "-" & CodigoCliente
+           SetNombrePRN = Impresota_PDF
+          'Geneeramos el documento
+           tPrint.TipoImpresion = Es_PDF
+           tPrint.NombreArchivo = NombFilePict
+           tPrint.TituloArchivo = "Reporte de Cartera de Clientes " & CodigoCliente
+           tPrint.TipoLetra = TipoHelvetica
+           tPrint.OrientacionPagina = 1
+           tPrint.PaginaA4 = True
+           tPrint.EsCampoCorto = True
+           tPrint.VerDocumento = VerDocumento
+           Set cPrint = New cImpresion
+           cPrint.iniciaImpresion
+           
+           PosLinea = 1
+           PosCampo(1) = 1.3    ' Razon_Social
+           PosCampo(2) = 6.2    ' T
+           PosCampo(3) = 6.5    ' TC
+           PosCampo(4) = 7      ' Fecha
+           PosCampo(5) = 8.5    ' Detalle
+           PosCampo(6) = 15.1   ' Cargos
+           PosCampo(7) = 16.9   ' Abonos
+           PosCampo(8) = 18.7   ' Saldo
+           PosCampo(9) = 21     ' .
+           
+           cPrint.printEncabezado 1.2, PosLinea, TipoHelvetica
+           Cadena = "La informacion presente reposa en la base de dato de la Institucion, corte realizado desde " _
+                  & FechaStrg(FechaInicioHistoria) & " al " & FechaStrg(FechaSistema) & ", " _
+                  & "cualquier informacion adicional comuniquese a la institucion."
+          'Pagina No. 1
+           NombreCliente = .fields("Razon_Social")
+           cPrint.fondoDeLetra = Negro
+           cPrint.tipoNegrilla = True
+           cPrint.PorteDeLetra = 8
+           cPrint.colorDeLetra = Negro
+           PosLinea = cPrint.printTextoMultiple(1.5, PosLinea, Cadena, 18.8)
+           PosLinea = PosLinea + 0.5
+           cPrint.printLinea 1.2, PosLinea, cPrint.dAnchoPapel - 1, PosLinea
+           PosLinea = PosLinea + 0.1
+           cPrint.printTexto PosCampo(1), PosLinea, "Razon Social"
+           cPrint.printTexto PosCampo(2), PosLinea, "T"
+           cPrint.printTexto PosCampo(3), PosLinea, "TC"
+           cPrint.printTexto PosCampo(4), PosLinea, "Fecha"
+           cPrint.printTexto PosCampo(5), PosLinea, "Detalle"
+           cPrint.printTexto PosCampo(6), PosLinea, "Cargos"
+           cPrint.printTexto PosCampo(7), PosLinea, "Abonos"
+           cPrint.printTexto PosCampo(8), PosLinea, "Saldo"
+           PosLinea = PosLinea + 0.4
+           cPrint.printLinea 1.2, PosLinea, cPrint.dAnchoPapel - 1, PosLinea
+           cPrint.colorDeLetra = Negro
+           cPrint.tipoNegrilla = False
+           PosLinea = PosLinea + 0.1
+           PosLinea = cPrint.printTextoMultiple(PosCampo(1), PosLinea, .fields("Razon_Social"), 5)
+           'cPrint.printFields PosCampo(1), PosLinea, .fields("Razon_Social")
+          '.MoveNext
+           Do While Not .EOF
+              If NombreCliente <> .fields("Razon_Social") Then
+                 cPrint.printLinea 1.2, PosLinea, cPrint.dAnchoPapel - 1, PosLinea
+                 PosLinea = PosLinea + 0.1
+                 PosLinea = cPrint.printTextoMultiple(PosCampo(1), PosLinea, .fields("Razon_Social"), 5)
+                 'cPrint.printFields PosCampo(1), PosLinea, .fields("Razon_Social")
+                 NombreCliente = .fields("Razon_Social")
+              End If
+             cPrint.printFields PosCampo(2), PosLinea, .fields("T")
+             cPrint.printFields PosCampo(3), PosLinea, .fields("TC")
+             cPrint.printFields PosCampo(4), PosLinea, .fields("Fecha")
+             PosLinea = cPrint.printTextoMultiple(PosCampo(5), PosLinea, .fields("Detalle"), 6)
+             cPrint.printFields PosCampo(6), PosLinea, .fields("Cargos")
+             cPrint.printFields PosCampo(7), PosLinea, .fields("Abonos")
+             cPrint.printFields PosCampo(8), PosLinea, .fields("Saldo")
+             PosLinea = PosLinea + 0.4
+             'Siguiente Pagina
+              If PosLinea > (cPrint.dAltoPapel - 1.5) Then
+                 cPrint.paginaNueva
+                 PosLinea = 1
+                 cPrint.printEncabezado 1.2, PosLinea, TipoHelvetica
+                 PosLinea = PosLinea - 0.15
+                 cPrint.colorDeLetra = Negro
+                 cPrint.tipoNegrilla = True
+                 cPrint.PorteDeLetra = 8
+                 cPrint.printTexto PosCampo(1), PosLinea, "Razon Social"
+                 cPrint.printTexto PosCampo(2), PosLinea, "T"
+                 cPrint.printTexto PosCampo(3), PosLinea, "TC"
+                 cPrint.printTexto PosCampo(4), PosLinea, "Fecha"
+                 cPrint.printTexto PosCampo(5), PosLinea, "Detalle"
+                 cPrint.printTexto PosCampo(6), PosLinea, "Cargos"
+                 cPrint.printTexto PosCampo(7), PosLinea, "Abonos"
+                 cPrint.printTexto PosCampo(8), PosLinea, "Saldo"
+                 PosLinea = PosLinea + 0.4
+                 cPrint.printLinea 1.2, PosLinea - 0.05, cPrint.dAnchoPapel - 1, PosLinea - 0.05
+                 PosLinea = PosLinea + 0.1
+                 cPrint.tipoNegrilla = False
+              End If
+             .MoveNext
+           Loop
+          'fin del documento
+           cPrint.finalizaImpresion
+        End If
+    Else
+       SiExisteDatos = False
+    End If
+   End With
+   AdoCarteraDB.Close
+   Reporte_Mayor_Clientes_PDF = SiExisteDatos
 End Function
 
 Public Sub Prueba_Envio_de_Correos()

@@ -13,8 +13,8 @@ Begin VB.Form HistorialFacturas
    ClientWidth     =   15960
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   15615
-   ScaleWidth      =   28560
+   ScaleHeight     =   10050
+   ScaleWidth      =   15960
    WindowState     =   2  'Maximized
    Begin VB.CheckBox CheqIngreso 
       Caption         =   "Cuenta de Ingreso"
@@ -225,7 +225,7 @@ Begin VB.Form HistorialFacturas
    End
    Begin VB.Frame Frame1 
       Height          =   645
-      Left            =   11025
+      Left            =   11235
       TabIndex        =   1
       Top             =   0
       Width           =   6105
@@ -829,8 +829,8 @@ Begin VB.Form HistorialFacturas
       Left            =   0
       TabIndex        =   0
       Top             =   0
-      Width           =   28560
-      _ExtentX        =   50377
+      Width           =   15960
+      _ExtentX        =   28152
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -1013,6 +1013,22 @@ Begin VB.Form HistorialFacturas
             Key             =   "Estado_Cuenta_Cliente"
             Object.ToolTipText     =   "Estado de cuenta de Clientes"
             ImageIndex      =   20
+            Style           =   5
+            BeginProperty ButtonMenus {66833FEC-8583-11D1-B16A-00C0F0283628} 
+               NumButtonMenus  =   3
+               BeginProperty ButtonMenu1 {66833FEE-8583-11D1-B16A-00C0F0283628} 
+                  Key             =   "Cartera_Clientes"
+                  Text            =   "Carte de Clientes"
+               EndProperty
+               BeginProperty ButtonMenu2 {66833FEE-8583-11D1-B16A-00C0F0283628} 
+                  Key             =   "Cartera_Clientes_Resumen"
+                  Text            =   "Resumen Carte de Clientes"
+               EndProperty
+               BeginProperty ButtonMenu3 {66833FEE-8583-11D1-B16A-00C0F0283628} 
+                  Key             =   "Mayor_Cartera_Clientes"
+                  Text            =   "Mayor Cartera Clientes "
+               EndProperty
+            EndProperty
          EndProperty
          BeginProperty Button16 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Object.Visible         =   0   'False
@@ -1474,7 +1490,7 @@ DGQuery.Visible = False
 
 DGQuery.Caption = "HISTORIAL DE FACTURAS Y PRODUCTOS"
 sSQL = "SELECT F.T, CL.Cliente, F.TC As Doc, F.Serie, F.Factura, F.Fecha, F.Codigo, F.Producto, F.Mes, F.Cantidad, F.Total, 0 As Total_NC, " _
-     & "(Total_Desc+Total_Desc2) As Descuento, (F.Total-Total_Desc-Total_Desc2) As SubTotal, C.Marca, " _
+     & "(Total_Desc+Total_Desc2) As Descuento, (F.Total-Total_Desc-Total_Desc2) As SubTotal, CL.Grupo, CL.Direccion As Ubicacion, C.Marca, " _
      & "C.Desc_Item As Parte, F.Lote_No, F.Fecha_Fab, F.Fecha_Exp, C.Reg_Sanitario, F.Serie_No " & Con_Costeo
 If Si_No Then sSQL = sSQL & ",F.Precio, Valor_Compra As Costos "
 sSQL = sSQL _
@@ -1494,7 +1510,7 @@ sSQL = sSQL _
 sSQL = sSQL _
      & "UNION ALL " _
      & "SELECT F.T, CL.Cliente, F.TP As Doc, F.Serie, F.Factura, F.Fecha, F.Cta As Codigo, (F.Banco + ' - ' + F.Cheque) AS Producto_Aux, F.Mes, 1 As Cantidad, 0 As Total, -F.Abono As Total_NC, " _
-     & "0 As Descuento, -F.Abono As SubTotal, '.' As Marca, " _
+     & "0 As Descuento, -F.Abono As SubTotal, '.' As Grupo, '.' As Ubicacion, '.' As Marca, " _
      & "'.' As Parte, '.' As Lote_No, F.Fecha As Fecha_Fab, F.Fecha As Fecha_Exp, '.' As Reg_Sanitario, '.' As Serie_No "
 If Si_No Then sSQL = sSQL & ", 0 As Precio, 0 As Costos "
 sSQL = sSQL _
@@ -3442,35 +3458,6 @@ Private Sub ToolbarMenu_ButtonClick(ByVal Button As MSComctlLib.Button)
          'Listado_Facturas_Por_Meses True
     Case "Listar_Por_Meses"
          Listado_Facturas_Por_Meses False
-    Case "Estado_Cuenta_Cliente"
-         Titulo = "Pregunta de Desicion"
-         Mensajes = "Procesar Cartera Clientes Resumida?"
-         If BoxMensaje = vbYes Then Si_No = True Else Si_No = False
-         
-         DGQuery.Visible = False
-         DGQuery.Refresh
-         If ListCliente.Text = "Todos" Then FA.CodigoC = "Todos"
-         Reporte_Cartera_Clientes_SP PrimerDiaMes(MBFechaI), UltimoDiaMes(FechaSistema), FA.CodigoC, Si_No, CheqPreFa.value
-         
-         sSQL = "SELECT Razon_Social, T, TC, Serie, Factura, Fecha, Detalle, Anio, Mes, Cargos, Abonos, Saldo, Emails, Direccion, CodigoC " _
-              & "FROM Reporte_Cartera_Clientes " _
-              & "WHERE Item = '" & NumEmpresa & "' " _
-              & "AND CodigoU = '" & CodigoUsuario & "' " _
-              & "AND T <> 'A' " _
-              & "ORDER BY Cod_Benef, TC, Serie, Factura, Anio, Mes, T_No, ID "
-         Select_Adodc_Grid DGQuery, AdoQuery, sSQL
-         DGQuery.Visible = False
-         With AdoQuery.Recordset
-          If .RecordCount > 0 Then
-              Do While Not .EOF
-                 Total = Total + .fields("Cargos")
-                 Abono = Abono + .fields("Abonos")
-                .MoveNext
-              Loop
-             .MoveFirst
-          End If
-         End With
-         Opcion = 19
     Case "Listados_Medidor"
          'Listados_Medidor
     Case "Base_Access"
@@ -3574,6 +3561,85 @@ Private Sub ToolbarMenu_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMe
           CxC_Tiempo_Vencimiento
      Case "Tipo_Pago_Cliente"
           Tipo_Pago_Cliente
+    'Cartera de Clientes
+     Case "Cartera_Clientes"
+          DGQuery.Visible = False
+          DGQuery.Refresh
+          If ListCliente.Text = "Todos" Then FA.CodigoC = "Todos"
+          Reporte_Cartera_Clientes_SP PrimerDiaMes(MBFechaI), UltimoDiaMes(FechaSistema), FA.CodigoC, False, CheqPreFa.value
+        
+          sSQL = "SELECT Razon_Social, T, TC, Serie, Factura, Fecha, Detalle, Anio, Mes, Cargos, Abonos, Saldo, Emails, Direccion, CodigoC " _
+               & "FROM Reporte_Cartera_Clientes " _
+               & "WHERE Item = '" & NumEmpresa & "' " _
+               & "AND CodigoU = '" & CodigoUsuario & "' " _
+               & "AND T <> 'A' " _
+               & "ORDER BY Cod_Benef, TC, Serie, Factura, Anio, Mes, T_No, ID "
+          Select_Adodc_Grid DGQuery, AdoQuery, sSQL
+          DGQuery.Visible = False
+          With AdoQuery.Recordset
+           If .RecordCount > 0 Then
+               Do While Not .EOF
+                  Total = Total + .fields("Cargos")
+                  Abono = Abono + .fields("Abonos")
+                 .MoveNext
+               Loop
+              .MoveFirst
+           End If
+          End With
+          Opcion = 19
+          DGQuery.Visible = True
+     Case "Cartera_Clientes_Resumen"
+          DGQuery.Visible = False
+          DGQuery.Refresh
+          If ListCliente.Text = "Todos" Then FA.CodigoC = "Todos"
+          Reporte_Cartera_Clientes_SP PrimerDiaMes(MBFechaI), UltimoDiaMes(FechaSistema), FA.CodigoC, True, CheqPreFa.value
+        
+          sSQL = "SELECT Razon_Social, T, TC, Serie, Factura, Fecha, Detalle, Anio, Mes, Cargos, Abonos, Saldo, Emails, Direccion, CodigoC " _
+               & "FROM Reporte_Cartera_Clientes " _
+               & "WHERE Item = '" & NumEmpresa & "' " _
+               & "AND CodigoU = '" & CodigoUsuario & "' " _
+               & "AND T <> 'A' " _
+               & "ORDER BY Cod_Benef, TC, Serie, Factura, Anio, Mes, T_No, ID "
+          Select_Adodc_Grid DGQuery, AdoQuery, sSQL
+          DGQuery.Visible = False
+          With AdoQuery.Recordset
+           If .RecordCount > 0 Then
+               Do While Not .EOF
+                  Total = Total + .fields("Cargos")
+                  Abono = Abono + .fields("Abonos")
+                 .MoveNext
+               Loop
+              .MoveFirst
+           End If
+          End With
+          Opcion = 19
+          DGQuery.Visible = True
+     Case "Mayor_Cartera_Clientes"
+          DGQuery.Visible = False
+          DGQuery.Refresh
+          If ListCliente.Text = "Todos" Then FA.CodigoC = "Todos"
+          Reporte_Cartera_Mayor_SP PrimerDiaMes(MBFechaI), UltimoDiaMes(FechaSistema), FA.CodigoC
+        
+          sSQL = "SELECT  Razon_Social, T, TC, Fecha, Detalle, Cargos, Abonos, Saldo " _
+               & "FROM Reporte_Cartera_Mayor " _
+               & "WHERE Item = '" & NumEmpresa & "' " _
+               & "AND CodigoU = '" & CodigoUsuario & "' " _
+               & "AND T <> 'A' " _
+               & "ORDER BY Cod_Benef, CodigoC, Fecha, TC, ID "
+          Select_Adodc_Grid DGQuery, AdoQuery, sSQL
+          DGQuery.Visible = False
+          With AdoQuery.Recordset
+           If .RecordCount > 0 Then
+               Do While Not .EOF
+                  Total = Total + .fields("Cargos")
+                  Abono = Abono + .fields("Abonos")
+                 .MoveNext
+               Loop
+              .MoveFirst
+           End If
+          End With
+          Opcion = 22
+          DGQuery.Visible = True
     'Reportes por Excel
      Case "Bajar_Excel"
           DGQuery.Visible = False
@@ -3721,7 +3787,9 @@ Dim Resultado  As Boolean
       Case 19
            RatonReloj
            Resultado = Reporte_Cartera_Clientes_PDF(PrimerDiaMes(MBFechaI), FA.CodigoC, False, True)
-           'Presenta__Archivo_PDF HistorialFacturas, RutaDocumentoPDF
+      Case 22
+           RatonReloj
+           Resultado = Reporte_Mayor_Clientes_PDF(PrimerDiaMes(MBFechaI), FA.CodigoC, False, True)
     End Select
     HistorialFacturas.Caption = "RESUMEN HISTORICO DE FACTURAS/NOTAS DE VENTA"
     DGQuery.Visible = True

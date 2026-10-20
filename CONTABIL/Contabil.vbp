@@ -147,6 +147,7 @@ Class=cStringBuilder; ..\CLASES\cStringBuilder.cls
 Class=cPing; ..\CLASES\cPing.cls
 Form=..\GENERAL\FEnviarCorreos.frm
 Form=..\GENERAL\FSRIAutorizaXML.frm
+Form=..\GENERAL\FInfMsg.frm
 IconForm="MDIConta"
 Startup="MDIConta"
 HelpFile=""

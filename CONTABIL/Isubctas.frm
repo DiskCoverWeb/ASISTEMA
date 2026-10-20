@@ -1,8 +1,8 @@
 VERSION 5.00
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "msmask32.ocx"
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDATLST.OCX"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "COMCTL32.OCX"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
 Begin VB.Form ISubCtas 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Ingreso/Modificacion de SubCuentas"
@@ -1012,21 +1012,21 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
    Case "Primero"
         Nuevo = False
        .MoveFirst
-        DLCtas.Text = .fields("Nombre_Cta")
+        DLCtas.Text = .Fields("Nombre_Cta")
    Case "Anterior"
         Nuevo = False
        .MovePrevious
         If .BOF Then .MoveFirst
-        DLCtas.Text = .fields("Nombre_Cta")
+        DLCtas.Text = .Fields("Nombre_Cta")
    Case "Siguiente"
         Nuevo = False
        .MoveNext
         If .EOF Then .MoveLast
-        DLCtas.Text = .fields("Nombre_Cta")
+        DLCtas.Text = .Fields("Nombre_Cta")
    Case "Ultimo"
         Nuevo = False
        .MoveLast
-        DLCtas.Text = .fields("Nombre_Cta")
+        DLCtas.Text = .Fields("Nombre_Cta")
  End Select
  If Nuevo = False Then
     Cadena = SinEspaciosIzq(DLCtas.Text)
@@ -1045,25 +1045,25 @@ Public Sub LlenarCta(CodigoCta As String)
    Select_Adodc AdoSubCta1, sSQL
    With AdoSubCta1.Recordset
     If .RecordCount > 0 Then
-        TextSubCta.Text = .fields("Detalle")
-        TxtCodigo = .fields("Codigo")
-        Select Case .fields("TC")
+        TextSubCta.Text = .Fields("Detalle")
+        TxtCodigo = .Fields("Codigo")
+        Select Case .Fields("TC")
           Case "G": OpcG.value = True
           Case "I": OpcI.value = True
           Case "PM": OpcPM.value = True
           Case "CC": OpcCC.value = True
         End Select
-        MBoxCta.Text = FormatoCodigoCta(.fields("Cta_Reembolso"))
-        Label5.Caption = " " & Listar_Detalle_Cta(.fields("Cta_Reembolso"))
+        MBoxCta.Text = FormatoCodigoCta(.Fields("Cta_Reembolso"))
+        Label5.Caption = " " & Listar_Detalle_Cta(.Fields("Cta_Reembolso"))
         'MsgBox Listar_Detalle_Cta(.Fields("Cta"))
-        TxtReembolso = .fields("Reembolso")
-        TxtNivel = .fields("Nivel")
-        MBFechaI = .fields("Fecha_D")
-        MBFechaF = .fields("Fecha_H")
-        TextPresupuesto = Format(.fields("Presupuesto"), "#,##0.00")
-        If .fields("Caja") Then CheqCaja.value = 1 Else CheqCaja.value = 0
-        If .fields("Agrupacion") Then CheqNivel.value = 1 Else CheqNivel.value = 0
-        If .fields("Bloquear") Then CheqBloquear.value = 1 Else CheqBloquear.value = 0
+        TxtReembolso = .Fields("Reembolso")
+        TxtNivel = .Fields("Nivel")
+        MBFechaI = .Fields("Fecha_D")
+        MBFechaF = .Fields("Fecha_H")
+        TextPresupuesto = Format(.Fields("Presupuesto"), "#,##0.00")
+        If .Fields("Caja") Then CheqCaja.value = 1 Else CheqCaja.value = 0
+        If .Fields("Agrupacion") Then CheqNivel.value = 1 Else CheqNivel.value = 0
+        If .Fields("Bloquear") Then CheqBloquear.value = 1 Else CheqBloquear.value = 0
     Else
         DLCtas.Enabled = False
         TextSubCta.Text = ""
@@ -1078,7 +1078,9 @@ End Sub
 Public Sub NuevaCta()
   DLCtas.Enabled = False
   TextSubCta.Text = ""
-  TxtCodigo = NumEmpresa & "0000000"
+  Numero = ReadSetDataNum("SubCtas", True, False)
+ 'MsgBox Numero
+  TxtCodigo = NumEmpresa & Format(Numero, "0000000")
 End Sub
 
 Public Sub GrabarCta(CodigoCta As String)
@@ -1096,13 +1098,13 @@ Public Sub GrabarCta(CodigoCta As String)
        & "AND TC = '" & TipoCta & "' "
   Select_Adodc AdoSubCta1, sSQL
   If AdoSubCta1.Recordset.RecordCount > 0 Then
-     Codigo = AdoSubCta1.Recordset.fields("Codigo")
+     Codigo = AdoSubCta1.Recordset.Fields("Codigo")
   Else
      If TipoCta = "CC" Then
         Codigo = CodigoCta
      Else
         Numero = ReadSetDataNum("SubCtas", True, True)
-        Codigo = FormatoCodigo(TextSubCta.Text, Numero)
+        Codigo = NumEmpresa & Format(Numero, "0000000") 'FormatoCodigo(TextSubCta.Text, Numero)
      End If
   End If
   sSQL = "DELETE * " _
@@ -1171,7 +1173,7 @@ Public Function Listar_Detalle_Cta(FCta As String) As String
       .MoveFirst
       .Find ("Codigo = '" & FCta & "' ")
        If Not .EOF Then
-          Listar_Detalle_Cta = .fields("Cuenta")
+          Listar_Detalle_Cta = .Fields("Cuenta")
        Else
           Listar_Detalle_Cta = ""
        End If

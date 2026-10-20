@@ -77,6 +77,7 @@ Class=cJSONScript; ..\CLASES\cJSONScript.cls
 Module=JSON; ..\MODULOS\JSON.bas
 Form=..\Facturas\FacturaDesp.frm
 Form=..\GENERAL\FSRIAutorizaXML.frm
+Form=..\GENERAL\FInfMsg.frm
 IconForm="MDIDespensa"
 Startup="MDIDespensa"
 HelpFile=""

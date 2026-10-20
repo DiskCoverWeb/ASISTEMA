@@ -32,15 +32,14 @@ Option Explicit
 '------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 'SELECT  Ciudad, Empresa, RUC, Email, Email_Conexion, Email_Clave, Email_Respaldos, Email_Conexion_CE, Email_Clave_CE, Email_Procesos, Email_CE_Copia, smtp_Servidor, ID From Empresas
 '------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-'     194.195.222.54     db.diskcoversystem.com
 '      69.164.192.53     erp.diskcoversystem.com
+'      69.164.192.53     ftpds.diskcoversystem.com
 '     104.237.138.52     imap.diskcoversystem.com
 '     194.195.222.54     ftp.diskcoversystem.com
-'      69.164.192.53     ftpds.diskcoversystem.com
+'     194.195.222.54     db.diskcoversystem.com
 '      186.4.206.112     cloud.diskcoversystem.com
 '       186.4.206.95     vpn.diskcoversystem.com
 '       186.4.206.95     ftpupdate.diskcoversystem.com
-'       186.4.206.95
 '-----------------------------------------------------
 'Tipo_Concepto_Retencion
 'BINARY       1 byte por carácter Se puede almacenar cualquier tipo de datos en un campo de
@@ -92,13 +91,15 @@ Option Explicit
 ' Trans_No = 36-78, 201-249
 '-----------------------------------------------------------------
 'Este Campo se cambiara segun el tiempo y la version de conexion
-
+'-----------------------------------------------------------------
 ''' "USTED NO ESTA LEGALIZADO LLAME A SU" & vbCrLf _
 '''                 & "PROVEEDOR O A NUESTRAS OFICINAS A" & vbCrLf _
 '''                 & "LOS TELEFONOS: 02-321-0051/099-965-4196/098-910-5300" & vbCrLf _
 '''                 & "EN QUITO - ECUADOR O LOS EMAILS:" & vbCrLf _
 '''                 & "asistencia@diskcoversystem.com / prisma_net@hotmail.es" & vbCrLf _
 '''                 & "PARA SU LEGALIZACION"
+'--------------------------------------------------------------------------------------------------------------------------------------------
+'DATOS PARA TRANSFERENCIAS y RETENCIONES: [NOMBREDE LA EMPRESA TAL COMO ESTA EN EL RUC] RUC: 1791278550001, Banco XXXXX Cta. Cte/Ahr. 0123456789, mail: correo_de_la_empresa@correo.com, Celular: 099-000-0000.
 '--------------------------------------------------------------------------------------------------------------------------------------------
 'https://srienlinea.sri.gob.ec/sri-catastro-sujeto-servicio-internet/rest/ConsolidadoContribuyente/existePorNumeroRuc?numeroRuc=1793042813001
 'https://srienlinea.sri.gob.ec/facturacion-internet/consultas/publico/ruc-datos2.jspa?accion=siguiente&ruc=1793192001001
@@ -157,8 +158,6 @@ Global Const Resolucion_Retencion = "RESOLUCION: El Articulo 97 del Reglamento p
 '-------------------------------------------------------------------------------
 'Datos de Conexion a la Base de Datos en las nubes db.diskcoversystem.com:13306
 '-------------------------------------------------------------------------------
-'Global Const AdoStrCnnMySQL = "DRIVER={MySQL ODBC 3.51 Driver};"
-'Global Const AdoStrCnnMySQL = "DRIVER={MySQL ODBC 5.1 Driver};"
 'Global Const AdoStrCnnMySQL = "DRIVER={MySQL ODBC 8.0 ANSI Driver};"
 '-------------------------------------------------------------------------------
 'MySQL: root / disk2023@Cover
@@ -166,9 +165,6 @@ Global Const Resolucion_Retencion = "RESOLUCION: El Articulo 97 del Reglamento p
 '-------------------------------------------------------------------------------
 Global Const strServidor = "db.diskcoversystem.com"
 Global Const strServidorERP = "erp.diskcoversystem.com"
-'MySQL ODBC 5.1 Driver
-'MySQL ODBC 8.0 ANSI Driver
-Global Const AdoStrCnnMySQL = "DRIVER={MySQL ODBC 8.0 ANSI Driver};SERVER=" & strServidorERP & ";PORT=13306;DATABASE=diskcover_empresas;USER=diskcover;PASSWORD=disk2017@Cover;OPTION=3"
 
 Global Const urlIdukay = "https://erp.diskcoversystem.com/php/vista/consultarEstudiante.php?id="
 Global Const urlEsUnRUC = "https://srienlinea.sri.gob.ec/sri-catastro-sujeto-servicio-internet/rest/ConsolidadoContribuyente/existePorNumeroRuc?numeroRuc="
@@ -176,25 +172,16 @@ Global Const urlDatosDelRUC = "https://srienlinea.sri.gob.ec/facturacion-interne
 '-----------------------------------------------------------------
 Global Const CorreoDiskCover = "informacion@diskcoversystem.com"
 Global Const ContrasenaDiskCover = "infoDlcjvl1210DiskCover"
+
 Global Const CorreoUpdate = "actualizar@diskcoversystem.com"
 Global Const PaswordUpdate = "Dlcjvl1210@"
-'LINODE DB
-Global Const ftpSvrLinode = "ftp.diskcoversystem.com"   'Es el servidor del db.diskcoversystem.com
-Global Const ftpUseLinode = "ftpuser"
-Global Const ftpPwrLinode = "ftp2023User"
-Global Const ftpDirLinode = "/files"
-Global Const ftpPuerto = 21
-'LINODE ERP
-Global Const ftpSvr = "ftpds.diskcoversystem.com"       'Es el servidor del erp.diskcoversystem.com
-Global Const ftpUse = "ftpuser"
-Global Const ftpPwr = "ftp2023User"
-Global Const ftpDir = "/files"
+
 'READONLY FTP
-Global Const ftpUpSvr = "only.diskcoversystem.com"      'Es el servidor del only.diskcoversystem.com
+Global Const ftpUpSvr = "ftp.diskcoversystem.com"      'Es el servidor del only.diskcoversystem.com
 Global Const ftpUpUse = "userftp"
 Global Const ftpUpPwr = "user2025Ftp"
-Global Const ftpUpDir = "" '"/files"
-Global Const ftpUpPuerto = 10021
+Global Const ftpUpDir = "/files"
+Global Const ftpUpPuerto = 21
 'DNSEXIT IMAP
 Global Const imapHost = "imap.diskcoversystem.com"       'Es el servidor del imap.diskcoversystem.com
 Global Const imaphelo = "imap.diskcoversystem.com"
@@ -336,7 +323,12 @@ Global Const EstTransp = "T"
 Global Const MP = "MP"
 Global Const PP = "PP"
 Global Const PT = "PT"
+'----------------------------------------
+'Borrar de MySQL los siguientes SP:
+'   sp_mysql_leer_estado_empresa
+'   sp_mysql_datos_estado_empresa
 '-----------------------------------------
+
 Global Const MascaraFechas = "##/##/####"
 Global Const LimpiarFechas = "00/00/0000"
 Global Const FormatoFechas = "dd/MM/yyyy"
@@ -360,3 +352,26 @@ Global Const MascaraTelef = "###-###"
 Global Const LimpiarTelef = "000-000"
 '-----------------------------------------
 Global Const MaxVect = 80
+'-----------------------------------------
+'--- tipos de archivos --- para el Upload y Download
+Global Const FTP_TRANSFER_TYPE_UNKNOWN = &H0
+Global Const FTP_TRANSFER_TYPE_ASCII = &H1
+Global Const FTP_TRANSFER_TYPE_BINARY = &H2
+
+'Puerto FTP
+Global Const INTERNET_SERVICE_FTP = 1
+
+' Modo de conexión FTP
+Global Const INTERNET_FLAG_PASSIVE = &H8000000
+'Private Const INTERNET_FLAG_PASSIVE = New Binary(0x08000000)
+
+'--- formas de entrar en internet ---
+' usa config del registro
+Global Const INTERNET_OPEN_TYPE_PRECONFIG = 0
+' directo a internetnet
+Global Const INTERNET_OPEN_TYPE_DIRECT = 1
+' via  proxy
+Global Const INTERNET_OPEN_TYPE_PROXY = 3
+' prevent using java/script/INS
+Global Const INTERNET_OPEN_TYPE_PRECONFIG_WITH_NO_AUTOPROXY = 4
+

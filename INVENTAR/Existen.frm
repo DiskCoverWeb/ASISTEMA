@@ -1021,6 +1021,7 @@ Option Explicit
 Dim PorBodega       As Boolean
 Dim PorCodigoBarra  As Boolean
 Dim PorTodos        As Boolean
+Dim Opcion_Menu     As Byte
 
 Public Sub ListarProductos(OpcVista As String)
  Select Case OpcVista
@@ -1074,10 +1075,11 @@ Public Sub Consultar_Kardex()
   FechaFin = BuscarFecha(MBoxFechaF.Text)
   Codigo = LabelCodigo.Caption
   Codigo1 = SinEspaciosDer(DCBodega.Text)
+  If Codigo = "" Then Codigo = "."
   Debe = 0
   Haber = 0
-  If Codigo = "" Then Codigo = "."
-  sSQL = "SELECT K.Codigo_Inv, K.Codigo_Barra, SUM(Entrada) As Entradas, SUM(Salida) As Salidas, SUM(Entrada-Salida) As Stock_Kardex " _
+  
+  sSQL = "SELECT K.Codigo_Inv, K.CodBodega, K.Codigo_Barra, SUM(Entrada) As Entradas, SUM(Salida) As Salidas, SUM(Entrada-Salida) As Stock_Kardex " _
        & "FROM Trans_Kardex As K, Comprobantes As C " _
        & "WHERE K.Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
        & "AND K.Codigo_Inv = '" & Codigo & "' " _
@@ -1085,16 +1087,17 @@ Public Sub Consultar_Kardex()
        & "AND K.Item = '" & NumEmpresa & "' " _
        & "AND K.Periodo = '" & Periodo_Contable & "' "
   If PorBodega Then sSQL = sSQL & "AND K.CodBodega = '" & Codigo1 & "' "
+  If PorCodigoBarra Then sSQL = sSQL & "AND K.Codigo_Barra = '" & Codigo1 & "' "
   sSQL = sSQL & "AND K.TP = C.TP " _
        & "AND K.Fecha = C.Fecha " _
        & "AND K.Numero = C.Numero " _
        & "AND K.Item = C.Item " _
        & "AND K.Periodo = C.Periodo " _
-       & "GROUP BY K.Codigo_Inv, K.Codigo_Barra " _
+       & "GROUP BY K.CodBodega, K.Codigo_Barra, K.Codigo_Inv " _
        & "HAVING SUM(Entrada-Salida) >= 1 " _
-       & "ORDER BY K.Codigo_Inv, K.Codigo_Barra "
+       & "ORDER BY K.CodBodega, K.Codigo_Barra, K.Codigo_Inv "
   SQLDec = ""
-  Select_Adodc_Grid DGKardex, AdoKardex, sSQL, SQLDec, , , "Kardex_Producto"
+  Select_Adodc_Grid DGKardex, AdoKardex, sSQL, SQLDec
   RatonReloj
   With AdoKardex.Recordset
    If .RecordCount > 0 Then
@@ -1109,6 +1112,7 @@ Public Sub Consultar_Kardex()
   Existen.Caption = "EXISTENCIA DE INVENTARIO"
   DGKardex.Visible = True
   RatonNormal
+  DCTInv.SetFocus
 End Sub
 
 Public Sub Consultar_Tipo_De_Kardex(EsKardexIndividual As Boolean)
@@ -1133,8 +1137,12 @@ Dim GrupoInv As String
   End If
   sSQL = sSQL _
        & "TK.Costo, TK.Total As Saldo, TK.Valor_Unitario, TK.Valor_Total, TK.Fecha_Exp, TK.TC, TK.Serie, TK.Factura, TK.Cta_Inv, TK.Contra_Cta, TK.Serie_No, TK.Lote_No, " _
-       & "TK.Codigo_Tra AS CI_RUC_CC, CM.Marca As 'Marca_Tipo_Proceso', TK.Detalle, TK.Centro_Costo As Beneficiario_Centro_Costo, TK.Orden_No, TK.Cmds, TK.ID " _
-       & "FROM Trans_Kardex As TK, Catalogo_Productos As CP, Catalogo_Marcas As CM " _
+       & "Tipo_Areas_NIC_CC=CASE WHEN LEN(Codigo_Tra) <> 5 THEN Codigo_Tra ELSE (SELECT Proceso FROM Catalogo_Proceso WHERE Item = '" & NumEmpresa & "' AND Cmds = TK.Codigo_Tra) END, " _
+       & "Motivos_Modelo=CASE WHEN LEN(Modelo) <> 5 THEN Modelo ELSE (SELECT Proceso FROM Catalogo_Proceso WHERE Item = '" & NumEmpresa & "' AND Cmds = TK.Modelo) END, " _
+       & "Marca_Tipo_Proceso=CASE WHEN LEN(CodMarca) = 1 THEN '.' ELSE (SELECT Marca FROM Catalogo_Marcas WHERE Item = '" & NumEmpresa & "' AND Periodo = '" & Periodo_Contable & "' AND CodMar = TK.CodMarca) END, " _
+       & "Tipo_Ingreso = CASE WHEN LEN(Cmds) <> 4 THEN Cmds ELSE (SELECT Proceso FROM Catalogo_Proceso WHERE Item = '" & NumEmpresa & "' AND TP = TK.Cmds) END, " _
+       & "TK.Detalle, TK.Centro_Costo As Beneficiario_Centro_Costo, TK.Orden_No, TK.ID " _
+       & "FROM Trans_Kardex As TK, Catalogo_Productos As CP " _
        & "WHERE TK.Item = '" & NumEmpresa & "' " _
        & "AND TK.Periodo = '" & Periodo_Contable & "' " _
        & "AND TK.Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
@@ -1144,15 +1152,13 @@ Dim GrupoInv As String
   Else
      If GrupoInv <> "*" Then sSQL = sSQL & "AND TK.Codigo_Inv LIKE '" & GrupoInv & "%' "
   End If
+  
   If PorBodega Then sSQL = sSQL & "AND TK.CodBodega LIKE '" & Codigo1 & "%' "
   If PorCodigoBarra Then sSQL = sSQL & "AND TK.Codigo_Barra = '" & Codigo1 & "' "
   sSQL = sSQL _
        & "AND TK.Item = CP.Item " _
-       & "AND TK.Item = CM.Item " _
        & "AND TK.Periodo = CP.Periodo " _
-       & "AND TK.Periodo = CM.Periodo " _
        & "AND TK.Codigo_Inv = CP.Codigo_Inv " _
-       & "AND TK.CodMarca = CM.CodMar " _
        & "ORDER BY TK.CodBodega, TK.Codigo_Inv, TK.Fecha,TK.Entrada DESC,TK.Salida,TK.TP,TK.Numero,TK.ID "
   SQLDec = "TK.Costo " & CStr(Dec_Costo) & "| TK.Valor_Unitario " & CStr(Dec_Costo) & "|,TK.Valor_Total 2|."
   Select_Adodc_Grid DGKardex, AdoKardex, sSQL, SQLDec
@@ -1176,6 +1182,7 @@ Dim GrupoInv As String
   LabelExitencia.Caption = Format(Debe - Haber, "#,##0.00")
   DGKardex.Visible = True
   RatonNormal
+  DCTInv.SetFocus
 End Sub
 
 Public Sub Kardex_Total_QR()
@@ -1199,8 +1206,8 @@ Dim GrupoInv As String
      sSQL = sSQL & "TK.Existencia As Stock, "
   End If
   sSQL = sSQL _
-       & "TK.Costo, TK.Total As Saldo, TK.Valor_Unitario, TK.Valor_Total, TK.Fecha_Exp, TK.TC, TK.Serie, TK.Factura, TK.Cta_Inv, TK.Contra_Cta, TC.Porc_C As Temperatura, TK.Serie_No, TK.Lote_No, " _
-       & "TK.Codigo_Tra AS CI_RUC_CC, CM.Marca As 'Marca_Tipo_Proceso', TK.Detalle, TK.Centro_Costo As Beneficiario_Centro_Costo, TK.Orden_No, TK.ID " _
+       & "TK.Costo, TK.Total As Saldo, TK.Valor_Unitario, TK.Valor_Total, TK.Fecha_Exp, TK.TC, TK.Serie, TK.Factura, TK.Cta_Inv, TK.Contra_Cta, TC.Porc_C As Temperatura, " _
+       & "TK.Serie_No, TK.Lote_No, TK.Codigo_Tra AS CI_RUC_CC, CM.Marca As 'Marca_Tipo_Proceso', TK.Detalle, TK.Centro_Costo As Beneficiario_Centro_Costo, TK.Orden_No, TK.ID " _
        & "FROM Trans_Kardex As TK, Catalogo_Productos As CP, Catalogo_Marcas As CM, Trans_Correos As TC " _
        & "WHERE TK.Item = '" & NumEmpresa & "' " _
        & "AND TK.Periodo = '" & Periodo_Contable & "' " _
@@ -1246,6 +1253,7 @@ Dim GrupoInv As String
   LabelExitencia.Caption = Format(Debe - Haber, "#,##0.00")
   DGKardex.Visible = True
   RatonNormal
+  DCTInv.SetFocus
 End Sub
 
 Private Sub Command1_Click()
@@ -1368,17 +1376,19 @@ Private Sub DGKardex_KeyDown(KeyCode As Integer, Shift As Integer)
  Keys_Especiales Shift
  If AdoKardex.Recordset.RecordCount > 0 Then
     CodigoInv = DGKardex.Columns(0)
-    Producto = DGKardex.Columns(1)
-    FA.TC = DGKardex.Columns(15)
-    FA.Serie = DGKardex.Columns(16)
-    FA.Factura = DGKardex.Columns(18)
-    CodigoN = DGKardex.Columns(20)
-    Codigos = DGKardex.Columns(21)
-    Existencia = Val(DGKardex.Columns(9).Text)
-    ID_Reg = Val(DGKardex.Columns(CantCampos - 1).Text)
     FechaIni = BuscarFecha(MBoxFechaI.Text)
     FechaFin = BuscarFecha(MBoxFechaF.Text)
-
+    ID_Reg = Val(DGKardex.Columns(CantCampos - 1).Text)
+    Select Case Opcion_Menu
+      Case 1
+           Producto = DGKardex.Columns(1)
+           FA.TC = DGKardex.Columns(16)
+           FA.Serie = DGKardex.Columns(17)
+           FA.Factura = DGKardex.Columns(18)
+           CodigoN = DGKardex.Columns(20)
+           Codigos = DGKardex.Columns(21)
+           Existencia = Val(DGKardex.Columns(9).Text)
+    End Select
     If CtrlDown And KeyCode = vbKeyF11 Then
        If Leer_Codigo_Inv(CodigoInv, FechaSistema) Then
           DatInv.Codigo_Barra = Codigos
@@ -1387,7 +1397,6 @@ Private Sub DGKardex_KeyDown(KeyCode As Integer, Shift As Integer)
     End If
     
     If CtrlDown And KeyCode = vbKeyF12 Then
-    
        LblProducto = Producto
        Listar_Articulos True
        RatonNormal
@@ -1472,7 +1481,7 @@ Private Sub Form_Activate()
   PorBodega = False
   PorCodigoBarra = False
   PorTodos = False
-  
+  Opcion_Menu = 0
 ''  sSQL = "UPDATE Catalogo_Productos " _
 ''       & "SET X = '.' " _
 ''       & "WHERE Item = '" & NumEmpresa & "' " _
@@ -1619,12 +1628,16 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
    Select Case Button.key
      Case "Consultar"
           Consultar_Tipo_De_Kardex True
+          Opcion_Menu = 1
      Case "Kardex"
           Consultar_Kardex
+          Opcion_Menu = 2
      Case "Kardex_Total"
           Consultar_Tipo_De_Kardex False
+          Opcion_Menu = 1
      Case "Kardex_Total_QR"
           Kardex_Total_QR
+          Opcion_Menu = 3
      Case "Imprimir_Kardex"
           DGKardex.Visible = False
           ImprimirKardex AdoKardex, AdoArt

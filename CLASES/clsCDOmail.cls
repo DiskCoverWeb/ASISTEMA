@@ -59,35 +59,35 @@ Dim vAdjunto As String
     Set oCDO = CreateObject("CDO.Message")
     With oCDO.Configuration
         'Indica el SMTP server para poder enviar el Mail (puede ser el nombre del servidor o su dirección IP)
-        .fields("http://schemas.microsoft.com/cdo/configuration/smtpserver").value = mServidor
+        .Fields("http://schemas.microsoft.com/cdo/configuration/smtpserver").value = mServidor
         'Tipo de envio de mail
-        .fields("http://schemas.microsoft.com/cdo/configuration/sendusing").value = 2
+        .Fields("http://schemas.microsoft.com/cdo/configuration/sendusing").value = 2
         'Por defecto se usa el puerto (typically 25, 465, 587), en el caso de Gmail se usa el puerto 465
         'The next line is commented out because of the use of SSL encryption
-        .fields("http://schemas.microsoft.com/cdo/configuration/smtpserverport").value = mPuerto     'Commonly -> 465 SSL, 587 TLS
+        .Fields("http://schemas.microsoft.com/cdo/configuration/smtpserverport").value = mPuerto     'Commonly -> 465 SSL, 587 TLS
         'Enviar un mensaje al servdor
-         If Len(mEhlo) > 1 Then .fields("http://schemas.microsoft.com/cdo/configuration/ehlo").value = mEhlo
+         If Len(mEhlo) > 1 Then .Fields("http://schemas.microsoft.com/cdo/configuration/ehlo").value = mEhlo
         'Indica si se usa SSL para el envío. En el caso de Gmail requiere que esté en True
-         If mSSL Then .fields("http://schemas.microsoft.com/cdo/configuration/smtpusessl").value = mSSL
-         If mTLS Then .fields("http://schemas.microsoft.com/cdo/configuration/sendtls").value = mTLS
+         If mSSL Then .Fields("http://schemas.microsoft.com/cdo/configuration/smtpusessl").value = mSSL
+         If mTLS Then .Fields("http://schemas.microsoft.com/cdo/configuration/sendtls").value = mTLS
         'Configura las opciones para el login en el SMTP
         'SMTP Account User ID
          If mUseAuntentificacion Then
            'Id de usuario del servidor Smtp (en el caso de gmail, debe ser la dirección de correro mas el @gmail.com)
-           .fields("http://schemas.microsoft.com/cdo/configuration/sendusername").value = mUsuario
+           .Fields("http://schemas.microsoft.com/cdo/configuration/sendusername").value = mUsuario
            'Password de la cuenta
-           .fields("http://schemas.microsoft.com/cdo/configuration/sendpassword").value = mPassword
+           .Fields("http://schemas.microsoft.com/cdo/configuration/sendpassword").value = mPassword
          End If
         'Indica el tipo de autentificación con el servidor de correo. Type of authentication, NONE, Basic (Base64 encoded), NTLM
         'El valor 0 no requiere autentificarse, el valor 1 es con autentificación
-        .fields("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate").value = Abs(mUseAuntentificacion)
+        .Fields("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate").value = Abs(mUseAuntentificacion)
         'Tiempo máximo de espera en segundos para la conexión
         'Number of seconds to wait for a response from the server before aborting
-        .fields("http://schemas.microsoft.com/cdo/configuration/smtpconnectiontimeout").value = 10
+        .Fields("http://schemas.microsoft.com/cdo/configuration/smtpconnectiontimeout").value = 10
         'Cuerpo del mensaje
-        .fields("http://schemas.microsoft.com/cdo/configuration/BodyFormat").value = 2
+        .Fields("http://schemas.microsoft.com/cdo/configuration/BodyFormat").value = 2
         'Actualiza los datos antes de enviar
-        .fields.Update
+        .Fields.Update
     End With
    'MsgBox "...."
    'Estructura del mail

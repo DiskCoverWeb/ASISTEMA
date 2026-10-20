@@ -21,4 +21,5 @@ Global Precio As Double
 Global Valor_Prom As Double
 Global ValorUnitAnt As Double
 Global ValorUnit As Double
-
+Global PosXFirmaPDF As Double
+Global PosYFirmaPDF As Double

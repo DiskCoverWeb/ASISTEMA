@@ -517,8 +517,8 @@ On Error GoTo error_Handler
        Progreso_Barra.Mensaje_Box = "Conectando al servidor"
       .Mostar_Estado_FTP ProgressBarEstado, LstStatud
       .Inicializar Me
-      ' MsgBox EsReadOnly
-       If EsReadOnly Then
+      'MsgBox EsReadOnly
+'       If EsReadOnly Then
           If InStr(IPDelOrdenador, "192.168.27") Then
             .servidor = "192.168.27.3"           'Establecesmo el nombre del Servidor FTP
             .Puerto = 21
@@ -528,13 +528,13 @@ On Error GoTo error_Handler
           End If
          .Password = ftpUpPwr                    'Le establecemos la contraseña de la cuenta Ftp
          .Usuario = ftpUpUse                     'Le establecemos el nombre de usuario de la cuenta
-       Else
-         .servidor = ftpSvr                      'Establecesmo el nombre del Servidor FTP
-         .Password = ftpPwr                      'Le establecemos la contraseña de la cuenta Ftp
-         .Usuario = ftpUse                       'Le establecemos el nombre de usuario de la cuenta
-         .Puerto = ftpPuerto
-       End If
-      'MsgBox .servidor & vbCrLf & .Puerto
+ '      Else
+'         .servidor = ftpSvr                      'Establecesmo el nombre del Servidor FTP
+'         .Password = ftpPwr                      'Le establecemos la contraseña de la cuenta Ftp
+'         .Usuario = ftpUse                       'Le establecemos el nombre de usuario de la cuenta
+'         .Puerto = ftpPuerto
+'       End If
+      'MsgBox .servidor & vbCrLf & .Puerto & vbCrLf & .ConectarFtp(LstStatud)
       'Conectamos al servidor FTP. EL label es el control donde mostrar los errores y el estado de la conexión
        If .ConectarFtp(LstStatud) = False Then
            MsgBox "No se pudo conectar" & .MsgError
@@ -554,35 +554,29 @@ On Error GoTo error_Handler
       '------------------------------------------
       'Esta opcion solo actualiza los ejecutables
       '==========================================
+       Cadena = ""
        If InStr(TypeUpdate, "[2]") Then
+          Cadena = ""
          'Borramos archivos antiguos
           Eliminar_Si_Existe_File RutaSistema & "\JAVASCRIPT\*.*"
-          
-         .CambiarDirectorio ftpUpDir & "/SISTEMA"
-         .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              Select Case UCaseStrg(RightStrg(LstVwFTP.ListItems(I), 3))
-                Case "EXE", "JPG", "PNG", "GIF"
-                     Progreso_Barra.Mensaje_Box = "Eliminando: " & LstVwFTP.ListItems(I)
-                    .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                     Eliminar_Si_Existe_File RutaSistema & "\" & LstVwFTP.ListItems(I)
-              End Select
-              Cadena = Cadena & LstVwFTP.ListItems(I) & vbCrLf
-          Next I
-          
-         .CambiarDirectorio ftpUpDir & "/SISTEMA/JAVASCRIPT/"
-         .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              Progreso_Barra.Mensaje_Box = "Eliminando: " & LstVwFTP.ListItems(I)
-             .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-              Eliminar_Si_Existe_File RutaSistema & "\" & LstVwFTP.ListItems(I)
-              Cadena = Cadena & LstVwFTP.ListItems(I) & vbCrLf
-          Next I
+          Eliminar_Si_Existe_File RutaSistema & "\FONTSPDF\*.*"
+          Eliminar_Si_Existe_File RutaSistema & "\*.JPG"
+          Eliminar_Si_Existe_File RutaSistema & "\*.PNG"
+          Eliminar_Si_Existe_File RutaSistema & "\*.GIF"
           
          'Copiamos nuevos archivos del servidor
          .CambiarDirectorio ftpUpDir & "/SISTEMA"
          .ListarArchivos
-          Cadena = ""
+         'Borramos los ejecutable nuevos
+          For I = 1 To LstVwFTP.ListItems.Count
+              If UCaseStrg(RightStrg(LstVwFTP.ListItems(I), 3)) = "EXE" Then
+                 Progreso_Barra.Mensaje_Box = "Eliminando: " & LstVwFTP.ListItems(I)
+                .Mostar_Estado_FTP ProgressBarEstado, LstStatud
+                 Eliminar_Si_Existe_File RutaSistema & "\" & LstVwFTP.ListItems(I)
+              End If
+              Cadena = Cadena & LstVwFTP.ListItems(I) & vbCrLf
+          Next I
+
           For I = 1 To LstVwFTP.ListItems.Count
               Select Case UCaseStrg(RightStrg(LstVwFTP.ListItems(I), 3))
                 Case "PNG", "JPG", "GIF"
@@ -592,8 +586,18 @@ On Error GoTo error_Handler
                 .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\" & LstVwFTP.ListItems(I), True
               End Select
           Next I
-          'Sleep 5000
           
+          Sleep 500
+          
+          For I = 1 To LstVwFTP.ListItems.Count
+              If UCaseStrg(RightStrg(LstVwFTP.ListItems(I), 3)) = "EXE" Then
+                 Cadena = Cadena & "Copying: " & LstVwFTP.ListItems(I) & vbCrLf
+                 Progreso_Barra.Mensaje_Box = "Actualizando: " & LstVwFTP.ListItems(I)
+                .Mostar_Estado_FTP ProgressBarEstado, LstStatud
+                .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\" & LstVwFTP.ListItems(I), True
+              End If
+          Next I
+
          .CambiarDirectorio ftpUpDir & "/SISTEMA/JAVASCRIPT/"
          .ListarArchivos
           For I = 1 To LstVwFTP.ListItems.Count
@@ -602,17 +606,6 @@ On Error GoTo error_Handler
              .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\JAVASCRIPT\" & LstVwFTP.ListItems(I), True
           Next I
           
-         .CambiarDirectorio ftpUpDir & "/SISTEMA/"
-         .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              If UCaseStrg(RightStrg(LstVwFTP.ListItems(I), 3)) = "EXE" Then
-                Cadena = Cadena & "Copying: " & LstVwFTP.ListItems(I) & vbCrLf
-                 Progreso_Barra.Mensaje_Box = "Actualizando: " & LstVwFTP.ListItems(I)
-                .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\" & LstVwFTP.ListItems(I), True
-              End If
-          Next I
-         'MsgBox Cadena
          'Conectamos la nueva Base de Datos para sacar los fondos del Adobe Reader DC
          .CambiarDirectorio ftpUpDir & "/SISTEMA/FONTSPDF/"
          .ListarArchivos
@@ -875,6 +868,8 @@ End Sub
 
 Public Sub Enviar_Mail_Actualizacion()
    'Enviamos el mail de confirmacion
+    Si_No = Get_Internet
+    
     sSQL = "SELECT E.Nombre_Entidad, E.Representante, E.RUC_CI_NIC, E.Email_Entidad, L.ID_Empresa " _
          & "FROM entidad As E, lista_empresas As L " _
          & "WHERE L.Base_Datos = '" & strNombreBaseDatos & "' " _
@@ -891,12 +886,15 @@ Public Sub Enviar_Mail_Actualizacion()
     TMail.para = ""
     Insertar_Mail TMail.para, EmailEmpresa
     Insertar_Mail TMail.para, CorreoUpdate
-    TMail.Asunto = "Proceso de actualizacion, exitoso"
+    TMail.Asunto = "SERVER: " & strIPServidor & ", Proceso de actualizacion exitoso"
     TMail.Mensaje = NombreEntidad & vbCrLf _
-                      & "Representante: " & RepresentanteEntidad & vbCrLf _
-                      & "Servidor: " & strIPServidor & vbCrLf _
-                      & TMail.Mensaje & vbCrLf _
-                      & "SERVIRLES ES NUESTRO COMPROMISO, DISFRUTARLO ES EL SUYO."
+                  & "Representante: " & RepresentanteEntidad & vbCrLf _
+                  & "Servidor: " & strIPServidor & vbCrLf _
+                  & "Equipo que Actualizo: " & IP_PC.Nombre_PC & vbCrLf _
+                  & "IP Local del Equipo: " & IP_PC.IP_PC & vbCrLf _
+                  & "IP Publica-WAN: " & IP_PC.WAN_PC & vbCrLf _
+                  & TMail.Mensaje & vbCrLf _
+                  & "SERVIRLES ES NUESTRO COMPROMISO, DISFRUTARLO ES EL SUYO."
     FEnviarCorreos.Show 1
 End Sub
 

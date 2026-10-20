@@ -14,8 +14,8 @@ Begin VB.Form SaldoSubCtasVence
    DrawStyle       =   1  'Dash
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   8985
-   ScaleWidth      =   11280
+   ScaleHeight     =   15615
+   ScaleWidth      =   15960
    WindowState     =   2  'Maximized
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
@@ -23,8 +23,8 @@ Begin VB.Form SaldoSubCtasVence
       Left            =   0
       TabIndex        =   0
       Top             =   0
-      Width           =   11280
-      _ExtentX        =   19897
+      Width           =   15960
+      _ExtentX        =   28152
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005

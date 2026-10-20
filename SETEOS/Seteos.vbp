@@ -86,6 +86,7 @@ Class=cJSONScript; ..\CLASES\cJSONScript.cls
 Class=cStringBuilder; ..\CLASES\cStringBuilder.cls
 Class=cPing; ..\CLASES\cPing.cls
 Form=..\GENERAL\FSRIAutorizaXML.frm
+Form=..\GENERAL\FInfMsg.frm
 IconForm="MDISeteos"
 Startup="MDISeteos"
 HelpFile=""

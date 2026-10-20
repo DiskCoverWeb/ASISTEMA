@@ -1,1 +1,3 @@
+Línea 18: la clase ComctlLib.Toolbar del control Toolbar1 no era una clase de control cargada.
 Línea 79: la clase AcroPDFLibCtl.AcroPDF del control APDFLiquidacion no era una clase de control cargada.
+Línea 686: la clase ComctlLib.ImageList del control ImageList1 no era una clase de control cargada.

@@ -998,7 +998,7 @@ Dim TipoProc As String
    Select_Adodc AdoDetCom, sSQL
    With AdoDetCom.Recordset
     If .RecordCount > 0 Then
-       'MsgBox .RecordCount
+       'MsgBox "Cont Reg = " & .RecordCount
         Co.Item = NumEmpresa
         Co.Fecha = .Fields("Fecha")
         Co.Beneficiario = .Fields("Cliente")
@@ -1036,6 +1036,8 @@ Dim TipoProc As String
         RatonNormal
     End If
    End With
+   
+  'MsgBox "AUTORIZACION: " & SRI_Autorizacion.Autorizacion
    SRI_Autorizacion.Clave_De_Acceso = FA.Autorizacion_R
    LblResultado.Caption = SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion)
   'LblResultado.Caption = SRI_Leer_Comprobantes_no_Autorizados("2604202507070216417900110010030000000421234567814")   ' FA.Autorizacion_R

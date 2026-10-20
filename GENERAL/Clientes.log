@@ -1,0 +1,5 @@
+Línea 20: la clase ComctlLib.Toolbar del control TBarCliente no era una clase de control cargada.
+Línea 1232: la clase MSMask.MaskEdBox del control MBFecha no era una clase de control cargada.
+Línea 1258: la clase MSMask.MaskEdBox del control MBFechaN no era una clase de control cargada.
+Línea 2174: la clase MSMask.MaskEdBox del control MBCtaxCob no era una clase de control cargada.
+Línea 2510: la clase ComctlLib.ImageList del control ImageList1 no era una clase de control cargada.

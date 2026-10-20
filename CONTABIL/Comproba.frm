@@ -542,15 +542,15 @@ Begin VB.Form FComprobantes
       TabCaption(2)   =   "&6.- RETENCIONES"
       TabPicture(2)   =   "Comproba.frx":016E
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "DGAC"
-      Tab(2).Control(1)=   "DGAsientosR"
+      Tab(2).Control(0)=   "DGAsientosR"
+      Tab(2).Control(1)=   "DGAC"
       Tab(2).ControlCount=   2
       TabCaption(3)   =   "&7.- AV - AI - AE"
       TabPicture(3)   =   "Comproba.frx":018A
       Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "DGAE"
+      Tab(3).Control(0)=   "DGAV"
       Tab(3).Control(1)=   "DGAI"
-      Tab(3).Control(2)=   "DGAV"
+      Tab(3).Control(2)=   "DGAE"
       Tab(3).ControlCount=   3
       TabCaption(4)   =   "&8.- INVENTARIO"
       TabPicture(4)   =   "Comproba.frx":01A6
@@ -3823,13 +3823,13 @@ Private Sub Form_Activate()
     
   If Len(Co.TP) < 2 Then Co.TP = CompDiario
   If Len(Co.Fecha) = 10 And IsDate(Co.Fecha) Then MBoxFecha = Co.Fecha Else MBoxFecha = FechaSistema
- 'Leer los datos del comprobante a modificar o copiar
 
+ 'Leer los datos del comprobante a modificar o copiar
   If ModificarComp Then
      Control_Procesos Normal, "Modificar Comprobante de: " & Co.TP & " No. " & Co.Numero
      Listar_Comprobante_SP Co
   End If
-  
+
   If CopiarComp Then
      Control_Procesos Normal, "Copiando Comprobante de: " & Co.TP & " No. " & Co.Numero
      Listar_Comprobante_SP Co
@@ -3846,14 +3846,16 @@ Private Sub Form_Activate()
         If BoxMensaje <> vbYes Then Eliminar_Asientos_SP True
      End If
   End If
-  
+
   sSQL = "SELECT TOP 50 TD, CI_RUC, Codigo, Cliente, Email, Grupo, RISE, Especial, Direccion, Telefono " _
        & "FROM Clientes " _
        & "WHERE Cliente LIKE '%" & Co.Beneficiario & "%' " _
        & "ORDER BY Cliente "
   SelectDB_Combo DCCliente, AdoBenef, sSQL, "Cliente"
   TipoBusqueda = "%"
+
   Tipo_De_Comprobante_No Co
+
 '  Datos_del_Cliente Co    'Solo con el CodigoB = Codigo del Cliente se busca
   'Select_Cuentas DLCuentas, AdoCuentas
   
@@ -3870,6 +3872,7 @@ Private Sub Form_Activate()
      OpcTP(3).Visible = False
      OpcTP(4).Visible = False
   End If
+
   If Bloquear_Control Then CmdGrabar.Enabled = False
   RatonNormal
   FComprobantes.WindowState = vbMaximized

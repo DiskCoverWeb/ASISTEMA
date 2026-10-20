@@ -105,6 +105,7 @@ Begin VB.Form LRolPagos
             ImageIndex      =   17
          EndProperty
          BeginProperty Button13 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
             Object.Tag             =   ""
             Style           =   3
             MixedState      =   -1  'True
@@ -433,15 +434,15 @@ Begin VB.Form LRolPagos
       TabCaption(1)   =   "ROL DE PAGOS"
       TabPicture(1)   =   "LRolPag.frx":0033
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "AdoNomina"
+      Tab(1).Control(0)=   "DGNomina"
       Tab(1).Control(1)=   "DGTotNomina"
-      Tab(1).Control(2)=   "DGNomina"
+      Tab(1).Control(2)=   "AdoNomina"
       Tab(1).ControlCount=   3
       TabCaption(2)   =   "CxC/CxP Empleados"
       TabPicture(2)   =   "LRolPag.frx":004F
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "DGNomina1"
-      Tab(2).Control(1)=   "DGSubCtas"
+      Tab(2).Control(0)=   "DGSubCtas"
+      Tab(2).Control(1)=   "DGNomina1"
       Tab(2).ControlCount=   2
       TabCaption(3)   =   "OTROS INGRESOS/EGRESOS"
       TabPicture(3)   =   "LRolPag.frx":006B
@@ -451,21 +452,21 @@ Begin VB.Form LRolPagos
       TabCaption(4)   =   "CONTABILIDAD"
       TabPicture(4)   =   "LRolPag.frx":0087
       Tab(4).ControlEnabled=   0   'False
-      Tab(4).Control(0)=   "LblConcepto(0)"
-      Tab(4).Control(1)=   "LabelDiferencia"
-      Tab(4).Control(2)=   "LabelHaber"
+      Tab(4).Control(0)=   "DGAsiento(0)"
+      Tab(4).Control(1)=   "Label1"
+      Tab(4).Control(2)=   "Label19"
       Tab(4).Control(3)=   "LabelDebe"
-      Tab(4).Control(4)=   "Label19"
-      Tab(4).Control(5)=   "Label1"
-      Tab(4).Control(6)=   "DGAsiento(0)"
+      Tab(4).Control(4)=   "LabelHaber"
+      Tab(4).Control(5)=   "LabelDiferencia"
+      Tab(4).Control(6)=   "LblConcepto(0)"
       Tab(4).ControlCount=   7
       TabCaption(5)   =   "PROVISIONES"
       TabPicture(5)   =   "LRolPag.frx":00A3
       Tab(5).ControlEnabled=   0   'False
-      Tab(5).Control(0)=   "LblConcepto(1)"
-      Tab(5).Control(1)=   "LblConcepto(2)"
-      Tab(5).Control(2)=   "DGAsiento(1)"
-      Tab(5).Control(3)=   "DGAsiento(2)"
+      Tab(5).Control(0)=   "DGAsiento(2)"
+      Tab(5).Control(1)=   "DGAsiento(1)"
+      Tab(5).Control(2)=   "LblConcepto(2)"
+      Tab(5).Control(3)=   "LblConcepto(1)"
       Tab(5).ControlCount=   4
       Begin AcroPDFLibCtl.AcroPDF APDFRol 
          Height          =   4635
@@ -2995,6 +2996,7 @@ On Error GoTo Errorhandler
            Progreso_Barra.Incremento = 0
            Progreso_Barra.Valor_Maximo = .RecordCount
            If Un_Solo_Rol Then
+              
               Generar_Rol_html Por_CI_RUC
     
              'Enviamos por mail el rol
@@ -3002,7 +3004,11 @@ On Error GoTo Errorhandler
               TMail.Mensaje = "Rol Pagos " & CAnio & "-" & Format$(NumMeses, "00") & " " & vbCrLf _
                             & "Correspondiente a: " & NombreCliente & ". "
               TMail.Adjunto = ""
-
+              If Not Medio_Rol Then
+                 Llenar_Rol_Pagos_Individual Por_CI_RUC
+                 'MsgBox RutaDocumentoPDF
+                 TMail.Adjunto = RutaDocumentoPDF
+              End If
              'Enviamos lista de mails
               TMail.para = ""
               Insertar_Mail TMail.para, FA.EmailC
@@ -3023,6 +3029,11 @@ On Error GoTo Errorhandler
                  TMail.Mensaje = "Rol Pagos " & CAnio & "-" & Format$(NumMeses, "00") & " " & vbCrLf _
                                & "Correspondiente a: " & NombreCliente & ". "
                  TMail.Adjunto = ""
+                 If Not Medio_Rol Then
+                    Llenar_Rol_Pagos_Individual .fields("Codigo")
+                   'MsgBox RutaDocumentoPDF
+                    TMail.Adjunto = RutaDocumentoPDF
+                 End If
                  
                 'Enviamos lista de mails
                  TMail.para = ""
@@ -3869,27 +3880,27 @@ Dim Tot_Egresos As Currency
       cPrint.printLinea Xo, Yo + 2.4, 19.5, Yo + 2.4
       
       cPrint.printTexto Xo + 0.1, Yo + 2.5, "Fecha de Ingreso:"
-      cPrint.printTexto Xo + 0.1, Yo + 3, "Beneficiario:"
+      cPrint.printTexto Xo + 0.1, Yo + 2.9, "Beneficiario:"
       cPrint.printTexto Xo + 11.6, Yo + 2.5, "Codigo:"
-      cPrint.printTexto Xo + 0.1, Yo + 3.5, "Periodo:"
+      cPrint.printTexto Xo + 0.1, Yo + 3.3, "Periodo:"
       cPrint.printTexto Xo + 16.7, Yo + 2.5, "Días:"
-      cPrint.printTexto Xo + 11.6, Yo + 3.5, "Forma de Pago:"
+      cPrint.printTexto Xo + 11.6, Yo + 3.3, "Forma de Pago:"
       cPrint.tipoNegrilla = False
       cPrint.printTexto Xo + 3.7, Yo + 2.5, FechaTexto
-      cPrint.printTexto Xo + 2.8, Yo + 3, NombreCliente
+      cPrint.printTexto Xo + 2.8, Yo + 2.9, NombreCliente
       cPrint.printTexto Xo + 13.1, Yo + 2.5, CICliente  'CodigoRol
-      cPrint.printTexto Xo + 1.8, Yo + 3.5, MesesLetras(Month(FechaFinal))
+      cPrint.printTexto Xo + 1.8, Yo + 3.3, MesesLetras(Month(FechaFinal))
       cPrint.tipoNegrilla = True
 
-      PFil = Yo + 4
-      PFilIni = Yo + 4
-      cPrint.printLinea Xo, Yo + 4, 19.5, Yo + 4
+      PFil = Yo + 3.7
+      PFilIni = Yo + 3.7
+      cPrint.printLinea Xo, Yo + 3.65, 19.5, Yo + 3.65
       PFil = PFil + 0.05
       cPrint.tipoNegrilla = True
       cPrint.printTexto Xo + 0.1, PFil, "D E T A L L E    D E L    E M P L E A D O"
       cPrint.printTexto Xo + 14.5, PFil, "INGRESOS"
       cPrint.printTexto Xo + 17, PFil, "EGRESOS"
-      PFil = PFil + 0.4
+      PFil = PFil + 0.35
       cPrint.printLinea Xo, PFil, 19.5, PFil
       PFil = PFil + 0.1
      .MoveFirst
@@ -3902,9 +3913,9 @@ Dim Tot_Egresos As Currency
                  cPrint.printLinea Xo, PFil, 19.5, PFil
                  PFil = PFil + 0.1
                  cPrint.printTexto Xo + 0.1, PFil, "SUBTOTALES DE INGRESOS Y EGRESOS"
-                 cPrint.printVariable Xo + 12.7, PFil, Tot_Ingresos
-                 cPrint.printVariable Xo + 15.2, PFil, Tot_Egresos
-                 PFil = PFil + 0.4
+                 cPrint.printVariable Xo + 12.6, PFil, Tot_Ingresos
+                 cPrint.printVariable Xo + 15.1, PFil, Tot_Egresos
+                 PFil = PFil + 0.35
                  cPrint.printLinea Xo, PFil, 19.5, PFil
                  PFil = PFil + 0.1
                  cPrint.printTexto Xo + 0.1, PFil, UCaseStrg(.fields("Detalle"))
@@ -3924,7 +3935,7 @@ Dim Tot_Egresos As Currency
              Tot_Ingresos = Tot_Ingresos + .fields("Ingresos")
              Tot_Egresos = Tot_Egresos + .fields("Egresos")
              
-             PFil = PFil + 0.4
+             PFil = PFil + 0.35
          End If
         .MoveNext
       Loop
@@ -3938,7 +3949,7 @@ Dim Tot_Egresos As Currency
       PFil = PFil - 0.1
       'cPrint.printTexto   Xo + 14.6, Yo + 4.5, Format(J, "#,##0.00")
       cPrint.printTexto Xo + 18, Yo + 2.5, Format(I, "#,##0") ' DIAS
-      cPrint.printTexto Xo + 14.8, Yo + 3.5, CodigoB
+      cPrint.printTexto Xo + 14.8, Yo + 3.3, CodigoB
       cPrint.tipoNegrilla = False
       'cPrint.printLinea Xo, PFil - 0.3, 19.5, PFil - 0.4
       cPrint.printLinea Xo, PFil + 0.05, 19.5, PFil + 0.05
@@ -3968,10 +3979,19 @@ Dim Tot_Egresos As Currency
            Loop
        End If
       End With
-      cPrint.printTexto Xo + 4, Yo + 11.5, String(12, "_")
-      cPrint.printTexto Xo + 9, Yo + 11.5, String(17, "_")
-      cPrint.printTexto Xo + 4.2, Yo + 12, "Empleador"
-      cPrint.printTexto Xo + 9.5, Yo + 12, "Recibi conforme"
+      cPrint.printLinea Xo, PFil, Xo + 18.2, PFil
+      cPrint.printLinea Xo, PFil, Xo + 18.5, Yo + 9
+      cPrint.printLinea Xo, 10.3, Xo + 18.2, 10.3
+      
+      PosXFirmaPDF = 0.1
+      PosYFirmaPDF = Yo + 7.5
+      Motivo_Firma_PDF = "Nomina de " & MesesLetras(Month(FechaInicial))
+      cPrint.printTexto Xo + 1.3, Yo + 11.5, String(Len(NombreGerente) + 1, "_")
+      cPrint.printTexto Xo + 10.4, Yo + 11.5, String(Len(NombreCliente) + 1, "_")
+      cPrint.printTexto Xo + 1.4, Yo + 12, ULCase(NombreGerente)
+      cPrint.printTexto Xo + 1.4, Yo + 12.5, "Empleador"
+      cPrint.printTexto Xo + 10.5, Yo + 12, ULCase(NombreCliente)
+      cPrint.printTexto Xo + 10.5, Yo + 12.5, "Recibi conforme"
       DetalleComp = ""
   End If
  End With
@@ -4227,6 +4247,8 @@ Dim Es_Vacaciones As Boolean
       cPrint.printLinea Xo, PFil, Xo + 8.5, PFil
       cPrint.printLinea Xo, PFil, Xo + 8.8, Yo + 9.7
       cPrint.printLinea Xo, 11, Xo + 8.5, 11
+      PosXFirmaPDF = 0
+      PosYFirmaPDF = 0
       cPrint.printTexto Xo + 1, Yo + 12.6, String(12, "_")
       cPrint.printTexto Xo + 6, Yo + 12.6, String(17, "_")
       cPrint.printTexto Xo + 1.2, Yo + 13, "Empleador"

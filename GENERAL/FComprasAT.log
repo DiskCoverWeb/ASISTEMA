@@ -1,0 +1,4 @@
+Línea 753: la clase MSMask.MaskEdBox del control MBFechaEmiComp no era una clase de control cargada.
+Línea 906: la clase MSMask.MaskEdBox del control MBFechaCad no era una clase de control cargada.
+Línea 932: la clase MSMask.MaskEdBox del control MBFechaRegis no era una clase de control cargada.
+Línea 1045: la clase MSMask.MaskEdBox del control MBFechaEmi no era una clase de control cargada.

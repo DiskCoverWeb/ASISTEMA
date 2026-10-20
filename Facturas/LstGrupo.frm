@@ -14,7 +14,7 @@ Begin VB.Form ListarGrupos
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
    ScaleHeight     =   15615
-   ScaleWidth      =   15960
+   ScaleWidth      =   28560
    WindowState     =   1  'Minimized
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
@@ -22,8 +22,8 @@ Begin VB.Form ListarGrupos
       Left            =   0
       TabIndex        =   50
       Top             =   0
-      Width           =   15960
-      _ExtentX        =   28152
+      Width           =   28560
+      _ExtentX        =   50377
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -2048,7 +2048,7 @@ Dim Periodo_Facturacion As String
 Dim Total_IVAFM As Currency
 
   DGQuery.Visible = False
-  sSQL = "SELECT C.Grupo,C.Cliente,C.Codigo,CF.Periodo,CF.Num_Mes,SUM(CF.Valor) As TValor " _
+  sSQL = "SELECT C.Grupo, C.Cliente, C.Codigo, CF.Periodo, CF.Num_Mes, SUM(CF.Valor) As TValor " _
        & "FROM Clientes As C, Clientes_Facturacion As CF " _
        & "WHERE CF.Item = '" & NumEmpresa & "' " _
        & "AND C.T = 'N' "
@@ -2066,8 +2066,8 @@ Dim Total_IVAFM As Currency
   End If
   sSQL = sSQL _
        & "AND C.Codigo = CF.Codigo " _
-       & "GROUP BY C.Grupo,C.Cliente,C.Codigo,CF.Periodo,CF.Num_Mes " _
-       & "ORDER BY C.Grupo,C.Cliente,CF.Periodo,CF.Num_Mes "   'CF.Periodo
+       & "GROUP BY C.Grupo, C.Cliente, C.Codigo, CF.Periodo, CF.Num_Mes " _
+       & "ORDER BY C.Grupo, C.Cliente, CF.Periodo, CF.Num_Mes "   'CF.Periodo
   Select_Adodc AdoQuery, sSQL
   Contador = 0
  'MsgBox AdoQuery.Recordset.RecordCount

@@ -5,7 +5,7 @@ Begin VB.Form FClientesFlash
    BackColor       =   &H00C0FFC0&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "NUEVO ITEM DE PROCESO"
-   ClientHeight    =   8460
+   ClientHeight    =   7920
    ClientLeft      =   45
    ClientTop       =   330
    ClientWidth     =   9570
@@ -13,7 +13,7 @@ Begin VB.Form FClientesFlash
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   8460
+   ScaleHeight     =   7920
    ScaleWidth      =   9570
    ShowInTaskbar   =   0   'False
    Begin ComctlLib.Toolbar TBarCliente 
@@ -179,7 +179,7 @@ Begin VB.Form FClientesFlash
       EndProperty
       Height          =   330
       Left            =   105
-      MaxLength       =   8
+      MaxLength       =   10
       TabIndex        =   7
       Top             =   1785
       Width           =   1275
@@ -273,7 +273,7 @@ Begin VB.Form FClientesFlash
    Begin MSAdodcLib.Adodc AdoAux 
       Height          =   330
       Left            =   210
-      Top             =   3675
+      Top             =   7980
       Visible         =   0   'False
       Width           =   1905
       _ExtentX        =   3360
@@ -320,7 +320,7 @@ Begin VB.Form FClientesFlash
    Begin MSAdodcLib.Adodc AdoListCtas 
       Height          =   330
       Left            =   2205
-      Top             =   3675
+      Top             =   7980
       Visible         =   0   'False
       Width           =   2010
       _ExtentX        =   3545
@@ -830,9 +830,9 @@ Private Sub CNacion_LostFocus()
        & "ORDER BY CProvincia "
   Select_Adodc AdoAux, sSQL
   If AdoAux.Recordset.RecordCount > 0 Then
-     CProvincia.Text = AdoAux.Recordset.fields("CProvincia") & " " & AdoAux.Recordset.fields("Descripcion_Rubro")
+     CProvincia.Text = AdoAux.Recordset.Fields("CProvincia") & " " & AdoAux.Recordset.Fields("Descripcion_Rubro")
      Do While Not AdoAux.Recordset.EOF
-        CProvincia.AddItem AdoAux.Recordset.fields("CProvincia") & " " & AdoAux.Recordset.fields("Descripcion_Rubro")
+        CProvincia.AddItem AdoAux.Recordset.Fields("CProvincia") & " " & AdoAux.Recordset.Fields("Descripcion_Rubro")
         AdoAux.Recordset.MoveNext
      Loop
   Else
@@ -860,9 +860,9 @@ Private Sub CProvincia_LostFocus()
        & "ORDER BY CCiudad "
   Select_Adodc AdoAux, sSQL
   If AdoAux.Recordset.RecordCount > 0 Then
-     CCiudadS.Text = AdoAux.Recordset.fields("Descripcion_Rubro")
+     CCiudadS.Text = AdoAux.Recordset.Fields("Descripcion_Rubro")
      Do While Not AdoAux.Recordset.EOF
-        CCiudadS.AddItem AdoAux.Recordset.fields("Descripcion_Rubro")
+        CCiudadS.AddItem AdoAux.Recordset.Fields("Descripcion_Rubro")
         AdoAux.Recordset.MoveNext
      Loop
   Else
@@ -896,7 +896,7 @@ Private Sub Form_Activate()
   If AdoAux.Recordset.RecordCount > 0 Then
      CNacion.Text = "593 ECUADOR"
      Do While Not AdoAux.Recordset.EOF
-        CNacion.AddItem AdoAux.Recordset.fields("CPais") & " " & AdoAux.Recordset.fields("Descripcion_Rubro")
+        CNacion.AddItem AdoAux.Recordset.Fields("CPais") & " " & AdoAux.Recordset.Fields("Descripcion_Rubro")
         AdoAux.Recordset.MoveNext
      Loop
   End If
@@ -910,9 +910,9 @@ Private Sub Form_Activate()
        & "ORDER BY CProvincia "
   Select_Adodc AdoAux, sSQL
   If AdoAux.Recordset.RecordCount > 0 Then
-     CProvincia.Text = AdoAux.Recordset.fields("CProvincia") & " " & AdoAux.Recordset.fields("Descripcion_Rubro")
+     CProvincia.Text = AdoAux.Recordset.Fields("CProvincia") & " " & AdoAux.Recordset.Fields("Descripcion_Rubro")
      Do While Not AdoAux.Recordset.EOF
-        CProvincia.AddItem AdoAux.Recordset.fields("CProvincia") & " " & AdoAux.Recordset.fields("Descripcion_Rubro")
+        CProvincia.AddItem AdoAux.Recordset.Fields("CProvincia") & " " & AdoAux.Recordset.Fields("Descripcion_Rubro")
         AdoAux.Recordset.MoveNext
      Loop
   Else
@@ -1178,7 +1178,7 @@ Private Sub TxtGrupo_LostFocus()
     If Mas_Grupos Then sSQL = sSQL & "AND DirNumero = '" & NumEmpresa & "' "
     Select_Adodc AdoAux, sSQL
     If AdoAux.Recordset.RecordCount > 0 Then
-       If Len(AdoAux.Recordset.fields("Direccion")) > 1 Then TxtDirS.Text = AdoAux.Recordset.fields("Direccion") Else TxtDirS.Text = "SD"
+       If Len(AdoAux.Recordset.Fields("Direccion")) > 1 Then TxtDirS.Text = AdoAux.Recordset.Fields("Direccion") Else TxtDirS.Text = "SD"
     Else
        TxtDirS.Text = "SD"
     End If

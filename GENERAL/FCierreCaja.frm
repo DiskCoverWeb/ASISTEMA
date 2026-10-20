@@ -32,7 +32,7 @@ Begin VB.Form FCierreCaja
       ImageList       =   "ImageList1"
       _Version        =   327682
       BeginProperty Buttons {0713E452-850A-101B-AFC0-4210102A8DA7} 
-         NumButtons      =   12
+         NumButtons      =   13
          BeginProperty Button1 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "Salir"
             Object.ToolTipText     =   "Salir del Modulo"
@@ -105,11 +105,17 @@ Begin VB.Form FCierreCaja
             Object.Tag             =   ""
             ImageIndex      =   13
          EndProperty
+         BeginProperty Button13 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   "Insertar_Kardex"
+            Object.ToolTipText     =   "Reactivar Kardex Borrado"
+            Object.Tag             =   ""
+            ImageIndex      =   14
+         EndProperty
       EndProperty
       Begin VB.Frame Frame1 
          BorderStyle     =   0  'None
          Height          =   645
-         Left            =   7140
+         Left            =   7665
          TabIndex        =   5
          Top             =   0
          Width           =   10620
@@ -150,7 +156,7 @@ Begin VB.Form FCierreCaja
             Height          =   540
             Left            =   9030
             TabIndex        =   11
-            Top             =   105
+            Top             =   210
             Width           =   1380
          End
          Begin VB.CheckBox CheqCajero 
@@ -286,29 +292,29 @@ Begin VB.Form FCierreCaja
       TabCaption(1)   =   "&2.- INVENTARIO"
       TabPicture(1)   =   "FCierreCaja.frx":0036
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "DGCierres"
-      Tab(1).Control(1)=   "DGProductos"
-      Tab(1).Control(2)=   "DGInv"
-      Tab(1).Control(3)=   "AdoInv"
+      Tab(1).Control(0)=   "AdoInv"
+      Tab(1).Control(1)=   "DGInv"
+      Tab(1).Control(2)=   "DGProductos"
+      Tab(1).Control(3)=   "DGCierres"
       Tab(1).ControlCount=   4
       TabCaption(2)   =   "&3.- CONTABILIDAD"
       TabPicture(2)   =   "FCierreCaja.frx":0052
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "DGAsiento1"
-      Tab(2).Control(1)=   "DGAsiento"
-      Tab(2).Control(2)=   "DGAnticipos"
-      Tab(2).Control(3)=   "LabelHaber1"
-      Tab(2).Control(4)=   "LabelDebe1"
-      Tab(2).Control(5)=   "Label15"
-      Tab(2).Control(6)=   "LabelHaber"
+      Tab(2).Control(0)=   "Label13"
+      Tab(2).Control(1)=   "LblDiferencia1"
+      Tab(2).Control(2)=   "LblConcepto1"
+      Tab(2).Control(3)=   "LblConcepto"
+      Tab(2).Control(4)=   "LblDiferencia"
+      Tab(2).Control(5)=   "Label1"
+      Tab(2).Control(6)=   "Label11"
       Tab(2).Control(7)=   "LabelDebe"
-      Tab(2).Control(8)=   "Label11"
-      Tab(2).Control(9)=   "Label1"
-      Tab(2).Control(10)=   "LblDiferencia"
-      Tab(2).Control(11)=   "LblConcepto"
-      Tab(2).Control(12)=   "LblConcepto1"
-      Tab(2).Control(13)=   "LblDiferencia1"
-      Tab(2).Control(14)=   "Label13"
+      Tab(2).Control(8)=   "LabelHaber"
+      Tab(2).Control(9)=   "Label15"
+      Tab(2).Control(10)=   "LabelDebe1"
+      Tab(2).Control(11)=   "LabelHaber1"
+      Tab(2).Control(12)=   "DGAnticipos"
+      Tab(2).Control(13)=   "DGAsiento"
+      Tab(2).Control(14)=   "DGAsiento1"
       Tab(2).ControlCount=   15
       TabCaption(3)   =   "&4.- ANULADAS"
       TabPicture(3)   =   "FCierreCaja.frx":006E
@@ -318,26 +324,26 @@ Begin VB.Form FCierreCaja
       TabCaption(4)   =   "&5.- REPORTE DE AUDITORIA"
       TabPicture(4)   =   "FCierreCaja.frx":008A
       Tab(4).ControlEnabled=   0   'False
-      Tab(4).Control(0)=   "DGSRI"
-      Tab(4).Control(1)=   "AdoSRI"
-      Tab(4).Control(2)=   "LblTotalFacturado"
-      Tab(4).Control(3)=   "Label16"
-      Tab(4).Control(4)=   "LblServicio"
-      Tab(4).Control(5)=   "Label7"
-      Tab(4).Control(6)=   "LblIVA"
-      Tab(4).Control(7)=   "LblDescuento"
-      Tab(4).Control(8)=   "LblSinIVA"
-      Tab(4).Control(9)=   "LblConIVA"
-      Tab(4).Control(10)=   "Label18"
-      Tab(4).Control(11)=   "Label14"
-      Tab(4).Control(12)=   "Label12"
-      Tab(4).Control(13)=   "Label9"
+      Tab(4).Control(0)=   "Label9"
+      Tab(4).Control(1)=   "Label12"
+      Tab(4).Control(2)=   "Label14"
+      Tab(4).Control(3)=   "Label18"
+      Tab(4).Control(4)=   "LblConIVA"
+      Tab(4).Control(5)=   "LblSinIVA"
+      Tab(4).Control(6)=   "LblDescuento"
+      Tab(4).Control(7)=   "LblIVA"
+      Tab(4).Control(8)=   "Label7"
+      Tab(4).Control(9)=   "LblServicio"
+      Tab(4).Control(10)=   "Label16"
+      Tab(4).Control(11)=   "LblTotalFacturado"
+      Tab(4).Control(12)=   "AdoSRI"
+      Tab(4).Control(13)=   "DGSRI"
       Tab(4).ControlCount=   14
       TabCaption(5)   =   "&6.- REPORTE DEL BANCO"
       TabPicture(5)   =   "FCierreCaja.frx":00A6
       Tab(5).ControlEnabled=   0   'False
-      Tab(5).Control(0)=   "DCBanco"
-      Tab(5).Control(1)=   "DGBanco"
+      Tab(5).Control(0)=   "DGBanco"
+      Tab(5).Control(1)=   "DCBanco"
       Tab(5).ControlCount=   2
       Begin MSDataGridLib.DataGrid DGCxC 
          Bindings        =   "FCierreCaja.frx":00C2
@@ -2508,7 +2514,7 @@ Begin VB.Form FCierreCaja
       MaskColor       =   12632256
       _Version        =   327682
       BeginProperty Images {0713E8C2-850A-101B-AFC0-4210102A8DA7} 
-         NumListImages   =   14
+         NumListImages   =   15
          BeginProperty ListImage1 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
             Picture         =   "FCierreCaja.frx":01E6
             Key             =   ""
@@ -2563,6 +2569,10 @@ Begin VB.Form FCierreCaja
          EndProperty
          BeginProperty ListImage14 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
             Picture         =   "FCierreCaja.frx":3848
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage15 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "FCierreCaja.frx":3B62
             Key             =   ""
          EndProperty
       EndProperty
@@ -4042,10 +4052,12 @@ Private Sub TbarCierre_ButtonClick(ByVal Button As ComctlLib.Button)
                   GenerarDataTexto FCierreCaja, AdoBanco
                   DGBanco.Visible = True
            End Select
-'''      Case "Kardex"
-'''           Progreso_Barra.Mensaje_Box = "Actualizando Productos"
-'''           Progreso_Esperar
-'''           Insertar_Productos_Cierre_Caja_SP MBFechaI, MBFechaF
-'''           Progreso_Final
+      Case "Insertar_Kardex"
+           If ClaveAdministrador Then
+                Progreso_Barra.Mensaje_Box = "Actualizando Productos"
+                Progreso_Esperar
+                Insertar_Productos_Cierre_Caja_SP MBFechaI, MBFechaF
+                Progreso_Final
+           End If
     End Select
 End Sub

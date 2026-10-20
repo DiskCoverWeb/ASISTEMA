@@ -401,6 +401,7 @@ Type CtasAsiento
       SubTotal_NCX     As Currency
       Sin_IVA          As Currency
       Con_IVA          As Currency
+      Total_Exento_IVA As Currency
       Total_Sin_No_IVA As Currency
       Total_Descuento  As Currency
       Total_IVA        As Currency
@@ -774,8 +775,8 @@ Type Tipo_Beneficiarios
      Cod_Ejec        As String
      Patron_Busqueda As String
      Archivo_Foto    As String
+     Cod_Banco       As String
      
-     Cod_Banco       As Integer
      Credito         As Integer
      
      Salario         As Currency
@@ -859,6 +860,7 @@ Type Tipo_Estado_SRI
      Hora_Autorizacion  As String
      Estado_SRI         As String
      Error_SRI          As String
+     Error_XML          As String
      Documento_XML      As String
 End Type
 '-------------------------------------

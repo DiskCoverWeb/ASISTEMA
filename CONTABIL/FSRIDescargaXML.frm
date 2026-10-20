@@ -10,11 +10,11 @@ Begin VB.Form FSRIDescargaXML
    ClientHeight    =   9450
    ClientLeft      =   60
    ClientTop       =   345
-   ClientWidth     =   17760
+   ClientWidth     =   15960
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
    ScaleHeight     =   9450
-   ScaleWidth      =   17760
+   ScaleWidth      =   15960
    WindowState     =   2  'Maximized
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
@@ -22,8 +22,8 @@ Begin VB.Form FSRIDescargaXML
       Left            =   0
       TabIndex        =   15
       Top             =   0
-      Width           =   17760
-      _ExtentX        =   31327
+      Width           =   15960
+      _ExtentX        =   28152
       _ExtentY        =   1402
       ButtonWidth     =   1455
       ButtonHeight    =   1244
@@ -1146,7 +1146,7 @@ Dim Porcentaje As Single
 
 'Sube los abonos
 Private Sub Leer_XML()
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
 
 Dim ArchivoValido As Boolean
 Dim ReceptorValido As Boolean
@@ -1245,9 +1245,9 @@ Dim LineFile As String
         With AdoTxt.Recordset
          If .RecordCount > 0 Then
              ftp.Inicializar FSRIDescargaXML
-             ftp.Password = ftpPwr  'Le establecemos la contraseña de la cuenta Ftp
-             ftp.Usuario = ftpUse   'Le establecemos el nombre de usuario de la cuenta
-             ftp.servidor = ftpSvr  'Establecesmo el nombre del Servidor FTP
+             ftp.Password = ftpUpPwr  'Le establecemos la contraseña de la cuenta Ftp
+             ftp.Usuario = ftpUpUse   'Le establecemos el nombre de usuario de la cuenta
+             ftp.servidor = ftpUpSvr  'Establecesmo el nombre del Servidor FTP
              Set ftp.ListView = LstVwFTP
              ftp.ConStatus = True
              If ftp.ConectarFtp(LstStatud) Then CnnFTPPOK = True Else CnnFTPPOK = False
@@ -1484,7 +1484,7 @@ Dim LineFile As String
   Toolbar1.buttons("Excel").Enabled = True
   Toolbar1.buttons("Grabar").Enabled = True
   Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub

@@ -1,0 +1,6 @@
+Línea 314: la clase MSMask.MaskEdBox del control MBoxCta_Inv no era una clase de control cargada.
+Línea 337: la clase MSMask.MaskEdBox del control MBoxCta_Pat no era una clase de control cargada.
+Línea 476: la clase MSMask.MaskEdBox del control MBFecha no era una clase de control cargada.
+Línea 549: la clase MSMask.MaskEdBox del control MBFechaI no era una clase de control cargada.
+Línea 685: la clase ComctlLib.ListView del control LstVwFTP no era una clase de control cargada.
+Línea 755: la clase ComctlLib.ImageList del control ImgLstFTP no era una clase de control cargada.

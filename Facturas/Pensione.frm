@@ -2606,7 +2606,7 @@ Public Sub Grabar_FA_Pensiones()
        
        If Not ComisionEjec Then CodigoVen = Ninguno
 
-      ' MsgBox "............."
+       MsgBox "Abonos.."
       'Seteos de Abonos Generales para todos los tipos de abonos
        TA.T = FA.T
        TA.TP = FA.TC
@@ -2627,6 +2627,7 @@ Public Sub Grabar_FA_Pensiones()
        End If
        TA.Cheque = TextCheqNo
        TA.Abono = Total_Bancos
+       'MsgBox "Grabar_Abonos"
        Grabar_Abonos TA
         
       'Abono de Factura
@@ -2674,6 +2675,7 @@ Public Sub Grabar_FA_Pensiones()
        Grabar_Abonos TA
        
       'Grabamos el numero de factura
+       MsgBox "Grabar_Factura"
        Grabar_Factura FA, TA, True
        
        RatonNormal
@@ -2811,9 +2813,9 @@ Dim SiGrabarFactura As Boolean
 ''       End If
        Cta_Aux = Leer_Cta_Catalogo(CtaPagoMax)
        FA.Tipo_Pago = TipoPago
-       
+       MsgBox "Actualiza_Datos_Cliente"
        Actualiza_Datos_Cliente
-       
+       MsgBox "Grabar_FA_Pensiones"
        Grabar_FA_Pensiones
        
        Nuevo = False

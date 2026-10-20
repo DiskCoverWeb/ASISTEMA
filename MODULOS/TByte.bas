@@ -1,5 +1,6 @@
 Attribute VB_Name = "TByte"
 Global Cant_FA As Byte
+Global ContadorAutorizar As Byte
 Global ContadorServidor As Byte
 Global ContadorEstados As Byte
 Global TipoModulo As Byte

@@ -369,6 +369,9 @@ Begin VB.MDIForm MDIFact
    End
    Begin VB.Menu MOtrosProc 
       Caption         =   "&Herramientas"
+      Begin VB.Menu Reindexar 
+         Caption         =   "Reindexar Inventario"
+      End
       Begin VB.Menu MCobProg 
          Caption         =   "Cobros programados"
       End
@@ -727,6 +730,22 @@ Private Sub MVerifEstSRI_Click()
    
 End Sub
 
+Private Sub Reindexar_Click()
+    If ClaveAdministrador Then
+         Control_Procesos Normal, "Reindexar Inventario"
+         RatonReloj
+         sSQL = "UPDATE Trans_Kardex " _
+              & "SET Procesado = 0 " _
+              & "WHERE Item = '" & NumEmpresa & "' " _
+              & "AND Periodo = '" & Periodo_Contable & "' " _
+              & "AND Codigo_Inv = '02.01' "
+         Ejecutar_SQL_SP sSQL
+         RatonReloj
+         Mayorizar_Inventario_SP
+         RatonNormal
+    End If
+End Sub
+
 Private Sub Timer1_Timer()
 '''    If MiTiempo >= 0.59 Then
 '''       Select Case ContadorServidor
@@ -1037,8 +1056,17 @@ Private Sub Productos_Click()
 End Sub
 
 Private Sub ResumCratT_Click()
-   RatonReloj
-   ListarSuscripciones.Show
+Dim sCedula As String
+    Dim sNombre As String
+    
+    sCedula = InputBox("INGRESE LA CEDULA", "CEDULA", "0702164179")
+    sNombre = ObtenerNombrePorCedula(sCedula)
+    
+    MsgBox "Nombre: " & sNombre, vbInformation, "Resultado"
+    
+   
+'   RatonReloj
+'   ListarSuscripciones.Show
 End Sub
 
 Private Sub SalirSystem_Click()

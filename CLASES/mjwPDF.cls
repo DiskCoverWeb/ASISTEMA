@@ -523,11 +523,18 @@ Dim in_i        As Long
     sFileName = Items(UBound(Items))
     sFilePath = LeftStrg(str_FileName, Len(str_FileName) - Len(Items(UBound(Items))))
     
+    sFileName = Replace(sFileName, vbCr, "")
+    sFileName = Replace(sFileName, vbLf, "")
+    
     If MidStrg(sFileName, 1, 1) = "." Then sFileName = "Ninguno"
     If MidStrg(sFileName, 1, 1) = "-" Then sFileName = "Ninguno"
     
     sPDFName = Fso.BuildPath(sFilePath, sFileName)
-    'MsgBox sPDFName
+    
+'    Clipboard.Clear
+'    Clipboard.SetText sFilePath & vbCrLf & vbCrLf & sPDFName
+    
+   'MsgBox sFilePath & vbCrLf & vbCrLf & sPDFName
     Set Strm = Fso.CreateTextFile(sPDFName, True)
     Exit Property
 Err_File:
@@ -2152,13 +2159,15 @@ Dim PathAcroRd32 As String
 
     If boPDFConfirm Then MsgBox "PDF file generated.", vbOKOnly, "Generated PDF file - " & mjwPDFVersion
     RutaDocumentoPDF = PDFGetFileName
-   'RutaDocumentoPDF = Replace(RutaDocumentoPDF, "C:", "Z:")
-   'MsgBox RutaDocumentoPDF
+    If Motivo_Firma_PDF = "" Then Motivo_Firma_PDF = "Ningun Motivo"
+    
+   'MsgBox "Desktop Ruta PDF: antes de firmar: " & RutaDocumentoPDF & vbCrLf & PosXFirmaPDF & vbCrLf & PosYFirmaPDF & vbCrLf & Motivo_Firma_PDF
+    
+    iRet = Firmar_Documento_PDF(RutaDocumentoPDF, PosXFirmaPDF, PosYFirmaPDF)
+   'MsgBox "Desktop Ruta PDF Firmado: (" & iRet & ")" & RutaDocumentoPDF
     If boPDFView Then
         If Dir$(RutaDocumentoPDF) <> "" Then
-          'MsgBox "Desktop Ruta PDF: " & RutaDocumentoPDF
            iRet = Shell("cmd /c start """" """ & RutaDocumentoPDF & """", vbHide) ' vbMinimizedFocus
-           'iRet = Shell("rundll32.exe url.dll,FileProtocolHandler " & RutaDocumentoPDF, vbMaximizedFocus)
         Else
            MsgBox "EL ARCHIVO:" & vbCrLf & vbCrLf & RutaDocumentoPDF & vbCrLf & vbCrLf & "NO EXISTE O ESTA DAÑADO"
         End If

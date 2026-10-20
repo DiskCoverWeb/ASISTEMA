@@ -13,8 +13,8 @@ Begin VB.Form Facturas
    ClientWidth     =   15960
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   15615
-   ScaleWidth      =   28560
+   ScaleHeight     =   10215
+   ScaleWidth      =   15960
    WindowState     =   2  'Maximized
    Begin ComctlLib.Toolbar TBarFactura 
       Align           =   1  'Align Top
@@ -22,8 +22,8 @@ Begin VB.Form Facturas
       Left            =   0
       TabIndex        =   134
       Top             =   0
-      Width           =   28560
-      _ExtentX        =   50377
+      Width           =   15960
+      _ExtentX        =   28152
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -93,7 +93,7 @@ Begin VB.Form Facturas
          Left            =   4830
          TabIndex        =   135
          Top             =   -105
-         Width           =   15870
+         Width           =   15450
          Begin VB.TextBox TxtCompra 
             Alignment       =   1  'Right Justify
             BeginProperty Font 
@@ -157,8 +157,8 @@ Begin VB.Form Facturas
             TabIndex        =   139
             Top             =   210
             Visible         =   0   'False
-            Width           =   6840
-            _ExtentX        =   12065
+            Width           =   6630
+            _ExtentX        =   11695
             _ExtentY        =   635
             _Version        =   393216
             Text            =   ""
@@ -195,7 +195,7 @@ Begin VB.Form Facturas
             Alignment       =   2  'Center
             BackColor       =   &H00C0FFFF&
             BorderStyle     =   1  'Fixed Single
-            Caption         =   "X"
+            Caption         =   "XXXXXXXXXX"
             BeginProperty Font 
                Name            =   "MS Sans Serif"
                Size            =   8.25
@@ -207,10 +207,10 @@ Begin VB.Form Facturas
             EndProperty
             ForeColor       =   &H000000C0&
             Height          =   330
-            Left            =   14175
+            Left            =   13965
             TabIndex        =   140
             Top             =   210
-            Width           =   1590
+            Width           =   1380
          End
       End
    End
@@ -227,29 +227,29 @@ Begin VB.Form Facturas
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H00C0FFFF&
-      Height          =   2370
-      Left            =   8715
+      Height          =   1950
+      Left            =   5880
       TabIndex        =   129
-      Top             =   5355
+      Top             =   5985
       Visible         =   0   'False
-      Width           =   7515
+      Width           =   7830
       Begin MSDataListLib.DataCombo DCPlacaSocio 
          Bindings        =   "Facturas.frx":0019
          DataSource      =   "AdoPlacaSocio"
-         Height          =   1710
+         Height          =   1305
          Left            =   105
          TabIndex        =   130
          Top             =   525
-         Width           =   7260
-         _ExtentX        =   12806
-         _ExtentY        =   3016
+         Width           =   7575
+         _ExtentX        =   13361
+         _ExtentY        =   2302
          _Version        =   393216
          Style           =   1
          BackColor       =   16776960
          Text            =   "000000000"
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "Courier New"
-            Size            =   11.25
+            Size            =   9
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -276,7 +276,7 @@ Begin VB.Form Facturas
          Left            =   105
          TabIndex        =   131
          Top             =   210
-         Width           =   7260
+         Width           =   7575
       End
    End
    Begin VB.Frame FrmCopyFA 
@@ -293,9 +293,9 @@ Begin VB.Form Facturas
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   3735
-      Left            =   13440
+      Left            =   12705
       TabIndex        =   124
-      Top             =   1575
+      Top             =   1680
       Visible         =   0   'False
       Width           =   1665
       Begin MSDataListLib.DataCombo DCFACopia 
@@ -3126,6 +3126,7 @@ Begin VB.Form Facturas
       _Version        =   393216
    End
    Begin VB.Label LblPlaca 
+      Alignment       =   1  'Right Justify
       BackColor       =   &H00FFFFFF&
       BorderStyle     =   1  'Fixed Single
       BeginProperty Font 
@@ -3138,14 +3139,14 @@ Begin VB.Form Facturas
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   19005
+      Left            =   19110
       TabIndex        =   132
       Top             =   1575
-      Width           =   1170
+      Width           =   1065
    End
    Begin VB.Label Label54 
       BorderStyle     =   1  'Fixed Single
-      Caption         =   "Placa:"
+      Caption         =   " Placa:"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   8.25
@@ -3159,7 +3160,7 @@ Begin VB.Form Facturas
       Left            =   18375
       TabIndex        =   133
       Top             =   1575
-      Width           =   645
+      Width           =   750
    End
    Begin VB.Label Label52 
       Alignment       =   2  'Center
@@ -4516,6 +4517,22 @@ Private Sub CommandButton1_Click()
    End With
 End Sub
 
+Private Sub DCArticulo_KeyPress(KeyAscii As Integer)
+Dim Busqueda As String
+    Busqueda = DCArticulo
+    If Len(Busqueda) > 0 Then
+        sSQL = "SELECT TOP 50 Producto, Codigo_Inv, Codigo_Barra " _
+             & "FROM Catalogo_Productos " _
+             & "WHERE TC = 'P' " _
+             & "AND Item = '" & NumEmpresa & "' " _
+             & "AND Periodo = '" & Periodo_Contable & "' " _
+             & "AND INV <> " & Val(adFalse) & " " _
+             & "AND Producto LIKE '%" & Busqueda & "%' " _
+             & "ORDER BY Producto,Codigo_Inv,Codigo_Barra "
+        Select_Adodc AdoArticulo, sSQL
+    End If
+End Sub
+
 Private Sub DCBodega_KeyDown(KeyCode As Integer, Shift As Integer)
   PresionoEnter KeyCode
 End Sub
@@ -4614,10 +4631,10 @@ Private Sub DCLinea_LostFocus()
      If Len(SerieFAUser) = 6 Then sSQL = sSQL _
                                        & "AND Serie = '" & SerieFAUser & "' " _
                                        & "AND Cedula = '" & CodigoUsuario & "' "
-     sSQL = sSQL & "ORDER BY Placa_Socio "
+     sSQL = sSQL & "ORDER BY Cedula, Placa_Socio "
      SelectDB_Combo DCPlacaSocio, AdoPlacaSocio, sSQL, "Placa_Del_Socio"
-     FrmPlacaSocio.Top = MBoxFechaV.Top
-     FrmPlacaSocio.Left = MBoxFechaV.Left
+     FrmPlacaSocio.Top = Label9.Top
+     FrmPlacaSocio.Left = Label9.Left
      FrmPlacaSocio.Visible = True
      DCPlacaSocio.SetFocus
   End If
@@ -5859,7 +5876,11 @@ Private Sub TBarFactura_ButtonClick(ByVal Button As ComctlLib.Button)
           SelectDB_Combo DCRazonSocial, AdoPersonas, sSQL, "Cliente"
           SelectDB_Combo DCEmpresaEntrega, AdoTransporte, sSQL, "Cliente"
           LblGuiaR = Format$(Val(TxtGuiaRem), "00000000")
-          CentrarFrame FrmGuiaRemision
+          
+          FrmGuiaRemision.Left = Label9.Left
+          FrmGuiaRemision.Top = Label9.Top
+          
+          'CentrarFrame FrmGuiaRemision
           'FrmGuiaRemision.Top = 740
           FrmGuiaRemision.Visible = True
           MBoxFechaGRE.SetFocus

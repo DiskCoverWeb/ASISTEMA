@@ -1,10 +1,10 @@
 VERSION 5.00
 Object = "{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}#1.1#0"; "ieframe.dll"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
 Object = "{CDE57A40-8B86-11D0-B3C6-00A0C90AEA82}#1.0#0"; "MSDatGrd.ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
-Object = "{65E121D4-0C60-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSChrt20.ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
+Object = "{65E121D4-0C60-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSChrt20.ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.Ocx"
 Begin VB.Form FGeneraPDF 
    Caption         =   "PDF"
@@ -32,7 +32,7 @@ Begin VB.Form FGeneraPDF
       ImageList       =   "ImageList1"
       _Version        =   327682
       BeginProperty Buttons {0713E452-850A-101B-AFC0-4210102A8DA7} 
-         NumButtons      =   18
+         NumButtons      =   19
          BeginProperty Button1 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "Salir"
             Object.ToolTipText     =   "Salir"
@@ -141,6 +141,12 @@ Begin VB.Form FGeneraPDF
             Object.Tag             =   ""
             ImageIndex      =   20
          EndProperty
+         BeginProperty Button19 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   "Firmar_PDF"
+            Object.ToolTipText     =   "Permite firma un documentos PDF"
+            Object.Tag             =   ""
+            ImageIndex      =   21
+         EndProperty
       EndProperty
       MousePointer    =   1
       Begin VB.Frame Frame1 
@@ -155,7 +161,7 @@ Begin VB.Form FGeneraPDF
             Strikethrough   =   0   'False
          EndProperty
          Height          =   645
-         Left            =   10605
+         Left            =   11235
          TabIndex        =   7
          Top             =   0
          Width           =   7575
@@ -262,7 +268,7 @@ Begin VB.Form FGeneraPDF
       NoFolders       =   0   'False
       Transparent     =   0   'False
       ViewID          =   "{0057D0E0-3573-11CF-AE69-08002B2E1262}"
-      Location        =   "http:///"
+      Location        =   ""
    End
    Begin VB.ListBox LstStatud 
       Appearance      =   0  'Flat
@@ -659,7 +665,7 @@ Begin VB.Form FGeneraPDF
       MaskColor       =   12632256
       _Version        =   327682
       BeginProperty Images {0713E8C2-850A-101B-AFC0-4210102A8DA7} 
-         NumListImages   =   20
+         NumListImages   =   21
          BeginProperty ListImage1 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
             Picture         =   "FGeneraPDF.frx":44E6
             Key             =   ""
@@ -740,6 +746,10 @@ Begin VB.Form FGeneraPDF
             Picture         =   "FGeneraPDF.frx":48794
             Key             =   ""
          EndProperty
+         BeginProperty ListImage21 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "FGeneraPDF.frx":4B7E6
+            Key             =   ""
+         EndProperty
       EndProperty
    End
 End
@@ -756,7 +766,7 @@ Dim Obj_Hoja As Object
 
 '-----------------------
 Dim Resultado As Boolean
-Dim Respuesta As Boolean
+Dim respuesta As Boolean
 Dim oDocument As Object
 Dim DocumentoXML As MSXML2.DOMDocument30
 Dim pJSON As Object
@@ -1093,17 +1103,18 @@ Dim fin As Date
 ''''        MsgBox Cadena
        
 ''''        Prueba_Envio_de_Correos
-        
+        Mensaje = InputBox("Mensaje:", "PRUEBA ENVIAR MAIL", "Mensaje de Texto Empresa")
         TMail.ListaMail = 255
         TMail.TipoDeEnvio = "CO"
        'MsgBox RutaBackup
         TMail.Asunto = "Prueba de Mails por imap.diskcoversystem.com"
         'TMail.MensajeHTML = Leer_Archivo_Texto(RutaSistema & "\JAVASCRIPT\f_recibo.html")
         TMail.MensajeHTML = Leer_Archivo_Texto(RutaSistema & "\JAVASCRIPT\f_cartera.html")
+        TMail.MensajeHTML = Replace(TMail.MensajeHTML, "vMensajeFinal", Mensaje)
         
         html_Informacion_adicional = "<strong>INFORMACION ADICIONAL:</strong><br><br>" _
                                    & "<strong>Importe total: USD </strong>150,00<br>" _
-                                   & "<strong>Importe total: USD </strong>150,00<br>" _
+                                   & "<strong>Mensaje Adicional</strong>" & HoraSistema & "<br>" _
                                    & "<strong>Importe total: USD </strong>150,00<br>"
                                    
         html_Detalle_adicional = "<tr>" _
@@ -1113,7 +1124,7 @@ Dim fin As Date
                                & "</tr>" _
                                & "<tr>" _
                                & "<td>13/12/2024</td>" _
-                               & "<td>Madera</td>" _
+                               & "<td>" & Mensaje & "</td>" _
                                & "<td class='row text-right'>180,00</td>" _
                                & "</tr>"
         FA.Fecha = FechaSistema
@@ -1124,7 +1135,7 @@ Dim fin As Date
                       & "de la empresa: " & Empresa & "."
 
         'TMail.Adjunto = "C:\SYSBASES\TEMP\archivo.xml;C:\SYSBASES\TEMP\archivo.pdf;C:\TEMP\walter.png;C:\TEMP\Master Planes de Cuentasx.xls"
-        TMail.Adjunto = "C:\SYSBASES\TEMP\archivo.xml"
+        TMail.Adjunto = "C:\SYSBASES\TEMP\archivo123.xml"
         'TMail.Adjunto = ""
         TMail.para = ""
         Insertar_Mail TMail.para, "diskcoversystem@msn.com"
@@ -1138,7 +1149,6 @@ Dim fin As Date
    Case "SRI"
        '-------------------------------------------------------------------------------------------------------------------
         With SRI_Autorizacion
-             Inicio = Now
             '2001202601070216417900110010030000025971234567819
             '1612202501070216417900110010030000025981234567815
             '0501202607179076457500120010300000646911234567817
@@ -1149,8 +1159,9 @@ Dim fin As Date
             '2503202401070216417900110010030000015701234567811
             
             'MsgBox "Desktop Test:" & RutaDocumentos & "\Comprobantes Generados\" & FA.ClaveAcceso & ".xml"
+            .Clave_De_Acceso = InputBox("INGRESE LA AUTORIZACION A CONSULTAR: ", "CONSULTA DE COMPROBANTE ELECTRONICO", "1909202601070216417900110010090000000011234567818")
              RatonReloj
-            .Clave_De_Acceso = "1506202604179231505000120010050000002721234567811"
+             Inicio = Now
             .Autorizacion = RUC
              Select Case MidStrg(.Clave_De_Acceso, 9, 2)
                Case "01": .Tipo_Doc_SRI = "FA"
@@ -1460,6 +1471,16 @@ Dim fin As Date
 ''            MsgBox "DATOS INGRESADOS NO CUMPLEN CON EL FORMATO"
 ''         End If
         End If
+   Case "Firmar_PDF"
+        Dim iRet As Long
+        ' "Pago de Remuneraciones Septiembre",
+        RutaDocumentoPDF = "Rol_Pagos_de_VACA_PRIETO_EDY_ANGELICA_2026-09_0702164179.pdf"
+        iRet = Firmar_Documento_PDF(RutaDocumentoPDF, 0.1, 8)
+        If iRet = 0 Then
+           iRet = Shell("cmd /c start """" """ & RutaDocumentoPDF & """", vbHide)
+        Else
+           MsgBox RutaDocumentoPDF
+        End If
   End Select
   RatonNormal
 End Sub
@@ -1759,12 +1780,12 @@ Dim A_No As Long
            RatonReloj
            Progreso_Barra.Valor_Maximo = Progreso_Barra.Valor_Maximo + .RecordCount
            Do While Not .EOF
-              Mifecha = .fields("Fecha")
-              CodigoB = .fields("Codigo_P")
-              TipoDoc = .fields("TP")
-              Numero = .fields("Numero")
-              Cta = .fields("Cta_Inv")
-              Contra_Cta = .fields("Contra_Cta")
+              Mifecha = .Fields("Fecha")
+              CodigoB = .Fields("Codigo_P")
+              TipoDoc = .Fields("TP")
+              Numero = .Fields("Numero")
+              Cta = .Fields("Cta_Inv")
+              Contra_Cta = .Fields("Contra_Cta")
               Progreso_Barra.Mensaje_Box = "[" & ContIDX & "] Ins. Cta. Trans." & TipoDoc & " = " & Numero & ": " & Mifecha & ", " & CodigoCli
               Progreso_Esperar
 
@@ -1815,11 +1836,11 @@ Dim A_No As Long
            Progreso_Barra.Valor_Maximo = Progreso_Barra.Valor_Maximo + .RecordCount
            'MsgBox "...."
            Do While Not .EOF
-              Mifecha = .fields("Fecha")
-              CodigoB = .fields("Codigo_B")
-              TipoDoc = .fields("TP")
-              Numero = .fields("Numero")
-              CodigoCli = .fields("Cliente")
+              Mifecha = .Fields("Fecha")
+              CodigoB = .Fields("Codigo_B")
+              TipoDoc = .Fields("TP")
+              Numero = .Fields("Numero")
+              CodigoCli = .Fields("Cliente")
               Progreso_Barra.Mensaje_Box = "[" & ContIDX & "] " & TipoDoc & " = " & Numero & ": " & Mifecha & ", " & CodigoCli
               Progreso_Esperar
               sSQL = "SELECT Cta_Inv, SUM(Valor_Total) As TotalInv " _
@@ -1833,8 +1854,8 @@ Dim A_No As Long
               Select_Adodc AdoCtas, sSQL
               If AdoCtas.Recordset.RecordCount > 0 Then
                  Do While Not AdoCtas.Recordset.EOF
-                    Haber = Redondear(AdoCtas.Recordset.fields("TotalInv"), 2)
-                    Cta = AdoCtas.Recordset.fields("Cta_Inv")
+                    Haber = Redondear(AdoCtas.Recordset.Fields("TotalInv"), 2)
+                    Cta = AdoCtas.Recordset.Fields("Cta_Inv")
                     sSQL = "UPDATE Transacciones " _
                          & "SET Haber = " & Haber & " " _
                          & "WHERE Periodo = '" & Periodo_Contable & "' " _
@@ -1858,8 +1879,8 @@ Dim A_No As Long
               Select_Adodc AdoCtas, sSQL
               If AdoCtas.Recordset.RecordCount > 0 Then
                  Do While Not AdoCtas.Recordset.EOF
-                    Debe = Redondear(AdoCtas.Recordset.fields("TotalInv"), 2)
-                    Cta = AdoCtas.Recordset.fields("Contra_Cta")
+                    Debe = Redondear(AdoCtas.Recordset.Fields("TotalInv"), 2)
+                    Cta = AdoCtas.Recordset.Fields("Contra_Cta")
                     
                     sSQL = "UPDATE Transacciones " _
                          & "SET Debe = " & Debe & " " _
@@ -1896,10 +1917,10 @@ Dim A_No As Long
               Select_Adodc AdoCtas, sSQL
               If AdoCtas.Recordset.RecordCount > 0 Then
                  Do While Not AdoCtas.Recordset.EOF
-                    Debe = Redondear(AdoCtas.Recordset.fields("Valor_Total"), 2)
-                    Cta = AdoCtas.Recordset.fields("Contra_Cta")
-                    SubCta = AdoCtas.Recordset.fields("TC")
-                    CodigoL = AdoCtas.Recordset.fields("CodigoL")
+                    Debe = Redondear(AdoCtas.Recordset.Fields("Valor_Total"), 2)
+                    Cta = AdoCtas.Recordset.Fields("Contra_Cta")
+                    SubCta = AdoCtas.Recordset.Fields("TC")
+                    CodigoL = AdoCtas.Recordset.Fields("CodigoL")
                     If Len(CodigoL) > 1 Then
                        SetAdoAddNew "Trans_SubCtas"
                        SetAdoFields "T", "N"
@@ -2019,12 +2040,12 @@ Dim A_No As Long
            RatonReloj
            Progreso_Barra.Valor_Maximo = Progreso_Barra.Valor_Maximo + .RecordCount
            Do While Not .EOF
-              Mifecha = .fields("Fecha")
-              TipoDoc = .fields("TC")
-              Factura_No = .fields("Factura")
-              CodigoInv = .fields("Codigo")
-              Cod_Bodega = .fields("CodBodega")
-              Cod_Marca = .fields("CodMarca")
+              Mifecha = .Fields("Fecha")
+              TipoDoc = .Fields("TC")
+              Factura_No = .Fields("Factura")
+              CodigoInv = .Fields("Codigo")
+              Cod_Bodega = .Fields("CodBodega")
+              Cod_Marca = .Fields("CodMarca")
               Progreso_Barra.Mensaje_Box = "[" & ContIDX & "] Ins. Cta. Trans." & TipoDoc & " = " & Factura_No & ": " & Mifecha & ", " & CodigoInv
               Progreso_Esperar
 
@@ -2035,31 +2056,31 @@ Dim A_No As Long
                  If DatInv.Costo > 0 And Len(DatInv.Cta_Inventario) > 1 And Len(DatInv.Cta_Costo_Venta) > 1 Then
                     SetAdoAddNew "Trans_Kardex"
                     SetAdoFields "T", "@" ' Normal
-                    SetAdoFields "TC", .fields("TC")
-                    SetAdoFields "Serie", .fields("Serie")
-                    SetAdoFields "Fecha", .fields("Fecha")
-                    SetAdoFields "Factura", .fields("Factura")
-                    SetAdoFields "Codigo_P", .fields("CodigoC")
-                    SetAdoFields "CodBodega", .fields("CodBodega")
-                    SetAdoFields "CodMarca", .fields("CodMarca")
-                    SetAdoFields "Codigo_Inv", .fields("Codigo")
-                    SetAdoFields "CodigoL", .fields("CodigoL")
-                    SetAdoFields "Lote_No", .fields("Lote_No")
-                    SetAdoFields "Fecha_Fab", .fields("Fecha_Fab")
-                    SetAdoFields "Fecha_Exp", .fields("Fecha_Exp")
-                    SetAdoFields "Procedencia", .fields("Procedencia")
-                    SetAdoFields "Modelo", .fields("Modelo")
-                    SetAdoFields "Orden_No", .fields("Orden_No")
-                    SetAdoFields "Serie_No", .fields("Serie_No")
-                    SetAdoFields "Total_IVA", .fields("Total_IVA")
-                    SetAdoFields "Porc_C", .fields("Porc_C")
-                    SetAdoFields "Salida", .fields("Cantidad")
-                    SetAdoFields "PVP", .fields("Precio")
-                    SetAdoFields "Valor_Unitario", .fields("Precio")
+                    SetAdoFields "TC", .Fields("TC")
+                    SetAdoFields "Serie", .Fields("Serie")
+                    SetAdoFields "Fecha", .Fields("Fecha")
+                    SetAdoFields "Factura", .Fields("Factura")
+                    SetAdoFields "Codigo_P", .Fields("CodigoC")
+                    SetAdoFields "CodBodega", .Fields("CodBodega")
+                    SetAdoFields "CodMarca", .Fields("CodMarca")
+                    SetAdoFields "Codigo_Inv", .Fields("Codigo")
+                    SetAdoFields "CodigoL", .Fields("CodigoL")
+                    SetAdoFields "Lote_No", .Fields("Lote_No")
+                    SetAdoFields "Fecha_Fab", .Fields("Fecha_Fab")
+                    SetAdoFields "Fecha_Exp", .Fields("Fecha_Exp")
+                    SetAdoFields "Procedencia", .Fields("Procedencia")
+                    SetAdoFields "Modelo", .Fields("Modelo")
+                    SetAdoFields "Orden_No", .Fields("Orden_No")
+                    SetAdoFields "Serie_No", .Fields("Serie_No")
+                    SetAdoFields "Total_IVA", .Fields("Total_IVA")
+                    SetAdoFields "Porc_C", .Fields("Porc_C")
+                    SetAdoFields "Salida", .Fields("Cantidad")
+                    SetAdoFields "PVP", .Fields("Precio")
+                    SetAdoFields "Valor_Unitario", .Fields("Precio")
                     SetAdoFields "Costo", DatInv.Costo
-                    SetAdoFields "Valor_Total", Redondear(.fields("Cantidad") * .fields("Precio"), 2)
-                    SetAdoFields "Total", Redondear(.fields("Cantidad") * DatInv.Costo, 2)
-                    SetAdoFields "Detalle", "FA: " + MidStrg(.fields("Cliente"), 1, 96)
+                    SetAdoFields "Valor_Total", Redondear(.Fields("Cantidad") * .Fields("Precio"), 2)
+                    SetAdoFields "Total", Redondear(.Fields("Cantidad") * DatInv.Costo, 2)
+                    SetAdoFields "Detalle", "FA: " + MidStrg(.Fields("Cliente"), 1, 96)
                     SetAdoFields "Codigo_Barra", DatInv.Codigo_Barra
                     SetAdoFields "Cta_Inv", DatInv.Cta_Inventario
                     SetAdoFields "Contra_Cta", DatInv.Cta_Costo_Venta
@@ -2128,13 +2149,13 @@ Dim A_No As Long
        If .RecordCount > 0 Then
            RatonReloj
            Progreso_Barra.Valor_Maximo = .RecordCount
-           Cont = .fields("IDX")
-           Mifecha = .fields("FECHA")
-           CodigoA = .fields("CI_RUC")
-           CodigoB = TrimStrg(.fields("APELLIDOS_NOMBRES"))
-           CodigoC = TrimStrg(.fields("FICHA_CLINICA"))
-           Codigo1 = TrimStrg(.fields("CATEGORIA"))
-           CodigoCli = .fields("CODIGO")
+           Cont = .Fields("IDX")
+           Mifecha = .Fields("FECHA")
+           CodigoA = .Fields("CI_RUC")
+           CodigoB = TrimStrg(.Fields("APELLIDOS_NOMBRES"))
+           CodigoC = TrimStrg(.Fields("FICHA_CLINICA"))
+           Codigo1 = TrimStrg(.Fields("CATEGORIA"))
+           CodigoCli = .Fields("CODIGO")
            
            sSQL = "UPDATE Trans_Kardex " _
                 & "SET X = '.' " _
@@ -2166,9 +2187,9 @@ Dim A_No As Long
            Ejecutar_SQL_SP sSQL
            
            Do While Not .EOF
-              Progreso_Barra.Mensaje_Box = "[" & ContIDX & "] CD = " & NumComp & ": " & Mifecha & ", " & CodigoB & " -> (" & A_No & ") " & .fields("CODIGO_INVENTARIO")
+              Progreso_Barra.Mensaje_Box = "[" & ContIDX & "] CD = " & NumComp & ": " & Mifecha & ", " & CodigoB & " -> (" & A_No & ") " & .Fields("CODIGO_INVENTARIO")
               Progreso_Esperar
-              If Cont <> .fields("IDX") Then
+              If Cont <> .Fields("IDX") Then
                  Ln_No = 0
                  sSQL = "SELECT CONTRA_CTA, SUM(VALOR_TOTAL) As TotCta " _
                       & "FROM Asiento_K " _
@@ -2180,7 +2201,7 @@ Dim A_No As Long
                  Select_Adodc AdoCtas, sSQL
                  If AdoCtas.Recordset.RecordCount > 0 Then
                     Do While Not AdoCtas.Recordset.EOF
-                       InsertarAsientos AdoAsiento, AdoCtas.Recordset.fields("CONTRA_CTA"), 0, AdoCtas.Recordset.fields("TotCta"), 0
+                       InsertarAsientos AdoAsiento, AdoCtas.Recordset.Fields("CONTRA_CTA"), 0, AdoCtas.Recordset.Fields("TotCta"), 0
                        Ln_No = Ln_No + 1
                        AdoCtas.Recordset.MoveNext
                     Loop
@@ -2196,7 +2217,7 @@ Dim A_No As Long
                  Select_Adodc AdoCtas, sSQL
                  If AdoCtas.Recordset.RecordCount > 0 Then
                     Do While Not AdoCtas.Recordset.EOF
-                       InsertarAsientos AdoAsiento, AdoCtas.Recordset.fields("CTA_INVENTARIO"), 0, 0, AdoCtas.Recordset.fields("TotCta")
+                       InsertarAsientos AdoAsiento, AdoCtas.Recordset.Fields("CTA_INVENTARIO"), 0, 0, AdoCtas.Recordset.Fields("TotCta")
                        Ln_No = Ln_No + 1
                        AdoCtas.Recordset.MoveNext
                     Loop
@@ -2228,14 +2249,14 @@ Dim A_No As Long
                       & "WHERE IDX = " & Cont & " "
                  Ejecutar_SQL_SP sSQL
                 'MsgBox sSQL
-                 Cont = .fields("IDX")
+                 Cont = .Fields("IDX")
                  ContIDX = ContIDX + 1
-                 Mifecha = .fields("FECHA")
-                 CodigoA = .fields("CI_RUC")
-                 CodigoB = TrimStrg(.fields("APELLIDOS_NOMBRES"))
-                 CodigoC = TrimStrg(.fields("FICHA_CLINICA"))
-                 Codigo1 = TrimStrg(.fields("CATEGORIA"))
-                 CodigoCli = .fields("CODIGO")
+                 Mifecha = .Fields("FECHA")
+                 CodigoA = .Fields("CI_RUC")
+                 CodigoB = TrimStrg(.Fields("APELLIDOS_NOMBRES"))
+                 CodigoC = TrimStrg(.Fields("FICHA_CLINICA"))
+                 Codigo1 = TrimStrg(.Fields("CATEGORIA"))
+                 CodigoCli = .Fields("CODIGO")
                 'MsgBox "CD = " & NumComp & " .."
                  IniciarAsientosAdo AdoAsiento
                  A_No = 0
@@ -2249,22 +2270,22 @@ Dim A_No As Long
               End If
 
              'Averiguamos el costo promedio de salida
-              Stock_Actual_Inventario .fields("FECHA"), .fields("CODIGO_INVENTARIO"), "01"
-              ValorTotal = Redondear(ValorUnit * .fields("CANTIDAD_SALIDA"), 2)
+              Stock_Actual_Inventario .Fields("FECHA"), .Fields("CODIGO_INVENTARIO"), "01"
+              ValorTotal = Redondear(ValorUnit * .Fields("CANTIDAD_SALIDA"), 2)
               RatonReloj
               
               '.Fields ("FICHA_CLINICA")
               SetAdoAddNew "Asiento_K"
               SetAdoFields "DH", "2"
-              SetAdoFields "CODIGO_INV", .fields("CODIGO_INVENTARIO")
-              SetAdoFields "PRODUCTO", .fields("PRODUCTO")
-              SetAdoFields "CANT_ES", .fields("CANTIDAD_SALIDA")
+              SetAdoFields "CODIGO_INV", .Fields("CODIGO_INVENTARIO")
+              SetAdoFields "PRODUCTO", .Fields("PRODUCTO")
+              SetAdoFields "CANT_ES", .Fields("CANTIDAD_SALIDA")
               SetAdoFields "VALOR_UNIT", ValorUnit
               SetAdoFields "VALOR_TOTAL", ValorTotal
-              SetAdoFields "CTA_INVENTARIO", .fields("CTA_INVENTARIO")
-              SetAdoFields "CONTRA_CTA", .fields("CODIGO_CONTABLE")
-              SetAdoFields "CANTIDAD", .fields("CANTIDAD_SALIDA")
-              SetAdoFields "SUBCTA", .fields("CODIGO_CC")
+              SetAdoFields "CTA_INVENTARIO", .Fields("CTA_INVENTARIO")
+              SetAdoFields "CONTRA_CTA", .Fields("CODIGO_CONTABLE")
+              SetAdoFields "CANTIDAD", .Fields("CANTIDAD_SALIDA")
+              SetAdoFields "SUBCTA", .Fields("CODIGO_CC")
               SetAdoFields "UNIDAD", "UNIDAD"
               SetAdoFields "Codigo_B", CodigoCli
               SetAdoFields "CodBod", "01"
@@ -2278,9 +2299,9 @@ Dim A_No As Long
               SetAdoFields "TM", "1"
               SetAdoFields "DH", "1"
               SetAdoFields "Factura", 0
-              SetAdoFields "Codigo", .fields("CODIGO_CC")
-              SetAdoFields "FECHA_V", .fields("FECHA")
-              SetAdoFields "Cta", .fields("CODIGO_CONTABLE")
+              SetAdoFields "Codigo", .Fields("CODIGO_CC")
+              SetAdoFields "FECHA_V", .Fields("FECHA")
+              SetAdoFields "Cta", .Fields("CODIGO_CONTABLE")
               SetAdoFields "Detalle_SubCta", CodigoB
               SetAdoFields "TC", "CC"
               SetAdoFields "T_No", Trans_No
@@ -2302,7 +2323,7 @@ Dim A_No As Long
            Select_Adodc AdoCtas, sSQL
            If AdoCtas.Recordset.RecordCount > 0 Then
               Do While Not AdoCtas.Recordset.EOF
-                 InsertarAsientos AdoAsiento, AdoCtas.Recordset.fields("CONTRA_CTA"), 0, AdoCtas.Recordset.fields("TotCta"), 0
+                 InsertarAsientos AdoAsiento, AdoCtas.Recordset.Fields("CONTRA_CTA"), 0, AdoCtas.Recordset.Fields("TotCta"), 0
                  Ln_No = Ln_No + 1
                  AdoCtas.Recordset.MoveNext
               Loop
@@ -2318,7 +2339,7 @@ Dim A_No As Long
            Select_Adodc AdoCtas, sSQL
            If AdoCtas.Recordset.RecordCount > 0 Then
               Do While Not AdoCtas.Recordset.EOF
-                 InsertarAsientos AdoAsiento, AdoCtas.Recordset.fields("CTA_INVENTARIO"), 0, 0, AdoCtas.Recordset.fields("TotCta")
+                 InsertarAsientos AdoAsiento, AdoCtas.Recordset.Fields("CTA_INVENTARIO"), 0, 0, AdoCtas.Recordset.Fields("TotCta")
                  Ln_No = Ln_No + 1
                  AdoCtas.Recordset.MoveNext
               Loop
@@ -2386,8 +2407,8 @@ Dim rsExcel As ADODB.Recordset
        AdoDataGrid.Recordset.MoveLast
        DataGrid.Caption = AdoDataGrid.Recordset.RecordCount
        Cadena = "Registros: " & AdoDataGrid.Recordset.RecordCount & vbCrLf
-       For I = 0 To AdoDataGrid.Recordset.fields.Count - 1
-           Cadena = Cadena & AdoDataGrid.Recordset.fields(I).Name & " = " & AdoDataGrid.Recordset.fields(I) & vbCrLf
+       For I = 0 To AdoDataGrid.Recordset.Fields.Count - 1
+           Cadena = Cadena & AdoDataGrid.Recordset.Fields(I).Name & " = " & AdoDataGrid.Recordset.Fields(I) & vbCrLf
        Next I
        'MsgBox Cadena
        End If
@@ -2456,9 +2477,9 @@ Dim CnnFTPPOK As Boolean
    'MsgBox Len(ClaveAcceso) & "-" & ClaveAcceso
     If Len(ClaveAcceso) = 49 Then
        ftp.Inicializar FGeneraPDF
-       ftp.Password = ftpPwr  'Le establecemos la contraseña de la cuenta Ftp
-       ftp.Usuario = ftpUse   'Le establecemos el nombre de usuario de la cuenta
-       ftp.servidor = ftpSvr  'Establecesmo el nombre del Servidor FTP
+       ftp.Password = ftpUpPwr  'Le establecemos la contraseña de la cuenta Ftp
+       ftp.Usuario = ftpUpUse   'Le establecemos el nombre de usuario de la cuenta
+       ftp.servidor = ftpUpSvr  'Establecesmo el nombre del Servidor FTP
        Set ftp.ListView = LstVwFTP
        ftp.ConStatus = True
        If ftp.ConectarFtp(LstStatud) Then CnnFTPPOK = True Else CnnFTPPOK = False
@@ -2492,7 +2513,7 @@ Dim CnnFTPPOK As Boolean
     End If
 End Sub
 
-Private Sub WebBrowser1_NavigateComplete2(ByVal pDisp As Object, URL As Variant)
+Private Sub WebBrowser1_NavigateComplete2(ByVal pDisp As Object, url As Variant)
 ''   On Error Resume Next
 ''   Set oDocument = pDisp.document
 ''

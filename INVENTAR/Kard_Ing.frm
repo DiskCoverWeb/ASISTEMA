@@ -14,8 +14,8 @@ Begin VB.Form Kard_Ing
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
    Picture         =   "Kard_Ing.frx":0442
-   ScaleHeight     =   8340
-   ScaleWidth      =   13635
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    WindowState     =   2  'Maximized
    Begin VB.TextBox TxtSerie 
       Alignment       =   1  'Right Justify

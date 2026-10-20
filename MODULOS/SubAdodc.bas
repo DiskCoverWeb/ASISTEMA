@@ -39,6 +39,7 @@ Option Explicit
 '''
 '''Loop
 '''Close #NumFile                      ' Close file.
+
 Public Sub Informe_Errores()
 Dim AdoErrorDB As ADODB.Recordset
 Dim HayReg As Boolean
@@ -169,7 +170,7 @@ Dim SizeLetra As Integer
 Dim TextoMemo As String
 Dim TextoTemp As String
 
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
 SizeLetra = 10
 Mensajes = "Seguro de Envial Memo No. " & NumeroMemo & vbCrLf
 Titulo = "ENVIOS POR MAIL"
@@ -242,7 +243,7 @@ If BoxMensaje = vbYes Then
     End With
     RatonNormal
     Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -257,7 +258,7 @@ Public Sub Imprimir_Memo(para As Adodc, _
 Dim SizeLetra As Integer
 Dim TextoMemo As String
 Dim TextoTemp As String
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
 SizeLetra = 10
 Mensajes = "Seguro de Imprimir el Memo No. " & NumeroMemo & vbCrLf
 Titulo = "IMPRESION"
@@ -426,7 +427,7 @@ RatonNormal
 MensajeEncabData = ""
 Printer.EndDoc
 Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -2369,7 +2370,7 @@ Public Sub ImprimirDataObjetivo(Datas As Adodc, _
                                 FinDoc As Boolean, _
                                 FormaImp As Byte, _
                                 SizeLetra As Integer)
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
 RatonReloj
 InicioX = 0.5: InicioY = 0
 'Escala_Centimetro FormaImp, TipoTimes, SizeLetra
@@ -2398,7 +2399,7 @@ RatonNormal
 MensajeEncabData = ""
 If FinDoc Then Printer.EndDoc
 Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -2406,7 +2407,7 @@ End Sub
 
 Public Sub ImprimirMeses(Datas As Adodc, _
                          SizeLetra As Integer)
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
 RatonReloj
 InicioX = 0.5: InicioY = 0
 Escala_Centimetro 2, TipoTimes, SizeLetra
@@ -2456,7 +2457,7 @@ MensajeEncabData = ""
 RatonNormal
 Printer.EndDoc
 Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -2466,7 +2467,7 @@ Public Sub Imprimir12MesesPorc(Datas As Adodc, _
                                FechaI As MaskEdBox, _
                                FechaF As MaskEdBox)
 Dim SizeLetra As Integer
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
 RatonReloj
 FechaValida FechaI
 FechaValida FechaF
@@ -2548,7 +2549,7 @@ MensajeEncabData = ""
 RatonNormal
 Printer.EndDoc
 Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -2558,7 +2559,7 @@ Public Sub ImprimirMesesPorc(Datas As Adodc, _
                              FechaI As MaskEdBox, _
                              FechaF As MaskEdBox)
 Dim SizeLetra As Integer
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
 RatonReloj
 FechaValida FechaI
 FechaValida FechaF
@@ -2621,7 +2622,7 @@ MensajeEncabData = ""
 RatonNormal
 Printer.EndDoc
 Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -2732,7 +2733,7 @@ Dim oldScaleMode As Integer
 Dim Porcentaje As Single
 Dim CadAux As String
 
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
  
    If SQuerys <> "" Then
       RatonReloj
@@ -2755,8 +2756,8 @@ On Error GoTo Errorhandler
       Generar_File_SQL NombreFile, SQuerys
      'MsgBox AdoStrCnn
      
-     'Clipboard.Clear
-     'Clipboard.SetText SQuerys
+'     Clipboard.Clear
+'     Clipboard.SetText SQuerys
      'MsgBox SQuerys
       Dtas.RecordSource = SQuerys
       Dtas.Refresh
@@ -2887,7 +2888,7 @@ On Error GoTo Errorhandler
   RatonNormal
 '''  If Is_Prog_Bar Then Prog_Bar.Value = Prog_Bar.Max
 Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     DBGMalla.Visible = True
     MsgBox ("Error #" & CStr(Err.Number) & " " & Err.Description)
@@ -3127,7 +3128,7 @@ Public Sub Select_AdoDB(AdoReg As ADODB.Recordset, _
  'MsgBox SQLQuery
   RatonReloj
   SQLQuery = CompilarSQL(SQLQuery)
- 'MsgBox SQLQuery
+ 'MsgBox SQLQuery & vbCrLf & AdoStrCnn
   Generar_File_SQL NombreFile, SQLQuery
   Set AdoReg = New ADODB.Recordset
   AdoReg.CursorType = adOpenStatic   'adOpenDynamic
@@ -3146,12 +3147,6 @@ Public Sub Select_AdoDB_MySQL(AdoReg As ADODB.Recordset, _
 '''   strUsuario = "diskcover"
 '''   strPassword = "disk2017Cover"
 '''   strPuerto = "13306"
-'''   AdoStrCnnMySQL = "DRIVER={MySQL ODBC 3.51 Driver};" _
-'''                  & "SERVER=" & strServidor & ";" _
-'''                  & "DATABASE=" & strBaseDatos & ";" _
-'''                  & "UID=" & strUsuario & ";" _
-'''                  & "PASSWORD=" & strPassword & ";" _
-'''                  & "PORT=" & strPuerto & ";"
                               
  'MsgBox SQLQuery & vbCrLf & AdoStrCnnMySQL
   RatonReloj
@@ -3188,7 +3183,7 @@ Public Sub Conectar_Ado_Execute_MySQL(SQLQuery As String, _
 Dim AdoCon1 As ADODB.Connection
 Dim IdTime As Long
      RatonReloj
-     If Ping_IP(strServidorERP) Then
+    'If Ping_IP(strServidorERP) Then
        'Consultamos las cuentas de la tabla
        'SQLQuery = CompilarSQL(SQLQuery)
        'MsgBox SQLQuery & vbCrLf & String(70, "_") & vbCrLf & AdoStrCnnMySQL
@@ -3197,7 +3192,7 @@ Dim IdTime As Long
         AdoCon1.open AdoStrCnnMySQL
         AdoCon1.Execute SQLQuery, RegAfectados, adCmdText
         AdoCon1.Close
-     End If
+    'End If
      RatonNormal
      If RegSN Then MsgBox "Registros Afectados: " & Format$(RegAfectados, "#,##0")
 End Sub
@@ -3257,7 +3252,7 @@ Public Sub ImprimirAdo(Datas As Adodc, _
                        FormaImp As Byte, _
                        SizeLetra As Integer, _
                        Optional EsCampoCorto As Boolean)
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
 
 Mensajes = "Seguro de Imprimir en:" & vbCrLf & Printer.DeviceName & "?"
 Titulo = "IMPRESION"
@@ -3302,7 +3297,7 @@ MensajeEncabData = ""
 If FinDoc Then Printer.EndDoc
 Cuadricula = False
 Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -3316,7 +3311,7 @@ Public Sub ImprimirAdodc(Datas As Adodc, _
                          SizeLetra As Integer, _
                          Optional EsCampoCorto As Boolean, _
                          Optional PiePagina As String)
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
 RatonReloj
 Mensajes = "Seguro de Imprimir en:" & vbCrLf & Printer.DeviceName & "?"
 Titulo = "IMPRESION"
@@ -3424,7 +3419,7 @@ RatonNormal
 Printer.EndDoc
 Cuadricula = False
 Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -3962,7 +3957,7 @@ Dim FP_PosL_Yo As Single
 Dim FP_PosL_Yf As Single
 Dim FP_CentrarTextoW As Single
 
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
    'Establecemos los inicios por default
     Inicio_X = Inicio_Xo
     Inicio_Y = Inicio_Yo
@@ -4126,7 +4121,7 @@ On Error GoTo Errorhandler
     AdoFormatoP.Close
     RatonNormal
 Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -5385,7 +5380,7 @@ Dim IJ As Long
 Dim IdTime As Long
 Dim strCnn As String
 Dim NúmeroError
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
 ' Consultamos las cuentas de la tabla
   RatonReloj
  'MsgBox AdoStrCnn
@@ -5402,7 +5397,7 @@ On Error GoTo Errorhandler
   AdoCon1.Close
   RatonNormal
   Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     MsgBox "Error:(" & Err & ")" & vbCrLf _
          & "En la Impresora: " & Printer.DeviceName & vbCrLf _
@@ -5902,7 +5897,8 @@ Dim Nombre_Base_Datos_SQL As String
 Dim CarIni As Long
 Dim CarFin As Long
 
-  'Leemos la cadena de conexion
+  'Leemos la cadena de conexion de MySQL y de SQL Server de la empresa
+   AdoStrCnnMySQL = "DRIVER={MySQL ODBC 8.0 ANSI Driver};SERVER=" & strServidorERP & ";PORT=13306;DATABASE=diskcover_empresas;USER=diskcover;PASSWORD=disk2017@Cover;OPTION=3"
    RutaGeneraFile = RutaSistema & "\ConectarDB.ini"
    RutaEmpresa = RutaSistema & "\EMPRESA\"
    Conexion_Temp = ""
@@ -5933,7 +5929,7 @@ Dim CarFin As Long
       CarIni = InStr(1, strIPServidor, ",")
       CarFin = InStr(1, strIPServidor, ";")
       If CarIni > 0 Then strPuerto = MidStrg(strIPServidor, CarIni + 1, Len(strIPServidor) - CarIni)
-
+      
       CarIni = InStr(1, strIPServidor, ":")
       CarFin = InStr(1, strIPServidor, ",")
       If CarIni > 0 And CarFin > 0 Then strIPServidor = MidStrg(strIPServidor, CarIni + 1, CarFin - CarIni - 1)
@@ -5991,6 +5987,32 @@ Dim CarFin As Long
       If CarIni > 0 Then strWebServices = MidStrg(strWebServices, 13, 3) Else strWebServices = "000"
    End If
    AdoStrCnn = Conexion_Temp
+  'MsgBox AdoStrCnn
+''   MsgBox strIPServidor & vbCrLf _
+''        & strNombreBaseDatos & vbCrLf _
+''        & strWebServices & vbCrLf _
+''        & strPassword & vbCrLf _
+''        & strUsuario & vbCrLf _
+''        & strPuerto & vbCrLf _
+''        & "-----------------------------------------" & vbCrLf _
+''        & AdoStrCnn & vbCrLf _
+''        & "-----------------------------------------" & vbCrLf _
+''        & AdoStrCnnMySQL
+      
+  'Cadena de conexion de SQL Server
+''   AdoStrCnn = Replace(AdoStrCnn, "only.diskcoversystem.com", "186.4.206.95")
+''   AdoStrCnn = Replace(AdoStrCnn, "imap.diskcoversystem.com", "104.237.138.52")
+''   AdoStrCnn = Replace(AdoStrCnn, "erp.diskcoversystem.com", "69.164.192.53")
+''   AdoStrCnn = Replace(AdoStrCnn, "db.diskcoversystem.com", "194.195.222.54")
+''   AdoStrCnnMySQL = Replace(AdoStrCnnMySQL, "erp.diskcoversystem.com", "69.164.192.53")
+
+'      69.164.192.53     ftpds.diskcoversystem.com
+'     194.195.222.54     ftp.diskcoversystem.com
+'     194.195.222.54     db.diskcoversystem.com
+'      186.4.206.112     cloud.diskcoversystem.com
+'       186.4.206.95     vpn.diskcoversystem.com
+'       186.4.206.95     ftpupdate.diskcoversystem.com
+
 '''   MsgBox strIPServidor & vbCrLf _
 '''        & strNombreBaseDatos & vbCrLf _
 '''        & strWebServices & vbCrLf _
@@ -5998,7 +6020,9 @@ Dim CarFin As Long
 '''        & strUsuario & vbCrLf _
 '''        & strPuerto & vbCrLf _
 '''        & "-----------------------------------------" & vbCrLf _
-'''        & AdoStrCnn
+'''        & AdoStrCnn & vbCrLf _
+'''        & "-----------------------------------------" & vbCrLf _
+'''        & AdoStrCnnMySQL
 End Sub
 
 Public Sub Leer_Datos_Conexion(Conexion As Tipo_Conexion)
@@ -6885,29 +6909,21 @@ On Error GoTo error_Handler
         .Inicializar MDIFormulario
         'Le establecemos el nombre y Clave del usuario de la cuenta
          Select Case strIPServidor
-           Case "db.diskcoversystem.com"
-               'Establecesmo el nombre del Servidor FTP
-               .servidor = ftpSvrLinode
-               'Usuario, Clave y puerto de entrada
-               .Usuario = ftpUseLinode
-               .Password = ftpPwrLinode
-               .Puerto = 21
-                FtpOK = True
-           Case "only.diskcoversystem.com"
-               'Establecesmo el nombre del Servidor FTP
-               .servidor = ftpUpSvr
-               'Usuario, Clave y puerto de entrada
-               .Usuario = ftpUpUse
-               .Password = ftpUpPwr
+           Case "db.diskcoversystem.com", "only.diskcoversystem.com"
+               .servidor = ftpUpSvr   'Establecesmo el nombre del Servidor FTP
+               .Usuario = ftpUpUse   'Le establecemos el nombre de usuario de la cuenta
+               .Password = ftpUpPwr  'Le establecemos la contraseña de la cuenta Ftp
                .Puerto = ftpUpPuerto
+               
                 FtpOK = True
            Case Else
                 FtpOK = False
          End Select
+        'MsgBox "Conexion: " & FtpOK
          If FtpOK Then
            'conectamos al servidor FTP. EL label es el control donde mostrar los errores y el estado de la conexión
+           'MsgBox .ConectarFtp(LstStatud)
             If .ConectarFtp(LstStatud) = False Then GoTo error_Handler
-            
            'Mostramos en el label el path del directorio actual donde estamos ubicados en el servidor
             Progreso_Barra.Mensaje_Box = .GetDirectorioActual
             
@@ -6919,10 +6935,11 @@ On Error GoTo error_Handler
            'Realizamos la subida del archivo
            '================================
             FileCSV = Right$(sOrigen, Len(sOrigen) - InStrRev(sOrigen, "\"))
-            sDestino = "/files/" & FileCSV
-           'MsgBox sDestino
+            sDestino = ftpUpDir & "/" & FileCSV
+           
             Progreso_Barra.Mensaje_Box = "Subiendo: " & FileCSV
            .SubirArchivo sOrigen, sDestino, True
+           'MsgBox sDestino
            .Desconectar
          End If
     End With
@@ -6947,23 +6964,12 @@ On Error GoTo error_Handler
     With ftpLinode
          Progreso_Barra.Mensaje_Box = "Conectando al servidor"
         .Inicializar MDIFormulario
-        
         'Le establecemos el nombre y Clave del usuario de la cuenta
          Select Case strIPServidor
-           Case "db.diskcoversystem.com"
-               'Establecesmo el nombre del Servidor FTP
-               .servidor = ftpSvrLinode
-               'Usuario, Clave y puerto de entrada
-               .Usuario = ftpUseLinode
-               .Password = ftpPwrLinode
-               .Puerto = 21
-                FtpOK = True
-           Case "only.diskcoversystem.com"
-               'Establecesmo el nombre del Servidor FTP
-               .servidor = ftpUpSvr
-               'Usuario, Clave y puerto de entrada
-               .Usuario = ftpUpUse
-               .Password = ftpUpPwr
+           Case "db.diskcoversystem.com", "only.diskcoversystem.com"
+               .servidor = ftpUpSvr  'Establecesmo el nombre del Servidor FTP
+               .Usuario = ftpUpUse   'Le establecemos el nombre de usuario de la cuenta
+               .Password = ftpUpPwr  'Le establecemos la contraseña de la cuenta Ftp
                .Puerto = ftpUpPuerto
                 FtpOK = True
            Case Else

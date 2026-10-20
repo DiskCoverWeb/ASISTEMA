@@ -26,6 +26,7 @@ Global strUsuario As String
 Global strPuerto As String
 '-----------------------------------------
 Global AdoStrCnn As String
+Global AdoStrCnnMySQL As String
 Global AdoStrCnnBackup As String
 '-----------------------------------------
 Global PathEmpresa As String
@@ -599,6 +600,7 @@ Global SQLAtrasos As String
 Global Evaluacion As String
 Global Distrito As String
 Global TipoKardex As String
+Global Motivo_Firma_PDF As String
 '-----------------------------------------
 Global JSONInPutAbonos As String
 Global JSONOutPut As String
@@ -608,3 +610,4 @@ Global html_Detalle_adicional As String
 Global html_Titulo_Mensaje As String
 '-----------------------------------------
 Global ListaDeImpresoras() As String
+Global ListaComunicados As String

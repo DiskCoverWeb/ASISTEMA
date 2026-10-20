@@ -18,7 +18,7 @@ Option Explicit
 
 'variables locales que contienen valores de propiedad
 '-----------------------------------------------------------------------------------------------------------------------------------------------------------
-Public Respuesta As String
+Public respuesta As String
 '-----------------------------------------------------------------------------------------------------------------------------------------------------------
 Private mvarIPDestino As String 'copia local
 Private mvarLongitudDatos As Long 'copia local
@@ -268,7 +268,7 @@ End Property
 Public Property Get Estado() As Long
 'se usa cuando se asigna un valor a una propiedad, en el lado derecho de la asignación.
 'Syntax: Debug.Print X.Estado
-    Respuesta = Respuesta & Descripcion & vbCrLf
+    respuesta = respuesta & Descripcion & vbCrLf
     Estado = mvarEstado
 End Property
 
@@ -343,7 +343,7 @@ End Function
 Private Sub Class_Initialize()
 mvarLongitudDatos = 32
 mvarTimeOut = 1500
-Respuesta = ""
+respuesta = ""
 End Sub
 
 'Funciones Publicas de la clase
@@ -353,7 +353,7 @@ End Sub
 Public Function ConexionInternet() As Boolean
 Dim Result As Boolean
    Result = InternetGetConnectedState(0&, 0&)
-   If Result Then Respuesta = "Conectado al Internet" & vbCrLf
+   If Result Then respuesta = "Conectado al Internet" & vbCrLf
    ConexionInternet = Result
 End Function
 
@@ -398,35 +398,68 @@ Public Sub ping()
 End Sub
 
 Public Function IP_Publica() As String
-Dim cTemp As String
-Dim arTemp() As String
-Dim URL As String
-Dim IP As String
-Dim PosIpI As Long
-Dim PosIpF As Long
+    On Error GoTo ErrorHandler
     
-    cTemp = "0.0.0.0"
-    If ConexionInternet Then
-       IP = RutaSysBases & "\TEMP\IP_" & CodigoUsuario & ".txt"
-        URL = "https://whatismyipaddress.com/"
-        If Dir(IP) <> "" Then Kill IP
-        Call URLDownloadToFile(0, URL, IP, 0, 0)
-        If Dir(IP) <> "" Then
-           cTemp = CreateObject("Scripting.FileSystemObject").OpenTextFile(IP).ReadAll
-           cTemp = Replace(cTemp, """", "'")
-           PosIpI = InStr(cTemp, "https://whatismyipaddress.com/ip/")
-            If PosIpI > 0 Then
-               cTemp = MidStrg(cTemp, PosIpI, Len(cTemp))
-               PosIpF = InStr(cTemp, "'")
-               cTemp = MidStrg(cTemp, 1, PosIpF - 1)
-               cTemp = Replace(cTemp, "https://whatismyipaddress.com/ip/", "")
-               cTemp = TrimStrg(MidStrg(cTemp, 1, 15))
-            End If
-            Kill IP
-        End If
-    End If
-    IP_Publica = cTemp
+    Dim xmlHttp As Object
+    Dim url As String
+    Dim respuesta As String
+    
+'''    ' Servicio que retorna solo la IP en texto plano
+'''    'url = "https://api.ipify.org"
+'''    url = "https://icanhazip.com"
+'''    ' Alternativas si falla: "https://icanhazip.com" o "https://ident.me"
+'''
+'''    ' Se usa ServerXMLHTTP.6.0 por compatibilidad con HTTPS/TLS moderno
+'''    Set xmlHttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
+'''
+'''    xmlHttp.open "GET", url, False
+'''    xmlHttp.send
+'''
+'''    If xmlHttp.Status = 200 Then
+'''        ' Limpiamos saltos de línea y espacios
+'''        respuesta = Trim(xmlHttp.responseText)
+'''        respuesta = Replace(respuesta, vbCr, "")
+'''        respuesta = Replace(respuesta, vbLf, "")
+'''        IP_Publica = respuesta
+'''    Else
+'''        IP_Publica = "Error HTTP: " & xmlHttp.Status
+'''    End If
+'''
+'''    Set xmlHttp = Nothing
+    
+    IP_Publica = "0.0.0.0"
+    Exit Function
+
+ErrorHandler:
+    IP_Publica = "Error: " & Err.Description
+    Set xmlHttp = Nothing
 End Function
+
+'Public Function IP_Publica() As String
+'    On Error GoTo ErrorHandler
+'
+'    Dim http As Object
+'    Set http = CreateObject("WinHttp.WinHttpRequest.5.1")
+'
+'    ' Configurar timeouts (Resolver, Conectar, Enviar, Recibir en milisegundos)
+'    http.setTimeouts 5000, 5000, 5000, 5000
+'
+'    http.open "GET", "https://api.ipify.org", False
+'    http.send
+'
+'    If http.Status = 200 Then
+'        IP_Publica = Trim(http.responseText)
+'    Else
+'        IP_Publica = "Error HTTP: " & http.Status
+'    End If
+'
+'    Set http = Nothing
+'    Exit Function
+'
+'ErrorHandler:
+'    IP_Publica = "Error: " & Err.Description
+'    Set http = Nothing
+'End Function
 
 Public Function Nombre_PC() As String
 Dim dwLen As Long

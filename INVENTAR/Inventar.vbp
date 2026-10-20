@@ -100,6 +100,7 @@ Class=cJSONScript; ..\CLASES\cJSONScript.cls
 Class=cStringBuilder; ..\CLASES\cStringBuilder.cls
 Form=Kard_Chg.frm
 Form=..\GENERAL\FSRIAutorizaXML.frm
+Form=..\GENERAL\FInfMsg.frm
 IconForm="MDICosto"
 Startup="MDICosto"
 HelpFile=""

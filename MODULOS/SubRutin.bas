@@ -72,6 +72,260 @@ Option Explicit
 '        Next I
 '       .Desconectar
 
+' Función para ejecutar en segundo plano y esperar a que finalice
+Public Function EjecutarComandoEspera(ByVal comando As String) As Long
+    Dim wsh As Object
+    On Error GoTo errHandler
+    
+    Set wsh = CreateObject("WScript.Shell")
+    ' El 0 oculta la ventana negra de CMD, True hace que VB6 espere
+    EjecutarComandoEspera = wsh.Run(comando, 0, True)
+    
+    Set wsh = Nothing
+    Exit Function
+errHandler:
+    Set wsh = Nothing
+    EjecutarComandoEspera = -1
+    MsgBox "Error al intentar ejecutar: " & Err.Description, vbCritical
+End Function
+
+' Convierte centímetros a coordenadas de JSignPdf: origenDesdeArriba: True si mides desde el borde superior de la hoja
+Sub CalcularCoordenadasJSignPdf( _
+    ByVal margenX_cm As Double, _
+    ByVal margenY_cm As Double, _
+    ByVal anchoSello_cm As Double, _
+    ByVal altoSello_cm As Double, _
+    ByRef llx As Long, _
+    ByRef lly As Long, _
+    ByRef urx As Long, _
+    ByRef ury As Long, _
+    Optional ByVal esA4 As Boolean = False, _
+    Optional ByVal origenDesdeArriba As Boolean = True)
+
+    Const PT_POR_CM As Double = 28.3465
+    Dim altoHoja_cm As Double
+    
+    ' Definir altura total de la página según el formato
+    If esA4 Then
+        altoHoja_cm = 29.7   ' A4
+    Else
+        altoHoja_cm = 27.94  ' Carta / Letter
+    End If
+    
+    ' Horizontal
+    llx = Round(margenX_cm * PT_POR_CM)
+    urx = Round((margenX_cm + anchoSello_cm) * PT_POR_CM)
+    
+    ' Vertical
+    If origenDesdeArriba Then
+        ' Si mides desde la parte superior hacia abajo
+        ury = Round((altoHoja_cm - margenY_cm) * PT_POR_CM)
+        lly = Round((altoHoja_cm - margenY_cm - altoSello_cm) * PT_POR_CM)
+    Else
+        ' Si mides desde la base de la hoja hacia arriba
+        lly = Round(margenY_cm * PT_POR_CM)
+        ury = Round((margenY_cm + altoSello_cm) * PT_POR_CM)
+    End If
+End Sub
+
+Function Firmar_Documento_PDF(ArchivoPDF As String, PosXcm As Double, PosYcm As Double) As Long
+Dim ArchivoPDFIn    As String
+Dim rutaCli         As String
+Dim rutaPdfOriginal As String
+Dim carpetaSalida   As String
+Dim sufijoSalida    As String
+Dim rutaImagenQR    As String
+Dim textoQR         As String
+Dim cmdQR           As String
+Dim comando         As String
+Dim textoParaURL    As String
+Dim DocFirmado      As String
+Dim exitCode        As Long
+Dim p_llx           As Long
+Dim p_lly           As Long
+Dim p_urx           As Long
+Dim p_ury           As Long
+Dim iRet            As Long
+Dim posBarra        As Long
+
+    RatonReloj
+    If PosXcm > 0 And PosYcm > 0 Then
+        'MsgBox RutaSysTemp & vbCrLf & RutaCertificado & vbCrLf & ClaveCertificado
+        '1. Rutas
+         posBarra = InStrRev(ArchivoPDF, "\")
+         If posBarra > 0 Then ArchivoPDFIn = MidStrg(ArchivoPDF, posBarra + 1, Len(ArchivoPDF)) Else ArchivoPDFIn = ArchivoPDF
+         
+         rutaCli = "C:\Program Files\JSignPdf\JSignPdfC.exe"
+         carpetaSalida = RutaSysTemp & "\PDF\PDF" & NumEmpresa
+         sufijoSalida = "_firmado"
+         rutaPdfOriginal = carpetaSalida & "\" & ArchivoPDFIn
+         DocFirmado = Replace(rutaPdfOriginal, ".pdf", sufijoSalida & ".pdf")
+        'Archivo temporal para la imagen del código QR
+         rutaImagenQR = RutaSysBases & "\TEMP\qr_firma" & NumEmpresa & ".png"
+         
+        '2. PASO PREVIO: Generar la imagen del Código QR (con curl de Windows)
+        ' Contenido que leerá el QR (puedes poner tu nombre, RUC o datos de validación): Puedes concatenar varias líneas de texto para el QR:
+         textoQR = "Firmado por: " & ULCase(NombreGerente) & " " & vbCrLf & _
+                   "RUC: " & RUC & " " & vbCrLf & _
+                   "Motivo: " & Motivo_Firma_PDF & " " & vbCrLf & _
+                   "Fecha: " & Format(Now, "yyyy-mm-dd hh:nn:ss") & " "
+        'Función para preparar el texto con saltos de línea para la URL:
+         textoParaURL = textoQR
+         textoParaURL = Replace(textoParaURL, vbCrLf, "%0A")
+         textoParaURL = Replace(textoParaURL, " ", "%20")
+         textoParaURL = Replace(textoParaURL, ":", "%3A")
+                 
+        'Descarga la imagen PNG del código QR directamente
+         cmdQR = "curl.exe -s ""https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" & textoParaURL & """ -o """ & rutaImagenQR & """"
+         EjecutarComandoEspera cmdQR
+         
+        'Ejemplo: En una hoja Carta, colocar un recuadro de firma de 7.5 cm de ancho
+        'y 2.5 cm de alto, ubicado a 2.0 cm del borde izquierdo y a 18.0 cm del borde superior:
+         CalcularCoordenadasJSignPdf margenX_cm:=PosXcm, margenY_cm:=PosYcm, anchoSello_cm:=8.5, altoSello_cm:=2, llx:=p_llx, lly:=p_lly, urx:=p_urx, ury:=p_ury, esA4:=False, origenDesdeArriba:=True
+         
+        '3. Construir el comando de JSignPdf con IMAGEN + TEXTO
+        'Ajusta las coordenadas donde deseas que caiga la estampa: llx, lly = esquina inferior izquierda | urx, ury = esquina superior derecha
+        'Parámetros de JSignPdf con las coordenadas exactas sobre EMPLEADOR:
+         
+        'Luego armas el comando inyectando los valores:
+         comando = """" & rutaCli & """" & _
+                   " """ & rutaPdfOriginal & """" & _
+                   " -kst PKCS12" & _
+                   " -ksf """ & RutaCertificado & """" & _
+                   " -ksp """ & TrimStrg(ClaveCertificado) & """" & _
+                   " -d """ & carpetaSalida & """" & _
+                   " -os """ & sufijoSalida & """" & _
+                   " --overwrite" & _
+                   " -r """ & Motivo_Firma_PDF & ". RUC: " & RUC & """" & _
+                   " -l """ & ULCase(NombreCiudad) & " - Ecuador""" & _
+                   " -V" & _
+                   " -pg 1" & _
+                   " -fs 7" & _
+                   " -llx " & p_llx & " -lly " & p_lly & _
+                   " -urx " & p_urx & " -ury " & p_ury & _
+                   " --render-mode GRAPHIC_AND_DESCRIPTION" & _
+                   " --img-path """ & rutaImagenQR & """"
+        '4. Ejecutar la firma
+         exitCode = EjecutarComandoEspera(comando)
+        '5. Verificar resultado
+         RatonNormal
+         If exitCode = 0 Then
+            iRet = Shell("cmd /c del /f /q """ & rutaPdfOriginal & """", vbHide)
+            ArchivoPDF = DocFirmado
+         Else
+            ArchivoPDF = "Error al firmar. Código: " & exitCode
+         End If
+         
+        Firmar_Documento_PDF = exitCode
+    Else
+        RatonNormal
+        Firmar_Documento_PDF = -1
+    End If
+End Function
+
+Public Sub Informacion_Entidad()
+Dim AdoDBInfoError As ADODB.Recordset
+Dim Exito As Boolean
+
+    RatonReloj
+    FinalizarSistema = False
+    ReDim MsgIngreso(12) As Mensaje_Sistema
+    For I = 0 To 9
+        MsgIngreso(I).Mensaje = ""
+        MsgIngreso(I).Finalizar = False
+    Next I
+    
+   'MsgBox IP_PC.InterNet & vbCrLf & IP_PC.Nombre_PC & vbCrLf & IP_PC.IP_PC & vbCrLf & IP_PC.MAC_PC & vbCrLf & IP_PC.WAN_PC
+    If Not Get_Internet Then MsgIngreso(0).Mensaje = "Su acceso al Internet es inestable, no podra autorizar los comprobantes electronicos hasta que su conexion al Internet se estabilice." & vbCrLf
+
+    CadenaParcial = ""
+    sSQL = "SELECT Modulo, Item, Codigo " _
+         & "FROM Acceso_Empresa " _
+         & "WHERE Modulo <> '00' " _
+         & "AND Codigo = '" & CodigoUsuario & "' "
+    Select_AdoDB AdoDBInfoError, sSQL
+    With AdoDBInfoError
+     If .RecordCount > 0 Then
+         Do While Not .EOF
+            CadenaParcial = CadenaParcial & .Fields("Modulo") & "^" & .Fields("Item") & "^" & .Fields("Codigo") & "^~"
+           .MoveNext
+         Loop
+     End If
+    End With
+    AdoDBInfoError.Close
+    
+    If Len(CadenaParcial) > 65535 Then MsgIngreso(1).Mensaje = "Falta ampliar los niveles de seguridad." & vbCrLf
+    
+    If Not PCActivo Then
+       MsgIngreso(2).Mensaje = NombreUsuario & vbCrLf & "Su Equipo se encuentra en LISTA NEGRA, ingreso no autorizado, comuniquese con el Administrador del Sistema." & vbCrLf
+       MsgIngreso(2).Finalizar = True
+    End If
+    
+    If Not EstadoUsuario Then
+       MsgIngreso(3).Mensaje = NombreUsuario & vbCrLf & "Su ingreso no esta autorizado, comuniquese con el Administrador del Sistema." & vbCrLf
+       MsgIngreso(3).Finalizar = True
+    End If
+
+    Evaluar = False
+    
+    If Cartera <> 0 And Cant_FA <> 0 Then
+       MsgIngreso(4).Mensaje = "CARTERA VENCIDA: ESTIMADO " & UCase(Empresa) & ", SE LE COMUNICA QUE USTED MANTIENE UNA CARTERA VENCIDA DE USD " & Format(Cartera, "#,##0.00") & ", " _
+                             & "EQUIVALENTE A " & Cant_FA & " FACTURA(S) EMITIDA(S) A USTED." & vbCrLf
+    End If
+    
+    Select Case EstadoEmpresa
+      Case "VEN30"
+           MsgIngreso(5).Mensaje = "PRIMER COMUNICADO DE ALVERTENCIA: SU EMPRESA ESTA POR SER BLOQUEADA POR CARTERA DE 30 DIAS DE VENCIMIENTO." & vbCrLf
+      Case "VEN60"
+           MsgIngreso(5).Mensaje = "SEGUNDO COMUNICADO DE ALVERTENCIA: SU EMPRESA ESTA POR SER BLOQUEADA POR CARTERA DE 60 DIAS DE VENCIMIENTO." & vbCrLf
+      Case "VEN90"
+           MsgIngreso(5).Mensaje = "TERCER COMUNICADO DE ALVERTENCIA: SU EMPRESA ESTA POR SER BLOQUEADA POR CARTERA DE 90 DIAS DE VENCIMIENTO." & vbCrLf
+      Case "VEN360"
+           MsgIngreso(5).Mensaje = "SU EMPRESA ESTA BLOQUEADA POR CARTERA DE 360 DIAS DE VENCIMIENTO." & vbCrLf
+           MsgIngreso(5).Finalizar = True
+      Case "VEN180", "MAS360"
+           MsgIngreso(5).Mensaje = "LO SENTIMOS, SU EMPRESA ESTA SUSPENDIDA EN EL SISTEMA." & vbCrLf
+           MsgIngreso(5).Finalizar = True
+      Case "BLOQ"
+           MsgIngreso(5).Mensaje = "BLOQUEO DEFINITIVO: LO SENTIMOS, SU EMPRESA NO ESTA ACTIVA EN EL SISTEMA, COMUNIQUESE A DISKCOVER SYSTEM." & vbCrLf
+           MsgIngreso(5).Finalizar = True
+    End Select
+    
+   'MsgBox "Desktop Test: 1 Estado = " & EstadoEmpresa
+    Cadena1 = ""
+    If Len(NombreGerente) <= 1 Then Cadena1 = Cadena1 & "Representante Legal," & vbCrLf
+    If Len(RazonSocial) <= 1 Then Cadena1 = Cadena1 & "Razon Social," & vbCrLf
+    If Len(NombreContador) <= 1 Then Cadena1 = Cadena1 & "Nombre del Contador," & vbCrLf
+    If Len(RUC_Contador) <= 1 Then Cadena1 = Cadena1 & "RUC del Contador," & vbCrLf
+    If Len(EmailProcesos) <= 1 And Email_CE_Copia Then Cadena1 = Cadena1 & "Email de Procesos y Respaldos," & vbCrLf
+    If Len(Cadena1) > 1 Then MsgIngreso(6).Mensaje = "REGISTRAR ESTOS DATOS DE LA EMPRESA:" & vbCrLf & Cadena1
+     
+    If Len(ComunicadoEntidad) > 1 Then MsgIngreso(7).Mensaje = ComunicadoEntidad & vbCrLf
+    If Len(MensajeEmpresa) > 1 Then MsgIngreso(8).Mensaje = MensajeEmpresa & vbCrLf
+
+    If Len(Link_Canal) > 1 Then MsgIngreso(9).Mensaje = "Presione el Boton del VIDEO para ver el tutorial." & vbCrLf
+
+    If Len(Archivo_Incluido) > 1 Then
+       Exito = DescargarFTP(ftpUpSvr, ftpUpUse, ftpUpPwr, "/files/descargas/" & Archivo_Incluido, RutaSysBases & "\TEMP\" & Archivo_Incluido)
+       MsgIngreso(10).Mensaje = "Presione el Boton de DESCARGAS para ver el comunicado enviado a Ustesd." & vbCrLf
+    End If
+        
+    If Version_Nueva Then
+       Exito = DescargarFTP(ftpUpSvr, ftpUpUse, ftpUpPwr, "/files/descargas/UpdSystem.exe", RutaSistema & "\UpdSystem.exe")
+       MsgIngreso(11).Mensaje = "Existe una version nueva del Sistema, presione en el boton ROJO que dice UPDATE para empezar la actualizacion, o comuniquese a DISKCOVERSYSTEMA para que le realice el proceso." & vbCrLf
+    End If
+        
+    ListaComunicados = ""
+    For I = 0 To UBound(MsgIngreso) - 1
+        ListaComunicados = ListaComunicados & MsgIngreso(I).Mensaje
+        If MsgIngreso(I).Finalizar Then FinalizarSistema = True
+    Next I
+    
+   'Recojemos los datos de salida del SP
+    If Len(ListaComunicados) > 1 Then FInfoMensaje.Show vbModal
+    
+End Sub
+
 Public Sub screen_size()
     MDI_X_Max = MDIFormulario.ProgressBarEstado.width - 100
     MDI_Y_Max = Screen.Height - 1940
@@ -310,7 +564,7 @@ Dim Valor_Retorno As Variant
              & "FROM Empresas " _
              & "WHERE Item = '" & NumEmpresa & "' "
        Select_AdoDB AdoRegs, Strgs
-       If AdoRegs.RecordCount > 0 Then Valor_Retorno = AdoRegs.fields(Campo_de_Busqueda)
+       If AdoRegs.RecordCount > 0 Then Valor_Retorno = AdoRegs.Fields(Campo_de_Busqueda)
        AdoRegs.Close
     End If
  End If
@@ -334,7 +588,7 @@ Dim AdoRegs As ADODB.Recordset
           & "AND Periodo = '" & Periodo_Contable & "' "
     AdoRegs.open Strgs, AdoStrCnn, , , adCmdText
     If AdoRegs.RecordCount > 0 Then
-       Valor_Retorno = AdoRegs.fields(Campo_de_Busqueda)
+       Valor_Retorno = AdoRegs.Fields(Campo_de_Busqueda)
     End If
     AdoRegs.Close
  End If
@@ -357,9 +611,9 @@ Dim AdoRegs As ADODB.Recordset
          & "WHERE " & Campo_de_Busqueda & " = '" & Patron_Busqueda & "' "
    AdoRegs.open Strgs, AdoStrCnn, , , adCmdText
    If AdoRegs.RecordCount > 0 Then
-      Valor_Retorno = AdoRegs.fields("Cliente")
-      Codigos = AdoRegs.fields("Codigo")
-      CodigoP = AdoRegs.fields("CI_RUC")
+      Valor_Retorno = AdoRegs.Fields("Cliente")
+      Codigos = AdoRegs.Fields("Codigo")
+      CodigoP = AdoRegs.Fields("CI_RUC")
    End If
    AdoRegs.Close
  End If
@@ -557,7 +811,7 @@ Dim Texto As String
 Dim LineTexto As String
 Dim CampoTexto As String
 Dim AnchoDeLinea As Single
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
 RatonReloj
 SQLMsg1 = "IMPRESION DE ERRORES"
 SQLMsg2 = "Fecha de Error del Archivo: " & Mifecha
@@ -613,7 +867,7 @@ Loop
 Printer.EndDoc
 RatonNormal
 Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -654,7 +908,7 @@ Dim SizeLetra As Integer
 Dim PosSup, PosIzq, DivxFila As Single
 Dim CodigoBarra As String
 SizeLetra = 6
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
 RatonReloj
 If Cantidad < 3 Then Cantidad = 3
 Mensajes = "Seguro de Imprimir en:" & vbCrLf & Printer.DeviceName & "?"
@@ -672,7 +926,7 @@ If PonImpresoraDefecto(SetNombrePRN) Then
     If .RecordCount > 0 Then
        .MoveFirst
         Do While Not .EOF
-           CodigoBarra = .fields("Codigo_Barra")
+           CodigoBarra = .Fields("Codigo_Barra")
            CodigoBarra = Replace(CodigoBarra, "Ñ", "N")
            Printer.FontBold = True
           'Elaboración del grafico del codigo de barra
@@ -686,7 +940,7 @@ If PonImpresoraDefecto(SetNombrePRN) Then
 ''           PictBar.FontBold = False
 ''           PictBar.Picture = Clipboard.GetData
           'Nombre del Producto
-           Producto = .fields("Producto")
+           Producto = .Fields("Producto")
            Printer.FontSize = 8
            J = Len(Producto)
            Do While (Printer.TextWidth(MidStrg(Producto, 1, J)) > 4.5) And (J > 0)
@@ -721,10 +975,10 @@ If PonImpresoraDefecto(SetNombrePRN) Then
            Printer.Print Producto
            Printer.CurrentX = PosColumna
            Printer.CurrentY = PosLinea + 1.4
-           Printer.Print .fields("Tipo")
+           Printer.Print .Fields("Tipo")
            Printer.CurrentX = PosColumna
            Printer.CurrentY = PosLinea + 1.8
-           Printer.Print .fields("Ubicacion")
+           Printer.Print .Fields("Ubicacion")
           'Codigo de Barra
            Printer.PaintPicture PictBar.Image, PosColumna, PosLinea + 2.2
           'Codigo de Barra en Texto
@@ -734,7 +988,7 @@ If PonImpresoraDefecto(SetNombrePRN) Then
            Printer.Print " Codigo: " & CodigoBarra
            Printer.CurrentX = PosColumna
            Printer.CurrentY = PosLinea + 3.3
-           Printer.Print .fields("Nombre_Responsable")
+           Printer.Print .Fields("Nombre_Responsable")
            
            Contador = Contador + 1
            If Contador > Cantidad Then
@@ -759,7 +1013,7 @@ If PonImpresoraDefecto(SetNombrePRN) Then
    MensajeEncabData = ""
    Printer.EndDoc
 Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -786,7 +1040,7 @@ CantEtiquetaY = 10
 EtiquetaAncho = 3.8
 EtiquetaAlto = 2.5
 
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
 RatonReloj
 Mensajes = "Seguro de Imprimir?"
 Titulo = "IMPRESION"
@@ -835,11 +1089,11 @@ If PonImpresoraDefecto(SetNombrePRN) Then
       PosSup = 1.2
       PosIzq = 0.6
       Do While Not DatasC.EOF
-         CodigoBarra = DatasC.fields("Codigo_Barra")
-         Precio = DatasC.fields("PVP")
-         If DatasC.fields("IVA") Then Precio = Precio + (Precio * Porc_IVA)
+         CodigoBarra = DatasC.Fields("Codigo_Barra")
+         Precio = DatasC.Fields("PVP")
+         If DatasC.Fields("IVA") Then Precio = Precio + (Precio * Porc_IVA)
          CodigoP = "PVP $ " & Format$(Precio, "#,##0.00")
-         Producto = DatasC.fields("Producto")
+         Producto = DatasC.Fields("Producto")
          cPrint.letraTipo TipoArialNarrow, 8
          K = Len(Producto)
          Do While (cPrint.anchoTexto(MidStrg(Producto, 1, K)) >= EtiquetaAncho) And (K > 0)
@@ -873,7 +1127,7 @@ If PonImpresoraDefecto(SetNombrePRN) Then
       Progreso_Final
    End If
 Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     cPrint.finalizaImpresion
     Progreso_Final
@@ -894,7 +1148,7 @@ Dim PDF_Titulo As String
 Dim PDF_Nombre_Documento As String
 
 SizeLetra = 6
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
 RatonReloj
 Mensajes = "Seguro de Imprimir?"
 Titulo = "IMPRESION"
@@ -926,11 +1180,11 @@ If PonImpresoraDefecto(SetNombrePRN) Then
    Select_AdoDB DatasC, sSQL
    If DatasC.RecordCount > 0 Then
    
-      Precio = DatasC.fields("PVP")
-      If DatasC.fields("IVA") Then Precio = Precio + (Precio * Porc_IVA)
+      Precio = DatasC.Fields("PVP")
+      If DatasC.Fields("IVA") Then Precio = Precio + (Precio * Porc_IVA)
       'MsgBox Precio
       CodigoP = " $ " & Format$(Precio, "#,##0.00")
-      Producto = DatasC.fields("Producto")
+      Producto = DatasC.Fields("Producto")
       cPrint.tipoNegrilla = True
       cPrint.colorDeLetra = Negro
       If Cantidad >= 1 Then
@@ -989,7 +1243,7 @@ If PonImpresoraDefecto(SetNombrePRN) Then
       Progreso_Final
    End If
 Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     cPrint.finalizaImpresion
     Progreso_Final
@@ -1001,7 +1255,7 @@ End If
 End Sub
 
 Public Sub Imprimir_Texo_Impresora(TextoImprimir As String)
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
 RatonReloj
 Mensajes = "Seguro de Imprimir?"
 Titulo = "IMPRESION"
@@ -1035,7 +1289,7 @@ If PonImpresoraDefecto(SetNombrePRN) Then
       cPrint.finalizaImpresion
    End If
    Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     cPrint.finalizaImpresion
     ErrorDeImpresion
@@ -1061,7 +1315,7 @@ CantEtiquetaY = 10
 EtiquetaAncho = 3.8
 EtiquetaAlto = 2.5
 
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
 RatonReloj
 CantCodigos = InputBox("CANTIDAD DE CODIGOS A IMPRIMIR:", "IMPRESION DE CODIGOS DE BARRAS", CStr(CantidadEtiquetas))
  
@@ -1145,7 +1399,7 @@ If PonImpresoraDefecto(SetNombrePRN) Then
    End If
 
 Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -1522,7 +1776,7 @@ Dim AnioFecha As String
               & "AND #" & FechaFin1 & "# BETWEEN Fecha_Inicial AND Fecha_Final " _
               & "AND Detalle LIKE '" & AnioFecha & "%' "
         Select_AdoDB AdoCierre, sSQL1
-        If AdoCierre.RecordCount > 0 Then FechaCierre = AdoCierre.fields("Fecha_Inicial")
+        If AdoCierre.RecordCount > 0 Then FechaCierre = AdoCierre.Fields("Fecha_Inicial")
         AdoCierre.Close
        'MsgBox ChequearCierreMes & vbCrLf & ErrorFecha
         If ChequearCierreMes Then
@@ -1567,8 +1821,8 @@ Dim sSQL1 As String
           & "ORDER BY Porc DESC "
     Select_AdoDB AdoCierre, sSQL1
     If AdoCierre.RecordCount > 0 Then
-       Porc_IVA = Redondear(AdoCierre.fields("Porc") / 100, 2)
-       Cod_Porc_IVA = AdoCierre.fields("Codigo")
+       Porc_IVA = Redondear(AdoCierre.Fields("Porc") / 100, 2)
+       Cod_Porc_IVA = AdoCierre.Fields("Codigo")
     End If
     AdoCierre.Close
    'MsgBox "===--->> " & Porc_IVA
@@ -1589,7 +1843,7 @@ Dim sSQL1 As String
           & "AND Codigo = " & CodPorcIva & " " _
           & "ORDER BY Porc DESC "
     Select_AdoDB AdoCierre, sSQL1
-    If AdoCierre.RecordCount > 0 Then Porc_IVA = Redondear(AdoCierre.fields("Porc") / 100, 2)
+    If AdoCierre.RecordCount > 0 Then Porc_IVA = Redondear(AdoCierre.Fields("Porc") / 100, 2)
     AdoCierre.Close
     RatonNormal
 End Sub
@@ -1609,8 +1863,8 @@ Dim sSQL1 As String
           & "ORDER BY Porc DESC "
     Select_AdoDB AdoCierre, sSQL1
     If AdoCierre.RecordCount > 0 Then
-       Cod_Porc_IVA = AdoCierre.fields("Codigo")
-       Porc_IVA = Redondear(AdoCierre.fields("Porc") / 100, 2)
+       Cod_Porc_IVA = AdoCierre.Fields("Codigo")
+       Porc_IVA = Redondear(AdoCierre.Fields("Porc") / 100, 2)
     End If
     AdoCierre.Close
     RatonNormal
@@ -1813,43 +2067,31 @@ Dim Result As Long
      If Modulo <> "UPDATE" Then
         RatonReloj
         Progreso_Barra.Mensaje_Box = "Extrayendo Certificado"
-        
-       'Creamos carpetas si no existen
-'''        If Not Existe_Carpeta(WindowsDirectory & "\LIBRERIA") Then MkDir (WindowsDirectory & "\LIBRERIA")
+       '---------------------------------------------------------------------------------
+       'MsgBox RutaSysTemp
+        RutaSubDirTemp = RutaSysTemp
+        If Not Existe_Carpeta(RutaSubDirTemp) Then MkDir RutaSubDirTemp
         If Not Existe_Carpeta(RutaSysTemp) Then MkDir RutaSysTemp
+       'Ruta donde se generaran los PDF
+        RutaSubDirTemp = RutaSubDirTemp & "\PDF"
+        If Not Existe_Carpeta(RutaSubDirTemp) Then MkDir RutaSubDirTemp
+        RutaSubDirTemp = RutaSubDirTemp & "\PDF" & NumEmpresa & "\"
+        If Not Existe_Carpeta(RutaSubDirTemp) Then MkDir RutaSubDirTemp
+       'Creamos carpeta TEMP si no existen
         If Not Existe_Carpeta(RutaSysBases & "\TEMP") Then MkDir RutaSysBases & "\TEMP"
-        
        'Verificamos y creamos carpetas de firma electronica
         RutaDocumentos = RutaSysBases & "\CE"
         If Not Existe_Carpeta(RutaDocumentos) Then MkDir RutaDocumentos
-       
         RutaDocumentos = RutaSysBases & "\CE\CE" & NumEmpresa
         If Not Existe_Carpeta(RutaDocumentos) Then MkDir RutaDocumentos
         If Not Existe_Carpeta(RutaDocumentos & "\Comprobantes Autorizados") Then MkDir (RutaDocumentos & "\Comprobantes Autorizados")
         If Not Existe_Carpeta(RutaDocumentos & "\Comprobantes Firmados") Then MkDir (RutaDocumentos & "\Comprobantes Firmados")
         If Not Existe_Carpeta(RutaDocumentos & "\Comprobantes Generados") Then MkDir (RutaDocumentos & "\Comprobantes Generados")
         If Not Existe_Carpeta(RutaDocumentos & "\Comprobantes no Autorizados") Then MkDir (RutaDocumentos & "\Comprobantes no Autorizados")
-       
-       'Instalando el certificado de la firma electronica
-'''        If RutaCertificado <> Ninguno Then
-'''           If Not Existe_File(WindowsDirectory & "\LIBRERIA\" & RutaCertificado) Then
-'''              Result = Copiar_Archivos(RutaSistema & "\CERTIFIC\", WindowsDirectory & "\LIBRERIA\", RutaCertificado)
-'''           End If
-'''        End If
-       'Averiguamos si las librerias estan instaladas
-'''        If Not Existe_File(WindowsDirectory & "\LIBRERIA\FacturacionElect.tlb") Then
-'''           Result = Copiar_Archivos(RutaSistema & "\LIBRERIA\", WindowsDirectory & "\LIBRERIA\", "*.dll")
-'''           Result = Copiar_Archivos(RutaSistema & "\LIBRERIA\", WindowsDirectory & "\LIBRERIA\", "*.bat")
-'''           MsgBox "COMUNIQUESE AL PROVEEDOR DEL PROGRAMA," & vbCrLf _
-'''                & "SU SISTEMA NECESITA UNA ACTUALIZACION," & vbCrLf _
-'''                & "DE " & WindowsDirectory & "\LIBRERIA\FacturacionElect.tlb" _
-'''                & "LOS CONTACTOS TELEFONICOS SON: " & vbCrLf _
-'''                & "09-8910-5300/09-9965-4196"
-'''        End If
      End If
      RatonNormal
     'MsgBox Empresa & vbCrLf &  RutaDocumentos & vbCrLf & LogoTipo & vbCrLf & RutaSysBases
-     IniciarPrograma = False
+'    IniciarPrograma = False
   End If
 End Sub
 
@@ -2000,9 +2242,7 @@ Dim Color3 As Long
 Dim ColorC As Long
 Dim CantEstadoDescripcion As Long
 Dim Dias_Restantes As Long
-Dim FinEjecucion As Boolean
 
-  FinEjecucion = False
  'Ejecutar API
   MsgR = Validar_URL("Servidor de Recepcion del SRI", "https://cel.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl")
   MsgA = Validar_URL("Servidor de Autorizacion del SRI", "https://cel.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl")
@@ -2160,6 +2400,7 @@ Dim FinEjecucion As Boolean
   PCol = (MDI_X_Max - Escribir_Texto_Picture_Ancho(NPicture, MsgA)) / 2
   If MidStrg(MsgA, 1, 1) = "-" Then ColorC = Rojo Else ColorC = Verde
   Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Blanco_Claro, ColorC, Replace(MsgA, "-", "")
+  
   NPicture.FontSize = 12
   msg = "Gerencia: gerencia@diskcoversystem.com " & vbCrLf _
       & "Teléfono: 099-965-4196 " & vbCrLf _
@@ -2292,7 +2533,6 @@ Dim FinEjecucion As Boolean
      NPicture.Line (PCol - 40, PFil - 50)-(PCol + 2540, PFil + 2040), Azul, BF
      Select Case EstadoEmpresa
        Case "BLOQ", "MAS360": RutaDestino = RutaSistema & "\FORMATOS\BLOQUEO.jpg"
-                              FinEjecucion = True
        Case "ONLY", "OKONLY": RutaDestino = RutaSistema & "\FORMATOS\ONLY.jpg"
        Case "DBMANT", "DBFULL": RutaDestino = RutaSistema & "\FORMATOS\Reparar.jpg"
        Case Else: RutaDestino = RutaSistema & "\FORMATOS\ADVERTENCIA.jpg"
@@ -2317,18 +2557,6 @@ Dim FinEjecucion As Boolean
         PFil = AltoWeb + 1000
         Escribir_Texto_Picture_Multiple NPicture, PCol, PFil, Blanco, Rojo, Cadena
         ContadorEstados = 0
-     End If
-     If FinEjecucion Then
-        Cadena = String(64, "_") & " " & vbCrLf _
-               & "M E N S A J E   D E   B L O Q U E O   D E F I N I T I V O" & vbCrLf _
-               & " " & vbCrLf _
-               & "COMUNIQUECE AL DISTRIBUIDOR DEL SISTEMA, O A NUESTRO " _
-               & "CENTRO DE ATENCION AL CLIENTE: " & vbCrLf _
-               & "TELEFONOS: 098-910-5300/099-965-4196 " & vbCrLf _
-               & "EMAILS: prisma_net@hotmail.es/soporte@diskcoversystem.com " & vbCrLf _
-               & String(64, "_") & " "
-        MsgBox Cadena, vbCritical, ">>>>>  M E N S A J E   D E   A D V E R T E N C I A  <<<<<"
-        End
      End If
   End If
   NPicture.FontBold = False
@@ -2389,10 +2617,6 @@ Dim HalfHeight As Single
 
    'Obtenemos la fecha del Sistema
     FechaSistema = Format$(Date, FormatoFechas)
-    
-    If TiempoSistema = 0 Then TiempoSistema = Time
-    If TiempoSistema1 = 0 Then TiempoSistema1 = Time
-    If TiempoTarea = 0 Then TiempoTarea = Time
     MinutosTime = Time
     Segundos = Second(MinutosTime - TiempoSistema)
     Minutos = Minute(MinutosTime - TiempoSistema)
@@ -2412,15 +2636,16 @@ Dim HalfHeight As Single
 ''       End If
 ''    End If
     
-    If MiTiempo >= 5 Then
+    If MiTiempo >= 10 Then
       'If Len(NumEmpresa) >= 3 Then MsgBox "Desktop Test: Empresa: (" & MiTiempo & ") " & NumEmpresa & vbCrLf & NombreCertificado
       'MsgBox Minutos & vbCrLf & Segundos
-      '-------------------------------------------------------------------------------
-       TiempoSistema = Time
-      '-------------------------------------------------------------------------------
-       If Len(NumEmpresa) >= 3 And Len(NumModulo) > 1 And Len(CodigoUsuario) > 1 Then
+       If Len(NumEmpresa) >= 3 And Len(NumModulo) > 1 And Len(CodigoUsuario) > 1 And MDI_X_Max > 0 And MDI_Y_Max > 0 Then
+         'Nuevo contador del tiempo
+          TiempoTarea = Time
+          TiempoSistema = Time
+          TiempoSistema1 = Time
+          TiempoServidor = Time
           Cadena = ""
-          
           NombFilePict = CodigoUsuario & NumEmpresa & NumModulo
          'MsgBox NombFilePict & vbCrLf & MDI_X_Max & " x " & MDI_Y_Max
           EstadoEmpresa = ""
@@ -2435,83 +2660,13 @@ Dim HalfHeight As Single
          'Fecha_CO,Fecha_CE,AgenteRetencion,MicroEmpresa,EstadoEmpresa,DescripcionEstado,NombreEntidad,RepresentanteLegal,MensajeEmpresa,ComunicadoEntidad
          '------------------------------------------------------------------------------------------------------------------------------------------------
 '          If IP_PC.InterNet Then
-            '------------------------
+            '-----------------------------
              'Estado_Empresa_SP_MySQL
-             Leer_Estado_Empresa_SP_MySQL
-            '------------------------
-             If Len(ComunicadoEntidad) > 1 Or Len(MensajeEmpresa) > 1 Then
-                Titulo = "COMUNICADO A LA ENTIDAD"
-                Mensajes = "INFORMATIVO:" & vbCrLf _
-                         & "-----------" & vbCrLf & vbCrLf _
-                         & "Este es un mensaje automatico, enviado desde el Centro de " _
-                         & "Control de Atención al Cliente, el informativo dice:" & vbCrLf & vbCrLf
-                If Len(ComunicadoEntidad) > 1 Then Mensajes = Mensajes & UCaseStrg(ComunicadoEntidad) & vbCrLf & vbCrLf
-                If Len(MensajeEmpresa) > 1 Then Mensajes = Mensajes & MensajeEmpresa & vbCrLf & vbCrLf
-                Mensajes = Mensajes _
-                         & "En caso de requerir atención personalizada por parte de un asesor de servicio " _
-                         & "al cliente de DiskCover System, usted podrá solicitar ayuda mediante los canales de " _
-                         & "atención al cliente oficiales que detallamos a continuación: " _
-                         & "Telefonos: 099-965-4196/098-910-5300." & vbCrLf & vbCrLf _
-                         & "Por la atención que se de al presente quedamos de usted." & vbCrLf & vbCrLf _
-                         & "DESEA SEGUIR RECIBIENDO ESTE COMUNICADO"
-                If BoxMensaje = vbNo Then
-                  'Datos del destinatario de mails, Cod datos de privacidad
-                   TMail.ListaMail = 5
-                   TMail.Asunto = "Informativo enviado a Sr(a): " & RepresentanteLegal & ", representante de: " & NombreEntidad
-                   TMail.Adjunto = ""
-                   TMail.Credito_No = ""
-                    
-                  'Enviamos lista de mails
-                   TMail.para = ""
-                   Insertar_Mail TMail.para, CorreoDiskCover
-                   Insertar_Mail TMail.para, EmailContador
-                   Insertar_Mail TMail.para, EmailProcesos
-                  'MsgBox "Lista: " & emails
-'''                   Do While Len(Emails) > 3
-'''                      posPuntoComa = InStr(Emails, ";")
-'''                      Email = MidStrg(Emails, 1, posPuntoComa - 1)
-'''                      TMail.para = Email
-'''                     'MsgBox "Email: " & Email & vbCrLf & RutaXML
-'''                      If EsUnEmail(TMail.para) Then FEnviarCorreos.Show 1
-'''                      Emails = MidStrg(Emails, posPuntoComa + 1, Len(Emails))
-'''                   Loop
-'''
-                   FEnviarCorreos.Show 1
-                   
-                   sSQL = "UPDATE entidad " _
-                        & "SET Comunicado = '.' " _
-                        & "WHERE ID_Empresa = " & IDEntidad & " "
-                   Conectar_Ado_Execute_MySQL sSQL
-                    
-                   sSQL = "UPDATE lista_empresas " _
-                        & "SET Mensaje = '.' " _
-                        & "WHERE ID_Empresa = " & IDEntidad & " " _
-                        & "AND RUC_CI_NIC = '" & RUC & "' " _
-                        & "AND Item = '" & NumEmpresa & "' "
-                   Conectar_Ado_Execute_MySQL sSQL
-                End If
-'             End If
-                            
-             'Actualizamos el estado y fecha de comprobantes electronico de la empresa
-              sSQL = "UPDATE Empresas " _
-                   & "SET Estado = '" & EstadoEmpresa & "' " _
-                   & "WHERE Item = '" & NumEmpresa & "' " _
-                   & "AND Estado <> '" & EstadoEmpresa & "' "
-              Ejecutar_SQL_SP sSQL
-             
-              sSQL = "UPDATE Empresas " _
-                   & "SET Fecha_CE = '" & BuscarFecha(Fecha_CE) & "' " _
-                   & "WHERE Item = '" & NumEmpresa & "' " _
-                   & "AND Fecha_CE <> '" & BuscarFecha(Fecha_CE) & "' "
-              Ejecutar_SQL_SP sSQL
-              
-             'Lista_Mensaje_SP_MySQL TextoFile
-             '--------------------------------
-              TextoFile = "DISKCOVER SYSTEM AHORA EN LAS NUBLES (CLOUD) "
-          Else
-              TextoFile = "DISKCOVER SYSTEM AHORA EN LAS NUBLES (CLOUD) " & vbCrLf & " " & vbCrLf & "COMUNIQUESE CON SU ADMINISTRADOR DE LA RED "
-          End If
-           
+             'Leer_Estado_Empresa_SP_MySQL
+            '-----------------------------
+             Leer_Datos_Entidad_SP_MySQL
+            '-----------------------------
+
          'MsgBox DescripcionEstado
           
         'Colocamos el grafico si existe ya hecho en otras secciones sino colocamos el por default
@@ -2543,17 +2698,7 @@ Dim HalfHeight As Single
          SavePicture MDIFormulario.PictMDI.Image, RutaDestino1
          MDIFormulario.PictMDI.Visible = False
          MDIFormulario.Picture = LoadPicture(RutaDestino1)
-    
-         If Not PCActivo Then
-            Cadena = NombreUsuario & vbCrLf & "Su Equipo se encuentra en LISTA NEGRA, ingreso no autorizado, comuniquese con el Administrador del Sistema"
-            MsgBox UCaseStrg(Cadena), vbCritical, "ACCESO DEL COMPUTADOR AL SISTEMA DENEGADO"
-            End
-         End If
-         If Not EstadoUsuario Then
-            Cadena = NombreUsuario & vbCrLf & "Su ingreso no esta autorizado, comuniquese con el Administrador del Sistema"
-            MsgBox UCaseStrg(Cadena), vbCritical, "ACCESO DEL USUARIO AL SISTEMA DENEGADO"
-            End
-         End If
+         Informacion_Entidad
        End If
     End If
     RatonNormal
@@ -2617,7 +2762,7 @@ If SQLs <> "" Then
          & "AND Periodo = '" & Periodo_Contable & "' " _
          & "AND Detalle = '" & SQLs & "' "
    AdoRegs.open Strgs, AdoStrCnn, , , adCmdText
-   If AdoRegs.RecordCount > 0 Then NumCodigo = AdoRegs.fields("Codigo")
+   If AdoRegs.RecordCount > 0 Then NumCodigo = AdoRegs.Fields("Codigo")
    AdoRegs.Close
  End If
  ReadAdoCta = NumCodigo
@@ -2682,7 +2827,7 @@ Dim NuevoNumero As Boolean
       'MsgBox Strgs
        With AdoRegs
         If .RecordCount > 0 Then
-            NumCodigo = .fields("Numero")
+            NumCodigo = .Fields("Numero")
         Else
             NuevoNumero = True
             NumCodigo = 1
@@ -2740,7 +2885,7 @@ Dim CodigoRUC As String
     CodigoMayor = 0
     With AdoRegs
      If .RecordCount > 0 Then
-         CodigoMayor = Val(MidStrg(.fields("CI_RUC"), 4, Len(.fields("CI_RUC"))))
+         CodigoMayor = Val(MidStrg(.Fields("CI_RUC"), 4, Len(.Fields("CI_RUC"))))
          CodigoRUC = NumEmpresa & Format$(CodigoMayor + 1, "00000")
      End If
     End With
@@ -2918,7 +3063,7 @@ End Function
 Public Sub UnidadSistema()
   RutaSistema = LeftStrg(CurDir$, 2) & "\SISTEMA"
   RutaSysBases = LeftStrg(CurDir$, 2) & "\SYSBASES"
-  RutaSysTemp = LeftStrg(WindowsDirectory, 2) & "\SYSTEMP\"
+  RutaSysTemp = LeftStrg(WindowsDirectory, 2) & "\SYSBASES" ' & "\SYSTEMP\"
   ChDir RutaSistema
 End Sub
 
@@ -4374,7 +4519,7 @@ Public Sub Imprimir_Apertura(CuentaNo As String)
 Dim DatasN As ADODB.Recordset
 Dim DatasC As ADODB.Recordset
 Dim No_Soc As Byte
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
   CodigoCli = Ninguno
   sSQL = "SELECT * " _
        & "FROM Clientes_Datos_Extras " _
@@ -4382,9 +4527,9 @@ On Error GoTo Errorhandler
   Select_AdoDB DatasN, sSQL
   With DatasN
    If .RecordCount > 0 Then
-       CodigoCli = .fields("Codigo")
-       No_Soc = .fields("Num")
-       Mifecha = .fields("Fecha_Registro")
+       CodigoCli = .Fields("Codigo")
+       No_Soc = .Fields("Num")
+       Mifecha = .Fields("Fecha_Registro")
    End If
   End With
   sSQL = "SELECT * " _
@@ -4407,8 +4552,8 @@ If PonImpresoraDefecto(SetNombrePRN) Then
   Select_AdoDB DatasN, sSQL
   With DatasN
    If .RecordCount > 0 Then
-       SaldoDisp = .fields("Monto_Aper")
-       SaldoCont = .fields("Monto_Cert")
+       SaldoDisp = .Fields("Monto_Aper")
+       SaldoCont = .Fields("Monto_Cert")
    End If
   End With
   sSQL = "SELECT * " _
@@ -4418,11 +4563,11 @@ If PonImpresoraDefecto(SetNombrePRN) Then
   Printer.FontSize = 11
   With DatasN
    If .RecordCount > 0 Then
-       PrinterVariables 3, 16, .fields("Nombres")
-       PrinterVariables 16.5, 16, .fields("LugarTrabajo")
-       PrinterVariables 3, 17.3, .fields("Direccion")
-       PrinterVariables 15, 17.3, .fields("Telefono")
-       PrinterVariables 16, 18.2, .fields("Cedula")
+       PrinterVariables 3, 16, .Fields("Nombres")
+       PrinterVariables 16.5, 16, .Fields("LugarTrabajo")
+       PrinterVariables 3, 17.3, .Fields("Direccion")
+       PrinterVariables 15, 17.3, .Fields("Telefono")
+       PrinterVariables 16, 18.2, .Fields("Cedula")
    End If
   End With
   sSQL = "SELECT * " _
@@ -4436,44 +4581,44 @@ If PonImpresoraDefecto(SetNombrePRN) Then
        PrinterVariables 3, 3.8, FechaStrg(Mifecha)
        PrinterVariables 12.5, 3.8, Empresa
        PrinterVariables 16, 4.7, CuentaNo
-       PrinterVariables 15, 5.9, .fields("Cliente")
-       PrinterVariables 1.5, 7, .fields("Representante")
-       Cadena = .fields("Cliente") & " " & .fields("Representante")
+       PrinterVariables 15, 5.9, .Fields("Cliente")
+       PrinterVariables 1.5, 7, .Fields("Representante")
+       Cadena = .Fields("Cliente") & " " & .Fields("Representante")
        PrinterVariables 3, 9.6, Cadena
-       PrinterVariables 15, 10.3, .fields("Telefono")
-       PrinterVariables 3, 11.1, .fields("Direccion")
-       PrinterVariables 3.5, 11.8, .fields("Est_Civil")
-       PrinterVariables 15, 11.8, .fields("No_Dep")
-       PrinterVariables 3.5, 12.3, .fields("CI_RUC")
-       PrinterVariables 15, 12.3, .fields("Ciudad")
-       PrinterVariables 4.5, 12.9, .fields("Lugar_Trabajo")
-       PrinterVariables 3, 13.5, .fields("DireccionT")
-       PrinterVariables 15, 13.5, .fields("TelefonoT")
-       PrinterVariables 4.5, 14.2, .fields("Profesion")
+       PrinterVariables 15, 10.3, .Fields("Telefono")
+       PrinterVariables 3, 11.1, .Fields("Direccion")
+       PrinterVariables 3.5, 11.8, .Fields("Est_Civil")
+       PrinterVariables 15, 11.8, .Fields("No_Dep")
+       PrinterVariables 3.5, 12.3, .Fields("CI_RUC")
+       PrinterVariables 15, 12.3, .Fields("Ciudad")
+       PrinterVariables 4.5, 12.9, .Fields("Lugar_Trabajo")
+       PrinterVariables 3, 13.5, .Fields("DireccionT")
+       PrinterVariables 15, 13.5, .Fields("TelefonoT")
+       PrinterVariables 4.5, 14.2, .Fields("Profesion")
       'Razon Social
-       PrinterVariables 3.5, 20.8, .fields("Cliente")
-       PrinterVariables 14.5, 21.3, .fields("CI_RUC")
-       PrinterVariables 3, 21.3, .fields("DireccionT")
-       PrinterVariables 3, 21.9, .fields("Ciudad")
-       PrinterVariables 10.5, 21.9, .fields("TelefonoT")
-       PrinterVariables 14.5, 21.9, .fields("FAX")
-       PrinterVariables 4, 22.7, .fields("Casilla")
+       PrinterVariables 3.5, 20.8, .Fields("Cliente")
+       PrinterVariables 14.5, 21.3, .Fields("CI_RUC")
+       PrinterVariables 3, 21.3, .Fields("DireccionT")
+       PrinterVariables 3, 21.9, .Fields("Ciudad")
+       PrinterVariables 10.5, 21.9, .Fields("TelefonoT")
+       PrinterVariables 14.5, 21.9, .Fields("FAX")
+       PrinterVariables 4, 22.7, .Fields("Casilla")
        Printer.FontSize = 10
       'Autorizacion
        Printer.NewPage
        PrinterVariables 3.5, 3.6, FechaStrg(Mifecha)
-       Cadena = .fields("Cliente") & " " _
-              & .fields("Representante")
+       Cadena = .Fields("Cliente") & " " _
+              & .Fields("Representante")
        PrinterVariables 2.5, 4.8, Cadena
        PrinterVariables 2.8, 6.6, CuentaNo
        PrinterVariables 11.2, 6.6, Redondear(SaldoDisp, 2)
        PrinterVariables 9, 7.4, Redondear(SaldoCont * No_Soc, 2) ' Certif
       'Registro Firmas
        Printer.NewPage
-       PrinterVariables 2.5, 2.3, .fields("Cliente")
-       PrinterVariables 2.8, 3, .fields("Direccion")
-       PrinterVariables 2.6, 3.6, .fields("Telefono")
-       PrinterVariables 2, 4.4, .fields("CI_RUC")
+       PrinterVariables 2.5, 2.3, .Fields("Cliente")
+       PrinterVariables 2.8, 3, .Fields("Direccion")
+       PrinterVariables 2.6, 3.6, .Fields("Telefono")
+       PrinterVariables 2, 4.4, .Fields("CI_RUC")
    End If
   End With
   RatonNormal
@@ -4482,7 +4627,7 @@ Else
     RatonNormal
 End If
 Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -4935,7 +5080,7 @@ Dim Items As Long
            & "WHERE TP = '" & BTP & "' " _
            & "AND Item = '" & NumEmpresa & "' "
     ConectarAdoRecordSet SQLSet
-    If AdoReg.RecordCount > 0 Then ConLineas = AdoReg.fields("Lineas")
+    If AdoReg.RecordCount > 0 Then ConLineas = AdoReg.Fields("Lineas")
    'MsgBox "Formato: " & SQLSet
     SQLSet = "SELECT * " _
            & "FROM Seteos_Documentos "
@@ -4954,11 +5099,11 @@ Dim Items As Long
        I = AdoReg.RecordCount + 1
        AdoReg.MoveFirst
        Do While Not AdoReg.EOF
-          Items = AdoReg.fields("Campo")
-          SetD(Items).PosX = Redondear(AdoReg.fields("Pos_X"), 4)
-          SetD(Items).PosY = Redondear(AdoReg.fields("Pos_Y"), 4)
-          SetD(Items).Porte = Redondear(AdoReg.fields("Porte"), 2)
-          SetD(Items).Encabezado = AdoReg.fields("Encabezado")
+          Items = AdoReg.Fields("Campo")
+          SetD(Items).PosX = Redondear(AdoReg.Fields("Pos_X"), 4)
+          SetD(Items).PosY = Redondear(AdoReg.Fields("Pos_Y"), 4)
+          SetD(Items).Porte = Redondear(AdoReg.Fields("Porte"), 2)
+          SetD(Items).Encabezado = AdoReg.Fields("Encabezado")
           If SetD(Items).Encabezado = "" Then SetD(I).Encabezado = Ninguno
           If SetD(Items).Porte <= 0 Then SetD(Items).Porte = 8
           AdoReg.MoveNext
@@ -5006,120 +5151,120 @@ Dim AdoCtas As ADODB.Recordset
    If .RecordCount > 0 Then
       .MoveFirst
        Do While Not .EOF
-          Cadena = Cadena & .fields("Detalle") & vbCrLf
-          Select Case .fields("Detalle")
+          Cadena = Cadena & .Fields("Detalle") & vbCrLf
+          Select Case .Fields("Detalle")
             Case "Cta_Ret"
-                 Cta_Ret = .fields("Codigo")
+                 Cta_Ret = .Fields("Codigo")
             Case "Cta_Ret_Egreso"
-                 Cta_Ret_Egreso = .fields("Codigo")
+                 Cta_Ret_Egreso = .Fields("Codigo")
             Case "Cta_Ret_IVA"
-                 Cta_Ret_IVA = .fields("Codigo")
+                 Cta_Ret_IVA = .Fields("Codigo")
             Case "Cta_Ret_IVA_Egreso"
-                 Cta_Ret_IVA_Egreso = .fields("Codigo")
+                 Cta_Ret_IVA_Egreso = .Fields("Codigo")
             Case "Cta_IVA"
-                 Cta_IVA = .fields("Codigo")
-                 DC_IVA = .fields("DC")
+                 Cta_IVA = .Fields("Codigo")
+                 DC_IVA = .Fields("DC")
             Case "Cta_Descuentos"
-                 Cta_Desc = .fields("Codigo")
-                 DC_Desc = .fields("DC")
+                 Cta_Desc = .Fields("Codigo")
+                 DC_Desc = .Fields("DC")
             Case "Cta_Descuentos_Pronto_Pago"
-                 Cta_Desc2 = .fields("Codigo")
+                 Cta_Desc2 = .Fields("Codigo")
             Case "Cta_Caja_General"
-                 Cta_General = .fields("Codigo")
-                 DC_General = .fields("DC")
+                 Cta_General = .Fields("Codigo")
+                 DC_General = .Fields("DC")
             Case "Cta_Caja_GMN"
-                 Cta_CajaG = .fields("Codigo")
-                 DC_CajaG = .fields("DC")
+                 Cta_CajaG = .Fields("Codigo")
+                 DC_CajaG = .Fields("DC")
             Case "Cta_Caja_GME"
-                 Cta_CajaGE = .fields("Codigo")
-                 DC_CajaGE = .fields("DC")
+                 Cta_CajaGE = .Fields("Codigo")
+                 DC_CajaGE = .Fields("DC")
             Case "Cta_Caja_BAU"
-                 Cta_CajaBA = .fields("Codigo")
-                 DC_CajaBA = .fields("DC")
+                 Cta_CajaBA = .Fields("Codigo")
+                 DC_CajaBA = .Fields("DC")
             Case "Cta_Gastos"
-                 Cta_Gastos = .fields("Codigo")
-                 DC_Gastos = .fields("DC")
+                 Cta_Gastos = .Fields("Codigo")
+                 DC_Gastos = .Fields("DC")
             Case "Cta_Diferencial_Cambiario"
-                 Cta_Diferencial = .fields("Codigo")
-                 DC_Diferencial = .fields("DC")
+                 Cta_Diferencial = .Fields("Codigo")
+                 DC_Diferencial = .Fields("DC")
             Case "Cta_SubTotal"
-                 Cta_SubTotal = .fields("Codigo")
-                 DC_SubTotal = .fields("DC")
+                 Cta_SubTotal = .Fields("Codigo")
+                 DC_SubTotal = .Fields("DC")
             Case "Cta_Comision"
-                 Cta_Comision = .fields("Codigo")
-                 DC_Comision = .fields("DC")
+                 Cta_Comision = .Fields("Codigo")
+                 DC_Comision = .Fields("DC")
             Case "Cta_Faltantes"
-                 Cta_Faltantes = .fields("Codigo")
-                 DC_Faltantes = .fields("DC")
+                 Cta_Faltantes = .Fields("Codigo")
+                 DC_Faltantes = .Fields("DC")
             Case "Cta_Protestos"
-                 Cta_Protestos = .fields("Codigo")
-                 DC_Protestos = .fields("DC")
+                 Cta_Protestos = .Fields("Codigo")
+                 DC_Protestos = .Fields("DC")
             Case "Cta_Sobrantes"
-                 Cta_Sobrantes = .fields("Codigo")
-                 DC_Sobrantes = .fields("DC")
+                 Cta_Sobrantes = .Fields("Codigo")
+                 DC_Sobrantes = .Fields("DC")
             Case "Cta_Suspenso"
-                 Cta_Suspenso = .fields("Codigo")
-                 DC_Suspenso = .fields("DC")
+                 Cta_Suspenso = .Fields("Codigo")
+                 DC_Suspenso = .Fields("DC")
             Case "Cta_Libretas"
-                 Cta_Libretas = .fields("Codigo")
-                 DC_Libretas = .fields("DC")
+                 Cta_Libretas = .Fields("Codigo")
+                 DC_Libretas = .Fields("DC")
             Case "Cta_Certificado"
-                 Cta_Certificado = .fields("Codigo")
-                 DC_Certificado = .fields("DC")
+                 Cta_Certificado = .Fields("Codigo")
+                 DC_Certificado = .Fields("DC")
             Case "Cta_Certificado_Aportacion"
-                 Cta_Certificado_Apor = .fields("Codigo")
-                 DC_Certificado_Apor = .fields("DC")
+                 Cta_Certificado_Apor = .Fields("Codigo")
+                 DC_Certificado_Apor = .Fields("DC")
             Case "Cta_Apertura"
-                 Cta_Apertura = .fields("Codigo")
-                 DC_Apertura = .fields("DC")
+                 Cta_Apertura = .Fields("Codigo")
+                 DC_Apertura = .Fields("DC")
             Case "Cta_Transito"
-                 Cta_Transito = .fields("Codigo")
-                 DC_Transito = .fields("DC")
+                 Cta_Transito = .Fields("Codigo")
+                 DC_Transito = .Fields("DC")
             Case "Cta_Cheque_Transito"
-                 Cta_Cheque_Transito = .fields("Codigo")
+                 Cta_Cheque_Transito = .Fields("Codigo")
             Case "Cta_IVA_Inventario"
-                 Cta_IVA_Inventario = .fields("Codigo")
-                 DC_IVA_Inventario = .fields("DC")
+                 Cta_IVA_Inventario = .Fields("Codigo")
+                 DC_IVA_Inventario = .Fields("DC")
             Case "Cta_CxP_Retenciones"
-                 Cta_CxP_Retenciones = .fields("Codigo")
+                 Cta_CxP_Retenciones = .Fields("Codigo")
             Case "Cta_Inventario"
-                 Cta_Inventario = .fields("Codigo")
-                 DC_Inventario = .fields("DC")
+                 Cta_Inventario = .Fields("Codigo")
+                 DC_Inventario = .Fields("DC")
             Case "Cta_Mantenimiento"
-                 Cta_Mantenimiento = .fields("Codigo")
-                 DC_Mantenimiento = .fields("DC")
+                 Cta_Mantenimiento = .Fields("Codigo")
+                 DC_Mantenimiento = .Fields("DC")
             Case "Cta_Fondo_Mortuorio"
-                 Cta_Fondo_Mortuorio = .fields("Codigo")
-                 DC_Fondo_Mortuorio = .fields("DC")
+                 Cta_Fondo_Mortuorio = .Fields("Codigo")
+                 DC_Fondo_Mortuorio = .Fields("DC")
             Case "Cta_Servicios_Basicos"
-                 Cta_Servicios_Basicos = .fields("Codigo")
-                 DC_Servicios_Basicos = .fields("DC")
+                 Cta_Servicios_Basicos = .Fields("Codigo")
+                 DC_Servicios_Basicos = .Fields("DC")
             Case "Cta_Servicio"
-                 Cta_Servicio = .fields("Codigo")
-                 DC_Servicio = .fields("DC")
+                 Cta_Servicio = .Fields("Codigo")
+                 DC_Servicio = .Fields("DC")
             Case "Cta_CxP_Propinas"
-                 Cta_Propinas = .fields("Codigo")
-                 DC_Propinas = .fields("DC")
+                 Cta_Propinas = .Fields("Codigo")
+                 DC_Propinas = .Fields("DC")
             Case "Cta_Intereses"
-                 Cta_Interes = .fields("Codigo")
-                 DC_Interes = .fields("DC")
+                 Cta_Interes = .Fields("Codigo")
+                 DC_Interes = .Fields("DC")
             Case "Cta_Intereses1"
-                 Cta_Interes1 = .fields("Codigo")
-                 DC_Interes1 = .fields("DC")
+                 Cta_Interes1 = .Fields("Codigo")
+                 DC_Interes1 = .Fields("DC")
             Case "Cta_CxP_Tarjetas"
-                 Cta_Tarjetas = .fields("Codigo")
+                 Cta_Tarjetas = .Fields("Codigo")
             Case "Cta_Caja_Vaucher"
-                 Cta_Caja_Vaucher = .fields("Codigo")
+                 Cta_Caja_Vaucher = .Fields("Codigo")
             Case "Cta_Banco"
-                 Cta_Del_Banco = .fields("Codigo")
+                 Cta_Del_Banco = .Fields("Codigo")
             Case "Cta_Seguro_Desgravamen"
-                 Cta_Seguro = .fields("Codigo")
+                 Cta_Seguro = .Fields("Codigo")
             Case "Cta_Impuesto_Renta_Empleado"
-                 Cta_Impuesto_Renta_Empleado = .fields("Codigo")
+                 Cta_Impuesto_Renta_Empleado = .Fields("Codigo")
             Case "Cta_Seguro_Ingreso"
-                 Cta_Seguro_I = .fields("Codigo")
-            Case "Inv_Promedio": If .fields("Codigo") = "TRUE" Then Inv_Promedio = True
-            Case "PVP_Al_Inicio": If .fields("Codigo") = "TRUE" Then PVP_Al_Inicio = True
+                 Cta_Seguro_I = .Fields("Codigo")
+            Case "Inv_Promedio": If .Fields("Codigo") = "TRUE" Then Inv_Promedio = True
+            Case "PVP_Al_Inicio": If .Fields("Codigo") = "TRUE" Then PVP_Al_Inicio = True
           End Select
          .MoveNext
        Loop
@@ -5160,7 +5305,7 @@ Dim AdoCtas As ADODB.Recordset
                & "AND Periodo = '" & Periodo_Contable & "' " _
                & "AND Detalle = '" & Det_Cta & "' "
     Select_AdoDB AdoCtas, SSQLSeteos
-    If AdoCtas.RecordCount > 0 Then Cta_Ret_Aux = AdoCtas.fields("Codigo")
+    If AdoCtas.RecordCount > 0 Then Cta_Ret_Aux = AdoCtas.Fields("Codigo")
     AdoCtas.Close
     Leer_Seteos_Ctas = Cta_Ret_Aux
     RatonNormal
@@ -6216,7 +6361,7 @@ Dim XIniY As Currency
 Dim CadFormato As String
 
 Dim AdoDBx As ADODB.Recordset
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
 ReDim Ancho(10) As Single
 Mensajes = "Seguro de Imprimir en:" & vbCrLf & Printer.DeviceName & "?"
 Titulo = UCaseStrg(TipoComprobante)
@@ -6243,24 +6388,24 @@ If Len(SQLx) > 0 Then
    With AdoDBx
     If .RecordCount > 0 Then
        .MoveFirst
-        ReDim TipoC(.fields.Count - 1) As Campos_Tabla
-        For I = 0 To .fields.Count - 1
-            TipoC(I).Campo = .fields(I).Name
-            TipoC(I).Ancho = AnchoTipoCampoTexto(.fields(I))
+        ReDim TipoC(.Fields.Count - 1) As Campos_Tabla
+        For I = 0 To .Fields.Count - 1
+            TipoC(I).Campo = .Fields(I).Name
+            TipoC(I).Ancho = AnchoTipoCampoTexto(.Fields(I))
         Next I
         Do While Not .EOF
-        For I = 0 To .fields.Count - 1
-            Select Case .fields(I).Type
+        For I = 0 To .Fields.Count - 1
+            Select Case .Fields(I).Type
               Case TadByte, TadInteger, TadLong
-                   LineaDeMalla = LineaDeMalla & SetearBlancos(.fields(I), TipoC(I).Ancho, 0, True, FAConLineas)
+                   LineaDeMalla = LineaDeMalla & SetearBlancos(.Fields(I), TipoC(I).Ancho, 0, True, FAConLineas)
               Case TadSingle, TadDouble, TadCurrency
-                   LineaDeMalla = LineaDeMalla & SetearBlancos(.fields(I), TipoC(I).Ancho, 0, True, FAConLineas, True)
+                   LineaDeMalla = LineaDeMalla & SetearBlancos(.Fields(I), TipoC(I).Ancho, 0, True, FAConLineas, True)
               Case TadBoolean
                    ValorBool = "Si"
-                   If .fields(I) = 0 Then ValorBool = "No"
+                   If .Fields(I) = 0 Then ValorBool = "No"
                    LineaDeMalla = LineaDeMalla & " " & SetearBlancos(ValorBool, TipoC(I).Ancho, 0, True, FAConLineas)
               Case Else
-                   LineaDeMalla = LineaDeMalla & " " & SetearBlancos(.fields(I), TipoC(I).Ancho, 0, False, FAConLineas)
+                   LineaDeMalla = LineaDeMalla & " " & SetearBlancos(.Fields(I), TipoC(I).Ancho, 0, False, FAConLineas)
             End Select
         Next I
         LineaDeMalla = LineaDeMalla & vbCrLf
@@ -6462,7 +6607,7 @@ Producto = InsertarLinea
 Printer.EndDoc
 RatonNormal
 Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -6473,7 +6618,7 @@ End Sub
 
 Public Sub Imprimir_Liquidacion(SQLx As String, ReImp As Boolean)
 Dim AdoDBx As ADODB.Recordset
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
 Mensajes = "Seguro de Imprimir en:" & vbCrLf & Printer.DeviceName & "?"
 Titulo = "IMPRIMIR LIQUIDACION DE CREDITO"
 Bandera = False
@@ -6489,16 +6634,16 @@ With AdoDBx
  If .RecordCount > 0 Then
     .MoveFirst
      Total = 0                           'Total de Joyas (Capital)
-     Mifecha = .fields("Fecha")
-     NombreCliente = .fields("Cliente")
-     DirCliente = .fields("Direccion")
-     TotalCapital = .fields("Avaluo")
-     Interes = .fields("Porc_Int") / 100
-     NoDias = .fields("Plazo")
+     Mifecha = .Fields("Fecha")
+     NombreCliente = .Fields("Cliente")
+     DirCliente = .Fields("Direccion")
+     TotalCapital = .Fields("Avaluo")
+     Interes = .Fields("Porc_Int") / 100
+     NoDias = .Fields("Plazo")
      Contador = 2
-     Producto = .fields("Operacion") & " - " & .fields("Trans_No")
+     Producto = .Fields("Operacion") & " - " & .Fields("Trans_No")
      Do While Not .EOF
-        Total = Total + Fix(.fields("Valor"))
+        Total = Total + Fix(.Fields("Valor"))
         Contador = Contador + 1
        .MoveNext
      Loop
@@ -6610,19 +6755,19 @@ With AdoDBx
      'MsgBox .RecordCount
      PosLinea = PosLinea + 1
      PrinterTexto 3.5, PosLinea, UCaseStrg(NombreCiudad)
-     PrinterTexto 13.5, PosLinea, .fields("Fecha")
+     PrinterTexto 13.5, PosLinea, .Fields("Fecha")
      PosLinea = PosLinea + 0.5
-     PrinterTexto 3.5, PosLinea, .fields("Cliente")
-     PrinterTexto 15, PosLinea, .fields("CI_RUC")
+     PrinterTexto 3.5, PosLinea, .Fields("Cliente")
+     PrinterTexto 15, PosLinea, .Fields("CI_RUC")
      PosLinea = PosLinea + 0.5
-     PrinterFields 3.5, PosLinea, .fields("Plazo")
-     PrinterFields 8.5, PosLinea, .fields("Fecha_V")
-     PrinterTexto 14.5, PosLinea, .fields("Operacion") & "-" & CStr(.fields("Trans_No"))
+     PrinterFields 3.5, PosLinea, .Fields("Plazo")
+     PrinterFields 8.5, PosLinea, .Fields("Fecha_V")
+     PrinterTexto 14.5, PosLinea, .Fields("Operacion") & "-" & CStr(.Fields("Trans_No"))
      PosLinea = PosLinea + 0.5
-     PrinterTexto 4, PosLinea, .fields("Forma_Pago")
-     PrinterFields 15, PosLinea, .fields("Peso_Total")
+     PrinterTexto 4, PosLinea, .Fields("Forma_Pago")
+     PrinterFields 15, PosLinea, .Fields("Peso_Total")
      PosLinea = PosLinea + 1.65
-     PrinterFields 14, PosLinea, .fields("Avaluo")
+     PrinterFields 14, PosLinea, .Fields("Avaluo")
      PosLinea = PosLinea + 0.5
      PrinterVariables 14, PosLinea, Saldo
      PosLinea = PosLinea + 0.5
@@ -6634,12 +6779,12 @@ With AdoDBx
      PosLinea = PosLinea + 2.05
      Sumatoria = 0
      Do While Not .EOF
-        PrinterFields 1, PosLinea, .fields("Cantidad")
-        PrinterFields 3, PosLinea, .fields("Descripcion")
-        PrinterFields 12.5, PosLinea, .fields("Peso")
-        PrinterFields 14.5, PosLinea, .fields("Kilataje")
-        PrinterFields 17, PosLinea, .fields("Valor")
-        Sumatoria = Sumatoria + .fields("Valor")
+        PrinterFields 1, PosLinea, .Fields("Cantidad")
+        PrinterFields 3, PosLinea, .Fields("Descripcion")
+        PrinterFields 12.5, PosLinea, .Fields("Peso")
+        PrinterFields 14.5, PosLinea, .Fields("Kilataje")
+        PrinterFields 17, PosLinea, .Fields("Valor")
+        Sumatoria = Sumatoria + .Fields("Valor")
         PosLinea = PosLinea + 0.55
        .MoveNext
      Loop
@@ -6662,12 +6807,12 @@ With AdoDBx
         
            PrinterTexto 4.5, PosLinea, Cadena2
            PosLinea = PosLinea + 0.5
-           PrinterTexto 3.5, PosLinea, .fields("Operacion") & "-" & CStr(.fields("Trans_No"))
+           PrinterTexto 3.5, PosLinea, .Fields("Operacion") & "-" & CStr(.Fields("Trans_No"))
            PosLinea = PosLinea + 2
-           PrinterTexto 1.5, PosLinea, .fields("Cliente")
+           PrinterTexto 1.5, PosLinea, .Fields("Cliente")
            PrinterTexto 11, PosLinea, Empresa
            PosLinea = PosLinea + 0.45
-           PrinterTexto 1.5, PosLinea, "C.I./R.U.C. " & .fields("CI_RUC")
+           PrinterTexto 1.5, PosLinea, "C.I./R.U.C. " & .Fields("CI_RUC")
         
      End If
  End If
@@ -6681,7 +6826,7 @@ RatonNormal
 MensajeEncabData = ""
 Printer.EndDoc
 Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -6692,7 +6837,7 @@ End Sub
 
 Public Sub Imprimir_Cancelacion_Liquidacion(SQLx As String, ReImp As Boolean)
 Dim AdoDBx As ADODB.Recordset
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
 Mensajes = "Seguro de Imprimir en:" & vbCrLf & Printer.DeviceName & "?"
 Titulo = "IMPRIMIR CANCELACION DE CREDITO"
 Bandera = False
@@ -6708,15 +6853,15 @@ With AdoDBx
  If .RecordCount > 0 Then
     .MoveFirst
      Total = 0                           'Total de Joyas (Capital)
-     Mifecha = .fields("Fecha")
-     NombreCliente = .fields("Cliente")
-     DirCliente = .fields("Direccion")
-     TotalCapital = .fields("Avaluo")
-     Interes = .fields("Porc_Int") / 100
-     NoDias = .fields("Plazo")
+     Mifecha = .Fields("Fecha")
+     NombreCliente = .Fields("Cliente")
+     DirCliente = .Fields("Direccion")
+     TotalCapital = .Fields("Avaluo")
+     Interes = .Fields("Porc_Int") / 100
+     NoDias = .Fields("Plazo")
      Contador = 2
      Do While Not .EOF
-        Total = Total + Fix(.fields("Valor"))
+        Total = Total + Fix(.Fields("Valor"))
         Contador = Contador + 1
        .MoveNext
      Loop
@@ -6814,18 +6959,18 @@ With AdoDBx
      PrinterTexto 16, PosLinea, FechaSistema
      'PrinterTexto 16, PosLinea, .Fields("Fecha_C")
      PosLinea = PosLinea + 0.5
-     PrinterTexto 3.5, PosLinea, .fields("Cliente")
-     PrinterTexto 15, PosLinea, .fields("CI_RUC")
+     PrinterTexto 3.5, PosLinea, .Fields("Cliente")
+     PrinterTexto 15, PosLinea, .Fields("CI_RUC")
      PosLinea = PosLinea + 0.5
-     PrinterFields 3.5, PosLinea, .fields("Plazo")
-     PrinterFields 8.5, PosLinea, .fields("Fecha_V")
-     PrinterTexto 14.5, PosLinea, .fields("Operacion") & "-" & CStr(.fields("Trans_No"))
+     PrinterFields 3.5, PosLinea, .Fields("Plazo")
+     PrinterFields 8.5, PosLinea, .Fields("Fecha_V")
+     PrinterTexto 14.5, PosLinea, .Fields("Operacion") & "-" & CStr(.Fields("Trans_No"))
      PosLinea = PosLinea + 0.5
-     PrinterTexto 4, PosLinea, .fields("Forma_Pago")
-     PrinterFields 15, PosLinea, .fields("Peso_Total")
+     PrinterTexto 4, PosLinea, .Fields("Forma_Pago")
+     PrinterFields 15, PosLinea, .Fields("Peso_Total")
      PosLinea = PosLinea + 1.65
      If Si_No Then
-     PrinterFields 14, PosLinea, .fields("Avaluo")
+     PrinterFields 14, PosLinea, .Fields("Avaluo")
      PosLinea = PosLinea + 0.5
      PrinterVariables 14, PosLinea, Total_Interes
      PosLinea = PosLinea + 0.5
@@ -6834,12 +6979,12 @@ With AdoDBx
      PosLinea = PosLinea + 2.05
      Sumatoria = 0
      Do While Not .EOF
-        PrinterFields 1, PosLinea, .fields("Cantidad")
-        PrinterFields 3, PosLinea, .fields("Descripcion")
-        PrinterFields 12.5, PosLinea, .fields("Peso")
-        PrinterFields 14.5, PosLinea, .fields("Kilataje")
-        PrinterFields 17, PosLinea, .fields("Valor")
-        Sumatoria = Sumatoria + .fields("Valor")
+        PrinterFields 1, PosLinea, .Fields("Cantidad")
+        PrinterFields 3, PosLinea, .Fields("Descripcion")
+        PrinterFields 12.5, PosLinea, .Fields("Peso")
+        PrinterFields 14.5, PosLinea, .Fields("Kilataje")
+        PrinterFields 17, PosLinea, .Fields("Valor")
+        Sumatoria = Sumatoria + .Fields("Valor")
         PosLinea = PosLinea + 0.55
        .MoveNext
      Loop
@@ -6851,16 +6996,16 @@ With AdoDBx
     .MoveLast
      If Si_No Then
         PosLinea = PosLinea + 2
-        PrinterTexto 1.5, PosLinea, .fields("Cliente")
+        PrinterTexto 1.5, PosLinea, .Fields("Cliente")
         PrinterTexto 11, PosLinea, Empresa
         PosLinea = PosLinea + 0.45
-        PrinterTexto 1.5, PosLinea, "C.I./R.U.C. " & .fields("CI_RUC")
+        PrinterTexto 1.5, PosLinea, "C.I./R.U.C. " & .Fields("CI_RUC")
         PosLinea = PosLinea + 1
         PrinterTexto 1.5, PosLinea, "Recibo conforme y entera satisfacion las Joyas aqui detalladas."
         PosLinea = PosLinea + 2
-        PrinterTexto 1.5, PosLinea, .fields("Cliente")
+        PrinterTexto 1.5, PosLinea, .Fields("Cliente")
         PosLinea = PosLinea + 0.45
-        PrinterTexto 1.5, PosLinea, "C.I./R.U.C. " & .fields("CI_RUC")
+        PrinterTexto 1.5, PosLinea, "C.I./R.U.C. " & .Fields("CI_RUC")
      End If
  End If
 End With
@@ -6873,7 +7018,7 @@ RatonNormal
 MensajeEncabData = ""
 Printer.EndDoc
 Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -7466,7 +7611,7 @@ Sub Recordar_Tarea_Hora()
 End Sub
 
 Public Sub Imprimir_Clientes(DataCli As Adodc)
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
 Mensajes = "Seguro de Imprimir en:" & vbCrLf & Printer.DeviceName & "?"
 Titulo = "IMPRESION DE CLIENTES"
 Bandera = False
@@ -7501,19 +7646,19 @@ With DataCli.Recordset
         PrinterTexto 1, PosLinea + 0.72, "Direccion:"
         PrinterTexto 12.2, PosLinea + 0.72, "Comercial:"
         Printer.FontBold = False
-        PrinterFields 2.2, PosLinea, .fields("Cliente")
-        PrinterFields 12.5, PosLinea, .fields("CI_RUC")
-        PrinterFields 16.7, PosLinea, .fields("Codigo")
-        PrinterFields 2.1, PosLinea + 0.36, .fields("Grupo")
-        If Val(.fields("FAX")) <> 0 Then PrinterFields 4.4, PosLinea + 0.36, .fields("FAX")
+        PrinterFields 2.2, PosLinea, .Fields("Cliente")
+        PrinterFields 12.5, PosLinea, .Fields("CI_RUC")
+        PrinterFields 16.7, PosLinea, .Fields("Codigo")
+        PrinterFields 2.1, PosLinea + 0.36, .Fields("Grupo")
+        If Val(.Fields("FAX")) <> 0 Then PrinterFields 4.4, PosLinea + 0.36, .Fields("FAX")
         Codigo = ""
-        If Len(.fields("Telefono")) > 1 And Val(.fields("Telefono")) <> 0 Then Codigo = Codigo & "/" & .fields("Telefono")
-        If Len(.fields("TelefonoT")) > 1 And Val(.fields("TelefonoT")) <> 0 Then Codigo = Codigo & "/" & .fields("TelefonoT")
-        If Len(.fields("Celular")) > 1 And Val(.fields("Celular")) <> 0 Then Codigo = Codigo & "/" & .fields("Celular")
+        If Len(.Fields("Telefono")) > 1 And Val(.Fields("Telefono")) <> 0 Then Codigo = Codigo & "/" & .Fields("Telefono")
+        If Len(.Fields("TelefonoT")) > 1 And Val(.Fields("TelefonoT")) <> 0 Then Codigo = Codigo & "/" & .Fields("TelefonoT")
+        If Len(.Fields("Celular")) > 1 And Val(.Fields("Celular")) <> 0 Then Codigo = Codigo & "/" & .Fields("Celular")
         PrinterTexto 7.7, PosLinea + 0.36, Codigo
-        PrinterFields 13.3, PosLinea + 0.36, .fields("Email")
-        PrinterTexto 2.5, PosLinea + 0.72, .fields("Direccion") & " (" & .fields("DirNumero") & ")"
-        PrinterTexto 14, PosLinea + 0.72, .fields("Representante")
+        PrinterFields 13.3, PosLinea + 0.36, .Fields("Email")
+        PrinterTexto 2.5, PosLinea + 0.72, .Fields("Direccion") & " (" & .Fields("DirNumero") & ")"
+        PrinterTexto 14, PosLinea + 0.72, .Fields("Representante")
         PosLinea = PosLinea + 1.09
         Imprimir_Linea_H PosLinea, 1, 19, Negro
         PosLinea = PosLinea + 0.05
@@ -7534,7 +7679,7 @@ RatonNormal
 MensajeEncabData = ""
 Printer.EndDoc
 Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -8180,90 +8325,90 @@ Dim ContEquiv As Byte
     Select_AdoDB DatosEducativosDB, Strgs
     With DatosEducativosDB
      If .RecordCount > 0 Then
-         Q_PX = .fields("Q_PP")
+         Q_PX = .Fields("Q_PP")
          If Q_PX <= 0 Then Q_PX = 80
          Q_PX = Q_PX / 100
          
-         Q_EX = .fields("Q_PE")
+         Q_EX = .Fields("Q_PE")
          If Q_EX <= 0 Then Q_EX = 20
          Q_EX = Q_EX / 100
          
-         Cierre_Periodo = .fields("Cierre_Periodo")
-         Nota_Mayor = .fields("Nota_Mayor")
-         Horas_Min = .fields("Horas_Min")
-         Asistencias = .fields("Asistencias")
-         Rector = .fields("Rector")
-         Director = .fields("Director")
-         Secretario1 = .fields("Secretario1")
-         Secretario2 = .fields("Secretario2")
-         Secretario3 = .fields("Secretario3")
+         Cierre_Periodo = .Fields("Cierre_Periodo")
+         Nota_Mayor = .Fields("Nota_Mayor")
+         Horas_Min = .Fields("Horas_Min")
+         Asistencias = .Fields("Asistencias")
+         Rector = .Fields("Rector")
+         Director = .Fields("Director")
+         Secretario1 = .Fields("Secretario1")
+         Secretario2 = .Fields("Secretario2")
+         Secretario3 = .Fields("Secretario3")
          
-         SexoRector = .fields("Sexo_Rector")
-         SexoDirector = .fields("Sexo_Director")
-         SexoSecre1 = .fields("Sexo_Secre1")
-         SexoSecre2 = .fields("Sexo_Secre2")
-         SexoSecre3 = .fields("Sexo_Secre3")
+         SexoRector = .Fields("Sexo_Rector")
+         SexoDirector = .Fields("Sexo_Director")
+         SexoSecre1 = .Fields("Sexo_Secre1")
+         SexoSecre2 = .Fields("Sexo_Secre2")
+         SexoSecre3 = .Fields("Sexo_Secre3")
          
-         TextoSecretario1 = .fields("Texto_Secretario1")
-         TextoSecretario2 = .fields("Texto_Secretario2")
+         TextoSecretario1 = .Fields("Texto_Secretario1")
+         TextoSecretario2 = .Fields("Texto_Secretario2")
          
-         TextoBachiller1 = .fields("Bachiller1")
-         TextoBachiller2 = .fields("Bachiller2")
-         TextoVicerrector1 = .fields("Vicerrector1")
-         TextoVicerrector2 = .fields("Vicerrector2")
-         TextoRector = .fields("Texto_Rector")
-         TextoDirector = .fields("Texto_Director")
-         Anio_Lectivo = .fields("Anio_Lectivo")
-         FormatoLibreta = .fields("Formato")
-         Recomen = .fields("Recomendacion")
-         Escalas = .fields("Escala")
+         TextoBachiller1 = .Fields("Bachiller1")
+         TextoBachiller2 = .Fields("Bachiller2")
+         TextoVicerrector1 = .Fields("Vicerrector1")
+         TextoVicerrector2 = .Fields("Vicerrector2")
+         TextoRector = .Fields("Texto_Rector")
+         TextoDirector = .Fields("Texto_Director")
+         Anio_Lectivo = .Fields("Anio_Lectivo")
+         FormatoLibreta = .Fields("Formato")
+         Recomen = .Fields("Recomendacion")
+         Escalas = .Fields("Escala")
          
-         Codigo_Ministerio = .fields("Codigo_Colegio")
-         Codigo_AMIE = .fields("Codigo_AMIE")
-         Mail_Colegio = .fields("Mail_Colegio")
-         Institucion1 = .fields("Institucion1")
-         Institucion2 = .fields("Institucion2")
-         Rubro_Matricula = .fields("Rubro_Matricula")
-         Encabezado_Prim = .fields("Encabezado_Prim")
-         Encabezado_Secu = .fields("Encabezado_Secu")
-         Encabezado_Bach = .fields("Encabezado_Bach")
-         TextoWeb = .fields("Web")
-         TextoLeyenda = .fields("Leyenda")
-         Dec_Nota = .fields("Dec_Nota")
-         Tot_Dec_Nota = .fields("Tot_Dec_Nota")
-         Suma_Supletorio = .fields("Suma_Supletorio")
-         Nota_Rojo = .fields("Nota_Rojo")
-         Mejor_Promedio = .fields("Mejor_Promedio")
-         Alfabetico = .fields("Alfabetico")
-         Distrito = .fields("Distrito")
-         Zona = .fields("Zona")
+         Codigo_Ministerio = .Fields("Codigo_Colegio")
+         Codigo_AMIE = .Fields("Codigo_AMIE")
+         Mail_Colegio = .Fields("Mail_Colegio")
+         Institucion1 = .Fields("Institucion1")
+         Institucion2 = .Fields("Institucion2")
+         Rubro_Matricula = .Fields("Rubro_Matricula")
+         Encabezado_Prim = .Fields("Encabezado_Prim")
+         Encabezado_Secu = .Fields("Encabezado_Secu")
+         Encabezado_Bach = .Fields("Encabezado_Bach")
+         TextoWeb = .Fields("Web")
+         TextoLeyenda = .Fields("Leyenda")
+         Dec_Nota = .Fields("Dec_Nota")
+         Tot_Dec_Nota = .Fields("Tot_Dec_Nota")
+         Suma_Supletorio = .Fields("Suma_Supletorio")
+         Nota_Rojo = .Fields("Nota_Rojo")
+         Mejor_Promedio = .Fields("Mejor_Promedio")
+         Alfabetico = .Fields("Alfabetico")
+         Distrito = .Fields("Distrito")
+         Zona = .Fields("Zona")
         'Lista de Correos por Secciones
-         If Len(.fields("Email_Basica")) > 1 And Len(.fields("Email_Pwd_Basica")) > 1 Then
-            Lista_De_Correos(1).Correo_Electronico = .fields("Email_Basica")
-            Lista_De_Correos(1).Clave = .fields("Email_Pwd_Basica")
+         If Len(.Fields("Email_Basica")) > 1 And Len(.Fields("Email_Pwd_Basica")) > 1 Then
+            Lista_De_Correos(1).Correo_Electronico = .Fields("Email_Basica")
+            Lista_De_Correos(1).Clave = .Fields("Email_Pwd_Basica")
          End If
-         If Len(.fields("Email_Secundaria")) > 1 And Len(.fields("Email_Pwd_Secundaria")) > 1 Then
-            Lista_De_Correos(2).Correo_Electronico = .fields("Email_Secundaria")
-            Lista_De_Correos(2).Clave = .fields("Email_Pwd_Secundaria")
+         If Len(.Fields("Email_Secundaria")) > 1 And Len(.Fields("Email_Pwd_Secundaria")) > 1 Then
+            Lista_De_Correos(2).Correo_Electronico = .Fields("Email_Secundaria")
+            Lista_De_Correos(2).Clave = .Fields("Email_Pwd_Secundaria")
          End If
-         If Len(.fields("Email_Bachillerato")) > 1 And Len(.fields("Email_Pwd_Bachillerato")) > 1 Then
-            Lista_De_Correos(3).Correo_Electronico = .fields("Email_Bachillerato")
-            Lista_De_Correos(3).Clave = .fields("Email_Pwd_Bachillerato")
+         If Len(.Fields("Email_Bachillerato")) > 1 And Len(.Fields("Email_Pwd_Bachillerato")) > 1 Then
+            Lista_De_Correos(3).Correo_Electronico = .Fields("Email_Bachillerato")
+            Lista_De_Correos(3).Clave = .Fields("Email_Pwd_Bachillerato")
          End If
                   
         'Logotipo Adicional
          LogoTipo1 = ""
-         If .fields("Logo_Tipo") <> Ninguno Then
+         If .Fields("Logo_Tipo") <> Ninguno Then
              RutaOrigen = RutaSistema & "\LOGOS\"
-             If Existe_File(RutaOrigen & .fields("Logo_Tipo") & ".gif") Then
-                LogoTipo1 = RutaSistema & "\LOGOS\" & .fields("Logo_Tipo") & ".gif"
+             If Existe_File(RutaOrigen & .Fields("Logo_Tipo") & ".gif") Then
+                LogoTipo1 = RutaSistema & "\LOGOS\" & .Fields("Logo_Tipo") & ".gif"
              Else
-                If Existe_File(RutaOrigen & .fields("Logo_Tipo") & ".jpg") Then
-                   LogoTipo1 = RutaSistema & "\LOGOS\" & .fields("Logo_Tipo") & ".jpg"
+                If Existe_File(RutaOrigen & .Fields("Logo_Tipo") & ".jpg") Then
+                   LogoTipo1 = RutaSistema & "\LOGOS\" & .Fields("Logo_Tipo") & ".jpg"
                 End If
              End If
          End If
-       If Campo <> "" Then CampoDeTabla = .fields(Campo)
+       If Campo <> "" Then CampoDeTabla = .Fields(Campo)
      End If
     End With
     DatosEducativosDB.Close
@@ -8280,18 +8425,18 @@ Dim ContEquiv As Byte
          ContEquiv = 0
          ReDim Equivalencias(.RecordCount) As Tipo_Equivalencias
          Do While Not .EOF
-            Equivalencias(ContEquiv).Desde = .fields("Desde")
-            Equivalencias(ContEquiv).Hasta = .fields("Hasta")
-            Equivalencias(ContEquiv).Rango = .fields("Rango")
-            Equivalencias(ContEquiv).Letras = .fields("Letras")
-            Equivalencias(ContEquiv).Cualitativa = .fields("Cualitativa")
-            Equivalencias(ContEquiv).Cualitativa2 = .fields("Cualitativa2")
-            Equivalencias(ContEquiv).Equivalencia = .fields("Equivalencia")
-            Equivalencias(ContEquiv).Significado_Letras = .fields("Significado_Letras")
-            Equivalencias(ContEquiv).Significado_Letras2 = .fields("Significado_Letras2")
-            Equivalencias(ContEquiv).Significado_Evaluacion = .fields("Significado_Evaluacion")
-            Equivalencias(ContEquiv).Significado_Evaluacion2 = .fields("Significado_Evaluacion2")
-            Equivalencias(ContEquiv).Significado_Equivalencia = .fields("Significado_Equivalencia")
+            Equivalencias(ContEquiv).Desde = .Fields("Desde")
+            Equivalencias(ContEquiv).Hasta = .Fields("Hasta")
+            Equivalencias(ContEquiv).Rango = .Fields("Rango")
+            Equivalencias(ContEquiv).Letras = .Fields("Letras")
+            Equivalencias(ContEquiv).Cualitativa = .Fields("Cualitativa")
+            Equivalencias(ContEquiv).Cualitativa2 = .Fields("Cualitativa2")
+            Equivalencias(ContEquiv).Equivalencia = .Fields("Equivalencia")
+            Equivalencias(ContEquiv).Significado_Letras = .Fields("Significado_Letras")
+            Equivalencias(ContEquiv).Significado_Letras2 = .Fields("Significado_Letras2")
+            Equivalencias(ContEquiv).Significado_Evaluacion = .Fields("Significado_Evaluacion")
+            Equivalencias(ContEquiv).Significado_Evaluacion2 = .Fields("Significado_Evaluacion2")
+            Equivalencias(ContEquiv).Significado_Equivalencia = .Fields("Significado_Equivalencia")
             ContEquiv = ContEquiv + 1
            .MoveNext
          Loop

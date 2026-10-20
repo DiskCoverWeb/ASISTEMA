@@ -735,7 +735,7 @@ Begin VB.Form FImporta
    Begin VB.Label Label4 
       BackColor       =   &H00C0C000&
       BorderStyle     =   1  'Fixed Single
-      Caption         =   " LAS PLANTILLAS: 01, 05, 06, 15, 27, 31, 99. DEBEN SER EN FORMATO CSV"
+      Caption         =   " LAS PLANTILLAS: 01, 05, 06, 15, 27, 31, 34, 99. DEBEN SER EN FORMATO CSV"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   12
@@ -1128,6 +1128,7 @@ Dim IdName As String
                     If IdName = "FECHA DE NACIMIENTO" Then Tipo_Carga = 50
                     If IdName = "MADRE" Then Tipo_Carga = 51
                     If IdName = "LUGAR Y FECHA" Then Tipo_Carga = 52
+                    If IdName = "CORREO_ELECTRONICO_EMPLEADO" Then Tipo_Carga = 34             ' Actualizar Datos Empleados
                Case 3
                     If IdName = "Razon_Social" Then Tipo_Carga = 24
                     If IdName = "COMPROBANTE" Then Tipo_Carga = 12
@@ -1285,6 +1286,7 @@ Dim Extension As String
          Case 5: Importar_Contabilidad
          Case 15: Importar_Abonos_Transferencias
          Case 27: Importar_Compras_Diarias
+         Case 34: Importar_Actualizar_Empleados
          Case 99: Importar_Contabilidad_SubModulos
        End Select
        ConectarAdodc AdoExcelAdodc
@@ -1754,6 +1756,15 @@ Dim SubTotalDescuento As Currency
   
 '''  FA.Fecha_Corte = FechaSistema
 '''  Actualizar_Abonos_Facturas_SP FA
+  Progreso_Final
+  DGExcelAdodc.Visible = True
+  SubidaExitosa = True
+End Sub
+
+Public Sub Importar_Actualizar_Empleados()
+  DGExcelAdodc.Visible = False
+  Progreso_Iniciar
+  Importar_Actualizar_Empleados_SP
   Progreso_Final
   DGExcelAdodc.Visible = True
   SubidaExitosa = True

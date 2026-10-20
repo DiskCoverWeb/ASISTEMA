@@ -787,7 +787,7 @@ Dim AnchoL As Single
 Dim PosPicX As Single
 Dim EmpresaTemp As String
 Dim IPDelOrdenador As String
-
+Dim ItemBD As String
 Dim EsReadOnly As Boolean
 
 Dim ping As cPing
@@ -798,6 +798,7 @@ Dim FechaFinN As Integer
 Dim SiActualizar As Boolean
  
     RatonReloj
+    ContadorAutorizar = 0
     Primera_Vez = False
     PosPicX = 5600
     PosLinea = Pict_Version.Top + 2500
@@ -874,18 +875,6 @@ Dim SiActualizar As Boolean
      If .RecordCount > 0 Then
         .Find ("Empresa = '" & DCEmpresa & "' ")
          If Not .EOF Then
-            CadenaParcial = ""
-            sSQL = "SELECT Modulo, Item, Codigo " _
-                 & "FROM Acceso_Empresa " _
-                 & "WHERE Modulo <> '00' "
-            Select_Adodc AdoAux, sSQL
-            If AdoAux.Recordset.RecordCount > 0 Then
-               Do While Not AdoAux.Recordset.EOF
-                  CadenaParcial = CadenaParcial & AdoAux.Recordset.fields("Modulo") & "^" & AdoAux.Recordset.fields("Item") & "^" & AdoAux.Recordset.fields("Codigo") & "^~"
-                  AdoAux.Recordset.MoveNext
-               Loop
-            End If
-            If Len(CadenaParcial) > 65535 Then MsgIngreso(1).Mensaje = "Falta ampliar los niveles de seguridad."
             NumEmpresa = .fields("Item")
             GrupoEmpresa = .fields("Grupo")
             Empresa = .fields("Empresa")
@@ -1043,15 +1032,6 @@ Dim SiActualizar As Boolean
             'MsgBox LogoTipo
              Carpeta = .fields("SubDir")
              EmpresaActual = "[" & RutaEmpresa & "]."
-                      
-             If Not PCActivo Then
-                MsgIngreso(2).Mensaje = NombreUsuario & vbCrLf & "Su Equipo se encuentra en LISTA NEGRA, ingreso no autorizado, comuniquese con el Administrador del Sistema"
-                MsgIngreso(2).Finalizar = True
-             End If
-             If Not EstadoUsuario Then
-                MsgIngreso(3).Mensaje = NombreUsuario & vbCrLf & "Su ingreso no esta autorizado, comuniquese con el Administrador del Sistema"
-                MsgIngreso(3).Finalizar = True
-             End If
              
              If Cod_Bodega <> Ninguno Then
                 sSQL = "SELECT Bodega " _
@@ -1083,44 +1063,22 @@ Dim SiActualizar As Boolean
             'MsgBox URLToken & vbCrLf & Token
             'Resultado del SP del MySQL
              ListaFacturas = ""
-             Evaluar = False
-             If Cartera <> 0 And Cant_FA <> 0 Then
-                MsgIngreso(4).Mensaje = "CARTERA VENCIDA: ESTIMADO " & UCase(Empresa) & ", SE LE COMUNICA QUE USTED MANTIENE UNA CARTERA VENCIDA DE USD " & Format(Cartera, "#,##0.00") & ", " _
-                                      & "EQUIVALENTE A " & Cant_FA & " FACTURA(S) EMITIDA(S) A USTED." & vbCrLf
-             End If
-             Select Case EstadoEmpresa
-               Case "VEN30"
-                    MsgIngreso(5).Mensaje = "PRIMER COMUNICADO DE ALVERTENCIA: SU EMPRESA ESTA POR SER BLOQUEADA POR CARTERA DE 30 DIAS DE VENCIMIENTO, "
-               Case "VEN60"
-                    MsgIngreso(5).Mensaje = "SEGUNDO COMUNICADO DE ALVERTENCIA: SU EMPRESA ESTA POR SER BLOQUEADA POR CARTERA DE 60 DIAS DE VENCIMIENTO, "
-               Case "VEN90"
-                    MsgIngreso(5).Mensaje = "TERCER COMUNICADO DE ALVERTENCIA: SU EMPRESA ESTA POR SER BLOQUEADA POR CARTERA DE 90 DIAS DE VENCIMIENTO, "
-               Case "VEN360"
-                    MsgIngreso(5).Mensaje = "SU EMPRESA ESTA BLOQUEADA POR CARTERA DE 360 DIAS DE VENCIMIENTO, "
-                    MsgIngreso(5).Finalizar = True
-               Case "VEN180", "MAS360"
-                    MsgIngreso(5).Mensaje = "LO SENTIMOS, SU EMPRESA ESTA SUSPENDIDA EN EL SISTEMA, "
-                    MsgIngreso(5).Finalizar = True
-               Case "BLOQ"
-                    MsgIngreso(5).Mensaje = "BLOQUEO DEFINITIVO: LO SENTIMOS, SU EMPRESA NO ESTA ACTIVA EN EL SISTEMA, COMUNIQUESE A DISKCOVER SYSTEM, "
-                    MsgIngreso(5).Finalizar = True
-             End Select
-        
-            'MsgBox "Desktop Test: 1 Estado = " & EstadoEmpresa
-             RatonNormal
-             Cadena1 = ""
-             If Len(NombreGerente) <= 1 Then Cadena1 = Cadena1 & "Representante Legal," & vbCrLf
-             If Len(RazonSocial) <= 1 Then Cadena1 = Cadena1 & "Razon Social," & vbCrLf
-             If Len(NombreContador) <= 1 Then Cadena1 = Cadena1 & "Nombre del Contador," & vbCrLf
-             If Len(RUC_Contador) <= 1 Then Cadena1 = Cadena1 & "RUC del Contador," & vbCrLf
-             If Len(EmailProcesos) <= 1 And Email_CE_Copia Then Cadena1 = Cadena1 & "Email de Procesos y Respaldos," & vbCrLf
-             Cadena = "En esta empresa no se ha registrado " & vbCrLf & Cadena1 & vbCrLf _
-                    & "comuniquese con el Administrador del Sistema para que le ayude con la actualizacion de estos datos. "
-             If Len(Cadena1) > 1 Then MsgIngreso(6).Mensaje = "REGISTRAR DATOS DE LA EMPRESA:" & vbCrLf & Cadena
+             'Actualizamos el estado y fecha de comprobantes electronico de la empresa
+              sSQL = "UPDATE Empresas " _
+                   & "SET Estado = '" & EstadoEmpresa & "' " _
+                   & "WHERE Item = '" & NumEmpresa & "' " _
+                   & "AND Estado <> '" & EstadoEmpresa & "' "
+              Ejecutar_SQL_SP sSQL
+             
+              sSQL = "UPDATE Empresas " _
+                   & "SET Fecha_CE = '" & BuscarFecha(Fecha_CE) & "' " _
+                   & "WHERE Item = '" & NumEmpresa & "' " _
+                   & "AND Fecha_CE <> '" & BuscarFecha(Fecha_CE) & "' "
+              Ejecutar_SQL_SP sSQL
              
              Control_Procesos Normal, "Ingreso a " & Empresa, "R.U.C. " & RUC & ", Item: " & NumEmpresa
          Else
-            MsgIngreso(4).Mensaje = "Seleccione una empresa valida"
+            MsgBox "Seleccione una empresa valida"
          End If
      Else
          NumEmpresa = Ninguno
@@ -1229,8 +1187,8 @@ Dim SiActualizar As Boolean
     Select Case UCaseStrg(Modulo)
       Case "EDUCATIVO"
            Leer_Periodo_Lectivo                 'Datos del Periodo Lectivo
-      Case "CONTABILIDAD", "FACTURACION", "SETEOS"
-          ' Descargar_Certificados_Logos_Empresa 'Descargar Logos y Certificados electronicos
+      Case "CONTABILIDAD", "FACTURACION", "ROL PAGOS", "SETEOS"
+           Descargar_Certificados_Logos_Empresa 'Descargar Logos y Certificados electronicos
       Case "CAJACREDITO"
            Cambio_Tipo_Cuentas                  'Si estamos en el modulo de Caja Credito
       Case "CYBER PCs"
@@ -1254,12 +1212,6 @@ Dim SiActualizar As Boolean
             End If
            End With
     End Select
-   '---------------------------------------------------------------------------------
-   'Ruta donde se generaran los PDF
-    RutaSubDirTemp = RutaSysTemp & "\PDF_" & NumEmpresa & "\"
-    If Not Existe_Carpeta(RutaSysTemp) Then MkDir RutaSysTemp
-    If Not Existe_Carpeta(RutaSubDirTemp) Then MkDir RutaSubDirTemp
-
    'Rutas generales de las bases
     PathEmpresa = UCaseStrg(RutaEmpresa & "\DISKCOVE.MDB")
     FechaCierre = FechaSistema
@@ -1287,12 +1239,6 @@ Dim SiActualizar As Boolean
    
     RatonNormal
     Evaluar = False
-    ListaFacturas = ""
-    For I = 0 To UBound(MsgIngreso) - 1
-        ListaFacturas = ListaFacturas & MsgIngreso(I).Mensaje
-        If MsgIngreso(I).Finalizar Then Evaluar = True
-    Next I
-  
 
     If Len(ListaFacturas) > 1 Then
        ListaFacturas = ListaFacturas & vbCrLf _
@@ -1335,22 +1281,15 @@ Dim SiActualizar As Boolean
     End If
 End Sub
 
-Public Sub Encerar_Mensajes_de_Ingreso()
-    ReDim MsgIngreso(10) As Mensaje_Sistema
-    For I = 0 To 9
-        MsgIngreso(I).Mensaje = ""
-        MsgIngreso(I).Finalizar = False
-    Next I
-End Sub
-
 Public Function BuscarClave(Usuario As String, Clave As String) As Boolean
-Dim Respuesta As Boolean
+Dim respuesta As Boolean
+
     NombreUsuario = ""
     IDEUsuario = Ninguno
     PWRUsuario = Ninguno
     Cod_Bodega = Ninguno
     Nom_Bodega = Ninguno
-    Respuesta = False
+    respuesta = False
     CNivel(1) = False
     CNivel(2) = False
     CNivel(3) = False
@@ -1383,7 +1322,7 @@ Dim Respuesta As Boolean
             CNivel(7) = .fields("Nivel_7")
             Supervisor = .fields("Supervisor")
          End If
-         Respuesta = True
+         respuesta = True
      Else
        Cadena = "Sr(a). " & Usuario & ": " & vbCrLf
        Cadena = Cadena & Space(10) & "Usted no esta autorizado a ingresar al sistema." & vbCrLf
@@ -1391,8 +1330,9 @@ Dim Respuesta As Boolean
        MsgBox Cadena
      End If
     End With
-    If Respuesta = False Then MsgBox "Error: Clave incorrecta."
-    BuscarClave = Respuesta
+    
+    If Not respuesta Then MsgBox "Error: Clave incorrecta."
+    BuscarClave = respuesta
 End Function
 
 Private Sub CmdBAceptar_Click()
@@ -1410,6 +1350,7 @@ Private Sub CmdBAceptar_Click()
         Unload ListEmp
         IniciarPrograma = True
      End If
+     'FInfoMensaje.Show
   End If
 End Sub
 
@@ -1476,6 +1417,27 @@ Private Sub Command1_Click()
                            & "Provider=Microsoft.Jet.OLEDB.4.0;" _
                            & "Persist Security Info=False;"
           End Select
+          
+         'Cadena de conexion de SQL Server
+'''          AdoStrCnn = Replace(AdoStrCnn, "only.diskcoversystem.com", "186.4.206.95")
+'''          AdoStrCnn = Replace(AdoStrCnn, "imap.diskcoversystem.com", "104.237.138.52")
+'''          AdoStrCnn = Replace(AdoStrCnn, "erp.diskcoversystem.com", "69.164.192.53")
+'''          AdoStrCnn = Replace(AdoStrCnn, "db.diskcoversystem.com", "194.195.222.54")
+
+         'Cadena de conexion de MySQL
+'''          AdoStrCnnMySQL = Replace(AdoStrCnnMySQL, "erp.diskcoversystem.com", "69.164.192.53")
+        
+'''          MsgBox strIPServidor & vbCrLf _
+'''               & strNombreBaseDatos & vbCrLf _
+'''               & strWebServices & vbCrLf _
+'''               & strPassword & vbCrLf _
+'''               & strUsuario & vbCrLf _
+'''               & strPuerto & vbCrLf _
+'''               & "-----------------------------------------" & vbCrLf _
+'''               & AdoStrCnn & vbCrLf _
+'''               & "-----------------------------------------" & vbCrLf _
+'''               & AdoStrCnnMySQL
+ 
          'Buscamos la cadena de conección a la base en SQL SERVER
           ConectarAdodc AdoAux
           ConectarAdodc AdoEmp
@@ -1484,7 +1446,7 @@ Private Sub Command1_Click()
           ConectarAdodc AdoEmpresa
           
           ChDir RutaSistema
-          Encerar_Mensajes_de_Ingreso
+          'Encerar_Mensajes_de_Ingreso
           
           ListEmp.Caption = "UNIDAD DE RED: [" & RutaSistema & "]."
           
@@ -1637,7 +1599,6 @@ Dim RetVal
     TMail.Volver_Envial = False
     Set ping = New cPing
     EsReadOnly = True
-    IPDelOrdenador = ping.IP_Del_PC()
    'Seteos de Impresion
     PrintDraft = Chr(27) & Chr(120) & Chr(0) 'Draft
     Print12CPI = Chr(27) & Chr(77)           '12 CPI
@@ -1687,10 +1648,12 @@ Dim RutaGeneraFile As String
 Dim LineaTexto As String
 Dim MiArchivo, MiRuta, MiNombre
 Dim Txt_SMTP_Mails As String
-   
+Dim ConexionAlInternet As Boolean
     RatonReloj
-    Encerar_Mensajes_de_Ingreso
+    ConexionAlInternet = Get_Internet
+    IPDelOrdenador = IP_PC.IP_PC
     
+'   Encerar_Mensajes_de_Ingreso
     EmpresaTemp = Ninguno
    'Redondear_Control CmdBAceptar
    'Obtenemos la fecha del Sistema
@@ -1717,9 +1680,6 @@ Dim Txt_SMTP_Mails As String
    
 '   If Not Get_Internet Then MsgBox "Este Equipo no esta conectado a Internet"
 '   HayCnn = Get_WAN_IP
-   
-   'MsgBox IP_PC.InterNet & vbCrLf & IP_PC.Nombre_PC & vbCrLf & IP_PC.IP_PC & vbCrLf & IP_PC.MAC_PC & vbCrLf & IP_PC.WAN_PC
-    If Not Get_Internet Then MsgIngreso(0).Mensaje = "Su acceso al Internet es inestable, no podra autorizar los comprobantes electronicos hasta que su conexion al Internet se estabilice."
 
    'Determinar que tipo de bases utilizamos
     Si_No = False
@@ -1772,8 +1732,12 @@ Dim Txt_SMTP_Mails As String
     Pict_Version.AutoRedraw = True
     Pict_Version.ForeColor = Gris
     Pict_Version.FontName = TipoVerdana
-    
-    Pict_Version.PaintPicture LoadPicture(RutaSistema & "\LOGOS\DiskCove.jpg"), 2500, 800, 2000, 800
+'    If Len(Dir$(RutaSistema & "\LOGOS\DiskCove.jpg")) = 0 Then
+'       Pict_Version.PaintPicture LoadPicture(RutaSistema & "\LOGOS\DEFAULT.jpg"), 2500, 800, 2000, 800
+'    Else
+'
+'    End If
+    Pict_Version.PaintPicture LoadPicture(RutaSistema & "\LOGOS\DiskCover.jpg"), 2500, 800, 2000, 800
     
     Pict_Version.FontBold = True
     Pict_Version.FontSize = 12
@@ -1800,6 +1764,7 @@ Dim Txt_SMTP_Mails As String
    'Buscamos la cadena de conección a la base en SQL SERVER
    '-------------------------------------------------------
     Conectar_Base_Datos
+   '-------------------------------------------------------
    'Conectamos los ADO a la basa
     ConectarAdodc AdoAux
     ConectarAdodc AdoEmp
@@ -1841,6 +1806,7 @@ Dim Txt_SMTP_Mails As String
     Select_Adodc AdoAux, sSQL
     If AdoAux.Recordset.RecordCount > 0 Then Version_Sistema = "Actualización de: " & AdoAux.Recordset.fields("Aplicacion") & " - Ver. 8.0.12 "
     
+    ItemBD = ""
     sSQL = "SELECT " & Full_Fields("Empresas") & " " _
          & "FROM Empresas " _
          & "WHERE Item <> '.' "
@@ -1850,7 +1816,16 @@ Dim Txt_SMTP_Mails As String
        sSQL = sSQL & "ORDER BY Item, Empresa "
     End If
     SelectDB_Combo DCEmpresa, AdoEmpresa, sSQL, "Empresa"
-    
+    With AdoEmpresa.Recordset
+     If .RecordCount > 0 Then
+         ItemBD = ItemBD & "'000'"
+         Do While Not .EOF
+            ItemBD = ItemBD & ",'" & .fields("Item") & "'"
+           .MoveNext
+         Loop
+        .MoveFirst
+     End If
+    End With
     If AdoEmpresa.Recordset.RecordCount <= 0 Then
        Unload ListEmp
        CrearEmp.Show
@@ -2022,6 +1997,8 @@ End Sub
 Private Sub TextClave_LostFocus()
 Dim Es_CI As Boolean
 Dim SinAccesoEmp As Boolean
+Dim AdoAccesoMySQL As ADODB.Recordset
+    
 Es_CI = True
 Claves = TextClave.Text
 If Claves <> "" And TextUsuario.Text <> "" Then
@@ -2096,8 +2073,38 @@ If Claves <> "" And TextUsuario.Text <> "" Then
             CmdBCrearEmp.Enabled = False
             DCEmpresa.Visible = False
          
-            Cadena = "ESTIMADO " & UCaseStrg(NombreUsuario) & ", por los múltiples cambios que se han realizado para el procesamientos financiero contable en las nubes (Cloud), " _
-                   & "comuniquese con el Administrador del Sistema para que active las seguridades respectivas y asi mantener sus datos integros y libre " _
+            sSQL = "DELETE FROM Tabla_Temporal WHERE CodigoU = '" & CodigoUsuario & "' "
+            Ejecutar_SQL_SP sSQL
+            
+            sSQL = "SELECT Item, Modulo " _
+                 & "FROM acceso_empresas " _
+                 & "WHERE CI_NIC = '" & CodigoUsuario & "' " _
+                 & "AND Item in (" & ItemBD & ") " _
+                 & "GROUP BY Item, Modulo "
+            Select_AdoDB_MySQL AdoAccesoMySQL, sSQL
+            With AdoAccesoMySQL
+             If .RecordCount > 0 Then
+                 Do While Not .EOF
+                    sSQL = "INSERT INTO Tabla_Temporal (Item, Modulo, CodigoU, Texto) VALUES ('" & .fields("Item") & "','" & .fields("Modulo") & "','" & CodigoUsuario & "','.') "
+                    Ejecutar_SQL_SP sSQL
+                    
+                    sSQL = "UPDATE Tabla_Temporal SET Texto='=' " _
+                         & "FROM Acceso_Empresa As AE, Tabla_Temporal As TT " _
+                         & "WHERE AE.Codigo = tt.CodigoU " _
+                         & "AND AE.Item = TT.Item " _
+                         & "AND AE.Modulo = TT.Modulo "
+                    Ejecutar_SQL_SP sSQL
+                    
+                    sSQL = "INSERT INTO Acceso_Empresa (Modulo, Item, Codigo, X) SELECT Modulo, Item, CodigoU, '.' FROM Tabla_Temporal WHERE Texto = '.' AND Item <> '000' "
+                    Ejecutar_SQL_SP sSQL
+    
+                   .MoveNext
+                 Loop
+             End If
+            End With
+         
+            Cadena = "ESTIMADO " & UCaseStrg(NombreUsuario) & vbCrLf & "Por los múltiples cambios que se han realizado para el procesamientos en las nubes (Cloud), " _
+                   & "vuelva a ingresar, si persiste este mensaje, comuniquese con el Administrador del Sistema para que active las seguridades respectivas y asi mantener sus datos integros y libre " _
                    & "de ataques externos."
             MsgBox Cadena, vbInformation, "ACTIVAR SEGURIDADES DE ACCESO AL SISTEMA"
             TextUsuario.Text = ""
@@ -2607,7 +2614,6 @@ End Sub
 '''End Sub
 
 Private Sub Descargar_Certificados_Logos_Empresa()
-Dim AdoDBTemp As ADODB.Recordset
 Dim Certificado As String
 Dim LogoTipoGIF As String
 Dim LogoTipoJPG As String
@@ -2622,37 +2628,23 @@ On Error GoTo error_Handler
     LogoTipoJPG = Ninguno
     LogoTipoPNG = Ninguno
     
-    sSQL = "SELECT Empresa, Ruta_Certificado, Logo_Tipo " _
-         & "FROM Empresas " _
-         & "WHERE Item = '" & NumEmpresa & "' "
-    Select_AdoDB AdoDBTemp, sSQL
-    If AdoDBTemp.RecordCount > 0 Then
-      'MsgBox "Destop Test: Certificado = " & AdoDBTemp.Fields("Ruta_Certificado")
-       If InStr(UCase(AdoDBTemp.fields("Ruta_Certificado")), "P12") > 1 Then
-          RutaDocumentos = RutaSistema & "\CERTIFIC\" & AdoDBTemp.fields("Ruta_Certificado")
-         'MsgBox "Desktop Test: " & Dir$(RutaDocumentos)
-          If Len(Dir$(RutaDocumentos)) = 0 Then Certificado = AdoDBTemp.fields("Ruta_Certificado")
-       End If
-      'MsgBox "Desktop Test: " & Certificado & vbCrLf & RutaDocumentos
-       If Len(AdoDBTemp.fields("Logo_Tipo")) > 1 Then
-          RutaDocumentos = RutaSistema & "\LOGOS\" & AdoDBTemp.fields("Logo_Tipo") & ".jpg"
-          If Len(Dir$(RutaDocumentos)) = 0 Then LogoTipoJPG = AdoDBTemp.fields("Logo_Tipo") & ".jpg"
-        
-          RutaDocumentos = RutaSistema & "\LOGOS\" & AdoDBTemp.fields("Logo_Tipo") & ".gif"
-          If Len(Dir$(RutaDocumentos)) = 0 Then LogoTipoGIF = AdoDBTemp.fields("Logo_Tipo") & ".gif"
-        
-          RutaDocumentos = RutaSistema & "\LOGOS\" & AdoDBTemp.fields("Logo_Tipo") & ".png"
-          If Len(Dir$(RutaDocumentos)) = 0 Then LogoTipoPNG = AdoDBTemp.fields("Logo_Tipo") & ".png"
-       End If
+   'MsgBox "Destop Test: Certificado = " & AdoDBTemp.Fields("Ruta_Certificado")
+    If InStr(UCase(NombreCertificado), "P12") > 1 Then
+       If Len(Dir$(RutaSistema & "\CERTIFIC\" & NombreCertificado)) = 0 Then Certificado = NombreCertificado
     End If
-    AdoDBTemp.Close
+   'MsgBox "Desktop Test: " & Certificado & vbCrLf & RutaDocumentos
+    If Len(NLogoTipo) > 1 Then
+       If Len(Dir$(RutaSistema & "\LOGOS\" & NLogoTipo & ".jpg")) = 0 Then LogoTipoJPG = NLogoTipo & ".jpg"
+       If Len(Dir$(RutaSistema & "\LOGOS\" & NLogoTipo & ".gif")) = 0 Then LogoTipoGIF = NLogoTipo & ".gif"
+       If Len(Dir$(RutaSistema & "\LOGOS\" & NLogoTipo & ".png")) = 0 Then LogoTipoPNG = NLogoTipo & ".png"
+    End If
     
     With ftp
         .Inicializar ListEmp
         'Le indicamos el ListView donde se listarán los archivos
          Set .ListView = LstVwFTP
        ' MsgBox EsReadOnly
-         If EsReadOnly Then
+'         If EsReadOnly Then
             If InStr(IPDelOrdenador, "192.168.27") Then
               .servidor = "192.168.27.3"    'Establecesmo el nombre del Servidor FTP
               .Puerto = 21
@@ -2662,14 +2654,14 @@ On Error GoTo error_Handler
             End If
            .Usuario = ftpUpUse              'Le establecemos el nombre de usuario de la cuenta
            .Password = ftpUpPwr             'Le establecemos la contraseña de la cuenta Ftp
-         Else
-           .servidor = ftpSvr               'Establecesmo el nombre del Servidor FTP
-           .Usuario = ftpUse                'Le establecemos el nombre de usuario de la cuenta
-           .Password = ftpPwr               'Le establecemos la contraseña de la cuenta Ftp
-           .Puerto = ftpPuerto
-         End If
-        'MsgBox "Destop Test: " & IP_PC.IP_PC & vbCrLf & "Certificado = " & Certificado
-         If Len(Certificado) > 1 Then
+'         Else
+'           .servidor = ftpSvr               'Establecesmo el nombre del Servidor FTP
+'           .Usuario = ftpUse                'Le establecemos el nombre de usuario de la cuenta
+'           .Password = ftpPwr               'Le establecemos la contraseña de la cuenta Ftp
+'           .Puerto = ftpPuerto
+'         End If
+        'MsgBox "Destop Test: " & IP_PC.IP_PC & vbCrLf & "Certificado = " & Certificado & LogoTipoGIF & LogoTipoJPG & LogoTipoPNG
+         If Len(Certificado & LogoTipoGIF & LogoTipoJPG & LogoTipoPNG) > 4 Then
            'conectamos al servidor FTP. EL label es el control donde mostrar los errores y el estado de la conexión
             If .ConectarFtp(LstStatud) Then
                 LstStatud.Text = LstStatud.Text & .GetDirectorioActual & vbCrLf
@@ -2678,34 +2670,29 @@ On Error GoTo error_Handler
                .CambiarDirectorio ftpUpDir & "/SISTEMA/CERTIFIC/"
                .ListarArchivos
                 For I = 1 To LstVwFTP.ListItems.Count
-                 If Certificado = LstVwFTP.ListItems(I) Then
+                 If UCaseStrg(Certificado) = UCaseStrg(LstVwFTP.ListItems(I)) Then
                    .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\CERTIFIC\" & LstVwFTP.ListItems(I), True
                     ActualizoFile = True
                     Exit For
                  End If
                 Next I
+               'Bajamos el logotipo si no los tubiera el Cliente
+               .CambiarDirectorio ftpUpDir & "/SISTEMA/LOGOS/"
+               .ListarArchivos
+                For I = 1 To LstVwFTP.ListItems.Count
+                    RutaDocumentos = RutaSistema & "\LOGOS\" & LstVwFTP.ListItems(I)
+                    If UCaseStrg(LogoTipoGIF) = UCaseStrg(LstVwFTP.ListItems(I)) Then .ObtenerArchivo LstVwFTP.ListItems(I), RutaDocumentos, True
+                    If UCaseStrg(LogoTipoJPG) = UCaseStrg(LstVwFTP.ListItems(I)) Then .ObtenerArchivo LstVwFTP.ListItems(I), RutaDocumentos, True
+                    If UCaseStrg(LogoTipoPNG) = UCaseStrg(LstVwFTP.ListItems(I)) Then .ObtenerArchivo LstVwFTP.ListItems(I), RutaDocumentos, True
+                Next I
                 If ActualizoFile Then MsgBox "Certificado nuevo actualizado"
                 .Desconectar
             Else
-                Err.Description = Err.Description & " No se pudo conectar al servidor de Certificados"
+                Err.Description = Err.Description & " No se pudo conectar al servidor de Certificados y Logos"
                 GoTo error_Handler 'Exit Sub
             End If
          End If
-         If .ConectarFtp(LstStatud) Then
-            .CambiarDirectorio ftpUpDir & "/SISTEMA/LOGOS/"
-            .ListarArchivos
-             For I = 1 To LstVwFTP.ListItems.Count
-                 RutaDocumentos = RutaSistema & "\LOGOS\" & LstVwFTP.ListItems(I)
-                 If LogoTipoGIF = LstVwFTP.ListItems(I) Then .ObtenerArchivo LstVwFTP.ListItems(I), RutaDocumentos, True
-                 If LogoTipoJPG = LstVwFTP.ListItems(I) Then .ObtenerArchivo LstVwFTP.ListItems(I), RutaDocumentos, True
-                 If LogoTipoPNG = LstVwFTP.ListItems(I) Then .ObtenerArchivo LstVwFTP.ListItems(I), RutaDocumentos, True
-             Next I
-            .Desconectar
-         Else
-             Err.Description = Err.Description & " No se pudo conectar al servidor de Logotipos"
-             GoTo error_Handler 'Exit Sub
-         End If
-     End With
+    End With
   End If
   RatonNormal
 Exit Sub

@@ -1,1 +1,3 @@
+Línea 19: la clase ComctlLib.Toolbar del control Toolbar1 no era una clase de control cargada.
 Línea 177: la clase AcroPDFLibCtl.AcroPDF del control APDFRetencion no era una clase de control cargada.
+Línea 803: la clase ComctlLib.ImageList del control ImageList1 no era una clase de control cargada.

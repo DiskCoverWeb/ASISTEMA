@@ -2411,7 +2411,9 @@ Dim JSONFiles As String
     AdoStrCnn = Replace(AdoStrCnn, strNombreBaseDatos, "DiskCover_#Update")
     
     ProgressBarEstado.value = ProgressBarEstado.value + 1
-    Bajar_Archivos_FTP "[1]"
+   '----------------------------------------
+'''    Bajar_Archivos_FTP "[1]"
+   '----------------------------------------
    'MsgBox "Fin Subida"
         
 '''    MsgBox "Desktop Test:" & vbCrLf _
@@ -2537,10 +2539,10 @@ Dim JSONFiles As String
            Ejecutar_SQL_AdoDB Crear_FN_SP(RutaSistema & "\BASES\UPDATE_DB\dbo.sp_Ejecutar_SQL.StoredProcedure.sql"), True
            Ejecutar_SQL_AdoDB Crear_FN_SP(RutaSistema & "\BASES\UPDATE_DB\dbo.sp_Crear_FN_SP.StoredProcedure.sql"), True
           'Eliminamos y luego creamos los SP necesarios para esta actualizacion
-           Ejecutar_SP "sp_Crear_FN_SP", "sp_Eliminar_Indices_Temporales"
-           Ejecutar_SP "sp_Crear_FN_SP", "sp_Eliminar_Tablas_Temporales"
-           Ejecutar_SP "sp_Crear_FN_SP", "sp_Eliminar_Duplicados"
-           Ejecutar_SP "sp_Crear_FN_SP", "sp_Actualizar_Base_Datos"
+'''           Ejecutar_SP "sp_Crear_FN_SP", "sp_Eliminar_Indices_Temporales"
+'''           Ejecutar_SP "sp_Crear_FN_SP", "sp_Eliminar_Tablas_Temporales"
+'''           Ejecutar_SP "sp_Crear_FN_SP", "sp_Eliminar_Duplicados"
+'''           Ejecutar_SP "sp_Crear_FN_SP", "sp_Actualizar_Base_Datos"
           'Procedemos a Actualizar la base actual
            
           ' MsgBox NombreBase(IdBase)

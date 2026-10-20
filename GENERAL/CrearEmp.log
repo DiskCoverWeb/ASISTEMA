@@ -1,1 +1,3 @@
-Línea 72: la clase TabDlg.SSTab del control SSTab1 no era una clase de control cargada.
+Línea 22: la clase ComctlLib.Toolbar del control TBarCliente no era una clase de control cargada.
+Línea 65: la clase InetCtlsObjects.Inet del control URLInet no era una clase de control cargada.
+Línea 2937: la clase ComctlLib.ImageList del control ImageList1 no era una clase de control cargada.

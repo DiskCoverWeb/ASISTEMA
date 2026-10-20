@@ -2060,8 +2060,12 @@ Private Sub Command1_Click()
          If TA.Abono > 0 Then TotalAbonos = TotalAbonos + TA.Abono
          Grabar_Abonos TA
          
+'        Clipboard.Clear
+'        Clipboard.SetText JSONInPutAbonos
+'        MsgBox "=->: " & vbCrLf & JSONInPutAbonos
+         
          Grabar_Abonos_Factura_SP TA
-'''         Actualizar_Saldos_Facturas_SP FA.TC, FA.Serie, FA.Factura
+'''      Actualizar_Saldos_Facturas_SP FA.TC, FA.Serie, FA.Factura
 '        --------------------------------------------------------
 '        Clipboard.Clear
 '        Clipboard.SetText JSONInPutAbonos

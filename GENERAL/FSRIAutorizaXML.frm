@@ -188,6 +188,8 @@ Dim DocumentoXML As MSXML2.DOMDocument
 Dim pJSON As Object
 
 Private Sub Form_Activate()
+Dim TextoErrorXML As String
+
    'SRI_Autorizacion.Clave_De_Acceso: Viene desde afuera ya la clave de acceso que se va autorizar
     With SRI_Autorizacion
         '---------------------------------------------------------------------
@@ -214,6 +216,12 @@ Private Sub Form_Activate()
             Progreso_Esperar True
             LblConexion.Refresh
             RatonReloj
+            If ContadorAutorizar > 10 Then
+               Sleep 6000
+               ContadorAutorizar = 0
+            End If
+            ContadorAutorizar = ContadorAutorizar + 1
+            MsgBox "Autorizar"
            '--------------------------------------------------------------------------------------------------------------------------------
             Inicio = Now
             URLHTTP = "https://erp.diskcoversystem.com/php/comprobantes/SRI/autorizar_sri_visual.php?EnviarAutorizarXMLOnline=true"
@@ -221,7 +229,10 @@ Private Sub Form_Activate()
             MensajeError = PostUrlSourceStr(URLHTTP, URLParams)
             fin = Now
            '--------------------------------------------------------------------------------------------------------------------------------
+            Clipboard.Clear
+            Clipboard.SetText MensajeError
             Set pJSON = JSON.parse(MensajeError)
+            MsgBox pJSON.Item("respuesta") & vbCrLf & pJSON.Item("mensaje")
             If IsNull(pJSON.Item("mensaje")) Then .Error_SRI = "" Else .Error_SRI = pJSON.Item("mensaje")
             If pJSON.Item("respuesta") = "1" Then
               .Resultado = True
@@ -234,9 +245,27 @@ Private Sub Form_Activate()
                   .Estado_SRI = "CNA"
                   If Len(.Error_SRI) > 1 Then .Error_SRI = "CNA: " & .Error_SRI Else .Error_SRI = "CNA: Comprobante no autorizado."
                End If
+              'MsgBox pJSON.Item("respuesta")
             End If
-            
-           .Documento_XML = pJSON.Item("XML")
+           'MsgBox MensajeError & "..."
+            If IsNull(pJSON.Item("XML")) Then
+              .Documento_XML = "<soap:Envelope xmlns:soap='http://schemas.xmlsoap.org/soap/envelope/'><soap:Body><ns2:validarComprobanteResponse xmlns:ns2='http://ec.gob.sri.ws.recepcion'>" _
+                             & "<RespuestaRecepcionComprobante>" _
+                             & "<estado>DEVUELTA</estado><comprobantes><comprobante>" _
+                             & "<claveAcceso>" & .Clave_De_Acceso & "</claveAcceso>" _
+                             & "<mensajes><mensaje><identificador>999</identificador>" _
+                             & "<mensaje>DOCUMENTO NO RECIBIDO POR EL SRI</mensaje>" _
+                             & "<informacionAdicional>Enviado por el Sistema DiskCover System</informacionAdicional>" _
+                             & "<tipo>ONLINE</tipo>" _
+                             & "</mensaje>" & pJSON.Item("mensaje") & "</mensajes>" _
+                             & "</comprobante></comprobantes>" _
+                             & "</RespuestaRecepcionComprobante>" _
+                             & "</ns2:validarComprobanteResponse>" _
+                             & "</soap:Body></soap:Envelope>"
+              ' MsgBox pJSON.Item("mensaje")
+            Else
+              .Documento_XML = pJSON.Item("XML")
+            End If
             DocumentoXML.loadXML .Documento_XML
            '------------------------------------------------------------------------------------------------
 '            Clipboard.Clear
@@ -253,7 +282,7 @@ Private Sub Form_Activate()
 '                            & pJSON.Item("respuesta") & vbCrLf _
 '                            & String(80, "-") & vbCrLf _
 '                            & pJSON.Item("XML")
-'            MsgBox "Respuesta: " & pJSON.Item("respuesta") & " (" & .Resultado & ")"
+           ' MsgBox "Respuesta: " & pJSON.Item("respuesta") & " (" & .Resultado & ")"
            '------------------------------------------------------------------------------------------------
             If .Resultado Then
                .Estado_SRI = "OK"
@@ -287,7 +316,18 @@ Private Sub Form_Activate()
                 DocumentoXML.save RutaXMLRechazado
             End If
          Else
-           .Documento_XML = Replace(Replace(Leer_Archivo_Texto(RutaSistema & "\JAVASCRIPT\sri_file_not_exist.xml"), "Clave_", .Clave_De_Acceso), "Error_", DocumentoXML.parseError.reason)
+           'Error al procesar el XML,
+            TextoErrorXML = Leer_Archivo_Texto(RutaSistema & "\JAVASCRIPT\sri_file_not_exist.xml")
+            MsgBox DocumentoXML.parseError.reason
+            If Len(SRI_Autorizacion.Error_XML) > 1 Then
+               SRI_Autorizacion.Error_XML = DocumentoXML.parseError.reason & ", " & SRI_Autorizacion.Error_XML
+            Else
+               SRI_Autorizacion.Error_XML = DocumentoXML.parseError.reason
+            End If
+           .Documento_XML = Replace(Replace(TextoErrorXML, "Clave_", .Clave_De_Acceso), "Error_", SRI_Autorizacion.Error_XML)
+            DocumentoXML.loadXML .Documento_XML
+            DocumentoXML.save RutaXMLRechazado
+            
             fin = Now
             FSRIAutorizaXML.BackColor = &HFF&
             FSRIAutorizaXML.Refresh
@@ -302,7 +342,6 @@ Private Sub Form_Activate()
            .Resultado = False
            .Estado_SRI = "CNG"
            .Error_SRI = "Error: Comprobante no generado: " & SRI_Leer_Comprobantes_no_Autorizados(SRI_Autorizacion)
-            DocumentoXML.save RutaXMLRechazado
          End If
     End With
     RatonNormal

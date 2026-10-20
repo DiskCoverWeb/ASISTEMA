@@ -1,0 +1,5 @@
+Línea 19: la clase ComctlLib.Toolbar del control Toolbar1 no era una clase de control cargada.
+Línea 445: la clase MSComDlg.CommonDialog del control CDialogDir no era una clase de control cargada.
+Línea 704: la clase ComctlLib.ListView del control LstVwFTP no era una clase de control cargada.
+Línea 933: la clase ComctlLib.ImageList del control ImgLstFTP no era una clase de control cargada.
+Línea 1067: la clase ComctlLib.ImageList del control ImageList1 no era una clase de control cargada.

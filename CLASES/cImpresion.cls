@@ -535,6 +535,9 @@ Dim sRutaDelPDF As String
  
    'Variables Locales del tipo de impresion
     RatonReloj
+    PosXFirmaPDF = 0
+    PosYFirmaPDF = 0
+    Motivo_Firma_PDF = ""
     txtTime = NumEmpresa & "_" & Format(Time$, "hhmmss")
     vColorLetra = Negro
     vTipoImp = tPrint.TipoImpresion
@@ -547,8 +550,8 @@ Dim sRutaDelPDF As String
     vEsCampoCorto = tPrint.EsCampoCorto
     vVerDocumento = tPrint.VerDocumento
     vNombreArchivo = Replace(vNombreArchivo, ".", "-")
-    
-    sRutaDelPDF = MidStrg(WindowsDirectory, 1, 2) & "\SYSTEMP\PDF_" & NumEmpresa & "\" & vNombreArchivo & ".pdf"
+   'Ruta General para crear PDF
+    sRutaDelPDF = MidStrg(WindowsDirectory, 1, 2) & "\SYSBASES\PDF\PDF" & NumEmpresa & "\" & vNombreArchivo & ".pdf"
 
     If vOrientacion = 0 Then vOrientacion = 1
     If vPorteLetra <= 0 Then vPorteLetra = 5

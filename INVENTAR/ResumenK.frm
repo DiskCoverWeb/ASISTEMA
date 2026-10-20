@@ -1293,6 +1293,8 @@ Private Sub Stock(StockSuperior As Boolean)
   Control_Procesos "I", "Proceso Stock de Inventario, del " & MBoxFechaI & " al " & MBoxFechaF
  'MsgBox Cod_Bodega
   Reporte_Resumen_Existencias_SP MBoxFechaI, MBoxFechaF, Cod_Bodega
+  If CheqBod.value = 0 Then Cod_Bodega = Ninguno Else Cod_Bodega = SinEspaciosIzq(DCBodega)
+  
   If CheqProducto.value Then
      Opcion = 2
      RatonReloj
@@ -1300,8 +1302,6 @@ Private Sub Stock(StockSuperior As Boolean)
      DGQuery.Visible = False
      Progreso_Barra.Mensaje_Box = "Procesando Resumen de Existencia"
      Progreso_Iniciar
-     If CheqBod.value = 0 Then Cod_Bodega = Ninguno Else Cod_Bodega = SinEspaciosIzq(DCBodega)
-
     'SQLDec = "Promedio " & CStr(Dec_Costo) & "|Valor_Total 2|."
                                                
      sSQL = "SELECT TC,Codigo_Inv,Stock_Anterior,Entradas,Salidas,Stock_Actual,Promedio,Valor_Total,Bodega " _
@@ -1313,18 +1313,22 @@ Private Sub Stock(StockSuperior As Boolean)
      Else
         sSQL = sSQL & "AND Stock_Actual <> 0 "
      End If
+     
      sSQL = sSQL & "AND TC = 'P' " _
           & "ORDER BY Codigo_Inv "
 ''     If (OpcProducto.value = 1) And (Codigo3 <> "Todos") Then sSQL = sSQL & "AND Recibo = '" & Codigo3 & "' "
 ''     If CheqExist.value = 1 Then sSQL = sSQL & "AND Saldo_Actual <> 0 "
 ''     sSQL = sSQL & "ORDER BY Numero "
+
+
+
   Else
      Opcion = 1
      Progreso_Barra.Mensaje_Box = "Procesando Resumen de Existencia"
      Progreso_Iniciar
     
     'StockInvent StockSuperior
-     sSQL = "SELECT TC,Codigo_Inv,Producto,Unidad,Stock_Anterior,Entradas,Salidas,Stock_Actual, Promedio As Costo_Unit,Valor_Total, 0 As Diferencias, Ubicacion, Bodega " _
+     sSQL = "SELECT TC,Codigo_Inv,Producto,Unidad,Stock_Anterior,Entradas,Salidas,Stock_Actual, Promedio As Costo_Unit, Valor_Total, 0 As Diferencias, Ubicacion, Bodega " _
           & "FROM Catalogo_Productos As CP " _
           & "WHERE Item = '" & NumEmpresa & "' " _
           & "AND Periodo = '" & Periodo_Contable & "' " _
@@ -1344,8 +1348,8 @@ Private Sub Stock(StockSuperior As Boolean)
        Do While Not .EOF
           If OpcProducto.value <> 1 Then
              If .fields("TC") <> "I" Then
-                 Debitos = Debitos + Redondear(.fields("Entradas") * .fields("Costo_Unit"), 2)
-                 Creditos = Creditos + Redondear(.fields("Salidas") * .fields("Costo_Unit"), 2)
+                 Debitos = Debitos + Redondear(.fields("Entradas") * .fields("Valor_Total"), 2)
+                 Creditos = Creditos + Redondear(.fields("Salidas") * .fields("Valor_Total"), 2)
                  Total = Total + Redondear(.fields("Valor_Total"), 2)
              End If
           End If
@@ -1500,7 +1504,7 @@ Private Sub TBKardex_ButtonClick(ByVal Button As ComctlLib.Button)
        If Len(DCBodega) >= 1 Then Cod_Bodega = SinEspaciosIzq(DCBodega)
     End If
 
-   'MsgBox Button.key
+   MsgBox Button.key
     Select Case Button.key
       Case "Salir"
            Unload ResumenKardex

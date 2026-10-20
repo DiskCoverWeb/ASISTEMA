@@ -1,4 +1,6 @@
 Attribute VB_Name = "TInteger"
+Global INTERNET_DEFAULT_FTP_PORT As Integer
+'-----------------------------------
 Global IDEntidad As Integer
 Global TipoPlan As Integer
 '-----------------------------------

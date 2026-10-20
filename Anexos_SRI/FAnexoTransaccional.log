@@ -1,1 +1,4 @@
 Línea 46: la clase AcroPDFLibCtl.AcroPDF del control APDFATS no era una clase de control cargada.
+Línea 208: la clase MSComctlLib.ImageList del control ImageList2 no era una clase de control cargada.
+Línea 844: la clase MSComctlLib.Toolbar del control Toolbar1 no era una clase de control cargada.
+Línea 899: la clase MSMask.MaskEdBox del control MBFechaE no era una clase de control cargada.

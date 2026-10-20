@@ -70,3 +70,4 @@ JSON = 104, 104, 1291, 746, Z
 cJSONScript = 0, 0, 0, 0, C
 cStringBuilder = 0, 0, 0, 0, C
 FSRIAutorizaXML = 0, 0, 0, 0, C, 156, 156, 1371, 798, C
+FInfoMensaje = 0, 0, 0, 0, C, 286, 286, 1445, 928, C

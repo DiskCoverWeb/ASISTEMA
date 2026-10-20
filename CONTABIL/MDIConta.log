@@ -1,2 +1,3 @@
-Línea 73: la propiedad Size de Font tenía un valor no válido.
-Línea 73: la propiedad Size de Font tenía un valor no válido.
+Línea 33: la clase MSComctlLib.StatusBar del control StaBarEmp no era una clase de control cargada.
+Línea 81: la clase MSComctlLib.ProgressBar del control ProgressBarEstado no era una clase de control cargada.
+Línea 93: la clase MSComDlg.CommonDialog del control Dir_Dialog no era una clase de control cargada.

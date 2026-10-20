@@ -9,12 +9,54 @@ Begin VB.Form FacturaReembolso
    ClientHeight    =   10335
    ClientLeft      =   45
    ClientTop       =   345
-   ClientWidth     =   15960
+   ClientWidth     =   18495
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
    ScaleHeight     =   10335
-   ScaleWidth      =   15960
+   ScaleWidth      =   18495
    WindowState     =   1  'Minimized
+   Begin VB.TextBox TxTSubTotal 
+      Alignment       =   1  'Right Justify
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FF0000&
+      Height          =   330
+      Left            =   5250
+      MaxLength       =   12
+      MultiLine       =   -1  'True
+      TabIndex        =   29
+      Text            =   "FacturaR.frx":0000
+      Top             =   2100
+      Width           =   1590
+   End
+   Begin VB.TextBox TxTSubTotal0 
+      Alignment       =   1  'Right Justify
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FF0000&
+      Height          =   330
+      Left            =   3675
+      MaxLength       =   12
+      MultiLine       =   -1  'True
+      TabIndex        =   27
+      Text            =   "FacturaR.frx":0002
+      Top             =   2100
+      Width           =   1485
+   End
    Begin VB.TextBox TxtAutProvee 
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -27,12 +69,11 @@ Begin VB.Form FacturaReembolso
       EndProperty
       ForeColor       =   &H00FF0000&
       Height          =   330
-      Left            =   9450
+      Left            =   12075
       MaxLength       =   49
-      TabIndex        =   21
-      Text            =   $"FacturaR.frx":0000
-      Top             =   2100
-      Width           =   6735
+      TabIndex        =   19
+      Top             =   1365
+      Width           =   6000
    End
    Begin VB.CommandButton Command2 
       Caption         =   "&+"
@@ -46,11 +87,11 @@ Begin VB.Form FacturaReembolso
          Strikethrough   =   0   'False
       EndProperty
       Height          =   645
-      Left            =   6615
-      Picture         =   "FacturaR.frx":0007
+      Left            =   6300
+      Picture         =   "FacturaR.frx":0004
       Style           =   1  'Graphical
       TabIndex        =   15
-      Top             =   1785
+      Top             =   1050
       Width           =   540
    End
    Begin VB.TextBox TxtFacturaP 
@@ -66,11 +107,11 @@ Begin VB.Form FacturaReembolso
       EndProperty
       ForeColor       =   &H00FF0000&
       Height          =   330
-      Left            =   8085
-      MaxLength       =   9
+      Left            =   2310
+      MaxLength       =   18
       MultiLine       =   -1  'True
-      TabIndex        =   19
-      Text            =   "FacturaR.frx":5C19
+      TabIndex        =   25
+      Text            =   "FacturaR.frx":5C16
       Top             =   2100
       Width           =   1275
    End
@@ -87,21 +128,57 @@ Begin VB.Form FacturaReembolso
       EndProperty
       ForeColor       =   &H00FF0000&
       Height          =   330
-      Left            =   7245
+      Left            =   1470
       MaxLength       =   6
       MultiLine       =   -1  'True
-      TabIndex        =   17
-      Text            =   "FacturaR.frx":5C25
+      TabIndex        =   23
+      Text            =   "FacturaR.frx":5C22
       Top             =   2100
       Width           =   750
    End
    Begin VB.Frame Frame1 
       BackColor       =   &H00FFC0C0&
-      Height          =   1275
+      Height          =   2325
       Left            =   105
       TabIndex        =   37
-      Top             =   8925
-      Width           =   16080
+      Top             =   7770
+      Width           =   17970
+      Begin VB.TextBox TxtObservacion 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   105
+         MaxLength       =   60
+         MultiLine       =   -1  'True
+         TabIndex        =   50
+         Top             =   1575
+         Width           =   11040
+      End
+      Begin VB.TextBox TxtNota 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   105
+         MaxLength       =   60
+         MultiLine       =   -1  'True
+         TabIndex        =   48
+         Top             =   525
+         Width           =   11040
+      End
       Begin VB.CommandButton Command1 
          Caption         =   "&Salir"
          BeginProperty Font 
@@ -114,15 +191,15 @@ Begin VB.Form FacturaReembolso
             Strikethrough   =   0   'False
          EndProperty
          Height          =   960
-         Left            =   14280
-         Picture         =   "FacturaR.frx":5C2E
+         Left            =   11340
+         Picture         =   "FacturaR.frx":5C2B
          Style           =   1  'Graphical
          TabIndex        =   47
-         Top             =   210
+         Top             =   1260
          Width           =   1590
       End
       Begin VB.CommandButton Command3 
-         Caption         =   "&AceptarX"
+         Caption         =   "&Aceptar"
          BeginProperty Font 
             Name            =   "Lucida Console"
             Size            =   6.75
@@ -133,50 +210,54 @@ Begin VB.Form FacturaReembolso
             Strikethrough   =   0   'False
          EndProperty
          Height          =   960
-         Left            =   12495
-         Picture         =   "FacturaR.frx":64F8
+         Left            =   11340
+         Picture         =   "FacturaR.frx":64F5
          Style           =   1  'Graphical
          TabIndex        =   46
          Top             =   210
          Width           =   1590
       End
-      Begin VB.Label Label22 
+      Begin VB.Label Label24 
+         BackColor       =   &H00808080&
          BorderStyle     =   1  'Fixed Single
-         Caption         =   " Total Tarifa 0%"
+         Caption         =   " OBSERVACION:"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
-            Size            =   13.5
+            Size            =   8.25
             Charset         =   0
             Weight          =   700
             Underline       =   0   'False
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Height          =   435
+         ForeColor       =   &H00FFFFFF&
+         Height          =   330
          Left            =   105
-         TabIndex        =   38
-         Top             =   210
-         Width           =   2430
+         TabIndex        =   51
+         Top             =   1260
+         Width           =   11040
       End
-      Begin VB.Label Label23 
+      Begin VB.Label Label21 
+         BackColor       =   &H00808080&
          BorderStyle     =   1  'Fixed Single
-         Caption         =   " Total Tarifa 12%"
+         Caption         =   " NOTA:"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
-            Size            =   13.5
+            Size            =   8.25
             Charset         =   0
             Weight          =   700
             Underline       =   0   'False
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Height          =   435
-         Left            =   2940
-         TabIndex        =   40
+         ForeColor       =   &H00FFFFFF&
+         Height          =   330
+         Left            =   105
+         TabIndex        =   49
          Top             =   210
-         Width           =   2430
+         Width           =   11040
       End
-      Begin VB.Label LabelSubTotal 
+      Begin VB.Label LabelTotal 
          Alignment       =   1  'Right Justify
          BackColor       =   &H00FFFFFF&
          BorderStyle     =   1  'Fixed Single
@@ -192,67 +273,9 @@ Begin VB.Form FacturaReembolso
          EndProperty
          ForeColor       =   &H000000FF&
          Height          =   435
-         Left            =   105
-         TabIndex        =   39
-         Top             =   630
-         Width           =   2430
-      End
-      Begin VB.Label LabelConIVA 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00FFFFFF&
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   "0.00"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   13.5
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H000000FF&
-         Height          =   435
-         Left            =   2940
-         TabIndex        =   41
-         Top             =   630
-         Width           =   2430
-      End
-      Begin VB.Label Label3 
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   " I.V.A. 12%"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   13.5
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00000000&
-         Height          =   435
-         Left            =   5775
-         TabIndex        =   42
-         Top             =   210
-         Width           =   2430
-      End
-      Begin VB.Label Label26 
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   " Total Facturado"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   13.5
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   435
-         Left            =   8610
-         TabIndex        =   44
-         Top             =   210
+         Left            =   15435
+         TabIndex        =   45
+         Top             =   1785
          Width           =   2430
       End
       Begin VB.Label LabelIVA 
@@ -271,12 +294,12 @@ Begin VB.Form FacturaReembolso
          EndProperty
          ForeColor       =   &H000000FF&
          Height          =   435
-         Left            =   5775
+         Left            =   15435
          TabIndex        =   43
-         Top             =   630
+         Top             =   1260
          Width           =   2430
       End
-      Begin VB.Label LabelTotal 
+      Begin VB.Label LabelConIVA 
          Alignment       =   1  'Right Justify
          BackColor       =   &H00FFFFFF&
          BorderStyle     =   1  'Fixed Single
@@ -292,49 +315,107 @@ Begin VB.Form FacturaReembolso
          EndProperty
          ForeColor       =   &H000000FF&
          Height          =   435
-         Left            =   8610
-         TabIndex        =   45
-         Top             =   630
+         Left            =   15435
+         TabIndex        =   41
+         Top             =   735
+         Width           =   2430
+      End
+      Begin VB.Label LabelSubTotal 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   "0.00"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   13.5
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H000000FF&
+         Height          =   435
+         Left            =   15435
+         TabIndex        =   39
+         Top             =   210
+         Width           =   2430
+      End
+      Begin VB.Label Label22 
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " Total Tarifa 0%"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   13.5
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   435
+         Left            =   13020
+         TabIndex        =   38
+         Top             =   210
+         Width           =   2430
+      End
+      Begin VB.Label Label23 
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " Total Tarifa IVA"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   13.5
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   435
+         Left            =   13020
+         TabIndex        =   40
+         Top             =   735
+         Width           =   2430
+      End
+      Begin VB.Label Label3 
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " Total  I.V.A."
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   13.5
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00000000&
+         Height          =   435
+         Left            =   13020
+         TabIndex        =   42
+         Top             =   1260
+         Width           =   2430
+      End
+      Begin VB.Label Label26 
+         BorderStyle     =   1  'Fixed Single
+         Caption         =   " Total Facturado"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   13.5
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   435
+         Left            =   13020
+         TabIndex        =   44
+         Top             =   1785
          Width           =   2430
       End
    End
-   Begin VB.TextBox TxtObservacion 
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   330
-      Left            =   8190
-      MaxLength       =   60
-      MultiLine       =   -1  'True
-      TabIndex        =   36
-      Top             =   8505
-      Width           =   7995
-   End
-   Begin VB.TextBox TxtNota 
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   330
-      Left            =   105
-      MaxLength       =   60
-      MultiLine       =   -1  'True
-      TabIndex        =   34
-      Top             =   8505
-      Width           =   7995
-   End
-   Begin VB.TextBox TextVUnit 
+   Begin VB.TextBox TxTIVA 
       Alignment       =   1  'Right Justify
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -347,82 +428,60 @@ Begin VB.Form FacturaReembolso
       EndProperty
       ForeColor       =   &H00FF0000&
       Height          =   330
-      Left            =   7455
-      MaxLength       =   10
-      MultiLine       =   -1  'True
-      TabIndex        =   27
-      Text            =   "FacturaR.frx":6802
-      Top             =   2835
-      Width           =   1170
-   End
-   Begin VB.TextBox TextCant 
-      Alignment       =   1  'Right Justify
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H00FF0000&
-      Height          =   330
-      Left            =   6405
-      MaxLength       =   6
-      MultiLine       =   -1  'True
-      TabIndex        =   25
-      Text            =   "FacturaR.frx":6807
-      Top             =   2835
-      Width           =   960
-   End
-   Begin VB.TextBox TxtDocumentos 
-      Alignment       =   1  'Right Justify
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H00FF0000&
-      Height          =   330
-      Left            =   10290
-      MaxLength       =   30
+      Left            =   6930
+      MaxLength       =   12
       MultiLine       =   -1  'True
       TabIndex        =   31
-      Top             =   2835
-      Width           =   5895
+      Text            =   "FacturaR.frx":67FF
+      Top             =   2100
+      Width           =   1590
+   End
+   Begin VB.TextBox TxtDocumentos 
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FF0000&
+      Height          =   330
+      Left            =   10185
+      MaxLength       =   50
+      MultiLine       =   -1  'True
+      TabIndex        =   35
+      Top             =   2100
+      Width           =   7890
    End
    Begin VB.TextBox TextFacturaNo 
       Enabled         =   0   'False
       BeginProperty Font 
          Name            =   "MS Sans Serif"
-         Size            =   13.5
+         Size            =   12
          Charset         =   0
          Weight          =   700
          Underline       =   0   'False
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   390
-      Left            =   14385
+      Height          =   360
+      Left            =   16485
       TabIndex        =   8
       Text            =   "9999999999"
-      Top             =   525
-      Width           =   1800
+      Top             =   105
+      Width           =   1590
    End
    Begin MSDataListLib.DataCombo DCArticulo 
-      Bindings        =   "FacturaR.frx":6809
+      Bindings        =   "FacturaR.frx":6804
       DataSource      =   "AdoArticulo"
       Height          =   315
       Left            =   105
       TabIndex        =   14
-      Top             =   2100
-      Width           =   6420
-      _ExtentX        =   11324
+      Top             =   1365
+      Width           =   6105
+      _ExtentX        =   10769
       _ExtentY        =   556
       _Version        =   393216
       ForeColor       =   16711680
@@ -438,14 +497,14 @@ Begin VB.Form FacturaReembolso
       EndProperty
    End
    Begin MSDataGridLib.DataGrid DGAsientoF 
-      Bindings        =   "FacturaR.frx":6823
-      Height          =   4845
+      Bindings        =   "FacturaR.frx":681E
+      Height          =   3375
       Left            =   105
-      TabIndex        =   32
-      Top             =   3255
-      Width           =   16080
-      _ExtentX        =   28363
-      _ExtentY        =   8546
+      TabIndex        =   36
+      Top             =   2520
+      Width           =   17970
+      _ExtentX        =   31697
+      _ExtentY        =   5953
       _Version        =   393216
       AllowUpdate     =   0   'False
       BackColor       =   12648447
@@ -508,7 +567,7 @@ Begin VB.Form FacturaReembolso
    Begin MSAdodcLib.Adodc AdoAsientoF 
       Height          =   330
       Left            =   525
-      Top             =   4620
+      Top             =   3990
       Visible         =   0   'False
       Width           =   2055
       _ExtentX        =   3625
@@ -555,7 +614,7 @@ Begin VB.Form FacturaReembolso
    Begin MSAdodcLib.Adodc AdoLinea 
       Height          =   330
       Left            =   525
-      Top             =   4935
+      Top             =   4305
       Visible         =   0   'False
       Width           =   2055
       _ExtentX        =   3625
@@ -602,7 +661,7 @@ Begin VB.Form FacturaReembolso
    Begin MSAdodcLib.Adodc AdoFactura 
       Height          =   330
       Left            =   525
-      Top             =   5250
+      Top             =   4620
       Visible         =   0   'False
       Width           =   2055
       _ExtentX        =   3625
@@ -649,7 +708,7 @@ Begin VB.Form FacturaReembolso
    Begin MSAdodcLib.Adodc AdoArticulo 
       Height          =   330
       Left            =   525
-      Top             =   4620
+      Top             =   3990
       Visible         =   0   'False
       Width           =   2040
       _ExtentX        =   3598
@@ -695,10 +754,10 @@ Begin VB.Form FacturaReembolso
    End
    Begin MSMask.MaskEdBox MBFecha 
       Height          =   330
-      Left            =   105
+      Left            =   945
       TabIndex        =   1
       ToolTipText     =   "Formato de Fecha: DD/MM/AA"
-      Top             =   420
+      Top             =   105
       Width           =   1275
       _ExtentX        =   2249
       _ExtentY        =   582
@@ -722,7 +781,7 @@ Begin VB.Form FacturaReembolso
    Begin MSAdodcLib.Adodc AdoBenef 
       Height          =   330
       Left            =   2625
-      Top             =   4620
+      Top             =   3990
       Visible         =   0   'False
       Width           =   2055
       _ExtentX        =   3625
@@ -769,7 +828,7 @@ Begin VB.Form FacturaReembolso
    Begin MSAdodcLib.Adodc AdoAux 
       Height          =   330
       Left            =   2625
-      Top             =   4935
+      Top             =   4305
       Visible         =   0   'False
       Width           =   2055
       _ExtentX        =   3625
@@ -814,14 +873,14 @@ Begin VB.Form FacturaReembolso
       _Version        =   393216
    End
    Begin MSDataListLib.DataCombo DCCliente 
-      Bindings        =   "FacturaR.frx":683D
+      Bindings        =   "FacturaR.frx":6838
       DataSource      =   "AdoBenef"
       Height          =   315
-      Left            =   1470
+      Left            =   3360
       TabIndex        =   3
-      Top             =   420
-      Width           =   9570
-      _ExtentX        =   16880
+      Top             =   105
+      Width           =   5580
+      _ExtentX        =   9843
       _ExtentY        =   556
       _Version        =   393216
       Text            =   "CONSUMIDOR FINAL"
@@ -836,14 +895,14 @@ Begin VB.Form FacturaReembolso
       EndProperty
    End
    Begin MSDataListLib.DataCombo DCTipoPago 
-      Bindings        =   "FacturaR.frx":6854
+      Bindings        =   "FacturaR.frx":684F
       DataSource      =   "AdoTipoPago"
       Height          =   360
-      Left            =   9450
+      Left            =   12285
       TabIndex        =   12
-      Top             =   1365
-      Width           =   6735
-      _ExtentX        =   11880
+      Top             =   525
+      Width           =   5790
+      _ExtentX        =   10213
       _ExtentY        =   635
       _Version        =   393216
       BackColor       =   12648447
@@ -861,7 +920,7 @@ Begin VB.Form FacturaReembolso
    Begin MSAdodcLib.Adodc AdoTipoPago 
       Height          =   330
       Left            =   525
-      Top             =   5565
+      Top             =   4935
       Visible         =   0   'False
       Width           =   2115
       _ExtentX        =   3731
@@ -906,15 +965,15 @@ Begin VB.Form FacturaReembolso
       _Version        =   393216
    End
    Begin MSDataListLib.DataCombo DCTipoComprobante 
-      Bindings        =   "FacturaR.frx":686E
+      Bindings        =   "FacturaR.frx":6869
       DataSource      =   "AdoTipoComp"
       Height          =   315
-      Left            =   105
-      TabIndex        =   23
-      ToolTipText     =   $"FacturaR.frx":688F
-      Top             =   2835
-      Width           =   6210
-      _ExtentX        =   10954
+      Left            =   6930
+      TabIndex        =   17
+      ToolTipText     =   $"FacturaR.frx":688A
+      Top             =   1365
+      Width           =   5055
+      _ExtentX        =   8916
       _ExtentY        =   556
       _Version        =   393216
       ForeColor       =   16711680
@@ -932,7 +991,7 @@ Begin VB.Form FacturaReembolso
    Begin MSAdodcLib.Adodc AdoTipoComprobante 
       Height          =   330
       Left            =   2625
-      Top             =   5250
+      Top             =   4620
       Visible         =   0   'False
       Width           =   2055
       _ExtentX        =   3625
@@ -976,11 +1035,38 @@ Begin VB.Form FacturaReembolso
       EndProperty
       _Version        =   393216
    End
-   Begin VB.Label Label8 
+   Begin MSMask.MaskEdBox MBFechaEmi 
+      Height          =   330
+      Left            =   105
+      TabIndex        =   21
+      ToolTipText     =   "Formato de Fecha: DD/MM/AA"
+      Top             =   2100
+      Width           =   1275
+      _ExtentX        =   2249
+      _ExtentY        =   582
+      _Version        =   393216
+      ForeColor       =   16711680
+      AllowPrompt     =   -1  'True
+      AutoTab         =   -1  'True
+      MaxLength       =   10
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Format          =   "dd/mm/yyyy"
+      Mask            =   "##/##/####"
+      PromptChar      =   "0"
+   End
+   Begin VB.Label Label19 
       Alignment       =   2  'Center
       BackColor       =   &H00C0FFFF&
       BorderStyle     =   1  'Fixed Single
-      Caption         =   "AUTORIZACON DEL COMPROBANTE"
+      Caption         =   "TOTAL I.V.A."
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   8.25
@@ -991,10 +1077,90 @@ Begin VB.Form FacturaReembolso
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
+      Left            =   6930
+      TabIndex        =   30
+      Top             =   1785
+      Width           =   1590
+   End
+   Begin VB.Label Label11 
+      Alignment       =   2  'Center
+      BackColor       =   &H00C0FFFF&
+      BorderStyle     =   1  'Fixed Single
+      Caption         =   "SUBTOTAL 0%"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   3675
+      TabIndex        =   26
+      Top             =   1785
+      Width           =   1485
+   End
+   Begin VB.Label Label12 
+      Alignment       =   2  'Center
+      BackColor       =   &H00C0FFFF&
+      BorderStyle     =   1  'Fixed Single
+      Caption         =   "SUBTOTAL IVA"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   5250
+      TabIndex        =   28
+      Top             =   1785
+      Width           =   1590
+   End
+   Begin VB.Label Label9 
+      BackColor       =   &H00C0FFFF&
+      BorderStyle     =   1  'Fixed Single
+      Caption         =   " Fecha Emis."
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00000000&
+      Height          =   330
       Left            =   105
-      TabIndex        =   22
-      Top             =   2520
-      Width           =   6210
+      TabIndex        =   20
+      Top             =   1785
+      Width           =   1275
+   End
+   Begin VB.Label Label8 
+      Alignment       =   2  'Center
+      BackColor       =   &H00C0FFFF&
+      BorderStyle     =   1  'Fixed Single
+      Caption         =   "TIPO DE COMPROBANTE"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   330
+      Left            =   6930
+      TabIndex        =   16
+      Top             =   1050
+      Width           =   5055
    End
    Begin VB.Label Label7 
       Alignment       =   2  'Center
@@ -1011,15 +1177,15 @@ Begin VB.Form FacturaReembolso
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   9450
-      TabIndex        =   20
-      Top             =   1785
-      Width           =   6735
+      Left            =   12075
+      TabIndex        =   18
+      Top             =   1050
+      Width           =   6000
    End
    Begin VB.Label Label34 
       BackColor       =   &H00808000&
       BorderStyle     =   1  'Fixed Single
-      Caption         =   " TIPO DE PAGO"
+      Caption         =   " TIPO DE PAGO:"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   8.25
@@ -1031,10 +1197,10 @@ Begin VB.Form FacturaReembolso
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   330
-      Left            =   9450
+      Left            =   10710
       TabIndex        =   11
-      Top             =   1050
-      Width           =   6735
+      Top             =   525
+      Width           =   1590
    End
    Begin VB.Label LblDireccion 
       BackColor       =   &H00FFFFFF&
@@ -1050,9 +1216,9 @@ Begin VB.Form FacturaReembolso
       EndProperty
       ForeColor       =   &H00C00000&
       Height          =   330
-      Left            =   105
+      Left            =   1365
       TabIndex        =   10
-      Top             =   1365
+      Top             =   525
       Width           =   9255
    End
    Begin VB.Label Label5 
@@ -1070,8 +1236,8 @@ Begin VB.Form FacturaReembolso
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   8085
-      TabIndex        =   18
+      Left            =   2310
+      TabIndex        =   24
       Top             =   1785
       Width           =   1275
    End
@@ -1090,15 +1256,15 @@ Begin VB.Form FacturaReembolso
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   7245
-      TabIndex        =   16
+      Left            =   1470
+      TabIndex        =   22
       Top             =   1785
       Width           =   750
    End
    Begin VB.Label Label29 
       BackColor       =   &H00808000&
       BorderStyle     =   1  'Fixed Single
-      Caption         =   " DIRECCION"
+      Caption         =   " DIRECCION:"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   8.25
@@ -1112,48 +1278,8 @@ Begin VB.Form FacturaReembolso
       Height          =   330
       Left            =   105
       TabIndex        =   9
-      Top             =   1050
-      Width           =   9255
-   End
-   Begin VB.Label Label24 
-      BackColor       =   &H00808080&
-      BorderStyle     =   1  'Fixed Single
-      Caption         =   "OBSERVACION:"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H00FFFFFF&
-      Height          =   330
-      Left            =   8190
-      TabIndex        =   35
-      Top             =   8190
-      Width           =   7995
-   End
-   Begin VB.Label Label21 
-      BackColor       =   &H00808080&
-      BorderStyle     =   1  'Fixed Single
-      Caption         =   " NOTA:"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H00FFFFFF&
-      Height          =   330
-      Left            =   105
-      TabIndex        =   33
-      Top             =   8190
-      Width           =   7995
+      Top             =   525
+      Width           =   1275
    End
    Begin VB.Label LblRUC 
       BackColor       =   &H00FFFFFF&
@@ -1169,9 +1295,9 @@ Begin VB.Form FacturaReembolso
       EndProperty
       ForeColor       =   &H00C00000&
       Height          =   330
-      Left            =   11130
+      Left            =   10395
       TabIndex        =   5
-      Top             =   420
+      Top             =   105
       Width           =   1800
    End
    Begin VB.Label Label15 
@@ -1189,10 +1315,10 @@ Begin VB.Form FacturaReembolso
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   330
-      Left            =   11130
+      Left            =   9030
       TabIndex        =   4
       Top             =   105
-      Width           =   1800
+      Width           =   1380
    End
    Begin VB.Label LblSerie 
       Alignment       =   1  'Right Justify
@@ -1201,7 +1327,7 @@ Begin VB.Form FacturaReembolso
       Caption         =   "999-999"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
-         Size            =   13.5
+         Size            =   12
          Charset         =   0
          Weight          =   700
          Underline       =   0   'False
@@ -1209,11 +1335,11 @@ Begin VB.Form FacturaReembolso
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H000000FF&
-      Height          =   435
-      Left            =   13125
+      Height          =   330
+      Left            =   15330
       TabIndex        =   7
-      Top             =   525
-      Width           =   1275
+      Top             =   105
+      Width           =   1170
    End
    Begin VB.Label LabelVTotal 
       Alignment       =   1  'Right Justify
@@ -1231,9 +1357,9 @@ Begin VB.Form FacturaReembolso
       EndProperty
       ForeColor       =   &H00FF0000&
       Height          =   330
-      Left            =   8715
-      TabIndex        =   29
-      Top             =   2835
+      Left            =   8610
+      TabIndex        =   33
+      Top             =   2100
       Width           =   1485
    End
    Begin VB.Label Label20 
@@ -1251,50 +1377,10 @@ Begin VB.Form FacturaReembolso
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   8715
-      TabIndex        =   28
-      Top             =   2520
+      Left            =   8610
+      TabIndex        =   32
+      Top             =   1785
       Width           =   1485
-   End
-   Begin VB.Label Label19 
-      Alignment       =   2  'Center
-      BackColor       =   &H00C0FFFF&
-      BorderStyle     =   1  'Fixed Single
-      Caption         =   "P.V.P"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   330
-      Left            =   7455
-      TabIndex        =   26
-      Top             =   2520
-      Width           =   1170
-   End
-   Begin VB.Label Label16 
-      Alignment       =   2  'Center
-      BackColor       =   &H00C0FFFF&
-      BorderStyle     =   1  'Fixed Single
-      Caption         =   "Cantidad"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   330
-      Left            =   6405
-      TabIndex        =   24
-      Top             =   2520
-      Width           =   960
    End
    Begin VB.Label Label10 
       BackColor       =   &H00C0FFFF&
@@ -1310,15 +1396,15 @@ Begin VB.Form FacturaReembolso
          Strikethrough   =   0   'False
       EndProperty
       Height          =   330
-      Left            =   10290
-      TabIndex        =   30
-      Top             =   2520
-      Width           =   5895
+      Left            =   10185
+      TabIndex        =   34
+      Top             =   1785
+      Width           =   7890
    End
    Begin VB.Label Label6 
       BackColor       =   &H00808000&
       BorderStyle     =   1  'Fixed Single
-      Caption         =   " NOMBRE DEL CLIENTE:"
+      Caption         =   " CLIENTE:"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   8.25
@@ -1330,15 +1416,15 @@ Begin VB.Form FacturaReembolso
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   330
-      Left            =   1470
+      Left            =   2310
       TabIndex        =   2
       Top             =   105
-      Width           =   9570
+      Width           =   1065
    End
    Begin VB.Label LabelStockArt 
       BackColor       =   &H00C0FFFF&
       BorderStyle     =   1  'Fixed Single
-      Caption         =   " PROVEEDOR"
+      Caption         =   " PROVEEDOR DEL GASTO (RUC/RAZON SOCIAL)"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   8.25
@@ -1351,8 +1437,8 @@ Begin VB.Form FacturaReembolso
       Height          =   330
       Left            =   105
       TabIndex        =   13
-      Top             =   1785
-      Width           =   6420
+      Top             =   1050
+      Width           =   6105
    End
    Begin VB.Label Label1 
       BackColor       =   &H00808080&
@@ -1368,8 +1454,8 @@ Begin VB.Form FacturaReembolso
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H00FFFFFF&
-      Height          =   435
-      Left            =   13125
+      Height          =   330
+      Left            =   12285
       TabIndex        =   6
       Top             =   105
       Width           =   3060
@@ -1392,7 +1478,7 @@ Begin VB.Form FacturaReembolso
       Left            =   105
       TabIndex        =   0
       Top             =   105
-      Width           =   1275
+      Width           =   855
    End
 End
 Attribute VB_Name = "FacturaReembolso"
@@ -1412,6 +1498,7 @@ Dim CantSaldoPendiente As Integer
 Dim ParpadearSaldo As Boolean
 Dim SiTPCJ As Boolean
 Dim SiTPBA As Boolean
+Dim CodTipoComp As Byte
 
 Private Sub Command2_Click()
     NombreCliente = "NUEVO PROVEEDOR"
@@ -1444,6 +1531,7 @@ End Sub
 
 Private Sub DCArticulo_KeyPress(KeyAscii As Integer)
 Dim Busqueda As String
+    CodTipoComp = 1
     Busqueda = DCArticulo.Text
     If Len(Busqueda) > 1 Then
        sSQL = "SELECT TOP 50 Cliente, Codigo, CI_RUC " _
@@ -1553,6 +1641,25 @@ Dim DireccionC As String
   End With
 End Sub
 
+Private Sub DCTipoComprobante_KeyDown(KeyCode As Integer, Shift As Integer)
+  PresionoEnter KeyCode
+End Sub
+
+Private Sub DCTipoComprobante_LostFocus()
+   'Busca que sea igual a la Descripcion
+    With AdoTipoComprobante.Recordset
+        If .RecordCount > 0 Then
+           .MoveFirst
+           .Find ("Descripcion = '" & DCTipoComprobante.Text & "' ")
+           If Not .EOF Then
+              CodTipoComp = .fields("Tipo_Comprobante_Codigo")
+           Else
+              MsgBox "Vuelva a seleccionar", vbInformation, "Aviso"
+           End If
+        End If
+    End With
+End Sub
+
 Private Sub DCTipoPago_KeyDown(KeyCode As Integer, Shift As Integer)
   PresionoEnter KeyCode
 End Sub
@@ -1572,6 +1679,18 @@ Private Sub MBFecha_LostFocus()
   LblSerie.Caption = SerieFactura & "-"
   NumComp = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, False)
   TextFacturaNo.Text = Format$(NumComp, "000000000")
+End Sub
+
+Private Sub MBFechaEmi_GotFocus()
+  MarcarTexto MBFechaEmi
+End Sub
+
+Private Sub MBFechaEmi_KeyDown(KeyCode As Integer, Shift As Integer)
+  PresionoEnter KeyCode
+End Sub
+
+Private Sub MBFechaEmi_LostFocus()
+  FechaValida MBFechaEmi
 End Sub
 
 Public Sub Listar_Clientes_FR()
@@ -1636,6 +1755,13 @@ Private Sub Form_Activate()
    Obligado_Conta = Leer_Campo_Empresa("Obligado_Conta")
    ContEspec = Leer_Campo_Empresa("Codigo_Contribuyente_Especial")
  
+   DGAsientoF.width = MDI_X_Max - 100
+   DGAsientoF.Height = MDI_Y_Max - DGAsientoF.Top - 2450
+   DGAsientoF.Refresh
+   
+   Frame1.Top = DGAsientoF.Top + DGAsientoF.Height + 50
+   Frame1.Refresh
+   
  'Facturas de Reembolso
  '---------------------
   TipoFactura = "FR"
@@ -1655,8 +1781,8 @@ Private Sub Form_Activate()
   FacturaReembolso.Caption = "FACTURA POR REEMBOLSO DE GASTOS (" & TipoFactura & ")"
   Label23.Caption = " Total Tarifa " & Porc_IVA * 100 & "%"
   Label3.Caption = " Total I.V.A. " & Porc_IVA * 100 & "%"
-  TextCant.Text = "0"
-  TextVUnit.Text = "0"
+  'TextCant.Text = "0"
+  'TextVUnit.Text = "0"
   LabelVTotal.Caption = "0"
   Modificar = False
   Bandera = True
@@ -1767,42 +1893,43 @@ Private Sub Form_Load()
   Encerar_Factura FA
 End Sub
 
-Private Sub TextCant_GotFocus()
-  MarcarTexto TextCant
-  Codigos = Ninguno
+Private Sub TxTSubTotal0_GotFocus()
+  MarcarTexto TxTSubTotal0
 End Sub
 
-Private Sub TextCant_KeyDown(KeyCode As Integer, Shift As Integer)
-  Keys_Especiales Shift
-End Sub
-
-Private Sub TextCant_LostFocus()
-  Cantidad = Val(TextCant)
-End Sub
-
-Private Sub TextVUnit_Change()
-   If IsNumeric(TextVUnit) And IsNumeric(TextCant) Then
-      If Val(TextVUnit) = 0 Then TextVUnit = "0.01"
-      Real1 = CCur(TextCant) * CCur(TextVUnit)
-      LabelVTotal.Caption = Format$(Real1, "#,##0.00")
-   Else
-      LabelVTotal.Caption = "0.0000"
-   End If
-End Sub
-
-Private Sub TextVUnit_GotFocus()
-  MarcarTexto TextVUnit
-End Sub
-
-Private Sub TextVUnit_KeyDown(KeyCode As Integer, Shift As Integer)
+Private Sub TxTSubTotal0_KeyDown(KeyCode As Integer, Shift As Integer)
    PresionoEnter KeyCode
 End Sub
 
-Private Sub TextVUnit_LostFocus()
-   TextoValido TextVUnit, True, , 2
-   Mensajes = "Ingreso de Reembolso Con IVA?" & vbCrLf
-   Titulo = "FORMULARIO DE CONFIRMACION"
-   If BoxMensaje = vbYes Then BanIVA = True Else BanIVA = False
+Private Sub TxTSubTotal0_LostFocus()
+   TextoValido TxTSubTotal0, True, , 2
+End Sub
+
+Private Sub TxTSubTotal_GotFocus()
+  MarcarTexto TxTSubTotal
+End Sub
+
+Private Sub TxTSubTotal_KeyDown(KeyCode As Integer, Shift As Integer)
+  PresionoEnter KeyCode
+End Sub
+
+Private Sub TxTSubTotal_LostFocus()
+  TextoValido TxTSubTotal, True, , 2
+  
+  TxTIVA.Text = Format(Val(TxTSubTotal) * Porc_IVA, "#,##0.00")
+End Sub
+
+Private Sub TxtIVA_GotFocus()
+  MarcarTexto TxTIVA
+End Sub
+
+Private Sub TxTIVA_KeyDown(KeyCode As Integer, Shift As Integer)
+   PresionoEnter KeyCode
+End Sub
+
+Private Sub TxtIVA_LostFocus()
+   TextoValido TxTIVA, True, , 2
+   LabelVTotal.Caption = Format(Val(TxTSubTotal0) + Val(TxTSubTotal) + Val(TxTIVA), "#,##0.00")
    TxtDocumentos.SetFocus
 End Sub
 
@@ -1881,9 +2008,9 @@ Public Sub DatosArticulos()
     Cta_Ventas = DatInv.Cta_Ventas
     Precio = DatInv.PVP
     BanIVA = DatInv.IVA
-    TextVUnit = Format$(Precio, "#,##0.0000")
+    'TextVUnit = Format$(Precio, "#,##0.0000")
     If TipoFactura = "NV" Then BanIVA = False
-    LabelStockArt.Caption = "PRODUCTO" & String(93 - Len(DatInv.Codigo_Inv), " ") & DatInv.Codigo_Inv
+    'LabelStockArt.Caption = "PRODUCTO" & String(93 - Len(DatInv.Codigo_Inv), " ") & DatInv.Codigo_Inv
     'DCArticulo.Text = Producto
 ''   End If
 ''  End With
@@ -1913,53 +2040,65 @@ End Sub
 Private Sub TxtDocumentos_LostFocus()
 Dim Grabar_PV As Boolean
 Dim ProductoAux As String
-Dim CodTipoComp As Byte
 
-    CodTipoComp = 1
-   'Busca que sea igual a la Descripcion
-    With AdoTipoComprobante.Recordset
-        If .RecordCount > 0 Then
-           .MoveFirst
-           .Find ("Descripcion = '" & DCTipoComprobante.Text & "' ")
-           If Not .EOF Then
-              CodTipoComp = .fields("Tipo_Comprobante_Codigo")
-           Else
-              MsgBox "Vuelva a seleccionar", vbInformation, "Aviso"
-           End If
-        End If
-    End With
-
-   TextoValido TxtDocumentos
-   DatInv.Codigo_Inv = "99.41"
-      LabelVTotal.Caption = Format$(Real1, "#,##0.00")
-      Real1 = 0: Real2 = 0: Real3 = 0
-      If IsNumeric(TextVUnit) And IsNumeric(TextCant) Then Real1 = CCur(TextCant) * CCur(TextVUnit)
-      LabelVTotal.Caption = Format$(Real1, "#,##0.00")
-      If Real1 > 0 Then
-         If BanIVA Then Real3 = Redondear((Real1 - Real2) * Porc_IVA, 2) Else Real3 = 0
-         SetAddNew AdoAsientoF
-         SetFields AdoAsientoF, "CODIGO", DatInv.Codigo_Inv
-         SetFields AdoAsientoF, "CODIGO_L", CodigoL
-         SetFields AdoAsientoF, "PRODUCTO", CodigoC
-         SetFields AdoAsientoF, "Tipo_Hab", MidStrg(TxtDocumentos, 1, 40)
-         SetFields AdoAsientoF, "RUTA", CodigoP
-         SetFields AdoAsientoF, "Serie_No", TxtSerieP & "-" & TxtFacturaP
-         SetFields AdoAsientoF, "Procedencia", TxtAutProvee
-         SetFields AdoAsientoF, "Lote_No", Format(CodTipoComp, "00")
-         SetFields AdoAsientoF, "Codigo_B", CodigoB
-         SetFields AdoAsientoF, "CANT", CCur(TextCant)
-         SetFields AdoAsientoF, "PRECIO", CCur(TextVUnit)
-         SetFields AdoAsientoF, "TOTAL", Real1
-         SetFields AdoAsientoF, "Total_IVA", Real3
-         SetFields AdoAsientoF, "Item", NumEmpresa
-         SetFields AdoAsientoF, "CodigoU", CodigoUsuario
-         SetFields AdoAsientoF, "CodBod", Cod_Bodega
-         SetFields AdoAsientoF, "A_No", Ln_No
-         SetUpdate AdoAsientoF
-         Ln_No = Ln_No + 1
-      End If
-   TextCant.Text = "0"
-   DCArticulo.SetFocus
+    TextoValido TxtDocumentos
+    If Len(TxtDocumentos) > 1 Then ProductoAux = "Reembolso de Gastos por " & TxtDocumentos Else ProductoAux = "Reembolso de Gastos"
+    If CodTipoComp = "11" Then TxtSerieP = "999999"
+    DatInv.Codigo_Inv = "99.41"
+    Real1 = Redondear(Val(TxTSubTotal0) + Val(TxTSubTotal), 2)
+    LabelVTotal.Caption = Format$(Real1, "#,##0.00")
+    If Real1 > 0 Then
+       If Val(TxTSubTotal0) > 0 Then
+          SetAddNew AdoAsientoF
+          SetFields AdoAsientoF, "CODIGO", DatInv.Codigo_Inv
+          SetFields AdoAsientoF, "CODIGO_L", CodigoL
+          SetFields AdoAsientoF, "PRODUCTO", ProductoAux
+          SetFields AdoAsientoF, "Tipo_Hab", TrimStrg(MidStrg(CodigoC, 1, 50))
+          SetFields AdoAsientoF, "RUTA", CodigoP
+          SetFields AdoAsientoF, "Serie_No", TxtSerieP & "-" & TxtFacturaP
+          SetFields AdoAsientoF, "Procedencia", TxtAutProvee
+          SetFields AdoAsientoF, "Lote_No", Format(CodTipoComp, "00")
+          SetFields AdoAsientoF, "Codigo_B", CodigoB
+          SetFields AdoAsientoF, "CANT", 1
+          SetFields AdoAsientoF, "PRECIO", Val(TxTSubTotal0)
+          SetFields AdoAsientoF, "TOTAL", Val(TxTSubTotal0)
+          SetFields AdoAsientoF, "Total_IVA", 0
+          SetFields AdoAsientoF, "Item", NumEmpresa
+          SetFields AdoAsientoF, "CodigoU", CodigoUsuario
+          SetFields AdoAsientoF, "CodBod", Cod_Bodega
+          SetFields AdoAsientoF, "Fecha_Fab", MBFechaEmi
+          SetFields AdoAsientoF, "TD", FA.TC
+          SetFields AdoAsientoF, "A_No", Ln_No
+          SetUpdate AdoAsientoF
+          Ln_No = Ln_No + 1
+       End If
+       
+       If Val(TxTSubTotal) > 0 Then
+          SetAddNew AdoAsientoF
+          SetFields AdoAsientoF, "CODIGO", DatInv.Codigo_Inv
+          SetFields AdoAsientoF, "CODIGO_L", CodigoL
+          SetFields AdoAsientoF, "PRODUCTO", ProductoAux
+          SetFields AdoAsientoF, "Tipo_Hab", TrimStrg(MidStrg(CodigoC, 1, 60))
+          SetFields AdoAsientoF, "RUTA", CodigoP
+          SetFields AdoAsientoF, "Serie_No", TxtSerieP & "-" & TxtFacturaP
+          SetFields AdoAsientoF, "Procedencia", TxtAutProvee
+          SetFields AdoAsientoF, "Lote_No", Format(CodTipoComp, "00")
+          SetFields AdoAsientoF, "Codigo_B", CodigoB
+          SetFields AdoAsientoF, "CANT", 1
+          SetFields AdoAsientoF, "PRECIO", Val(TxTSubTotal)
+          SetFields AdoAsientoF, "TOTAL", Val(TxTSubTotal)
+          SetFields AdoAsientoF, "Total_IVA", Val(TxTIVA)
+          SetFields AdoAsientoF, "Item", NumEmpresa
+          SetFields AdoAsientoF, "CodigoU", CodigoUsuario
+          SetFields AdoAsientoF, "CodBod", Cod_Bodega
+          SetFields AdoAsientoF, "Fecha_Fab", MBFechaEmi
+          SetFields AdoAsientoF, "TD", FA.TC
+          SetFields AdoAsientoF, "A_No", Ln_No
+          SetUpdate AdoAsientoF
+          Ln_No = Ln_No + 1
+       End If
+    End If
+    DCArticulo.SetFocus
 End Sub
 
 Private Sub TxtFacturaP_GotFocus()
@@ -2012,3 +2151,4 @@ Private Sub TxtSerieP_LostFocus()
   If Len(TxtSerieP) < 6 Then TxtSerieP = String(6 - Len(TxtSerieP), "0") & TxtSerieP
   If TxtSerieP.Text = "000000" Then TxtSerieP.Text = "001001"
 End Sub
+

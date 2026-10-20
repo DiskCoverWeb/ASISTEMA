@@ -1,0 +1,4 @@
+Línea 358: la clase MSComctlLib.ImageList del control ImageList2 no era una clase de control cargada.
+Línea 388: la clase MSComctlLib.Toolbar del control Toolbar1 no era una clase de control cargada.
+Línea 481: la clase MSMask.MaskEdBox del control MBFechaF no era una clase de control cargada.
+Línea 510: la clase MSMask.MaskEdBox del control MBFechaI no era una clase de control cargada.
