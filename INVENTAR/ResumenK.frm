@@ -1337,26 +1337,26 @@ Private Sub Stock(StockSuperior As Boolean)
      sSQL = sSQL & "ORDER BY Codigo_Inv "
   End If
   SQLDec = "Costo_Unit " & CStr(Dec_Costo) & "|Total 2|."
-  Select_Adodc_Grid DGQuery, AdoDetKardex, sSQL, SQLDec
+  Select_Adodc_Grid DGQuery, AdoDetKardex, sSQL, SQLDec, , , "Sorck_True"
  'MsgBox Opcion & vbCrLf & SQLDec & vbCrLf & Cod_Bodega
   Total = 0
   Debitos = 0
   Creditos = 0
   DGQuery.Visible = False
-  With AdoDetKardex.Recordset
-   If .RecordCount > 0 Then
-       Do While Not .EOF
-          If OpcProducto.value <> 1 Then
-             If .fields("TC") <> "I" Then
-                 Debitos = Debitos + Redondear(.fields("Entradas") * .fields("Valor_Total"), 2)
-                 Creditos = Creditos + Redondear(.fields("Salidas") * .fields("Valor_Total"), 2)
-                 Total = Total + Redondear(.fields("Valor_Total"), 2)
-             End If
-          End If
-         .MoveNext
-       Loop
-   End If
-  End With
+''  With AdoDetKardex.Recordset
+''   If .RecordCount > 0 Then
+''       Do While Not .EOF
+''          If OpcProducto.value <> 1 Then
+''             If .fields("TC") <> "I" Then
+''                 Debitos = Debitos + Redondear(.fields("Entradas") * .fields("Valor_Total"), 2)
+''                 Creditos = Creditos + Redondear(.fields("Salidas") * .fields("Valor_Total"), 2)
+''                 Total = Total + Redondear(.fields("Valor_Total"), 2)
+''             End If
+''          End If
+''         .MoveNext
+''       Loop
+''   End If
+''  End With
   DGQuery.Visible = True
  'Total = Debitos - Creditos
   LabelTot.Caption = Format(Total, "#,##0.00")
@@ -1504,7 +1504,7 @@ Private Sub TBKardex_ButtonClick(ByVal Button As ComctlLib.Button)
        If Len(DCBodega) >= 1 Then Cod_Bodega = SinEspaciosIzq(DCBodega)
     End If
 
-   MsgBox Button.key
+   'MsgBox Button.key
     Select Case Button.key
       Case "Salir"
            Unload ResumenKardex
@@ -1701,9 +1701,9 @@ Public Sub Resumen_Barras()
        & "GROUP BY TK.Codigo_Inv, CP.Producto, TK.CodBodega, TK.Codigo_Barra, CP.Reg_Sanitario " _
        & "HAVING SUM(TK.Entrada-TK.Salida) <> 0 " _
        & "ORDER BY TK.Codigo_Inv, TK.Codigo_Barra "
- 'MsgBox sSQL
+  MsgBox sSQL
   SQLDec = "Valor_Unit " & CStr(Dec_Costo) & "|Total_Inventario 2|."
-  Select_Adodc_Grid DGQuery, AdoDetKardex, sSQL, SQLDec
+  Select_Adodc_Grid DGQuery, AdoDetKardex, sSQL, SQLDec, , , "Resumen:Barra"
   DGQuery.Visible = False
   With AdoDetKardex.Recordset
    If .RecordCount > 0 Then
@@ -1724,16 +1724,17 @@ Public Sub Resumen_QR()
   Debitos = 0
   Creditos = 0
   Stock_Inv = 0
+  '& "HAVING SUM(Entrada-Salida) <> 0 "
   sSQL = "SELECT Codigo_Barra, " _
        & "SUM(Entrada) As Entradas, SUM(Salida) As Salidas, " _
-       & "SUM(Entrada-Salida) As Stock_QR, AVG(Valor_Unitario) As Valor_Unit, " _
+       & "(SUM(Entrada)-SUM(Salida)) As Stock_QR, AVG(Valor_Unitario) As Valor_Unit, " _
        & "((SUM(Entrada)-SUM(Salida)) * AVG(Valor_Unitario)) As Total_Inventario " _
        & "FROM Trans_Kardex " _
        & "WHERE Item = '" & NumEmpresa & "' " _
        & "AND Periodo = '" & Periodo_Contable & "' " _
        & "AND Fecha BETWEEN #" & FechaIni & "# and #" & FechaFin & "# " _
        & "GROUP BY Codigo_Barra " _
-       & "HAVING SUM(Entrada-Salida) <> 0 " _
+       & "HAVING (SUM(Entrada)-SUM(Salida)) <> 0 " _
        & "ORDER BY Codigo_Barra "
  'MsgBox sSQL
   SQLDec = "Valor_Unit " & CStr(Dec_Costo) & "|Total_Inventario 2|."

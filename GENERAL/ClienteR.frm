@@ -1591,7 +1591,7 @@ Public Sub GrabarCliente()
                 If Not AdoBanco.Recordset.EOF Then
                    SetFields AdoAux, "Cod_Banco", AdoBanco.Recordset.fields("Codigo")
                 Else
-                   SetFields AdoAux, "Cod_Banco", 0
+                   SetFields AdoAux, "Cod_Banco", "0"
                 End If
              End If
              SetUpdate AdoAux

@@ -1284,11 +1284,11 @@ Dim LineFile As String
                       
                       If pJSON.Item("resp") = "1" Then
                          TextoFileEmp = pJSON.Item("XML")
-                         I = InStr(TextoFileEmp, "<![CDATA[")
+                         i = InStr(TextoFileEmp, "<![CDATA[")
                          F = InStr(TextoFileEmp, "]]></comprobante>")
-                         If I > 0 And F > 0 Then
-                            I = I + 9
-                            TextoFileEmp = TrimStrg(MidStrg(TextoFileEmp, I, F - I))
+                         If i > 0 And F > 0 Then
+                            i = i + 9
+                            TextoFileEmp = TrimStrg(MidStrg(TextoFileEmp, i, F - i))
                          End If
                       Else
                          TextoFileEmp = pJSON.Item("mensaje")

@@ -64,6 +64,7 @@ Class=cJSONScript; ..\CLASES\cJSONScript.cls
 Class=cStringBuilder; ..\CLASES\cStringBuilder.cls
 Form=..\GENERAL\FSRIAutorizaXML.frm
 Form=..\GENERAL\FInfMsg.frm
+Module=RC4Archivos; ..\MODULOS\SubCifrado.bas
 IconForm="FUpdSystem"
 Startup="FUpdSystem"
 HelpFile=""

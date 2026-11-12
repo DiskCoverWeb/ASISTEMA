@@ -101,6 +101,7 @@ Class=cJSONScript; ..\CLASES\cJSONScript.cls
 Module=JSON; ..\MODULOS\JSON.bas
 Form=..\GENERAL\FSRIAutorizaXML.frm
 Form=..\GENERAL\FInfMsg.frm
+Module=RC4Archivos; ..\MODULOS\SubCifrado.bas
 IconForm="MDIFarmacia"
 Startup="MDIFarmacia"
 HelpFile=""

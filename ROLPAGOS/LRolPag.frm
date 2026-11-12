@@ -13,8 +13,8 @@ Begin VB.Form LRolPagos
    ClientWidth     =   14775
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   10035
-   ScaleWidth      =   14775
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    WindowState     =   2  'Maximized
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
@@ -22,8 +22,8 @@ Begin VB.Form LRolPagos
       Left            =   0
       TabIndex        =   0
       Top             =   0
-      Width           =   14775
-      _ExtentX        =   26061
+      Width           =   28560
+      _ExtentX        =   50377
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -434,15 +434,15 @@ Begin VB.Form LRolPagos
       TabCaption(1)   =   "ROL DE PAGOS"
       TabPicture(1)   =   "LRolPag.frx":0033
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "DGNomina"
+      Tab(1).Control(0)=   "AdoNomina"
       Tab(1).Control(1)=   "DGTotNomina"
-      Tab(1).Control(2)=   "AdoNomina"
+      Tab(1).Control(2)=   "DGNomina"
       Tab(1).ControlCount=   3
       TabCaption(2)   =   "CxC/CxP Empleados"
       TabPicture(2)   =   "LRolPag.frx":004F
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "DGSubCtas"
-      Tab(2).Control(1)=   "DGNomina1"
+      Tab(2).Control(0)=   "DGNomina1"
+      Tab(2).Control(1)=   "DGSubCtas"
       Tab(2).ControlCount=   2
       TabCaption(3)   =   "OTROS INGRESOS/EGRESOS"
       TabPicture(3)   =   "LRolPag.frx":006B
@@ -452,21 +452,21 @@ Begin VB.Form LRolPagos
       TabCaption(4)   =   "CONTABILIDAD"
       TabPicture(4)   =   "LRolPag.frx":0087
       Tab(4).ControlEnabled=   0   'False
-      Tab(4).Control(0)=   "DGAsiento(0)"
-      Tab(4).Control(1)=   "Label1"
-      Tab(4).Control(2)=   "Label19"
+      Tab(4).Control(0)=   "LblConcepto(0)"
+      Tab(4).Control(1)=   "LabelDiferencia"
+      Tab(4).Control(2)=   "LabelHaber"
       Tab(4).Control(3)=   "LabelDebe"
-      Tab(4).Control(4)=   "LabelHaber"
-      Tab(4).Control(5)=   "LabelDiferencia"
-      Tab(4).Control(6)=   "LblConcepto(0)"
+      Tab(4).Control(4)=   "Label19"
+      Tab(4).Control(5)=   "Label1"
+      Tab(4).Control(6)=   "DGAsiento(0)"
       Tab(4).ControlCount=   7
       TabCaption(5)   =   "PROVISIONES"
       TabPicture(5)   =   "LRolPag.frx":00A3
       Tab(5).ControlEnabled=   0   'False
-      Tab(5).Control(0)=   "DGAsiento(2)"
-      Tab(5).Control(1)=   "DGAsiento(1)"
-      Tab(5).Control(2)=   "LblConcepto(2)"
-      Tab(5).Control(3)=   "LblConcepto(1)"
+      Tab(5).Control(0)=   "LblConcepto(1)"
+      Tab(5).Control(1)=   "LblConcepto(2)"
+      Tab(5).Control(2)=   "DGAsiento(1)"
+      Tab(5).Control(3)=   "DGAsiento(2)"
       Tab(5).ControlCount=   4
       Begin AcroPDFLibCtl.AcroPDF APDFRol 
          Height          =   4635
@@ -2320,7 +2320,7 @@ Public Sub Imprimir_Pagina(Optional Impresora As Boolean)
 Dim AnchoPict As Single
 Dim AltoPict As Single
 Dim NombFilePict As String
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
 '''AcrovPDF.LoadFile ""
 '''AcrovPDF.setZoom 120
 '''AcrovPDF.Visible = True
@@ -2370,7 +2370,7 @@ If PonImpresoraDefecto(SetNombrePRN) Then
 
    RatonNormal
    Exit Sub
-Errorhandler:
+ErrorHandler:
              RatonNormal
              ErrorDeImpresion
              Exit Sub
@@ -2866,7 +2866,7 @@ Dim PosCopiaY As Single
 Dim NumEmpleados As Integer
 Dim NombFilePict As String
 
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
    Si_No = Leer_Campo_Empresa("Rol_2_Pagina")
    Medio_Rol = Leer_Campo_Empresa("Medio_Rol")
    Fecha_Del_AT CMes, CAnio
@@ -2953,7 +2953,7 @@ On Error GoTo Errorhandler
       RatonNormal
    End If
 Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -2972,7 +2972,7 @@ Dim Email As String
 Dim posPuntoComa As Integer
 Dim Un_Solo_Rol As Boolean
 
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
    If Len(Por_CI_RUC) > 1 Then Un_Solo_Rol = True Else Un_Solo_Rol = False
    Fecha_Del_AT CMes, CAnio
    Mensajes = "Seguro de Enviar Rol Pago por Email"
@@ -3055,7 +3055,7 @@ On Error GoTo Errorhandler
       RatonNormal
    End If
 Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -3599,9 +3599,9 @@ Dim CuatrupleTab As Single
      
      SetPapelLargo = 29
      CAnio.Clear
-     For I = Year(FechaSistema) To Year(FechaSistema) - 10 Step -1
-         CAnio.AddItem CStr(I)
-     Next I
+     For i = Year(FechaSistema) To Year(FechaSistema) - 10 Step -1
+         CAnio.AddItem CStr(i)
+     Next i
      CAnio.Text = CStr(Year(FechaSistema))
      
      CMes.Clear
@@ -3930,8 +3930,8 @@ Dim Tot_Egresos As Currency
                  cPrint.printFields Xo + 15.2, PFil, .fields("Egresos")
              End If
              If .fields("Cheq_Dep_Transf") <> Ninguno Then CodigoB = .fields("Cheq_Dep_Transf")
-             If .fields("Dias") <> 0 Then I = .fields("Dias")
-             If .fields("Horas") <> 0 Then J = .fields("Horas")
+             If .fields("Dias") <> 0 Then i = .fields("Dias")
+             If .fields("Horas") <> 0 Then j = .fields("Horas")
              Tot_Ingresos = Tot_Ingresos + .fields("Ingresos")
              Tot_Egresos = Tot_Egresos + .fields("Egresos")
              
@@ -3948,7 +3948,7 @@ Dim Tot_Egresos As Currency
       cPrint.tipoNegrilla = False
       PFil = PFil - 0.1
       'cPrint.printTexto   Xo + 14.6, Yo + 4.5, Format(J, "#,##0.00")
-      cPrint.printTexto Xo + 18, Yo + 2.5, Format(I, "#,##0") ' DIAS
+      cPrint.printTexto Xo + 18, Yo + 2.5, Format(i, "#,##0") ' DIAS
       cPrint.printTexto Xo + 14.8, Yo + 3.3, CodigoB
       cPrint.tipoNegrilla = False
       'cPrint.printLinea Xo, PFil - 0.3, 19.5, PFil - 0.4
@@ -4062,8 +4062,8 @@ Dim Estilos As String
                SumaDebe = SumaDebe + .fields("Ingresos")
                SumaHaber = SumaHaber + .fields("Egresos")
                If .fields("Cod_Rol_Pago") = "Salario" Then
-                   If .fields("Dias") <> 0 Then I = .fields("Dias")
-                   If .fields("Horas") <> 0 Then J = .fields("Horas")
+                   If .fields("Dias") <> 0 Then i = .fields("Dias")
+                   If .fields("Horas") <> 0 Then j = .fields("Horas")
                End If
                Insertar_Campo_XML AbrirXML("tr")
                Insertar_Campo_XML CampoIdXML("td", "", UCaseStrg(Sin_Signos_Especiales(.fields("Detalle"))))
@@ -4118,7 +4118,7 @@ Dim Es_Vacaciones As Boolean
  With AdoAsientoRol.Recordset
  'MsgBox CodigoRol & vbCrLf & .RecordCount
   If .RecordCount > 0 Then
-      J = 0
+      j = 0
       PFil = Yo
      'Es_Vacaciones = .Fields("Vac")
       cPrint.tipoNegrilla = True
@@ -4151,8 +4151,8 @@ Dim Es_Vacaciones As Boolean
       Do While Not .EOF
          If .fields("Tipo_Rubro") = "PER" Then
              If .fields("Cheq_Dep_Transf") <> Ninguno Then CodigoB = .fields("Cheq_Dep_Transf")
-             If .fields("Dias") <> 0 Then I = .fields("Dias")
-             If .fields("Horas") <> 0 Then J = .fields("Horas")
+             If .fields("Dias") <> 0 Then i = .fields("Dias")
+             If .fields("Horas") <> 0 Then j = .fields("Horas")
          End If
         .MoveNext
       Loop
@@ -4170,7 +4170,7 @@ Dim Es_Vacaciones As Boolean
       cPrint.tipoNegrilla = False
       cPrint.printTexto Xo + 2.1, PFil, CodigoB
       cPrint.printTexto Xo + 6.05, PFil, CodigoRol
-      cPrint.printTexto Xo + 8.65, PFil, Format(I, "#,##0")
+      cPrint.printTexto Xo + 8.65, PFil, Format(i, "#,##0")
       PFil = PFil + 0.35
       cPrint.tipoNegrilla = True
       cPrint.printTexto Xo, PFil, "Desde:"
@@ -4374,27 +4374,27 @@ Volver_Imprimir_Provision:
      .MoveFirst
      'Ancho(6) = Salario
       Distancia = Ancho(8) + 1.4
-      J = CantCampos
-      For I = 9 To CantCampos - 1
-          If .fields(I).Name = "II" Then J = I
-      Next I
-      CantCampos = J
-      For I = 9 To CantCampos - 1
-          If .fields(I).Name = "I" Or .fields(I).Name = "II" Then
-              Ancho(I) = Distancia
+      j = CantCampos
+      For i = 9 To CantCampos - 1
+          If .fields(i).Name = "II" Then j = i
+      Next i
+      CantCampos = j
+      For i = 9 To CantCampos - 1
+          If .fields(i).Name = "I" Or .fields(i).Name = "II" Then
+              Ancho(i) = Distancia
               Distancia = Distancia + 0.02
-          ElseIf .fields(I).Name = "Firma" Then
-              Ancho(I) = Distancia
+          ElseIf .fields(i).Name = "Firma" Then
+              Ancho(i) = Distancia
               Distancia = Distancia + 5
-          ElseIf .fields(I).Name = "CodigoU" Then
-              Ancho(I) = Distancia
+          ElseIf .fields(i).Name = "CodigoU" Then
+              Ancho(i) = Distancia
               Distancia = Distancia + 7
           Else
-              Ancho(I) = Distancia
+              Ancho(i) = Distancia
               Distancia = Distancia + 1
           End If
-          Ancho(CantCampos) = Ancho(I) + 0.1
-      Next I
+          Ancho(CantCampos) = Ancho(i) + 0.1
+      Next i
       X_Max = Ancho(CantCampos)
 
      'MsgBox Y_Max & " .... " & X_Max
@@ -4406,13 +4406,13 @@ Volver_Imprimir_Provision:
       PosLineaTemp = PosLinea
       cPrint.PorteDeLetra = SizeLetra
       cPrint.tipoNegrilla = True
-      For I = 0 To CantCampos - 1
-          Cadena = Replace(.fields(I).Name, "_", " ")
+      For i = 0 To CantCampos - 1
+          Cadena = Replace(.fields(i).Name, "_", " ")
           Select Case Cadena
             Case "Codigo", "CodigoU", "I", "II": 'cPrint.printTexto  Ancho(I) + Distancia, PosLinea, ""
-            Case Else: PosLinea = cPrint.printTextoMultiple(Ancho(I), PosLineaTemp, Cadena, 1)
+            Case Else: PosLinea = cPrint.printTextoMultiple(Ancho(i), PosLineaTemp, Cadena, 1)
           End Select
-      Next I
+      Next i
       PosLinea = PosLineaTemp
       PosLinea = PosLinea + 0.7
       PosLineaTemp = PosLinea
@@ -4423,9 +4423,9 @@ Volver_Imprimir_Provision:
       cPrint.PorteDeLetra = SizeLetra
       Do While Not .EOF
          cPrint.tipoNegrilla = True
-         For I = 0 To CantCampos - 1
-             Distancia = cPrint.anchoFields(.fields(I), 2)
-             If I = 0 Then
+         For i = 0 To CantCampos - 1
+             Distancia = cPrint.anchoFields(.fields(i), 2)
+             If i = 0 Then
                 cPrint.dStrgFormatoCampo = Format(Val(cPrint.dStrgFormatoCampo), "00")
                 Distancia = 0
                 'MsgBox I & ": " & cPrint.dStrgFormatoCampo
@@ -4436,14 +4436,14 @@ Volver_Imprimir_Provision:
              ElseIf cPrint.dStrgFormatoCampo = "0" Or cPrint.dStrgFormatoCampo = "0.00" Then
                 cPrint.dStrgFormatoCampo = " "
              End If
-             Select Case .fields(I).Name
+             Select Case .fields(i).Name
                Case "Codigo", "CodigoU", "I", "II": ' cPrint.printTexto  Ancho(I) + Distancia, PosLinea, ""
                Case "Nombre_Empleado"
-                    cPrint.printTexto Ancho(I) + Distancia, PosLinea, Extraer_Apellidos(cPrint.dStrgFormatoCampo)
-                    cPrint.printTexto Ancho(I) + Distancia, PosLinea + 0.3, Extraer_Nombres(cPrint.dStrgFormatoCampo)
-               Case Else: cPrint.printTexto Ancho(I) + Distancia, PosLinea, cPrint.dStrgFormatoCampo
+                    cPrint.printTexto Ancho(i) + Distancia, PosLinea, Extraer_Apellidos(cPrint.dStrgFormatoCampo)
+                    cPrint.printTexto Ancho(i) + Distancia, PosLinea + 0.3, Extraer_Nombres(cPrint.dStrgFormatoCampo)
+               Case Else: cPrint.printTexto Ancho(i) + Distancia, PosLinea, cPrint.dStrgFormatoCampo
              End Select
-         Next I
+         Next i
          PosLinea = PosLinea + 0.7
          cPrint.printLinea 0.5, PosLinea, 28.5, PosLinea 'Ancho(CantCampos) - 0.1
          PosLinea = PosLinea + 0.05
@@ -4462,13 +4462,13 @@ Volver_Imprimir_Provision:
             PosLineaTemp = PosLinea
             cPrint.PorteDeLetra = SizeLetra
             cPrint.tipoNegrilla = True
-            For I = 0 To CantCampos - 1
-                Cadena = Replace(.fields(I).Name, "_", " ")
+            For i = 0 To CantCampos - 1
+                Cadena = Replace(.fields(i).Name, "_", " ")
                 Select Case Cadena
                   Case "Codigo", "CodigoU", "I", "II": 'cPrint.printTexto  Ancho(I) + Distancia, PosLinea, ""
-                  Case Else: PosLinea = cPrint.printTextoMultiple(Ancho(I), PosLineaTemp, Cadena, 1)
+                  Case Else: PosLinea = cPrint.printTextoMultiple(Ancho(i), PosLineaTemp, Cadena, 1)
                 End Select
-            Next I
+            Next i
             PosLinea = PosLineaTemp
             PosLinea = PosLinea + 0.7
             cPrint.printLinea 0.5, PosLinea, 28.5, PosLinea
@@ -4502,17 +4502,17 @@ Volver_Imprimir_Provision:
       Ancho(0) = 1
       Ancho(1) = 3
       InicioX = 5.25
-      For I = 2 To CantCampos - 1
-          Ancho(I) = InicioX
+      For i = 2 To CantCampos - 1
+          Ancho(i) = InicioX
           InicioX = InicioX + 1.5
-      Next I
-      Ancho(I) = InicioX
+      Next i
+      Ancho(i) = InicioX
       cPrint.PorteDeLetra = SizeLetra
       cPrint.tipoNegrilla = True
-      For I = 0 To CantCampos - 1
-          cPrint.printTexto Ancho(I), PosLinea, .fields(I).Name
-          TotValores(I) = 0
-      Next I
+      For i = 0 To CantCampos - 1
+          cPrint.printTexto Ancho(i), PosLinea, .fields(i).Name
+          TotValores(i) = 0
+      Next i
       PosLinea = PosLinea + 0.35
       PosLineaTemp = PosLinea
       cPrint.printLinea 0.5, PosLinea, Ancho(CantCampos) - 0.5, PosLinea
@@ -4520,32 +4520,32 @@ Volver_Imprimir_Provision:
       cPrint.tipoNegrilla = False
       
       Do While Not .EOF
-         For I = 0 To CantCampos - 1
-             Distancia = cPrint.anchoFields(.fields(I), 2)
+         For i = 0 To CantCampos - 1
+             Distancia = cPrint.anchoFields(.fields(i), 2)
              If cPrint.dStrgFormatoCampo = Ninguno Then
                 cPrint.dStrgFormatoCampo = " "
              ElseIf cPrint.dStrgFormatoCampo = "0" Or cPrint.dStrgFormatoCampo = "0.00" Then
                 cPrint.dStrgFormatoCampo = " "
              End If
-             cPrint.printTexto Ancho(I) + Distancia, PosLinea, cPrint.dStrgFormatoCampo
-             If I <> 0 Then TotValores(I) = TotValores(I) + .fields(I)
-         Next I
+             cPrint.printTexto Ancho(i) + Distancia, PosLinea, cPrint.dStrgFormatoCampo
+             If i <> 0 Then TotValores(i) = TotValores(i) + .fields(i)
+         Next i
          PosLinea = PosLinea + 0.4
          cPrint.printLinea 0.5, PosLinea, Ancho(CantCampos) - 0.5, PosLinea
          PosLinea = PosLinea + 0.05
          If PosLinea >= LimiteAlto Then
-            For I = 0 To CantCampos
-                cPrint.printLinea Ancho(I) - 0.7, PosLineaTemp, Ancho(I) - 0.7, PosLinea + 0.1
-            Next I
+            For i = 0 To CantCampos
+                cPrint.printLinea Ancho(i) - 0.7, PosLineaTemp, Ancho(i) - 0.7, PosLinea + 0.1
+            Next i
             
             cPrint.paginaNueva
             Encabezado_Rol
             PosLineaTemp = PosLinea + 0.2
             cPrint.PorteDeLetra = SizeLetra
             cPrint.tipoNegrilla = True
-            For I = 0 To CantCampos - 1
-                cPrint.printTexto Ancho(I), PosLinea, .fields(I).Name
-            Next I
+            For i = 0 To CantCampos - 1
+                cPrint.printTexto Ancho(i), PosLinea, .fields(i).Name
+            Next i
             PosLinea = PosLinea + 0.3
             cPrint.printLinea 0.5, PosLinea + 0.1, Ancho(CantCampos) - 0.5, PosLinea + 0.1
             PosLinea = PosLinea + 0.1
@@ -4553,16 +4553,16 @@ Volver_Imprimir_Provision:
          End If
         .MoveNext
       Loop
-      For I = 0 To CantCampos
-          cPrint.printLinea Ancho(I) - 0.7, PosLineaTemp, Ancho(I) - 0.7, PosLinea
-      Next I
+      For i = 0 To CantCampos
+          cPrint.printLinea Ancho(i) - 0.7, PosLineaTemp, Ancho(i) - 0.7, PosLinea
+      Next i
   End If
  End With
  cPrint.tipoNegrilla = True
  cPrint.printTexto Ancho(0), PosLinea, "T O T A L E S"
- For I = 1 To CantCampos - 1
-     cPrint.printVariable Ancho(I), PosLinea, TotValores(I)
- Next I
+ For i = 1 To CantCampos - 1
+     cPrint.printVariable Ancho(i), PosLinea, TotValores(i)
+ Next i
  cPrint.PorteDeLetra = SizeLetra
  CantCamposTemp = CantCampos
  sSQL = "SELECT C.Cliente,TR.* " _
@@ -4639,7 +4639,7 @@ End Sub
 '''  If InStr(CtasDelRol, ExisteLaCta) = 0 Then CtasDelRol = CtasDelRol & "'" & ExisteLaCta & "',"
 '''End Sub
 
-Private Sub WebBPDF_NavigateComplete2(ByVal pDisp As Object, URL As Variant)
+Private Sub WebBPDF_NavigateComplete2(ByVal pDisp As Object, url As Variant)
    On Error Resume Next
    Set oDocument = pDisp.Document
 

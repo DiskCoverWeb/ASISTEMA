@@ -104,7 +104,7 @@ Public Sub ImprimirAdoAT(Datas As Adodc, _
 Dim FormaImp As Byte
 Dim SizeLetra As Integer
 Dim TipoLetra As String
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
 FormaImp = 2
 Mensajes = "Seguro de Imprimir en:" & vbCrLf & Printer.DeviceName & "?"
 Titulo = "IMPRESION"
@@ -167,7 +167,7 @@ RatonNormal
 MensajeEncabData = ""
 Printer.EndDoc
 Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -375,7 +375,7 @@ Public Sub Imprimir_Catalogo_Ret(Datas As Adodc, _
                                  FormaImp As Byte, _
                                  SizeLetra As Integer, _
                                  Optional EsCampoCorto As Boolean)
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
 
 Mensajes = "Seguro de Imprimir en:" & vbCrLf & Printer.DeviceName & "?"
 Titulo = "IMPRESION"
@@ -421,7 +421,7 @@ RatonNormal
 MensajeEncabData = ""
 Printer.EndDoc
 Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -482,7 +482,7 @@ End Sub
 
 Public Sub SRI_Enviar_Mails(TFA As Tipo_Facturas, _
                             SRI_Autorizacion As Tipo_Estado_SRI)
-Dim RutaPDF As String
+Dim rutaPDF As String
 Dim Email As String
 Dim Tipo_Documento As String
 Dim posPuntoComa As Byte
@@ -518,14 +518,14 @@ Dim posPuntoComa As Byte
               SRI_Generar_PDF_FA FA, True
               'SRI_Generar_XML_Firmado TFA.ClaveAcceso
          Case "AB"
-              RutaPDF = "ninguno.pdf"
-              RutaXML = "ninguno.xml"
+              rutaPDF = "ninguno.pdf"
+              rutaXML = "ninguno.xml"
        End Select
        
        If Len(TFA.ClaveAcceso) >= 13 Or Len(TFA.ClaveAcceso_GR) >= 13 Or Len(TFA.ClaveAcceso_LC) >= 13 Or Len(TFA.ClaveAcceso_NC) >= 13 Then TMail.TipoDeEnvio = "CE"
        If Len(TFA.PDF_ClaveAcceso) > 1 Then
-          RutaPDF = RutaSysTemp & "\PDF\PDF" & NumEmpresa & "\" & TFA.PDF_ClaveAcceso & ".pdf"
-          If InStr(TFA.PDF_ClaveAcceso, "_No_") = 0 Then RutaXML = RutaSysBases & "\TEMP\" & TFA.PDF_ClaveAcceso & ".xml"
+          rutaPDF = RutaSysTemp & "\PDF\PDF" & NumEmpresa & "\" & TFA.PDF_ClaveAcceso & ".pdf"
+          If InStr(TFA.PDF_ClaveAcceso, "_No_") = 0 Then rutaXML = RutaSysBases & "\TEMP\" & TFA.PDF_ClaveAcceso & ".xml"
        End If
        If MidStrg(TFA.ClaveAcceso, 9, 2) = "07" Then
           TFA.Hora_R = SRI_Autorizacion.Hora_Autorizacion
@@ -567,8 +567,8 @@ Dim posPuntoComa As Byte
           TMail.Credito_No = "X" & Format(TFA.Factura, "000000000")
           Insertar_Mail TMail.para, EmailProcesos
        End If
-       If Existe_File(RutaPDF) Then TMail.Adjunto = RutaPDF & "; "
-       If Existe_File(RutaXML) Then TMail.Adjunto = TMail.Adjunto & RutaXML
+       If Existe_File(rutaPDF) Then TMail.Adjunto = rutaPDF & "; "
+       If Existe_File(rutaXML) Then TMail.Adjunto = TMail.Adjunto & rutaXML
       '-----------------------------------------
       'MsgBox TFA.CodigoC & vbCrLf & TMail.para & vbCrLf & TMail.Adjunto
       '-----------------------------------------
@@ -1389,13 +1389,13 @@ Dim PosLineaFinal As Single
 ''    cPrint.letraTipo tipoDeLetra, 8, Rojo
 ''    cPrint.printTexto 1.5, 8.85, "1.5 x " & TempPosLinea & ", Alto: " & PosLinea
     cPrint.PorteDeLetra = 6
-    For I = 1 To 10
+    For i = 1 To 10
         PosLinea = PosLinea + 0.35
         cPrint.printLinea 14.2, PosLinea, 20, PosLinea, Negro
        'Raya de Informe y Leyenda
-        If I = 1 Then cPrint.printLinea 1.5, PosLinea, 13.6, PosLinea, Negro
-        If I = 8 Then cPrint.printLinea 1.5, PosLinea, 13.6, PosLinea, Negro
-    Next I
+        If i = 1 Then cPrint.printLinea 1.5, PosLinea, 13.6, PosLinea, Negro
+        If i = 8 Then cPrint.printLinea 1.5, PosLinea, 13.6, PosLinea, Negro
+    Next i
     PosLinea = PosLinea + 0.45
     cPrint.printCuadro 1.5, TempPosLinea, 13.6, PosLinea - 0.7, Negro, "B"
     cPrint.printCuadro 14.2, TempPosLinea, 20, PosLinea - 0.7, Negro, "B"
@@ -1797,10 +1797,10 @@ Dim tipoDeLetra As String
         'Rayas verticales de los subtotales
         'pie de la factura
          PosLinea = TempPosLinea + 0.4
-         For I = 1 To 5
+         For i = 1 To 5
              cPrint.printLinea 13.7, PosLinea, 20, PosLinea, Negro
              PosLinea = PosLinea + 0.4
-         Next I
+         Next i
          
          PosLinea = PosLinea + 0.1
          cPrint.printCuadro 13.7, TempPosLinea, 20, PosLinea - 0.7, Negro, "B"
@@ -2338,13 +2338,13 @@ Dim NombreTipoDeLetra As String
    'Lineas del Pie de la Factura
     'PosLinea = PosLinea - 0.1
     cPrint.PorteDeLetra = 6
-    For I = 1 To 10
+    For i = 1 To 10
         PosLinea = PosLinea + 0.35
         cPrint.printLinea 14.4, PosLinea, 20, PosLinea, Negro
        'Raya de Informe y Leyenda
-        If I = 1 Then cPrint.printLinea 1.5, PosLinea + 0.05, 13.6, PosLinea + 0.05, Negro
-        If I = 8 Then cPrint.printLinea 1.5, PosLinea, 13.6, PosLinea, Negro
-    Next I
+        If i = 1 Then cPrint.printLinea 1.5, PosLinea + 0.05, 13.6, PosLinea + 0.05, Negro
+        If i = 8 Then cPrint.printLinea 1.5, PosLinea, 13.6, PosLinea, Negro
+    Next i
     PosLinea = PosLinea - 0.25
     cPrint.printCuadro 1.5, TempPosLinea, 13.6, PosLinea, Negro, "B"
     cPrint.printCuadro 14.4, TempPosLinea, 20, PosLinea, Negro, "B"
@@ -3406,7 +3406,9 @@ Dim SecuencialReembolo  As String
        If TFA.TDT = 41 Then TFA.EsPorReembolso = True
       'Generamos la Clave de acceso
        If Len(TFA.Autorizacion) >= 13 Then
-          TFA.ClaveAcceso = Format$(TFA.Fecha, "ddmmyyyy") & "01" & RUC & Ambiente & TFA.Serie & Format$(TFA.Factura, String(9, "0")) & "123456781"
+          TFA.ClaveAcceso = Trim$(Format$(TFA.Fecha, "ddmmyyyy") & "01" & RUC & Ambiente & TFA.Serie & Format$(TFA.Factura, String(9, "0")) & "123456781")
+'          Clipboard.Clear
+'          Clipboard.SetText TFA.ClaveAcceso
           TFA.ClaveAcceso = TFA.ClaveAcceso & Digito_Verificador_Modulo11(TFA.ClaveAcceso)
        Else
           TFA.ClaveAcceso = Ninguno
@@ -3415,6 +3417,7 @@ Dim SecuencialReembolo  As String
        SRI_Autorizacion.Clave_De_Acceso = TFA.ClaveAcceso
       
       'MsgBox SRI_Autorizacion.Clave_De_Acceso
+       
        TipoIdent = "P"
        Select Case TFA.TB
          Case "R": If TFA.CI_RUC = String(13, "9") Then TipoIdent = "07" Else TipoIdent = "04"
@@ -3567,7 +3570,7 @@ Dim SecuencialReembolo  As String
                              Insertar_Campo_XML AbrirXML("impuesto")
                                 Insertar_Campo_XML CampoXML("codigo", "2")
                                 Insertar_Campo_XML CampoXML("codigoPorcentaje", "0")
-                                Insertar_Campo_XML CampoXML("tarifa", 0) ' POR SI ACASO
+                                Insertar_Campo_XML CampoXML("tarifa", "0.00")   ' POR SI ACASO
                                 Insertar_Campo_XML CampoXML("baseImponible", Format$(.Fields("Total"), "#0.00"))
                                 Insertar_Campo_XML CampoXML("valor", "0.00")
                              Insertar_Campo_XML CerrarXML("impuesto")
@@ -3576,7 +3579,7 @@ Dim SecuencialReembolo  As String
                              Insertar_Campo_XML AbrirXML("impuesto")
                                 Insertar_Campo_XML CampoXML("codigo", "2")
                                 Insertar_Campo_XML CampoXML("codigoPorcentaje", Cod_Porc_IVA)
-                                Insertar_Campo_XML CampoXML("tarifa", Porc_IVA * 100)
+                                Insertar_Campo_XML CampoXML("tarifa", Format$(Porc_IVA * 100, "#0.00"))
                                 Insertar_Campo_XML CampoXML("baseImponible", Format$(.Fields("Total"), "#0.00"))
                                 Insertar_Campo_XML CampoXML("valor", Format$(.Fields("Total_IVA"), "#0.00"))
                              Insertar_Campo_XML CerrarXML("impuesto")
@@ -3636,10 +3639,10 @@ Dim SecuencialReembolo  As String
                                 Insertar_Campo_XML CampoXML("codigo", "2")
                                 If .Fields("Total_IVA") = 0 Then
                                     Insertar_Campo_XML CampoXML("codigoPorcentaje", "0")
-                                    Insertar_Campo_XML CampoXML("tarifa", "0")
+                                    Insertar_Campo_XML CampoXML("tarifa", "0.00")
                                 Else
                                     Insertar_Campo_XML CampoXML("codigoPorcentaje", Cod_Porc_IVA)
-                                    Insertar_Campo_XML CampoXML("tarifa", Porc_IVA * 100)
+                                    Insertar_Campo_XML CampoXML("tarifa", Format$(Porc_IVA * 100, "#0.00"))
                                 End If
                                 Insertar_Campo_XML CampoXML("baseImponible", Format$(SubTotal, "#0.00"))
                                 Insertar_Campo_XML CampoXML("valor", Format$(.Fields("Total_IVA"), "#0.00"))
@@ -3757,9 +3760,9 @@ Dim SecuencialReembolo  As String
         'FIN XML DE FACTURA/NOTA DE VENTA
         'MsgBox "Fin XML"
         '-------------------------------------------------------------------
-'        Clipboard.Clear
-'        Clipboard.SetText TextoXML
-'        MsgBox "DOCUMENTO XML:" & vbCrLf & TextoXML
+''        Clipboard.Clear
+''        Clipboard.SetText TextoXML
+''        MsgBox "DOCUMENTO XML:" & vbCrLf & TextoXML
          SRI_Enviar_Documento_Autorizar "FA", VerFactura, GeneraXML, TFA, EnviarxMail
         '-------------------------------------------------------------------
         'MsgBox "Fin: " & TFA.Serie & "-" & TFA.Factura
@@ -4270,76 +4273,182 @@ Dim Con_Inv As Boolean
     RatonNormal
 End Sub
 
-'ClaveDeAcceso As String, ErrorAutorizacion As String
 Public Function SRI_Leer_Comprobantes_no_Autorizados(SRI_Auto As Tipo_Estado_SRI) As String
-Dim success As Boolean
-Dim ErrorEmitido As String
-Dim EstadoXML As String
-Dim Documento As String
-Dim nodeXML As String
-Dim ClaveDeAcceso As String
-Dim doc As New MSXML2.DOMDocument
-Dim node As MSXML2.IXMLDOMNode
-Dim nodeList As MSXML2.IXMLDOMNodeList
+    Dim oDoc As Object
+    Dim oNodoLista As Object
+    Dim oNodo As Object
+    Dim sResultado As String
+    Dim sTipo As String, sId As String, sMsg As String, sInfo As String
+    Dim RutaXMLRechazado As String
     
     RatonReloj
-    ErrorEmitido = ""
-    With SRI_Auto
-      RutaXMLRechazado = RutaSysBases & "\CE\CE" & NumEmpresa & "\Comprobantes no Autorizados\" & .Clave_De_Acceso & ".xml"
-      success = doc.Load(RutaXMLRechazado)
-      If success Then
-         If InStr(doc.XML, "<autorizacion") Then
-            nodeXML = "/autorizacion"
-         ElseIf InStr(doc.XML, "<factura") Then
-            nodeXML = "/factura"
-         ElseIf InStr(doc.XML, "<comprobanteRetencion") Then
-            nodeXML = "/comprobanteRetencion"
-         ElseIf InStr(doc.XML, "<notaCredito") Then
-            nodeXML = "/notaCredito"
-         ElseIf InStr(doc.XML, "<guiaRemision") Then
-            nodeXML = "/guiaRemision"
-         Else
-            nodeXML = ""
-         End If
-        'MsgBox nodeXML
-         If nodeXML <> "" Then
-            If nodeXML <> "/autorizacion" Then nodeXML = nodeXML & "/ns2:respuestaSolicitud"
-           'MsgBox nodeXML
-            Set nodeList = doc.selectNodes(nodeXML)
-            For Each node In nodeList
-                ErrorEmitido = ErrorEmitido & node.selectSingleNode("estado").Text & ": "
-            Next node
-           'MsgBox ErrorEmitido
-            If nodeXML = "/autorizacion" Then
-               nodeXML = nodeXML & "/mensajes/mensaje/mensaje"
-              'MsgBox nodeXML
-               Set nodeList = doc.selectNodes(nodeXML)
-               For Each node In nodeList
-                   ErrorEmitido = ErrorEmitido & "ERROR (" & node.selectSingleNode("identificador").Text & ") " _
-                                & node.selectSingleNode("mensaje").Text & " " _
-                                & node.selectSingleNode("informacionAdicional").Text & "."
-               Next node
-            Else
-               nodeXML = nodeXML & "/comprobantes/comprobante"
-               Set nodeList = doc.selectNodes(nodeXML)
-               For Each node In nodeList
-                   ErrorEmitido = ErrorEmitido & "Clave Acceso " & node.selectSingleNode("claveAcceso").Text & ". "
-               Next node
-               nodeXML = nodeXML & "/mensajes/mensaje"
-               Set nodeList = doc.selectNodes(nodeXML)
-               For Each node In nodeList
-                   ErrorEmitido = ErrorEmitido & node.selectSingleNode("tipo").Text & " (" & node.selectSingleNode("identificador").Text & ") " _
-                                & node.selectSingleNode("mensaje").Text & ". "
-                   If InStr(doc.XML, "<informacionAdicional") Then ErrorEmitido = ErrorEmitido & node.selectSingleNode("informacionAdicional").Text & ". "
-               Next node
-            End If
-         End If
-         ErrorEmitido = TrimStrg(Replace(ErrorEmitido, vbTab, " "))
-      End If
-    End With
+    On Error GoTo ErrHandler
+    
+    RutaXMLRechazado = RutaSysBases & "\CE\CE" & NumEmpresa & "\Comprobantes no Autorizados\" & SRI_Auto.Clave_De_Acceso & ".xml"
+    SRI_Leer_Comprobantes_no_Autorizados = ""
+    sResultado = ""
+
+    ' 1. Validar si el archivo existe y no está vacío (0 bytes)
+    If Len(Dir$(RutaXMLRechazado)) = 0 Then
+        RatonNormal
+        SRI_Leer_Comprobantes_no_Autorizados = "El archivo XML no existe en la carpeta de no autorizados."
+        Exit Function
+    ElseIf FileLen(RutaXMLRechazado) = 0 Then
+        RatonNormal
+        SRI_Leer_Comprobantes_no_Autorizados = "El archivo XML está completamente vacío (0 bytes). Este documento aun no lo procesa el SRI o esta mal formado"
+        Exit Function
+    End If
+
+    Set oDoc = CreateObject("MSXML2.DOMDocument.6.0")
+    oDoc.async = False
+    oDoc.resolveExternals = False
+
+    If Not oDoc.Load(RutaXMLRechazado) Then
+        ' Si el XML está mal formado o corrupto
+        RatonNormal
+        SRI_Leer_Comprobantes_no_Autorizados = "XML dañado o no válido: " & oDoc.parseError.reason
+        Set oDoc = Nothing
+        Exit Function
+    End If
+
+    ' 2. CASO PRINCIPAL: Buscar etiquetas estándar del SRI <mensaje>
+    Set oNodoLista = oDoc.selectNodes("//mensaje")
+
+    For Each oNodo In oNodoLista
+        sTipo = ""
+        sId = ""
+        sMsg = ""
+        sInfo = ""
+
+        If Not oNodo.selectSingleNode("tipo") Is Nothing Then
+            sTipo = Trim$(oNodo.selectSingleNode("tipo").Text)
+        End If
+        If Not oNodo.selectSingleNode("identificador") Is Nothing Then
+            sId = Trim$(oNodo.selectSingleNode("identificador").Text)
+        End If
+        If Not oNodo.selectSingleNode("mensaje") Is Nothing Then
+            sMsg = Trim$(oNodo.selectSingleNode("mensaje").Text)
+        End If
+        If Not oNodo.selectSingleNode("informacionAdicional") Is Nothing Then
+            sInfo = Trim$(oNodo.selectSingleNode("informacionAdicional").Text)
+        End If
+
+        If Len(sTipo) = 0 Then sTipo = "ERROR"
+        If Len(sId) > 0 Then
+            sResultado = sResultado & sTipo & " (" & sId & "): " & sMsg
+        Else
+            sResultado = sResultado & sTipo & ": " & sMsg
+        End If
+        If Len(sInfo) > 0 Then
+            sResultado = sResultado & vbCrLf & "Detalle: " & sInfo
+        End If
+        sResultado = sResultado & vbCrLf
+    Next oNodo
+
+    ' 3. CASO SECUNDARIO: Si no vino <mensaje>, verificar si fue una caída del Web Service (SOAP Fault)
+    If Len(Trim$(sResultado)) = 0 Then
+        If Not oDoc.selectSingleNode("//faultstring") Is Nothing Then
+            sResultado = "ERROR DEL WEBSERVICE SRI: " & oDoc.selectSingleNode("//faultstring").Text
+        ElseIf Not oDoc.selectSingleNode("//estado") Is Nothing Then
+            sResultado = "ESTADO DEL COMPROBANTE: " & oDoc.selectSingleNode("//estado").Text
+        Else
+            sResultado = "No se encontraron mensajes de error detallados en el XML."
+        End If
+    End If
+
+    Set oDoc = Nothing
     RatonNormal
-    SRI_Leer_Comprobantes_no_Autorizados = ErrorEmitido
+    SRI_Leer_Comprobantes_no_Autorizados = Trim$(sResultado)
+    Exit Function
+
+ErrHandler:
+    RatonNormal
+    SRI_Leer_Comprobantes_no_Autorizados = "Error inesperado al leer el comprobante: " & Err.Description
+    Set oDoc = Nothing
 End Function
+
+' Función auxiliar para extraer el texto de un nodo XML de forma 100% segura
+Private Function LeerNodo(ByVal oNodePadre As MSXML2.IXMLDOMNode, ByVal sTag As String) As String
+    Dim oSub As MSXML2.IXMLDOMNode
+    On Error Resume Next
+    Set oSub = oNodePadre.selectSingleNode(sTag)
+    If Not oSub Is Nothing Then
+        LeerNodo = Trim$(oSub.Text)
+    Else
+        LeerNodo = ""
+    End If
+End Function
+
+'''ClaveDeAcceso As String, ErrorAutorizacion As String
+''Public Function SRI_Leer_Comprobantes_no_Autorizados(SRI_Auto As Tipo_Estado_SRI) As String
+''Dim success As Boolean
+''Dim ErrorEmitido As String
+''Dim EstadoXML As String
+''Dim Documento As String
+''Dim nodeXML As String
+''Dim ClaveDeAcceso As String
+''Dim doc As New MSXML2.DOMDocument
+''Dim node As MSXML2.IXMLDOMNode
+''Dim nodeList As MSXML2.IXMLDOMNodeList
+''
+''    RatonReloj
+''    ErrorEmitido = ""
+''    With SRI_Auto
+''      RutaXMLRechazado = RutaSysBases & "\CE\CE" & NumEmpresa & "\Comprobantes no Autorizados\" & .Clave_De_Acceso & ".xml"
+''      success = doc.Load(RutaXMLRechazado)
+''      If success Then
+''         If InStr(doc.XML, "<autorizacion") Then
+''            nodeXML = "/autorizacion"
+''         ElseIf InStr(doc.XML, "<factura") Then
+''            nodeXML = "/factura"
+''         ElseIf InStr(doc.XML, "<comprobanteRetencion") Then
+''            nodeXML = "/comprobanteRetencion"
+''         ElseIf InStr(doc.XML, "<notaCredito") Then
+''            nodeXML = "/notaCredito"
+''         ElseIf InStr(doc.XML, "<guiaRemision") Then
+''            nodeXML = "/guiaRemision"
+''         Else
+''            nodeXML = ""
+''         End If
+''        'MsgBox nodeXML
+''         If nodeXML <> "" Then
+''            If nodeXML <> "/autorizacion" Then nodeXML = nodeXML & "/ns2:respuestaSolicitud"
+''           'MsgBox nodeXML
+''            Set nodeList = doc.selectNodes(nodeXML)
+''            For Each node In nodeList
+''                ErrorEmitido = ErrorEmitido & node.selectSingleNode("estado").Text & ": "
+''            Next node
+''           'MsgBox ErrorEmitido
+''            If nodeXML = "/autorizacion" Then
+''               nodeXML = nodeXML & "/mensajes/mensaje/mensaje"
+''              'MsgBox nodeXML
+''               Set nodeList = doc.selectNodes(nodeXML)
+''               For Each node In nodeList
+''                   ErrorEmitido = ErrorEmitido & "ERROR (" & node.selectSingleNode("identificador").Text & ") " _
+''                                & node.selectSingleNode("mensaje").Text & " " _
+''                                & node.selectSingleNode("informacionAdicional").Text & "."
+''               Next node
+''            Else
+''               nodeXML = nodeXML & "/comprobantes/comprobante"
+''               Set nodeList = doc.selectNodes(nodeXML)
+''               For Each node In nodeList
+''                   ErrorEmitido = ErrorEmitido & "Clave Acceso " & node.selectSingleNode("claveAcceso").Text & ". "
+''               Next node
+''               nodeXML = nodeXML & "/mensajes/mensaje"
+''               Set nodeList = doc.selectNodes(nodeXML)
+''               For Each node In nodeList
+''                   ErrorEmitido = ErrorEmitido & node.selectSingleNode("tipo").Text & " (" & node.selectSingleNode("identificador").Text & ") " _
+''                                & node.selectSingleNode("mensaje").Text & ". "
+''                   If InStr(doc.XML, "<informacionAdicional") Then ErrorEmitido = ErrorEmitido & node.selectSingleNode("informacionAdicional").Text & ". "
+''               Next node
+''            End If
+''         End If
+''         ErrorEmitido = TrimStrg(Replace(ErrorEmitido, vbTab, " "))
+''      End If
+''    End With
+''    RatonNormal
+''    SRI_Leer_Comprobantes_no_Autorizados = ErrorEmitido
+''End Function
 
 Public Function SRI_Leer_Comprobantes_no_Autorizados_XML(SRI_Auto As Tipo_Estado_SRI) As String
 Dim success As Boolean

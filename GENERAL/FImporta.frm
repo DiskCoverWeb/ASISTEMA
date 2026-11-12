@@ -12,8 +12,8 @@ Begin VB.Form FImporta
    ClientWidth     =   15960
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   9180
-   ScaleWidth      =   15960
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    WindowState     =   2  'Maximized
    Begin VB.CommandButton Command3 
       BackColor       =   &H008080FF&
@@ -1677,7 +1677,7 @@ Public Sub Importar_Activos()
 End Sub
 
 Public Sub Importar_Autorizacion_Electronica()
-Dim I As Long
+Dim i As Long
 Dim N As Long
    With AdoExcelAdodc.Recordset
     If .RecordCount > 0 Then
@@ -1697,7 +1697,7 @@ Dim N As Long
                  Case 3
                      'CA:0109201601179186149300120010050000000010909201615
                      'NA:3009201612333317918614930010962016447
-                      If (I Mod 2) = 0 Then Autorizacion = MidStrg(Codigo, 4, 49) Else CodigoC = MidStrg(Codigo, 4, 49)
+                      If (i Mod 2) = 0 Then Autorizacion = MidStrg(Codigo, 4, 49) Else CodigoC = MidStrg(Codigo, 4, 49)
                  Case 4
                      '30/09/2016  12:33:33
                       If Len(Codigo) > 1 Then
@@ -1706,7 +1706,7 @@ Dim N As Long
                       End If
                End Select
            Next IdField
-           If (I Mod 2) = 0 Then
+           If (i Mod 2) = 0 Then
               sSQL = "UPDATE Facturas " _
                    & "SET Autorizacion = '" & Autorizacion & "' " _
                    & "WHERE Item = '" & NumEmpresa & "' " _
@@ -1737,7 +1737,7 @@ Dim N As Long
            End If
           .MoveNext
         Loop
-        Me.Caption = "Importar de FlexGrid a Sistema " & I & " de " & Rango.NumFila2
+        Me.Caption = "Importar de FlexGrid a Sistema " & i & " de " & Rango.NumFila2
     End If
   End With
   SubidaExitosa = True
@@ -1771,7 +1771,7 @@ Public Sub Importar_Actualizar_Empleados()
 End Sub
 
 Public Sub Importar_Facturas_Farmacias()
-Dim I As Long
+Dim i As Long
 Dim N As Long
 Dim FacturaTemp As Long
 Dim Tot_Propinas As Currency
@@ -2085,7 +2085,7 @@ End Sub
 Public Sub Importar_Contabilidad_SubModulos()
 Dim AdoCatalogoDB As ADODB.Recordset
 Dim AdoSubCtaDB As ADODB.Recordset
-Dim I As Long
+Dim i As Long
 Dim N As Long
 Dim CtaD As String
 Dim CtaH As String
@@ -2387,7 +2387,7 @@ Public Sub Migrar_Cta_Nueva(Tabla As String, Campo As String, Cod_Antiguo As Str
 End Sub
 
 Public Sub Importar_Abonos()
-Dim I As Long
+Dim i As Long
 Dim N As Long
 Dim CodRet As String
 Dim CompRet As String
@@ -2529,7 +2529,7 @@ Dim Tot_Propinas As Currency
 End Sub
 
 Public Sub Importar_Estudiantes_Representantes()
-Dim I As Long
+Dim i As Long
 Dim N As Long
 Dim Cl As Tipo_Beneficiarios
 Dim Tot_Propinas As Currency
@@ -2637,7 +2637,7 @@ Dim Tot_Propinas As Currency
 End Sub
 
 Public Sub Importar_Estudiantes_PreFacturas()
-Dim I As Long
+Dim i As Long
 Dim N As Long
 Dim Cl As Tipo_Beneficiarios
 Dim Tot_Propinas As Currency
@@ -2691,7 +2691,7 @@ Dim Tot_Propinas As Currency
 End Sub
 
 Public Sub Importar_Personas()
-Dim I As Long
+Dim i As Long
 Dim N As Long
 Dim Lista_Clientes_Nuevos As String
 Dim Crear_Nuevo As Boolean
@@ -2820,7 +2820,7 @@ Dim Crear_Nuevo As Boolean
 End Sub
 
 Public Sub Importar_Descuento_Empleados()
-Dim I As Long
+Dim i As Long
 Dim N As Long
 Dim Lista_Clientes_Nuevos As String
 Dim CodigoPT As String
@@ -3287,7 +3287,7 @@ Dim Detalle_Ret As String
 End Sub
 
 Public Sub Generar_Asiento_Compras(Optional ParaFarmacia As Boolean)
-Dim I As Integer
+Dim i As Integer
 Dim J As Integer
 Dim ContSC As Integer
 Dim Fecha_Sem As String
@@ -4054,7 +4054,7 @@ Dim Cta As String
 End Sub
 
 Public Sub Importar_Inventarios()
-Dim I As Long
+Dim i As Long
 Dim N As Long
 Dim Precio_2 As Currency
 Dim Precio_3 As Currency
@@ -4639,7 +4639,7 @@ Dim AdoSubCtaDB As ADODB.Recordset
 End Sub
 
 Public Sub Importar_Empleados()
-Dim I As Long
+Dim i As Long
 Dim N As Long
 Dim Lista_Clientes_Nuevos As String
 Dim Cta_Transf As String
@@ -4731,7 +4731,7 @@ Dim Aplica_FP As Boolean
                     Case 12: TBeneficiario.Fecha_N = Codigo 'Fecha_N
                     Case 13: TBeneficiario.Sexo = MidStrg(Codigo, 1, 1) 'Sexo"
                     Case 14: TBeneficiario.Cte_Ahr_Otro = Codigo
-                    Case 15: TBeneficiario.Cod_Banco = Val(Codigo)
+                    Case 15: TBeneficiario.Cod_Banco = Codigo
                     Case 16: TBeneficiario.Cta_Transf = Codigo
                     Case 17: Cta_Aux = Codigo
                     Case 18: Cta_Gastos = Codigo
@@ -4855,7 +4855,7 @@ Dim Aplica_FP As Boolean
                  SetAdoUpdate
               End If
            End If
-           Me.Caption = "Importar de FlexGrid a Sistema El Beneficiario: " & TBeneficiario.CI_RUC & ": " & I & " de " & Rango.NumFila2
+           Me.Caption = "Importar de FlexGrid a Sistema El Beneficiario: " & TBeneficiario.CI_RUC & ": " & i & " de " & Rango.NumFila2
         .MoveNext
       Loop
    End If
@@ -6235,7 +6235,7 @@ End Sub
 ''-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 Public Sub Importar_Actualizacion_Estudiantes()
-Dim I As Long
+Dim i As Long
 Dim N As Long
 Dim Cl As Tipo_Beneficiarios
 Dim Tot_Propinas As Currency

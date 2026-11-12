@@ -121,6 +121,8 @@ Dim NumFile As Long
         DatosFile = Replace(DatosFile, "VALUES ", vbCrLf & "VALUES" & vbCrLf)
 '       DatosFile = Replace(DatosFile, "NULL,", "NULL," & vbCrLf)
      End If
+     Clipboard.Clear
+     Clipboard.SetText DatosFile
      NumFile = FreeFile
      Open RutaSysBases & "\TEMP\" & NombreFile & ".sql" For Output As #NumFile
      Print #NumFile, DatosFile
@@ -358,8 +360,8 @@ With Datas.Recordset
      PosLinea = PosLinea + 0.1
      Printer.FontSize = SizeLetra
      TextoTemp = ""
-     For I = 1 To Len(.Fields("Texto_Memo"))
-         TextoMemo = MidStrg(.Fields("Texto_Memo"), I, 1)
+     For i = 1 To Len(.Fields("Texto_Memo"))
+         TextoMemo = MidStrg(.Fields("Texto_Memo"), i, 1)
          Select Case Asc(TextoMemo)
            Case 13
                   TextoTemp = TextoTemp & " "
@@ -385,11 +387,11 @@ With Datas.Recordset
            Case Else
                 TextoTemp = TextoTemp & TextoMemo
                 If Printer.TextWidth(TextoTemp) >= 16 Then
-                   If MidStrg(.Fields("Texto_Memo"), I + 1, 1) <> " " Then
+                   If MidStrg(.Fields("Texto_Memo"), i + 1, 1) <> " " Then
                       Do While TextoMemo <> " "
                          TextoTemp = MidStrg(TextoTemp, 1, Len(TextoTemp) - 1)
-                         I = I - 1
-                         TextoMemo = MidStrg(.Fields("Texto_Memo"), I, 1)
+                         i = i - 1
+                         TextoMemo = MidStrg(.Fields("Texto_Memo"), i, 1)
                       Loop
                    End If
                    PrinterTexto InicioX, PosLinea, TrimStrg(TextoTemp), , 16
@@ -411,7 +413,7 @@ With Datas.Recordset
                    End If
                 End If
          End Select
-     Next I
+     Next i
      PosLinea = PosLinea + 0.5
      PrinterTexto 2, PosLinea, "Atentamente,"
      PosLinea = PosLinea + 2
@@ -1517,23 +1519,23 @@ With Datas
      CantCampos = .Fields.Count
      ReDim Ancho(CantCampos + 1) As Single
      ReDim AnchoDeCampo(CantCampos + 1) As String
-     For I = 0 To CantCampos - 1
-         AnchoDeCampo(I) = AnchoTipoCampo(.Fields(I))
-         Ancho(I) = 0
-     Next I
+     For i = 0 To CantCampos - 1
+         AnchoDeCampo(i) = AnchoTipoCampo(.Fields(i))
+         Ancho(i) = 0
+     Next i
 End With
 IniXX = IniciarX
 If IniXX < 0.5 Then IniXX = 0.5
 SumaTotalAncho = IniXX
 Ancho(0) = SumaTotalAncho
 Evaluar = False
-For I = 0 To CantCampos - 1
-    AnchoCampo = Printer.TextWidth(AnchoDeCampo(I)) + 0.1
+For i = 0 To CantCampos - 1
+    AnchoCampo = Printer.TextWidth(AnchoDeCampo(i)) + 0.1
     If AnchoCampo < 0.5 Then AnchoCampo = 0.5
     If AnchoCampo > 6.5 Then AnchoCampo = 6.5
     SumaTotalAncho = SumaTotalAncho + AnchoCampo
     If SumaTotalAncho + 1 >= AnchoPapel Then
-       EnDosPaginas = I
+       EnDosPaginas = i
        Evaluar = True
     End If
     
@@ -1541,8 +1543,8 @@ For I = 0 To CantCampos - 1
        SumaTotalAncho = IniXX
        Evaluar = False
     End If
-    Ancho(I + 1) = SumaTotalAncho
-Next I
+    Ancho(i + 1) = SumaTotalAncho
+Next i
 End Sub
 
 Public Sub DataAnchoCampos(IniciarX As Single, _
@@ -1595,28 +1597,28 @@ With Datas.Recordset
      CantCampos = .Fields.Count
      ReDim Ancho(CantCampos + 1) As Single
      ReDim AnchoDeCampo(CantCampos + 1) As String
-     For I = 0 To CantCampos - 1
-         AnchoDeCampo(I) = AnchoTipoCampo(.Fields(I))
-         Ancho(I) = 0
-     Next I
+     For i = 0 To CantCampos - 1
+         AnchoDeCampo(i) = AnchoTipoCampo(.Fields(i))
+         Ancho(i) = 0
+     Next i
      Ancho(0) = SumaTotalAncho
      Evaluar = False
-     For I = 0 To CantCampos - 1
+     For i = 0 To CantCampos - 1
          'AnchoCampo = PorteLetra * Len(AnchoDeCampo(I)) * 0.0185567
-         AnchoCampo = Printer.TextWidth(AnchoDeCampo(I)) + 0.1
+         AnchoCampo = Printer.TextWidth(AnchoDeCampo(i)) + 0.1
          If AnchoCampo < 0.5 Then AnchoCampo = 0.5
          If AnchoCampo > 6.5 Then AnchoCampo = 6.5
          SumaTotalAncho = SumaTotalAncho + AnchoCampo
          If SumaTotalAncho + 1 >= AnchoPapel Then
-            EnDosPaginas = I
+            EnDosPaginas = i
             Evaluar = True
          End If
          If Evaluar Then
             SumaTotalAncho = IniXX
             Evaluar = False
          End If
-         Ancho(I + 1) = SumaTotalAncho
-     Next I
+         Ancho(i + 1) = SumaTotalAncho
+     Next i
      Ancho(CantCampos) = SumaTotalAncho
  End If
 End With
@@ -1652,22 +1654,22 @@ With Datas
      CantCampos = .Fields.Count
      ReDim Ancho(CantCampos + 1) As Single
      ReDim AnchoDeCampo(CantCampos + 1) As String
-     For I = 0 To CantCampos - 1
-         AnchoDeCampo(I) = AnchoTipoCampo(.Fields(I))
-         Ancho(I) = 0
-     Next I
+     For i = 0 To CantCampos - 1
+         AnchoDeCampo(i) = AnchoTipoCampo(.Fields(i))
+         Ancho(i) = 0
+     Next i
 End With
 IniXX = IniciarX
 If IniXX < 0.5 Then IniXX = 0.5
 SumaTotalAncho = IniXX
 Ancho(0) = SumaTotalAncho
-For I = 0 To CantCampos - 1
-    AnchoCampo = Printer.TextWidth(AnchoDeCampo(I)) + 0.1
+For i = 0 To CantCampos - 1
+    AnchoCampo = Printer.TextWidth(AnchoDeCampo(i)) + 0.1
     If AnchoCampo < 0.35 Then AnchoCampo = 0.35
     If AnchoCampo > 6.5 Then AnchoCampo = 6.5
     SumaTotalAncho = SumaTotalAncho + AnchoCampo
-    Ancho(I + 1) = SumaTotalAncho
-Next I
+    Ancho(i + 1) = SumaTotalAncho
+Next i
 End Sub
 
 Public Sub LeerArchivoPlano(DtaAux As Adodc, _
@@ -1687,31 +1689,31 @@ FAConLineas = True
 With DtaAux.Recordset
      ReDim TipoC(.Fields.Count - 1) As Campos_Tabla
      Line Input #NumFile, LineaTexto
-     I = 0
+     i = 0
      Do
-       TipoC(I).Campo = ObtenerCampoTexto(LineaTexto)
-       LineaTexto = MidStrg(LineaTexto, Len(TipoC(I).Campo) + 2, Len(LineaTexto))
-       I = I + 1
+       TipoC(i).Campo = ObtenerCampoTexto(LineaTexto)
+       LineaTexto = MidStrg(LineaTexto, Len(TipoC(i).Campo) + 2, Len(LineaTexto))
+       i = i + 1
      Loop Until Len(LineaTexto) < 1
      Line Input #NumFile, LineaTexto
-     I = 0
+     i = 0
      Do
-       TipoC(I).Ancho = Val(ObtenerCampoTexto(LineaTexto))
-       LineaTexto = MidStrg(LineaTexto, Len(CStr(TipoC(I).Ancho)) + 2, Len(LineaTexto))
-       I = I + 1
+       TipoC(i).Ancho = Val(ObtenerCampoTexto(LineaTexto))
+       LineaTexto = MidStrg(LineaTexto, Len(CStr(TipoC(i).Ancho)) + 2, Len(LineaTexto))
+       i = i + 1
      Loop Until Len(LineaTexto) < 1
       
      Do While Not EOF(NumFile)
         Line Input #NumFile, LineaTexto
         NumPos = 1
-        For I = 0 To .Fields.Count - 1
-            TipoC(I).Valor = SinEspaciosCampo(MidStrg(LineaTexto, NumPos, TipoC(I).Ancho))
-            NumPos = NumPos + TipoC(I).Ancho
-        Next I
+        For i = 0 To .Fields.Count - 1
+            TipoC(i).Valor = SinEspaciosCampo(MidStrg(LineaTexto, NumPos, TipoC(i).Ancho))
+            NumPos = NumPos + TipoC(i).Ancho
+        Next i
        .AddNew
-        For I = 0 To .Fields.Count - 1
-           .Fields(TipoC(I).Campo) = TipoC(I).Valor
-        Next I
+        For i = 0 To .Fields.Count - 1
+           .Fields(TipoC(i).Campo) = TipoC(i).Valor
+        Next i
        .Update
      Loop
 End With
@@ -1857,9 +1859,9 @@ PosLinea = PosLinea + 0.5
 PrinterTexto CentrarTexto(SQLMsg2), PosLinea, SQLMsg2
 Printer.FontSize = 9: PosLinea = 2.2
 '========================================================================
-For I = 0 To 14
-   PrinterTexto Ancho(I), PosLinea, Datas.Recordset.Fields(I).Name
-Next I
+For i = 0 To 14
+   PrinterTexto Ancho(i), PosLinea, Datas.Recordset.Fields(i).Name
+Next i
 LimpiarLinea Ancho(14), PosLinea, True
 Printer.Line (Ancho(0), PosLinea - 0.1)-(Ancho(15), PosLinea - 0.1), Negro
 Printer.Line (Ancho(0), PosLinea + 0.4)-(Ancho(15), PosLinea + 0.4), Negro
@@ -2013,9 +2015,9 @@ Public Function DeleteSiNo(DataSQL As Adodc) As Boolean
 Dim Cancelar As Boolean
   With DataSQL.Recordset
      Mensajes = "Eliminar la transacción: " & vbCrLf
-     For I = 0 To .Fields.Count - 1
-        Mensajes = Mensajes & Space(20) & UCaseStrg(.Fields(I).Name) & ": " & .Fields(I) & "." & vbCrLf
-     Next I
+     For i = 0 To .Fields.Count - 1
+        Mensajes = Mensajes & Space(20) & UCaseStrg(.Fields(i).Name) & ": " & .Fields(i) & "." & vbCrLf
+     Next i
   End With
   Mensajes = Mensajes & vbCrLf _
            & "Realmente desea eliminar esta Transacción." & Space(10)
@@ -2029,11 +2031,11 @@ Public Function ActualizarSiNo(DataSQL As Adodc) As Integer
 Dim ResultadoSiNo As Integer
   Mensajes = "Actualizar la Transaccion: " & vbCrLf
   With DataSQL.Recordset
-     For I = 0 To .Fields.Count - 1
+     For i = 0 To .Fields.Count - 1
         Mensajes = Mensajes & Space(20) _
-                 & UCaseStrg(.Fields(I).Name) & ": " _
-                 & .Fields(I) & "." & vbCrLf
-     Next I
+                 & UCaseStrg(.Fields(i).Name) & ": " _
+                 & .Fields(i) & "." & vbCrLf
+     Next i
   End With
   Mensajes = Mensajes & vbCrLf _
            & "Realmente desea Actualizar esta Transacción."
@@ -2070,75 +2072,75 @@ With DtaAux.Recordset
   If DetFile Then
      'Print #NumFile, DtaAux.RecordSource
      ReDim TipoC(.Fields.Count - 1) As Campos_Tabla
-     For I = 0 To .Fields.Count - 1
-         TipoC(I).Campo = .Fields(I).Name
-         TipoC(I).Ancho = AnchoTipoCampoTexto(.Fields(I))
-     Next I
-     For I = 0 To .Fields.Count - 1
-         Cadena2 = TipoC(I).Campo
+     For i = 0 To .Fields.Count - 1
+         TipoC(i).Campo = .Fields(i).Name
+         TipoC(i).Ancho = AnchoTipoCampoTexto(.Fields(i))
+     Next i
+     For i = 0 To .Fields.Count - 1
+         Cadena2 = TipoC(i).Campo
          'MsgBox UCaseStrg(Cadena2)
          If UCaseStrg(Cadena2) = "ID" Then Cadena2 = "I"
-         If I <> .Fields.Count - 1 Then
-            Print #NumFile, SetearBlancos(Cadena2, Len(TipoC(I).Campo), 0, False, FAConLineas);
+         If i <> .Fields.Count - 1 Then
+            Print #NumFile, SetearBlancos(Cadena2, Len(TipoC(i).Campo), 0, False, FAConLineas);
          Else
-            Print #NumFile, SetearBlancos(Cadena2, Len(TipoC(I).Campo), 0, False, FAConLineas)
+            Print #NumFile, SetearBlancos(Cadena2, Len(TipoC(i).Campo), 0, False, FAConLineas)
          End If
-     Next I
-     For I = 0 To .Fields.Count - 1
-      Cadena = CStr(TipoC(I).Ancho)
-      If I <> .Fields.Count - 1 Then
+     Next i
+     For i = 0 To .Fields.Count - 1
+      Cadena = CStr(TipoC(i).Ancho)
+      If i <> .Fields.Count - 1 Then
          Print #NumFile, SetearBlancos(Cadena, Len(Cadena), 0, True, FAConLineas);
       Else
          Print #NumFile, SetearBlancos(Cadena, Len(Cadena), 0, True, FAConLineas)
       End If
-     Next I
+     Next i
   Else
      ReDim TipoC(.Fields.Count - 1) As Campos_Tabla
-     For I = 0 To .Fields.Count - 1
-         TipoC(I).Campo = .Fields(I).Name
-         TipoC(I).Ancho = AnchoTipoCampoTexto(.Fields(I))
-     Next I
+     For i = 0 To .Fields.Count - 1
+         TipoC(i).Campo = .Fields(i).Name
+         TipoC(i).Ancho = AnchoTipoCampoTexto(.Fields(i))
+     Next i
   End If
      FAConLineas = True
      If .RecordCount > 0 Then
         .MoveFirst
          Do While Not .EOF
          MiFrom.Caption = RutaGeneraFile & ": Registro No. " & Format$(Contador / .RecordCount, "00%")
-         For I = 0 To .Fields.Count - 1
-          If I <> .Fields.Count - 1 Then
-             Select Case .Fields(I).Type
+         For i = 0 To .Fields.Count - 1
+          If i <> .Fields.Count - 1 Then
+             Select Case .Fields(i).Type
                Case TadByte, TadInteger, TadLong
-                    Print #NumFile, SetearBlancos(.Fields(I), TipoC(I).Ancho, 0, True, FAConLineas);
+                    Print #NumFile, SetearBlancos(.Fields(i), TipoC(i).Ancho, 0, True, FAConLineas);
                Case TadSingle, TadDouble, TadCurrency
-                    Print #NumFile, SetearBlancos(.Fields(I), TipoC(I).Ancho, 0, True, FAConLineas, True);
+                    Print #NumFile, SetearBlancos(.Fields(i), TipoC(i).Ancho, 0, True, FAConLineas, True);
                Case TadBoolean
-                    If .Fields(I) = 0 Then
+                    If .Fields(i) = 0 Then
                         ValorBool = "0"
                     Else
                         ValorBool = "1"
                     End If
-                    Print #NumFile, SetearBlancos(ValorBool, TipoC(I).Ancho, 0, True, FAConLineas);
+                    Print #NumFile, SetearBlancos(ValorBool, TipoC(i).Ancho, 0, True, FAConLineas);
                Case Else
-                    Print #NumFile, SetearBlancos(.Fields(I), TipoC(I).Ancho, 0, False, FAConLineas);
+                    Print #NumFile, SetearBlancos(.Fields(i), TipoC(i).Ancho, 0, False, FAConLineas);
              End Select
           Else
-             Select Case .Fields(I).Type
+             Select Case .Fields(i).Type
                Case TadByte, TadInteger, TadLong
-                    Print #NumFile, SetearBlancos(.Fields(I), TipoC(I).Ancho, 0, True, FAConLineas)
+                    Print #NumFile, SetearBlancos(.Fields(i), TipoC(i).Ancho, 0, True, FAConLineas)
                Case TadSingle, TadDouble, TadCurrency
-                    Print #NumFile, SetearBlancos(.Fields(I), TipoC(I).Ancho, 0, True, FAConLineas, True)
+                    Print #NumFile, SetearBlancos(.Fields(i), TipoC(i).Ancho, 0, True, FAConLineas, True)
                Case TadBoolean
-                    If .Fields(I) = 0 Then
+                    If .Fields(i) = 0 Then
                         ValorBool = "0"
                     Else
                         ValorBool = "1"
                     End If
-                    Print #NumFile, SetearBlancos(ValorBool, TipoC(I).Ancho, 0, True, FAConLineas)
+                    Print #NumFile, SetearBlancos(ValorBool, TipoC(i).Ancho, 0, True, FAConLineas)
                Case Else
-                    Print #NumFile, SetearBlancos(.Fields(I), TipoC(I).Ancho, 0, False, FAConLineas)
+                    Print #NumFile, SetearBlancos(.Fields(i), TipoC(i).Ancho, 0, False, FAConLineas)
              End Select
           End If
-         Next I
+         Next i
          Contador = Contador + 1
         .MoveNext
          Loop
@@ -2190,14 +2192,14 @@ With DtaAux.Recordset
      FAConLineas = True
      Print #NumFile, Format$(TotalReg, "##0") & " - " & FechaDesde & " - " & FechaHasta & " - " & NombreTabla
      ReDim TipoC(TotalCampo) As Campos_Tabla
-     For I = 0 To TotalCampo
-         TipoC(I).Campo = CompilarString(.Fields(I).Name)
-         TipoC(I).Ancho = AnchoTipoCampoTexto(.Fields(I))
-     Next I
+     For i = 0 To TotalCampo
+         TipoC(i).Campo = CompilarString(.Fields(i).Name)
+         TipoC(i).Ancho = AnchoTipoCampoTexto(.Fields(i))
+     Next i
      CadFileReg = ""
-     For I = 0 To TotalCampo
-         CadFileReg = CadFileReg & TipoC(I).Campo & "|"
-     Next I
+     For i = 0 To TotalCampo
+         CadFileReg = CadFileReg & TipoC(i).Campo & "|"
+     Next i
      Print #NumFile, CadFileReg
      FAConLineas = True
     .MoveFirst
@@ -2205,26 +2207,26 @@ With DtaAux.Recordset
         ContadorReg = ContadorReg + 1
         Progreso_Esperar
         CadFileReg = ""
-        For I = 0 To TotalCampo
-          If IsNull(.Fields(I)) Or IsEmpty(.Fields(I)) Then Codigo4 = "0" Else Codigo4 = CStr(.Fields(I))
-          Select Case .Fields(I).Type
+        For i = 0 To TotalCampo
+          If IsNull(.Fields(i)) Or IsEmpty(.Fields(i)) Then Codigo4 = "0" Else Codigo4 = CStr(.Fields(i))
+          Select Case .Fields(i).Type
             Case TadBoolean
                  If Codigo4 = Ninguno Then Codigo4 = "0"
                  Codigo4 = CStr(CInt(CBool(Codigo4)))
                  Codigo4 = SetearBlancos(Codigo4, 2, 0, True, FAConLineas)
             Case TadByte, TadInteger, TadLong
-                 If .Fields(I).Name = "Item" Then
-                     Codigo4 = SetearBlancos(Format$(.Fields(I), "000"), 3, 0, False, FAConLineas)
+                 If .Fields(i).Name = "Item" Then
+                     Codigo4 = SetearBlancos(Format$(.Fields(i), "000"), 3, 0, False, FAConLineas)
                  Else
                      Codigo4 = SetearBlancos(Codigo4, 0, 0, True, FAConLineas)
                  End If
             Case TadSingle, TadDouble, TadCurrency
                  Codigo4 = SetearBlancos(Codigo4, 0, 0, True, FAConLineas, True)
             Case TadText
-                 If UCaseStrg(.Fields(I).Name) = "RUC_CI" Then Codigo4 = CompilarRUC_CI(.Fields(I))
-                 If UCaseStrg(.Fields(I).Name) = "RUC" Then Codigo4 = CompilarRUC_CI(.Fields(I))
-                 If UCaseStrg(.Fields(I).Name) = "CI" Then Codigo4 = CompilarRUC_CI(.Fields(I))
-                 If UCaseStrg(.Fields(I).Name) = "CEDULA" Then Codigo4 = CompilarRUC_CI(.Fields(I))
+                 If UCaseStrg(.Fields(i).Name) = "RUC_CI" Then Codigo4 = CompilarRUC_CI(.Fields(i))
+                 If UCaseStrg(.Fields(i).Name) = "RUC" Then Codigo4 = CompilarRUC_CI(.Fields(i))
+                 If UCaseStrg(.Fields(i).Name) = "CI" Then Codigo4 = CompilarRUC_CI(.Fields(i))
+                 If UCaseStrg(.Fields(i).Name) = "CEDULA" Then Codigo4 = CompilarRUC_CI(.Fields(i))
                  If Codigo4 = "0" Then Codigo4 = Ninguno
                  If Codigo4 = " " Then Codigo4 = Ninguno
                  Codigo4 = SetearBlancos(Codigo4, 0, 0, False, FAConLineas)
@@ -2236,7 +2238,7 @@ With DtaAux.Recordset
            Codigo4 = Replace(Codigo4, vbCrLf, Chr(17) & Chr(31))
            Codigo4 = Replace(Codigo4, "'", "`")
            CadFileReg = CadFileReg & Codigo4
-        Next I
+        Next i
         Print #NumFile, CadFileReg
        .MoveNext
      Loop
@@ -3155,7 +3157,7 @@ Public Sub Select_AdoDB_MySQL(AdoReg As ADODB.Recordset, _
   AdoReg.CursorType = adOpenStatic   'adOpenDynamic
   AdoReg.CursorLocation = adUseClient
   AdoReg.LockType = adLockOptimistic
-  AdoReg.open SQLQuery, AdoStrCnnMySQL, , , adCmdText
+  If Get_Internet Then AdoReg.open SQLQuery, AdoStrCnnMySQL, , , adCmdText
   
  'Determinamos el ancho de los campos
   CantCampos = AdoReg.Fields.Count
@@ -3183,7 +3185,7 @@ Public Sub Conectar_Ado_Execute_MySQL(SQLQuery As String, _
 Dim AdoCon1 As ADODB.Connection
 Dim IdTime As Long
      RatonReloj
-    'If Ping_IP(strServidorERP) Then
+    If Ping_IP(strServidorERP) Then
        'Consultamos las cuentas de la tabla
        'SQLQuery = CompilarSQL(SQLQuery)
        'MsgBox SQLQuery & vbCrLf & String(70, "_") & vbCrLf & AdoStrCnnMySQL
@@ -3192,9 +3194,9 @@ Dim IdTime As Long
         AdoCon1.open AdoStrCnnMySQL
         AdoCon1.Execute SQLQuery, RegAfectados, adCmdText
         AdoCon1.Close
-    'End If
-     RatonNormal
-     If RegSN Then MsgBox "Registros Afectados: " & Format$(RegAfectados, "#,##0")
+    End If
+    RatonNormal
+    If RegSN Then MsgBox "Registros Afectados: " & Format$(RegAfectados, "#,##0")
 End Sub
 
 Public Sub Conectar_Ado_ExecuteBackup(SQLQuery As String, _
@@ -3722,15 +3724,15 @@ End Function
 Public Function Existe_Campo(Nombre_Tabla As String, NCampo As String) As Boolean
 Dim AdoAuxDB As ADODB.Recordset
 Dim ExisteC As Boolean
-Dim C As Integer
+Dim c As Integer
     ExisteC = False
     sSQL = "SELECT * " _
          & "FROM " & Nombre_Tabla & " " _
          & "WHERE 1 = 0 "
     Select_AdoDB AdoAuxDB, sSQL
-    For C = 0 To AdoAuxDB.Fields.Count - 1
-        If NCampo = AdoAuxDB.Fields(C).Name Then ExisteC = True
-    Next C
+    For c = 0 To AdoAuxDB.Fields.Count - 1
+        If NCampo = AdoAuxDB.Fields(c).Name Then ExisteC = True
+    Next c
     AdoAuxDB.Close
     Existe_Campo = ExisteC
 End Function
@@ -4243,20 +4245,20 @@ Public Sub UPD_Abrir_Campos_SQL(NumFile As Integer)
     Line Input #NumFile, Cod_Field
     'MsgBox Cod_Base & vbCrLf & Cod_Field
     CantCamposUpdate = 0
-    For I = 1 To Len(Cod_Field)
-        If MidStrg(Cod_Field, I, 1) = "|" Then CantCamposUpdate = CantCamposUpdate + 1
-    Next I
+    For i = 1 To Len(Cod_Field)
+        If MidStrg(Cod_Field, i, 1) = "|" Then CantCamposUpdate = CantCamposUpdate + 1
+    Next i
     ReDim TipoC(CantCamposUpdate + 1) As Campos_Tabla
     No_Desde = 1: No_Hasta = 1
     Cadena = Cod_Field
-    For I = 1 To CantCamposUpdate
+    For i = 1 To CantCamposUpdate
         Do
            No_Hasta = No_Hasta + 1
         Loop Until MidStrg(Cadena, No_Hasta, 1) = "|"
-        TipoC(I).Campo = TrimStrg(MidStrg(Cadena, No_Desde, No_Hasta - 1))
+        TipoC(i).Campo = TrimStrg(MidStrg(Cadena, No_Desde, No_Hasta - 1))
         Cadena = MidStrg(Cadena, No_Hasta + 1, Len(Cadena))
         No_Desde = 1: No_Hasta = 1
-    Next I
+    Next i
 End Sub
 
 Public Sub UPD_Actualizar_La_Tabla(ROrigen As String, Optional EsAccesos As Boolean)
@@ -4268,20 +4270,20 @@ Dim Crear_Campo As Boolean
   Select_AdoDB AdoCompDB, sSQL
   With AdoCompDB
    SQL1 = "CREATE TABLE A_" & ROrigen & " ("
-   For K = 0 To .Fields.Count - 1
-       SQL1 = SQL1 & "[" & .Fields(K).Name & "] "
+   For k = 0 To .Fields.Count - 1
+       SQL1 = SQL1 & "[" & .Fields(k).Name & "] "
        If SQL_Server Then
-          Cadena1 = FieldTypeSQL(.Fields(K).Type)
+          Cadena1 = FieldTypeSQL(.Fields(k).Type)
        Else
-          Cadena1 = FieldTypeAccess(.Fields(K).Type)
+          Cadena1 = FieldTypeAccess(.Fields(k).Type)
        End If
        SQL1 = SQL1 & Cadena1
        If Cadena1 = "NVARCHAR" Or Cadena1 = "TEXT" Then
-          SQL1 = SQL1 & "(" & .Fields(K).DefinedSize & ")"
+          SQL1 = SQL1 & "(" & .Fields(k).DefinedSize & ")"
        End If
        SQL1 = SQL1 & " NULL "
-       If K <> (.Fields.Count - 1) Then SQL1 = SQL1 & ","
-   Next K
+       If k <> (.Fields.Count - 1) Then SQL1 = SQL1 & ","
+   Next k
    SQL1 = SQL1 & "); "
    Ejecutar_SQL_SP SQL1
    SQL2 = "INSERT INTO A_" & ROrigen & " " _
@@ -4293,37 +4295,37 @@ Dim Crear_Campo As Boolean
    Ejecutar_SQL_SP SQL1
  ' Volvemos a crear la tabla
    SQL1 = "CREATE TABLE " & ROrigen & " ("
-   For K = 0 To .Fields.Count - 1
+   For k = 0 To .Fields.Count - 1
        Crear_Campo = True
-       If ROrigen = "Accesos" And .Fields(K).Name = "Item" Then Crear_Campo = False
-       If ROrigen = "Accesos" And .Fields(K).Name = "CI" Then Crear_Campo = False
+       If ROrigen = "Accesos" And .Fields(k).Name = "Item" Then Crear_Campo = False
+       If ROrigen = "Accesos" And .Fields(k).Name = "CI" Then Crear_Campo = False
        If Crear_Campo Then
-           SQL1 = SQL1 & "[" & .Fields(K).Name & "] "
+           SQL1 = SQL1 & "[" & .Fields(k).Name & "] "
            If SQL_Server Then
-              Cadena1 = FieldTypeSQL(.Fields(K).Type)
+              Cadena1 = FieldTypeSQL(.Fields(k).Type)
            Else
-              Cadena1 = FieldTypeAccess(.Fields(K).Type)
+              Cadena1 = FieldTypeAccess(.Fields(k).Type)
            End If
            SQL1 = SQL1 & Cadena1
            If Cadena1 = "NVARCHAR" Or Cadena1 = "TEXT" Then
               If EsAccesos Then
-                 If .Fields(K).Name = "Codigo" Then
+                 If .Fields(k).Name = "Codigo" Then
                      SQL1 = SQL1 & "(10)"
                  Else
-                     SQL1 = SQL1 & "(" & .Fields(K).DefinedSize & ")"
+                     SQL1 = SQL1 & "(" & .Fields(k).DefinedSize & ")"
                  End If
               Else
-                 If .Fields(K).Name = "CodigoU" Or .Fields(K).Name = "CodigoA" Then
+                 If .Fields(k).Name = "CodigoU" Or .Fields(k).Name = "CodigoA" Then
                      SQL1 = SQL1 & "(10)"
                  Else
-                     SQL1 = SQL1 & "(" & .Fields(K).DefinedSize & ")"
+                     SQL1 = SQL1 & "(" & .Fields(k).DefinedSize & ")"
                  End If
               End If
            End If
            SQL1 = SQL1 & " NULL,"
            'If K <> (.Fields.Count - 1) Then SQL1 = SQL1 & ","
        End If
-   Next K
+   Next k
   'MsgBox SQL1
    SQL1 = MidStrg(SQL1, 1, Len(SQL1) - 1)
   'MsgBox SQL1
@@ -4337,16 +4339,16 @@ Dim Crear_Campo As Boolean
    Select_AdoDB AdoCompDB1, sSQL
    With AdoCompDB1
         SQL2 = "INSERT INTO " & ROrigen & " ("
-        For K = 0 To .Fields.Count - 1
-            SQL2 = SQL2 & "[" & .Fields(K).Name & "] "
-            If K <> (.Fields.Count - 1) Then SQL2 = SQL2 & ","
-        Next K
+        For k = 0 To .Fields.Count - 1
+            SQL2 = SQL2 & "[" & .Fields(k).Name & "] "
+            If k <> (.Fields.Count - 1) Then SQL2 = SQL2 & ","
+        Next k
         SQL2 = SQL2 & ") " _
              & "SELECT "
-        For K = 0 To .Fields.Count - 1
-            SQL2 = SQL2 & "[" & .Fields(K).Name & "] "
-            If K <> (.Fields.Count - 1) Then SQL2 = SQL2 & ","
-        Next K
+        For k = 0 To .Fields.Count - 1
+            SQL2 = SQL2 & "[" & .Fields(k).Name & "] "
+            If k <> (.Fields.Count - 1) Then SQL2 = SQL2 & ","
+        Next k
         SQL2 = SQL2 & "FROM A_" & ROrigen & ";"
    End With
    AdoCompDB1.Close
@@ -4369,37 +4371,37 @@ Dim IdFin As Long
     Line Input #NumFile, Cod_Base
     CantCampos = CInt(TrimStrg(Cod_Base))
     ReDim TablaNew(CantCampos) As Crear_Tablas
-    I = 0
+    i = 0
     Do While Not EOF(NumFile)
        Line Input #NumFile, Cod_Field
        No_Desde = 1: No_Hasta = 1
        Cadena = Cod_Field
-       TablaNew(I).ErrorCampo = False
-       TablaNew(I).LargoCampo = 0
-       For J = 1 To 3
+       TablaNew(i).ErrorCampo = False
+       TablaNew(i).LargoCampo = 0
+       For j = 1 To 3
            Do
              No_Hasta = No_Hasta + 1
            Loop Until MidStrg(Cadena, No_Hasta, 1) = "|"
-           Select Case J
-             Case 1: TablaNew(I).Campo = TrimStrg(MidStrg(Cadena, No_Desde, No_Hasta - 1))
-             Case 2: TablaNew(I).TipoSQL = TrimStrg(MidStrg(Cadena, No_Desde, No_Hasta - 1))
-             Case 3: TablaNew(I).TipoAccess = TrimStrg(MidStrg(Cadena, No_Desde, No_Hasta - 1))
+           Select Case j
+             Case 1: TablaNew(i).Campo = TrimStrg(MidStrg(Cadena, No_Desde, No_Hasta - 1))
+             Case 2: TablaNew(i).TipoSQL = TrimStrg(MidStrg(Cadena, No_Desde, No_Hasta - 1))
+             Case 3: TablaNew(i).TipoAccess = TrimStrg(MidStrg(Cadena, No_Desde, No_Hasta - 1))
            End Select
            Cadena = MidStrg(Cadena, No_Hasta + 1, Len(Cadena))
            No_Desde = 1: No_Hasta = 1
-       Next J
+       Next j
        
        If SQL_Server Then
-          IdIni = InStr(TablaNew(I).TipoSQL, "(")
-          IdFin = InStr(TablaNew(I).TipoSQL, ")")
-          If IdIni > 0 And IdFin > 0 Then TablaNew(I).LargoCampo = Val(MidStrg(TablaNew(I).TipoSQL, IdIni + 1, IdFin - IdIni))
+          IdIni = InStr(TablaNew(i).TipoSQL, "(")
+          IdFin = InStr(TablaNew(i).TipoSQL, ")")
+          If IdIni > 0 And IdFin > 0 Then TablaNew(i).LargoCampo = Val(MidStrg(TablaNew(i).TipoSQL, IdIni + 1, IdFin - IdIni))
        Else
-          IdIni = InStr(TablaNew(I).TipoSQL, "(")
-          IdFin = InStr(TablaNew(I).TipoSQL, ")")
-          If IdIni > 0 And IdFin > 0 Then TablaNew(I).LargoCampo = Val(MidStrg(TablaNew(I).TipoAccess, IdIni + 1, IdFin - IdIni))
+          IdIni = InStr(TablaNew(i).TipoSQL, "(")
+          IdFin = InStr(TablaNew(i).TipoSQL, ")")
+          If IdIni > 0 And IdFin > 0 Then TablaNew(i).LargoCampo = Val(MidStrg(TablaNew(i).TipoAccess, IdIni + 1, IdFin - IdIni))
        End If
       'MsgBox RutaDatosTabla & vbCrLf & TablaNew(I).Campo & " -> " & TablaNew(I).LargoCampo
-       I = I + 1
+       i = i + 1
     Loop
     Close #NumFile
 End Sub
@@ -4515,21 +4517,21 @@ Dim CantCampos As Integer
   UPD_Listar_Tablas Update_LstTablas
  'Actualizando datos, inserciones y eliminaciones de las tablas de esta actualizacion
   Mifecha = "31/12/" & Format(Year(FechaSistema) + 1, "0000")
-  For I = 0 To Update_LstTablas.ListCount - 1
-      Progreso_Barra.Mensaje_Box = "Actualizando datos por defecto de " & Update_LstTablas.List(I)
+  For i = 0 To Update_LstTablas.ListCount - 1
+      Progreso_Barra.Mensaje_Box = "Actualizando datos por defecto de " & Update_LstTablas.List(i)
       ftp.Mostar_Estado_FTP ProgressBarEstado, LstStatud
       sSQL = "SELECT * " _
-           & "FROM " & Update_LstTablas.List(I) & " " _
+           & "FROM " & Update_LstTablas.List(i) & " " _
            & "WHERE 1 = 0 "
       Select_AdoDB AdoAuxDB, sSQL
       ReDim nCampos(AdoAuxDB.Fields.Count) As String
-      For K = 0 To UBound(nCampos) - 1
-          nCampos(K) = AdoAuxDB.Fields(K).Name
-      Next K
+      For k = 0 To UBound(nCampos) - 1
+          nCampos(k) = AdoAuxDB.Fields(k).Name
+      Next k
       AdoAuxDB.Close
       
      'MsgBox "Empezamos la actualizacion"
-      Select Case Update_LstTablas.List(I)
+      Select Case Update_LstTablas.List(i)
         Case "Catalogo_Rol_Cuentas"
              Update_Default_SP "Catalogo_Rol_Cuentas"
         Case "Catalogo_Rol_Pagos"
@@ -5366,7 +5368,7 @@ Dim CantCampos As Integer
         Case "Transacciones"
              Update_Default_SP "Transacciones"
       End Select
-  Next I
+  Next i
 '''  Progreso_Barra.Incremento = Progreso_Barra.Valor_Maximo
 '''  Progreso_Barra.Mensaje_Box = "FIN DEL PROCESO DE ACTUALIZACION"
 '''  Progreso_Final
@@ -5891,138 +5893,95 @@ Dim ListaCampos As String
 End Function
 
 Public Sub Conectar_Base_Datos()
+Dim RutaGeneraFileKey As String
 Dim CarBase As String
 Dim Conexion_Temp As String
-Dim Nombre_Base_Datos_SQL As String
-Dim CarIni As Long
-Dim CarFin As Long
+Dim Conexion_DB As String
 
   'Leemos la cadena de conexion de MySQL y de SQL Server de la empresa
    AdoStrCnnMySQL = "DRIVER={MySQL ODBC 8.0 ANSI Driver};SERVER=" & strServidorERP & ";PORT=13306;DATABASE=diskcover_empresas;USER=diskcover;PASSWORD=disk2017@Cover;OPTION=3"
    RutaGeneraFile = RutaSistema & "\ConectarDB.ini"
+   RutaGeneraFileKey = RutaSistema & "\ConectarDB.key"
    RutaEmpresa = RutaSistema & "\EMPRESA\"
+   AdoStrCnn = ""
    Conexion_Temp = ""
-   Nombre_Base_Datos_SQL = ""
+   strIPServidor = "127.0.0.1"
    strNombreBaseDatos = ""
    strWebServices = "000"
    strPuerto = "1433"
-   strIPServidor = "127.0.0.1"
-  'Leemos archivo de conexion
-   NumFile = FreeFile
-   Open RutaGeneraFile For Input As #NumFile
-   Do While Not EOF(NumFile)
-      CarBase = Input(1, #NumFile) ' Obtiene un carácter.
-      Conexion_Temp = Conexion_Temp & CarBase
-   Loop
-   Close #NumFile
-   If InStr(1, Conexion_Temp, "SQLServer = SI") Then SQL_Server = True Else SQL_Server = False
-   If InStr(1, Conexion_Temp, "SQLServer = SI") Then
-      CarIni = InStr(1, Conexion_Temp, "<SQLServer = SI>") + 18
-      CarFin = InStr(1, Conexion_Temp, "</SQLServer>") - 2
-      Conexion_Temp = MidStrg(Conexion_Temp, CarIni, CarFin - CarIni)
-      
-      CarIni = InStr(1, Conexion_Temp, "Data Source=")
-      strIPServidor = MidStrg(Conexion_Temp, CarIni + 12, Len(Conexion_Temp))
-      CarFin = InStr(1, strIPServidor, ";")
-      strIPServidor = MidStrg(strIPServidor, 1, CarFin - 1)
-      
-      CarIni = InStr(1, strIPServidor, ",")
-      CarFin = InStr(1, strIPServidor, ";")
-      If CarIni > 0 Then strPuerto = MidStrg(strIPServidor, CarIni + 1, Len(strIPServidor) - CarIni)
-      
-      CarIni = InStr(1, strIPServidor, ":")
-      CarFin = InStr(1, strIPServidor, ",")
-      If CarIni > 0 And CarFin > 0 Then strIPServidor = MidStrg(strIPServidor, CarIni + 1, CarFin - CarIni - 1)
-      
-      CarIni = InStr(1, Conexion_Temp, "UID=")
-      strUsuario = MidStrg(Conexion_Temp, CarIni + 4, Len(Conexion_Temp))
-      CarFin = InStr(1, strUsuario, ";")
-      strUsuario = MidStrg(strUsuario, 1, CarFin - 1)
 
-      CarIni = InStr(1, Conexion_Temp, "PWD=")
-      strPassword = MidStrg(Conexion_Temp, CarIni + 4, Len(Conexion_Temp))
-      CarFin = InStr(1, strPassword, ";")
-      strPassword = MidStrg(strPassword, 1, CarFin - 1)
-
-      CarIni = InStr(1, Conexion_Temp, "Initial Catalog=")
-      strNombreBaseDatos = MidStrg(Conexion_Temp, CarIni + 16, Len(Conexion_Temp))
-      CarFin = InStr(1, strNombreBaseDatos, ";")
-      strNombreBaseDatos = MidStrg(strNombreBaseDatos, 1, CarFin - 1)
-      PathEmpresa = ""
-      
-      CarIni = InStr(1, Conexion_Temp, "WebServices=")
-      strWebServices = MidStrg(Conexion_Temp, CarIni + 12, Len(Conexion_Temp))
-      CarFin = InStr(1, strWebServices, ";")
-      If CarIni > 0 Then strWebServices = MidStrg(strWebServices, 1, CarFin - 1) Else strWebServices = "000"
-   ElseIf InStr(1, Conexion_Temp, "MySQL = SI") Then
-      CarIni = InStr(1, Conexion_Temp, "<MySQL = SI") + 13
-      CarFin = InStr(1, Conexion_Temp, "</MySQL>") - 2
-      Conexion_Temp = MidStrg(Conexion_Temp, CarIni, CarFin - CarIni)
-      
-      CarIni = InStr(1, Conexion_Temp, "DATABASE=")
-      Nombre_Base_Datos_SQL = MidStrg(Conexion_Temp, CarIni, Len(Conexion_Temp))
-      CarFin = InStr(1, Nombre_Base_Datos_SQL, ";")
-      strNombreBaseDatos = MidStrg(Nombre_Base_Datos_SQL, 10, CarFin - 10)
-      PathEmpresa = ""
-      
-      CarIni = InStr(1, Conexion_Temp, "WebServices=")
-      strWebServices = MidStrg(Conexion_Temp, CarIni, Len(Conexion_Temp))
-      CarFin = InStr(1, strWebServices, ";")
-      If CarIni > 0 Then strWebServices = MidStrg(strWebServices, 13, 3) Else strWebServices = "000"
-   Else
-      CarIni = InStr(1, Conexion_Temp, "<Access = SI>") + 15
-      CarFin = InStr(1, Conexion_Temp, "</Access>") - 2
-      Conexion_Temp = MidStrg(Conexion_Temp, CarIni, CarFin - CarIni)
-      Conexion_Temp = Replace(Conexion_Temp, "Path\", RutaSistema & "\EMPRESA\")
-      
-      CarIni = InStr(1, Conexion_Temp, "Data Source=")
-      Nombre_Base_Datos_SQL = MidStrg(Conexion_Temp, CarIni, Len(Conexion_Temp))
-      CarFin = InStr(1, Nombre_Base_Datos_SQL, ";")
-      strNombreBaseDatos = MidStrg(Nombre_Base_Datos_SQL, 13, CarFin - 13)
-      PathEmpresa = strNombreBaseDatos
-      
-      CarIni = InStr(1, Conexion_Temp, "WebServices=")
-      strWebServices = MidStrg(Conexion_Temp, CarIni, Len(Conexion_Temp))
-      CarFin = InStr(1, strWebServices, ";")
-      If CarIni > 0 Then strWebServices = MidStrg(strWebServices, 13, 3) Else strWebServices = "000"
+  'Creamos el archivo de conexion con extension KEY si no existe
+  '--------------------------------------------------------------------------------------------------------------------------------
+   If Dir$(RutaGeneraFileKey) = "" Then
+      CifrarCadenaYGuardarArchivo Leer_Archivo_Plano(RutaGeneraFile), RutaGeneraFileKey, ClaveKey
+      Borrar_Archivo RutaGeneraFile
    End If
-   AdoStrCnn = Conexion_Temp
-  'MsgBox AdoStrCnn
-''   MsgBox strIPServidor & vbCrLf _
-''        & strNombreBaseDatos & vbCrLf _
-''        & strWebServices & vbCrLf _
-''        & strPassword & vbCrLf _
-''        & strUsuario & vbCrLf _
-''        & strPuerto & vbCrLf _
-''        & "-----------------------------------------" & vbCrLf _
-''        & AdoStrCnn & vbCrLf _
-''        & "-----------------------------------------" & vbCrLf _
-''        & AdoStrCnnMySQL
+  '--------------------------------------------------------------------------------------------------------------------------------
+  'Leemos archivo de conexion con extension KEY
+  '--------------------------------------------
+   Conexion_DB = DescifrarArchivoATexto(RutaGeneraFileKey, ClaveKey)
+   
+   If InStr(1, Conexion_DB, "SQLServer = SI") Then SQL_Server = True Else SQL_Server = False
+   
+   Conexion_Temp = Extraer_Texto_Entre(Conexion_DB, "<SQLServer = SI>", "</SQLServer>")
+   If Len(Conexion_Temp) > 1 Then
+      AdoStrCnn = Conexion_Temp
+      strIPServidor = Extraer_Texto_Entre(AdoStrCnn, "Data Source=", ";") & ";"
+      Cadena = Extraer_Texto_Entre(strIPServidor, ",", ";")
+      If Len(Cadena) > 1 Then
+         strPuerto = Cadena
+         strIPServidor = Replace(strIPServidor, ";", "")
+      End If
       
-  'Cadena de conexion de SQL Server
-''   AdoStrCnn = Replace(AdoStrCnn, "only.diskcoversystem.com", "186.4.206.95")
-''   AdoStrCnn = Replace(AdoStrCnn, "imap.diskcoversystem.com", "104.237.138.52")
-''   AdoStrCnn = Replace(AdoStrCnn, "erp.diskcoversystem.com", "69.164.192.53")
-''   AdoStrCnn = Replace(AdoStrCnn, "db.diskcoversystem.com", "194.195.222.54")
-''   AdoStrCnnMySQL = Replace(AdoStrCnnMySQL, "erp.diskcoversystem.com", "69.164.192.53")
-
-'      69.164.192.53     ftpds.diskcoversystem.com
-'     194.195.222.54     ftp.diskcoversystem.com
-'     194.195.222.54     db.diskcoversystem.com
-'      186.4.206.112     cloud.diskcoversystem.com
-'       186.4.206.95     vpn.diskcoversystem.com
-'       186.4.206.95     ftpupdate.diskcoversystem.com
-
-'''   MsgBox strIPServidor & vbCrLf _
-'''        & strNombreBaseDatos & vbCrLf _
-'''        & strWebServices & vbCrLf _
-'''        & strPassword & vbCrLf _
-'''        & strUsuario & vbCrLf _
-'''        & strPuerto & vbCrLf _
-'''        & "-----------------------------------------" & vbCrLf _
-'''        & AdoStrCnn & vbCrLf _
-'''        & "-----------------------------------------" & vbCrLf _
-'''        & AdoStrCnnMySQL
+      strUsuario = Extraer_Texto_Entre(AdoStrCnn, "UID=", ";")
+      strPassword = Extraer_Texto_Entre(AdoStrCnn, "PWD=", ";")
+      strNombreBaseDatos = Extraer_Texto_Entre(AdoStrCnn, "Initial Catalog=", ";")
+      strWebServices = Extraer_Texto_Entre(AdoStrCnn, "WebServices=", ";")
+      PathEmpresa = ""
+      
+      If strIPServidor = "tcp:erp.diskcoversystem.com,11433" Or strIPServidor = "tcp:db.diskcoversystem.com,11433" Then
+         strIPServidor = Replace(strIPServidor, "tcp:", "")
+         strIPServidor = Replace(strIPServidor, ",11433", "")
+        'Actualizamos la nueva contraseña encriptada y le actualizamos el archivo de conexion
+         If strPassword <> ClaveNueva Then
+            AdoStrCnn = Replace(AdoStrCnn, strPassword, ClaveNueva)
+            Conexion_DB = Replace(Conexion_DB, strPassword, ClaveNueva)
+            CifrarCadenaYGuardarArchivo Conexion_DB, RutaGeneraFileKey, ClaveKey
+            strPassword = ClaveNueva
+         End If
+      End If
+   End If
+   
+   Conexion_Temp = Extraer_Texto_Entre(Conexion_DB, "<MySQL = SI>", "</MySQL>")
+   If Len(Conexion_Temp) > 1 Then
+      AdoStrCnn = Conexion_Temp
+      strIPServidor = Extraer_Texto_Entre(AdoStrCnn, "SERVER=", ";")
+      strUsuario = Extraer_Texto_Entre(AdoStrCnn, "USER=", ";")
+      strPassword = Extraer_Texto_Entre(AdoStrCnn, "PASSWORD=", ";")
+      strNombreBaseDatos = Extraer_Texto_Entre(AdoStrCnn, "DATABASE=", ";")
+      strWebServices = Extraer_Texto_Entre(AdoStrCnn, "WebServices=", ";")
+      PathEmpresa = ""
+   End If
+   
+   Conexion_Temp = Extraer_Texto_Entre(Conexion_DB, "<Access = SI>", "</Access>")
+   If Len(Conexion_Temp) > 1 Then
+      AdoStrCnn = Conexion_Temp
+      strIPServidor = Extraer_Texto_Entre(AdoStrCnn, "Data Source=Path\", ";")
+      strPuerto = "0"
+      strNombreBaseDatos = Extraer_Texto_Entre(AdoStrCnn, "Initial Catalog=", ";")
+      strWebServices = Extraer_Texto_Entre(AdoStrCnn, "WebServices=", ";")
+      PathEmpresa = RutaSistema & "\EMPRESA\"
+   End If
+'   MsgBox strIPServidor & vbCrLf _
+'        & strNombreBaseDatos & vbCrLf _
+'        & strUsuario & vbCrLf _
+'        & strPassword & vbCrLf _
+'        & strPuerto & vbCrLf _
+'        & strWebServices & vbCrLf _
+'        & "|TIPO BASE|-----------------------------------------" & vbCrLf _
+'        & AdoStrCnn & vbCrLf _
+'        & "|MYSQL ERP|-----------------------------------------" & vbCrLf _
+'        & AdoStrCnnMySQL
 End Sub
 
 Public Sub Leer_Datos_Conexion(Conexion As Tipo_Conexion)
@@ -6724,7 +6683,7 @@ Public Sub Exportar_AdoDB_Excel(consulta As ADODB.Recordset, Optional nombreHoja
 Dim APIExcel As Object
 Dim AddLibro As Object
 Dim AddHoja  As Object
-Dim I As Long
+Dim i As Long
 Dim filas As Long
 Dim columnas As Long
 
@@ -6788,9 +6747,9 @@ Dim columnas As Long
             
              'Escribimos el encabezado de la consulta
               APIExcel.cells(1, 1) = Empresa & " [" & nombreHoja & "]"
-              For I = 0 To columnas - 1
-                  APIExcel.cells(2, I + 1) = consulta.Fields(I).Name
-              Next I
+              For i = 0 To columnas - 1
+                  APIExcel.cells(2, i + 1) = consulta.Fields(i).Name
+              Next i
            
              'Pegamos los datos de la tabla en la nueva hoja
               consulta.MoveFirst
@@ -6816,7 +6775,7 @@ Public Sub Exportar_AdoDB_Solo_Excel(consulta As ADODB.Recordset, Optional nombr
 Dim APIExcel As Object
 Dim AddLibro As Object
 Dim AddHoja  As Object
-Dim I As Long
+Dim i As Long
 Dim filas As Long
 Dim columnas As Long
 
@@ -6875,9 +6834,9 @@ Dim columnas As Long
             
             'Escribimos el encabezado de la consulta
              APIExcel.cells(1, 1) = Empresa & " [" & nombreHoja & "]"
-             For I = 0 To columnas - 1
-                 APIExcel.cells(2, I + 1) = consulta.Fields(I).Name
-             Next I
+             For i = 0 To columnas - 1
+                 APIExcel.cells(2, i + 1) = consulta.Fields(i).Name
+             Next i
            
             'Pegamos los datos de la tabla en la nueva hoja
              consulta.MoveFirst
@@ -6904,21 +6863,22 @@ Dim FtpOK As Boolean
 
 On Error GoTo error_Handler
     RatonReloj
+    FtpOK = False
     With ftpLinode
          Progreso_Barra.Mensaje_Box = "Conectando al servidor"
         .Inicializar MDIFormulario
         'Le establecemos el nombre y Clave del usuario de la cuenta
-         Select Case strIPServidor
-           Case "db.diskcoversystem.com", "only.diskcoversystem.com"
-               .servidor = ftpUpSvr   'Establecesmo el nombre del Servidor FTP
-               .Usuario = ftpUpUse   'Le establecemos el nombre de usuario de la cuenta
-               .Password = ftpUpPwr  'Le establecemos la contraseña de la cuenta Ftp
-               .Puerto = ftpUpPuerto
-               
-                FtpOK = True
-           Case Else
-                FtpOK = False
-         End Select
+         If InStr(IPDelOrdenador, "192.168.27") Then
+           .servidor = "192.168.27.3"           'Establecesmo el nombre del Servidor FTP
+           .Puerto = 21
+         Else
+           .servidor = ftpUpSvr                 'Establecesmo el nombre del Servidor FTP
+           .Puerto = ftpUpPuerto
+         End If
+        .Password = ftpUpPwr                    'Le establecemos la contraseña de la cuenta Ftp
+        .Usuario = ftpUpUse                     'Le establecemos el nombre de usuario de la cuenta
+         FtpOK = True
+         
         'MsgBox "Conexion: " & FtpOK
          If FtpOK Then
            'conectamos al servidor FTP. EL label es el control donde mostrar los errores y el estado de la conexión
@@ -6946,6 +6906,15 @@ On Error GoTo error_Handler
     Progreso_Barra.Mensaje_Box = "OK"
     Progreso_Esperar True
     RatonNormal
+'    MsgBox "Desktop: Verifique quwe subio el archivo"
+'    strIPServidor
+'.servidor
+'.Usuario
+'.Password
+'.Puerto
+'
+'
+'    & vbCrLf & sOrigen & vbCrLf & sDestino
     Exit Sub
 error_Handler:
     RatonNormal
@@ -6960,21 +6929,32 @@ Dim FtpOK As Boolean
 On Error GoTo error_Handler
    RatonReloj
    'MsgBox strIPServidor
-     
+    FtpOK = False
     With ftpLinode
          Progreso_Barra.Mensaje_Box = "Conectando al servidor"
         .Inicializar MDIFormulario
         'Le establecemos el nombre y Clave del usuario de la cuenta
-         Select Case strIPServidor
-           Case "db.diskcoversystem.com", "only.diskcoversystem.com"
-               .servidor = ftpUpSvr  'Establecesmo el nombre del Servidor FTP
-               .Usuario = ftpUpUse   'Le establecemos el nombre de usuario de la cuenta
-               .Password = ftpUpPwr  'Le establecemos la contraseña de la cuenta Ftp
-               .Puerto = ftpUpPuerto
-                FtpOK = True
-           Case Else
-                FtpOK = False
-         End Select
+         If InStr(IPDelOrdenador, "192.168.27") Then
+           .servidor = "192.168.27.3"           'Establecesmo el nombre del Servidor FTP
+           .Puerto = 21
+         Else
+           .servidor = ftpUpSvr                 'Establecesmo el nombre del Servidor FTP
+           .Puerto = ftpUpPuerto
+         End If
+        .Password = ftpUpPwr                    'Le establecemos la contraseña de la cuenta Ftp
+        .Usuario = ftpUpUse                     'Le establecemos el nombre de usuario de la cuenta
+         FtpOK = True
+        
+'         Select Case strIPServidor
+'           Case "db.diskcoversystem.com", "only.diskcoversystem.com"
+'               .servidor = ftpUpSvr  'Establecesmo el nombre del Servidor FTP
+'               .Usuario = ftpUpUse   'Le establecemos el nombre de usuario de la cuenta
+'               .Password = ftpUpPwr  'Le establecemos la contraseña de la cuenta Ftp
+'               .Puerto = ftpUpPuerto
+'                FtpOK = True
+'           Case Else
+'                FtpOK = False
+'         End Select
          If FtpOK Then
            'conectamos al servidor FTP. EL label es el control donde mostrar los errores y el estado de la conexión
             If .ConectarFtp(LstStatud) = False Then GoTo error_Handler

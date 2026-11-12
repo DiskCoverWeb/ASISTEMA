@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
-Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.5#0"; "comctl32.Ocx"
+Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSAdoDc.ocx"
+Object = "{F0D2F211-CCB0-11D0-A316-00AA00688B10}#1.0#0"; "MSDatLst.Ocx"
 Begin VB.Form ListEmp 
    BackColor       =   &H00FF8080&
    BorderStyle     =   3  'Fixed Dialog
@@ -786,7 +786,6 @@ Dim AltoL As Single
 Dim AnchoL As Single
 Dim PosPicX As Single
 Dim EmpresaTemp As String
-Dim IPDelOrdenador As String
 Dim ItemBD As String
 Dim EsReadOnly As Boolean
 
@@ -989,10 +988,10 @@ Dim SiActualizar As Boolean
              
             'Asignacion de correos automáticos para envio a procesos automatizados
             '*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-             For I = 0 To 6
-                 Lista_De_Correos(I).Correo_Electronico = CorreoDiskCover
-                 Lista_De_Correos(I).Clave = ContrasenaDiskCover
-             Next I
+             For i = 0 To 6
+                 Lista_De_Correos(i).Correo_Electronico = CorreoDiskCover
+                 Lista_De_Correos(i).Clave = ContrasenaDiskCover
+             Next i
             
              If Len(.fields("Email_Conexion")) > 1 And Len(.fields("Email_Clave")) > 1 Then
                 Lista_De_Correos(0).Correo_Electronico = .fields("Email_Conexion")
@@ -1201,12 +1200,12 @@ Dim SiActualizar As Boolean
             If .RecordCount > 0 Then
                 Cantidad_Cyber_Tiempo = .RecordCount - 1
                 ReDim VCyber_Tiempo(Cantidad_Cyber_Tiempo)
-                I = 0
+                i = 0
                 Do While Not .EOF
-                   VCyber_Tiempo(I).Desde = .fields("Desde")
-                   VCyber_Tiempo(I).Hasta = .fields("Hasta")
-                   VCyber_Tiempo(I).Valor = .fields("Valor")
-                   I = I + 1
+                   VCyber_Tiempo(i).Desde = .fields("Desde")
+                   VCyber_Tiempo(i).Hasta = .fields("Hasta")
+                   VCyber_Tiempo(i).Valor = .fields("Valor")
+                   i = i + 1
                   .MoveNext
                 Loop
             End If
@@ -1623,11 +1622,11 @@ Dim RetVal
   ' ImpLineaCeros = False
    TimerAct.Interval = 1000
    ReDim SetD(MaxVect) As Seteos_Documentos
-   For I = 0 To MaxVect - 1
-       SetD(I).PosX = 0
-       SetD(I).PosY = 0
-       SetD(I).Porte = 9
-   Next I
+   For i = 0 To MaxVect - 1
+       SetD(i).PosX = 0
+       SetD(i).PosY = 0
+       SetD(i).Porte = 9
+   Next i
    Me.Font = 10
   'MsgBox WindowsDirectory & vbCrLf & SystemDirectory
    MensajeEncabData = ""
@@ -1835,6 +1834,8 @@ Dim ConexionAlInternet As Boolean
        CmdBAceptar.Enabled = False
        CmdBCrearEmp.Enabled = False
     End If
+    If Dir$("C:\Program Files\JSignPdf\JSignPdfC.exe") = "" Then MsgBox "ADVERTENCIA: Solicite a DiskCover System, actualizar los controladores para firmar electronicamente los documentos PDF (RIDE)"
+
   'NumEmpresa = "001"
 End Sub
 
@@ -2669,22 +2670,22 @@ On Error GoTo error_Handler
                 ActualizoFile = False
                .CambiarDirectorio ftpUpDir & "/SISTEMA/CERTIFIC/"
                .ListarArchivos
-                For I = 1 To LstVwFTP.ListItems.Count
-                 If UCaseStrg(Certificado) = UCaseStrg(LstVwFTP.ListItems(I)) Then
-                   .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\CERTIFIC\" & LstVwFTP.ListItems(I), True
+                For i = 1 To LstVwFTP.ListItems.Count
+                 If UCaseStrg(Certificado) = UCaseStrg(LstVwFTP.ListItems(i)) Then
+                   .ObtenerArchivo LstVwFTP.ListItems(i), RutaSistema & "\CERTIFIC\" & LstVwFTP.ListItems(i), True
                     ActualizoFile = True
                     Exit For
                  End If
-                Next I
+                Next i
                'Bajamos el logotipo si no los tubiera el Cliente
                .CambiarDirectorio ftpUpDir & "/SISTEMA/LOGOS/"
                .ListarArchivos
-                For I = 1 To LstVwFTP.ListItems.Count
-                    RutaDocumentos = RutaSistema & "\LOGOS\" & LstVwFTP.ListItems(I)
-                    If UCaseStrg(LogoTipoGIF) = UCaseStrg(LstVwFTP.ListItems(I)) Then .ObtenerArchivo LstVwFTP.ListItems(I), RutaDocumentos, True
-                    If UCaseStrg(LogoTipoJPG) = UCaseStrg(LstVwFTP.ListItems(I)) Then .ObtenerArchivo LstVwFTP.ListItems(I), RutaDocumentos, True
-                    If UCaseStrg(LogoTipoPNG) = UCaseStrg(LstVwFTP.ListItems(I)) Then .ObtenerArchivo LstVwFTP.ListItems(I), RutaDocumentos, True
-                Next I
+                For i = 1 To LstVwFTP.ListItems.Count
+                    RutaDocumentos = RutaSistema & "\LOGOS\" & LstVwFTP.ListItems(i)
+                    If UCaseStrg(LogoTipoGIF) = UCaseStrg(LstVwFTP.ListItems(i)) Then .ObtenerArchivo LstVwFTP.ListItems(i), RutaDocumentos, True
+                    If UCaseStrg(LogoTipoJPG) = UCaseStrg(LstVwFTP.ListItems(i)) Then .ObtenerArchivo LstVwFTP.ListItems(i), RutaDocumentos, True
+                    If UCaseStrg(LogoTipoPNG) = UCaseStrg(LstVwFTP.ListItems(i)) Then .ObtenerArchivo LstVwFTP.ListItems(i), RutaDocumentos, True
+                Next i
                 If ActualizoFile Then MsgBox "Certificado nuevo actualizado"
                 .Desconectar
             Else

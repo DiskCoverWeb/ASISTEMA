@@ -1773,9 +1773,9 @@ Dim Cont As Byte
             cPrint.printTexto PosCampo(1), PosLinea, "No"
             cPrint.printTexto PosCampo(2), PosLinea, "Cedula"
             cPrint.printTexto PosCampo(3), PosLinea, "Apellidos_Nombres"
-            For I = 4 To 15
-                cPrint.printTexto PosCampo(I), PosLinea, MidStrg(.fields(I - 2).Name, 1, 3)
-            Next I
+            For i = 4 To 15
+                cPrint.printTexto PosCampo(i), PosLinea, MidStrg(.fields(i - 2).Name, 1, 3)
+            Next i
             PosLinea = PosLinea + 0.4
             cPrint.printLinea 2.3, PosLinea, cPrint.dAnchoPapel - 1.1, PosLinea
             PosLinea = PosLinea + 0.1
@@ -1787,11 +1787,11 @@ Dim Cont As Byte
                cPrint.printFields PosCampo(2), PosLinea, .fields("CI_RUC")
                cPrint.printTexto PosCampo(3), PosLinea, ULCase(.fields("Cliente"))
                cPrint.printCuadro PosCampo(4) - 0.1, PosLinea, PosCampo(4) + 0.5, PosLinea + 0.4, Blanco_Claro, "BF"
-               For I = 4 To 15
-                   If .fields(I - 2) <> 0 Then ValorCampo = Format(.fields(I - 2), "#,#0.00") Else ValorCampo = " "
+               For i = 4 To 15
+                   If .fields(i - 2) <> 0 Then ValorCampo = Format(.fields(i - 2), "#,#0.00") Else ValorCampo = " "
                    If Not PorValor And Len(ValorCampo) > 1 Then ValorCampo = "Pag."
-                   cPrint.printTexto PosCampo(I), PosLinea, ValorCampo
-               Next I
+                   cPrint.printTexto PosCampo(i), PosLinea, ValorCampo
+               Next i
                Cont = Cont + 1
                PosLinea = PosLinea + 0.4
                cPrint.printLinea 2.3, PosLinea, cPrint.dAnchoPapel - 1.1, PosLinea
@@ -1800,16 +1800,16 @@ Dim Cont As Byte
             Loop
             cPrint.printLinea 2.3, PrimeraLinea, 2.3, PosLinea - 0.1
             cPrint.printLinea 20.4, PrimeraLinea, 20.4, PosLinea - 0.1
-            For I = 2 To 15
-                cPrint.printLinea PosCampo(I) - 0.05, PrimeraLinea, PosCampo(I) - 0.05, PosLinea - 0.1
-            Next I
+            For i = 2 To 15
+                cPrint.printLinea PosCampo(i) - 0.05, PrimeraLinea, PosCampo(i) - 0.05, PosLinea - 0.1
+            Next i
             cPrint.printTexto PosCampo(1), PosLinea, "OBSERVACIONES:"
             PosLinea = PosLinea + 0.3
-            For I = 1 To 4
+            For i = 1 To 4
                 PosLinea = PosLinea + 0.5
                 cPrint.printLinea 2.3, PosLinea, cPrint.dAnchoPapel - 1.1, PosLinea
                 PosLinea = PosLinea + 0.1
-            Next I
+            Next i
            'fin del documento
             cPrint.finalizaImpresion
         End If
@@ -2379,21 +2379,21 @@ Dim IdMail As Long
              TMail.Asunto = "Envio automatizado de su cartera pendiente por USD " & Format$(Total, "#,#0.00")
              
              html_Detalle_adicional = "<thead><tr><strong><td>DETALLE</td><td>PENDIENTE</td><td>MONTO</td></strong></tr></thead><tbody>"
-             For J = 2 To .fields.Count - 7
-                 If .fields(J) > 0 Then
-                     Select Case .fields(J).Name
+             For j = 2 To .fields.Count - 7
+                 If .fields(j) > 0 Then
+                     Select Case .fields(j).Name
                        Case "SubTotal", "Total", "Anticipos"
                             'No hace nada
                        Case Else
                             html_Detalle_adicional = html_Detalle_adicional _
                                                    & "<tr>" _
                                                    & "<td>Valor Pendiente</td>" _
-                                                   & "<td>" & .fields(J).Name & "</td>" _
-                                                   & "<td class='row text-right'>" & Format(.fields(J), "#,#0.00") & "</td>" _
+                                                   & "<td>" & .fields(j).Name & "</td>" _
+                                                   & "<td class='row text-right'>" & Format(.fields(j), "#,#0.00") & "</td>" _
                                                    & "</tr>"
                      End Select
                  End If
-             Next J
+             Next j
              
              html_Detalle_adicional = html_Detalle_adicional _
                                     & "<tr>" _
@@ -2458,13 +2458,16 @@ Private Sub CTipoConsulta_LostFocus()
           PorGrupo = True
           Listar_Grupo
           DCCliente.Visible = True
+          DCCliente.SetFocus
      Case "Listar por Direccion"
           PorDireccion = True
           Listar_Grupo
           DCCliente.Visible = True
+          DCCliente.SetFocus
      Case Else
           DCCliente.Visible = False
           SSTab2.Tab = 0
+          CheqResumen.SetFocus
    End Select
 End Sub
 
@@ -2953,9 +2956,9 @@ End Sub
 
 Private Sub LstClientes_Click()
   If LstClientes.Selected(0) = True Then
-     For I = 0 To LstClientes.ListCount - 1
-         LstClientes.Selected(I) = True
-     Next I
+     For i = 0 To LstClientes.ListCount - 1
+         LstClientes.Selected(i) = True
+     Next i
   End If
 End Sub
 
@@ -3135,9 +3138,9 @@ Dim DeudaCliente As String
              LstClientes.AddItem DeudaCliente
             .MoveNext
           Loop
-          For I = 1 To LstClientes.ListCount - 1
-              LstClientes.Selected(I) = False
-          Next I
+          For i = 1 To LstClientes.ListCount - 1
+              LstClientes.Selected(i) = False
+          Next i
           LstClientes.Text = LstClientes.List(0)
       End If
      End With

@@ -101,6 +101,7 @@ Class=cStringBuilder; ..\CLASES\cStringBuilder.cls
 Form=Kard_Chg.frm
 Form=..\GENERAL\FSRIAutorizaXML.frm
 Form=..\GENERAL\FInfMsg.frm
+Module=RC4Archivos; ..\MODULOS\SubCifrado.bas
 IconForm="MDICosto"
 Startup="MDICosto"
 HelpFile=""

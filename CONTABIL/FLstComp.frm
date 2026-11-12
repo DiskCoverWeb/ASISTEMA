@@ -13,8 +13,8 @@ Begin VB.Form FListComprobantes
    ClientWidth     =   11280
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   8895
-   ScaleWidth      =   11280
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    WindowState     =   2  'Maximized
    Begin VB.CommandButton Command2 
       BackColor       =   &H00FFFFC0&
@@ -311,8 +311,8 @@ Begin VB.Form FListComprobantes
       Left            =   0
       TabIndex        =   34
       Top             =   0
-      Width           =   11280
-      _ExtentX        =   19897
+      Width           =   28560
+      _ExtentX        =   50377
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -1832,7 +1832,7 @@ Dim IDTipoComp As Integer
 Dim FechaTemp As String
 
 Public Sub Imprimir_Cheques_En_Bloque()
-On Error GoTo Errorhandler
+On Error GoTo ErrorHandler
 RatonReloj
 Mensajes = "Imprimir Cheques" & vbCrLf _
          & "De: " & NombreCliente & vbCrLf
@@ -1887,7 +1887,7 @@ RatonNormal
 MensajeEncabData = ""
 Printer.EndDoc
 Exit Sub
-Errorhandler:
+ErrorHandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -2665,6 +2665,13 @@ If ClaveSupervisor Then
                sSQL = "DELETE * " _
                     & "FROM Trans_Kardex " _
                     & AnularComprobanteDe
+               Ejecutar_SQL_SP sSQL
+               
+               sSQL = "DELETE * " _
+                    & "FROM Trans_Correos " _
+                    & "WHERE Periodo = '" & Periodo_Contable & "' " _
+                    & "AND Item = '" & Co.Item & "' " _
+                    & "AND Recibo_No = " & Co.Numero & " "
                Ejecutar_SQL_SP sSQL
             End If
          End If

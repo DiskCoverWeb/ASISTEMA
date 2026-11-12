@@ -351,7 +351,8 @@ Type CtasAsiento
       Cta_Numero       As String
       Fecha_Cad        As String
       ResultadoFA      As String
-
+      Cod_Banco        As String
+      
       C                As Boolean
       p                As Boolean
       SP               As Boolean
@@ -372,7 +373,7 @@ Type CtasAsiento
       
       CantFact         As Integer
       TDT              As Integer
-      Cod_Banco        As Integer
+      
       Cantidad_Rubros  As Integer
       
       Factura          As Long

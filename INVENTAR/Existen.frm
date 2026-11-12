@@ -1127,7 +1127,7 @@ Dim GrupoInv As String
   If Codigo = "" Then Codigo = "."
   If GrupoInv = "" Then GrupoInv = "*"
   
-  sSQL = "SELECT TK.Codigo_Inv, CP.Producto, CP.Unidad, TK.CodBodega As Bodega, TK.Codigo_Barra, TK.Fecha, TK.TP, TK.Numero, TK.Entrada, TK.Salida, "
+  sSQL = "SELECT TK.Codigo_Inv, CP.Producto, CP.Unidad, TK.CodBodega As Bodega, TK.Codigo_Barra As Codigo_Barra_QR, TK.Fecha, TK.TP, TK.Numero, TK.Entrada, TK.Salida, "
   If PorCodigoBarra Then
      sSQL = sSQL & "TK.Stock_Barra As Stock, "
   ElseIf PorBodega Then
@@ -1138,15 +1138,15 @@ Dim GrupoInv As String
   sSQL = sSQL _
        & "TK.Costo, TK.Total As Saldo, TK.Valor_Unitario, TK.Valor_Total, TK.Fecha_Exp, TK.TC, TK.Serie, TK.Factura, TK.Cta_Inv, TK.Contra_Cta, TK.Serie_No, TK.Lote_No, " _
        & "Tipo_Areas_NIC_CC=CASE WHEN LEN(Codigo_Tra) <> 5 THEN Codigo_Tra ELSE (SELECT Proceso FROM Catalogo_Proceso WHERE Item = '" & NumEmpresa & "' AND Cmds = TK.Codigo_Tra) END, " _
-       & "Motivos_Modelo=CASE WHEN LEN(Modelo) <> 5 THEN Modelo ELSE (SELECT Proceso FROM Catalogo_Proceso WHERE Item = '" & NumEmpresa & "' AND Cmds = TK.Modelo) END, " _
+       & "Motivos_Modelo_Egreso=CASE WHEN LEN(Modelo) <> 5 THEN Modelo ELSE (SELECT Proceso FROM Catalogo_Proceso WHERE Item = '" & NumEmpresa & "' AND Cmds = TK.Modelo) END, " _
        & "Marca_Tipo_Proceso=CASE WHEN LEN(CodMarca) = 1 THEN '.' ELSE (SELECT Marca FROM Catalogo_Marcas WHERE Item = '" & NumEmpresa & "' AND Periodo = '" & Periodo_Contable & "' AND CodMar = TK.CodMarca) END, " _
        & "Tipo_Ingreso = CASE WHEN LEN(Cmds) <> 4 THEN Cmds ELSE (SELECT Proceso FROM Catalogo_Proceso WHERE Item = '" & NumEmpresa & "' AND TP = TK.Cmds) END, " _
-       & "TK.Detalle, TK.Centro_Costo As Beneficiario_Centro_Costo, TK.Orden_No, TK.ID " _
+       & "TK.Detalle, TK.Centro_Costo As Beneficiario_Centro_Costo, TK.Orden_No, TK.T, TK.ID " _
        & "FROM Trans_Kardex As TK, Catalogo_Productos As CP " _
        & "WHERE TK.Item = '" & NumEmpresa & "' " _
        & "AND TK.Periodo = '" & Periodo_Contable & "' " _
-       & "AND TK.Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
-       & "AND TK.T = '" & Normal & "' "
+       & "AND TK.Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# "
+       '& "AND TK.T = '" & Normal & "' "
   If EsKardexIndividual Then
      sSQL = sSQL & "AND TK.Codigo_Inv = '" & Codigo & "' "
   Else
@@ -1378,7 +1378,7 @@ Private Sub DGKardex_KeyDown(KeyCode As Integer, Shift As Integer)
     CodigoInv = DGKardex.Columns(0)
     FechaIni = BuscarFecha(MBoxFechaI.Text)
     FechaFin = BuscarFecha(MBoxFechaF.Text)
-    ID_Reg = Val(DGKardex.Columns(CantCampos - 1).Text)
+    ID_Reg = Val(DGKardex.Columns(DGKardex.Columns.Count - 1).Text)
     Select Case Opcion_Menu
       Case 1
            Producto = DGKardex.Columns(1)
@@ -1451,6 +1451,24 @@ Private Sub DGKardex_KeyDown(KeyCode As Integer, Shift As Integer)
           End If
           RatonNormal
           MsgBox "Proceso Terminado, vuelva a listar el documento"
+       End If
+    End If
+    
+    If CtrlDown And KeyCode = vbKeyDelete Then
+       Titulo = "PREGUNTA DE ELIMINACION"
+       Mensajes = "Esta seguro de Eliminar el Kardex del comprobante " & MBoxFechaI.Text & " - " & MBoxFechaF.Text & "?"
+       If BoxMensaje = vbYes Then
+          RatonReloj
+          
+          sSQL = "DELETE * " _
+               & "FROM Trans_Kardex " _
+               & "WHERE Item = '" & NumEmpresa & "' " _
+               & "AND Periodo = '" & Periodo_Contable & "' " _
+               & "AND Fecha BETWEEN #" & FechaIni & "# AND #" & FechaFin & "# " _
+               & "AND ID = " & ID_Reg & " "
+          Ejecutar_SQL_SP sSQL
+          RatonNormal
+          MsgBox "Proceso Terminado, vuelva a listar el Kardex"
        End If
     End If
     

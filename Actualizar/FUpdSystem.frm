@@ -568,54 +568,54 @@ On Error GoTo error_Handler
          .CambiarDirectorio ftpUpDir & "/SISTEMA"
          .ListarArchivos
          'Borramos los ejecutable nuevos
-          For I = 1 To LstVwFTP.ListItems.Count
-              If UCaseStrg(RightStrg(LstVwFTP.ListItems(I), 3)) = "EXE" Then
-                 Progreso_Barra.Mensaje_Box = "Eliminando: " & LstVwFTP.ListItems(I)
+          For i = 1 To LstVwFTP.ListItems.Count
+              If UCaseStrg(RightStrg(LstVwFTP.ListItems(i), 3)) = "EXE" Then
+                 Progreso_Barra.Mensaje_Box = "Eliminando: " & LstVwFTP.ListItems(i)
                 .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                 Eliminar_Si_Existe_File RutaSistema & "\" & LstVwFTP.ListItems(I)
+                 Eliminar_Si_Existe_File RutaSistema & "\" & LstVwFTP.ListItems(i)
               End If
-              Cadena = Cadena & LstVwFTP.ListItems(I) & vbCrLf
-          Next I
+              Cadena = Cadena & LstVwFTP.ListItems(i) & vbCrLf
+          Next i
 
-          For I = 1 To LstVwFTP.ListItems.Count
-              Select Case UCaseStrg(RightStrg(LstVwFTP.ListItems(I), 3))
+          For i = 1 To LstVwFTP.ListItems.Count
+              Select Case UCaseStrg(RightStrg(LstVwFTP.ListItems(i), 3))
                 Case "PNG", "JPG", "GIF"
-                 Cadena = Cadena & "Copying: " & LstVwFTP.ListItems(I) & vbCrLf
-                 Progreso_Barra.Mensaje_Box = "Actualizando: " & LstVwFTP.ListItems(I)
+                 Cadena = Cadena & "Copying: " & LstVwFTP.ListItems(i) & vbCrLf
+                 Progreso_Barra.Mensaje_Box = "Actualizando: " & LstVwFTP.ListItems(i)
                 .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\" & LstVwFTP.ListItems(I), True
+                .ObtenerArchivo LstVwFTP.ListItems(i), RutaSistema & "\" & LstVwFTP.ListItems(i), True
               End Select
-          Next I
+          Next i
           
           Sleep 500
           
-          For I = 1 To LstVwFTP.ListItems.Count
-              If UCaseStrg(RightStrg(LstVwFTP.ListItems(I), 3)) = "EXE" Then
-                 Cadena = Cadena & "Copying: " & LstVwFTP.ListItems(I) & vbCrLf
-                 Progreso_Barra.Mensaje_Box = "Actualizando: " & LstVwFTP.ListItems(I)
+          For i = 1 To LstVwFTP.ListItems.Count
+              If UCaseStrg(RightStrg(LstVwFTP.ListItems(i), 3)) = "EXE" Then
+                 Cadena = Cadena & "Copying: " & LstVwFTP.ListItems(i) & vbCrLf
+                 Progreso_Barra.Mensaje_Box = "Actualizando: " & LstVwFTP.ListItems(i)
                 .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\" & LstVwFTP.ListItems(I), True
+                .ObtenerArchivo LstVwFTP.ListItems(i), RutaSistema & "\" & LstVwFTP.ListItems(i), True
               End If
-          Next I
+          Next i
 
          .CambiarDirectorio ftpUpDir & "/SISTEMA/JAVASCRIPT/"
          .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              Progreso_Barra.Mensaje_Box = "Actualizando: " & LstVwFTP.ListItems(I)
+          For i = 1 To LstVwFTP.ListItems.Count
+              Progreso_Barra.Mensaje_Box = "Actualizando: " & LstVwFTP.ListItems(i)
              .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-             .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\JAVASCRIPT\" & LstVwFTP.ListItems(I), True
-          Next I
+             .ObtenerArchivo LstVwFTP.ListItems(i), RutaSistema & "\JAVASCRIPT\" & LstVwFTP.ListItems(i), True
+          Next i
           
          'Conectamos la nueva Base de Datos para sacar los fondos del Adobe Reader DC
          .CambiarDirectorio ftpUpDir & "/SISTEMA/FONTSPDF/"
          .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              If Len(LstVwFTP.ListItems(I)) > 3 Then
-                 Progreso_Barra.Mensaje_Box = "Descargando: " & LstVwFTP.ListItems(I)
+          For i = 1 To LstVwFTP.ListItems.Count
+              If Len(LstVwFTP.ListItems(i)) > 3 Then
+                 Progreso_Barra.Mensaje_Box = "Descargando: " & LstVwFTP.ListItems(i)
                 .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\FONTSPDF\" & LstVwFTP.ListItems(I), True
+                .ObtenerArchivo LstVwFTP.ListItems(i), RutaSistema & "\FONTSPDF\" & LstVwFTP.ListItems(i), True
               End If
-          Next I
+          Next i
        End If
 
       '=======================================================
@@ -623,93 +623,93 @@ On Error GoTo error_Handler
       '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
        If InStr(TypeUpdate, "[3]") Then
          'Borrammos fondos antiguos de cada mes
-          For J = 1 To 12
-             .CambiarDirectorio ftpUpDir & "/SISTEMA/FONDOS/M" & Format(J, "00") & "/"
+          For j = 1 To 12
+             .CambiarDirectorio ftpUpDir & "/SISTEMA/FONDOS/M" & Format(j, "00") & "/"
              .ListarArchivos
-              For I = 1 To LstVwFTP.ListItems.Count
-                  If Len(LstVwFTP.ListItems(I)) > 3 Then
-                     Progreso_Barra.Mensaje_Box = "Eliminando: FONDOS\M" & Format(J, "00") & "\" & LstVwFTP.ListItems(I)
+              For i = 1 To LstVwFTP.ListItems.Count
+                  If Len(LstVwFTP.ListItems(i)) > 3 Then
+                     Progreso_Barra.Mensaje_Box = "Eliminando: FONDOS\M" & Format(j, "00") & "\" & LstVwFTP.ListItems(i)
                     .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                     Eliminar_Si_Existe_File RutaSistema & "\FONDOS\M" & Format(J, "00") & "\" & LstVwFTP.ListItems(I)
+                     Eliminar_Si_Existe_File RutaSistema & "\FONDOS\M" & Format(j, "00") & "\" & LstVwFTP.ListItems(i)
                   End If
-              Next I
-          Next J
+              Next i
+          Next j
          
          .CambiarDirectorio ftpUpDir & "/SISTEMA/LOGOS/"
          .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              If Len(LstVwFTP.ListItems(I)) > 3 Then
-                 Progreso_Barra.Mensaje_Box = "Eliminando: LOGOS\" & LstVwFTP.ListItems(I)
+          For i = 1 To LstVwFTP.ListItems.Count
+              If Len(LstVwFTP.ListItems(i)) > 3 Then
+                 Progreso_Barra.Mensaje_Box = "Eliminando: LOGOS\" & LstVwFTP.ListItems(i)
                 .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                 Eliminar_Si_Existe_File RutaSistema & "\LOGOS\" & LstVwFTP.ListItems(I)
+                 Eliminar_Si_Existe_File RutaSistema & "\LOGOS\" & LstVwFTP.ListItems(i)
               End If
-          Next I
+          Next i
           
          .CambiarDirectorio ftpUpDir & "/SISTEMA/FOTOS/"
          .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              If Len(LstVwFTP.ListItems(I)) > 3 Then
-                 Progreso_Barra.Mensaje_Box = "Eliminando: FOTOS\" & LstVwFTP.ListItems(I)
+          For i = 1 To LstVwFTP.ListItems.Count
+              If Len(LstVwFTP.ListItems(i)) > 3 Then
+                 Progreso_Barra.Mensaje_Box = "Eliminando: FOTOS\" & LstVwFTP.ListItems(i)
                 .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                 Eliminar_Si_Existe_File RutaSistema & "\FOTOS\" & LstVwFTP.ListItems(I)
+                 Eliminar_Si_Existe_File RutaSistema & "\FOTOS\" & LstVwFTP.ListItems(i)
               End If
-          Next I
+          Next i
           
          .CambiarDirectorio ftpUpDir & "/SISTEMA/FORMATOS/"
          .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              If Len(LstVwFTP.ListItems(I)) > 3 Then
-                 Progreso_Barra.Mensaje_Box = "Eliminando: FORMATOS\" & LstVwFTP.ListItems(I)
+          For i = 1 To LstVwFTP.ListItems.Count
+              If Len(LstVwFTP.ListItems(i)) > 3 Then
+                 Progreso_Barra.Mensaje_Box = "Eliminando: FORMATOS\" & LstVwFTP.ListItems(i)
                 .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                 Eliminar_Si_Existe_File RutaSistema & "\FORMATOS\" & LstVwFTP.ListItems(I)
+                 Eliminar_Si_Existe_File RutaSistema & "\FORMATOS\" & LstVwFTP.ListItems(i)
               End If
-          Next I
+          Next i
                     
          'Insertamos los fondos por Mes
-          For J = 1 To 12
-             .CambiarDirectorio ftpUpDir & "/SISTEMA/FONDOS/M" & Format(J, "00") & "/"
+          For j = 1 To 12
+             .CambiarDirectorio ftpUpDir & "/SISTEMA/FONDOS/M" & Format(j, "00") & "/"
              .ListarArchivos
              'Cadena = "/SISTEMA/FONDOS/M" & Format(J, "00") & "/" & vbCrLf
-              For I = 1 To LstVwFTP.ListItems.Count
+              For i = 1 To LstVwFTP.ListItems.Count
                  'Cadena = Cadena & LstVwFTP.ListItems(I) & vbCrLf
-                  If Len(LstVwFTP.ListItems(I)) > 3 Then
-                     Progreso_Barra.Mensaje_Box = "Actualizando: FONDOS\M" & Format(J, "00") & "\" & LstVwFTP.ListItems(I)
+                  If Len(LstVwFTP.ListItems(i)) > 3 Then
+                     Progreso_Barra.Mensaje_Box = "Actualizando: FONDOS\M" & Format(j, "00") & "\" & LstVwFTP.ListItems(i)
                     .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                    .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\FONDOS\M" & Format(J, "00") & "\" & LstVwFTP.ListItems(I), True
+                    .ObtenerArchivo LstVwFTP.ListItems(i), RutaSistema & "\FONDOS\M" & Format(j, "00") & "\" & LstVwFTP.ListItems(i), True
                   End If
-              Next I
+              Next i
              'MsgBox Cadena
-          Next J
+          Next j
           
          .CambiarDirectorio ftpUpDir & "/SISTEMA/LOGOS/"
          .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              If Len(LstVwFTP.ListItems(I)) > 3 Then
-                 Progreso_Barra.Mensaje_Box = "Actualizando: LOGOS\" & LstVwFTP.ListItems(I)
+          For i = 1 To LstVwFTP.ListItems.Count
+              If Len(LstVwFTP.ListItems(i)) > 3 Then
+                 Progreso_Barra.Mensaje_Box = "Actualizando: LOGOS\" & LstVwFTP.ListItems(i)
                 .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\LOGOS\" & LstVwFTP.ListItems(I), True
+                .ObtenerArchivo LstVwFTP.ListItems(i), RutaSistema & "\LOGOS\" & LstVwFTP.ListItems(i), True
               End If
-          Next I
+          Next i
           
          .CambiarDirectorio ftpUpDir & "/SISTEMA/FOTOS/"
          .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              If Len(LstVwFTP.ListItems(I)) > 3 Then
-                 Progreso_Barra.Mensaje_Box = "Actualizando: FOTOS\" & LstVwFTP.ListItems(I)
+          For i = 1 To LstVwFTP.ListItems.Count
+              If Len(LstVwFTP.ListItems(i)) > 3 Then
+                 Progreso_Barra.Mensaje_Box = "Actualizando: FOTOS\" & LstVwFTP.ListItems(i)
                 .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\FOTOS\" & LstVwFTP.ListItems(I), True
+                .ObtenerArchivo LstVwFTP.ListItems(i), RutaSistema & "\FOTOS\" & LstVwFTP.ListItems(i), True
               End If
-          Next I
+          Next i
           
          .CambiarDirectorio ftpUpDir & "/SISTEMA/FORMATOS/"
          .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              If Len(LstVwFTP.ListItems(I)) > 3 Then
-                 Progreso_Barra.Mensaje_Box = "Actualizando: FORMATOS\" & LstVwFTP.ListItems(I)
+          For i = 1 To LstVwFTP.ListItems.Count
+              If Len(LstVwFTP.ListItems(i)) > 3 Then
+                 Progreso_Barra.Mensaje_Box = "Actualizando: FORMATOS\" & LstVwFTP.ListItems(i)
                 .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\FORMATOS\" & LstVwFTP.ListItems(I), True
+                .ObtenerArchivo LstVwFTP.ListItems(i), RutaSistema & "\FORMATOS\" & LstVwFTP.ListItems(i), True
               End If
-          Next I
+          Next i
        End If
       .Desconectar
    End With
@@ -754,7 +754,6 @@ Dim HayCnn As Boolean
     
     MDI_X_Max = Screen.width - 150
     MDI_Y_Max = Screen.Height - 1850
-    
     
    'Redondear_Cuadro FUpdSystem, 25
     ConSubDir = False

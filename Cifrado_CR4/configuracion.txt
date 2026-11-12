@@ -1,0 +1,7 @@
+<SQLServer = SI>
+Data Source=tcp:mysql.diskcoversystem.com,11433;
+Initial Catalog=DiskCover_Desarrollo;
+Provider=SQLOLEDB.1;
+UID=diskcover;
+PWD=Dlcjvl1210@;
+</SQLServer>

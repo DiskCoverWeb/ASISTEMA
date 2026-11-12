@@ -1441,7 +1441,7 @@ Dim AdoCliDB As ADODB.Recordset
 Public Sub Imprimir_Codigos_Banco(Datas As Adodc, _
                                   Optional EsCampoCorto As Boolean)
 Dim TipoLetra As String
-On Error GoTo ErrorHandler
+On Error GoTo Errorhandler
 
 Mensajes = "Seguro de Imprimir en:" & vbCrLf & Printer.DeviceName & "?"
 Titulo = "IMPRESION"
@@ -1547,7 +1547,7 @@ RatonNormal
 MensajeEncabData = ""
 Printer.EndDoc
 Exit Sub
-ErrorHandler:
+Errorhandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -2583,7 +2583,7 @@ Dim CaptionTemp As String
   'MsgBox Tipo_Carga
   Select Case Tipo_Carga
     Case 2
-         sSQL = "SELECT C.Codigo As CodigoC,F.Codigo,C.Grupo,C.Cliente,C.CI_RUC,C.Direccion,C.Casilla,C.Actividad,F.Periodo,F.Num_Mes,F.Fecha,CC.Codigo_Inv," _
+         sSQL = "SELECT C.Codigo As CodigoC,F.Codigo,C.Grupo,C.Cliente,C.TD,C.CI_RUC,C.Direccion,C.Casilla,C.Actividad,F.Periodo,F.Num_Mes,F.Fecha,CC.Codigo_Inv," _
               & "C.Representante,C.CI_RUC_R,C.TD_R,C.Telefono_R,C.Tipo_Cta,C.Cod_Banco,C.Cta_Numero,C.DireccionT,C.Fecha_Cad,C.Email2," _
               & "C.Saldo_Pendiente,CC.Producto,(F.Valor-(F.Descuento+F.Descuento2)) As Valor_Cobro " _
               & "FROM Clientes_Facturacion As F,Clientes As C,Catalogo_Productos As CC " _
@@ -2591,13 +2591,13 @@ Dim CaptionTemp As String
               & "AND CC.Periodo = '" & Periodo_Contable & "' " _
               & "AND (F.Valor-(F.Descuento+F.Descuento2)) > 0 "
     Case 3
-         sSQL = "SELECT C.Codigo As CodigoC,F.Codigo,C.Grupo,C.Cliente,C.CI_RUC,C.Direccion,C.Casilla,C.Actividad,C.Plan_Afiliado,C.Saldo_Pendiente," _
+         sSQL = "SELECT C.Codigo As CodigoC,F.Codigo,C.Grupo,C.Cliente,C.TD,C.CI_RUC,C.Direccion,C.Casilla,C.Actividad,C.Plan_Afiliado,C.Saldo_Pendiente," _
               & "C.Representante,C.CI_RUC_R,C.TD_R,C.Telefono_R,C.Tipo_Cta,C.Cod_Banco,C.Cta_Numero,C.DireccionT,C.Fecha_Cad,C.Email2,'PENSION ' As Producto," _
               & "'01.01' As Codigo_Inv,SUM(F.Valor-(F.Descuento+F.Descuento2)) As Valor_Cobro " _
               & "FROM Clientes_Facturacion As F,Clientes As C " _
               & "WHERE F.Item = '" & NumEmpresa & "' "
     Case Else
-         sSQL = "SELECT C.Codigo As CodigoC,F.Codigo,C.Grupo,C.Cliente,C.CI_RUC,C.Direccion,C.Casilla,C.Actividad,C.Plan_Afiliado,F.Periodo,F.Num_Mes,F.Fecha," _
+         sSQL = "SELECT C.Codigo As CodigoC,F.Codigo,C.Grupo,C.Cliente,C.TD,C.CI_RUC,C.Direccion,C.Casilla,C.Actividad,C.Plan_Afiliado,F.Periodo,F.Num_Mes,F.Fecha," _
               & "C.Representante,C.CI_RUC_R,C.TD_R,C.Telefono_R,C.Tipo_Cta,C.Cod_Banco,C.Cta_Numero,C.DireccionT,C.Fecha_Cad,C.Email2,C.EmailR," _
               & "F.Codigo_Inv, CC.Producto, C.Saldo_Pendiente,SUM(F.Valor-(F.Descuento+F.Descuento2)) As Valor_Cobro "
          'If CheqMatricula.value = 1 Then sSQL = sSQL & "'MATRICULAS Y PENSION DE ' As Producto " Else sSQL = sSQL & "'PENSION DE ' As Producto "
@@ -2624,7 +2624,7 @@ Dim CaptionTemp As String
     Case "INTERNACIONAL"
     Case Else
          sSQL = sSQL _
-              & "AND C.Cod_Banco > 0 " _
+              & "AND LEN(C.Cod_Banco) > 1 " _
               & "AND LEN(C.Cta_Numero) > 1 " _
               & "AND C.Tipo_Cta <> '.' "
   End Select
@@ -3889,7 +3889,7 @@ Dim TipoCta As String
           If Len(.fields("Email2")) > 3 Then CadAux = CadAux & ";" & .fields("Email2")
           
           If Tipo_Carga = 2 Then
-             Codigo4 = "RECAUDACIONES"
+             Codigo4 = "RECAUDACIONES " & Format$(Factura_No, "0000000000")
           Else
              If CheqMatricula.value = 1 Then
                 Codigo4 = "MATRICULAS Y PENSION DE " & MidStrg(MesesLetras(Month(MBFechaI)), 1, 3) & "-" & Year(MBFechaI)
@@ -3910,39 +3910,39 @@ Dim TipoCta As String
              Print #NumFileFacturas, "CO" & vbTab;                                                           '1
              Print #NumFileFacturas, Cta_Banco & vbTab;                                                      '2
              Print #NumFileFacturas, Contador & vbTab;                                                       '3
-             Print #NumFileFacturas, Format$(Factura_No, "0000000000") & vbTab;                              '4
-             Print #NumFileFacturas, CodigoP & vbTab;                                                        '5
+             Print #NumFileFacturas, .fields("CI_RUC_R") & vbTab;                                            '4 Cambiar por Cedula Representnte
+             Print #NumFileFacturas, .fields("CI_RUC") & vbTab;                                              '5 Cambiar la Cedula o codigo del Estudiante
              Print #NumFileFacturas, "USD" & vbTab;                                                          '6
              Print #NumFileFacturas, Format$(Saldo, "0000000000000") & vbTab;                                '7
              Print #NumFileFacturas, "REC" & vbTab;                                                          '8
              Print #NumFileFacturas, "32" & vbTab;                                                           '9
              Print #NumFileFacturas, vbTab;                                                                  '10 -> CTE/AHO
              Print #NumFileFacturas, "0" & vbTab;                                                            '11 -> No. Cta Cte/Aho
-             Print #NumFileFacturas, .fields("TD_R") & vbTab;                                                    '12
-             Print #NumFileFacturas, .fields("CI_RUC_R") & vbTab;                         '13
-             Print #NumFileFacturas, MidStrg(Month(.fields("Fecha")) & " " & NombreCliente, 1, 40) & vbTab;  '14
+             Print #NumFileFacturas, .fields("TD") & vbTab;                                                  '12 TD del Estudiante
+             Print #NumFileFacturas, .fields("CI_RUC") & vbTab;                                              '13 Cedula del Estudiante
+             Print #NumFileFacturas, MidStrg(NombreCliente & " " & Format(Month(.fields("Fecha")), "00"), 1, 40) & vbTab; '14 Quitar el numero
              Print #NumFileFacturas, vbTab;                                                                  '15
              Print #NumFileFacturas, vbTab;                                                                  '16
              Print #NumFileFacturas, vbTab;                                                                  '17
              Print #NumFileFacturas, vbTab;                                                                  '18
              Print #NumFileFacturas, Codigo2 & vbTab;                                                        '19
-             Print #NumFileFacturas, Codigo4 & vbTab                                                         '20 "Pensión Acumulada"
+             Print #NumFileFacturas, Codigo4 & vbTab                                                         '20 Pensión Acumulada / RECAUDACIONES 2000 12
                 
             'Linea en excel
              Obj_Hoja.cells(Contador, 1).formula = "CO"
              Obj_Hoja.cells(Contador, 2).formula = Cta_Banco
              Obj_Hoja.cells(Contador, 3).formula = Contador
-             Obj_Hoja.cells(Contador, 4).formula = "'" & Format$(Factura_No, "0000000000")
-             Obj_Hoja.cells(Contador, 5).formula = "'" & CodigoP
+             Obj_Hoja.cells(Contador, 4).formula = "'" & .fields("CI_RUC_R")
+             Obj_Hoja.cells(Contador, 5).formula = "'" & .fields("CI_RUC")
              Obj_Hoja.cells(Contador, 6).formula = "USD"
              Obj_Hoja.cells(Contador, 7).formula = "'" & Format$(Saldo, "0000000000000")
              Obj_Hoja.cells(Contador, 8).formula = "REC"
              Obj_Hoja.cells(Contador, 9).formula = "32"
              Obj_Hoja.cells(Contador, 10).formula = "0"  'CTE/AHO
              Obj_Hoja.cells(Contador, 11).formula = "0"  'No. Cta Cte/Aho
-             Obj_Hoja.cells(Contador, 12).formula = .fields("TD_R")
-             Obj_Hoja.cells(Contador, 13).formula = "'" & .fields("CI_RUC_R")
-             Obj_Hoja.cells(Contador, 14).formula = "'" & MidStrg(Month(.fields("Fecha")) & " " & NombreCliente, 1, 40)
+             Obj_Hoja.cells(Contador, 12).formula = .fields("TD")
+             Obj_Hoja.cells(Contador, 13).formula = "'" & .fields("CI_RUC")
+             Obj_Hoja.cells(Contador, 14).formula = "'" & MidStrg(NombreCliente & " " & Month(.fields("Fecha")), 1, 40)
              Obj_Hoja.cells(Contador, 15).formula = "0"
              Obj_Hoja.cells(Contador, 16).formula = "0"
              Obj_Hoja.cells(Contador, 17).formula = "0"
@@ -4007,7 +4007,7 @@ Dim TipoCta As String
             Case "AHORROS":   TipoCta = "AHO"
             Case "CORRIENTE": TipoCta = "CTE"
           End Select
-          If .fields("Cod_Banco") > 0 And Len(.fields("Cta_Numero")) > 1 And .fields("Cod_Banco") = Val(TxtCodBanco) And TipoCta <> Ninguno Then
+          If Len(.fields("Cod_Banco")) > 1 And Len(.fields("Cta_Numero")) > 1 And .fields("Cod_Banco") = TxtCodBanco And TipoCta <> Ninguno Then
              Contador = Contador + 1
              Factura_No = Val(.fields("Periodo") & Format$(.fields("Num_Mes"), "00"))
              Total = .fields("Valor_Cobro")
@@ -4196,8 +4196,8 @@ Dim Total_Banco As Currency
             Case "AHORROS":   TipoCta = "AHO"
             Case "CORRIENTE": TipoCta = "CTE"
           End Select
-          If .fields("Cod_Banco") > 0 And Len(.fields("Cta_Numero")) > 1 And TipoCta <> Ninguno Then
-             If .fields("Cod_Banco") <> Val(TxtCodBanco) Then
+          If Len(.fields("Cod_Banco")) > 1 And Len(.fields("Cta_Numero")) > 1 And TipoCta <> Ninguno Then
+             If .fields("Cod_Banco") <> TxtCodBanco Then
                 Contador = Contador + 1
                 Factura_No = Val(.fields("Periodo") & Format$(.fields("Num_Mes"), "00"))
                 Total = .fields("Valor_Cobro")

@@ -24,6 +24,7 @@ Global strWebServices As String
 Global strPassword As String
 Global strUsuario As String
 Global strPuerto As String
+Global IPDelOrdenador As String
 '-----------------------------------------
 Global AdoStrCnn As String
 Global AdoStrCnnMySQL As String

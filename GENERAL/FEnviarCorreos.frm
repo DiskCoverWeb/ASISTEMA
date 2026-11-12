@@ -373,7 +373,7 @@ Dim RutaGeneraFile As String
     End With
     Cursor_Img
    '------------------
-   MsgBox "Desktop Test: " & TMail.servidor & vbCrLf & imapHost & vbCrLf & TMail.para & vbCrLf & "Adjunto: " & TMail.Adjunto
+   'MsgBox "Desktop Test: " & TMail.servidor & vbCrLf & imapHost & vbCrLf & TMail.para & vbCrLf & "Adjunto: " & TMail.Adjunto
    '------------------
     If TMail.servidor = imapHost Then
       'Obtenemos la ruta inicial de donde vienen los archivos
@@ -427,6 +427,7 @@ Dim RutaGeneraFile As String
        End If
        Cursor_Img
        
+      'MsgBox "Desktop Test: (" & ContFile & ") " & UBound(DirFiles)
        TMail.Adjunto = ""
        If ContFile >= 0 Then
          'MsgBox "Desktop Test: " & UBound(DirFiles)
@@ -436,19 +437,21 @@ Dim RutaGeneraFile As String
           Next I
           TMail.Adjunto = MidStrg(TMail.Adjunto, 1, Len(TMail.Adjunto) - 1)
           Cursor_Img
-         MsgBox "Conectar FTP: " & ContFile & vbCrLf & TMail.Adjunto
+         'MsgBox "Conectar FTP: " & ContFile & vbCrLf & TMail.Adjunto
          'Conectamos al servidor ERP
           With ftp
             If ContFile >= 0 Then
               .Inicializar FEnviarCorreos
+               If InStr(IPDelOrdenador, "192.168.27") Then
+                 .servidor = "192.168.27.3"           'Establecesmo el nombre del Servidor FTP
+                 .Puerto = 21
+               Else
+                 .servidor = ftpUpSvr                 'Establecesmo el nombre del Servidor FTP
+                 .Puerto = ftpUpPuerto
+               End If
+              .Password = ftpUpPwr                    'Le establecemos la contraseña de la cuenta Ftp
+              .Usuario = ftpUpUse                     'Le establecemos el nombre de usuario de la cuenta
               
-              .Password = ftpUpPwr  'Le establecemos la contraseña de la cuenta Ftp
-              .Usuario = ftpUpUse   'Le establecemos el nombre de usuario de la cuenta
-              .servidor = ftpUpSvr  'Establecesmo el nombre del Servidor FTP
-              
-'''              .Password = ftpPwr  'Le establecemos la contraseña de la cuenta Ftp
-'''              .Usuario = ftpUse   'Le establecemos el nombre de usuario de la cuenta
-'''              .servidor = ftpSvr  'Establecesmo el nombre del Servidor FTP
                Set .ListView = LstVwFTP
               .ConStatus = True
                If Not .ConectarFtp(LstStatud) Then
@@ -503,7 +506,7 @@ Dim RutaGeneraFile As String
 '''      MsgBox Si_No & vbCrLf & URLParams '& vbCrLf & TMail.MensajeHTML
 '      MsgBox "Desktop Test: " & Si_No & vbCrLf & TMail.Adjunto
       '----------------------------------------------------------------------------------------------
-      MsgBox "Desktop Test: Eliminando..."
+      'MsgBox "Desktop Test: Eliminando..."
       'Eliminando archivos que se fueron con los correos
        If ContFile >= 0 Then
          'Le indicamos el ListView donde se listarán los archivos
@@ -577,6 +580,7 @@ Dim CadAncho As String
 Dim CantCadAncho As Long
 Dim IdImg As Integer
 
+    If Get_Internet Then
     RatonReloj
     CentrarForm FEnviarCorreos
     Redondear_Formulario FEnviarCorreos, 30
@@ -671,6 +675,7 @@ Dim IdImg As Integer
        TMail.ListaError = TMail.ListaError = ". Credenciales no asignadas para el envio de Correos electronicos, solicite ayuda al Administrador del Sistema"
     End If
     DoEvents
+    End If
 End Sub
 
 Private Sub Timer1_Timer()

@@ -1358,7 +1358,7 @@ End Sub
 
 Public Sub PDFTextOut(str_Text As String, Optional X As Double = 0, Optional y As Double = 0)
 Attribute PDFTextOut.VB_HelpID = 2072
-Dim J               As Integer
+Dim j               As Integer
 Dim in_PositionFont As Integer
 Dim str_Tmp         As String
 Dim str_TmpText     As String
@@ -1377,12 +1377,12 @@ Dim str_TmpText     As String
     If PDFFontName = "" Then
        in_PositionFont = 1
     Else
-       For J = 0 To UBound(Arr_Font)
-           If Arr_Font(J) = PDFFontName Then
-              in_PositionFont = J + 1
+       For j = 0 To UBound(Arr_Font)
+           If Arr_Font(j) = PDFFontName Then
+              in_PositionFont = j + 1
               Exit For
            End If
-       Next J
+       Next j
     End If
 
     If PDFFontSize = 0 Then PDFFontSize = 10
@@ -1467,8 +1467,8 @@ Dim bMulti   As Boolean
 Dim bBorder1 As String
 Dim bBorder2 As String
 Dim iSep     As Integer
-Dim I        As Long
-Dim J        As Long
+Dim i        As Long
+Dim j        As Long
 Dim L        As Long
 Dim nl       As Integer
 
@@ -1496,28 +1496,28 @@ Dim nl       As Integer
     End If
     
     iSep = -1
-    I = 1
-    J = 1
+    i = 1
+    j = 1
     L = 0
 
     nl = 1
     
     PDFOutStream sTempStream, "%DEBUT_CELL/%"
     
-    While I <= lText
-        sCar = MidStrg(str_Text, I, 1)
+    While i <= lText
+        sCar = MidStrg(str_Text, i, 1)
         
         If sCar = vbCrLf Then
             PDFstrTempBorder = bBorder1
-            PDFCell2 MidStrg(str_Text, J, I - J), X, yPos, tWidth, H
+            PDFCell2 MidStrg(str_Text, j, i - j), X, yPos, tWidth, H
             yPos = in_yCurrent
             
             bMulti = True
             
-            I = I + 1
+            i = i + 1
             
             iSep = -1
-            J = I
+            j = i
             L = 0
 
             nl = nl + 1
@@ -1526,39 +1526,39 @@ Dim nl       As Integer
          End If
         
         If sCar = " " Then
-            iSep = I
+            iSep = i
         End If
         
         L = L + PDFGetStringWidth(sCar, PDFFontName, PDFFontSize)
         
         If L > WidthMax Then
             If iSep = -1 Then
-                If I = J Then I = I + 1
+                If i = j Then i = i + 1
                 
                 PDFstrTempBorder = bBorder1
-                PDFCell2 MidStrg(str_Text, J, I - J), X, yPos, tWidth, H
+                PDFCell2 MidStrg(str_Text, j, i - j), X, yPos, tWidth, H
                 yPos = in_yCurrent
                                
                 bMulti = True
             Else
                 PDFstrTempBorder = bBorder1
-                PDFCell2 MidStrg(str_Text, J, iSep - J), X - PDFcMargin, yPos, tWidth, H
+                PDFCell2 MidStrg(str_Text, j, iSep - j), X - PDFcMargin, yPos, tWidth, H
                 yPos = in_yCurrent
             
                 bMulti = True
-                I = iSep + 1
+                i = iSep + 1
             End If
             
             iSep = -1
             
-            J = I
+            j = i
             L = 0
             
             nl = nl + 1
             
             If nl = 2 Then bBorder1 = bBorder2
         Else
-            I = I + 1
+            i = i + 1
         End If
     Wend
     
@@ -1568,7 +1568,7 @@ Dim nl       As Integer
     End If
     
     yPos = IIf(bMulti, in_yCurrent, yPos)
-    PDFCell2 MidStrg(str_Text, J, I - J), X - PDFcMargin, yPos, tWidth, H
+    PDFCell2 MidStrg(str_Text, j, i - j), X - PDFcMargin, yPos, tWidth, H
     
     boPDFUnderline = False
     
@@ -1599,7 +1599,7 @@ End Function
 
 Private Sub PDFCell2(str_Text As String, X As Double, y As Double, W As Double, H As Double, Optional URLLink As String = "")
 Attribute PDFCell2.VB_HelpID = 2073
-Dim J               As Integer
+Dim j               As Integer
 Dim dx              As Integer
 Dim ltmp            As Integer
 
@@ -1628,12 +1628,12 @@ Dim str_Tmp1        As String
     If PDFFontName = "" Then
         in_PositionFont = 1
     Else
-        For J = 0 To UBound(Arr_Font)
-            If Arr_Font(J) = PDFFontName Then
-                in_PositionFont = J + 1
+        For j = 0 To UBound(Arr_Font)
+            If Arr_Font(j) = PDFFontName Then
+                in_PositionFont = j + 1
                 Exit For
             End If
-        Next J
+        Next j
     End If
 
     If PDFFontSize = 0 Then PDFFontSize = 10
@@ -2159,7 +2159,6 @@ Dim PathAcroRd32 As String
 
     If boPDFConfirm Then MsgBox "PDF file generated.", vbOKOnly, "Generated PDF file - " & mjwPDFVersion
     RutaDocumentoPDF = PDFGetFileName
-    If Motivo_Firma_PDF = "" Then Motivo_Firma_PDF = "Ningun Motivo"
     
    'MsgBox "Desktop Ruta PDF: antes de firmar: " & RutaDocumentoPDF & vbCrLf & PosXFirmaPDF & vbCrLf & PosYFirmaPDF & vbCrLf & Motivo_Firma_PDF
     
@@ -2289,7 +2288,7 @@ End Sub
 Private Sub PDFSetArray()
 Attribute PDFSetArray.VB_HelpID = 2082
 
-Dim I As Integer
+Dim i As Integer
 
     CurrentObjectNum = CurrentObjectNum + 1
     ResourceNum = CurrentObjectNum
@@ -2301,16 +2300,16 @@ Dim I As Integer
     PDFOutStream TempStream, "<< /ProcSet [ /PDF /Text /ImageC]"
     PDFOutStream TempStream, "/XObject << "
 
-    For I = 1 To NumberofImages
-        PDFOutStream TempStream, "/ImgJPEG" & I & " " & (CurrentObjectNum + I) & " 0 R"
-    Next I
+    For i = 1 To NumberofImages
+        PDFOutStream TempStream, "/ImgJPEG" & i & " " & (CurrentObjectNum + i) & " 0 R"
+    Next i
 
     PDFOutStream TempStream, ">>"
     PDFOutStream TempStream, "/Font << "
 
-    For I = 1 To FontNumber
-        PDFOutStream TempStream, "/F" & I & " " & FontNumberList(I) & " 0 R "
-    Next I
+    For i = 1 To FontNumber
+        PDFOutStream TempStream, "/F" & i & " " & FontNumberList(i) & " 0 R "
+    Next i
 
     PDFOutStream TempStream, ">>"
     PDFOutStream TempStream, ">>"
@@ -2336,7 +2335,7 @@ End Sub
 Private Sub PDFSetPages()
 Attribute PDFSetPages.VB_HelpID = 2085
 
-Dim I, PageObjNum As Integer
+Dim i, PageObjNum As Integer
 
     CurrentObjectNum = CurrentObjectNum + 1
     ParentNum = CurrentObjectNum
@@ -2348,8 +2347,8 @@ Dim I, PageObjNum As Integer
     PDFOutStream TempStream, "/Kids ["
 
     PageObjNum = 2
-    For I = 1 To FPageNumber
-        PDFOutStream TempStream, (CurrentObjectNum + I + 1 + NumberofImages) & " 0 R"
+    For i = 1 To FPageNumber
+        PDFOutStream TempStream, (CurrentObjectNum + i + 1 + NumberofImages) & " 0 R"
 
         ReDim Preserve PageNumberList(1 To in_PagesNum)
         ReDim Preserve PageCanvasHeight(1 To in_PagesNum)
@@ -2365,7 +2364,7 @@ Dim I, PageObjNum As Integer
         in_PagesNum = in_PagesNum + 1
 
         PageObjNum = PageObjNum + 2
-    Next I
+    Next i
 
     PDFOutStream TempStream, "]"
     PDFOutStream TempStream, "/Count " & FPageNumber
@@ -2381,7 +2380,7 @@ End Sub
 Private Sub PDFSetPageObject(in_pg As Integer)
 Attribute PDFSetPageObject.VB_HelpID = 2086
 
-Dim I             As Integer
+Dim i             As Integer
 Dim str_Rect      As String
 Dim str_Annots    As String
 Dim str_TmpAnnots As String
@@ -2402,16 +2401,16 @@ Dim str_TmpAnnots As String
 
     If boPageLinksList(in_pg) = True Then
         str_Annots = "/Annots ["
-        For I = 1 To NbPageLinksList(in_pg)
+        For i = 1 To NbPageLinksList(in_pg)
             str_Rect = ""
-            str_Rect = PageLinksList(in_pg, I)(0) & " " & _
-                      PageLinksList(in_pg, I)(1) & " " & _
-                      PageLinksList(in_pg, I)(0) + PageLinksList(in_pg, I)(2) & " " & _
-                      PageLinksList(in_pg, I)(1) - PageLinksList(in_pg, I)(3)
+            str_Rect = PageLinksList(in_pg, i)(0) & " " & _
+                      PageLinksList(in_pg, i)(1) & " " & _
+                      PageLinksList(in_pg, i)(0) + PageLinksList(in_pg, i)(2) & " " & _
+                      PageLinksList(in_pg, i)(1) - PageLinksList(in_pg, i)(3)
             str_Annots = str_Annots & "<</Type /Annot /Subtype /Link /Rect [" & str_Rect & "] /Border [0 0 0] "
 
-            If TypeName(PageLinksList(in_pg, I)(4)) = "String" And PageLinksList(in_pg, I)(4) <> "" Then
-                str_TmpAnnots = PageLinksList(in_pg, I)(4)
+            If TypeName(PageLinksList(in_pg, i)(4)) = "String" And PageLinksList(in_pg, i)(4) <> "" Then
+                str_TmpAnnots = PageLinksList(in_pg, i)(4)
                 
                 str_TmpAnnots = Replace(str_TmpAnnots, "\", "\\")
                 str_TmpAnnots = Replace(str_TmpAnnots, "\\", "\\\\")
@@ -2420,7 +2419,7 @@ Dim str_TmpAnnots As String
     
                 str_Annots = str_Annots & "/A <</S /URI /URI (" & str_TmpAnnots & ")>>>>" & vbCr & vbLf
             End If
-        Next I
+        Next i
 
         PDFOutStream TempStream, str_Annots & "]"
         'MsgBox str_Annots
@@ -2555,7 +2554,7 @@ End Sub
 
 Private Sub PDFSetXref()
 Attribute PDFSetXref.VB_HelpID = 2090
-Dim I As Integer
+Dim i As Integer
 
     CurrentObjectNum = CurrentObjectNum + 1
     TempStream = ""
@@ -2564,9 +2563,9 @@ Dim I As Integer
     PDFOutStream TempStream, "0 " & CurrentObjectNum
     PDFOutStream TempStream, "0000000000 65535 f"
 
-    For I = 1 To CurrentObjectNum - 1
-        PDFOutStream TempStream, PDFGetOffsetNumber(TrimStrg(ObjectOffsetList(I))) + " 00000 n"
-    Next I
+    For i = 1 To CurrentObjectNum - 1
+        PDFOutStream TempStream, PDFGetOffsetNumber(TrimStrg(ObjectOffsetList(i))) + " 00000 n"
+    Next i
 
     PDFOutStream TempStream, "trailer"
     PDFOutStream TempStream, "<< /Size " & CurrentObjectNum

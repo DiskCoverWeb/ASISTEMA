@@ -1,5 +1,6 @@
 Attribute VB_Name = "SubWindows"
 Option Explicit
+
 '-----------------------------------------------------------------------------------------------------------------------------------------------------------
 ' DECLARACION VARIABLES GLOBALES
 '-----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -107,6 +108,8 @@ Public Const CLIP_DEFAULT_PRECIS As Long = 0
 Public Const OUT_TT_ONLY_PRECIS As Long = 7
 Public Const PROOF_QUALITY As Long = 2
 Public Const TRUETYPE_FONTTYPE As Long = &H4
+Public Const INVALID_FILE_ATTRIBUTES As Long = -1
+
 Public Const DC_MAXEXTENT = 5
 Public Const DC_MINEXTENT = 4
 Public Const DC_PAPERNAMES = 16
@@ -502,6 +505,7 @@ Declare Function lclose Lib "kernel32" Alias "_lclose" (ByVal hFile As Long) As 
 
 ' Api GetFileSize para averiguar el tamaño
 Declare Function GetFileSize Lib "kernel32" (ByVal hFile As Long, lpFileSizeHigh As Long) As Long
+Declare Function GetFileAttributes Lib "kernel32" Alias "GetFileAttributesA" (ByVal lpFileName As String) As Long
 
 'Funciones de unidades de red
 Declare Function GetLogicalDrives Lib "kernel32" () As Long
@@ -555,7 +559,7 @@ Declare Function WinHelp Lib "user32" Alias "WinHelpA" (ByVal hwnd As Long, _
 Declare Function GetSystemMetrics Lib "user32" (ByVal nIndex As Long) As Long
 Declare Function TrackPopupMenu Lib "user32" (ByVal hMenu As Long, _
                                               ByVal wFlags As Long, _
-                                              ByVal x As Long, _
+                                              ByVal X As Long, _
                                               ByVal y As Long, _
                                               ByVal nReserved As Long, _
                                               ByVal hwnd As Long, _
@@ -569,7 +573,7 @@ Declare Function ReleaseDC Lib "user32" (ByVal hwnd As Long, _
                                          ByVal hdc As Long) As Long
 Declare Sub SetWindowPos Lib "user32" (ByVal hwnd As Long, _
                                        ByVal hWndInsertAfter As Long, _
-                                       ByVal x As Long, _
+                                       ByVal X As Long, _
                                        ByVal y As Long, _
                                        ByVal cx As Long, _
                                        ByVal cy As Long, _
@@ -601,8 +605,8 @@ Declare Function SetWindowRgn Lib "user32" (ByVal hwnd As Long, _
 'Funciones API: GDI32
 '-----------------------------------------------------------------------------------------------------------------------------------------------------------
 Declare Function GetDeviceCaps Lib "gdi32" (ByVal hdc As Long, ByVal nIndex As Long) As Long
-Declare Function BitBlt Lib "gdi32" (ByVal hDestDC As Long, ByVal x As Long, ByVal y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hSrcDC As Long, ByVal XSrc As Long, ByVal YSrc As Long, ByVal dwRop As Long) As Long
-Declare Function CreateFont Lib "gdi32" Alias "CreateFontA" (ByVal H As Long, ByVal W As Long, ByVal E As Long, ByVal O As Long, ByVal W As Long, ByVal I As Long, ByVal U As Long, ByVal S As Long, ByVal C As Long, ByVal OP As Long, ByVal cp As Long, ByVal Q As Long, ByVal PAF As Long, ByVal F As String) As Long
+Declare Function BitBlt Lib "gdi32" (ByVal hDestDC As Long, ByVal X As Long, ByVal y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hSrcDC As Long, ByVal XSrc As Long, ByVal YSrc As Long, ByVal dwRop As Long) As Long
+Declare Function CreateFont Lib "gdi32" Alias "CreateFontA" (ByVal H As Long, ByVal W As Long, ByVal E As Long, ByVal O As Long, ByVal W As Long, ByVal i As Long, ByVal U As Long, ByVal S As Long, ByVal c As Long, ByVal OP As Long, ByVal cp As Long, ByVal Q As Long, ByVal PAF As Long, ByVal F As String) As Long
 Declare Function SelectObject Lib "gdi32" (ByVal hdc As Long, ByVal hObject As Long) As Long
 Declare Function DeleteObject Lib "gdi32" (ByVal hObject As Long) As Long
 ' Crea la región
@@ -1063,7 +1067,7 @@ Dim Handle As Long
 End Function
 
 Public Function Unidades_De_Red() As String
-Dim I As Long
+Dim i As Long
 Dim ret As Long
 Dim Unidad_Disp As String
 Dim Unidad_No_Disp As String
@@ -1073,15 +1077,15 @@ Unidad_No_Disp = ""
 
 ret = GetLogicalDrives()
 If ret Then
-    For I = 0 To 25
+    For i = 0 To 25
         ' Si el bit es cero, es que no existe la unidad o no está mapeada
-        If (ret And 2 ^ I) = 0 Then
+        If (ret And 2 ^ i) = 0 Then
             ' Mostrar el nombre de la unidad disponible
-            Unidad_Disp = Unidad_Disp & Chr$(I + 65) & ":" & vbCrLf
+            Unidad_Disp = Unidad_Disp & Chr$(i + 65) & ":" & vbCrLf
             'Combo2.AddItem Chr$(i + 65) & ":"
         Else
             ' Mostrar el nombre de la unidad ocupada
-            Unidad_No_Disp = Unidad_No_Disp & Chr$(I + 65) & ":" & vbCrLf
+            Unidad_No_Disp = Unidad_No_Disp & Chr$(i + 65) & ":" & vbCrLf
             'Combo1.AddItem Chr$(i + 65) & ":"
         End If
     Next
@@ -1098,33 +1102,33 @@ Unidades_De_Red = Unidad_Disp & vbCrLf & Unidad_No_Disp
 End Function
 
 Public Function Unidades_De_Red_Disponibles() As String
-Dim I As Long
+Dim i As Long
 Dim ret As Long
 Dim S As String
 Dim Unidades_Disponibles As String
 '
 Unidades_Disponibles = ""
-I = 260
-S = String$(I, Chr$(0))
-ret = GetLogicalDriveStrings(I, S)
+i = 260
+S = String$(i, Chr$(0))
+ret = GetLogicalDriveStrings(i, S)
 ' Si el valor devuelto es mayor que el tamaño del buffer, es que el buffer debe ser mayor
-If ret > I Then
-    I = ret + 2
-    S = String$(I, Chr$(0))
-    ret = GetLogicalDriveStrings(I, S)
+If ret > i Then
+    i = ret + 2
+    S = String$(i, Chr$(0))
+    ret = GetLogicalDriveStrings(i, S)
 End If
 '
 If ret Then
     ' Quitar los caracteres extras
     S = LeftStrg(S, ret)
     Do
-        I = InStr(S, Chr$(0))
-        If I Then
-            Unidades_Disponibles = Unidades_Disponibles & LeftStrg(S, I - 1) & vbCrLf
+        i = InStr(S, Chr$(0))
+        If i Then
+            Unidades_Disponibles = Unidades_Disponibles & LeftStrg(S, i - 1) & vbCrLf
             'Combo1.AddItem LeftStrg(S, I - 1)
-            S = MidStrg(S, I + 1)
+            S = MidStrg(S, i + 1)
         End If
-    Loop While I
+    Loop While i
     ' Mostrar la primera letra disponible
 '    If Combo1.ListCount > 0 Then
 '        Combo1.ListIndex = 0
@@ -1373,20 +1377,20 @@ End Function
 Function AddressStringToLong(ByVal tmp As String) As Long
 
 
-   Dim I As Integer
+   Dim i As Integer
    Dim parts(1 To 4) As String
    
-   I = 0
+   i = 0
    While InStr(tmp, ".") > 0
-      I = I + 1
-      parts(I) = Mid(tmp, 1, InStr(tmp, ".") - 1)
+      i = i + 1
+      parts(i) = Mid(tmp, 1, InStr(tmp, ".") - 1)
       tmp = Mid(tmp, InStr(tmp, ".") + 1)
    Wend
    
-   I = I + 1
-   parts(I) = tmp
+   i = i + 1
+   parts(i) = tmp
    
-   If I <> 4 Then
+   If i <> 4 Then
       AddressStringToLong = 0
       Exit Function
    End If
@@ -1417,10 +1421,10 @@ Function AddressStringToLong(ByVal tmp As String) As Long
 End Function
 
 Public Function SocketsCleanup() As Boolean
-    Dim x As Long
-    x = WSACleanup()
-    If x <> 0 Then
-        MsgBox "Windows Sockets error " & TrimStrg(Str$(x)) & _
+    Dim X As Long
+    X = WSACleanup()
+    If X <> 0 Then
+        MsgBox "Windows Sockets error " & TrimStrg(Str$(X)) & _
                " occurred in Cleanup.", vbExclamation
         SocketsCleanup = False
     Else
@@ -1430,12 +1434,12 @@ End Function
 
 Public Function SocketsInitialize() As Boolean
     Dim WSAD As WSADATA
-    Dim x As Integer
+    Dim X As Integer
     Dim szLoByte As String, szHiByte As String, szBuf As String
     
-    x = WSAStartup(WS_VERSION_REQD, WSAD)
+    X = WSAStartup(WS_VERSION_REQD, WSAD)
     
-    If x <> 0 Then
+    If X <> 0 Then
         MsgBox "Windows Sockets for 32 bit Windows " & _
                "environments is not successfully responding."
         SocketsInitialize = False
@@ -1642,7 +1646,7 @@ End Function
 
 Function StringToUTF8(ByVal Str As String) As String
     Dim utf8Bytes() As Byte
-    Dim I As Integer
+    Dim i As Integer
     Dim Result As String
 
     ' Convertir la cadena a bytes usando la codificación Unicode (UTF-16)
@@ -1650,9 +1654,9 @@ Function StringToUTF8(ByVal Str As String) As String
 
     ' Construir la cadena UTF-8
     Result = ""
-    For I = 0 To UBound(utf8Bytes)
-        Result = Result & Chr(utf8Bytes(I))
-    Next I
+    For i = 0 To UBound(utf8Bytes)
+        Result = Result & Chr(utf8Bytes(i))
+    Next i
 
     StringToUTF8 = Result
 End Function
@@ -1817,23 +1821,50 @@ End Function
 '''Mi_IP_Publica = cTemp
 '''End Function
 
+Public Function URLEncode(ByVal Text As String) As String
+    Dim i As Long
+    Dim c As Integer
+    Dim Result As String
+    
+    For i = 1 To Len(Text)
+        c = Asc(Mid$(Text, i, 1))
+        Select Case c
+            Case 48 To 57, 65 To 90, 97 To 122, 45, 46, 95, 126
+                Result = Result & Chr$(c)
+            Case 32
+                Result = Result & "%20"
+            Case Else
+                If c < 16 Then
+                    Result = Result & "%0" & Hex$(c)
+                Else
+                    Result = Result & "%" & Hex$(c)
+                End If
+        End Select
+    Next i
+    URLEncode = Result
+End Function
+
 Public Function Validar_URL(NombreServidor As String, IPsURL As String, Optional Puerto As Integer) As String
 Dim pJSON As Object
-Dim Respuesta As Boolean
+Dim respuesta As Boolean
     RatonReloj
+    
     If Puerto > 0 Then
        URLHTTP = "https://erp.diskcoversystem.com/php/comprobantes/SRI/autorizar_sri_visual.php?VerificarOnline=true"
        URLParams = "ip=" & IPsURL & "&puerto=" & CStr(Puerto)
     Else
        URLHTTP = "https://erp.diskcoversystem.com/php/comprobantes/SRI/autorizar_sri_visual.php?VerificarOnlineSri=true"
-       URLParams = "link=" & IPsURL
+       URLParams = "link=" & URLEncode(IPsURL)
+
     End If
+   'MsgBox URLHTTP & vbCrLf & URLParams
     TextoXML = PostUrlSourceStr(URLHTTP, URLParams)
    'MsgBox TextoXML
+    
     Set pJSON = JSON.parse(TextoXML)
-    Respuesta = CBool(pJSON.Item("resp"))
+    If Get_Internet Then respuesta = CBool(pJSON.Item("resp"))
     RatonNormal
-    If Respuesta Then
+    If respuesta Then
        Validar_URL = UCaseStrg(NombreServidor & " activo")
     Else
        Validar_URL = UCaseStrg("-" & NombreServidor & " inactivo/intermitencia")
@@ -1894,31 +1925,49 @@ Dim DomDoc As MSXML2.xmlHttp
 End Function
 
 Public Function PostUrlSourceStr(vURLHTTP As String, vURLParams As String) As String
-    Dim DomDoc As MSXML2.xmlHttp
+    Dim DomDoc As Object
     Dim RespuestaURL As String
 
     On Error GoTo errHandler
 
-   'Clipboard.Clear
-   'Clipboard.SetText vURLHTTP & vbCrLf & vbCrLf & vURLParams
+    ' 1. Asignar un valor por defecto desde el inicio
+    PostUrlSourceStr = "CNASS"
 
-    Set DomDoc = New MSXML2.xmlHttp
+    If Get_Internet Then
+        ' Usar ServerXMLHTTP60 para compatibilidad total con TLS 1.2/HTTPS
+        Set DomDoc = CreateObject("MSXML2.ServerXMLHTTP.6.0")
 
-    DomDoc.open "POST", vURLHTTP, False
-    DomDoc.setRequestHeader "Content-Type", "application/x-www-form-urlencoded"
-    ' NO agregar "Content-length" ni "Connection: close", XMLHTTP lo maneja solo.
+        ' Ignorar errores menores de certificado si aplica (opcional)
+        DomDoc.setOption 2, 13056 ' SXH_SERVER_CERT_IGNORE_ALL_SERVER_ERRORS
 
-    DomDoc.send vURLParams
-
-    ' Validar estado HTTP
-    If DomDoc.Status = 200 Then
-        RespuestaURL = DomDoc.responseText
+        DomDoc.open "POST", vURLHTTP, False
+        DomDoc.setRequestHeader "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8"
+        DomDoc.send vURLParams
+        
+'        Clipboard.Clear
+'        Clipboard.SetText vURLParams
+'        MsgBox vURLParams
+        
+        ' Validar estado HTTP
+        If DomDoc.Status = 200 Then
+            ' Evitar que sea Null o cadena vacía si el servidor responde sin texto
+            RespuestaURL = Trim$("" & DomDoc.responseText)
+            
+            If Len(RespuestaURL) > 0 Then
+                PostUrlSourceStr = RespuestaURL
+            Else
+                ' Si respondió 200 pero el cuerpo vino completamente vacío
+                PostUrlSourceStr = "CNASS"
+            End If
+        Else
+            PostUrlSourceStr = "CNASS"
+        End If
     Else
-        RespuestaURL = "CNASS"
+        ' Si Get_Internet fue False
+        PostUrlSourceStr = "CNASS"
     End If
 
-    PostUrlSourceStr = RespuestaURL
-
+    ' Liberar el objeto antes de salir
     Set DomDoc = Nothing
     Exit Function
 
@@ -1926,35 +1975,6 @@ errHandler:
     PostUrlSourceStr = "CNASS"
     If Not DomDoc Is Nothing Then Set DomDoc = Nothing
 End Function
-
-'''Public Function PostUrlSourceStr(vURLHTTP As String, vURLParams As String) As String
-'''Dim DomDoc As MSXML2.xmlHttp
-'''Dim RespuestaURL As String
-'''
-'''    Set DomDoc = New xmlHttp
-'''   'MsgBox vURLHTTP & vbCrLf & vURLParams
-'''   ' Clipboard.Clear
-'''   ' Clipboard.SetText vURLHTTP & vbCrLf & vbCrLf & vURLParams
-'''
-'''   'Parámetros en formato URLEncode
-'''   'Metodo a usar, url, y true en caso de manejar la respuesta en modo asíncrono
-'''    DomDoc.open "POST", vURLHTTP, False
-'''   'Encabezados
-'''    DomDoc.setRequestHeader "Content-type", "application/x-www-form-urlencoded"
-'''    DomDoc.setRequestHeader "Content-length", Len(vURLParams)
-'''    DomDoc.setRequestHeader "Connection", "close"
-'''    DomDoc.send vURLParams
-'''   'La respuesta, en caso de existir, está en responseBody.
-'''   'También puedes especificar responseXml si tu aplicación devolviese XML
-'''   'PostUrlSource = StrConv(DomDoc.responseBody, vbUnicode)
-'''   ' Clipboard.Clear
-'''   ' Clipboard.SetText vURLHTTP & vbCrLf & vbCrLf & vURLParams & vbCrLf & vbCrLf & DomDoc.responseBody
-'''   'MsgBox Len(DomDoc.responseBody) & " [" & DomDoc.responseBody & "]"
-'''    If Len(DomDoc.responseBody) > 0 Then RespuestaURL = StrConv(DomDoc.responseBody, vbUnicode) Else RespuestaURL = "CNASS"
-'''
-'''   'PostUrlSourceStr = Trim(Replace(RespuestaURL, "'", """"))
-'''    PostUrlSourceStr = RespuestaURL
-'''End Function
 
 Public Function Ping_IP(My_IP_PC As String) As Boolean
 Dim ping As cPing

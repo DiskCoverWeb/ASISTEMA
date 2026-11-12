@@ -606,7 +606,7 @@ On Error GoTo error_Handler
       .Mostar_Estado_FTP ProgressBarEstado, LstStatud
       .Inicializar Me
       ' MsgBox EsReadOnly
-       If EsReadOnly Then
+'       If EsReadOnly Then
           If InStr(IPDelOrdenador, "192.168.27") Then
             .servidor = "192.168.27.3"           'Establecesmo el nombre del Servidor FTP
             .Puerto = 21
@@ -616,13 +616,13 @@ On Error GoTo error_Handler
           End If
          .Password = ftpUpPwr                    'Le establecemos la contraseña de la cuenta Ftp
          .Usuario = ftpUpUse                     'Le establecemos el nombre de usuario de la cuenta
-       Else
-         .servidor = ftpSvr                    'Establecesmo el nombre del Servidor FTP
-         .Password = ftpPwr                    'Le establecemos la contraseña de la cuenta Ftp
-         .Usuario = ftpUse                     'Le establecemos el nombre de usuario de la cuenta
-         .Puerto = ftpPuerto
-       End If
-      'MsgBox .servidor
+'       Else
+'         .servidor = ftpSvr                    'Establecesmo el nombre del Servidor FTP
+'         .Password = ftpPwr                    'Le establecemos la contraseña de la cuenta Ftp
+'         .Usuario = ftpUse                     'Le establecemos el nombre de usuario de la cuenta
+'         .Puerto = ftpPuerto
+'       End If
+'      'MsgBox .servidor
       'Conectamos al servidor FTP. EL label es el control donde mostrar los errores y el estado de la conexión
        If .ConectarFtp(LstStatud) = False Then
            MsgBox "No se pudo conectar"
@@ -650,19 +650,19 @@ On Error GoTo error_Handler
           
          .CambiarDirectorio ftpUpDir & "/SISTEMA/BASES/UPDATE_DB/"
          .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
+          For i = 1 To LstVwFTP.ListItems.Count
              'MsgBox LstVwFTP.ListItems(I) & vbCrLf & UCaseStrg(RightStrg(LstVwFTP.ListItems(I), 3))
-              Select Case UCaseStrg(RightStrg(LstVwFTP.ListItems(I), 3))
+              Select Case UCaseStrg(RightStrg(LstVwFTP.ListItems(i), 3))
                 Case "DBS", "UPD", "TXT", "DOC", "SQL"
-                     Progreso_Barra.Mensaje_Box = "Actualizando [1]: " & LstVwFTP.ListItems(I)
+                     Progreso_Barra.Mensaje_Box = "Actualizando [1]: " & LstVwFTP.ListItems(i)
                     .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                    .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\BASES\UPDATE_DB\" & LstVwFTP.ListItems(I), True
+                    .ObtenerArchivo LstVwFTP.ListItems(i), RutaSistema & "\BASES\UPDATE_DB\" & LstVwFTP.ListItems(i), True
                 Case "ZIP"
-                     Progreso_Barra.Mensaje_Box = "Actualizando: " & LstVwFTP.ListItems(I)
+                     Progreso_Barra.Mensaje_Box = "Actualizando: " & LstVwFTP.ListItems(i)
                     .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                    .ObtenerArchivo LstVwFTP.ListItems(I), RutaSysBases & "\TEMP\" & LstVwFTP.ListItems(I), True
+                    .ObtenerArchivo LstVwFTP.ListItems(i), RutaSysBases & "\TEMP\" & LstVwFTP.ListItems(i), True
               End Select
-          Next I
+          Next i
           'MsgBox "...."
        End If
        
@@ -675,58 +675,58 @@ On Error GoTo error_Handler
           
          .CambiarDirectorio ftpUpDir & "/SISTEMA"
          .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              Select Case UCaseStrg(RightStrg(LstVwFTP.ListItems(I), 3))
+          For i = 1 To LstVwFTP.ListItems.Count
+              Select Case UCaseStrg(RightStrg(LstVwFTP.ListItems(i), 3))
                 Case "EXE", "JPG", "PNG", "GIF"
-                     Progreso_Barra.Mensaje_Box = "Eliminando: " & LstVwFTP.ListItems(I)
+                     Progreso_Barra.Mensaje_Box = "Eliminando: " & LstVwFTP.ListItems(i)
                     .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                     Eliminar_Si_Existe_File RutaSistema & "\" & LstVwFTP.ListItems(I)
+                     Eliminar_Si_Existe_File RutaSistema & "\" & LstVwFTP.ListItems(i)
               End Select
-              Cadena = Cadena & LstVwFTP.ListItems(I) & vbCrLf
-          Next I
+              Cadena = Cadena & LstVwFTP.ListItems(i) & vbCrLf
+          Next i
           
          .CambiarDirectorio ftpUpDir & "/SISTEMA/JAVASCRIPT/"
          .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              Progreso_Barra.Mensaje_Box = "Eliminando: " & LstVwFTP.ListItems(I)
+          For i = 1 To LstVwFTP.ListItems.Count
+              Progreso_Barra.Mensaje_Box = "Eliminando: " & LstVwFTP.ListItems(i)
              .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-              Eliminar_Si_Existe_File RutaSistema & "\" & LstVwFTP.ListItems(I)
-              Cadena = Cadena & LstVwFTP.ListItems(I) & vbCrLf
-          Next I
+              Eliminar_Si_Existe_File RutaSistema & "\" & LstVwFTP.ListItems(i)
+              Cadena = Cadena & LstVwFTP.ListItems(i) & vbCrLf
+          Next i
           
          'Copiamos nuevos archivos del servidor
          .CambiarDirectorio ftpUpDir & "/SISTEMA"
          .ListarArchivos
           Cadena = ""
-          For I = 1 To LstVwFTP.ListItems.Count
-              Select Case UCaseStrg(RightStrg(LstVwFTP.ListItems(I), 3))
+          For i = 1 To LstVwFTP.ListItems.Count
+              Select Case UCaseStrg(RightStrg(LstVwFTP.ListItems(i), 3))
                 Case "PNG", "JPG", "GIF"
-                 Cadena = Cadena & "Copying: " & LstVwFTP.ListItems(I) & vbCrLf
-                 Progreso_Barra.Mensaje_Box = "Actualizando: " & LstVwFTP.ListItems(I)
+                 Cadena = Cadena & "Copying: " & LstVwFTP.ListItems(i) & vbCrLf
+                 Progreso_Barra.Mensaje_Box = "Actualizando: " & LstVwFTP.ListItems(i)
                 .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\" & LstVwFTP.ListItems(I), True
+                .ObtenerArchivo LstVwFTP.ListItems(i), RutaSistema & "\" & LstVwFTP.ListItems(i), True
               End Select
-          Next I
+          Next i
           'Sleep 5000
           
          .CambiarDirectorio ftpUpDir & "/SISTEMA/JAVASCRIPT/"
          .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              Progreso_Barra.Mensaje_Box = "Actualizando: " & LstVwFTP.ListItems(I)
+          For i = 1 To LstVwFTP.ListItems.Count
+              Progreso_Barra.Mensaje_Box = "Actualizando: " & LstVwFTP.ListItems(i)
              .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-             .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\JAVASCRIPT\" & LstVwFTP.ListItems(I), True
-          Next I
+             .ObtenerArchivo LstVwFTP.ListItems(i), RutaSistema & "\JAVASCRIPT\" & LstVwFTP.ListItems(i), True
+          Next i
           
          .CambiarDirectorio ftpUpDir & "/SISTEMA/"
          .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              If UCaseStrg(RightStrg(LstVwFTP.ListItems(I), 3)) = "EXE" Then
-                Cadena = Cadena & "Copying: " & LstVwFTP.ListItems(I) & vbCrLf
-                 Progreso_Barra.Mensaje_Box = "Actualizando: " & LstVwFTP.ListItems(I)
+          For i = 1 To LstVwFTP.ListItems.Count
+              If UCaseStrg(RightStrg(LstVwFTP.ListItems(i), 3)) = "EXE" Then
+                Cadena = Cadena & "Copying: " & LstVwFTP.ListItems(i) & vbCrLf
+                 Progreso_Barra.Mensaje_Box = "Actualizando: " & LstVwFTP.ListItems(i)
                 .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\" & LstVwFTP.ListItems(I), True
+                .ObtenerArchivo LstVwFTP.ListItems(i), RutaSistema & "\" & LstVwFTP.ListItems(i), True
               End If
-          Next I
+          Next i
          'Conectamos la nueva Base de Datos para sacar los Certificados del servidor
           Idc = 0
           sSQL = "SELECT Empresa, Ruta_Certificado " _
@@ -750,15 +750,15 @@ On Error GoTo error_Handler
              RatonReloj
             .CambiarDirectorio ftpUpDir & "/SISTEMA/CERTIFIC/"
             .ListarArchivos
-             For I = 1 To LstVwFTP.ListItems.Count
-                 For J = 0 To UBound(Certificados)
-                     If Certificados(J) = LstVwFTP.ListItems(I) Then
-                        Progreso_Barra.Mensaje_Box = "Actualizando: " & LstVwFTP.ListItems(I)
+             For i = 1 To LstVwFTP.ListItems.Count
+                 For j = 0 To UBound(Certificados)
+                     If Certificados(j) = LstVwFTP.ListItems(i) Then
+                        Progreso_Barra.Mensaje_Box = "Actualizando: " & LstVwFTP.ListItems(i)
                        .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                       .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\CERTIFIC\" & LstVwFTP.ListItems(I), True
+                       .ObtenerArchivo LstVwFTP.ListItems(i), RutaSistema & "\CERTIFIC\" & LstVwFTP.ListItems(i), True
                      End If
-                 Next J
-             Next I
+                 Next j
+             Next i
              RatonNormal
           End If
        End If
@@ -769,105 +769,105 @@ On Error GoTo error_Handler
        If InStr(TypeUpdate, "[3]") Then
           Eliminar_Si_Existe_File RutaSistema & "\FONDOS\*.*"
          'Borrammos fondos antiguos de cada mes
-          For J = 1 To 12
-             .CambiarDirectorio ftpUpDir & "/SISTEMA/FONDOS/M" & Format(J, "00") & "/"
+          For j = 1 To 12
+             .CambiarDirectorio ftpUpDir & "/SISTEMA/FONDOS/M" & Format(j, "00") & "/"
              .ListarArchivos
-              For I = 1 To LstVwFTP.ListItems.Count
-                  If Len(LstVwFTP.ListItems(I)) > 3 Then
-                     Progreso_Barra.Mensaje_Box = "Eliminando: FONDOS\M" & Format(J, "00") & "\" & LstVwFTP.ListItems(I)
+              For i = 1 To LstVwFTP.ListItems.Count
+                  If Len(LstVwFTP.ListItems(i)) > 3 Then
+                     Progreso_Barra.Mensaje_Box = "Eliminando: FONDOS\M" & Format(j, "00") & "\" & LstVwFTP.ListItems(i)
                     .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                     Eliminar_Si_Existe_File RutaSistema & "\FONDOS\M" & Format(J, "00") & "\" & LstVwFTP.ListItems(I)
+                     Eliminar_Si_Existe_File RutaSistema & "\FONDOS\M" & Format(j, "00") & "\" & LstVwFTP.ListItems(i)
                   End If
-              Next I
-          Next J
+              Next i
+          Next j
          
          .CambiarDirectorio ftpUpDir & "/SISTEMA/LOGOS/"
          .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              If Len(LstVwFTP.ListItems(I)) > 3 Then
-                 Progreso_Barra.Mensaje_Box = "Eliminando: LOGOS\" & LstVwFTP.ListItems(I)
+          For i = 1 To LstVwFTP.ListItems.Count
+              If Len(LstVwFTP.ListItems(i)) > 3 Then
+                 Progreso_Barra.Mensaje_Box = "Eliminando: LOGOS\" & LstVwFTP.ListItems(i)
                 .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                 Eliminar_Si_Existe_File RutaSistema & "\LOGOS\" & LstVwFTP.ListItems(I)
+                 Eliminar_Si_Existe_File RutaSistema & "\LOGOS\" & LstVwFTP.ListItems(i)
               End If
-          Next I
+          Next i
           
          .CambiarDirectorio ftpUpDir & "/SISTEMA/FOTOS/"
          .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              If Len(LstVwFTP.ListItems(I)) > 3 Then
-                 Progreso_Barra.Mensaje_Box = "Eliminando: FOTOS\" & LstVwFTP.ListItems(I)
+          For i = 1 To LstVwFTP.ListItems.Count
+              If Len(LstVwFTP.ListItems(i)) > 3 Then
+                 Progreso_Barra.Mensaje_Box = "Eliminando: FOTOS\" & LstVwFTP.ListItems(i)
                 .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                 Eliminar_Si_Existe_File RutaSistema & "\FOTOS\" & LstVwFTP.ListItems(I)
+                 Eliminar_Si_Existe_File RutaSistema & "\FOTOS\" & LstVwFTP.ListItems(i)
               End If
-          Next I
+          Next i
           
          .CambiarDirectorio ftpUpDir & "/SISTEMA/FORMATOS/"
          .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              If Len(LstVwFTP.ListItems(I)) > 3 Then
-                 Progreso_Barra.Mensaje_Box = "Eliminando: FORMATOS\" & LstVwFTP.ListItems(I)
+          For i = 1 To LstVwFTP.ListItems.Count
+              If Len(LstVwFTP.ListItems(i)) > 3 Then
+                 Progreso_Barra.Mensaje_Box = "Eliminando: FORMATOS\" & LstVwFTP.ListItems(i)
                 .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                 Eliminar_Si_Existe_File RutaSistema & "\FORMATOS\" & LstVwFTP.ListItems(I)
+                 Eliminar_Si_Existe_File RutaSistema & "\FORMATOS\" & LstVwFTP.ListItems(i)
               End If
-          Next I
+          Next i
                     
          'Insertamos fondos nuevos de raiz
          .CambiarDirectorio ftpUpDir & "/SISTEMA/FONDOS/"
          .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              Select Case UCaseStrg(RightStrg(LstVwFTP.ListItems(I), 3))
+          For i = 1 To LstVwFTP.ListItems.Count
+              Select Case UCaseStrg(RightStrg(LstVwFTP.ListItems(i), 3))
                 Case "GIF", "JPG", "PNG"
                      Progreso_Barra.Mensaje_Box = "Actualizando: FONDOS\"
                     .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                    .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\FONDOS\" & LstVwFTP.ListItems(I), True
+                    .ObtenerArchivo LstVwFTP.ListItems(i), RutaSistema & "\FONDOS\" & LstVwFTP.ListItems(i), True
               End Select
-          Next I
+          Next i
                     
          'Insertamos los fondos por Mes
-          For J = 1 To 12
-             .CambiarDirectorio ftpUpDir & "/SISTEMA/FONDOS/M" & Format(J, "00") & "/"
+          For j = 1 To 12
+             .CambiarDirectorio ftpUpDir & "/SISTEMA/FONDOS/M" & Format(j, "00") & "/"
              .ListarArchivos
              'Cadena = "/SISTEMA/FONDOS/M" & Format(J, "00") & "/" & vbCrLf
-              For I = 1 To LstVwFTP.ListItems.Count
+              For i = 1 To LstVwFTP.ListItems.Count
                  'Cadena = Cadena & LstVwFTP.ListItems(I) & vbCrLf
-                  If Len(LstVwFTP.ListItems(I)) > 3 Then
-                     Progreso_Barra.Mensaje_Box = "Actualizando: FONDOS\M" & Format(J, "00") & "\" & LstVwFTP.ListItems(I)
+                  If Len(LstVwFTP.ListItems(i)) > 3 Then
+                     Progreso_Barra.Mensaje_Box = "Actualizando: FONDOS\M" & Format(j, "00") & "\" & LstVwFTP.ListItems(i)
                     .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                    .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\FONDOS\M" & Format(J, "00") & "\" & LstVwFTP.ListItems(I), True
+                    .ObtenerArchivo LstVwFTP.ListItems(i), RutaSistema & "\FONDOS\M" & Format(j, "00") & "\" & LstVwFTP.ListItems(i), True
                   End If
-              Next I
+              Next i
              'MsgBox Cadena
-          Next J
+          Next j
           
          .CambiarDirectorio ftpUpDir & "/SISTEMA/LOGOS/"
          .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              If Len(LstVwFTP.ListItems(I)) > 3 Then
-                 Progreso_Barra.Mensaje_Box = "Actualizando: LOGOS\" & LstVwFTP.ListItems(I)
+          For i = 1 To LstVwFTP.ListItems.Count
+              If Len(LstVwFTP.ListItems(i)) > 3 Then
+                 Progreso_Barra.Mensaje_Box = "Actualizando: LOGOS\" & LstVwFTP.ListItems(i)
                 .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\LOGOS\" & LstVwFTP.ListItems(I), True
+                .ObtenerArchivo LstVwFTP.ListItems(i), RutaSistema & "\LOGOS\" & LstVwFTP.ListItems(i), True
               End If
-          Next I
+          Next i
           
          .CambiarDirectorio ftpUpDir & "/SISTEMA/FOTOS/"
          .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              If Len(LstVwFTP.ListItems(I)) > 3 Then
-                 Progreso_Barra.Mensaje_Box = "Actualizando: FOTOS\" & LstVwFTP.ListItems(I)
+          For i = 1 To LstVwFTP.ListItems.Count
+              If Len(LstVwFTP.ListItems(i)) > 3 Then
+                 Progreso_Barra.Mensaje_Box = "Actualizando: FOTOS\" & LstVwFTP.ListItems(i)
                 .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\FOTOS\" & LstVwFTP.ListItems(I), True
+                .ObtenerArchivo LstVwFTP.ListItems(i), RutaSistema & "\FOTOS\" & LstVwFTP.ListItems(i), True
               End If
-          Next I
+          Next i
           
          .CambiarDirectorio ftpUpDir & "/SISTEMA/FORMATOS/"
          .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
-              If Len(LstVwFTP.ListItems(I)) > 3 Then
-                 Progreso_Barra.Mensaje_Box = "Actualizando: FORMATOS\" & LstVwFTP.ListItems(I)
+          For i = 1 To LstVwFTP.ListItems.Count
+              If Len(LstVwFTP.ListItems(i)) > 3 Then
+                 Progreso_Barra.Mensaje_Box = "Actualizando: FORMATOS\" & LstVwFTP.ListItems(i)
                 .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\FORMATOS\" & LstVwFTP.ListItems(I), True
+                .ObtenerArchivo LstVwFTP.ListItems(i), RutaSistema & "\FORMATOS\" & LstVwFTP.ListItems(i), True
               End If
-          Next I
+          Next i
        End If
        
       '_________________________________________________________
@@ -881,14 +881,14 @@ On Error GoTo error_Handler
 
          .CambiarDirectorio ftpUpDir & "/SISTEMA/BASES/UPDATE_DB/"
          .ListarArchivos
-          For I = 1 To LstVwFTP.ListItems.Count
+          For i = 1 To LstVwFTP.ListItems.Count
              'MsgBox LstVwFTP.ListItems(I) & vbCrLf & UCaseStrg(RightStrg(LstVwFTP.ListItems(I), 3))
-              If UCaseStrg(RightStrg(LstVwFTP.ListItems(I), 3)) = "SQL" Then
-                 Progreso_Barra.Mensaje_Box = "Actualizando: " & LstVwFTP.ListItems(I)
+              If UCaseStrg(RightStrg(LstVwFTP.ListItems(i), 3)) = "SQL" Then
+                 Progreso_Barra.Mensaje_Box = "Actualizando: " & LstVwFTP.ListItems(i)
                 .Mostar_Estado_FTP ProgressBarEstado, LstStatud
-                .ObtenerArchivo LstVwFTP.ListItems(I), RutaSistema & "\BASES\UPDATE_DB\" & LstVwFTP.ListItems(I), True
+                .ObtenerArchivo LstVwFTP.ListItems(i), RutaSistema & "\BASES\UPDATE_DB\" & LstVwFTP.ListItems(i), True
               End If
-          Next I
+          Next i
        End If
       .Desconectar
       
@@ -914,11 +914,22 @@ On Error GoTo error_Handler
                  Progreso_Barra.Mensaje_Box = "Conectando al servidor"
                 .Mostar_Estado_FTP ProgressBarEstado, LstStatud
                 .Inicializar Me
-                .Password = ftpPwrLinode                    'Le establecemos la contraseña de la cuenta Ftp
-                .Usuario = ftpUseLinode                     'Le establecemos el nombre de usuario de la cuenta
-                .servidor = ftpSvrLinode                    'Establecesmo el nombre del Servidor FTP
-                .Puerto = 21
-                'MsgBox .servidor
+         If InStr(IPDelOrdenador, "192.168.27") Then
+            .servidor = "192.168.27.3"           'Establecesmo el nombre del Servidor FTP
+            .Puerto = 21
+          Else
+            .servidor = ftpUpSvr                 'Establecesmo el nombre del Servidor FTP
+            .Puerto = ftpUpPuerto
+          End If
+         .Password = ftpUpPwr                    'Le establecemos la contraseña de la cuenta Ftp
+         .Usuario = ftpUpUse                     'Le establecemos el nombre de usuario de la cuenta
+                 
+                
+'                .Password = ftpPwrLinode                    'Le establecemos la contraseña de la cuenta Ftp
+'                .Usuario = ftpUseLinode                     'Le establecemos el nombre de usuario de la cuenta
+'                .servidor = ftpSvrLinode                    'Establecesmo el nombre del Servidor FTP
+'                .Puerto = 21
+'                'MsgBox .servidor
                 'Conectamos al servidor FTP. EL label es el control donde mostrar los errores y el estado de la conexión
                  If .ConectarFtp(LstStatud) = False Then
                      MsgBox "Error (" & Err.Number & ") " & Err.Description & vbCrLf & "No se pudo conectar"
@@ -927,7 +938,7 @@ On Error GoTo error_Handler
                  FActualizar.Caption = "DATOS Y PROGRAMAS: " & .servidor
                  FActualizar.Refresh
                 'Mostramos en el label el path del directorio actual donde estamos ubicados en el servidor
-                .CambiarDirectorio ftpDirLinode & "/SISTEMA/BASES/UPDATE_DB/"
+                .CambiarDirectorio ftpUpDir & "/SISTEMA/BASES/UPDATE_DB/"
                  Progreso_Barra.Mensaje_Box = .GetDirectorioActual
                 'MsgBox Progreso_Barra.Mensaje_Box
                 .Mostar_Estado_FTP ProgressBarEstado, LstStatud
@@ -941,16 +952,16 @@ On Error GoTo error_Handler
                 'Eliminar_Si_Existe_File RutaSistema & "\FONDOS\*.jpg"
                 '.EliminarArchivo
                 'MsgBox "Desktop Test: Cantidad de Archivos = " & UBound(Files)
-                 For I = 0 To UBound(Files)
-                     sOrigen = RutaSistema & "\BASES\UPDATE_DB\" & Files(I)
-                     sDestino = ftpDirLinode & "/SISTEMA/BASES/UPDATE_DB/" & Files(I)
-                     Progreso_Barra.Mensaje_Box = "Subiendo a DB: " & Files(I)
+                 For i = 0 To UBound(Files)
+                     sOrigen = RutaSistema & "\BASES\UPDATE_DB\" & Files(i)
+                     sDestino = ftpUpDir & "/SISTEMA/BASES/UPDATE_DB/" & Files(i)
+                     Progreso_Barra.Mensaje_Box = "Subiendo a DB: " & Files(i)
                     .Mostar_Estado_FTP ProgressBarEstado, LstStatud
                     .SubirArchivo sOrigen, sDestino, True
                      Progreso_Barra.Mensaje_Box = .MsgError
                     .Mostar_Estado_FTP ProgressBarEstado, LstStatud
                     'MsgBox .MsgError & vbCrLf & String(70, "-") & vbCrLf & sOrigen & vbCrLf & sDestino
-                 Next I
+                 Next i
                'MsgBox sOrigen & vbCrLf & sDestino
                 .Desconectar
             End With
@@ -2412,7 +2423,7 @@ Dim JSONFiles As String
     
     ProgressBarEstado.value = ProgressBarEstado.value + 1
    '----------------------------------------
-'''    Bajar_Archivos_FTP "[1]"
+    Bajar_Archivos_FTP "[1]"
    '----------------------------------------
    'MsgBox "Fin Subida"
         
@@ -2473,12 +2484,12 @@ Dim JSONFiles As String
     ConectarAdodc AdoAux
 
    'Listado de las Bases que estan en el Servidor Actual
-    sSQL = "SELECT sys.databases.name,(SUM(sys.master_files.size) * 8/1024) AS size_MB " _
-         & "FROM sys.databases JOIN sys.master_files " _
-         & "ON sys.databases.database_id = sys.master_files.database_id " _
-         & "WHERE sys.databases.name LIKE 'DiskCover%' " _
-         & "GROUP BY sys.databases.name " _
-         & "ORDER BY sys.databases.name, size_MB; "
+    sSQL = "SELECT d.name, CAST(SUM(CAST(mf.size AS BIGINT)) * 8.0 / 1024 AS DECIMAL(18, 2)) AS size_MB " _
+         & "FROM sys.databases AS d " _
+         & "INNER JOIN sys.master_files AS mf ON d.database_id = mf.database_id " _
+         & "WHERE d.name LIKE 'DiskCover%' " _
+         & "GROUP BY d.name " _
+         & "ORDER BY d.name;"
     Select_Adodc AdoAux, sSQL
     With AdoAux.Recordset
      If .RecordCount > 0 Then
@@ -2532,17 +2543,18 @@ Dim JSONFiles As String
            Ejecutar_SQL_AdoDB "DROP PROCEDURE IF EXISTS sp_Ejecutar_SQL"
            Ejecutar_SQL_AdoDB "DROP PROCEDURE IF EXISTS sp_Crear_FN_SP"
            Ejecutar_SQL_AdoDB "DROP PROCEDURE IF EXISTS sp_Eliminar_Duplicados"
+           Ejecutar_SQL_AdoDB "DROP PROCEDURE IF EXISTS sp_Actualizar_Base_Datos"
            Ejecutar_SQL_AdoDB "DROP TABLE IF EXISTS Actualizacion"
           'Creamos y actualizamos la tabla donde esta la actualizacion
            Ejecutar_SQL_AdoDB "SELECT * INTO " & strNombreBaseDatos & ".dbo.Actualizacion FROM DiskCover_#Update.dbo.Actualizacion ORDER BY Extension, Archivo", True
           'Creamos los SP que servira para actualizar la base de datos
            Ejecutar_SQL_AdoDB Crear_FN_SP(RutaSistema & "\BASES\UPDATE_DB\dbo.sp_Ejecutar_SQL.StoredProcedure.sql"), True
            Ejecutar_SQL_AdoDB Crear_FN_SP(RutaSistema & "\BASES\UPDATE_DB\dbo.sp_Crear_FN_SP.StoredProcedure.sql"), True
-          'Eliminamos y luego creamos los SP necesarios para esta actualizacion
-'''           Ejecutar_SP "sp_Crear_FN_SP", "sp_Eliminar_Indices_Temporales"
-'''           Ejecutar_SP "sp_Crear_FN_SP", "sp_Eliminar_Tablas_Temporales"
-'''           Ejecutar_SP "sp_Crear_FN_SP", "sp_Eliminar_Duplicados"
-'''           Ejecutar_SP "sp_Crear_FN_SP", "sp_Actualizar_Base_Datos"
+          'Creamos los SP necesarios para esta actualizacion
+           Ejecutar_SP "sp_Crear_FN_SP", "sp_Eliminar_Indices_Temporales"
+           Ejecutar_SP "sp_Crear_FN_SP", "sp_Eliminar_Tablas_Temporales"
+           Ejecutar_SP "sp_Crear_FN_SP", "sp_Eliminar_Duplicados"
+           Ejecutar_SP "sp_Crear_FN_SP", "sp_Actualizar_Base_Datos"
           'Procedemos a Actualizar la base actual
            
           ' MsgBox NombreBase(IdBase)
@@ -2597,8 +2609,7 @@ Dim JSONFiles As String
                          & "SERVIRLES ES NUESTRO COMPROMISO, DISFRUTARLO ES EL SUYO."
            TMail.Remitente = RepresentanteEntidad & " -> " & strIPServidor
            TMail.para = EmailEmpresa
-           TMail.Asunto = "Actualizacion exitosa de la Base de Datos: " & NombreBase(IdBase) & " (" & Format(IdBase, "00") & ") Duracion: " _
-                        & Format(Time - MiTiempo, FormatoTimes)
+           TMail.Asunto = "BD: " & NombreBase(IdBase) & " Actualizada exitosamente  (" & Format(IdBase, "00") & ") Duracion: " & Format(Time - MiTiempo, FormatoTimes)
            FEnviarCorreos.Show 1
           'MsgBox "Desktop Test:" & vbCrLf & strNombreBaseDatos
         Else
@@ -2607,6 +2618,7 @@ Dim JSONFiles As String
                 & "PARA QUE CONECTE LA VPN"
            AdoStrCnn = AdoStrCnnTemp
         End If
+
     Next IdBase
 
     If MensajeEmailUpdate <> "" Then

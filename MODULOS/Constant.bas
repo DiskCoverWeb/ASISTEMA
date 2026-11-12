@@ -3,13 +3,11 @@ Option Explicit
 '-------------------------------------------------------
 'Store Procedure:
 'C:\SISTEMA\BASES\UPDATE_DB
+'Data de SQL Server: /var/opt/mssql/data
 '.......................................................
+'https://api.diskcoversystem.com:8010/docs
 'https://downloads.mysql.com/archives/c-odbc/
 'https://downloads.mysql.com/archives/gpg/?file=mysql-connector-odbc-8.0.12-win32.msi&p=10
-'-------------------------------------------------------
-'+573103673819-- Cristhian Orozco Whatsapp
-'corozcoic@ foodbanking.org
-'jsuarezic@ foodbanking.org
 '-------------------------------------------------------
 'Clipboard.Clear
 'Clipboard.SetText SQL2
@@ -21,55 +19,9 @@ Option Explicit
 'credenciales@diskcoversystem.com       Dlcjvl1210@Credenciales
 '-------------------------------------------------------
 'SERVIRLES ES NUESTRO COMPROMISO, DISFRUTARLO ES EL SUYO.
-'-------------------------------------------------------
-' Prueba:     celcer.sri.gob.ec
-' Produccion: cel.sri.gob.ec
-'-------------------------------------------------------
-'https://www.youtube.com/watch?v=EVh36sDppcs
-' MySQL     Puerto: 13306
-' SQLServer Puerto: 11433
-' https://api.diskcoversystem.com:8010/docs
 '------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 'SELECT  Ciudad, Empresa, RUC, Email, Email_Conexion, Email_Clave, Email_Respaldos, Email_Conexion_CE, Email_Clave_CE, Email_Procesos, Email_CE_Copia, smtp_Servidor, ID From Empresas
 '------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-'      69.164.192.53     erp.diskcoversystem.com
-'      69.164.192.53     ftpds.diskcoversystem.com
-'     104.237.138.52     imap.diskcoversystem.com
-'     194.195.222.54     ftp.diskcoversystem.com
-'     194.195.222.54     db.diskcoversystem.com
-'      186.4.206.112     cloud.diskcoversystem.com
-'       186.4.206.95     vpn.diskcoversystem.com
-'       186.4.206.95     ftpupdate.diskcoversystem.com
-'-----------------------------------------------------
-'Tipo_Concepto_Retencion
-'BINARY       1 byte por carácter Se puede almacenar cualquier tipo de datos en un campo de
-'               este tipo. Los datos no se traducen (por ejemplo, a texto). La forma en que se
-'               introducen los datos en un campo binario indica cómo aparecerán al mostrarlos.
-'BIT          1 byte Valores Sí y No, y campos que contienen solamente uno de dos valores.
-'BYTE         1 byte Un número entero entre 0 y 255.
-'COUNTER      4 bytes Un número que el motor de base de datos Microsoft Jet incrementa
-'               automáticamente siempre que se agrega un registro nuevo a una tabla.
-'               En el motor de base de datos Microsoft Jet, el tipo de datos para este
-'               valor es Long.
-'CURRENCY     8 bytes Un número entero comprendido entre  – 922.337.203.685.477,5808 y
-'               922.337.203.685.477,5807.
-'DATETIME     8 bytes Una valor de fecha u hora entre los años 100 y 9999 (Vea DOUBLE)
-'GUID         128 bits Un número de identificación único utilizado con llamadas a
-'               procedimientos remotos.
-'SINGLE       4 bytes Un valor de signo flotante de precisión simple con un intervalo
-'               comprendido entre  – 3,402823E38 y  – 1,401298E-45 para valores negativos,
-'               y desde 1,401298E-45 a 3,402823E38 para valores positivos, y 0.
-'DOUBLE       8 bytes Un valor de signo flotante de precisión doble con un intervalo
-'               comprendido entre  – 1,79769313486232E308 y  – 4,94065645841247E-324 para
-'               valores negativos, y desde 4,94065645841247E-324 a 1,79769313486232E308 para
-'               valores positivos, y 0.
-'SHORT        2 bytes Un entero corto, entre  – 32.768 y 32.767.
-'LONG         4 bytes Un entero largo entre  – 2.147.483.648 y 2.147.483.647.
-'LONGTEXT     1 byte por carácterr    Desde cero hasta un máximo de 1,2 gigabytes.
-'LONGBINARY   Lo que se requiera  Desde cero hasta un máximo de 1,2 gigabytes. Se utiliza
-'             para objetos OLE.
-'TEXT         1 byte por carácter Desde cero a 255 caracteres.
-'=================================================================
 'Funciones de SQL
 'Constantes para acceso a Datos por ADO/ADODB/OLE DB
 'Constante                Valor
@@ -92,26 +44,28 @@ Option Explicit
 '-----------------------------------------------------------------
 'Este Campo se cambiara segun el tiempo y la version de conexion
 '-----------------------------------------------------------------
-''' "USTED NO ESTA LEGALIZADO LLAME A SU" & vbCrLf _
-'''                 & "PROVEEDOR O A NUESTRAS OFICINAS A" & vbCrLf _
-'''                 & "LOS TELEFONOS: 02-321-0051/099-965-4196/098-910-5300" & vbCrLf _
+''' "USTED NO ESTA LEGALIZADO LLAME A SU PROVEEDOR O A NUESTRAS OFICINAS A LOS TELEFONOS: 02-321-0051/099-965-4196/098-910-5300" & vbCrLf _
 '''                 & "EN QUITO - ECUADOR O LOS EMAILS:" & vbCrLf _
 '''                 & "asistencia@diskcoversystem.com / prisma_net@hotmail.es" & vbCrLf _
 '''                 & "PARA SU LEGALIZACION"
 '--------------------------------------------------------------------------------------------------------------------------------------------
 'DATOS PARA TRANSFERENCIAS y RETENCIONES: [NOMBREDE LA EMPRESA TAL COMO ESTA EN EL RUC] RUC: 1791278550001, Banco XXXXX Cta. Cte/Ahr. 0123456789, mail: correo_de_la_empresa@correo.com, Celular: 099-000-0000.
 '--------------------------------------------------------------------------------------------------------------------------------------------
-'https://srienlinea.sri.gob.ec/sri-catastro-sujeto-servicio-internet/rest/ConsolidadoContribuyente/existePorNumeroRuc?numeroRuc=1793042813001
-'https://srienlinea.sri.gob.ec/facturacion-internet/consultas/publico/ruc-datos2.jspa?accion=siguiente&ruc=1793192001001
-'-----------------------------------------------------------------------------------------------------------------------
 'Recepcion/Autorizacion
 'Produccion:
+'----------
 'https://cel.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl
 'https://cel.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl
 'Prueba:
+'------
 'https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl
 'https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl
 '--------------------------------------------------------------------------------------------
+Global Const ClaveKey = "DarCriMat031210"
+Global Const ClaveNueva = "Dlcjvl1210@" ' "DarCri031210@"
+' root: disk@Cover2026
+' diskcover: prisma@Net2026
+
 Global Const TextoLeyendaFA = "Para consultas, requerimientos o reclamos puede contactarse a nuestro Centro de Atención al Cliente Teléfono: 02-6052430, " _
                             & "o escriba al correo prisma_net@hotmail.es; para Transferencia o Depósitos hacer en El Banco Pichincha: Cta. Ahr. 4245946100 a " _
                             & "Nombre de Walter Vaca Prieto/Cta. Cte 3422225804, a Nombre de PRISMANET PROFESIONAL S.A."
@@ -158,8 +112,6 @@ Global Const Resolucion_Retencion = "RESOLUCION: El Articulo 97 del Reglamento p
 '-------------------------------------------------------------------------------
 'Datos de Conexion a la Base de Datos en las nubes db.diskcoversystem.com:13306
 '-------------------------------------------------------------------------------
-'Global Const AdoStrCnnMySQL = "DRIVER={MySQL ODBC 8.0 ANSI Driver};"
-'-------------------------------------------------------------------------------
 'MySQL: root / disk2023@Cover
 'SERVER=db.diskcoversystem.com;
 '-------------------------------------------------------------------------------
@@ -167,8 +119,11 @@ Global Const strServidor = "db.diskcoversystem.com"
 Global Const strServidorERP = "erp.diskcoversystem.com"
 
 Global Const urlIdukay = "https://erp.diskcoversystem.com/php/vista/consultarEstudiante.php?id="
+'-----------------------------------------------------------------------------------------------------------------------
 Global Const urlEsUnRUC = "https://srienlinea.sri.gob.ec/sri-catastro-sujeto-servicio-internet/rest/ConsolidadoContribuyente/existePorNumeroRuc?numeroRuc="
 Global Const urlDatosDelRUC = "https://srienlinea.sri.gob.ec/facturacion-internet/consultas/publico/ruc-datos2.jspa?accion=siguiente&ruc="
+'https://srienlinea.sri.gob.ec/sri-catastro-sujeto-servicio-internet/rest/ConsolidadoContribuyente/existePorNumeroRuc?numeroRuc=1793042813001
+'https://srienlinea.sri.gob.ec/facturacion-internet/consultas/publico/ruc-datos2.jspa?accion=siguiente&ruc=1793192001001
 '-----------------------------------------------------------------
 Global Const CorreoDiskCover = "informacion@diskcoversystem.com"
 Global Const ContrasenaDiskCover = "infoDlcjvl1210DiskCover"
@@ -374,4 +329,52 @@ Global Const INTERNET_OPEN_TYPE_DIRECT = 1
 Global Const INTERNET_OPEN_TYPE_PROXY = 3
 ' prevent using java/script/INS
 Global Const INTERNET_OPEN_TYPE_PRECONFIG_WITH_NO_AUTOPROXY = 4
+'-------------------------------------------------------
+'https://www.youtube.com/watch?v=EVh36sDppcs
+' MySQL     Puerto: 13306
+' SQLServer Puerto: 11433
+'-----------------------------------------------------
+'      69.164.192.53     erp.diskcoversystem.com
+'      69.164.192.53     ftpds.diskcoversystem.com
+'     104.237.138.52     imap.diskcoversystem.com
+'     194.195.222.54     ftp.diskcoversystem.com
+'     194.195.222.54     db.diskcoversystem.com
+'      186.4.206.112     cloud.diskcoversystem.com
+'       186.4.206.95     vpn.diskcoversystem.com
+'       186.4.206.95     ftpupdate.diskcoversystem.com
+'-----------------------------------------------------
+'+573103673819-- Cristhian Orozco Whatsapp
+'corozcoic@ foodbanking.org
+'jsuarezic@ foodbanking.org
+'-------------------------------------------------------
+'Tipo_Concepto_Retencion:
+'-----------------------
+'BINARY       1 byte por carácter Se puede almacenar cualquier tipo de datos en un campo de
+'               este tipo. Los datos no se traducen (por ejemplo, a texto). La forma en que se
+'               introducen los datos en un campo binario indica cómo aparecerán al mostrarlos.
+'BIT          1 byte Valores Sí y No, y campos que contienen solamente uno de dos valores.
+'BYTE         1 byte Un número entero entre 0 y 255.
+'COUNTER      4 bytes Un número que el motor de base de datos Microsoft Jet incrementa
+'               automáticamente siempre que se agrega un registro nuevo a una tabla.
+'               En el motor de base de datos Microsoft Jet, el tipo de datos para este
+'               valor es Long.
+'CURRENCY     8 bytes Un número entero comprendido entre  – 922.337.203.685.477,5808 y
+'               922.337.203.685.477,5807.
+'DATETIME     8 bytes Una valor de fecha u hora entre los años 100 y 9999 (Vea DOUBLE)
+'GUID         128 bits Un número de identificación único utilizado con llamadas a
+'               procedimientos remotos.
+'SINGLE       4 bytes Un valor de signo flotante de precisión simple con un intervalo
+'               comprendido entre  – 3,402823E38 y  – 1,401298E-45 para valores negativos,
+'               y desde 1,401298E-45 a 3,402823E38 para valores positivos, y 0.
+'DOUBLE       8 bytes Un valor de signo flotante de precisión doble con un intervalo
+'               comprendido entre  – 1,79769313486232E308 y  – 4,94065645841247E-324 para
+'               valores negativos, y desde 4,94065645841247E-324 a 1,79769313486232E308 para
+'               valores positivos, y 0.
+'SHORT        2 bytes Un entero corto, entre  – 32.768 y 32.767.
+'LONG         4 bytes Un entero largo entre  – 2.147.483.648 y 2.147.483.647.
+'LONGTEXT     1 byte por carácterr    Desde cero hasta un máximo de 1,2 gigabytes.
+'LONGBINARY   Lo que se requiera  Desde cero hasta un máximo de 1,2 gigabytes. Se utiliza
+'             para objetos OLE.
+'TEXT         1 byte por carácter Desde cero a 255 caracteres.
+'=================================================================
 

@@ -78,6 +78,7 @@ Module=JSON; ..\MODULOS\JSON.bas
 Form=..\Facturas\FacturaDesp.frm
 Form=..\GENERAL\FSRIAutorizaXML.frm
 Form=..\GENERAL\FInfMsg.frm
+Module=RC4Archivos; ..\MODULOS\SubCifrado.bas
 IconForm="MDIDespensa"
 Startup="MDIDespensa"
 HelpFile=""

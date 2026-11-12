@@ -2413,7 +2413,9 @@ Dim S_SubTotal As String
 End Sub
 
 Public Sub Actualiza_Datos_Cliente()
-    Documento = 0
+Dim Documento As String
+
+    Documento = "0"
     If AdoDebito.Recordset.RecordCount > 0 Then
        AdoDebito.Recordset.MoveFirst
        AdoDebito.Recordset.Find ("Descripcion = '" & DCDebito & "' ")
@@ -2606,7 +2608,7 @@ Public Sub Grabar_FA_Pensiones()
        
        If Not ComisionEjec Then CodigoVen = Ninguno
 
-       MsgBox "Abonos.."
+      'MsgBox "Abonos.."
       'Seteos de Abonos Generales para todos los tipos de abonos
        TA.T = FA.T
        TA.TP = FA.TC
@@ -2675,7 +2677,7 @@ Public Sub Grabar_FA_Pensiones()
        Grabar_Abonos TA
        
       'Grabamos el numero de factura
-       MsgBox "Grabar_Factura"
+      'MsgBox "Grabar_Factura"
        Grabar_Factura FA, TA, True
        
        RatonNormal
@@ -2813,9 +2815,9 @@ Dim SiGrabarFactura As Boolean
 ''       End If
        Cta_Aux = Leer_Cta_Catalogo(CtaPagoMax)
        FA.Tipo_Pago = TipoPago
-       MsgBox "Actualiza_Datos_Cliente"
+      'MsgBox "Actualiza_Datos_Cliente"
        Actualiza_Datos_Cliente
-       MsgBox "Grabar_FA_Pensiones"
+      'MsgBox "Grabar_FA_Pensiones"
        Grabar_FA_Pensiones
        
        Nuevo = False
@@ -3250,14 +3252,14 @@ Dim ExisteCliente As Boolean
           
          'Lista de Alumnos Matriculados
           CTipoCta = FA.Tipo_Cta
-          Documento = FA.Cod_Banco
+          'Documento = FA.Cod_Banco
           TxtCtaNo = FA.Cta_Numero
           MBFecha = FA.Fecha_Cad
           If FA.Por_Deposito Then CheqPorDeposito.value = 1 Else CheqPorDeposito.value = 0
           
           If AdoDebito.Recordset.RecordCount > 0 Then
              AdoDebito.Recordset.MoveFirst
-             AdoDebito.Recordset.Find ("Codigo = " & Documento & " ")
+             AdoDebito.Recordset.Find ("Codigo = '" & FA.Cod_Banco & "' ")
              If Not AdoDebito.Recordset.EOF Then
                 DCDebito = AdoDebito.Recordset.fields("Descripcion")
              Else
@@ -3322,10 +3324,10 @@ Dim ExisteCliente As Boolean
   tempDirS = TxtDirS
   tempCtaNo = TxtCtaNo
   tempTipoCta = CTipoCta
-  tempDocumento = Documento
+  tempDocumento = FA.Cod_Banco
   tempCaducidad = MBFecha
   
-  If Len(TxtCtaNo) > 1 And Len(CTipoCta) > 1 And Documento > 0 Then
+  If Len(TxtCtaNo) > 1 And Len(CTipoCta) > 1 And Len(FA.Cod_Banco) > 1 Then
      CheqDebito.value = 1
      FrmDebito.Visible = True
   End If
