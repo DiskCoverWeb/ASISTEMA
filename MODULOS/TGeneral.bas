@@ -353,7 +353,7 @@ Type CtasAsiento
       ResultadoFA      As String
       Cod_Banco        As String
       
-      C                As Boolean
+      c                As Boolean
       p                As Boolean
       SP               As Boolean
       ME_              As Boolean
@@ -468,23 +468,34 @@ Type CtasAsiento
  End Type
 '-------------------------------------
  Type Tipo_Contribuyente
-      Existe             As Boolean
-      Estado             As String
-      RazonSocial        As String
-      RUC_SRI            As String
-      NombreComercial    As String
-      ClaseRUC           As String
-      TipoRUC            As String
-      Obligado           As String
-      ActividadEconomica As String
-      FechaInicio        As String
-      FechaCese          As String
-      FechaReinicio      As String
-      FechaActualización As String
-      Categoria          As String
-      AgenteRetencion    As String
-      MicroEmpresa       As String
-      DatoContribuyente  As String
+      Existe                As Boolean
+      Estado                As String
+      RazonSocial           As String
+      RUC_SRI               As String
+      NombreComercial       As String
+      ClaseRUC              As String
+      TipoRUC               As String
+      Obligado              As String
+      ActividadEconomica    As String
+      FechaInicio           As String
+      FechaCese             As String
+      FechaReinicio         As String
+      FechaActualizacion    As String
+      Categoria             As String
+      AgenteRetencion       As String
+      MicroEmpresa          As String
+      DatoContribuyente     As String
+      TipoEstablecimiento   As String
+      DireccionCompleta     As String
+      EstadoEstablecimiento As String
+      NumeroEstablecimiento As String
+      EsMatriz              As String
+      ContribEspecial       As String
+      ContribFantasma       As String
+      TransacInexistente    As String
+      MotivoSuspension      As String
+      RepIdentificacion     As String
+      RepNombre             As String
  End Type
 '-------------------------------------
  Type Tipo_Rol_Pago_Individual

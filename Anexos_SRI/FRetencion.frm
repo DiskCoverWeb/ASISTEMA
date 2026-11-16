@@ -9,7 +9,7 @@ Begin VB.Form FRetencion
    ClientHeight    =   7815
    ClientLeft      =   60
    ClientTop       =   345
-   ClientWidth     =   19950
+   ClientWidth     =   18720
    FillColor       =   &H00FFC0C0&
    Icon            =   "FRetencion.frx":0000
    LinkTopic       =   "Form1"
@@ -17,7 +17,7 @@ Begin VB.Form FRetencion
    MouseIcon       =   "FRetencion.frx":030A
    ScaleHeight     =   16824.25
    ScaleMode       =   0  'User
-   ScaleWidth      =   17221.35
+   ScaleWidth      =   16159.58
    WindowState     =   2  'Maximized
    Begin VB.TextBox TxtSalarioBasico 
       Alignment       =   1  'Right Justify

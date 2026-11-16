@@ -23,8 +23,8 @@ Begin VB.Form ListFact
    EndProperty
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   9405
-   ScaleWidth      =   11280
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    WindowState     =   2  'Maximized
    Begin VB.Frame FrmEjecutivo 
       BackColor       =   &H00404080&
@@ -1495,13 +1495,13 @@ Begin VB.Form ListFact
    End
    Begin MSComctlLib.Toolbar TBarFactura 
       Align           =   1  'Align Top
-      Height          =   1800
+      Height          =   660
       Left            =   0
       TabIndex        =   68
       Top             =   0
-      Width           =   11280
-      _ExtentX        =   19897
-      _ExtentY        =   3175
+      Width           =   28560
+      _ExtentX        =   50377
+      _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
       Appearance      =   1
@@ -1993,20 +1993,20 @@ Public Sub Revertir_Facturas()
        Do While Not .EOF
           Contador = Contador + 1
           ListFact.Caption = Format(Contador / .RecordCount, "00%")
-          I = .fields("Mes_No")
+          i = .fields("Mes_No")
           Codigo2 = .fields("Ticket")
           Codigo3 = .fields("Mes")
           
-          If I <= 0 Then I = Month(.fields("Fecha"))
+          If i <= 0 Then i = Month(.fields("Fecha"))
           If Len(Codigo2) < 4 Then Codigo1 = CStr(Year(.fields("Fecha")))
-          If Len(Codigo3) < 3 Then Codigo3 = MesesLetras(CInt(I))
+          If Len(Codigo3) < 3 Then Codigo3 = MesesLetras(CInt(i))
           
           sSQL = "DELETE * " _
                & "FROM Clientes_Facturacion " _
                & "WHERE Periodo = '" & Codigo2 & "' " _
                & "AND Codigo_Inv = '" & .fields("Codigo") & "' " _
                & "AND Codigo = '" & .fields("CodigoC") & "' " _
-               & "AND Num_Mes = " & I & " " _
+               & "AND Num_Mes = " & i & " " _
                & "AND Item = '" & NumEmpresa & "' "
           Ejecutar_SQL_SP sSQL
           
@@ -2018,7 +2018,7 @@ Public Sub Revertir_Facturas()
           SetAdoFields "Descuento", .fields("Total_Desc")
           SetAdoFields "Descuento2", .fields("Total_Desc2")
           SetAdoFields "GrupoNo", .fields("Grupo")
-          SetAdoFields "Num_Mes", I
+          SetAdoFields "Num_Mes", i
           SetAdoFields "Mes", Codigo3
           SetAdoFields "Fecha", .fields("Fecha")
           SetAdoFields "Periodo", Codigo2

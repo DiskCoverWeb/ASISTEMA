@@ -13,8 +13,8 @@ Begin VB.Form Retenciones
    DrawMode        =   1  'Blackness
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   9435
-   ScaleWidth      =   15960
+   ScaleHeight     =   15615
+   ScaleWidth      =   28560
    WindowState     =   2  'Maximized
    Begin ComctlLib.Toolbar Toolbar1 
       Align           =   1  'Align Top
@@ -22,8 +22,8 @@ Begin VB.Form Retenciones
       Left            =   0
       TabIndex        =   16
       Top             =   0
-      Width           =   15960
-      _ExtentX        =   28152
+      Width           =   28560
+      _ExtentX        =   50377
       _ExtentY        =   1164
       ButtonWidth     =   1032
       ButtonHeight    =   1005
@@ -31,7 +31,7 @@ Begin VB.Form Retenciones
       ImageList       =   "ImageList1"
       _Version        =   327682
       BeginProperty Buttons {0713E452-850A-101B-AFC0-4210102A8DA7} 
-         NumButtons      =   10
+         NumButtons      =   11
          BeginProperty Button1 {0713F354-850A-101B-AFC0-4210102A8DA7} 
             Key             =   "Salir"
             Object.ToolTipText     =   "SAlir del modullo"
@@ -92,11 +92,19 @@ Begin VB.Form Retenciones
             Object.Tag             =   ""
             ImageIndex      =   10
          EndProperty
+         BeginProperty Button11 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   ""
+            Key             =   "Descargar_XML"
+            Description     =   ""
+            Object.ToolTipText     =   "Descarga archivo xml autorizado"
+            Object.Tag             =   ""
+            ImageIndex      =   12
+         EndProperty
       EndProperty
       BorderStyle     =   1
       Begin VB.Frame Frame1 
          Height          =   750
-         Left            =   5880
+         Left            =   6510
          TabIndex        =   17
          Top             =   -105
          Width           =   7260
@@ -811,7 +819,7 @@ Begin VB.Form Retenciones
       MaskColor       =   12632256
       _Version        =   327682
       BeginProperty Images {0713E8C2-850A-101B-AFC0-4210102A8DA7} 
-         NumListImages   =   11
+         NumListImages   =   12
          BeginProperty ListImage1 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
             Picture         =   "Retencio.frx":0045
             Key             =   ""
@@ -854,6 +862,10 @@ Begin VB.Form Retenciones
          EndProperty
          BeginProperty ListImage11 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
             Picture         =   "Retencio.frx":A6EA9
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage12 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "Retencio.frx":A71C3
             Key             =   ""
          EndProperty
       EndProperty
@@ -1148,6 +1160,9 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As ComctlLib.Button)
             SRI_Enviar_Mails FA, SRI_Autorizacion
             DCComp = AdoComp.Recordset.Fields("SecRetencion")
          End If
+    Case "Descargar_XML"
+         SRI_Generar_XML_Firmado FA.ClaveAcceso
+         MsgBox "Documento Electronico:" & vbCrLf & vbCrLf & FA.ClaveAcceso & ".xml" & vbCrLf & vbCrLf & "Descargado en: " & RutaSysBases & "\TEMP\"
   End Select
 End Sub
 

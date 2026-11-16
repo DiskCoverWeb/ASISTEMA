@@ -149,7 +149,6 @@ Form=..\GENERAL\FEnviarCorreos.frm
 Form=..\GENERAL\FSRIAutorizaXML.frm
 Form=..\GENERAL\FInfMsg.frm
 Module=RC4Archivos; ..\MODULOS\SubCifrado.bas
-Module=modFacturacionXML; ..\MODULOS\modFacturacionXML.bas
 IconForm="MDIConta"
 Startup="MDIConta"
 HelpFile=""

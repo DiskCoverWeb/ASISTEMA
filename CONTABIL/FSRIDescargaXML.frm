@@ -1153,6 +1153,7 @@ Dim ReceptorValido As Boolean
 Dim CnnFTPPOK As Boolean
 
 Dim ClaveAcceso As String
+Dim DocumentoNo As String
 Dim LineFile As String
 
    Progreso_Barra.Valor_Maximo = 100
@@ -1258,20 +1259,37 @@ Dim LineFile As String
              FechaTexto = FechaSistema
              Do While Not .EOF
                 RatonReloj
+               'Format$(TFA.Fecha, "ddmmyyyy") & "06" & RUC & Ambiente & TFA.Serie_GR & Format$(TFA.Remision, String(9, "0")) & "123456781"
                 ClaveAcceso = .Fields("CLAVE_ACCESO")
                 AXML.Razon_Social_Emisor = .Fields("RAZON_SOCIAL_EMISOR")
                 AXML.RUC_Emisor = .Fields("RUC_EMISOR")
                 AXML.Codigo_B = .Fields("Codigo_B")
                 CodigoCli = .Fields("Codigo_B")
+        
+                DocumentoNo = MidStrg(ClaveAcceso, 5, 4) & "-" & MidStrg(ClaveAcceso, 3, 2) & "-" & MidStrg(ClaveAcceso, 1, 2)
+                Select Case MidStrg(ClaveAcceso, 9, 2)
+                    Case "01": DocumentoNo = DocumentoNo & "_FA_"
+                    Case "03": DocumentoNo = DocumentoNo & "_LC_"
+                    Case "04": DocumentoNo = DocumentoNo & "_NC_"
+                    Case "05": DocumentoNo = DocumentoNo & "_ND_"
+                    Case "06": DocumentoNo = DocumentoNo & "_GR_"
+                    Case "07": DocumentoNo = DocumentoNo & "_RE_"
+                    Case Else: DocumentoNo = DocumentoNo & "_CE_"
+                End Select
+                DocumentoNo = DocumentoNo & MidStrg(ClaveAcceso, 25, 15)
                 
                 Progreso_Barra.Mensaje_Box = Format(Progreso_Barra.Incremento / Progreso_Barra.Valor_Maximo, "00%") & " - Subiendo archivo: " & ClaveAcceso
                 Progreso_Esperar
                 
                 ID_Reg = .Fields("ID")
+                
+                MsgBox DocumentoNo
+                
                 If Len(ClaveAcceso) = 49 Then
                    TextoFileEmp = ""
                    RutaXMLAutorizado = RutaSysBases & "\SRI\Comprobantes Recibidos\" & ClaveAcceso & ".xml"
                    RutaXMLRechazado = RutaSysBases & "\SRI\Comprobantes no Autorizados\" & ClaveAcceso & ".xml"
+                   RutaPDFAutorizado = RutaSysBases & "\SRI\Comprobantes PDF\" & ClaveAcceso & ".pdf"
                    If Not Existe_File(RutaXMLAutorizado) Then
                       URLHTTP = "https://erp.diskcoversystem.com/php/comprobantes/SRI/autorizar_sri_visual.php?CERecibidos=true"
                       URLParams = "XML=" & ClaveAcceso
@@ -1299,6 +1317,9 @@ Dim LineFile As String
                      .Fields("Existe") = True
                      .Update
                    End If
+                   
+                   If Not Existe_File(RutaPDFAutorizado) Then Si_No = GenerarPDF_Desde_XML(RutaXMLAutorizado, RutaPDFAutorizado, LogoTipo)
+                   
                   'Procedemos a leer la informacion del Documento
                    AXML.Documento = Ninguno
                    AXML.Direccion_Emisor = Ninguno

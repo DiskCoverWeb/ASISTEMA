@@ -48,6 +48,7 @@ Global RutaSubDirTemp As String
 Global NombreCertificado As String
 Global RutaCertificado As String
 Global RutaXML As String
+Global RutaPDFAutorizado As String
 Global RutaXMLFirmado As String
 Global RutaXMLAutorizado As String
 Global RutaXMLRechazado As String

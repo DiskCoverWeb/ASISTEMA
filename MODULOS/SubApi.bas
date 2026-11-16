@@ -204,6 +204,8 @@ Private Const HEAP_ZERO_MEMORY As Long = &H8
 Private Const HEAP_GENERATE_EXCEPTIONS As Long = &H4
 Private Const NCBRESET As Long = &H32
 
+Public Const SYNCHRONIZE As Long = &H100000
+Public Const INFINITE As Long = &HFFFFFFFF
 '-----------------------------------------------------------------------------------------------------------------------------------------------------------
 ' TIPOS
 '-----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -528,7 +530,7 @@ Public Declare Function WideCharToMultiByte Lib "kernel32" ( _
     ByVal lpDefaultChar As Long, _
     ByVal lpUsedDefaultChar As Long) As Long
     
-''' Maps a character string to a UTF-16 (wide character) string
+'Maps a character string to a UTF-16 (wide character) string
 Public Declare Function MultiByteToWideChar Lib "kernel32" ( _
     ByVal CodePage As Long, _
     ByVal dwFlags As Long, _
@@ -540,7 +542,11 @@ Public Declare Function MultiByteToWideChar Lib "kernel32" ( _
     
 Public Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
 Public Declare Function SetErrorMode Lib "kernel32" (ByVal wMode As Long) As Long
-Declare Function GetCurrentThreadId Lib "kernel32" () As Long
+Public Declare Function GetCurrentThreadId Lib "kernel32" () As Long
+
+'APIs de Windows para esperar la ejecución del conversor PDF
+Public Declare Function OpenProcess Lib "kernel32" (ByVal dwDesiredAccess As Long, ByVal bInheritHandle As Long, ByVal dwProcessId As Long) As Long
+Public Declare Function WaitForSingleObject Lib "kernel32" (ByVal hHandle As Long, ByVal dwMilliseconds As Long) As Long
 '-----------------------------------------------------------------------------------------------------------------------------------------------------------
 'Funciones API: USER32
 '-----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1924,56 +1930,111 @@ Dim DomDoc As MSXML2.xmlHttp
     PostUrlSource = Val(DomDoc.responseBody)
 End Function
 
+'Public Function PostUrlSourceStr(vURLHTTP As String, vURLParams As String) As String
+'    Dim DomDoc As Object
+'    Dim RespuestaURL As String
+'
+'    On Error GoTo ErrHandler
+'
+'    ' 1. Asignar un valor por defecto desde el inicio
+'    PostUrlSourceStr = "CNASS"
+'
+'    If Get_Internet Then
+''        Clipboard.Clear
+''        Clipboard.SetText vURLHTTP & vbCrLf & vURLParams
+''        MsgBox vURLParams
+'
+'        ' Usar ServerXMLHTTP60 para compatibilidad total con TLS 1.2/HTTPS
+'        Set DomDoc = CreateObject("MSXML2.ServerXMLHTTP.6.0")
+'
+'        ' Ignorar errores menores de certificado si aplica (opcional)
+'        DomDoc.setOption 2, 13056 ' SXH_SERVER_CERT_IGNORE_ALL_SERVER_ERRORS
+'
+'        DomDoc.open "POST", vURLHTTP, False
+'        DomDoc.setRequestHeader "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8"
+'        DomDoc.send vURLParams
+'
+'        ' Validar estado HTTP
+'        If DomDoc.Status = 200 Then
+'            ' Evitar que sea Null o cadena vacía si el servidor responde sin texto
+'            RespuestaURL = Trim$("" & DomDoc.responseText)
+'
+'            If Len(RespuestaURL) > 0 Then
+'                PostUrlSourceStr = RespuestaURL
+'            Else
+'                ' Si respondió 200 pero el cuerpo vino completamente vacío
+'                PostUrlSourceStr = "CNASS"
+'            End If
+'        Else
+'            PostUrlSourceStr = "CNASS"
+'        End If
+'    Else
+'        ' Si Get_Internet fue False
+'        PostUrlSourceStr = "CNASS"
+'    End If
+'
+'    ' Liberar el objeto antes de salir
+'    Set DomDoc = Nothing
+'    Exit Function
+'
+'ErrHandler:
+'    PostUrlSourceStr = "CNASS"
+'    If Not DomDoc Is Nothing Then Set DomDoc = Nothing
+'End Function
+
 Public Function PostUrlSourceStr(vURLHTTP As String, vURLParams As String) As String
-    Dim DomDoc As Object
+    Dim HttpReq As Object
     Dim RespuestaURL As String
 
     On Error GoTo errHandler
 
-    ' 1. Asignar un valor por defecto desde el inicio
     PostUrlSourceStr = "CNASS"
 
     If Get_Internet Then
-        ' Usar ServerXMLHTTP60 para compatibilidad total con TLS 1.2/HTTPS
-        Set DomDoc = CreateObject("MSXML2.ServerXMLHTTP.6.0")
+        Set HttpReq = CreateObject("WinHttp.WinHttpRequest.5.1")
 
-        ' Ignorar errores menores de certificado si aplica (opcional)
-        DomDoc.setOption 2, 13056 ' SXH_SERVER_CERT_IGNORE_ALL_SERVER_ERRORS
+        ' Timeouts en ms: 10s Resolver, 10s Conectar, 20s Enviar, 60s Recibir (1 minuto máx)
+        HttpReq.SetTimeouts 10000, 10000, 20000, 60000
 
-        DomDoc.open "POST", vURLHTTP, False
-        DomDoc.setRequestHeader "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8"
-        DomDoc.send vURLParams
+        ' Ignorar errores de certificado SSL (13056 = SslErrorIgnoreFlags_IgnoreAll)
+        HttpReq.Option(4) = 13056
+
+        ' Habilitar TLS 1.2 (2048) + TLS 1.1 (512) + TLS 1.0 (128) = 2688
+        On Error Resume Next
+        HttpReq.Option(9) = 2688
+        On Error GoTo errHandler
+
+        HttpReq.open "POST", vURLHTTP, False
+        HttpReq.setRequestHeader "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8"
+        HttpReq.setRequestHeader "User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
         
-'        Clipboard.Clear
-'        Clipboard.SetText vURLParams
-'        MsgBox vURLParams
-        
-        ' Validar estado HTTP
-        If DomDoc.Status = 200 Then
-            ' Evitar que sea Null o cadena vacía si el servidor responde sin texto
-            RespuestaURL = Trim$("" & DomDoc.responseText)
-            
+        ' Envío de la petición
+        HttpReq.send vURLParams
+
+        If HttpReq.Status = 200 Then
+            RespuestaURL = Trim$("" & HttpReq.responseText)
             If Len(RespuestaURL) > 0 Then
                 PostUrlSourceStr = RespuestaURL
-            Else
-                ' Si respondió 200 pero el cuerpo vino completamente vacío
-                PostUrlSourceStr = "CNASS"
             End If
         Else
-            PostUrlSourceStr = "CNASS"
+            Debug.Print "Error HTTP Status: " & HttpReq.Status & " - " & HttpReq.statusText
         End If
-    Else
-        ' Si Get_Internet fue False
-        PostUrlSourceStr = "CNASS"
+        
+        Set HttpReq = Nothing
     End If
 
-    ' Liberar el objeto antes de salir
-    Set DomDoc = Nothing
     Exit Function
 
 errHandler:
-    PostUrlSourceStr = "CNASS"
-    If Not DomDoc Is Nothing Then Set DomDoc = Nothing
+    ' Si supera el minuto de espera (error 80072ee2)
+    If Err.Number = &H80072EE2 Or Err.Number = -2147012894 Then
+        PostUrlSourceStr = "TIMEOUT"
+        Debug.Print "Aviso: Se superó el tiempo máximo de espera de 1 minuto con el servidor."
+    Else
+        Debug.Print "Error " & Err.Number & ": " & Err.Description
+    End If
+    
+    Set HttpReq = Nothing
 End Function
 
 Public Function Ping_IP(My_IP_PC As String) As Boolean
@@ -2037,7 +2098,7 @@ End Function
 
 ' Función para obtener el nombre a partir de la cédula en VB6
 Public Function ObtenerNombrePorCedula(ByVal sCedula As String) As String
-    On Error GoTo Errorhandler
+    On Error GoTo ErrorHandler
     
     Dim oHttp As Object
     Dim sUrl As String
@@ -2082,7 +2143,598 @@ Public Function ObtenerNombrePorCedula(ByVal sCedula As String) As String
     Set oHttp = Nothing
     Exit Function
 
-Errorhandler:
+ErrorHandler:
     ObtenerNombrePorCedula = "Error de red: " & Err.Description
     Set oHttp = Nothing
 End Function
+
+
+' =========================================================================
+' RUTINA PRINCIPAL BLINDADA: Soporta Facturas, NC, ND, Liq. Compra,
+' Comprobantes de Retención SRI Ecuador (v1.0.0 y v2.0.0) y Logo opcional
+' =========================================================================
+Public Function GenerarPDF_Desde_XML(ByVal RutaXML As String, ByVal rutaPDF As String, Optional ByVal RutaLogo As String = "") As Boolean
+    On Error GoTo errHandler
+
+    Dim xmlDoc As Object
+    Dim xmlComprobante As Object
+    Dim nodoCData As Object
+    
+    Set xmlDoc = CrearDOMDocument()
+    If xmlDoc Is Nothing Then
+        MsgBox "No se pudo inicializar el motor MSXML en este equipo.", vbCritical, "Error MSXML"
+        GenerarPDF_Desde_XML = False
+        Exit Function
+    End If
+    
+    If Not xmlDoc.Load(RutaXML) Then
+        MsgBox "Error al cargar el XML (" & xmlDoc.parseError.errorCode & "): " & xmlDoc.parseError.reason, vbCritical, "Error XML"
+        GenerarPDF_Desde_XML = False
+        Set xmlDoc = Nothing
+        Exit Function
+    End If
+    
+    ' -------------------------------------------------------------
+    ' 1. DESENVOLVER <autorizacion><comprobante><![CDATA[...]]> SI EXISTE
+    ' -------------------------------------------------------------
+    Dim sNumAutorizacion As String
+    Dim sFechaAutorizacion As String
+    
+    sNumAutorizacion = ObtenerValorNodo(xmlDoc, "numeroAutorizacion")
+    sFechaAutorizacion = ObtenerValorNodo(xmlDoc, "fechaAutorizacion")
+    
+    Set nodoCData = xmlDoc.selectSingleNode("//*[local-name()='comprobante']")
+    If Not nodoCData Is Nothing And InStr(1, nodoCData.Text, "<", vbBinaryCompare) > 0 Then
+        Set xmlComprobante = CrearDOMDocument()
+        If Not xmlComprobante.loadXML(Trim$(nodoCData.Text)) Then
+            MsgBox "Error en XML interno del comprobante: " & xmlComprobante.parseError.reason, vbCritical, "Error XML SRI"
+            GenerarPDF_Desde_XML = False
+            Set xmlComprobante = Nothing
+            Set xmlDoc = Nothing
+            Exit Function
+        End If
+    Else
+        Set xmlComprobante = xmlDoc
+    End If
+    
+    ' -------------------------------------------------------------
+    ' 2. EXTRAER DATOS TRIBUTARIOS DEL SRI ECUADOR
+    ' -------------------------------------------------------------
+    Dim sTipoDocNombre As String
+    Dim sCodDoc As String
+    Dim sAmbiente As String
+    Dim sTipoEmision As String
+    Dim sClaveAcceso As String
+    Dim sEstab As String, sPtoEmi As String, sSecuencial As String, sNumeroDoc As String
+    
+    ' Datos Emisor
+    Dim sEmisorRuc As String
+    Dim sEmisorRazon As String
+    Dim sEmisorComercial As String
+    Dim sEmisorDirMatriz As String
+    Dim sEmisorDirEstab As String
+    Dim sContribEspecial As String
+    Dim sObligadoContab As String
+    Dim sAgenteRetencion As String
+    Dim sRegimenRimpe As String
+    
+    ' Datos Cliente / Sujeto
+    Dim sFechaEmision As String
+    Dim sClienteDoc As String
+    Dim sClienteRazon As String
+    Dim sClienteDireccion As String
+    Dim sGuiaRemision As String
+    Dim sPeriodoFiscal As String
+    
+    sCodDoc = ObtenerValorNodo(xmlComprobante, "infoTributaria/codDoc")
+    Select Case sCodDoc
+        Case "01": sTipoDocNombre = "FACTURA"
+        Case "03": sTipoDocNombre = "LIQUIDACIÓN DE COMPRA"
+        Case "04": sTipoDocNombre = "NOTA DE CRÉDITO"
+        Case "05": sTipoDocNombre = "NOTA DE DÉBITO"
+        Case "06": sTipoDocNombre = "GUÍA DE REMISIÓN"
+        Case "07": sTipoDocNombre = "COMPROBANTE DE RETENCIÓN"
+        Case Else: sTipoDocNombre = "COMPROBANTE ELECTRÓNICO"
+    End Select
+    
+    sAmbiente = IIf(ObtenerValorNodo(xmlComprobante, "infoTributaria/ambiente") = "2", "PRODUCCIÓN", "PRUEBAS")
+    sTipoEmision = IIf(ObtenerValorNodo(xmlComprobante, "infoTributaria/tipoEmision") = "1", "NORMAL", "INDISPONIBILIDAD")
+    sClaveAcceso = ObtenerValorNodo(xmlComprobante, "infoTributaria/claveAcceso")
+    If sNumAutorizacion = "" Then sNumAutorizacion = sClaveAcceso
+    
+    sEstab = ObtenerValorNodo(xmlComprobante, "infoTributaria/estab")
+    sPtoEmi = ObtenerValorNodo(xmlComprobante, "infoTributaria/ptoEmi")
+    sSecuencial = ObtenerValorNodo(xmlComprobante, "infoTributaria/secuencial")
+    sNumeroDoc = sEstab & "-" & sPtoEmi & "-" & sSecuencial
+    
+    ' Emisor
+    sEmisorRuc = ObtenerValorNodo(xmlComprobante, "infoTributaria/ruc")
+    sEmisorRazon = ObtenerValorNodo(xmlComprobante, "infoTributaria/razonSocial")
+    sEmisorComercial = ObtenerValorNodo(xmlComprobante, "infoTributaria/nombreComercial")
+    sEmisorDirMatriz = ObtenerValorNodo(xmlComprobante, "infoTributaria/dirMatriz")
+    sAgenteRetencion = ObtenerValorNodo(xmlComprobante, "infoTributaria/agenteRetencion")
+    sRegimenRimpe = ObtenerValorNodo(xmlComprobante, "infoTributaria/contribuyenteRimpe")
+    
+    ' Info específica
+    sFechaEmision = ObtenerValorNodo(xmlComprobante, "fechaEmision")
+    sEmisorDirEstab = ObtenerValorNodo(xmlComprobante, "dirEstablecimiento")
+    sContribEspecial = ObtenerValorNodo(xmlComprobante, "contribuyenteEspecial")
+    sObligadoContab = ObtenerValorNodo(xmlComprobante, "obligadoContabilidad")
+    sGuiaRemision = ObtenerValorNodo(xmlComprobante, "guiaRemision")
+    sPeriodoFiscal = ObtenerValorNodo(xmlComprobante, "periodoFiscal")
+    
+    ' Receptor / Comprador / Sujeto Retenido
+    sClienteRazon = ObtenerValorNodo(xmlComprobante, "razonSocialComprador")
+    If sClienteRazon = "" Then sClienteRazon = ObtenerValorNodo(xmlComprobante, "razonSocialSujetoRetenido")
+    If sClienteRazon = "" Then sClienteRazon = ObtenerValorNodo(xmlComprobante, "razonSocialProveedor")
+    
+    sClienteDoc = ObtenerValorNodo(xmlComprobante, "identificacionComprador")
+    If sClienteDoc = "" Then sClienteDoc = ObtenerValorNodo(xmlComprobante, "identificacionSujetoRetenido")
+    If sClienteDoc = "" Then sClienteDoc = ObtenerValorNodo(xmlComprobante, "identificacionProveedor")
+    
+    sClienteDireccion = ObtenerValorNodo(xmlComprobante, "direccionComprador")
+    
+    ' -------------------------------------------------------------
+    ' 3. EXTRAER DETALLES Y TOTALES SEGÚN TIPO DE DOCUMENTO
+    ' -------------------------------------------------------------
+    Dim sTablaDetalleHTML As String
+    Dim sBloqueTotalesHTML As String
+    Dim sFilasHTML As String
+    
+    If sCodDoc = "07" Then
+        ' MODO RETENCIÓN (Soporta v1.0.0 <impuestos> y v2.0.0 <docsSustento>)
+        Dim dTotalRetenido As Double
+        Dim nodeListDocs As Object, nodoDocSus As Object
+        Dim nodeListRet As Object, nodoRet As Object
+        
+        Dim sCompSustento As String, sNumSustento As String, sFechaSustento As String
+        Dim sImpCodigo As String, sImpNombre As String, sCodRet As String
+        Dim dBaseImp As Double, dPorcRet As Double, dValRet As Double
+        
+        Set nodeListDocs = xmlComprobante.selectNodes("//*[local-name()='docsSustento']/*[local-name()='docSustento']")
+        
+        If nodeListDocs.Length > 0 Then
+            For Each nodoDocSus In nodeListDocs
+                sCompSustento = NombreDocSustentoSRI(ObtenerValorSubNodo(nodoDocSus, "codDocSustento"))
+                sNumSustento = FormatearNumDocSRI(ObtenerValorSubNodo(nodoDocSus, "numDocSustento"))
+                sFechaSustento = ObtenerValorSubNodo(nodoDocSus, "fechaEmisionDocSustento")
+                
+                Set nodeListRet = nodoDocSus.selectNodes(".//*[local-name()='retenciones']/*[local-name()='retencion']")
+                For Each nodoRet In nodeListRet
+                    sImpCodigo = ObtenerValorSubNodo(nodoRet, "codigo")
+                    sImpNombre = NombreImpuestoRetencionSRI(sImpCodigo)
+                    sCodRet = ObtenerValorSubNodo(nodoRet, "codigoRetencion")
+                    dBaseImp = Val(Replace$(ObtenerValorSubNodo(nodoRet, "baseImponible"), ",", "."))
+                    dPorcRet = Val(Replace$(ObtenerValorSubNodo(nodoRet, "porcentajeRetener"), ",", "."))
+                    dValRet = Val(Replace$(ObtenerValorSubNodo(nodoRet, "valorRetenido"), ",", "."))
+                    dTotalRetenido = dTotalRetenido + dValRet
+                    
+                    sFilasHTML = sFilasHTML & "<tr>" & _
+                                 "<td align='center'>" & EscaparHTML(sCompSustento) & "</td>" & _
+                                 "<td align='center'>" & EscaparHTML(sNumSustento) & "</td>" & _
+                                 "<td align='center'>" & EscaparHTML(sFechaSustento) & "</td>" & _
+                                 "<td align='center'>" & EscaparHTML(sPeriodoFiscal) & "</td>" & _
+                                 "<td align='right'>" & FormatNumber(dBaseImp, 2) & "</td>" & _
+                                 "<td align='center'>" & EscaparHTML(sImpNombre) & " (" & EscaparHTML(sCodRet) & ")</td>" & _
+                                 "<td align='right'>" & FormatNumber(dPorcRet, 2) & "%</td>" & _
+                                 "<td align='right'>" & FormatNumber(dValRet, 2) & "</td>" & _
+                                 "</tr>"
+                Next nodoRet
+            Next nodoDocSus
+        Else
+            Set nodeListRet = xmlComprobante.selectNodes("//*[local-name()='impuestos']/*[local-name()='impuesto']")
+            For Each nodoRet In nodeListRet
+                sCompSustento = NombreDocSustentoSRI(ObtenerValorSubNodo(nodoRet, "codDocSustento"))
+                sNumSustento = FormatearNumDocSRI(ObtenerValorSubNodo(nodoRet, "numDocSustento"))
+                sFechaSustento = ObtenerValorSubNodo(nodoRet, "fechaEmisionDocSustento")
+                sImpCodigo = ObtenerValorSubNodo(nodoRet, "codigo")
+                sImpNombre = NombreImpuestoRetencionSRI(sImpCodigo)
+                sCodRet = ObtenerValorSubNodo(nodoRet, "codigoRetencion")
+                dBaseImp = Val(Replace$(ObtenerValorSubNodo(nodoRet, "baseImponible"), ",", "."))
+                dPorcRet = Val(Replace$(ObtenerValorSubNodo(nodoRet, "porcentajeRetener"), ",", "."))
+                dValRet = Val(Replace$(ObtenerValorSubNodo(nodoRet, "valorRetenido"), ",", "."))
+                dTotalRetenido = dTotalRetenido + dValRet
+                
+                sFilasHTML = sFilasHTML & "<tr>" & _
+                             "<td align='center'>" & EscaparHTML(sCompSustento) & "</td>" & _
+                             "<td align='center'>" & EscaparHTML(sNumSustento) & "</td>" & _
+                             "<td align='center'>" & EscaparHTML(sFechaSustento) & "</td>" & _
+                             "<td align='center'>" & EscaparHTML(sPeriodoFiscal) & "</td>" & _
+                             "<td align='right'>" & FormatNumber(dBaseImp, 2) & "</td>" & _
+                             "<td align='center'>" & EscaparHTML(sImpNombre) & " (" & EscaparHTML(sCodRet) & ")</td>" & _
+                             "<td align='right'>" & FormatNumber(dPorcRet, 2) & "%</td>" & _
+                             "<td align='right'>" & FormatNumber(dValRet, 2) & "</td>" & _
+                             "</tr>"
+            Next nodoRet
+        End If
+        
+        sTablaDetalleHTML = "<table class='tabla-items'>" & _
+                            "  <thead><tr>" & _
+                            "    <th>Comprobante</th><th>Número</th><th>Fecha Emisión</th><th>Ejercicio Fiscal</th>" & _
+                            "    <th>Base Imponible</th><th>Impuesto / Cód.</th><th>% Retención</th><th>Valor Retenido</th>" & _
+                            "  </tr></thead>" & _
+                            "  <tbody>" & sFilasHTML & "</tbody>" & _
+                            "</table>"
+                            
+        sBloqueTotalesHTML = "<div class='box-totales'>" & _
+                             "  <table>" & _
+                             "    <tr><td><b>TOTAL RETENIDO</b></td><td align='right'><b>" & FormatNumber(dTotalRetenido, 2) & "</b></td></tr>" & _
+                             "  </table>" & _
+                             "</div>"
+    Else
+        ' MODO FACTURA / NOTA CRÉDITO / LIQUIDACIÓN DE COMPRA
+        Dim sSubTotalSinImp As String, sTotalDescuento As String, sTotalIVA As String, sImporteTotal As String
+        Dim dTotalIVA As Double
+        Dim nodeListImp As Object, nodoImp As Object
+        Dim nodeListItems As Object, nodoItem As Object
+        
+        sSubTotalSinImp = ObtenerValorNodo(xmlComprobante, "totalSinImpuestos")
+        sTotalDescuento = ObtenerValorNodo(xmlComprobante, "totalDescuento")
+        sImporteTotal = ObtenerValorNodo(xmlComprobante, "importeTotal")
+        If sImporteTotal = "" Then sImporteTotal = ObtenerValorNodo(xmlComprobante, "valorModificacion")
+        
+        Set nodeListImp = xmlComprobante.selectNodes("//*[local-name()='totalImpuesto']")
+        For Each nodoImp In nodeListImp
+            If ObtenerValorSubNodo(nodoImp, "codigo") = "2" Then
+                dTotalIVA = dTotalIVA + Val(Replace$(ObtenerValorSubNodo(nodoImp, "valor"), ",", "."))
+            End If
+        Next nodoImp
+        sTotalIVA = FormatNumber(dTotalIVA, 2)
+        
+        Set nodeListItems = xmlComprobante.selectNodes("//*[local-name()='detalles']/*[local-name()='detalle']")
+        For Each nodoItem In nodeListItems
+            Dim sCodPrin As String, sCant As String, sDesc As String
+            Dim sPreUni As String, sDescItem As String, sTotalLin As String
+            
+            sCodPrin = ObtenerValorSubNodo(nodoItem, "codigoPrincipal")
+            If sCodPrin = "" Then sCodPrin = ObtenerValorSubNodo(nodoItem, "codigoInterno")
+            sCant = ObtenerValorSubNodo(nodoItem, "cantidad")
+            sDesc = ObtenerValorSubNodo(nodoItem, "descripcion")
+            sPreUni = ObtenerValorSubNodo(nodoItem, "precioUnitario")
+            sDescItem = ObtenerValorSubNodo(nodoItem, "descuento")
+            sTotalLin = ObtenerValorSubNodo(nodoItem, "precioTotalSinImpuesto")
+            
+            sFilasHTML = sFilasHTML & "<tr>" & _
+                         "<td align='center'>" & EscaparHTML(sCodPrin) & "</td>" & _
+                         "<td align='center'>" & sCant & "</td>" & _
+                         "<td>" & EscaparHTML(sDesc) & "</td>" & _
+                         "<td align='right'>" & FormatNumber(Val(Replace$(sPreUni, ",", ".")), 2) & "</td>" & _
+                         "<td align='right'>" & FormatNumber(Val(Replace$(sDescItem, ",", ".")), 2) & "</td>" & _
+                         "<td align='right'>" & FormatNumber(Val(Replace$(sTotalLin, ",", ".")), 2) & "</td>" & _
+                         "</tr>"
+        Next nodoItem
+        
+        sTablaDetalleHTML = "<table class='tabla-items'>" & _
+                            "  <thead><tr><th width='12%'>Cod. Principal</th><th width='8%'>Cant.</th><th>Descripción</th><th width='13%'>Precio Unit.</th><th width='12%'>Descuento</th><th width='14%'>Precio Total</th></tr></thead>" & _
+                            "  <tbody>" & sFilasHTML & "</tbody>" & _
+                            "</table>"
+                            
+        sBloqueTotalesHTML = "<div class='box-totales'>" & _
+                             "  <table>" & _
+                             "    <tr><td><b>SUBTOTAL SIN IMPUESTOS</b></td><td align='right'>" & FormatNumber(Val(Replace$(sSubTotalSinImp, ",", ".")), 2) & "</td></tr>" & _
+                             "    <tr><td><b>TOTAL DESCUENTO</b></td><td align='right'>" & FormatNumber(Val(Replace$(sTotalDescuento, ",", ".")), 2) & "</td></tr>" & _
+                             "    <tr><td><b>IVA</b></td><td align='right'>" & sTotalIVA & "</td></tr>" & _
+                             "    <tr><td><b>VALOR TOTAL</b></td><td align='right'><b>" & FormatNumber(Val(Replace$(sImporteTotal, ",", ".")), 2) & "</b></td></tr>" & _
+                             "  </table>" & _
+                             "</div>"
+    End If
+    
+    ' -------------------------------------------------------------
+    ' 4. EXTRAER INFORMACIÓN ADICIONAL (<infoAdicional><campoAdicional>)
+    ' -------------------------------------------------------------
+    Dim nodeListAdic As Object, nodoAdic As Object
+    Dim sFilasAdic As String
+    Set nodeListAdic = xmlComprobante.selectNodes("//*[local-name()='infoAdicional']/*[local-name()='campoAdicional']")
+    For Each nodoAdic In nodeListAdic
+        Dim sNombreCampo As String
+        sNombreCampo = ""
+        If Not nodoAdic.attributes.getNamedItem("nombre") Is Nothing Then
+            sNombreCampo = nodoAdic.attributes.getNamedItem("nombre").Text
+        End If
+        sFilasAdic = sFilasAdic & "<tr><td><b>" & EscaparHTML(sNombreCampo) & ":</b></td><td>" & EscaparHTML(Trim$(nodoAdic.Text)) & "</td></tr>"
+    Next nodoAdic
+    
+    ' -------------------------------------------------------------
+    ' 5. PROCESAR LOGO OPCIONAL (GIF, JPG, PNG -> BASE64)
+    ' -------------------------------------------------------------
+    Dim sDataUriLogo As String
+    Dim sHtmlLogo As String
+    sDataUriLogo = ConvertirImagenABase64(RutaLogo)
+    If sDataUriLogo <> "" Then
+        sHtmlLogo = "<div class='box-logo'><img src='" & sDataUriLogo & "' alt='Logo'></div>"
+    Else
+        sHtmlLogo = ""
+    End If
+    
+    ' -------------------------------------------------------------
+    ' 6. ARMAR EL DISEÑO HTML DEL RIDE SRI
+    ' -------------------------------------------------------------
+    Dim sHtml As String
+    sHtml = "<!DOCTYPE html><html><head><meta charset='utf-8'>" & _
+            "<style>" & _
+            "  body { font-family: Arial, Helvetica, sans-serif; font-size: 10px; color: #222; margin: 15px; }" & _
+            "  .col-izq { width: 48%; float: left; }" & _
+            "  .col-der { width: 49%; float: right; border: 1.5px solid #000; border-radius: 8px; padding: 10px; box-sizing: border-box; }" & _
+            "  .box-logo { text-align: center; margin-bottom: 6px; min-height: 55px; }" & _
+            "  .box-logo img { max-width: 240px; max-height: 75px; object-fit: contain; }" & _
+            "  .box-emisor { border: 1.5px solid #000; border-radius: 8px; padding: 10px; }" & _
+            "  .box-cliente { width: 100%; border: 1.5px solid #000; border-radius: 6px; padding: 8px; margin-top: 10px; box-sizing: border-box; }" & _
+            "  .tabla-items { width: 100%; border-collapse: collapse; margin-top: 10px; }" & _
+            "  .tabla-items th { background: #2c3e50; color: #fff; padding: 5px; border: 1px solid #000; font-size: 9.5px; }" & _
+            "  .tabla-items td { padding: 4px; border: 1px solid #888; font-size: 9.5px; }" & _
+            "  .box-adic { width: 56%; float: left; border: 1px solid #000; border-radius: 6px; padding: 8px; margin-top: 10px; box-sizing: border-box; }" & _
+            "  .box-totales { width: 40%; float: right; margin-top: 10px; }" & _
+            "  .box-totales table { width: 100%; border-collapse: collapse; }" & _
+            "  .box-totales td { padding: 4px; border: 1px solid #888; }" & _
+            "  .clave { font-family: monospace; font-size: 8.5px; word-break: break-all; }" & _
+            "</style></head><body>"
+            
+    ' Cabecera dos columnas
+    sHtml = sHtml & "<div style='width:100%;'>"
+    sHtml = sHtml & "  <div class='col-izq'>"
+    sHtml = sHtml & "    " & sHtmlLogo
+    sHtml = sHtml & "    <div class='box-emisor'>"
+    sHtml = sHtml & "      <h3 style='margin:0 0 4px 0;'>" & EscaparHTML(sEmisorRazon) & "</h3>"
+    If sEmisorComercial <> "" Then sHtml = sHtml & "      <div><b>Nombre Comercial:</b> " & EscaparHTML(sEmisorComercial) & "</div>"
+    sHtml = sHtml & "      <div><b>Dir. Matriz:</b> " & EscaparHTML(sEmisorDirMatriz) & "</div>"
+    If sEmisorDirEstab <> "" Then sHtml = sHtml & "      <div><b>Dir. Sucursal:</b> " & EscaparHTML(sEmisorDirEstab) & "</div>"
+    If sContribEspecial <> "" Then sHtml = sHtml & "      <div><b>Contribuyente Especial Nro:</b> " & EscaparHTML(sContribEspecial) & "</div>"
+    If sObligadoContab <> "" Then sHtml = sHtml & "      <div><b>Obligado a llevar Contabilidad:</b> " & EscaparHTML(sObligadoContab) & "</div>"
+    If sAgenteRetencion <> "" Then sHtml = sHtml & "      <div><b>Agente de Retención Resolución Nro:</b> " & EscaparHTML(sAgenteRetencion) & "</div>"
+    If sRegimenRimpe <> "" Then sHtml = sHtml & "      <div><b>" & EscaparHTML(sRegimenRimpe) & "</b></div>"
+    sHtml = sHtml & "    </div>"
+    sHtml = sHtml & "  </div>"
+    
+    sHtml = sHtml & "  <div class='col-der'>"
+    sHtml = sHtml & "    <div style='font-size:12px;'><b>R.U.C.:</b> " & EscaparHTML(sEmisorRuc) & "</div>"
+    sHtml = sHtml & "    <div style='font-size:13px; font-weight:bold; margin:4px 0;'>" & sTipoDocNombre & "</div>"
+    sHtml = sHtml & "    <div><b>No.:</b> " & EscaparHTML(sNumeroDoc) & "</div>"
+    sHtml = sHtml & "    <div style='margin-top:6px;'><b>NÚMERO DE AUTORIZACIÓN:</b></div>"
+    sHtml = sHtml & "    <div class='clave'>" & EscaparHTML(sNumAutorizacion) & "</div>"
+    If sFechaAutorizacion <> "" Then sHtml = sHtml & "    <div style='margin-top:4px;'><b>FECHA Y HORA AUTORIZACIÓN:</b> " & EscaparHTML(sFechaAutorizacion) & "</div>"
+    sHtml = sHtml & "    <div><b>AMBIENTE:</b> " & sAmbiente & " &nbsp;&nbsp; <b>EMISIÓN:</b> " & sTipoEmision & "</div>"
+    sHtml = sHtml & "    <div style='margin-top:6px;'><b>CLAVE DE ACCESO:</b></div>"
+    sHtml = sHtml & "    <div class='clave'>" & EscaparHTML(sClaveAcceso) & "</div>"
+    sHtml = sHtml & "  </div>"
+    sHtml = sHtml & "  <div style='clear:both;'></div>"
+    sHtml = sHtml & "</div>"
+    
+    ' Datos del Cliente / Sujeto Retenido
+    sHtml = sHtml & "<div class='box-cliente'>"
+    sHtml = sHtml & "  <table width='100%'>"
+    sHtml = sHtml & "    <tr><td width='65%'><b>Razón Social / Nombres:</b> " & EscaparHTML(sClienteRazon) & "</td><td><b>Identificación:</b> " & EscaparHTML(sClienteDoc) & "</td></tr>"
+    If sCodDoc = "07" Then
+        sHtml = sHtml & "    <tr><td><b>Fecha Emisión:</b> " & EscaparHTML(sFechaEmision) & "</td><td><b>Ejercicio Fiscal:</b> " & EscaparHTML(sPeriodoFiscal) & "</td></tr>"
+    Else
+        sHtml = sHtml & "    <tr><td><b>Fecha Emisión:</b> " & EscaparHTML(sFechaEmision) & "</td><td><b>Guía Remisión:</b> " & EscaparHTML(sGuiaRemision) & "</td></tr>"
+    End If
+    If sClienteDireccion <> "" Then sHtml = sHtml & "    <tr><td colspan='2'><b>Dirección:</b> " & EscaparHTML(sClienteDireccion) & "</td></tr>"
+    sHtml = sHtml & "  </table>"
+    sHtml = sHtml & "</div>"
+    
+    ' Tabla de Detalles (Items o Retenciones)
+    sHtml = sHtml & sTablaDetalleHTML
+    
+    ' Información Adicional y Totales
+    If sFilasAdic <> "" Then
+        sHtml = sHtml & "<div class='box-adic'><b>Información Adicional</b><table width='100%' style='margin-top:4px;'>" & sFilasAdic & "</table></div>"
+    End If
+    
+    sHtml = sHtml & sBloqueTotalesHTML
+    sHtml = sHtml & "<div style='clear:both;'></div>"
+    sHtml = sHtml & "</body></html>"
+    
+    ' -------------------------------------------------------------
+    ' 7. GUARDAR HTML EN UTF-8 Y CONVERTIR A PDF
+    ' -------------------------------------------------------------
+    Dim sRutaTempHtml As String
+    Dim sNombreLimpio As String
+    sNombreLimpio = Replace$(sNumeroDoc, "-", "")
+    If sNombreLimpio = "" Then sNombreLimpio = Format$(Now, "yyyymmddhhnnss")
+    
+    sRutaTempHtml = Environ$("TEMP") & "\ride_" & sNombreLimpio & ".html"
+    GuardarTextoUTF8 sRutaTempHtml, sHtml
+    
+    GenerarPDF_Desde_HTML sRutaTempHtml, rutaPDF
+    
+    On Error Resume Next
+    Kill sRutaTempHtml
+    
+    GenerarPDF_Desde_XML = (Dir(rutaPDF) <> "")
+    Set xmlComprobante = Nothing
+    Set xmlDoc = Nothing
+    Exit Function
+
+errHandler:
+    GenerarPDF_Desde_XML = False
+    MsgBox "Error (" & Err.Number & "): " & Err.Description, vbCritical, "Error RIDE PDF"
+    Set xmlComprobante = Nothing
+    Set xmlDoc = Nothing
+End Function
+
+' =========================================================================
+' CONVERSOR DE IMAGEN (GIF, JPG, PNG) A DATA URI BASE64 PARA HTML/PDF
+' =========================================================================
+Private Function ConvertirImagenABase64(ByVal sRutaImagen As String) As String
+    On Error GoTo ErrImg
+    
+    sRutaImagen = Trim$(sRutaImagen)
+    If sRutaImagen = "" Then Exit Function
+    If Dir(sRutaImagen) = "" Then Exit Function
+    
+    Dim sExt As String
+    Dim sMime As String
+    Dim lPosPunto As Long
+    
+    lPosPunto = InStrRev(sRutaImagen, ".")
+    If lPosPunto = 0 Then Exit Function
+    
+    sExt = LCase$(Mid$(sRutaImagen, lPosPunto + 1))
+    Select Case sExt
+        Case "png":  sMime = "image/png"
+        Case "jpg", "jpeg": sMime = "image/jpeg"
+        Case "gif":  sMime = "image/gif"
+        Case Else:   Exit Function ' Solo permite gif, jpg o png
+    End Select
+    
+    Dim oStream As Object
+    Dim arrBytes() As Byte
+    Dim oXml As Object
+    Dim oNodo As Object
+    Dim sBase64 As String
+    
+    Set oStream = CreateObject("ADODB.Stream")
+    oStream.Type = 1 ' adTypeBinary
+    oStream.open
+    oStream.LoadFromFile sRutaImagen
+    arrBytes = oStream.Read
+    oStream.Close
+    Set oStream = Nothing
+    
+    Set oXml = CrearDOMDocument()
+    Set oNodo = oXml.createElement("b64")
+    oNodo.dataType = "bin.base64"
+    oNodo.nodeTypedValue = arrBytes
+    sBase64 = Replace$(Replace$(oNodo.Text, vbCr, ""), vbLf, "")
+    
+    ConvertirImagenABase64 = "data:" & sMime & ";base64," & sBase64
+    
+    Set oNodo = Nothing
+    Set oXml = Nothing
+    Exit Function
+
+ErrImg:
+    ConvertirImagenABase64 = ""
+    Set oStream = Nothing
+    Set oNodo = Nothing
+    Set oXml = Nothing
+End Function
+
+' =========================================================================
+' HELPERS DE CATÁLOGO SRI PARA RETENCIONES
+' =========================================================================
+Private Function NombreImpuestoRetencionSRI(ByVal sCodigo As String) As String
+    Select Case Trim$(sCodigo)
+        Case "1": NombreImpuestoRetencionSRI = "RENTA"
+        Case "2": NombreImpuestoRetencionSRI = "IVA"
+        Case "6": NombreImpuestoRetencionSRI = "ISD"
+        Case Else: NombreImpuestoRetencionSRI = "IMPUESTO " & sCodigo
+    End Select
+End Function
+
+Private Function NombreDocSustentoSRI(ByVal sCodDoc As String) As String
+    Select Case Trim$(sCodDoc)
+        Case "01": NombreDocSustentoSRI = "FACTURA"
+        Case "02": NombreDocSustentoSRI = "NOTA DE VENTA"
+        Case "03": NombreDocSustentoSRI = "LIQ. COMPRA"
+        Case "04": NombreDocSustentoSRI = "NOTA DE CRÉDITO"
+        Case "05": NombreDocSustentoSRI = "NOTA DE DÉBITO"
+        Case "11": NombreDocSustentoSRI = "PASAJE AÉREO"
+        Case "12": NombreDocSustentoSRI = "DOC. FINANCIERO"
+        Case "41": NombreDocSustentoSRI = "REEMBOLSO"
+        Case Else: NombreDocSustentoSRI = "DOC. " & sCodDoc
+    End Select
+End Function
+
+Private Function FormatearNumDocSRI(ByVal sNum As String) As String
+    sNum = Trim$(sNum)
+    If Len(sNum) = 15 And InStr(sNum, "-") = 0 Then
+        FormatearNumDocSRI = Left$(sNum, 3) & "-" & Mid$(sNum, 4, 3) & "-" & Mid$(sNum, 7, 9)
+    Else
+        FormatearNumDocSRI = sNum
+    End If
+End Function
+
+' =========================================================================
+' INSTANCIADOR BLINDADO DE MSXML Y AUXILIARES
+' =========================================================================
+Private Function CrearDOMDocument() As Object
+    Dim oDoc As Object
+    On Error Resume Next
+    Set oDoc = CreateObject("MSXML2.DOMDocument.6.0")
+    If oDoc Is Nothing Then Set oDoc = CreateObject("MSXML2.DOMDocument.3.0")
+    If oDoc Is Nothing Then Set oDoc = CreateObject("MSXML2.DOMDocument")
+    
+    If Not oDoc Is Nothing Then
+        oDoc.async = False
+        oDoc.validateOnParse = False
+        oDoc.resolveExternals = False
+        oDoc.setProperty "SelectionLanguage", "XPath"
+    End If
+    On Error GoTo 0
+    Set CrearDOMDocument = oDoc
+End Function
+
+Private Function ObtenerValorNodo(ByVal oDoc As Object, ByVal sRuta As String) As String
+    Dim oNodo As Object
+    Set oNodo = oDoc.selectSingleNode("//" & ConvertirRutaALocalName(sRuta))
+    If Not oNodo Is Nothing Then ObtenerValorNodo = Trim$(oNodo.Text)
+End Function
+
+Private Function ObtenerValorSubNodo(ByVal oPadre As Object, ByVal sRuta As String) As String
+    Dim oNodo As Object
+    Set oNodo = oPadre.selectSingleNode(".//" & ConvertirRutaALocalName(sRuta))
+    If Not oNodo Is Nothing Then ObtenerValorSubNodo = Trim$(oNodo.Text)
+End Function
+
+Private Function ConvertirRutaALocalName(ByVal sRuta As String) As String
+    Dim i As Long, c As String, sTag As String, sRes As String
+    For i = 1 To Len(sRuta)
+        c = Mid$(sRuta, i, 1)
+        If c = "/" Then
+            If sTag <> "" Then
+                sRes = sRes & "*[local-name()='" & sTag & "']"
+                sTag = ""
+            End If
+            sRes = sRes & "/"
+        Else
+            sTag = sTag & c
+        End If
+    Next i
+    If sTag <> "" Then sRes = sRes & "*[local-name()='" & sTag & "']"
+    ConvertirRutaALocalName = sRes
+End Function
+
+Private Sub GuardarTextoUTF8(ByVal sArchivo As String, ByVal sContenido As String)
+    Dim oStream As Object
+    Set oStream = CreateObject("ADODB.Stream")
+    oStream.Type = 2
+    oStream.charset = "utf-8"
+    oStream.open
+    oStream.WriteText sContenido
+    oStream.SaveToFile sArchivo, 2
+    oStream.Close
+    Set oStream = Nothing
+End Sub
+
+Private Function EscaparHTML(ByVal sTexto As String) As String
+    sTexto = Replace$(sTexto, "&", "&amp;")
+    sTexto = Replace$(sTexto, "<", "&lt;")
+    sTexto = Replace$(sTexto, ">", "&gt;")
+    sTexto = Replace$(sTexto, """", "&quot;")
+    EscaparHTML = sTexto
+End Function
+
+Private Sub GenerarPDF_Desde_HTML(ByVal sRutaHtml As String, ByVal sRutaPdf As String)
+    Dim oShell As Object
+    Dim sEdgePath As String
+    Dim sCmd As String
+    
+    If Dir("C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe") <> "" Then
+        sEdgePath = "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
+    ElseIf Dir("C:\Program Files\Microsoft\Edge\Application\msedge.exe") <> "" Then
+        sEdgePath = "C:\Program Files\Microsoft\Edge\Application\msedge.exe"
+    Else
+        Err.Raise vbObjectError + 513, , "No se encontró Microsoft Edge (msedge.exe) para convertir HTML a PDF."
+    End If
+    
+    If Dir(sRutaPdf) <> "" Then Kill sRutaPdf
+    
+    sCmd = """" & sEdgePath & """ --headless --disable-gpu --no-pdf-header-footer --print-to-pdf=""" & sRutaPdf & """ """ & sRutaHtml & """"
+    
+    Set oShell = CreateObject("WScript.Shell")
+    oShell.Run sCmd, 0, True
+    Set oShell = Nothing
+End Sub
+
+

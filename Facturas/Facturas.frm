@@ -4295,6 +4295,13 @@ Dim GuiaRemision As Long
                 FA.Nuevo_Doc = True
                 FA.Factura = ReadSetDataNum(FA.TC & "_SERIE_" & FA.Serie, True, False)
                 TextFacturaNo.Text = FA.Factura
+                
+                sSQL = "DELETE * " _
+                     & "FROM Asiento_F " _
+                     & "WHERE Item = '" & NumEmpresa & "' " _
+                     & "AND CodigoU = '" & CodigoUsuario & "' "
+                Ejecutar_SQL_SP sSQL
+                
                 sSQL = "SELECT * " _
                      & "FROM Asiento_F " _
                      & "WHERE Item = '" & NumEmpresa & "' " _

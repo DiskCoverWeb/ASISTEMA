@@ -47,20 +47,30 @@ Public Function JSON_Leer_Campo(ByVal JSON As String, ByVal Clave As String) As 
     Dim matches As MatchCollection
     
     Set regEx = New RegExp
-    ' Expresión regular que busca "clave": "valor" o "clave": valorNumérico
-    regEx.Pattern = """" & Clave & """\s*:\s*(?:""([^""]*)""|([0-9\.]+))"
+    ' Captura:
+    ' SubMatches(0) -> Texto entre comillas (incluyendo comillas escapadas \")
+    ' SubMatches(1) -> Números positivos/negativos, booleanos (true/false) o null sin comillas
+    regEx.Pattern = """" & Clave & """\s*:\s*(?:""((?:\\.|[^""\\])*)""|(-?[0-9\.]+|true|false|null))"
     regEx.IgnoreCase = True
     
     If regEx.Test(JSON) Then
         Set matches = regEx.Execute(JSON)
-        ' Validar si capturó texto entre comillas o un número
-        If Not matches(0).SubMatches(0) = "" Then
-            JSON_Leer_Campo = matches(0).SubMatches(0) ' Retorna cadena
+        
+        If Len(matches(0).SubMatches(0)) > 0 Then
+            ' Retorna cadena limpia (desescapando comillas \" si las hubiera)
+            JSON_Leer_Campo = Replace$(matches(0).SubMatches(0), "\""", """")
+        ElseIf Len(matches(0).SubMatches(1)) > 0 Then
+            ' Retorna número, true, false (y convierte null en vacío "")
+            If LCase$(matches(0).SubMatches(1)) = "null" Then
+                JSON_Leer_Campo = ""
+            Else
+                JSON_Leer_Campo = matches(0).SubMatches(1)
+            End If
         Else
-            JSON_Leer_Campo = matches(0).SubMatches(1) ' Retorna número
+            JSON_Leer_Campo = ""
         End If
     Else
-        JSON_Leer_Campo = "" ' No encontrado
+        JSON_Leer_Campo = ""
     End If
     
     Set regEx = Nothing

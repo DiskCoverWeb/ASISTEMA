@@ -2973,10 +2973,10 @@ Public Sub GrabarCliente()
             Do While Not .EOF
                Codigo1 = .fields("Cta_CxP")
                Codigo2 = .fields("Cuenta")
-               I = InStr(Codigo2, "ZONA")
+               i = InStr(Codigo2, "ZONA")
               ' MsgBox Codigo2
-               If I > 0 Then
-                  Codigo3 = TrimStrg(MidStrg(Codigo2, I, 10))
+               If i > 0 Then
+                  Codigo3 = TrimStrg(MidStrg(Codigo2, i, 10))
                   sSQL = "UPDATE Clientes " _
                        & "SET Grupo = '" & Codigo3 & "' " _
                        & "WHERE Cta_CxP = '" & Codigo1 & "' "
@@ -3191,11 +3191,11 @@ Dim TextoBusqueda1 As String
      If .fields("Asignar_Dr") Then CheqDr.value = 1 Else CheqDr.value = 0
      TipoBenef = .fields("TD")
      Temp_TD = .fields("TD")
-     For I = 0 To CEstado.ListCount - 1
-      If .fields("Est_Civil") = MidStrg(CEstado.List(I), 1, 1) Then
-          CEstado = CEstado.List(I)
+     For i = 0 To CEstado.ListCount - 1
+      If .fields("Est_Civil") = MidStrg(CEstado.List(i), 1, 1) Then
+          CEstado = CEstado.List(i)
       End If
-     Next I
+     Next i
      If .fields("Sexo") = "M" Then OpcM.value = True Else OpcF.value = True
      Label6.Caption = "* C.I./R.U.C.  [" & TipoBenef & "]"
      DN = Datos_Nacion(.fields("Ciudad"), "C", .fields("Pais"), .fields("Prov"))
@@ -4210,7 +4210,7 @@ Dim ConDeudaPendiente As Boolean
                    & "WHERE FA <> " & Val(adFalse) & " " _
                    & "ORDER BY Grupo,Cliente "
               Select_Adodc AdoAux, sSQL
-              Contador = 0: K = 0
+              Contador = 0: k = 0
               RatonReloj
               With AdoAux.Recordset
                If .RecordCount > 0 Then
@@ -4220,14 +4220,14 @@ Dim ConDeudaPendiente As Boolean
                       DigVerif = Digito_Verificador(.fields("CI_RUC"))
                       Caracter = MidStrg(.fields("CI_RUC"), 10, 1)
                       If Tipo_RUC_CI.Tipo_Beneficiario = "O" Then
-                         K = K + 1
-                        .fields("CI_RUC") = Format$(K, "00000000")
+                         k = k + 1
+                        .fields("CI_RUC") = Format$(k, "00000000")
                         .fields("TD") = "E"
                         .Update
                       Else
                          If DigVerif <> Caracter Then
-                            K = K + 1
-                           .fields("CI_RUC") = Format$(K, "00000000")
+                            k = k + 1
+                           .fields("CI_RUC") = Format$(k, "00000000")
                            .fields("TD") = "E"
                            .Update
                          End If

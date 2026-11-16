@@ -75,7 +75,7 @@ Option Explicit
 ' Función para ejecutar en segundo plano y esperar a que finalice
 Public Function EjecutarComandoEspera(ByVal comando As String) As Long
     Dim wsh As Object
-    On Error GoTo errHandler
+    On Error GoTo ErrHandler
     
     Set wsh = CreateObject("WScript.Shell")
     ' El 0 oculta la ventana negra de CMD, True hace que VB6 espere
@@ -83,7 +83,7 @@ Public Function EjecutarComandoEspera(ByVal comando As String) As Long
     
     Set wsh = Nothing
     Exit Function
-errHandler:
+ErrHandler:
     Set wsh = Nothing
     EjecutarComandoEspera = -1
     MsgBox "Error al intentar ejecutar: " & Err.Description, vbCritical
@@ -812,7 +812,7 @@ Dim Texto As String
 Dim LineTexto As String
 Dim CampoTexto As String
 Dim AnchoDeLinea As Single
-On Error GoTo ErrorHandler
+On Error GoTo Errorhandler
 RatonReloj
 SQLMsg1 = "IMPRESION DE ERRORES"
 SQLMsg2 = "Fecha de Error del Archivo: " & Mifecha
@@ -868,7 +868,7 @@ Loop
 Printer.EndDoc
 RatonNormal
 Exit Sub
-ErrorHandler:
+Errorhandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -909,7 +909,7 @@ Dim SizeLetra As Integer
 Dim PosSup, PosIzq, DivxFila As Single
 Dim CodigoBarra As String
 SizeLetra = 6
-On Error GoTo ErrorHandler
+On Error GoTo Errorhandler
 RatonReloj
 If Cantidad < 3 Then Cantidad = 3
 Mensajes = "Seguro de Imprimir en:" & vbCrLf & Printer.DeviceName & "?"
@@ -1014,7 +1014,7 @@ If PonImpresoraDefecto(SetNombrePRN) Then
    MensajeEncabData = ""
    Printer.EndDoc
 Exit Sub
-ErrorHandler:
+Errorhandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -1041,7 +1041,7 @@ CantEtiquetaY = 10
 EtiquetaAncho = 3.8
 EtiquetaAlto = 2.5
 
-On Error GoTo ErrorHandler
+On Error GoTo Errorhandler
 RatonReloj
 Mensajes = "Seguro de Imprimir?"
 Titulo = "IMPRESION"
@@ -1128,7 +1128,7 @@ If PonImpresoraDefecto(SetNombrePRN) Then
       Progreso_Final
    End If
 Exit Sub
-ErrorHandler:
+Errorhandler:
     RatonNormal
     cPrint.finalizaImpresion
     Progreso_Final
@@ -1149,7 +1149,7 @@ Dim PDF_Titulo As String
 Dim PDF_Nombre_Documento As String
 
 SizeLetra = 6
-On Error GoTo ErrorHandler
+On Error GoTo Errorhandler
 RatonReloj
 Mensajes = "Seguro de Imprimir?"
 Titulo = "IMPRESION"
@@ -1244,7 +1244,7 @@ If PonImpresoraDefecto(SetNombrePRN) Then
       Progreso_Final
    End If
 Exit Sub
-ErrorHandler:
+Errorhandler:
     RatonNormal
     cPrint.finalizaImpresion
     Progreso_Final
@@ -1256,7 +1256,7 @@ End If
 End Sub
 
 Public Sub Imprimir_Texo_Impresora(TextoImprimir As String)
-On Error GoTo ErrorHandler
+On Error GoTo Errorhandler
 RatonReloj
 Mensajes = "Seguro de Imprimir?"
 Titulo = "IMPRESION"
@@ -1290,7 +1290,7 @@ If PonImpresoraDefecto(SetNombrePRN) Then
       cPrint.finalizaImpresion
    End If
    Exit Sub
-ErrorHandler:
+Errorhandler:
     RatonNormal
     cPrint.finalizaImpresion
     ErrorDeImpresion
@@ -1316,7 +1316,7 @@ CantEtiquetaY = 10
 EtiquetaAncho = 3.8
 EtiquetaAlto = 2.5
 
-On Error GoTo ErrorHandler
+On Error GoTo Errorhandler
 RatonReloj
 CantCodigos = InputBox("CANTIDAD DE CODIGOS A IMPRIMIR:", "IMPRESION DE CODIGOS DE BARRAS", CStr(CantidadEtiquetas))
  
@@ -1400,7 +1400,7 @@ If PonImpresoraDefecto(SetNombrePRN) Then
    End If
 
 Exit Sub
-ErrorHandler:
+Errorhandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -2025,7 +2025,7 @@ Dim Result As Long
      Progreso_Barra.Mensaje_Box = "Conectandose a la base de Datos"
      
      MDIFormulario.Caption = Empresa & ":"
-     MDIFormulario.StaBarEmp.Font.Bold = True
+     MDIFormulario.StaBarEmp.Font.bold = True
      MDIFormulario.StaBarEmp.Font.Size = 9
      MDIFormulario.StaBarEmp.Font.Name = TipoArialNarrow
      
@@ -4520,7 +4520,7 @@ Public Sub Imprimir_Apertura(CuentaNo As String)
 Dim DatasN As ADODB.Recordset
 Dim DatasC As ADODB.Recordset
 Dim No_Soc As Byte
-On Error GoTo ErrorHandler
+On Error GoTo Errorhandler
   CodigoCli = Ninguno
   sSQL = "SELECT * " _
        & "FROM Clientes_Datos_Extras " _
@@ -4628,7 +4628,7 @@ Else
     RatonNormal
 End If
 Exit Sub
-ErrorHandler:
+Errorhandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -6280,8 +6280,28 @@ End Sub
 Public Function Digito_Verificador(NumeroRUC As String) As String
 Dim RUCSRI As Tipo_Contribuyente
    RatonReloj
+    With RUCSRI
+        .Existe = False
+        .Obligado = "NO"
+        .Estado = Ninguno
+        .RUC_SRI = Ninguno
+        .RazonSocial = Ninguno
+        .NombreComercial = Ninguno
+        .ClaseRUC = Ninguno
+        .TipoRUC = Ninguno
+        .ActividadEconomica = Ninguno
+        .Categoria = Ninguno
+        .FechaInicio = Ninguno
+        .FechaCese = Ninguno
+        .FechaReinicio = Ninguno
+        .FechaActualizacion = Ninguno
+        .AgenteRetencion = Ninguno
+        .MicroEmpresa = Ninguno
+        .DatoContribuyente = ""
+    End With
 
   'SP que determinar que tipo de contribuyente es y el codigo si es pasaporte
+  
    Digito_Verificador_SP NumeroRUC
    If Len(NumeroRUC) = 13 Then
       RUCSRI = consulta_RUC_SRI(NumeroRUC)
@@ -6362,7 +6382,7 @@ Dim XIniY As Currency
 Dim CadFormato As String
 
 Dim AdoDBx As ADODB.Recordset
-On Error GoTo ErrorHandler
+On Error GoTo Errorhandler
 ReDim Ancho(10) As Single
 Mensajes = "Seguro de Imprimir en:" & vbCrLf & Printer.DeviceName & "?"
 Titulo = UCaseStrg(TipoComprobante)
@@ -6608,7 +6628,7 @@ Producto = InsertarLinea
 Printer.EndDoc
 RatonNormal
 Exit Sub
-ErrorHandler:
+Errorhandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -6619,7 +6639,7 @@ End Sub
 
 Public Sub Imprimir_Liquidacion(SQLx As String, ReImp As Boolean)
 Dim AdoDBx As ADODB.Recordset
-On Error GoTo ErrorHandler
+On Error GoTo Errorhandler
 Mensajes = "Seguro de Imprimir en:" & vbCrLf & Printer.DeviceName & "?"
 Titulo = "IMPRIMIR LIQUIDACION DE CREDITO"
 Bandera = False
@@ -6827,7 +6847,7 @@ RatonNormal
 MensajeEncabData = ""
 Printer.EndDoc
 Exit Sub
-ErrorHandler:
+Errorhandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -6838,7 +6858,7 @@ End Sub
 
 Public Sub Imprimir_Cancelacion_Liquidacion(SQLx As String, ReImp As Boolean)
 Dim AdoDBx As ADODB.Recordset
-On Error GoTo ErrorHandler
+On Error GoTo Errorhandler
 Mensajes = "Seguro de Imprimir en:" & vbCrLf & Printer.DeviceName & "?"
 Titulo = "IMPRIMIR CANCELACION DE CREDITO"
 Bandera = False
@@ -7019,7 +7039,7 @@ RatonNormal
 MensajeEncabData = ""
 Printer.EndDoc
 Exit Sub
-ErrorHandler:
+Errorhandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -7612,7 +7632,7 @@ Sub Recordar_Tarea_Hora()
 End Sub
 
 Public Sub Imprimir_Clientes(DataCli As Adodc)
-On Error GoTo ErrorHandler
+On Error GoTo Errorhandler
 Mensajes = "Seguro de Imprimir en:" & vbCrLf & Printer.DeviceName & "?"
 Titulo = "IMPRESION DE CLIENTES"
 Bandera = False
@@ -7680,7 +7700,7 @@ RatonNormal
 MensajeEncabData = ""
 Printer.EndDoc
 Exit Sub
-ErrorHandler:
+Errorhandler:
     RatonNormal
     ErrorDeImpresion
     Exit Sub
@@ -7837,7 +7857,7 @@ Public Function Leer_Archivo_Plano(ByVal RutaFile As Variant) As String
     End If
     
     ' 3. LECTURA CON PROTECCIÓN DE CURSOR Y ARCHIVO
-    On Error GoTo ErrorHandler
+    On Error GoTo Errorhandler
     
     RatonReloj
     
@@ -7856,7 +7876,7 @@ Public Function Leer_Archivo_Plano(ByVal RutaFile As Variant) As String
     RatonNormal
     Exit Function
 
-ErrorHandler:
+Errorhandler:
     ' Limpieza obligatoria si ocurre cualquier fallo de disco/red
     If NumFile > 0 Then Close #NumFile
     RatonNormal
@@ -7936,7 +7956,7 @@ Public Function Borrar_Archivo(ByVal RutaFile As Variant) As Boolean
     sRuta = Trim$(RutaFile & "")
     If Len(sRuta) = 0 Then Exit Function
     
-    On Error GoTo ErrorHandler
+    On Error GoTo Errorhandler
     
     ' 2. Comprobar si el archivo existe antes de intentar borrarlo
     If Len(Dir$(sRuta, vbNormal Or vbHidden Or vbReadOnly Or vbSystem)) > 0 Then
@@ -7950,7 +7970,7 @@ Public Function Borrar_Archivo(ByVal RutaFile As Variant) As Boolean
     
     Exit Function
 
-ErrorHandler:
+Errorhandler:
     ' Si está bloqueado, sin permisos o en uso, devuelve False sin congelar la app
     Borrar_Archivo = False
 End Function
@@ -8354,7 +8374,7 @@ Dim oSheet As Object
    Set oSheet = oBook.Worksheets(1)
    oSheet.Range("A1").value = "Last Name"
    oSheet.Range("B1").value = "First Name"
-   oSheet.Range("A1:B1").Font.Bold = True
+   oSheet.Range("A1:B1").Font.bold = True
    oSheet.Range("A2").value = "Doe"
    oSheet.Range("B2").value = "John"
    'Save the Workbook and Quit Excel
@@ -8958,28 +8978,52 @@ TotalFrames = aImg.Count - 1
 Load_Gif = TotalFrames
 Exit Function
 
-errHandler:
+ErrHandler:
 MsgBox "Error No. " & Err.Number & " leyendo la fila", vbCritical
 Load_Gif = False
 On Error GoTo 0
 If Err Then Beep
 End Function
 
-Public Function consulta_RUC_SRI(NumRUC As String) As Tipo_Contribuyente
-Dim Cont As Integer
-Dim IniNodo As Integer
-Dim FinNodo As Integer
+Public Function ConsultarRucDesdeAPI(ByVal sRuc As String) As String
+    Dim oHttp As Object
+    Dim sUrl As String
+    
+    On Error GoTo ErrHandler
+    sRuc = Trim$(sRuc)
+    sUrl = "https://erp.diskcoversystem.com/php/comprobantes/SRI/consulta_ruc_sri.php?ruc=" & sRuc & "&_t=" & Replace$(CStr(Timer), ",", ".")
+    
+    Set oHttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
+    oHttp.open "GET", sUrl, False
+    oHttp.setRequestHeader "Accept", "application/json"
+    oHttp.setRequestHeader "Cache-Control", "no-cache"
+    oHttp.setTimeouts 5000, 5000, 12000, 12000
+    oHttp.send
+   'MsgBox "Respuesta: " & oHttp.Status
+    If oHttp.Status = 200 Then
+        ConsultarRucDesdeAPI = oHttp.responseText
+    Else
+        ConsultarRucDesdeAPI = "ERROR_HTTP_" & oHttp.Status & ": " & oHttp.statusText
+    End If
+    
+    Set oHttp = Nothing
+    Exit Function
 
+ErrHandler:
+    ConsultarRucDesdeAPI = "ERROR_VB6_" & Err.Number & ": " & Err.Description
+    Set oHttp = Nothing
+End Function
+
+Public Function consulta_RUC_SRI(NumRUC As String) As Tipo_Contribuyente
 Dim ResultURL As String
 Dim xmlRUC As String
-
-Dim pJSON As Object
+Dim sJsonSRI As String
 Dim Result As Tipo_Contribuyente
-
+    
     RatonReloj
     With Result
         .Existe = False
-        .Obligado = "SI"
+        .Obligado = "NO"
         .Estado = Ninguno
         .RUC_SRI = Ninguno
         .RazonSocial = Ninguno
@@ -8991,11 +9035,10 @@ Dim Result As Tipo_Contribuyente
         .FechaInicio = Ninguno
         .FechaCese = Ninguno
         .FechaReinicio = Ninguno
-        .FechaActualización = Ninguno
+        .FechaActualizacion = Ninguno
         .AgenteRetencion = Ninguno
         .MicroEmpresa = Ninguno
         .DatoContribuyente = ""
-         If Len(NumRUC) = 13 Then
             If NumRUC = "9999999999999" Then
               .Existe = True
               .Obligado = "NO"
@@ -9003,99 +9046,168 @@ Dim Result As Tipo_Contribuyente
               .RUC_SRI = NumRUC
               .RazonSocial = "CONSUMIDOR FINAL"
             Else
-               URLHTTP = "https://erp.diskcoversystem.com/php/comprobantes/SRI/autorizar_sri_visual.php?validarRuc=true"
-               URLParams = "RUC=" & NumRUC
-               ResultURL = PostUrlSourceStr(URLHTTP, URLParams)
-               Set pJSON = JSON.parse(ResultURL)
-               If pJSON.Item("res") = "1" Then
+               sJsonSRI = ConsultarRucDesdeAPI(NumRUC)
+              .Existe = JSON_Leer_Campo(sJsonSRI, "ok")
+              'MsgBox Left$(sJsonSRI, 6) <> "ERROR_" & " - " & .Existe & vbCrLf & sJsonSRI
+               If .Existe Then
+                 'sJsonSRI = ConsultarRucSRI_JSON(NumRUC)
+                 'If Left$(sJsonSRI, 6) <> "ERROR_" And Len(Trim$(sJsonSRI)) > 5 Then
                  .Existe = True
-                 'Verificamos que tipo de contribuyente es
-                  Tipo_Contribuyente_SP_MySQL NumRUC, .MicroEmpresa, .AgenteRetencion
-                  xmlRUC = pJSON.Item("tbl")
-                  xmlRUC = Replace(xmlRUC, """", "'")
-                  xmlRUC = Replace(xmlRUC, "\n", vbCrLf)
-                  xmlRUC = Replace(xmlRUC, "\t", "")
-                  xmlRUC = Replace(xmlRUC, vbCr, "")
-                  xmlRUC = Replace(xmlRUC, vbLf, "")
-                  xmlRUC = Replace(xmlRUC, vbTab, "")
-                  xmlRUC = Replace(xmlRUC, "&aacute;", "a")
-                  xmlRUC = Replace(xmlRUC, "&eacute;", "e")
-                  xmlRUC = Replace(xmlRUC, "&iacute;", "i")
-                  xmlRUC = Replace(xmlRUC, "&oacute;", "o")
-                  xmlRUC = Replace(xmlRUC, "&uacute;", "u")
-                  xmlRUC = Replace(xmlRUC, "&nbsp;", "")
-                  xmlRUC = Replace(xmlRUC, "<table class='table'>", "")
-                  xmlRUC = Replace(xmlRUC, "onclick='forma.ruc.value='" & NumRUC & "''>", "")
-                  xmlRUC = Replace(xmlRUC, "<a class='link2' href='javascript:sociedad();'", "")
-                  xmlRUC = Replace(xmlRUC, "<table'>", "")
-                  xmlRUC = Replace(xmlRUC, "</table>", "")
-                  xmlRUC = Replace(xmlRUC, "<a>", "")
-                  xmlRUC = Replace(xmlRUC, "</a>", "")
-                  xmlRUC = Replace(xmlRUC, "<tr>", "")
-                  xmlRUC = Replace(xmlRUC, "</tr>", "")
-                  xmlRUC = Trim(xmlRUC)
-                 'Generar_File_SQL "SRI_LINEA_2", XML
-'                  Clipboard.Clear
-'                  Clipboard.SetText xmlRUC
-                 'Escribir_Archivo "c:\temp\index_" & NumRUC & ".php", XML
-                  Cont = 0
-                  Do While Len(xmlRUC) > 0
-                     IniNodo = InStr(xmlRUC, "<td>")
-                     FinNodo = InStr(xmlRUC, "</td>")
-                     If IniNodo > 0 And FinNodo > 0 Then
-                        If IniNodo < FinNodo Then
-                           ResultURL = Trim(UCase(Mid(xmlRUC, IniNodo + 4, FinNodo - IniNodo - 4)))
-                           If Cont = 1 Then .RazonSocial = ResultURL
-                           If Cont = 3 Then .RUC_SRI = ResultURL
-                           If Cont = 5 Then .NombreComercial = ResultURL
-                           If Cont = 7 Then .Estado = ResultURL
-                           If Cont = 9 Then .ClaseRUC = ResultURL
-                           If Cont = 11 Then .TipoRUC = ResultURL
-                           If Cont = 13 Then .Obligado = ResultURL
-                           If Cont = 15 Then .ActividadEconomica = ResultURL
-                           If Cont = 17 Then .FechaInicio = ResultURL
-                           If Cont = 19 Then .FechaCese = ResultURL
-                           If Cont = 21 Then .FechaReinicio = ResultURL
-                           If Cont = 23 Then .FechaActualización = ResultURL
-                           If Cont = 25 Then .Categoria = ResultURL
-                        Else
-                           xmlRUC = ""
-                        End If
-                        xmlRUC = Mid(xmlRUC, FinNodo + 4, Len(xmlRUC))
-                     Else
-                        xmlRUC = ""
-                     End If
-                     Cont = Cont + 1
-                  Loop
+                 
+                 'Identificación y estado
+                 .RUC_SRI = LimpiarValorSRI(JSON_Leer_Campo(sJsonSRI, "numeroRuc"))
+                 .RazonSocial = Replace(LimpiarValorSRI(JSON_Leer_Campo(sJsonSRI, "razonSocial")), "&", " Y ")
+                 .Estado = LimpiarValorSRI(JSON_Leer_Campo(sJsonSRI, "estadoContribuyenteRuc"))
+                 .MotivoSuspension = LimpiarValorSRI(JSON_Leer_Campo(sJsonSRI, "motivoCancelacionSuspension"))
+                  
+                 'Clasificación tributaria
+                 .ActividadEconomica = LimpiarValorSRI(JSON_Leer_Campo(sJsonSRI, "actividadEconomicaPrincipal"))
+                  If Len(.MotivoSuspension) > 1 Then .ActividadEconomica = .ActividadEconomica & ", " & .MotivoSuspension
+                 .TipoRUC = LimpiarValorSRI(JSON_Leer_Campo(sJsonSRI, "tipoContribuyente"))
+                 .ClaseRUC = LimpiarValorSRI(JSON_Leer_Campo(sJsonSRI, "regimen"))
+                 .Categoria = LimpiarValorSRI(JSON_Leer_Campo(sJsonSRI, "categoria"))
+                 .Obligado = LimpiarValorSRI(JSON_Leer_Campo(sJsonSRI, "obligadoLlevarContabilidad"))
+                 .AgenteRetencion = LimpiarValorSRI(JSON_Leer_Campo(sJsonSRI, "agenteRetencion"))
+                 .ContribEspecial = LimpiarValorSRI(JSON_Leer_Campo(sJsonSRI, "contribuyenteEspecial"))
+                  
+                 'Alertas de control SRI
+                 .ContribFantasma = LimpiarValorSRI(JSON_Leer_Campo(sJsonSRI, "contribuyenteFantasma"))
+                 .TransacInexistente = LimpiarValorSRI(JSON_Leer_Campo(sJsonSRI, "transaccionesInexistente"))
+                  
+                 'Sub-objeto: informacionFechasContribuyente
+                 .FechaInicio = LimpiarValorSRI(JSON_Leer_Campo(sJsonSRI, "fechaInicioActividades"))
+                 .FechaCese = LimpiarValorSRI(JSON_Leer_Campo(sJsonSRI, "fechaCese"))
+                 .FechaReinicio = LimpiarValorSRI(JSON_Leer_Campo(sJsonSRI, "fechaReinicioActividades"))
+                 .FechaActualizacion = LimpiarValorSRI(JSON_Leer_Campo(sJsonSRI, "fechaActualizacion"))
+                  
+                 'Sub-objeto: representantesLegales (si es Sociedad) ---
+                 .RepIdentificacion = LimpiarValorSRI(JSON_Leer_Campo(sJsonSRI, "identificacion"))
+                 .RepNombre = LimpiarValorSRI(JSON_Leer_Campo(sJsonSRI, "nombre"))
+                 
+                 'Datos adicionles del RUC
+                 .NombreComercial = Replace(LimpiarValorSRI(JSON_Leer_Campo(sJsonSRI, "nombreFantasiaComercial")), "&", " Y ")
+                 .TipoEstablecimiento = LimpiarValorSRI(JSON_Leer_Campo(sJsonSRI, "tipoEstablecimiento")) ' MAT o SUC
+                 .DireccionCompleta = LimpiarValorSRI(JSON_Leer_Campo(sJsonSRI, "direccionCompleta"))
+                 .EstadoEstablecimiento = LimpiarValorSRI(JSON_Leer_Campo(sJsonSRI, "estado")) ' ABIERTO / CERRADO
+                 .NumeroEstablecimiento = LimpiarValorSRI(JSON_Leer_Campo(sJsonSRI, "numeroEstablecimiento")) ' 001, 002...
+                 .EsMatriz = LimpiarValorSRI(JSON_Leer_Campo(sJsonSRI, "matriz")) ' SI / NO
+                 
+                 'Formateo limpio de fechas (si no vienen vacías)
+                  If Len(.FechaInicio) >= 10 Then .FechaInicio = Format$(CDate(Left$(.FechaInicio, 10)), FormatoFechas)
+                  If Len(.FechaCese) >= 10 Then .FechaCese = Format$(CDate(Left$(.FechaCese, 10)), FormatoFechas)
+                  If Len(.FechaReinicio) >= 10 Then .FechaReinicio = Format$(CDate(Left$(.FechaReinicio, 10)), FormatoFechas)
+                  If Len(.FechaActualizacion) >= 10 Then .FechaActualizacion = Format$(CDate(Left$(.FechaActualizacion, 10)), FormatoFechas)
                Else
-                 .Estado = "NO EXISTE EL RUC"
+                 .Estado = "NO ES RUC VALIDO"
                  .Obligado = Ninguno
                End If
+               Tipo_Contribuyente_SP_MySQL NumRUC, .MicroEmpresa, .AgenteRetencion
             End If
-         Else
-           .Estado = "NO ES RUC VALIDO"
-           .Obligado = Ninguno
-         End If
-         If .Existe Then
-             Tipo_Contribuyente_SP_MySQL .RUC_SRI, .MicroEmpresa, .AgenteRetencion
-             If Len(.RUC_SRI) > 1 Then .DatoContribuyente = .DatoContribuyente & "R.U.C.: " & .RUC_SRI & vbCrLf
-             If Len(.RazonSocial) > 1 Then .DatoContribuyente = .DatoContribuyente & "RAZON SOCIAL: " & .RazonSocial & vbCrLf
-             If Len(.NombreComercial) > 1 Then .DatoContribuyente = .DatoContribuyente & "NOMBRE COMERCIAL: " & .NombreComercial & vbCrLf
-             If Len(.TipoRUC) > 1 Then .DatoContribuyente = .DatoContribuyente & UCaseStrg(.TipoRUC) & ", "
-             If Len(.Obligado) > 1 Then .DatoContribuyente = .DatoContribuyente & .Obligado & " ESTA OBLIGADO A LLEVAR CONTABILIDAD" & vbCrLf
-             If Len(.ActividadEconomica) > 1 Then .DatoContribuyente = .DatoContribuyente & "ACTIVIDAD ECONOMICA: " & .ActividadEconomica & vbCrLf
-             If Len(.FechaInicio) > 1 Then .DatoContribuyente = .DatoContribuyente & "INICIO SU ACTIVIDAD EL " & .FechaInicio & vbCrLf
-             If Len(.FechaActualización) > 1 Then .DatoContribuyente = .DatoContribuyente & "R.U.C. ACTUALIZADO EL " & .FechaActualización & vbCrLf
-             If Len(.FechaReinicio) > 1 Then .DatoContribuyente = .DatoContribuyente & "REINICIO DE ACTIVIDADES: " & .FechaReinicio & vbCrLf
-             If Len(.Categoria) > 1 And Len(.ClaseRUC) > 1 Then .DatoContribuyente = .DatoContribuyente & "CATEGORIA: " & .Categoria & ", CLASE: " & .ClaseRUC & vbCrLf
-             If Len(.FechaCese) > 1 Then .DatoContribuyente = .DatoContribuyente & "CESE DE ACTIVIDADES: " & .FechaCese & vbCrLf
-             If Len(.MicroEmpresa) > 1 Then .DatoContribuyente = .DatoContribuyente & "TIPO DE CONTRIBUYENTE: """ & UCaseStrg(.MicroEmpresa) & """ " & vbCrLf
-             If Len(.AgenteRetencion) > 1 Then .DatoContribuyente = .DatoContribuyente & "AGENTE DE RETENCION: """ & UCaseStrg(.AgenteRetencion) & """ " & vbCrLf
-             If Len(.Estado) > 1 Then .DatoContribuyente = .DatoContribuyente & "ESTADO DEL CONTRIBUYENTE: """ & UCaseStrg(.Estado) & """ "
-         End If
+            If Len(.RUC_SRI) > 1 Then .DatoContribuyente = .DatoContribuyente & "R.U.C.: " & .RUC_SRI
+            If Len(.Estado) > 1 Then .DatoContribuyente = .DatoContribuyente & String(25, " ") & "ESTADO DEL CONTRIBUYENTE: """ & UCaseStrg(.Estado) & """ "
+            .DatoContribuyente = .DatoContribuyente & vbCrLf
+            If Len(.RazonSocial) > 1 Then .DatoContribuyente = .DatoContribuyente & "RAZON SOCIAL: " & .RazonSocial & vbCrLf
+            If Len(.NombreComercial) > 1 Then .DatoContribuyente = .DatoContribuyente & "NOMBRE COMERCIAL: " & .NombreComercial & vbCrLf
+            If Len(.TipoRUC) > 1 Then .DatoContribuyente = .DatoContribuyente & UCaseStrg(.TipoRUC) & ", "
+            If Len(.Obligado) > 1 Then .DatoContribuyente = .DatoContribuyente & .Obligado & " OBLIGADO A LLEVAR CONTABILIDAD" & vbCrLf
+            If Len(.DireccionCompleta) > 1 Then .DatoContribuyente = .DatoContribuyente & "DIRECCION: " & UCaseStrg(.DireccionCompleta) & vbCrLf
+            If Len(.RepNombre) > 1 Then .DatoContribuyente = .DatoContribuyente & "REPRESENTANTE LEGAL: " & .RepNombre & vbCrLf
+            If Len(.RepIdentificacion) > 1 Then .DatoContribuyente = .DatoContribuyente & "CEDULA: " & .RepIdentificacion & vbCrLf
+            If Len(.ActividadEconomica) > 1 Then .DatoContribuyente = .DatoContribuyente & "ACTIVIDAD ECONOMICA: " & .ActividadEconomica & vbCrLf
+            If Len(.Categoria) > 1 And Len(.ClaseRUC) > 1 Then .DatoContribuyente = .DatoContribuyente & "CATEGORIA: " & .Categoria & ", CLASE: " & .ClaseRUC & vbCrLf
+            If Len(.FechaCese) > 1 Then .DatoContribuyente = .DatoContribuyente & "CESE DE ACTIVIDADES: " & .FechaCese & vbCrLf
+            If Len(.MicroEmpresa) > 1 Then .DatoContribuyente = .DatoContribuyente & "TIPO DE CONTRIBUYENTE: """ & UCaseStrg(.MicroEmpresa) & """ " & vbCrLf
+            If Len(.AgenteRetencion) > 1 Then .DatoContribuyente = .DatoContribuyente & "AGENTE DE RETENCION: """ & UCaseStrg(.AgenteRetencion) & """ " & vbCrLf
+            
+            If Len(.FechaInicio) > 1 Then .DatoContribuyente = .DatoContribuyente & "INICIO SU ACTIVIDAD EL " & .FechaInicio & String(10, " ")
+            If Len(.FechaActualizacion) > 1 Then .DatoContribuyente = .DatoContribuyente & "R.U.C. ACTUALIZADO EL " & .FechaActualizacion & String(10, " ")
+            If Len(.FechaReinicio) > 1 Then .DatoContribuyente = .DatoContribuyente & "REINICIO DE ACTIVIDADES: " & .FechaReinicio
     End With
     RatonNormal
     consulta_RUC_SRI = Result
+End Function
+
+Public Function LimpiarValorSRI(ByVal sVal As String) As String
+    sVal = Trim$(sVal)
+    If LCase$(sVal) = "null" Then
+        LimpiarValorSRI = ""
+    Else
+        LimpiarValorSRI = sVal
+    End If
+End Function
+
+Public Function ConsultarRucSRI_JSON(ByVal sRuc As String) As String
+    Dim oHttp As Object
+    Dim sUrl As String
+    
+    On Error GoTo ErrHandler
+    
+    ' Limpiar espacios y evitar que Windows devuelva respuestas cacheadas agregando timestamp
+    sRuc = Trim$(sRuc)
+    sUrl = "https://srienlinea.sri.gob.ec/sri-catastro-sujeto-servicio-internet/rest/ConsolidadoContribuyente/obtenerPorNumerosRuc?&ruc=" & sRuc & "&_t=" & Replace$(CStr(Timer), ",", ".")
+    
+    Set oHttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
+    oHttp.open "GET", sUrl, False
+    
+    ' Forzar cero caché en cliente y proxy
+    oHttp.setRequestHeader "Accept", "application/json, text/plain, */*"
+    oHttp.setRequestHeader "Cache-Control", "no-cache, no-store, must-revalidate"
+    oHttp.setRequestHeader "Pragma", "no-cache"
+    oHttp.setRequestHeader "If-Modified-Since", "Sat, 1 Jan 2000 00:00:00 GMT"
+    oHttp.setRequestHeader "User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+    
+    oHttp.setTimeouts 5000, 5000, 10000, 10000
+    oHttp.send
+    
+    If oHttp.Status = 200 Then
+        ConsultarRucSRI_JSON = oHttp.responseText
+    Else
+        ConsultarRucSRI_JSON = "ERROR_HTTP_" & oHttp.Status & ": " & oHttp.statusText
+    End If
+    
+    Set oHttp = Nothing
+    Exit Function
+
+ErrHandler:
+    ConsultarRucSRI_JSON = "ERROR_VB6_" & Err.Number & ": " & Err.Description
+    Set oHttp = Nothing
+End Function
+
+Public Function ConsultarEstablecimientoSRI_JSON(ByVal sRuc As String) As String
+    Dim oHttp As Object
+    Dim sUrl As String
+    
+    On Error GoTo ErrHandler
+    
+    ' Limpiar espacios y agregar timestamp para evitar caché de Windows/WinHTTP
+    sRuc = Trim$(sRuc)
+    sUrl = "https://srienlinea.sri.gob.ec/sri-catastro-sujeto-servicio-internet/rest/Establecimiento/consultarPorNumeroRuc?numeroRuc=" & sRuc & "&_t=" & Replace$(CStr(Timer), ",", ".")
+    
+    Set oHttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
+    oHttp.open "GET", sUrl, False
+    
+    ' Forzar cero caché en cliente y proxy
+    oHttp.setRequestHeader "Accept", "application/json, text/plain, */*"
+    oHttp.setRequestHeader "Cache-Control", "no-cache, no-store, must-revalidate"
+    oHttp.setRequestHeader "Pragma", "no-cache"
+    oHttp.setRequestHeader "If-Modified-Since", "Sat, 1 Jan 2000 00:00:00 GMT"
+    oHttp.setRequestHeader "User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+    
+    oHttp.setTimeouts 5000, 5000, 10000, 10000
+    oHttp.send
+    
+    If oHttp.Status = 200 Then
+        ConsultarEstablecimientoSRI_JSON = oHttp.responseText
+    Else
+        ConsultarEstablecimientoSRI_JSON = "ERROR_HTTP_" & oHttp.Status & ": " & oHttp.statusText
+    End If
+    
+    Set oHttp = Nothing
+    Exit Function
+
+ErrHandler:
+    ConsultarEstablecimientoSRI_JSON = "ERROR_VB6_" & Err.Number & ": " & Err.Description
+    Set oHttp = Nothing
 End Function
 
 '''Public Function Estado_Servidor(IPServidor As String) As Boolean
